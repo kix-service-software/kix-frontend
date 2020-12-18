@@ -11,7 +11,6 @@
         "require ./components/config-item-history-widget",
         "require ./components/config-item-images-widget",
         "require ./components/config-item-info",
-        "require ./components/config-item-info-widget",
         "require ./components/config-item-version-compare-legend",
         "require ./components/config-item-version-details",
         "require ./components/edit-config-item-class-dialog",

@@ -66,7 +66,16 @@ export class PlaceholderService {
                 replaceString = typeof replaceString === 'undefined' || replaceString === null ? '' : replaceString;
                 replacedPlaceholders.set(placeholder, replaceString);
             }
-            text = text.replace(placeholder, replacedPlaceholders.get(placeholder));
+
+            if (placeholders.length === 1 &&
+                placeholder.endsWith('_ObjectValue>') &&
+                typeof replacedPlaceholders.get(placeholder) !== 'string'
+            ) {
+                text = replacedPlaceholders.get(placeholder);
+                break;
+            } else {
+                text = text.replace(placeholder, replacedPlaceholders.get(placeholder));
+            }
         }
 
         return text;

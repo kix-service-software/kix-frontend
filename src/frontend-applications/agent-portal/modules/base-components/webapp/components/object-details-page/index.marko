@@ -16,10 +16,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <@content>
                     <ul.lane-list no-update>
                         <for|lane| of=state.lanes>
-                            <li.lane key=lane.instanceId>
-                                <${component.getWidgetTemplate(lane.instanceId)} ...{
+                            <li.lane key=lane[0]>
+                                <${lane[1]} ...{
                                     contextType: "MAIN",
-                                    instanceId: lane.instanceId,
+                                    instanceId: lane[0],
                                     type: component.getLaneWidgetType()
                                 }/>
                             </li>
@@ -33,9 +33,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </else>
         <div.object-details-content-widget key="object-details-content">
             <for|contentWidget| of=state.contentWidgets>
-                <${component.getWidgetTemplate(contentWidget.instanceId)} ...{
+                <${contentWidget[1]} ...{
                     contextType: "MAIN",
-                    instanceId: contentWidget.instanceId
+                    instanceId: contentWidget[0]
                 }/>
             </for>
         </div>

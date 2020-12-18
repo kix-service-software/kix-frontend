@@ -36,6 +36,7 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                     case ArticleProperty.TICKET_ID:
                     case ArticleProperty.SENDER_TYPE_ID:
                     case ArticleProperty.MESSAGE_ID:
+                    case ArticleProperty.CHANNEL_ID:
                         result = article[attribute] ? article[attribute].toString() : '';
                         break;
                     case ArticleProperty.SUBJECT:

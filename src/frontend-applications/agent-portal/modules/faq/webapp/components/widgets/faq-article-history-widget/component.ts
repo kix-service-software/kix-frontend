@@ -29,7 +29,9 @@ class Component {
 
     public async onMount(): Promise<void> {
         const context = await ContextService.getInstance().getContext<FAQDetailsContext>(FAQDetailsContext.CONTEXT_ID);
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        this.state.widgetConfiguration = context
+            ? await context.getWidgetConfiguration(this.state.instanceId)
+            : undefined;
 
         context.registerListener('faq-history-widget', {
             explorerBarToggled: () => { return; },

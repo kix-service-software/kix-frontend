@@ -27,7 +27,6 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                         null, 'sysconfig', 'Translatable#SysConfig', null,
                         KIXObjectType.SYS_CONFIG_OPTION, 'system-admin-sysconfig',
                         [
-                            new UIComponentPermission('system/config/home', [CRUD.UPDATE]),
                             new UIComponentPermission('system/config/FQDN', [CRUD.UPDATE])
                         ]
                     )

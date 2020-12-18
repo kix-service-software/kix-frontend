@@ -211,46 +211,56 @@ export class ContactFormService extends KIXObjectFormService {
     private async addRolesField(
         accesses: string[], formInstance?: FormInstance
     ): Promise<FormFieldConfiguration> {
+        const value = formInstance ? await formInstance.getFormFieldValueByProperty(UserProperty.ROLE_IDS) : null;
+        const roleIds = value && Array.isArray(value.value) ? value.value : [];
+
         if (accesses && accesses.some((a) => a === UserProperty.IS_AGENT)) {
-            let value = formInstance
-                ? await formInstance.getFormFieldValueByProperty(UserProperty.ROLE_IDS)
-                : null;
-
-            if (accesses.some((a) => a === UserProperty.IS_CUSTOMER)) {
-                const loadingOptions = new KIXObjectLoadingOptions([
-                    new FilterCriteria(
-                        RoleProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Customer'
-                    )
-                ]);
-
-                const roles = await KIXObjectService.loadObjects<Role>(KIXObjectType.ROLE, null, loadingOptions);
-                if (roles && roles.length) {
-                    if (value && Array.isArray(value.value)) {
-                        if (!value.value.some((id) => id === roles[0].ID)) {
-                            value.value.push(roles[0].ID);
-                        }
-                    } else {
-                        value = new FormFieldValue(roles[0].ID);
-                    }
-                }
+            const role = await this.loadRole('Agent User');
+            if (role && !roleIds.some((rid) => rid === role.ID)) {
+                roleIds.push(role.ID);
             }
-
-            const roleField = new FormFieldConfiguration(
-                'contact-form-field-user-roles',
-                'Translatable#Roles', UserProperty.ROLE_IDS, 'object-reference-input', false,
-                'Translatable#Helptext_Users_UserCreateEdit_Roles',
-                [
-                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ROLE),
-                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
-                    new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true)
-                ], value
-            );
-            return new FormFieldConfiguration(
-                'contact-form-field-roles-container', 'Translatable#Role Assignment', 'ROLES_CONTAINER', null,
-                false, null, null, null, null, [roleField], null, null, null, null, null,
-                null, null, true, true
-            );
         }
+
+        if (accesses && accesses.some((a) => a === UserProperty.IS_CUSTOMER)) {
+            const role = await this.loadRole('Customer');
+            if (role && !roleIds.some((rid) => rid === role.ID)) {
+                roleIds.push(role.ID);
+            }
+        }
+
+        const roleField = new FormFieldConfiguration(
+            'contact-form-field-user-roles',
+            'Translatable#Roles', UserProperty.ROLE_IDS, 'object-reference-input', false,
+            'Translatable#Helptext_Users_UserCreateEdit_Roles',
+            [
+                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ROLE),
+                new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
+                new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true)
+            ], new FormFieldValue(roleIds)
+        );
+
+        return new FormFieldConfiguration(
+            'contact-form-field-roles-container', 'Translatable#Role Assignment', 'ROLES_CONTAINER', null,
+            false, null, null, null, null, [roleField], null, null, null, null, null,
+            null, null, true, true
+        );
+    }
+
+    private async loadRole(name: string): Promise<Role> {
+        let role: Role;
+
+        const roles = await KIXObjectService.loadObjects<Role>(
+            KIXObjectType.ROLE, null, new KIXObjectLoadingOptions([
+                new FilterCriteria(
+                    RoleProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, name
+                )
+            ])
+        );
+        if (roles && roles.length) {
+            role = roles[0];
+        }
+
+        return role;
     }
 
     private async addPreferencesFields(

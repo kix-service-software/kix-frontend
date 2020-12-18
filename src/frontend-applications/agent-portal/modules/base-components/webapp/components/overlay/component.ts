@@ -150,7 +150,7 @@ class OverlayComponent {
     private async applyWidgetConfiguration(widgetInstanceId: string): Promise<void> {
         if (widgetInstanceId && widgetInstanceId !== '') {
             const context = ContextService.getInstance().getActiveContext();
-            const widgetConfiguration = context.getWidgetConfiguration(widgetInstanceId);
+            const widgetConfiguration = await context.getWidgetConfiguration(widgetInstanceId);
             if (widgetConfiguration) {
                 this.state.actions = await ActionFactory.getInstance().generateActions(
                     widgetConfiguration.actions, this.state.content.getActionObject()

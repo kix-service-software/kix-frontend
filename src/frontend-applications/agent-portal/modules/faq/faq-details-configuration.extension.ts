@@ -22,6 +22,8 @@ import { UIComponentPermission } from '../../model/UIComponentPermission';
 import { CRUD } from '../../../../server/model/rest/CRUD';
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { FAQArticleProperty } from './model/FAQArticleProperty';
+import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -33,8 +35,82 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const configurations = [];
         const faqInfoWidget = new WidgetConfiguration(
             'faq-article-info-widget', 'FAQ Article Info', ConfigurationType.Widget,
-            'faq-article-info-widget', 'Translatable#FAQ Information',
-            [], null, null, false, true, null, false
+            'object-information-card-widget', 'Translatable#FAQ Information',
+            [], null,
+            {
+                avatar: [],
+                rows: [
+                    {
+                        style: '',
+                        separator: true,
+                        values: [
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: FAQArticleProperty.CATEGORY_ID
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: FAQArticleProperty.CUSTOMER_VISIBLE
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: KIXObjectProperty.VALID_ID
+                                    }
+                                }
+                            ]
+                        ]
+                    },
+                    {
+                        style: '',
+                        separator: false,
+                        values: [
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: FAQArticleProperty.CREATED
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: FAQArticleProperty.CREATED_BY
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: FAQArticleProperty.CHANGED
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: FAQArticleProperty.CHANGED_BY
+                                    }
+                                }
+                            ]
+                        ]
+                    }
+                ]
+            }
+            , false, true, null, false
         );
         configurations.push(faqInfoWidget);
 

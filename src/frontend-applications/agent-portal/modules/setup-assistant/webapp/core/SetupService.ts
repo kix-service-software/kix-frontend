@@ -43,11 +43,8 @@ export class SetupService {
 
     private setupSteps: SetupStep[] = [];
 
-    public async registerSetupStep(step: SetupStep): Promise<void> {
-        const hasPermissions = await AuthenticationSocketClient.getInstance().checkPermissions(step.permissions);
-        if (hasPermissions) {
-            this.setupSteps.push(step);
-        }
+    public registerSetupStep(step: SetupStep): void {
+        this.setupSteps.push(step);
     }
 
     public async getSetupSteps(): Promise<SetupStep[]> {
@@ -123,7 +120,7 @@ export class SetupService {
             const roles = await KIXObjectService.loadObjects<Role>(
                 KIXObjectType.ROLE, null, new KIXObjectLoadingOptions([
                     new FilterCriteria(RoleProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Superuser')
-                ]));
+                ])).catch((): Role[] => []);
 
             if (Array.isArray(roles) && roles.length) {
                 const superuserRoleId = roles[0].ID;

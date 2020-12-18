@@ -25,7 +25,7 @@ export class CompareConfigItemVersionDialogContext extends Context {
     public async setObjectList(objectType: KIXObjectType, versions: Version[]) {
         super.setObjectList(objectType, versions);
 
-        const widget = this.getWidgetConfiguration('compare-ci-version-widget');
+        const widget = await this.getWidgetConfiguration('compare-ci-version-widget');
         if (widget) {
             widget.configuration.tableConfiguration = new TableConfiguration(null, null, null);
             const columns: IColumnConfiguration[] = [

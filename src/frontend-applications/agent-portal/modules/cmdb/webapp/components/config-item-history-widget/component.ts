@@ -32,7 +32,9 @@ class Component {
         const context = await ContextService.getInstance().getContext<ConfigItemDetailsContext>(
             ConfigItemDetailsContext.CONTEXT_ID
         );
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        this.state.widgetConfiguration = context
+            ? await context.getWidgetConfiguration(this.state.instanceId)
+            : undefined;
 
         context.registerListener('config-item-history-widget', {
             explorerBarToggled: () => { return; },

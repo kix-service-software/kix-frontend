@@ -15,7 +15,7 @@ export class ComponentState extends AbstractComponentState {
         public prepared: boolean = false,
         public isSetup: boolean = false,
         public instanceId: string = 'admin-outbox',
-        public title: string = 'Communication: Email: Outbox',
+        public title: string = 'Translatable#Communication: Email: Outbox',
         public completed: boolean = false
     ) {
         super();

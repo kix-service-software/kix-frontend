@@ -28,9 +28,11 @@ export class ObjectIcon extends KIXObject {
 
     public fallbackIcon: ObjectIcon | string;
 
+    public tooltip: string;
+
     public constructor(
         objectIcon?: ObjectIcon, object?: string, id?: string | number, contentType?: string, content?: any,
-        fallbackIcon?: ObjectIcon | string
+        fallbackIcon?: ObjectIcon | string, tooltip?: string
     ) {
         super(objectIcon);
 
@@ -49,6 +51,7 @@ export class ObjectIcon extends KIXObject {
         }
 
         this.fallbackIcon = fallbackIcon;
+        this.tooltip = tooltip;
     }
 
     public equals(object: ObjectIcon): boolean {

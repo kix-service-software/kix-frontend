@@ -24,6 +24,7 @@ import { UIComponentPermission } from '../../model/UIComponentPermission';
 import { CRUD } from '../../../../server/model/rest/CRUD';
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { ConfigItemProperty } from './model/ConfigItemProperty';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -35,8 +36,90 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const configurations = [];
         const configItemInfoLaneTab = new WidgetConfiguration(
             'config-item-details-object-info', 'Object Info', ConfigurationType.Widget,
-            'config-item-info-widget', 'Translatable#Config Item Information', [],
-            null, null, false, true, null, false
+            'object-information-card-widget', 'Translatable#Config Item Information', [],
+            null,
+            {
+                avatar: [],
+                rows: [
+                    {
+                        style: '',
+                        separator: true,
+                        values: [
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: ConfigItemProperty.CLASS_ID
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: ConfigItemProperty.NAME
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: ConfigItemProperty.CUR_DEPL_STATE_ID
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: ConfigItemProperty.CUR_INCI_STATE_ID
+                                    }
+                                }
+                            ]
+                        ]
+                    },
+                    {
+                        style: '',
+                        separator: false,
+                        values: [
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: ConfigItemProperty.CREATE_TIME
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: ConfigItemProperty.CREATE_BY
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: ConfigItemProperty.CHANGE_TIME
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: ConfigItemProperty.CHANGE_BY
+                                    }
+                                }
+                            ]
+                        ]
+                    }
+                ]
+            },
+            false, true, null, false
         );
         configurations.push(configItemInfoLaneTab);
 

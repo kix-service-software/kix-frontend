@@ -32,6 +32,7 @@ import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 import { ExtendedKIXObjectAPIService } from './ExtendedKIXObjectAPIService';
 import { CacheService } from './cache';
 import { SearchProperty } from '../../modules/search/model/SearchProperty';
+import { SearchOperator } from '../../modules/search/model/SearchOperator';
 
 export abstract class KIXObjectAPIService implements IKIXObjectService {
 
@@ -68,7 +69,13 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     ): Promise<O[]> {
         const query = this.prepareQuery(loadingOptions);
         if (loadingOptions && loadingOptions.filter && loadingOptions.filter.length) {
-            await this.buildFilter(loadingOptions.filter, responseProperty, query, token);
+            const success = await this.buildFilter(loadingOptions.filter, responseProperty, query, token);
+
+            if (!success) {
+                LoggingService.getInstance().warning('Invalid api filter.', loadingOptions.filter);
+                return [];
+            }
+
         }
 
         let objects: O[] = [];
@@ -243,9 +250,9 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     }
 
     protected sendDeleteRequest<R>(
-        token: string, clientRequestId: string, uri: string[], cacheKeyPrefix: string
+        token: string, clientRequestId: string, uri: string[], cacheKeyPrefix: string, logError: boolean = true
     ): Promise<Error[]> {
-        return this.httpService.delete<R>(uri, token, clientRequestId, cacheKeyPrefix);
+        return this.httpService.delete<R>(uri, token, clientRequestId, cacheKeyPrefix, logError);
     }
 
     protected buildUri(...args): string {
@@ -369,7 +376,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
     public async buildFilter(
         criteria: FilterCriteria[], objectProperty: string, query: any, token?: string
-    ): Promise<any> {
+    ): Promise<boolean> {
 
         const nonDynamicFieldCriteria = criteria.filter(
             (c) => !c.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
@@ -384,7 +391,14 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         }
 
         // ignore fulltext property
-        filterCriteria = filterCriteria ? filterCriteria.filter((c) => c.property !== SearchProperty.FULLTEXT) : [];
+        filterCriteria = filterCriteria
+            ? filterCriteria.filter((c) => {
+                if (c.property === SearchProperty.FULLTEXT) {
+                    return false;
+                }
+                return true;
+            })
+            : [];
 
         if (filterCriteria && filterCriteria.length) {
             const apiFilter = {};
@@ -407,6 +421,14 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
         if (searchCriteria && searchCriteria.length) {
 
+            const hasEmptyINSearch = searchCriteria.some(
+                (c) => c.operator === SearchOperator.IN && (Array.isArray(c.value) && !c.value.length)
+            );
+
+            if (hasEmptyINSearch) {
+                return false;
+            }
+
             // use correct property name
             const fulltextCriterion = searchCriteria.find((c) => c.property === SearchProperty.FULLTEXT);
             if (fulltextCriterion) {
@@ -418,7 +440,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             query.search = encodeURIComponent(JSON.stringify(apiSearch));
         }
 
-        return query;
+        return true;
     }
 
     public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
@@ -432,11 +454,26 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     public prepareObjectFilter(filterCriteria: FilterCriteria[]): any {
         let objectFilter = {};
 
-        filterCriteria.forEach(
-            (c) => c.property = c.property.replace(KIXObjectProperty.DYNAMIC_FIELDS + '.', 'DynamicField_')
-        );
+        const prepareCriteria = [];
+        filterCriteria.forEach((c) => {
+            c.property = c.property.replace(KIXObjectProperty.DYNAMIC_FIELDS + '.', 'DynamicField_');
+            switch (c.operator) {
+                case SearchOperator.BETWEEN:
+                    if (c.value) {
+                        prepareCriteria.push(new FilterCriteria(
+                            c.property, SearchOperator.GREATER_THAN_OR_EQUAL, c.type, c.filterType, c.value[0]
+                        ));
+                        prepareCriteria.push(new FilterCriteria(
+                            c.property, SearchOperator.LESS_THAN_OR_EQUAL, c.type, c.filterType, c.value[1]
+                        ));
+                    }
+                    break;
+                default:
+                    prepareCriteria.push(c);
+            }
+        });
 
-        const andFilter = filterCriteria.filter((f) => f.filterType === FilterType.AND).map((f) => {
+        const andFilter = prepareCriteria.filter((f) => f.filterType === FilterType.AND).map((f) => {
             return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
         });
 
@@ -444,7 +481,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             objectFilter = { ...objectFilter, AND: andFilter };
         }
 
-        const orFilter = filterCriteria.filter((f) => f.filterType === FilterType.OR).map((f) => {
+        const orFilter = prepareCriteria.filter((f) => f.filterType === FilterType.OR).map((f) => {
             return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
         });
 

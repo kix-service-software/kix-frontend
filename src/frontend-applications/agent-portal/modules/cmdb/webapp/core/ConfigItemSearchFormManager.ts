@@ -36,8 +36,9 @@ import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptio
 import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
+import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
 
-export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
+export class ConfigItemSearchFormManager extends SearchFormManager {
 
     public objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM;
 
@@ -45,8 +46,12 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
 
     public useOwnSearch: boolean = true;
 
+    public constructor(public ignorePropertiesFixed: string[] = []) {
+        super();
+    }
+
     public async getProperties(): Promise<Array<[string, string]>> {
-        const properties: Array<[string, string]> = [
+        let properties: Array<[string, string]> = [
             [SearchProperty.FULLTEXT, null],
             [ConfigItemProperty.NAME, null],
             [VersionProperty.NUMBER, null],
@@ -69,6 +74,11 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
         if (await this.checkReadPermissions('system/users')) {
             properties.push([KIXObjectProperty.CHANGE_BY, null]);
         }
+
+        properties = properties.filter(
+            (p) => !this.ignorePropertiesFixed.some((ip) => ip === p[0])
+                && !this.ignoreProperties.some((ip) => ip === p[0])
+        );
 
         for (const p of properties) {
             const label = await LabelService.getInstance().getPropertyText(p[0], KIXObjectType.CONFIG_ITEM);
@@ -107,7 +117,7 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
     }
 
     public async getOperations(property: string): Promise<any[]> {
-        let operations: SearchOperator[] = [];
+        let operations: Array<string | SearchOperator> = [];
 
         const numberOperators = [
             SearchOperator.IN

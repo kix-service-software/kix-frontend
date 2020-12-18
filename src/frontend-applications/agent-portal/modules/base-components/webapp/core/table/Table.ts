@@ -31,6 +31,7 @@ import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { DynamicFieldProperty } from '../../../../dynamic-fields/model/DynamicFieldProperty';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
 
 
 export class Table implements Table {
@@ -110,6 +111,15 @@ export class Table implements Table {
             if (this.sortColumnId && this.sortOrder) {
                 await this.sort(this.sortColumnId, this.sortOrder);
             }
+
+            if (this.tableConfiguration &&
+                this.tableConfiguration.toggle &&
+                this.tableConfiguration.toggleOptions &&
+                this.tableConfiguration.toggleOptions.toggleFirst &&
+                this.rows.length
+            ) {
+                this.rows[0].expand(true);
+            }
         }
     }
 
@@ -122,14 +132,6 @@ export class Table implements Table {
             const rows = [];
             data.forEach((d) => rows.push(this.createRow(d)));
             this.rows = rows;
-
-            if (this.tableConfiguration &&
-                this.tableConfiguration.toggle &&
-                this.tableConfiguration.toggleOptions.toggleFirst &&
-                this.rows.length
-            ) {
-                this.rows[0].expand(true);
-            }
         }
     }
 
@@ -389,19 +391,23 @@ export class Table implements Table {
             column.setSortOrder(sortOrder);
 
             if (this.filteredRows) {
-                this.filteredRows = TableSortUtil.sort(
+                this.filteredRows = await TableSortUtil.sort(
                     this.filteredRows, columnId, sortOrder, column.getColumnConfiguration().dataType
                 );
+                const sortPromises = [];
                 for (const row of this.filteredRows) {
-                    row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType);
+                    sortPromises.push(row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType));
                 }
+                await Promise.all(sortPromises);
             } else {
-                this.rows = TableSortUtil.sort(
+                this.rows = await TableSortUtil.sort(
                     this.rows, columnId, sortOrder, column.getColumnConfiguration().dataType
                 );
+                const sortPromises = [];
                 for (const row of this.rows) {
-                    row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType);
+                    sortPromises.push(row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType));
                 }
+                await Promise.all(sortPromises);
             }
             EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
             EventService.getInstance().publish(
@@ -527,15 +533,29 @@ export class Table implements Table {
             this.getColumns().some((c) => c.isFiltered());
     }
 
-    public setRowObjectValues(values: Array<[any, [string, any]]>): void {
-        values.forEach((v) => {
+    public async updateRowObject(object: KIXObject): Promise<void> {
+        const row = this.getRowByObject(object);
+        if (row) {
+            row.getRowObject().updateObject(object);
+            for (const c of row.getCells()) {
+                await c.getDisplayValue(true);
+            }
+            EventService.getInstance().publish(
+                TableEvent.ROW_VALUE_CHANGED,
+                new TableEventData(this.getTableId(), row.getRowId())
+            );
+        }
+    }
+
+    public async setRowObjectValues(values: Array<[any, [string, any]]>): Promise<void> {
+        for (const v of values) {
             const row = this.getRowByObject(v[0]);
             if (row) {
                 const value = v[1];
                 row.getRowObject().addValue(new TableValue(value[0], value[1]));
                 const cell = row.getCell(value[0]);
                 if (cell) {
-                    cell.setValue(new TableValue(value[0], value[1], value[1]));
+                    await cell.setValue(new TableValue(value[0], value[1]));
                 } else {
                     row.addCell(new TableValue(value[0], value[1], value[1]));
                 }
@@ -544,7 +564,7 @@ export class Table implements Table {
                     new TableEventData(this.getTableId(), row.getRowId())
                 );
             }
-        });
+        }
     }
 
     public setRowObjectValueState(objects: any[], state: ValueState): void {

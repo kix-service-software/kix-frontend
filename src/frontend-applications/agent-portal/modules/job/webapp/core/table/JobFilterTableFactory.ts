@@ -52,7 +52,7 @@ export class JobFilterTableFactory extends TableFactory {
             ),
             new DefaultColumnConfiguration(null, null, null,
                 JobFilterTableProperty.VALUE, true, false, true, false, 600, true, true,
-                false, DataType.STRING, true, 'label-list-cell-content', 'Translatable#Value', false
+                false, DataType.STRING, true, 'job-filter-cell-content', 'Translatable#Value', false
             )
         ];
 

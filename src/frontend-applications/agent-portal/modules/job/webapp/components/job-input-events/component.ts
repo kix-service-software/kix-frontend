@@ -11,10 +11,11 @@ import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { TreeNode, TreeService, TreeHandler } from '../../../../base-components/webapp/core/tree';
-import { JobService } from '../../core';
+import { JobFormService, JobService } from '../../core';
 import { JobProperty } from '../../../model/JobProperty';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { FormService } from '../../../../base-components/webapp/core/FormService';
+import { IJobFormManager } from '../../core/IJobFormManager';
 
 class Component extends FormInputComponent<string[], ComponentState> {
 
@@ -40,18 +41,33 @@ class Component extends FormInputComponent<string[], ComponentState> {
         TreeService.getInstance().registerTreeHandler(this.state.treeId, treeHandler);
         await this.load();
         await super.onMount();
+
         this.state.prepared = true;
     }
 
     private async load(): Promise<void> {
-        const nodes = await JobService.getInstance().getTreeNodes(
-            JobProperty.EXEC_PLAN_EVENTS
-        );
+        let nodes = [];
+
+        const jobFormManager = await this.getJobFormManager();
+        if (jobFormManager) {
+            nodes = await jobFormManager.getEventNodes();
+        }
 
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
         if (treeHandler) {
             treeHandler.setTree(nodes, null, true);
         }
+    }
+
+    private async getJobFormManager(): Promise<IJobFormManager> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        if (formInstance) {
+            const value = await formInstance.getFormFieldValueByProperty<string>(JobProperty.TYPE);
+            if (value && value.value) {
+                return JobFormService.getInstance().getJobFormManager(value.value);
+            }
+        }
+        return;
     }
 
     public async setCurrentValue(): Promise<void> {

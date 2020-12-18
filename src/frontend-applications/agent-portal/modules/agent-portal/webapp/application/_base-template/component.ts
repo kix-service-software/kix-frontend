@@ -153,6 +153,7 @@ class Component {
     private async initModules(): Promise<void> {
         const modules = KIXModulesService.getInstance().getModules();
 
+        const requireStart = Date.now();
         const uiModules: IUIModule[] = [];
         for (const mod of modules) {
             for (const c of mod.initComponents) {
@@ -166,7 +167,10 @@ class Component {
                 }
             }
         }
+        const requireEnd = Date.now();
+        console.debug(`Require ${modules.length} modules in ${requireEnd - requireStart}ms`);
 
+        const moduleStart = Date.now();
         uiModules.sort((a, b) => a.priority - b.priority);
         for (let i = 0; i < uiModules.length; i++) {
             if (uiModules[i].register) {
@@ -181,6 +185,8 @@ class Component {
             const percent = Math.round((i / uiModules.length) * 100);
             this.state.loadingHint = `${percent}%`;
         }
+        const moduleEnd = Date.now();
+        console.debug(`Init modules in ${moduleEnd - moduleStart}ms`);
     }
 }
 

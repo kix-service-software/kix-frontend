@@ -59,9 +59,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             contextRegistered: () => null
         });
 
-        this.prepareConfigurations();
-        await this.prepareWidget();
-        await this.prepareActions();
         this.state.loading = false;
     }
 
@@ -71,11 +68,28 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         ContextService.getInstance().unregisterListener('object-details-page');
     }
 
-    private prepareConfigurations(): void {
+    private async prepareConfigurations(): Promise<void> {
+        this.state.lanes = [];
+        this.state.contentWidgets = [];
+
         const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-        this.state.lanes = context.getLanes(true);
-        this.state.contentWidgets = context.getContent(true);
         this.state.instanceId = context.getDescriptor().contextId;
+
+        const lanes = context.getLanes(true);
+        if (Array.isArray(lanes)) {
+            for (const lane of lanes) {
+                const template = await this.getWidgetTemplate(lane.instanceId);
+                this.state.lanes.push([lane.instanceId, template]);
+            }
+        }
+
+        const contentWidgets = context.getContent(true);
+        if (Array.isArray(contentWidgets)) {
+            for (const cw of contentWidgets) {
+                const template = await this.getWidgetTemplate(cw.instanceId);
+                this.state.contentWidgets.push([cw.instanceId, template]);
+            }
+        }
     }
 
     private async prepareWidget(): Promise<void> {
@@ -113,9 +127,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    public getWidgetTemplate(instanceId: string): any {
+    private async getWidgetTemplate(instanceId: string): Promise<any> {
         const context = ContextService.getInstance().getActiveContext();
-        const config = context ? context.getWidgetConfiguration(instanceId) : undefined;
+        const config = context ? await context.getWidgetConfiguration(instanceId) : undefined;
         return config ? KIXModulesService.getComponentTemplate(config.widgetId) : undefined;
     }
 

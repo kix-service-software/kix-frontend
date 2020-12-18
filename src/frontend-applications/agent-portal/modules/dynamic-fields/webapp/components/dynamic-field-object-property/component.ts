@@ -25,6 +25,7 @@ import { LabelService } from '../../../../base-components/webapp/core/LabelServi
 import { TicketProperty } from '../../../../ticket/model/TicketProperty';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -46,6 +47,20 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async update(): Promise<void> {
+        if (!this.object) {
+            const context = ContextService.getInstance().getActiveContext();
+            const contextObject = await context.getObject();
+            if (contextObject) {
+                const loadedObjects = await KIXObjectService.loadObjects(
+                    contextObject.KIXObjectType, [contextObject.ObjectId],
+                    new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS])
+                );
+                if (Array.isArray(loadedObjects) && loadedObjects.length) {
+                    this.object = loadedObjects[0];
+                }
+            }
+        }
+
         if (this.name && this.object) {
             this.state.field = await KIXObjectService.loadDynamicField(this.name);
             this.createDynamicFieldInfos();

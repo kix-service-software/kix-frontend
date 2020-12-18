@@ -17,12 +17,15 @@ export class MacroActionTypeOption {
 
     public Label: string;
 
+    public Order: number;
+
     public constructor(macroActionType?: MacroActionTypeOption) {
         if (macroActionType) {
             this.Name = macroActionType.Name;
             this.Description = macroActionType.Description;
             this.Required = macroActionType.Required;
             this.Label = macroActionType.Label;
+            this.Order = macroActionType.Order;
         }
     }
 

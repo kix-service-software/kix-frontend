@@ -56,6 +56,8 @@ export class ContextNamespace extends SocketNameSpace {
 
     private rebuildPromise: Promise<void>;
 
+    private configCache: Map<string, any>;
+
     protected getNamespace(): string {
         return 'context';
     }
@@ -91,7 +93,7 @@ export class ContextNamespace extends SocketNameSpace {
     public async rebuildConfigCache(): Promise<void> {
         if (!this.rebuildPromise) {
             this.rebuildPromise = new Promise<void>(async (resolve, reject) => {
-
+                this.configCache = new Map();
                 await CacheService.getInstance().deleteKeys('ContextConfiguration', true);
 
                 const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
@@ -122,6 +124,7 @@ export class ContextNamespace extends SocketNameSpace {
                         );
 
                         await CacheService.getInstance().set(newConfig.contextId, newConfig, 'ContextConfiguration');
+                        this.configCache.set(newConfig.contextId, newConfig);
                     }
                 }
 
@@ -139,22 +142,19 @@ export class ContextNamespace extends SocketNameSpace {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';
 
-        let configuration = await CacheService.getInstance().get(data.contextId, 'ContextConfiguration');
+        // let configuration = await CacheService.getInstance().get(data.contextId, 'ContextConfiguration');
 
-        if (!configuration) {
+        if (!this.configCache) {
             await this.rebuildConfigCache();
-            configuration = await CacheService.getInstance().get(data.contextId, 'ContextConfiguration');
         }
+        // const configuration = await CacheService.getInstance().get(data.contextId, 'ContextConfiguration');
+        const configuration = this.configCache.get(data.contextId);
 
         if (!configuration) {
             return new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(
                 data.requestId, `No configuration extension for context ${data.contextId} available.`
             ));
         }
-
-        configuration = await PermissionService.getInstance().filterContextConfiguration(
-            token, configuration as ContextConfiguration
-        ).catch(() => configuration);
 
         const response = new LoadContextConfigurationResponse(data.requestId, configuration as ContextConfiguration);
         return new SocketResponse(ContextEvent.CONTEXT_CONFIGURATION_LOADED, response);

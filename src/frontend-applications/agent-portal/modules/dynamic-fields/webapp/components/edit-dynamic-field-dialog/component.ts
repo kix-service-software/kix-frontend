@@ -11,6 +11,9 @@ import { AbstractEditDialog } from '../../../../../modules/base-components/webap
 import { ComponentState } from './ComponentState';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { EditDynamicFieldDialogContext } from '../../core/EditDynamicFieldDialogContext';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { DynamicField } from '../../../model/DynamicField';
+import { DynamicFieldTypes } from '../../../model/DynamicFieldTypes';
 
 class Component extends AbstractEditDialog {
 
@@ -26,6 +29,23 @@ class Component extends AbstractEditDialog {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+
+        const context = await ContextService.getInstance().getContext<EditDynamicFieldDialogContext>(
+            EditDynamicFieldDialogContext.CONTEXT_ID
+        );
+
+        const object = await context.getObject();
+
+        if (object && object instanceof DynamicField) {
+            this.state.dynamicField = object;
+
+            const values = Object.values(DynamicFieldTypes);
+            if (!values.some((v) => v === this.state.dynamicField.FieldType)) {
+                this.state.isSupportedType = false;
+            }
+        }
+
+        this.state.prepared = true;
     }
 
     public async onDestroy(): Promise<void> {

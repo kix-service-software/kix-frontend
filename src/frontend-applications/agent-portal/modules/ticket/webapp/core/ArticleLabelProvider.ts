@@ -76,7 +76,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
 
         if (displayValue) {
             displayValue = await TranslationService.translate(
-                displayValue.toString(), undefined, undefined, translatable
+                displayValue.toString(), undefined, undefined
             );
         }
 
@@ -175,6 +175,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                 }
                 break;
             case ArticleProperty.CHANNEL_ID:
+            case ArticleProperty.CHANNEL:
                 if (displayValue) {
                     const channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL);
                     if (channels) {

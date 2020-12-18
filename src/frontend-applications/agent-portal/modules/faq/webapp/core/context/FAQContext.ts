@@ -8,7 +8,6 @@
  */
 
 import { Context } from '../../../../../model/Context';
-import { FAQCategory } from '../../../model/FAQCategory';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
@@ -20,12 +19,13 @@ import { FAQArticleProperty } from '../../../model/FAQArticleProperty';
 
 
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 export class FAQContext extends Context {
 
     public static CONTEXT_ID: string = 'faq';
 
-    public faqCategory: FAQCategory;
+    public categoryId: number;
 
     public getIcon(): string {
         return 'kix-icon-faq';
@@ -35,21 +35,38 @@ export class FAQContext extends Context {
         return 'FAQ Dashboard';
     }
 
-    public async setFAQCategory(faqCategory: FAQCategory): Promise<void> {
-        if (faqCategory) {
-            if (!this.faqCategory || faqCategory.ID !== this.faqCategory.ID) {
-                this.faqCategory = faqCategory;
-                await this.loadFAQArticles();
-                this.listeners.forEach(
-                    (l) => l.objectChanged(
-                        this.faqCategory ? this.faqCategory.ID : null,
-                        this.faqCategory,
-                        KIXObjectType.FAQ_CATEGORY)
-                );
+    public async initContext(urlParams: URLSearchParams): Promise<void> {
+        if (urlParams) {
+            if (urlParams.has('categoryId') && !isNaN(Number(urlParams.get('categoryId')))) {
+                this.categoryId = Number(urlParams.get('categoryId'));
             }
-        } else if (this.faqCategory || typeof this.faqCategory === 'undefined') {
-            this.faqCategory = null;
+        }
+    }
+    public async getUrl(): Promise<string> {
+        let url: string = '';
+        if (Array.isArray(this.descriptor.urlPaths) && this.descriptor.urlPaths.length) {
+            url = this.descriptor.urlPaths[0];
+
+            const params = [];
+            if (this.categoryId) {
+                params.push(`categoryId=${this.categoryId}`);
+            }
+
+            if (params.length) {
+                url += `?${params.join('&')}`;
+            }
+        }
+        return url;
+    }
+
+    public async setFAQCategoryId(categoryId: number): Promise<void> {
+        if (!this.categoryId || this.categoryId !== categoryId) {
+            this.categoryId = categoryId;
             await this.loadFAQArticles();
+            this.listeners.forEach(
+                (l) => l.objectChanged(this.categoryId, this.categoryId, KIXObjectType.FAQ_CATEGORY)
+            );
+            ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
         }
     }
 
@@ -62,11 +79,11 @@ export class FAQContext extends Context {
                 )
             ], null, 1000, [FAQArticleProperty.VOTES], [FAQArticleProperty.VOTES]
         );
-        if (this.faqCategory) {
+        if (this.categoryId) {
             loadingOptions.filter.push(
                 new FilterCriteria(
                     FAQArticleProperty.CATEGORY_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                    FilterType.AND, this.faqCategory.ID
+                    FilterType.AND, this.categoryId
                 )
             );
         }
@@ -79,7 +96,7 @@ export class FAQContext extends Context {
 
     public reset(): void {
         super.reset();
-        this.faqCategory = null;
+        this.categoryId = null;
         this.loadFAQArticles();
     }
 

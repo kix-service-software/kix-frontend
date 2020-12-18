@@ -65,10 +65,10 @@ export class TicketTableFactory extends TableFactory {
                 new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.QUEUE_ID, true, false, true, false, 100, true, true, true
                 ),
-                new DefaultColumnConfiguration(null, null, null,
-                    'DynamicFields.AffectedAsset', true, false, true, false, 200, true, true, true, undefined, true,
-                    'label-list-cell-content'
-                ),
+                // new DefaultColumnConfiguration(null, null, null,
+                //     'DynamicFields.AffectedAsset', true, false, true, false, 200, true, true, true, undefined, true,
+                //     'label-list-cell-content'
+                // ),
                 new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.OWNER_ID, true, false, true, false, 150, true, true
                 ),
@@ -101,10 +101,10 @@ export class TicketTableFactory extends TableFactory {
                 new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.QUEUE_ID, true, false, true, false, 100, true, true, true
                 ),
-                new DefaultColumnConfiguration(null, null, null,
-                    'DynamicFields.AffectedAsset', true, false, true, false, 200, true, true, true, undefined, true,
-                    'label-list-cell-content'
-                ),
+                // new DefaultColumnConfiguration(null, null, null,
+                //     'DynamicFields.AffectedAsset', true, false, true, false, 200, true, true, true, undefined, true,
+                //     'label-list-cell-content'
+                // ),
                 new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.RESPONSIBLE_ID, true, false, true, false, 150, true, true
                 ),

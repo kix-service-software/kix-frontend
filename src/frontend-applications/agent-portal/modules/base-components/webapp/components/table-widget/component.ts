@@ -25,6 +25,13 @@ import { KIXModulesService } from '../../../../../modules/base-components/webapp
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ContextUIEvent } from '../../core/ContextUIEvent';
 import { ApplicationEvent } from '../../core/ApplicationEvent';
+import { IContextListener } from '../../core/IContextListener';
+import { Context } from '../../../../../model/Context';
+import { AdditionalContextInformation } from '../../core/AdditionalContextInformation';
+import { FormEvent } from '../../core/FormEvent';
+import { FormValuesChangedEventData } from '../../core/FormValuesChangedEventData';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
 
 class Component {
 
@@ -41,6 +48,10 @@ class Component {
     private configuredTitle: boolean = true;
 
     private useContext: boolean = true;
+
+    private contextListener: IContextListener;
+
+    private formSubscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -67,11 +78,12 @@ class Component {
 
         if (this.useContext) {
             this.state.widgetConfiguration = context
-                ? context.getWidgetConfiguration(this.state.instanceId)
+                ? await context.getWidgetConfiguration(this.state.instanceId)
                 : undefined;
         }
 
         if (this.state.widgetConfiguration) {
+            this.state.show = true;
             const settings: TableWidgetConfiguration = this.state.widgetConfiguration.configuration;
 
             context.addObjectDependency(settings.objectType);
@@ -138,38 +150,98 @@ class Component {
             this.prepareHeader();
             this.prepareTable().then(() => this.prepareTitle());
 
-            if (this.state.widgetConfiguration.contextDependent) {
-                context.registerListener('table-widget-' + this.state.instanceId, {
-                    explorerBarToggled: () => { return; },
-                    filteredObjectListChanged: () => { return; },
-                    objectChanged: () => { return; },
-                    objectListChanged: (objectType: KIXObjectType | string) => {
-                        if (objectType === this.objectType) {
-                            if (settings && settings.resetFilterOnReload) {
-                                if (this.state.table) {
-                                    this.state.table.resetFilter();
-                                }
-                                const filterComponent = (this as any).getComponent('table-widget-filter');
-                                if (filterComponent) {
-                                    filterComponent.reset();
-                                }
-                            } else if (this.state.table) {
-                                this.state.filterValue = this.state.table.getFilterValue();
+            this.prepareContextDependency(settings);
+            this.prepareFormDependency();
+        }
+    }
+
+    private prepareContextDependency(settings: TableWidgetConfiguration): void {
+        if (
+            this.state.widgetConfiguration.contextDependent ||
+            this.state.widgetConfiguration.contextObjectDependent
+        ) {
+            this.contextListener = {
+                explorerBarToggled: () => { return; },
+                filteredObjectListChanged: () => { return; },
+                objectChanged: () => { return; },
+                objectListChanged: (objectType: KIXObjectType | string) => {
+                    if (objectType === this.objectType) {
+                        if (settings && settings.resetFilterOnReload) {
+                            if (this.state.table) {
+                                this.state.table.resetFilter();
+                            }
+                            const filterComponent = (this as any).getComponent('table-widget-filter');
+                            if (filterComponent) {
+                                filterComponent.reset();
+                            }
+                        } else if (this.state.table) {
+                            this.state.filterValue = this.state.table.getFilterValue();
+                        }
+                    }
+                },
+                sidebarToggled: () => { return; },
+                scrollInformationChanged: (objectType: KIXObjectType | string, objectId: string | number) => {
+                    this.scrollToRow(objectType, objectId);
+                },
+                additionalInformationChanged: () => { return; }
+            };
+
+            ContextService.getInstance().registerListener({
+                constexServiceListenerId: 'table-widget' + this.state.instanceId,
+                contextChanged: (id: string, c: Context, contextType, history: boolean, oldContext: Context) => {
+                    if (oldContext) {
+                        oldContext.unregisterListener('table-widget-' + this.state.instanceId);
+                    }
+                    if (context) {
+                        c.registerListener('table-widget-' + this.state.instanceId, this.contextListener);
+                    }
+
+                    if (this.state.table) {
+                        this.state.table.reload();
+                    }
+                },
+                contextRegistered: () => null
+            });
+
+            const context = ContextService.getInstance().getActiveContext(this.contextType);
+            context.registerListener('table-widget-' + this.state.instanceId, this.contextListener);
+        }
+    }
+
+    private prepareFormDependency(): void {
+        if (this.state.widgetConfiguration.formDependent) {
+            const context = ContextService.getInstance().getActiveContext(this.contextType);
+            const formId = context.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
+
+            this.formSubscriber = {
+                eventSubscriberId: IdService.generateDateBasedId('ReferencedObjectWidget'),
+                eventPublished: (data: FormValuesChangedEventData, eventId: string) => {
+                    for (const cv of data.changedValues) {
+                        let property = cv[0].property;
+                        if (cv[0].property === KIXObjectProperty.DYNAMIC_FIELDS) {
+                            const dfNameOption = cv[0].options.find(
+                                (o) => o.option === DynamicFormFieldOption.FIELD_NAME
+                            );
+                            if (dfNameOption) {
+                                property = 'DynamicFields.' + dfNameOption.value;
                             }
                         }
-                    },
-                    sidebarToggled: () => { return; },
-                    scrollInformationChanged: (objectType: KIXObjectType | string, objectId: string | number) => {
-                        this.scrollToRow(objectType, objectId);
-                    },
-                    additionalInformationChanged: () => { return; }
-                });
-            }
+
+                        if (this.state.widgetConfiguration.formDependencyProperties.some((fdp) => fdp === property)) {
+                            if (this.state.table) {
+                                this.state.table.reload();
+                            }
+                        }
+                    }
+                }
+            };
+            EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
         }
     }
 
     public onDestroy(): void {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
+
         EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_CREATED, this.subscriber);
         EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.subscriber);
@@ -178,9 +250,15 @@ class Component {
         EventService.getInstance().unsubscribe(TableEvent.RELOAD, this.subscriber);
         EventService.getInstance().unsubscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
 
+        ContextService.getInstance().unregisterListener('table-widget' + this.state.instanceId);
+
         const context = ContextService.getInstance().getActiveContext(this.contextType);
         if (context) {
             context.unregisterListener('table-widget-' + this.state.instanceId);
+        }
+
+        if (this.formSubscriber) {
+            EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
         }
 
         TableFactoryService.getInstance().destroyTable(`table-widget-${this.state.instanceId}`);
@@ -223,7 +301,9 @@ class Component {
 
             const table = await TableFactoryService.getInstance().createTable(
                 `table-widget-${this.state.instanceId}`, this.objectType,
-                settings.tableConfiguration, null, contextId, true, true, settings.shortTable, false, !settings.cache
+                settings.tableConfiguration, null, contextId, true,
+                settings.tableConfiguration ? settings.tableConfiguration.toggle : true,
+                settings.shortTable, false, !settings.cache
             );
 
             if (table) {

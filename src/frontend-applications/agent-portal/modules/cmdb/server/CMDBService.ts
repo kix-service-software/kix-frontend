@@ -303,21 +303,24 @@ export class CMDBAPIService extends KIXObjectAPIService {
     }
 
     public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        return criteria.filter((c) =>
-            c.property !== ConfigItemProperty.CONFIG_ITEM_ID &&
-            c.property !== ConfigItemProperty.NUMBER &&
-            c.property !== ConfigItemProperty.NAME &&
-            c.property !== 'InciStateIDs' &&
-            c.property !== 'DeplStateIDs' &&
-            c.property !== 'ClassIDs' &&
-            !c.property.startsWith('Data') &&
-            !c.property.startsWith('CurrentVersion')
-        );
+        return criteria.filter((c) => {
+            if (c.property === ConfigItemProperty.CONFIG_ITEM_ID && c.operator === SearchOperator.NOT_EQUALS) {
+                return true;
+            }
+
+            return c.property !== ConfigItemProperty.NUMBER &&
+                c.property !== ConfigItemProperty.NAME &&
+                c.property !== 'InciStateIDs' &&
+                c.property !== 'DeplStateIDs' &&
+                c.property !== 'ClassIDs' &&
+                !c.property.startsWith('Data') &&
+                !c.property.startsWith('CurrentVersion');
+        });
     }
 
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         const newCriteria = criteria.filter((c) =>
-            c.property === ConfigItemProperty.CONFIG_ITEM_ID ||
+            (c.property === ConfigItemProperty.CONFIG_ITEM_ID && c.operator !== SearchOperator.NOT_EQUALS) ||
             c.property === ConfigItemProperty.NUMBER ||
             c.property === ConfigItemProperty.NAME ||
             c.property === 'InciStateIDs' ||

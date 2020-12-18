@@ -8,9 +8,17 @@
  */
 
 import { Context } from '../../../../../model/Context';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { SearchContext } from '../../../../search/webapp/core';
 
 export class FAQArticleSearchContext extends Context {
 
     public static CONTEXT_ID: string = 'search-faq-article-context';
+
+    public async getUrl(): Promise<string> {
+        const context = await ContextService.getInstance().getContext<SearchContext>(SearchContext.CONTEXT_ID);
+        const url = await context.getUrl();
+        return url;
+    }
 
 }

@@ -37,7 +37,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         WidgetService.getInstance().setWidgetType('notification-message-group', WidgetType.GROUP);
         this.state.labelProvider = new NotificationLabelProvider();
         const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        this.state.widgetConfiguration = context
+            ? await context.getWidgetConfiguration(this.state.instanceId)
+            : undefined;
         this.contextListenerId = IdService.generateDateBasedId('notification-text-widget');
 
         context.registerListener(this.contextListenerId, {
@@ -53,7 +55,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             },
             additionalInformationChanged: () => { return; }
         });
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        this.state.widgetConfiguration = context
+            ? await context.getWidgetConfiguration(this.state.instanceId)
+            : undefined;
 
         await this.initWidget(await context.getObject<Notification>());
     }

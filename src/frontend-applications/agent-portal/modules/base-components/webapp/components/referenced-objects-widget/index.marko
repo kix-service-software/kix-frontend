@@ -6,16 +6,12 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <widget
     instanceId=state.instanceId
     title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
     icon=(state.widgetConfiguration ? state.widgetConfiguration.icon : null)>
     <@content>
         <div.referenced-objects-content>
-            <div.reference-objects-filter>
-                <filter showFilterCount=false on-filter("filter")/>
-            </div>
             <div.reference-objects-table-container>
                 <if(state.table)>
                     <standard-table-NEW table=state.table/>

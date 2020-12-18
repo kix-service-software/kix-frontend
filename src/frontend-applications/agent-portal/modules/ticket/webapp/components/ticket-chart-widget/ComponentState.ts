@@ -15,7 +15,8 @@ export class ComponentState extends WidgetComponentState {
     public constructor(
         public title: string = '',
         public chartConfig: ChartConfiguration = null,
-        public loading: boolean = true
+        public loading: boolean = true,
+        public show: boolean = false
     ) {
         super();
     }

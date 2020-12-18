@@ -19,7 +19,8 @@ export class ComponentState {
         public content: string = null,
         public contentType: string = null,
         public showUnknown: boolean = false,
-        public iconId: string = IdService.generateDateBasedId()
+        public iconId: string = IdService.generateDateBasedId(),
+        public tooltip: string = ''
     ) { }
 
 }

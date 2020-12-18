@@ -81,9 +81,15 @@ export class GeneralCatalogLabelProvider extends LabelProvider<GeneralCatalogIte
     }
 
     public async getObjectText(
-        generalCatalog: GeneralCatalogItem, id?: boolean, title?: boolean, translatable?: boolean
+        generalCatalog: GeneralCatalogItem, id?: boolean, title?: boolean, translatable: boolean = true
     ): Promise<string> {
-        return `${generalCatalog.Name}`;
+        let text = generalCatalog.Name;
+
+        if (translatable) {
+            text = await TranslationService.translate(generalCatalog.Name);
+        }
+
+        return text;
     }
 
     public getObjectIcon(catlogItem?: GeneralCatalogItem): string | ObjectIcon {

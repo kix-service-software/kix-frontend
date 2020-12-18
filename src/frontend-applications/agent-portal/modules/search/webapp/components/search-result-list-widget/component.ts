@@ -44,10 +44,10 @@ class Component implements IKIXObjectSearchListener {
         this.eventSubscriberId = this.state.instanceId;
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         const currentContext = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = currentContext
-            ? currentContext.getWidgetConfiguration(this.state.instanceId)
+            ? await currentContext.getWidgetConfiguration(this.state.instanceId)
             : undefined;
 
         SearchService.getInstance().registerListener(this);

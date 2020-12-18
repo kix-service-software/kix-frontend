@@ -33,7 +33,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async update(contact: Contact): Promise<void> {
         if (contact && contact instanceof Contact) {
-            const dialogs = ContextFactory.getInstance().getContextDescriptors(
+            const dialogs = await ContextFactory.getInstance().getContextDescriptors(
                 ContextMode.CREATE, KIXObjectType.TICKET
             );
             this.state.show = contact.ValidID === 1 && dialogs && dialogs.length > 0;

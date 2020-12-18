@@ -13,6 +13,7 @@ import { Macro } from './Macro';
 import { ExecPlan } from './ExecPlan';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { JobTypes } from './JobTypes';
+import { SearchOperator } from '../../search/model/SearchOperator';
 
 export class Job extends KIXObject {
 
@@ -60,20 +61,33 @@ export class Job extends KIXObject {
                 ? job.ExecPlans.map((ep) => new ExecPlan(ep))
                 : null;
 
-            if (this.Filter) {
-                for (const key in this.Filter) {
-                    if (Array.isArray(this.Filter[key])) {
-                        for (const filter of this.Filter[key]) {
-                            if (filter.Field.match(/^DynamicField_/)) {
-                                filter.Field = filter.Field.replace(
-                                    /^DynamicField_(.+)$/, `${KIXObjectProperty.DYNAMIC_FIELDS}.$1`
-                                );
-                            }
+            this.prepareFilter();
+        }
+    }
+
+    private prepareFilter() {
+        if (this.Filter) {
+            // key = AND or OR
+            for (const key in this.Filter) {
+                if (Array.isArray(this.Filter[key])) {
+                    const preparedFilter = [];
+                    for (const filter of this.Filter[key]) {
+                        if (filter.Field.match(/^DynamicField_/)) {
+                            filter.Field = filter.Field.replace(
+                                /^DynamicField_(.+)$/, `${KIXObjectProperty.DYNAMIC_FIELDS}.$1`
+                            );
+                        }
+                        if (filter.Operator === SearchOperator.GREATER_THAN_OR_EQUAL) {
+                            this.handleBetweenValueOnGTE(preparedFilter, filter);
+                        } else if (filter.Operator === SearchOperator.LESS_THAN_OR_EQUAL) {
+                            this.handleBetweenValueOnLTE(preparedFilter, filter);
+                        } else {
+                            preparedFilter.push(filter);
                         }
                     }
+                    this.Filter[key] = preparedFilter;
                 }
             }
         }
     }
-
 }

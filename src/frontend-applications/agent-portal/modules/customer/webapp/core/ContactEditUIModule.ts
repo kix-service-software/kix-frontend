@@ -21,6 +21,8 @@ import { ContextService } from '../../../../modules/base-components/webapp/core/
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
 import { ImportService } from '../../../import/webapp/core/ImportService';
 import { ContactDuplicateAction } from './actions/ContactDuplicateAction';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
 
 export class UIModule implements IUIModule {
 
@@ -42,22 +44,31 @@ export class UIModule implements IUIModule {
     private async registerContexts(): Promise<void> {
         const newContactContext = new ContextDescriptor(
             NewContactDialogContext.CONTEXT_ID, [KIXObjectType.CONTACT], ContextType.DIALOG, ContextMode.CREATE,
-            false, 'new-contact-dialog', ['contacts'], NewContactDialogContext
+            false, 'new-contact-dialog', ['contacts'], NewContactDialogContext,
+            [
+                new UIComponentPermission('contacts', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(newContactContext);
+        ContextService.getInstance().registerContext(newContactContext);
 
         const editContactContext = new ContextDescriptor(
             EditContactDialogContext.CONTEXT_ID, [KIXObjectType.CONTACT], ContextType.DIALOG, ContextMode.EDIT,
-            false, 'edit-contact-dialog', ['contacts'], EditContactDialogContext
+            false, 'edit-contact-dialog', ['contacts'], EditContactDialogContext,
+            [
+                new UIComponentPermission('contacts', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(editContactContext);
+        ContextService.getInstance().registerContext(editContactContext);
 
         const contactImportDialogContext = new ContextDescriptor(
             ContactImportDialogContext.CONTEXT_ID, [KIXObjectType.CONTACT],
             ContextType.DIALOG, ContextMode.IMPORT,
-            false, 'import-dialog', ['contacts'], ContactImportDialogContext
+            false, 'import-dialog', ['contacts'], ContactImportDialogContext,
+            [
+                new UIComponentPermission('contacts', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(contactImportDialogContext);
+        ContextService.getInstance().registerContext(contactImportDialogContext);
     }
 
     private registerActions(): void {

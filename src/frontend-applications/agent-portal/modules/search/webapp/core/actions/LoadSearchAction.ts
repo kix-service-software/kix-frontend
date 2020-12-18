@@ -17,7 +17,7 @@ import { ContextService } from '../../../../../modules/base-components/webapp/co
 
 export class LoadSearchAction extends AbstractAction {
 
-    public async  initAction(): Promise<void> {
+    public async initAction(): Promise<void> {
         this.icon = 'kix-icon-search';
         this.text = 'Translatable#Search';
     }

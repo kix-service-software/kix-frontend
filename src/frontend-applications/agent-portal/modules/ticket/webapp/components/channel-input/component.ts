@@ -88,6 +88,10 @@ class Component extends FormInputComponent<number, ComponentState> {
         if (noChannelOption) {
             this.state.noChannel = noChannelOption.value;
         }
+
+        if (this.state.field.readonly || this.state.field.required) {
+            this.state.noChannel = false;
+        }
         this.setFields();
     }
 

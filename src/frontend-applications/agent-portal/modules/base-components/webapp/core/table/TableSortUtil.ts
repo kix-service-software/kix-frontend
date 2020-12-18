@@ -14,16 +14,24 @@ import { SortUtil } from '../../../../../model/SortUtil';
 
 export class TableSortUtil {
 
-    public static sort(
+    public static async sort(
         rows: Row[], columnId: string, sortOrder: SortOrder, dataType: DataType
-    ): Row[] {
+    ): Promise<Row[]> {
         if (columnId && sortOrder && dataType) {
+
+            const useObjectValue =
+                dataType === DataType.DATE_TIME || dataType === DataType.DATE || dataType === DataType.NUMBER;
+
+            if (!useObjectValue) {
+                const valuePromises = [];
+                rows.forEach((r) => valuePromises.push(r.getCell(columnId).getDisplayValue()));
+
+                await Promise.all(valuePromises);
+            }
+
             rows.sort((a, b) => {
                 const cellA = a.getCell(columnId);
                 const cellB = b.getCell(columnId);
-
-                const useObjectValue =
-                    dataType === DataType.DATE_TIME || dataType === DataType.DATE || dataType === DataType.NUMBER;
 
                 const valueA = useObjectValue ? cellA.getValue().objectValue : cellA.getValue().displayValue;
                 const valueB = useObjectValue ? cellB.getValue().objectValue : cellB.getValue().displayValue;

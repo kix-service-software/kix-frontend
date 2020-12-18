@@ -8,6 +8,7 @@
  */
 
 import { Context } from '../../../../model/Context';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
 
 export class AdminContext extends Context {
 
@@ -15,6 +16,7 @@ export class AdminContext extends Context {
 
     public adminModuleId: string;
     public categoryName: string;
+    public filterValue: string;
 
     public getIcon(): string {
         return 'kix-icon-admin';
@@ -24,12 +26,51 @@ export class AdminContext extends Context {
         return 'Admin Dashboard';
     }
 
+    public async initContext(urlParams: URLSearchParams): Promise<void> {
+        if (urlParams) {
+            if (urlParams.has('moduleId')) {
+                this.adminModuleId = decodeURI(urlParams.get('moduleId'));
+            }
+
+            if (urlParams.has('filter')) {
+                this.filterValue = decodeURI(urlParams.get('filter'));
+            }
+        }
+    }
+
+    public async getUrl(): Promise<string> {
+        let url: string = '';
+        if (Array.isArray(this.descriptor.urlPaths) && this.descriptor.urlPaths.length) {
+            url = this.descriptor.urlPaths[0];
+            const params = [];
+            if (this.adminModuleId) {
+                params.push(`moduleId=${this.adminModuleId}`);
+            }
+
+            if (this.filterValue) {
+                params.push(`filter=${this.filterValue}`);
+            }
+
+            if (params.length) {
+                url += `?${params.join('&')}`;
+            }
+        }
+        return url;
+    }
+
     public setAdminModule(adminModuleId: string, categoryName: string): void {
         if (!this.adminModuleId || this.adminModuleId !== adminModuleId) {
             this.adminModuleId = adminModuleId;
             this.categoryName = categoryName;
+            this.filterValue = null;
             this.listeners.forEach((l) => l.objectChanged(null, null, null));
+            ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
         }
+    }
+
+    public setFilterValue(filterValue: string): void {
+        this.filterValue = filterValue;
+        ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
     }
 
     public reset(refresh?: boolean): void {
@@ -37,6 +78,7 @@ export class AdminContext extends Context {
         if (!refresh) {
             this.adminModuleId = null;
             this.categoryName = null;
+            this.filterValue = null;
         }
     }
 

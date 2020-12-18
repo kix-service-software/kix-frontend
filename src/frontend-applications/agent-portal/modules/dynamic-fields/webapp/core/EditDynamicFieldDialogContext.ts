@@ -30,7 +30,9 @@ export class EditDynamicFieldDialogContext extends Context {
         super(descriptor, objectId, configuration);
     }
 
-    public async getObject<O extends KIXObject>(kixObjectType: KIXObjectType = KIXObjectType.TICKET): Promise<O> {
+    public async getObject<O extends KIXObject>(
+        kixObjectType: KIXObjectType = KIXObjectType.DYNAMIC_FIELD
+    ): Promise<O> {
         let object;
         if (kixObjectType === KIXObjectType.DYNAMIC_FIELD) {
             const fieldId = this.getObjectId();

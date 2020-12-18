@@ -49,7 +49,7 @@ class Component {
             this.state.logoIcon = icons[0];
         }
 
-        const dialogs = ContextFactory.getInstance().getContextDescriptors(ContextMode.CREATE);
+        const dialogs = await await ContextFactory.getInstance().getContextDescriptors(ContextMode.CREATE);
         this.state.allowNew = dialogs && (dialogs.length > 0);
     }
 

@@ -11,6 +11,7 @@ import { KIXObjectType } from './KIXObjectType';
 import { ConfiguredPermissions } from '../ConfiguredPermissions';
 import { Link } from '../../modules/links/model/Link';
 import { DynamicFieldValue } from '../../modules/dynamic-fields/model/DynamicFieldValue';
+import { SearchOperator } from '../../modules/search/model/SearchOperator';
 
 export abstract class KIXObject {
 
@@ -62,6 +63,37 @@ export abstract class KIXObject {
 
     public getIdPropertyName(): string {
         return 'ID';
+    }
+
+    protected handleBetweenValueOnLTE(preparedFilter: any[], filter: any) {
+        const propertyFilter = preparedFilter.find(
+            (f) => f.Field === filter.Field
+                && f.Operator === SearchOperator.GREATER_THAN_OR_EQUAL
+        );
+        if (propertyFilter) {
+            propertyFilter.Operator = SearchOperator.BETWEEN;
+            propertyFilter.Value = [
+                propertyFilter.Value,
+                filter.Value,
+            ];
+        } else {
+            preparedFilter.push(filter);
+        }
+    }
+
+    protected handleBetweenValueOnGTE(preparedFilter: any[], filter: any) {
+        const propertyFilter = preparedFilter.find(
+            (f) => f.Field === filter.Field && f.Operator === SearchOperator.LESS_THAN_OR_EQUAL
+        );
+        if (propertyFilter) {
+            propertyFilter.Operator = SearchOperator.BETWEEN;
+            propertyFilter.Value = [
+                filter.Value,
+                propertyFilter.Value
+            ];
+        } else {
+            preparedFilter.push(filter);
+        }
     }
 
 }

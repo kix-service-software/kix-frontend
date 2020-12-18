@@ -28,7 +28,6 @@ import { LabelService } from './LabelService';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { ExtendedLabelProvider } from './ExtendedLabelProvider';
 import { Label } from './Label';
-import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class LabelProvider<T = any> implements ILabelProvider<T> {
 

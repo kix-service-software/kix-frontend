@@ -50,21 +50,21 @@ export class UIModule implements IUIModule {
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
             false, 'new-webform-dialog', ['webforms'], NewWebformDialogContext
         );
-        await ContextService.getInstance().registerContext(newWebformDialogContext);
+        ContextService.getInstance().registerContext(newWebformDialogContext);
 
         const webformDetailsContext = new ContextDescriptor(
             WebformDetailsContext.CONTEXT_ID, [KIXObjectType.WEBFORM],
             ContextType.MAIN, ContextMode.DETAILS,
             false, 'object-details-page', ['webforms'], WebformDetailsContext
         );
-        await ContextService.getInstance().registerContext(webformDetailsContext);
+        ContextService.getInstance().registerContext(webformDetailsContext);
 
         const editWebformDialogContext = new ContextDescriptor(
             EditWebformDialogContext.CONTEXT_ID, [KIXObjectType.WEBFORM],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
             false, 'edit-webform-dialog', ['webforms'], EditWebformDialogContext
         );
-        await ContextService.getInstance().registerContext(editWebformDialogContext);
+        ContextService.getInstance().registerContext(editWebformDialogContext);
 
         FormValidationService.getInstance().registerValidator(new WebformAcceptedDomainsValidator());
     }

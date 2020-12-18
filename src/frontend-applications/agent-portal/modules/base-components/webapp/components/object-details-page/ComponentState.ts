@@ -14,8 +14,8 @@ export class ComponentState {
 
     public constructor(
         public instanceId: string = null,
-        public lanes: ConfiguredWidget[] = [],
-        public contentWidgets: ConfiguredWidget[] = [],
+        public lanes: Array<[string, any]> = [],
+        public contentWidgets: Array<[string, any]> = [],
         public actions: AbstractAction[] = [],
         public error: any = null,
         public title: string = '',

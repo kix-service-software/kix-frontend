@@ -36,6 +36,8 @@ import { FormFieldValue } from '../../../../../model/configuration/FormFieldValu
 import { SetupEvent } from '../../../../setup-assistant/webapp/core/SetupEvent';
 import { SetupStep } from '../../../../setup-assistant/webapp/core/SetupStep';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
+import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
+import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFieldTypes';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -241,7 +243,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             new FormFieldConfiguration(
                 'SendmailModule::AuthPassword', 'Translatable#Password', 'SendmailModule::AuthPassword',
                 null, false, passwordHint,
-                null, null, null, null, null, null, null, null, null, null, null, null, null,
+                [
+                    new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
+                ],
+                null, null, null, null, null, null, null, null, null, null, null, null,
                 passwordReadonly
             )
         ];

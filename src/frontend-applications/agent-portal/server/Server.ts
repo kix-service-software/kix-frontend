@@ -237,7 +237,7 @@ export class Server implements IServer {
             }
 
             await this.extendFormConfigurations(configurations);
-            await this.handleConfigurationExtensions(configurations);
+            configurations = await this.handleConfigurationExtensions(configurations);
 
             const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
 
@@ -339,16 +339,18 @@ export class Server implements IServer {
         }
     }
 
-    private static async handleConfigurationExtensions(configurations: IConfiguration[]): Promise<void> {
+    private static async handleConfigurationExtensions(configurations: IConfiguration[]): Promise<IConfiguration[]> {
         if (configurations.length) {
             const extensions = await PluginService.getInstance().getExtensions<IModifyConfigurationExtension>(
                 AgentPortalExtensions.MODIFY_CONFIGURATION
             );
 
             for (const extension of extensions) {
-                await extension.modifyConfigurations(configurations);
+                configurations = await extension.modifyConfigurations(configurations);
             }
         }
+
+        return configurations;
     }
 
     private static getPlugins(): any[] {

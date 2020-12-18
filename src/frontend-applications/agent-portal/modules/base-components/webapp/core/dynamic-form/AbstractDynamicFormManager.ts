@@ -96,23 +96,22 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
                     )
                 ]
             );
-            const fields = await KIXObjectService.loadObjects<DynamicField>(
+            const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
                 KIXObjectType.DYNAMIC_FIELD, null, loadingOptions
-            );
+            ).catch(() => [] as DynamicField[]);
 
-            if (fields) {
-                for (const field of fields) {
+            if (dynamicFields && dynamicFields.length) {
+                for (const df of dynamicFields) {
                     if (
-                        field.FieldType === DynamicFieldTypes.CI_REFERENCE
+                        df.FieldType === DynamicFieldTypes.CI_REFERENCE
                         && !await this.checkReadPermissions('/cmdb/configitems')
                     ) { continue; }
                     if (
-                        field.FieldType === DynamicFieldTypes.TICKET_REFERENCE
+                        df.FieldType === DynamicFieldTypes.TICKET_REFERENCE
                         && !await this.checkReadPermissions('/tickets')
                     ) { continue; }
-
-                    const translated = await TranslationService.translate(field.Label);
-                    properties.push([KIXObjectProperty.DYNAMIC_FIELDS + '.' + field.Name, translated]);
+                    const label = await TranslationService.translate(df.Label);
+                    properties.push([`${KIXObjectProperty.DYNAMIC_FIELDS}.${df.Name}`, label]);
                 }
             }
         }
@@ -340,27 +339,73 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     }
 
     public async validate(): Promise<ValidationResult[]> {
+        const fullResult = [];
         for (const extendedManager of this.extendedFormManager) {
             const result = await extendedManager.validate();
             if (result) {
-                return result;
+                fullResult.push(...result);
             }
         }
         for (const value of this.values) {
             if (value.operator === SearchOperator.BETWEEN && Array.isArray(value.value)) {
-                const start: Date = new Date(value.value[0]);
-                const end: Date = new Date(value.value[1]);
-                if (
-                    typeof start.getTime === 'function'
-                    && typeof end.getTime === 'function'
-                    && start.getTime() > end.getTime()
-                ) {
-                    value.valid = false;
-                    return [new ValidationResult(ValidationSeverity.ERROR, 'Translatable#Start time has to be before end time')];
-                } else {
-                    value.valid = true;
+                const fieldType = await this.getInputType(value.property);
+                if (fieldType && fieldType === InputFieldTypes.DATE || fieldType === InputFieldTypes.DATE_TIME) {
+                    const result = this.checkDate(value);
+                    if (result) {
+                        fullResult.push(...result);
+                    }
+                } else if (fieldType && fieldType === InputFieldTypes.NUMBER) {
+                    const result = this.checkNumber(value);
+                    if (result) {
+                        fullResult.push(...result);
+                    }
                 }
             }
+        }
+        return fullResult;
+    }
+
+    private checkDate(value: ObjectPropertyValue) {
+        const start: Date = new Date(value.value[0]);
+        const end: Date = new Date(value.value[1]);
+        if (typeof start.getTime !== 'function') {
+            value.valid = false;
+            return [new ValidationResult(
+                ValidationSeverity.ERROR, 'Translatable#Start date/time is not given'
+            )];
+        } else if (typeof end.getTime !== 'function') {
+            value.valid = false;
+            return [new ValidationResult(
+                ValidationSeverity.ERROR, 'Translatable#End date/time is not given'
+            )];
+        } else if (start.getTime() > end.getTime()) {
+            value.valid = false;
+            return [new ValidationResult(
+                ValidationSeverity.ERROR, 'Translatable#Start time has to be before end time'
+            )];
+        } else {
+            value.valid = true;
+        }
+        return null;
+    }
+    private checkNumber(value: ObjectPropertyValue) {
+        if (isNaN(Number(value.value[0])) || value.value[0] === null) {
+            value.valid = false;
+            return [new ValidationResult(
+                ValidationSeverity.ERROR, 'Translatable#Start value is not given'
+            )];
+        } else if (isNaN(Number(value.value[1])) || value.value[1] === null) {
+            value.valid = false;
+            return [new ValidationResult(
+                ValidationSeverity.ERROR, 'Translatable#End value is not given'
+            )];
+        } else if (Number(value.value[1]) > Number(value.value[0])) {
+            value.valid = false;
+            return [new ValidationResult(
+                ValidationSeverity.ERROR, 'Translatable#Start value is greate than end value'
+            )];
+        } else {
+            value.valid = true;
         }
         return null;
     }
@@ -406,7 +451,6 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             }
         }
 
-        let isMultiSelect = false;
         const dfName = KIXObjectService.getDynamicFieldName(property);
         if (dfName) {
             const field = await KIXObjectService.loadDynamicField(dfName);
@@ -417,12 +461,12 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
                     field.FieldType === DynamicFieldTypes.TICKET_REFERENCE ||
                     field.FieldType === DynamicFieldTypes.CI_REFERENCE
                 ) &&
-                field.Config && Number(field.Config.CountMax) > 1
+                field.Config && Number(field.Config.CountMax) === 1
             ) {
-                isMultiSelect = true;
+                return false;
             }
         }
-        return isMultiSelect;
+        return;
     }
 
     protected async getInputTypeForDF(property: string): Promise<InputFieldTypes> {

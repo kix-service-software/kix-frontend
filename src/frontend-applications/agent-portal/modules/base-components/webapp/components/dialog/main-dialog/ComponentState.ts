@@ -7,7 +7,7 @@
  * --
  */
 
-import { WidgetConfiguration } from '../../../../../../model/configuration/WidgetConfiguration';
+import { ConfiguredWidget } from '../../../../../../model/configuration/ConfiguredWidget';
 
 export class ComponentState {
 
@@ -15,7 +15,7 @@ export class ComponentState {
         public show: boolean = false,
         public dialogHint: string = '',
         public contextId: string = null,
-        public dialogWidgets: WidgetConfiguration[] = [],
+        public dialogWidgets: ConfiguredWidget[] = [],
     ) { }
 
 }

@@ -20,7 +20,8 @@ export class ComponentState extends AbstractComponentState {
         public hint: string = '',
         public show: boolean = false,
         public canDraggable: boolean = false,
-        public draggable: string = 'false'
+        public draggable: string = 'false',
+        public label: string = ''
     ) {
         super();
     }

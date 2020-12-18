@@ -37,7 +37,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        this.state.widgetConfiguration = context
+            ? await context.getWidgetConfiguration(this.state.instanceId)
+            : undefined;
 
         this.contextListenerId = IdService.generateDateBasedId('mail-account-info-widget-');
         context.registerListener(this.contextListenerId, {

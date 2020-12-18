@@ -30,7 +30,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 ? await manager.getInputType(propertyCell.getValue().objectValue)
                 : null;
             this.state.isLabelCell = inputType === InputFieldTypes.DROPDOWN
-                || inputType === InputFieldTypes.OBJECT_REFERENCE;
+                || inputType === InputFieldTypes.OBJECT_REFERENCE
+                || inputType === InputFieldTypes.DATE
+                || inputType === InputFieldTypes.DATE_TIME;
         }
         this.state.cell = input.cell;
     }

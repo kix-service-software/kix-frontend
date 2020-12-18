@@ -13,29 +13,46 @@
         display: grid;
         grid-gap: @margin-small * 2;
         grid-auto-flow: column;
+
         &.minimizable {
             cursor: pointer;
+
             &:hover {
                 >.toggle {
                     color: darken(@secondary-0, 20%);
                 }
             }
         }
+
         >.label>span,
         >.value {
             .shorten-text;
+
+            >textarea {
+                background-color: @secondary-6;
+                border: 0;
+                margin: 0;
+                padding: 0;
+                width: 30rem;
+                height: 10rem;
+                resize: none;
+            }
         }
+
         >.label {
             font-weight: bold;
             display: grid;
             grid-template-columns: minmax(auto, min-content) max-content;
+
             &::after {
                 content: ':';
             }
         }
+
         >.file-entry {
             grid-template-columns: 1rem minmax(10rem, auto) minmax(10rem, auto);
         }
+
         >.toggle {
             .icon-font-size-normal;
             display: grid;
@@ -43,24 +60,30 @@
             grid-gap: @margin-small;
             align-items: center;
             color: @secondary-0;
+
             >.line {
                 height: 1px;
                 background-color: @secondary-3;
                 min-width: 5rem;
+
                 &.minimized {
                     background-color: @secondary-1;
                 }
             }
         }
     }
-    >.sub {
-        margin-top: @margin-small;
-        >.label-value-groups-container {
-            margin: 0 1.75rem;
-            >.group {
-                >.label {
-                    font-weight: normal;
-                }
+
+}
+
+>.sub {
+    margin-top: @margin-small;
+
+    >.label-value-groups-container {
+        margin: 0 1.75rem;
+
+        >.group {
+            >.label {
+                font-weight: normal;
             }
         }
     }

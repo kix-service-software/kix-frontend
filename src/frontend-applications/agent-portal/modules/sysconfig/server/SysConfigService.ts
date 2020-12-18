@@ -117,11 +117,11 @@ export class SysConfigService extends KIXObjectAPIService {
 
     public async deleteObjects(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: Array<string | number>,
-        deleteOptions?: KIXObjectSpecificDeleteOptions
+        deleteOptions?: KIXObjectSpecificDeleteOptions, logError: boolean = true
     ): Promise<void> {
         if (objectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION) {
             const uris = objectIds.map((id) => this.buildUri(this.RESOURCE_URI, 'definitions', id));
-            const errors: Error[] = await this.sendDeleteRequest(token, clientRequestId, uris, objectType)
+            const errors: Error[] = await this.sendDeleteRequest(token, clientRequestId, uris, objectType, logError)
                 .catch((error) => { throw new Error(error.Code, error.Message); });
             errors.forEach((e) => LoggingService.getInstance().error(`${e.Code}: ${e.Message}`, e));
         }

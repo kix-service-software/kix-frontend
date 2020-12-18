@@ -47,7 +47,9 @@ class Component {
             TicketDetailsContext.CONTEXT_ID
         );
 
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        this.state.widgetConfiguration = context
+            ? await context.getWidgetConfiguration(this.state.instanceId)
+            : undefined;
 
         this.subscriber = {
             eventSubscriberId: 'ticket-info-widget',
@@ -120,7 +122,7 @@ class Component {
     }
 
     private async initContact(context: Context): Promise<void> {
-        const config = context ? context.getWidgetConfiguration('contact-info-overlay') : undefined;
+        const config = context ? await context.getWidgetConfiguration('contact-info-overlay') : undefined;
         if (!isNaN(Number(this.state.ticket.ContactID))) {
 
             if (config && config.configuration) {
@@ -136,7 +138,7 @@ class Component {
     }
 
     private async initOrganisation(context: Context): Promise<void> {
-        const config = context ? context.getWidgetConfiguration('organisation-info-overlay') : undefined;
+        const config = context ? await context.getWidgetConfiguration('organisation-info-overlay') : undefined;
         if (!isNaN(Number(this.state.ticket.OrganisationID))) {
 
             if (config && config.configuration) {

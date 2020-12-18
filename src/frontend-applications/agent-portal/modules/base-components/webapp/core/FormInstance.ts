@@ -30,6 +30,8 @@ import { FormFactory } from './FormFactory';
 import { KIXObjectFormService } from './KIXObjectFormService';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { FormGroupConfiguration } from '../../../../model/configuration/FormGroupConfiguration';
+import { ContextService } from './ContextService';
+import { ContextType } from '../../../../model/ContextType';
 
 export class FormInstance {
 
@@ -341,7 +343,7 @@ export class FormInstance {
             return [formField ? formField.instanceId : null, v[1]];
         });
 
-        this.provideFormFieldValues(instanceValues, originInstanceId, silent);
+        this.provideFormFieldValues(instanceValues.filter((iv) => iv[0] !== null), originInstanceId, silent);
     }
 
     public async provideFormFieldValues<T>(
@@ -358,7 +360,7 @@ export class FormInstance {
             const formFieldValue = this.formFieldValues.get(instanceId);
             formFieldValue.value = value;
 
-            const formField = await this.getFormField(instanceId);
+            const formField = this.getFormField(instanceId);
             if (this.form.validation) {
                 const result = await FormValidationService.getInstance().validate(formField, this.form.id);
                 formFieldValue.valid = result.findIndex((vr) => vr.severity === ValidationSeverity.ERROR) === -1;
@@ -367,6 +369,11 @@ export class FormInstance {
         }
 
         if (!silent) {
+            const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+            if (dialogContext) {
+                await dialogContext.setFormObject();
+            }
+
             EventService.getInstance().publish(
                 FormEvent.VALUES_CHANGED, new FormValuesChangedEventData(this, changedFieldValues, originInstanceId)
             );

@@ -11,6 +11,6 @@ import { IConfiguration } from '../../model/configuration/IConfiguration';
 
 export interface IModifyConfigurationExtension {
 
-    modifyConfigurations(configurations: IConfiguration[]): Promise<void>;
+    modifyConfigurations(configurations: IConfiguration[]): Promise<IConfiguration[]>;
 
 }
