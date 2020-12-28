@@ -45,8 +45,7 @@ class Extension extends KIXExtension implements IInitialDataExtension {
             const config = {
                 CountDefault: '0', CountMax: '1', CountMin: '0',
                 DateRestriction: 'none', DefaultValue: '0', ItemSeparator: '',
-                YearsInFuture: '0', YearsInPast: '0',
-                Link: '', ValueTTL: '',
+                YearsInFuture: '0', YearsInPast: '0'
             };
 
             const parameter: Array<[string, any]> = [
