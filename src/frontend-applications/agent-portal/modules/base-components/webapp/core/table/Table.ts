@@ -41,7 +41,6 @@ export class Table implements Table {
     private columns: Column[] = [];
     private contentProvider: ITableContentProvider;
     private columnConfiguration: IColumnConfiguration[];
-    private objectType: KIXObjectType | string;
 
     private filterValue: string;
     private filterCriteria: UIFilterCriterion[];
@@ -70,7 +69,9 @@ export class Table implements Table {
     }
 
     public getObjectType(): KIXObjectType | string {
-        return this.objectType;
+        return this.tableConfiguration
+            ? this.tableConfiguration.objectType
+            : this.contentProvider.getObjectType();
     }
 
     public setContentProvider(contentProvider: ITableContentProvider): void {
@@ -95,9 +96,6 @@ export class Table implements Table {
             if (this.contentProvider) {
                 await this.contentProvider.initialize();
                 await this.loadRowData();
-                this.objectType = this.tableConfiguration
-                    ? this.tableConfiguration.objectType
-                    : this.contentProvider.getObjectType();
             }
 
             this.rows.forEach((r) => {
