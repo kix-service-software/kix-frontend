@@ -279,6 +279,10 @@ export abstract class KIXObjectFormService {
             predefinedParameterValues.forEach((pv) => parameter.push([pv[0], pv[1]]));
         }
 
+        if (!formId) {
+            return parameter;
+        }
+
         const formInstance = await FormService.getInstance().getFormInstance(formId);
         const formValues = formInstance.getAllFormFieldValues();
         const iterator = formValues.keys();
