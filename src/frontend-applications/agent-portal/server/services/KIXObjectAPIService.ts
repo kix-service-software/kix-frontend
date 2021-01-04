@@ -69,7 +69,13 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     ): Promise<O[]> {
         const query = this.prepareQuery(loadingOptions);
         if (loadingOptions && loadingOptions.filter && loadingOptions.filter.length) {
-            await this.buildFilter(loadingOptions.filter, responseProperty, query, token);
+            const success = await this.buildFilter(loadingOptions.filter, responseProperty, query, token);
+
+            if (!success) {
+                LoggingService.getInstance().warning('Invalid api filter.', loadingOptions.filter);
+                return [];
+            }
+
         }
 
         let objects: O[] = [];
@@ -370,7 +376,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
     public async buildFilter(
         criteria: FilterCriteria[], objectProperty: string, query: any, token?: string
-    ): Promise<any> {
+    ): Promise<boolean> {
 
         const nonDynamicFieldCriteria = criteria.filter(
             (c) => !c.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
@@ -415,6 +421,14 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
         if (searchCriteria && searchCriteria.length) {
 
+            const hasEmptyINSearch = searchCriteria.some(
+                (c) => c.operator === SearchOperator.IN && (Array.isArray(c.value) && !c.value.length)
+            );
+
+            if (hasEmptyINSearch) {
+                return false;
+            }
+
             // use correct property name
             const fulltextCriterion = searchCriteria.find((c) => c.property === SearchProperty.FULLTEXT);
             if (fulltextCriterion) {
@@ -426,7 +440,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             query.search = encodeURIComponent(JSON.stringify(apiSearch));
         }
 
-        return query;
+        return true;
     }
 
     public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {

@@ -15,7 +15,9 @@ export class ComponentState extends WidgetComponentState {
         public prepared: boolean = false,
         public viewLabel: string = 'Translatable#Week',
         public view: string = 'month',
-        public currentDate: string = ''
+        public currentDate: string = '',
+        public calendars: any[] = [],
+        public loading: boolean = false
     ) {
         super();
     }

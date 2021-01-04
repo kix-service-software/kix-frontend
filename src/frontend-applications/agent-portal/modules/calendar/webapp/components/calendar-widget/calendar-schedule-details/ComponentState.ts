@@ -24,6 +24,10 @@ export class ComponentState {
         public organisation: string = '',
         public ticketNumber: string = '',
         public icon: string | ObjectIcon = null,
+        public avatar: ObjectIcon | string = null,
+        public initials: string = '',
+        public contactTooltip: string = '',
+        public userColor: string = ''
     ) { }
 
 }

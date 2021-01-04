@@ -32,6 +32,7 @@ import { RoutingConfiguration } from '../../../../model/configuration/RoutingCon
 import { ContextMode } from '../../../../model/ContextMode';
 import { ConfigItemAttachment } from '../../model/ConfigItemAttachment';
 import { Version } from '../../model/Version';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> {
 
@@ -205,7 +206,8 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 );
 
                 for (const i of items) {
-                    const text = await LabelService.getInstance().getObjectText(i);
+                    let text = await LabelService.getInstance().getObjectText(i);
+                    text = await TranslationService.translate(text);
                     nodes.push(new TreeNode(
                         i.ItemID, text, new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, i.ItemID),
                         undefined, undefined, undefined,

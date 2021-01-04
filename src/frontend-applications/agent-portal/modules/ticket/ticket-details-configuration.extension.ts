@@ -466,7 +466,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             [
                                 {
                                     icon: 'kix-icon-ticket',
-                                    text: 'Open Tickets of Contact',
+                                    text: 'Translatable#Open Tickets of Contact',
                                     routingConfiguration: {
                                         contextId: 'search',
                                         contextMode: ContextMode.SEARCH,
@@ -500,7 +500,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 },
                                 {
                                     icon: 'kix-icon-ticket',
-                                    text: 'Open Tickets of Organisation',
+                                    text: 'Translatable#Open Tickets of Organisation',
                                     routingConfiguration: {
                                         contextId: 'search',
                                         contextMode: ContextMode.SEARCH,
@@ -641,7 +641,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 TicketProperty.TICKET_ID, SearchOperator.NOT_EQUALS,
                                 FilterDataType.NUMERIC, FilterType.AND, '<KIX_TICKET_TicketID>'
                             )
-                        ]
+                        ], null, 100
                     ), 10,
                     [
                         new DefaultColumnConfiguration(
@@ -680,7 +680,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 TicketProperty.TICKET_ID, SearchOperator.NOT_EQUALS,
                                 FilterDataType.NUMERIC, FilterType.AND, '<KIX_TICKET_TicketID>'
                             )
-                        ]
+                        ], null, 100
                     ), 10,
                     [
                         new DefaultColumnConfiguration(

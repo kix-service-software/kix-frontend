@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.calendar-container>
     <widget instanceId=input.instanceId title="Ticket Calendar">
         <@content>
@@ -33,6 +32,22 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </div>
                 </div>
                 <div id="calendar"/>
+                <div.calendar-legend>
+                    <if(state.loading)>
+                        <span.kix-icon-arrow-refresh/>
+                        <translation-string pattern="Translatable#Reload Calendar Data ..."/>
+                    </if>
+                    <ul>
+                        <for|calendar| of=state.calendars>
+                            <li
+                                class={
+                                                                inactive: !calendar.visible
+                                                            }
+                                style=("border-color:" + calendar.bgColor)
+                                on-click("toggleCalendar", calendar)>${calendar.name}</li>
+                        </for>
+                    </ul>
+                </div>
             </if>
             <else>
                 <loading-spinner/>

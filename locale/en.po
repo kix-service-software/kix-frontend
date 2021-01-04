@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2020-10-24 14:32+0000\n"
-"Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
+"PO-Revision-Date: 2020-12-10 12:33+0000\n"
+"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: English <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/en/>\n"
 "Language: en\n"
@@ -51,6 +51,9 @@ msgid "Access denied"
 msgstr ""
 
 msgid "Access Level"
+msgstr ""
+
+msgid "Accounted Time: {0}"
 msgstr ""
 
 msgid "Account Information"
@@ -102,6 +105,9 @@ msgid "Admin Password"
 msgstr ""
 
 msgid "Advanced Search"
+msgstr ""
+
+msgid "Affected Assets"
 msgstr ""
 
 msgid "after"
@@ -243,6 +249,9 @@ msgstr ""
 msgid "Assigned Roles"
 msgstr ""
 
+msgid "Assignees"
+msgstr ""
+
 msgid "Assign Link"
 msgstr ""
 
@@ -378,6 +387,9 @@ msgstr ""
 msgid "Charset"
 msgstr ""
 
+msgid "Checklists"
+msgstr ""
+
 msgid "Choose a command"
 msgstr ""
 
@@ -471,6 +483,9 @@ msgid "Communication: Email: Email Filters"
 msgstr ""
 
 msgid "Communication: Email: Inbox"
+msgstr ""
+
+msgid "Communication: Email: Outbox"
 msgstr ""
 
 msgid "Communication: Webform"
@@ -582,6 +597,9 @@ msgid "Created at"
 msgstr ""
 
 msgid "Created by"
+msgstr ""
+
+msgid "Created by {0} at {1}. Last change by {2} at {3}"
 msgstr ""
 
 msgid "Created with Priority"
@@ -920,11 +938,17 @@ msgstr ""
 msgid "Enable attachments"
 msgstr ""
 
+msgid "End date/time is not given"
+msgstr ""
+
 msgid "ends with"
 msgstr ""
 
 msgid "End time"
 msgstr "End Time"
+
+msgid "End value is not given"
+msgstr ""
 
 msgid "Enter search value"
 msgstr ""
@@ -2485,7 +2509,7 @@ msgid "insert filter value"
 msgstr ""
 
 msgid "Internal Field"
-msgstr ""
+msgstr "Internal"
 
 msgid "Internationalisation"
 msgstr ""
@@ -2964,6 +2988,12 @@ msgstr ""
 msgid "Open Tickets"
 msgstr ""
 
+msgid "Open Tickets of Contact"
+msgstr ""
+
+msgid "Open Tickets of Organisation"
+msgstr ""
+
 msgid "Operator"
 msgstr ""
 
@@ -3082,6 +3112,9 @@ msgid "Phone"
 msgstr ""
 
 msgid "Place this code wherever you want to open the webform dialog."
+msgstr ""
+
+msgid "Plan: {0} - {1}"
 msgstr ""
 
 msgid "Plan Begin"
@@ -3240,11 +3273,20 @@ msgstr ""
 msgid "Recipient: To"
 msgstr ""
 
+msgid "References"
+msgstr ""
+
 msgid "Refresh Page"
+msgstr ""
+
+msgid "Related Tickets"
 msgstr ""
 
 msgid "Reload Agent Portal Configurations"
 msgstr "Reload Frontend Configurations"
+
+msgid "Reload Calendar Data ..."
+msgstr ""
 
 msgid "Reload Frontend Configurations"
 msgstr ""
@@ -3385,6 +3427,9 @@ msgid "Save Search"
 msgstr ""
 
 msgid "Save Settings"
+msgstr ""
+
+msgid "Scheduling"
 msgstr ""
 
 msgid "Search"
@@ -3564,10 +3609,16 @@ msgstr ""
 msgid "Source"
 msgstr ""
 
+msgid "Source Message"
+msgstr ""
+
 msgid "Split Option"
 msgstr ""
 
 msgid "Start by"
+msgstr ""
+
+msgid "Start date/time is not given"
 msgstr ""
 
 msgid "Start Import"
@@ -3586,6 +3637,12 @@ msgid "Start time"
 msgstr ""
 
 msgid "Start time has to be before end time"
+msgstr ""
+
+msgid "Start value is greate than end value"
+msgstr ""
+
+msgid "Start value is not given"
 msgstr ""
 
 msgid "State"
@@ -3637,6 +3694,9 @@ msgid "Successfully rated."
 msgstr ""
 
 msgid "Suggested FAQ"
+msgstr ""
+
+msgid "Summary"
 msgstr ""
 
 msgid "Sunday"
@@ -3829,6 +3889,9 @@ msgstr ""
 msgid "Tickets for Assets"
 msgstr ""
 
+msgid "Tickets for Contact"
+msgstr ""
+
 msgid "Ticket: States"
 msgstr ""
 
@@ -3938,6 +4001,9 @@ msgid "Unread"
 msgstr ""
 
 msgid "Unread Articles"
+msgstr ""
+
+msgid "Unsupported dynamic field type {0}."
 msgstr ""
 
 msgid "until"

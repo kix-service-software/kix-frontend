@@ -17,6 +17,7 @@ export class Component implements IImageDialogListener {
 
     private state: ComponentState;
     private currImageIndex: number = 0;
+    private keyDownEventFunction: () => {};
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -38,6 +39,11 @@ export class Component implements IImageDialogListener {
             (id) => id.imageId === showImageId
         ) : 0;
         this.state.image = this.state.imageDescriptions[this.currImageIndex];
+
+        setTimeout(() => {
+            this.keyDownEventFunction = this.handleKeyEvent.bind(this);
+            document.body.addEventListener('keydown', this.keyDownEventFunction, false);
+        }, 50);
     }
 
     public preventPropagation(event: any): void {
@@ -48,7 +54,17 @@ export class Component implements IImageDialogListener {
         }
     }
 
+    private handleKeyEvent(event: any): void {
+        if (event && event.key === 'Escape') {
+            event.stopPropagation();
+            this.close();
+        }
+    }
+
     public close(): void {
+        if (this.keyDownEventFunction) {
+            document.body.removeEventListener('keydown', this.keyDownEventFunction, false);
+        }
         this.state.show = false;
     }
 

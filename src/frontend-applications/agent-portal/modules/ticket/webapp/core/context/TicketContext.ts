@@ -83,11 +83,11 @@ export class TicketContext extends Context {
         ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
     }
 
-    private async loadTickets(): Promise<void> {
+    private async loadTickets(silent: boolean = false): Promise<void> {
         EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.TICKET);
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            [], null, null, [TicketProperty.STATE, TicketProperty.WATCHERS]
+            [], null, null, [TicketProperty.STATE, TicketProperty.STATE_TYPE, TicketProperty.WATCHERS]
         );
 
         if (this.queueId) {
@@ -106,12 +106,16 @@ export class TicketContext extends Context {
             loadingOptions.filter.push(fulltextFilter);
         }
 
-        if (!this.filterValue && !this.queueId) {
-            loadingOptions.limit = 30;
+        if (!this.queueId) {
+            loadingOptions.limit = 100;
             loadingOptions.sortOrder = '-Ticket.Age:numeric';
-            loadingOptions.filter.push(new FilterCriteria(
-                TicketProperty.OWNER_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
-            ));
+
+            if (!this.filterValue) {
+                loadingOptions.filter.push(new FilterCriteria(
+                    TicketProperty.OWNER_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
+                ));
+            }
+
             loadingOptions.filter.push(new FilterCriteria(
                 TicketProperty.STATE_TYPE, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'new'
             ));
@@ -125,8 +129,8 @@ export class TicketContext extends Context {
             KIXObjectType.TICKET, null, loadingOptions, null, false
         ).catch((error) => []);
 
-        this.setObjectList(KIXObjectType.TICKET, tickets);
-        this.setFilteredObjectList(KIXObjectType.TICKET, tickets);
+        this.setObjectList(KIXObjectType.TICKET, tickets, silent);
+        this.setFilteredObjectList(KIXObjectType.TICKET, tickets, silent);
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
     }
@@ -137,9 +141,9 @@ export class TicketContext extends Context {
         this.filterValue = null;
     }
 
-    public reloadObjectList(objectType: KIXObjectType): Promise<void> {
+    public reloadObjectList(objectType: KIXObjectType, silent: boolean = false): Promise<void> {
         if (objectType === KIXObjectType.TICKET) {
-            return this.loadTickets();
+            return this.loadTickets(silent);
         }
     }
 

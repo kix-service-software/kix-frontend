@@ -172,33 +172,40 @@ export class JobLabelProvider extends LabelProvider {
     public async getIcons(job: Job, property: string, value?: string | number): Promise<Array<string | ObjectIcon>> {
         const icons = [];
         if (property === JobProperty.HAS_TRIGGER_EVENTS || property === JobProperty.HAS_TRIGGER_TIMES) {
-            let execPlans: ExecPlan[] = [];
-            if (Array.isArray(job.ExecPlans) && !!job.ExecPlans.length) {
-                execPlans = job.ExecPlans;
-            } else if (Array.isArray(job.ExecPlanIDs) && !!job.ExecPlanIDs.length) {
-                execPlans = await KIXObjectService.loadObjects<ExecPlan>(
-                    KIXObjectType.EXEC_PLAN, job.ExecPlanIDs, undefined, null, true
-                ).catch(() => [] as ExecPlan[]);
-            }
+            if (job) {
+                let execPlans: ExecPlan[] = [];
+                if (Array.isArray(job.ExecPlans) && !!job.ExecPlans.length) {
+                    execPlans = job.ExecPlans;
+                } else if (Array.isArray(job.ExecPlanIDs) && !!job.ExecPlanIDs.length) {
+                    execPlans = await KIXObjectService.loadObjects<ExecPlan>(
+                        KIXObjectType.EXEC_PLAN, job.ExecPlanIDs, undefined, null, true
+                    ).catch(() => [] as ExecPlan[]);
+                }
 
-            if (property === JobProperty.HAS_TRIGGER_EVENTS) {
-                const hasEvents: boolean = execPlans && !!execPlans.length && execPlans.some(
-                    (ep) => ep.Parameters && Array.isArray(ep.Parameters.Event) && !!ep.Parameters.Event.length
-                );
-                if (hasEvents) {
-                    icons.push('kix-icon-close');
+                if (property === JobProperty.HAS_TRIGGER_EVENTS) {
+                    const hasEvents: boolean = execPlans && !!execPlans.length && execPlans.some(
+                        (ep) => ep.Parameters && Array.isArray(ep.Parameters.Event) && !!ep.Parameters.Event.length
+                    );
+                    if (hasEvents) {
+                        icons.push('kix-icon-check');
+                    }
+                } else if (property === JobProperty.HAS_TRIGGER_TIMES) {
+                    const hasTimes: boolean = execPlans && !!execPlans.length && execPlans.some(
+                        (ep) => ep.Parameters
+                            && Array.isArray(ep.Parameters.Weekday) && !!ep.Parameters.Weekday.length
+                            && Array.isArray(ep.Parameters.Time) && !!ep.Parameters.Time.length
+                    );
+                    if (hasTimes) {
+                        icons.push('kix-icon-check');
+                    }
                 }
-            } else if (property === JobProperty.HAS_TRIGGER_TIMES) {
-                const hasTimes: boolean = execPlans && !!execPlans.length && execPlans.some(
-                    (ep) => ep.Parameters
-                        && Array.isArray(ep.Parameters.Weekday) && !!ep.Parameters.Weekday.length
-                        && Array.isArray(ep.Parameters.Time) && !!ep.Parameters.Time.length
-                );
-                if (hasTimes) {
-                    icons.push('kix-icon-close');
-                }
+            } else if (value && value === 'Yes') {
+                icons.push('kix-icon-check');
+            } else if (value && value === 'No') {
+                icons.push('kix-icon-close');
             }
         }
+
         return icons;
     }
 
