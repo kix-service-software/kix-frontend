@@ -156,7 +156,9 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         }
     }
 
-    public async searchObjectTree(property: string, searchValue: string, limit?: number): Promise<TreeNode[]> {
+    public async searchObjectTree(
+        property: string, searchValue: string, loadingOptions: KIXObjectLoadingOptions
+    ): Promise<TreeNode[]> {
         return [];
     }
 

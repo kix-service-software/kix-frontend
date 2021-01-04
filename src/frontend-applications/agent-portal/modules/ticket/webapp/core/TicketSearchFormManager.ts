@@ -28,6 +28,7 @@ import { QueueProperty } from '../../model/QueueProperty';
 import { Ticket } from '../../model/Ticket';
 import { ArticleProperty } from '../../model/ArticleProperty';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
 
 export class TicketSearchFormManager extends SearchFormManager {
 
@@ -200,6 +201,7 @@ export class TicketSearchFormManager extends SearchFormManager {
             options.push([ObjectReferenceOptions.FREETEXT, true]);
             options.push([ObjectReferenceOptions.AUTOCOMPLETE_PRELOAD_PATTERN, '*']);
         }
+
         return options;
     }
 

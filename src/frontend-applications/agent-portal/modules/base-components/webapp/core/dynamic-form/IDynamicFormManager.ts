@@ -14,6 +14,7 @@ import { InputFieldTypes } from '../InputFieldTypes';
 import { TreeNode } from '../tree';
 import { ValidationResult } from '../ValidationResult';
 import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 
 export interface IDynamicFormManager {
 
@@ -29,7 +30,9 @@ export interface IDynamicFormManager {
 
     getFieldOptions(): Promise<any[]>;
 
-    searchObjectTree(property: string, searchValue: string, limit?: number): Promise<TreeNode[]>;
+    searchObjectTree(
+        property: string, searchValue: string, loadingOptions?: KIXObjectLoadingOptions
+    ): Promise<TreeNode[]>;
 
     registerListener(listenerId: string, callback: () => void): void;
 
