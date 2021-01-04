@@ -14,6 +14,7 @@ import { DynamicFormOperationsType } from './DynamicFormOperationsType';
 import { ValidationResult } from '../ValidationResult';
 import { DynamicFieldTypes } from '../../../../dynamic-fields/model/DynamicFieldTypes';
 import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 
 export abstract class ExtendedDynamicFormManager implements IDynamicFormManager {
 
@@ -130,7 +131,9 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
         return null;
     }
 
-    public searchObjectTree(property: string, searchValue: string, limit?: number): Promise<TreeNode[]> {
+    public searchObjectTree(property: string, searchValue: string,
+        loadingOptions: KIXObjectLoadingOptions
+    ): Promise<TreeNode[]> {
         return null;
     }
 

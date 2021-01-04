@@ -21,6 +21,7 @@ import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ObjectReferenceOptions } from '../../core/ObjectReferenceOptions';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 
 
 export class DynamicFormFieldValue {
@@ -505,11 +506,21 @@ export class DynamicFormFieldValue {
 
     public async doAutocompleteSearch(limit: number, searchValue: string): Promise<TreeNode[]> {
         let tree: TreeNode[];
+        let loadingOptions: KIXObjectLoadingOptions;
+        const option = this.inputOptions.find((o) => o[0] === ObjectReferenceOptions.LOADINGOPTIONS);
+        if (option) {
+            loadingOptions = option[1] as KIXObjectLoadingOptions;
+        } else {
+            loadingOptions = new KIXObjectLoadingOptions();
+        }
+
+        loadingOptions.limit = limit;
+
         if (this.manager.useOwnSearch) {
-            tree = await this.manager.searchObjectTree(this.value.property, searchValue, limit);
+            tree = await this.manager.searchObjectTree(this.value.property, searchValue, loadingOptions);
         } else {
             tree = await KIXObjectService.searchObjectTree(
-                this.manager.objectType, this.value.property, searchValue, limit
+                this.manager.objectType, this.value.property, searchValue, loadingOptions
             );
         }
 
