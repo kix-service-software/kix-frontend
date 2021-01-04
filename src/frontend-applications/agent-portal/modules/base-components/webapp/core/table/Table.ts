@@ -50,6 +50,8 @@ export class Table implements Table {
     private sortColumnId: string;
     private sortOrder: SortOrder;
 
+    private reloadPromise: Promise<void>;
+
     public constructor(
         private tableKey: string,
         private tableConfiguration?: TableConfiguration,
@@ -476,39 +478,50 @@ export class Table implements Table {
         return selectionState;
     }
 
-    public async reload(keepSelection: boolean = false, sort: boolean = true): Promise<void> {
-        EventService.getInstance().publish(TableEvent.RELOAD, new TableEventData(this.getTableId()));
-        let selectedRows: Row[] = [];
-        if (keepSelection) {
-            selectedRows = this.getSelectedRows(true);
-        }
-        await this.loadRowData();
-        if (this.columns && !!this.columns.length) {
-            this.columns.forEach((c) =>
-                this.rows.forEach((r) => {
-                    r.addCell(new TableValue(c.getColumnId(), null));
-                })
-            );
-        }
-        if (keepSelection && !!selectedRows.length) {
-            // TODO: auch ohne Object sollte es möglich sein, die Selektion zu erhalten
-            selectedRows.map(
-                (r) => r.getRowObject().getObject()
-            ).forEach(
-                (o) => this.selectRowByObject(o)
-            );
+    public reload(keepSelection: boolean = false, sort: boolean = true): Promise<void> {
+        if (this.reloadPromise) {
+            return this.reloadPromise;
         }
 
-        if (sort && this.sortColumnId && this.sortOrder) {
-            await this.sort(this.sortColumnId, this.sortOrder);
-        }
+        this.reloadPromise = new Promise<void>(async (resolve, reject) => {
+            EventService.getInstance().publish(TableEvent.RELOAD, new TableEventData(this.getTableId()));
+            let selectedRows: Row[] = [];
+            if (keepSelection) {
+                selectedRows = this.getSelectedRows(true);
+            }
+            await this.loadRowData();
+            if (this.columns && !!this.columns.length) {
+                this.columns.forEach((c) =>
+                    this.rows.forEach((r) => {
+                        r.addCell(new TableValue(c.getColumnId(), null));
+                    })
+                );
+            }
+            if (keepSelection && !!selectedRows.length) {
+                // TODO: auch ohne Object sollte es möglich sein, die Selektion zu erhalten
+                selectedRows.map(
+                    (r) => r.getRowObject().getObject()
+                ).forEach(
+                    (o) => this.selectRowByObject(o)
+                );
+            }
 
-        this.rows.forEach((r) => {
-            r.initializeDisplayValues();
+            if (sort && this.sortColumnId && this.sortOrder) {
+                await this.sort(this.sortColumnId, this.sortOrder);
+            }
+
+            this.rows.forEach((r) => {
+                r.initializeDisplayValues();
+            });
+
+            EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
+            EventService.getInstance().publish(TableEvent.RELOADED, new TableEventData(this.getTableId()));
+
+            resolve();
+            this.reloadPromise = null;
         });
 
-        EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
-        EventService.getInstance().publish(TableEvent.RELOADED, new TableEventData(this.getTableId()));
+        return this.reloadPromise;
     }
 
     public switchColumnOrder(): void {
