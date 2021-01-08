@@ -9,16 +9,18 @@
 
 import { RequestObject } from '../../../../../../server/model/rest/RequestObject';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { MacroActionProperty } from '../../model/MacroActionProperty';
 
 export class CreateMacroAction extends RequestObject {
 
     public constructor(
-        type: string, parameters: {},
+        type: string, parameters: {}, resultVariables: {},
         validId: number, comment?: string
     ) {
         super();
-        this.applyProperty('Type', type);
-        this.applyProperty('Parameters', parameters);
+        this.applyProperty(MacroActionProperty.TYPE, type);
+        this.applyProperty(MacroActionProperty.PARAMETERS, parameters);
+        this.applyProperty(MacroActionProperty.RESULT_VARIABLES, resultVariables);
         this.applyProperty(KIXObjectProperty.VALID_ID, validId);
         this.applyProperty(KIXObjectProperty.COMMENT, comment);
     }

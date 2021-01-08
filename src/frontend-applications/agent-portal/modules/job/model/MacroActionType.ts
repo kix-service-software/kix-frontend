@@ -24,6 +24,8 @@ export class MacroActionType extends KIXObject {
 
     public Options: {};
 
+    public Results: {};
+
     public constructor(macroActionType?: MacroActionType) {
         super(macroActionType);
         if (macroActionType) {
@@ -32,6 +34,7 @@ export class MacroActionType extends KIXObject {
             this.DisplayName = macroActionType.DisplayName;
             this.Description = macroActionType.Description;
             this.Options = macroActionType.Options;
+            this.Results = macroActionType.Results;
         }
     }
 

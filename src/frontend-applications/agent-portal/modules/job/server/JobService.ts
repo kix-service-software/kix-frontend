@@ -414,7 +414,7 @@ export class JobAPIService extends KIXObjectAPIService {
         const createMacroActions: CreateMacroAction[] = Array.isArray(macroActions) ?
             macroActions.map(
                 (ma) => new CreateMacroAction(
-                    ma.Type, ma.Parameters, Number(ma.ValidID),
+                    ma.Type, ma.Parameters, ma.ResultVariables, Number(ma.ValidID),
                     ma.Comment ? ma.Comment : `MacroAction for Job "${jobName}"`,
                 )
             ) : macroActions === null ? [] : undefined;
@@ -470,7 +470,7 @@ export class JobAPIService extends KIXObjectAPIService {
             const createMacroActions: CreateMacroAction[] = Array.isArray(macroActions) ?
                 macroActions.map(
                     (ma) => new CreateMacroAction(
-                        ma.Type, ma.Parameters, Number(ma.ValidID),
+                        ma.Type, ma.Parameters, ma.ResultVariables, Number(ma.ValidID),
                         ma.Comment ? ma.Comment : `MacroAction for Job "${newJobName}"`,
                     )
                 ) : [];
