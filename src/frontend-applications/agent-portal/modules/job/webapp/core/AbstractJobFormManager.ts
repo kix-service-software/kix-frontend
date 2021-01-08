@@ -33,6 +33,7 @@ import { FormContext } from '../../../../model/configuration/FormContext';
 import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { ExtendedJobFormManager } from './ExtendedJobFormManager';
+import { MacroActionTypeResult } from '../../model/MacroActionTypeResult';
 
 export class AbstractJobFormManager implements IJobFormManager {
 
@@ -232,7 +233,7 @@ export class AbstractJobFormManager implements IJobFormManager {
                 if (macro.ExecOrder && macro.ExecOrder.length) {
                     macro.ExecOrder.forEach((aId) => {
                         const action = macro.Actions.find((a) => a.ID === aId);
-                        if (action) {
+                        if (action && !actions.some((a) => a.ID === action.ID)) {
                             actions.push(action);
                         }
                     });
@@ -285,61 +286,117 @@ export class AbstractJobFormManager implements IJobFormManager {
     public async getFormFieldsForAction(
         actionType: string, actionFieldInstanceId: string, jobType: string, action?: MacroAction
     ): Promise<FormFieldConfiguration[]> {
-        const fieldOrderMap: Map<string, number> = new Map();
-        let fields: FormFieldConfiguration[] = [];
+        const fields: FormFieldConfiguration[] = [];
         if (!actionFieldInstanceId) {
             console.error('No "actionFieldInstanceId" given!');
         } else {
             if (actionType) {
-                const macroActionTypes = await KIXObjectService.loadObjects<MacroActionType>(
-                    KIXObjectType.MACRO_ACTION_TYPE, [actionType], null, { id: jobType }, true
-                ).catch((error): MacroActionType[] => []);
-                if (macroActionTypes && !!macroActionTypes.length) {
-                    for (const optionName in macroActionTypes[0].Options) {
-                        if (optionName) {
-                            const option = macroActionTypes[0].Options[optionName] as MacroActionTypeOption;
-                            if (option) {
-                                const actionPropertyField = this.getActionOptionField(
-                                    action, option, actionType, actionFieldInstanceId, jobType
-                                );
 
-                                // split values if it is an array option field
-                                if (
-                                    actionPropertyField.countMax > 1
-                                    && Array.isArray(actionPropertyField.defaultValue.value)
-                                ) {
-                                    for (const value of actionPropertyField.defaultValue.value) {
-                                        const newField = this.getNewOptionField(
-                                            actionPropertyField, value, actionFieldInstanceId, option.Name
-                                        );
-                                        fieldOrderMap.set(newField.instanceId, option.Order);
-                                        fields.push(newField);
-                                    }
-                                } else {
-
-                                    // special instance id to distinguish between the actions
-                                    actionPropertyField.instanceId = IdService.generateDateBasedId(
-                                        `ACTION###${actionFieldInstanceId}###${option.Name}`
-                                    );
-
-                                    fieldOrderMap.set(actionPropertyField.instanceId, option.Order);
-                                    fields.push(actionPropertyField);
-                                }
-                            }
-                        }
-                    }
-                }
                 const skip = await this.getSkipField(actionType, actionFieldInstanceId, action);
 
                 // special instance id to distinguish between the actions
                 skip.instanceId = IdService.generateDateBasedId(`ACTION###${actionFieldInstanceId}###SKIP`);
+                fields.push(skip);
 
-                fields.unshift(skip);
+                const macroActionTypes = await KIXObjectService.loadObjects<MacroActionType>(
+                    KIXObjectType.MACRO_ACTION_TYPE, [actionType], null, { id: jobType }, true
+                ).catch((error): MacroActionType[] => []);
+                if (macroActionTypes && !!macroActionTypes.length) {
+                    if (macroActionTypes[0].Results) {
+                        const resultGroup: FormFieldConfiguration = this.getResultGroupField(
+                            macroActionTypes[0], action, actionType, actionFieldInstanceId
+                        );
+                        fields.push(resultGroup);
+                    }
+
+                    if (macroActionTypes[0].Options) {
+                        const optionFields: FormFieldConfiguration[] = this.getOptionFields(
+                            macroActionTypes[0], action, actionType, actionFieldInstanceId, jobType
+                        );
+                        fields.push(...optionFields);
+                    }
+                }
             }
         }
 
-        fields = fields.sort((a, b) => fieldOrderMap.get(a.instanceId) - fieldOrderMap.get(b.instanceId));
         return fields;
+    }
+    private getResultGroupField(
+        macroActionType: MacroActionType, action: MacroAction, actionType: string, actionFieldInstanceId: string
+    ): FormFieldConfiguration {
+        const fields: FormFieldConfiguration[] = [];
+        for (const resultName in macroActionType.Results) {
+            if (resultName) {
+                const result = macroActionType.Results[resultName] as MacroActionTypeResult;
+                if (result) {
+                    let defaultValue;
+                    if (action && action.ResultVariables) {
+                        defaultValue = action.ResultVariables[result.Name];
+                    }
+                    const resultField = new FormFieldConfiguration(
+                        `job-action-${actionType}-result-${result.Name}`, result.Name,
+                        `ACTION###${actionFieldInstanceId}###RESULT###${result.Name}`,
+                        null, false, result.Description, undefined,
+                        typeof defaultValue !== 'undefined'
+                            ? new FormFieldValue(defaultValue) : undefined,
+                    );
+
+                    // special instance id to distinguish between the actions
+                    const instanceId = IdService.generateDateBasedId(
+                        `ACTION###${actionFieldInstanceId}###${result.Name}`
+                    );
+                    resultField.instanceId = instanceId;
+                    fields.push(resultField);
+                }
+            }
+        }
+        return new FormFieldConfiguration(
+            `job-action-${actionType}-resultGroup`, 'Translatable#Result names',
+            `ACTION###${actionFieldInstanceId}###RESULTGROUP`,
+            null, false, 'Translatable#An optional mapping of named results of the macro action and their variable names. The variable can be used as special placeholder in following actions like "${VariableName}".',
+            undefined, null, null, fields, null, null, null, null, null, null, null, true, true
+        );
+    }
+
+    private getOptionFields(
+        macroActionType: MacroActionType, action: MacroAction, actionType: string,
+        actionFieldInstanceId: string, jobType: string
+    ) {
+        const fieldOrderMap: Map<string, number> = new Map();
+        const fields: FormFieldConfiguration[] = [];
+        for (const optionName in macroActionType.Options) {
+            if (optionName) {
+                const option = macroActionType.Options[optionName] as MacroActionTypeOption;
+                if (option) {
+                    const actionPropertyField = this.getActionOptionField(
+                        action, option, actionType, actionFieldInstanceId, jobType
+                    );
+
+                    // split values if it is an array option field
+                    if (actionPropertyField.countMax > 1
+                        && Array.isArray(actionPropertyField.defaultValue.value)) {
+                        for (const value of actionPropertyField.defaultValue.value) {
+                            const newField = this.getNewOptionField(
+                                actionPropertyField, value, actionFieldInstanceId, option.Name
+                            );
+                            fieldOrderMap.set(newField.instanceId, option.Order);
+                            fields.push(newField);
+                        }
+                    } else {
+
+                        // special instance id to distinguish between the actions
+                        actionPropertyField.instanceId = IdService.generateDateBasedId(
+                            `ACTION###${actionFieldInstanceId}###${option.Name}`
+                        );
+
+                        fieldOrderMap.set(actionPropertyField.instanceId, option.Order);
+                        fields.push(actionPropertyField);
+                    }
+                }
+            }
+        }
+
+        return fields.sort((a, b) => fieldOrderMap.get(a.instanceId) - fieldOrderMap.get(b.instanceId));
     }
 
     private getNewOptionField(

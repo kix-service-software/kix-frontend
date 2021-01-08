@@ -168,10 +168,10 @@ export class JobFormService extends KIXObjectFormService {
         formContext?: FormContext, formInstance?: FormInstance
     ): Promise<Array<[string, any]>> {
         const actionTypesParameter = parameter.filter((p) => p[0].startsWith(JobProperty.MACRO_ACTIONS));
-        const actionAttributesParameter = parameter.filter((p) => p[0].match(/^ACTION###/));
+        const actionAttributesParameter = parameter.filter((p) => p[0].startsWith('ACTION###'));
 
         parameter = parameter.filter(
-            (p) => p[0] !== JobProperty.MACRO_ACTIONS && !p[0].match(/^ACTION###/)
+            (p) => !p[0].startsWith(JobProperty.MACRO_ACTIONS) && !p[0].startsWith('ACTION###')
         );
 
         const actions: Map<string, MacroAction> = new Map();
@@ -185,6 +185,7 @@ export class JobFormService extends KIXObjectFormService {
                     action = new MacroAction();
                     action.Type = actionType;
                     action.Parameters = {};
+                    action.ResultVariables = {};
                     actions.set(actionFieldInstanceId, action);
                 }
             }
@@ -194,15 +195,20 @@ export class JobFormService extends KIXObjectFormService {
         const manager = this.getJobFormManager(typeValue ? typeValue.value : null);
         actionAttributesParameter.forEach((p) => {
 
-            // key prepared in job form service
-            const actionFieldInstanceId = p[0].replace(/^ACTION###(.+)###.+/, '$1');
-            const valueName = p[0].replace(/^ACTION###.+###(.+)/, '$1');
+            // key prepared in AbstractJobFormManager
+            const actionFieldInstanceId = p[0].replace(/^ACTION###(.+?)###.+/, '$1');
+            const valueName = p[0].replace(/^ACTION###.+?###(.+)/, '$1');
 
             const action = actions.get(actionFieldInstanceId);
             if (action) {
                 if (valueName === 'SKIP') {
                     // true means "skip" (checkbox), so valid id have to be "invalid" (= 2)
                     action.ValidID = p[1] ? 2 : 1;
+                } else if (valueName.startsWith('RESULT')) {
+                    const resultName = valueName.replace(/^RESULT###(.+)/, '$1');
+                    if (resultName && resultName !== 'RESULTGROUP') {
+                        action.ResultVariables[resultName] = p[1];
+                    }
                 } else {
                     let value;
                     if (manager) {

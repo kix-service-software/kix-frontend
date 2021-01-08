@@ -39,6 +39,7 @@ import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { FormValidationService } from '../../../base-components/webapp/core/FormValidationService';
 import { JobFilterValidator } from './form/validators/JobFilterValidator';
+import { DynamicFieldSet } from './extended-form-manager/DynamicFieldSet';
 
 export class UIModule implements IUIModule {
 
@@ -113,6 +114,9 @@ export class UIModule implements IUIModule {
             );
             (manager as AbstractJobFormManager).addExtendedJobFormManager(
                 new TicketCreateDynamicFields()
+            );
+            (manager as AbstractJobFormManager).addExtendedJobFormManager(
+                new DynamicFieldSet()
             );
         }
     }

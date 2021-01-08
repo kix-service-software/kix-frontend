@@ -17,6 +17,8 @@ export enum MacroActionProperty {
 
     PARAMETERS = 'Parameters',
 
+    RESULT_VARIABLES = 'ResultVariables',
+
     NUMBER = 'number'
 
 }
