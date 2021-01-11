@@ -98,7 +98,7 @@ class Component extends FormInputComponent<JSON, ComponentState> {
 
                     this.editor.on('change', this.valueChanged.bind(this));
                 }
-            }, 100);
+            }, 200);
         }
     }
 
