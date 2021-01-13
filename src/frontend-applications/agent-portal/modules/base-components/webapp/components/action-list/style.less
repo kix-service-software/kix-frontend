@@ -74,6 +74,12 @@
                 max-width: @action-max-width;
                 overflow: hidden;
 
+                &:active {
+                    transform: scale(0.85);
+                    box-shadow: inset 1px 1px 4px @secondary-1;
+                    border-radius: 3px;
+                }
+
                 &.list-button {
                     span {
                         padding: 3px 2px 0 2px;
@@ -145,6 +151,12 @@
                 display: block;
                 margin: 0 @margin-small;
                 padding: 0 @margin-small;
+
+                &:active {
+                    transform: scale(0.85);
+                    box-shadow: inset 1px 1px 4px @secondary-1;
+                    border-radius: 3px;
+                }
 
                 &.inactive {
                     color: @secondary-1;
