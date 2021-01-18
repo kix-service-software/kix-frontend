@@ -75,6 +75,12 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         ),
         new UIComponent(
             'faq-category-info-widget', '/kix-module-faq$0/webapp/components/admin/widgets/faq-category-info-widget', []
+        ),
+        new UIComponent(
+            'faq-article-import-cell', '/kix-module-faq$0/webapp/components/faq-article-import-cell', []
+        ),
+        new UIComponent(
+            'faq-article-html-preview-cell', '/kix-module-faq$0/webapp/components/faq-article-html-preview-cell', []
         )
     ];
 

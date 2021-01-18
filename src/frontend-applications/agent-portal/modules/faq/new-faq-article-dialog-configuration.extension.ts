@@ -36,6 +36,7 @@ import { FormContext } from '../../model/configuration/FormContext';
 import { ModuleConfigurationService } from '../../server/services/configuration';
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { DynamicFormFieldOption } from '../dynamic-fields/webapp/core';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -189,6 +190,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'faq-article-new-form-field-customer-visible',
                     'faq-article-new-form-field-language',
                     'faq-article-new-form-field-tags',
+                    'faq-article-new-form-field-relatedassets',
                     'faq-article-new-form-field-attachments',
                     'faq-article-new-form-field-links',
                     'faq-article-new-form-field-symptom',
@@ -196,6 +198,15 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'faq-article-new-form-field-solution',
                     'faq-article-new-form-field-comment',
                     'faq-article-new-form-field-valid'
+                ], null,
+                [
+                    new FormFieldConfiguration(
+                        'faq-article-new-form-field-relatedassets', null, KIXObjectProperty.DYNAMIC_FIELDS, null,
+                        false, 'Translatable#Helptext_FAQ_ArticleCreate_RelatedAssets',
+                        [
+                            new FormFieldOption(DynamicFormFieldOption.FIELD_NAME, 'RelatedAssets')
+                        ]
+                    )
                 ]
             )
         );

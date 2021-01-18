@@ -7,14 +7,6 @@
  * --
  */
 
-export enum FAQEvent {
-
-    SHOW_FAQ_VOTE = 'SHOW_FAQ_VOTE',
-
-    VOTE_UPDATED = 'VOTE_UPDATED',
-
-    APPEND_FAQ_ARTICLE_HTML = 'APPEND_FAQ_ARTICLE_HTML',
-
-    APPEND_FAQ_ARTICLE_ATTACHMENTS = 'APPEND_FAQ_ARTICLE_ATTACHMENTS'
-
+export class ComponentState {
+    public title = '';
 }

@@ -15,6 +15,7 @@ import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
 import { ContextSocketClient } from '../../../base-components/webapp/core/ContextSocketClient';
 import { KIXModulesSocketClient } from '../../../base-components/webapp/core/KIXModulesSocketClient';
 import { SysconfigEvent } from './SysconfigEvent';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
 
 export class ReloadConfigurationCacheAction extends AbstractAction {
 
@@ -37,6 +38,9 @@ export class ReloadConfigurationCacheAction extends AbstractAction {
                 );
                 await ContextSocketClient.getInstance().rebuildConfiguration().catch(() => null);
                 await KIXModulesSocketClient.getInstance().rebuildConfiguration().catch(() => null);
+
+                await ContextService.getInstance().resetAll();
+
                 EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
                 EventService.getInstance().publish(SysconfigEvent.SYSCONFIG_OPTIONS_UPDATED);
             });

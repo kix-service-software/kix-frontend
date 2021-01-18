@@ -17,6 +17,7 @@ import { KIXObjectLoadingOptions } from '../KIXObjectLoadingOptions';
 import { RoutingConfiguration } from './RoutingConfiguration';
 import { DialogRoutingConfiguration } from './DialogRoutingConfiguration';
 import { ToggleOptions } from '../../modules/base-components/webapp/core/table';
+import { AdditionalTableObjectsHandlerConfiguration } from '../../modules/base-components/webapp/core/AdditionalTableObjectsHandlerConfiguration';
 
 export class TableConfiguration implements IConfiguration {
 
@@ -37,7 +38,9 @@ export class TableConfiguration implements IConfiguration {
         public rowHeight?: TableRowHeight,
         public emptyResultHint?: string,
         public routingConfiguration?: RoutingConfiguration | DialogRoutingConfiguration,
-        public fixedFirstColumn: boolean = false
+        public fixedFirstColumn: boolean = false,
+        public additionalTableObjectsHandler: AdditionalTableObjectsHandlerConfiguration[] = [],
+        public intersection: boolean = true
     ) {
 
         if (!headerHeight) {

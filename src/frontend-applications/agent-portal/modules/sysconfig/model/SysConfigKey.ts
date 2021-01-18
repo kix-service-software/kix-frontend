@@ -63,6 +63,8 @@ export enum SysConfigKey {
 
     TICKET_SUBJECT_FW = 'Ticket::SubjectFwd',
 
-    SETUP_ASSISTANT_STATE = 'SetupAssistantState'
+    SETUP_ASSISTANT_STATE = 'SetupAssistantState',
+
+    DYNAMIC_FIELD_OBJECT_TYPE = 'DynamicFields::ObjectType'
 
 }

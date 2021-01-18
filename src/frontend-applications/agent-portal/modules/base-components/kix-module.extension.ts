@@ -100,11 +100,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent('toast', '/kix-module-base-components$0/webapp/components/overlay/toast', []),
         new UIComponent('overlay-icon', '/kix-module-base-components$0/webapp/components/overlay-icon', []),
         new UIComponent('quick-search', '/kix-module-base-components$0/webapp/components/quick-search', []),
-        new UIComponent(
-            'referenced-objects-widget',
-            '/kix-module-base-components$0/webapp/components/referenced-objects-widget',
-            []
-        ),
         new UIComponent('rich-text-input', '/kix-module-base-components$0/webapp/components/rich-text-input', []),
         new UIComponent('router-outlet', '/kix-module-base-components$0/webapp/components/router-outlet', []),
         new UIComponent('search-form', '/kix-module-base-components$0/webapp/components/search-form', []),

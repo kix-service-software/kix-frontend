@@ -47,6 +47,10 @@ export class ContextService {
 
     private contextExtensions: Map<string, ContextExtension[]> = new Map();
 
+    public async resetAll(): Promise<void> {
+        await ContextFactory.getInstance().clearContextInstances(this.activeMainContext);
+    }
+
     public addExtendedContext(contextId: string, extension: ContextExtension): void {
         if (!this.contextExtensions.has(contextId)) {
             this.contextExtensions.set(contextId, []);

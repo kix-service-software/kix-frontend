@@ -10,7 +10,7 @@
 import { ServiceType } from './ServiceType';
 import { IKIXService } from './IKIXService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { IObjectReferenceHandler } from './IObjectReferenceHandler';
+import { IAdditionalTableObjectsHandler } from './IAdditionalTableObjectsHandler';
 
 export class ServiceRegistry {
 
@@ -27,7 +27,7 @@ export class ServiceRegistry {
 
     private services: IKIXService[] = [];
 
-    private objectReferenceHandler: Map<string, IObjectReferenceHandler> = new Map();
+    private additionalTableObjectsHandler: Map<string, IAdditionalTableObjectsHandler> = new Map();
 
     public static registerServiceInstance(service: IKIXService): void {
         if (service) {
@@ -36,9 +36,9 @@ export class ServiceRegistry {
         }
     }
 
-    public static registerObjectReferenceHandler(id: string, handler: IObjectReferenceHandler): void {
+    public static registerAdditionalTableObjectsHandler(handler: IAdditionalTableObjectsHandler): void {
         if (handler) {
-            ServiceRegistry.getInstance().objectReferenceHandler.set(id, handler);
+            ServiceRegistry.getInstance().additionalTableObjectsHandler.set(handler.handlerId, handler);
         }
     }
 
@@ -50,8 +50,8 @@ export class ServiceRegistry {
         return service ? service as T : null;
     }
 
-    public static getObjectReferenceHandler(id: string): IObjectReferenceHandler {
-        return ServiceRegistry.getInstance().objectReferenceHandler.get(id);
+    public static getAdditionalTableObjectsHandler(id: string): IAdditionalTableObjectsHandler {
+        return ServiceRegistry.getInstance().additionalTableObjectsHandler.get(id);
     }
 
 }

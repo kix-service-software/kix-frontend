@@ -75,6 +75,14 @@ export class ContextFactory {
         return context;
     }
 
+    public async clearContextInstances(activeContext: Context): Promise<void> {
+        const configuration = await ContextSocketClient.getInstance().loadContextConfiguration(
+            activeContext.getDescriptor().contextId
+        );
+        activeContext.setConfiguration(configuration);
+        this.contextInstances = [activeContext];
+    }
+
     public getContextDescriptor(contextId: string): ContextDescriptor {
         const descriptor = this.registeredDescriptors.find((c) => c.contextId === contextId);
         return descriptor;

@@ -37,7 +37,7 @@ export enum ConfigurationType {
 
     ObjectInformation = 'ObjectInformation',
 
-    ObjectReferenceWidget = 'ObjectReferenceWidget',
+    AdditionalTableObjectsHandler = 'AdditionalTableObjectsHandler',
 
     Slider = 'Slider',
 

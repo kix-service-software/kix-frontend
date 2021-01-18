@@ -34,6 +34,7 @@ import { FormConfiguration } from '../../model/configuration/FormConfiguration';
 import { FormContext } from '../../model/configuration/FormContext';
 import { ModuleConfigurationService } from '../../server/services/configuration';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { DynamicFormFieldOption } from '../dynamic-fields/webapp/core';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -178,12 +179,22 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'faq-article-edit-form-field-customer-visible',
                     'faq-article-edit-form-field-language',
                     'faq-article-edit-form-field-tags',
+                    'faq-article-edit-form-field-relatedassets',
                     'faq-article-edit-form-field-attachments',
                     'faq-article-edit-form-field-symptom',
                     'faq-article-edit-form-field-cause',
                     'faq-article-edit-form-field-solution',
                     'faq-article-edit-form-field-comment',
                     'faq-article-edit-form-field-valid'
+                ], null,
+                [
+                    new FormFieldConfiguration(
+                        'faq-article-edit-form-field-relatedassets', null, KIXObjectProperty.DYNAMIC_FIELDS, null,
+                        false, 'Translatable#Helptext_FAQ_ArticleCreate_RelatedAssets',
+                        [
+                            new FormFieldOption(DynamicFormFieldOption.FIELD_NAME, 'RelatedAssets')
+                        ]
+                    )
                 ]
             )
         );

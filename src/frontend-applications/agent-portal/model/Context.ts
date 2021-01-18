@@ -436,7 +436,7 @@ export abstract class Context {
         return new BreadcrumbInformation(this.getIcon(), [], text);
     }
 
-    public reset(refresh?: boolean): void {
+    public reset(): void {
         this.resetAdditionalInformation();
         this.objectId = null;
         this.objectLists.clear();

@@ -7,8 +7,6 @@
  * --
  */
 
-export class ComponentInput {
-
-    public instanceId: string;
-
+export class ComponentState {
+    public title = '';
 }

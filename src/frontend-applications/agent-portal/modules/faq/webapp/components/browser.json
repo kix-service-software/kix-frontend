@@ -4,6 +4,8 @@
         "./dialogs/",
         "require ./faq-module",
         "require ./faq-vote-selector",
+        "require ./faq-article-import-cell",
+        "require ./faq-article-html-preview-cell",
         "./widgets"
     ]
 }

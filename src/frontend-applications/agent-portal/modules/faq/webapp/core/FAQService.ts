@@ -248,33 +248,6 @@ export class FAQService extends KIXObjectService {
         }
     }
 
-    public async getFAQArticleInlineContent(faqArticle: FAQArticle): Promise<InlineContent[]> {
-        const inlineContent: InlineContent[] = [];
-        if (faqArticle.Attachments) {
-            const inlineAttachments = faqArticle.Attachments.filter((a) => a.Disposition === 'inline');
-            for (const attachment of inlineAttachments) {
-                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, ['Content']);
-                const faqArticleAttachmentOptions = new FAQArticleAttachmentLoadingOptions(
-                    faqArticle.ID, attachment.ID
-                );
-                const attachments = await KIXObjectService.loadObjects<Attachment>(
-                    KIXObjectType.FAQ_ARTICLE_ATTACHMENT, [attachment.ID], loadingOptions,
-                    faqArticleAttachmentOptions
-                );
-                for (const attachmentItem of attachments) {
-                    if (attachment.ID === attachmentItem.ID) {
-                        attachment.Content = attachmentItem.Content;
-                    }
-                }
-            }
-
-            inlineAttachments.forEach(
-                (a) => inlineContent.push(new InlineContent(a.ContentID, a.Content, a.ContentType))
-            );
-        }
-        return inlineContent;
-    }
-
     public async checkFilterValue(article: FAQArticle, criteria: UIFilterCriterion): Promise<boolean> {
         let match = false;
         if (criteria.property === FAQArticleProperty.VOTES && article && article.Votes) {

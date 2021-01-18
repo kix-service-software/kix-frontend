@@ -9,19 +9,18 @@
 
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 
-import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { AdditionalTableObjectsHandlerConfiguration } from './AdditionalTableObjectsHandlerConfiguration';
 
-export interface IObjectReferenceHandler {
+export interface IAdditionalTableObjectsHandler {
 
-    name: string;
+    handlerId: string;
 
     objectType: KIXObjectType;
 
-    determineObjects(object: KIXObject, config: any): Promise<KIXObject[]>;
-
-    determineObjectsByForm(formId: string, object: KIXObject, config: any): Promise<KIXObject[]>;
-
-    isPossibleFormField(formField: FormFieldConfiguration, config: any): boolean;
+    determineObjects(
+        handlerConfig: AdditionalTableObjectsHandlerConfiguration, loadingOptions?: KIXObjectLoadingOptions
+    ): Promise<KIXObject[]>;
 
 }

@@ -148,7 +148,7 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 displayValue = await translationService.getLanguageName(faqArticle.Language);
                 break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
+                displayValue = await super.getDisplayText(faqArticle, property, defaultValue, translatable);
         }
 
         if (displayValue) {

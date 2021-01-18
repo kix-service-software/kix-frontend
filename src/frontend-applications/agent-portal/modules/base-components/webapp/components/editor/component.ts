@@ -16,6 +16,7 @@ import { AttachmentUtil } from '../../../../../modules/base-components/webapp/co
 import { AutocompleteFormFieldOption } from '../../../../../model/AutocompleteFormFieldOption';
 import { PlaceholderService } from '../../../../../modules/base-components/webapp/core/PlaceholderService';
 import { TextModule } from '../../../../textmodule/model/TextModule';
+import { BrowserUtil } from '../../core/BrowserUtil';
 
 declare var CKEDITOR: any;
 
@@ -58,7 +59,9 @@ class EditorComponent {
                     || !this.editor.getData()
                 )
             ) {
-                let contentString = this.replaceInlineContent(input.value ? input.value : '', input.inlineContent);
+                let contentString = BrowserUtil.replaceInlineContent(
+                    input.value ? input.value : '', input.inlineContent
+                );
                 const matches = contentString.match(
                     /<(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))>/ig);
                 if (matches) {
@@ -285,23 +288,6 @@ class EditorComponent {
      */
     private instanceExists(): boolean {
         return CKEDITOR && CKEDITOR.instances && CKEDITOR.instances[this.state.id];
-    }
-
-    private replaceInlineContent(value: string, inlineContent: InlineContent[]): string {
-        let newString = value;
-        if (inlineContent) {
-            for (const contentItem of inlineContent) {
-                if (contentItem.contentId && contentItem.contentType) {
-                    const contentType = contentItem.contentType.replace(new RegExp('"', 'g'), '\'');
-                    const replaceString = `data:${contentType};base64,${contentItem.content}`;
-                    const contentIdLength = contentItem.contentId.length - 1;
-                    const contentId = contentItem.contentId.substring(1, contentIdLength);
-                    const regexpString = new RegExp('cid:' + contentId, 'g');
-                    newString = newString.replace(regexpString, replaceString);
-                }
-            }
-        }
-        return newString;
     }
 }
 

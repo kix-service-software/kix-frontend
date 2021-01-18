@@ -57,7 +57,6 @@
         "require ./quick-search",
         "require ./placeholder/table-placeholder",
         "require ./placeholder/chart-placeholder",
-        "require ./referenced-objects-widget",
         "require ./rich-text-input",
         "require ./router-outlet",
         "require ./search-form",
