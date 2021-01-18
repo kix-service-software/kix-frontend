@@ -332,7 +332,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 'Translatable#Helptext_Tickets_TicketCreate_Queue',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
-
                     new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
@@ -370,7 +369,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
                     new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true),
-                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE_PRELOAD_PATTERN, '*'),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
                             [

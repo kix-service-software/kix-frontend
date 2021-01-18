@@ -282,7 +282,7 @@ export class Ticket extends KIXObject {
             Property: TicketProperty.OWNER_ID,
             Operations: [SearchOperator.IN],
             DataType: FilterDataType.NUMERIC,
-            InputType: InputFieldTypes.DROPDOWN
+            InputType: InputFieldTypes.OBJECT_REFERENCE
         },
         {
             Property: TicketProperty.PENDING_TIME,
@@ -306,7 +306,7 @@ export class Ticket extends KIXObject {
             Property: TicketProperty.RESPONSIBLE_ID,
             Operations: [SearchOperator.IN],
             DataType: FilterDataType.NUMERIC,
-            InputType: InputFieldTypes.DROPDOWN
+            InputType: InputFieldTypes.OBJECT_REFERENCE
         },
         {
             Property: TicketProperty.STATE_ID,
