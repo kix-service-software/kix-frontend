@@ -15,7 +15,7 @@ import { JobFormService, JobService } from '../../core';
 import { JobProperty } from '../../../model/JobProperty';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { FormService } from '../../../../base-components/webapp/core/FormService';
-import { IJobFormManager } from '../../core/IJobFormManager';
+import { AbstractJobFormManager } from '../../core/AbstractJobFormManager';
 
 class Component extends FormInputComponent<string[], ComponentState> {
 
@@ -59,7 +59,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
         }
     }
 
-    private async getJobFormManager(): Promise<IJobFormManager> {
+    private async getJobFormManager(): Promise<AbstractJobFormManager> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         if (formInstance) {
             const value = await formInstance.getFormFieldValueByProperty<string>(JobProperty.TYPE);

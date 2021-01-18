@@ -226,6 +226,8 @@ export class BrowserCacheService {
             case KIXObjectType.JOB:
                 cacheKeyPrefixes.push(KIXObjectType.JOB_RUN);
                 cacheKeyPrefixes.push(KIXObjectType.JOB_RUN_LOG);
+                cacheKeyPrefixes.push(KIXObjectType.MACRO);
+                cacheKeyPrefixes.push(KIXObjectType.MACRO_ACTION);
                 break;
             default:
         }

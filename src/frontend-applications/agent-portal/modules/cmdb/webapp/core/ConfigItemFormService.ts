@@ -219,7 +219,7 @@ export class ConfigItemFormService extends KIXObjectFormService {
             for (const pd of relevantPreparedData) {
                 if (index < ff.countMax) {
                     if (index > 0) {
-                        ff = this.getNewFormField(formField);
+                        ff = await this.getNewFormField(formField);
                         formFields.push(ff);
                     }
                     this.setDataValue(ff, pd, index, formFieldValues);

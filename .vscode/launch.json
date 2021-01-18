@@ -19,7 +19,7 @@
             "stopOnEntry": false,
             "type": "node",
             "outFiles": [
-                "${workspaceFolder}/dist/server/*.js"
+                "${workspaceFolder}/dist/server/**/*.js"
             ],
             "console": "integratedTerminal",
             "preLaunchTask": "gulp"
@@ -58,6 +58,8 @@
                 "ts:ts-node/register",
                 "--require",
                 "source-map-support/register",
+                "--bail",
+                "--exit",
                 "tests/**/*.test.ts",
                 "src/**/*.test.ts"
             ],

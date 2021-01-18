@@ -15,7 +15,7 @@ import { JobTypes } from '../../../model/JobTypes';
 
 export class FetchAssetAttributes extends ExtendedJobFormManager {
 
-    public getActionOptionField(
+    public createOptionField(
         action: MacroAction, option: MacroActionTypeOption, actionType: string, actionFieldInstanceId: string,
         jobType: string
     ): FormFieldConfiguration {

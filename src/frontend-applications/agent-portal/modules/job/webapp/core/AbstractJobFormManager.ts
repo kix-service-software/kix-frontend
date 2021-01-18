@@ -7,7 +7,6 @@
  * --
  */
 
-import { IJobFormManager } from './IJobFormManager';
 import { FormGroupConfiguration } from '../../../../model/configuration/FormGroupConfiguration';
 import { JobProperty } from '../../model/JobProperty';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
@@ -19,27 +18,24 @@ import { FormPageConfiguration } from '../../../../model/configuration/FormPageC
 import { Macro } from '../../model/Macro';
 import { JobService } from '.';
 import { MacroAction } from '../../model/MacroAction';
-import { IdService } from '../../../../model/IdService';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { Job } from '../../model/Job';
-import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
-import { MacroActionType } from '../../model/MacroActionType';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { MacroActionTypeOption } from '../../model/MacroActionTypeOption';
 import { ExecPlan } from '../../model/ExecPlan';
 import { ExecPlanTypes } from '../../model/ExecPlanTypes';
 import { AbstractDynamicFormManager } from '../../../base-components/webapp/core/dynamic-form';
 import { FormContext } from '../../../../model/configuration/FormContext';
 import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
-import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { ExtendedJobFormManager } from './ExtendedJobFormManager';
-import { MacroActionTypeResult } from '../../model/MacroActionTypeResult';
+import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
+import { MacroFieldCreator } from './MacroFieldCreator';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
-export class AbstractJobFormManager implements IJobFormManager {
+export class AbstractJobFormManager {
 
     public filterManager: AbstractDynamicFormManager;
 
-    private extendedJobFormManager: ExtendedJobFormManager[] = [];
+    public extendedJobFormManager: ExtendedJobFormManager[] = [];
 
     public job: Job = null;
     protected execPageId: string = 'job-form-page-execution-plan';
@@ -64,14 +60,14 @@ export class AbstractJobFormManager implements IJobFormManager {
         return true;
     }
 
-    public async getPages(formContext: FormContext): Promise<FormPageConfiguration[]> {
-        const execPlanPage = await this.getExecPlanPage(formContext);
-        const filterPage = await this.getFilterPage(formContext);
-        const actionPage = await this.getActionPage(formContext);
+    public async getPages(job: Job, formInstance: FormInstance): Promise<FormPageConfiguration[]> {
+        const execPlanPage = await this.getExecPlanPage(formInstance);
+        const filterPage = await this.getFilterPage(formInstance);
+        const actionPage = await this.getMacroPage(job, formInstance);
         return [execPlanPage, filterPage, actionPage];
     }
 
-    public static getJobPage(formContext: FormContext): FormPageConfiguration {
+    public static getJobPage(formInstance: FormInstance): FormPageConfiguration {
         return new FormPageConfiguration(
             'job-new-form-page-information', 'Translatable#Job Information',
             [], true, null,
@@ -88,7 +84,7 @@ export class AbstractJobFormManager implements IJobFormManager {
                                 new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.JOB_TYPE),
                                 new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true)
                             ], null, null, null, null, null, null, null, null, null, null, null, null,
-                            formContext === FormContext.EDIT
+                            formInstance.getFormContext() === FormContext.EDIT
                         ),
                         new FormFieldConfiguration(
                             'job-new-form-field-name',
@@ -115,9 +111,9 @@ export class AbstractJobFormManager implements IJobFormManager {
         );
     }
 
-    protected async getExecPlanPage(formContext: FormContext): Promise<FormPageConfiguration> {
-        const timeGroup = await this.getTimeGroup(formContext);
-        const eventGroup = await this.getEventGroup(formContext);
+    protected async getExecPlanPage(forminstance: FormInstance): Promise<FormPageConfiguration> {
+        const timeGroup = await this.getTimeGroup(forminstance.getFormContext());
+        const eventGroup = await this.getEventGroup(forminstance.getFormContext());
         return new FormPageConfiguration(
             this.execPageId, 'Translatable#Execution Plan',
             undefined, undefined, undefined, [timeGroup, eventGroup]
@@ -184,8 +180,11 @@ export class AbstractJobFormManager implements IJobFormManager {
         );
     }
 
-    protected async getFilterPage(formContext: FormContext): Promise<FormPageConfiguration> {
-        const filtersValue = await this.getValue(JobProperty.FILTER, null, null, this.job, formContext);
+    protected async getFilterPage(formInstance: FormInstance): Promise<FormPageConfiguration> {
+        const filtersValue = await this.getValue(
+            JobProperty.FILTER, null, null, this.job, formInstance.getFormContext()
+        );
+
         const filters = new FormFieldConfiguration(
             'job-form-field-filters',
             'Translatable#Filter', JobProperty.FILTER, 'job-input-filter', false,
@@ -203,266 +202,32 @@ export class AbstractJobFormManager implements IJobFormManager {
         );
     }
 
-    protected async getActionPage(formContext: FormContext): Promise<FormPageConfiguration> {
-        const actionsField = new FormFieldConfiguration(
-            'job-form-field-actions',
-            '1. Action', JobProperty.MACRO_ACTIONS, 'job-input-actions', false,
-            'Translatable#Helptext_Admin_JobCreateEdit_Actions', undefined, undefined, undefined, undefined,
-            undefined, 1, 200, 0
-        );
-        const actionGroup = new FormGroupConfiguration(
-            'job-form-group-actions', 'Translatable#Actions',
-            undefined, undefined, [actionsField], true
-        );
-        await this.prepareMacroActionFields(actionsField, actionGroup, formContext);
+    protected async getMacroPage(job: Job, formInstance: FormInstance): Promise<FormPageConfiguration> {
+        const groups = [];
+
+        if (job && Array.isArray(job.Macros)) {
+            const macros: Macro[] = await JobService.getMacrosOfJob(this.job);
+            for (const macro of macros) {
+                const macroField = await MacroFieldCreator.createMacroField(macro, formInstance, this);
+                groups.push(
+                    new FormGroupConfiguration(
+                        'job-form-group-macro', 'Translatable#Macro',
+                        undefined, undefined, [macroField]
+                    )
+                );
+            }
+        } else {
+            const macroField = await MacroFieldCreator.createMacroField(null, formInstance, this);
+            groups.push(
+                new FormGroupConfiguration(
+                    'job-form-group-macro', 'Translatable#Macro', undefined, undefined, [macroField]
+                )
+            );
+        }
 
         return new FormPageConfiguration(
             this.actionPageId, 'Translatable#Actions',
-            undefined, undefined, undefined, [actionGroup]
-        );
-    }
-
-    protected async prepareMacroActionFields(
-        field: FormFieldConfiguration, group: FormGroupConfiguration, formContext: FormContext
-    ): Promise<void> {
-        if (this.job && formContext === FormContext.EDIT) {
-            const macros: Macro[] = await JobService.getMacrosOfJob(this.job);
-            if (macros && macros.length && macros[0].Actions && macros[0].Actions.length) {
-                const macro = macros[0];
-                const actions: MacroAction[] = [];
-                if (macro.ExecOrder && macro.ExecOrder.length) {
-                    macro.ExecOrder.forEach((aId) => {
-                        const action = macro.Actions.find((a) => a.ID === aId);
-                        if (action && !actions.some((a) => a.ID === action.ID)) {
-                            actions.push(action);
-                        }
-                    });
-
-                    macro.Actions.forEach((ma) => {
-                        if (!actions.some((a) => a.ID === ma.ID)) {
-                            actions.push(ma);
-                        }
-                    });
-
-                    for (let i = 0; i < actions.length; i++) {
-                        const action = actions[i];
-                        let actionField = field;
-                        if (i === 0) {
-                            actionField.defaultValue = new FormFieldValue(action.Type);
-                        } else {
-                            actionField = new FormFieldConfiguration(
-                                field.id,
-                                field.label, field.property, field.inputComponent, field.required,
-                                field.hint, field.options, new FormFieldValue(action.Type),
-                                field.fieldConfigurationIds, undefined, field.parentInstanceId, field.countDefault,
-                                field.countMax, field.countMin, field.maxLength, field.regEx, field.regExErrorMessage,
-                                field.empty, field.asStructure, field.readonly, field.placeholder, undefined,
-                                field.showLabel, field.name
-                            );
-                            group.formFields.push(actionField);
-                        }
-                        actionField.instanceId = IdService.generateDateBasedId(field.property);
-                        const childFields = await this.getFormFieldsForAction(
-                            action.Type, actionField.instanceId, macro.Type, action
-                        );
-                        actionField.children = childFields;
-                    }
-                    await this.updateFields(group.formFields);
-                }
-            }
-        }
-    }
-
-    public async updateFields(fields: FormFieldConfiguration[]): Promise<void> {
-        const actionsFields = fields.filter((ff) => ff.property === JobProperty.MACRO_ACTIONS);
-        if (actionsFields) {
-            for (let i = 0; i < actionsFields.length; i++) {
-                const label = await TranslationService.translate('Translatable#{0}. Action', [i + 1]);
-                actionsFields[i].label = label;
-            }
-        }
-    }
-
-    public async getFormFieldsForAction(
-        actionType: string, actionFieldInstanceId: string, jobType: string, action?: MacroAction
-    ): Promise<FormFieldConfiguration[]> {
-        const fields: FormFieldConfiguration[] = [];
-        if (!actionFieldInstanceId) {
-            console.error('No "actionFieldInstanceId" given!');
-        } else {
-            if (actionType) {
-
-                const skip = await this.getSkipField(actionType, actionFieldInstanceId, action);
-
-                // special instance id to distinguish between the actions
-                skip.instanceId = IdService.generateDateBasedId(`ACTION###${actionFieldInstanceId}###SKIP`);
-                fields.push(skip);
-
-                const macroActionTypes = await KIXObjectService.loadObjects<MacroActionType>(
-                    KIXObjectType.MACRO_ACTION_TYPE, [actionType], null, { id: jobType }, true
-                ).catch((error): MacroActionType[] => []);
-                if (macroActionTypes && !!macroActionTypes.length) {
-                    if (macroActionTypes[0].Results) {
-                        const resultGroup: FormFieldConfiguration = this.getResultGroupField(
-                            macroActionTypes[0], action, actionType, actionFieldInstanceId
-                        );
-                        fields.push(resultGroup);
-                    }
-
-                    if (macroActionTypes[0].Options) {
-                        const optionFields: FormFieldConfiguration[] = this.getOptionFields(
-                            macroActionTypes[0], action, actionType, actionFieldInstanceId, jobType
-                        );
-                        fields.push(...optionFields);
-                    }
-                }
-            }
-        }
-
-        return fields;
-    }
-    private getResultGroupField(
-        macroActionType: MacroActionType, action: MacroAction, actionType: string, actionFieldInstanceId: string
-    ): FormFieldConfiguration {
-        const fields: FormFieldConfiguration[] = [];
-        for (const resultName in macroActionType.Results) {
-            if (resultName) {
-                const result = macroActionType.Results[resultName] as MacroActionTypeResult;
-                if (result) {
-                    let defaultValue;
-                    if (action && action.ResultVariables) {
-                        defaultValue = action.ResultVariables[result.Name];
-                    }
-                    const resultField = new FormFieldConfiguration(
-                        `job-action-${actionType}-result-${result.Name}`, result.Name,
-                        `ACTION###${actionFieldInstanceId}###RESULT###${result.Name}`,
-                        null, false, result.Description, undefined,
-                        typeof defaultValue !== 'undefined'
-                            ? new FormFieldValue(defaultValue) : undefined,
-                    );
-
-                    // special instance id to distinguish between the actions
-                    const instanceId = IdService.generateDateBasedId(
-                        `ACTION###${actionFieldInstanceId}###${result.Name}`
-                    );
-                    resultField.instanceId = instanceId;
-                    fields.push(resultField);
-                }
-            }
-        }
-        return new FormFieldConfiguration(
-            `job-action-${actionType}-resultGroup`, 'Translatable#Result names',
-            `ACTION###${actionFieldInstanceId}###RESULTGROUP`,
-            null, false, 'Translatable#An optional mapping of named results of the macro action and their variable names. The variable can be used as special placeholder in following actions like "${VariableName}".',
-            undefined, null, null, fields, null, null, null, null, null, null, null, true, true
-        );
-    }
-
-    private getOptionFields(
-        macroActionType: MacroActionType, action: MacroAction, actionType: string,
-        actionFieldInstanceId: string, jobType: string
-    ) {
-        const fieldOrderMap: Map<string, number> = new Map();
-        const fields: FormFieldConfiguration[] = [];
-        for (const optionName in macroActionType.Options) {
-            if (optionName) {
-                const option = macroActionType.Options[optionName] as MacroActionTypeOption;
-                if (option) {
-                    const actionPropertyField = this.getActionOptionField(
-                        action, option, actionType, actionFieldInstanceId, jobType
-                    );
-
-                    // split values if it is an array option field
-                    if (actionPropertyField.countMax > 1
-                        && Array.isArray(actionPropertyField.defaultValue.value)) {
-                        for (const value of actionPropertyField.defaultValue.value) {
-                            const newField = this.getNewOptionField(
-                                actionPropertyField, value, actionFieldInstanceId, option.Name
-                            );
-                            fieldOrderMap.set(newField.instanceId, option.Order);
-                            fields.push(newField);
-                        }
-                    } else {
-
-                        // special instance id to distinguish between the actions
-                        actionPropertyField.instanceId = IdService.generateDateBasedId(
-                            `ACTION###${actionFieldInstanceId}###${option.Name}`
-                        );
-
-                        fieldOrderMap.set(actionPropertyField.instanceId, option.Order);
-                        fields.push(actionPropertyField);
-                    }
-                }
-            }
-        }
-
-        return fields.sort((a, b) => fieldOrderMap.get(a.instanceId) - fieldOrderMap.get(b.instanceId));
-    }
-
-    private getNewOptionField(
-        actionPropertyField: FormFieldConfiguration, value: any, actionFieldInstanceId: string, optionName: string
-    ) {
-        return new FormFieldConfiguration(
-            IdService.generateDateBasedId(actionPropertyField.id), actionPropertyField.label,
-            actionPropertyField.property, actionPropertyField.inputComponent,
-            actionPropertyField.required, actionPropertyField.hint,
-            actionPropertyField.options, new FormFieldValue(value),
-            [], null, null,
-            actionPropertyField.countDefault, actionPropertyField.countMax,
-            actionPropertyField.countMin, actionPropertyField.maxLength,
-            actionPropertyField.regEx, actionPropertyField.regExErrorMessage,
-            actionPropertyField.empty, actionPropertyField.asStructure,
-            actionPropertyField.readonly, actionPropertyField.placeholder,
-
-            // special instance id to distinguish between the actions
-            IdService.generateDateBasedId(
-                `ACTION###${actionFieldInstanceId}###${optionName}`
-            ),
-            actionPropertyField.showLabel, actionPropertyField.name,
-            actionPropertyField.draggableFields, actionPropertyField.defaultHint,
-            actionPropertyField.type, actionPropertyField.visible
-        );
-    }
-
-    public getActionOptionField(
-        action: MacroAction, option: MacroActionTypeOption, actionType: string, actionFieldInstanceId: string,
-        jobType: string
-    ): FormFieldConfiguration {
-        for (const extendedManager of this.extendedJobFormManager) {
-            const result = extendedManager.getActionOptionField(
-                action, option, actionType, actionFieldInstanceId, jobType
-            );
-
-            if (result) {
-                return result;
-            }
-        }
-
-        let defaultValue;
-        if (action && action.Parameters) {
-            defaultValue = action.Parameters[option.Name];
-        }
-
-        return new FormFieldConfiguration(
-            `job-action-${actionType}-${option.Name}`, option.Label,
-            `ACTION###${actionFieldInstanceId}###${option.Name}`,
-            null, Boolean(option.Required), option.Description, undefined,
-            typeof defaultValue !== 'undefined' ? new FormFieldValue(defaultValue) : undefined);
-    }
-
-    private async getSkipField(
-        actionType: string, actionFieldInstanceId: string, action?: MacroAction
-    ): Promise<FormFieldConfiguration> {
-        let defaultValue;
-        if (action) {
-            defaultValue = action[KIXObjectProperty.VALID_ID] !== 1;
-        }
-        return new FormFieldConfiguration(
-            `job-action-${actionType}-skip`, 'Translatable#Skip',
-            `ACTION###${actionFieldInstanceId}###SKIP`,
-            'checkbox-input', false,
-            'Translatable#Helptext_Admin_JobCreateEdit_ActionSkip', undefined,
-            typeof defaultValue !== 'undefined' ? new FormFieldValue(defaultValue) : new FormFieldValue(false)
+            undefined, undefined, undefined, groups
         );
     }
 
@@ -504,11 +269,6 @@ export class AbstractJobFormManager implements IJobFormManager {
                 }
                 break;
             default:
-                if (property.startsWith('ACTION###') || property.startsWith('MACRO_ACTIONS')) {
-                    value = (formField && formField.defaultValue)
-                        ? formField.defaultValue.value
-                        : null;
-                }
         }
         return value;
     }
@@ -533,5 +293,14 @@ export class AbstractJobFormManager implements IJobFormManager {
         return await JobService.getInstance().getTreeNodes(
             JobProperty.EXEC_PLAN_EVENTS
         );
+    }
+
+    public async updateFields(fields: FormFieldConfiguration[]): Promise<void> {
+        if (Array.isArray(fields)) {
+            for (let i = 0; i < fields.length; i++) {
+                const label = await TranslationService.translate('Translatable#{0}. Action', [i + 1]);
+                fields[i].label = label;
+            }
+        }
     }
 }

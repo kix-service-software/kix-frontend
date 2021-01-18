@@ -16,7 +16,7 @@ import { JobTypes } from '../../../model/JobTypes';
 
 export class TicketArticleCreateBody extends ExtendedJobFormManager {
 
-    public getActionOptionField(
+    public createOptionField(
         action: MacroAction, option: MacroActionTypeOption, actionType: string, actionFieldInstanceId: string,
         jobType: string
     ): FormFieldConfiguration {
@@ -32,7 +32,7 @@ export class TicketArticleCreateBody extends ExtendedJobFormManager {
 
             return new FormFieldConfiguration(
                 `job-action-${actionType}-${option.Name}`, option.Label,
-                `ACTION###${actionFieldInstanceId}###${option.Name}`,
+                `${actionFieldInstanceId}###${option.Name}`,
                 'rich-text-input', Boolean(option.Required), option.Description, undefined,
                 typeof defaultValue !== 'undefined' ? new FormFieldValue(defaultValue) : undefined
             );

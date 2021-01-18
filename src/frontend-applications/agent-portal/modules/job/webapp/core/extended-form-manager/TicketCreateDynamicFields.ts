@@ -15,7 +15,7 @@ import { JobTypes } from '../../../model/JobTypes';
 
 export class TicketCreateDynamicFields extends ExtendedJobFormManager {
 
-    public getActionOptionField(
+    public createOptionField(
         action: MacroAction, option: MacroActionTypeOption, actionType: string, actionFieldInstanceId: string,
         jobType: string
     ): FormFieldConfiguration {

@@ -21,20 +21,13 @@ import { ExecPlanTypes } from '../model/ExecPlanTypes';
 import { ExecPlanProperty } from '../model/ExecPlanProperty';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { MacroAction } from '../model/MacroAction';
-import { CreateMacroAction } from './api/CreateMacroAction';
 import { MacroProperty } from '../model/MacroProperty';
 import { Macro } from '../model/Macro';
 import { Error } from '../../../../../server/model/Error';
-import { JobTypes } from '../model/JobTypes';
 import { MacroActionType } from '../model/MacroActionType';
 import { JobType } from '../model/JobType';
 import { JobRun } from '../model/JobRun';
-import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
 import { CacheService } from '../../../server/services/cache';
-import { FilterCriteria } from '../../../model/FilterCriteria';
-import { SearchOperator } from '../../search/model/SearchOperator';
-import { FilterDataType } from '../../../model/FilterDataType';
-import { FilterType } from '../../../model/FilterType';
 
 export class JobAPIService extends KIXObjectAPIService {
 
@@ -195,6 +188,9 @@ export class JobAPIService extends KIXObjectAPIService {
     private async createJob(
         token: string, clientRequestId: string, parameter: Array<[string, any]>
     ): Promise<number> {
+
+        const macroIds = await this.createMacros(token, clientRequestId, parameter, true);
+
         const jobParameter = parameter.filter(
             (p) => p[0] !== JobProperty.EXEC_PLAN_EVENTS
                 && p[0] !== JobProperty.EXEC_PLAN_WEEKDAYS
@@ -206,18 +202,11 @@ export class JobAPIService extends KIXObjectAPIService {
             token, clientRequestId, parameter
         ).catch((error) => { throw new Error(error.Code, error.Message); });
 
-        const macroId = await this.createMacro(
-            token, clientRequestId, parameter, true
-        ).catch((error) => {
-            this.deletePlansAndMacroOfNewJob(token, clientRequestId, execPlanIds);
-            throw new Error(error.Code, error.Message);
-        });
-
         if (!!execPlanIds.length) {
             jobParameter.push([JobProperty.EXEC_PLAN_IDS, execPlanIds]);
         }
-        if (macroId) {
-            jobParameter.push([JobProperty.MACROS_IDS, [macroId]]);
+        if (Array.isArray(macroIds)) {
+            jobParameter.push([JobProperty.MACROS_IDS, macroIds]);
         }
 
         this.prepareFilterParameter(jobParameter);
@@ -225,7 +214,7 @@ export class JobAPIService extends KIXObjectAPIService {
         const id = await super.executeUpdateOrCreateRequest(
             token, clientRequestId, jobParameter, this.RESOURCE_URI, this.objectType, 'JobID', true
         ).catch((error: Error) => {
-            this.deletePlansAndMacroOfNewJob(token, clientRequestId, execPlanIds, macroId);
+            this.deletePlansAndMacroOfNewJob(token, clientRequestId, execPlanIds);
             throw new Error(error.Code, error.Message);
         });
 
@@ -236,12 +225,19 @@ export class JobAPIService extends KIXObjectAPIService {
         token: string, clientRequestId: string, parameter: Array<[string, any]>, jobId: number
     ): Promise<number> {
         if (jobId) {
+
+            const macroIds = await this.createMacros(token, clientRequestId, parameter, true);
+
             const jobParameter = parameter.filter(
                 (p) => p[0] !== JobProperty.EXEC_PLAN_EVENTS
                     && p[0] !== JobProperty.EXEC_PLAN_WEEKDAYS
                     && p[0] !== JobProperty.EXEC_PLAN_WEEKDAYS_TIMES
                     && p[0] !== JobProperty.MACRO_ACTIONS
             );
+
+            if (Array.isArray(macroIds)) {
+                jobParameter.push([JobProperty.MACROS_IDS, macroIds]);
+            }
 
             const execValue = parameter.find((p) => p[0] === JobProperty.EXEC);
             if (!execValue) {
@@ -258,14 +254,6 @@ export class JobAPIService extends KIXObjectAPIService {
                         token, clientRequestId, parameter, jobs[0]
                     ).catch((error) => { throw new Error(error.Code, error.Message); });
 
-                    const macroId = await this.updateMacroForJob(
-                        token, clientRequestId, parameter, jobs[0]
-                    ).catch((error) => {
-                        // TODO: if new ExecPlans were created, delete them
-                        // this.deletePlansAndMacroOfJob(token, clientRequestId, execPlanIds);
-                        throw new Error(error.Code, error.Message);
-                    });
-
                     this.prepareFilterParameter(jobParameter);
 
                     const uri = this.buildUri(this.RESOURCE_URI, jobId);
@@ -277,7 +265,7 @@ export class JobAPIService extends KIXObjectAPIService {
                         throw new Error(error.Code, error.Message);
                     });
 
-                    await this.updateJobRelations(token, clientRequestId, jobs[0], execPlanIds, macroId);
+                    await this.updateJobRelations(token, clientRequestId, jobs[0], execPlanIds);
                 }
             } else {
                 const uri = this.buildUri(this.RESOURCE_URI, jobId);
@@ -334,9 +322,7 @@ export class JobAPIService extends KIXObjectAPIService {
         ).then((response) => {
             if (response) { execPlanIds.push(response); }
         }).catch((error) => {
-            if (job) {
-                this.deletePlansAndMacroOfNewJob(token, clientRequestId, execPlanIds);
-            }
+            this.deletePlansAndMacroOfNewJob(token, clientRequestId, execPlanIds);
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
         });
@@ -395,169 +381,6 @@ export class JobAPIService extends KIXObjectAPIService {
         return id;
     }
 
-    public async createMacro(
-        token: string, clientRequestId: string, parameter: Array<[string, any]>, forJob?: boolean
-    ): Promise<number> {
-        const jobName = this.getParameterValue(parameter, JobProperty.NAME);
-        const jobType = this.getParameterValue(parameter, JobProperty.TYPE);
-
-        let macroName = this.getParameterValue(parameter, MacroProperty.NAME);
-        macroName = forJob ? `Macro for Job "${jobName}"` : macroName;
-
-        let macroType = this.getParameterValue(parameter, MacroProperty.TYPE);
-        macroType = forJob ? jobType || JobTypes.TICKET : macroType;
-
-        const macroComment = this.getParameterValue(parameter, KIXObjectProperty.COMMENT);
-
-        const macroActions: MacroAction[] = this.getParameterValue(parameter, JobProperty.MACRO_ACTIONS);
-
-        const createMacroActions: CreateMacroAction[] = Array.isArray(macroActions) ?
-            macroActions.map(
-                (ma) => new CreateMacroAction(
-                    ma.Type, ma.Parameters, ma.ResultVariables, Number(ma.ValidID),
-                    ma.Comment ? ma.Comment : `MacroAction for Job "${jobName}"`,
-                )
-            ) : macroActions === null ? [] : undefined;
-
-        let macroId;
-
-        if (Array.isArray(createMacroActions)) {
-            let failedError;
-            const macroParameter: Array<[string, any]> = [
-                [MacroProperty.NAME, macroName],
-                [MacroProperty.TYPE, macroType],
-                [KIXObjectProperty.COMMENT, forJob ? `Macro for Job "${jobName}"` : macroComment],
-                [MacroProperty.ACTIONS, createMacroActions]
-            ];
-            macroId = await this.createObject(
-                token, clientRequestId, KIXObjectType.MACRO, macroParameter
-            ).catch((error) => {
-                failedError = error;
-            });
-
-            if (failedError) {
-                const macros = await this.loadObjects<Macro>(
-                    token, clientRequestId, KIXObjectType.MACRO, null,
-                    new KIXObjectLoadingOptions([
-                        new FilterCriteria(
-                            MacroProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, macroName
-                        )
-                    ]), null
-                );
-
-                if (macros && macros.length) {
-                    await this.deleteMacro(token, macros[0].ID).catch((error) => null);
-                }
-
-                throw failedError;
-            }
-        }
-
-        return macroId;
-    }
-    private async updateMacroForJob(
-        token: string, clientRequestId: string, parameter: Array<[string, any]>, job: Job
-    ): Promise<number> {
-        let id;
-        if (job) {
-            let newJobName = this.getParameterValue(parameter, JobProperty.NAME);
-            if (!newJobName) {
-                newJobName = Job.name;
-            }
-
-            const macroActions: MacroAction[] = this.getParameterValue(parameter, JobProperty.MACRO_ACTIONS);
-
-            const createMacroActions: CreateMacroAction[] = Array.isArray(macroActions) ?
-                macroActions.map(
-                    (ma) => new CreateMacroAction(
-                        ma.Type, ma.Parameters, ma.ResultVariables, Number(ma.ValidID),
-                        ma.Comment ? ma.Comment : `MacroAction for Job "${newJobName}"`,
-                    )
-                ) : [];
-
-            const jobMacro = job.Macros && !!job.Macros.length ? job.Macros[0] : null;
-            id = await this.updateMacro(token, jobMacro, `Macro for Job "${newJobName}"`, createMacroActions);
-        }
-
-        return id;
-    }
-
-    public async updateMacro(
-        token: string, macro: Macro, macroName: string, actions: CreateMacroAction[]
-    ): Promise<number> {
-        let id;
-        if (Array.isArray(actions)) {
-            const macroParameter: Array<[string, any]> = [
-                [MacroProperty.NAME, macroName],
-                [MacroProperty.TYPE, macro.Type],
-                [KIXObjectProperty.COMMENT, macroName]
-            ];
-            if (macro) {
-                const actionIds = await this.updateMacroActions(
-                    token, 'JobAPIService', macro, actions
-                ).catch((error) => {
-                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                    throw new Error(error.Code, error.Message);
-                });
-                macroParameter.push([MacroProperty.EXEC_ORDER, actionIds]);
-
-                id = await this.updateObject(
-                    token, 'JobAPIService', KIXObjectType.MACRO, macroParameter, macro.ID,
-                    undefined, undefined
-                ).catch((error) => { throw new Error(error.Code, error.Message); });
-
-                if (macro.ExecuteMacro) {
-                    CacheService.getInstance().deleteKeys(macro.Type);
-                }
-            } else {
-                macroParameter.push([MacroProperty.ACTIONS, actions]);
-
-                id = await this.createObject(
-                    token, 'JobAPIService', KIXObjectType.MACRO, macroParameter
-                ).catch((error) => {
-                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                    throw new Error(error.Code, error.Message);
-                });
-            }
-        }
-
-        return id;
-    }
-
-    private async updateMacroActions(
-        token: string, clientRequestId: string, macro: Macro, newActions: CreateMacroAction[]
-    ): Promise<number[]> {
-        const actionIds = macro.Actions.map((a) => a.ID);
-        const uri = this.buildUri(this.RESOURCE_URI_MACRO, macro.ID, 'actions');
-
-        // TODO: just delete unnecessary action and update/create other actions
-        if (actionIds && !!actionIds.length) {
-            await super.deleteObject(
-                token, clientRequestId, KIXObjectType.MACRO_ACTION, actionIds.join(','),
-                undefined, KIXObjectType.EXEC_PLAN, uri
-            ).catch((error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            });
-        }
-
-        const newActionIds: number[] = [];
-        for (const action of newActions) {
-            const object = {};
-            object[KIXObjectType.MACRO_ACTION] = action;
-            await this.sendRequest(
-                token, clientRequestId, uri, object, KIXObjectType.MACRO_ACTION, true
-            ).then((response) => {
-                if (response) {
-                    newActionIds.push(response.MacroActionID);
-                }
-            }).catch((error: Error) => {
-                throw new Error(error.Code, error.Message);
-            });
-        }
-
-        return newActionIds;
-    }
-
     private prepareFilterParameter(jobParameter: Array<[string, any]>): void {
         const filterIndex = jobParameter.findIndex((p) => p[0] === JobProperty.FILTER);
         if (filterIndex !== -1 && Array.isArray(jobParameter[filterIndex][1])) {
@@ -566,40 +389,12 @@ export class JobAPIService extends KIXObjectAPIService {
         }
     }
 
-    private deletePlansAndMacroOfNewJob(
-        token: string, clientRequestId: string, execPlanIds: number[] = [], macroId?: number
-    ): void {
-        for (const execPlanId of execPlanIds) {
-            if (execPlanId) {
-                this.deleteObject(
-                    token, clientRequestId, KIXObjectType.EXEC_PLAN, execPlanId,
-                    undefined, KIXObjectType.EXEC_PLAN, this.RESOURCE_URI_EXEC_PLAN
-                ).catch((error) => {
-                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                });
-            }
-        }
-        if (macroId) {
-            this.deleteObject(
-                token, clientRequestId, KIXObjectType.MACRO, macroId,
-                undefined, KIXObjectType.MACRO, this.RESOURCE_URI_MACRO
-            ).catch((error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            });
-        }
-    }
-
     private async updateJobRelations(
-        token: string, clientRequestId: string, job: Job, execPlanIds: number[] = [], macroId: number
+        token: string, clientRequestId: string, job: Job, execPlanIds: number[] = []
     ): Promise<void> {
         let planIds: number[] = [];
         if (job && job.ExecPlans) {
             planIds = job.ExecPlans.map((p) => p.ID);
-        }
-
-        let macroIds: number[] = [];
-        if (job && job.Macros) {
-            macroIds = job.Macros.map((p) => p.ID);
         }
 
         const newExePlanIds = execPlanIds.filter((newId) => !planIds.some((id) => newId === id));
@@ -613,32 +408,31 @@ export class JobAPIService extends KIXObjectAPIService {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             });
         }
+    }
 
-        if (macroId && !macroIds.some((id) => macroId === id)) {
-            const object = {};
-            object['MacroID'] = macroId;
-            const uri = this.buildUri(this.RESOURCE_URI, job.ID, 'macroids');
-            await this.sendRequest(
-                token, clientRequestId, uri, object, KIXObjectType.JOB, true
-            ).catch((error: Error) => {
+    private deletePlansAndMacroOfNewJob(
+        token: string, clientRequestId: string, execPlanIds: number[] = [], macroIds: number[] = []
+    ): void {
+        for (const execPlanId of execPlanIds) {
+            if (execPlanId) {
+                this.deleteObject(
+                    token, clientRequestId, KIXObjectType.EXEC_PLAN, execPlanId,
+                    undefined, KIXObjectType.EXEC_PLAN, this.RESOURCE_URI_EXEC_PLAN
+                ).catch((error) => {
+                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                });
+            }
+        }
+        for (const macroId of macroIds) {
+            this.deleteObject(
+                token, clientRequestId, KIXObjectType.MACRO, macroId,
+                undefined, KIXObjectType.MACRO, this.RESOURCE_URI_MACRO
+            ).catch((error) => {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             });
         }
     }
 
-    public async deleteObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType | string, objectId: number,
-        deleteOptions: KIXObjectSpecificDeleteOptions, cacheKeyPrefix: string, ressourceUri: string = this.RESOURCE_URI
-    ): Promise<Error[]> {
-        if (objectType === KIXObjectType.MACRO) {
-            await this.deleteMacro(token, objectId);
-            return [];
-        }
-
-        return super.deleteObject(
-            token, clientRequestId, objectType, objectId, deleteOptions, cacheKeyPrefix, ressourceUri
-        );
-    }
 
     public async deleteMacro(token: string, macroId: number): Promise<void> {
         await this.deleteMacroActions(token, macroId);
@@ -648,7 +442,6 @@ export class JobAPIService extends KIXObjectAPIService {
             null, KIXObjectType.MACRO, macroUri
         );
     }
-
     public async deleteMacroActions(token: string, macroId: number): Promise<void> {
         const macros = await this.loadObjects<Macro>(
             token, 'ObjectActionAPIService', KIXObjectType.MACRO, [macroId],
@@ -662,5 +455,125 @@ export class JobAPIService extends KIXObjectAPIService {
                 );
             }
         }
+    }
+
+    // NEW IMPLEMENTATION
+
+    public async createMacros(
+        token: string, clientRequestId: string, parameter: Array<[string, any]>, forJob?: boolean
+    ): Promise<number[]> {
+        const macroIds = [];
+        const macroParameter = parameter.filter((p) => p[0] === JobProperty.MACROS);
+        for (const mp of macroParameter) {
+            const macro: Macro = mp[1];
+            const macroId = await this.createOrUpdateMacro(token, clientRequestId, macro);
+            if (macroId) {
+                macroIds.push(macroId);
+            }
+        }
+        return macroIds;
+    }
+
+    private async createOrUpdateMacro(token: string, requestId: string, macro: Macro): Promise<number> {
+        if (!Array.isArray(macro.Actions) || !macro.Actions.length) {
+            return null;
+        }
+
+        let create = true;
+        let uri = this.buildUri(this.RESOURCE_URI_MACRO);
+        if (macro.ID) {
+            create = false;
+            uri = this.buildUri(uri, macro.ID);
+        }
+
+        const parameter = [];
+        for (const key in macro) {
+            if (macro[key]) {
+                if (key === MacroProperty.ID && create) {
+                    continue;
+                }
+
+                if (key === MacroProperty.NAME && !create) {
+                    continue;
+                }
+
+                if (key !== MacroProperty.ACTIONS) {
+                    parameter.push([key, macro[key]]);
+                }
+            }
+        }
+        const macroId = await super.executeUpdateOrCreateRequest(
+            token, requestId, parameter, uri, KIXObjectType.MACRO, 'MacroID', create
+        );
+
+        macro.ID = macroId;
+
+        if (macroId && Array.isArray(macro.Actions)) {
+            const actionsUri = this.buildUri(this.RESOURCE_URI_MACRO, macroId, 'actions');
+            const existingActions = await super.load<Macro>(
+                token, KIXObjectType.MACRO_ACTION, actionsUri, null, null, KIXObjectType.MACRO_ACTION
+            );
+
+            const actionsToDelete = existingActions
+                .filter((a) => !macro.Actions.some((ma) => ma.ID && ma.ID === a.ID))
+                .map((a) => a.ID);
+
+            if (actionsToDelete.length) {
+                await super.sendDeleteRequest(
+                    token, requestId,
+                    actionsToDelete.map((id) => this.buildUri(actionsUri, id)),
+                    KIXObjectType.MACRO_ACTION
+                );
+            }
+
+            const execOrder = [];
+            for (const action of macro.Actions) {
+                const actionId = await this.createOrUpdateAction(token, requestId, macroId, action);
+                execOrder.push(actionId);
+            }
+
+            const updateUri = this.buildUri(this.RESOURCE_URI_MACRO, macro.ID);
+            await super.executeUpdateOrCreateRequest(
+                token, requestId, [[MacroProperty.EXEC_ORDER, execOrder]], updateUri, KIXObjectType.MACRO, 'MacroID'
+            );
+        }
+
+        return macroId;
+    }
+
+    private async createOrUpdateAction(
+        token: string, requestId: string, macroId: number, action: MacroAction
+    ): Promise<number> {
+        const parameter = [];
+        for (const key in action) {
+            if (action[key]) {
+                parameter.push([key, action[key]]);
+            }
+        }
+
+        let create = true;
+        let uri = this.buildUri(this.RESOURCE_URI_MACRO, macroId, 'actions');
+        if (action.ID) {
+            create = false;
+            uri = this.buildUri(uri, action.ID);
+        }
+
+        if (action.Type === 'Loop') {
+            let macro = action.Parameters['MacroID'];
+            if (Array.isArray(macro) && macro.length) {
+                macro = macro[0];
+            }
+
+            const subMacroId = await this.createOrUpdateMacro(token, requestId, macro);
+            action.Parameters['MacroID'] = subMacroId;
+        }
+
+        const actionId = await super.executeUpdateOrCreateRequest(
+            token, requestId, parameter, uri, KIXObjectType.MACRO_ACTION, 'MacroActionID', create
+        );
+
+        action.ID = actionId;
+
+        return actionId;
     }
 }
