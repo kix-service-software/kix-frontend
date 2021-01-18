@@ -95,7 +95,7 @@ export class TicketDetailsDataBuilder {
 
         const configuration =
             await ModuleConfigurationService.getInstance().loadConfiguration<ObjectInformationWidgetConfiguration>(
-                token, 'ticket-details-object-information-config'
+                token, 'ticket-details-print-config'
             );
 
         if (configuration && configuration.properties) {
