@@ -38,6 +38,7 @@ import { FilterDataType } from '../../model/FilterDataType';
 import { CacheState } from '../search/model/CacheState';
 import { ArticleProperty } from './model/ArticleProperty';
 import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
+import { ObjectInformationWidgetConfiguration } from '../../model/configuration/ObjectInformationWidgetConfiguration';
 import { FAQArticleProperty } from '../faq/model/FAQArticleProperty';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
@@ -781,6 +782,30 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     new ConfiguredWidget(
                         'ticket-details-history-widget', 'ticket-details-history-widget', null
                     )
+                ]
+            )
+        );
+
+        configurations.push(
+            new ObjectInformationWidgetConfiguration(
+                'ticket-details-print-config', 'Ticket Print Configuration', ConfigurationType.ObjectInformation, KIXObjectType.TICKET,
+                [
+                    TicketProperty.ORGANISATION_ID,
+                    TicketProperty.CONTACT_ID,
+                    TicketProperty.CREATED,
+                    KIXObjectProperty.CREATE_BY,
+                    TicketProperty.CHANGED,
+                    KIXObjectProperty.CHANGE_BY,
+                    TicketProperty.AGE,
+                    TicketProperty.LOCK_ID,
+                    TicketProperty.TYPE_ID,
+                    TicketProperty.QUEUE_ID,
+                    'DynamicFields.AffectedAsset',
+                    TicketProperty.PRIORITY_ID,
+                    TicketProperty.RESPONSIBLE_ID,
+                    TicketProperty.OWNER_ID,
+                    TicketProperty.STATE_ID,
+                    TicketProperty.PENDING_TIME
                 ]
             )
         );
