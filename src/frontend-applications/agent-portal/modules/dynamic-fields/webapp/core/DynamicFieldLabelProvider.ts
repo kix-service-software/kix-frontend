@@ -15,6 +15,8 @@ import { DynamicField } from '../../model/DynamicField';
 import { DynamicFieldProperty } from '../../model/DynamicFieldProperty';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { DynamicFieldType } from '../../model/DynamicFieldType';
+import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
+import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
 
 export class DynamicFieldLabelProvider extends LabelProvider<DynamicField> {
 
@@ -104,6 +106,19 @@ export class DynamicFieldLabelProvider extends LabelProvider<DynamicField> {
                     }
                 }
                 break;
+            case DynamicFieldProperty.OBJECT_TYPE:
+                displayValue = value;
+                if (value) {
+                    const objectTypeConfigs = await KIXObjectService.loadObjects<SysConfigOption>(
+                        KIXObjectType.SYS_CONFIG_OPTION, [`${SysConfigKey.DYNAMIC_FIELD_OBJECT_TYPE}###${value}`],
+                        null, null, true
+                    ).catch(() => [] as SysConfigOption[]);
+
+                    if (objectTypeConfigs && objectTypeConfigs.length && objectTypeConfigs[0].Value) {
+                        displayValue = objectTypeConfigs[0].Value.DisplayName;
+                    }
+                }
+                break;
             default:
                 displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
@@ -151,6 +166,12 @@ export class DynamicFieldLabelProvider extends LabelProvider<DynamicField> {
             return dynamicField && dynamicField.InternalField === 1 ? ['kix-icon-check'] : [];
         } else if (property === DynamicFieldProperty.CUSTOMER_VISIBLE) {
             return dynamicField && dynamicField.CustomerVisible ? ['kix-icon-check'] : [];
+        } else if (property === DynamicFieldProperty.OBJECT_TYPE) {
+            const type = dynamicField ? dynamicField.ObjectType : value;
+            if (type) {
+                return type === KIXObjectType.TICKET ? ['kix-icon-ticket']
+                    : type === KIXObjectType.FAQ_ARTICLE ? ['kix-icon-faq'] : null;
+            }
         }
         return null;
     }

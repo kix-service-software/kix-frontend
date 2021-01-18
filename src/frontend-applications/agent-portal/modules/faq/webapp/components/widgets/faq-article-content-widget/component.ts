@@ -29,6 +29,7 @@ import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
 import { Context } from '../../../../../../model/Context';
 import { DisplayImageDescription } from '../../../../../base-components/webapp/core/DisplayImageDescription';
 import { DialogService } from '../../../../../base-components/webapp/core/DialogService';
+import { FAQArticleHandler } from '../../../core/FAQArticleHandler';
 
 class Component {
 
@@ -87,7 +88,7 @@ class Component {
 
         if (faqArticle && faqArticle.Attachments) {
             this.state.attachments = faqArticle.Attachments.filter((a) => a.Disposition !== 'inline');
-            this.state.inlineContent = await FAQService.getInstance().getFAQArticleInlineContent(faqArticle);
+            this.state.inlineContent = await FAQArticleHandler.getFAQArticleInlineContent(faqArticle);
             this.prepareImages();
 
             this.stars = await LabelService.getInstance().getIcons(faqArticle, FAQArticleProperty.VOTES);
@@ -101,16 +102,18 @@ class Component {
         const imageAttachments = this.state.attachments.filter((a) => a.ContentType.match(/^image\//));
         if (imageAttachments && imageAttachments.length) {
             for (const imageAttachment of imageAttachments) {
-                attachmentPromises.push(new Promise<DisplayImageDescription>(async (resolve, reject) => {
-                    const attachment = await this.loadAttachment(imageAttachment, true).catch(() => null);
-                    if (attachment) {
-                        const content = `data:${attachment.ContentType};base64,${attachment.Content}`;
-                        resolve(new DisplayImageDescription(
-                            attachment.ID, content, attachment.Comment ? attachment.Comment : attachment.Filename
-                        ));
-                    }
-                    resolve();
-                }));
+                attachmentPromises.push(
+                    new Promise<DisplayImageDescription>(async (resolve, reject) => {
+                        const attachment = await this.loadAttachment(imageAttachment, true).catch(() => null);
+                        if (attachment) {
+                            const content = `data:${attachment.ContentType};base64,${attachment.Content}`;
+                            resolve(new DisplayImageDescription(
+                                attachment.ID, content, attachment.Comment ? attachment.Comment : attachment.Filename
+                            ));
+                        }
+                        resolve(attachment);
+                    })
+                );
             }
         }
         this.images = (await Promise.all(attachmentPromises)).filter((i) => i);

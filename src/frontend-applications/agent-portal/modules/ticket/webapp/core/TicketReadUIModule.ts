@@ -92,7 +92,7 @@ export class UIModule implements IUIModule {
             KIXObjectType.ARTICLE, new ArticleTableCSSHandler()
         );
 
-        ServiceRegistry.registerObjectReferenceHandler('SuggestedFAQHandler', new SuggestedFAQHandler());
+        ServiceRegistry.registerAdditionalTableObjectsHandler(new SuggestedFAQHandler());
 
         FormService.getInstance().addFormFieldValueHandler(new TicketFormFieldValueHandler());
 

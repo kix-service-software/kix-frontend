@@ -9,9 +9,8 @@
 
 import { IConfiguration } from '../../../../model/configuration/IConfiguration';
 import { ConfigurationType } from '../../../../model/configuration/ConfigurationType';
-import { DefaultColumnConfiguration } from '../../../../model/configuration/DefaultColumnConfiguration';
 
-export class ObjectReferenceWidgetConfiguration implements IConfiguration {
+export class AdditionalTableObjectsHandlerConfiguration implements IConfiguration {
 
     public type;
 
@@ -20,9 +19,9 @@ export class ObjectReferenceWidgetConfiguration implements IConfiguration {
         public name: string,
         public handlerId: string,
         public handlerConfiguration?: any,
-        public tableColumns: DefaultColumnConfiguration[] = []
+        public dependencyProperties: string[] = [],
     ) {
-        this.type = ConfigurationType.ObjectReferenceWidget;
+        this.type = ConfigurationType.AdditionalTableObjectsHandler;
     }
 
 }

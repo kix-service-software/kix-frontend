@@ -100,7 +100,8 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 'Translatable#Helptext_Admin_DynamicFieldCreate_ObjectType',
                 [
                     new FormFieldOption(ObjectReferenceOptions.ADDITIONAL_NODES, [
-                        new TreeNode('Ticket', 'Ticket', 'kix-icon-ticket')
+                        new TreeNode(KIXObjectType.TICKET, 'Ticket', 'kix-icon-ticket'),
+                        new TreeNode(KIXObjectType.FAQ_ARTICLE, 'FAQ', 'kix-icon-faq')
                     ])
                 ], null, null, null, null, null, null, null, null, null, null, null, null, true
             )

@@ -24,6 +24,7 @@ import { LoadingShieldEventData } from './LoadingShieldEventData';
 import { ContextHistory } from './ContextHistory';
 import { ContextService } from './ContextService';
 import { PlaceholderService } from './PlaceholderService';
+import { InlineContent } from './InlineContent';
 
 
 export class BrowserUtil {
@@ -298,6 +299,23 @@ export class BrowserUtil {
             }
         }
         return urlParams;
+    }
+
+    public static replaceInlineContent(value: string, inlineContent: InlineContent[]): string {
+        let newString = value;
+        if (inlineContent) {
+            for (const contentItem of inlineContent) {
+                if (contentItem.contentId && contentItem.contentType) {
+                    const contentType = contentItem.contentType.replace(new RegExp('"', 'g'), '\'');
+                    const replaceString = `data:${contentType};base64,${contentItem.content}`;
+                    const contentIdLength = contentItem.contentId.length - 1;
+                    const contentId = contentItem.contentId.substring(1, contentIdLength);
+                    const regexpString = new RegExp('cid:' + contentId, 'g');
+                    newString = newString.replace(regexpString, replaceString);
+                }
+            }
+        }
+        return newString;
     }
 
 }

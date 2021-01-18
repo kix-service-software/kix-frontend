@@ -18,6 +18,8 @@ export interface ITableContentProvider<T = any> {
 
     loadData(): Promise<Array<RowObject<T>>>;
 
+    getRowObjects(objects: T[]): Promise<RowObject[]>;
+
     destroy(): void;
 
 }

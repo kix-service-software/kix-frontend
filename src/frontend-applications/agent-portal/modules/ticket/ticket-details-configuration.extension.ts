@@ -21,7 +21,7 @@ import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
 import { UIComponentPermission } from '../../model/UIComponentPermission';
 import { CRUD } from '../../../../server/model/rest/CRUD';
 import { TicketProperty } from './model/TicketProperty';
-import { ObjectReferenceWidgetConfiguration } from '../base-components/webapp/core/ObjectReferenceWidgetConfiguration';
+import { AdditionalTableObjectsHandlerConfiguration } from '../base-components/webapp/core/AdditionalTableObjectsHandlerConfiguration';
 import { DefaultColumnConfiguration } from '../../model/configuration/DefaultColumnConfiguration';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { ObjectIcon } from '../icon/model/ObjectIcon';
@@ -36,8 +36,9 @@ import { ContextMode } from '../../model/ContextMode';
 import { FilterType } from '../../model/FilterType';
 import { FilterDataType } from '../../model/FilterDataType';
 import { CacheState } from '../search/model/CacheState';
-import { Ticket } from './model/Ticket';
+import { ArticleProperty } from './model/ArticleProperty';
 import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
+import { FAQArticleProperty } from '../faq/model/FAQArticleProperty';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -542,27 +543,56 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(contactInfoCard);
 
         const suggestedFAQWidget = new WidgetConfiguration(
-            'ticket-details-dialog-suggested-faq-widget', 'Suggested FAQ', ConfigurationType.Widget,
-            'referenced-objects-widget', 'Translatable#Suggested FAQ', [], null,
-            new ObjectReferenceWidgetConfiguration(
-                'ticket-details-suggested-faq-config', 'Suggested FAQ',
-                'SuggestedFAQHandler',
-                {
-                    properties: [
-                        'Title',
-                        'Subject'
-                    ]
-                },
-                [
-                    new DefaultColumnConfiguration(
-                        null, null, null, 'Title', true, false, true, false, 180, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        null, null, null, 'Votes', true, false, false, false, 50, true, false
-                    ),
-                ]
+            'ticket-details-suggested-faq-widget', 'Suggested FAQ', ConfigurationType.Widget,
+            'table-widget', 'Translatable#Suggested FAQ', [], null,
+            new TableWidgetConfiguration(
+                'ticket-details-suggested-faq-table-widget', 'Suggested FAQ',
+                ConfigurationType.TableWidget, KIXObjectType.FAQ_ARTICLE, null, null,
+                new TableConfiguration(
+                    'ticket-details-suggested-faq-table-config', 'Suggested FAQ', ConfigurationType.Table,
+                    KIXObjectType.FAQ_ARTICLE,
+                    new KIXObjectLoadingOptions(
+                        [
+                            new FilterCriteria(
+                                'DynamicFields.RelatedAssets', SearchOperator.IN,
+                                FilterDataType.NUMERIC, FilterType.AND, '<KIX_TICKET_DynamicField_AffectedAsset_ObjectValue>'
+                            ),
+                            new FilterCriteria(
+                                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS,
+                                FilterDataType.NUMERIC, FilterType.AND, 1
+                            )
+                        ], null, 100, [FAQArticleProperty.VOTES]
+                    ), 10,
+                    [
+                        new DefaultColumnConfiguration(
+                            null, null, null, '', false, false, false, false, 30,
+                            false, false, false, null, false, 'faq-article-html-preview-cell'
+                        ),
+                        new DefaultColumnConfiguration(
+                            null, null, null, FAQArticleProperty.TITLE, true, false, true, false, 260, true, false
+                        ),
+                        new DefaultColumnConfiguration(
+                            null, null, null, FAQArticleProperty.VOTES, true, false, false, false, 50, true, false
+                        ),
+                    ], null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL,
+                    null, null, null,
+                    [
+                        new AdditionalTableObjectsHandlerConfiguration(
+                            'ticket-details-suggested-faq-handler-config', 'FAQs by ticket title or subject',
+                            'SuggestedFAQHandler',
+                            {
+                                minLength: 3,
+                                onlyValid: true
+                            },
+                            [
+                                TicketProperty.TITLE,
+                                ArticleProperty.SUBJECT
+                            ]
+                        )
+                    ],
+                ), null, false, false, null
             ),
-            false, false, 'kix-icon-faq'
+            false, false, 'kix-icon-faq', false, true
         );
         configurations.push(suggestedFAQWidget);
 
@@ -705,7 +735,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         'ticket-details-contact-card-widget', 'ticket-details-contact-card-widget'
                     ),
                     new ConfiguredWidget(
-                        'ticket-details-dialog-suggested-faq-widget', 'ticket-details-dialog-suggested-faq-widget'
+                        'ticket-details-suggested-faq-widget', 'ticket-details-suggested-faq-widget'
                     ),
                     new ConfiguredWidget(
                         'ticket-details-affected-asset-tickets', 'ticket-details-affected-asset-tickets'

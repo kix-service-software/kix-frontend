@@ -81,7 +81,7 @@ class Component {
                 this.state.reload = true;
                 const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
                 if (context) {
-                    context.reset(true);
+                    context.reset();
                 }
 
                 setTimeout(() => {

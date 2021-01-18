@@ -32,6 +32,9 @@ import { DynamicFieldProperty } from '../../../../dynamic-fields/model/DynamicFi
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { ServiceRegistry } from '../ServiceRegistry';
+import { AdditionalTableObjectsHandlerConfiguration } from '../AdditionalTableObjectsHandlerConfiguration';
+import { IAdditionalTableObjectsHandler } from '../IAdditionalTableObjectsHandler';
 
 
 export class Table implements Table {
@@ -51,6 +54,7 @@ export class Table implements Table {
     private sortOrder: SortOrder;
 
     private reloadPromise: Promise<void>;
+    private handlerRowObjects = {};
 
     public constructor(
         private tableKey: string,
@@ -97,8 +101,8 @@ export class Table implements Table {
 
             if (this.contentProvider) {
                 await this.contentProvider.initialize();
-                await this.loadRowData();
             }
+            await this.loadRowData();
 
             this.rows.forEach((r) => {
                 this.columns.forEach((c) => {
@@ -123,16 +127,69 @@ export class Table implements Table {
         }
     }
 
-    private async loadRowData(): Promise<void> {
+    private async loadRowData(relevantHandlerConfigIds?: string[]): Promise<void> {
         this.rows = [];
         this.filteredRows = null;
 
         if (this.contentProvider) {
-            const data = await this.contentProvider.loadData();
             const rows = [];
-            data.forEach((d) => rows.push(this.createRow(d)));
+            let rowObjects: RowObject[] = await this.contentProvider.loadData();
+
+            if (
+                // if intersection is active and no rowobjects found, result list is always empty, so ignore handler
+                (!this.tableConfiguration.intersection || (rowObjects && rowObjects.length))
+                && this.tableConfiguration
+                && Array.isArray(this.tableConfiguration.additionalTableObjectsHandler)
+                && this.tableConfiguration.additionalTableObjectsHandler.length
+            ) {
+                rowObjects = await this.considerHandlerData(rowObjects, relevantHandlerConfigIds);
+            }
+
+            rowObjects.forEach((d) => rows.push(this.createRow(d)));
             this.rows = rows;
         }
+    }
+
+    private async considerHandlerData(rowObjects: RowObject<any>[], relevantHandlerConfigIds?: string[]) {
+        for (const handlerConfig of this.tableConfiguration.additionalTableObjectsHandler) {
+            if (handlerConfig && handlerConfig.handlerId) {
+                if (
+                    !Array.isArray(relevantHandlerConfigIds)
+                    || relevantHandlerConfigIds.some((rhid) => rhid === handlerConfig.id)
+                    || !Array.isArray(this.handlerRowObjects[handlerConfig.id])
+                ) {
+                    const handler = ServiceRegistry.getAdditionalTableObjectsHandler(handlerConfig.handlerId);
+                    if (handler) {
+                        await this.prepareHandlerRowObjects(handler, handlerConfig);
+                    }
+                }
+
+                if (this.handlerRowObjects && Array.isArray(this.handlerRowObjects[handlerConfig.id])) {
+                    if (this.tableConfiguration.intersection) {
+                        rowObjects = rowObjects.filter((ro) => this.handlerRowObjects[handlerConfig.id].some(
+                            (hro) => ro.getObject().ObjectId === hro.getObject().ObjectId
+                        ));
+                    } else {
+                        this.handlerRowObjects[handlerConfig.id].forEach((hro) => {
+                            if (!rowObjects.some(
+                                (ro) => ro.getObject().ObjectId === hro.getObject().ObjectId)) {
+                                rowObjects.push(hro);
+                            }
+                        });
+                    }
+                }
+            }
+        }
+        return rowObjects;
+    }
+
+    private async prepareHandlerRowObjects(
+        handler: IAdditionalTableObjectsHandler,
+        handlerConfig: AdditionalTableObjectsHandlerConfiguration
+    ): Promise<void> {
+        const objects = await handler.determineObjects(handlerConfig, this.tableConfiguration.loadingOptions);
+        const handlerRowObjects = objects ? await this.contentProvider.getRowObjects(objects) : [];
+        this.handlerRowObjects[handlerConfig.id] = handlerRowObjects;
     }
 
     public createRow(tableObject?: RowObject): Row {
@@ -478,7 +535,9 @@ export class Table implements Table {
         return selectionState;
     }
 
-    public reload(keepSelection: boolean = false, sort: boolean = true): Promise<void> {
+    public reload(
+        keepSelection: boolean = false, sort: boolean = true, relevantHandlerConfigIds?: string[]
+    ): Promise<void> {
         if (this.reloadPromise) {
             return this.reloadPromise;
         }
@@ -489,7 +548,7 @@ export class Table implements Table {
             if (keepSelection) {
                 selectedRows = this.getSelectedRows(true);
             }
-            await this.loadRowData();
+            await this.loadRowData(relevantHandlerConfigIds);
             if (this.columns && !!this.columns.length) {
                 this.columns.forEach((c) =>
                     this.rows.forEach((r) => {
@@ -498,7 +557,7 @@ export class Table implements Table {
                 );
             }
             if (keepSelection && !!selectedRows.length) {
-                // TODO: auch ohne Object sollte es möglich sein, die Selektion zu erhalten
+                // TODO: get selection without object
                 selectedRows.map(
                     (r) => r.getRowObject().getObject()
                 ).forEach(

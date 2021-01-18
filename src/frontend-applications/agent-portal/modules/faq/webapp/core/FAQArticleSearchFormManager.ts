@@ -8,9 +8,6 @@
  */
 
 import { FAQService } from './FAQService';
-import {
-    AbstractDynamicFormManager
-} from '../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { FAQArticleProperty } from '../../model/FAQArticleProperty';
@@ -23,16 +20,17 @@ import { SearchOperator } from '../../../search/model/SearchOperator';
 import { SearchDefinition, SearchOperatorUtil } from '../../../search/webapp/core';
 import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
 import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
 
 
-export class FAQArticleSearchFormManager extends AbstractDynamicFormManager {
+export class FAQArticleSearchFormManager extends SearchFormManager {
 
     public objectType: KIXObjectType | string = KIXObjectType.FAQ_ARTICLE;
 
     protected readPermissions: Map<string, boolean> = new Map();
 
     public async getProperties(): Promise<Array<[string, string]>> {
-        const properties: Array<[string, string]> = [
+        let properties: Array<[string, string]> = [
             [SearchProperty.FULLTEXT, null],
             [FAQArticleProperty.NUMBER, null],
             [FAQArticleProperty.TITLE, null],
@@ -73,6 +71,13 @@ export class FAQArticleSearchFormManager extends AbstractDynamicFormManager {
             p[1] = label;
         }
 
+        const superProperties = await super.getProperties();
+        properties = [...properties, ...superProperties];
+
+        properties = properties.filter(
+            (p) => !this.ignoreProperties.some((ip) => ip === p[0])
+        );
+
         return properties;
     }
 
@@ -88,7 +93,7 @@ export class FAQArticleSearchFormManager extends AbstractDynamicFormManager {
     }
 
     public async getOperations(property: string): Promise<any[]> {
-        let operations: SearchOperator[] = [];
+        let operations: Array<string | SearchOperator> = [];
 
         if (property === FAQArticleProperty.CUSTOMER_VISIBLE) {
             operations = [SearchOperator.EQUALS];
@@ -99,7 +104,10 @@ export class FAQArticleSearchFormManager extends AbstractDynamicFormManager {
         } else if (this.isDateTime(property)) {
             operations = SearchDefinition.getDateTimeOperators();
         } else {
-            operations = SearchDefinition.getStringOperators();
+            operations = await super.getOperations(property);
+            if (!operations || !operations.length) {
+                operations = SearchDefinition.getStringOperators();
+            }
         }
 
         return operations;
@@ -110,9 +118,9 @@ export class FAQArticleSearchFormManager extends AbstractDynamicFormManager {
             return InputFieldTypes.DROPDOWN;
         } else if (this.isDateTime(property)) {
             return InputFieldTypes.DATE_TIME;
+        } else {
+            return await super.getInputType(property);
         }
-
-        return InputFieldTypes.TEXT;
     }
 
     private isDropDown(property: string): boolean {
@@ -146,7 +154,10 @@ export class FAQArticleSearchFormManager extends AbstractDynamicFormManager {
     }
 
     public async getTreeNodes(property: string): Promise<TreeNode[]> {
-        const nodes = await FAQService.getInstance().getTreeNodes(property, true, true);
+        let nodes = await super.getTreeNodes(property);
+        if (!nodes || !nodes.length) {
+            nodes = await FAQService.getInstance().getTreeNodes(property, true, true);
+        }
         return nodes;
     }
 

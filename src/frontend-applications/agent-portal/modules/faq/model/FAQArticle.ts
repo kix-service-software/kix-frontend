@@ -50,7 +50,7 @@ export class FAQArticle extends KIXObject {
     public changedBy: User;
 
     public constructor(faqArticle: FAQArticle) {
-        super();
+        super(faqArticle);
         if (faqArticle) {
             this.ID = faqArticle.ID;
             this.ObjectId = faqArticle.ID;
