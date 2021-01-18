@@ -106,18 +106,17 @@ export class TicketSearchFormManager extends SearchFormManager {
     }
 
     public async getInputType(property: string): Promise<InputFieldTypes | string> {
-        let inputType;
+        let inputType: InputFieldTypes | string;
         const searchProperty = Ticket.SEARCH_PROPERTIES.find((p) => p.Property === property);
+
         if (searchProperty) {
             inputType = searchProperty.InputType;
         } else if (this.isDropDown(property)) {
             inputType = InputFieldTypes.DROPDOWN;
         } else if (this.isDateTime(property)) {
             inputType = InputFieldTypes.DATE_TIME;
-        } else if (property === TicketProperty.ORGANISATION_ID || property === TicketProperty.CONTACT_ID) {
-            inputType = InputFieldTypes.OBJECT_REFERENCE;
         } else {
-            inputType = super.getInputType(property);
+            inputType = await super.getInputType(property);
         }
 
         return inputType;
