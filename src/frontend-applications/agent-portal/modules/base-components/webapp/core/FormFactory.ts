@@ -35,19 +35,22 @@ export class FormFactory {
 
     private static initFormFields(fields: FormFieldConfiguration[]): FormFieldConfiguration[] {
         if (fields) {
-            fields = fields.map((f) => {
-                const field = new FormFieldConfiguration(
-                    f.id,
-                    f.label, f.property, f.inputComponent, f.required, f.hint, f.options, f.defaultValue,
-                    f.fieldConfigurationIds, FormFactory.initFormFields(f.children), f.parentInstanceId, f.countDefault,
-                    f.countMax, f.countMin, f.maxLength, f.regEx, f.regExErrorMessage, f.empty, f.asStructure,
-                    f.readonly, f.placeholder, f.existingFieldId, f.showLabel, f.name, f.draggableFields
-                );
-                field.instanceId = IdService.generateDateBasedId();
-                return field;
-            });
+            fields = fields.map((f) => this.cloneField(f));
         }
         return fields ? fields : [];
+    }
+
+    public static cloneField(field: FormFieldConfiguration): FormFieldConfiguration {
+        const clonedField = new FormFieldConfiguration(
+            field.id, field.label, field.property, field.inputComponent, field.required, field.hint,
+            field.options, field.defaultValue, field.fieldConfigurationIds,
+            FormFactory.initFormFields(field.children), field.parentInstanceId, field.countDefault,
+            field.countMax, field.countMin, field.maxLength, field.regEx, field.regExErrorMessage,
+            field.empty, field.asStructure, field.readonly, field.placeholder, field.existingFieldId,
+            field.showLabel, field.name, field.draggableFields
+        );
+        clonedField.instanceId = IdService.generateDateBasedId();
+        return clonedField;
     }
 
 }

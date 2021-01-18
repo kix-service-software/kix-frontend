@@ -21,13 +21,12 @@ import { JobProperty } from '../../../model/JobProperty';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { MacroActionType } from '../../../model/MacroActionType';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { MacroFieldCreator } from '../../core/MacroFieldCreator';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
     private currentAction: TreeNode;
     private treeId: string;
-    private formSubscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -144,7 +143,7 @@ class Component extends FormInputComponent<string, ComponentState> {
 
                     const childFields = await formService.getFormFieldsForAction(
                         this.currentAction.id, this.state.field.instanceId,
-                        typeValue ? typeValue.value : null
+                        typeValue ? typeValue.value : null, formInstance
                     );
                     formInstance.addFieldChildren(this.state.field, childFields, true);
                 } else {

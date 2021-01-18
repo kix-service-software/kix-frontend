@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.form-field
     class={
         additionalFieldControlsNeeded: input.additionalFieldControlsNeeded,
@@ -19,7 +18,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         "no-label": !state.label || !state.field.showLabel
     }>
         <span.label-text title=state.label>
-            <if(state.field.required)>
+            <if(state.field.required && state.field.showLabel)>
                 <span.required-field>*</span>
             </if>
             <if(state.field.showLabel)>
@@ -33,7 +32,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </if>
     </div>
     <div.field-input style={
-        "padding-left": component.getPaddingLeft(),
         "padding-right": component.getPaddingRight()
     }>
         <if(!state.field.empty)>
@@ -49,7 +47,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </div>
         </else>
     </div>
-    <if(component.hasChildren() && (!state.field.empty || state.field.asStructure))>
+    <if(
+        component.hasChildren() &&
+        (!state.field.empty || state.field.asStructure)
+    )>
         <span.minimize-icon-container>
             <if(state.minimized)>
                 <span.kix-icon-sort-down on-click("minimize")/>
@@ -79,7 +80,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </div>
     </if>
 </div>
-<if(!state.minimized && (!state.field.empty || state.field.asStructure) && component.hasChildren())>
+<if(
+    !state.minimized &&
+    (!state.field.empty || state.field.asStructure) &&
+    component.hasChildren()
+)>
     <div.sub-field-container>
         <field-container
             level=(state.level + 1)

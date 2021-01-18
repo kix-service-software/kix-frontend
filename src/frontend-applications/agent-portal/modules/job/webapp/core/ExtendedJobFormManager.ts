@@ -8,7 +8,6 @@
  */
 
 // tslint:disable-next-line: max-line-length
-import { IJobFormManager } from './IJobFormManager';
 import { Job } from '../../model/Job';
 import { AbstractDynamicFormManager } from '../../../base-components/webapp/core/dynamic-form';
 import { FormContext } from '../../../../model/configuration/FormContext';
@@ -19,15 +18,16 @@ import { ExecPlanTypes } from '../../model/ExecPlanTypes';
 import { MacroActionTypeOption } from '../../model/MacroActionTypeOption';
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 // tslint:enable
 
-export class ExtendedJobFormManager implements IJobFormManager {
+export class ExtendedJobFormManager {
 
     public job: Job;
 
     public filterManager: AbstractDynamicFormManager;
 
-    public getPages(formContext: FormContext): Promise<FormPageConfiguration[]> {
+    public getPages(job: Job, formInstance: FormInstance): Promise<FormPageConfiguration[]> {
         return null;
     }
 
@@ -37,13 +37,13 @@ export class ExtendedJobFormManager implements IJobFormManager {
         return null;
     }
 
-    public getFormFieldsForAction(
+    public createOptionFields(
         actionType: string, actionFieldInstanceId: string, type: string, action?: MacroAction
     ): Promise<FormFieldConfiguration[]> {
         return null;
     }
 
-    public getActionOptionField(
+    public createOptionField(
         action: MacroAction, option: MacroActionTypeOption, actionType: string, actionFieldInstanceId: string,
         jobType: string
     ) {
@@ -81,7 +81,7 @@ export class ExtendedJobFormManager implements IJobFormManager {
     ): FormFieldConfiguration {
         return new FormFieldConfiguration(
             `job-action-${actionType}-${option.Name}`, option.Label,
-            `ACTION###${actionFieldInstanceId}###${option.Name}`,
+            `${actionFieldInstanceId}###${option.Name}`,
             fieldType, Boolean(option.Required), option.Description, undefined,
             typeof defaultValue !== 'undefined' ? new FormFieldValue(defaultValue) : undefined,
             null, null, null, countDefault, countMax, countMin,

@@ -23,12 +23,14 @@ import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { FormContext } from '../../../../model/configuration/FormContext';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
 import { JobTypes } from '../../model/JobTypes';
-import { IJobFormManager } from './IJobFormManager';
 import { AbstractJobFormManager } from './AbstractJobFormManager';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { FormEvent } from '../../../base-components/webapp/core/FormEvent';
 import { FormValuesChangedEventData } from '../../../base-components/webapp/core/FormValuesChangedEventData';
+import { MacroFieldCreator } from './MacroFieldCreator';
+import { Macro } from '../../model/Macro';
+import { MacroObjectCreator } from './MacroObjectCreator';
 
 export class JobFormService extends KIXObjectFormService {
 
@@ -55,12 +57,15 @@ export class JobFormService extends KIXObjectFormService {
                         await data.formInstance.removePages(null, [data.formInstance.getForm().pages[0].id]);
 
                         if (typeValue[1] && typeValue[1].value) {
-                            const manager: IJobFormManager = this.getJobFormManager(typeValue[1].value);
+                            const manager: AbstractJobFormManager = this.getJobFormManager(typeValue[1].value);
                             if (manager) {
                                 if (data.formInstance.getForm().formContext === FormContext.NEW) {
                                     manager.reset();
                                 }
-                                const pages = await manager.getPages(data.formInstance.getForm().formContext);
+
+                                const context = ContextService.getInstance().getActiveContext();
+                                const job = await context.getObject<Job>();
+                                const pages = await manager.getPages(job, data.formInstance);
                                 pages.forEach((p) => data.formInstance.addPage(p));
                             }
                         }
@@ -70,13 +75,13 @@ export class JobFormService extends KIXObjectFormService {
         });
     }
 
-    private jobFormManager: Map<JobTypes | string, IJobFormManager> = new Map();
+    private jobFormManager: Map<JobTypes | string, AbstractJobFormManager> = new Map();
 
-    public getJobFormManager(type: JobTypes | string): IJobFormManager {
+    public getJobFormManager(type: JobTypes | string): AbstractJobFormManager {
         return this.jobFormManager.get(type);
     }
 
-    public registerJobFormManager(type: JobTypes | string, manager: IJobFormManager): void {
+    public registerJobFormManager(type: JobTypes | string, manager: AbstractJobFormManager): void {
         this.jobFormManager.set(type, manager);
     }
 
@@ -84,9 +89,9 @@ export class JobFormService extends KIXObjectFormService {
         return kixObjectType === KIXObjectType.JOB;
     }
 
-    protected async prePrepareForm(form: FormConfiguration, job: Job): Promise<void> {
+    protected async prePrepareForm(form: FormConfiguration, job: Job, formInstance: FormInstance): Promise<void> {
         form.pages = [];
-        form.pages.push(AbstractJobFormManager.getJobPage(form.formContext));
+        form.pages.push(AbstractJobFormManager.getJobPage(formInstance));
 
         if (form.pages.length && job && form.formContext === FormContext.EDIT) {
             const manager = this.getJobFormManager(job.Type);
@@ -105,25 +110,8 @@ export class JobFormService extends KIXObjectFormService {
                 }
             }
 
-            const pages = await manager.getPages(form.formContext);
+            const pages = await manager.getPages(job, formInstance);
             form.pages = [...form.pages, ...pages];
-        }
-    }
-
-    protected async postPrepareForm(
-        form: FormConfiguration, formInstance: FormInstance,
-        formFieldValues: Map<string, FormFieldValue<any>>, job: Job
-    ): Promise<void> {
-        if (form && form.formContext === FormContext.EDIT) {
-            for (const p of form.pages) {
-                for (const g of p.groups) {
-                    for (const f of g.formFields) {
-                        if (f.property === JobProperty.MACRO_ACTIONS) {
-                            f.defaultValue = null;
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -137,27 +125,24 @@ export class JobFormService extends KIXObjectFormService {
         return value;
     }
 
-    public getNewFormField(f: FormFieldConfiguration, parent?: FormFieldConfiguration): FormFieldConfiguration {
-        const field = super.getNewFormField(f, parent, false);
-        field.defaultValue = null;
-        if (field.property === JobProperty.MACRO_ACTIONS) {
-            field.hint = field.defaultHint;
-            field.children = [];
+    public async getNewFormField(
+        f: FormFieldConfiguration, parent?: FormFieldConfiguration
+    ): Promise<FormFieldConfiguration> {
+        if (f.property === JobProperty.MACRO_ACTIONS) {
+            return await MacroFieldCreator.createActionField(f.parent, null);
         }
-        return field;
     }
 
     public async prepareCreateValue(
         property: string, formfield: FormFieldConfiguration, value: any, formInstance: FormInstance
     ): Promise<Array<[string, any]>> {
-        const typeValue = await formInstance.getFormFieldValueByProperty<string>(JobProperty.TYPE);
-        const manager = this.getJobFormManager(typeValue ? typeValue.value : null);
-        if (manager) {
-            const p = await manager.prepareCreateValue(property, formfield, value);
-            if (property.startsWith('MACRO_ACTION')) {
-                p[0][0] = formfield.instanceId;
+
+        if (property === JobProperty.MACROS) {
+            if (!formfield.parentInstanceId) {
+                value = await MacroObjectCreator.createMacro(formfield, formInstance);
+            } else {
+                value = null;
             }
-            return p;
         }
 
         return [[property, value]];
@@ -167,76 +152,21 @@ export class JobFormService extends KIXObjectFormService {
         parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
         formContext?: FormContext, formInstance?: FormInstance
     ): Promise<Array<[string, any]>> {
-        const actionTypesParameter = parameter.filter((p) => p[0].startsWith(JobProperty.MACRO_ACTIONS));
-        const actionAttributesParameter = parameter.filter((p) => p[0].startsWith('ACTION###'));
-
-        parameter = parameter.filter(
-            (p) => !p[0].startsWith(JobProperty.MACRO_ACTIONS) && !p[0].startsWith('ACTION###')
-        );
-
-        const actions: Map<string, MacroAction> = new Map();
-        actionTypesParameter.forEach((p) => {
-            if (p[1]) {
-                // value prepared in action input component
-                const actionFieldInstanceId = p[0].replace(/^(.+)###.+/, '$1');
-                const actionType = p[1].replace(/^.+###(.+)/, '$1');
-                let action = actions.get(actionFieldInstanceId);
-                if (!action) {
-                    action = new MacroAction();
-                    action.Type = actionType;
-                    action.Parameters = {};
-                    action.ResultVariables = {};
-                    actions.set(actionFieldInstanceId, action);
-                }
-            }
-        });
-
-        const typeValue = await formInstance.getFormFieldValueByProperty<string>(JobProperty.TYPE);
-        const manager = this.getJobFormManager(typeValue ? typeValue.value : null);
-        actionAttributesParameter.forEach((p) => {
-
-            // key prepared in AbstractJobFormManager
-            const actionFieldInstanceId = p[0].replace(/^ACTION###(.+?)###.+/, '$1');
-            const valueName = p[0].replace(/^ACTION###.+?###(.+)/, '$1');
-
-            const action = actions.get(actionFieldInstanceId);
-            if (action) {
-                if (valueName === 'SKIP') {
-                    // true means "skip" (checkbox), so valid id have to be "invalid" (= 2)
-                    action.ValidID = p[1] ? 2 : 1;
-                } else if (valueName.startsWith('RESULT')) {
-                    const resultName = valueName.replace(/^RESULT###(.+)/, '$1');
-                    if (resultName && resultName !== 'RESULTGROUP') {
-                        action.ResultVariables[resultName] = p[1];
-                    }
-                } else {
-                    let value;
-                    if (manager) {
-                        value = manager.postPrepareOptionValue(action, valueName, p[1]);
-                    }
-
-                    if (typeof value !== 'undefined' && value !== null) {
-                        action.Parameters[valueName] = value;
-                    } else {
-                        action.Parameters[valueName] = p[1];
-                    }
-                }
-            }
-        });
-
-        parameter.push([
-            JobProperty.MACRO_ACTIONS, Array.from(actions.values())
-        ]);
+        parameter = parameter.filter((p) => !p[0].startsWith('MACRO###'));
+        parameter = parameter.filter((p) => p[0] !== JobProperty.MACROS || p[1] !== null);
         return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
     }
 
     public async getFormFieldsForAction(
-        actionType: string, actionFieldInstanceId: string, type: string, action?: MacroAction
+        actionType: string, actionFieldInstanceId: string, type: string, formInstance: FormInstance,
+        action?: MacroAction
     ): Promise<FormFieldConfiguration[]> {
         let formFields = [];
         if (type) {
             const manager = this.getJobFormManager(type);
-            formFields = await manager.getFormFieldsForAction(actionType, actionFieldInstanceId, type, action);
+            formFields = await MacroFieldCreator.createActionOptionFields(
+                actionType, actionFieldInstanceId, type, formInstance, manager, action
+            );
         }
         return formFields;
     }
