@@ -45,6 +45,8 @@ import { ContextMode } from '../../../../model/ContextMode';
 import { SenderType } from '../../model/SenderType';
 import { TicketLock } from '../../model/TicketLock';
 import { Watcher } from '../../model/Watcher';
+import { EventService } from '../../../base-components/webapp/core/EventService';
+import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -117,6 +119,7 @@ export class TicketService extends KIXObjectService<Ticket> {
 
     public async setArticleSeenFlag(ticketId: number, articleId: number): Promise<void> {
         await TicketSocketClient.getInstance().setArticleSeenFlag(ticketId, articleId);
+        EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
     }
 
     public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
