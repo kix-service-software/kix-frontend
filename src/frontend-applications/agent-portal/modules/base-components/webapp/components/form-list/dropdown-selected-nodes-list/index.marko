@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(state.nodes.length)>
     <for|node| of=state.nodes>
         <div.selected-node
@@ -27,5 +26,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     </for>
 </if>
 <else>
-    <span.form-list-placeholder>${state.placeholder}</span>
+    <span.form-list-placeholder class={
+        invalid: input.invalid
+    }>${state.placeholder}</span>
 </else>

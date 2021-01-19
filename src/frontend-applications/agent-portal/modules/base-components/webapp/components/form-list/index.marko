@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.form-list key=state.listId on-click("setKeepExpanded")>
     <if(state.prepared)>
         <div.form-list-input-container.input-style
@@ -19,7 +18,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             key=("form-list-input-container-" + state.listId)
             title=state.placeholder>
             <div.selected-nodes tabindex="0" on-focus("focus") key=("form-list-selected-nodes-" + state.listId)>
-                <dropdown-selected-nodes-list treeId=state.treeId canRemoveNode=state.removeNodes placeholder=state.placeholder/>
+                <dropdown-selected-nodes-list
+                    treeId=state.treeId
+                    canRemoveNode=state.removeNodes
+                    placeholder=state.placeholder
+                    invalid=state.invalid/>
             </div>
             <div.form-input-control-list>
                 <dropdown-action-list actions=state.actions/>
