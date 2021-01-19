@@ -131,6 +131,7 @@ export class CacheService {
             case KIXObjectType.ARTICLE:
             case KIXObjectType.DYNAMIC_FIELD:
                 cacheKeyPrefixes.push(KIXObjectType.TICKET);
+                cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
                 break;
             case KIXObjectType.TICKET:
                 cacheKeyPrefixes.push(KIXObjectType.ARTICLE);
