@@ -123,7 +123,7 @@ export class SearchNamespace extends SocketNameSpace {
                 if (data.name && search[data.name]) {
                     delete search[data.name];
                     const value = JSON.stringify(search);
-                    UserService.getInstance().setPreferences(token, 'SearchNamespace', [[preferenceId, value]]);
+                    await UserService.getInstance().setPreferences(token, 'SearchNamespace', [[preferenceId, value]]);
                 }
             }
 
