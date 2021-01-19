@@ -255,18 +255,18 @@ export class MacroFieldCreator {
 
         if (jobManager) {
             for (const extendedManager of jobManager.extendedJobFormManager) {
-                const optionField = extendedManager.createOptionField(
+                const result = extendedManager.createOptionField(
                     action, option, actionType, actionFieldInstanceId, jobType
                 );
 
-                if (optionField) {
-                    optionField.instanceId = `${actionFieldInstanceId}###${option.Name}`;
-                    if (Array.isArray(optionField.options)) {
-                        optionField.options.push(nameOption);
+                if (result) {
+                    result.instanceId = `${actionFieldInstanceId}###${option.Name}`;
+                    if (Array.isArray(result.options)) {
+                        result.options.push(nameOption);
                     } else {
-                        optionField.options = [nameOption];
+                        result.options = [nameOption];
                     }
-                    return optionField;
+                    return result;
                 }
             }
         }
