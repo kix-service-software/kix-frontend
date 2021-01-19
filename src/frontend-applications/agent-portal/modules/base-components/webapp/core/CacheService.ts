@@ -135,6 +135,7 @@ export class BrowserCacheService {
             case KIXObjectType.WATCHER:
             case KIXObjectType.DYNAMIC_FIELD:
                 cacheKeyPrefixes.push(KIXObjectType.TICKET);
+                cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
                 break;
             case KIXObjectType.TICKET:
                 cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
