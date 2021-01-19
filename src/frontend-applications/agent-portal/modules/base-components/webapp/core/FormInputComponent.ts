@@ -45,7 +45,7 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
 
     public async onMount(): Promise<void> {
         this.subscriber = {
-            eventSubscriberId: this.state.field.instanceId,
+            eventSubscriberId: `${this.state.field.instanceId}_FormInputComponent`,
             eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
                 if (eventId === FormEvent.VALUES_CHANGED && this.state.field && data) {
                     if (data.originInstanceId !== this.state.field.instanceId) {
@@ -62,10 +62,13 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
                     } else {
                         FormInputComponent.prototype.setInvalidState.call(this);
                     }
+                } else if (eventId === FormEvent.FORM_VALIDATED) {
+                    FormInputComponent.prototype.setInvalidState.call(this);
                 }
             }
         };
         EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.subscriber);
+        EventService.getInstance().subscribe(FormEvent.FORM_VALIDATED, this.subscriber);
 
         FormInputComponent.prototype.setInvalidState.call(this);
         await this.setCurrentValue();
@@ -73,7 +76,8 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
     }
 
     public async onDestroy(): Promise<void> {
-        EventService.getInstance().unsubscribe(this.state.field.instanceId, this.subscriber);
+        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.subscriber);
+        EventService.getInstance().unsubscribe(FormEvent.FORM_VALIDATED, this.subscriber);
     }
 
     public abstract async setCurrentValue(): Promise<void>;
@@ -87,7 +91,7 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
 
     protected async setInvalidState(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        if (formInstance) {
+        if (formInstance && this.state.field) {
             const value = formInstance.getFormFieldValue(this.state.field.instanceId);
             if (value) {
                 this.state.invalid = !value.valid;
