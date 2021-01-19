@@ -163,7 +163,7 @@ export class Server implements IServer {
     }
 
     public static async createClientRegistration(): Promise<void> {
-        LoggingService.getInstance().info('Create ClientRegsitration');
+        LoggingService.getInstance().info('Create Client Registration');
         let poDefinitions = [];
 
         const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
