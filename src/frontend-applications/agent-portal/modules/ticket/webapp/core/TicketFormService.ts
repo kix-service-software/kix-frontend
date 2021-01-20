@@ -97,6 +97,9 @@ export class TicketFormService extends KIXObjectFormService {
                     if (channels && channels.length) {
                         value = channels[0].ID;
                     }
+                } else {
+                    value = formField.defaultValue ? Array.isArray(formField.defaultValue.value)
+                        ? formField.defaultValue.value[0] : formField.defaultValue.value : null;
                 }
                 break;
             default:

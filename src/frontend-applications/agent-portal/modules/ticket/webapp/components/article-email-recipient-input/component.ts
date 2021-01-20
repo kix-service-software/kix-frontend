@@ -30,13 +30,10 @@ import { ContextService } from '../../../../../modules/base-components/webapp/co
 import { ContextType } from '../../../../../model/ContextType';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
-import { Ticket } from '../../../model/Ticket';
 import { Article } from '../../../model/Article';
 import { ArticleReceiver } from '../../../model/ArticleReceiver';
-import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { IKIXObjectService } from '../../../../../modules/base-components/webapp/core/IKIXObjectService';
-import { ContactService } from '../../../../customer/webapp/core';
 import { Contact } from '../../../../customer/model/Contact';
 
 class Component extends FormInputComponent<string[], ComponentState> {
@@ -89,13 +86,14 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     public async onDestroy(): Promise<void> {
+        await super.onDestroy();
         EventService.getInstance().unsubscribe('SET_CC_RECIPIENTS', this.ccSubscriber);
         EventService.getInstance().unsubscribe('CC_READY', this.ccReadySubscriber);
     }
 
     public async setCurrentValue(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const value = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        const value = this.state.field ? formInstance.getFormFieldValue<number>(this.state.field.instanceId) : null;
         if (value && value.value) {
             let contactValues: any[] = Array.isArray(value.value) ? [...value.value] : [value.value];
             contactValues = contactValues.map((v) => v.replace(/.+ <(.+)>/, '$1'));
