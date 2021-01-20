@@ -51,7 +51,7 @@ export class UIModule implements IUIModule {
             ContextMode.CREATE_ADMIN, false, 'new-faq-category-dialog', ['faqcategories'],
             NewFAQCategoryDialogContext,
             [
-                new UIComponentPermission('faq/categories', [CRUD.CREATE])
+                new UIComponentPermission('system/faq/categories', [CRUD.CREATE])
             ]
         );
         ContextService.getInstance().registerContext(newFAQCategoryContext);
@@ -63,7 +63,7 @@ export class UIModule implements IUIModule {
             ContextMode.EDIT_ADMIN, false, 'edit-faq-category-dialog', ['faqcategories'],
             EditFAQCategoryDialogContext,
             [
-                new UIComponentPermission('faq/categories', [CRUD.CREATE])
+                new UIComponentPermission('system/faq/categories', [CRUD.CREATE])
             ]
         );
         ContextService.getInstance().registerContext(editFAQCategoryContext);
@@ -73,7 +73,7 @@ export class UIModule implements IUIModule {
             ContextType.MAIN, ContextMode.DETAILS,
             true, 'object-details-page', ['faqcategories'], FAQCategoryDetailsContext,
             [
-                new UIComponentPermission('faq/categories', [CRUD.READ])
+                new UIComponentPermission('system/faq/categories', [CRUD.READ])
             ]
         );
         ContextService.getInstance().registerContext(faqCategoryDetailsContextDescriptor);

@@ -244,7 +244,7 @@ export class FAQService extends KIXObjectService {
         if (objectType === KIXObjectType.FAQ_ARTICLE) {
             return 'faq/articles';
         } else if (objectType === KIXObjectType.FAQ_CATEGORY) {
-            return 'faq/categories';
+            return 'system/faq/categories';
         }
     }
 
