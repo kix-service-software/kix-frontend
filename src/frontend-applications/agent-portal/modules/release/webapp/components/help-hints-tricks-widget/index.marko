@@ -6,36 +6,49 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <widget title=state.translations["Translatable#Help, hints & tricks"]>
     <@content>
         <div.help-and-info-widget>
             <div>
                 <div.header>
-                    <icon icon="kix-icon-edit"/>
+                    <img.app-logo alt=state.translations["Translatable#Field Agent App"] src="/static/img/release/kix_field_agent_app.png"/>
                     <h2>
-                        <translation-string pattern="Translatable#Important functional elements briefly explained"/>
+                        <translation-string pattern="Translatable#Field Agent App"/>
                     </h2>
                 </div>
+                <p>
+                    <translation-string pattern="Translatable#The quick and easy way to provide technical customer service while on the go. Whether you're dealing with a technical problem or maintenance work: Switch over to paperless documentation and save both time and money."/>
+                </p>
+                <h3 style="margin-top: 0.5rem">
+                    <translation-string pattern="Translatable#Features"/>:
+                </h3>
                 <ul>
                     <li>
-                        <translation-string pattern="Translatable#Green button 'Back to' = history of your last visited pages"/>
+                        <translation-string pattern="Translatable#Online and offline processing of service jobs"/>
                     </li>
                     <li>
-                        <translation-string pattern="Translatable#Click on the middle or right mouse button (context menu) = open window in a new tab"/>
+                        <translation-string pattern="Translatable#Management using clear checklists"/>
                     </li>
                     <li>
-                        <span.sortable>
-                            <icon icon="kix-icon-triangle-up"/>
-                            <icon icon="kix-icon-sort-down"/>
-                        </span>
-                        <translation-string pattern="Translatable#Open/close at line ends = open and close elements"/>
+                        <translation-string pattern="Translatable#Automatic time measurement"/>
                     </li>
                     <li>
-                        <icon icon="kix-icon-dots"/>
-                        <translation-string pattern="Translatable#Button with 3 points = Here you can find further actions"/>
+                        <translation-string pattern="Translatable#Save photos and work notes"/>
+                    </li>
+                    <li>
+                        <translation-string pattern="Translatable#Confirmation through customer signature"/>
                     </li>
                 </ul>
+                <div.app-links>
+                    <a href="https://apps.apple.com/de/app/kix-field-agent/id1489588005" target="_blank">
+                        <img alt=state.translations["Translatable#Field Agent App (iOS)"] src="/static/img/release/app-store.png"/>
+                        <translation-string pattern="Translatable#Field Agent App (iOS)"/>
+                    </a>
+                    <a href="https://play.google.com/store/apps/details?id=com.compl3te.fieldservices" target="_blank">
+                        <img alt=state.translations["Translatable#Field Agent App (Android)"] src="/static/img/release/google-play.png"/>
+                        <translation-string pattern="Translatable#Field Agent App (Android)"/>
+                    </a>
+                </div>
             </div>
             <if(state.hasFAQAccess)>
                 <div>

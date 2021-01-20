@@ -4390,6 +4390,27 @@ msgstr "PLZ"
 msgid "ZIP"
 msgstr "PLZ"
 
+msgid "The quick and easy way to provide technical customer service while on the go. Whether you're dealing with a technical problem or maintenance work: Switch over to paperless documentation and save both time and money."
+msgstr "Technischer Kundendienst schnell und einfach mobil. Ob technisches Problem oder eine Wartung: Steigen Sie um auf die papierlose Dokumentation und sparen Sie Zeit und Geld."
+
+msgid "Features"
+msgstr "Funktionen"
+
+msgid "Online and offline processing of service jobs"
+msgstr "Online- und Offline-Bearbeitung von Serviceaufträgen"
+
+msgid "Management using clear checklists"
+msgstr "Führung durch übersichtliche Checklisten"
+
+msgid "Automatic time measurement"
+msgstr "Automatische Zeitmessung"
+
+msgid "Save photos and work notes"
+msgstr "Hinterlegen von Fotos und Arbeitsnotizen"
+
+msgid "Confirmation through customer signature"
+msgstr "Bestätigung durch Unterschrift des Kunden"
+
 #~ msgid "Communication: Email: Email Accounts"
 #~ msgstr "Kommunikation: E-Mail: E-Mail Konten"
 

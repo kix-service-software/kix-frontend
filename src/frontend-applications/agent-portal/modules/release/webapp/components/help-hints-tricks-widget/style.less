@@ -44,6 +44,11 @@
                     color: @primary-0;
                     text-transform: uppercase;
                 }
+
+                .app-logo {
+                    max-height: 4.5rem;
+                    max-width: 4.5rem;
+                }
             }
 
             >p {
@@ -85,6 +90,25 @@
                         border-radius: 3px;
                         color: @secondary-0;
                     }
+                }
+            }
+
+            div.app-links {
+                margin-top: 1rem;
+                display: grid;
+                grid-template-columns: max-content max-content;
+                grid-gap: 2rem;
+
+                >a {
+                    display: grid;
+                    grid-template-columns: max-content max-content;
+                    grid-gap: 1rem;
+                    align-items: center;
+                }
+
+                img {
+                    max-height: 2rem;
+                    max-width: 2rem;
                 }
             }
         }
