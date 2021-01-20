@@ -73,7 +73,7 @@ class Component extends AbstractEditDialog {
             }
         }
 
-        if (channelId === 2) {
+        if (Number(channelId) === 2) {
             this.state.buttonLabel = 'Translatable#Send';
         } else {
             this.state.buttonLabel = 'Translatable#Save';
