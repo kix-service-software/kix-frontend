@@ -369,8 +369,11 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
     ): Promise<Array<[string, any]>> {
         const dfName = KIXObjectService.getDynamicFieldName(property);
         if (dfName) {
-            const setValue = value ? value.value : null;
-            await this.setDFParameterValue(dfName, setValue, parameter);
+            const dynamicField = await KIXObjectService.loadDynamicField(dfName);
+            if (dynamicField) {
+                const setValue = value ? value.value : null;
+                await this.setDFParameterValue(dfName, setValue, parameter);
+            }
         }
         return parameter;
     }
