@@ -38,7 +38,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         this.state.translations = await TranslationService.createTranslationObject([
-            'Translatable#Help, hints & tricks'
+            'Translatable#Help, hints & tricks', 'Translatable#Field Agent App',
+            'Field Agent App (Android)', 'Field Agent App (iOS)'
         ]);
         this.state.hasFAQAccess = await this.checkReadPermissions('faq/articles');
 
