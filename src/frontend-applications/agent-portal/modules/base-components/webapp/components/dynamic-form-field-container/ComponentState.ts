@@ -15,8 +15,7 @@ export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public dynamicValues: DynamicFormFieldValue[] = [],
-        public options: ObjectPropertyValueOption[] = [],
-        public prepared: boolean = false,
+        public options: ObjectPropertyValueOption[] = []
     ) {
         super();
     }
