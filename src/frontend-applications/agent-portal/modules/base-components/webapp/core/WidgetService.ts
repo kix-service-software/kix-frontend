@@ -11,8 +11,8 @@ import { Table } from './table';
 import { IAction } from './IAction';
 import { IActionListener } from './IActionListener';
 import { WidgetType } from '../../../../model/configuration/WidgetType';
-import { Context } from 'vm';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { Context } from '../../../../model/Context';
 
 export class WidgetService {
 

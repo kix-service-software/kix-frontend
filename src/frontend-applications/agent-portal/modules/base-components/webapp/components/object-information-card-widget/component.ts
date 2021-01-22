@@ -67,7 +67,7 @@ class Component {
 
         const object = await context.getObject();
 
-        if (this.state.widgetConfiguration.configuration) {
+        if (this.state.widgetConfiguration?.configuration) {
             const config = this.state.widgetConfiguration.configuration as IConfiguration;
             if (Array.isArray(config.avatar)) {
                 this.state.avatar = config.avatar;
