@@ -54,8 +54,7 @@ class Component {
                 values.push(value);
             }
         }
-        await this.addEmptyValue(values);
-        this.state.dynamicValues = [...values];
+        await this.addEmptyValue();
         if (this.manager.uniqueProperties) {
             this.state.dynamicValues.forEach((dv) => dv.updateProperties());
         }
@@ -75,14 +74,13 @@ class Component {
                         v.objectType, v.readonly, v.changeable, v.id
                     )
                 );
-                await formFieldValue.init();
+                formFieldValue.init();
                 this.state.dynamicValues.push(formFieldValue);
             }
 
             this.state.options = await this.manager.getFieldOptions();
 
             this.addEmptyValue();
-            this.state.prepared = true;
         }
     }
 
@@ -184,21 +182,14 @@ class Component {
         await this.updateValues();
     }
 
-    private async addEmptyValue(newValues?: DynamicFormFieldValue[]): Promise<void> {
-        if (await this.manager.shouldAddEmptyField()) {
-            const index = this.state.dynamicValues.findIndex((sv) => sv.getValue().property === null);
-            let emptyField: DynamicFormFieldValue;
-            if (index === -1 || newValues) {
-                emptyField = new DynamicFormFieldValue(this.manager);
-                await emptyField.init();
-            } else {
-                emptyField = this.state.dynamicValues.splice(index, 1)[0];
-            }
-            if (newValues) {
-                newValues.push(emptyField);
-            } else {
-                this.state.dynamicValues = [...this.state.dynamicValues, emptyField];
-            }
+    private async addEmptyValue(): Promise<void> {
+        const canAddEmptyValue = await this.manager.shouldAddEmptyField();
+        const hasEmptyValue = this.state.dynamicValues.some((sv) => sv.getValue().property === null);
+
+        if (canAddEmptyValue && !hasEmptyValue) {
+            const emptyField = new DynamicFormFieldValue(this.manager);
+            await emptyField.init();
+            this.state.dynamicValues = [...this.state.dynamicValues, emptyField];
         }
     }
 

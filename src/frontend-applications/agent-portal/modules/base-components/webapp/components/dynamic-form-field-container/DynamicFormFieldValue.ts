@@ -48,8 +48,6 @@ export class DynamicFormFieldValue {
 
     public isBetween: boolean = false;
 
-    public label: string = '';
-
     public autoCompleteConfiguration: AutoCompleteConfiguration;
     public autoCompleteCallback: (limit: number, searchValue: string) => Promise<TreeNode[]>;
 
@@ -88,39 +86,9 @@ export class DynamicFormFieldValue {
     }
 
     public async init(): Promise<void> {
-        await this.setPropertyTree();
-        if (this.value.property) {
-            const operator = this.value.operator;
-            await this.setProperty(this.value.property, false, true);
-
-            const objectType = this.value.objectType ? this.value.objectType : this.manager.objectType;
-            this.label = await LabelService.getInstance().getPropertyText(this.value.property, objectType);
-
-            const properties = await this.manager.getProperties();
-            const property = properties.find((p) => p[0] === this.value.property);
-            if (property) {
-                this.propertyTreeHandler.setSelection([new TreeNode(property[0], property[1])], true, true);
-            }
-
-            if (operator) {
-                await this.setOperator(operator);
-                const operationNode = TreeUtil.findNode(this.operationTreeHandler.getTree(), operator);
-                if (operationNode) {
-                    this.operationTreeHandler.setSelection([operationNode], true);
-                }
-            }
-
-            await this.setCurrentValue(undefined, true);
-        }
-
-        const propertiesPlaceholder = await this.manager.getPropertiesPlaceholder();
-        if (propertiesPlaceholder) {
-            this.propertiesPlaceholder = await TranslationService.translate(propertiesPlaceholder);
-        }
-        const operationsPlaceholder = await this.manager.getOperationsPlaceholder();
-        if (operationsPlaceholder) {
-            this.operationsPlaceholder = await TranslationService.translate(operationsPlaceholder);
-        }
+        await this.setProperty(this.value.property, false, true);
+        this.setOperator(this.value.operator);
+        await this.setCurrentValue(undefined, true);
     }
 
     public updateProperties(): void {
@@ -152,9 +120,6 @@ export class DynamicFormFieldValue {
                 this.valueTreeHandler.setTree([]);
             }
         }
-
-        const objectType = this.value.objectType ? this.value.objectType : this.manager.objectType;
-        this.label = await LabelService.getInstance().getPropertyText(this.value.property, objectType);
 
         await this.manager.setValue(this.value, silent);
 
