@@ -101,6 +101,8 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             ? responseObject
             : [responseObject];
 
+        objects = objects.filter((o) => o !== null);
+
         const result = objectConstructor ? objects.map((o) => new objectConstructor(o as KIXObject)) : objects;
         return result as O[];
     }
