@@ -106,13 +106,6 @@ export abstract class Context {
         return actions;
     }
 
-    public addObjectDependency(objectType: KIXObjectType | string): void {
-        const type = this.descriptor.kixObjectTypes.find((ot) => ot === objectType);
-        if (!type) {
-            this.descriptor.kixObjectTypes.push(objectType);
-        }
-    }
-
     public async setFormObject(overwrite: boolean = true): Promise<void> {
         return;
     }
