@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.article-body.input-style class={
     invalid: state.invalid
 }>
@@ -19,5 +18,5 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         noImages=state.noImages
         readOnly=state.field.readonly
         useReadonlyStyle=state.field.readonly
-        key=state.field.instanceId/>
+        key=(state.field.instanceId + "-editor")/>
 </div>

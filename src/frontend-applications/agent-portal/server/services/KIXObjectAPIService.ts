@@ -67,7 +67,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         useCache?: boolean
         // tslint:disable-next-line: ban-types
     ): Promise<O[]> {
-        const query = this.prepareQuery(loadingOptions);
+        const query = this.prepareQuery(loadingOptions, objectType);
         if (loadingOptions && loadingOptions.filter && loadingOptions.filter.length) {
             const success = await this.buildFilter(loadingOptions.filter, responseProperty, query, token);
 
@@ -155,7 +155,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         throw new Error('', 'Method not implemented.');
     }
 
-    protected prepareQuery(loadingOptions: KIXObjectLoadingOptions): any {
+    protected prepareQuery(loadingOptions: KIXObjectLoadingOptions, objectType: KIXObjectType | string): any {
         let query = {};
 
         if (loadingOptions) {
@@ -169,7 +169,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
             let additionalIncludes = [];
             this.extendedServices.forEach(
-                (s) => additionalIncludes = [...additionalIncludes, ...s.getAdditionalIncludes()]
+                (s) => additionalIncludes = [...additionalIncludes, ...s.getAdditionalIncludes(objectType)]
             );
 
             if (loadingOptions.includes) {

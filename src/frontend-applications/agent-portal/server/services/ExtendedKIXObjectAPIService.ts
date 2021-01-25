@@ -51,7 +51,7 @@ export abstract class ExtendedKIXObjectAPIService implements IKIXObjectService {
         return [];
     }
 
-    public getAdditionalIncludes(): string[] {
+    public getAdditionalIncludes(objectType: KIXObjectType | string): string[] {
         return [];
     }
 
