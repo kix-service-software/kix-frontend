@@ -11,7 +11,6 @@ import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { IKIXObjectService } from '../../../../../modules/base-components/webapp/core/IKIXObjectService';
 import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
-import { InlineContent } from '../../../../../modules/base-components/webapp/core/InlineContent';
 import { AttachmentUtil } from '../../../../../modules/base-components/webapp/core/AttachmentUtil';
 import { AutocompleteFormFieldOption } from '../../../../../model/AutocompleteFormFieldOption';
 import { PlaceholderService } from '../../../../../modules/base-components/webapp/core/PlaceholderService';
@@ -27,6 +26,7 @@ class EditorComponent {
     private autoCompletePlugins: any[] = [];
     private useReadonlyStyle: boolean = false;
     private changeTimeout: any;
+    private createTimeout: any;
 
     public onCreate(input: any): void {
         this.state = new ComponentState(
@@ -106,94 +106,101 @@ class EditorComponent {
         this.autoCompletePlugins = [];
 
         if (!this.instanceExists()) {
-            if (!this.state.readOnly) {
-                const userLanguage = await TranslationService.getUserLanguage();
-                if (userLanguage) {
-                    this.state.config['language'] = userLanguage;
+            if (this.createTimeout) {
+                window.clearTimeout(this.createTimeout);
+                this.createTimeout = null;
+            }
+            this.createTimeout = setTimeout(async () => {
+                if (!this.state.readOnly) {
+                    const userLanguage = await TranslationService.getUserLanguage();
+                    if (userLanguage) {
+                        this.state.config['language'] = userLanguage;
+                    }
                 }
-            }
-            if (this.state.inline) {
-                this.editor = CKEDITOR.inline(this.state.id, {
-                    ...this.state.config
-                });
-            } else {
-                this.editor = CKEDITOR.replace(this.state.id, {
-                    ...this.state.config
-                });
-            }
 
-            this.editor.on('paste', (event: any) => {
-                const fileSize = event.data.dataTransfer.getFilesCount();
-                if (fileSize > 0) {
-                    event.stop();
-                    if (!this.state.noImages) {
-                        for (let i = 0; i < fileSize; i++) {
-                            const file = event.data.dataTransfer.getFile(i);
-                            const valid = AttachmentUtil.checkMimeType(
-                                file, ['image/png', 'image/jpg', 'image/jpeg', 'image/bmp', 'image/svg+xml']
-                            );
-                            if (valid) {
-                                const reader = new FileReader();
-                                reader.onload = (evt: any) => {
-                                    const element = this.editor.document.createElement('img', {
-                                        attributes: {
-                                            src: evt.target.result
-                                        }
-                                    });
+                if (this.state.inline) {
+                    this.editor = CKEDITOR.inline(this.state.id, {
+                        ...this.state.config
+                    });
+                } else {
+                    this.editor = CKEDITOR.replace(this.state.id, {
+                        ...this.state.config
+                    });
+                }
 
-                                    setTimeout(() => {
-                                        this.editor.insertElement(element);
-                                    }, 0);
-                                };
-                                reader.readAsDataURL(file);
+                this.editor.on('paste', (event: any) => {
+                    const fileSize = event.data.dataTransfer.getFilesCount();
+                    if (fileSize > 0) {
+                        event.stop();
+                        if (!this.state.noImages) {
+                            for (let i = 0; i < fileSize; i++) {
+                                const file = event.data.dataTransfer.getFile(i);
+                                const valid = AttachmentUtil.checkMimeType(
+                                    file, ['image/png', 'image/jpg', 'image/jpeg', 'image/bmp', 'image/svg+xml']
+                                );
+                                if (valid) {
+                                    const reader = new FileReader();
+                                    reader.onload = (evt: any) => {
+                                        const element = this.editor.document.createElement('img', {
+                                            attributes: {
+                                                src: evt.target.result
+                                            }
+                                        });
+
+                                        setTimeout(() => {
+                                            this.editor.insertElement(element);
+                                        }, 0);
+                                    };
+                                    reader.readAsDataURL(file);
+                                }
                             }
                         }
                     }
+                });
+
+                const changeListener = () => {
+                    if (this.changeTimeout) {
+                        window.clearTimeout(this.changeTimeout);
+                        this.changeTimeout = null;
+                    }
+
+                    this.changeTimeout = setTimeout(() => {
+                        const value = this.editor.getData();
+                        (this as any).emit('valueChanged', value);
+                        this.changeTimeout = null;
+                    }, 200);
+                };
+
+                this.editor.on('change', changeListener);
+                this.editor.on('mode', () => {
+                    const editable = this.editor.editable();
+                    if (editable) {
+                        if (this.editor.mode === 'source') {
+                            editable.attachListener(editable, 'input', changeListener);
+                        } else {
+                            editable.removeListener('input', changeListener);
+                        }
+                    }
+                });
+
+                if (this.state.readOnly) {
+                    this.editor.on('contentDom', () => {
+                        const editable = this.editor.editable();
+                        editable.attachListener(editable, 'click', (evt) => {
+                            const link = new CKEDITOR.dom.elementPath(evt.data.getTarget(), this).contains('a');
+                            if (link && evt.data.$.button !== 2 && link.isReadOnly()) {
+                                window.open(link.getAttribute('href'));
+                            }
+                        });
+                    });
                 }
-            });
 
-            const changeListener = () => {
-                if (this.changeTimeout) {
-                    window.clearTimeout(this.changeTimeout);
-                    this.changeTimeout = null;
-                }
-
-                this.changeTimeout = setTimeout(() => {
-                    const value = this.editor.getData();
-                    (this as any).emit('valueChanged', value);
-                    this.changeTimeout = null;
-                }, 200);
-            };
-
-            this.editor.on('change', changeListener);
-            this.editor.on('mode', () => {
-                const editable = this.editor.editable();
-                if (editable) {
-                    if (this.editor.mode === 'source') {
-                        editable.attachListener(editable, 'input', changeListener);
-                    } else {
-                        editable.removeListener('input', changeListener);
+                if (await this.isEditorReady()) {
+                    if (this.state.noImages && this.editor.pasteFilter) {
+                        this.editor.pasteFilter.disallow('img');
                     }
                 }
-            });
-
-            if (this.state.readOnly) {
-                this.editor.on('contentDom', () => {
-                    const editable = this.editor.editable();
-                    editable.attachListener(editable, 'click', (evt) => {
-                        const link = new CKEDITOR.dom.elementPath(evt.data.getTarget(), this).contains('a');
-                        if (link && evt.data.$.button !== 2 && link.isReadOnly()) {
-                            window.open(link.getAttribute('href'));
-                        }
-                    });
-                });
-            }
-
-            if (await this.isEditorReady()) {
-                if (this.state.noImages && this.editor.pasteFilter) {
-                    this.editor.pasteFilter.disallow('img');
-                }
-            }
+            }, 50);
         }
     }
 
@@ -251,6 +258,10 @@ class EditorComponent {
     // TODO: bessere Lösung finden (im Moment gibt es warnings im Log, ...->
     // weil der Editor schon kurz nach Instanziierung wieder zerstört wird)
     public async onDestroy(): Promise<void> {
+        if (this.createTimeout) {
+            window.clearTimeout(this.createTimeout);
+            this.createTimeout = null;
+        }
         if (this.instanceExists()) {
             this.autoCompletePlugins.forEach((p) => p.close());
             this.editor.destroy();

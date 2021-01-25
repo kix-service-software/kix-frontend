@@ -111,15 +111,14 @@ export class MacroFieldCreator {
         macroField: FormFieldConfiguration, action: MacroAction
     ): Promise<FormFieldConfiguration> {
         const actionField = new FormFieldConfiguration(
-            'job-form-field-actions', '1. Action', `MACRO###${JobProperty.MACRO_ACTIONS}`, 'job-input-actions'
+            'job-form-field-actions', '1. Action', `MACRO###${JobProperty.MACRO_ACTIONS}`, 'job-input-actions',
+            false, 'Translatable#Helptext_Admin_JobCreateEdit_Actions'
         );
 
         actionField.options = [
             new FormFieldOption('ActionId', action ? action.ID : null)
         ];
 
-        actionField.required = false;
-        actionField.hint = 'Translatable#Helptext_Admin_JobCreateEdit_Actions';
         actionField.countDefault = 1;
         actionField.countMax = 200;
         actionField.countMin = 0;
