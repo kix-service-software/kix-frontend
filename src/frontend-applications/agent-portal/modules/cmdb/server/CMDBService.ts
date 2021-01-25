@@ -131,7 +131,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
     ): Promise<ConfigItem[]> {
         loadingOptions = loadingOptions || new KIXObjectLoadingOptions();
 
-        const query = this.prepareQuery(loadingOptions);
+        const query = this.prepareQuery(loadingOptions, KIXObjectType.CONFIG_ITEM);
 
         let configItems: ConfigItem[] = [];
 
@@ -184,7 +184,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
             } else {
                 loadingOptions.includes = ['Content'];
             }
-            const query = this.prepareQuery(loadingOptions);
+            const query = this.prepareQuery(loadingOptions, KIXObjectType.CONFIG_ITEM_IMAGE);
 
             let images: ConfigItemImage[] = [];
 
@@ -240,7 +240,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
 
             loadingOptions = loadingOptions || new KIXObjectLoadingOptions();
 
-            const query = this.prepareQuery(loadingOptions);
+            const query = this.prepareQuery(loadingOptions, KIXObjectType.CONFIG_ITEM_ATTACHMENT);
             attachmentIds = attachmentIds.filter(
                 (id) => typeof id !== 'undefined' && id.toString() !== '' && id !== null
             );
