@@ -398,7 +398,7 @@ export class TicketService extends KIXObjectService<Ticket> {
                 article.TicketID, article.ArticleID, article.bodyAttachment.ID
             );
 
-            const inlineAttachments = article.Attachments.filter((a) => a.Disposition === 'inline');
+            const inlineAttachments = article.getAttachments(true);
             for (const inlineAttachment of inlineAttachments) {
                 const attachment = await this.loadArticleAttachment(
                     article.TicketID, article.ArticleID, inlineAttachment.ID

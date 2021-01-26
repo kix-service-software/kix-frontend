@@ -213,4 +213,14 @@ export class Article extends KIXObject {
     public getIdPropertyName(): string {
         return 'ArticleID';
     }
+
+    public getAttachments(inline?: boolean): Attachment[] {
+        let attachments = this.Attachments;
+        if (inline) {
+            attachments = this.Attachments.filter((a) => a.Disposition === 'inline');
+        } else {
+            attachments = this.Attachments.filter((a) => a.Disposition !== 'inline');
+        }
+        return attachments;
+    }
 }
