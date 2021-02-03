@@ -36,7 +36,7 @@ class Component extends FormInputComponent<string, ComponentState> {
         const autofillOption = this.state.field.options.find((o) => o.option === FormFieldOptions.AUTO_COMPLETE);
         if (autofillOption) {
             const autocompleteOption = (autofillOption.value as AutocompleteFormFieldOption);
-            const component = (this as any).getComponent(this.state.field.instanceId);
+            const component = (this as any).getComponent(this.state.field.instanceId + '-editor');
             if (component) {
                 component.setAutocompleteConfiguration(autocompleteOption);
             }
