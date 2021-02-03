@@ -57,7 +57,7 @@ class Component extends FormInputComponent<any[], ComponentState> {
                                 permissionDescriptions.push(
                                     new CreatePermissionDescription(
                                         Number(v.property),
-                                        v.operator,
+                                        v.operator.trim(),
                                         v.value && (v.value as PermissionFormData).IsRequired ? 1 : 0,
                                         crudValue,
                                         v.value && (v.value as PermissionFormData).Comment,
