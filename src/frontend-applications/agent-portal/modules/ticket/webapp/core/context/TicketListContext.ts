@@ -43,4 +43,8 @@ export class TicketListContext extends Context {
         this.setObjectList(KIXObjectType.TICKET, tickets);
     }
 
+    public async reloadObjectList(objectType: KIXObjectType | string, silent: boolean = false): Promise<void> {
+        this.loadTickets(this.ticketIds, this.text);
+    }
+
 }
