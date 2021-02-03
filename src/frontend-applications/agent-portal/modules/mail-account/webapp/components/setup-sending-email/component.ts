@@ -211,18 +211,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const sysconfigDefinitions = await KIXObjectService.loadObjects<SysConfigOptionDefinition>(
             KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, configKeys
         );
-        const hostHint = sysconfigDefinitions.find((o) => o.Name === 'SendmailModule::Host').Description || '';
-        const portHint = sysconfigDefinitions.find((o) => o.Name === 'SendmailModule::Port').Description || '';
-        const userHint = sysconfigDefinitions.find((o) => o.Name === 'SendmailModule::AuthUser').Description || '';
-        const passwordHint = sysconfigDefinitions.find((o) => o.Name === 'SendmailModule::AuthPassword').Description || '';
+        const hostHint = sysconfigDefinitions.find((o) => o.Name === 'SendmailModule::Host')?.Description || '';
+        const portHint = sysconfigDefinitions.find((o) => o.Name === 'SendmailModule::Port')?.Description || '';
+        const userHint = sysconfigDefinitions.find((o) => o.Name === 'SendmailModule::AuthUser')?.Description || '';
+        const passwordHint = sysconfigDefinitions.find((o) => o.Name === 'SendmailModule::AuthPassword')?.Description || '';
 
         const sysconfigOptions = await KIXObjectService.loadObjects<SysConfigOption>(
             KIXObjectType.SYS_CONFIG_OPTION, configKeys
         );
-        const hostReadonly = sysconfigOptions.find((o) => o.Name === 'SendmailModule::Host').ReadOnly;
-        const portReadonly = sysconfigOptions.find((o) => o.Name === 'SendmailModule::Port').ReadOnly;
-        const userReadonly = sysconfigOptions.find((o) => o.Name === 'SendmailModule::AuthUser').ReadOnly;
-        const passwordReadonly = sysconfigOptions.find((o) => o.Name === 'SendmailModule::AuthPassword').ReadOnly;
+        const hostReadonly = sysconfigOptions.find((o) => o.Name === 'SendmailModule::Host')?.ReadOnly;
+        const portReadonly = sysconfigOptions.find((o) => o.Name === 'SendmailModule::Port')?.ReadOnly;
+        const userReadonly = sysconfigOptions.find((o) => o.Name === 'SendmailModule::AuthUser')?.ReadOnly;
+        const passwordReadonly = sysconfigOptions.find((o) => o.Name === 'SendmailModule::AuthPassword')?.ReadOnly;
 
         return [
             new FormFieldConfiguration(

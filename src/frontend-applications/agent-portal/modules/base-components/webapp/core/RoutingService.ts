@@ -136,7 +136,9 @@ export class RoutingService {
     private handleRequest(params: URLSearchParams): void {
         setTimeout(async () => {
             if (params.has('new')) {
-                await ContextService.getInstance().setDialogContext(null, null, ContextMode.CREATE, null, true);
+                await ContextService.getInstance().setDialogContext(null, null, ContextMode.CREATE, null, true,
+                    undefined, undefined, undefined, undefined, undefined, undefined, params
+                );
             } else if (params.has('actionId')) {
                 const actionId = params.get('actionId');
                 const data = params.get('data');

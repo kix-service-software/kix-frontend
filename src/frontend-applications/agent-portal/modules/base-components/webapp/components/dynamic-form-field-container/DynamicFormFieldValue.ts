@@ -177,8 +177,13 @@ export class DynamicFormFieldValue {
                     }
                     this.operationTreeHandler.setTree(operationNodes);
                     if (!!operationNodes.length) {
-                        this.value.operator = operationNodes[0].id;
-                        this.operationTreeHandler.setSelection([operationNodes[0]], true);
+                        let operationNode = operationNodes[0];
+                        if (this.value.operator) {
+                            operationNode = operationNodes.find((n) => n.id === this.value.operator);
+                        } else {
+                            this.value.operator = operationNodes[0].id;
+                        }
+                        this.operationTreeHandler.setSelection([operationNode], true);
                     }
                 }
         }

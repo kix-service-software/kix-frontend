@@ -28,8 +28,8 @@ export class NewTicketDialogContext extends Context {
     private contact: any;
     private organisation: any;
 
-    public async initContext(): Promise<void> {
-        super.initContext();
+    public async initContext(urlParams?: URLSearchParams): Promise<void> {
+        super.initContext(urlParams);
         this.contact = null;
         this.organisation = null;
 

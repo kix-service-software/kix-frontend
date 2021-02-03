@@ -217,6 +217,20 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </if>
         </div>
         <if(
+            state.hasAdditionalOptions &&
+            component.showValueInput(dynamicValue)
+        )>
+            <div.addtional-options>
+                <span>
+                    <translation-string pattern="Translatable#Field Options:"/>
+                </span>
+                <textarea.input-style
+                    value=dynamicValue.value.additionalOptions
+                    on-blur("additionalOptionsChanged", dynamicValue)
+                    on-change("additionalOptionsChanged", dynamicValue)/>
+            </div>
+        </if>
+        <if(
             !dynamicValue.required &&
             !dynamicValue.readonly &&
             state.dynamicValues.length > 1 &&
