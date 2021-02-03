@@ -82,7 +82,7 @@ export class TicketDetailsContext extends Context {
 
     private async loadTicket(changedProperties: string[] = [], cache: boolean = true): Promise<Ticket> {
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, ['StateType', 'ObjectActions']
+            null, null, null, ['StateType', 'ObjectActions', TicketProperty.WATCHERS]
         );
 
         const ticket: Ticket = await this.loadDetailsObject<Ticket>(KIXObjectType.TICKET, loadingOptions);
