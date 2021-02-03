@@ -208,7 +208,7 @@ class FieldContainerComponent {
                 }
                 this.state.dragStartIndex = null;
                 this.state.dragStartInstanceId = null;
-            }, 10);
+            }, 100);
         }
     }
 

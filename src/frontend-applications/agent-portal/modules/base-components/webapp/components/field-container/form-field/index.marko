@@ -69,13 +69,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <${input.additionalFieldControls}/>
             </if>
             <if(state.canDraggable)>
-                <button.form-control-button.button-without-text.drag-button
+                <div.form-control-button.button-without-text.drag-button
                     title=state.translations["Translatable#Sort"]
                     on-mouseenter("setDraggable", true)
                     on-mouseleave("setDraggable", false)>
                     <span.kix-icon-sort-up/>
                     <span.kix-icon-sort-down/>
-                </button>
+                </div>
             </if>
         </div>
     </if>

@@ -188,6 +188,7 @@ class Component {
     }
 
     public async removeValue(value: DynamicFormFieldValue): Promise<void> {
+        this.state.dynamicValues = this.state.dynamicValues.filter((dv) => dv.instanceId !== value.instanceId);
         await this.manager.removeValue(value.getValue());
         await this.updateValues();
     }
