@@ -18,13 +18,14 @@ import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { InputFieldTypes } from '../../../../../modules/base-components/webapp/core/InputFieldTypes';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
 import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
-import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ObjectReferenceOptions } from '../../core/ObjectReferenceOptions';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 
 
 export class DynamicFormFieldValue {
+
+    public instanceId: string = IdService.generateDateBasedId('DynamicFormFieldValue');
 
     public isDropdown: boolean = false;
     public isDate: boolean = false;
