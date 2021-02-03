@@ -52,6 +52,24 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     public useOwnSearch: boolean = false;
     public validDFTypes = [];
 
+    protected propertiesIgnoreList: string[] = [];
+
+    public async addToPropertiesIgnoreList(properties: string[]): Promise<void> {
+        properties.forEach((p) => {
+            if (!this.propertiesIgnoreList.some((ip) => ip === p)) {
+                this.propertiesIgnoreList.push(p);
+            }
+        });
+    }
+
+    public async removeFromPropertiesIgnoreList(properties: string[]): Promise<void> {
+        this.propertiesIgnoreList = this.propertiesIgnoreList.filter((ip) => !properties.some((p) => p === ip));
+    }
+
+    public filterProperties(properties: string[]): string[] {
+        return properties.filter((p) => !this.propertiesIgnoreList.some((ip) => ip === p));
+    }
+
     public async getFieldOptions(): Promise<ObjectPropertyValueOption[]> {
         return [];
     }
@@ -174,6 +192,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             this.values[index].operator = newValue.operator;
             this.values[index].value = newValue.value;
             this.values[index].required = newValue.required;
+            this.values[index].additionalOptions = newValue.additionalOptions;
         } else {
             this.values.push(newValue);
         }
@@ -252,9 +271,9 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return '';
     }
 
-    public async getTreeNodes(property: string): Promise<TreeNode[]> {
+    public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
         for (const extendedManager of this.extendedFormManager) {
-            const result = await extendedManager.getTreeNodes(property);
+            const result = await extendedManager.getTreeNodes(property, objectIds);
             if (result) {
                 return result;
             }
@@ -517,6 +536,10 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     }
 
     public hasOption(option: ObjectPropertyValueOption, property: string, operator: string): boolean {
+        return false;
+    }
+
+    public hasAdditionalOptions(): boolean {
         return false;
     }
 

@@ -80,7 +80,9 @@ export abstract class Context {
     }
 
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
-        return;
+        if (urlParams) {
+            urlParams.forEach((value: string, key: string) => this.setAdditionalInformation(key, value));
+        }
     }
 
     public async getUrl(): Promise<string> {
@@ -89,6 +91,8 @@ export abstract class Context {
             url = this.descriptor.urlPaths[0];
             if (this.descriptor.contextMode === ContextMode.DETAILS) {
                 url += `/${this.getObjectId()}`;
+            } else if (this.descriptor.contextMode === ContextMode.CREATE) {
+                url += `?new`;
             }
         }
         return url;

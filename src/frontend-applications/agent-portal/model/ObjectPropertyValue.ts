@@ -26,6 +26,7 @@ export class ObjectPropertyValue {
         public readonly: boolean = false,
         public changeable: boolean = true,
         public id: string = IdService.generateDateBasedId('value-'),
+        public additionalOptions: any = null
     ) { }
 
 }

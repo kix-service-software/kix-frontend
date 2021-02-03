@@ -58,6 +58,8 @@ class Component {
         if (this.manager.uniqueProperties) {
             this.state.dynamicValues.forEach((dv) => dv.updateProperties());
         }
+
+        this.state.dynamicValues = [...this.state.dynamicValues];
     }
 
     public async onMount(): Promise<void> {
@@ -71,7 +73,7 @@ class Component {
                     this.manager,
                     new ObjectPropertyValue(
                         v.property, v.operator, v.value, v.options, v.required, v.valid,
-                        v.objectType, v.readonly, v.changeable, v.id
+                        v.objectType, v.readonly, v.changeable, v.id, v.additionalOptions
                     )
                 );
                 formFieldValue.init();
@@ -79,6 +81,8 @@ class Component {
             }
 
             this.state.options = await this.manager.getFieldOptions();
+
+            this.state.hasAdditionalOptions = this.manager.hasAdditionalOptions();
 
             this.addEmptyValue();
         }
@@ -106,6 +110,12 @@ class Component {
 
     public treeValueChanged(value: DynamicFormFieldValue, nodes: TreeNode[]): void {
         value.setValue(nodes.map((n) => n.id));
+        this.provideValue(value);
+    }
+
+    public additionalOptionsChanged(value: DynamicFormFieldValue, event: any): void {
+        const additionalOptions = event.target.value;
+        value.value.additionalOptions = additionalOptions;
         this.provideValue(value);
     }
 

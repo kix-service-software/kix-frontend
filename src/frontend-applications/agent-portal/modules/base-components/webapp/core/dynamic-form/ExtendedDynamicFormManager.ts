@@ -141,4 +141,8 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
         return false;
     }
 
+    public hasAdditionalOptions(): boolean {
+        return false;
+    }
+
 }

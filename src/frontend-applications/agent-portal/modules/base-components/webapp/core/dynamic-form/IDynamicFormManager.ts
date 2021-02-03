@@ -86,4 +86,5 @@ export interface IDynamicFormManager {
 
     hasOption(option: ObjectPropertyValueOption, property: string, operator: string): boolean;
 
+    hasAdditionalOptions(): boolean;
 }

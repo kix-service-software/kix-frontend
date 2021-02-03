@@ -255,7 +255,8 @@ export class TicketService extends KIXObjectService<Ticket> {
                     );
                 }
                 let users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, null, loadingOptions, null, true
+                    KIXObjectType.USER, filterIds ? filterIds.map((fid) => Number(fid)) : null,
+                    loadingOptions, null, true
                 ).catch((error) => [] as User[]);
                 if (!showInvalid) {
                     users = users.filter((s) => s.ValidID === 1);
