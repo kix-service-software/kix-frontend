@@ -16,6 +16,8 @@ import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/Da
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { UserProperty } from '../../../user/model/UserProperty';
 import { AbstractPlaceholderHandler } from '../../../base-components/webapp/core/AbstractPlaceholderHandler';
+import { DynamicFieldValuePlaceholderHandler } from '../../../dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler';
+import { SortUtil } from '../../../../model/SortUtil';
 
 export class ContactPlaceholderHandler extends AbstractPlaceholderHandler {
 
@@ -25,7 +27,15 @@ export class ContactPlaceholderHandler extends AbstractPlaceholderHandler {
         let result = '';
         if (contact) {
             const attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
-            if (attribute && this.isKnownProperty(attribute)) {
+
+            if (
+                PlaceholderService.getInstance().isDynamicFieldAttribute(attribute) &&
+                DynamicFieldValuePlaceholderHandler
+            ) {
+                const optionsString: string = PlaceholderService.getInstance().getOptionsString(placeholder);
+                result = await DynamicFieldValuePlaceholderHandler.getInstance().replaceDFValue(contact, optionsString);
+            }
+            else if (attribute && this.isKnownProperty(attribute)) {
                 if (!PlaceholderService.getInstance().translatePlaceholder(placeholder)) {
                     language = 'en';
                 }

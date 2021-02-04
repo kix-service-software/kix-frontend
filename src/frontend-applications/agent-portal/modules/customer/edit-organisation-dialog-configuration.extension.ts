@@ -29,6 +29,7 @@ import { FormConfiguration } from '../../model/configuration/FormConfiguration';
 import { FormContext } from '../../model/configuration/FormContext';
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { DynamicFormFieldOption } from '../dynamic-fields/webapp/core';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -79,6 +80,17 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 'Translatable#Helptext_Customers_OrganisationCreate_Name'
             )
         );
+
+        configurations.push(
+            new FormFieldConfiguration(
+                'organisation-edit-form-field-type', null, KIXObjectProperty.DYNAMIC_FIELDS, null,
+                false, 'Translatable#Helptext_Customers_OrganisationCreate_Type',
+                [
+                    new FormFieldOption(DynamicFormFieldOption.FIELD_NAME, 'Type')
+                ]
+            )
+        );
+
         configurations.push(
             new FormFieldConfiguration(
                 'organisation-edit-form-field-url',
@@ -93,6 +105,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 [
                     'organisation-edit-form-field-cno',
                     'organisation-edit-form-field-name',
+                    'organisation-edit-form-field-type',
                     'organisation-edit-form-field-url'
                 ]
             )

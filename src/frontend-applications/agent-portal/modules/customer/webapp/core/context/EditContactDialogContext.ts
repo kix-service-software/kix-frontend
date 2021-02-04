@@ -8,9 +8,30 @@
  */
 
 import { Context } from '../../../../../model/Context';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 
 export class EditContactDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'edit-contact-dialog-context';
 
+    public async getObject<O extends KIXObject>(
+        objectType: KIXObjectType | string = KIXObjectType.CONTACT,
+        reload: boolean = false, changedProperties?: string[]
+    ): Promise<O> {
+        let object;
+        const objectId = this.getObjectId();
+        if (objectId) {
+            const loadingOptions = new KIXObjectLoadingOptions(
+                null, null, null,
+                [KIXObjectProperty.DYNAMIC_FIELDS]
+            );
+            const objects = await KIXObjectService.loadObjects(objectType, [objectId], loadingOptions);
+            object = objects && objects.length ? objects[0] : null;
+        }
+        return object;
+    }
 }

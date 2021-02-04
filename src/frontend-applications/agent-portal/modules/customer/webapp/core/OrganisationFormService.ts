@@ -53,6 +53,7 @@ export class OrganisationFormService extends KIXObjectFormService {
                 }
                 break;
             default:
+                value = await super.getValue(property, value, organisation, formField, formContext);
         }
 
         return value;

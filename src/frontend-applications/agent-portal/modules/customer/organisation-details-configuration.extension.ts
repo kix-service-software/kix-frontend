@@ -32,6 +32,7 @@ import { CRUD } from '../../../../server/model/rest/CRUD';
 import { UserProperty } from '../user/model/UserProperty';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { ObjectIcon } from '../icon/model/ObjectIcon';
+import { SearchOperator } from '../search/model/SearchOperator';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -79,14 +80,22 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         property: OrganisationProperty.NAME
                                     }
                                 },
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: 'DynamicFields.Type'
+                                    }
+                                },
+                            ],
+                            [
                                 {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: OrganisationProperty.URL
                                     }
-                                }
-                            ],
-                            [
+                                },
                                 {
                                     componentId: 'object-avatar-label',
                                     componentData: {
