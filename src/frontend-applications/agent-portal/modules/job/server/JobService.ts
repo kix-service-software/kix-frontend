@@ -189,7 +189,7 @@ export class JobAPIService extends KIXObjectAPIService {
         token: string, clientRequestId: string, parameter: Array<[string, any]>
     ): Promise<number> {
 
-        const macroIds = await this.createMacros(token, clientRequestId, parameter, true);
+        const macroIds = await this.createMacros(token, clientRequestId, parameter);
 
         const jobParameter = parameter.filter(
             (p) => p[0] !== JobProperty.EXEC_PLAN_EVENTS
@@ -457,16 +457,23 @@ export class JobAPIService extends KIXObjectAPIService {
         }
     }
 
-    // NEW IMPLEMENTATION
-
     public async createMacros(
-        token: string, clientRequestId: string, parameter: Array<[string, any]>, forJob?: boolean
+        token: string, clientRequestId: string, parameter: Array<[string, any]>, update?: boolean
     ): Promise<number[]> {
         const macroIds = [];
         const macroParameter = parameter.filter((p) => p[0] === JobProperty.MACROS);
         for (const mp of macroParameter) {
             const macro: Macro = mp[1];
-            const macroId = await this.createOrUpdateMacro(token, clientRequestId, macro);
+            const macroId = await this.createOrUpdateMacro(token, clientRequestId, macro, update)
+                .catch(async (e) => {
+                    if (!update) {
+                        for (const mid of macroIds) {
+                            await this.deleteMacro(token, mid).catch(() => null);
+                        }
+                    }
+                    throw e;
+                });
+
             if (macroId) {
                 macroIds.push(macroId);
             }
@@ -474,7 +481,9 @@ export class JobAPIService extends KIXObjectAPIService {
         return macroIds;
     }
 
-    private async createOrUpdateMacro(token: string, requestId: string, macro: Macro): Promise<number> {
+    private async createOrUpdateMacro(
+        token: string, requestId: string, macro: Macro, update?: boolean
+    ): Promise<number> {
         if (!Array.isArray(macro.Actions) || !macro.Actions.length) {
             return null;
         }
@@ -528,7 +537,13 @@ export class JobAPIService extends KIXObjectAPIService {
 
             const execOrder = [];
             for (const action of macro.Actions) {
-                const actionId = await this.createOrUpdateAction(token, requestId, macroId, action);
+                const actionId = await this.createOrUpdateAction(token, requestId, macroId, action)
+                    .catch(async (e) => {
+                        if (!update) {
+                            await this.deleteMacro(token, macroId);
+                        }
+                        throw e;
+                    });
                 execOrder.push(actionId);
             }
 
