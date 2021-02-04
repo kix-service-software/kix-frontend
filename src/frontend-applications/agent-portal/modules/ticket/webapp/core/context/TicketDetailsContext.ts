@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -82,7 +82,7 @@ export class TicketDetailsContext extends Context {
 
     private async loadTicket(changedProperties: string[] = [], cache: boolean = true): Promise<Ticket> {
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, ['StateType', 'ObjectActions']
+            null, null, null, ['StateType', 'ObjectActions', TicketProperty.WATCHERS]
         );
 
         const ticket: Ticket = await this.loadDetailsObject<Ticket>(KIXObjectType.TICKET, loadingOptions);

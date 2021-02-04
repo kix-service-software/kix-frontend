@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -22,7 +22,11 @@ export class MacroActionType extends KIXObject {
 
     public Description: string;
 
+    public MacroType: string;
+
     public Options: {};
+
+    public Results: {};
 
     public constructor(macroActionType?: MacroActionType) {
         super(macroActionType);
@@ -31,7 +35,9 @@ export class MacroActionType extends KIXObject {
             this.Name = macroActionType.Name;
             this.DisplayName = macroActionType.DisplayName;
             this.Description = macroActionType.Description;
+            this.MacroType = macroActionType.MacroType;
             this.Options = macroActionType.Options;
+            this.Results = macroActionType.Results;
         }
     }
 

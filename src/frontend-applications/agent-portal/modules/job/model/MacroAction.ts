@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -24,6 +24,8 @@ export class MacroAction extends KIXObject {
 
     public Parameters: {};
 
+    public ResultVariables: {};
+
     public number: number;
 
     public constructor(macroAction?: MacroAction, number?: number) {
@@ -34,6 +36,7 @@ export class MacroAction extends KIXObject {
             this.Type = macroAction.Type;
             this.MacroID = macroAction.MacroID;
             this.Parameters = macroAction.Parameters;
+            this.ResultVariables = macroAction.ResultVariables;
             this.number = number;
         }
     }

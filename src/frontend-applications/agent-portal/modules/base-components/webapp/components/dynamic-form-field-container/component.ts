@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -54,11 +54,12 @@ class Component {
                 values.push(value);
             }
         }
-        await this.addEmptyValue(values);
-        this.state.dynamicValues = [...values];
+        await this.addEmptyValue();
         if (this.manager.uniqueProperties) {
             this.state.dynamicValues.forEach((dv) => dv.updateProperties());
         }
+
+        this.state.dynamicValues = [...this.state.dynamicValues];
     }
 
     public async onMount(): Promise<void> {
@@ -72,17 +73,18 @@ class Component {
                     this.manager,
                     new ObjectPropertyValue(
                         v.property, v.operator, v.value, v.options, v.required, v.valid,
-                        v.objectType, v.readonly, v.changeable, v.id
+                        v.objectType, v.readonly, v.changeable, v.id, v.additionalOptions
                     )
                 );
-                await formFieldValue.init();
+                formFieldValue.init();
                 this.state.dynamicValues.push(formFieldValue);
             }
 
             this.state.options = await this.manager.getFieldOptions();
 
+            this.state.hasAdditionalOptions = this.manager.hasAdditionalOptions();
+
             this.addEmptyValue();
-            this.state.prepared = true;
         }
     }
 
@@ -108,6 +110,12 @@ class Component {
 
     public treeValueChanged(value: DynamicFormFieldValue, nodes: TreeNode[]): void {
         value.setValue(nodes.map((n) => n.id));
+        this.provideValue(value);
+    }
+
+    public additionalOptionsChanged(value: DynamicFormFieldValue, event: any): void {
+        const additionalOptions = event.target.value;
+        value.value.additionalOptions = additionalOptions;
         this.provideValue(value);
     }
 
@@ -180,25 +188,19 @@ class Component {
     }
 
     public async removeValue(value: DynamicFormFieldValue): Promise<void> {
+        this.state.dynamicValues = this.state.dynamicValues.filter((dv) => dv.instanceId !== value.instanceId);
         await this.manager.removeValue(value.getValue());
         await this.updateValues();
     }
 
-    private async addEmptyValue(newValues?: DynamicFormFieldValue[]): Promise<void> {
-        if (await this.manager.shouldAddEmptyField()) {
-            const index = this.state.dynamicValues.findIndex((sv) => sv.getValue().property === null);
-            let emptyField: DynamicFormFieldValue;
-            if (index === -1 || newValues) {
-                emptyField = new DynamicFormFieldValue(this.manager);
-                await emptyField.init();
-            } else {
-                emptyField = this.state.dynamicValues.splice(index, 1)[0];
-            }
-            if (newValues) {
-                newValues.push(emptyField);
-            } else {
-                this.state.dynamicValues = [...this.state.dynamicValues, emptyField];
-            }
+    private async addEmptyValue(): Promise<void> {
+        const canAddEmptyValue = await this.manager.shouldAddEmptyField();
+        const hasEmptyValue = this.state.dynamicValues.some((sv) => sv.getValue().property === null);
+
+        if (canAddEmptyValue && !hasEmptyValue) {
+            const emptyField = new DynamicFormFieldValue(this.manager);
+            await emptyField.init();
+            this.state.dynamicValues = [...this.state.dynamicValues, emptyField];
         }
     }
 

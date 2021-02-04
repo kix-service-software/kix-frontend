@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -18,12 +18,14 @@ import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { InputFieldTypes } from '../../../../../modules/base-components/webapp/core/InputFieldTypes';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
 import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
-import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ObjectReferenceOptions } from '../../core/ObjectReferenceOptions';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 
 
 export class DynamicFormFieldValue {
+
+    public instanceId: string = IdService.generateDateBasedId('DynamicFormFieldValue');
 
     public isDropdown: boolean = false;
     public isDate: boolean = false;
@@ -46,8 +48,6 @@ export class DynamicFormFieldValue {
     public isFreeText: boolean = false;
 
     public isBetween: boolean = false;
-
-    public label: string = '';
 
     public autoCompleteConfiguration: AutoCompleteConfiguration;
     public autoCompleteCallback: (limit: number, searchValue: string) => Promise<TreeNode[]>;
@@ -87,39 +87,9 @@ export class DynamicFormFieldValue {
     }
 
     public async init(): Promise<void> {
-        await this.setPropertyTree();
-        if (this.value.property) {
-            const operator = this.value.operator;
-            await this.setProperty(this.value.property, false, true);
-
-            const objectType = this.value.objectType ? this.value.objectType : this.manager.objectType;
-            this.label = await LabelService.getInstance().getPropertyText(this.value.property, objectType);
-
-            const properties = await this.manager.getProperties();
-            const property = properties.find((p) => p[0] === this.value.property);
-            if (property) {
-                this.propertyTreeHandler.setSelection([new TreeNode(property[0], property[1])], true, true);
-            }
-
-            if (operator) {
-                await this.setOperator(operator);
-                const operationNode = TreeUtil.findNode(this.operationTreeHandler.getTree(), operator);
-                if (operationNode) {
-                    this.operationTreeHandler.setSelection([operationNode], true);
-                }
-            }
-
-            await this.setCurrentValue(undefined, true);
-        }
-
-        const propertiesPlaceholder = await this.manager.getPropertiesPlaceholder();
-        if (propertiesPlaceholder) {
-            this.propertiesPlaceholder = await TranslationService.translate(propertiesPlaceholder);
-        }
-        const operationsPlaceholder = await this.manager.getOperationsPlaceholder();
-        if (operationsPlaceholder) {
-            this.operationsPlaceholder = await TranslationService.translate(operationsPlaceholder);
-        }
+        await this.setProperty(this.value.property, false, true);
+        this.setOperator(this.value.operator);
+        await this.setCurrentValue(undefined, true);
     }
 
     public updateProperties(): void {
@@ -151,9 +121,6 @@ export class DynamicFormFieldValue {
                 this.valueTreeHandler.setTree([]);
             }
         }
-
-        const objectType = this.value.objectType ? this.value.objectType : this.manager.objectType;
-        this.label = await LabelService.getInstance().getPropertyText(this.value.property, objectType);
 
         await this.manager.setValue(this.value, silent);
 
@@ -211,8 +178,13 @@ export class DynamicFormFieldValue {
                     }
                     this.operationTreeHandler.setTree(operationNodes);
                     if (!!operationNodes.length) {
-                        this.value.operator = operationNodes[0].id;
-                        this.operationTreeHandler.setSelection([operationNodes[0]], true);
+                        let operationNode = operationNodes[0];
+                        if (this.value.operator) {
+                            operationNode = operationNodes.find((n) => n.id === this.value.operator);
+                        } else {
+                            this.value.operator = operationNodes[0].id;
+                        }
+                        this.operationTreeHandler.setSelection([operationNode], true);
                     }
                 }
         }
@@ -505,11 +477,21 @@ export class DynamicFormFieldValue {
 
     public async doAutocompleteSearch(limit: number, searchValue: string): Promise<TreeNode[]> {
         let tree: TreeNode[];
+        let loadingOptions: KIXObjectLoadingOptions;
+        const option = this.inputOptions.find((o) => o[0] === ObjectReferenceOptions.LOADINGOPTIONS);
+        if (option) {
+            loadingOptions = option[1] as KIXObjectLoadingOptions;
+        } else {
+            loadingOptions = new KIXObjectLoadingOptions();
+        }
+
+        loadingOptions.limit = limit;
+
         if (this.manager.useOwnSearch) {
-            tree = await this.manager.searchObjectTree(this.value.property, searchValue, limit);
+            tree = await this.manager.searchObjectTree(this.value.property, searchValue, loadingOptions);
         } else {
             tree = await KIXObjectService.searchObjectTree(
-                this.manager.objectType, this.value.property, searchValue, limit
+                this.manager.objectType, this.value.property, searchValue, loadingOptions
             );
         }
 

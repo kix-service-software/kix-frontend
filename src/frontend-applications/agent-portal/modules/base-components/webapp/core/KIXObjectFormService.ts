@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -91,7 +91,7 @@ export abstract class KIXObjectFormService {
         formContext: FormContext, formInstance: FormInstance
     ): Promise<void> {
         if (formContext === FormContext.NEW) {
-            this.handleCountValues(formFields);
+            await this.handleCountValues(formFields);
         } else if (formContext === FormContext.EDIT) {
             await DynamicFieldFormUtil.getInstance().handleDynamicFieldValues(
                 formFields, kixObject, this, formFieldValues
@@ -161,7 +161,7 @@ export abstract class KIXObjectFormService {
         return value;
     }
 
-    protected handleCountValues(formFields: FormFieldConfiguration[]): void {
+    protected async handleCountValues(formFields: FormFieldConfiguration[]): Promise<void> {
         const fields = [...formFields];
         for (const field of fields) {
             if (!field.asStructure) {
@@ -169,7 +169,7 @@ export abstract class KIXObjectFormService {
                     field.empty = false;
 
                     for (let i = 1; i < field.countMin; i++) {
-                        const newField = this.getNewFormField(field);
+                        const newField = await this.getNewFormField(field);
                         const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
                         formFields.splice(index, 0, newField);
                     }
@@ -179,7 +179,7 @@ export abstract class KIXObjectFormService {
                 if (countDefault > 1 && countDefault > field.countMin && countDefault <= field.countMax) {
                     const c = field.countMin === 0 ? 1 : field.countMin;
                     for (let i = c; i < countDefault; i++) {
-                        const newField = this.getNewFormField(field);
+                        const newField = await this.getNewFormField(field);
                         const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
                         formFields.splice(index, 0, newField);
                     }
@@ -199,9 +199,9 @@ export abstract class KIXObjectFormService {
         return;
     }
 
-    public getNewFormField(
+    public async getNewFormField(
         f: FormFieldConfiguration, parent?: FormFieldConfiguration, withChildren: boolean = true
-    ): FormFieldConfiguration {
+    ): Promise<FormFieldConfiguration> {
         const newField = new FormFieldConfiguration(
             f.id,
             f.label, f.property, f.inputComponent, f.required, f.hint, f.options, f.defaultValue,
@@ -221,7 +221,8 @@ export abstract class KIXObjectFormService {
                     || typeof child.countDefault !== 'number'
                     || child.countDefault > existingChildren.length
                 ) {
-                    children.push(this.getNewFormField(child, newField));
+                    const newChild = await this.getNewFormField(child, newField);
+                    children.push(newChild);
                 }
             }
         }
@@ -277,6 +278,10 @@ export abstract class KIXObjectFormService {
         const predefinedParameterValues = await this.preparePredefinedValues(forUpdate);
         if (predefinedParameterValues) {
             predefinedParameterValues.forEach((pv) => parameter.push([pv[0], pv[1]]));
+        }
+
+        if (!formId) {
+            return parameter;
         }
 
         const formInstance = await FormService.getInstance().getFormInstance(formId);

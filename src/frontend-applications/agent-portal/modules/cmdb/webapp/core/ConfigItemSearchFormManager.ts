@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -261,7 +261,9 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
         return true;
     }
 
-    public async searchObjectTree(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
+    public async searchObjectTree(
+        property: string, searchValue: string, loadingOptions?: KIXObjectLoadingOptions
+    ): Promise<TreeNode[]> {
         let tree = [];
 
         const classParameter = this.values.find((p) => p.property === ConfigItemProperty.CLASS_ID);
@@ -270,15 +272,17 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
         );
 
         if (input.Type === 'CIClassReference') {
-            const configItems = await this.loadConfigItems(input, searchValue, limit);
+            const configItems = await this.loadConfigItems(input, searchValue, loadingOptions);
             tree = configItems.map(
                 (ci) => new TreeNode(ci.ConfigItemID, ci.Name, new ObjectIcon(null, ci.KIXObjectType, ci.ConfigItemID))
             );
         } else if (input.Type === 'Organisation') {
-            const organisations = await KIXObjectService.search(KIXObjectType.ORGANISATION, searchValue, limit);
+            const organisations = await KIXObjectService.search(
+                KIXObjectType.ORGANISATION, searchValue, loadingOptions
+            );
             return await KIXObjectService.prepareTree(organisations);
         } else if (input.Type === 'Contact') {
-            const contacts = await KIXObjectService.search(KIXObjectType.CONTACT, searchValue, limit);
+            const contacts = await KIXObjectService.search(KIXObjectType.CONTACT, searchValue, loadingOptions);
             return await KIXObjectService.prepareTree(contacts);
         }
 
@@ -301,12 +305,14 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
         return items;
     }
 
-    private async loadConfigItems(input: InputDefinition, searchValue: string, limit: number): Promise<ConfigItem[]> {
+    private async loadConfigItems(
+        input: InputDefinition, searchValue: string, loadingOptions: KIXObjectLoadingOptions
+    ): Promise<ConfigItem[]> {
         const classReference = input['ReferencedCIClassName'];
         const ciClassNames = Array.isArray(classReference) ? classReference : [classReference];
 
         const configItems = await CMDBService.getInstance().searchConfigItemsByClass(
-            ciClassNames, searchValue, limit
+            ciClassNames, searchValue, loadingOptions
         );
         return configItems;
     }

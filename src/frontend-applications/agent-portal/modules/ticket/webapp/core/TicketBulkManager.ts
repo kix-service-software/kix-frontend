@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -25,6 +25,7 @@ import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { TicketService } from '.';
 import { BulkManager } from '../../../bulk/webapp/core';
+import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
 
 export class TicketBulkManager extends BulkManager {
 
@@ -64,6 +65,9 @@ export class TicketBulkManager extends BulkManager {
         let inputFieldType: InputFieldTypes | string = InputFieldTypes.TEXT;
         switch (property) {
             case TicketProperty.CONTACT_ID:
+            case TicketProperty.ORGANISATION_ID:
+            case TicketProperty.OWNER_ID:
+            case TicketProperty.RESPONSIBLE_ID:
                 inputFieldType = InputFieldTypes.OBJECT_REFERENCE;
                 break;
             case TicketProperty.QUEUE_ID:
@@ -71,10 +75,7 @@ export class TicketBulkManager extends BulkManager {
             case TicketProperty.TYPE_ID:
             case TicketProperty.PRIORITY_ID:
             case TicketProperty.SERVICE_ID:
-            case TicketProperty.RESPONSIBLE_ID:
-            case TicketProperty.OWNER_ID:
             case TicketProperty.LOCK_ID:
-            case TicketProperty.ORGANISATION_ID:
                 inputFieldType = InputFieldTypes.DROPDOWN;
                 break;
             case TicketProperty.PENDING_TIME:
@@ -85,6 +86,15 @@ export class TicketBulkManager extends BulkManager {
         }
 
         return inputFieldType;
+    }
+
+    public async getInputTypeOptions(property: string, operator: string): Promise<Array<[string, any]>> {
+        const options = await super.getInputTypeOptions(property, operator);
+        if (property === TicketProperty.OWNER_ID || property === TicketProperty.RESPONSIBLE_ID) {
+            options.push([ObjectReferenceOptions.AUTOCOMPLETE_PRELOAD_PATTERN, '*']);
+        }
+
+        return options;
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {

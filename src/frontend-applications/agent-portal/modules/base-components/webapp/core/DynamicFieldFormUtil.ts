@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -324,7 +324,7 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
                         if (i === 0) {
                             formFieldValues.set(field.instanceId, new FormFieldValue(dfValue[i]));
                         } else {
-                            const newField = formService.getNewFormField(field);
+                            const newField = await formService.getNewFormField(field);
                             formFieldValues.set(newField.instanceId, new FormFieldValue(dfValue[i]));
                             const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
                             formFields.splice(index + i, 0, newField);
@@ -338,7 +338,7 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
                         const count = dfValue.length === 0 ? countDefault : field.countMin - dfValue.length;
 
                         for (let i = 1; i < count; i++) {
-                            const newField = formService.getNewFormField(field);
+                            const newField = await formService.getNewFormField(field);
                             formFieldValues.set(newField.instanceId, new FormFieldValue(null, false));
                             const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
                             formFields.splice(index, 0, newField);
@@ -369,8 +369,11 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
     ): Promise<Array<[string, any]>> {
         const dfName = KIXObjectService.getDynamicFieldName(property);
         if (dfName) {
-            const setValue = value ? value.value : null;
-            await this.setDFParameterValue(dfName, setValue, parameter);
+            const dynamicField = await KIXObjectService.loadDynamicField(dfName);
+            if (dynamicField) {
+                const setValue = value ? value.value : null;
+                await this.setDFParameterValue(dfName, setValue, parameter);
+            }
         }
         return parameter;
     }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -24,6 +24,7 @@ import { CRUD } from '../../../../server/model/rest/CRUD';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { FAQArticleProperty } from './model/FAQArticleProperty';
 import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
+import { SearchOperator } from '../search/model/SearchOperator';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -72,7 +73,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     },
                     {
                         style: '',
-                        separator: false,
+                        separator: true,
                         values: [
                             [
                                 {
@@ -104,6 +105,31 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentData: {
                                         property: FAQArticleProperty.CHANGED_BY
                                     }
+                                }
+                            ]
+                        ]
+                    },
+                    {
+                        title: 'Translatable#References',
+                        style: '',
+                        separator: false,
+                        values: [
+                            [
+                                {
+                                    text: 'Translatable#Related Assets',
+                                    textStyle: 'font-weight:bold;margin-bottom:0.5rem',
+                                    icon: 'kix-icon-ci',
+                                    componentId: 'dynamic-field-value',
+                                    componentData: {
+                                        name: 'RelatedAssets'
+                                    },
+                                    conditions: [
+                                        {
+                                            property: 'DynamicFields.RelatedAssets',
+                                            operator: SearchOperator.NOT_EQUALS,
+                                            value: null
+                                        }
+                                    ]
                                 }
                             ]
                         ]

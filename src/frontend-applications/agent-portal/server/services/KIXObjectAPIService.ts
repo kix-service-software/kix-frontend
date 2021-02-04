@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -67,7 +67,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         useCache?: boolean
         // tslint:disable-next-line: ban-types
     ): Promise<O[]> {
-        const query = this.prepareQuery(loadingOptions);
+        const query = this.prepareQuery(loadingOptions, objectType);
         if (loadingOptions && loadingOptions.filter && loadingOptions.filter.length) {
             const success = await this.buildFilter(loadingOptions.filter, responseProperty, query, token);
 
@@ -100,6 +100,8 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         objects = Array.isArray(responseObject)
             ? responseObject
             : [responseObject];
+
+        objects = objects.filter((o) => o !== null);
 
         const result = objectConstructor ? objects.map((o) => new objectConstructor(o as KIXObject)) : objects;
         return result as O[];
@@ -153,7 +155,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         throw new Error('', 'Method not implemented.');
     }
 
-    protected prepareQuery(loadingOptions: KIXObjectLoadingOptions): any {
+    protected prepareQuery(loadingOptions: KIXObjectLoadingOptions, objectType: KIXObjectType | string): any {
         let query = {};
 
         if (loadingOptions) {
@@ -167,7 +169,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
             let additionalIncludes = [];
             this.extendedServices.forEach(
-                (s) => additionalIncludes = [...additionalIncludes, ...s.getAdditionalIncludes()]
+                (s) => additionalIncludes = [...additionalIncludes, ...s.getAdditionalIncludes(objectType)]
             );
 
             if (loadingOptions.includes) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -15,6 +15,7 @@ import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { AbstractPlaceholderHandler } from '../../../base-components/webapp/core/AbstractPlaceholderHandler';
+import { DynamicFieldValuePlaceholderHandler } from '../../../dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler';
 
 export class OrganisationPlaceholderHandler extends AbstractPlaceholderHandler {
 
@@ -24,7 +25,16 @@ export class OrganisationPlaceholderHandler extends AbstractPlaceholderHandler {
         let result = '';
         if (organisation) {
             const attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
-            if (attribute && this.isKnownProperty(attribute)) {
+
+            if (
+                PlaceholderService.getInstance().isDynamicFieldAttribute(attribute) &&
+                DynamicFieldValuePlaceholderHandler
+            ) {
+                const optionsString: string = PlaceholderService.getInstance().getOptionsString(placeholder);
+                result = await DynamicFieldValuePlaceholderHandler.getInstance().replaceDFValue(organisation,
+                    optionsString);
+            }
+            else if (attribute && this.isKnownProperty(attribute)) {
                 if (!PlaceholderService.getInstance().translatePlaceholder(placeholder)) {
                     language = 'en';
                 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -163,7 +163,7 @@ export class Server implements IServer {
     }
 
     public static async createClientRegistration(): Promise<void> {
-        LoggingService.getInstance().info('Create ClientRegsitration');
+        LoggingService.getInstance().info('Create Client Registration');
         let poDefinitions = [];
 
         const serverConfig = ConfigurationService.getInstance().getServerConfiguration();

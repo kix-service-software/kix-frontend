@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -117,7 +117,7 @@ export class AgentService extends KIXObjectService<User> {
     public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
         return [
             new FilterCriteria(
-                UserProperty.USER_LOGIN, SearchOperator.CONTAINS, FilterDataType.STRING,
+                'Search', SearchOperator.CONTAINS, FilterDataType.STRING,
                 FilterType.OR, searchValue.toLocaleLowerCase()
             )
         ];

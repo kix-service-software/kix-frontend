@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -24,6 +24,7 @@ import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextU
 import { OrganisationService } from '../OrganisationService';
 import { ContactService } from '../ContactService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
 export class OrganisationContext extends Context {
 
@@ -91,7 +92,7 @@ export class OrganisationContext extends Context {
     }
 
     public async getDisplayText(): Promise<string> {
-        return await TranslationService.translate('Translatable#Customer Dashboard');
+        return await TranslationService.translate('Translatable#Organisations Dashboard');
     }
 
     public setFilteredObjectList(objectType: KIXObjectType, filteredObjectList: KIXObject[]) {

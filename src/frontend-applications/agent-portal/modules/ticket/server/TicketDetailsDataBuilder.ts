@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -95,7 +95,7 @@ export class TicketDetailsDataBuilder {
 
         const configuration =
             await ModuleConfigurationService.getInstance().loadConfiguration<ObjectInformationWidgetConfiguration>(
-                token, 'ticket-details-object-information-config'
+                token, 'ticket-details-print-config'
             );
 
         if (configuration && configuration.properties) {
@@ -406,7 +406,7 @@ export class TicketDetailsDataBuilder {
                 token, article.TicketID, article.ArticleID, article.bodyAttachment.ID
             );
 
-            const inlineAttachments = article.Attachments.filter((a) => a.Disposition === 'inline');
+            const inlineAttachments = article.getAttachments(true);
             for (const inlineAttachment of inlineAttachments) {
                 const attachment = await this.loadArticleAttachment(
                     token, article.TicketID, article.ArticleID, inlineAttachment.ID

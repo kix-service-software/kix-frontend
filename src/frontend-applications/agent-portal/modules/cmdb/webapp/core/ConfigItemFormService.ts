@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -219,7 +219,7 @@ export class ConfigItemFormService extends KIXObjectFormService {
             for (const pd of relevantPreparedData) {
                 if (index < ff.countMax) {
                     if (index > 0) {
-                        ff = this.getNewFormField(formField);
+                        ff = await this.getNewFormField(formField);
                         formFields.push(ff);
                     }
                     this.setDataValue(ff, pd, index, formFieldValues);

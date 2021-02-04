@@ -14,6 +14,7 @@
         "require ./components/job-run-history-widget",
         "require ./components/job-run-log-download-cell",
         "require ./components/job-run-logs",
+        "require ./components/job-input-macro",
         "require ./core"
     ]
 }

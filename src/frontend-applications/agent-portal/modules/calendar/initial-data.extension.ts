@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -45,8 +45,7 @@ class Extension extends KIXExtension implements IInitialDataExtension {
             const config = {
                 CountDefault: '0', CountMax: '1', CountMin: '0',
                 DateRestriction: 'none', DefaultValue: '0', ItemSeparator: '',
-                YearsInFuture: '0', YearsInPast: '0',
-                Link: '', ValueTTL: '',
+                YearsInFuture: '0', YearsInPast: '0'
             };
 
             const parameter: Array<[string, any]> = [
