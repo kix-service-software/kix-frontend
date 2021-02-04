@@ -152,7 +152,7 @@ export class JobFormService extends KIXObjectFormService {
         parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
         formContext?: FormContext, formInstance?: FormInstance
     ): Promise<Array<[string, any]>> {
-        parameter = parameter.filter((p) => !p[0].startsWith('MACRO###'));
+        parameter = parameter.filter((p) => !p[0].startsWith('###MACRO###'));
         parameter = parameter.filter((p) => p[0] !== JobProperty.MACROS || p[1] !== null);
         return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
     }
