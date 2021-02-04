@@ -91,7 +91,7 @@ export class OrganisationContext extends Context {
     }
 
     public async getDisplayText(): Promise<string> {
-        return await TranslationService.translate('Translatable#Customer Dashboard');
+        return await TranslationService.translate('Translatable#Organisations Dashboard');
     }
 
     public setFilteredObjectList(objectType: KIXObjectType, filteredObjectList: KIXObject[]) {
