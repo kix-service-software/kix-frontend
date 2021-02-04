@@ -26,7 +26,7 @@ class Extension extends KIXExtension implements IMainMenuExtension {
 
     public icon: string = 'kix-icon-organisation';
 
-    public text: string = 'Translatable#Customer';
+    public text: string = 'Translatable#Organisations';
 
     public permissions: UIComponentPermission[] = [
         new UIComponentPermission('organisations', [CRUD.READ]),
