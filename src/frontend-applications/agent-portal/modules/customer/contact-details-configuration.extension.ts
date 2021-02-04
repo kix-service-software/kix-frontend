@@ -33,6 +33,7 @@ import { RoutingConfiguration } from '../../model/configuration/RoutingConfigura
 import { ContextMode } from '../../model/ContextMode';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { ObjectIcon } from '../icon/model/ObjectIcon';
+import { SearchOperator } from '../search/model/SearchOperator';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -243,7 +244,20 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         property: KIXObjectProperty.CHANGE_BY
                                     }
                                 }
-                            ]
+                            ],
+                            {
+                                componentId: 'object-avatar-label',
+                                componentData: {
+                                    property: 'DynamicFields.Source'
+                                },
+                                conditions: [
+                                    {
+                                        property: 'DynamicFields.Source',
+                                        operator: SearchOperator.NOT_EQUALS,
+                                        value: null
+                                    }
+                                ]
+                            }
                         ]
                     },
                     {

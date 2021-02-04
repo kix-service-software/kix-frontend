@@ -94,7 +94,7 @@ export class OrganisationLabelProvider extends LabelProvider<Organisation> {
                 );
                 break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
+                displayValue = await super.getDisplayText(organisation, property, displayValue, translatable);
         }
 
         if (displayValue) {

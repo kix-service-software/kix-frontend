@@ -24,6 +24,7 @@ import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextU
 import { OrganisationService } from '../OrganisationService';
 import { ContactService } from '../ContactService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
 export class OrganisationContext extends Context {
 

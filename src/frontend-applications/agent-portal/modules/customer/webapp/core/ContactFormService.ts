@@ -96,7 +96,10 @@ export class ContactFormService extends KIXObjectFormService {
         await super.initValues(form, formInstance, contact);
     }
 
-    protected async prePrepareForm(form: FormConfiguration, contact: Contact): Promise<void> {
+    protected async prePrepareForm(
+        form: FormConfiguration, contact: Contact, formInstance: FormInstance
+    ): Promise<void> {
+        await super.prePrepareForm(form, contact, formInstance);
         this.assignedUserId = contact ? contact.AssignedUserID : this.editUserId ? this.editUserId : null;
 
         if (form.formContext === FormContext.NEW && this.isAgentDialog) {
