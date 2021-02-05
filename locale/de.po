@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2021-02-03 08:42+0000\n"
+"PO-Revision-Date: 2021-02-05 14:36+0000\n"
 "Last-Translator: tczirfusz <Tobias.Czirfusz@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
@@ -69,7 +69,7 @@ msgid "Actions"
 msgstr "Aktionen"
 
 msgid "Activate dependency to organisation"
-msgstr "Abhängigkeit zu Kunden aktivieren"
+msgstr "Abhängigkeit zu Organisationen aktivieren"
 
 msgid "Add"
 msgstr "Hinzufügen"
@@ -249,7 +249,7 @@ msgid "Assigned Contacts"
 msgstr "Zugeordnete Kontakte"
 
 msgid "Assigned Organisation"
-msgstr "Zugeordneter Kunde"
+msgstr "Zugeordnete Organisation"
 
 msgid "Assigned Organisations"
 msgstr "Zugeordnete Organisationen"
@@ -651,7 +651,7 @@ msgid "Create Notification"
 msgstr "Benachrichtigung wird angelegt"
 
 msgid "Create Organisation"
-msgstr "Kunde wird angelegt"
+msgstr "Organisation wird angelegt"
 
 msgid "Create Priority"
 msgstr "Priorität wird angelegt"
@@ -714,10 +714,10 @@ msgid "(Current version)"
 msgstr "(aktuelle Version)"
 
 msgid "Customer"
-msgstr "Kunde"
+msgstr "Organisation"
 
 msgid "Customer Dashboard"
-msgstr "Kunden Dashboard"
+msgstr "Organisationen Dashboard"
 
 msgid "Customer Login"
 msgstr "Self Service Login"
@@ -880,7 +880,7 @@ msgid "Edit Objects"
 msgstr "Objekte bearbeiten"
 
 msgid "Edit Organisation"
-msgstr "Kunde bearbeiten"
+msgstr "Organisation bearbeiten"
 
 msgid "Edit Personal Settings"
 msgstr "Persönliche Einstellungen bearbeiten"
@@ -2050,10 +2050,10 @@ msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Organisation"
 msgstr ""
-"Wählen Sie den Kunden, welchem der Kontakt zugeordnet sein soll. Bei der "
-"Eingabe von mindestens 3 Zeichen wird Ihnen eine Liste mit bereits im System "
-"registrierten Kunden vorgeschlagen. Sie können „*“ als Platzhalter "
-"verwenden.  („KNR“ und „Kundenname“ möglich)"
+"Wählen Sie die Organisation, welchem der Kontakt zugeordnet sein soll. Bei "
+"der Eingabe von mindestens 3 Zeichen wird Ihnen eine Liste mit bereits im "
+"System registrierten Organisationen vorgeschlagen. Sie können „*“ als "
+"Platzhalter verwenden.  („KNR“ und „Organisationsname“ möglich)"
 
 msgid "Helptext_Customers_ContactCreate_Phone"
 msgstr ""
@@ -2101,7 +2101,8 @@ msgid "Helptext_Customers_OrganisationCreate_City"
 msgstr ""
 
 msgid "Helptext_Customers_OrganisationCreate_Comment"
-msgstr "Hier können Sie zusätzliche Informationen zu dem Kunden hinterlegen."
+msgstr ""
+"Hier können Sie zusätzliche Informationen zu dieser Organisation hinterlegen."
 
 msgid "Helptext_Customers_OrganisationCreate_Country"
 msgstr ""
@@ -2111,8 +2112,7 @@ msgstr ""
 
 msgid "Helptext_Customers_OrganisationCreate_Number"
 msgstr ""
-"Geben Sie einen eindeutigen Identifier (z.B. Kundennummer) für den Kunden "
-"ein."
+"Geben Sie einen eindeutigen Identifier (z.B. KNR) für die Organisation ein."
 
 msgid "Helptext_Customers_OrganisationCreate_Street"
 msgstr ""
@@ -2122,7 +2122,8 @@ msgstr ""
 
 msgid "Helptext_Customers_OrganisationCreate_Validity"
 msgstr ""
-"Der Kunde kann im System nur verwendet werden, wenn er „gültig“ gesetzt ist."
+"Die Organisation kann im System nur verwendet werden, wenn sie „gültig“ "
+"gesetzt ist."
 
 msgid "Helptext_Customers_OrganisationCreate_Zip"
 msgstr ""
@@ -2325,7 +2326,7 @@ msgstr ""
 "Wählen Sie aus, ob der folgende Artikel im Self Service Portal angezeigt "
 "wird. Haben Sie oben den Kanal \"E-Mail\" gewählt und in einem der folgenden "
 "Empfänger-Felder (An, Cc oder Bcc) eine Adresse gewählt, die einem Kontakt "
-"des Kunden dieses Tickets zugeordnet ist,  wird der Haken automatisch "
+"der Organisation dieses Tickets zugeordnet ist, wird der Haken automatisch "
 "gesetzt und kann nicht entfernt werden."
 
 msgid "Helptext_Tickets_ArticleCreateEdit_Subject"
@@ -2415,11 +2416,12 @@ msgstr ""
 "Wählen Sie aus, ob der folgende Artikel im Self Service Portal angezeigt "
 "wird. Haben Sie oben den Kanal \"E-Mail\" gewählt und in einem der folgenden "
 "Empfänger-Felder (An, Cc oder Bcc) eine Adresse gewählt, die einem Kontakt "
-"des Kunden dieses Tickets zugeordnet ist,  wird der Haken automatisch "
+"der Organisation dieses Tickets zugeordnet ist, wird der Haken automatisch "
 "gesetzt und kann nicht entfernt werden."
 
 msgid "Helptext_Tickets_TicketCreate_Organisation"
-msgstr "Der Kunde wird automatisch in Abhängigkeit vom Kontakt zugeordnet."
+msgstr ""
+"Die Organisation wird automatisch in Abhängigkeit vom Kontakt zugeordnet."
 
 msgid "Helptext_Tickets_TicketCreate_Owner"
 msgstr "Wählen Sie eine Person aus, die das Ticket bearbeiten soll."
@@ -2466,7 +2468,8 @@ msgstr ""
 "berücksichtigt alle Eigenschaften des Kontakes."
 
 msgid "Helptext_Tickets_TicketEdit_Organisation"
-msgstr "Der Kunde wird automatisch in Abhängigkeit vom Kontakt zugeordnet."
+msgstr ""
+"Die Organisation wird automatisch in Abhängigkeit vom Kontakt zugeordnet."
 
 msgid "Helptext_Tickets_TicketEdit_Owner"
 msgstr "Wählen Sie eine Person aus, die das Ticket bearbeiten soll."
@@ -2916,7 +2919,7 @@ msgid "New Object"
 msgstr "Neues Objekt"
 
 msgid "New Organisation"
-msgstr "Neuer Kunde"
+msgstr "Neue Organisation"
 
 msgid "New Password"
 msgstr "Neues Passwort"
@@ -3129,28 +3132,28 @@ msgid "Open Tickets of Contact"
 msgstr "Offene Tickets des Kontaktes"
 
 msgid "Open Tickets of Organisation"
-msgstr "Offene Tickets des Kunden"
+msgstr "Offene Tickets der Organisation"
 
 msgid "Operator"
 msgstr ""
 
 msgid "Organisation"
-msgstr "Kunde"
+msgstr "Organisation"
 
 msgid "Organisation ID"
-msgstr "Kunden ID"
+msgstr "Organisation ID"
 
 msgid "Organisation Information"
-msgstr "Kunden-Informationen"
+msgstr "Organisations-Informationen"
 
 msgid "Organisations"
 msgstr "Organisationen"
 
 msgid "Organisation Search"
-msgstr "Kunden-Suche"
+msgstr "Organisations-Suche"
 
 msgid "Organisation successfully created."
-msgstr "Kunde wurde erfolgreich angelegt."
+msgstr "Organisation wurde erfolgreich angelegt."
 
 msgid "Other"
 msgstr "Sonstiges"
@@ -3265,7 +3268,7 @@ msgid "Please enter a search term."
 msgstr "Bitte geben Sie einen Suchbegriff ein."
 
 msgid "Please enter a search term for a organisation."
-msgstr "Bitte geben Sie einen Suchbegriff für einen Kunden ein."
+msgstr "Bitte geben Sie einen Suchbegriff für eine Organisation ein."
 
 msgid "Please logout and login again with the new user."
 msgstr ""
@@ -3440,7 +3443,7 @@ msgid "Reminder Tickets"
 msgstr "Erinnerungstickets"
 
 msgid "Remove dependency to organisation"
-msgstr "Abhängigkeit zu Kunden auflösen"
+msgstr "Abhängigkeit zur Organisation lösen"
 
 msgid "Remove Filter"
 msgstr "Filter löschen"
