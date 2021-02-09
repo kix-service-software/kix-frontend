@@ -175,18 +175,20 @@ export class TicketFormService extends KIXObjectFormService {
             lockParameter[1] = lockParameter[1][0];
         }
 
-        if (!parameter.some((p) => p[0] === TicketProperty.CONTACT_ID)) {
-            const currentUser = await AgentService.getInstance().getCurrentUser();
-            parameter.push([TicketProperty.CONTACT_ID, currentUser?.Contact?.ID]);
-        }
+        if (formContext === FormContext.NEW) {
+            if (!parameter.some((p) => p[0] === TicketProperty.CONTACT_ID)) {
+                const currentUser = await AgentService.getInstance().getCurrentUser();
+                parameter.push([TicketProperty.CONTACT_ID, currentUser?.Contact?.ID]);
+            }
 
-        if (!parameter.some((p) => p[0] === TicketProperty.ORGANISATION_ID)) {
-            const contactParameter = parameter.find((p) => p[0] === TicketProperty.CONTACT_ID);
-            if (contactParameter) {
-                const contacts = await KIXObjectService.loadObjects<Contact>(
-                    KIXObjectType.CONTACT, [contactParameter[1]]
-                ).catch((e) => []);
-                parameter.push([TicketProperty.ORGANISATION_ID, contacts[0]?.PrimaryOrganisationID]);
+            if (!parameter.some((p) => p[0] === TicketProperty.ORGANISATION_ID)) {
+                const contactParameter = parameter.find((p) => p[0] === TicketProperty.CONTACT_ID);
+                if (contactParameter) {
+                    const contacts = await KIXObjectService.loadObjects<Contact>(
+                        KIXObjectType.CONTACT, [contactParameter[1]]
+                    ).catch((e) => []);
+                    parameter.push([TicketProperty.ORGANISATION_ID, contacts[0]?.PrimaryOrganisationID]);
+                }
             }
         }
 

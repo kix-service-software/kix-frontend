@@ -119,6 +119,10 @@ export class UserLabelProvider extends LabelProvider<User> {
         let displayValue = user[property];
 
         switch (property) {
+            case UserProperty.USER_LOGIN:
+            case UserProperty.USER_COMMENT:
+                translatable = false;
+                break;
             case UserProperty.USER_LAST_LOGIN:
                 if (user.Preferences) {
                     const lastLogin = user.Preferences.find((p) => p.ID === UserProperty.USER_LAST_LOGIN);

@@ -8,9 +8,6 @@
  */
 
 import { CMDBService } from './CMDBService';
-import {
-    AbstractDynamicFormManager
-} from '../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { VersionProperty } from '../../model/VersionProperty';
@@ -37,6 +34,7 @@ import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class ConfigItemSearchFormManager extends SearchFormManager {
 
@@ -89,6 +87,7 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
         const classAttributes = await ConfigItemClassAttributeUtil.getMergedClassAttributeIds(
             classParameter ? classParameter.value : null
         );
+
         classAttributes.filter((ca) => {
             switch (ca[2]) {
                 case 'GeneralCatalog':
@@ -100,7 +99,12 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
                 default:
                     return true;
             }
-        }).forEach((ca) => properties.push([ca[0], ca[1]]));
+        });
+
+        for (const ca of classAttributes) {
+            const label = await TranslationService.translate(ca[1]);
+            properties.push([ca[0], label]);
+        }
 
         return properties;
     }
