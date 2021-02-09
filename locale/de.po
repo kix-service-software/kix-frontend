@@ -5159,9 +5159,6 @@ msgstr "Bestätigung durch Unterschrift des Kunden"
 #~ msgid "Close window"
 #~ msgstr "Fenster schließen"
 
-#~ msgid "Organisations Dashboard"
-#~ msgstr "Kunden Dashboard"
-
 #~ msgid ""
 #~ "A contact is a person, filing a request for the customer. Enter at least "
 #~ "3 characters in order to get a suggestion list of already registered "

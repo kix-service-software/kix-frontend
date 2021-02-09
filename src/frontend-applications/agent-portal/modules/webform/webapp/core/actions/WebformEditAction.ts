@@ -19,8 +19,8 @@ export class WebformEditAction extends AbstractAction {
     public hasLink: boolean = true;
 
     public async initAction(): Promise<void> {
-        this.text = 'Translatable#Edit Webform';
-        this.icon = 'kix-icon-new-gear';
+        this.text = 'Translatable#Edit';
+        this.icon = 'kix-icon-edit';
     }
 
     public async run(): Promise<void> {
