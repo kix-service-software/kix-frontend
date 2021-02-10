@@ -7,7 +7,11 @@
  * --
  */
 
-div.go-to-article {
+.go-to-article {
     cursor: pointer;
-    display: inline-block;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    grid-column-gap: 0.5rem;
+    align-items: center;
 }
