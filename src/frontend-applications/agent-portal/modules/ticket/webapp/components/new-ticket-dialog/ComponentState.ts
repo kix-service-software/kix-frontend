@@ -14,7 +14,8 @@ export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public loading: boolean = false,
-        public buttonLabel: string = 'Translatable#Save'
+        public buttonLabel: string = 'Translatable#Save',
+        public submitted: boolean = false
     ) {
         super();
     }
