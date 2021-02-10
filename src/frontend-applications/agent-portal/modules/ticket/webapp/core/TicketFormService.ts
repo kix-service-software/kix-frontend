@@ -175,7 +175,8 @@ export class TicketFormService extends KIXObjectFormService {
             lockParameter[1] = lockParameter[1][0];
         }
 
-        if (formContext === FormContext.NEW) {
+        // use defaults for new ticket if not given
+        if (formContext && formContext === FormContext.NEW) {
             if (!parameter.some((p) => p[0] === TicketProperty.CONTACT_ID)) {
                 const currentUser = await AgentService.getInstance().getCurrentUser();
                 parameter.push([TicketProperty.CONTACT_ID, currentUser?.Contact?.ID]);
