@@ -149,7 +149,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         let closedTickets: Ticket[];
-        if (this.kanbanConfig.columns.some((c) => c.id === 'closes')) {
+        if (this.kanbanConfig.columns.some((c) => c.id === 'closed')) {
             closedTickets = await this.createTicketBoard(
                 !this.widgetConfiguration.contextDependent, 'closed', 'closed', 'Translatable#Recently Closed', true
             );
