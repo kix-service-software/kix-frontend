@@ -42,12 +42,31 @@ export class FormFactory {
 
     public static cloneField(field: FormFieldConfiguration): FormFieldConfiguration {
         const clonedField = new FormFieldConfiguration(
-            field.id, field.label, field.property, field.inputComponent, field.required, field.hint,
-            field.options, field.defaultValue, field.fieldConfigurationIds,
-            FormFactory.initFormFields(field.children), field.parentInstanceId, field.countDefault,
-            field.countMax, field.countMin, field.maxLength, field.regEx, field.regExErrorMessage,
-            field.empty, field.asStructure, field.readonly, field.placeholder, field.existingFieldId,
-            field.showLabel, field.name, field.draggableFields
+            field.id,
+            field.label,
+            field.property,
+            field.inputComponent,
+            field.required,
+            field.hint,
+            Array.isArray(field.options) ? [...field.options] : [],
+            field.defaultValue,
+            field.fieldConfigurationIds,
+            Array.isArray(field.children) ? FormFactory.initFormFields([...field.children]) : [],
+            field.parentInstanceId,
+            field.countDefault,
+            field.countMax,
+            field.countMin,
+            field.maxLength,
+            field.regEx,
+            field.regExErrorMessage,
+            field.empty,
+            field.asStructure,
+            field.readonly,
+            field.placeholder,
+            field.existingFieldId,
+            field.showLabel,
+            field.name,
+            field.draggableFields
         );
         clonedField.instanceId = IdService.generateDateBasedId();
         return clonedField;
