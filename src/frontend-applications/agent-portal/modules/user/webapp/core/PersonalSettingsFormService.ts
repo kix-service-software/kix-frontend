@@ -20,6 +20,9 @@ import { FilterType } from '../../../../model/FilterType';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { Notification } from '../../../notification/model/Notification';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 
 export class PersonalSettingsFormService extends KIXObjectFormService {
 
@@ -90,7 +93,8 @@ export class PersonalSettingsFormService extends KIXObjectFormService {
     }
 
     public async postPrepareValues(
-        parameter: Array<[string, any]>
+        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
+        formContext?: FormContext, formInstance?: FormInstance
     ): Promise<Array<[string, any]>> {
 
         const queuesParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
@@ -113,6 +117,6 @@ export class PersonalSettingsFormService extends KIXObjectFormService {
             notificationParameter[1] = JSON.stringify(notificationPreference);
         }
 
-        return parameter;
+        return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
     }
 }
