@@ -1102,6 +1102,9 @@ msgstr "Feld '{0}' enthält einen ungültigen Wert ({1})."
 msgid "Field Information"
 msgstr "Feld Informationen"
 
+msgid "Field Options:"
+msgstr "Feld Optionen"
+
 msgid "Field Type"
 msgstr "Feldtyp"
 
@@ -2647,6 +2650,9 @@ msgstr "Die eingegebene E-Mail-Adresse darf keine Systemadresse sein ({0})."
 msgid "insert filter value"
 msgstr "Filterwert eingeben"
 
+msgid "Insert into article"
+msgstr ""
+
 msgid "Internal Field"
 msgstr "Intern"
 
@@ -3155,6 +3161,9 @@ msgstr "Organisations-Suche"
 msgid "Organisation successfully created."
 msgstr "Organisation wurde erfolgreich angelegt."
 
+msgid "Organisations Dashboard"
+msgstr "Kunden Dashboard"
+
 msgid "Other"
 msgstr "Sonstiges"
 
@@ -3506,6 +3515,9 @@ msgstr "Verantwortliche Tickets"
 
 msgid "Results advanced search"
 msgstr "Ergebnis Komplexsuche"
+
+msgid "Result names"
+msgstr ""
 
 msgid "Role"
 msgstr "Rolle"
