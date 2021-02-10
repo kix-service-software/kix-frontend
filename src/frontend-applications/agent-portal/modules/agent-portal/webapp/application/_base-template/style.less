@@ -89,30 +89,30 @@
         display: grid;
         grid-template-rows: max-content 1fr;
         grid-gap: @margin-middle @margin-default;
-        grid-template-columns: [main-menu-wrapper] 4.5rem [content] minmax(40rem, auto) [sidebar-menu-wrapper] min-content;
+        grid-template-columns: [main-menu-wrapper] @main-menu-width [content] minmax(40rem, auto) [sidebar-menu-wrapper] min-content;
         min-width: 72rem;
 
         &.with-explorer {
-            grid-template-columns: [main-menu-wrapper] 4.5rem [explorer-bar] min-content [content] minmax(40rem, auto) [sidebar-menu-wrapper] min-content;
+            grid-template-columns: [main-menu-wrapper] @main-menu-width [explorer-bar] min-content [content] minmax(40rem, auto) [sidebar-menu-wrapper] min-content;
         }
 
         &.with-sidebar:not(.with-explorer) {
-            grid-template-columns: [main-menu-wrapper] 4.5rem [content] minmax(40rem, auto) [sidebar-area] min-content [sidebar-menu-wrapper] min-content;
+            grid-template-columns: [main-menu-wrapper] @main-menu-width [content] minmax(40rem, auto) [sidebar-area] min-content [sidebar-menu-wrapper] min-content;
 
             // first breakpoint - hide sidebar
             @media only screen and (max-width: 1475px) {
-                grid-template-columns: [main-menu-wrapper] 4.5rem [content] minmax(40rem, auto) [sidebar-menu-wrapper] min-content;
+                grid-template-columns: [main-menu-wrapper] @main-menu-width [content] minmax(40rem, auto) [sidebar-menu-wrapper] min-content;
 
                 .hide-sidebar();
             }
         }
 
         &.with-explorer.with-sidebar {
-            grid-template-columns: [main-menu-wrapper] 4.5rem [explorer-bar] min-content [content] minmax(40rem, auto) [sidebar-area] min-content [sidebar-menu-wrapper] min-content;
+            grid-template-columns: [main-menu-wrapper] @main-menu-width [explorer-bar] min-content [content] minmax(40rem, auto) [sidebar-area] min-content [sidebar-menu-wrapper] min-content;
 
             // first breakpoint - hide sidebar
             @media only screen and (max-width: 1700px) {
-                grid-template-columns: [main-menu-wrapper] 4.5rem [explorer-bar] min-content [content] minmax(40rem, auto) [sidebar-menu-wrapper] min-content;
+                grid-template-columns: [main-menu-wrapper] @main-menu-width [explorer-bar] min-content [content] minmax(40rem, auto) [sidebar-menu-wrapper] min-content;
 
                 .hide-sidebar();
             }
