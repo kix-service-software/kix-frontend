@@ -320,7 +320,24 @@ export class BrowserUtil {
 
     public static formatJSON(json) {
         if (typeof json !== 'string') {
-            json = JSON.stringify(json, undefined, 4);
+            try {
+                const replacerFunc = () => {
+                    const visited = new WeakSet();
+                    return (key: string, value: any) => {
+                        if (typeof value === 'object' && value !== null) {
+                            if (visited.has(value)) {
+                                return;
+                            }
+                            visited.add(value);
+                        }
+                        return value;
+                    };
+                };
+                json = JSON.stringify(json, replacerFunc(), 4);
+            } catch (e) {
+                console.error(e);
+                json = '';
+            }
         }
         json = json
             .replace(/&/g, '&amp;')
