@@ -187,6 +187,8 @@ export class UserLabelProvider extends LabelProvider<User> {
                             contact, property, defaultValue, translatable
                         );
                     }
+
+                    translatable = false;
                 } else {
                     displayValue = await super.getDisplayText(user, property, defaultValue, translatable);
                 }

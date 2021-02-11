@@ -52,7 +52,7 @@ export class HttpService {
 
         if (serverConfig.LOG_REQUEST_QUEUES_INTERVAL) {
             setInterval(
-                () => LoggingService.getInstance().info(`HTTP Request Queue Length: ${this.requestCounter}`),
+                () => LoggingService.getInstance().debug(`HTTP Request Queue Length: ${this.requestCounter}`),
                 serverConfig.LOG_REQUEST_QUEUES_INTERVAL
             );
         }
