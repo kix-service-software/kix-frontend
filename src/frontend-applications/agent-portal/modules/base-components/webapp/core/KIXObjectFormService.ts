@@ -94,7 +94,7 @@ export abstract class KIXObjectFormService {
             await this.handleCountValues(formFields);
         } else if (formContext === FormContext.EDIT) {
             await DynamicFieldFormUtil.getInstance().handleDynamicFieldValues(
-                formFields, kixObject, this, formFieldValues
+                formFields, kixObject, this, formFieldValues, formInstance.getObjectType()
             );
         }
 
