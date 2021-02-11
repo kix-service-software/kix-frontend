@@ -379,6 +379,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     public async buildFilter(
         criteria: FilterCriteria[], objectProperty: string, query: any, token?: string
     ): Promise<boolean> {
+        criteria = criteria.filter((c) => c?.property);
 
         const nonDynamicFieldCriteria = criteria.filter(
             (c) => !c.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
