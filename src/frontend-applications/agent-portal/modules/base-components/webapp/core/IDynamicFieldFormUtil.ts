@@ -15,6 +15,7 @@ import { ValidationResult } from './ValidationResult';
 import { CheckListItem } from '../../../dynamic-fields/webapp/core/CheckListItem';
 import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
 import { KIXObjectFormService } from './KIXObjectFormService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export interface IDynamicFieldFormUtil {
 
@@ -22,7 +23,7 @@ export interface IDynamicFieldFormUtil {
 
     handleDynamicFieldValues(
         formFields: FormFieldConfiguration[], object: KIXObject, formService: KIXObjectFormService,
-        formFieldValues: Map<string, FormFieldValue<any>>
+        formFieldValues: Map<string, FormFieldValue<any>>, objectType: KIXObjectType | string
     ): Promise<void>;
 
     handleDynamicField(
@@ -35,6 +36,6 @@ export interface IDynamicFieldFormUtil {
 
     prepareDateField(field: FormFieldConfiguration, dynamicField: DynamicField): void;
 
-    createDynamicFormField(field: FormFieldConfiguration): Promise<boolean>;
+    createDynamicFormField(field: FormFieldConfiguration, objectType: KIXObjectType | string): Promise<boolean>;
 
 }
