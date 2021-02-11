@@ -62,6 +62,9 @@ msgstr "Kontoinformationen"
 msgid "Account successfully created."
 msgstr "Konto wurde erfolgreich angelegt."
 
+msgid "Account time has to be an integer."
+msgstr ""
+
 msgid "Action"
 msgstr "Aktion"
 
@@ -295,6 +298,9 @@ msgstr "Attribute"
 msgid "Attributes to be edited"
 msgstr "Zu ändernde Attribute"
 
+msgid "Automatic time measurement"
+msgstr "Automatische Zeitmessung"
+
 msgid "Automation"
 msgstr "Automatisierung"
 
@@ -330,9 +336,6 @@ msgstr "Lesezeichen"
 
 msgid "Bulk Action"
 msgstr "Sammelaktion"
-
-msgid "Button with 3 points = Here you can find further actions"
-msgstr "Button mit 3 Punkten  =  Hier befinden sich weitere Aktionen"
 
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -433,12 +436,6 @@ msgstr "Klassendefinition"
 
 msgid "Clear"
 msgstr "Leeren"
-
-msgid ""
-"Click on the middle or right mouse button (context menu) = open window in a "
-"new tab"
-msgstr ""
-"Klick der mittleren oder rechten Maustaste  =  Fenster in neuem Tab öffnen"
 
 msgid "Close"
 msgstr "Schließen"
@@ -541,6 +538,9 @@ msgstr "Asset-Versionsvergleich"
 
 msgid "Configuration"
 msgstr "Konfiguration"
+
+msgid "Confirmation through customer signature"
+msgstr "Bestätigung durch Unterschrift des Kunden"
 
 msgid "Confirm New Password"
 msgstr "Neues Passwort bestätigen"
@@ -715,9 +715,6 @@ msgstr "(aktuelle Version)"
 
 msgid "Customer"
 msgstr "Kunde"
-
-msgid "Customer Dashboard"
-msgstr "Kunden Dashboard"
 
 msgid "Customer Login"
 msgstr "Self Service Login"
@@ -1083,6 +1080,9 @@ msgstr "Favoriten"
 msgid "Fax"
 msgstr "Fax"
 
+msgid "Features"
+msgstr "Funktionen"
+
 msgid "Feedback"
 msgstr "Feedback"
 
@@ -1098,6 +1098,15 @@ msgstr "Feld"
 #, fuzzy
 msgid "Field {0} has an invalid value ({1})."
 msgstr "Feld '{0}' enthält einen ungültigen Wert ({1})."
+
+msgid "Field Agent App"
+msgstr ""
+
+msgid "Field Agent App (Android)"
+msgstr ""
+
+msgid "Field Agent App (iOS)"
+msgstr ""
 
 msgid "Field Information"
 msgstr "Feld Informationen"
@@ -1192,10 +1201,6 @@ msgstr "Allgemeine Hinweise zum Arbeiten mit KIX 18"
 
 msgid "General information on working with KIX 18"
 msgstr "Allgemeine Hinweise zum Arbeiten mit KIX 18"
-
-msgid "Green button 'Back to' = history of your last visited pages"
-msgstr ""
-"Grüner Button „Zurück zu“  =  Historie Ihrer zuletzt aufgerufenen Seiten"
 
 msgid "Hello"
 msgstr "Hallo"
@@ -1462,8 +1467,8 @@ msgstr ""
 
 msgid "Helptext_Admin_NotificationCreate_AdditionalRecipient"
 msgstr ""
-"Wählen Sie weitere Kontakte aus oder tragen Sie eine syntaktisch korrekte E"
-"-Mail-Adresse ein, an welche die Benachrichtigung zusätzlich zu den oben "
+"Wählen Sie weitere Kontakte aus oder tragen Sie eine syntaktisch korrekte E-"
+"Mail-Adresse ein, an welche die Benachrichtigung zusätzlich zu den oben "
 "definierten Empfängern versendet werden soll."
 
 msgid "Helptext_Admin_NotificationCreate_Comment"
@@ -2008,12 +2013,12 @@ msgid "Helptext_Customer_Dashboard_Search"
 msgstr ""
 "Wenn die Tabellen abhängig sind, wird nur nach Organisationen gesucht. Ist "
 "die Abhängigkeit aufgelöst, wird nach Organisationen und Kontakten gesucht. "
-"Durchsuchbar sind die Organisations-Eigenschaften \"KNR\", \"Name\", \"URL\""
-", \"Straße\", \"PLZ\", \"Stadt\" und \"Land\" und die Kontakt-Eigenschaften "
-"\"Nutzername\", \"E-Mail\", \"Vorname\", \"Nachname\", \"Titel\", \"Telefon\""
-", \"Fax\", \"Mobil\", \"Straße\", \"Stadt\", \"Land\". Verwendung von "
-"Wildcards (*) ist möglich. Die Nutzung weiterer Sonderzeichen ist im FAQ "
-"Artikel \"Wie suche ich in KIX 18\" zu finden."
+"Durchsuchbar sind die Organisations-Eigenschaften \"KNR\", \"Name\", \"URL"
+"\", \"Straße\", \"PLZ\", \"Stadt\" und \"Land\" und die Kontakt-"
+"Eigenschaften \"Nutzername\", \"E-Mail\", \"Vorname\", \"Nachname\", \"Titel"
+"\", \"Telefon\", \"Fax\", \"Mobil\", \"Straße\", \"Stadt\", \"Land\". "
+"Verwendung von Wildcards (*) ist möglich. Die Nutzung weiterer Sonderzeichen "
+"ist im FAQ Artikel \"Wie suche ich in KIX 18\" zu finden."
 
 msgid "Helptext_Customers_ContactCreate_Avatar."
 msgstr ""
@@ -2085,9 +2090,9 @@ msgstr ""
 "Attribute: *PrimaryOrganisationID – Zahl (vorhanden, wenn Datei aus KIX-"
 "Kontakt-Export stammt) ODER *PrimaryOrganisationNumber - KNR der "
 "zugeordneten Organisation (muss bereits im KIX vorhanden sein); Firstname – "
-"Vorname; Lastname – Nachname; Title – Titel; *Email – E-Mail Adresse; Phone –"
-" Telefonnummer; Mobile – Handynummer; Fax – Faxnummer; Street - Straße; City "
-"– Stadt; ZIP - PLZ; Country – Land; Comment – Kommentar; *ValidID – "
+"Vorname; Lastname – Nachname; Title – Titel; *Email – E-Mail Adresse; Phone "
+"– Telefonnummer; Mobile – Handynummer; Fax – Faxnummer; Street - Straße; "
+"City – Stadt; ZIP - PLZ; Country – Land; Comment – Kommentar; *ValidID – "
 "Gültigkeit (1=gültig; 2=ungültig; 3=temporär ungültig) ODER *Validity - "
 "Gültigkeit (valid=gültig; invalid=ungültig; invalid-temporarily=temporär "
 "ungültig) Enthält der Datensatz keine Gültigkeit, wird dieses Attribut über "
@@ -2118,6 +2123,9 @@ msgstr ""
 "Geben Sie einen eindeutigen Identifier (z.B. KNR) für die Organisation ein."
 
 msgid "Helptext_Customers_OrganisationCreate_Street"
+msgstr ""
+
+msgid "Helptext_Customers_OrganisationCreate_Type"
 msgstr ""
 
 msgid "Helptext_Customers_OrganisationCreate_URL"
@@ -2171,6 +2179,9 @@ msgid "Helptext_FAQ_ArticleCreate_Links"
 msgstr ""
 "Verknüpfen Sie diesen Artikel mit einem Asset, einem FAQ-Artikel oder einem "
 "anderen Ticket."
+
+msgid "Helptext_FAQ_ArticleCreate_RelatedAssets"
+msgstr ""
 
 msgid "Helptext_FAQ_ArticleCreate_Solution"
 msgstr "Beschreiben Sie die Lösung des Problems so genau wie möglich."
@@ -2237,6 +2248,9 @@ msgid "Helptext_Import_ValueSeparator."
 msgstr ""
 "Ermöglicht es, die einzelnen Attribute einer Zeile voneinander zu trennen. "
 "Falls unbekannt, öffnen Sie die .csv-Datei mit einem Texteditor."
+
+msgid "Helptext_Jobs_Create_ResultNames"
+msgstr ""
 
 msgid "Helptext_PersonalSettings_MyQueues_Hint"
 msgstr ""
@@ -2578,9 +2592,6 @@ msgstr "Import"
 msgid "Import {0} {1}. Execute?"
 msgstr "Sie importieren {0} {1}. Ausführen?"
 
-msgid "Important functional elements briefly explained"
-msgstr "Wichtige Funktionselemente kurz erklärt"
-
 msgid "Import configurations"
 msgstr "Konfigurationen importieren"
 
@@ -2804,8 +2815,14 @@ msgstr "Abmelden"
 msgid "Logs"
 msgstr "Logs"
 
+msgid "Macro"
+msgstr ""
+
 msgid "Mail Account successfully fetched."
 msgstr "E-Mail-Konto wurde erfolgreich abgerufen."
+
+msgid "Management using clear checklists"
+msgstr "Führung durch übersichtliche Checklisten"
 
 msgid "Menu"
 msgstr "Modulmenü"
@@ -3125,8 +3142,8 @@ msgstr "Einmal pro Tag"
 msgid "Once per day"
 msgstr "Einmal pro Tag"
 
-msgid "Open/close at line ends = open and close elements"
-msgstr "Auf-/Zuklappen an Zeilenenden  =  Öffnen und Schließen von Elementen"
+msgid "Online and offline processing of service jobs"
+msgstr "Online- und Offline-Bearbeitung von Serviceaufträgen"
 
 msgid "Open Sidebars"
 msgstr "Geöffnete Sidebars"
@@ -3155,14 +3172,14 @@ msgstr "Organisations-Informationen"
 msgid "Organisations"
 msgstr "Organisationen"
 
+msgid "Organisations Dashboard"
+msgstr "Organisationen Dashboard"
+
 msgid "Organisation Search"
 msgstr "Organisations-Suche"
 
 msgid "Organisation successfully created."
 msgstr "Organisation wurde erfolgreich angelegt."
-
-msgid "Organisations Dashboard"
-msgstr "Organisationen Dashboard"
 
 msgid "Other"
 msgstr "Sonstiges"
@@ -3433,6 +3450,9 @@ msgstr "Verweise"
 msgid "Refresh Page"
 msgstr "Seite neu laden"
 
+msgid "Related Assets"
+msgstr ""
+
 msgid "Related Tickets"
 msgstr ""
 
@@ -3513,11 +3533,11 @@ msgstr "Verantwortlicher"
 msgid "Responsible Tickets"
 msgstr "Verantwortliche Tickets"
 
-msgid "Results advanced search"
-msgstr "Ergebnis Komplexsuche"
-
 msgid "Result names"
 msgstr ""
+
+msgid "Results advanced search"
+msgstr "Ergebnis Komplexsuche"
 
 msgid "Role"
 msgstr "Rolle"
@@ -3583,6 +3603,9 @@ msgstr ""
 
 msgid "Save Outbox Settings"
 msgstr "Postausgangseinstellungen speichern"
+
+msgid "Save photos and work notes"
+msgstr "Hinterlegen von Fotos und Arbeitsnotizen"
 
 msgid "Save Search"
 msgstr "Suche speichern"
@@ -3972,6 +3995,15 @@ msgstr "Der Job {0} wird jetzt ausgeführt. Sind Sie sicher?"
 
 msgid "The password is changed for Admin."
 msgstr ""
+
+msgid ""
+"The quick and easy way to provide technical customer service while on the "
+"go. Whether you're dealing with a technical problem or maintenance work: "
+"Switch over to paperless documentation and save both time and money."
+msgstr ""
+"Technischer Kundendienst schnell und einfach mobil. Ob technisches Problem "
+"oder eine Wartung: Steigen Sie um auf die papierlose Dokumentation und "
+"sparen Sie Zeit und Geld."
 
 msgid "The search only includes current versions."
 msgstr "Es werden nur aktuelle Versionen durchsucht."
@@ -4405,26 +4437,28 @@ msgstr "PLZ"
 msgid "ZIP"
 msgstr "PLZ"
 
-msgid "The quick and easy way to provide technical customer service while on the go. Whether you're dealing with a technical problem or maintenance work: Switch over to paperless documentation and save both time and money."
-msgstr "Technischer Kundendienst schnell und einfach mobil. Ob technisches Problem oder eine Wartung: Steigen Sie um auf die papierlose Dokumentation und sparen Sie Zeit und Geld."
+#~ msgid "Button with 3 points = Here you can find further actions"
+#~ msgstr "Button mit 3 Punkten  =  Hier befinden sich weitere Aktionen"
 
-msgid "Features"
-msgstr "Funktionen"
+#~ msgid ""
+#~ "Click on the middle or right mouse button (context menu) = open window in "
+#~ "a new tab"
+#~ msgstr ""
+#~ "Klick der mittleren oder rechten Maustaste  =  Fenster in neuem Tab öffnen"
 
-msgid "Online and offline processing of service jobs"
-msgstr "Online- und Offline-Bearbeitung von Serviceaufträgen"
+#~ msgid "Customer Dashboard"
+#~ msgstr "Kunden Dashboard"
 
-msgid "Management using clear checklists"
-msgstr "Führung durch übersichtliche Checklisten"
+#~ msgid "Green button 'Back to' = history of your last visited pages"
+#~ msgstr ""
+#~ "Grüner Button „Zurück zu“  =  Historie Ihrer zuletzt aufgerufenen Seiten"
 
-msgid "Automatic time measurement"
-msgstr "Automatische Zeitmessung"
+#~ msgid "Important functional elements briefly explained"
+#~ msgstr "Wichtige Funktionselemente kurz erklärt"
 
-msgid "Save photos and work notes"
-msgstr "Hinterlegen von Fotos und Arbeitsnotizen"
-
-msgid "Confirmation through customer signature"
-msgstr "Bestätigung durch Unterschrift des Kunden"
+#~ msgid "Open/close at line ends = open and close elements"
+#~ msgstr ""
+#~ "Auf-/Zuklappen an Zeilenenden  =  Öffnen und Schließen von Elementen"
 
 #~ msgid "Communication: Email: Email Accounts"
 #~ msgstr "Kommunikation: E-Mail: E-Mail Konten"
