@@ -16,19 +16,11 @@ import { PropertyOperator } from '../../../../modules/base-components/webapp/cor
 import { PropertyOperatorUtil } from '../../../../modules/base-components/webapp/core/PropertyOperatorUtil';
 import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
-import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
-import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
-import { FilterCriteria } from '../../../../model/FilterCriteria';
-import { DynamicFieldProperty } from '../../../dynamic-fields/model/DynamicFieldProperty';
-import { SearchOperator } from '../../../search/model/SearchOperator';
-import { FilterDataType } from '../../../../model/FilterDataType';
-import { FilterType } from '../../../../model/FilterType';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { DynamicFieldFormUtil } from '../../../base-components/webapp/core/DynamicFieldFormUtil';
 import { ValidationSeverity } from '../../../base-components/webapp/core/ValidationSeverity';
 import { ValidationResult } from '../../../base-components/webapp/core/ValidationResult';
 import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
-import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export abstract class BulkManager extends AbstractDynamicFormManager {
 
@@ -85,7 +77,7 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
         }
 
         const dfObjectValues = [];
-        const dynamicFieldValues = this.values.filter(
+        const dynamicFieldValues = edTableValues.filter(
             (v) => v.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
         );
         for (const dfValue of dynamicFieldValues) {
@@ -121,18 +113,6 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
         )];
     }
 
-    public async isMultiselect(property: string): Promise<boolean> {
-        let isMultiSelect = false;
-        const dfName = KIXObjectService.getDynamicFieldName(property);
-        if (dfName) {
-            const field = await KIXObjectService.loadDynamicField(dfName);
-            if (field && field.FieldType === DynamicFieldTypes.SELECTION && field.Config && field.Config.CountMax > 1) {
-                isMultiSelect = true;
-            }
-        }
-        return isMultiSelect;
-    }
-
     public async validate(): Promise<ValidationResult[]> {
         const dfValues = this.values.filter((v) => KIXObjectService.getDynamicFieldName(v.property));
         let validationResult: ValidationResult[] = [];
@@ -145,5 +125,29 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
         }
 
         return validationResult;
+    }
+
+    public async isMultiselect(property: string): Promise<boolean> {
+        const result = await super.isMultiselect(property);
+        if (result !== null && typeof result !== 'undefined') {
+            return result;
+        }
+
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
+            const field = await KIXObjectService.loadDynamicField(dfName);
+            if (
+                field &&
+                (
+                    field.FieldType === DynamicFieldTypes.SELECTION ||
+                    field.FieldType === DynamicFieldTypes.TICKET_REFERENCE ||
+                    field.FieldType === DynamicFieldTypes.CI_REFERENCE
+                ) &&
+                field.Config && Number(field.Config.CountMax) > 1
+            ) {
+                return true;
+            }
+        }
+        return false;
     }
 }
