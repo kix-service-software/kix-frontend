@@ -310,9 +310,12 @@ export class TicketFormService extends KIXObjectFormService {
         const options = [
             new FormFieldOption(ObjectReferenceOptions.OBJECT, objectType),
             new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, autocomplete),
-            new FormFieldOption(FormFieldOptions.SHOW_INVALID, false),
-            new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true)
+            new FormFieldOption(FormFieldOptions.SHOW_INVALID, false)
         ];
+
+        if (objectType === KIXObjectType.QUEUE) {
+            options.push(new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true));
+        }
 
         if (objectType === KIXObjectType.QUEUE) {
             options.push(
