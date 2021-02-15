@@ -197,7 +197,6 @@ export class TicketSearchFormManager extends SearchFormManager {
         const options = await super.getInputTypeOptions(property, operator);
         if (property === TicketProperty.OWNER_ID || property === TicketProperty.RESPONSIBLE_ID) {
             options.push([ObjectReferenceOptions.FREETEXT, true]);
-            options.push([ObjectReferenceOptions.AUTOCOMPLETE_PRELOAD_PATTERN, '*']);
         }
 
         return options;
