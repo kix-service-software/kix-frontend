@@ -56,10 +56,10 @@ class Component {
         }
         await this.addEmptyValue();
         if (this.manager.uniqueProperties) {
-            this.state.dynamicValues.forEach((dv) => dv.updateProperties());
+            values.forEach((dv) => dv.updateProperties());
         }
 
-        this.state.dynamicValues = [...this.state.dynamicValues];
+        this.state.dynamicValues = [...values];
     }
 
     public async onMount(): Promise<void> {
@@ -68,6 +68,9 @@ class Component {
         ]);
         if (this.manager) {
             this.manager.init();
+
+            const initPromises = [];
+            const values = [];
             for (const v of this.manager.getValues()) {
                 const formFieldValue = new DynamicFormFieldValue(
                     this.manager,
@@ -76,9 +79,11 @@ class Component {
                         v.objectType, v.readonly, v.changeable, v.id, v.additionalOptions
                     )
                 );
-                formFieldValue.init();
-                this.state.dynamicValues.push(formFieldValue);
+                initPromises.push(formFieldValue.init());
+                values.push(formFieldValue);
             }
+            await Promise.all(initPromises);
+            this.state.dynamicValues = values;
 
             this.state.options = await this.manager.getFieldOptions();
 

@@ -37,7 +37,11 @@ class Component extends FormInputComponent<any, ComponentState> {
             this.state.manager.registerListener(this.state.field.instanceId, () => {
                 const filterCriteria = [];
                 const values = this.state.manager.getValues();
-                values.forEach((v) => filterCriteria.push(searchDefinition.getFilterCriteria(v)));
+                values.forEach((v) => {
+                    if (v.value !== null && typeof v.value !== 'undefined') {
+                        filterCriteria.push(searchDefinition.getFilterCriteria(v));
+                    }
+                });
                 super.provideValue(filterCriteria, true);
             });
         }
