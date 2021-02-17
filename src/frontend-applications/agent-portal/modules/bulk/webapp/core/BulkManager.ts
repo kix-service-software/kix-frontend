@@ -132,22 +132,6 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
         if (result !== null && typeof result !== 'undefined') {
             return result;
         }
-
-        const dfName = KIXObjectService.getDynamicFieldName(property);
-        if (dfName) {
-            const field = await KIXObjectService.loadDynamicField(dfName);
-            if (
-                field &&
-                (
-                    field.FieldType === DynamicFieldTypes.SELECTION ||
-                    field.FieldType === DynamicFieldTypes.TICKET_REFERENCE ||
-                    field.FieldType === DynamicFieldTypes.CI_REFERENCE
-                ) &&
-                field.Config && Number(field.Config.CountMax) > 1
-            ) {
-                return true;
-            }
-        }
         return false;
     }
 }
