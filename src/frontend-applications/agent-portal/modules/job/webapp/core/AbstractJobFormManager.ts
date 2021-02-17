@@ -205,8 +205,13 @@ export class AbstractJobFormManager {
     protected async getMacroPage(job: Job, formInstance: FormInstance): Promise<FormPageConfiguration> {
         const groups = [];
 
+        let hasMacro = false;
         if (job && Array.isArray(job.Macros)) {
-            const macros: Macro[] = await JobService.getMacrosOfJob(this.job);
+            const macros: Macro[] = await JobService.getMacrosOfJob(this.job)
+                .catch((): Macro[] => []);
+
+            hasMacro = macros.length > 0;
+
             for (const macro of macros) {
                 const macroField = await MacroFieldCreator.createMacroField(macro, formInstance, this);
                 groups.push(
@@ -216,7 +221,9 @@ export class AbstractJobFormManager {
                     )
                 );
             }
-        } else {
+        }
+
+        if (!hasMacro) {
             const macroField = await MacroFieldCreator.createMacroField(null, formInstance, this);
             groups.push(
                 new FormGroupConfiguration(
