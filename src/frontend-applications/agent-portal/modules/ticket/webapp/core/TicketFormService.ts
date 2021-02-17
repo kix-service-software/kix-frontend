@@ -210,10 +210,9 @@ export class TicketFormService extends KIXObjectFormService {
 
             switch (field.property) {
                 case TicketProperty.CONTACT_ID:
-                    field.inputComponent = 'object-reference-input';
+                    field.inputComponent = 'ticket-input-contact';
                     field.options = [
                         ...field.options,
-                        ...this.getObjectReferenceOptions(KIXObjectType.CONTACT, true)
                     ];
                     field.label = label;
                     break;
