@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2020-12-10 12:33+0000\n"
+"PO-Revision-Date: 2021-02-11 12:46+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: English <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/en/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3\n"
+"X-Generator: Weblate 4.4\n"
 
 msgid "{0}/{1} {2} imported"
 msgstr ""
@@ -60,6 +60,9 @@ msgid "Account Information"
 msgstr ""
 
 msgid "Account successfully created."
+msgstr ""
+
+msgid "Account time has to be an integer."
 msgstr ""
 
 msgid "Action"
@@ -285,6 +288,9 @@ msgstr ""
 msgid "Attributes to be edited"
 msgstr ""
 
+msgid "Automatic time measurement"
+msgstr ""
+
 msgid "Automation"
 msgstr ""
 
@@ -319,9 +325,6 @@ msgid "Bookmarks"
 msgstr ""
 
 msgid "Bulk Action"
-msgstr ""
-
-msgid "Button with 3 points = Here you can find further actions"
 msgstr ""
 
 msgid "Cancel"
@@ -421,11 +424,6 @@ msgid "Class Definition"
 msgstr ""
 
 msgid "Clear"
-msgstr ""
-
-msgid ""
-"Click on the middle or right mouse button (context menu) = open window in a "
-"new tab"
 msgstr ""
 
 msgid "Close"
@@ -528,6 +526,9 @@ msgid "Config Item Version Compare"
 msgstr "Asset Version Compare"
 
 msgid "Configuration"
+msgstr ""
+
+msgid "Confirmation through customer signature"
 msgstr ""
 
 msgid "Confirm New Password"
@@ -702,10 +703,7 @@ msgid "(Current version)"
 msgstr ""
 
 msgid "Customer"
-msgstr ""
-
-msgid "Customer Dashboard"
-msgstr ""
+msgstr "Customer"
 
 msgid "Customer Login"
 msgstr "Self Service Login"
@@ -1070,6 +1068,9 @@ msgstr ""
 msgid "Fax"
 msgstr ""
 
+msgid "Features"
+msgstr ""
+
 msgid "Feedback"
 msgstr ""
 
@@ -1085,7 +1086,19 @@ msgstr ""
 msgid "Field {0} has an invalid value ({1})."
 msgstr ""
 
+msgid "Field Agent App"
+msgstr ""
+
+msgid "Field Agent App (Android)"
+msgstr ""
+
+msgid "Field Agent App (iOS)"
+msgstr ""
+
 msgid "Field Information"
+msgstr ""
+
+msgid "Field Options:"
 msgstr ""
 
 msgid "Field Type"
@@ -1169,9 +1182,6 @@ msgid "General information on how to work with KIX 18"
 msgstr ""
 
 msgid "General information on working with KIX 18"
-msgstr ""
-
-msgid "Green button 'Back to' = history of your last visited pages"
 msgstr ""
 
 msgid "Hello"
@@ -1405,8 +1415,9 @@ msgstr ""
 
 msgid "Helptext_Admin_NotificationCreate_AdditionalRecipient"
 msgstr ""
-"Insert a syntactically correct email address to send this notification to "
-"further recipients, additionally to the criteria defined above."
+"Choose futher contacts or insert a syntactically correct email address to "
+"send this notification to further recipients, additionally to the criteria "
+"defined above."
 
 msgid "Helptext_Admin_NotificationCreate_Comment"
 msgstr ""
@@ -2004,6 +2015,9 @@ msgstr "Insert an unique identifier (e.g. customer code) for the organisation."
 msgid "Helptext_Customers_OrganisationCreate_Street"
 msgstr ""
 
+msgid "Helptext_Customers_OrganisationCreate_Type"
+msgstr ""
+
 msgid "Helptext_Customers_OrganisationCreate_URL"
 msgstr ""
 
@@ -2048,6 +2062,9 @@ msgstr "Insert the FAQ article language."
 
 msgid "Helptext_FAQ_ArticleCreate_Links"
 msgstr "Link this FAQ article with a ticket, an asset or another FAQ article."
+
+msgid "Helptext_FAQ_ArticleCreate_RelatedAssets"
+msgstr ""
 
 msgid "Helptext_FAQ_ArticleCreate_Solution"
 msgstr ""
@@ -2111,6 +2128,12 @@ msgid "Helptext_Import_ValueSeparator."
 msgstr ""
 "Separates between the attributes of a row. If unknown, open your .csv-file "
 "with a text editor."
+
+msgid "Helptext_Jobs_Create_ResultNames"
+msgstr ""
+"An optional mapping of named results of the macro action and their variable "
+"names. The variable can be used as special placeholder in following actions "
+"like \"${VariableName}\"."
 
 msgid "Helptext_PersonalSettings_MyQueues_Hint"
 msgstr ""
@@ -2436,9 +2459,6 @@ msgstr ""
 msgid "Import {0} {1}. Execute?"
 msgstr ""
 
-msgid "Important functional elements briefly explained"
-msgstr ""
-
 msgid "Import configurations"
 msgstr ""
 
@@ -2506,6 +2526,9 @@ msgid "Inserted email address must not be a system address ({0})."
 msgstr ""
 
 msgid "insert filter value"
+msgstr ""
+
+msgid "Insert into article"
 msgstr ""
 
 msgid "Internal Field"
@@ -2658,7 +2681,13 @@ msgstr ""
 msgid "Logs"
 msgstr ""
 
+msgid "Macro"
+msgstr ""
+
 msgid "Mail Account successfully fetched."
+msgstr ""
+
+msgid "Management using clear checklists"
 msgstr ""
 
 msgid "Menu"
@@ -2979,7 +3008,7 @@ msgstr ""
 msgid "Once per day"
 msgstr ""
 
-msgid "Open/close at line ends = open and close elements"
+msgid "Online and offline processing of service jobs"
 msgstr ""
 
 msgid "Open Sidebars"
@@ -3007,6 +3036,9 @@ msgid "Organisation Information"
 msgstr ""
 
 msgid "Organisations"
+msgstr ""
+
+msgid "Organisations Dashboard"
 msgstr ""
 
 msgid "Organisation Search"
@@ -3279,6 +3311,9 @@ msgstr ""
 msgid "Refresh Page"
 msgstr ""
 
+msgid "Related Assets"
+msgstr ""
+
 msgid "Related Tickets"
 msgstr ""
 
@@ -3357,6 +3392,9 @@ msgstr ""
 msgid "Responsible Tickets"
 msgstr ""
 
+msgid "Result names"
+msgstr ""
+
 msgid "Results advanced search"
 msgstr ""
 
@@ -3421,6 +3459,9 @@ msgid "Save Organisation"
 msgstr ""
 
 msgid "Save Outbox Settings"
+msgstr ""
+
+msgid "Save photos and work notes"
 msgstr ""
 
 msgid "Save Search"
@@ -3807,6 +3848,12 @@ msgid "The Job {0} will be ran now. Are you sure?"
 msgstr ""
 
 msgid "The password is changed for Admin."
+msgstr ""
+
+msgid ""
+"The quick and easy way to provide technical customer service while on the "
+"go. Whether you're dealing with a technical problem or maintenance work: "
+"Switch over to paperless documentation and save both time and money."
 msgstr ""
 
 msgid "The search only includes current versions."
@@ -4233,6 +4280,9 @@ msgstr ""
 
 msgid "ZIP"
 msgstr ""
+
+#~ msgid "Customer Dashboard"
+#~ msgstr "Organisation Dashboard"
 
 #~ msgid "Load Config Item"
 #~ msgstr "Loading Assets"

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -14,6 +14,8 @@ import { BreadcrumbInformation } from '../../../../../model/BreadcrumbInformatio
 import { OrganisationContext } from '.';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
 export class OrganisationDetailsContext extends Context {
 
@@ -38,7 +40,9 @@ export class OrganisationDetailsContext extends Context {
     ): Promise<O> {
         let object;
         if (objectType === KIXObjectType.ORGANISATION) {
-            object = await this.loadDetailsObject<O>(KIXObjectType.ORGANISATION, null, null, true, undefined, true);
+            object = await this.loadDetailsObject<O>(KIXObjectType.ORGANISATION,
+                new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS]),
+                null, true, undefined, true);
 
             if (reload) {
                 this.listeners.forEach((l) => l.objectChanged(this.getObjectId(), object, KIXObjectType.ORGANISATION));

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -79,6 +79,15 @@ export class OrganisationLabelProvider extends LabelProvider<Organisation> {
             ? defaultValue : organisation[property];
 
         switch (property) {
+            case OrganisationProperty.NAME:
+            case OrganisationProperty.NUMBER:
+            case OrganisationProperty.STREET:
+            case OrganisationProperty.URL:
+            case OrganisationProperty.ZIP:
+            case OrganisationProperty.CITY:
+            case OrganisationProperty.COUNTRY:
+                translatable = false;
+                break;
             case OrganisationProperty.OPEN_TICKETS_COUNT:
                 displayValue = organisation.TicketStats.OpenCount.toString();
                 break;
@@ -94,7 +103,7 @@ export class OrganisationLabelProvider extends LabelProvider<Organisation> {
                 );
                 break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
+                displayValue = await super.getDisplayText(organisation, property, displayValue, translatable);
         }
 
         if (displayValue) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -51,7 +51,7 @@ export class UIModule implements IUIModule {
             ContextMode.CREATE_ADMIN, false, 'new-faq-category-dialog', ['faqcategories'],
             NewFAQCategoryDialogContext,
             [
-                new UIComponentPermission('faq/categories', [CRUD.CREATE])
+                new UIComponentPermission('system/faq/categories', [CRUD.CREATE])
             ]
         );
         ContextService.getInstance().registerContext(newFAQCategoryContext);
@@ -63,7 +63,7 @@ export class UIModule implements IUIModule {
             ContextMode.EDIT_ADMIN, false, 'edit-faq-category-dialog', ['faqcategories'],
             EditFAQCategoryDialogContext,
             [
-                new UIComponentPermission('faq/categories', [CRUD.CREATE])
+                new UIComponentPermission('system/faq/categories', [CRUD.CREATE])
             ]
         );
         ContextService.getInstance().registerContext(editFAQCategoryContext);
@@ -73,7 +73,7 @@ export class UIModule implements IUIModule {
             ContextType.MAIN, ContextMode.DETAILS,
             true, 'object-details-page', ['faqcategories'], FAQCategoryDetailsContext,
             [
-                new UIComponentPermission('faq/categories', [CRUD.READ])
+                new UIComponentPermission('system/faq/categories', [CRUD.READ])
             ]
         );
         ContextService.getInstance().registerContext(faqCategoryDetailsContextDescriptor);

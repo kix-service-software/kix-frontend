@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -68,7 +68,7 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
                 });
 
                 for (const df of dynamicFields) {
-                    const success = await this.createDynamicFormField(df);
+                    const success = await this.createDynamicFormField(df, form.objectType);
                     if (!success) {
                         const index = group.formFields.findIndex((f) => f.instanceId === df.instanceId);
                         group.formFields.splice(index, 1);
@@ -78,13 +78,15 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
         }
     }
 
-    public async createDynamicFormField(field: FormFieldConfiguration): Promise<boolean> {
+    public async createDynamicFormField(
+        field: FormFieldConfiguration, objectType: KIXObjectType | string
+    ): Promise<boolean> {
         let success = false;
         const nameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
         if (nameOption) {
             const name = nameOption.value;
             const dynamicField = await KIXObjectService.loadDynamicField(name);
-            if (dynamicField && dynamicField.ValidID === 1) {
+            if (dynamicField && dynamicField.ValidID === 1 && dynamicField.ObjectType === objectType) {
                 const config = dynamicField.Config;
                 field.countDefault = Number(config.CountDefault);
                 field.countMax = Number(config.CountMax);
@@ -253,7 +255,7 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
 
     public async handleDynamicFieldValues(
         formFields: FormFieldConfiguration[], object: KIXObject, formService: KIXObjectFormService,
-        formFieldValues: Map<string, FormFieldValue<any>>
+        formFieldValues: Map<string, FormFieldValue<any>>, objectType: KIXObjectType | string
     ): Promise<void> {
         const fields = [...formFields].filter((f) => f.property === KIXObjectProperty.DYNAMIC_FIELDS);
         for (const field of fields) {
@@ -276,7 +278,7 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
                 dynamicField = await KIXObjectService.loadDynamicField(fieldNameOption.value);
             }
 
-            if (dynamicField) {
+            if (dynamicField && dynamicField.ObjectType === objectType) {
                 if (
                     (typeof dfValue === 'undefined' || dfValue === null) &&
                     typeof dynamicField.Config === 'object' &&
@@ -324,7 +326,7 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
                         if (i === 0) {
                             formFieldValues.set(field.instanceId, new FormFieldValue(dfValue[i]));
                         } else {
-                            const newField = formService.getNewFormField(field);
+                            const newField = await formService.getNewFormField(field);
                             formFieldValues.set(newField.instanceId, new FormFieldValue(dfValue[i]));
                             const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
                             formFields.splice(index + i, 0, newField);
@@ -338,7 +340,7 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
                         const count = dfValue.length === 0 ? countDefault : field.countMin - dfValue.length;
 
                         for (let i = 1; i < count; i++) {
-                            const newField = formService.getNewFormField(field);
+                            const newField = await formService.getNewFormField(field);
                             formFieldValues.set(newField.instanceId, new FormFieldValue(null, false));
                             const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
                             formFields.splice(index, 0, newField);
@@ -359,7 +361,7 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
         const fieldNameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
         if (fieldNameOption) {
             const setValue = field.empty ? null : value.value;
-            this.setDFParameterValue(fieldNameOption.value, setValue, parameter);
+            await this.setDFParameterValue(fieldNameOption.value, setValue, parameter);
         }
         return parameter;
     }
@@ -369,8 +371,11 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
     ): Promise<Array<[string, any]>> {
         const dfName = KIXObjectService.getDynamicFieldName(property);
         if (dfName) {
-            const setValue = value ? value.value : null;
-            await this.setDFParameterValue(dfName, setValue, parameter);
+            const dynamicField = await KIXObjectService.loadDynamicField(dfName);
+            if (dynamicField) {
+                const setValue = value ? value.value : null;
+                await this.setDFParameterValue(dfName, setValue, parameter);
+            }
         }
         return parameter;
     }

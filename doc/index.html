@@ -1012,7 +1012,7 @@ if (action &amp;&amp; action.Parameters) {
 }
 return new FormFieldConfiguration(
     `job-action-${actionType}-${option.Name}`, option.Label,
-    `ACTION###${actionFieldInstanceId}###${option.Name}`,
+    `${actionFieldInstanceId}###${option.Name}`,
     &#39;text-area-input&#39;, Boolean(option.Required), option.Description, undefined,
     defaultValue
 );

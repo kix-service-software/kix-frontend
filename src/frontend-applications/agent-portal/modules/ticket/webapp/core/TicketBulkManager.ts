@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -64,6 +64,9 @@ export class TicketBulkManager extends BulkManager {
         let inputFieldType: InputFieldTypes | string = InputFieldTypes.TEXT;
         switch (property) {
             case TicketProperty.CONTACT_ID:
+            case TicketProperty.ORGANISATION_ID:
+            case TicketProperty.OWNER_ID:
+            case TicketProperty.RESPONSIBLE_ID:
                 inputFieldType = InputFieldTypes.OBJECT_REFERENCE;
                 break;
             case TicketProperty.QUEUE_ID:
@@ -71,10 +74,7 @@ export class TicketBulkManager extends BulkManager {
             case TicketProperty.TYPE_ID:
             case TicketProperty.PRIORITY_ID:
             case TicketProperty.SERVICE_ID:
-            case TicketProperty.RESPONSIBLE_ID:
-            case TicketProperty.OWNER_ID:
             case TicketProperty.LOCK_ID:
-            case TicketProperty.ORGANISATION_ID:
                 inputFieldType = InputFieldTypes.DROPDOWN;
                 break;
             case TicketProperty.PENDING_TIME:

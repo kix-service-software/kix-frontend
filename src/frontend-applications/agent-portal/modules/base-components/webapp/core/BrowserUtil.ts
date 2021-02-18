@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -24,6 +24,7 @@ import { LoadingShieldEventData } from './LoadingShieldEventData';
 import { ContextHistory } from './ContextHistory';
 import { ContextService } from './ContextService';
 import { PlaceholderService } from './PlaceholderService';
+import { InlineContent } from './InlineContent';
 
 
 export class BrowserUtil {
@@ -298,6 +299,69 @@ export class BrowserUtil {
             }
         }
         return urlParams;
+    }
+
+    public static replaceInlineContent(value: string, inlineContent: InlineContent[]): string {
+        let newString = value;
+        if (inlineContent) {
+            for (const contentItem of inlineContent) {
+                if (contentItem.contentId && contentItem.contentType) {
+                    const contentType = contentItem.contentType.replace(new RegExp('"', 'g'), '\'');
+                    const replaceString = `data:${contentType};base64,${contentItem.content}`;
+                    const contentIdLength = contentItem.contentId.length - 1;
+                    const contentId = contentItem.contentId.substring(1, contentIdLength);
+                    const regexpString = new RegExp('cid:' + contentId, 'g');
+                    newString = newString.replace(regexpString, replaceString);
+                }
+            }
+        }
+        return newString;
+    }
+
+    public static formatJSON(json) {
+        if (typeof json !== 'string') {
+            try {
+                const replacerFunc = () => {
+                    const visited = new WeakSet();
+                    return (key: string, value: any) => {
+                        if (typeof value === 'object' && value !== null) {
+                            if (visited.has(value)) {
+                                return;
+                            }
+                            visited.add(value);
+                        }
+                        return value;
+                    };
+                };
+                json = JSON.stringify(json, replacerFunc(), 4);
+            } catch (e) {
+                console.error(e);
+                json = '';
+            }
+        }
+        json = json
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+
+        const regex = /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g;
+        json = json.replace(regex, (match) => {
+            let cls = 'number';
+            if (/^"/.test(match)) {
+                if (/:$/.test(match)) {
+                    cls = 'key';
+                } else {
+                    cls = 'string';
+                }
+            } else if (/true|false/.test(match)) {
+                cls = 'boolean';
+            } else if (/null/.test(match)) {
+                cls = 'null';
+            }
+            return match;
+        });
+
+        return json;
     }
 
 }

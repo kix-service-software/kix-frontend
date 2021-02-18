@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -45,6 +45,8 @@ import { ContextMode } from '../../../../model/ContextMode';
 import { SenderType } from '../../model/SenderType';
 import { TicketLock } from '../../model/TicketLock';
 import { Watcher } from '../../model/Watcher';
+import { EventService } from '../../../base-components/webapp/core/EventService';
+import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -117,6 +119,7 @@ export class TicketService extends KIXObjectService<Ticket> {
 
     public async setArticleSeenFlag(ticketId: number, articleId: number): Promise<void> {
         await TicketSocketClient.getInstance().setArticleSeenFlag(ticketId, articleId);
+        EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
     }
 
     public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
@@ -252,7 +255,8 @@ export class TicketService extends KIXObjectService<Ticket> {
                     );
                 }
                 let users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, null, loadingOptions, null, true
+                    KIXObjectType.USER, filterIds ? filterIds.map((fid) => Number(fid)) : null,
+                    loadingOptions, null, true
                 ).catch((error) => [] as User[]);
                 if (!showInvalid) {
                     users = users.filter((s) => s.ValidID === 1);
@@ -395,7 +399,7 @@ export class TicketService extends KIXObjectService<Ticket> {
                 article.TicketID, article.ArticleID, article.bodyAttachment.ID
             );
 
-            const inlineAttachments = article.Attachments.filter((a) => a.Disposition === 'inline');
+            const inlineAttachments = article.getAttachments(true);
             for (const inlineAttachment of inlineAttachments) {
                 const attachment = await this.loadArticleAttachment(
                     article.TicketID, article.ArticleID, inlineAttachment.ID

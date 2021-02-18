@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -58,7 +58,7 @@ export class UIModule implements IUIModule {
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
             false, 'new-mail-account-dialog', ['mail-filters'], NewMailFilterDialogContext,
             [
-                new UIComponentPermission('system/communication/mailfilter', [CRUD.CREATE])
+                new UIComponentPermission('system/communication/mailfilters', [CRUD.CREATE])
             ]
         );
         ContextService.getInstance().registerContext(newMailFilterDialogContext);
@@ -72,7 +72,7 @@ export class UIModule implements IUIModule {
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
             false, 'edit-mail-filter-dialog', ['mail-filters'], EditMailFilterDialogContext,
             [
-                new UIComponentPermission('system/communication/mailfilter', [CRUD.CREATE])
+                new UIComponentPermission('system/communication/mailfilters', [CRUD.CREATE])
             ]
         );
         ContextService.getInstance().registerContext(editMailFilterDialogContext);
@@ -82,7 +82,7 @@ export class UIModule implements IUIModule {
             ContextType.MAIN, ContextMode.DETAILS,
             false, 'object-details-page', ['mail-filters'], MailFilterDetailsContext,
             [
-                new UIComponentPermission('system/communication/mailfilter', [CRUD.READ])
+                new UIComponentPermission('system/communication/mailfilters', [CRUD.READ])
             ]
         );
         ContextService.getInstance().registerContext(mailFilterDetailsContext);

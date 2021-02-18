@@ -36,7 +36,7 @@ export class MyExtendedJobFormManager extends ExtendedJobFormManager {
                 }
                 return new FormFieldConfiguration(
                     `job-action-${actionType}-${option.Name}`, option.Label,
-                    `ACTION###${actionFieldInstanceId}###${option.Name}`,
+                    `${actionFieldInstanceId}###${option.Name}`,
                     'text-area-input', Boolean(option.Required), option.Description, undefined,
                     defaultValue
                 );

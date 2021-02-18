@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -86,8 +86,6 @@ class Component {
             this.state.show = true;
             const settings: TableWidgetConfiguration = this.state.widgetConfiguration.configuration;
 
-            context.addObjectDependency(settings.objectType);
-
             this.state.showFilter = typeof settings.showFilter !== 'undefined' ? settings.showFilter : true;
 
             this.state.icon = this.state.widgetConfiguration.icon;
@@ -106,9 +104,7 @@ class Component {
                     }
 
                     if (eventId === ApplicationEvent.OBJECT_CREATED || eventId === ApplicationEvent.OBJECT_UPDATED) {
-                        if (this.state.table && data.objectType === this.state.table.getObjectType()) {
-                            this.state.table.reload(true);
-                        }
+                        this.state.table.reload(true);
                     }
 
                     if (data && this.state.table && data.tableId === this.state.table.getTableId()) {
@@ -211,11 +207,11 @@ class Component {
     private prepareFormDependency(): void {
         if (this.state.widgetConfiguration.formDependent) {
             const context = ContextService.getInstance().getActiveContext(this.contextType);
-            const formId = context.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
 
             this.formSubscriber = {
                 eventSubscriberId: IdService.generateDateBasedId('ReferencedObjectWidget'),
                 eventPublished: (data: FormValuesChangedEventData, eventId: string) => {
+                    const properties: string[] = [];
                     for (const cv of data.changedValues) {
                         let property = cv[0].property;
                         if (cv[0].property === KIXObjectProperty.DYNAMIC_FIELDS) {
@@ -226,17 +222,45 @@ class Component {
                                 property = 'DynamicFields.' + dfNameOption.value;
                             }
                         }
+                        properties.push(property);
+                    }
 
-                        if (this.state.widgetConfiguration.formDependencyProperties.some((fdp) => fdp === property)) {
-                            if (this.state.table) {
-                                this.state.table.reload();
-                            }
-                        }
+                    const relevantHandlerConfigIds = this.getRelevantHandlerConfigIds(properties);
+                    if (
+                        this.state.table &&
+                        (
+                            relevantHandlerConfigIds.length
+                            || this.state.widgetConfiguration.formDependencyProperties.some(
+                                (fdp) => properties.some((p) => p === fdp)
+                            )
+                        )
+                    ) {
+                        this.state.table.reload(null, null, relevantHandlerConfigIds);
                     }
                 }
             };
             EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
         }
+    }
+
+    private getRelevantHandlerConfigIds(properties: string[]): string[] {
+        const relevantHandlerIds = [];
+        const settings: TableWidgetConfiguration = this.state.widgetConfiguration.configuration;
+        if (
+            settings && settings.tableConfiguration
+            && Array.isArray(settings.tableConfiguration.additionalTableObjectsHandler)
+        ) {
+            settings.tableConfiguration.additionalTableObjectsHandler.forEach((handlerConfig) => {
+                if (
+                    !handlerConfig.dependencyProperties
+                    || !handlerConfig.dependencyProperties.length
+                    || handlerConfig.dependencyProperties.some((dp) => properties.some((p) => p === dp))
+                ) {
+                    relevantHandlerIds.push(handlerConfig.id);
+                }
+            });
+        }
+        return relevantHandlerIds;
     }
 
     public onDestroy(): void {
@@ -293,7 +317,8 @@ class Component {
         if (
             settings && settings.objectType || (settings.tableConfiguration && settings.tableConfiguration.objectType)
         ) {
-            this.objectType = settings.objectType || settings.tableConfiguration.objectType;
+            this.objectType = settings.tableConfiguration && settings.tableConfiguration.objectType
+                ? settings.tableConfiguration.objectType : settings.objectType; // table prior table widget
             const context = ContextService.getInstance().getActiveContext(this.contextType);
             const contextId = this.state.widgetConfiguration.contextDependent
                 ? context.getDescriptor().contextId

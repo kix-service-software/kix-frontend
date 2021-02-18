@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -506,7 +506,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return nodes;
     }
     public static async search(
-        objectType: KIXObjectType | string, searchValue: string, limit: number = 10,
+        objectType: KIXObjectType | string, searchValue: string, loadingOptions?: KIXObjectLoadingOptions,
         additionalFilter?: FilterCriteria[], onlyValidObjects: boolean = false
     ): Promise<KIXObject[]> {
         let result = [];
@@ -521,7 +521,14 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             if (Array.isArray(additionalFilter)) {
                 filter = filter.concat(additionalFilter);
             }
-            const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
+
+            if (!loadingOptions) {
+                loadingOptions = new KIXObjectLoadingOptions(filter, null, 10);
+            } else if (Array.isArray(loadingOptions.filter)) {
+                loadingOptions.filter = loadingOptions.filter.concat(filter);
+            } else {
+                loadingOptions.filter = filter;
+            }
             result = await service.loadObjects(objectType, null, loadingOptions);
         }
         return result;
@@ -637,13 +644,14 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     }
 
     public static async searchObjectTree(
-        objectType: KIXObjectType | string, property: string, searchValue: string, limit: number
+        objectType: KIXObjectType | string, property: string, searchValue: string,
+        loadingOptions: KIXObjectLoadingOptions
     ): Promise<TreeNode[]> {
 
         const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(objectType);
         if (service) {
             const objectTypeForSearch = await service.getObjectTypeForProperty(property);
-            const objects = await KIXObjectService.search(objectTypeForSearch, searchValue, limit);
+            const objects = await KIXObjectService.search(objectTypeForSearch, searchValue, loadingOptions);
             return KIXObjectService.prepareTree(objects);
         }
     }

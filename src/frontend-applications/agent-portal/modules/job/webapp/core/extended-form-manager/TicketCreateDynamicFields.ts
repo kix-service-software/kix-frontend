@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -15,7 +15,7 @@ import { JobTypes } from '../../../model/JobTypes';
 
 export class TicketCreateDynamicFields extends ExtendedJobFormManager {
 
-    public getActionOptionField(
+    public createOptionField(
         action: MacroAction, option: MacroActionTypeOption, actionType: string, actionFieldInstanceId: string,
         jobType: string
     ): FormFieldConfiguration {

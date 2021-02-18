@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -280,7 +280,7 @@ export class FormInstance {
                 this.form.objectType, ServiceType.FORM
             );
             if (service) {
-                const newField = service.getNewFormField(formField, null, withChildren);
+                const newField = await service.getNewFormField(formField, null, withChildren);
                 fields.splice(index + 1, 0, newField);
                 this.setDefaultValueAndParent([newField], formField.parent);
                 await service.updateFields(fields, this);
@@ -633,6 +633,25 @@ export class FormInstance {
         this.templateValues.clear();
         this.savedValues = null;
         this.provideFormFieldValues(values, null);
+    }
+
+    public replaceFormField(oldField: FormFieldConfiguration, newField: FormFieldConfiguration): void {
+        oldField.options = newField.options;
+        oldField.property = newField.property;
+        oldField.empty = newField.empty;
+        oldField.children = newField.children;
+        oldField.hint = newField.hint;
+        oldField.instanceId = newField.instanceId;
+        oldField.parent = newField.parent;
+        oldField.parentInstanceId = newField.parentInstanceId;
+        oldField.countDefault = newField.countDefault;
+        oldField.countMax = newField.countMax;
+        oldField.countMin = newField.countMin;
+        oldField.defaultValue = newField.defaultValue;
+        oldField.inputComponent = newField.inputComponent;
+        oldField.readonly = newField.readonly;
+        oldField.asStructure = newField.asStructure;
+        oldField.showLabel = newField.showLabel;
     }
 
 }

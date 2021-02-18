@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -119,6 +119,10 @@ export class UserLabelProvider extends LabelProvider<User> {
         let displayValue = user[property];
 
         switch (property) {
+            case UserProperty.USER_LOGIN:
+            case UserProperty.USER_COMMENT:
+                translatable = false;
+                break;
             case UserProperty.USER_LAST_LOGIN:
                 if (user.Preferences) {
                     const lastLogin = user.Preferences.find((p) => p.ID === UserProperty.USER_LAST_LOGIN);
@@ -183,6 +187,8 @@ export class UserLabelProvider extends LabelProvider<User> {
                             contact, property, defaultValue, translatable
                         );
                     }
+
+                    translatable = false;
                 } else {
                     displayValue = await super.getDisplayText(user, property, defaultValue, translatable);
                 }

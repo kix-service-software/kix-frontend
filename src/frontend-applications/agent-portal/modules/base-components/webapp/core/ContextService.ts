@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -46,6 +46,10 @@ export class ContextService {
     private activeContextType: ContextType = ContextType.MAIN;
 
     private contextExtensions: Map<string, ContextExtension[]> = new Map();
+
+    public async resetAll(): Promise<void> {
+        await ContextFactory.getInstance().clearContextInstances(this.activeMainContext);
+    }
 
     public addExtendedContext(contextId: string, extension: ContextExtension): void {
         if (!this.contextExtensions.has(contextId)) {
@@ -138,7 +142,8 @@ export class ContextService {
     public async setDialogContext(
         contextId: string, objectType?: KIXObjectType | string, contextMode?: ContextMode, objectId?: string | number,
         resetContext?: boolean, title?: string, singleTab?: boolean, icon?: string | ObjectIcon,
-        formId?: string, deleteForm: boolean = true, additionalInformation: Array<[string, any]> = []
+        formId?: string, deleteForm: boolean = true, additionalInformation: Array<[string, any]> = [],
+        urlParams?: URLSearchParams
     ): Promise<Context> {
         const oldContext = this.getActiveContext();
 
@@ -161,7 +166,7 @@ export class ContextService {
 
         if (context && context.getDescriptor().contextType === ContextType.DIALOG) {
             this.handleDialogContext(
-                context, oldContext, formId, objectType, deleteForm, title, icon, singleTab, objectId
+                context, oldContext, formId, objectType, deleteForm, title, icon, singleTab, objectId, urlParams
             );
         }
 
@@ -170,7 +175,8 @@ export class ContextService {
 
     private async handleDialogContext(
         context: Context, oldContext: Context, formId: string, objectType: KIXObjectType | string,
-        deleteForm: boolean, title: string, icon: ObjectIcon | string, singleTab: boolean, objectId?: string | number
+        deleteForm: boolean, title: string, icon: ObjectIcon | string, singleTab: boolean, objectId?: string | number,
+        urlParams?: URLSearchParams
     ): Promise<void> {
         this.activeDialogContext = context;
         this.activeContextType = ContextType.DIALOG;
@@ -193,7 +199,7 @@ export class ContextService {
             await FormService.getInstance().getFormInstance(formId);
         }
 
-        await context.initContext();
+        await context.initContext(urlParams);
 
         DialogService.getInstance().openMainDialog(
             context.getDescriptor().contextMode, context.getDescriptor().componentId,

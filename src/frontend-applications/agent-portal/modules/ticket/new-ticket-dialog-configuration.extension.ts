@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -37,8 +37,9 @@ import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
 import { ObjectReferenceOptions } from '../../modules/base-components/webapp/core/ObjectReferenceOptions';
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
 import { ModuleConfigurationService } from '../../server/services/configuration';
-import { ObjectReferenceWidgetConfiguration } from '../base-components/webapp/core/ObjectReferenceWidgetConfiguration';
+import { AdditionalTableObjectsHandlerConfiguration } from '../base-components/webapp/core/AdditionalTableObjectsHandlerConfiguration';
 import { DynamicFormFieldOption } from '../dynamic-fields/webapp/core';
+import { FAQArticleProperty } from '../faq/model/FAQArticleProperty';
 import { ObjectIcon } from '../icon/model/ObjectIcon';
 import { SearchOperator } from '../search/model/SearchOperator';
 import { ArticleProperty } from './model/ArticleProperty';
@@ -220,26 +221,59 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         const suggestedFAQWidget = new WidgetConfiguration(
             'ticket-new-dialog-suggested-faq-widget', 'Suggested FAQ', ConfigurationType.Widget,
-            'referenced-objects-widget', 'Translatable#Suggested FAQ', [], null,
-            new ObjectReferenceWidgetConfiguration(
-                'ticket-new-suggested-faq-config', 'Suggested FAQ',
-                'SuggestedFAQHandler',
-                {
-                    properties: [
-                        'Title',
-                        'Subject'
-                    ]
-                },
-                [
-                    new DefaultColumnConfiguration(
-                        null, null, null, TicketProperty.TITLE, true, false, true, false, 130, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        null, null, null, TicketProperty.TYPE_ID, false, true, true, false, 50, true, true, true
-                    )
-                ]
+            'table-widget', 'Translatable#Suggested FAQ', [], null,
+            new TableWidgetConfiguration(
+                'ticket-new-suggested-faq-table-widget', 'Suggested FAQ',
+                ConfigurationType.TableWidget, KIXObjectType.FAQ_ARTICLE, null, null,
+                new TableConfiguration(
+                    'ticket-new-suggested-faq-table-config', 'Suggested FAQ', ConfigurationType.Table,
+                    KIXObjectType.FAQ_ARTICLE,
+                    new KIXObjectLoadingOptions(
+                        [
+                            new FilterCriteria(
+                                'DynamicFields.RelatedAssets', SearchOperator.IN,
+                                FilterDataType.NUMERIC, FilterType.AND, '<KIX_TICKET_DynamicField_AffectedAsset_ObjectValue>'
+                            ),
+                            new FilterCriteria(
+                                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS,
+                                FilterDataType.NUMERIC, FilterType.AND, 1
+                            )
+                        ], null, 100, [FAQArticleProperty.VOTES]
+                    ), 10,
+                    [
+                        new DefaultColumnConfiguration(
+                            null, null, null, '', false, false, false, false, 30,
+                            false, false, false, null, false, 'faq-article-import-cell'
+                        ),
+                        new DefaultColumnConfiguration(
+                            null, null, null, '', false, false, false, false, 30,
+                            false, false, false, null, false, 'faq-article-html-preview-cell'
+                        ),
+                        new DefaultColumnConfiguration(
+                            null, null, null, FAQArticleProperty.TITLE, true, false, true, false, 260, true, false
+                        ),
+                        new DefaultColumnConfiguration(
+                            null, null, null, FAQArticleProperty.VOTES, true, false, false, false, 50, true, false
+                        ),
+                    ], null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL,
+                    null, null, null,
+                    [
+                        new AdditionalTableObjectsHandlerConfiguration(
+                            'ticket-new-suggested-faq-handler-config', 'FAQs by ticket title or subject',
+                            'SuggestedFAQHandler',
+                            {
+                                minLength: 3,
+                                onlyValid: true
+                            },
+                            [
+                                TicketProperty.TITLE,
+                                ArticleProperty.SUBJECT
+                            ]
+                        )
+                    ],
+                ), null, false, false, null
             ),
-            false, false, 'kix-icon-faq'
+            false, true, 'kix-icon-faq', false, false, true, ['DynamicFields.AffectedAsset']
         );
         configurations.push(suggestedFAQWidget);
 
@@ -361,7 +395,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
                     new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true),
-                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE_PRELOAD_PATTERN, '*'),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
                             [

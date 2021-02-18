@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -96,7 +96,10 @@ export class ContactFormService extends KIXObjectFormService {
         await super.initValues(form, formInstance, contact);
     }
 
-    protected async prePrepareForm(form: FormConfiguration, contact: Contact): Promise<void> {
+    protected async prePrepareForm(
+        form: FormConfiguration, contact: Contact, formInstance: FormInstance
+    ): Promise<void> {
+        await super.prePrepareForm(form, contact, formInstance);
         this.assignedUserId = contact ? contact.AssignedUserID : this.editUserId ? this.editUserId : null;
 
         if (form.formContext === FormContext.NEW && this.isAgentDialog) {

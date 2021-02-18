@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -288,7 +288,9 @@ export class UserService extends KIXObjectAPIService {
 
     public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         const filterProperties = [
-            KIXObjectProperty.VALID_ID
+            KIXObjectProperty.VALID_ID,
+            UserProperty.IS_AGENT,
+            UserProperty.IS_CUSTOMER
         ];
         const filterCriteria = criteria.filter((f) => filterProperties.some((fp) => f.property === fp));
         return filterCriteria;
@@ -296,7 +298,8 @@ export class UserService extends KIXObjectAPIService {
 
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         const searchProperties = [
-            UserProperty.USER_LOGIN
+            UserProperty.USER_LOGIN,
+            'Search'
         ];
 
         const searchCriteria = criteria.filter(

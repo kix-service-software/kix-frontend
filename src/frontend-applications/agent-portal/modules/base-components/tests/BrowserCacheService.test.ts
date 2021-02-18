@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -235,20 +235,23 @@ describe('BrowserCacheService', () => {
                 const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.ARTICLE);
                 expect(prefixes).exist;
                 expect(prefixes).an('array');
-                expect(prefixes.length).equals(2);
+                expect(prefixes.length).equals(3);
 
                 expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.ARTICLE)).exist;
+                expect(prefixes.find((p) => p === KIXObjectType.CURRENT_USER)).exist;
             });
 
             it('should resolve the namespace for Watcher', () => {
                 const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.WATCHER);
                 expect(prefixes).exist;
                 expect(prefixes).an('array');
-                expect(prefixes.length).equals(2);
+                expect(prefixes.length).equals(3);
 
                 expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.WATCHER)).exist;
+                expect(prefixes.find((p) => p === KIXObjectType.CURRENT_USER)).exist;
+
             });
 
         });

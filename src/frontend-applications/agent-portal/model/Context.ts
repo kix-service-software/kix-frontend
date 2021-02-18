@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -80,7 +80,9 @@ export abstract class Context {
     }
 
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
-        return;
+        if (urlParams) {
+            urlParams.forEach((value: string, key: string) => this.setAdditionalInformation(key, value));
+        }
     }
 
     public async getUrl(): Promise<string> {
@@ -89,6 +91,8 @@ export abstract class Context {
             url = this.descriptor.urlPaths[0];
             if (this.descriptor.contextMode === ContextMode.DETAILS) {
                 url += `/${this.getObjectId()}`;
+            } else if (this.descriptor.contextMode === ContextMode.CREATE) {
+                url += `?new`;
             }
         }
         return url;
@@ -104,13 +108,6 @@ export abstract class Context {
         }
         actions.sort((a, b) => SortUtil.compareNumber(a.data.Rank, b.data.Rank, SortOrder.UP, false));
         return actions;
-    }
-
-    public addObjectDependency(objectType: KIXObjectType | string): void {
-        const type = this.descriptor.kixObjectTypes.find((ot) => ot === objectType);
-        if (!type) {
-            this.descriptor.kixObjectTypes.push(objectType);
-        }
     }
 
     public async setFormObject(overwrite: boolean = true): Promise<void> {
@@ -436,7 +433,7 @@ export abstract class Context {
         return new BreadcrumbInformation(this.getIcon(), [], text);
     }
 
-    public reset(refresh?: boolean): void {
+    public reset(): void {
         this.resetAdditionalInformation();
         this.objectId = null;
         this.objectLists.clear();
