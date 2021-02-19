@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -119,6 +119,8 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
                     } else {
                         AbstractNewDialog.prototype.showValidationError.call(this, result);
                     }
+
+                    resolve();
                 } else {
 
                     let canceled = false;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,122 +7,101 @@
  * --
  */
 
-import { IObjectReferenceHandler } from '../../../base-components/webapp/core/IObjectReferenceHandler';
+import { IAdditionalTableObjectsHandler } from '../../../base-components/webapp/core/IAdditionalTableObjectsHandler';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { FAQArticle } from '../../../faq/model/FAQArticle';
 import { Ticket } from '../../model/Ticket';
 import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
 import { IKIXObjectService } from '../../../base-components/webapp/core/IKIXObjectService';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
-import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { FormService } from '../../../base-components/webapp/core/FormService';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
-import { FAQArticleProperty } from '../../../faq/model/FAQArticleProperty';
-import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
-import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
 import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
+import { AdditionalTableObjectsHandlerConfiguration } from '../../../base-components/webapp/core/AdditionalTableObjectsHandlerConfiguration';
+import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
 
-export class SuggestedFAQHandler implements IObjectReferenceHandler {
+export class SuggestedFAQHandler implements IAdditionalTableObjectsHandler {
 
-    public name: string = 'SuggestedFAQHandler';
+    public handlerId: string = 'SuggestedFAQHandler';
 
     public objectType: KIXObjectType = KIXObjectType.FAQ_ARTICLE;
 
-    public async determineObjects(ticket: Ticket, config: any): Promise<FAQArticle[]> {
+    public async determineObjects(
+        handlerConfig: AdditionalTableObjectsHandlerConfiguration, loadingOptions?: KIXObjectLoadingOptions
+    ): Promise<FAQArticle[]> {
         let articles = [];
 
-        if (ticket && config && config.properties && Array.isArray(config.properties)) {
-            let filter = [];
-            const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.FAQ_ARTICLE);
-            if (service) {
+        if (handlerConfig && Array.isArray(handlerConfig.dependencyProperties)) {
+            const context = ContextService.getInstance().getActiveContext();
+            const ticket = await context.getObject<Ticket>();
+            const formId = context.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
+            const formInstance = formId ? await FormService.getInstance().getFormInstance(formId) : null;
+            const filter: FilterCriteria[] = await this.getFilter(handlerConfig, ticket, formInstance);
 
-                const stopWords = await this.getStopWords();
+            if (filter && filter.length) {
+                if (
+                    handlerConfig.handlerConfiguration
+                    && handlerConfig.handlerConfiguration.onlyValid
+                ) {
+                    filter.push(
+                        new FilterCriteria(
+                            KIXObjectProperty.VALID_ID, SearchOperator.EQUALS,
+                            FilterDataType.NUMERIC, FilterType.AND, 1
+                        )
+                    );
+                }
+                const preparedLoadingOptions = new KIXObjectLoadingOptions(
+                    filter, null, null, loadingOptions ? loadingOptions.includes : null,
+                    loadingOptions ? loadingOptions.expands : null
+                );
+                articles = await KIXObjectService.loadObjects<FAQArticle>(
+                    KIXObjectType.FAQ_ARTICLE, null, preparedLoadingOptions
+                ).catch(() => []);
+            }
+        }
+        return articles;
+    }
 
-                const minLength = config.minLenght ? config.minLength : 3;
-                for (const p of config.properties) {
-                    if (ticket[p] && typeof ticket[p] === 'string') {
-                        const searchWords = ticket[p].replace(/;/g, '').split(' ');
+    private async getFilter(
+        handlerConfig: AdditionalTableObjectsHandlerConfiguration, ticket: Ticket, formInstance?: FormInstance
+    ): Promise<FilterCriteria[]> {
+        let filter: FilterCriteria[] = [];
+
+        const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.FAQ_ARTICLE);
+        if (service) {
+            const minLength = handlerConfig.handlerConfiguration
+                && handlerConfig.handlerConfiguration.minLenght
+                ? handlerConfig.handlerConfiguration.minLenght : 3;
+            const stopWords = await this.getStopWords();
+
+            for (const p of handlerConfig.dependencyProperties) {
+                const formField = formInstance ? formInstance.getFormFieldByProperty(p) : null;
+                if (formField) {
+                    const value = await formInstance.getFormFieldValueByProperty(p);
+                    if (value && value.value && typeof value.value === 'string') {
+                        const searchWords = value.value.replace(/;/g, '').split(' ');
                         filter = await this.buildFilterForSearchWords(
                             searchWords, service, minLength, stopWords
                         );
                     }
+                } else if (ticket && ticket[p] && typeof ticket[p] === 'string') {
+                    const searchWords = ticket[p].replace(/;/g, '').split(' ');
+                    filter = await this.buildFilterForSearchWords(
+                        searchWords, service, minLength, stopWords
+                    );
                 }
             }
-
-            if (filter && filter.length) {
-                const loadingOptions = new KIXObjectLoadingOptions(
-                    filter, null, null, [FAQArticleProperty.VOTES]
-                );
-                articles = await KIXObjectService.loadObjects<FAQArticle>(
-                    KIXObjectType.FAQ_ARTICLE, null, loadingOptions
-                ).catch(() => []);
-            }
         }
-
-        return articles;
-    }
-
-    public async determineObjectsByForm(formId: string, ticket: Ticket, config: any): Promise<FAQArticle[]> {
-        let articles = [];
-        if (config && config.properties && Array.isArray(config.properties)) {
-            const minLength = config.minLenght ? config.minLength : 3;
-            const formInstance = await FormService.getInstance().getFormInstance(formId);
-            let filter: FilterCriteria[] = [];
-            const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.FAQ_ARTICLE);
-            if (service) {
-
-                const stopWords = await this.getStopWords();
-
-                for (const p of config.properties) {
-                    const formField = formInstance.getFormFieldByProperty(p);
-                    if (formField) {
-                        const value = await formInstance.getFormFieldValueByProperty(p);
-                        if (value && value.value && typeof value.value === 'string') {
-                            const searchWords = value.value.replace(/;/g, '').split(' ');
-                            filter = await this.buildFilterForSearchWords(
-                                searchWords, service, minLength, stopWords
-                            );
-                        }
-                    } else {
-                        if (ticket && ticket[p] && typeof ticket[p] === 'string') {
-                            const searchWords = ticket[p].replace(/;/g, '').split(' ');
-                            filter = await this.buildFilterForSearchWords(
-                                searchWords, service, minLength, stopWords
-                            );
-                        }
-                    }
-                }
-            }
-
-            if (filter && filter.length) {
-                const loadingOptions = new KIXObjectLoadingOptions(
-                    filter, null, null, [FAQArticleProperty.VOTES]
-                );
-                articles = await KIXObjectService.loadObjects<FAQArticle>(
-                    KIXObjectType.FAQ_ARTICLE, null, loadingOptions
-                ).catch(() => []);
-            }
-
-        }
-        return articles;
-    }
-
-    public isPossibleFormField(formField: FormFieldConfiguration, config: any): boolean {
-        if (formField && config && config.properties && Array.isArray(config.properties)) {
-            if (formField.property === KIXObjectProperty.DYNAMIC_FIELDS) {
-                const dfNameOption = formField.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
-                if (dfNameOption) {
-                    return config.properties.some((p) => p === 'DynamicFields.' + dfNameOption.value);
-                }
-            }
-
-            return config.properties.some((p) => p === formField.property);
-        }
-
-        return false;
+        return filter;
     }
 
     private async buildFilterForSearchWords(

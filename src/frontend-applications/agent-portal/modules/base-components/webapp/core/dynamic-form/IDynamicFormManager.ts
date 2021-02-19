@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -14,6 +14,7 @@ import { InputFieldTypes } from '../InputFieldTypes';
 import { TreeNode } from '../tree';
 import { ValidationResult } from '../ValidationResult';
 import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 
 export interface IDynamicFormManager {
 
@@ -29,7 +30,9 @@ export interface IDynamicFormManager {
 
     getFieldOptions(): Promise<any[]>;
 
-    searchObjectTree(property: string, searchValue: string, limit?: number): Promise<TreeNode[]>;
+    searchObjectTree(
+        property: string, searchValue: string, loadingOptions?: KIXObjectLoadingOptions
+    ): Promise<TreeNode[]>;
 
     registerListener(listenerId: string, callback: () => void): void;
 
@@ -83,4 +86,5 @@ export interface IDynamicFormManager {
 
     hasOption(option: ObjectPropertyValueOption, property: string, operator: string): boolean;
 
+    hasAdditionalOptions(): boolean;
 }

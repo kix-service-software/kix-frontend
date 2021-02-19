@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -93,16 +93,9 @@ class Component extends AbstractNewDialog {
     }
 
     public async submit(): Promise<void> {
-        await super.submit().then(async () => {
-            // const context = await ContextService.getInstance().getContext(TicketDetailsContext.CONTEXT_ID);
-            // const ticket = await context.getObject<Ticket>(KIXObjectType.TICKET, true, [TicketProperty.ARTICLES]);
-            // if (ticket) {
-            //     const article = [...ticket.Articles].sort((a, b) => b.ArticleID - a.ArticleID)[0];
-            //     if (article.isUnsent()) {
-            //         BrowserUtil.openErrorOverlay(article.getUnsentError());
-            //     }
-            // }
-        });
+        this.state.submitted = true;
+        await super.submit().catch((e) => null);
+        this.state.submitted = false;
     }
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -38,6 +38,8 @@ import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
+import { QueueProperty } from '../../model/QueueProperty';
+import { AgentService } from '../../../user/webapp/core';
 
 export class TicketFormService extends KIXObjectFormService {
 
@@ -97,6 +99,9 @@ export class TicketFormService extends KIXObjectFormService {
                     if (channels && channels.length) {
                         value = channels[0].ID;
                     }
+                } else {
+                    value = formField.defaultValue ? Array.isArray(formField.defaultValue.value)
+                        ? formField.defaultValue.value[0] : formField.defaultValue.value : null;
                 }
                 break;
             default:
@@ -169,6 +174,25 @@ export class TicketFormService extends KIXObjectFormService {
         if (lockParameter && Array.isArray(lockParameter[1])) {
             lockParameter[1] = lockParameter[1][0];
         }
+
+        // use defaults for new ticket if not given
+        if (formContext && formContext === FormContext.NEW) {
+            if (!parameter.some((p) => p[0] === TicketProperty.CONTACT_ID)) {
+                const currentUser = await AgentService.getInstance().getCurrentUser();
+                parameter.push([TicketProperty.CONTACT_ID, currentUser?.Contact?.ID]);
+            }
+
+            if (!parameter.some((p) => p[0] === TicketProperty.ORGANISATION_ID)) {
+                const contactParameter = parameter.find((p) => p[0] === TicketProperty.CONTACT_ID);
+                if (contactParameter) {
+                    const contacts = await KIXObjectService.loadObjects<Contact>(
+                        KIXObjectType.CONTACT, [contactParameter[1]]
+                    ).catch((e) => []);
+                    parameter.push([TicketProperty.ORGANISATION_ID, contacts[0]?.PrimaryOrganisationID]);
+                }
+            }
+        }
+
         return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
     }
 
@@ -180,31 +204,49 @@ export class TicketFormService extends KIXObjectFormService {
         for (const field of formFields) {
             const label = await LabelService.getInstance().getPropertyText(field.property, KIXObjectType.TICKET);
 
+            if (!Array.isArray(field.options)) {
+                field.options = [];
+            }
+
             switch (field.property) {
                 case TicketProperty.CONTACT_ID:
-                    field.inputComponent = 'object-reference-input';
-                    field.options = this.getObjectReferenceOptions(KIXObjectType.CONTACT, true);
+                    field.inputComponent = 'ticket-input-contact';
+                    field.options = [
+                        ...field.options,
+                    ];
                     field.label = label;
                     break;
                 case TicketProperty.ORGANISATION_ID:
                     field.inputComponent = 'object-reference-input';
-                    field.options = this.getObjectReferenceOptions(KIXObjectType.ORGANISATION);
+                    field.options = [
+                        ...field.options,
+                        ...this.getObjectReferenceOptions(KIXObjectType.ORGANISATION)
+                    ];
                     field.label = label;
                     break;
                 case TicketProperty.TYPE_ID:
                     field.inputComponent = 'object-reference-input';
-                    field.options = this.getObjectReferenceOptions(KIXObjectType.TICKET_TYPE);
+                    field.options = [
+                        ...field.options,
+                        ...this.getObjectReferenceOptions(KIXObjectType.TICKET_TYPE)
+                    ];
                     field.label = label;
                     break;
                 case TicketProperty.QUEUE_ID:
                     field.inputComponent = 'object-reference-input';
-                    field.options = this.getObjectReferenceOptions(KIXObjectType.QUEUE);
+                    field.options = [
+                        ...field.options,
+                        ...this.getObjectReferenceOptions(KIXObjectType.QUEUE)
+                    ];
                     field.label = label;
                     break;
                 case TicketProperty.OWNER_ID:
                 case TicketProperty.RESPONSIBLE_ID:
                     field.inputComponent = 'object-reference-input';
-                    field.options = this.getObjectReferenceOptions(KIXObjectType.USER);
+                    field.options = [
+                        ...field.options,
+                        ...this.getObjectReferenceOptions(KIXObjectType.USER, true)
+                    ];
                     field.options.push(
                         new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                             new KIXObjectLoadingOptions(
@@ -224,7 +266,10 @@ export class TicketFormService extends KIXObjectFormService {
                     break;
                 case TicketProperty.PRIORITY_ID:
                     field.inputComponent = 'object-reference-input';
-                    field.options = this.getObjectReferenceOptions(KIXObjectType.TICKET_PRIORITY);
+                    field.options = [
+                        ...field.options,
+                        ...this.getObjectReferenceOptions(KIXObjectType.TICKET_PRIORITY)
+                    ];
                     field.label = label;
                     break;
                 case TicketProperty.LOCK_ID:
@@ -241,7 +286,10 @@ export class TicketFormService extends KIXObjectFormService {
                 case TicketProperty.STATE_ID:
                     field.label = label;
                     field.inputComponent = 'object-reference-input';
-                    field.options = this.getObjectReferenceOptions(KIXObjectType.TICKET_STATE);
+                    field.options = [
+                        ...field.options,
+                        ...this.getObjectReferenceOptions(KIXObjectType.TICKET_STATE)
+                    ];
                     break;
                 default:
             }
@@ -258,11 +306,35 @@ export class TicketFormService extends KIXObjectFormService {
     }
 
     private getObjectReferenceOptions(objectType: KIXObjectType | string, autocomplete?: boolean): FormFieldOption[] {
-        return [
+        const options = [
             new FormFieldOption(ObjectReferenceOptions.OBJECT, objectType),
             new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, autocomplete),
             new FormFieldOption(FormFieldOptions.SHOW_INVALID, false)
         ];
+
+        if (objectType === KIXObjectType.QUEUE) {
+            options.push(new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true));
+        }
+
+        if (objectType === KIXObjectType.QUEUE) {
+            options.push(
+                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                    new KIXObjectLoadingOptions(
+                        [
+                            new FilterCriteria(
+                                QueueProperty.PARENT_ID, SearchOperator.EQUALS,
+                                FilterDataType.STRING, FilterType.AND, null
+                            )
+                        ],
+                        null, null,
+                        [QueueProperty.SUB_QUEUES],
+                        [QueueProperty.SUB_QUEUES]
+                    )
+                )
+            );
+        }
+
+        return options;
     }
 
 }

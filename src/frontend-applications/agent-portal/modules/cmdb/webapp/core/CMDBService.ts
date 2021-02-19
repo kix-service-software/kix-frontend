@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -82,8 +82,12 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
     }
 
     public async searchConfigItemsByClass(
-        ciClassNames: string[], searchValue: string, limit: number = 50
+        ciClassNames: string[], searchValue: string, loadingOptions?: KIXObjectLoadingOptions
     ): Promise<ConfigItem[]> {
+        if (!loadingOptions) {
+            loadingOptions = new KIXObjectLoadingOptions(null, null, 50);
+        }
+
         const configItems = [];
 
         const loadingOptionsNumber = new KIXObjectLoadingOptions([
@@ -95,7 +99,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 ConfigItemProperty.NUMBER, SearchOperator.CONTAINS,
                 FilterDataType.STRING, FilterType.AND, searchValue
             )
-        ], null, limit);
+        ], null, loadingOptions.limit);
 
         const configItemsByNumber = await KIXObjectService.loadObjects<ConfigItem>(
             KIXObjectType.CONFIG_ITEM, null, loadingOptionsNumber, null, false
@@ -110,7 +114,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 ConfigItemProperty.NAME, SearchOperator.LIKE,
                 FilterDataType.STRING, FilterType.AND, `*${searchValue}*`
             )
-        ], null, limit);
+        ], null, loadingOptions.limit);
 
         const configItemsByName = await KIXObjectService.loadObjects<ConfigItem>(
             KIXObjectType.CONFIG_ITEM, null, loadingOptionsName, null, false

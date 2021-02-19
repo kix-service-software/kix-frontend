@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -24,6 +24,18 @@
     align-items: center;
     grid-column-gap: @dynamic-value-gap;
     margin-bottom: @margin-small;
+    align-items: start;
+    grid-row-gap: @margin-small;
+
+    .addtional-options {
+        grid-row: 2;
+        grid-column: 2 /span 3;
+
+        display: grid;
+        grid-template-columns: 15rem auto;
+
+        padding: 0 0 0 @margin-small;
+    }
 
     &.with-options:not(.no-operation) {
         grid-template-columns: @dynamic-value-columns-with-options

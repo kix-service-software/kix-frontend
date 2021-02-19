@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -110,6 +110,7 @@ class Component {
     }
 
     public async submit(): Promise<void> {
+        this.state.submitted = true;
         if (this.state.formId) {
 
             const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
@@ -120,8 +121,7 @@ class Component {
                 this.showValidationError(result);
             } else {
                 BrowserUtil.toggleLoadingShield(true, 'Translatable#Create Config Item');
-                const cmdbService
-                    = ServiceRegistry.getServiceInstance<CMDBService>(KIXObjectType.CONFIG_ITEM);
+                const cmdbService = ServiceRegistry.getServiceInstance<CMDBService>(KIXObjectType.CONFIG_ITEM);
 
                 const ciClass = await this.getCIClass(this.classId);
                 await cmdbService.createConfigItem(this.state.formId, ciClass.ID)
@@ -141,6 +141,7 @@ class Component {
                     });
             }
         }
+        this.state.submitted = false;
     }
 
     private async getCIClass(classId: number): Promise<ConfigItemClass> {

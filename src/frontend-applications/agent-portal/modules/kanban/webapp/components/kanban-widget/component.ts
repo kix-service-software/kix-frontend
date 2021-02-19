@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -149,7 +149,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         let closedTickets: Ticket[];
-        if (this.kanbanConfig.columns.some((c) => c.id === 'closes')) {
+        if (this.kanbanConfig.columns.some((c) => c.id === 'closed')) {
             closedTickets = await this.createTicketBoard(
                 !this.widgetConfiguration.contextDependent, 'closed', 'closed', 'Translatable#Recently Closed', true
             );

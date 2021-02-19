@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2020-12-16 13:35+0000\n"
+"PO-Revision-Date: 2021-02-15 11:46+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
@@ -62,6 +62,9 @@ msgstr "Kontoinformationen"
 msgid "Account successfully created."
 msgstr "Konto wurde erfolgreich angelegt."
 
+msgid "Account time has to be an integer."
+msgstr ""
+
 msgid "Action"
 msgstr "Aktion"
 
@@ -69,7 +72,7 @@ msgid "Actions"
 msgstr "Aktionen"
 
 msgid "Activate dependency to organisation"
-msgstr "Abhängigkeit zu Kunden aktivieren"
+msgstr "Abhängigkeit zu Organisationen aktivieren"
 
 msgid "Add"
 msgstr "Hinzufügen"
@@ -249,10 +252,10 @@ msgid "Assigned Contacts"
 msgstr "Zugeordnete Kontakte"
 
 msgid "Assigned Organisation"
-msgstr "Zugeordneter Kunde"
+msgstr "Zugeordnete Organisation"
 
 msgid "Assigned Organisations"
-msgstr "Zugeordnete Kunden"
+msgstr "Zugeordnete Organisationen"
 
 msgid "Assigned Roles"
 msgstr "Zugeordnete Rollen"
@@ -295,6 +298,9 @@ msgstr "Attribute"
 msgid "Attributes to be edited"
 msgstr "Zu ändernde Attribute"
 
+msgid "Automatic time measurement"
+msgstr "Automatische Zeitmessung"
+
 msgid "Automation"
 msgstr "Automatisierung"
 
@@ -330,9 +336,6 @@ msgstr "Lesezeichen"
 
 msgid "Bulk Action"
 msgstr "Sammelaktion"
-
-msgid "Button with 3 points = Here you can find further actions"
-msgstr "Button mit 3 Punkten  =  Hier befinden sich weitere Aktionen"
 
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -433,12 +436,6 @@ msgstr "Klassendefinition"
 
 msgid "Clear"
 msgstr "Leeren"
-
-msgid ""
-"Click on the middle or right mouse button (context menu) = open window in a "
-"new tab"
-msgstr ""
-"Klick der mittleren oder rechten Maustaste  =  Fenster in neuem Tab öffnen"
 
 msgid "Close"
 msgstr "Schließen"
@@ -541,6 +538,9 @@ msgstr "Asset-Versionsvergleich"
 
 msgid "Configuration"
 msgstr "Konfiguration"
+
+msgid "Confirmation through customer signature"
+msgstr "Bestätigung durch Unterschrift des Kunden"
 
 msgid "Confirm New Password"
 msgstr "Neues Passwort bestätigen"
@@ -651,7 +651,7 @@ msgid "Create Notification"
 msgstr "Benachrichtigung wird angelegt"
 
 msgid "Create Organisation"
-msgstr "Kunde wird angelegt"
+msgstr "Organisation wird angelegt"
 
 msgid "Create Priority"
 msgstr "Priorität wird angelegt"
@@ -716,9 +716,6 @@ msgstr "(aktuelle Version)"
 msgid "Customer"
 msgstr "Kunde"
 
-msgid "Customer Dashboard"
-msgstr "Kunden Dashboard"
-
 msgid "Customer Login"
 msgstr "Self Service Login"
 
@@ -768,7 +765,7 @@ msgid "Description"
 msgstr "Beschreibung"
 
 msgid "Detailed search results"
-msgstr "Detailierte Suchergebnisse"
+msgstr "Detaillierte Suchergebnisse"
 
 msgid "Dispatching"
 msgstr "Verteilung"
@@ -880,7 +877,7 @@ msgid "Edit Objects"
 msgstr "Objekte bearbeiten"
 
 msgid "Edit Organisation"
-msgstr "Kunde bearbeiten"
+msgstr "Organisation bearbeiten"
 
 msgid "Edit Personal Settings"
 msgstr "Persönliche Einstellungen bearbeiten"
@@ -1083,6 +1080,9 @@ msgstr "Favoriten"
 msgid "Fax"
 msgstr "Fax"
 
+msgid "Features"
+msgstr "Funktionen"
+
 msgid "Feedback"
 msgstr "Feedback"
 
@@ -1099,8 +1099,20 @@ msgstr "Feld"
 msgid "Field {0} has an invalid value ({1})."
 msgstr "Feld '{0}' enthält einen ungültigen Wert ({1})."
 
+msgid "Field Agent App"
+msgstr ""
+
+msgid "Field Agent App (Android)"
+msgstr ""
+
+msgid "Field Agent App (iOS)"
+msgstr ""
+
 msgid "Field Information"
 msgstr "Feld Informationen"
+
+msgid "Field Options:"
+msgstr "Feld Optionen:"
 
 msgid "Field Type"
 msgstr "Feldtyp"
@@ -1189,10 +1201,6 @@ msgstr "Allgemeine Hinweise zum Arbeiten mit KIX 18"
 
 msgid "General information on working with KIX 18"
 msgstr "Allgemeine Hinweise zum Arbeiten mit KIX 18"
-
-msgid "Green button 'Back to' = history of your last visited pages"
-msgstr ""
-"Grüner Button „Zurück zu“  =  Historie Ihrer zuletzt aufgerufenen Seiten"
 
 msgid "Hello"
 msgstr "Hallo"
@@ -1459,9 +1467,9 @@ msgstr ""
 
 msgid "Helptext_Admin_NotificationCreate_AdditionalRecipient"
 msgstr ""
-"Tragen Sie eine syntaktisch korrekte E-Mail-Adresse ein, an die die "
-"Benachrichtigung zusätzlich zu den oben definierten Empfängern versendet "
-"werden soll."
+"Wählen Sie weitere Kontakte aus oder tragen Sie eine syntaktisch korrekte E-"
+"Mail-Adresse ein, an welche die Benachrichtigung zusätzlich zu den oben "
+"definierten Empfängern versendet werden soll."
 
 msgid "Helptext_Admin_NotificationCreate_Comment"
 msgstr ""
@@ -2003,14 +2011,14 @@ msgstr ""
 
 msgid "Helptext_Customer_Dashboard_Search"
 msgstr ""
-"Wenn die Tabellen abhängig sind, wird nur nach Kunden gesucht. Ist die "
-"Abhängigkeit aufgelöst, wird nach Kunden und Kontakten gesucht. Durchsuchbar "
-"sind die Kunden-Eigenschaften \"KNR\", \"Name\", \"URL\", \"Straße\", \"PLZ"
-"\", \"Stadt\" und \"Land\" und die Kontakt-Eigenschaften \"Nutzername\", \"E-"
-"Mail\", \"Vorname\", \"Nachname\", \"Titel\", \"Telefon\", \"Fax\", \"Mobil"
-"\", \"Straße\", \"Stadt\", \"Land\". Verwendung von Wildcards (*) ist "
-"möglich. Die Nutzung weiterer Sonderzeichen ist im FAQ Artikel \"Wie suche "
-"ich in KIX 18\" zu finden."
+"Wenn die Tabellen abhängig sind, wird nur nach Organisationen gesucht. Ist "
+"die Abhängigkeit aufgelöst, wird nach Organisationen und Kontakten gesucht. "
+"Durchsuchbar sind die Organisations-Eigenschaften \"KNR\", \"Name\", \"URL"
+"\", \"Straße\", \"PLZ\", \"Stadt\" und \"Land\" und die Kontakt-"
+"Eigenschaften \"Nutzername\", \"E-Mail\", \"Vorname\", \"Nachname\", \"Titel"
+"\", \"Telefon\", \"Fax\", \"Mobil\", \"Straße\", \"Stadt\", \"Land\". "
+"Verwendung von Wildcards (*) ist möglich. Die Nutzung weiterer Sonderzeichen "
+"ist im FAQ Artikel \"Wie suche ich in KIX 18\" zu finden."
 
 msgid "Helptext_Customers_ContactCreate_Avatar."
 msgstr ""
@@ -2050,10 +2058,10 @@ msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Organisation"
 msgstr ""
-"Wählen Sie den Kunden, welchem der Kontakt zugeordnet sein soll. Bei der "
-"Eingabe von mindestens 3 Zeichen wird Ihnen eine Liste mit bereits im System "
-"registrierten Kunden vorgeschlagen. Sie können „*“ als Platzhalter "
-"verwenden.  („KNR“ und „Kundenname“ möglich)"
+"Wählen Sie die Organisation, welcher der Kontakt zugeordnet sein soll. Bei "
+"der Eingabe von mindestens 3 Zeichen wird Ihnen eine Liste mit bereits im "
+"System registrierten Organisationen vorgeschlagen. Sie können „*“ als "
+"Platzhalter verwenden.  („KNR“ und „Name“ der Organisation möglich)"
 
 msgid "Helptext_Customers_ContactCreate_Phone"
 msgstr ""
@@ -2080,15 +2088,15 @@ msgstr ""
 "(Groß- & Kleinschreibung beachten!) entsprechen. Es müssen mindestens alle "
 "Pflichtattribute (*) gefüllt sein (Ausnahme: Gültigkeit, siehe unten) "
 "Attribute: *PrimaryOrganisationID – Zahl (vorhanden, wenn Datei aus KIX-"
-"Kontakt-Export stammt) ODER *PrimaryOrganisationNumber - KNR des "
-"zugeordneten Kunden (muss bereits im KIX vorhanden sein); Firstname – "
+"Kontakt-Export stammt) ODER *PrimaryOrganisationNumber - KNR der "
+"zugeordneten Organisation (muss bereits im KIX vorhanden sein); Firstname – "
 "Vorname; Lastname – Nachname; Title – Titel; *Email – E-Mail Adresse; Phone "
 "– Telefonnummer; Mobile – Handynummer; Fax – Faxnummer; Street - Straße; "
 "City – Stadt; ZIP - PLZ; Country – Land; Comment – Kommentar; *ValidID – "
 "Gültigkeit (1=gültig; 2=ungültig; 3=temporär ungültig) ODER *Validity - "
 "Gültigkeit (valid=gültig; invalid=ungültig; invalid-temporarily=temporär "
 "ungültig) Enthält der Datensatz keine Gültigkeit, wird dieses Attribut über "
-"die Auswahl im Bereich „Wert  ersetzen“ automatisch gesetzt (kann geändert "
+"die Auswahl im Bereich „Wert ersetzen“ automatisch gesetzt (kann geändert "
 "werden)."
 
 msgid "Helptext_Customers_OrganisationCreate_Avatar."
@@ -2101,7 +2109,8 @@ msgid "Helptext_Customers_OrganisationCreate_City"
 msgstr ""
 
 msgid "Helptext_Customers_OrganisationCreate_Comment"
-msgstr "Hier können Sie zusätzliche Informationen zu dem Kunden hinterlegen."
+msgstr ""
+"Hier können Sie zusätzliche Informationen zu dieser Organisation hinterlegen."
 
 msgid "Helptext_Customers_OrganisationCreate_Country"
 msgstr ""
@@ -2111,10 +2120,12 @@ msgstr ""
 
 msgid "Helptext_Customers_OrganisationCreate_Number"
 msgstr ""
-"Geben Sie einen eindeutigen Identifier (z.B. Kundennummer) für den Kunden "
-"ein."
+"Geben Sie einen eindeutigen Identifier (z.B. KNR) für die Organisation ein."
 
 msgid "Helptext_Customers_OrganisationCreate_Street"
+msgstr ""
+
+msgid "Helptext_Customers_OrganisationCreate_Type"
 msgstr ""
 
 msgid "Helptext_Customers_OrganisationCreate_URL"
@@ -2122,24 +2133,25 @@ msgstr ""
 
 msgid "Helptext_Customers_OrganisationCreate_Validity"
 msgstr ""
-"Der Kunde kann im System nur verwendet werden, wenn er „gültig“ gesetzt ist."
+"Die Organisation kann im System nur verwendet werden, wenn sie „gültig“ "
+"gesetzt ist."
 
 msgid "Helptext_Customers_OrganisationCreate_Zip"
 msgstr ""
 
 msgid "Helptext_Customers_OrganisationImport"
 msgstr ""
-"In der CSV-Quelldatei muss die erste Zeile die internen Kundenattribute "
-"beinhalten. Diese Attribute müssen den KIX-internen Attributsnamen exakt "
-"(Groß- & Kleinschreibung beachten!) entsprechen. Es müssen mindestens alle "
-"Pflichtattribute (*) gefüllt sein (Ausnahme: Gültigkeit, siehe unten) "
-"Attribute: *CNR – Kundennummer/KNR;  *Name – Name; Url – URL/Webadresse; "
-"Street – Straße; Zip – PLZ; City – Stadt; Country – Land; Comment – "
-"Kommentar; *ValidID – Gültigkeit (1=gültig; 2=ungültig; 3=temporär ungültig) "
-"ODER *Validity - Gültigkeit valid=gültig; invalid=ungültig; invalid-"
-"temporarily=temporär ungültig) Enthält der Datensatz keine Gültigkeit, wird "
-"dieses Attribut über die Auswahl im Bereich „Wert ersetzen“ automatisch "
-"gesetzt (kann geändert werden)."
+"In der CSV-Quelldatei muss die erste Zeile die internen "
+"Organisationsattribute beinhalten. Diese Attribute müssen den KIX-internen "
+"Attributsnamen exakt (Groß- & Kleinschreibung beachten!) entsprechen. Es "
+"müssen mindestens alle Pflichtattribute (*) gefüllt sein (Ausnahme: "
+"Gültigkeit, siehe unten) Attribute: *CNR – Kundennummer/KNR; *Name – Name; "
+"Url – URL/Webadresse; Street – Straße; Zip – PLZ; City – Stadt; Country – "
+"Land; Comment – Kommentar; *ValidID – Gültigkeit (1=gültig; 2=ungültig; "
+"3=temporär ungültig) ODER *Validity - Gültigkeit valid=gültig; "
+"invalid=ungültig; invalid-temporarily=temporär ungültig) Enthält der "
+"Datensatz keine Gültigkeit, wird dieses Attribut über die Auswahl im Bereich "
+"„Wert ersetzen“ automatisch gesetzt (kann geändert werden)."
 
 msgid "Helptext_FAQ_ArticleCreate_Attachments"
 msgstr ""
@@ -2167,6 +2179,9 @@ msgid "Helptext_FAQ_ArticleCreate_Links"
 msgstr ""
 "Verknüpfen Sie diesen Artikel mit einem Asset, einem FAQ-Artikel oder einem "
 "anderen Ticket."
+
+msgid "Helptext_FAQ_ArticleCreate_RelatedAssets"
+msgstr ""
 
 msgid "Helptext_FAQ_ArticleCreate_Solution"
 msgstr "Beschreiben Sie die Lösung des Problems so genau wie möglich."
@@ -2233,6 +2248,12 @@ msgid "Helptext_Import_ValueSeparator."
 msgstr ""
 "Ermöglicht es, die einzelnen Attribute einer Zeile voneinander zu trennen. "
 "Falls unbekannt, öffnen Sie die .csv-Datei mit einem Texteditor."
+
+msgid "Helptext_Jobs_Create_ResultNames"
+msgstr ""
+"Optional können Sie hier einen Variablen-Name für das Ergebnis der Macro-"
+"Action hinterlegen. Diese Variable kann als spezieller Platzhalter "
+"\"${VariableName}\" in folgenden Aktionen verwendet werden."
 
 msgid "Helptext_PersonalSettings_MyQueues_Hint"
 msgstr ""
@@ -2325,7 +2346,7 @@ msgstr ""
 "Wählen Sie aus, ob der folgende Artikel im Self Service Portal angezeigt "
 "wird. Haben Sie oben den Kanal \"E-Mail\" gewählt und in einem der folgenden "
 "Empfänger-Felder (An, Cc oder Bcc) eine Adresse gewählt, die einem Kontakt "
-"des Kunden dieses Tickets zugeordnet ist,  wird der Haken automatisch "
+"der Organisation dieses Tickets zugeordnet ist, wird der Haken automatisch "
 "gesetzt und kann nicht entfernt werden."
 
 msgid "Helptext_Tickets_ArticleCreateEdit_Subject"
@@ -2415,11 +2436,12 @@ msgstr ""
 "Wählen Sie aus, ob der folgende Artikel im Self Service Portal angezeigt "
 "wird. Haben Sie oben den Kanal \"E-Mail\" gewählt und in einem der folgenden "
 "Empfänger-Felder (An, Cc oder Bcc) eine Adresse gewählt, die einem Kontakt "
-"des Kunden dieses Tickets zugeordnet ist,  wird der Haken automatisch "
+"der Organisation dieses Tickets zugeordnet ist, wird der Haken automatisch "
 "gesetzt und kann nicht entfernt werden."
 
 msgid "Helptext_Tickets_TicketCreate_Organisation"
-msgstr "Der Kunde wird automatisch in Abhängigkeit vom Kontakt zugeordnet."
+msgstr ""
+"Die Organisation wird automatisch in Abhängigkeit vom Kontakt zugeordnet."
 
 msgid "Helptext_Tickets_TicketCreate_Owner"
 msgstr "Wählen Sie eine Person aus, die das Ticket bearbeiten soll."
@@ -2466,7 +2488,8 @@ msgstr ""
 "berücksichtigt alle Eigenschaften des Kontakes."
 
 msgid "Helptext_Tickets_TicketEdit_Organisation"
-msgstr "Der Kunde wird automatisch in Abhängigkeit vom Kontakt zugeordnet."
+msgstr ""
+"Die Organisation wird automatisch in Abhängigkeit vom Kontakt zugeordnet."
 
 msgid "Helptext_Tickets_TicketEdit_Owner"
 msgstr "Wählen Sie eine Person aus, die das Ticket bearbeiten soll."
@@ -2572,9 +2595,6 @@ msgstr "Import"
 msgid "Import {0} {1}. Execute?"
 msgstr "Sie importieren {0} {1}. Ausführen?"
 
-msgid "Important functional elements briefly explained"
-msgstr "Wichtige Funktionselemente kurz erklärt"
-
 msgid "Import configurations"
 msgstr "Konfigurationen importieren"
 
@@ -2600,7 +2620,7 @@ msgid "Import/Export Templates"
 msgstr "Import/Export Vorlagen"
 
 msgid "Import Organisations"
-msgstr "Kunden importieren"
+msgstr "Organisationen importieren"
 
 msgid "Importstate"
 msgstr "Importstatus"
@@ -2643,6 +2663,9 @@ msgstr "Die eingegebene E-Mail-Adresse darf keine Systemadresse sein ({0})."
 
 msgid "insert filter value"
 msgstr "Filterwert eingeben"
+
+msgid "Insert into article"
+msgstr "In Artikel einfügen"
 
 msgid "Internal Field"
 msgstr "Intern"
@@ -2795,8 +2818,14 @@ msgstr "Abmelden"
 msgid "Logs"
 msgstr "Logs"
 
+msgid "Macro"
+msgstr ""
+
 msgid "Mail Account successfully fetched."
 msgstr "E-Mail-Konto wurde erfolgreich abgerufen."
+
+msgid "Management using clear checklists"
+msgstr "Führung durch übersichtliche Checklisten"
 
 msgid "Menu"
 msgstr "Modulmenü"
@@ -2916,7 +2945,7 @@ msgid "New Object"
 msgstr "Neues Objekt"
 
 msgid "New Organisation"
-msgstr "Neuer Kunde"
+msgstr "Neue Organisation"
 
 msgid "New Password"
 msgstr "Neues Passwort"
@@ -3116,8 +3145,8 @@ msgstr "Einmal pro Tag"
 msgid "Once per day"
 msgstr "Einmal pro Tag"
 
-msgid "Open/close at line ends = open and close elements"
-msgstr "Auf-/Zuklappen an Zeilenenden  =  Öffnen und Schließen von Elementen"
+msgid "Online and offline processing of service jobs"
+msgstr "Online- und Offline-Bearbeitung von Serviceaufträgen"
 
 msgid "Open Sidebars"
 msgstr "Geöffnete Sidebars"
@@ -3129,28 +3158,31 @@ msgid "Open Tickets of Contact"
 msgstr "Offene Tickets des Kontaktes"
 
 msgid "Open Tickets of Organisation"
-msgstr "Offene Tickets des Kunden"
+msgstr "Offene Tickets der Organisation"
 
 msgid "Operator"
 msgstr ""
 
 msgid "Organisation"
-msgstr "Kunde"
+msgstr "Organisation"
 
 msgid "Organisation ID"
-msgstr "Kunden ID"
+msgstr "Organisation ID"
 
 msgid "Organisation Information"
-msgstr "Kunden-Informationen"
+msgstr "Organisations-Informationen"
 
 msgid "Organisations"
-msgstr "Kunden"
+msgstr "Organisationen"
+
+msgid "Organisations Dashboard"
+msgstr "Organisationen Dashboard"
 
 msgid "Organisation Search"
-msgstr "Kunden-Suche"
+msgstr "Organisations-Suche"
 
 msgid "Organisation successfully created."
-msgstr "Kunde wurde erfolgreich angelegt."
+msgstr "Organisation wurde erfolgreich angelegt."
 
 msgid "Other"
 msgstr "Sonstiges"
@@ -3180,7 +3212,7 @@ msgid "Overview of {0} to import ({1})"
 msgstr "Übersicht zu importierende {0} ({1})"
 
 msgid "Overview Organisations"
-msgstr "Übersicht Kunden"
+msgstr "Übersicht Organisationen"
 
 msgid "Overview Ticket Priorities"
 msgstr "Tickets nach Prioritäten"
@@ -3265,7 +3297,7 @@ msgid "Please enter a search term."
 msgstr "Bitte geben Sie einen Suchbegriff ein."
 
 msgid "Please enter a search term for a organisation."
-msgstr "Bitte geben Sie einen Suchbegriff für einen Kunden ein."
+msgstr "Bitte geben Sie einen Suchbegriff für eine Organisation ein."
 
 msgid "Please logout and login again with the new user."
 msgstr ""
@@ -3421,6 +3453,9 @@ msgstr "Verweise"
 msgid "Refresh Page"
 msgstr "Seite neu laden"
 
+msgid "Related Assets"
+msgstr ""
+
 msgid "Related Tickets"
 msgstr ""
 
@@ -3440,7 +3475,7 @@ msgid "Reminder Tickets"
 msgstr "Erinnerungstickets"
 
 msgid "Remove dependency to organisation"
-msgstr "Abhängigkeit zu Kunden auflösen"
+msgstr "Abhängigkeit zur Organisation lösen"
 
 msgid "Remove Filter"
 msgstr "Filter löschen"
@@ -3500,6 +3535,9 @@ msgstr "Verantwortlicher"
 
 msgid "Responsible Tickets"
 msgstr "Verantwortliche Tickets"
+
+msgid "Result names"
+msgstr "Ergebnisbezeichnungen"
 
 msgid "Results advanced search"
 msgstr "Ergebnis Komplexsuche"
@@ -3568,6 +3606,9 @@ msgstr ""
 
 msgid "Save Outbox Settings"
 msgstr "Postausgangseinstellungen speichern"
+
+msgid "Save photos and work notes"
+msgstr "Hinterlegen von Fotos und Arbeitsnotizen"
 
 msgid "Save Search"
 msgstr "Suche speichern"
@@ -3853,7 +3894,7 @@ msgid "Superuser Account"
 msgstr "Nutzer Superuser"
 
 msgid "Switch"
-msgstr "Tauschen"
+msgstr ""
 
 msgid "Switch to customer portal."
 msgstr "Wechsel ins Self Service Portal."
@@ -3958,6 +3999,15 @@ msgstr "Der Job {0} wird jetzt ausgeführt. Sind Sie sicher?"
 msgid "The password is changed for Admin."
 msgstr ""
 
+msgid ""
+"The quick and easy way to provide technical customer service while on the "
+"go. Whether you're dealing with a technical problem or maintenance work: "
+"Switch over to paperless documentation and save both time and money."
+msgstr ""
+"Technischer Kundendienst schnell und einfach mobil. Ob technisches Problem "
+"oder eine Wartung: Steigen Sie um auf die papierlose Dokumentation und "
+"sparen Sie Zeit und Geld."
+
 msgid "The search only includes current versions."
 msgstr "Es werden nur aktuelle Versionen durchsucht."
 
@@ -4044,7 +4094,7 @@ msgid "Tickets for Assets"
 msgstr "Tickets zu Assets"
 
 msgid "Tickets for Contact"
-msgstr ""
+msgstr "Tickets zu Kontakt"
 
 msgid "Ticket: States"
 msgstr "Ticket: Status"
@@ -4389,6 +4439,29 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Button with 3 points = Here you can find further actions"
+#~ msgstr "Button mit 3 Punkten  =  Hier befinden sich weitere Aktionen"
+
+#~ msgid ""
+#~ "Click on the middle or right mouse button (context menu) = open window in "
+#~ "a new tab"
+#~ msgstr ""
+#~ "Klick der mittleren oder rechten Maustaste  =  Fenster in neuem Tab öffnen"
+
+#~ msgid "Customer Dashboard"
+#~ msgstr "Kunden Dashboard"
+
+#~ msgid "Green button 'Back to' = history of your last visited pages"
+#~ msgstr ""
+#~ "Grüner Button „Zurück zu“  =  Historie Ihrer zuletzt aufgerufenen Seiten"
+
+#~ msgid "Important functional elements briefly explained"
+#~ msgstr "Wichtige Funktionselemente kurz erklärt"
+
+#~ msgid "Open/close at line ends = open and close elements"
+#~ msgstr ""
+#~ "Auf-/Zuklappen an Zeilenenden  =  Öffnen und Schließen von Elementen"
 
 #~ msgid "Communication: Email: Email Accounts"
 #~ msgstr "Kommunikation: E-Mail: E-Mail Konten"
@@ -5134,9 +5207,6 @@ msgstr "PLZ"
 
 #~ msgid "Close window"
 #~ msgstr "Fenster schließen"
-
-#~ msgid "Organisations Dashboard"
-#~ msgstr "Kunden Dashboard"
 
 #~ msgid ""
 #~ "A contact is a person, filing a request for the customer. Enter at least "

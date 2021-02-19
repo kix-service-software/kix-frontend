@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -51,6 +51,24 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
     public useOwnSearch: boolean = false;
     public validDFTypes = [];
+
+    protected propertiesIgnoreList: string[] = [];
+
+    public async addToPropertiesIgnoreList(properties: string[]): Promise<void> {
+        properties.forEach((p) => {
+            if (!this.propertiesIgnoreList.some((ip) => ip === p)) {
+                this.propertiesIgnoreList.push(p);
+            }
+        });
+    }
+
+    public async removeFromPropertiesIgnoreList(properties: string[]): Promise<void> {
+        this.propertiesIgnoreList = this.propertiesIgnoreList.filter((ip) => !properties.some((p) => p === ip));
+    }
+
+    public filterProperties(properties: string[]): string[] {
+        return properties.filter((p) => !this.propertiesIgnoreList.some((ip) => ip === p));
+    }
 
     public async getFieldOptions(): Promise<ObjectPropertyValueOption[]> {
         return [];
@@ -156,7 +174,9 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         }
     }
 
-    public async searchObjectTree(property: string, searchValue: string, limit?: number): Promise<TreeNode[]> {
+    public async searchObjectTree(
+        property: string, searchValue: string, loadingOptions: KIXObjectLoadingOptions
+    ): Promise<TreeNode[]> {
         return [];
     }
 
@@ -172,6 +192,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             this.values[index].operator = newValue.operator;
             this.values[index].value = newValue.value;
             this.values[index].required = newValue.required;
+            this.values[index].additionalOptions = newValue.additionalOptions;
         } else {
             this.values.push(newValue);
         }
@@ -250,9 +271,9 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return '';
     }
 
-    public async getTreeNodes(property: string): Promise<TreeNode[]> {
+    public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
         for (const extendedManager of this.extendedFormManager) {
-            const result = await extendedManager.getTreeNodes(property);
+            const result = await extendedManager.getTreeNodes(property, objectIds);
             if (result) {
                 return result;
             }
@@ -460,10 +481,10 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
                     field.FieldType === DynamicFieldTypes.SELECTION ||
                     field.FieldType === DynamicFieldTypes.TICKET_REFERENCE ||
                     field.FieldType === DynamicFieldTypes.CI_REFERENCE
-                ) &&
-                field.Config && Number(field.Config.CountMax) === 1
+                )
             ) {
-                return false;
+                // return true OR false (not only one of them)
+                return field.Config && Number(field.Config.CountMax) > 1;
             }
         }
         return;
@@ -515,6 +536,10 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     }
 
     public hasOption(option: ObjectPropertyValueOption, property: string, operator: string): boolean {
+        return false;
+    }
+
+    public hasAdditionalOptions(): boolean {
         return false;
     }
 

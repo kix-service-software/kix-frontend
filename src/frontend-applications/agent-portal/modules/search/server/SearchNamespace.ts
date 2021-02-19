@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -123,7 +123,7 @@ export class SearchNamespace extends SocketNameSpace {
                 if (data.name && search[data.name]) {
                     delete search[data.name];
                     const value = JSON.stringify(search);
-                    UserService.getInstance().setPreferences(token, 'SearchNamespace', [[preferenceId, value]]);
+                    await UserService.getInstance().setPreferences(token, 'SearchNamespace', [[preferenceId, value]]);
                 }
             }
 

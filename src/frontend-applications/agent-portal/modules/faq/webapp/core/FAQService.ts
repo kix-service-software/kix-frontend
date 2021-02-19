@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -244,35 +244,8 @@ export class FAQService extends KIXObjectService {
         if (objectType === KIXObjectType.FAQ_ARTICLE) {
             return 'faq/articles';
         } else if (objectType === KIXObjectType.FAQ_CATEGORY) {
-            return 'faq/categories';
+            return 'system/faq/categories';
         }
-    }
-
-    public async getFAQArticleInlineContent(faqArticle: FAQArticle): Promise<InlineContent[]> {
-        const inlineContent: InlineContent[] = [];
-        if (faqArticle.Attachments) {
-            const inlineAttachments = faqArticle.Attachments.filter((a) => a.Disposition === 'inline');
-            for (const attachment of inlineAttachments) {
-                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, ['Content']);
-                const faqArticleAttachmentOptions = new FAQArticleAttachmentLoadingOptions(
-                    faqArticle.ID, attachment.ID
-                );
-                const attachments = await KIXObjectService.loadObjects<Attachment>(
-                    KIXObjectType.FAQ_ARTICLE_ATTACHMENT, [attachment.ID], loadingOptions,
-                    faqArticleAttachmentOptions
-                );
-                for (const attachmentItem of attachments) {
-                    if (attachment.ID === attachmentItem.ID) {
-                        attachment.Content = attachmentItem.Content;
-                    }
-                }
-            }
-
-            inlineAttachments.forEach(
-                (a) => inlineContent.push(new InlineContent(a.ContentID, a.Content, a.ContentType))
-            );
-        }
-        return inlineContent;
     }
 
     public async checkFilterValue(article: FAQArticle, criteria: UIFilterCriterion): Promise<boolean> {

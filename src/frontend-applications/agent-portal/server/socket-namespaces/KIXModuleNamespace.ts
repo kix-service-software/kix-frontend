@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -61,8 +61,6 @@ export class KIXModuleNamespace extends SocketNameSpace {
         super();
     }
 
-    private configCache: Map<string, any>;
-
     private rebuildPromise: Promise<void>;
 
     protected getNamespace(): string {
@@ -104,7 +102,6 @@ export class KIXModuleNamespace extends SocketNameSpace {
     public async rebuildConfigCache(): Promise<void> {
         if (!this.rebuildPromise) {
             this.rebuildPromise = new Promise<void>(async (resolve, reject) => {
-                this.configCache = new Map();
                 await CacheService.getInstance().deleteKeys('FormConfiguration', true);
 
                 const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
@@ -139,7 +136,6 @@ export class KIXModuleNamespace extends SocketNameSpace {
                         });
 
                         await CacheService.getInstance().set(formOption.Name, newConfig, 'FormConfiguration');
-                        this.configCache.set(formOption.Name, newConfig);
                     }
                 }
 
@@ -196,17 +192,15 @@ export class KIXModuleNamespace extends SocketNameSpace {
         let form = await CacheService.getInstance().get(data.formId, 'FormConfiguration');
 
         if (!form) {
-            if (!this.configCache) {
-                await this.rebuildConfigCache();
-            }
-            // form = await CacheService.getInstance().get(data.formId, 'FormConfiguration');
-            form = this.configCache.get(data.formId);
+            await this.rebuildConfigCache();
+            form = await CacheService.getInstance().get(data.formId, 'FormConfiguration');
         }
 
         return new SocketResponse(
             KIXModulesEvent.LOAD_FORM_CONFIGURATION_FINISHED,
             new LoadFormConfigurationResponse(data.requestId, form)
         );
+
     }
 
     private async loadReleaseInfo(data: ISocketRequest): Promise<SocketResponse<LoadReleaseInfoResponse>> {

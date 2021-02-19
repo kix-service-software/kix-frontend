@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -16,6 +16,7 @@ import { FormFieldConfiguration } from '../../../../model/configuration/FormFiel
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { Attachment } from '../../../../model/kix/Attachment';
 import { BrowserUtil } from '../../../../modules/base-components/webapp/core/BrowserUtil';
+import { FAQArticleHandler } from './FAQArticleHandler';
 
 export class FAQArticleFormService extends KIXObjectFormService {
 
@@ -48,7 +49,7 @@ export class FAQArticleFormService extends KIXObjectFormService {
                 case FAQArticleProperty.FIELD_2:
                 case FAQArticleProperty.FIELD_3:
                 case FAQArticleProperty.FIELD_6:
-                    const inlineContent = await FAQService.getInstance().getFAQArticleInlineContent(faqArticle);
+                    const inlineContent = await FAQArticleHandler.getFAQArticleInlineContent(faqArticle);
                     value = this.replaceInlineContent(faqArticle[property], inlineContent);
                     break;
                 case FAQArticleProperty.ATTACHMENTS:

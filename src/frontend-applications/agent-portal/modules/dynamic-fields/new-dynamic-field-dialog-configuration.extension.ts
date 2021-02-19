@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -100,7 +100,10 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 'Translatable#Helptext_Admin_DynamicFieldCreate_ObjectType',
                 [
                     new FormFieldOption(ObjectReferenceOptions.ADDITIONAL_NODES, [
-                        new TreeNode('Ticket', 'Ticket', 'kix-icon-ticket')
+                        new TreeNode(KIXObjectType.CONTACT, 'Contact', 'kix-icon-man-bubble'),
+                        new TreeNode(KIXObjectType.FAQ_ARTICLE, 'FAQ', 'kix-icon-faq'),
+                        new TreeNode(KIXObjectType.ORGANISATION, 'Organisation', 'kix-icon-organisation'),
+                        new TreeNode(KIXObjectType.TICKET, 'Ticket', 'kix-icon-ticket')
                     ])
                 ]
             )

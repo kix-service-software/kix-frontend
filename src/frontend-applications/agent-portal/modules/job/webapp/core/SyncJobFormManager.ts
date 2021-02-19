@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -11,6 +11,8 @@ import { AbstractJobFormManager } from './AbstractJobFormManager';
 import { FormPageConfiguration } from '../../../../model/configuration/FormPageConfiguration';
 import { ExecPlanTypes } from '../../model/ExecPlanTypes';
 import { FormContext } from '../../../../model/configuration/FormContext';
+import { Job } from '../../model/Job';
+import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 
 export class SyncJobFormManager extends AbstractJobFormManager {
 
@@ -22,14 +24,14 @@ export class SyncJobFormManager extends AbstractJobFormManager {
         return planType === ExecPlanTypes.TIME_BASED;
     }
 
-    public async getPages(formContext: FormContext): Promise<FormPageConfiguration[]> {
-        const execPlanPage = await this.getExecPlanPage(formContext);
-        const actionPage = await this.getActionPage(formContext);
+    public async getPages(job: Job, formInstance: FormInstance): Promise<FormPageConfiguration[]> {
+        const execPlanPage = await this.getExecPlanPage(formInstance);
+        const actionPage = await this.getMacroPage(job, formInstance);
         return [execPlanPage, actionPage];
     }
 
-    protected async getExecPlanPage(formContext: FormContext): Promise<FormPageConfiguration> {
-        const timeGroup = await this.getTimeGroup(formContext);
+    protected async getExecPlanPage(formInstance: FormInstance): Promise<FormPageConfiguration> {
+        const timeGroup = await this.getTimeGroup(formInstance.getFormContext());
         return new FormPageConfiguration(
             this.execPageId, 'Translatable#Execution Plan',
             undefined, undefined, undefined, [timeGroup]

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -75,6 +75,12 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         ),
         new UIComponent(
             'faq-category-info-widget', '/kix-module-faq$0/webapp/components/admin/widgets/faq-category-info-widget', []
+        ),
+        new UIComponent(
+            'faq-article-import-cell', '/kix-module-faq$0/webapp/components/faq-article-import-cell', []
+        ),
+        new UIComponent(
+            'faq-article-html-preview-cell', '/kix-module-faq$0/webapp/components/faq-article-html-preview-cell', []
         )
     ];
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -51,9 +51,9 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                         scrollInformationChanged: () => { return; },
                         additionalInformationChanged: () => { return; }
                     });
-                    this.initialized = true;
                 }
             }
+            this.initialized = true;
         }
     }
 
@@ -110,7 +110,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         return await this.getRowObjects(objects);
     }
 
-    protected async getRowObjects(objects: T[]): Promise<RowObject[]> {
+    public async getRowObjects(objects: T[]): Promise<RowObject[]> {
         const rowObjectPromises: Array<Promise<RowObject<T>>> = [];
         if (objects) {
             for (const o of objects) {
@@ -119,8 +119,12 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
                     const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
                     for (const column of columns) {
-                        const tableValue = new TableValue(column.property, o[column.property], null, null, null);
-                        values.push(tableValue);
+
+                        // ignore dynamic fields, they will be added in prepareSpecificValues
+                        if (!column.property.startsWith(`${KIXObjectProperty.DYNAMIC_FIELDS}.`)) {
+                            const tableValue = new TableValue(column.property, o[column.property], null, null, null);
+                            values.push(tableValue);
+                        }
                     }
                     await this.prepareSpecificValues(values, o);
                     const rowObject = new RowObject<T>(values, o);

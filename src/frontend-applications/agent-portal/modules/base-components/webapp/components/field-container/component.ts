@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -190,13 +190,26 @@ class FieldContainerComponent {
     public async handleDrop(index: number, event) {
         event.stopPropagation();
         event.preventDefault();
+
         const formInstance = await FormService.getInstance().getFormInstance(this.formId);
         if (formInstance && this.state.dragStartInstanceId) {
+            const fieldComponent = (this as any).getComponent(this.state.dragStartInstanceId);
+            let wasMinimized = false;
+            if (fieldComponent) {
+                wasMinimized = fieldComponent.state.minimized;
+                fieldComponent.state.minimized = true;
+            }
+
             formInstance.changeFieldOrder(this.state.dragStartInstanceId, index);
+
+            setTimeout(() => {
+                if (fieldComponent) {
+                    fieldComponent.state.minimized = wasMinimized;
+                }
+                this.state.dragStartIndex = null;
+                this.state.dragStartInstanceId = null;
+            }, 100);
         }
-        this.state.dragStartIndex = null;
-        this.state.dragStartInstanceId = null;
-        return false;
     }
 
 }

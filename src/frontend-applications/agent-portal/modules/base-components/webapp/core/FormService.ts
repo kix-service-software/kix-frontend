@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -16,6 +16,12 @@ import { FormFieldValueHandler } from './FormFieldValueHandler';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { EventService } from './EventService';
 import { FormEvent } from './FormEvent';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { ServiceRegistry } from './ServiceRegistry';
+import { KIXObjectFormService } from './KIXObjectFormService';
+import { ServiceType } from './ServiceType';
+import { FormPageConfiguration } from '../../../../model/configuration/FormPageConfiguration';
+import { FormGroupConfiguration } from '../../../../model/configuration/FormGroupConfiguration';
 
 export class FormService {
 
@@ -115,6 +121,35 @@ export class FormService {
             formId = formIdByContext[2];
         }
         return formId;
+    }
+
+    public static async createFrom(
+        formFields: FormFieldConfiguration[], objectType: KIXObjectType | string,
+        formName: string, formContext: FormContext
+    ): Promise<FormConfiguration> {
+        const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
+            objectType, ServiceType.FORM
+        );
+
+        if (service) {
+            formFields = await service.createFormFieldConfigurations(formFields);
+        }
+
+        const form = new FormConfiguration(
+            `${objectType}-template-form-${formName}`, formName, [],
+            objectType,
+            true, formContext, null,
+            [
+                new FormPageConfiguration(
+                    null, null, null, true, null,
+                    [
+                        new FormGroupConfiguration(null, null, null, null, formFields)
+                    ]
+                )
+            ]
+        );
+
+        return form;
     }
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -73,7 +73,7 @@ export class DynamicFieldFormService extends KIXObjectFormService {
                     value = Object.assign({}, value);
                     if (dynamicField.FieldType === DynamicFieldTypes.SELECTION) {
                         const possibleValueArray = [];
-                        if (value.possibleValues) {
+                        if (value.PossibleValues) {
                             Object.keys(value.PossibleValues).forEach((key) => {
                                 const newPossibleValues = {};
                                 newPossibleValues['Key'] = key;
