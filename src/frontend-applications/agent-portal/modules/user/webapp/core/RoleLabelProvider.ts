@@ -53,6 +53,10 @@ export class RoleLabelProvider extends LabelProvider<Role> {
         let displayValue = role[property];
 
         switch (property) {
+            case RoleProperty.NAME:
+            case RoleProperty.COMMENT:
+                translatable = false;
+                break;
             case RoleProperty.ID:
                 displayValue = role.Name;
                 break;

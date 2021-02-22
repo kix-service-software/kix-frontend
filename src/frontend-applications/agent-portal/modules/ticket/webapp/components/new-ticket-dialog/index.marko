@@ -14,11 +14,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <button.cancel-button
                     type="button"
                     on-click("cancel")
-                    title=state.translations["Translatable#Cancel"]>
+                    title=state.translations["Translatable#Cancel"]
+                    disabled=state.submitted>
                     <span.kix-icon-close/>
                     <translation-string pattern="Translatable#Cancel"/>
                 </button>
-                <button.submit-button type="button" on-click("submit") title=state.buttonLabel>
+                <button.submit-button
+                    type="button"
+                    on-click("submit")
+                    title=state.buttonLabel
+                    disabled=state.submitted>
                     <span.kix-icon-check/>
                     <translation-string pattern=state.buttonLabel/>
                 </button>

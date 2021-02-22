@@ -481,10 +481,10 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
                     field.FieldType === DynamicFieldTypes.SELECTION ||
                     field.FieldType === DynamicFieldTypes.TICKET_REFERENCE ||
                     field.FieldType === DynamicFieldTypes.CI_REFERENCE
-                ) &&
-                field.Config && Number(field.Config.CountMax) === 1
+                )
             ) {
-                return false;
+                // return true OR false (not only one of them)
+                return field.Config && Number(field.Config.CountMax) > 1;
             }
         }
         return;

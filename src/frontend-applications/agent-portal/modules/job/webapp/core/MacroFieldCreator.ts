@@ -235,7 +235,7 @@ export class MacroFieldCreator {
 
         resultParentField.instanceId = `${actionFieldInstanceId}###RESULTGROUP`;
         resultParentField.required = false;
-        resultParentField.hint = 'Translatable#An optional mapping of named results of the macro action and their variable names. The variable can be used as special placeholder in following actions like "${VariableName}".';
+        resultParentField.hint = 'Translatable#Helptext_Jobs_Create_ResultNames';
         resultParentField.children = fields;
         resultParentField.empty = true;
         resultParentField.asStructure = true;

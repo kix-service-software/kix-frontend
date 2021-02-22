@@ -40,7 +40,7 @@ export abstract class SocketNameSpace implements ISocketNamespace {
         const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
         if (serverConfig && serverConfig.LOG_REQUEST_QUEUES_INTERVAL) {
             setInterval(
-                () => LoggingService.getInstance().info(
+                () => LoggingService.getInstance().debug(
                     `Socket Request Queue Length (${this.getNamespace()}): ${this.requestCounter}`
                 ),
                 serverConfig.LOG_REQUEST_QUEUES_INTERVAL

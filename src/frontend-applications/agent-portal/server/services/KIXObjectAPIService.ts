@@ -379,6 +379,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     public async buildFilter(
         criteria: FilterCriteria[], objectProperty: string, query: any, token?: string
     ): Promise<boolean> {
+        criteria = criteria.filter((c) => c?.property);
 
         const nonDynamicFieldCriteria = criteria.filter(
             (c) => !c.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
@@ -458,20 +459,22 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
         const prepareCriteria = [];
         filterCriteria.forEach((c) => {
-            c.property = c.property.replace(KIXObjectProperty.DYNAMIC_FIELDS + '.', 'DynamicField_');
-            switch (c.operator) {
-                case SearchOperator.BETWEEN:
-                    if (c.value) {
-                        prepareCriteria.push(new FilterCriteria(
-                            c.property, SearchOperator.GREATER_THAN_OR_EQUAL, c.type, c.filterType, c.value[0]
-                        ));
-                        prepareCriteria.push(new FilterCriteria(
-                            c.property, SearchOperator.LESS_THAN_OR_EQUAL, c.type, c.filterType, c.value[1]
-                        ));
-                    }
-                    break;
-                default:
-                    prepareCriteria.push(c);
+            if (c?.property) {
+                c.property = c.property.replace(KIXObjectProperty.DYNAMIC_FIELDS + '.', 'DynamicField_');
+                switch (c.operator) {
+                    case SearchOperator.BETWEEN:
+                        if (c.value) {
+                            prepareCriteria.push(new FilterCriteria(
+                                c.property, SearchOperator.GREATER_THAN_OR_EQUAL, c.type, c.filterType, c.value[0]
+                            ));
+                            prepareCriteria.push(new FilterCriteria(
+                                c.property, SearchOperator.LESS_THAN_OR_EQUAL, c.type, c.filterType, c.value[1]
+                            ));
+                        }
+                        break;
+                    default:
+                        prepareCriteria.push(c);
+                }
             }
         });
 

@@ -18,7 +18,8 @@ export class ComponentState extends AbstractComponentState {
         public placeholder: string = '',
         public hint: string = null,
         public loadNodes: () => Promise<TreeNode[]> = null,
-        public hasObject: boolean = false
+        public hasObject: boolean = false,
+        public submitted: boolean = false
     ) {
         super();
     }

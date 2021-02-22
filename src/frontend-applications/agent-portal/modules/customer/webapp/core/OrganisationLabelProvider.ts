@@ -79,6 +79,15 @@ export class OrganisationLabelProvider extends LabelProvider<Organisation> {
             ? defaultValue : organisation[property];
 
         switch (property) {
+            case OrganisationProperty.NAME:
+            case OrganisationProperty.NUMBER:
+            case OrganisationProperty.STREET:
+            case OrganisationProperty.URL:
+            case OrganisationProperty.ZIP:
+            case OrganisationProperty.CITY:
+            case OrganisationProperty.COUNTRY:
+                translatable = false;
+                break;
             case OrganisationProperty.OPEN_TICKETS_COUNT:
                 displayValue = organisation.TicketStats.OpenCount.toString();
                 break;

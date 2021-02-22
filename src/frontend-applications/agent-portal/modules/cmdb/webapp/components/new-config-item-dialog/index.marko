@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <widget instanceId="new-config-item-dialog">
     <@content>
         <div.form>
@@ -18,7 +17,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </div>
                 <div.field-icon>
                     <if(state.hint)>
-                        <overlay-icon isHint=true content=state.hint title=state.translations["Translatable#Config Item Class"]/>
+                        <overlay-icon
+                            isHint=true
+                            content=state.hint
+                            title=state.translations[
+                                "Translatable#Config Item Class"
+                            ]/>
                     </if>
                 </div>
                 <div.field-input>
@@ -38,12 +42,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </if>
         </div>
         <div.dialog-button-container>
-            <button.cancel-button type="button" on-click("cancel") title=state.translations["Translatable#Cancel"]>
+            <button.cancel-button
+                type="button"
+                on-click("cancel")
+                title=state.translations["Translatable#Cancel"]
+                disabled=state.submitted>
                 <span.kix-icon-close/>
                 <translation-string pattern="Translatable#Cancel"/>
             </button>
             <button.submit-button
-                disabled=!state.formId
+                disabled=(!state.formId || state.submitted)
                 type="button"
                 on-click("submit")
                 title=state.translations["Translatable#Save"]>

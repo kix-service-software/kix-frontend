@@ -119,6 +119,8 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
                     } else {
                         AbstractNewDialog.prototype.showValidationError.call(this, result);
                     }
+
+                    resolve();
                 } else {
 
                     let canceled = false;

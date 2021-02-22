@@ -88,7 +88,7 @@ export class DynamicFormFieldValue {
 
     public async init(): Promise<void> {
         await this.setProperty(this.value.property, false, true);
-        this.setOperator(this.value.operator);
+        await this.setOperator(this.value.operator);
         await this.setCurrentValue(undefined, true);
     }
 

@@ -175,18 +175,21 @@ export class TicketFormService extends KIXObjectFormService {
             lockParameter[1] = lockParameter[1][0];
         }
 
-        if (!parameter.some((p) => p[0] === TicketProperty.CONTACT_ID)) {
-            const currentUser = await AgentService.getInstance().getCurrentUser();
-            parameter.push([TicketProperty.CONTACT_ID, currentUser?.Contact?.ID]);
-        }
+        // use defaults for new ticket if not given
+        if (formContext && formContext === FormContext.NEW) {
+            if (!parameter.some((p) => p[0] === TicketProperty.CONTACT_ID)) {
+                const currentUser = await AgentService.getInstance().getCurrentUser();
+                parameter.push([TicketProperty.CONTACT_ID, currentUser?.Contact?.ID]);
+            }
 
-        if (!parameter.some((p) => p[0] === TicketProperty.ORGANISATION_ID)) {
-            const contactParameter = parameter.find((p) => p[0] === TicketProperty.CONTACT_ID);
-            if (contactParameter) {
-                const contacts = await KIXObjectService.loadObjects<Contact>(
-                    KIXObjectType.CONTACT, [contactParameter[1]]
-                ).catch((e) => []);
-                parameter.push([TicketProperty.ORGANISATION_ID, contacts[0]?.PrimaryOrganisationID]);
+            if (!parameter.some((p) => p[0] === TicketProperty.ORGANISATION_ID)) {
+                const contactParameter = parameter.find((p) => p[0] === TicketProperty.CONTACT_ID);
+                if (contactParameter) {
+                    const contacts = await KIXObjectService.loadObjects<Contact>(
+                        KIXObjectType.CONTACT, [contactParameter[1]]
+                    ).catch((e) => []);
+                    parameter.push([TicketProperty.ORGANISATION_ID, contacts[0]?.PrimaryOrganisationID]);
+                }
             }
         }
 
@@ -207,10 +210,9 @@ export class TicketFormService extends KIXObjectFormService {
 
             switch (field.property) {
                 case TicketProperty.CONTACT_ID:
-                    field.inputComponent = 'object-reference-input';
+                    field.inputComponent = 'ticket-input-contact';
                     field.options = [
                         ...field.options,
-                        ...this.getObjectReferenceOptions(KIXObjectType.CONTACT, true)
                     ];
                     field.label = label;
                     break;
@@ -307,9 +309,12 @@ export class TicketFormService extends KIXObjectFormService {
         const options = [
             new FormFieldOption(ObjectReferenceOptions.OBJECT, objectType),
             new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, autocomplete),
-            new FormFieldOption(FormFieldOptions.SHOW_INVALID, false),
-            new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true)
+            new FormFieldOption(FormFieldOptions.SHOW_INVALID, false)
         ];
+
+        if (objectType === KIXObjectType.QUEUE) {
+            options.push(new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true));
+        }
 
         if (objectType === KIXObjectType.QUEUE) {
             options.push(

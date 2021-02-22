@@ -48,6 +48,7 @@ describe('DynamicFieldFormUtil', () => {
                 df.Name = 'Text';
                 df.Config = dfConfig;
                 df.ValidID = name === 'valid' ? 1 : 0;
+                df.ObjectType = KIXObjectType.TICKET;
                 return df;
             };
 
@@ -97,6 +98,7 @@ describe('DynamicFieldFormUtil', () => {
                     df.Name = 'Text';
                     df.Config = dfConfig;
                     df.ValidID = 1;
+                    df.ObjectType = KIXObjectType.TICKET;
                 }
                 return df;
             };
@@ -159,6 +161,7 @@ describe('DynamicFieldFormUtil', () => {
                     df.Label = 'TextArea';
                     df.Config = dfConfig;
                     df.ValidID = 1;
+                    df.ObjectType = KIXObjectType.TICKET;
                 }
                 return df;
             };
@@ -221,6 +224,7 @@ describe('DynamicFieldFormUtil', () => {
                     df.Label = 'Date';
                     df.Config = dfConfig;
                     df.ValidID = 1;
+                    df.ObjectType = KIXObjectType.TICKET;
                 }
                 return df;
             };
@@ -311,6 +315,7 @@ describe('DynamicFieldFormUtil', () => {
                     df.Label = 'DateTime';
                     df.Config = dfConfig;
                     df.ValidID = 1;
+                    df.ObjectType = KIXObjectType.TICKET;
                 }
                 return df;
             };
@@ -391,6 +396,7 @@ describe('DynamicFieldFormUtil', () => {
                     df.Label = 'Multiselect';
                     df.Config = dfConfig;
                     df.ValidID = 1;
+                    df.ObjectType = KIXObjectType.TICKET;
                 }
                 return df;
             };
@@ -477,6 +483,7 @@ describe('DynamicFieldFormUtil', () => {
                     df.Label = 'CheckList';
                     df.Config = dfConfig;
                     df.ValidID = 1;
+                    df.ObjectType = KIXObjectType.TICKET;
                 }
                 return df;
             };

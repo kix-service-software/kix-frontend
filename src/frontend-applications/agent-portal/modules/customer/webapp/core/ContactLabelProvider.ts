@@ -202,6 +202,16 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
             ? defaultValue : contact[property];
 
         switch (property) {
+            case ContactProperty.FIRSTNAME:
+            case ContactProperty.LASTNAME:
+            case ContactProperty.STREET:
+            case ContactProperty.ZIP:
+            case ContactProperty.CITY:
+            case ContactProperty.COUNTRY:
+            case ContactProperty.MOBILE:
+            case ContactProperty.TITLE:
+                translatable = false;
+                break;
             case ContactProperty.CREATE_NEW_TICKET:
                 if (contact.ValidID === 1) {
                     const newTicketLabel = await TranslationService.translate('Translatable#New Ticket');
