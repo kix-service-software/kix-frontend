@@ -18,7 +18,7 @@ export class TicketJobFormManager extends AbstractJobFormManager {
         super();
         const searchDefinition = SearchService.getInstance().getSearchDefinition(KIXObjectType.TICKET);
         if (searchDefinition) {
-            this.filterManager = searchDefinition.createFormManager([SearchProperty.FULLTEXT]);
+            this.filterManager = searchDefinition.createFormManager([SearchProperty.FULLTEXT], false);
             this.filterManager.init = () => {
 
                 // get extended managers on init because they could be added after filterManager was created

@@ -31,8 +31,10 @@ export class TicketSearchDefinition extends SearchDefinition {
         this.formManager = new TicketSearchFormManager();
     }
 
-    public createFormManager(ignoreProperties: string[] = []): SearchFormManager {
-        return new TicketSearchFormManager(ignoreProperties);
+    public createFormManager(
+        ignoreProperties: string[] = [], validDynamicFields: boolean = true
+    ): SearchFormManager {
+        return new TicketSearchFormManager(ignoreProperties, validDynamicFields);
     }
 
     public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {

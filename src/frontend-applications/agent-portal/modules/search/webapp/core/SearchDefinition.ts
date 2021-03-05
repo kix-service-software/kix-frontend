@@ -44,7 +44,9 @@ export abstract class SearchDefinition {
         this.extendedDefinitions.push(definition);
     }
 
-    public createFormManager(ignoreProperties: string[] = []): SearchFormManager {
+    public createFormManager(
+        ignoreProperties: string[] = [], validDynamicFields: boolean = true
+    ): SearchFormManager {
         return null;
     }
 
