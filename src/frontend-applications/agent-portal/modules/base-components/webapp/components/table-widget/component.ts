@@ -182,23 +182,6 @@ class Component {
                 additionalInformationChanged: () => { return; }
             };
 
-            ContextService.getInstance().registerListener({
-                constexServiceListenerId: 'table-widget' + this.state.instanceId,
-                contextChanged: (id: string, c: Context, contextType, history: boolean, oldContext: Context) => {
-                    if (oldContext) {
-                        oldContext.unregisterListener('table-widget-' + this.state.instanceId);
-                    }
-                    if (context) {
-                        c.registerListener('table-widget-' + this.state.instanceId, this.contextListener);
-                    }
-
-                    if (this.state.table) {
-                        this.state.table.reload();
-                    }
-                },
-                contextRegistered: () => null
-            });
-
             const context = ContextService.getInstance().getActiveContext(this.contextType);
             context.registerListener('table-widget-' + this.state.instanceId, this.contextListener);
         }
@@ -273,8 +256,6 @@ class Component {
         EventService.getInstance().unsubscribe(TableEvent.RELOADED, this.subscriber);
         EventService.getInstance().unsubscribe(TableEvent.RELOAD, this.subscriber);
         EventService.getInstance().unsubscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
-
-        ContextService.getInstance().unregisterListener('table-widget' + this.state.instanceId);
 
         const context = ContextService.getInstance().getActiveContext(this.contextType);
         if (context) {
