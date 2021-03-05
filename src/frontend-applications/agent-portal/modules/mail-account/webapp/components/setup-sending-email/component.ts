@@ -88,7 +88,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     [
                         new FormFieldOption(DefaultSelectInputFormOption.NODES,
                             [
-                                new TreeNode('DoNotSendEmail', 'DoNotSendEmail'),
+                                new TreeNode('Kernel::System::Email::DoNotSendEmail', 'DoNotSendEmail'),
                                 new TreeNode('Kernel::System::Email::SMTP', 'SMTP'),
                                 new TreeNode('Kernel::System::Email::SMTPS', 'SMTPS'),
                                 new TreeNode('Kernel::System::Email::SMTPTLS', 'SMTPTLS')
