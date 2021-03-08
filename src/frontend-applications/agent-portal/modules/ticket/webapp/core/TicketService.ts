@@ -47,6 +47,7 @@ import { TicketLock } from '../../model/TicketLock';
 import { Watcher } from '../../model/Watcher';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
+import { ContextType } from '../../../../model/ContextType';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -123,11 +124,27 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
-        return [
+        const filter = [
             new FilterCriteria(
                 SearchProperty.FULLTEXT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
             )
         ];
+
+        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const object = await context?.getObject();
+        if (
+            object?.KIXObjectType === KIXObjectType.TICKET
+            && context?.getDescriptor()?.contextMode === ContextMode.DETAILS
+        ) {
+            filter.push(
+                new FilterCriteria(
+                    TicketProperty.TICKET_ID, SearchOperator.NOT_EQUALS, FilterDataType.NUMERIC,
+                    FilterType.AND, object.ObjectId
+                )
+            );
+        }
+
+        return filter;
     }
 
     public async getTreeNodes(
