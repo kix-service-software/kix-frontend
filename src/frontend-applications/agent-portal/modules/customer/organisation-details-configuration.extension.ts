@@ -32,7 +32,6 @@ import { CRUD } from '../../../../server/model/rest/CRUD';
 import { UserProperty } from '../user/model/UserProperty';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { ObjectIcon } from '../icon/model/ObjectIcon';
-import { SearchOperator } from '../search/model/SearchOperator';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -59,9 +58,9 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentId: 'icon',
                                     componentData: {
                                         icon: new ObjectIcon(
-                                            null, KIXObjectType.ORGANISATION, '<KIX_ORGANISATION_ID>', null, null, 'kix-icon-man-house'
+                                            null, KIXObjectType.ORGANISATION, '<KIX_ORG_ID>', null, null, 'kix-icon-man-house'
                                         ),
-                                        style: 'width: 5rem;height:5rem;font-size:5rem;'
+                                        style: 'max-width: 15rem;width: unset;height: unset'
                                     }
                                 }
                             ],
