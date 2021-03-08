@@ -1,6 +1,5 @@
 {
     "dependencies": [
-        "./static/font-awesome/css/all.css",
         "./style.less",
         "../../../../static/thirdparty/socket.io.js"
     ]
