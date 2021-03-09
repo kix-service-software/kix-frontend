@@ -177,19 +177,73 @@ export class TicketFormService extends KIXObjectFormService {
 
         // use defaults for new ticket if not given
         if (formContext && formContext === FormContext.NEW) {
-            if (!parameter.some((p) => p[0] === TicketProperty.CONTACT_ID)) {
+            const contactIndex = parameter.findIndex((p) => p[0] === TicketProperty.CONTACT_ID);
+            if (contactIndex === -1 || !parameter[contactIndex][1]) {
                 const currentUser = await AgentService.getInstance().getCurrentUser();
+                if (contactIndex !== -1) {
+                    parameter.splice(contactIndex, 1);
+                }
                 parameter.push([TicketProperty.CONTACT_ID, currentUser?.Contact?.ID]);
             }
 
-            if (!parameter.some((p) => p[0] === TicketProperty.ORGANISATION_ID)) {
+            const organisationIndex = parameter.findIndex((p) => p[0] === TicketProperty.ORGANISATION_ID);
+            if (organisationIndex === -1 || !parameter[organisationIndex][1]) {
                 const contactParameter = parameter.find((p) => p[0] === TicketProperty.CONTACT_ID);
                 if (contactParameter) {
                     const contacts = await KIXObjectService.loadObjects<Contact>(
                         KIXObjectType.CONTACT, [contactParameter[1]]
                     ).catch((e) => []);
+
+                    if (organisationIndex !== -1) {
+                        parameter.splice(organisationIndex, 1);
+                    }
+
                     parameter.push([TicketProperty.ORGANISATION_ID, contacts[0]?.PrimaryOrganisationID]);
                 }
+            }
+
+            const priorityIndex = parameter.findIndex((p) => p[0] === TicketProperty.PRIORITY_ID);
+            if (priorityIndex === -1 || !parameter[priorityIndex][1]) {
+                const priorityId = await TicketService.getDefaultPriorityID();
+
+                if (priorityIndex !== -1) {
+                    parameter.splice(priorityIndex, 1);
+                }
+
+                parameter.push([TicketProperty.PRIORITY_ID, priorityId]);
+            }
+
+            const queueIndex = parameter.findIndex((p) => p[0] === TicketProperty.QUEUE_ID);
+            if (queueIndex === -1 || !parameter[queueIndex][1]) {
+                const queueId = await TicketService.getDefaultQueueID();
+
+                if (queueIndex !== -1) {
+                    parameter.splice(queueIndex, 1);
+                }
+
+                parameter.push([TicketProperty.QUEUE_ID, queueId]);
+            }
+
+            const typeIndex = parameter.findIndex((p) => p[0] === TicketProperty.TYPE_ID);
+            if (typeIndex === -1 || !parameter[typeIndex][1]) {
+                const typeId = await TicketService.getDefaultTypeID();
+
+                if (typeIndex !== -1) {
+                    parameter.splice(typeIndex, 1);
+                }
+
+                parameter.push([TicketProperty.TYPE_ID, typeId]);
+            }
+
+            const stateIndex = parameter.findIndex((p) => p[0] === TicketProperty.STATE_ID);
+            if (stateIndex === -1 || !parameter[stateIndex][1]) {
+                const typeId = await TicketService.getDefaultStateID();
+
+                if (stateIndex !== -1) {
+                    parameter.splice(stateIndex, 1);
+                }
+
+                parameter.push([TicketProperty.STATE_ID, typeId]);
             }
         }
 
