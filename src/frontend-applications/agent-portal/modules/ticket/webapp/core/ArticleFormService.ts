@@ -358,8 +358,8 @@ export class ArticleFormService extends KIXObjectFormService {
         return value;
     }
 
-    private async getBodyFieldValue(): Promise<string> {
-        let value;
+    public async getBodyFieldValue(): Promise<string> {
+        let value: string;
         const referencedArticle = await this.getReferencedArticle();
         if (referencedArticle) {
             const fromString = referencedArticle.From.replace(/>/g, '&gt;').replace(/</g, '&lt;');
@@ -369,8 +369,9 @@ export class ArticleFormService extends KIXObjectFormService {
 
             const prepareContent = await TicketService.getInstance().getPreparedArticleBodyContent(referencedArticle);
             if (prepareContent) {
-                articleString = prepareContent[1] ?
-                    this.replaceInlineContent(prepareContent[0], prepareContent[1]) : prepareContent[0];
+                articleString = prepareContent[1]
+                    ? this.replaceInlineContent(prepareContent[0], prepareContent[1])
+                    : prepareContent[0];
             }
             value = `<p></p>${wroteString} ${dateTime}:`
                 + '<div type="cite" style="border-left:2px solid #0a7cb3;padding:10px;">'
