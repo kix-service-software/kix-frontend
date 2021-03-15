@@ -11,6 +11,10 @@ import { Request, Response, Router } from 'express';
 import { IRouter } from './IRouter';
 import { IServerConfiguration } from '../../../../server/model/IServerConfiguration';
 import { ConfigurationService } from '../../../../server/services/ConfigurationService';
+import { ObjectIconLoadingOptions } from '../model/ObjectIconLoadingOptions';
+import { ObjectIcon } from '../../modules/icon/model/ObjectIcon';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { KIXObjectServiceRegistry } from '../services/KIXObjectServiceRegistry';
 
 export abstract class KIXRouter implements IRouter {
 
@@ -42,5 +46,23 @@ export abstract class KIXRouter implements IRouter {
 
     protected setFrontendSocketUrl(res: Response): void {
         res.cookie('frontendSocketUrl', this.getServerUrl());
+    }
+
+    protected async getIcon(name: string): Promise<ObjectIcon> {
+        const config = ConfigurationService.getInstance().getServerConfiguration();
+        if (config && config.BACKEND_API_TOKEN) {
+            // FIXME: do not use ObjectIconAPIService directly, there is a circular reference somewhere
+            const service = KIXObjectServiceRegistry.getServiceInstance(KIXObjectType.OBJECT_ICON);
+            if (service) {
+                const logoLoadingOptions = new ObjectIconLoadingOptions(name, name);
+                const icons = await service.loadObjects<ObjectIcon>(
+                    config.BACKEND_API_TOKEN, '',
+                    KIXObjectType.OBJECT_ICON, null, null, logoLoadingOptions
+                ).catch(() => [] as ObjectIcon[]);
+
+                return icons?.length ? icons[0] : null;
+            }
+        }
+        return null;
     }
 }
