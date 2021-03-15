@@ -91,9 +91,14 @@ export class ApplicationRouter extends KIXRouter {
                 token, '', KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.BROWSER_SOCKET_TIMEOUT_CONFIG], null, null
             ).catch((): SysConfigOption[] => []);
 
+            const favIcon = await this.getIcon('agent-portal-icon');
+
             const templatePath = path.join('..', '..', 'modules', 'agent-portal', 'webapp', 'application');
             const template = require(templatePath);
-            res.marko(template, { socketTimeout: options && options.length ? options[0].Value : 30000 });
+            res.marko(template, {
+                socketTimeout: options && options.length ? options[0].Value : 30000,
+                favIcon
+            });
         }
     }
 

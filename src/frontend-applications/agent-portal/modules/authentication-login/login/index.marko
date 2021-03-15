@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <!doctype html>
 <html lang="de">
     <head>
@@ -14,9 +13,18 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <title>KIX 18</title>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <link rel="shortcut icon" type="image/x-icon" href="/static/img/kix-cloud.ico"/>
+        <if(input.favIcon)>
+            <link
+                rel="shortcut icon"
+                type=input.favIcon.ContentType
+                sizes="32x32"
+                href=("data:" + input.favIcon.ContentType + ";base64," + input.favIcon.Content)/>
+        </if>
+        <else>
+            <link rel="shortcut icon" type="image/png" sizes="32x32" href="/static/img/kix_default.png"/>
+        </else>
         <!-- Muss aus der kix-font.less entfernt und hier eingefügt werden. -->
-        <style>            
+        <style>
             @font-face {
                 font-family: 'kix_font';
                 src: url('/static/font/kix_font.woff?i8olzm') format('woff');

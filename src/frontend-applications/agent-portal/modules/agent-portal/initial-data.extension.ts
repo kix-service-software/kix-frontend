@@ -14,9 +14,8 @@ import { ConfigurationService } from '../../../../server/services/ConfigurationS
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { ObjectIcon } from '../icon/model/ObjectIcon';
 import { LoggingService } from '../../../../server/services/LoggingService';
-
-
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { IServerConfiguration } from '../../../../server/model/IServerConfiguration';
 
 class Extension extends KIXExtension implements IInitialDataExtension {
 
@@ -25,27 +24,31 @@ class Extension extends KIXExtension implements IInitialDataExtension {
     public async createData(): Promise<void> {
         const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
 
-        const logoLoadingOptions = new ObjectIconLoadingOptions('agent-portal-logo', 'agent-portal-logo');
+        await this.setObjectIcon(serverConfig, 'agent-portal-logo', '/../../static/img/kix_start.png');
+        await this.setObjectIcon(serverConfig, 'agent-portal-icon', '/../../static/img/kix_start_icon.png');
+    }
+
+    private async setObjectIcon(serverConfig: IServerConfiguration, name: string, path: string) {
+        const iconLoadingOptions = new ObjectIconLoadingOptions(name, name);
         const icons = await ObjectIconService.getInstance().loadObjects(
-            serverConfig.BACKEND_API_TOKEN, '', KIXObjectType.OBJECT_ICON, null, null, logoLoadingOptions
+            serverConfig.BACKEND_API_TOKEN, '', KIXObjectType.OBJECT_ICON, null, null, iconLoadingOptions
         );
 
         if (!icons || !icons.length) {
             try {
                 const fs = require('fs');
                 const image = fs.readFileSync(
-                    __dirname + '/../../static/img/kix-logo.png',
+                    __dirname + path,
                     { encoding: 'base64' }
                 );
-                const logo = new ObjectIcon(null, 'agent-portal-logo', 'agent-portal-logo', 'image/png', image);
-                await ObjectIconService.getInstance().createIcons(serverConfig.BACKEND_API_TOKEN, '', logo)
+                const newIcon = new ObjectIcon(null, name, name, 'image/png', image);
+                await ObjectIconService.getInstance().createIcon(serverConfig.BACKEND_API_TOKEN, '', newIcon)
                     .catch((e) => LoggingService.getInstance().error(e));
             } catch (e) {
                 LoggingService.getInstance().error(e);
             }
         }
     }
-
 }
 
 module.exports = (data, host, options) => {

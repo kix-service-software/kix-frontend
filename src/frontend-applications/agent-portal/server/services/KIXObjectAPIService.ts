@@ -126,7 +126,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             icon.Object = objectType;
             icon.ObjectID = response[responseProperty];
             if (create) {
-                await this.createIcons(token, clientRequestId, icon)
+                await this.createIcon(token, clientRequestId, icon)
                     .catch(() => {
                         // be silent
                     });
@@ -318,7 +318,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         }
     }
 
-    public async createIcons(token: string, clientRequestId: string, icon: ObjectIcon): Promise<void> {
+    public async createIcon(token: string, clientRequestId: string, icon: ObjectIcon): Promise<void> {
         if (icon) {
             const iconService = KIXObjectServiceRegistry.getServiceInstance(
                 KIXObjectType.OBJECT_ICON
@@ -338,7 +338,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         }
     }
 
-    protected async updateIcon(token: string, clientRequestId: string, icon: ObjectIcon): Promise<void> {
+    public async updateIcon(token: string, clientRequestId: string, icon: ObjectIcon): Promise<void> {
         if (icon) {
             const iconService = KIXObjectServiceRegistry.getServiceInstance(
                 KIXObjectType.OBJECT_ICON
@@ -361,7 +361,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                     throw new Error(error.Code, error.Message);
                 });
             } else {
-                this.createIcons(token, clientRequestId, icon)
+                this.createIcon(token, clientRequestId, icon)
                     .catch((error) => {
                         throw error;
                     });
