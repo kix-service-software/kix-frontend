@@ -286,10 +286,10 @@ export class AbstractJobFormManager {
         return [[property, value]];
     }
 
-    public postPrepareOptionValue(action: MacroAction, optionName: string, value: any): any {
+    public postPrepareOptionValue(actionType: string, optionName: string, value: any, parameter: {}): any {
         for (const extendedManager of this.extendedJobFormManager) {
-            const result = extendedManager.postPrepareOptionValue(action, optionName, value);
-            if (result) {
+            const result = extendedManager.postPrepareOptionValue(actionType, optionName, value, parameter);
+            if (typeof result !== 'undefined') {
                 return result;
             }
         }
