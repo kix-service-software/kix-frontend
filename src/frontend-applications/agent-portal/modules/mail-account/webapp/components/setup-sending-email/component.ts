@@ -33,21 +33,38 @@ import { IEventSubscriber } from '../../../../base-components/webapp/core/IEvent
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
-import { SetupEvent } from '../../../../setup-assistant/webapp/core/SetupEvent';
 import { SetupStep } from '../../../../setup-assistant/webapp/core/SetupStep';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFieldTypes';
+import { SystemAddress } from '../../../../system-address/model/SystemAddress';
+import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { SystemAddressProperty } from '../../../../system-address/model/SystemAddressProperty';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../model/FilterType';
+import { FormValidationService } from '../../../../base-components/webapp/core/FormValidationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private configKeys: string[] = [];
     private subscriber: IEventSubscriber;
     private step: SetupStep;
+    private systemAddress: SystemAddress;
+    private canUpdateSystemAddress: boolean;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
         this.state.isSetup = typeof input.setup === 'undefined' ? false : input.setup;
+    }
+
+    public onInput(input: any): void {
+        this.step = input.step;
+        this.state.completed = this.step ? this.step.completed : false;
     }
 
     public async onMount(): Promise<void> {
@@ -60,13 +77,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             'Translatable#Save & Continue', 'Translatable#Skip & Continue', 'Translatable#Save'
         ]);
 
+        await this.initSystemAddress();
+
         await this.prepareForm();
         this.state.prepared = true;
-    }
-
-    public onInput(input: any): void {
-        this.step = input.step;
-        this.state.completed = this.step ? this.step.completed : false;
     }
 
     private async prepareForm(): Promise<void> {
@@ -140,8 +154,28 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             ]
         );
 
-
         const formGroups = [typeGroup, envelopeGroup];
+
+        if (this.canUpdateSystemAddress) {
+            const addessGroup = new FormGroupConfiguration(
+                'setup-sending-email-form-address-group', 'Translatable#System address', null, null,
+                [
+                    new FormFieldConfiguration(
+                        'setup-sending-email-form-field-email',
+                        'Translatable#Email Address', SystemAddressProperty.NAME, null, true,
+                        'Translatable#Helptext_Admin_SystemAddressCreate_Name', null, null, null, null, null, null,
+                        null, null, null,
+                        FormValidationService.EMAIL_REGEX, FormValidationService.EMAIL_REGEX_ERROR_MESSAGE
+                    ),
+                    new FormFieldConfiguration(
+                        'setup-sending-email-form-field-name',
+                        'Translatable#Display Name', SystemAddressProperty.REALNAME, null, true,
+                        'Translatable#Helptext_Admin_SystemAddressCreate_DisplayName'
+                    )
+                ]
+            );
+            formGroups.push(addessGroup);
+        }
 
         const form = new FormConfiguration(
             'setup-sending-email-form', 'Sending Email', null, KIXObjectType.ANY,
@@ -199,6 +233,43 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.subscriber);
         FormService.getInstance().deleteFormInstance(this.state.formId);
+    }
+
+    private async initSystemAddress(): Promise<void> {
+        if (this.state.isSetup) {
+            let systemAddress: SystemAddress[];
+            if (this.step?.result?.systemAddressId) {
+                systemAddress = await KIXObjectService.loadObjects<SystemAddress>(
+                    KIXObjectType.SYSTEM_ADDRESS, [this.step.result.systemAddressId]
+                );
+            } else {
+                systemAddress = await KIXObjectService.loadObjects<SystemAddress>(
+                    KIXObjectType.SYSTEM_ADDRESS, null,
+                    new KIXObjectLoadingOptions(
+                        [
+                            new FilterCriteria(
+                                SystemAddressProperty.NAME, SearchOperator.EQUALS,
+                                FilterDataType.STRING, FilterType.AND, 'kix@localhost'
+                            )
+                        ]
+                    )
+                );
+                if (Array.isArray(systemAddress) && !systemAddress.length) {
+                    systemAddress = await KIXObjectService.loadObjects<SystemAddress>(
+                        KIXObjectType.SYSTEM_ADDRESS, [1]
+                    );
+                }
+            }
+
+            if (Array.isArray(systemAddress) && systemAddress.length) {
+                this.systemAddress = systemAddress[0];
+                this.canUpdateSystemAddress = await AuthenticationSocketClient.getInstance().checkPermissions([
+                    new UIComponentPermission(
+                        `system/communication/systemaddresses/${this.systemAddress.ID}`, [CRUD.UPDATE]
+                    )
+                ]);
+            }
+        }
     }
 
     private async getSMTPFields(): Promise<FormFieldConfiguration[]> {
@@ -263,6 +334,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             (k) => [k, sysconfigOptions.find((o) => o.Name === k).Value]
         );
 
+        if (this.systemAddress) {
+            values.push(
+                [SystemAddressProperty.NAME, this.systemAddress.Name],
+                [SystemAddressProperty.REALNAME, this.systemAddress.Realname]
+            );
+        }
+
         formInstance.provideFormFieldValuesForProperties(values, null);
     }
 
@@ -276,10 +354,22 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         } else {
             BrowserUtil.toggleLoadingShield(true, 'Translatable#Save Outbox Settings');
 
+            if (this.systemAddress && this.canUpdateSystemAddress) {
+                await KIXObjectService.updateObjectByForm(
+                    KIXObjectType.SYSTEM_ADDRESS, this.state.formId, this.systemAddress.ID
+                ).catch(() => null);
+            }
+
             await this.saveSysconfigValues(formInstance).catch(() => null);
 
             if (this.state.isSetup) {
-                await SetupService.getInstance().stepCompleted(this.step.id, null);
+                if (this.systemAddress && this.canUpdateSystemAddress) {
+                    await SetupService.getInstance().stepCompleted(
+                        this.step.id, { systemAddressId: this.systemAddress.ID }
+                    );
+                } else {
+                    await SetupService.getInstance().stepCompleted(this.step.id, null);
+                }
             }
 
             BrowserUtil.toggleLoadingShield(false);
@@ -291,8 +381,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const formFieldValues = formInstance.getAllFormFieldValues();
         formFieldValues.forEach((value: FormFieldValue, key: string) => {
             const field = formInstance.getFormField(key);
-            const v = Array.isArray(value.value) ? value.value[0] : value.value;
-            values.push([field.property, v]);
+            if (
+                field.property !== SystemAddressProperty.NAME &&
+                field.property !== SystemAddressProperty.REALNAME
+            ) {
+                const v = Array.isArray(value.value) ? value.value[0] : value.value;
+                values.push([field.property, v]);
+            }
         });
 
         for (const value of values) {
