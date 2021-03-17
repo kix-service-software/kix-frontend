@@ -422,15 +422,11 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
         searchCriteria = [...searchCriteria, ...dynamicFieldCriteria];
 
-        if (searchCriteria && searchCriteria.length) {
+        searchCriteria = searchCriteria.filter(
+            (c) => c.operator !== SearchOperator.IN || (Array.isArray(c.value) && c.value.length)
+        );
 
-            const hasEmptyINSearch = searchCriteria.some(
-                (c) => c.operator === SearchOperator.IN && (Array.isArray(c.value) && !c.value.length)
-            );
-
-            if (hasEmptyINSearch) {
-                return false;
-            }
+        if (searchCriteria.length) {
 
             // use correct property name
             const fulltextCriterion = searchCriteria.find((c) => c.property === SearchProperty.FULLTEXT);
