@@ -63,8 +63,8 @@ export class ExtendedJobFormManager {
         return null;
     }
 
-    public postPrepareOptionValue(action: MacroAction, optionName: string, value: any): any {
-        return null;
+    public postPrepareOptionValue(actionType: string, optionName: string, value: any, parameter: {}): any {
+        return;
     }
 
     public updateFields(fields: FormFieldConfiguration[]): Promise<void> {
@@ -88,12 +88,11 @@ export class ExtendedJobFormManager {
         );
     }
 
-    protected valueAsArray(action: MacroAction, optionName: string, value: any): any {
-        if (!action.Parameters[optionName]) {
+    protected valueAsArray(parameter: {}, optionName: string, value: any): any {
+        if (!parameter[optionName]) {
             return [value];
-        } else if (Array.isArray(action.Parameters[optionName])) {
-            action.Parameters[optionName].push(value);
-            return action.Parameters[optionName];
+        } else if (Array.isArray(parameter[optionName])) {
+            return parameter[optionName].push(value);
         }
     }
 
