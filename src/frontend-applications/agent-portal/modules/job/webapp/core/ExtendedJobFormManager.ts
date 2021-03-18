@@ -92,7 +92,8 @@ export class ExtendedJobFormManager {
         if (!parameter[optionName]) {
             return [value];
         } else if (Array.isArray(parameter[optionName])) {
-            return parameter[optionName].push(value);
+            parameter[optionName].push(value);
+            return parameter[optionName];
         }
     }
 

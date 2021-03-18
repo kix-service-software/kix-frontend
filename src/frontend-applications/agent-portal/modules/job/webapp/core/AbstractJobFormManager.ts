@@ -303,7 +303,8 @@ export class AbstractJobFormManager {
     }
 
     public async updateFields(fields: FormFieldConfiguration[]): Promise<void> {
-        if (Array.isArray(fields)) {
+        // only actions fields (no results or action-options)
+        if (Array.isArray(fields) && fields.length && fields[0].property === JobProperty.MACRO_ACTIONS) {
             for (let i = 0; i < fields.length; i++) {
                 const label = await TranslationService.translate('Translatable#{0}. Action', [i + 1]);
                 fields[i].label = label;
