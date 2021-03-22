@@ -45,6 +45,7 @@ export class ObjectIcon extends KIXObject {
             this.ObjectID = objectIcon.ObjectID;
         } else {
             this.ObjectID = objectId;
+            this.ObjectId = objectId;
             this.Object = object;
             this.ContentType = contentType;
             this.Content = content;
