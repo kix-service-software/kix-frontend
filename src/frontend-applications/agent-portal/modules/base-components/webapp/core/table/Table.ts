@@ -116,14 +116,18 @@ export class Table implements Table {
                 await this.sort(this.sortColumnId, this.sortOrder);
             }
 
-            if (this.tableConfiguration &&
-                this.tableConfiguration.toggle &&
-                this.tableConfiguration.toggleOptions &&
-                this.tableConfiguration.toggleOptions.toggleFirst &&
-                this.rows.length
-            ) {
-                this.rows[0].expand(true);
-            }
+            this.toggleFirstRow();
+        }
+    }
+
+    private toggleFirstRow(): void {
+        if (this.tableConfiguration &&
+            this.tableConfiguration.toggle &&
+            this.tableConfiguration.toggleOptions &&
+            this.tableConfiguration.toggleOptions.toggleFirst &&
+            this.rows.length
+        ) {
+            this.rows[0].expand(true);
         }
     }
 
@@ -572,6 +576,8 @@ export class Table implements Table {
             this.rows.forEach((r) => {
                 r.initializeDisplayValues();
             });
+
+            this.toggleFirstRow();
 
             EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
             EventService.getInstance().publish(TableEvent.RELOADED, new TableEventData(this.getTableId()));

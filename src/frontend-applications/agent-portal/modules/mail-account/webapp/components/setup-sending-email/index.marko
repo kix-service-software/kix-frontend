@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(state.formId && state.prepared)>
     <if(state.isSetup)>
         <div.sending-email-form>
@@ -32,9 +31,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <div.sending-email-form>
                     <main-form formId=state.formId/>
                     <div.button-container>
-                        <button.submit-button type="button" on-click("submit") title=state.translations["Translatable#Save & Continue"]>
+                        <button.submit-button type="button" on-click("submit") title=state.translations["Translatable#Save"]>
                             <span.kix-icon-arrow-outward/>
-                            <translation-string pattern="Translatable#Save & Continue"/>
+                            <translation-string pattern="Translatable#Save"/>
                         </button>
                     </div>
                     <loading-shield/>

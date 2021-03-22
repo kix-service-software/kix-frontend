@@ -36,12 +36,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (this.state.widgetConfiguration) {
             const settings: TabWidgetConfiguration = this.state.widgetConfiguration.configuration;
             const widgets = [];
-            settings.widgets.forEach(async (w) => {
+            for (const w of settings.widgets) {
                 const config = await context.getConfiguredWidget(w);
                 if (config) {
                     widgets.push(config);
                 }
-            });
+            }
             this.state.widgets = widgets;
         }
         this.state.show = true;

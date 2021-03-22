@@ -47,6 +47,14 @@ import { TicketLock } from '../../model/TicketLock';
 import { Watcher } from '../../model/Watcher';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
+import { ContextType } from '../../../../model/ContextType';
+import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
+import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
+import { Queue } from '../../model/Queue';
+import { QueueProperty } from '../../model/QueueProperty';
+import { TicketPriorityProperty } from '../../model/TicketPriorityProperty';
+import { TicketStateProperty } from '../../model/TicketStateProperty';
+import { TicketTypeProperty } from '../../model/TicketTypeProperty';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -123,11 +131,27 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
-        return [
+        const filter = [
             new FilterCriteria(
                 SearchProperty.FULLTEXT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
             )
         ];
+
+        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const object = await context?.getObject();
+        if (
+            object?.KIXObjectType === KIXObjectType.TICKET
+            && context?.getDescriptor()?.contextMode === ContextMode.DETAILS
+        ) {
+            filter.push(
+                new FilterCriteria(
+                    TicketProperty.TICKET_ID, SearchOperator.NOT_EQUALS, FilterDataType.NUMERIC,
+                    FilterType.AND, object.ObjectId
+                )
+            );
+        }
+
+        return filter;
     }
 
     public async getTreeNodes(
@@ -453,5 +477,94 @@ export class TicketService extends KIXObjectService<Ticket> {
         return new RoutingConfiguration(
             TicketDetailsContext.CONTEXT_ID, KIXObjectType.TICKET, ContextMode.DETAILS, TicketProperty.TICKET_ID
         );
+    }
+
+    public static async getDefaultQueueID(): Promise<number> {
+        let queueId: number;
+        const name = await this.getDefaultConfigValue(SysConfigKey.POSTMASTER_DEFAULT_QUEUE);
+        if (name) {
+            const queues = await KIXObjectService.loadObjects<Queue>(
+                KIXObjectType.QUEUE, null, new KIXObjectLoadingOptions(
+                    [
+                        new FilterCriteria(
+                            QueueProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
+                            FilterType.AND, name
+                        )
+                    ]
+                ), null, true
+            );
+            queueId = queues && !!queues.length ? queues[0].QueueID : null;
+        }
+        return queueId;
+    }
+
+    public static async getDefaultPriorityID(): Promise<number> {
+        let priorityId: number;
+        const name = await this.getDefaultConfigValue(SysConfigKey.POSTMASTER_DEFAULT_PRIORITY);
+        if (name) {
+            const objects = await KIXObjectService.loadObjects<TicketPriority>(
+                KIXObjectType.TICKET_PRIORITY, null, new KIXObjectLoadingOptions(
+                    [
+                        new FilterCriteria(
+                            TicketPriorityProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
+                            FilterType.AND, name
+                        )
+                    ]
+                ), null, true
+            );
+            priorityId = objects && !!objects.length ? objects[0].ID : null;
+        }
+        return priorityId;
+    }
+
+    public static async getDefaultTypeID(): Promise<number> {
+        let typeId: number;
+        const name = await this.getDefaultConfigValue(SysConfigKey.TICKET_TYPE_DEFAULT);
+        if (name) {
+            const objects = await KIXObjectService.loadObjects<TicketType>(
+                KIXObjectType.TICKET_TYPE, null, new KIXObjectLoadingOptions(
+                    [
+                        new FilterCriteria(
+                            TicketTypeProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
+                            FilterType.AND, name
+                        )
+                    ]
+                ), null, true
+            );
+            typeId = objects && !!objects.length ? objects[0].ID : null;
+        }
+        return typeId;
+    }
+
+    public static async getDefaultStateID(): Promise<number> {
+        let stateId: number;
+        const name = await this.getDefaultConfigValue(SysConfigKey.POSTMASTER_DEFAULT_STATE);
+        if (name) {
+            const objects = await KIXObjectService.loadObjects<TicketState>(
+                KIXObjectType.TICKET_STATE, null, new KIXObjectLoadingOptions(
+                    [
+                        new FilterCriteria(
+                            TicketStateProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
+                            FilterType.AND, name
+                        )
+                    ]
+                ), null, true
+            );
+            stateId = objects && !!objects.length ? objects[0].ID : null;
+        }
+        return stateId;
+    }
+
+    private static async getDefaultConfigValue(configId: string): Promise<string> {
+        let name: string;
+        if (configId) {
+            const defaultOptions = await KIXObjectService.loadObjects<SysConfigOption>(
+                KIXObjectType.SYS_CONFIG_OPTION, [configId], null, null, true
+            );
+            if (defaultOptions && !!defaultOptions.length) {
+                name = defaultOptions[0].Value;
+            }
+        }
+        return name;
     }
 }
