@@ -794,11 +794,11 @@ msgstr "Log Download"
 msgid "Duplicate"
 msgstr "Duplizieren"
 
-#, fuzzy
-msgid "DynamicField"
+msgid "Dynamic Field"
 msgstr "Dynamisches Feld"
 
-msgid "Dynamic Field"
+#, fuzzy
+msgid "DynamicField"
 msgstr "Dynamisches Feld"
 
 msgid "Dynamic Fields"
@@ -2739,11 +2739,11 @@ msgstr ""
 msgid "Legend"
 msgstr "Legende"
 
-#, fuzzy
-msgid "Lets go"
+msgid "Let's go"
 msgstr "Los geht's"
 
-msgid "Let's go"
+#, fuzzy
+msgid "Lets go"
 msgstr "Los geht's"
 
 msgid "Limit:"
@@ -3913,6 +3913,9 @@ msgstr "System"
 
 msgid "System"
 msgstr "System"
+
+msgid "System address"
+msgstr ""
 
 msgid "System Address"
 msgstr "Systemadresse"
