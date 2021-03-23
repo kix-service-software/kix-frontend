@@ -472,6 +472,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     routingConfiguration: {
                                         contextId: 'search',
                                         contextMode: ContextMode.SEARCH,
+                                        externalLink: false,
                                         params: [
                                             [
                                                 'search',
@@ -505,6 +506,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     routingConfiguration: {
                                         contextId: 'search',
                                         contextMode: ContextMode.SEARCH,
+                                        externalLink: false,
                                         params: [
                                             [
                                                 'search',
