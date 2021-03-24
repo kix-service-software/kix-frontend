@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2021-02-15 11:46+0000\n"
+"PO-Revision-Date: 2021-03-24 10:46+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
@@ -3086,7 +3086,7 @@ msgid "Notification successfully created."
 msgstr "Benachrichtigung wurde erfolgreich angelegt."
 
 msgid "Notification Template"
-msgstr "Benachrichtigungs-Layout"
+msgstr "Layout Benachrichtigungen"
 
 msgid "Notification Text"
 msgstr "Benachrichtigungstext"
@@ -3599,7 +3599,7 @@ msgid "Save new search"
 msgstr "Neue Suche speichern"
 
 msgid "Save notification template"
-msgstr "Benachrichtigungs-Layout speichern"
+msgstr "Layout Benachrichtigungen speichern"
 
 msgid "Save Organisation"
 msgstr ""
@@ -3762,7 +3762,7 @@ msgid "Show in agent preferences"
 msgstr "Anzeige Agenteneinstellung"
 
 msgid "Show in Customer Portal"
-msgstr "Im Self Service Portal anzeigen"
+msgstr "Für Self Service Portal freigeben"
 
 msgid "Show title in form"
 msgstr "Titel im Formular anzeigen"
@@ -3894,7 +3894,7 @@ msgid "Superuser Account"
 msgstr "Nutzer Superuser"
 
 msgid "Switch"
-msgstr ""
+msgstr "Tauschen"
 
 msgid "Switch to customer portal."
 msgstr "Wechsel ins Self Service Portal."
@@ -3915,7 +3915,7 @@ msgid "System"
 msgstr "System"
 
 msgid "System address"
-msgstr ""
+msgstr "Systemadresse"
 
 msgid "System Address"
 msgstr "Systemadresse"
