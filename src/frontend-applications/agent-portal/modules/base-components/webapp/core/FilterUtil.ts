@@ -41,6 +41,7 @@ export class FilterUtil {
 
                 let objectValue = object[criterion.property];
                 objectValue = await this.getDynamicFieldValue(object, criterion, objectValue);
+                objectValue = typeof objectValue === 'undefined' ? null : objectValue;
 
                 match = await FilterUtil.checkUIFilterCriterion(objectValue, criterion.operator, value);
                 if (!match) {
