@@ -275,7 +275,7 @@ export abstract class Context {
         let sidebars = this.configuration.sidebars;
 
         if (show && sidebars) {
-            sidebars = sidebars.filter((sb) => this.shownSidebars.some((s) => sb.instanceId === s));
+            sidebars = sidebars.filter((sb) => sb.configuration && this.shownSidebars.some((s) => sb.instanceId === s));
         }
 
         return sidebars;
