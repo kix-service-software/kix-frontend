@@ -3082,6 +3082,9 @@ msgstr "Benachrichtigungen"
 msgid "Notifications for Tickets"
 msgstr "Benachrichtigungen für Tickets"
 
+msgid "Notifications successfully removed."
+msgstr "Benachrichtigungen wurden erfolgreich entfernt."
+
 msgid "Notification successfully created."
 msgstr "Benachrichtigung wurde erfolgreich angelegt."
 
@@ -3479,6 +3482,9 @@ msgstr "Abhängigkeit zur Organisation lösen"
 
 msgid "Remove Filter"
 msgstr "Filter löschen"
+
+msgid "Remove Notifications"
+msgstr "Benachrichtigungen löschen"
 
 msgid "Remove parameter"
 msgstr "Parameter löschen"

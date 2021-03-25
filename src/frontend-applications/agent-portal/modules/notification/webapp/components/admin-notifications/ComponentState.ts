@@ -24,7 +24,7 @@ export class ComponentState {
         public instanceId: string = IdService.generateDateBasedId('admin-notifications-list'),
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
             null, null, null,
-            'table-widget', 'Translatable#Automation: Notifications', ['notification-create', 'csv-export-action'],
+            'table-widget', 'Translatable#Automation: Notifications', ['notification-create', 'notification-table-delete', 'csv-export-action'],
             null, new TableWidgetConfiguration(
                 null, null, null,
                 KIXObjectType.NOTIFICATION, [NotificationProperty.NAME, SortOrder.UP], null,

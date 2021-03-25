@@ -2945,6 +2945,9 @@ msgstr "Notifications"
 msgid "Notifications for Tickets"
 msgstr ""
 
+msgid "Notifications successfully removed."
+msgstr ""
+
 msgid "Notification successfully created."
 msgstr "Notification successfully created."
 
@@ -3336,6 +3339,9 @@ msgid "Remove dependency to organisation"
 msgstr ""
 
 msgid "Remove Filter"
+msgstr ""
+
+msgid "Remove Notifications"
 msgstr ""
 
 msgid "Remove parameter"
