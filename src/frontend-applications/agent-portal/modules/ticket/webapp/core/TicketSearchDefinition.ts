@@ -28,7 +28,7 @@ export class TicketSearchDefinition extends SearchDefinition {
 
     public constructor() {
         super(KIXObjectType.TICKET);
-        this.formManager = new TicketSearchFormManager();
+        this.formManager = new TicketSearchFormManager([TicketProperty.STATE_TYPE]);
     }
 
     public createFormManager(
