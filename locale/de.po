@@ -3826,7 +3826,7 @@ msgstr "Startzeitpunkt"
 msgid "Start time has to be before end time"
 msgstr "Der Startzeitpunkt muss vor dem Endzeitpunkt liegen."
 
-msgid "Start value is greate than end value"
+msgid "Start value is greater than end value"
 msgstr ""
 
 msgid "Start value is not given"

@@ -3680,7 +3680,7 @@ msgstr ""
 msgid "Start time has to be before end time"
 msgstr ""
 
-msgid "Start value is greate than end value"
+msgid "Start value is greater than end value"
 msgstr ""
 
 msgid "Start value is not given"
