@@ -426,10 +426,10 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             return [new ValidationResult(
                 ValidationSeverity.ERROR, 'Translatable#End value is not given'
             )];
-        } else if (Number(value.value[1]) > Number(value.value[0])) {
+        } else if (Number(value.value[0]) > Number(value.value[1])) {
             value.valid = false;
             return [new ValidationResult(
-                ValidationSeverity.ERROR, 'Translatable#Start value is greate than end value'
+                ValidationSeverity.ERROR, 'Translatable#Start value is greater than end value'
             )];
         } else {
             value.valid = true;
