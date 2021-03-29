@@ -41,9 +41,10 @@ export class TicketDetailsPrintRouter extends KIXRouter {
 
     private async getPrintComponent(req: Request, res: Response): Promise<void> {
         const token: string = req.cookies.token;
+        const favIcon = await this.getIcon('agent-portal-icon');
         const data = await TicketDetailsDataBuilder.buildTicketData(token, req.params.objectId);
         const template = require('../webapp/components/ticket-details-print');
-        res.marko(template, data);
+        res.marko(template, { favIcon, ...data });
     }
 
 }

@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.ticket-print-container>
     <if(state.prepared)>
         <h1>${input.title}</h1>
@@ -42,7 +41,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             </for>
                         </div>
                         <div.article-text>
-                            <editor readOnly=true value=article.content inlineContent=article.inlineContent useReadonlyStyle=true/>
+                            <editor readOnly=true value=article.content inlineContent=article.inlineContent useReadonlyStyle=true maxReadyTries=50/>
                         </div>
                     </div>
                 </for>
