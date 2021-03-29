@@ -422,6 +422,19 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
         searchCriteria = [...searchCriteria, ...dynamicFieldCriteria];
 
+        // check for "invalid" (not satisfiable) AND criteria (IN criteria with empty values)
+        if (searchCriteria.length) {
+            const hasEmptyINSearch = searchCriteria.some(
+                (c) => c.operator === SearchOperator.IN && c.filterType === FilterType.AND
+                    && (Array.isArray(c.value) && !c.value.length)
+            );
+
+            if (hasEmptyINSearch) {
+                return false;
+            }
+        }
+
+        // filter IN criteria with empty values
         searchCriteria = searchCriteria.filter(
             (c) => c.operator !== SearchOperator.IN || (Array.isArray(c.value) && c.value.length)
         );
