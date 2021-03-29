@@ -27,6 +27,7 @@ class EditorComponent {
     private useReadonlyStyle: boolean = false;
     private changeTimeout: any;
     private createTimeout: any;
+    private maxReadyTries: number;
 
     public onCreate(input: any): void {
         this.state = new ComponentState(
@@ -42,6 +43,9 @@ class EditorComponent {
 
     public onInput(input: any): void {
         this.update(input);
+        const maxTries = input.maxReadyTries ? Number(input.maxReadyTries) : 10;
+        this.maxReadyTries = !isNaN(maxTries) && maxTries > 10
+            ? maxTries : 10;
     }
 
     private async update(input: any): Promise<void> {
@@ -282,7 +286,7 @@ class EditorComponent {
                 this.editor.status === 'ready'
             ) {
                 resolve(true);
-            } else if (retryCount < 10) {
+            } else if (retryCount < (this.maxReadyTries || 10)) {
                 setTimeout(() => {
                     resolve(this.isEditorReady(++retryCount));
                 }, 200);
@@ -295,10 +299,10 @@ class EditorComponent {
     /**
      * Checks if an instance exists
      *
-     * @return boolean (promise)
+     * @return boolean
      */
     private instanceExists(): boolean {
-        return CKEDITOR && CKEDITOR.instances && CKEDITOR.instances[this.state.id];
+        return Boolean(CKEDITOR?.instances && CKEDITOR.instances[this.state.id]);
     }
 }
 
