@@ -45,6 +45,10 @@ export class UserPlaceholderHandler extends AbstractPlaceholderHandler {
                     case KIXObjectProperty.VALID_ID:
                         result = user[attribute].toString();
                         break;
+                    // FIXME: use UserID else it will be ID of contact (change/remove it with placeholder refactoring)
+                    case 'ID':
+                        result = user.UserID.toString();
+                        break;
                     case UserProperty.USER_LOGIN:
                     case ContactProperty.FIRSTNAME:
                     case ContactProperty.LASTNAME:
@@ -77,7 +81,9 @@ export class UserPlaceholderHandler extends AbstractPlaceholderHandler {
         knownProperties = [
             ...knownProperties,
             ...Object.keys(KIXObjectProperty).map((p) => KIXObjectProperty[p]),
-            ...Object.keys(ContactProperty).map((p) => ContactProperty[p])
+            ...Object.keys(ContactProperty).map((p) => ContactProperty[p]),
+            // FIXME: change/remove it with placeholder refactoring
+            'ContactID'
         ];
         return knownProperties.some((p) => p === property);
     }
