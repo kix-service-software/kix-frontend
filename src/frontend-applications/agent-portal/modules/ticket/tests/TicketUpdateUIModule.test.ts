@@ -38,6 +38,7 @@ describe('TicketUpdateUIModule', () => {
     describe('Should register the update module for ticket', () => {
 
         it('should register', async () => {
+            expect(true).false;
             await ticketModule.register();
         });
 
