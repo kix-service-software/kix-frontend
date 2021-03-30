@@ -166,7 +166,7 @@ export class UserLabelProvider extends LabelProvider<User> {
                 translatable = false;
                 break;
             default:
-                if (this.isContactProperty(property)) {
+                if (this.isContactProperty(property) || property === 'ContactID') {
                     let contact = user.Contact;
                     if (!contact) {
                         const contacts = await KIXObjectService.loadObjects<Contact>(
@@ -183,9 +183,14 @@ export class UserLabelProvider extends LabelProvider<User> {
                         contact = contacts && contacts.length ? contacts[0] : null;
                     }
                     if (contact) {
-                        displayValue = await LabelService.getInstance().getDisplayText(
-                            contact, property, defaultValue, translatable
-                        );
+                        if (property === 'ContactID') {
+                            displayValue = contact.ID;
+                            translatable = false;
+                        } else {
+                            displayValue = await LabelService.getInstance().getDisplayText(
+                                contact, property, defaultValue, translatable
+                            );
+                        }
                     }
 
                     translatable = false;
