@@ -44,6 +44,7 @@ import { ServiceType } from '../../../base-components/webapp/core/ServiceType';
 import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
 import { TicketFormService } from './TicketFormService';
 import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
+import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
 
 export class ArticleFormService extends KIXObjectFormService {
 
@@ -369,9 +370,7 @@ export class ArticleFormService extends KIXObjectFormService {
 
             const prepareContent = await TicketService.getInstance().getPreparedArticleBodyContent(referencedArticle);
             if (prepareContent) {
-                articleString = prepareContent[1]
-                    ? this.replaceInlineContent(prepareContent[0], prepareContent[1])
-                    : prepareContent[0];
+                articleString = BrowserUtil.replaceInlineContent(prepareContent[0], prepareContent[1]);
             }
             value = `<p></p>${wroteString} ${dateTime}:`
                 + '<div type="cite" style="border-left:2px solid #0a7cb3;padding:10px;">'
