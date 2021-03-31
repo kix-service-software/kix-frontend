@@ -13,6 +13,10 @@ import { IActionListener } from './IActionListener';
 import { WidgetType } from '../../../../model/configuration/WidgetType';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { Context } from '../../../../model/Context';
+import { EventService } from './EventService';
+import { TabContainerEvent } from './TabContainerEvent';
+import { TabContainerEventData } from './TabContainerEventData';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 export class WidgetService {
 
@@ -32,8 +36,11 @@ export class WidgetService {
 
     private widgetTypes: Map<string, WidgetType> = new Map();
 
-    public setWidgetTitle(instanceId: string, title: string): void {
+    public setWidgetTitle(instanceId: string, title: string, icon?: ObjectIcon | string): void {
         this.widgetTitle.set(instanceId, title);
+        EventService.getInstance().publish(
+            TabContainerEvent.CHANGE_TITLE, new TabContainerEventData(instanceId, title, icon)
+        );
     }
 
     public getWidgetTitle(instanceId: string): string {

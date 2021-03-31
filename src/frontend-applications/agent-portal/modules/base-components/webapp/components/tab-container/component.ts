@@ -195,6 +195,9 @@ class TabLaneComponent implements IEventSubscriber {
             if (tab) {
                 const newTitle = await TranslationService.translate(data.title);
                 this.tabTitles.set(tab.instanceId, newTitle);
+                if (data.icon) {
+                    this.tabIcons.set(tab.instanceId, data.icon);
+                }
                 (this as any).setStateDirty('tabWidgets');
             }
         }
