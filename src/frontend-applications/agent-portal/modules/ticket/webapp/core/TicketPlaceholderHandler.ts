@@ -148,7 +148,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                         break;
                     case 'OWNER':
                     case 'TICKETOWNER':
-                        if (ticket.OwnerID) {
+                        if (ticket.OwnerID && !isNaN(Number(ticket.OwnerID))) {
                             const loadingOptions = new KIXObjectLoadingOptions(
                                 null, null, null, null, ['Preferences']
                             );
@@ -164,7 +164,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                         break;
                     case 'RESPONSIBLE':
                     case 'TICKETRESPONSIBLE':
-                        if (ticket.ResponsibleID) {
+                        if (ticket.ResponsibleID && !isNaN(Number(ticket.ResponsibleID))) {
                             const loadingOptions = new KIXObjectLoadingOptions(
                                 null, null, null, null, ['Preferences']
                             );
@@ -180,7 +180,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                         break;
                     case 'CONTACT':
                         let contact: Contact;
-                        if (ticket.ContactID) {
+                        if (ticket.ContactID && !isNaN(Number(ticket.ContactID))) {
                             const contacts = await KIXObjectService.loadObjects(
                                 KIXObjectType.CONTACT, [ticket.ContactID], null, null, true
                             ).catch((error) => []);
@@ -198,7 +198,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                         break;
                     case 'ORG':
                         let organisation: Organisation;
-                        if (ticket.OrganisationID) {
+                        if (ticket.OrganisationID && !isNaN(Number(ticket.OrganisationID))) {
                             const organisations = await KIXObjectService.loadObjects(
                                 KIXObjectType.ORGANISATION, [ticket.OrganisationID], null, null, true
                             ).catch((error) => []);
