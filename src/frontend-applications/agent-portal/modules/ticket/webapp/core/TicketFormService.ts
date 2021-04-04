@@ -191,7 +191,7 @@ export class TicketFormService extends KIXObjectFormService {
                 const contactParameter = parameter.find((p) => p[0] === TicketProperty.CONTACT_ID);
                 if (contactParameter) {
                     const contacts = await KIXObjectService.loadObjects<Contact>(
-                        KIXObjectType.CONTACT, [contactParameter[1]]
+                        KIXObjectType.CONTACT, [contactParameter[1]], null, null, true
                     ).catch((e) => []);
 
                     if (organisationIndex !== -1) {
