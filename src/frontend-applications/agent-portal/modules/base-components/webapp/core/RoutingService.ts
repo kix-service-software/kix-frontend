@@ -52,16 +52,8 @@ export class RoutingService {
     }
 
     public async routeToInitialContext(history: boolean = false, useURL: boolean = true): Promise<void> {
-        const isSetupAssistantNeeded = await SetupService.getInstance().isSetupAssitantNeeded();
-        if (isSetupAssistantNeeded) {
-            const context = await ContextService.getInstance().getContext<any>('admin');
-            if (context) {
-                context.setAdminModule('setup-assistant', '');
-                await ContextService.getInstance().setContext(
-                    'admin', KIXObjectType.ANY, ContextMode.DASHBOARD, null, false
-                );
-            }
-        } else {
+        const isSetupAssistantNeeded = await SetupService.getInstance().setSetupAssistentIfNeeded();
+        if (!isSetupAssistantNeeded) {
             const needReleaseInfo = await this.isReleaseInfoNeeded();
             if (needReleaseInfo) {
                 ContextService.getInstance().setContext(

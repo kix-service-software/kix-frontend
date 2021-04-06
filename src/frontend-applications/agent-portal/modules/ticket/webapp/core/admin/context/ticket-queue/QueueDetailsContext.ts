@@ -12,7 +12,7 @@ import { LabelService } from '../../../../../../../modules/base-components/webap
 import { Queue } from '../../../../../model/Queue';
 import { BreadcrumbInformation } from '../../../../../../../model/BreadcrumbInformation';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
-import { AdminContext } from '../../../../../../admin/webapp/core';
+import { AdminContext } from '../../../../../../admin/webapp/core/AdminContext';
 import { KIXObject } from '../../../../../../../model/kix/KIXObject';
 
 export class QueueDetailsContext extends Context {

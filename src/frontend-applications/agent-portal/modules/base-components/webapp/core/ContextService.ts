@@ -15,8 +15,6 @@ import { DialogService } from './DialogService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextMode } from '../../../../model/ContextMode';
 import { BrowserHistoryState } from './BrowserHistoryState';
-import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
-import { RoutingService } from './RoutingService';
 import { ContextHistory } from './ContextHistory';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { AdditionalContextInformation } from './AdditionalContextInformation';
@@ -27,6 +25,8 @@ import { ContextConfiguration } from '../../../../model/configuration/ContextCon
 import { ContextSocketClient } from './ContextSocketClient';
 import { Context } from '../../../../model/Context';
 import { ContextExtension } from '../../../../model/ContextExtension';
+import { EventService } from './EventService';
+import { RoutingEvent } from './RoutingEvent';
 
 export class ContextService {
 
@@ -103,8 +103,11 @@ export class ContextService {
             DialogService.getInstance().closeMainDialog();
             this.activeMainContext = context;
 
-            RoutingService.getInstance().routeTo(
-                'base-router', context.getDescriptor().componentId, { objectId: context.getObjectId(), history }
+            EventService.getInstance().publish(RoutingEvent.ROUTE_TO,
+                {
+                    componentId: context.getDescriptor().componentId,
+                    data: { objectId: context.getObjectId() }
+                }
             );
 
             this.serviceListener.forEach(

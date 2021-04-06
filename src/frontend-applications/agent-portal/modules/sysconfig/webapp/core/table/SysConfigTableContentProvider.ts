@@ -19,7 +19,7 @@ import { SysConfigOptionDefinitionProperty } from '../../../model/SysConfigOptio
 import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
-import { AdminContext } from '../../../../admin/webapp/core';
+import { AdminContext } from '../../../../admin/webapp/core/AdminContext';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 
 export class SysConfigTableContentProvider extends TableContentProvider<SysConfigOptionDefinition> {
