@@ -194,6 +194,9 @@ msgstr ""
 "Beim Ausführen des Jobs ist ein Fehler aufgetreten. Für nähere Informationen "
 "prüfen Sie den System Log."
 
+msgid "An error occured during report creation. See system log for details."
+msgstr ""
+
 msgid "An error occurred."
 msgstr "Es ist ein Fehler aufgetreten."
 
@@ -309,6 +312,9 @@ msgstr "Automatisierung: Jobs"
 
 msgid "Automation: Notifications"
 msgstr "Automatisierung: Benachrichtigungen"
+
+msgid "Available Output Formats"
+msgstr ""
 
 msgid "Avatar"
 msgstr ""
@@ -584,6 +590,9 @@ msgstr "Offene Tickets des Kunden"
 msgid "Country"
 msgstr "Land"
 
+msgid "Create"
+msgstr ""
+
 msgid "Create Address"
 msgstr "Adresse wird angelegt"
 
@@ -659,6 +668,12 @@ msgstr "Priorität wird angelegt"
 msgid "Create Queue"
 msgstr "Team wird angelegt"
 
+msgid "Create Report"
+msgstr ""
+
+msgid "Create Report Definition"
+msgstr ""
+
 msgid "Create Role"
 msgstr "Rolle wird angelegt"
 
@@ -670,6 +685,9 @@ msgstr "Superuser anlegen"
 
 msgid "Create Text Module"
 msgstr "Textbaustein wird angelegt"
+
+msgid "Create the report with output format {0} and defaults?"
+msgstr ""
 
 msgid "Create Ticket"
 msgstr "Ticket anlegen"
@@ -728,8 +746,17 @@ msgstr "KW"
 msgid "Data has been updated."
 msgstr "Daten wurden aktualisiert."
 
+msgid "Datasource"
+msgstr ""
+
+msgid "Data Type"
+msgstr ""
+
 msgid "Day(s)"
 msgstr "Tag(e)"
+
+msgid "DBMS"
+msgstr ""
 
 msgid "Default"
 msgstr "Standard"
@@ -746,11 +773,23 @@ msgstr "Benachrichtigungs-Layout definieren"
 msgid "Delete"
 msgstr "Löschen"
 
+msgid "Delete all selected report definitions?"
+msgstr ""
+
+msgid "Delete all selected reports?"
+msgstr ""
+
 msgid "Deleted"
 msgstr "Gelöscht"
 
 msgid "Delete Link"
 msgstr "Verknüpfung löschen"
+
+msgid "Delete Report"
+msgstr ""
+
+msgid "Delete Report Definition"
+msgstr ""
 
 msgid "Delete Search"
 msgstr "Suche löschen"
@@ -790,6 +829,9 @@ msgstr "Download"
 
 msgid "Download log"
 msgstr "Log Download"
+
+msgid "Download Result"
+msgstr ""
 
 msgid "Duplicate"
 msgstr "Duplizieren"
@@ -887,6 +929,9 @@ msgstr "Priorität bearbeiten"
 
 msgid "Edit Queue"
 msgstr "Team bearbeiten"
+
+msgid "Edit Report"
+msgstr ""
 
 msgid "Edit Role"
 msgstr "Rolle bearbeiten"
@@ -986,6 +1031,12 @@ msgstr "Fehler beim Hinzufügen von Anlagen:"
 
 msgid "Error while adding the image:"
 msgstr "Fehler beim Hinzufügen des Bildes:"
+
+msgid "Error while deleting Report."
+msgstr ""
+
+msgid "Error while deleting Report Definition."
+msgstr ""
 
 msgid "Escalated Tickets"
 msgstr "Eskalierte Tickets"
@@ -2278,6 +2329,66 @@ msgstr "Legen Sie ein neues Passwort für Ihren Nutzeraccount fest."
 msgid "Helptext_PersonalSettings_UserPassword_Hint"
 msgstr "Geben Sie Ihr aktuell gültiges Passwort ein."
 
+msgid "Helptext_Reporting_ReportCreate_Comment"
+msgstr ""
+
+msgid "Helptext_Reporting_ReportCreate_Datasource"
+msgstr ""
+
+msgid "Helptext_Reporting_ReportCreate_Datasource_DBMS"
+msgstr ""
+
+msgid "Helptext_Reporting_ReportCreate_Datasource_OutputHandler"
+msgstr ""
+
+msgid "Helptext_Reporting_ReportCreate_OutputFormat"
+msgstr ""
+
+msgid "Helptext_Reporting_ReportCreate_Parameter"
+msgstr ""
+
+msgid "Helptext_Reporting_ReportCreate_ParameterDataType"
+msgstr ""
+
+msgid "Helptext_Reporting_ReportCreate_ParameterDefault"
+msgstr ""
+
+msgid "Helptext_Reporting_ReportCreate_ParameterDescription"
+msgstr ""
+
+msgid "Helptext_Reporting_ReportCreate_ParameterLabel"
+msgstr ""
+
+msgid "Helptext_Reporting_ReportCreate_ParameterMultiple"
+msgstr ""
+
+msgid "Helptext_Reporting_ReportCreate_ParameterName"
+msgstr ""
+
+msgid "Helptext_Reporting_ReportCreate_ParameterPossibleValues"
+msgstr ""
+
+msgid "Helptext_Reporting_ReportCreate_ParameterReadonly"
+msgstr ""
+
+msgid "Helptext_Reporting_ReportCreate_ParameterReferences"
+msgstr ""
+
+msgid "Helptext_Reporting_ReportCreate_ParameterRequired"
+msgstr ""
+
+msgid "Helptext_Reporting_ReportCreate_Roles"
+msgstr ""
+
+msgid "Helptext_Reporting_ReportCreate_Title"
+msgstr ""
+
+msgid "Helptext_Reporting_ReportCreate_Validity"
+msgstr ""
+
+msgid "Helptext_Reporting_Report_OutputFormats"
+msgstr ""
+
 msgid "Helptext_Search_ConfigItem"
 msgstr ""
 "Die Suche bezieht sich nur auf aktuelle Versionen. Der FAQ-Artikel \"Wie "
@@ -2854,6 +2965,9 @@ msgstr "Montag"
 msgid "Month"
 msgstr "Monat"
 
+msgid "Multiple"
+msgstr ""
+
 msgid "My locked tickets"
 msgstr "Meine gesperrten Tickets"
 
@@ -2955,6 +3069,12 @@ msgstr "Neue Priorität"
 
 msgid "New Queue"
 msgstr "Neues Team"
+
+msgid "New Report"
+msgstr ""
+
+msgid "New Report Definition"
+msgstr ""
 
 msgid "New Role"
 msgstr "Neue Rolle"
@@ -3190,6 +3310,15 @@ msgstr "Sonstiges"
 msgid "Outbox"
 msgstr "Postausgang"
 
+msgid "Output Format"
+msgstr ""
+
+msgid "Output Formats"
+msgstr ""
+
+msgid "Output Handler"
+msgstr ""
+
 msgid "Overall"
 msgstr "Gesamt"
 
@@ -3214,6 +3343,12 @@ msgstr "Übersicht zu importierende {0} ({1})"
 msgid "Overview Organisations"
 msgstr "Übersicht Organisationen"
 
+msgid "Overview Report Definitions"
+msgstr ""
+
+msgid "Overview Reports"
+msgstr ""
+
 msgid "Overview Ticket Priorities"
 msgstr "Tickets nach Prioritäten"
 
@@ -3228,6 +3363,12 @@ msgstr "Versionsübersicht"
 
 msgid "Owner"
 msgstr "Bearbeiter"
+
+msgid "Paramater"
+msgstr ""
+
+msgid "Parameter"
+msgstr ""
 
 msgid "Parent Category"
 msgstr "Übergeordnete Kategorie"
@@ -3306,6 +3447,9 @@ msgid "Please select a contact"
 msgstr "Wählen Sie bitte einen Kontakt."
 
 msgid "Port"
+msgstr ""
+
+msgid "Possible Values"
 msgstr ""
 
 msgid "Postal Address"
@@ -3508,6 +3652,45 @@ msgstr "Antworten"
 
 msgid "Reply all"
 msgstr "Allen antworten"
+
+msgid "Report"
+msgstr ""
+
+msgid "Report Definition"
+msgstr ""
+
+msgid "Report Definitions"
+msgstr ""
+
+msgid "Report Definition(s) deleted."
+msgstr ""
+
+msgid "Report definition successfully created."
+msgstr ""
+
+msgid "Report Definition successfully updated."
+msgstr ""
+
+msgid "Report Information"
+msgstr ""
+
+msgid "Reporting"
+msgstr ""
+
+msgid "Report Parameter"
+msgstr ""
+
+msgid "Reports"
+msgstr ""
+
+msgid "Report(s) deleted."
+msgstr ""
+
+msgid "Report successfully created."
+msgstr ""
+
+msgid "Required"
+msgstr "Erforderlich"
 
 #, fuzzy
 msgid "Required field {0} has no value."
@@ -4268,6 +4451,9 @@ msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update Queue"
 msgstr "Aktualisierung wird durchgeführt"
+
+msgid "Update Report Definition"
+msgstr ""
 
 msgid "Update Role"
 msgstr "Aktualisierung wird durchgeführt"
@@ -5752,9 +5938,6 @@ msgstr "PLZ"
 
 #~ msgid "Update Customer"
 #~ msgstr "Aktualisierung wird durchgeführt"
-
-#~ msgid "Required"
-#~ msgstr "Erforderlich"
 
 #~ msgid "Deny"
 #~ msgstr "Deny"
