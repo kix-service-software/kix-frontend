@@ -6,9 +6,13 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(!state.loading)>
-    <if(input.draggable && state.fields.length > 1 && state.dragStartInstanceId && state.dragStartIndex !== 0)>
+    <if(
+        input.draggable &&
+        state.fields.length > 1 &&
+        state.dragStartInstanceId &&
+        state.dragStartIndex !== 0
+    )>
         <div.field-drop-zone
             on-drop("handleDrop", 0)
             on-dragover("allowDrop")
@@ -28,30 +32,28 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 on-dragEnd("dragEnd")>
                 <@additionalFieldControls>
                     <if(input.additionalFieldControlsNeeded)>
-                        <if(!field.asStructure)>
-                            <if(component.canAdd(field))>
-                                <button.form-control-button.button-without-text
-                                    type="button"
-                                    title=state.translations["Translatable#Add"]
-                                    on-click("addField", field)>
-                                    <span.kix-icon-plus-blank/>
-                                </button>
-                            </if>
-                            <else>
-                                <span/>
-                            </else>
-                            <if(component.canRemove(field))>
-                                <button.form-control-button.button-without-text
-                                    type="button"
-                                    title=state.translations["Translatable#Delete"]
-                                    on-click("removeField", field)>
-                                    <span.kix-icon-minus/>
-                                </button>
-                            </if>
-                            <else>
-                                <span/>
-                            </else>
+                        <if(component.canAdd(field))>
+                            <button.form-control-button.button-without-text
+                                type="button"
+                                title=state.translations["Translatable#Add"]
+                                on-click("addField", field)>
+                                <span.kix-icon-plus-blank/>
+                            </button>
                         </if>
+                        <else>
+                            <span/>
+                        </else>
+                        <if(component.canRemove(field))>
+                            <button.form-control-button.button-without-text
+                                type="button"
+                                title=state.translations["Translatable#Delete"]
+                                on-click("removeField", field)>
+                                <span.kix-icon-minus/>
+                            </button>
+                        </if>
+                        <else>
+                            <span/>
+                        </else>
                     </if>
                 </@additionalFieldControls>
             </form-field>

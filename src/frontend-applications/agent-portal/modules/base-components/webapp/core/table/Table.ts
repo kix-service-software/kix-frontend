@@ -149,7 +149,7 @@ export class Table implements Table {
                 rowObjects = await this.considerHandlerData(rowObjects, relevantHandlerConfigIds);
             }
 
-            rowObjects.forEach((d) => rows.push(this.createRow(d)));
+            rowObjects.forEach((d) => rows.push(this.createRow(d, false)));
             this.rows = rows;
         }
     }
@@ -196,9 +196,11 @@ export class Table implements Table {
         this.handlerRowObjects[handlerConfig.id] = handlerRowObjects;
     }
 
-    public createRow(tableObject?: RowObject): Row {
+    public createRow(tableObject?: RowObject, addRow: boolean = true): Row {
         const row = new Row(this, tableObject);
-        this.rows.push(row);
+        if (addRow) {
+            this.rows.push(row);
+        }
         return row;
     }
 

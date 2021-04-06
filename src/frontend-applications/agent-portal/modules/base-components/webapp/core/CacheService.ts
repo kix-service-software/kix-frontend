@@ -233,6 +233,18 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.MACRO);
                 cacheKeyPrefixes.push(KIXObjectType.MACRO_ACTION);
                 break;
+            case KIXObjectType.REPORT_DEFINITION:
+                cacheKeyPrefixes.push(KIXObjectType.REPORT_DEFINITION);
+                cacheKeyPrefixes.push(KIXObjectType.REPORT);
+                cacheKeyPrefixes.push(KIXObjectType.REPORT_RESULT);
+                cacheKeyPrefixes.push(KIXObjectType.ROLE);
+                cacheKeyPrefixes.push(KIXObjectType.ROLE_PERMISSION);
+            case KIXObjectType.REPORT:
+            case KIXObjectType.REPORT_RESULT:
+                cacheKeyPrefixes.push(KIXObjectType.REPORT_DEFINITION);
+                cacheKeyPrefixes.push(KIXObjectType.REPORT);
+                cacheKeyPrefixes.push(KIXObjectType.REPORT_RESULT);
+                break;
             default:
         }
 

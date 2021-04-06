@@ -13,6 +13,7 @@ import { FormInputComponent } from '../../../../../modules/base-components/webap
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
 import { FormService } from '../../core/FormService';
+import { InputFieldTypes } from '../../core/InputFieldTypes';
 
 class Component extends FormInputComponent<string | Date, ComponentState> {
 
@@ -83,11 +84,13 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
     }
 
     private setValue(): void {
-        const date = this.state.dateValue ? new Date(
-            this.state.dateValue + (this.state.timeValue ? ` ${this.state.timeValue}` : '')
-        ) : null;
+        const dateValue = this.state.dateValue || '2000-01-01';
 
-        if (date && this.state.inputType !== 'DATE_TIME') {
+        const date = new Date(
+            dateValue + (this.state.timeValue ? ` ${this.state.timeValue}` : '')
+        );
+
+        if (date && this.state.inputType === InputFieldTypes.DATE) {
             date.setHours(0, 0, 0, 0);
         }
 

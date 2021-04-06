@@ -89,12 +89,17 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             (o) => o.option === ObjectReferenceOptions.LOADINGOPTIONS
         );
 
+        const objectIdOption = this.state.field.options.find((o) => o.option === ObjectReferenceOptions.OBJECT_IDS);
+        const objectIds = objectIdOption && Array.isArray(objectIdOption.value) && objectIdOption.value.length
+            ? objectIdOption.value
+            : null;
+
         const loadingOptions = configLoadingOptions ? configLoadingOptions.value : null;
 
         if (objectOption) {
             if (!this.autocomplete) {
                 this.objects = await KIXObjectService.loadObjects(
-                    objectOption.value, null, loadingOptions
+                    objectOption.value, objectIds, loadingOptions
                 );
                 const structureOption = this.state.field.options.find(
                     (o) => o.option === ObjectReferenceOptions.USE_OBJECT_SERVICE
@@ -146,7 +151,13 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
         if (treeHandler) {
-            treeHandler.setTree(nodes, null, true, !this.state.freeText);
+            const keepSelectionOption = this.state.field.options.find(
+                (o) => o.option === ObjectReferenceOptions.KEEP_SELECTION
+            );
+
+            const keepSelection = keepSelectionOption ? keepSelectionOption.value : false;
+            const filterSelection = !keepSelection && !this.state.freeText;
+            treeHandler.setTree(nodes, null, true, filterSelection);
         }
     }
 
@@ -265,6 +276,11 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     private async search(limit: number, searchValue: string): Promise<TreeNode[]> {
         let nodes = [];
         const objectOption = this.state.field.options.find((o) => o.option === ObjectReferenceOptions.OBJECT);
+        const objectIdOption = this.state.field.options.find((o) => o.option === ObjectReferenceOptions.OBJECT_IDS);
+        const objectIds = objectIdOption && Array.isArray(objectIdOption.value) && objectIdOption.value.length
+            ? objectIdOption.value
+            : null;
+
         if (objectOption) {
             if (this.autocomplete) {
                 const objectType = objectOption.value as KIXObjectType;
@@ -305,7 +321,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
                 const preparedOptions = await this.prepareLoadingOptions(loadingOptions);
                 this.objects = await KIXObjectService.loadObjects<KIXObject>(
-                    objectType, null, preparedOptions, null, false
+                    objectType, objectIds, preparedOptions, null, false
                 );
 
                 if (searchValue && searchValue !== '') {
@@ -344,8 +360,10 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
                 tooltip = (tooltip && tooltip !== text) ? text + ': ' + tooltip : text;
                 return new TreeNode(
-                    o.ObjectId, text ? text : `${o.KIXObjectType}: ${o.ObjectId} `, icon, undefined, undefined,
-                    undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+                    o.ObjectId,
+                    text ? text : o.ObjectId?.toString(),
+                    icon,
+                    undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
                     typeof o.ValidID === 'undefined' || o.ValidID === 1 || invalidClickable,
                     tooltip, undefined, undefined, undefined,
                     typeof o.ValidID !== 'undefined' && o.ValidID !== 1
@@ -389,7 +407,6 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         }
         return loadingOptions;
     }
-
 }
 
 module.exports = Component;

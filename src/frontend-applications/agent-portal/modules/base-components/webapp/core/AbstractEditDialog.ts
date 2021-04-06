@@ -83,6 +83,9 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
         const dialogContext = await ContextService.getInstance().getContextByTypeAndMode(
             this.objectType, [ContextMode.EDIT, ContextMode.EDIT_ADMIN]
         );
+
+        FormService.getInstance().deleteFormInstance(this.state.formId);
+
         if (dialogContext) {
             dialogContext.resetAdditionalInformation();
         }

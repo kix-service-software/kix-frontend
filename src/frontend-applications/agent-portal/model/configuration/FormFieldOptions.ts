@@ -25,6 +25,8 @@ export enum FormFieldOptions {
 
     OBJECT_TYPE = 'OBJECT_TYPE',
 
+    LANGUAGE = 'LANGUAGE',
+
     IGNORE_PROPERTIES = 'IGNORE_PROPERTIES'
 
 }
