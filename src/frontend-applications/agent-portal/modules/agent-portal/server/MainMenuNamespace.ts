@@ -132,7 +132,9 @@ export class MainMenuNamespace extends SocketNameSpace {
                 const allowed = await PermissionService.getInstance().checkPermissions(token, extension.permissions)
                     .catch(() => false);
                 if (allowed && extension.primaryMenu === primary) {
-                    entries.push(new MenuEntry(extension.icon, extension.text, extension.mainContextId, extension.contextIds));
+                    entries.push(
+                        new MenuEntry(extension.icon, extension.text, extension.mainContextId, extension.contextIds)
+                    );
                 }
             }
         }
