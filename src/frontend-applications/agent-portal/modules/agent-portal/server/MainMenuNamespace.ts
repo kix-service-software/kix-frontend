@@ -69,7 +69,7 @@ export class MainMenuNamespace extends SocketNameSpace {
             ).catch(() => []);
 
             const secondaryEntries = await this.getMenuEntries(
-                token, extensions, configuration.secondaryMenuEntryConfigurations
+                token, extensions, configuration.secondaryMenuEntryConfigurations, false
             ).catch(() => []);
 
             const response = new MainMenuEntriesResponse(
@@ -110,7 +110,7 @@ export class MainMenuNamespace extends SocketNameSpace {
     }
 
     private async getMenuEntries(
-        token: string, extensions: IMainMenuExtension[], entryConfigurations: MenuEntry[]
+        token: string, extensions: IMainMenuExtension[], entryConfigurations: MenuEntry[], primary: boolean = true
     ): Promise<MenuEntry[]> {
 
         const entries: MenuEntry[] = [];
@@ -131,7 +131,7 @@ export class MainMenuNamespace extends SocketNameSpace {
             if (!entries.some((e) => e.mainContextId === extension.mainContextId)) {
                 const allowed = await PermissionService.getInstance().checkPermissions(token, extension.permissions)
                     .catch(() => false);
-                if (allowed) {
+                if (allowed && extension.primaryMenu === primary) {
                     entries.push(new MenuEntry(extension.icon, extension.text, extension.mainContextId, extension.contextIds));
                 }
             }
