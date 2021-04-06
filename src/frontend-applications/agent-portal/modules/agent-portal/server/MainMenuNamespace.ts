@@ -126,6 +126,17 @@ export class MainMenuNamespace extends SocketNameSpace {
             }
         }
 
+        // add extensions which are not in cofniguration
+        for (const extension of extensions) {
+            if (!entries.some((e) => e.mainContextId === extension.mainContextId)) {
+                const allowed = await PermissionService.getInstance().checkPermissions(token, extension.permissions)
+                    .catch(() => false);
+                if (allowed) {
+                    entries.push(new MenuEntry(extension.icon, extension.text, extension.mainContextId, extension.contextIds));
+                }
+            }
+        }
+
         return entries;
     }
 
