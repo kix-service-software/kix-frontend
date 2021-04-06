@@ -1,6 +1,6 @@
 {
     "dependencies": [
-        "require ./core",
+        "require ./core/AdminUIModule",
         "require ./components/admin-module",
         "require ./components/admin-modules-explorer"
     ]

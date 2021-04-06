@@ -141,7 +141,7 @@ export class Table implements Table {
 
             if (
                 // if intersection is active and no rowobjects found, result list is always empty, so ignore handler
-                (!this.tableConfiguration.intersection || (rowObjects && rowObjects.length))
+                (!this.tableConfiguration?.intersection || (rowObjects && rowObjects.length))
                 && this.tableConfiguration
                 && Array.isArray(this.tableConfiguration.additionalTableObjectsHandler)
                 && this.tableConfiguration.additionalTableObjectsHandler.length

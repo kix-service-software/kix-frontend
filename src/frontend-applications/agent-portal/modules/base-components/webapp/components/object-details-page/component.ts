@@ -59,6 +59,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             contextRegistered: () => null
         });
 
+        await this.prepareConfigurations();
+        await this.prepareWidget();
+        await this.prepareActions();
         this.state.loading = false;
     }
 

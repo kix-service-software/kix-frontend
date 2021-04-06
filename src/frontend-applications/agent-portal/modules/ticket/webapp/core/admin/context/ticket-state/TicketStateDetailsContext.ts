@@ -12,7 +12,7 @@ import { LabelService } from '../../../../../../../modules/base-components/webap
 import { TicketState } from '../../../../../model/TicketState';
 import { BreadcrumbInformation } from '../../../../../../../model/BreadcrumbInformation';
 import { TranslationService } from '../../../../../../../modules/translation/webapp/core/TranslationService';
-import { AdminContext } from '../../../../../../admin/webapp/core';
+import { AdminContext } from '../../../../../../admin/webapp/core/AdminContext';
 import { KIXObject } from '../../../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 

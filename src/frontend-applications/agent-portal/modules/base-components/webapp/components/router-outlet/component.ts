@@ -7,18 +7,22 @@
  * --
  */
 
-import { RouterComponentState } from './RouterComponentState';
-import { RoutingService } from '../../../../../modules/base-components/webapp/core/RoutingService';
-import { ComponentRouter } from '../../../../../model/ComponentRouter';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
 import { IRoutingServiceListener } from '../../../../../modules/base-components/webapp/core/IRoutingServiceListener';
+import { EventService } from '../../core/EventService';
+import { IdService } from '../../../../../model/IdService';
+import { ComponentState } from './ComponentState';
+import { ContextService } from '../../core/ContextService';
+import { IEventSubscriber } from '../../core/IEventSubscriber';
+import { RoutingEvent } from '../../core/RoutingEvent';
 
 export class RouterOutletComponent implements IRoutingServiceListener {
 
-    private state: RouterComponentState;
+    private state: ComponentState;
+    private subscriber: IEventSubscriber;
 
     public onCreate(input: any): void {
-        this.state = new RouterComponentState();
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
@@ -26,17 +30,39 @@ export class RouterOutletComponent implements IRoutingServiceListener {
     }
 
     public onMount(): void {
-        RoutingService.getInstance().registerServiceListener(this);
+
+        const context = ContextService.getInstance().getActiveContext();
+        if (context) {
+            this.state.componentId = context.getDescriptor()?.componentId;
+            this.state.data = { objectId: context.getObjectId() };
+            this.state.template = KIXModulesService.getComponentTemplate(this.state.componentId);
+        }
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId('RouterOutlet'),
+            eventPublished: this.routedTo.bind(this)
+        };
+        EventService.getInstance().subscribe(RoutingEvent.ROUTE_TO, this.subscriber);
+
+        this.state.prepared = true;
     }
 
-    public routedTo(router: ComponentRouter): void {
-        if (router) {
-            this.state.componentId = router.componentId;
-            this.state.data = router.data;
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(RoutingEvent.ROUTE_TO, this.subscriber);
+    }
+
+    public routedTo(data: any): void {
+        if (data.componentId) {
+            this.state.prepared = false;
+
+            this.state.componentId = data.componentId;
+            this.state.data = data.data;
+
             this.state.template = KIXModulesService.getComponentTemplate(this.state.componentId);
-            (this as any).update();
+            setTimeout(() => this.state.prepared = true, 50);
         }
     }
+
 
 }
 
