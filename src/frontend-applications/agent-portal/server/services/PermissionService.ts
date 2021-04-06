@@ -23,15 +23,17 @@ export class PermissionService {
 
     private constructor() { }
 
-    public async checkPermissions(token: string, permissions: UIComponentPermission[] = []): Promise<boolean> {
+    public async checkPermissions(
+        token: string, permissions: UIComponentPermission[] = [], object?: any
+    ): Promise<boolean> {
         if (permissions && permissions.length) {
             const andPermissionChecks: Array<Promise<boolean>> = [];
             const orPermissionChecks: Array<Promise<boolean>> = [];
             permissions.filter((p) => p.OR).forEach((p) => {
-                orPermissionChecks.push(this.methodAllowed(token, p));
+                orPermissionChecks.push(this.methodAllowed(token, p, object));
             });
             permissions.filter((p) => !p.OR).forEach((p) => {
-                andPermissionChecks.push(this.methodAllowed(token, p));
+                andPermissionChecks.push(this.methodAllowed(token, p, object));
             });
 
             const andChecks = await Promise.all(andPermissionChecks);
@@ -47,16 +49,14 @@ export class PermissionService {
         return true;
     }
 
-    private async methodAllowed(token: string, permission: UIComponentPermission): Promise<boolean> {
+    private async methodAllowed(token: string, permission: UIComponentPermission, object: any): Promise<boolean> {
         if (permission.permissions && permission.permissions.length) {
             if (permission.target.startsWith('/')) {
                 permission.target = permission.target.substr(1, permission.target.length);
             }
 
-            permission.target = permission.target.replace('\*', 'permissioncheck');
-
             const response = await HttpService.getInstance().options(
-                token, permission.target, permission.permissionCheckMaxLayer
+                token, permission.target, object
             ).catch((error) => {
                 console.error(error);
                 return null;

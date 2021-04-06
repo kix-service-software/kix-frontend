@@ -27,6 +27,10 @@ export enum ObjectReferenceOptions {
 
     COUNT_MIN = 'COUNT_MIN',
 
-    COUNT_MAX = 'COUNT_MAX'
+    COUNT_MAX = 'COUNT_MAX',
+
+    OBJECT_IDS = 'OBJECT_IDS',
+
+    KEEP_SELECTION = 'KEEP_SELECTION'
 
 }

@@ -190,6 +190,15 @@ export class FormInstance {
             this.deleteFieldValues(formField);
             this.setFieldChildrenEmpty(formField);
         }
+
+        const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
+            this.form.objectType, ServiceType.FORM
+        );
+        service.updateFields([formField], this);
+
+        EventService.getInstance().publish(
+            FormEvent.FIELD_EMPTY_STATE_CHANGED, { formInstance: this, field: formField }
+        );
     }
 
     private setFieldChildrenEmpty(formField: FormFieldConfiguration): void {
@@ -249,10 +258,10 @@ export class FormInstance {
         }
     }
 
-    public async getFields(formField: FormFieldConfiguration): Promise<FormFieldConfiguration[]> {
+    public getFields(formField: FormFieldConfiguration): FormFieldConfiguration[] {
         let fields: FormFieldConfiguration[];
         if (formField.parent) {
-            const parent = await this.getFormField(formField.parent.instanceId);
+            const parent = this.getFormField(formField.parent.instanceId);
             fields = parent.children;
         } else {
             for (const page of this.form.pages) {
@@ -273,7 +282,7 @@ export class FormInstance {
     public async duplicateAndAddNewField(
         formField: FormFieldConfiguration, withChildren: boolean = true
     ): Promise<FormFieldConfiguration> {
-        const fields: FormFieldConfiguration[] = await this.getFields(formField);
+        const fields: FormFieldConfiguration[] = this.getFields(formField);
         if (Array.isArray(fields)) {
             const index = fields.findIndex((c) => c.instanceId === formField.instanceId);
             const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
@@ -285,7 +294,13 @@ export class FormInstance {
                 this.setDefaultValueAndParent([newField], formField.parent);
                 await service.updateFields(fields, this);
 
-                EventService.getInstance().publish(FormEvent.FIELD_CHILDREN_ADDED, { formInstance: this, parent });
+                EventService.getInstance().publish(
+                    FormEvent.FIELD_DUPLICATED, { formInstance: this, field: newField }
+                );
+
+                EventService.getInstance().publish(
+                    FormEvent.FIELD_CHILDREN_ADDED, { formInstance: this, parent, field: newField }
+                );
                 return newField;
             }
         }
@@ -413,6 +428,82 @@ export class FormInstance {
         return null;
     }
 
+    public getFormFieldsByProperty(property: string): FormFieldConfiguration[] {
+        let fields = [];
+        for (const p of this.form.pages) {
+            for (const g of p.groups) {
+                const groupFields = this.findFormFieldsByProperty(g.formFields, property);
+                if (Array.isArray(groupFields)) {
+                    fields = [...fields, ...groupFields];
+                }
+            }
+        }
+
+        return fields;
+    }
+
+    private findFormFieldByProperty(fields: FormFieldConfiguration[] = [], property: string): FormFieldConfiguration {
+        let field = fields.find((f) => f.property === property);
+
+        if (!field) {
+            const dfName = KIXObjectService.getDynamicFieldName(property);
+            if (dfName) {
+                field = fields.filter((f) => f.property === KIXObjectProperty.DYNAMIC_FIELDS).find(
+                    (f) => f.options && f.options.some(
+                        (o) => o.option === DynamicFormFieldOption.FIELD_NAME && o.value === dfName
+                    )
+                );
+            }
+        }
+
+        if (!field) {
+            for (const f of fields) {
+                const foundField = f.children && f.children.length ?
+                    this.findFormFieldByProperty(f.children, property) : null;
+                if (foundField) {
+                    field = foundField;
+                    break;
+                }
+            }
+        }
+
+        return field;
+    }
+
+    private findFormFieldsByProperty(
+        fields: FormFieldConfiguration[] = [], property: string
+    ): FormFieldConfiguration[] {
+        let resultFields = fields.filter((f) => f.property === property);
+
+        if (!resultFields) {
+            const dfName = KIXObjectService.getDynamicFieldName(property);
+            if (dfName) {
+                const dfFields = resultFields.filter((f) => f.property === KIXObjectProperty.DYNAMIC_FIELDS).find(
+                    (f) => f.options && f.options.some(
+                        (o) => o.option === DynamicFormFieldOption.FIELD_NAME && o.value === dfName
+                    )
+                );
+                if (Array.isArray(dfFields)) {
+                    resultFields = [...resultFields, ...dfFields];
+                }
+            }
+        }
+
+        if (!resultFields) {
+            for (const f of resultFields) {
+                const subFields = f.children && f.children.length
+                    ? this.findFormFieldByProperty(f.children, property)
+                    : null;
+                if (Array.isArray(subFields)) {
+                    resultFields = [...resultFields, ...subFields];
+                    break;
+                }
+            }
+        }
+
+        return resultFields;
+    }
+
     // TODO: Deprecated
     public getAllFormFieldValues(): Map<string, FormFieldValue<any>> {
         return this.formFieldValues;
@@ -467,34 +558,6 @@ export class FormInstance {
         }
 
         return foundFields;
-    }
-
-    private findFormFieldByProperty(fields: FormFieldConfiguration[] = [], property: string): FormFieldConfiguration {
-        let field = fields.find((f) => f.property === property);
-
-        if (!field) {
-            const dfName = KIXObjectService.getDynamicFieldName(property);
-            if (dfName) {
-                field = fields.filter((f) => f.property === KIXObjectProperty.DYNAMIC_FIELDS).find(
-                    (f) => f.options && f.options.some(
-                        (o) => o.option === DynamicFormFieldOption.FIELD_NAME && o.value === dfName
-                    )
-                );
-            }
-        }
-
-        if (!field) {
-            for (const f of fields) {
-                const foundField = f.children && f.children.length ?
-                    this.findFormFieldByProperty(f.children, property) : null;
-                if (foundField) {
-                    field = foundField;
-                    break;
-                }
-            }
-        }
-
-        return field;
     }
 
     public async validateForm(): Promise<ValidationResult[]> {

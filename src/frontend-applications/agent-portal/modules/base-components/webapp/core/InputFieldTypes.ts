@@ -17,6 +17,8 @@ export enum InputFieldTypes {
 
     DATE_TIME = 'DATE_TIME',
 
+    TIME = 'TIME',
+
     DROPDOWN = 'DROPDOWN',
 
     DUMMY = 'DUMMY',

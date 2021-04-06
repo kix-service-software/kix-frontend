@@ -115,6 +115,16 @@ export enum KIXObjectType {
 
     QUEUE = 'Queue',
 
+    REPORT = 'Report',
+
+    REPORT_DEFINITION = 'ReportDefinition',
+
+    REPORT_OUTPUT_FORMAT = 'OutputFormat',
+
+    REPORT_RESULT = 'ReportResult',
+
+    REPORT_DATA_SOURCE = 'DataSource',
+
     ROLE = 'Role',
 
     SERVICE = 'Service',

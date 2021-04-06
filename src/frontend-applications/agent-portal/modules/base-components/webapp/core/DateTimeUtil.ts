@@ -9,6 +9,8 @@
 
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
+import dateFormat = require('dateformat');
+
 export class DateTimeUtil {
 
     public static async getLocalDateString(value: any, language?: string): Promise<string> {
@@ -200,6 +202,10 @@ export class DateTimeUtil {
             return new Date(parts[1] + '/' + parts[0] + '/' + parts[2]);
         }
         return new Date();
+    }
+
+    public static format(date: Date, format: string): string {
+        return dateFormat(date, format);
     }
 
 }

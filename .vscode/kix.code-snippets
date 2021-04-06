@@ -68,5 +68,39 @@
 			"const ${1:text} = await TranslationService.translate('Translatable#${2:pattern}', [${3}]);",
 		],
 		"description": "translation component"
-	}
+	},
+	"Unit Test": {
+		"scope": "javascript,typescript",
+		"prefix": "kix unit test",
+		"body": [
+			"/* tslint:disable */",
+			"",
+			"import chai = require('chai');",
+			"import chaiAsPromised = require('chai-as-promised');",
+			"",
+			"chai.use(chaiAsPromised);",
+			"const expect = chai.expect;",
+			"",
+			"describe('Module', () => {",
+			"",
+			"\tbefore(() => {",
+			"\t\t// before tests",
+			"\t});",
+			"",
+			"\tafter(() => {",
+			"\t\t// after tests",
+			"\t});",
+			"",
+			"\tdescribe('Test Scenario', () => {",
+			"",
+			"\t\tit('Test Case', () => {",
+			"\t\t\t// expect(data).true;",
+			"\t\t});",
+			"",
+			"\t});",
+			"",
+			"});"
+		],
+		"description": "singleton pattern implementation"
+	},
 }

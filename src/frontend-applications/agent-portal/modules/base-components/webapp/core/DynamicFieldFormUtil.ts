@@ -79,14 +79,18 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
     }
 
     public async createDynamicFormField(
-        field: FormFieldConfiguration, objectType: KIXObjectType | string
+        field: FormFieldConfiguration, objectType?: KIXObjectType | string
     ): Promise<boolean> {
         let success = false;
         const nameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
         if (nameOption) {
             const name = nameOption.value;
             const dynamicField = await KIXObjectService.loadDynamicField(name);
-            if (dynamicField && dynamicField.ValidID === 1 && dynamicField.ObjectType === objectType) {
+            if (dynamicField && dynamicField.ValidID === 1) {
+                if (objectType && dynamicField.ObjectType !== objectType) {
+                    return;
+                }
+
                 const config = dynamicField.Config;
                 field.countDefault = Number(config.CountDefault);
                 field.countMax = Number(config.CountMax);

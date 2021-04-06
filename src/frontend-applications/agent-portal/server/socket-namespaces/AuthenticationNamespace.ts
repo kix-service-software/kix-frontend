@@ -114,7 +114,7 @@ export class AuthenticationNamespace extends SocketNameSpace {
         return new Promise<SocketResponse>(async (resolve, reject) => {
             let event = AuthenticationEvent.PERMISSION_CHECK_SUCCESS;
 
-            const allowed = await PermissionService.getInstance().checkPermissions(token, data.permissions)
+            const allowed = await PermissionService.getInstance().checkPermissions(token, data.permissions, data.object)
                 .catch(() => false);
 
             if (!allowed) {
