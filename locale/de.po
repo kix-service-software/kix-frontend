@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2021-03-25 14:46+0000\n"
+"PO-Revision-Date: 2021-04-06 12:46+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
@@ -196,6 +196,8 @@ msgstr ""
 
 msgid "An error occured during report creation. See system log for details."
 msgstr ""
+"Während der Berichtserstellung trat ein Fehler auf. Nächere Informationen "
+"finden Sie im System Log."
 
 msgid "An error occurred."
 msgstr "Es ist ein Fehler aufgetreten."
@@ -314,7 +316,7 @@ msgid "Automation: Notifications"
 msgstr "Automatisierung: Benachrichtigungen"
 
 msgid "Available Output Formats"
-msgstr ""
+msgstr "Verfügbare Ausgabeformate"
 
 msgid "Avatar"
 msgstr ""
@@ -669,10 +671,10 @@ msgid "Create Queue"
 msgstr "Team wird angelegt"
 
 msgid "Create Report"
-msgstr ""
+msgstr "Bericht erstellen"
 
 msgid "Create Report Definition"
-msgstr ""
+msgstr "Berichtsdefinition wird erstellt"
 
 msgid "Create Role"
 msgstr "Rolle wird angelegt"
@@ -687,7 +689,7 @@ msgid "Create Text Module"
 msgstr "Textbaustein wird angelegt"
 
 msgid "Create the report with output format {0} and defaults?"
-msgstr ""
+msgstr "Bericht mit Ausgabeformat {0} und Standardwerten erstellen?"
 
 msgid "Create Ticket"
 msgstr "Ticket anlegen"
@@ -747,10 +749,10 @@ msgid "Data has been updated."
 msgstr "Daten wurden aktualisiert."
 
 msgid "Datasource"
-msgstr ""
+msgstr "Datenquelle"
 
 msgid "Data Type"
-msgstr ""
+msgstr "Datentyp"
 
 msgid "Day(s)"
 msgstr "Tag(e)"
@@ -774,10 +776,10 @@ msgid "Delete"
 msgstr "Löschen"
 
 msgid "Delete all selected report definitions?"
-msgstr ""
+msgstr "Ausgewählte Berichtsdefinitionen löschen?"
 
 msgid "Delete all selected reports?"
-msgstr ""
+msgstr "Ausgewählte Berichte löschen?"
 
 msgid "Deleted"
 msgstr "Gelöscht"
@@ -786,10 +788,10 @@ msgid "Delete Link"
 msgstr "Verknüpfung löschen"
 
 msgid "Delete Report"
-msgstr ""
+msgstr "Bericht wird gelöscht"
 
 msgid "Delete Report Definition"
-msgstr ""
+msgstr "Berichtsdefinition wird gelöscht"
 
 msgid "Delete Search"
 msgstr "Suche löschen"
@@ -831,7 +833,7 @@ msgid "Download log"
 msgstr "Log Download"
 
 msgid "Download Result"
-msgstr ""
+msgstr "Ergebnis herunterladen"
 
 msgid "Duplicate"
 msgstr "Duplizieren"
@@ -931,7 +933,7 @@ msgid "Edit Queue"
 msgstr "Team bearbeiten"
 
 msgid "Edit Report"
-msgstr ""
+msgstr "Berichtsdefinition bearbeiten"
 
 msgid "Edit Role"
 msgstr "Rolle bearbeiten"
@@ -1033,10 +1035,10 @@ msgid "Error while adding the image:"
 msgstr "Fehler beim Hinzufügen des Bildes:"
 
 msgid "Error while deleting Report."
-msgstr ""
+msgstr "Beim Löschen des Berichts ist ein Fehler aufgetreten."
 
 msgid "Error while deleting Report Definition."
-msgstr ""
+msgstr "Beim Löschen der Berichtsdefinition ist ein Fehler aufgetreten."
 
 msgid "Escalated Tickets"
 msgstr "Eskalierte Tickets"
@@ -3071,10 +3073,10 @@ msgid "New Queue"
 msgstr "Neues Team"
 
 msgid "New Report"
-msgstr ""
+msgstr "Neuer Bericht"
 
 msgid "New Report Definition"
-msgstr ""
+msgstr "Neue Definition"
 
 msgid "New Role"
 msgstr "Neue Rolle"
@@ -3311,10 +3313,10 @@ msgid "Outbox"
 msgstr "Postausgang"
 
 msgid "Output Format"
-msgstr ""
+msgstr "Ausgabeformat"
 
 msgid "Output Formats"
-msgstr ""
+msgstr "Ausgabeformate"
 
 msgid "Output Handler"
 msgstr ""
@@ -3344,10 +3346,10 @@ msgid "Overview Organisations"
 msgstr "Übersicht Organisationen"
 
 msgid "Overview Report Definitions"
-msgstr ""
+msgstr "Übersicht Berichtsdefinitionen"
 
 msgid "Overview Reports"
-msgstr ""
+msgstr "Übersicht Berichte"
 
 msgid "Overview Ticket Priorities"
 msgstr "Tickets nach Prioritäten"
@@ -3450,7 +3452,7 @@ msgid "Port"
 msgstr ""
 
 msgid "Possible Values"
-msgstr ""
+msgstr "Mögliche Werte"
 
 msgid "Postal Address"
 msgstr "Adresse"
@@ -3654,40 +3656,40 @@ msgid "Reply all"
 msgstr "Allen antworten"
 
 msgid "Report"
-msgstr ""
+msgstr "Bericht"
 
 msgid "Report Definition"
-msgstr ""
+msgstr "Berichtsdefinition"
 
 msgid "Report Definitions"
-msgstr ""
+msgstr "Berichtsdefinitionen"
 
 msgid "Report Definition(s) deleted."
-msgstr ""
+msgstr "Berichtsdefinition(en) wurden gelöscht."
 
 msgid "Report definition successfully created."
-msgstr ""
+msgstr "Berichtsdefinition wurde erfolgreich erstellt."
 
 msgid "Report Definition successfully updated."
-msgstr ""
+msgstr "Berichtsdefinition wurde erfolgreich gespeichert."
 
 msgid "Report Information"
-msgstr ""
+msgstr "Berichtsinformationen"
 
 msgid "Reporting"
-msgstr ""
+msgstr "Berichte"
 
 msgid "Report Parameter"
-msgstr ""
+msgstr "Berichtsparamenter"
 
 msgid "Reports"
-msgstr ""
+msgstr "Berichte"
 
 msgid "Report(s) deleted."
-msgstr ""
+msgstr "Bericht(e) wurden gelöscht."
 
 msgid "Report successfully created."
-msgstr ""
+msgstr "Bericht wurde erfolgreich angelegt."
 
 msgid "Required"
 msgstr "Erforderlich"
@@ -4453,7 +4455,7 @@ msgid "Update Queue"
 msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update Report Definition"
-msgstr ""
+msgstr "Berichtsdefinition wird gespeichert"
 
 msgid "Update Role"
 msgstr "Aktualisierung wird durchgeführt"
