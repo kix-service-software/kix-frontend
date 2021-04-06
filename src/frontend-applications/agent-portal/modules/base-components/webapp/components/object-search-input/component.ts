@@ -29,7 +29,13 @@ class Component extends FormInputComponent<any, ComponentState> {
         const option = this.state.field.options.find((o) => o.option === FormFieldOptions.OBJECT_TYPE);
         if (option && option.value) {
             const searchDefinition = SearchService.getInstance().getSearchDefinition(option.value);
-            this.state.manager = searchDefinition.createFormManager();
+
+            let ignoreProperties = [];
+            const ignoreOption = this.state.field.options.find((o) => o.option === FormFieldOptions.IGNORE_PROPERTIES);
+            if (ignoreOption && Array.isArray(ignoreOption.value)) {
+                ignoreProperties = ignoreOption.value;
+            }
+            this.state.manager = searchDefinition.createFormManager(ignoreProperties);
 
             this.state.manager.reset();
             this.state.manager.init();

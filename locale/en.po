@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2021-02-11 12:46+0000\n"
+"PO-Revision-Date: 2021-03-24 10:46+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: English <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/en/>\n"
@@ -783,10 +783,10 @@ msgstr ""
 msgid "Duplicate"
 msgstr ""
 
-msgid "DynamicField"
+msgid "Dynamic Field"
 msgstr ""
 
-msgid "Dynamic Field"
+msgid "DynamicField"
 msgstr ""
 
 msgid "Dynamic Fields"
@@ -2603,10 +2603,10 @@ msgstr ""
 msgid "Legend"
 msgstr ""
 
-msgid "Lets go"
+msgid "Let's go"
 msgstr ""
 
-msgid "Let's go"
+msgid "Lets go"
 msgstr ""
 
 msgid "Limit:"
@@ -2949,7 +2949,7 @@ msgid "Notification successfully created."
 msgstr "Notification successfully created."
 
 msgid "Notification Template"
-msgstr ""
+msgstr "Notifications Template"
 
 msgid "Notification Text"
 msgstr ""
@@ -3453,7 +3453,7 @@ msgid "Save new search"
 msgstr ""
 
 msgid "Save notification template"
-msgstr ""
+msgstr "Save notifications template"
 
 msgid "Save Organisation"
 msgstr ""
@@ -3615,7 +3615,7 @@ msgid "Show in agent preferences"
 msgstr ""
 
 msgid "Show in Customer Portal"
-msgstr "Show in Self Service Portal"
+msgstr "Enable for Self Service Portal"
 
 msgid "Show title in form"
 msgstr ""
@@ -3680,7 +3680,7 @@ msgstr ""
 msgid "Start time has to be before end time"
 msgstr ""
 
-msgid "Start value is greate than end value"
+msgid "Start value is greater than end value"
 msgstr ""
 
 msgid "Start value is not given"
@@ -3766,6 +3766,9 @@ msgstr ""
 
 msgid "System"
 msgstr ""
+
+msgid "System address"
+msgstr "System Address"
 
 msgid "System Address"
 msgstr ""
