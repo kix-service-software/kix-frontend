@@ -145,14 +145,10 @@ export class HttpService {
         return errors;
     }
 
-    public async options(
-        token: string, resource: string, permissionCheckMaxLayer: string = 'Resource'
-    ): Promise<OptionsResponse> {
+    public async options(token: string, resource: string, content: any): Promise<OptionsResponse> {
         const options = {
             method: RequestMethod.OPTIONS,
-            headers: {
-                'X-KIX-PermissionCheckMaxLayer': permissionCheckMaxLayer
-            }
+            body: content
         };
 
         const cacheKey = token + resource;

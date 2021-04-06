@@ -216,7 +216,8 @@ export class Row<T = any> {
 
         if (notify && !silent) {
             EventService.getInstance().publish(
-                TableEvent.ROW_SELECTION_CHANGED, new TableEventData(this.getTable().getTableId(), this.getRowId())
+                TableEvent.ROW_SELECTION_CHANGED, new TableEventData(this.getTable().getTableId(), this.getRowId(),
+                    null, this.getTable())
             );
         }
     }

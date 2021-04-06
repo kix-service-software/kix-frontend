@@ -39,7 +39,7 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
         this.state.formContext = formInstance.getFormContext();
 
         if (!this.state.field) {
-            this.state.field = await formInstance.getFormField(this.state.field.instanceId);
+            this.state.field = formInstance.getFormField(this.state.field.instanceId);
         }
     }
 
@@ -47,32 +47,42 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
         this.subscriber = {
             eventSubscriberId: `${this.state.field.instanceId}_FormInputComponent`,
             eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
-                if (eventId === FormEvent.VALUES_CHANGED && this.state.field && data) {
-                    if (data.originInstanceId !== this.state.field.instanceId) {
-                        const ownValue = data.changedValues.find(
-                            (cv) => cv[0] && cv[0].instanceId === this.state.field.instanceId
-                        );
-                        if (ownValue) {
-                            this.state.prepared = false;
-                            this.setCurrentValue();
-                            this.state.field = data.formInstance.getFormField(this.state.field.instanceId);
-                            FormInputComponent.prototype.setInvalidState.call(this);
-                            setTimeout(() => this.state.prepared = true, 10);
+                if (data?.formInstance?.getForm()?.id === this.state.formId) {
+                    if (eventId === FormEvent.VALUES_CHANGED && this.state.field && data) {
+                        if (data.originInstanceId !== this.state.field.instanceId) {
+                            const ownValue = data.changedValues.find(
+                                (cv) => cv[0] && cv[0].instanceId === this.state.field.instanceId
+                            );
+                            if (ownValue) {
+                                this.state.prepared = false;
+                                this.setCurrentValue();
+                                this.state.field = data.formInstance.getFormField(this.state.field.instanceId);
+                                FormInputComponent.prototype.callSetInvalidState.call(this);
+                                setTimeout(() => this.state.prepared = true, 10);
+                            }
+                        } else {
+                            FormInputComponent.prototype.callSetInvalidState.call(this);
                         }
-                    } else {
-                        FormInputComponent.prototype.setInvalidState.call(this);
+                    } else if (eventId === FormEvent.FORM_VALIDATED) {
+                        FormInputComponent.prototype.callSetInvalidState.call(this);
                     }
-                } else if (eventId === FormEvent.FORM_VALIDATED) {
-                    FormInputComponent.prototype.setInvalidState.call(this);
                 }
             }
         };
         EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(FormEvent.FORM_VALIDATED, this.subscriber);
 
-        FormInputComponent.prototype.setInvalidState.call(this);
+        FormInputComponent.prototype.callSetInvalidState.call(this);
         await this.setCurrentValue();
         this.state.prepared = true;
+    }
+
+    private callSetInvalidState(): void {
+        if (this.setInvalidState) {
+            this.setInvalidState();
+        } else {
+            FormInputComponent.prototype.setInvalidState.call(this);
+        }
     }
 
     public async onDestroy(): Promise<void> {
@@ -80,7 +90,7 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
         EventService.getInstance().unsubscribe(FormEvent.FORM_VALIDATED, this.subscriber);
     }
 
-    public abstract async setCurrentValue(): Promise<void>;
+    public abstract setCurrentValue(): Promise<void>;
 
     protected async provideValue(value: T, silent?: boolean): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
@@ -103,7 +113,7 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         if (formInstance && formInstance.getForm().validation) {
             await formInstance.validateField(this.state.field);
-            FormInputComponent.prototype.setInvalidState.call(this);
+            FormInputComponent.prototype.callSetInvalidState.call(this);
         }
     }
 }

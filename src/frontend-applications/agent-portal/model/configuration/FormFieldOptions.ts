@@ -23,6 +23,8 @@ export enum FormFieldOptions {
 
     MAX_DATE = 'MAX_DATE',
 
-    OBJECT_TYPE = 'OBJECT_TYPE'
+    OBJECT_TYPE = 'OBJECT_TYPE',
+
+    LANGUAGE = 'LANGUAGE'
 
 }

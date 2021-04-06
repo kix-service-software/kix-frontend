@@ -22,6 +22,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     public onInput(input: any): void {
         super.onInput(input);
+        this.state.freeText = typeof input.freeText !== 'undefined' ? input.freeText : false;
         this.update();
     }
 

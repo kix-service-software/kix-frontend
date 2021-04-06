@@ -48,6 +48,7 @@
         "cookie-parser": "1.4.3",
         "cors": "2.8.5",
         "csso": "3.5.1",
+        "dateformat": "4.5.1",
         "express": "4.16.4",
         "express-force-ssl": "0.3.2",
         "file-saver": "2.0.2",

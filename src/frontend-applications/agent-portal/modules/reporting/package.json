@@ -1,0 +1,34 @@
+{
+    "name": "kix-module-reporting",
+    "extensions": {
+        "kix:services": {
+            "reporting-service": {
+                "module": "service.extension"
+            }
+        },
+        "kix:modules": {
+            "reporting-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:menu:main": {
+            "reporting-menu-main": {
+                "module": "menu.extension"
+            }
+        },
+        "kix:configuration": {
+            "reporting-configuration": {
+                "module": "configuration.extension"
+            },
+            "new-report-definition-dialog-configuration": {
+                "module": "new-report-definition-configuration.extension"
+            },
+            "edit-report-definition-dialog-configuration": {
+                "module": "edit-report-definition-configuration.extension"
+            },
+            "new-report-dialog-configuration": {
+                "module": "new-report-configuration.extension"
+            }
+        }
+    }
+}
