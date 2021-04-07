@@ -2338,8 +2338,8 @@ msgstr ""
 
 msgid "Helptext_Reporting_ReportCreate_Datasource"
 msgstr ""
-"Angabe der Datenquelle der Berichtsdefinition. Aktuell ist nur \"GenericSQL\""
-" möglich."
+"Angabe der Datenquelle der Berichtsdefinition. Aktuell ist nur \"GenericSQL"
+"\" möglich."
 
 msgid "Helptext_Reporting_ReportCreate_Datasource_DBMS"
 msgstr ""
@@ -2409,8 +2409,8 @@ msgstr ""
 
 msgid "Helptext_Reporting_ReportCreate_ParameterReferences"
 msgstr ""
-"Angabe der Datenquelle, auf die der Parameter referenziert. Syntax: "
-"Objekt.Attribut (z.B.: die ID der Organistation: \"Organisation.ID\"). "
+"Angabe der Datenquelle, auf die der Parameter referenziert. Syntax: Objekt."
+"Attribut (z.B.: die ID der Organistation: \"Organisation.ID\"). "
 "Detailiertere Informationen finden Sie im Handbuch."
 
 msgid "Helptext_Reporting_ReportCreate_ParameterRequired"

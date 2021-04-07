@@ -315,7 +315,7 @@ export class ReportDefinitionFormCreator {
             false, 'Translatable#Helptext_Reporting_ReportCreate_ParameterDescription', []
         );
         descriptionField.instanceId = IdService.generateDateBasedId();
-        descriptionField.defaultValue = parameter ? new FormFieldValue(parameter.Name) : null;
+        descriptionField.defaultValue = parameter ? new FormFieldValue(parameter.Description) : null;
         descriptionField.parent = parameterField;
         descriptionField.parentInstanceId = parameterField.instanceId;
         parameterField.children.push(descriptionField);
