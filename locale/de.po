@@ -4133,6 +4133,9 @@ msgstr "Sonntag"
 msgid "Superuser Account"
 msgstr "Nutzer Superuser"
 
+msgid "switch_column_order_action"
+msgstr ""
+
 msgid "Switch to customer portal."
 msgstr "Wechsel ins Self Service Portal."
 

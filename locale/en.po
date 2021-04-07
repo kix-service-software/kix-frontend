@@ -3982,6 +3982,9 @@ msgstr ""
 msgid "Superuser Account"
 msgstr ""
 
+msgid "switch_column_order_action"
+msgstr ""
+
 msgid "Switch to customer portal."
 msgstr "Switch to Self Service Portal."
 
