@@ -751,6 +751,9 @@ msgstr "Daten wurden aktualisiert."
 msgid "Datasource"
 msgstr "Datenquelle"
 
+msgid "Data Source"
+msgstr ""
+
 msgid "Data Type"
 msgstr "Datentyp"
 
