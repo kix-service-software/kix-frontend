@@ -332,7 +332,8 @@ export class ReportDefinitionFormCreator {
                         new TreeNode('DATETIME', 'Date Time'),
                         new TreeNode('TIME', 'Time')
                     ]),
-                new FormFieldOption(DefaultSelectInputFormOption.MULTI, false)
+                new FormFieldOption(DefaultSelectInputFormOption.MULTI, false),
+                new FormFieldOption(DefaultSelectInputFormOption.TRANSLATABLE, false)
             ],
         );
         dataTypeField.instanceId = IdService.generateDateBasedId();
