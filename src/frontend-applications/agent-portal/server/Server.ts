@@ -187,7 +187,10 @@ export class Server implements IServer {
             poDefinitions,
             configurations,
             backendDependencies,
-            plugins
+            plugins,
+            {
+                SystemInfo: 1
+            }
         );
 
         const systemInfo = await ClientRegistrationService.getInstance().createClientRegistration(
