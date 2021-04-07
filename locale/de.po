@@ -2440,6 +2440,9 @@ msgstr ""
 "Die Berichtsdefinition kann nur verwendet werden, wenn sie \"gültig\" "
 "gesetzt ist."
 
+msgid "Helptext_Reporting_ReportDefinitionCreate_Title"
+msgstr ""
+
 msgid "Helptext_Reporting_Report_OutputFormats"
 msgstr ""
 "Wählen Sie, für welches Ausgabeformat Sie den Bericht erstellen wollen. Der "

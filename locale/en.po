@@ -2315,6 +2315,9 @@ msgid "Helptext_Reporting_ReportCreate_Validity"
 msgstr ""
 "The report definition can only be used within the system if set “valid”."
 
+msgid "Helptext_Reporting_ReportDefinitionCreate_Title"
+msgstr ""
+
 msgid "Helptext_Reporting_Report_OutputFormats"
 msgstr ""
 "Choose the output format for your report. The report will be available in "
