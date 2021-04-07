@@ -4130,9 +4130,6 @@ msgstr "Sonntag"
 msgid "Superuser Account"
 msgstr "Nutzer Superuser"
 
-msgid "Switch"
-msgstr "Tauschen"
-
 msgid "Switch to customer portal."
 msgstr "Wechsel ins Self Service Portal."
 

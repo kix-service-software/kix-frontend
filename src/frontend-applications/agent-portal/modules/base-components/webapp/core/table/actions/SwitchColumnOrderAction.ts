@@ -13,7 +13,7 @@ import { AbstractAction } from '../../AbstractAction';
 export class SwitchColumnOrderAction extends AbstractAction<Table> {
 
     public async initAction(): Promise<void> {
-        this.text = 'Translatable#Switch';
+        this.text = 'Translatable#switch_column_order_action';
         this.icon = 'kix-icon-exchange';
     }
 
