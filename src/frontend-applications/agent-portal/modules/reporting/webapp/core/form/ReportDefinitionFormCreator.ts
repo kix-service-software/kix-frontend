@@ -423,7 +423,7 @@ export class ReportDefinitionFormCreator {
     private static async createOutputFormatsPage(reportDefinition: ReportDefinition): Promise<FormPageConfiguration> {
         const titleField = new FormFieldConfiguration(
             'report-ouputformats-title', 'Translatable#Title', ReportDefinitionProperty.CONFIG_TITLE, null, false,
-            'Helptext_Reporting_ReportDefinitionCreate_Title'
+            'Translatable#Helptext_Reporting_ReportDefinitionCreate_Title'
         );
         titleField.defaultValue = reportDefinition && reportDefinition.Config[ReportDefinitionProperty.CONFIG_TITLE]
             ? new FormFieldValue(reportDefinition.Config[ReportDefinitionProperty.CONFIG_TITLE])
