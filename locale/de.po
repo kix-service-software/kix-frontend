@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2021-02-15 11:46+0000\n"
+"PO-Revision-Date: 2021-04-07 12:46+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
@@ -194,6 +194,11 @@ msgstr ""
 "Beim Ausführen des Jobs ist ein Fehler aufgetreten. Für nähere Informationen "
 "prüfen Sie den System Log."
 
+msgid "An error occured during report creation. See system log for details."
+msgstr ""
+"Während der Berichtserstellung trat ein Fehler auf. Nächere Informationen "
+"finden Sie im System Log."
+
 msgid "An error occurred."
 msgstr "Es ist ein Fehler aufgetreten."
 
@@ -309,6 +314,9 @@ msgstr "Automatisierung: Jobs"
 
 msgid "Automation: Notifications"
 msgstr "Automatisierung: Benachrichtigungen"
+
+msgid "Available Output Formats"
+msgstr "Verfügbare Ausgabeformate"
 
 msgid "Avatar"
 msgstr ""
@@ -584,6 +592,9 @@ msgstr "Offene Tickets des Kunden"
 msgid "Country"
 msgstr "Land"
 
+msgid "Create"
+msgstr ""
+
 msgid "Create Address"
 msgstr "Adresse wird angelegt"
 
@@ -612,7 +623,7 @@ msgid "Created by"
 msgstr "Erstellt von"
 
 msgid "Created by {0} at {1}. Last change by {2} at {3}"
-msgstr "Erstellt von {0} um {1}. Zuletzt geändert von {2} um {3}"
+msgstr "Erstellt von {0} am {1}. Zuletzt geändert von {2} am {3}"
 
 msgid "Created with Priority"
 msgstr "Erstellt mit der Priorität"
@@ -659,6 +670,12 @@ msgstr "Priorität wird angelegt"
 msgid "Create Queue"
 msgstr "Team wird angelegt"
 
+msgid "Create Report"
+msgstr "Bericht erstellen"
+
+msgid "Create Report Definition"
+msgstr "Berichtsdefinition wird erstellt"
+
 msgid "Create Role"
 msgstr "Rolle wird angelegt"
 
@@ -670,6 +687,9 @@ msgstr "Superuser anlegen"
 
 msgid "Create Text Module"
 msgstr "Textbaustein wird angelegt"
+
+msgid "Create the report with output format {0} and defaults?"
+msgstr "Bericht mit Ausgabeformat {0} und Standardwerten erstellen?"
 
 msgid "Create Ticket"
 msgstr "Ticket anlegen"
@@ -728,8 +748,20 @@ msgstr "KW"
 msgid "Data has been updated."
 msgstr "Daten wurden aktualisiert."
 
+msgid "Datasource"
+msgstr "Datenquelle"
+
+msgid "Data Source"
+msgstr "Datenquelle"
+
+msgid "Data Type"
+msgstr "Datentyp"
+
 msgid "Day(s)"
 msgstr "Tag(e)"
+
+msgid "DBMS"
+msgstr ""
 
 msgid "Default"
 msgstr "Standard"
@@ -746,11 +778,23 @@ msgstr "Benachrichtigungs-Layout definieren"
 msgid "Delete"
 msgstr "Löschen"
 
+msgid "Delete all selected report definitions?"
+msgstr "Ausgewählte Berichtsdefinitionen löschen?"
+
+msgid "Delete all selected reports?"
+msgstr "Ausgewählte Berichte löschen?"
+
 msgid "Deleted"
 msgstr "Gelöscht"
 
 msgid "Delete Link"
 msgstr "Verknüpfung löschen"
+
+msgid "Delete Report"
+msgstr "Bericht wird gelöscht"
+
+msgid "Delete Report Definition"
+msgstr "Berichtsdefinition wird gelöscht"
 
 msgid "Delete Search"
 msgstr "Suche löschen"
@@ -791,14 +835,17 @@ msgstr "Download"
 msgid "Download log"
 msgstr "Log Download"
 
+msgid "Download Result"
+msgstr "Ergebnis herunterladen"
+
 msgid "Duplicate"
 msgstr "Duplizieren"
 
-#, fuzzy
-msgid "DynamicField"
+msgid "Dynamic Field"
 msgstr "Dynamisches Feld"
 
-msgid "Dynamic Field"
+#, fuzzy
+msgid "DynamicField"
 msgstr "Dynamisches Feld"
 
 msgid "Dynamic Fields"
@@ -887,6 +934,9 @@ msgstr "Priorität bearbeiten"
 
 msgid "Edit Queue"
 msgstr "Team bearbeiten"
+
+msgid "Edit Report"
+msgstr "Berichtsdefinition bearbeiten"
 
 msgid "Edit Role"
 msgstr "Rolle bearbeiten"
@@ -986,6 +1036,12 @@ msgstr "Fehler beim Hinzufügen von Anlagen:"
 
 msgid "Error while adding the image:"
 msgstr "Fehler beim Hinzufügen des Bildes:"
+
+msgid "Error while deleting Report."
+msgstr "Beim Löschen des Berichts ist ein Fehler aufgetreten."
+
+msgid "Error while deleting Report Definition."
+msgstr "Beim Löschen der Berichtsdefinition ist ein Fehler aufgetreten."
 
 msgid "Escalated Tickets"
 msgstr "Eskalierte Tickets"
@@ -2278,6 +2334,124 @@ msgstr "Legen Sie ein neues Passwort für Ihren Nutzeraccount fest."
 msgid "Helptext_PersonalSettings_UserPassword_Hint"
 msgstr "Geben Sie Ihr aktuell gültiges Passwort ein."
 
+msgid "Helptext_Reporting_ReportCreate_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur in der "
+"Übersicht der Berichtsdefinitionen angezeigt werden."
+
+msgid "Helptext_Reporting_ReportCreate_Datasource"
+msgstr ""
+"Angabe der Datenquelle der Berichtsdefinition. Aktuell ist nur \"GenericSQL"
+"\" möglich."
+
+msgid "Helptext_Reporting_ReportCreate_Datasource_DBMS"
+msgstr ""
+"Angabe des Datenbankmanagementsystems - die Information wird für "
+"Standardberichte genutzt. Für neue Berichte ist nur \"Any\" möglich."
+
+msgid "Helptext_Reporting_ReportCreate_Datasource_OutputHandler"
+msgstr ""
+"Nur Ansicht: Die Output-Handler werden für die Ausführung der von KIX Pro "
+"mitgelieferten Standardberichte benötigt. Die Parameter der Output-Handler "
+"sind direkt von den entsprechenden SQL-Statements abhängig. Werden diese "
+"verändert, funktionieren die Berichte nicht mehr."
+
+msgid "Helptext_Reporting_ReportCreate_OutputFormat"
+msgstr ""
+"Wählen Sie aus, in welchen Ausgabeformaten der Bericht erzeugt werden kann. "
+"Pro Zeile kann jeweils ein Ausgabeformat gewählt und anschließend "
+"konfiguriert werden. Fügen Sie weitere Ausgabeformate über klick auf das "
+"Plus-Icon hinzu."
+
+msgid "Helptext_Reporting_ReportCreate_Parameter"
+msgstr ""
+"Haben Sie im SQL-Statement Parameter definiert (z. B. \"TypeIDList), die bei "
+"der Berichtserstellung gewählt werden können, können Sie diese hier näher "
+"definieren. Nähere Informationen finden Sie im Admin-Handbuch."
+
+msgid "Helptext_Reporting_ReportCreate_ParameterDataType"
+msgstr ""
+"Der gewählte Datentyp bestimmt, welche Werte beim Erstellen des konkreten "
+"Berichts in das Formularfeld eingegeben werden dürfen."
+
+msgid "Helptext_Reporting_ReportCreate_ParameterDefault"
+msgstr ""
+"Hier können Sie festlegen, mit welchem unter \"Mögliche Werte\" angegebenen "
+"Wert das Formularfeld vorbelegt sein soll."
+
+msgid "Helptext_Reporting_ReportCreate_ParameterDescription"
+msgstr ""
+"Die Beschreibung wird im Formular zum Erstellen des konkreten Berichts als "
+"Hilfetext bei Klick auf das Fragezeichen-Icon des Parameters angezeigt."
+
+msgid "Helptext_Reporting_ReportCreate_ParameterLabel"
+msgstr ""
+"Anzeigename des Parameters, wie er im Formular zum Erstellen des konkreten "
+"Berichts angezeigt wird."
+
+msgid "Helptext_Reporting_ReportCreate_ParameterMultiple"
+msgstr ""
+"Wenn diese Checkbox gewählt ist, kann der Berichteersteller im Formularfeld "
+"mehrere Werte eingeben."
+
+msgid "Helptext_Reporting_ReportCreate_ParameterName"
+msgstr "Name des Parameters, wie er im SQL-Statement vorkommt."
+
+msgid "Helptext_Reporting_ReportCreate_ParameterPossibleValues"
+msgstr ""
+"Definiert die beim Erstellen des Berichts auswählbaren Werte, basierend auf "
+"der unter \"Verweise\" gewählten Datenquelle (wurde z.B. die Organisation.ID "
+"gewählt, kann das hier weiter konkretisiert werden). Wird hier nichts "
+"angegeben, sind im Bericht alle Objekte auswählbar. Detailiertere "
+"Informationen finden Sie im Handbuch."
+
+msgid "Helptext_Reporting_ReportCreate_ParameterReadonly"
+msgstr ""
+"Wenn diese Checkbox gewählt ist, kann das Formularfeld vom Berichteersteller "
+"nicht bearbeitet werden, es wird aber im Dialog zur Information angezeigt."
+
+msgid "Helptext_Reporting_ReportCreate_ParameterReferences"
+msgstr ""
+"Angabe der Datenquelle, auf die der Parameter referenziert. Syntax: Objekt."
+"Attribut (z.B.: die ID der Organistation: \"Organisation.ID\"). "
+"Detailiertere Informationen finden Sie im Handbuch."
+
+msgid "Helptext_Reporting_ReportCreate_ParameterRequired"
+msgstr ""
+"Wen diese Checkbox gewählt ist, ist das Feld beim Erstellen des konkreten "
+"Berichtes ein Pflichtfeld, welches zwingend eine Eingabe durch den "
+"Berichtersteller erfordert."
+
+msgid "Helptext_Reporting_ReportCreate_Roles"
+msgstr ""
+"Diese Berichtsdefinition steht nur den Agenten zur Verfügung, die den hier "
+"gewählten Rollen zugeordnet sind. ACHTUNG: Ordnen Sie hier keine Rollen zu, "
+"die bereits umfassende Berechtigungen für Berichte haben, wie z.B. Superuser "
+"oder Admin. Das kann zu Fehlverhalten führen. Weiterführende Informationen "
+"finden Sie im Admin-Handbuch."
+
+msgid "Helptext_Reporting_ReportCreate_Title"
+msgstr ""
+"Name/Bezeichnung der Berichtsdefinition. Tragen Sie eine aussagekräftige "
+"Bezeichnung ein, damit Agenten den gewünschten Bericht gezielt finden."
+
+msgid "Helptext_Reporting_ReportCreate_Validity"
+msgstr ""
+"Die Berichtsdefinition kann nur verwendet werden, wenn sie \"gültig\" "
+"gesetzt ist."
+
+msgid "Helptext_Reporting_ReportDefinitionCreate_Title"
+msgstr ""
+"Hier können Sie einen Titel festlegen, der in dem erzeugten Bericht als "
+"Überschrift gesetzt wird."
+
+msgid "Helptext_Reporting_Report_OutputFormats"
+msgstr ""
+"Wählen Sie, für welches Ausgabeformat Sie den Bericht erstellen wollen. Der "
+"Bericht wird anschließend in der Tabelle \"Übersicht Berichte\" angezeigt "
+"und kann von dort heruntergeladen werden. Das Erzeugen des Berichts kann "
+"einige Zeit dauern."
+
 msgid "Helptext_Search_ConfigItem"
 msgstr ""
 "Die Suche bezieht sich nur auf aktuelle Versionen. Der FAQ-Artikel \"Wie "
@@ -2739,11 +2913,11 @@ msgstr ""
 msgid "Legend"
 msgstr "Legende"
 
-#, fuzzy
-msgid "Lets go"
+msgid "Let's go"
 msgstr "Los geht's"
 
-msgid "Let's go"
+#, fuzzy
+msgid "Lets go"
 msgstr "Los geht's"
 
 msgid "Limit:"
@@ -2854,6 +3028,9 @@ msgstr "Montag"
 msgid "Month"
 msgstr "Monat"
 
+msgid "Multiple"
+msgstr ""
+
 msgid "My locked tickets"
 msgstr "Meine gesperrten Tickets"
 
@@ -2955,6 +3132,12 @@ msgstr "Neue Priorität"
 
 msgid "New Queue"
 msgstr "Neues Team"
+
+msgid "New Report"
+msgstr "Neuer Bericht"
+
+msgid "New Report Definition"
+msgstr "Neue Definition"
 
 msgid "New Role"
 msgstr "Neue Rolle"
@@ -3086,7 +3269,7 @@ msgid "Notification successfully created."
 msgstr "Benachrichtigung wurde erfolgreich angelegt."
 
 msgid "Notification Template"
-msgstr "Benachrichtigungs-Layout"
+msgstr "Layout Benachrichtigungen"
 
 msgid "Notification Text"
 msgstr "Benachrichtigungstext"
@@ -3190,6 +3373,15 @@ msgstr "Sonstiges"
 msgid "Outbox"
 msgstr "Postausgang"
 
+msgid "Output Format"
+msgstr "Ausgabeformat"
+
+msgid "Output Formats"
+msgstr "Ausgabeformate"
+
+msgid "Output Handler"
+msgstr ""
+
 msgid "Overall"
 msgstr "Gesamt"
 
@@ -3214,6 +3406,12 @@ msgstr "Übersicht zu importierende {0} ({1})"
 msgid "Overview Organisations"
 msgstr "Übersicht Organisationen"
 
+msgid "Overview Report Definitions"
+msgstr "Übersicht Berichtsdefinitionen"
+
+msgid "Overview Reports"
+msgstr "Übersicht Berichte"
+
 msgid "Overview Ticket Priorities"
 msgstr "Tickets nach Prioritäten"
 
@@ -3228,6 +3426,12 @@ msgstr "Versionsübersicht"
 
 msgid "Owner"
 msgstr "Bearbeiter"
+
+msgid "Paramater"
+msgstr ""
+
+msgid "Parameter"
+msgstr ""
 
 msgid "Parent Category"
 msgstr "Übergeordnete Kategorie"
@@ -3307,6 +3511,9 @@ msgstr "Wählen Sie bitte einen Kontakt."
 
 msgid "Port"
 msgstr ""
+
+msgid "Possible Values"
+msgstr "Mögliche Werte"
 
 msgid "Postal Address"
 msgstr "Adresse"
@@ -3428,9 +3635,8 @@ msgstr "Bewertung"
 msgid "Read"
 msgstr "Lesen"
 
-#, fuzzy
 msgid "Readonly"
-msgstr "Lesen"
+msgstr "Nur Lesen"
 
 msgid "Recently Closed"
 msgstr "Kürzlich Geschlossen"
@@ -3509,6 +3715,45 @@ msgstr "Antworten"
 
 msgid "Reply all"
 msgstr "Allen antworten"
+
+msgid "Report"
+msgstr "Bericht"
+
+msgid "Report Definition"
+msgstr "Berichtsdefinition"
+
+msgid "Report Definitions"
+msgstr "Berichtsdefinitionen"
+
+msgid "Report Definition(s) deleted."
+msgstr "Berichtsdefinition(en) wurden gelöscht."
+
+msgid "Report definition successfully created."
+msgstr "Berichtsdefinition wurde erfolgreich erstellt."
+
+msgid "Report Definition successfully updated."
+msgstr "Berichtsdefinition wurde erfolgreich gespeichert."
+
+msgid "Report Information"
+msgstr "Berichtsinformationen"
+
+msgid "Reporting"
+msgstr "Berichte"
+
+msgid "Report Parameter"
+msgstr "Berichtsparamenter"
+
+msgid "Reports"
+msgstr "Berichte"
+
+msgid "Report(s) deleted."
+msgstr "Bericht(e) wurden gelöscht."
+
+msgid "Report successfully created."
+msgstr "Bericht wurde erfolgreich angelegt."
+
+msgid "Required"
+msgstr "Erforderlich"
 
 #, fuzzy
 msgid "Required field {0} has no value."
@@ -3599,7 +3844,7 @@ msgid "Save new search"
 msgstr "Neue Suche speichern"
 
 msgid "Save notification template"
-msgstr "Benachrichtigungs-Layout speichern"
+msgstr "Layout Benachrichtigungen speichern"
 
 msgid "Save Organisation"
 msgstr ""
@@ -3762,7 +4007,7 @@ msgid "Show in agent preferences"
 msgstr "Anzeige Agenteneinstellung"
 
 msgid "Show in Customer Portal"
-msgstr "Im Self Service Portal anzeigen"
+msgstr "Für Self Service Portal freigeben"
 
 msgid "Show title in form"
 msgstr "Titel im Formular anzeigen"
@@ -3827,7 +4072,7 @@ msgstr "Startzeitpunkt"
 msgid "Start time has to be before end time"
 msgstr "Der Startzeitpunkt muss vor dem Endzeitpunkt liegen."
 
-msgid "Start value is greate than end value"
+msgid "Start value is greater than end value"
 msgstr ""
 
 msgid "Start value is not given"
@@ -3893,8 +4138,8 @@ msgstr "Sonntag"
 msgid "Superuser Account"
 msgstr "Nutzer Superuser"
 
-msgid "Switch"
-msgstr ""
+msgid "switch_column_order_action"
+msgstr "Tauschen"
 
 msgid "Switch to customer portal."
 msgstr "Wechsel ins Self Service Portal."
@@ -3913,6 +4158,9 @@ msgstr "System"
 
 msgid "System"
 msgstr "System"
+
+msgid "System address"
+msgstr "Systemadresse"
 
 msgid "System Address"
 msgstr "Systemadresse"
@@ -4266,6 +4514,9 @@ msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update Queue"
 msgstr "Aktualisierung wird durchgeführt"
+
+msgid "Update Report Definition"
+msgstr "Berichtsdefinition wird gespeichert"
 
 msgid "Update Role"
 msgstr "Aktualisierung wird durchgeführt"
@@ -5750,9 +6001,6 @@ msgstr "PLZ"
 
 #~ msgid "Update Customer"
 #~ msgstr "Aktualisierung wird durchgeführt"
-
-#~ msgid "Required"
-#~ msgstr "Erforderlich"
 
 #~ msgid "Deny"
 #~ msgstr "Deny"

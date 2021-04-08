@@ -43,12 +43,12 @@ export class DynamicFieldTableFactory extends TableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            this.getDefaultColumnConfiguration(DynamicFieldProperty.NAME),
-            this.getDefaultColumnConfiguration(DynamicFieldProperty.LABEL),
-            this.getDefaultColumnConfiguration(DynamicFieldProperty.FIELD_TYPE),
-            this.getDefaultColumnConfiguration(DynamicFieldProperty.OBJECT_TYPE),
-            this.getDefaultColumnConfiguration(DynamicFieldProperty.INTERNAL_FIELD),
-            this.getDefaultColumnConfiguration(DynamicFieldProperty.CUSTOMER_VISIBLE),
+            this.getDefaultColumnConfiguration(DynamicFieldProperty.NAME, false),
+            this.getDefaultColumnConfiguration(DynamicFieldProperty.LABEL, false),
+            this.getDefaultColumnConfiguration(DynamicFieldProperty.FIELD_TYPE, false),
+            this.getDefaultColumnConfiguration(DynamicFieldProperty.OBJECT_TYPE, false),
+            this.getDefaultColumnConfiguration(DynamicFieldProperty.INTERNAL_FIELD, false),
+            this.getDefaultColumnConfiguration(DynamicFieldProperty.CUSTOMER_VISIBLE, false),
             this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID),
             this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_TIME),
             this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_BY),
@@ -77,7 +77,7 @@ export class DynamicFieldTableFactory extends TableFactory {
         return tableConfiguration;
     }
 
-    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
+    public getDefaultColumnConfiguration(property: string, translatable: boolean = true): IColumnConfiguration {
         let config;
         switch (property) {
             case DynamicFieldProperty.FIELD_TYPE:
@@ -94,7 +94,7 @@ export class DynamicFieldTableFactory extends TableFactory {
                     null, null, null, property, false, true, false, true, 100, true, true, true);
                 break;
             default:
-                config = super.getDefaultColumnConfiguration(property);
+                config = super.getDefaultColumnConfiguration(property, translatable);
         }
         return config;
     }

@@ -33,7 +33,10 @@ export class TicketSearchFormManager extends SearchFormManager {
 
     public objectType: KIXObjectType = KIXObjectType.TICKET;
 
-    public constructor(public ignorePropertiesFixed: string[] = []) {
+    public constructor(
+        public ignorePropertiesFixed: string[] = [],
+        private validDynamicFields: boolean = true
+    ) {
         super();
     }
 
@@ -45,9 +48,7 @@ export class TicketSearchFormManager extends SearchFormManager {
         ];
 
         for (const prop of Ticket.SEARCH_PROPERTIES) {
-            if (prop.Property !== TicketProperty.STATE_TYPE) {
-                properties.push([prop.Property, null]);
-            }
+            properties.push([prop.Property, null]);
         }
 
         const context = ContextService.getInstance().getActiveContext();
@@ -64,7 +65,7 @@ export class TicketSearchFormManager extends SearchFormManager {
             p[1] = label;
         }
 
-        const superProperties = await super.getProperties();
+        const superProperties = await super.getProperties(this.validDynamicFields);
         properties = [...properties, ...superProperties];
 
         properties = properties.filter(

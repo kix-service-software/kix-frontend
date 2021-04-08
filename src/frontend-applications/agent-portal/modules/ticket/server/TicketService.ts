@@ -427,7 +427,11 @@ export class TicketAPIService extends KIXObjectAPIService {
             'Queue.FollowUpID'
         ];
 
-        const filterCriteria = criteria.filter((f) => filterProperties.some((fp) => f.property === fp));
+        const filterCriteria = criteria.filter((f) => {
+            const isFilterProperty = filterProperties.some((fp) => f.property === fp);
+            const isTicketId = (f.property === TicketProperty.TICKET_ID && f.operator === SearchOperator.NOT_EQUALS);
+            return isFilterProperty || isTicketId;
+        });
         await this.setUserID(filterCriteria, token);
         return filterCriteria;
     }

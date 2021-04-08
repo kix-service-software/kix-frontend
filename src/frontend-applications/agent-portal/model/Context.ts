@@ -275,7 +275,7 @@ export abstract class Context {
         let sidebars = this.configuration.sidebars;
 
         if (show && sidebars) {
-            sidebars = sidebars.filter((sb) => this.shownSidebars.some((s) => sb.instanceId === s));
+            sidebars = sidebars.filter((sb) => sb.configuration && this.shownSidebars.some((s) => sb.instanceId === s));
         }
 
         return sidebars;
@@ -456,30 +456,35 @@ export abstract class Context {
         return;
     }
 
+    private loadingPromise: Promise<any>;
     protected async loadDetailsObject<T extends KIXObject>(
         objectType: KIXObjectType | string, loadingOptions: KIXObjectLoadingOptions = null,
         objectSpecificLoadingOptions: KIXObjectSpecificLoadingOptions = null,
         silent: boolean = true, cache?: boolean, forceIds?: boolean
     ): Promise<T> {
-        let object: T;
 
-        if (this.objectId) {
-            const objectId = Number(this.objectId);
+        // use timeout to prevent loading with "wrong/old" objectId
+        if (!this.loadingPromise) {
+            this.loadingPromise = new Promise<T>(async (resolve, reject) => {
+                setTimeout(async () => {
+                    let object: T;
 
-            const objects = await KIXObjectService.loadObjects<T>(
-                objectType, [objectId], loadingOptions, objectSpecificLoadingOptions, silent, cache, forceIds
-            ).catch((error) => {
-                console.error(error);
-                return null;
+                    if (this.objectId) {
+                        const objects = await KIXObjectService.loadObjects<T>(
+                            objectType, [Number(this.objectId)], loadingOptions, objectSpecificLoadingOptions,
+                            silent, cache, forceIds
+                        ).catch((error) => {
+                            console.error(error);
+                            return [];
+                        });
+
+                        object = objects?.length ? objects[0] : null;
+                    }
+                    this.loadingPromise = null;
+                    resolve(object);
+                }, 150);
             });
-
-            if (objects && objects.length) {
-                object = objects[0];
-                this.objectId = object.ObjectId;
-            }
         }
-
-        return object;
+        return this.loadingPromise;
     }
-
 }

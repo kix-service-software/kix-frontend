@@ -37,8 +37,8 @@ export class DynamicFieldSet extends ExtendedJobFormManager {
         return;
     }
 
-    public postPrepareOptionValue(action: MacroAction, optionName: string, value: any): any {
-        if (optionName === 'DynamicFieldAppend') {
+    public postPrepareOptionValue(actionType: string, optionName: string, value: any, parameter: {}): any {
+        if (actionType === 'DynamicFieldSet' && optionName === 'DynamicFieldAppend') {
             return Number(value);
         }
         return;

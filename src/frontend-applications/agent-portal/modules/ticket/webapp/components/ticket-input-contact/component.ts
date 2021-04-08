@@ -216,9 +216,9 @@ class Component extends FormInputComponent<number | string, ComponentState> {
                 )
             ]);
             const contacts = await KIXObjectService.loadObjects<Contact>(
-                KIXObjectType.CONTACT, null, loadingOptions
-            );
-            if (contacts && contacts.length) {
+                KIXObjectType.CONTACT, null, loadingOptions, null, true
+            ).catch(() => null);
+            if (contacts?.length) {
                 contactId = contacts[0].ID;
             }
         } else {

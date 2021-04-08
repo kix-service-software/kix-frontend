@@ -22,6 +22,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     public onInput(input: any): void {
         super.onInput(input);
+        this.state.freeText = typeof input.freeText !== 'undefined' ? input.freeText : false;
         this.update();
     }
 
@@ -137,10 +138,14 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     private async getNodes(nodes: TreeNode[], translatable: boolean = true): Promise<TreeNode[]> {
         const newNodes = [];
         for (const node of nodes) {
-            const label = translatable ? await TranslationService.translate(node.label) :
-                await TranslationService.translate(node.label, null, undefined, true);
-            const tooltip = translatable ? await TranslationService.translate(node.tooltip) :
-                await TranslationService.translate(node.tooltip, null, undefined, true);
+            const label = translatable
+                ? await TranslationService.translate(node.label)
+                : await TranslationService.translate(node.label, null, undefined, true);
+
+            const tooltip = translatable
+                ? await TranslationService.translate(node.tooltip)
+                : await TranslationService.translate(node.tooltip, null, undefined, true);
+
             newNodes.push(
                 new TreeNode(
                     node.id, label, node.icon, node.secondaryIcon, node.children, node.parent, node.nextNode,

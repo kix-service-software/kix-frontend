@@ -184,7 +184,13 @@ export class Server implements IServer {
             serverConfig.NOTIFICATION_URL,
             serverConfig.NOTIFICATION_INTERVAL,
             'Token ' + AuthenticationService.getInstance().getCallbackToken(),
-            poDefinitions, configurations, backendDependencies, plugins
+            poDefinitions,
+            configurations,
+            backendDependencies,
+            plugins,
+            {
+                SystemInfo: 1
+            }
         );
 
         const systemInfo = await ClientRegistrationService.getInstance().createClientRegistration(

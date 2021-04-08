@@ -74,7 +74,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return [];
     }
 
-    public async getProperties(): Promise<Array<[string, string]>> {
+    public async getProperties(validDynamicFields: boolean = true): Promise<Array<[string, string]>> {
         let properties = [];
 
         for (const manager of this.extendedFormManager) {
@@ -107,13 +107,19 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
                             DynamicFieldTypes.TICKET_REFERENCE,
                             ...validTypes
                         ]
-                    ),
+                    )
+                ]
+            );
+
+            if (validDynamicFields) {
+                loadingOptions.filter.push(
                     new FilterCriteria(
                         KIXObjectProperty.VALID_ID, SearchOperator.EQUALS,
                         FilterDataType.NUMERIC, FilterType.AND, 1
                     )
-                ]
-            );
+                );
+            }
+
             const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
                 KIXObjectType.DYNAMIC_FIELD, null, loadingOptions
             ).catch(() => [] as DynamicField[]);
@@ -420,10 +426,10 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             return [new ValidationResult(
                 ValidationSeverity.ERROR, 'Translatable#End value is not given'
             )];
-        } else if (Number(value.value[1]) > Number(value.value[0])) {
+        } else if (Number(value.value[0]) > Number(value.value[1])) {
             value.valid = false;
             return [new ValidationResult(
-                ValidationSeverity.ERROR, 'Translatable#Start value is greate than end value'
+                ValidationSeverity.ERROR, 'Translatable#Start value is greater than end value'
             )];
         } else {
             value.valid = true;

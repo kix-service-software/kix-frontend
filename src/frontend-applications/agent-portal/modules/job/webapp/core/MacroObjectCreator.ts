@@ -13,6 +13,7 @@ import { FormInstance } from '../../../base-components/webapp/core/FormInstance'
 import { JobProperty } from '../../model/JobProperty';
 import { Macro } from '../../model/Macro';
 import { MacroAction } from '../../model/MacroAction';
+import { JobFormService } from './JobFormService';
 
 export class MacroObjectCreator {
 
@@ -30,13 +31,13 @@ export class MacroObjectCreator {
         const typeValue = await formInstance.getFormFieldValueByProperty<string>(JobProperty.TYPE);
         macro.Type = typeValue ? typeValue.value : null;
 
-        macro.Actions = await this.createActions(macro.ID, macroField.children, formInstance);
+        macro.Actions = await this.createActions(macro.ID, macroField.children, formInstance, macro.Type);
 
         return macro.Actions.length ? macro : null;
     }
 
     public static async createActions(
-        macroId: number, actionFields: FormFieldConfiguration[], formInstance: FormInstance
+        macroId: number, actionFields: FormFieldConfiguration[], formInstance: FormInstance, macroType: string
     ): Promise<MacroAction[]> {
         const macroActions = [];
 
@@ -58,7 +59,7 @@ export class MacroObjectCreator {
                     );
 
                     action.Parameters = await this.createActionParameter(
-                        action, actionField.children, formInstance
+                        action, actionField.children, formInstance, macroType
                     );
 
                     this.setActionValid(action, actionField.children, formInstance);
@@ -93,7 +94,7 @@ export class MacroObjectCreator {
     }
 
     public static async createActionParameter(
-        action: MacroAction, parameterFields: FormFieldConfiguration[], formInstance: FormInstance
+        action: MacroAction, parameterFields: FormFieldConfiguration[], formInstance: FormInstance, macroType: string
     ): Promise<any> {
         const parameter = {};
 
@@ -110,7 +111,16 @@ export class MacroObjectCreator {
                     parameter[optionNameValue.value] = macro;
                 } else if (optionNameValue.value !== 'Skip') {
                     if (value && value.value !== null && typeof value.value !== 'undefined') {
-                        parameter[optionNameValue.value] = value ? value.value : null;
+                        const manager = JobFormService.getInstance().getJobFormManager(macroType || 'Ticket');
+                        if (manager) {
+                            const preparedValue = manager.postPrepareOptionValue(
+                                action.Type, optionNameValue.value, value.value, parameter
+                            );
+                            parameter[optionNameValue.value] = typeof preparedValue !== 'undefined'
+                                ? preparedValue : value.value;
+                        } else {
+                            parameter[optionNameValue.value] = value.value;
+                        }
                     }
                 }
             }

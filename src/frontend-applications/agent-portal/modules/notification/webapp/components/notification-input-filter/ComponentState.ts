@@ -21,7 +21,7 @@ export class ComponentState extends FormInputComponentState<Array<[string, strin
     ) {
         super();
         const searchDefinition = SearchService.getInstance().getSearchDefinition(KIXObjectType.TICKET);
-        this.manager = searchDefinition.createFormManager([SearchProperty.FULLTEXT]);
+        this.manager = searchDefinition.createFormManager([SearchProperty.FULLTEXT], false);
     }
 
 }

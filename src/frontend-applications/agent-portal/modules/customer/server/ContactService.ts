@@ -114,7 +114,7 @@ export class ContactAPIService extends KIXObjectAPIService {
         if (icon && icon.Content) {
             icon.Object = objectType;
             icon.ObjectID = response.ContactID;
-            await this.createIcons(token, clientRequestId, icon)
+            await this.createIcon(token, clientRequestId, icon)
                 .catch(() => {
                     // be silent
                 });

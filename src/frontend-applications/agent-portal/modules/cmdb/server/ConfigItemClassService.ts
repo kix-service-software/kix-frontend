@@ -88,7 +88,7 @@ export class ConfigItemAPIClassService extends KIXObjectAPIService {
             if (icon) {
                 icon.Object = KIXObjectType.GENERAL_CATALOG_ITEM;
                 icon.ObjectID = response.ConfigItemClassID;
-                await this.createIcons(token, clientRequestId, icon);
+                await this.createIcon(token, clientRequestId, icon);
             }
 
             return response.ConfigItemClassID;

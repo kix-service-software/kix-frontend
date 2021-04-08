@@ -18,6 +18,7 @@ import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/Da
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { Channel } from '../../model/Channel';
 import { SenderType } from '../../model/SenderType';
+import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
 
 
 export class ArticleLabelProvider extends LabelProvider<Article> {
@@ -121,7 +122,11 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                 break;
             case ArticleProperty.BODY_RICHTEXT:
                 if (article) {
-                    displayValue = await TicketService.getInstance().getPreparedArticleBodyContent(article);
+                    const prepareContent = await TicketService.getInstance().getPreparedArticleBodyContent(article);
+                    if (prepareContent) {
+                        displayValue = BrowserUtil.replaceInlineContent(prepareContent[0], prepareContent[1]);
+                    }
+                    translatable = false;
                 }
                 break;
             default:

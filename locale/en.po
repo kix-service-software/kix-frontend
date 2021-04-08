@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2021-02-11 12:46+0000\n"
+"PO-Revision-Date: 2021-04-07 12:46+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: English <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/en/>\n"
@@ -186,6 +186,9 @@ msgstr ""
 msgid "An error occured during job execution. See system log for details."
 msgstr ""
 
+msgid "An error occured during report creation. See system log for details."
+msgstr ""
+
 msgid "An error occurred."
 msgstr ""
 
@@ -298,6 +301,9 @@ msgid "Automation: Jobs"
 msgstr ""
 
 msgid "Automation: Notifications"
+msgstr ""
+
+msgid "Available Output Formats"
 msgstr ""
 
 msgid "Avatar"
@@ -573,6 +579,9 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
+msgid "Create"
+msgstr ""
+
 msgid "Create Address"
 msgstr ""
 
@@ -648,6 +657,12 @@ msgstr ""
 msgid "Create Queue"
 msgstr "Create Team"
 
+msgid "Create Report"
+msgstr ""
+
+msgid "Create Report Definition"
+msgstr ""
+
 msgid "Create Role"
 msgstr ""
 
@@ -658,6 +673,9 @@ msgid "Create Superuser Account"
 msgstr ""
 
 msgid "Create Text Module"
+msgstr ""
+
+msgid "Create the report with output format {0} and defaults?"
 msgstr ""
 
 msgid "Create Ticket"
@@ -717,7 +735,19 @@ msgstr ""
 msgid "Data has been updated."
 msgstr ""
 
+msgid "Datasource"
+msgstr ""
+
+msgid "Data Source"
+msgstr ""
+
+msgid "Data Type"
+msgstr ""
+
 msgid "Day(s)"
+msgstr ""
+
+msgid "DBMS"
 msgstr ""
 
 msgid "Default"
@@ -735,10 +765,22 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
+msgid "Delete all selected report definitions?"
+msgstr ""
+
+msgid "Delete all selected reports?"
+msgstr ""
+
 msgid "Deleted"
 msgstr ""
 
 msgid "Delete Link"
+msgstr ""
+
+msgid "Delete Report"
+msgstr ""
+
+msgid "Delete Report Definition"
 msgstr ""
 
 msgid "Delete Search"
@@ -780,13 +822,16 @@ msgstr ""
 msgid "Download log"
 msgstr ""
 
+msgid "Download Result"
+msgstr ""
+
 msgid "Duplicate"
 msgstr ""
 
-msgid "DynamicField"
+msgid "Dynamic Field"
 msgstr ""
 
-msgid "Dynamic Field"
+msgid "DynamicField"
 msgstr ""
 
 msgid "Dynamic Fields"
@@ -875,6 +920,9 @@ msgstr ""
 
 msgid "Edit Queue"
 msgstr "Edit Team"
+
+msgid "Edit Report"
+msgstr "Edit Report Definition"
 
 msgid "Edit Role"
 msgstr ""
@@ -973,6 +1021,12 @@ msgid "Error while adding the attachement:"
 msgstr ""
 
 msgid "Error while adding the image:"
+msgstr ""
+
+msgid "Error while deleting Report."
+msgstr ""
+
+msgid "Error while deleting Report Definition."
 msgstr ""
 
 msgid "Escalated Tickets"
@@ -2157,6 +2211,119 @@ msgstr "Set a new password for your user account."
 msgid "Helptext_PersonalSettings_UserPassword_Hint"
 msgstr "Insert your current password."
 
+msgid "Helptext_Reporting_ReportCreate_Comment"
+msgstr ""
+"Insert additional information (only displayed within the report definition "
+"overview table)."
+
+msgid "Helptext_Reporting_ReportCreate_Datasource"
+msgstr ""
+"Data Source for report definition. At the moment, only \"GenericSQL\" is "
+"available."
+
+msgid "Helptext_Reporting_ReportCreate_Datasource_DBMS"
+msgstr ""
+"The used database management system - this information is necessary for the "
+"standard reports. For new reports, only \"any\" is available."
+
+msgid "Helptext_Reporting_ReportCreate_Datasource_OutputHandler"
+msgstr ""
+"Read only: The output handler is necessary for the initially provided "
+"standard reports. The parameters used by the output handler is directly "
+"dependend on the SQL statement. If the SQL statement is changed, reports "
+"cannot be created anymore."
+
+msgid "Helptext_Reporting_ReportCreate_OutputFormat"
+msgstr ""
+"Choose which for output formats the report is available. Choose one output "
+"format per line and add further configurations. Add further output formats "
+"by clicking the plus icon."
+
+msgid "Helptext_Reporting_ReportCreate_Parameter"
+msgstr ""
+"It is possible to use parameters in the SQL statement (e.g. \"TypeIDList\") "
+"which are to be defined by the user creating the actual report later. If you "
+"defined any parameters in your SQL statement you can now configure them. See "
+"admin manual for further information."
+
+msgid "Helptext_Reporting_ReportCreate_ParameterDataType"
+msgstr ""
+"Choose the data source which are allowed to enter in the form field when "
+"actually creating a report."
+
+msgid "Helptext_Reporting_ReportCreate_ParameterDefault"
+msgstr ""
+"Here you can choose if any of the values defined in \"Possible Values\" is "
+"set initially for the form field."
+
+msgid "Helptext_Reporting_ReportCreate_ParameterDescription"
+msgstr ""
+"This description will be shown in the create-report-form as help text, if "
+"the user clicks the question mark icon besides the form field label."
+
+msgid "Helptext_Reporting_ReportCreate_ParameterLabel"
+msgstr ""
+"Label of the parameter, as will be shown in the form when actually creating "
+"a report."
+
+msgid "Helptext_Reporting_ReportCreate_ParameterMultiple"
+msgstr ""
+"If this checkbox is checked, the formfield is multiselect when actually "
+"creating a report."
+
+msgid "Helptext_Reporting_ReportCreate_ParameterName"
+msgstr "Name of the parameter, as used in the SQL statement."
+
+msgid "Helptext_Reporting_ReportCreate_ParameterPossibleValues"
+msgstr ""
+"Specifies the values selectable in the form when actually creating a report, "
+"based on the data source selected in \"references\". (e.g. if Organisation."
+"ID is choosen this can be restricted further). If nothin is specified all "
+"objects are available when creating a report. See admin manuall for further "
+"information."
+
+msgid "Helptext_Reporting_ReportCreate_ParameterReadonly"
+msgstr ""
+"If this checkbox is checked, the formfield is shown as readonly for "
+"informational purposes only when actually creating a report."
+
+msgid "Helptext_Reporting_ReportCreate_ParameterReferences"
+msgstr ""
+"Specificataion of the data source the parameter refers to. Syntax: Object."
+"Attribute (e.g. the Organisation ID: \"Organisation.ID\"). See admin manuall "
+"for further information."
+
+msgid "Helptext_Reporting_ReportCreate_ParameterRequired"
+msgstr ""
+"If this checkbox is checked, the form field is \"required\" in the form "
+"field when actually creating a report and necessarily requires an input by "
+"the user."
+
+msgid "Helptext_Reporting_ReportCreate_Roles"
+msgstr ""
+"This report definition can only be used by agents assigned to this roles. "
+"ATTENTION: Do not assign roles here who already contain wide-ranging "
+"permissions for reports, e.g. Superuser or Admin. This can cause "
+"malfunctions. See admin manual for further information."
+
+msgid "Helptext_Reporting_ReportCreate_Title"
+msgstr ""
+"Name of the Report Definiton. Choose a significant name so your agents can "
+"quickly find the report definition they are looking for."
+
+msgid "Helptext_Reporting_ReportCreate_Validity"
+msgstr ""
+"The report definition can only be used within the system if set “valid”."
+
+msgid "Helptext_Reporting_ReportDefinitionCreate_Title"
+msgstr "Here you can choose a title as headline for the generated report."
+
+msgid "Helptext_Reporting_Report_OutputFormats"
+msgstr ""
+"Choose the output format for your report. The report will be available in "
+"the table \"Overview Reports\" and can be downloaded from there. Creating "
+"the report may take a while."
+
 msgid "Helptext_Search_ConfigItem"
 msgstr ""
 "The search only considers current versions. The FAQ article \"How to search "
@@ -2603,10 +2770,10 @@ msgstr ""
 msgid "Legend"
 msgstr ""
 
-msgid "Lets go"
+msgid "Let's go"
 msgstr ""
 
-msgid "Let's go"
+msgid "Lets go"
 msgstr ""
 
 msgid "Limit:"
@@ -2717,6 +2884,9 @@ msgstr ""
 msgid "Month"
 msgstr ""
 
+msgid "Multiple"
+msgstr ""
+
 msgid "My locked tickets"
 msgstr ""
 
@@ -2818,6 +2988,12 @@ msgstr ""
 
 msgid "New Queue"
 msgstr "New Team"
+
+msgid "New Report"
+msgstr ""
+
+msgid "New Report Definition"
+msgstr "New Definition"
 
 msgid "New Role"
 msgstr ""
@@ -2949,7 +3125,7 @@ msgid "Notification successfully created."
 msgstr "Notification successfully created."
 
 msgid "Notification Template"
-msgstr ""
+msgstr "Notifications Template"
 
 msgid "Notification Text"
 msgstr ""
@@ -3053,6 +3229,15 @@ msgstr ""
 msgid "Outbox"
 msgstr ""
 
+msgid "Output Format"
+msgstr ""
+
+msgid "Output Formats"
+msgstr ""
+
+msgid "Output Handler"
+msgstr ""
+
 msgid "Overall"
 msgstr ""
 
@@ -3077,6 +3262,12 @@ msgstr ""
 msgid "Overview Organisations"
 msgstr ""
 
+msgid "Overview Report Definitions"
+msgstr ""
+
+msgid "Overview Reports"
+msgstr ""
+
 msgid "Overview Ticket Priorities"
 msgstr "Tickets by Priorities"
 
@@ -3090,6 +3281,12 @@ msgid "Overview Versions"
 msgstr ""
 
 msgid "Owner"
+msgstr ""
+
+msgid "Paramater"
+msgstr ""
+
+msgid "Parameter"
 msgstr ""
 
 msgid "Parent Category"
@@ -3168,6 +3365,9 @@ msgid "Please select a contact"
 msgstr ""
 
 msgid "Port"
+msgstr ""
+
+msgid "Possible Values"
 msgstr ""
 
 msgid "Postal Address"
@@ -3368,6 +3568,45 @@ msgstr ""
 msgid "Reply all"
 msgstr ""
 
+msgid "Report"
+msgstr ""
+
+msgid "Report Definition"
+msgstr ""
+
+msgid "Report Definitions"
+msgstr ""
+
+msgid "Report Definition(s) deleted."
+msgstr ""
+
+msgid "Report definition successfully created."
+msgstr ""
+
+msgid "Report Definition successfully updated."
+msgstr ""
+
+msgid "Report Information"
+msgstr ""
+
+msgid "Reporting"
+msgstr ""
+
+msgid "Report Parameter"
+msgstr ""
+
+msgid "Reports"
+msgstr ""
+
+msgid "Report(s) deleted."
+msgstr ""
+
+msgid "Report successfully created."
+msgstr ""
+
+msgid "Required"
+msgstr ""
+
 msgid "Required field {0} has no value."
 msgstr ""
 
@@ -3453,7 +3692,7 @@ msgid "Save new search"
 msgstr ""
 
 msgid "Save notification template"
-msgstr ""
+msgstr "Save notifications template"
 
 msgid "Save Organisation"
 msgstr ""
@@ -3615,7 +3854,7 @@ msgid "Show in agent preferences"
 msgstr ""
 
 msgid "Show in Customer Portal"
-msgstr "Show in Self Service Portal"
+msgstr "Enable for Self Service Portal"
 
 msgid "Show title in form"
 msgstr ""
@@ -3680,7 +3919,7 @@ msgstr ""
 msgid "Start time has to be before end time"
 msgstr ""
 
-msgid "Start value is greate than end value"
+msgid "Start value is greater than end value"
 msgstr ""
 
 msgid "Start value is not given"
@@ -3746,8 +3985,8 @@ msgstr ""
 msgid "Superuser Account"
 msgstr ""
 
-msgid "Switch"
-msgstr ""
+msgid "switch_column_order_action"
+msgstr "Switch"
 
 msgid "Switch to customer portal."
 msgstr "Switch to Self Service Portal."
@@ -3766,6 +4005,9 @@ msgstr ""
 
 msgid "System"
 msgstr ""
+
+msgid "System address"
+msgstr "System Address"
 
 msgid "System Address"
 msgstr ""
@@ -4109,6 +4351,9 @@ msgstr ""
 
 msgid "Update Queue"
 msgstr "Update Team"
+
+msgid "Update Report Definition"
+msgstr ""
 
 msgid "Update Role"
 msgstr ""

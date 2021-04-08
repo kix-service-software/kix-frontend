@@ -45,6 +45,7 @@ import { TableConfiguration } from '../../model/configuration/TableConfiguration
 import { TableHeaderHeight } from '../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../model/configuration/TableRowHeight';
 import { FAQArticleProperty } from '../faq/model/FAQArticleProperty';
+import { CacheState } from '../search/model/CacheState';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -59,83 +60,138 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             'object-information-card-widget', 'Translatable#Contact Information', [], null,
             {
                 avatar: new ObjectIcon(
-                    null, KIXObjectType.CONTACT, '<KIX_CONTACT_ID>', null, null, 'kix-icon-man'
+                    null, KIXObjectType.CONTACT, '<KIX_CONTACT_ID>', null, null, 'kix-icon-man-bubble'
                 ),
                 rows: [
                     {
-                        margin: false,
+                        separator: false,
                         values: [
-                            {
-                                icon: null,
-                                text: '<KIX_CONTACT_Firstname> <KIX_CONTACT_Lastname>',
-                                linkSrc: null
-                            },
+                            [
+                                {
+                                    icon: null,
+                                    text: '<KIX_CONTACT_Firstname> <KIX_CONTACT_Lastname>',
+                                    linkSrc: null
+                                },
+                                {
+                                    icon: new ObjectIcon(
+                                        null, 'Organisation', '<KIX_ORG_ID>', null, null, 'kix-icon-man-house'
+                                    ),
+                                    text: '<KIX_ORG_Name>',
+                                    linkSrc: null
+                                }
+                            ]
                         ],
                     },
                     {
-                        margin: false,
                         values: [
-                            {
-                                icon: new ObjectIcon(
-                                    null, 'Organisation', '<KIX_ORG_ID>', null, null, 'kix-icon-man-house'
-                                ),
-                                text: '<KIX_ORG_Name>',
-                                linkSrc: null
-                            }
-                        ],
-                    },
-                    {
-                        margin: true,
-                        values: [
-                            {
-                                icon: 'kix-icon-call',
-                                text: '<KIX_CONTACT_Phone>',
-                                linkSrc: 'tel:<KIX_CONTACT_Phone>'
-                            }
+                            [
+                                {
+                                    icon: 'kix-icon-call',
+                                    text: '<KIX_CONTACT_Phone>',
+                                    linkSrc: 'tel:<KIX_CONTACT_Phone>'
+                                },
+                                {
+                                    icon: 'kix-icon-mail',
+                                    text: '<KIX_CONTACT_Email>',
+                                    linkSrc: null
+                                }
+                            ]
                         ]
                     },
                     {
-                        margin: false,
                         values: [
-                            {
-                                icon: 'kix-icon-mail',
-                                text: '<KIX_CONTACT_Email>',
-                                linkSrc: null
-                            }
+                            [
+                                {
+                                    icon: 'kix-icon-compass',
+                                    text: '<KIX_CONTACT_Street>',
+                                    // tslint:disable-next-line: max-line-length
+                                    linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
+                                },
+                                {
+                                    icon: null,
+                                    text: '<KIX_CONTACT_Zip> <KIX_CONTACT_City>',
+                                    // tslint:disable-next-line: max-line-length
+                                    linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
+                                },
+                                {
+                                    icon: null,
+                                    text: '<KIX_CONTACT_Country>',
+                                    // tslint:disable-next-line: max-line-length
+                                    linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
+                                }
+                            ]
                         ]
                     },
                     {
-                        margin: true,
                         values: [
-                            {
-                                icon: 'kix-icon-compass',
-                                text: '<KIX_CONTACT_Street>',
-                                // tslint:disable-next-line: max-line-length
-                                linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
-                            }
-                        ]
-                    },
-                    {
-                        margin: false,
-                        values: [
-                            {
-                                icon: null,
-                                text: '<KIX_CONTACT_Zip> <KIX_CONTACT_City>',
-                                // tslint:disable-next-line: max-line-length
-                                linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
-                            }
-                        ]
-
-                    },
-                    {
-                        margin: false,
-                        values: [
-                            {
-                                icon: null,
-                                text: '<KIX_CONTACT_Country>',
-                                // tslint:disable-next-line: max-line-length
-                                linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
-                            }
+                            [
+                                {
+                                    icon: 'kix-icon-ticket',
+                                    text: 'Translatable#Open Tickets of Contact',
+                                    routingConfiguration: {
+                                        contextId: 'search',
+                                        contextMode: ContextMode.SEARCH,
+                                        params: [
+                                            [
+                                                'search',
+                                                {
+                                                    objectType: KIXObjectType.TICKET,
+                                                    criteria: [
+                                                        {
+                                                            property: TicketProperty.CONTACT_ID,
+                                                            operator: SearchOperator.EQUALS,
+                                                            type: 'STRING',
+                                                            filterType: FilterType.AND,
+                                                            value: '<KIX_TICKET_ContactID>'
+                                                        },
+                                                        {
+                                                            property: TicketProperty.STATE_ID,
+                                                            operator: SearchOperator.EQUALS,
+                                                            type: FilterDataType.NUMERIC,
+                                                            filterType: FilterType.AND,
+                                                            value: 2
+                                                        }
+                                                    ],
+                                                    status: CacheState.VALID
+                                                }
+                                            ]
+                                        ]
+                                    }
+                                },
+                                {
+                                    icon: 'kix-icon-ticket',
+                                    text: 'Translatable#Open Tickets of Organisation',
+                                    routingConfiguration: {
+                                        contextId: 'search',
+                                        contextMode: ContextMode.SEARCH,
+                                        params: [
+                                            [
+                                                'search',
+                                                {
+                                                    objectType: KIXObjectType.TICKET,
+                                                    criteria: [
+                                                        {
+                                                            property: TicketProperty.ORGANISATION_ID,
+                                                            operator: SearchOperator.EQUALS,
+                                                            type: 'STRING',
+                                                            filterType: FilterType.AND,
+                                                            value: '<KIX_TICKET_OrganisationID>'
+                                                        },
+                                                        {
+                                                            property: TicketProperty.STATE_ID,
+                                                            operator: SearchOperator.EQUALS,
+                                                            type: FilterDataType.NUMERIC,
+                                                            filterType: FilterType.AND,
+                                                            value: 2
+                                                        }
+                                                    ],
+                                                    status: CacheState.VALID
+                                                }
+                                            ]
+                                        ]
+                                    }
+                                }
+                            ]
                         ]
                     }
                 ]

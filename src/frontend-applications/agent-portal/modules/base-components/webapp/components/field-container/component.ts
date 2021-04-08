@@ -88,7 +88,7 @@ class FieldContainerComponent {
             propertyFields = this.filterDynamicFields(field, propertyFields);
         }
 
-        if (propertyFields.length === 1 && field.empty) {
+        if (propertyFields.length === 1 && field.empty && !field.asStructure) {
             return false;
         }
         return field.countMin !== null && field.countMin < propertyFields.length;

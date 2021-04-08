@@ -143,6 +143,9 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.QUEUE);
                 cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
                 cacheKeyPrefixes.push(KIXObjectType.ARTICLE);
+                // needed for permission checks of objectactions (UIObjectActions/AuthenticationSocketClient)
+                // - check new after ticket update
+                cacheKeyPrefixes.push(KIXObjectType.ROLE);
                 break;
             case KIXObjectType.FAQ_VOTE:
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
@@ -229,6 +232,18 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.JOB_RUN_LOG);
                 cacheKeyPrefixes.push(KIXObjectType.MACRO);
                 cacheKeyPrefixes.push(KIXObjectType.MACRO_ACTION);
+                break;
+            case KIXObjectType.REPORT_DEFINITION:
+                cacheKeyPrefixes.push(KIXObjectType.REPORT_DEFINITION);
+                cacheKeyPrefixes.push(KIXObjectType.REPORT);
+                cacheKeyPrefixes.push(KIXObjectType.REPORT_RESULT);
+                cacheKeyPrefixes.push(KIXObjectType.ROLE);
+                cacheKeyPrefixes.push(KIXObjectType.ROLE_PERMISSION);
+            case KIXObjectType.REPORT:
+            case KIXObjectType.REPORT_RESULT:
+                cacheKeyPrefixes.push(KIXObjectType.REPORT_DEFINITION);
+                cacheKeyPrefixes.push(KIXObjectType.REPORT);
+                cacheKeyPrefixes.push(KIXObjectType.REPORT_RESULT);
                 break;
             default:
         }

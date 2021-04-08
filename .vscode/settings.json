@@ -8,9 +8,7 @@
     "**/.DS_Store": true,
     "node_modules": true,
     ".cache": true,
-    "dist": true,
-    "coverage": true,
-    "allure-results": true
+    "dist": true
   },
   "editor.tabSize": 4,
   "editor.formatOnSave": true,

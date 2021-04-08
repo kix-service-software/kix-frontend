@@ -20,6 +20,7 @@ class Component {
     private state: ComponentState;
     private manager: IDynamicFormManager;
     private provideTimeout: any;
+    private addEmptyValueTimeout: any;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -199,14 +200,20 @@ class Component {
     }
 
     private async addEmptyValue(): Promise<void> {
-        const canAddEmptyValue = await this.manager.shouldAddEmptyField();
-        const hasEmptyValue = this.state.dynamicValues.some((sv) => sv.getValue().property === null);
-
-        if (canAddEmptyValue && !hasEmptyValue) {
-            const emptyField = new DynamicFormFieldValue(this.manager);
-            await emptyField.init();
-            this.state.dynamicValues = [...this.state.dynamicValues, emptyField];
+        if (this.addEmptyValueTimeout) {
+            window.clearTimeout(this.addEmptyValueTimeout);
         }
+
+        this.addEmptyValueTimeout = setTimeout(async () => {
+            const canAddEmptyValue = await this.manager.shouldAddEmptyField();
+            const hasEmptyValue = this.state.dynamicValues.some((sv) => sv.getValue().property === null);
+
+            if (canAddEmptyValue && !hasEmptyValue) {
+                const emptyField = new DynamicFormFieldValue(this.manager);
+                await emptyField.init();
+                setTimeout(() => this.state.dynamicValues = [...this.state.dynamicValues, emptyField], 50);
+            }
+        }, 100);
     }
 
     public showValueInput(value: DynamicFormFieldValue): boolean {
