@@ -289,7 +289,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         {
                                             property: 'AccountedTime',
                                             operator: SearchOperator.NOT_EQUALS,
-                                            value: 0
+                                            value: null
                                         }
                                     ]
                                 }

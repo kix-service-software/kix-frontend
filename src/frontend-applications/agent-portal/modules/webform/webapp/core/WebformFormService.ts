@@ -22,19 +22,10 @@ import { UserProperty } from '../../../user/model/UserProperty';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
-import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
-import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
-import { Queue } from '../../../ticket/model/Queue';
-import { QueueProperty } from '../../../ticket/model/QueueProperty';
-import { TicketPriority } from '../../../ticket/model/TicketPriority';
-import { TicketPriorityProperty } from '../../../ticket/model/TicketPriorityProperty';
-import { TicketType } from '../../../ticket/model/TicketType';
-import { TicketTypeProperty } from '../../../ticket/model/TicketTypeProperty';
-import { TicketState } from '../../../ticket/model/TicketState';
-import { TicketStateProperty } from '../../../ticket/model/TicketStateProperty';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { TicketService } from '../../../ticket/webapp/core';
 
 export class WebformFormService extends KIXObjectFormService {
 
@@ -69,16 +60,16 @@ export class WebformFormService extends KIXObjectFormService {
                             let value;
                             switch (f.property) {
                                 case WebformProperty.QUEUE_ID:
-                                    value = await this.getDefaultQueueID();
+                                    value = await TicketService.getDefaultQueueID();
                                     break;
                                 case WebformProperty.PRIORITY_ID:
-                                    value = await this.getDefaultPriorityID();
+                                    value = await TicketService.getDefaultPriorityID();
                                     break;
                                 case WebformProperty.TYPE_ID:
-                                    value = await this.getDefaultTypeID();
+                                    value = await TicketService.getDefaultTypeID();
                                     break;
                                 case WebformProperty.STATE_ID:
-                                    value = await this.getDefaultStateID();
+                                    value = await TicketService.getDefaultStateID();
                                     break;
                                 default:
                             }
@@ -117,95 +108,6 @@ export class WebformFormService extends KIXObjectFormService {
             default:
         }
         return value;
-    }
-
-    private async getDefaultConfigValue(configId: string): Promise<string> {
-        let name;
-        if (configId) {
-            const defaultOptions = await KIXObjectService.loadObjects<SysConfigOption>(
-                KIXObjectType.SYS_CONFIG_OPTION, [configId], null, null, true
-            );
-            if (defaultOptions && !!defaultOptions.length) {
-                name = defaultOptions[0].Value;
-            }
-        }
-        return name;
-    }
-
-    private async getDefaultQueueID(): Promise<number> {
-        let queueId: number;
-        const name = await this.getDefaultConfigValue(SysConfigKey.POSTMASTER_DEFAULT_QUEUE);
-        if (name) {
-            const queues = await KIXObjectService.loadObjects<Queue>(
-                KIXObjectType.QUEUE, null, new KIXObjectLoadingOptions(
-                    [
-                        new FilterCriteria(
-                            QueueProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
-                            FilterType.AND, name
-                        )
-                    ]
-                ), null, true
-            );
-            queueId = queues && !!queues.length ? queues[0].QueueID : null;
-        }
-        return queueId;
-    }
-
-    private async getDefaultPriorityID(): Promise<number> {
-        let priorityId: number;
-        const name = await this.getDefaultConfigValue(SysConfigKey.POSTMASTER_DEFAULT_PRIORITY);
-        if (name) {
-            const objects = await KIXObjectService.loadObjects<TicketPriority>(
-                KIXObjectType.TICKET_PRIORITY, null, new KIXObjectLoadingOptions(
-                    [
-                        new FilterCriteria(
-                            TicketPriorityProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
-                            FilterType.AND, name
-                        )
-                    ]
-                ), null, true
-            );
-            priorityId = objects && !!objects.length ? objects[0].ID : null;
-        }
-        return priorityId;
-    }
-
-    private async getDefaultTypeID(): Promise<number> {
-        let typeId: number;
-        const name = await this.getDefaultConfigValue(SysConfigKey.TICKET_TYPE_DEFAULT);
-        if (name) {
-            const objects = await KIXObjectService.loadObjects<TicketType>(
-                KIXObjectType.TICKET_TYPE, null, new KIXObjectLoadingOptions(
-                    [
-                        new FilterCriteria(
-                            TicketTypeProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
-                            FilterType.AND, name
-                        )
-                    ]
-                ), null, true
-            );
-            typeId = objects && !!objects.length ? objects[0].ID : null;
-        }
-        return typeId;
-    }
-
-    private async getDefaultStateID(): Promise<number> {
-        let stateId: number;
-        const name = await this.getDefaultConfigValue(SysConfigKey.POSTMASTER_DEFAULT_STATE);
-        if (name) {
-            const objects = await KIXObjectService.loadObjects<TicketState>(
-                KIXObjectType.TICKET_STATE, null, new KIXObjectLoadingOptions(
-                    [
-                        new FilterCriteria(
-                            TicketStateProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
-                            FilterType.AND, name
-                        )
-                    ]
-                ), null, true
-            );
-            stateId = objects && !!objects.length ? objects[0].ID : null;
-        }
-        return stateId;
     }
 
     public async prepareCreateValue(

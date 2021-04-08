@@ -15,6 +15,7 @@ import { ConfigurationService } from '../../../../../server/services/Configurati
 import { ObjectUpdatedEventData } from '../../../model/ObjectUpdatedEventData';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { LoggingService } from '../../../../../server/services/LoggingService';
+import { RequestMethod } from '../../../../../server/model/rest/RequestMethod';
 
 export class CacheService {
 
@@ -139,6 +140,8 @@ export class CacheService {
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 cacheKeyPrefixes.push(KIXObjectType.QUEUE);
                 cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
+                // needed for permission checks of objectactions (HttpService) - check new after ticket update
+                cacheKeyPrefixes.push(RequestMethod.OPTIONS);
                 break;
             case KIXObjectType.FAQ_VOTE:
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
@@ -218,6 +221,18 @@ export class CacheService {
             case KIXObjectType.JOB:
                 cacheKeyPrefixes.push(KIXObjectType.JOB_RUN);
                 cacheKeyPrefixes.push(KIXObjectType.JOB_RUN_LOG);
+                break;
+            case KIXObjectType.REPORT_DEFINITION:
+                cacheKeyPrefixes.push(KIXObjectType.REPORT_DEFINITION);
+                cacheKeyPrefixes.push(KIXObjectType.REPORT);
+                cacheKeyPrefixes.push(KIXObjectType.REPORT_RESULT);
+                cacheKeyPrefixes.push(KIXObjectType.ROLE);
+                cacheKeyPrefixes.push(KIXObjectType.ROLE_PERMISSION);
+            case KIXObjectType.REPORT:
+            case KIXObjectType.REPORT_RESULT:
+                cacheKeyPrefixes.push(KIXObjectType.REPORT_DEFINITION);
+                cacheKeyPrefixes.push(KIXObjectType.REPORT);
+                cacheKeyPrefixes.push(KIXObjectType.REPORT_RESULT);
                 break;
             default:
         }

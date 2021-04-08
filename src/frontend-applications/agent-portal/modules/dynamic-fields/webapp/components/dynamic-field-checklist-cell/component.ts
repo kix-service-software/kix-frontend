@@ -12,6 +12,8 @@ import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/
 import { Cell } from '../../../../base-components/webapp/core/table';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -22,11 +24,22 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public onInput(input: any): void {
         const cell: Cell = input.cell;
         if (cell) {
-            const kixObject: KIXObject = cell.getRow().getRowObject().getObject();
-            const property = cell.getColumnConfiguration().property;
-            const dfName = KIXObjectService.getDynamicFieldName(property);
-            if (dfName && kixObject.DynamicFields && Array.isArray(kixObject.DynamicFields)) {
-                const dfValue = kixObject.DynamicFields.find((df) => df.Name === dfName);
+            this.update(cell);
+        }
+    }
+
+    private async update(cell: Cell): Promise<void> {
+        const rowObject: KIXObject = cell.getRow().getRowObject().getObject();
+        const property = cell.getColumnConfiguration().property;
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
+            const objects = await KIXObjectService.loadObjects(
+                rowObject.KIXObjectType, [rowObject.ObjectId],
+                new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS])
+            );
+
+            if (Array.isArray(objects) && objects.length) {
+                const dfValue = objects[0].DynamicFields.find((df) => df.Name === dfName);
                 if (dfValue && dfValue.Value && Array.isArray(dfValue.Value) && dfValue.Value.length) {
                     this.state.checklist = JSON.parse(dfValue.Value[0]);
                 }

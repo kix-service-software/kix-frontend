@@ -116,14 +116,18 @@ export class Table implements Table {
                 await this.sort(this.sortColumnId, this.sortOrder);
             }
 
-            if (this.tableConfiguration &&
-                this.tableConfiguration.toggle &&
-                this.tableConfiguration.toggleOptions &&
-                this.tableConfiguration.toggleOptions.toggleFirst &&
-                this.rows.length
-            ) {
-                this.rows[0].expand(true);
-            }
+            this.toggleFirstRow();
+        }
+    }
+
+    private toggleFirstRow(): void {
+        if (this.tableConfiguration &&
+            this.tableConfiguration.toggle &&
+            this.tableConfiguration.toggleOptions &&
+            this.tableConfiguration.toggleOptions.toggleFirst &&
+            this.rows.length
+        ) {
+            this.rows[0].expand(true);
         }
     }
 
@@ -145,7 +149,7 @@ export class Table implements Table {
                 rowObjects = await this.considerHandlerData(rowObjects, relevantHandlerConfigIds);
             }
 
-            rowObjects.forEach((d) => rows.push(this.createRow(d)));
+            rowObjects.forEach((d) => rows.push(this.createRow(d, false)));
             this.rows = rows;
         }
     }
@@ -192,9 +196,11 @@ export class Table implements Table {
         this.handlerRowObjects[handlerConfig.id] = handlerRowObjects;
     }
 
-    public createRow(tableObject?: RowObject): Row {
+    public createRow(tableObject?: RowObject, addRow: boolean = true): Row {
         const row = new Row(this, tableObject);
-        this.rows.push(row);
+        if (addRow) {
+            this.rows.push(row);
+        }
         return row;
     }
 
@@ -572,6 +578,8 @@ export class Table implements Table {
             this.rows.forEach((r) => {
                 r.initializeDisplayValues();
             });
+
+            this.toggleFirstRow();
 
             EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
             EventService.getInstance().publish(TableEvent.RELOADED, new TableEventData(this.getTableId()));

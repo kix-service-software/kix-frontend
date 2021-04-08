@@ -31,7 +31,7 @@ export class ObjectIcon extends KIXObject {
     public tooltip: string;
 
     public constructor(
-        objectIcon?: ObjectIcon, object?: string, id?: string | number, contentType?: string, content?: any,
+        objectIcon?: ObjectIcon, object?: string, objectId?: string | number, contentType?: string, content?: any,
         fallbackIcon?: ObjectIcon | string, tooltip?: string
     ) {
         super(objectIcon);
@@ -44,7 +44,8 @@ export class ObjectIcon extends KIXObject {
             this.Object = objectIcon.Object;
             this.ObjectID = objectIcon.ObjectID;
         } else {
-            this.ObjectId = id;
+            this.ObjectID = objectId;
+            this.ObjectId = objectId;
             this.Object = object;
             this.ContentType = contentType;
             this.Content = content;

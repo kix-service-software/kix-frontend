@@ -111,7 +111,7 @@ export class MacroFieldCreator {
         macroField: FormFieldConfiguration, action: MacroAction
     ): Promise<FormFieldConfiguration> {
         const actionField = new FormFieldConfiguration(
-            'job-form-field-actions', '1. Action', `MACRO###${JobProperty.MACRO_ACTIONS}`, 'job-input-actions',
+            'job-form-field-actions', '1. Action', JobProperty.MACRO_ACTIONS, 'job-input-actions',
             false, 'Translatable#Helptext_Admin_JobCreateEdit_Actions'
         );
 
@@ -124,7 +124,6 @@ export class MacroFieldCreator {
         actionField.countMin = 0;
         actionField.defaultValue = new FormFieldValue(action ? action.Type : null);
         actionField.instanceId = `${macroField.instanceId}###${actionField.property}###${IdService.generateDateBasedId()}`;
-        actionField.property = JobProperty.MACRO_ACTIONS;
         actionField.parentInstanceId = macroField.instanceId;
         actionField.parent = macroField;
 
@@ -155,6 +154,7 @@ export class MacroFieldCreator {
                             );
 
                             // split values if it is an array option field
+                            // FIXME: do not use default value
                             if (optionField.countMax > 1 && Array.isArray(optionField.defaultValue.value)) {
                                 for (const value of optionField.defaultValue.value) {
                                     const clonedOptionField = this.cloneOptionField(
@@ -270,6 +270,7 @@ export class MacroFieldCreator {
             }
         }
 
+        // FIXME: do not use default value
         let defaultValue;
         if (action && action.Parameters) {
             defaultValue = action.Parameters[option.Name];

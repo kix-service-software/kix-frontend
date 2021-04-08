@@ -11,8 +11,15 @@ import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { FormService } from '../../core/FormService';
+import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
+
+declare var CodeMirror: any;
 
 class Component extends FormInputComponent<string, ComponentState> {
+
+    private codeMirror: any;
+
+    private createEditorTimeout: any;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -20,10 +27,15 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     public onInput(input: any): void {
         super.onInput(input);
-        this.update();
+
+        setTimeout(() => {
+            this.initCodeEditor();
+        }, 100);
     }
 
-    public async update(): Promise<void> {
+    public async onMount(): Promise<void> {
+        await super.onMount();
+
         const placeholderText = this.state.field.placeholder
             ? this.state.field.placeholder
             : this.state.field.required ? this.state.field.label : '';
@@ -38,11 +50,84 @@ class Component extends FormInputComponent<string, ComponentState> {
             } else {
                 this.state.rows = 5;
             }
+
+            this.state.prepared = true;
+
+            setTimeout(() => {
+                this.initCodeEditor();
+            }, 100);
         }
     }
 
-    public async onMount(): Promise<void> {
-        await super.onMount();
+    protected async setInvalidState(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        if (formInstance && this.state.field) {
+            const value = formInstance.getFormFieldValue(this.state.field.instanceId);
+            if (value && !this.codeMirror) {
+                this.state.invalid = !value.valid;
+            }
+        }
+    }
+
+    private initCodeEditor(): void {
+
+        if (this.codeMirror) {
+            this.codeMirror.refresh();
+            return;
+        }
+
+        if (this.createEditorTimeout) {
+            window.clearTimeout(this.createEditorTimeout);
+        }
+        this.createEditorTimeout = setTimeout(() => {
+            let language: string;
+            const languageOption = this.state.field.options.find(
+                (o) => o.option === FormFieldOptions.LANGUAGE
+            );
+            if (languageOption) {
+                language = languageOption.value;
+            }
+
+            if (language) {
+                const textareaElement = (this as any).getEl(this.state.field.instanceId);
+                if (textareaElement) {
+                    this.codeMirror = CodeMirror.fromTextArea(
+                        textareaElement,
+                        {
+                            value: this.state.currentValue,
+                            lineNumbers: true,
+                            mode: language,
+                            readOnly: this.state.field.readonly,
+                            extraKeys: {
+                                'Ctrl-Space': 'autocomplete'
+                            }
+                            // hint: CodeMirror.hint.sql,
+                            // hintOptions: {
+                            //     tables: {
+                            //         'ticket': ['id', 'queue_id', 'priority_id'],
+                            //         'article': ['id', 'body', 'to', 'cc']
+                            //     }
+                            // }
+                        }
+                    );
+
+                    this.codeMirror.on('blur', (instance: any, changeObject: any) => {
+                        this.handleValueChanged(instance.getValue());
+                    });
+
+                    CodeMirror.commands.autocomplete = (cm) => {
+                        CodeMirror.showHint(cm, CodeMirror.hint.sql, {
+                            tables: {
+                                'table1': ['col_A', 'col_B', 'col_C'],
+                                'table2': ['other_columns1', 'other_columns2']
+                            }
+                        });
+                    };
+
+                    this.createEditorTimeout = null;
+                }
+            }
+        }, 500);
     }
 
     public async onDestroy(): Promise<void> {
@@ -59,10 +144,17 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     public valueChanged(event: any): void {
         if (event) {
-            this.state.currentValue = event.target && event.target.value !== '' ? event.target.value : null;
-            (this as any).emit('valueChanged', this.state.currentValue);
-            super.provideValue(this.state.currentValue);
+            this.handleValueChanged(event.target && event.target.value !== '' ? event.target.value : null);
         }
+    }
+
+    private handleValueChanged(value: string): void {
+        if (!this.codeMirror) {
+            this.state.currentValue = value;
+        }
+
+        (this as any).emit('valueChanged', value);
+        super.provideValue(value);
     }
 
     public async focusLost(event: any): Promise<void> {

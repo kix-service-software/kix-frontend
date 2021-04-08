@@ -93,8 +93,11 @@ export class AuthenticationRouter extends KIXRouter {
                         redirectUrl = req.url;
                     }
 
+                    const favIcon = await this.getIcon('agent-portal-icon');
+                    const logo = await this.getIcon('agent-portal-logo');
+
                     res.marko(template, {
-                        login: true, logout, releaseInfo, imprintLink, redirectUrl
+                        login: true, logout, releaseInfo, imprintLink, redirectUrl, favIcon, logo
                     });
                 } catch (error) {
                     console.error(error);

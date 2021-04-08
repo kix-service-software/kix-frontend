@@ -14,6 +14,7 @@ src/logs/**/*
 src/**/.gulp-*
 allure-results
 test-result.tar.gz
+test-results.xml
 logs
 
 coverage

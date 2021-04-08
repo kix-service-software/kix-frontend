@@ -10,6 +10,9 @@
 import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
 
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { SystemAddressProperty } from '../../model/SystemAddressProperty';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 
 export class SystemAddressFormService extends KIXObjectFormService {
 
@@ -29,5 +32,23 @@ export class SystemAddressFormService extends KIXObjectFormService {
 
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.SYSTEM_ADDRESS;
+    }
+
+
+    public async getFormParameter(
+        formId: string, forUpdate: boolean = false, createOptions?: KIXObjectSpecificCreateOptions
+    ): Promise<Array<[string, any]>> {
+        let parameter = await super.getFormParameter(formId, forUpdate, createOptions);
+
+        // filter parameter (updated by setup assistant)
+        if (forUpdate) {
+            const knownProperties = [
+                ...Object.keys(SystemAddressProperty).map((p) => SystemAddressProperty[p]),
+                ...Object.keys(KIXObjectProperty).map((p) => KIXObjectProperty[p])
+            ];
+            parameter = parameter.filter((v) => knownProperties.some((p) => p === v[0]));
+        }
+
+        return parameter;
     }
 }

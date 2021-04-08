@@ -50,7 +50,7 @@ export class FAQArticleFormService extends KIXObjectFormService {
                 case FAQArticleProperty.FIELD_3:
                 case FAQArticleProperty.FIELD_6:
                     const inlineContent = await FAQArticleHandler.getFAQArticleInlineContent(faqArticle);
-                    value = this.replaceInlineContent(faqArticle[property], inlineContent);
+                    value = BrowserUtil.replaceInlineContent(faqArticle[property], inlineContent);
                     break;
                 case FAQArticleProperty.ATTACHMENTS:
                     value = faqArticle.Attachments.filter((a) => a.Disposition !== 'inline');

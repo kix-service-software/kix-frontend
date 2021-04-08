@@ -85,7 +85,7 @@ export class OrganisationAPIService extends KIXObjectAPIService {
         if (icon && icon.Content) {
             icon.Object = objectType;
             icon.ObjectID = response.OrganisationID;
-            await this.createIcons(token, clientRequestId, icon)
+            await this.createIcon(token, clientRequestId, icon)
                 .catch(() => {
                     // be silent
                 });

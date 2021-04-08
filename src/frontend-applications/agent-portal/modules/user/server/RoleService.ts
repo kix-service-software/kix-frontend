@@ -23,6 +23,9 @@ import { Role } from '../model/Role';
 import { PermissionType } from '../model/PermissionType';
 import { Error } from '../../../../../server/model/Error';
 import { FilterCriteria } from '../../../model/FilterCriteria';
+import { SearchOperator } from '../../search/model/SearchOperator';
+import { FilterDataType } from '../../../model/FilterDataType';
+import { FilterType } from '../../../model/FilterType';
 
 
 export class RoleService extends KIXObjectAPIService {
@@ -304,6 +307,24 @@ export class RoleService extends KIXObjectAPIService {
         if (errors && errors.length) {
             throw new Error(errors[0].Code, errors[0].Message, errors[0].StatusCode);
         }
+    }
+
+    public async getPermissionTypeId(name: string, token: string): Promise<number> {
+        let permissionTypeId = 1;
+        const loadingOptions = new KIXObjectLoadingOptions([
+            new FilterCriteria('Name', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, name)
+        ]);
+        const permissionTypes = await this.loadObjects<PermissionType>(
+            token, 'RoleService', KIXObjectType.PERMISSION_TYPE, null, loadingOptions, null
+        ).catch((error): PermissionType[] => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            return [];
+        });
+        if (permissionTypes && permissionTypes.length === 1) {
+            permissionTypeId = permissionTypes[0].ID;
+        }
+
+        return permissionTypeId;
     }
 
 }

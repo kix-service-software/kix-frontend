@@ -22,7 +22,8 @@ export class CreateClientRegistration extends RequestObject {
         public Translations: PODefinition[] = [],
         public SysConfigOptionDefinitions: SysConfigOptionDefinition[] = [],
         public Requires: any[] = [],
-        public Plugins: any[] = []
+        public Plugins: any[] = [],
+        public Requesting?: any
     ) {
         super();
     }

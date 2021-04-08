@@ -38,9 +38,9 @@ export class FetchAssetAttributes extends ExtendedJobFormManager {
         return field;
     }
 
-    public postPrepareOptionValue(action: MacroAction, optionName: string, value: any): any {
-        if (optionName === 'AttributeDFMapping') {
-            return this.valueAsArray(action, optionName, value);
+    public postPrepareOptionValue(actionType: string, optionName: string, value: any, parameter: {}): any {
+        if (actionType === 'FetchAssetAttributes' && optionName === 'AttributeDFMapping') {
+            return this.valueAsArray(parameter, optionName, value);
         }
         return;
     }

@@ -74,7 +74,7 @@ class SidebarMenuComponent {
                 [
                     'Translatable#Close Sidebars',
                     'Translatable#Open Sidebars',
-                    ...this.state.sidebars.map((s) => s.configuration.title)
+                    ...this.state.sidebars.map((s) => s.configuration?.title)
                 ]
             );
         }

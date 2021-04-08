@@ -175,6 +175,7 @@ class Component {
             const formListInputContainer = (this as any).getEl('form-list-input-container-' + this.state.listId);
             let container = formListInputContainer;
             while (container
+                && container.className !== 'tab-content'
                 && container.parentNode
                 && container.parentNode.className !== 'overlay-dialog'
                 && container.parentNode.className !== 'lane-widget') {

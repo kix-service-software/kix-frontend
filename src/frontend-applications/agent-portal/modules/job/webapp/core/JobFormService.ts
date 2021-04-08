@@ -19,7 +19,6 @@ import { ContextService } from '../../../../modules/base-components/webapp/core/
 import { ContextType } from '../../../../model/ContextType';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { MacroAction } from '../../model/MacroAction';
-import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { FormContext } from '../../../../model/configuration/FormContext';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
 import { JobTypes } from '../../model/JobTypes';
@@ -29,7 +28,6 @@ import { EventService } from '../../../base-components/webapp/core/EventService'
 import { FormEvent } from '../../../base-components/webapp/core/FormEvent';
 import { FormValuesChangedEventData } from '../../../base-components/webapp/core/FormValuesChangedEventData';
 import { MacroFieldCreator } from './MacroFieldCreator';
-import { Macro } from '../../model/Macro';
 import { MacroObjectCreator } from './MacroObjectCreator';
 
 export class JobFormService extends KIXObjectFormService {
@@ -131,6 +129,8 @@ export class JobFormService extends KIXObjectFormService {
         if (f.property === JobProperty.MACRO_ACTIONS) {
             return await MacroFieldCreator.createActionField(f.parent, null);
         }
+
+        return super.getNewFormField(f, parent);
     }
 
     public async prepareCreateValue(
