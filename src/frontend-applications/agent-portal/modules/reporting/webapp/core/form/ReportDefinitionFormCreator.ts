@@ -315,7 +315,7 @@ export class ReportDefinitionFormCreator {
             false, 'Translatable#Helptext_Reporting_ReportCreate_ParameterDescription', []
         );
         descriptionField.instanceId = IdService.generateDateBasedId();
-        descriptionField.defaultValue = parameter ? new FormFieldValue(parameter.Name) : null;
+        descriptionField.defaultValue = parameter ? new FormFieldValue(parameter.Description) : null;
         descriptionField.parent = parameterField;
         descriptionField.parentInstanceId = parameterField.instanceId;
         parameterField.children.push(descriptionField);
@@ -332,7 +332,8 @@ export class ReportDefinitionFormCreator {
                         new TreeNode('DATETIME', 'Date Time'),
                         new TreeNode('TIME', 'Time')
                     ]),
-                new FormFieldOption(DefaultSelectInputFormOption.MULTI, false)
+                new FormFieldOption(DefaultSelectInputFormOption.MULTI, false),
+                new FormFieldOption(DefaultSelectInputFormOption.TRANSLATABLE, false)
             ],
         );
         dataTypeField.instanceId = IdService.generateDateBasedId();
@@ -421,7 +422,8 @@ export class ReportDefinitionFormCreator {
 
     private static async createOutputFormatsPage(reportDefinition: ReportDefinition): Promise<FormPageConfiguration> {
         const titleField = new FormFieldConfiguration(
-            'report-ouputformats-title', 'Translatable#Title', ReportDefinitionProperty.CONFIG_TITLE, null
+            'report-ouputformats-title', 'Translatable#Title', ReportDefinitionProperty.CONFIG_TITLE, null, false,
+            'Translatable#Helptext_Reporting_ReportDefinitionCreate_Title'
         );
         titleField.defaultValue = reportDefinition && reportDefinition.Config[ReportDefinitionProperty.CONFIG_TITLE]
             ? new FormFieldValue(reportDefinition.Config[ReportDefinitionProperty.CONFIG_TITLE])

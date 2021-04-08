@@ -52,13 +52,27 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 eventPublished: (data: any, eventId: string) => {
                     if (eventId === ContextUIEvent.RELOAD_OBJECTS && data === KIXObjectType.REPORT_DEFINITION) {
                         this.state.prepared = false;
-                    } else if (eventId === ContextUIEvent.RELOAD_OBJECTS_FINISHED &&
-                        data === KIXObjectType.REPORT_DEFINITION) {
+                    } else if (
+                        eventId === ContextUIEvent.RELOAD_OBJECTS_FINISHED &&
+                        data === KIXObjectType.REPORT_DEFINITION
+                    ) {
                         this.state.prepared = true;
+                        setTimeout(() => {
+                            const tableWidgetComponent = (this as any).getComponent('report-definition-table-widget');
+                            if (tableWidgetComponent) {
+                                const table = tableWidgetComponent.getTable();
+                                context.setFilteredObjectList(
+                                    KIXObjectType.REPORT_DEFINITION,
+                                    table?.getSelectedRows().map((r) => r.getRowObject().getObject())
+                                );
+                            }
+                        }, 150);
                     } else if (eventId === TableEvent.ROW_SELECTION_CHANGED &&
                         data.table.getObjectType() === KIXObjectType.REPORT_DEFINITION) {
-                        context.setFilteredObjectList(KIXObjectType.REPORT_DEFINITION,
-                            data.table.getSelectedRows().map((r) => r.getRowObject().getObject()));
+                        context.setFilteredObjectList(
+                            KIXObjectType.REPORT_DEFINITION,
+                            data.table.getSelectedRows().map((r) => r.getRowObject().getObject())
+                        );
                         this.state.prepared = true;
                     }
                 }

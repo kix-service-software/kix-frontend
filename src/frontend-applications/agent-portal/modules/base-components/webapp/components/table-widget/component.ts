@@ -16,7 +16,7 @@ import { ComponentInput } from './ComponentInput';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
 import { IdService } from '../../../../../model/IdService';
-import { TableEventData, TableEvent, TableFactoryService } from '../../core/table';
+import { TableEventData, TableEvent, TableFactoryService, Table } from '../../core/table';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
@@ -26,8 +26,6 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { ContextUIEvent } from '../../core/ContextUIEvent';
 import { ApplicationEvent } from '../../core/ApplicationEvent';
 import { IContextListener } from '../../core/IContextListener';
-import { Context } from '../../../../../model/Context';
-import { AdditionalContextInformation } from '../../core/AdditionalContextInformation';
 import { FormEvent } from '../../core/FormEvent';
 import { FormValuesChangedEventData } from '../../core/FormValuesChangedEventData';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
@@ -359,6 +357,10 @@ class Component {
 
     public getTemplate(componentId: string): any {
         return KIXModulesService.getComponentTemplate(componentId);
+    }
+
+    public getTable(): Table {
+        return this.state.table;
     }
 
 }

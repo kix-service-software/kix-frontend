@@ -51,6 +51,9 @@ export class ReportDefinitionLabelProvider extends LabelProvider<ReportDefinitio
             case ReportDefinitionProperty.AVAILABLE_OUTPUT_FORMATS:
                 displayValue = 'Translatable#Available Output Formats';
                 break;
+            case ReportDefinitionProperty.DATASOURCE:
+                displayValue = 'Translatable#Data Source';
+                break;
             default:
                 displayValue = await super.getPropertyText(property, short, translatable);
         }
