@@ -12,7 +12,8 @@ import { IUIModule } from '../../../../model/IUIModule';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import {
     TextModuleService, TextModuleFormService, TextModulesTableFactory,
-    TextModuleLabelProvider, TextModuleCreateAction, NewTextModuleDialogContext, EditTextModuleDialogContext
+    TextModuleLabelProvider, TextModuleCreateAction, NewTextModuleDialogContext, EditTextModuleDialogContext,
+    TextModuleTableDeleteAction
 } from '.';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../base-components/webapp/core/table';
@@ -47,6 +48,7 @@ export class UIModule implements IUIModule {
 
         ActionFactory.getInstance().registerAction('text-module-create', TextModuleCreateAction);
         ActionFactory.getInstance().registerAction('text-module-duplicate', TextModuleDuplicateAction);
+        ActionFactory.getInstance().registerAction('text-module-table-delete', TextModuleTableDeleteAction);
 
         const newTextModuleDialogContext = new ContextDescriptor(
             NewTextModuleDialogContext.CONTEXT_ID, [KIXObjectType.TEXT_MODULE],
