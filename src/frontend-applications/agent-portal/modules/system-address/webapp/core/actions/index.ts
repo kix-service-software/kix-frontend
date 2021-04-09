@@ -9,3 +9,4 @@
 
 export { SystemAddressCreateAction } from './SystemAddressCreateAction';
 export { SystemAddressEditAction } from './SystemAddressEditAction';
+export { SystemAddressDeleteAction } from './SystemAddressDeleteAction';

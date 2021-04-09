@@ -20,7 +20,7 @@ import { ContextService } from '../../../../modules/base-components/webapp/core/
 import {
     SystemAddressService, SystemAddressFormService, SystemAddressTableFactory,
     SystemAddressLabelProvider, SystemAddressCreateAction, NewSystemAddressDialogContext, SystemAddressEditAction,
-    EditSystemAddressDialogContext, SystemAddressDetailsContext
+    EditSystemAddressDialogContext, SystemAddressDetailsContext, SystemAddressDeleteAction
 } from '.';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
@@ -42,6 +42,7 @@ export class UIModule implements IUIModule {
         LabelService.getInstance().registerLabelProvider(new SystemAddressLabelProvider());
 
         ActionFactory.getInstance().registerAction('system-address-create', SystemAddressCreateAction);
+        ActionFactory.getInstance().registerAction('system-addresses-table-delete', SystemAddressDeleteAction);
 
         const newSystemAddressDialogContext = new ContextDescriptor(
             NewSystemAddressDialogContext.CONTEXT_ID, [KIXObjectType.SYSTEM_ADDRESS],
