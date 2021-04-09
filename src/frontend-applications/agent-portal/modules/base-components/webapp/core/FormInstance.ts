@@ -347,7 +347,7 @@ export class FormInstance {
     }
 
     public async provideFormFieldValues<T>(
-        values: Array<[string, T]>, originInstanceId: string, silent?: boolean
+        values: Array<[string, T]>, originInstanceId: string, silent?: boolean, validate: boolean = this.form.validation
     ): Promise<void> {
         const changedFieldValues: Array<[FormFieldConfiguration, FormFieldValue]> = [];
         for (const newValue of values) {
@@ -361,7 +361,7 @@ export class FormInstance {
             formFieldValue.value = value;
 
             const formField = this.getFormField(instanceId);
-            if (this.form.validation) {
+            if (validate) {
                 const result = await FormValidationService.getInstance().validate(formField, this.form.id);
                 formFieldValue.valid = result.findIndex((vr) => vr.severity === ValidationSeverity.ERROR) === -1;
             }

@@ -98,6 +98,7 @@ export abstract class KIXObjectFormService {
             );
         }
 
+        const values = [];
         for (const f of formFields) {
             let formFieldValue: FormFieldValue;
 
@@ -112,6 +113,8 @@ export abstract class KIXObjectFormService {
                 f,
                 formContext
             );
+
+            values.push([f.instanceId, value]);
 
             // TODO: move handling to this.getValue - object FormServices have to use super
             if (f.property === 'ICON') {
@@ -139,6 +142,8 @@ export abstract class KIXObjectFormService {
                 await this.prepareFormFieldValues(f.children, kixObject, formFieldValues, formContext, formInstance);
             }
         }
+
+        formInstance.provideFormFieldValues(values, null, false, false);
     }
 
     protected async getValue(
