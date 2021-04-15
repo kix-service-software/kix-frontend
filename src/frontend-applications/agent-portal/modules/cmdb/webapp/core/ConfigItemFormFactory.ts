@@ -25,7 +25,6 @@ import { FilterType } from '../../../../model/FilterType';
 import { GeneralCatalogItemProperty } from '../../../general-catalog/model/GeneralCatalogItemProperty';
 import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
 import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
-import { isArray } from 'util';
 import { ConfigItemProperty } from '../../model/ConfigItemProperty';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { IdService } from '../../../../model/IdService';
@@ -186,7 +185,7 @@ export class ConfigItemFormFactory {
 
     private getCIClassReferenceField(ad: AttributeDefinition, parentInstanceId: string): FormFieldConfiguration {
         let classes = [];
-        if (isArray(ad.Input['ReferencedCIClassName'])) {
+        if (Array.isArray(ad.Input['ReferencedCIClassName'])) {
             classes = ad.Input['ReferencedCIClassName'];
         } else {
             classes = [ad.Input['ReferencedCIClassName']];
