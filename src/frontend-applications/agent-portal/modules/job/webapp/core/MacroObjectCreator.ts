@@ -28,8 +28,8 @@ export class MacroObjectCreator {
         const jobNameValue = await formInstance.getFormFieldValueByProperty(JobProperty.NAME);
         macro.Name = jobNameValue ? `Macro for Job "${jobNameValue.value}"` : macroField.instanceId;
 
-        const typeValue = await formInstance.getFormFieldValueByProperty<string>(JobProperty.TYPE);
-        macro.Type = typeValue ? typeValue.value : null;
+        const typeValue = formInstance.getFormFieldValue<string>(macroField?.instanceId);
+        macro.Type = Array.isArray(typeValue?.value) ? typeValue.value[0] : typeValue.value;
 
         macro.Actions = await this.createActions(macro.ID, macroField.children, formInstance, macro.Type);
 
@@ -52,7 +52,9 @@ export class MacroObjectCreator {
 
                 const actionValue = formInstance.getFormFieldValue<string>(actionField.instanceId);
                 if (actionValue.value) {
-                    action.Type = actionValue ? actionValue.value : null;
+                    action.Type = Array.isArray(actionValue?.value)
+                        ? actionValue.value[0]
+                        : actionValue.value;
 
                     action.ResultVariables = this.createActionResultVariables(
                         action, actionField.children, formInstance
@@ -98,29 +100,26 @@ export class MacroObjectCreator {
     ): Promise<any> {
         const parameter = {};
 
-        const referenceTypes = ['Loop'];
-
         for (const parameterField of parameterFields) {
             const value = formInstance.getFormFieldValue(parameterField.instanceId);
             const optionNameValue = parameterField.options.find((o) => o.option === 'OptionName');
-            if (optionNameValue) {
-                if (referenceTypes.some((t) => t === action.Type) && optionNameValue.value === 'MacroID') {
-                    const macro = await this.createMacro(parameterField, formInstance);
-                    macro.Name = `${macro.Name} - Action: ${action.Type} - ${IdService.generateDateBasedId()}`;
-                    macro.Comment = `Referenced by Action: ${action.Type}`;
-                    parameter[optionNameValue.value] = macro;
-                } else if (optionNameValue.value !== 'Skip') {
-                    if (value && value.value !== null && typeof value.value !== 'undefined') {
-                        const manager = JobFormService.getInstance().getJobFormManager(macroType || 'Ticket');
-                        if (manager) {
-                            const preparedValue = manager.postPrepareOptionValue(
-                                action.Type, optionNameValue.value, value.value, parameter
-                            );
-                            parameter[optionNameValue.value] = typeof preparedValue !== 'undefined'
-                                ? preparedValue : value.value;
-                        } else {
-                            parameter[optionNameValue.value] = value.value;
-                        }
+            if (optionNameValue?.value === 'MacroID') {
+                const macro = await this.createMacro(parameterField, formInstance);
+                macro.Name = `${macro.Name} - Action: ${action.Type} - ${IdService.generateDateBasedId()}`;
+                macro.Comment = `Referenced by Action: ${action.Type}`;
+                parameter[optionNameValue.value] = macro;
+            } else if (optionNameValue?.value !== 'Skip') {
+                if (value && value.value !== null && typeof value.value !== 'undefined') {
+                    const manager = JobFormService.getInstance().getJobFormManager(macroType || 'Ticket');
+                    if (manager) {
+                        const preparedValue = await manager.postPrepareOptionValue(
+                            action.Type, optionNameValue.value, value.value, parameter,
+                            parameterField, formInstance
+                        );
+                        parameter[optionNameValue.value] = typeof preparedValue !== 'undefined'
+                            ? preparedValue : value.value;
+                    } else {
+                        parameter[optionNameValue.value] = value.value;
                     }
                 }
             }

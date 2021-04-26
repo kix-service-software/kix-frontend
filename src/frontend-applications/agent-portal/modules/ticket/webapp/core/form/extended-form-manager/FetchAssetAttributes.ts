@@ -7,18 +7,19 @@
  * --
  */
 
-import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
-import { MacroAction } from '../../../model/MacroAction';
-import { MacroActionTypeOption } from '../../../model/MacroActionTypeOption';
-import { ExtendedJobFormManager } from '../ExtendedJobFormManager';
-import { JobTypes } from '../../../model/JobTypes';
+import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
+import { JobTypes } from '../../../../../job/model/JobTypes';
+import { MacroAction } from '../../../../../job/model/MacroAction';
+import { MacroActionTypeOption } from '../../../../../job/model/MacroActionTypeOption';
+import { ExtendedJobFormManager } from '../../../../../job/webapp/core/ExtendedJobFormManager';
+
 
 export class FetchAssetAttributes extends ExtendedJobFormManager {
 
-    public createOptionField(
+    public async createOptionField(
         action: MacroAction, option: MacroActionTypeOption, actionType: string, actionFieldInstanceId: string,
         jobType: string
-    ): FormFieldConfiguration {
+    ): Promise<FormFieldConfiguration> {
         let field: FormFieldConfiguration;
         if (jobType === JobTypes.TICKET && actionType === 'FetchAssetAttributes') {
             let defaultValue;

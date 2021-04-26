@@ -240,19 +240,18 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                             }
                         }
                     }
-                    const freeTextOption = this.state.field.options.find(
-                        (o) => o.option === ObjectReferenceOptions.FREETEXT
-                    );
-
-                    if (freeTextOption && freeTextOption.value) {
-                        const freeTextNodes = objectIds
-                            .filter((oid) => !selectedNodes.some((sn) => sn.id.toString() === oid.toString()))
-                            .map((v) => new TreeNode(v, v));
-                        selectedNodes = [...selectedNodes, ...freeTextNodes];
-                    }
-
                 }
             }
+
+            const freeTextOption = this.state.field.options.find((o) => o.option === ObjectReferenceOptions.FREETEXT);
+
+            if (freeTextOption && freeTextOption.value) {
+                const freeTextNodes = objectIds
+                    .filter((oid) => !selectedNodes.some((sn) => sn.id.toString() === oid.toString()))
+                    .map((v) => new TreeNode(v, v));
+                selectedNodes = [...selectedNodes, ...freeTextNodes];
+            }
+
             treeHandler.selectNone(true);
             setTimeout(() => treeHandler.setSelection(selectedNodes, true, true, true), 200);
         } else if (treeHandler) {

@@ -318,7 +318,7 @@ export class BrowserUtil {
         return newString;
     }
 
-    public static formatJSON(json) {
+    public static formatJSON(json: any) {
         if (typeof json !== 'string') {
             try {
                 const replacerFunc = () => {

@@ -109,9 +109,10 @@ export class FormInstance {
         }
     }
 
-    private setDefaultValueAndParent(formFields: FormFieldConfiguration[], parent?: FormFieldConfiguration): void {
+    public setDefaultValueAndParent(formFields: FormFieldConfiguration[], parent?: FormFieldConfiguration): void {
         formFields.forEach((f) => {
             f.parent = parent;
+            f.parentInstanceId = parent?.instanceId;
 
             if (!f.instanceId) {
                 f.instanceId = IdService.generateDateBasedId(f.property);
@@ -289,7 +290,7 @@ export class FormInstance {
                 this.form.objectType, ServiceType.FORM
             );
             if (service) {
-                const newField = await service.getNewFormField(formField, null, withChildren);
+                const newField = await service.getNewFormField(this, formField, null, withChildren);
                 fields.splice(index + 1, 0, newField);
                 this.setDefaultValueAndParent([newField], formField.parent);
                 await service.updateFields(fields, this);
@@ -311,14 +312,15 @@ export class FormInstance {
         parent: FormFieldConfiguration, children: FormFieldConfiguration[], clearChildren: boolean = false
     ): Promise<void> {
         if (parent) {
-            parent = await this.getFormField(parent.instanceId);
             if (!parent.children) {
                 parent.children = [];
             }
+
             if (clearChildren) {
                 parent.children.forEach((c) => this.deleteFieldValues(c));
                 parent.children = [];
             }
+
             children.forEach((f) => parent.children.push(f));
             this.setDefaultValueAndParent(children, parent);
 
