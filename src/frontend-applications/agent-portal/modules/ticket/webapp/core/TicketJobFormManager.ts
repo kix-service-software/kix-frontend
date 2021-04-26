@@ -7,10 +7,10 @@
  * --
  */
 
-import { AbstractJobFormManager } from './AbstractJobFormManager';
 import { SearchService } from '../../../search/webapp/core';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { SearchProperty } from '../../../search/model/SearchProperty';
+import { AbstractJobFormManager } from '../../../job/webapp/core/AbstractJobFormManager';
 
 export class TicketJobFormManager extends AbstractJobFormManager {
 

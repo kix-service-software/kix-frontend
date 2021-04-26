@@ -33,6 +33,7 @@ import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptio
 import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 
 export class ConfigItemFormService extends KIXObjectFormService {
 
@@ -65,14 +66,14 @@ export class ConfigItemFormService extends KIXObjectFormService {
 
     public async prepareFormFieldValues(
         formFields: FormFieldConfiguration[], configItem: ConfigItem, formFieldValues: Map<string, FormFieldValue<any>>,
-        formContext: FormContext
+        formContext: FormContext, formInstance: FormInstance
     ): Promise<void> {
         if (configItem || formContext === FormContext.EDIT) {
             const fields = await this.prepareConfigItemValues(configItem, formFields, formFieldValues, formContext);
             formFields.splice(0, formFields.length);
             fields.forEach((f) => formFields.push(f));
         } else {
-            this.handleCountValues(formFields);
+            this.handleCountValues(formFields, formInstance);
             for (const f of formFields) {
                 let formFieldValue: FormFieldValue;
                 if (f.defaultValue) {
@@ -88,7 +89,9 @@ export class ConfigItemFormService extends KIXObjectFormService {
                 }
                 formFieldValues.set(f.instanceId, formFieldValue);
                 if (f.children) {
-                    await this.prepareFormFieldValues(f.children, configItem, formFieldValues, formContext);
+                    await this.prepareFormFieldValues(
+                        f.children, configItem, formFieldValues, formContext, formInstance
+                    );
                 }
             }
         }
@@ -219,7 +222,7 @@ export class ConfigItemFormService extends KIXObjectFormService {
             for (const pd of relevantPreparedData) {
                 if (index < ff.countMax) {
                     if (index > 0) {
-                        ff = await this.getNewFormField(formField);
+                        ff = await this.getNewFormField(null, formField);
                         formFields.push(ff);
                     }
                     this.setDataValue(ff, pd, index, formFieldValues);

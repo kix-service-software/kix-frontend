@@ -39,7 +39,7 @@ const macroField = {
         }
     ],
     'defaultValue': {
-        'value': null,
+        'value': 'Ticket',
         'valid': true
     },
     'fieldConfigurationIds': [],
@@ -303,7 +303,7 @@ const macroFieldWithLoopAction = {
         }
     ],
     'defaultValue': {
-        'value': null,
+        'value': 'Ticket',
         'valid': true
     },
     'fieldConfigurationIds': [],
@@ -420,7 +420,7 @@ const macroFieldWithLoopAction = {
                         }
                     ],
                     'defaultValue': {
-                        'value': null,
+                        'value': 'Ticket',
                         'valid': true
                     },
                     'fieldConfigurationIds': [],

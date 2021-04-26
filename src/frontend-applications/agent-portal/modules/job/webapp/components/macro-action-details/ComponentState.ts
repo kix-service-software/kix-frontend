@@ -7,13 +7,13 @@
  * --
  */
 
-import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
-import { TreeNode } from '../../../../base-components/webapp/core/tree';
+import { LabelValueGroup } from '../../../../../model/LabelValueGroup';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState extends FormInputComponentState<string> {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public placeholder: string = '',
+        public groups: LabelValueGroup[] = []
     ) {
         super();
     }

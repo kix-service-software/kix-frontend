@@ -7,6 +7,7 @@
  * --
  */
 
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { DateTimeUtil } from '../../../../base-components/webapp/core/DateTimeUtil';
 import { FormInstance } from '../../../../base-components/webapp/core/FormInstance';
@@ -44,9 +45,16 @@ export class ReportObjectCreator {
     }
 
     private static async getParameters(formInstance: FormInstance, definition: ReportDefinition): Promise<any> {
+        const parameterFields = formInstance.getFormFieldsByProperty(ReportProperty.PARAMETER) || [];
+        const parameters = await this.getParameterConfig(parameterFields, formInstance, definition);
+        return parameters;
+    }
+
+    public static async getParameterConfig(
+        parameterFields: FormFieldConfiguration[], formInstance: FormInstance, definition: ReportDefinition
+    ): Promise<any> {
         const parameters = {};
 
-        const parameterFields = formInstance.getFormFieldsByProperty(ReportProperty.PARAMETER) || [];
         for (const field of parameterFields) {
             const formValue = formInstance.getFormFieldValue(field.instanceId);
             if (formValue) {

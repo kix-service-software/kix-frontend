@@ -51,7 +51,7 @@ export class ReportFormCreator {
         );
     }
 
-    private static async createOutputFormatField(
+    public static async createOutputFormatField(
         reportDefinition: ReportDefinition, outputFormat?: string
     ): Promise<FormFieldConfiguration> {
         const outputFormatField = new FormFieldConfiguration(
@@ -65,7 +65,7 @@ export class ReportFormCreator {
         outputFormatField.instanceId = IdService.generateDateBasedId();
 
         const nodes: TreeNode[] = [];
-        if (reportDefinition.Config['OutputFormats']) {
+        if (reportDefinition?.Config['OutputFormats']) {
             for (const format in reportDefinition.Config['OutputFormats']) {
                 if (reportDefinition.Config['OutputFormats'][format]) {
                     nodes.push(new TreeNode(format, format));
@@ -93,7 +93,9 @@ export class ReportFormCreator {
         return outputFormatField;
     }
 
-    private static async createParameterFields(reportDefinition: ReportDefinition): Promise<FormFieldConfiguration[]> {
+    public static async createParameterFields(
+        reportDefinition: ReportDefinition, defaultParameters?: any, allowPlaceholder?: boolean
+    ): Promise<FormFieldConfiguration[]> {
         const fields: FormFieldConfiguration[] = [];
         if (reportDefinition.Config && Array.isArray(reportDefinition.Config['Parameters'])) {
             const parameters: ReportParameter[] = reportDefinition.Config['Parameters'];
@@ -106,9 +108,13 @@ export class ReportFormCreator {
                 field.instanceId = IdService.generateDateBasedId();
                 field.label = parameter.Label ? parameter.Label : parameter.Name;
                 field.readonly = Boolean(parameter.ReadOnly);
-                field.defaultValue = new FormFieldValue(parameter.Default);
 
-                await this.prepareFieldInput(field, parameter);
+                const defaultValue = defaultParameters
+                    ? defaultParameters[parameter.Name]
+                    : parameter.Default;
+
+                field.defaultValue = new FormFieldValue(defaultValue);
+                await this.prepareFieldInput(field, parameter, allowPlaceholder);
 
                 fields.push(field);
             }
@@ -117,7 +123,9 @@ export class ReportFormCreator {
         return fields;
     }
 
-    private static async prepareFieldInput(field: FormFieldConfiguration, parameter: ReportParameter): Promise<void> {
+    private static async prepareFieldInput(
+        field: FormFieldConfiguration, parameter: ReportParameter, allowPlaceholder?: boolean
+    ): Promise<void> {
         if (parameter.DataType === 'number') {
             field.options.push(new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.NUMBER));
         } else if (parameter.DataType === 'DATE') {
@@ -135,6 +143,10 @@ export class ReportFormCreator {
             await ReportingFormUtil.setInputComponent(field, parameter);
         } else if (Array.isArray(parameter.PossibleValues) && parameter.PossibleValues.length) {
             ReportingFormUtil.createDefaultValueInput(field, parameter);
+        }
+
+        if (allowPlaceholder) {
+            field.options.push(new FormFieldOption(FormFieldOptions.ALLOW_PLACEHOLDER, true));
         }
     }
 

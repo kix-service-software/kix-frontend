@@ -43,6 +43,12 @@ import { FormService } from '../../../base-components/webapp/core/FormService';
 import { TicketFormFieldValueHandler } from './TicketFormFieldValueHandler';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { JobFormService } from '../../../job/webapp/core';
+import { JobTypes } from '../../../job/model/JobTypes';
+import { FetchAssetAttributes } from './form/extended-form-manager/FetchAssetAttributes';
+import { TicketArticleCreate } from './form/extended-form-manager/TicketArticleCreate';
+import { TicketCreateDynamicFields } from './form/extended-form-manager/TicketCreateDynamicFields';
+import { TicketJobFormManager } from './TicketJobFormManager';
 
 export class UIModule implements IUIModule {
 
@@ -98,6 +104,15 @@ export class UIModule implements IUIModule {
 
         await this.registerContexts();
         this.registerTicketActions();
+
+        JobFormService.getInstance().registerJobFormManager(JobTypes.TICKET, new TicketJobFormManager());
+
+        const ticketManager = JobFormService.getInstance().getJobFormManager(JobTypes.TICKET);
+        if (ticketManager) {
+            ticketManager.addExtendedJobFormManager(new TicketArticleCreate());
+            ticketManager.addExtendedJobFormManager(new FetchAssetAttributes());
+            ticketManager.addExtendedJobFormManager(new TicketCreateDynamicFields());
+        }
     }
 
     private registerTicketActions(): void {

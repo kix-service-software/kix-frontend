@@ -15,10 +15,10 @@ import { JobTypes } from '../../../model/JobTypes';
 
 export class DynamicFieldSet extends ExtendedJobFormManager {
 
-    public createOptionField(
+    public async createOptionField(
         action: MacroAction, option: MacroActionTypeOption, actionType: string, actionFieldInstanceId: string,
         jobType: string
-    ): FormFieldConfiguration {
+    ): Promise<FormFieldConfiguration> {
         if (
             jobType === JobTypes.TICKET
             && actionType === 'DynamicFieldSet'

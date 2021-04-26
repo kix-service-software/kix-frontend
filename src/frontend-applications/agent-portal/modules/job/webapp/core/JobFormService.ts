@@ -79,6 +79,12 @@ export class JobFormService extends KIXObjectFormService {
         return this.jobFormManager.get(type);
     }
 
+    public getAllJobFormManager(): AbstractJobFormManager[] {
+        const manager = [];
+        this.jobFormManager?.forEach((v, k) => manager.push(v));
+        return manager;
+    }
+
     public registerJobFormManager(type: JobTypes | string, manager: AbstractJobFormManager): void {
         this.jobFormManager.set(type, manager);
     }
@@ -118,19 +124,19 @@ export class JobFormService extends KIXObjectFormService {
     ): Promise<any> {
         if (job) {
             const manager = this.getJobFormManager(job.Type);
-            value = manager.getValue(property, formField, value, job, formContext);
+            value = await manager.getValue(property, formField, value, job, formContext);
         }
         return value;
     }
 
     public async getNewFormField(
-        f: FormFieldConfiguration, parent?: FormFieldConfiguration
+        formInstance: FormInstance, f: FormFieldConfiguration, parent?: FormFieldConfiguration
     ): Promise<FormFieldConfiguration> {
         if (f.property === JobProperty.MACRO_ACTIONS) {
-            return await MacroFieldCreator.createActionField(f.parent, null);
+            return await MacroFieldCreator.createActionField(f.parent, null, null, formInstance);
         }
 
-        return super.getNewFormField(f, parent);
+        return super.getNewFormField(formInstance, f, parent);
     }
 
     public async prepareCreateValue(

@@ -5,7 +5,6 @@
         "require ./components/job-details-exec-plans-widget",
         "require ./components/job-details-filter-widget",
         "require ./components/job-filter-cell-content",
-        "require ./components/job-input-actions",
         "require ./components/job-input-events",
         "require ./components/job-input-fetchAssetAttributesMapping",
         "require ./components/job-input-filter",
@@ -14,7 +13,7 @@
         "require ./components/job-run-history-widget",
         "require ./components/job-run-log-download-cell",
         "require ./components/job-run-logs",
-        "require ./components/job-input-macro",
+        "require ./components/macro-action-details",
         "require ./core"
     ]
 }

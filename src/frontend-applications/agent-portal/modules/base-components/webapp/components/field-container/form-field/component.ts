@@ -86,13 +86,15 @@ class Component {
     private async hasInvalidChildren(field: FormFieldConfiguration = this.state.field): Promise<boolean> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         let hasInvalidChildren = false;
-        for (const child of field.children) {
-            const value = formInstance.getFormFieldValue(child.instanceId);
-            if (!value.valid) {
-                return true;
-            }
+        if (Array.isArray(field.children)) {
+            for (const child of field.children) {
+                const value = formInstance.getFormFieldValue(child.instanceId);
+                if (!value.valid) {
+                    return true;
+                }
 
-            hasInvalidChildren = await this.hasInvalidChildren(child);
+                hasInvalidChildren = await this.hasInvalidChildren(child);
+            }
         }
 
         return hasInvalidChildren;
