@@ -9,3 +9,5 @@
 
 export { MailFilterCreateAction } from './MailFilterCreateAction';
 export { MailFilterEditAction } from './MailFilterEditAction';
+export { MailFilterDuplicateAction } from './MailFilterDuplicateAction';
+export { MailFilterTableDuplicateAction } from './MailFilterTableDuplicateAction';
