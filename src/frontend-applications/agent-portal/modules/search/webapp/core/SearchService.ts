@@ -49,7 +49,7 @@ export class SearchService {
     private formSearches: Map<KIXObjectType | string, (formId: string) => Promise<any[]>> = new Map();
     private formTableConfigs: Map<KIXObjectType | string, Table> = new Map();
     private searchDefinitions: SearchDefinition[] = [];
-    private activeSearchResultExplorerCategory: SearchResultCategory = null;
+    private searchCategory: SearchResultCategory = null;
 
     private listeners: IKIXObjectSearchListener[] = [];
 
@@ -242,12 +242,14 @@ export class SearchService {
     }
 
     public setActiveSearchResultExplorerCategory(category: SearchResultCategory): void {
-        this.activeSearchResultExplorerCategory = category;
-        this.listeners.forEach((l) => l.searchResultCategoryChanged(this.activeSearchResultExplorerCategory));
+        if (!this.searchCategory || this.searchCategory.objectType !== category.objectType) {
+            this.searchCategory = category;
+            this.listeners.forEach((l) => l.searchResultCategoryChanged(this.searchCategory));
+        }
     }
 
     public getActiveSearchResultExplorerCategory(): SearchResultCategory {
-        return this.activeSearchResultExplorerCategory;
+        return this.searchCategory;
     }
 
     public getSearchDefinition(objectType: KIXObjectType | string): SearchDefinition {
@@ -287,7 +289,6 @@ export class SearchService {
                 .then(async () => {
                     this.searchCache.name = name;
                     await this.getSearchBookmarks(true);
-                    this.listeners.forEach((l) => l.searchFinished());
                 }).catch((error: Error) => BrowserUtil.openErrorOverlay(error.message));
         }
     }

@@ -57,9 +57,13 @@ export class TicketTableFactory extends TableFactory {
                     TicketProperty.PRIORITY_ID, false, true, true, false, 65, true, true, true, DataType.STRING, false
                 ),
                 new DefaultColumnConfiguration(
-                    null, null, null, TicketProperty.TICKET_NUMBER, true, false, true, false, 135, true, true),
+                    null, null, null, TicketProperty.TICKET_NUMBER, true, false, true, false, 135, true, true, false,
+                    undefined, true, undefined, undefined, false
+                ),
                 new DefaultColumnConfiguration(
-                    null, null, null, TicketProperty.TITLE, true, false, true, false, 160, true, true),
+                    null, null, null, TicketProperty.TITLE, true, false, true, false, 160, true, true, false,
+                    undefined, true, undefined, undefined, false
+                ),
                 new DefaultColumnConfiguration(
                     null, null, null, TicketProperty.STATE_ID, true, true, true, false, 150, true, true, true),
                 new DefaultColumnConfiguration(null, null, null,
