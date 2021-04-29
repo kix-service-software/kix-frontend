@@ -37,7 +37,8 @@ import { JobService } from './JobService';
 
 export class MacroFieldCreator {
     public static async createMacroField(
-        macro: Macro, formInstance: FormInstance, jobManager: AbstractJobFormManager, parentInstanceId: string = ''
+        macro: Macro, formInstance: FormInstance, jobManager: AbstractJobFormManager, parentInstanceId: string = '',
+        allowEmpty: boolean = false
     ): Promise<FormFieldConfiguration> {
         const macroField = new FormFieldConfiguration(
             'job-form-field-macro', '', JobProperty.MACROS, 'default-select-input'
@@ -103,6 +104,11 @@ export class MacroFieldCreator {
         } else if (macroField.defaultValue && macroField.defaultValue.value) {
             const actionField = await this.createActionField(macroField, type, null, formInstance);
             macroField.children.push(actionField);
+        }
+
+        if (allowEmpty) {
+            macroField.empty = !macro;
+            macroField.countMin = 0;
         }
 
         return macroField;
