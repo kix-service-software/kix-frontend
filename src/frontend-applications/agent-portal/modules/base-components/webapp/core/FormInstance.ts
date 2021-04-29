@@ -357,7 +357,7 @@ export class FormInstance {
     ): Promise<void> {
         const instanceValues: Array<[string, any]> = values.map((v) => {
             const formField = this.getFormFieldByProperty(v[0]);
-            return [formField ? formField.instanceId : null, v[1]];
+            return [formField ? formField.instanceId : v[0], v[1]];
         });
 
         this.provideFormFieldValues(instanceValues.filter((iv) => iv[0] !== null), originInstanceId, silent);
@@ -412,6 +412,8 @@ export class FormInstance {
         const field = await this.getFormFieldByProperty(property);
         if (field) {
             return this.getFormFieldValue(field.instanceId);
+        } else {
+            return this.getFormFieldValue(property);
         }
 
         return this.fixedValues.has(property) ? this.fixedValues.get(property)[1] : undefined;
