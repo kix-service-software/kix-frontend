@@ -13,6 +13,7 @@ import { ObjectUpdatedEventData } from '../../../../model/ObjectUpdatedEventData
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { EventService } from './EventService';
 import { ApplicationEvent } from './ApplicationEvent';
+import { ObjectUpdatedEvent } from '../../../../model/ObjectUpdatedEvent';
 
 export class BrowserCacheService {
 
@@ -93,12 +94,14 @@ export class BrowserCacheService {
     }
 
     public async updateCaches(events: ObjectUpdatedEventData[]): Promise<void> {
-        for (const event of events) {
-            if (event.RequestID !== ClientStorageService.getClientRequestId()) {
-                if (!event.Namespace.startsWith(KIXObjectType.TRANSLATION_PATTERN)) {
-                    this.deleteKeys(event.Namespace);
-                }
-            }
+        if (events.some((e) => e.Event === ObjectUpdatedEvent.CLEAR_CACHE)) {
+            this.clear();
+        } else {
+            events = events
+                .filter((e) => e.RequestID !== ClientStorageService.getClientRequestId())
+                .filter((e) => !e.Namespace.startsWith(KIXObjectType.TRANSLATION_PATTERN));
+
+            events.forEach((e) => this.deleteKeys(e.Namespace));
         }
     }
 
