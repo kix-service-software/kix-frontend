@@ -48,13 +48,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
 
             setTimeout(() => {
-                this.setActiveNode(context.adminModuleId);
+                this.setActiveNode(context.adminModuleId, true);
             }, 500);
         }
     }
 
-    private setActiveNode(adminModuleId: string): void {
-        this.activeNodeChanged(this.getActiveNode(adminModuleId));
+    private setActiveNode(adminModuleId: string, force: boolean = false): void {
+        this.publishToContext(this.getActiveNode(adminModuleId), force);
     }
 
     private getActiveNode(adminModuleId: string, nodes: TreeNode[] = this.state.nodes): TreeNode {
@@ -136,11 +136,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async activeNodeChanged(node: TreeNode): Promise<void> {
+        this.publishToContext(node);
+    }
+
+    private async publishToContext(node: TreeNode, force: boolean = false): Promise<void> {
         this.state.activeNode = node;
         if (node) {
             const context = await ContextService.getInstance().getContext<AdminContext>(AdminContext.CONTEXT_ID);
             if (context) {
-                context.setAdminModule(node.id, node.parent ? node.parent.label : '');
+                context.setAdminModule(node.id, node.parent ? node.parent.label : '', force);
             }
         }
     }
