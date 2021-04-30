@@ -40,14 +40,14 @@ export class NewTicketDialogContext extends Context {
                 this.setFormObject();
                 if (form.objectType === KIXObjectType.TICKET && form.formContext === FormContext.NEW) {
                     const organisationValue = data.changedValues.find(
-                        (cv) => cv[0] && cv[0].property === TicketProperty.ORGANISATION_ID
+                        (cv) => cv[0]?.property === TicketProperty.ORGANISATION_ID
                     );
                     if (organisationValue) {
                         this.handleOrganisationValue(organisationValue[1].value);
                     }
 
                     const contactValue = data.changedValues.find(
-                        (cv) => cv[0].property === TicketProperty.CONTACT_ID
+                        (cv) => cv[0]?.property === TicketProperty.CONTACT_ID
                     );
                     if (contactValue) {
                         this.handleContactValue(contactValue[1].value);
