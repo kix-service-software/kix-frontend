@@ -65,7 +65,7 @@ export class ReportDefinitionFormValueHandler extends FormFieldValueHandler {
             const outputFormatValue = changedFieldValues.find(
                 (cv) => cv[0] && cv[0].property === ReportDefinitionProperty.AVAILABLE_OUTPUT_FORMATS
             );
-            if (outputFormatValue && outputFormatValue[1].value) {
+            if (outputFormatValue) {
                 await ReportDefinitionFormCreator.updateOutputFormatField(formInstance, outputFormatValue[0]);
             }
 
