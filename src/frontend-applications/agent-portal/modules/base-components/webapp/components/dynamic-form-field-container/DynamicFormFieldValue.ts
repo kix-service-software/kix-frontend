@@ -120,6 +120,8 @@ export class DynamicFormFieldValue {
                 this.valueTreeHandler.setSelection(this.valueTreeHandler.getSelectedNodes(), false, true, true);
                 this.valueTreeHandler.setTree([]);
             }
+
+            this.value.additionalOptions = null;
         }
 
         await this.manager.setValue(this.value, silent);
