@@ -185,12 +185,14 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 cacheKeyPrefixes.push(KIXObjectType.TICKET);
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
+                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
                 break;
             case KIXObjectType.CONTACT:
                 cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
                 cacheKeyPrefixes.push(KIXObjectType.TICKET);
                 cacheKeyPrefixes.push(KIXObjectType.USER);
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
+                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
                 break;
             case KIXObjectType.PERMISSION:
             case KIXObjectType.ROLE:
@@ -217,6 +219,8 @@ export class BrowserCacheService {
                 break;
             case KIXObjectType.CONFIG_ITEM_VERSION:
                 cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
+                cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
+                cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 break;
             case KIXObjectType.GENERAL_CATALOG_ITEM:
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
