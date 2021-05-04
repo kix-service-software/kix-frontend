@@ -49,6 +49,8 @@ export class DynamicFormFieldValue {
 
     public isBetween: boolean = false;
 
+    public label: string = '';
+
     public autoCompleteConfiguration: AutoCompleteConfiguration;
     public autoCompleteCallback: (limit: number, searchValue: string) => Promise<TreeNode[]>;
 
@@ -124,6 +126,12 @@ export class DynamicFormFieldValue {
             this.value.additionalOptions = null;
         }
 
+        // get label (needed if field is required)
+        if (this.required) {
+            const objectType = this.value.objectType ? this.value.objectType : this.manager.objectType;
+            this.label = await LabelService.getInstance().getPropertyText(this.value.property, objectType);
+        }
+
         await this.manager.setValue(this.value, silent);
 
         await this.setPropertyTree();
@@ -184,7 +192,7 @@ export class DynamicFormFieldValue {
                         if (this.value.operator) {
                             operationNode = operationNodes.find((n) => n.id === this.value.operator);
                         } else {
-                            this.value.operator = operationNodes[0].id;
+                            this.value.operator = operationNode.id;
                         }
                         this.operationTreeHandler.setSelection([operationNode], true);
                     }
