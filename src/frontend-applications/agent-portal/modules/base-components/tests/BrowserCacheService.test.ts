@@ -109,7 +109,7 @@ describe('BrowserCacheService', () => {
                 const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('CMDB.ConfigItemVersion');
                 expect(prefixes).exist;
                 expect(prefixes).an('array');
-                expect(prefixes.length).equals(2);
+                expect(prefixes.length).equals(4);
 
                 expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM_VERSION)).exist;
@@ -368,7 +368,7 @@ describe('BrowserCacheService', () => {
                 const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.CONTACT);
                 expect(prefixes).exist;
                 expect(prefixes).an('array');
-                expect(prefixes.length).equals(5);
+                expect(prefixes.length).equals(6);
 
                 expect(prefixes.find((p) => p === KIXObjectType.CONTACT)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.ORGANISATION)).exist;
