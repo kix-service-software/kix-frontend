@@ -32,8 +32,6 @@ import { JobRunLogLabelProvider } from './JobRunLogLabelProvider';
 import { JobRunLogTableFactory } from './table/JobRunLogTableFactory';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
-import { FormValidationService } from '../../../base-components/webapp/core/FormValidationService';
-import { JobFilterValidator } from './form/validators/JobFilterValidator';
 import { DynamicFieldSet } from './extended-form-manager/DynamicFieldSet';
 import { MacroFieldJobFormManager } from './form/MacroFieldJobFormManager';
 import { AssembleObject } from './extended-form-manager/AssembleObject';
@@ -97,7 +95,6 @@ export class UIModule implements IUIModule {
         );
         ContextService.getInstance().registerContext(editJobDialogContext);
 
-        FormValidationService.getInstance().registerValidator(new JobFilterValidator());
         JobFormService.getInstance().registerJobFormManager(JobTypes.SYNCHRONISATION, new SyncJobFormManager());
 
         const manager = JobFormService.getInstance().getAllJobFormManager();

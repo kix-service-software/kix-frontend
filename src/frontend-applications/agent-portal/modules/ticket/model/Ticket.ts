@@ -163,6 +163,7 @@ export class Ticket extends KIXObject {
     ];
 
     // tslint:disable: max-line-length
+    // TODO: allow all possible (in backend) Operators for attributes - managers should limit
     public static SEARCH_PROPERTIES = [
         {
             Property: TicketProperty.TICKET_ID,

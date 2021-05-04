@@ -11,6 +11,8 @@ import { SearchService } from '../../../search/webapp/core';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { AbstractJobFormManager } from '../../../job/webapp/core/AbstractJobFormManager';
+import { TicketSearchFormManager } from './TicketSearchFormManager';
+import { SearchOperator } from '../../../search/model/SearchOperator';
 
 export class TicketJobFormManager extends AbstractJobFormManager {
 
@@ -18,7 +20,10 @@ export class TicketJobFormManager extends AbstractJobFormManager {
         super();
         const searchDefinition = SearchService.getInstance().getSearchDefinition(KIXObjectType.TICKET);
         if (searchDefinition) {
-            this.filterManager = searchDefinition.createFormManager([SearchProperty.FULLTEXT], false);
+
+            // use own manager to extend operators
+            this.filterManager = new TicketJobFilterFormManager([SearchProperty.FULLTEXT], false);
+
             this.filterManager.init = () => {
 
                 // get extended managers on init because they could be added after filterManager was created
@@ -30,5 +35,20 @@ export class TicketJobFormManager extends AbstractJobFormManager {
                 }
             };
         }
+    }
+}
+
+// tslint:disable-next-line:max-classes-per-file
+class TicketJobFilterFormManager extends TicketSearchFormManager {
+
+    // TODO: extend Operators, remove if Operators are not limited anymore (Ticket.ts -> SEARCH_PROPERTIES)
+    public async getOperations(property: string): Promise<Array<string | SearchOperator>> {
+        const operations: Array<string | SearchOperator> = await super.getOperations(property);
+
+        if (operations.some((o) => o === SearchOperator.IN) && !operations.some((o) => o === SearchOperator.EQUALS)) {
+            operations.push(SearchOperator.EQUALS);
+        }
+
+        return operations;
     }
 }
