@@ -560,7 +560,7 @@ export class ReportDefinitionFormCreator {
         formInstance: FormInstance, field: FormFieldConfiguration
     ): Promise<void> {
         const value = formInstance.getFormFieldValue<string>(field.instanceId);
-        if (value) {
+        if (value && value.value) {
             const options = await this.createOutputFormatOptionsFields(value.value, null);
             formInstance.addFieldChildren(field, options, true);
         } else {
@@ -586,11 +586,17 @@ export class ReportDefinitionFormCreator {
             .map((of) => of.Name);
 
         for (const of of outputFields) {
+
+            const fieldValue = formInstance.getFormFieldValue(of.instanceId);
+            const values = fieldValue && fieldValue.value
+                ? [fieldValue.value, ...selectableOutputFormats]
+                : selectableOutputFormats;
+
             const option = of.options.find((o) => o.option === ObjectReferenceOptions.OBJECT_IDS);
             if (option) {
-                option.value = selectableOutputFormats;
+                option.value = values;
             } else {
-                of.options.push(new FormFieldOption(ObjectReferenceOptions.OBJECT_IDS, selectableOutputFormats));
+                of.options.push(new FormFieldOption(ObjectReferenceOptions.OBJECT_IDS, values));
             }
 
             EventService.getInstance().publish(
