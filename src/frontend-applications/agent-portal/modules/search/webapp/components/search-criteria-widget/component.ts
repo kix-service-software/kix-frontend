@@ -17,12 +17,19 @@ import { Label } from '../../../../../modules/base-components/webapp/core/Label'
 import { SearchOperatorUtil } from '../../core/SearchOperatorUtil';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { SearchEvent } from '../../../model/SearchEvent';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { IdService } from '../../../../../model/IdService';
+import { SearchCache } from '../../../model/SearchCache';
 
 class Component implements IKIXObjectSearchListener {
 
     public listenerId: string = 'search-criteria-widget';
 
     private state: ComponentState;
+
+    private subscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -39,6 +46,19 @@ class Component implements IKIXObjectSearchListener {
         this.searchFinished();
         this.state.loading = false;
         WidgetService.getInstance().updateActions(this.state.instanceId);
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId('search-criteria-widget'),
+            eventPublished: () => {
+                this.setTitle();
+            }
+        };
+
+        EventService.getInstance().subscribe(SearchEvent.SAVE_SEARCH_FINISHED, this.subscriber);
+    }
+
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(SearchEvent.SAVE_SEARCH_FINISHED, this.subscriber);
     }
 
     private async prepareActions(): Promise<void> {
@@ -53,6 +73,18 @@ class Component implements IKIXObjectSearchListener {
         this.searchFinished();
     }
 
+    private async setTitle(): Promise<void> {
+        const cache = SearchService.getInstance().getSearchCache();
+        const titleLabel = await TranslationService.translate('Translatable#Selected Search Criteria');
+        const searchLabel = await TranslationService.translate('Translatable#Search');
+        if (cache.name) {
+            this.state.title = `${titleLabel}: (${searchLabel}: ${cache.name})`;
+        } else {
+            const objectName = await LabelService.getInstance().getObjectName(cache.objectType, true);
+            this.state.title = `${titleLabel}: ${objectName}`;
+        }
+    }
+
     public async searchFinished(): Promise<void> {
         const cache = SearchService.getInstance().getSearchCache();
         const titleLabel = await TranslationService.translate('Translatable#Selected Search Criteria');
@@ -61,13 +93,7 @@ class Component implements IKIXObjectSearchListener {
         if (cache) {
             const searchDefinition = SearchService.getInstance().getSearchDefinition(cache.objectType);
 
-            const searchLabel = await TranslationService.translate('Translatable#Search');
-            if (cache.name) {
-                this.state.title = `${titleLabel}: (${searchLabel}: ${cache.name})`;
-            } else {
-                const objectName = await LabelService.getInstance().getObjectName(cache.objectType, true);
-                this.state.title = `${titleLabel}: ${objectName}`;
-            }
+            await this.setTitle();
             const displayCriteria: Array<[string, string, Label[]]> = [];
 
             const parameter = [];

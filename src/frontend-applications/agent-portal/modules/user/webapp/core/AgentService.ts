@@ -26,6 +26,9 @@ import { UserProperty } from '../../model/UserProperty';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
+import { ConfiguredWidget } from '../../../../model/configuration/ConfiguredWidget';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { ContextType } from '../../../../model/ContextType';
 
 export class AgentService extends KIXObjectService<User> {
 

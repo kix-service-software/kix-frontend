@@ -25,11 +25,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async load(): Promise<TreeNode[]> {
         const bookmarks = await SearchService.getInstance().getSearchBookmarks();
-        const nodes = bookmarks.map((b) => new TreeNode(b.title, b.title, b.icon));
+        const nodes = bookmarks.map((b) => new TreeNode(b.actionData.id, b.title, b.icon));
 
         const cache = SearchService.getInstance().getSearchCache();
         if (cache) {
-            const currentNode = nodes.find((n) => n.label === cache.name);
+            const currentNode = nodes.find((n) => n.id === cache.id);
             if (currentNode) {
                 currentNode.selected = true;
                 this.currentSearch = currentNode.id;
@@ -70,9 +70,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             } else {
                 this.state.nameInvalid = false;
 
-                const existingName = this.currentSearch ? this.currentSearch : null;
-
-                await SearchService.getInstance().saveCache(this.state.name, existingName);
+                await SearchService.getInstance().saveCache(this.state.name);
                 BrowserUtil.openSuccessOverlay('Translatable#Search successfully saved.');
 
                 (this as any).emit('closeOverlay');

@@ -35,6 +35,9 @@ import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { ServiceRegistry } from '../ServiceRegistry';
 import { AdditionalTableObjectsHandlerConfiguration } from '../AdditionalTableObjectsHandlerConfiguration';
 import { IAdditionalTableObjectsHandler } from '../IAdditionalTableObjectsHandler';
+import { SearchService } from '../../../../search/webapp/core';
+import { SearchProperty } from '../../../../search/model/SearchProperty';
+import { TicketProperty } from '../../../../ticket/model/TicketProperty';
 
 
 export class Table implements Table {
@@ -99,6 +102,8 @@ export class Table implements Table {
                 }
             }
 
+            await this.prepareAdditionalSearchColumns();
+
             if (this.contentProvider) {
                 await this.contentProvider.initialize();
             }
@@ -117,6 +122,24 @@ export class Table implements Table {
             }
 
             this.toggleFirstRow();
+        }
+    }
+
+    private async prepareAdditionalSearchColumns(): Promise<void> {
+        if (this.tableConfiguration?.searchName) {
+            const search = await SearchService.getInstance().loadSearchCache(this.tableConfiguration.searchName);
+            const searchDefinition = SearchService.getInstance().getSearchDefinition(search.objectType);
+
+            const parameter: Array<[string, any]> = [];
+            const criteria = search.criteria.filter((c) => {
+                return c.property !== SearchProperty.FULLTEXT
+                    && c.property !== TicketProperty.CLOSE_TIME
+                    && c.property !== TicketProperty.LAST_CHANGE_TIME;
+            });
+            criteria.forEach((c) => parameter.push([c.property, c.value]));
+
+            const columns = await searchDefinition.getTableColumnConfiguration(parameter);
+            await this.addColumns(columns);
         }
     }
 

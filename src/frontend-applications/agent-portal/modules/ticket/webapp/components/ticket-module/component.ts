@@ -22,7 +22,7 @@ class Component {
 
     public async onMount(): Promise<void> {
         const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
-        this.state.contentWidgets = context.getContent();
+        this.state.contentWidgets = await context.getContent();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Search',
             'Translatable#Help'

@@ -24,7 +24,7 @@ class Component {
         const context = await ContextService.getInstance().getContext<OrganisationContext>(
             OrganisationContext.CONTEXT_ID
         );
-        this.state.contentWidgets = context.getContent();
+        this.state.contentWidgets = await context.getContent();
 
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Search',

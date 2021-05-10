@@ -27,6 +27,8 @@ import { Context } from '../../../../model/Context';
 import { ContextExtension } from '../../../../model/ContextExtension';
 import { EventService } from './EventService';
 import { RoutingEvent } from './RoutingEvent';
+import { ConfiguredWidget } from '../../../../model/configuration/ConfiguredWidget';
+import { AgentService } from '../../../user/webapp/core/AgentService';
 
 export class ContextService {
 
@@ -270,6 +272,39 @@ export class ContextService {
     public updateObjectLists(objectType: KIXObjectType | string): void {
         const contexts = ContextFactory.getInstance().getContextInstances(ContextType.MAIN, ContextMode.DASHBOARD);
         contexts.forEach((c) => c.reloadObjectList(objectType));
+    }
+
+    public async saveUserWidgetList(widgets: ConfiguredWidget[], contextWidgetList: string): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        if (context) {
+            const contextWidgets: ConfiguredWidget[] = context.getConfiguration()[contextWidgetList];
+
+            const preferences: Array<[string, string]> = [];
+
+            const widgetList: Array<ConfiguredWidget | string> = [];
+            for (const widget of widgets) {
+                if (contextWidgets?.some((w) => w.instanceId === widget.instanceId)) {
+                    widgetList.push(widget.instanceId);
+                } else {
+                    widgetList.push(widget);
+                }
+            }
+
+            const contextId = context.getDescriptor().contextId;
+
+            const currentUser = await AgentService.getInstance().getCurrentUser();
+            const preference = currentUser.Preferences.find((p) => p.ID === 'ContextWidgetLists');
+            const preferenceValue = preference ? JSON.parse(preference.Value) : {};
+
+            if (!preferenceValue[contextId]) {
+                preferenceValue[contextId] = {};
+            }
+
+            preferenceValue[contextId][contextWidgetList] = widgetList;
+
+            preferences.push(['ContextWidgetLists', JSON.stringify(preferenceValue)]);
+            await AgentService.getInstance().setPreferences(preferences);
+        }
     }
 
 }
