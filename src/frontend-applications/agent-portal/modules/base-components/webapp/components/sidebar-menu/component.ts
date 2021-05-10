@@ -14,6 +14,8 @@ import { Context } from '../../../../../model/Context';
 import { ContextType } from '../../../../../model/ContextType';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
+import { EventService } from '../../core/EventService';
+import { ApplicationEvent } from '../../core/ApplicationEvent';
 
 class SidebarMenuComponent {
 
@@ -34,15 +36,16 @@ class SidebarMenuComponent {
     public onMount(): void {
         ContextService.getInstance().registerListener({
             constexServiceListenerId: this.contextServiceListernerId,
-            contextChanged: (contextId: string, context: Context, type: ContextType) => {
+            contextChanged: (contextId: string, newCcontext: Context, type: ContextType) => {
                 if (type === this.state.contextType) {
-                    this.setContext(context);
+                    this.setContext(newCcontext);
                 }
             },
             contextRegistered: () => { return; }
         });
 
-        this.setContext(ContextService.getInstance().getActiveContext(this.state.contextType));
+        const context = ContextService.getInstance().getActiveContext(this.state.contextType);
+        this.setContext(context);
     }
 
     public onDestroy(): void {
@@ -50,19 +53,20 @@ class SidebarMenuComponent {
     }
 
     private setContext(context: Context): void {
-        if (context) {
-            context.registerListener(this.contextListernerId, {
-                sidebarToggled: () => {
-                    this.setSidebarMenu(context);
-                },
-                explorerBarToggled: () => { return; },
-                objectChanged: () => { return; },
-                objectListChanged: () => { return; },
-                filteredObjectListChanged: () => { return; },
-                scrollInformationChanged: () => { return; },
-                additionalInformationChanged: () => { return; }
-            });
-        }
+
+        this.state.isContextCustomizable = context?.getConfiguration()?.customizable;
+
+        context?.registerListener(this.contextListernerId, {
+            sidebarToggled: () => {
+                this.setSidebarMenu(context);
+            },
+            explorerBarToggled: () => { return; },
+            objectChanged: () => { return; },
+            objectListChanged: () => { return; },
+            filteredObjectListChanged: () => { return; },
+            scrollInformationChanged: () => { return; },
+            additionalInformationChanged: () => { return; }
+        });
         this.setSidebarMenu(context);
     }
 
@@ -72,6 +76,7 @@ class SidebarMenuComponent {
 
             this.state.translations = await TranslationService.createTranslationObject(
                 [
+                    'Translatable#Configuration Mode',
                     'Translatable#Close Sidebars',
                     'Translatable#Open Sidebars',
                     ...this.state.sidebars.map((s) => s.configuration?.title)
@@ -104,6 +109,10 @@ class SidebarMenuComponent {
     public areSidebarsShown(): boolean {
         const context: Context = ContextService.getInstance().getActiveContext(this.state.contextType);
         return context && context.areSidebarsShown();
+    }
+
+    public toggleConfigurationMode(): void {
+        EventService.getInstance().publish(ApplicationEvent.TOGGLE_CONFIGURATION_MODE, { cancel: true });
     }
 
 }

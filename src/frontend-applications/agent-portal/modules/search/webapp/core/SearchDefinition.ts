@@ -40,6 +40,10 @@ export abstract class SearchDefinition {
         this.limit = limit && limit > 0 ? limit : null;
     }
 
+    public getLimit(): number {
+        return this.limit;
+    }
+
     public addExtendedDefinitions(definition: SearchDefinition): void {
         this.extendedDefinitions.push(definition);
     }

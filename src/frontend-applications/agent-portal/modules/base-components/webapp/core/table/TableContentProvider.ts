@@ -21,6 +21,7 @@ import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicField
 import { LabelService } from '../LabelService';
 import { PlaceholderService } from '../PlaceholderService';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { SearchService } from '../../../../search/webapp/core';
 
 export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
@@ -92,6 +93,8 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
         if (this.objects) {
             objects = this.objects;
+        } else if (this.table.getTableConfiguration().searchName) {
+            objects = await SearchService.getInstance().doSearch(null, this.table.getTableConfiguration().searchName);
         } else if (this.contextId && !this.objectIds) {
             const context = await ContextService.getInstance().getContext(this.contextId);
             objects = context ? await context.getObjectList(this.objectType) : [];

@@ -27,7 +27,7 @@ export class SearchContext extends Context {
                 try {
                     const cache = JSON.parse(urlParams.get('search'));
                     this.setSearchCache(cache);
-                    await SearchService.getInstance().loadSearch(null, cache);
+                    await SearchService.getInstance().executeSearchCache(null, null, cache);
                 } catch (error) {
                     console.error(error);
                 }

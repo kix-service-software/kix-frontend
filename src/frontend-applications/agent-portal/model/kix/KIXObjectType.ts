@@ -179,5 +179,7 @@ export enum KIXObjectType {
 
     FOLLOW_UP_TYPE = 'FollowUpType',
 
-    WEBFORM = 'WEBFORM'
+    WEBFORM = 'WEBFORM',
+
+    CONTEXT = 'CONTEXT'
 }

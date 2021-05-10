@@ -30,6 +30,15 @@ import { Bookmark } from '../../../../model/Bookmark';
 import { SortUtil } from '../../../../model/SortUtil';
 import { BookmarkService } from '../../../../modules/base-components/webapp/core/BookmarkService';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { ConfiguredWidget } from '../../../../model/configuration/ConfiguredWidget';
+import { IdService } from '../../../../model/IdService';
+import { TableWidgetConfiguration } from '../../../../model/configuration/TableWidgetConfiguration';
+import { ConfigurationType } from '../../../../model/configuration/ConfigurationType';
+import { WidgetConfiguration } from '../../../../model/configuration/WidgetConfiguration';
+import { LabelService } from '../../../base-components/webapp/core/LabelService';
+import { TableConfiguration } from '../../../../model/configuration/TableConfiguration';
+import { EventService } from '../../../base-components/webapp/core/EventService';
+import { SearchEvent } from '../../model/SearchEvent';
 
 export class SearchService {
 
@@ -92,7 +101,7 @@ export class SearchService {
     }
 
     public async executeSearch<T extends KIXObject = KIXObject>(
-        formId: string, objectType: KIXObjectType | string, excludeObjects?: KIXObject[]
+        formId: string, objectType: KIXObjectType | string, excludeObjects?: KIXObject[], limit?: number
     ): Promise<T[]> {
         let objects;
 
@@ -101,10 +110,9 @@ export class SearchService {
                 (c) => typeof c.value !== 'undefined' && c.value !== null && c.value !== ''
             );
 
-            const cacheName = this.searchCache && this.searchCache.status === CacheState.VALID
-                ? this.searchCache.name
-                : null;
-            this.searchCache = new SearchCache<T>(objectType, criteria, [], null, CacheState.VALID, cacheName);
+            this.searchCache = new SearchCache<T>(
+                this.searchCache?.id, objectType, criteria, [], null, CacheState.VALID, this.searchCache?.name, limit
+            );
 
             const context = await ContextService.getInstance().getContext<SearchContext>(SearchContext.CONTEXT_ID);
             context.setSearchCache(this.searchCache);
@@ -166,19 +174,32 @@ export class SearchService {
         return (objects as any);
     }
 
-    private async doSearch(): Promise<KIXObject[]> {
-        const searchDefinition = this.getSearchDefinition(this.searchCache.objectType);
+    public async doSearch(cache?: SearchCache, searchName?: string): Promise<KIXObject[]> {
+        let searchCache = cache || this.searchCache;
+        if (searchName) {
+            const search = await SearchSocketClient.getInstance().loadSearch();
+            searchCache = cache || search.find((s) => s.name === searchName);
+        }
 
-        let preparedCriteria = await searchDefinition.prepareFormFilterCriteria(this.searchCache.criteria);
+        if (!searchCache) {
+            throw new Error('No search available');
+        }
+        const searchDefinition = this.getSearchDefinition(searchCache.objectType);
+
+        if (!searchCache.limit) {
+            searchCache.limit = searchDefinition.getLimit();
+        }
+
+        let preparedCriteria = await searchDefinition.prepareFormFilterCriteria(searchCache.criteria);
         preparedCriteria = this.prepareCriteria(preparedCriteria);
 
         const loadingOptions = searchDefinition.getLoadingOptions(preparedCriteria);
         const objects = await KIXObjectService.loadObjects(
-            this.searchCache.objectType, null, loadingOptions, null, false
+            searchCache.objectType, null, loadingOptions, null, false
         );
-        this.searchCache.result = objects;
+        searchCache.result = objects;
 
-        const category = await this.getSearchResultCategories();
+        const category = await this.getSearchResultCategories(searchCache);
         if (category) {
             const ids: any = objects.map((o) => o.ObjectId);
             category.objectIds = ids;
@@ -193,6 +214,7 @@ export class SearchService {
         objectType: KIXObjectType | string, searchValue: string
     ): Promise<T[]> {
         this.searchCache = new SearchCache<T>(
+            null,
             objectType,
             [
                 new FilterCriteria(
@@ -231,9 +253,10 @@ export class SearchService {
         this.listeners.forEach((l) => l.searchCleared());
     }
 
-    public async getSearchResultCategories(): Promise<SearchResultCategory> {
-        const searchDefinition = this.searchCache && this.searchCache.objectType ?
-            this.searchDefinitions.find((sd) => sd.objectType === this.searchCache.objectType) : null;
+    public async getSearchResultCategories(searchCache?: SearchCache): Promise<SearchResultCategory> {
+        searchCache = searchCache || this.searchCache;
+        const searchDefinition = searchCache && searchCache.objectType ?
+            this.searchDefinitions.find((sd) => sd.objectType === searchCache.objectType) : null;
         let categories;
         if (searchDefinition) {
             categories = await searchDefinition.getSearchResultCategories();
@@ -241,11 +264,9 @@ export class SearchService {
         return categories;
     }
 
-    public setActiveSearchResultExplorerCategory(category: SearchResultCategory): void {
-        if (!this.searchCategory || this.searchCategory.objectType !== category?.objectType) {
-            this.searchCategory = category;
-            this.listeners.forEach((l) => l.searchResultCategoryChanged(this.searchCategory));
-        }
+    public setActiveSearchResultExplorerCategory(category?: SearchResultCategory): void {
+        this.searchCategory = category;
+        this.listeners.forEach((l) => l.searchResultCategoryChanged(this.searchCategory));
     }
 
     public getActiveSearchResultExplorerCategory(): SearchResultCategory {
@@ -278,18 +299,20 @@ export class SearchService {
         return prepareCriteria;
     }
 
-    public async saveCache(name: string, existingName: string): Promise<void> {
+    public async saveCache(name: string): Promise<void> {
         if (this.searchCache) {
             const search = new SearchCache(
+                this.searchCache.id,
                 this.searchCache.objectType, [...this.searchCache.criteria], [],
-                this.searchCache.fulltextValue, CacheState.VALID, name
+                this.searchCache.fulltextValue, CacheState.VALID, name, this.searchCache.limit
             );
 
-            await SearchSocketClient.getInstance().saveSearch(search, existingName)
-                .then(async () => {
-                    this.searchCache.name = name;
-                    await this.getSearchBookmarks(true);
-                }).catch((error: Error) => BrowserUtil.openErrorOverlay(error.message));
+            await SearchSocketClient.getInstance().saveSearch(search)
+                .catch((error: Error) => BrowserUtil.openErrorOverlay(error.message));
+
+            this.searchCache.name = name;
+            await this.getSearchBookmarks(true);
+            EventService.getInstance().publish(SearchEvent.SAVE_SEARCH_FINISHED);
         }
     }
 
@@ -297,7 +320,7 @@ export class SearchService {
         const search = await SearchSocketClient.getInstance().loadSearch();
         search.sort((s1, s2) => SortUtil.compareString(s1.name, s2.name));
         const bookmarks = search.map((s) => new Bookmark(
-            s.name, this.getSearchIcon(s.objectType), 'load-search-action', s.name)
+            s.name, this.getSearchIcon(s.objectType), 'load-search-action', { id: s.id, name: s.name })
         );
 
         if (publish) {
@@ -325,22 +348,68 @@ export class SearchService {
 
     public async deleteSearch(): Promise<void> {
         if (this.searchCache && this.searchCache.name !== null) {
-            await SearchSocketClient.getInstance().deleteSearch(this.searchCache.name);
-            this.getSearchBookmarks(true);
+            await SearchSocketClient.getInstance().deleteSearch(this.searchCache.id);
+            await this.getSearchBookmarks(true);
             this.clearSearchCache();
         }
     }
 
-    public async loadSearch(name?: string, cache?: SearchCache): Promise<void> {
+    public async executeSearchCache(id?: string, name?: string, cache?: SearchCache): Promise<void> {
         const search = await SearchSocketClient.getInstance().loadSearch();
-        const searchCache = cache || search.find((s) => s.name === name);
+        let searchCache = cache || search.find((s) => s.id === id);
+        if (!searchCache && name) {
+            searchCache = search.find((s) => s.name === name);
+        }
         if (searchCache) {
             this.searchCache = new SearchCache(
-                searchCache.objectType, searchCache.criteria, [], searchCache.fulltextValue, CacheState.VALID, name
+                searchCache.id, searchCache.objectType, searchCache.criteria, [], searchCache.fulltextValue,
+                CacheState.VALID, name, searchCache.limit
             );
 
             await this.doSearch();
         }
+    }
+
+    public async loadSearchCache(name: string): Promise<SearchCache> {
+        const search = await SearchSocketClient.getInstance().loadSearch();
+        let searchCache = search.find((s) => s.name === name);
+        if (searchCache) {
+            searchCache = new SearchCache(
+                searchCache.id,
+                searchCache.objectType, searchCache.criteria, [], searchCache.fulltextValue, CacheState.VALID, name,
+                searchCache.limit
+            );
+        }
+
+        return searchCache;
+    }
+
+    public async createTableWidget(name: string): Promise<ConfiguredWidget> {
+        const search = await SearchSocketClient.getInstance().loadSearch();
+        const searchCache = search.find((s) => s.name === name);
+
+        let widget: ConfiguredWidget;
+        if (searchCache) {
+            const icon = LabelService.getInstance().getObjectIconForType(searchCache.objectType,);
+
+            const tableWidgetConfiguration = new TableWidgetConfiguration(
+                IdService.generateDateBasedId(), name, ConfigurationType.TableWidget, searchCache.objectType,
+            );
+
+            const tableConfiguration = new TableConfiguration(IdService.generateDateBasedId(), name);
+            tableConfiguration.searchName = name;
+
+            tableWidgetConfiguration.tableConfiguration = tableConfiguration;
+
+            const widgetConfiguration = new WidgetConfiguration(
+                IdService.generateDateBasedId(), name, ConfigurationType.Widget, 'table-widget', name, [], null,
+                tableWidgetConfiguration, false, true, icon
+            );
+
+            widget = new ConfiguredWidget(IdService.generateDateBasedId(name), null, widgetConfiguration);
+
+        }
+        return widget;
     }
 
 }

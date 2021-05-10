@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div>
     <form-page-menu
         pages=(state.formInstance ? state.formInstance.form.pages : [])
@@ -14,9 +13,18 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         before=true
         on-showPage("showPage")/>
     <form.form autocomplete="off">
-        <input id="username" style="display:none" type="text" name="fakeusernameremembered"/>
-        <input id="password" style="display:none" type="password" name="fakepasswordremembered" autocomplete="off"/>
-        <if(state.isSearchContext)>
+        <input
+            id="username"
+            style="display:none"
+            type="text"
+            name="fakeusernameremembered"/>
+        <input
+            id="password"
+            style="display:none"
+            type="password"
+            name="fakepasswordremembered"
+            autocomplete="off"/>
+        <if(state.isSearchContext && !state.loading)>
             <search-form formId=state.formId objectType=state.objectType/>
         </if>
         <else-if(state.formInstance && state.formInstance.form && state.formId)>
@@ -30,7 +38,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             <widget
                                 instanceId="form-group"
                                 title=group.name
-                                on-minimizedChanged("handleFormGroupMinimizeState", group.name)
+                                on-minimizedChanged(
+                                    "handleFormGroupMinimizeState",
+                                    group.name
+                                )
                                 key=group.name>
                                 <@content>
                                     <field-container

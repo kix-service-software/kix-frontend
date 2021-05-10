@@ -86,7 +86,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         }
 
-        const contentWidgets = context.getContent(true);
+        const contentWidgets = await context.getContent(true);
         if (Array.isArray(contentWidgets)) {
             for (const cw of contentWidgets) {
                 const template = await this.getWidgetTemplate(cw.instanceId);

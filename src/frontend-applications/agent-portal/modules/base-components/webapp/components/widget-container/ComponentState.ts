@@ -8,12 +8,21 @@
  */
 
 import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
+import { AbstractComponentState } from '../../core/AbstractComponentState';
+import { Label } from '../../core/Label';
 
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public widgets: ConfiguredWidget[] = null
-    ) { }
+        public widgets: ConfiguredWidget[] = null,
+        public customizable: boolean = false,
+        public configurationMode: boolean = false,
+        public dragOverInstanceId: string = null,
+        public searchBookmarkTreeId: string = null,
+        public contextTreeId: string = null
+    ) {
+        super();
+    }
 
 }
