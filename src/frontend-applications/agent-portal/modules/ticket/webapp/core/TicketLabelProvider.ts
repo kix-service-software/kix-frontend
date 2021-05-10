@@ -221,6 +221,8 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 displayValue = 'Translatable#State';
                 break;
             case TicketProperty.STATE_TYPE:
+                displayValue = 'Translatable#Viewable States';
+                break;
             case TicketProperty.STATE_TYPE_ID:
                 displayValue = 'Translatable#State Type';
                 break;

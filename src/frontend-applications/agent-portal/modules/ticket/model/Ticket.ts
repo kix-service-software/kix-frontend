@@ -317,7 +317,7 @@ export class Ticket extends KIXObject {
         },
         {
             Property: TicketProperty.STATE_TYPE,
-            Operations: [SearchOperator.IN],
+            Operations: [SearchOperator.EQUALS],
             DataType: FilterDataType.STRING,
             InputType: InputFieldTypes.DROPDOWN
         },

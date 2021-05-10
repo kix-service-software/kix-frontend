@@ -148,6 +148,7 @@ export class TicketSearchFormManager extends SearchFormManager {
             property === TicketProperty.LOCK_ID
             || property === 'Queue.FollowUpID'
             || property === ArticleProperty.CUSTOMER_VISIBLE
+            || property === TicketProperty.STATE_TYPE
         ) {
             return false;
         }
