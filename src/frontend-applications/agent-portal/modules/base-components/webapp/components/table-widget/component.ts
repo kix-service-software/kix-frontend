@@ -187,23 +187,23 @@ class Component {
 
     private prepareFormDependency(): void {
         if (this.state.widgetConfiguration.formDependent) {
-            const context = ContextService.getInstance().getActiveContext(this.contextType);
-
             this.formSubscriber = {
                 eventSubscriberId: IdService.generateDateBasedId('ReferencedObjectWidget'),
                 eventPublished: (data: FormValuesChangedEventData, eventId: string) => {
                     const properties: string[] = [];
                     for (const cv of data.changedValues) {
-                        let property = cv[0].property;
-                        if (cv[0].property === KIXObjectProperty.DYNAMIC_FIELDS) {
-                            const dfNameOption = cv[0].options.find(
-                                (o) => o.option === DynamicFormFieldOption.FIELD_NAME
-                            );
-                            if (dfNameOption) {
-                                property = 'DynamicFields.' + dfNameOption.value;
+                        if (cv[0]?.property) {
+                            let property = cv[0].property;
+                            if (property === KIXObjectProperty.DYNAMIC_FIELDS) {
+                                const dfNameOption = cv[0].options.find(
+                                    (o) => o.option === DynamicFormFieldOption.FIELD_NAME
+                                );
+                                if (dfNameOption) {
+                                    property = 'DynamicFields.' + dfNameOption.value;
+                                }
                             }
+                            properties.push(property);
                         }
-                        properties.push(property);
                     }
 
                     const relevantHandlerConfigIds = this.getRelevantHandlerConfigIds(properties);
