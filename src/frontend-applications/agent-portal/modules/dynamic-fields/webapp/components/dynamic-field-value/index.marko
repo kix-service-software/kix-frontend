@@ -6,8 +6,8 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<if(state.prepared)>
-    <if(state.field && state.field.FieldType === "CheckList")>
+<if(state.prepared && state.field)>
+    <if(state.field.FieldType === "CheckList")>
         <div.df-checklist>
             <dynamic-field-checklist-progress checklist=state.checklist/>
             <overlay-icon
@@ -20,6 +20,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 }/>
         </div>
     </if>
+    <else-if(state.field.FieldType === "TextArea")>
+        <for|value| of=state.dfValue.Value>
+            <div.df-textarea>
+                <textarea value=value readonly/>
+            </div>
+        </for>
+    </else-if>
     <else>
         <label-list
             labels=state.labels

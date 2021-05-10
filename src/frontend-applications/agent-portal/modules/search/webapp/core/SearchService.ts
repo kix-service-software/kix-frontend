@@ -242,7 +242,7 @@ export class SearchService {
     }
 
     public setActiveSearchResultExplorerCategory(category: SearchResultCategory): void {
-        if (!this.searchCategory || this.searchCategory.objectType !== category.objectType) {
+        if (!this.searchCategory || this.searchCategory.objectType !== category?.objectType) {
             this.searchCategory = category;
             this.listeners.forEach((l) => l.searchResultCategoryChanged(this.searchCategory));
         }
