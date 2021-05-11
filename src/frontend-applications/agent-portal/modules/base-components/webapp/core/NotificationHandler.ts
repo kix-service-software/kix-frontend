@@ -59,7 +59,9 @@ export class NotificationHandler {
                 showRefreshNotification = events.some((e) => {
                     const objectType = this.getObjectType(e.Namespace);
                     const isObjectType = context.getDescriptor().kixObjectTypes.some((ot) => ot === objectType);
-                    const eventObjectId = e.ObjectID ? e.ObjectID.split('::') : [];
+                    const eventObjectId = e.ObjectID && typeof e.ObjectID === 'string'
+                        ? e.ObjectID.split('::')
+                        : [];
                     const isObject = eventObjectId[0] === context.getObjectId().toString();
                     if (isObjectType && isObject) {
                         notifiactionObjectType = objectType;
