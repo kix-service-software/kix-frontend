@@ -30,6 +30,7 @@ import { FormEvent } from '../../core/FormEvent';
 import { FormValuesChangedEventData } from '../../core/FormValuesChangedEventData';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
+import { SearchService } from '../../../../search/webapp/core';
 
 class Component {
 
@@ -280,7 +281,12 @@ class Component {
             count = this.state.table.getRowCount(true);
         }
 
-        if (!this.configuredTitle) {
+        const searchId = this.state.table?.getTableConfiguration()?.searchId;
+        if (searchId) {
+            const cache = await SearchService.getInstance().loadSearchCache(searchId);
+            const countString = count > 0 ? ' (' + count + ')' : '';
+            this.state.title = cache?.name + countString;
+        } else if (!this.configuredTitle) {
             let title = WidgetService.getInstance().getWidgetTitle(this.state.instanceId);
             if (!title) {
                 title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : '';

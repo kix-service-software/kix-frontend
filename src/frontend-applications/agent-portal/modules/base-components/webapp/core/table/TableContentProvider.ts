@@ -93,8 +93,8 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
         if (this.objects) {
             objects = this.objects;
-        } else if (this.table.getTableConfiguration().searchName) {
-            objects = await SearchService.getInstance().doSearch(null, this.table.getTableConfiguration().searchName);
+        } else if (this.table.getTableConfiguration().searchId) {
+            objects = await SearchService.getInstance().doSearch(null, this.table.getTableConfiguration().searchId);
         } else if (this.contextId && !this.objectIds) {
             const context = await ContextService.getInstance().getContext(this.contextId);
             objects = context ? await context.getObjectList(this.objectType) : [];

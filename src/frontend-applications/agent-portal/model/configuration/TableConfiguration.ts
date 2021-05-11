@@ -41,7 +41,7 @@ export class TableConfiguration implements IConfiguration {
         public fixedFirstColumn: boolean = false,
         public additionalTableObjectsHandler: AdditionalTableObjectsHandlerConfiguration[] = [],
         public intersection: boolean = true,
-        public searchName: string = null
+        public searchId: string = null
     ) {
 
         if (!headerHeight) {

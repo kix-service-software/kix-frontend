@@ -126,8 +126,8 @@ export class Table implements Table {
     }
 
     private async prepareAdditionalSearchColumns(): Promise<void> {
-        if (this.tableConfiguration?.searchName) {
-            const search = await SearchService.getInstance().loadSearchCache(this.tableConfiguration.searchName);
+        if (this.tableConfiguration?.searchId) {
+            const search = await SearchService.getInstance().loadSearchCache(this.tableConfiguration.searchId);
             const searchDefinition = SearchService.getInstance().getSearchDefinition(search.objectType);
 
             const parameter: Array<[string, any]> = [];

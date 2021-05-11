@@ -174,11 +174,11 @@ export class SearchService {
         return (objects as any);
     }
 
-    public async doSearch(cache?: SearchCache, searchName?: string): Promise<KIXObject[]> {
+    public async doSearch(cache?: SearchCache, searchId?: string): Promise<KIXObject[]> {
         let searchCache = cache || this.searchCache;
-        if (searchName) {
+        if (searchId) {
             const search = await SearchSocketClient.getInstance().loadSearch();
-            searchCache = cache || search.find((s) => s.name === searchName);
+            searchCache = cache || search.find((s) => s.id === searchId);
         }
 
         if (!searchCache) {
@@ -370,13 +370,13 @@ export class SearchService {
         }
     }
 
-    public async loadSearchCache(name: string): Promise<SearchCache> {
+    public async loadSearchCache(id: string): Promise<SearchCache> {
         const search = await SearchSocketClient.getInstance().loadSearch();
-        let searchCache = search.find((s) => s.name === name);
+        let searchCache = search.find((s) => s.id === id);
         if (searchCache) {
             searchCache = new SearchCache(
                 searchCache.id,
-                searchCache.objectType, searchCache.criteria, [], searchCache.fulltextValue, CacheState.VALID, name,
+                searchCache.objectType, searchCache.criteria, [], searchCache.fulltextValue, CacheState.VALID, searchCache.name,
                 searchCache.limit
             );
         }
@@ -397,7 +397,7 @@ export class SearchService {
             );
 
             const tableConfiguration = new TableConfiguration(IdService.generateDateBasedId(), name);
-            tableConfiguration.searchName = name;
+            tableConfiguration.searchId = searchCache.id;
 
             tableWidgetConfiguration.tableConfiguration = tableConfiguration;
 
