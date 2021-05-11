@@ -376,8 +376,8 @@ export class SearchService {
         if (searchCache) {
             searchCache = new SearchCache(
                 searchCache.id,
-                searchCache.objectType, searchCache.criteria, [], searchCache.fulltextValue, CacheState.VALID, searchCache.name,
-                searchCache.limit
+                searchCache.objectType, searchCache.criteria, [], searchCache.fulltextValue, CacheState.VALID,
+                searchCache.name, searchCache.limit
             );
         }
 
