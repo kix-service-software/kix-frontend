@@ -47,7 +47,8 @@ export class TicketDialogUtil {
     }
 
     public static async editTicket(
-        ticketId?: number, articleId?: number, formId?: string, widgetTitle?: string, icon?: ObjectIcon | string
+        ticketId?: number, articleId?: number, formId?: string, widgetTitle?: string, icon?: ObjectIcon | string,
+        deleteForm: boolean = true
     ): Promise<void> {
         const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
             TicketDetailsContext.CONTEXT_ID
@@ -68,7 +69,7 @@ export class TicketDialogUtil {
         if (ticketId) {
             dialogContext = await ContextService.getInstance().setDialogContext(
                 EditTicketDialogContext.CONTEXT_ID, KIXObjectType.TICKET, ContextMode.EDIT, ticketId,
-                null, null, null, null, formId, true
+                null, null, null, null, formId, deleteForm
             );
         }
 
