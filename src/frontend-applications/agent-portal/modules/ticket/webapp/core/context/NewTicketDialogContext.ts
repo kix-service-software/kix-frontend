@@ -35,9 +35,9 @@ export class NewTicketDialogContext extends Context {
 
         EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, {
             eventSubscriberId: NewTicketDialogContext.CONTEXT_ID,
-            eventPublished: (data: FormValuesChangedEventData, eventId: string) => {
+            eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
                 const form = data.formInstance.getForm();
-                this.setFormObject();
+                await this.setFormObject();
                 if (form.objectType === KIXObjectType.TICKET && form.formContext === FormContext.NEW) {
                     const organisationValue = data.changedValues.find(
                         (cv) => cv[0]?.property === TicketProperty.ORGANISATION_ID

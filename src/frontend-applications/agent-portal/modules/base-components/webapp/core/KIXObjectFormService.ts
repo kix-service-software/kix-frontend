@@ -31,6 +31,7 @@ import { ExtendedKIXObjectFormService } from './ExtendedKIXObjectFormService';
 import { FormInstance } from './FormInstance';
 import { KIXObjectService } from './KIXObjectService';
 import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core/DynamicFormFieldOption';
+import { PlaceholderService } from './PlaceholderService';
 
 export abstract class KIXObjectFormService {
 
@@ -271,6 +272,9 @@ export abstract class KIXObjectFormService {
             return parameter;
         }
 
+        const context = ContextService.getInstance().getActiveContext();
+        const object = await context?.getObject();
+
         const formInstance = await FormService.getInstance().getFormInstance(formId);
         const formValues = formInstance.getAllFormFieldValues();
         const iterator = formValues.keys();
@@ -282,6 +286,8 @@ export abstract class KIXObjectFormService {
             const value = formValues.get(formFieldInstanceId);
 
             if (value && typeof value.value !== 'undefined' && property) {
+                value.value = await PlaceholderService.getInstance().replacePlaceholders(value.value, object);
+
                 if (property === KIXObjectProperty.DYNAMIC_FIELDS) {
                     parameter = await DynamicFieldFormUtil.getInstance().handleDynamicField(field, value, parameter);
                 } else {

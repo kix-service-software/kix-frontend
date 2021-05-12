@@ -6,17 +6,16 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<if(state.channels)>
+<if(state.channels && !state.loading)>
     <div.channel-list>
         <for|channel| of=state.channels>
             <div.channel-item
                 on-click("channelClicked", channel)
                 title=component.getDisplayText(channel)
                 class={
-                                active: component.isActive(channel),
-                                readonly: state.field.readonly
-                            }>
+                    active: component.isActive(channel),
+                    readonly: state.field.readonly
+                }>
                 <span.channel-icon>
                     <icon icon=component.getIcon(channel)/>
                 </span>
@@ -28,8 +27,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 on-click("channelClicked", null)
                 title=state.translations["Translatable#No Article"]
                 class={
-                                active: component.isActive(null)
-                            }>
+                    active: component.isActive(null)
+                }>
                 <span.channel-icon>
                     <icon icon="kix-icon-unselect"/>
                 </span>
