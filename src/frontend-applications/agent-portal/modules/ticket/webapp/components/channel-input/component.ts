@@ -14,7 +14,6 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
-import { isArray } from 'util';
 import { ChannelProperty } from '../../../model/ChannelProperty';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
@@ -55,9 +54,11 @@ class Component extends FormInputComponent<number, ComponentState> {
             if (!this.state.currentChannel || channelId !== this.state.currentChannel.ID) {
                 const channel = this.state.channels.find((ch) => ch.ID === channelId);
                 this.state.currentChannel = channel;
-                this.setFields();
+                await this.setFields();
             }
         }
+
+        setTimeout(() => this.state.loading = false, 100);
     }
 
     private async loadChannels(): Promise<void> {
@@ -65,7 +66,7 @@ class Component extends FormInputComponent<number, ComponentState> {
         channels = channels.filter((c) => c.ValidID.toString() === '1');
 
         const channelsOption = this.state.field.options.find((o) => o.option === 'CHANNELS');
-        if (channelsOption && channelsOption.value && isArray(channelsOption.value) && channelsOption.value.length) {
+        if (Array.isArray(channelsOption?.value) && channelsOption.value.length) {
             this.state.channels = [];
             channelsOption.value.forEach((cid) => {
                 const channel = channels.find((c) => c.ID === cid);
@@ -92,7 +93,6 @@ class Component extends FormInputComponent<number, ComponentState> {
         if (this.state.field.readonly || this.state.field.required) {
             this.state.noChannel = false;
         }
-        this.setFields();
     }
 
     public getIcon(channel: Channel): string | ObjectIcon {
@@ -132,7 +132,7 @@ class Component extends FormInputComponent<number, ComponentState> {
             const channelFields = await formService.getFormFieldsForChannel(
                 this.state.currentChannel, this.state.formId, clear
             );
-            formInstance.addFieldChildren(this.state.field, channelFields, true);
+            setTimeout(() => formInstance.addFieldChildren(this.state.field, channelFields, true), 500);
         } else {
             formInstance.addFieldChildren(this.state.field, [], true);
         }
