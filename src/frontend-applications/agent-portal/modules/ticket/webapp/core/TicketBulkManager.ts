@@ -25,6 +25,8 @@ import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { TicketService } from '.';
 import { BulkManager } from '../../../bulk/webapp/core';
+import { UserProperty } from '../../../user/model/UserProperty';
+import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
 
 export class TicketBulkManager extends BulkManager {
 
@@ -85,6 +87,28 @@ export class TicketBulkManager extends BulkManager {
         }
 
         return inputFieldType;
+    }
+
+    public async getInputTypeOptions(property: string, operator: string): Promise<Array<[string, any]>> {
+        const options = await super.getInputTypeOptions(property, operator);
+
+        if (property === TicketProperty.OWNER_ID || property === TicketProperty.RESPONSIBLE_ID) {
+            const loadingOptions = new KIXObjectLoadingOptions(
+                [
+                    new FilterCriteria(
+                        KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                        FilterType.AND, 1
+                    ),
+                    new FilterCriteria(
+                        UserProperty.USAGE_CONTEXT, SearchOperator.IN, FilterDataType.NUMERIC,
+                        FilterType.AND, [1, 3]
+                    )
+                ]
+            );
+            options.push([ObjectReferenceOptions.LOADINGOPTIONS, loadingOptions]);
+        }
+
+        return options;
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {
@@ -179,6 +203,10 @@ export class TicketBulkManager extends BulkManager {
                     [
                         new FilterCriteria(
                             KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                            FilterType.AND, 1
+                        ),
+                        new FilterCriteria(
+                            UserProperty.IS_AGENT, SearchOperator.EQUALS, FilterDataType.NUMERIC,
                             FilterType.AND, 1
                         )
                     ], undefined, undefined, undefined, undefined,

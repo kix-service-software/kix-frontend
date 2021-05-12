@@ -490,7 +490,8 @@ export class DynamicFormFieldValue {
         let loadingOptions: KIXObjectLoadingOptions;
         const option = this.inputOptions.find((o) => o[0] === ObjectReferenceOptions.LOADINGOPTIONS);
         if (option) {
-            loadingOptions = option[1] as KIXObjectLoadingOptions;
+            loadingOptions = { ...option[1] as KIXObjectLoadingOptions };
+            loadingOptions.filter = loadingOptions.filter ? [...loadingOptions.filter] : [];
         } else {
             loadingOptions = new KIXObjectLoadingOptions();
         }
