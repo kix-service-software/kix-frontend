@@ -290,7 +290,8 @@ export class UserService extends KIXObjectAPIService {
         const filterProperties = [
             KIXObjectProperty.VALID_ID,
             UserProperty.IS_AGENT,
-            UserProperty.IS_CUSTOMER
+            UserProperty.IS_CUSTOMER,
+            UserProperty.USAGE_CONTEXT
         ];
         const filterCriteria = criteria.filter((f) => filterProperties.some((fp) => f.property === fp));
         return filterCriteria;
