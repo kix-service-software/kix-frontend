@@ -95,6 +95,15 @@ msgstr "Objekt Anlegen"
 msgid "Address successfully created."
 msgstr "Adresse wurde erfolgreich angelegt."
 
+msgid "Address successfully removed."
+msgstr ""
+
+msgid "Add Table Widget"
+msgstr ""
+
+msgid "Add Widget"
+msgstr ""
+
 msgid "Admin"
 msgstr "Admin"
 
@@ -315,6 +324,9 @@ msgstr "Automatisierung: Jobs"
 msgid "Automation: Notifications"
 msgstr "Automatisierung: Benachrichtigungen"
 
+msgid "Available Dashboard Widgets"
+msgstr ""
+
 msgid "Available Output Formats"
 msgstr "Verfügbare Ausgabeformate"
 
@@ -448,6 +460,9 @@ msgstr "Leeren"
 msgid "Close"
 msgstr "Schließen"
 
+msgid "Closed"
+msgstr ""
+
 msgid "Closed at"
 msgstr "Geschlossen am"
 
@@ -546,6 +561,9 @@ msgstr "Asset-Versionsvergleich"
 
 msgid "Configuration"
 msgstr "Konfiguration"
+
+msgid "Configuration Mode"
+msgstr ""
 
 msgid "Confirmation through customer signature"
 msgstr "Bestätigung durch Unterschrift des Kunden"
@@ -2995,6 +3013,9 @@ msgstr "Logs"
 msgid "Macro"
 msgstr ""
 
+msgid "Mail Accounts successfully removed."
+msgstr ""
+
 msgid "Mail Account successfully fetched."
 msgstr "E-Mail-Konto wurde erfolgreich abgerufen."
 
@@ -3039,6 +3060,15 @@ msgstr "Meine gesperrten Tickets mit neuen Artikeln"
 
 msgid "My Open Tickets"
 msgstr "Meine offenen Tickets"
+
+msgid "My Open Tickets Table"
+msgstr ""
+
+msgid "My Open Tickets Table Widget"
+msgstr ""
+
+msgid "My Open Tickets Widget"
+msgstr ""
 
 msgid "My Organisation"
 msgstr "Eigene Firma"
@@ -3157,8 +3187,23 @@ msgstr "Neues Ticket"
 msgid "New Tickets"
 msgstr "Neue Tickets"
 
+msgid "New Tickets Chart"
+msgstr ""
+
+msgid "New Tickets Chart Widget"
+msgstr ""
+
 msgid "New Tickets (recent 7 days)"
 msgstr "Neue Tickets der letzten 7 Tage"
+
+msgid "New Tickets Table"
+msgstr ""
+
+msgid "New Tickets Table Widget"
+msgstr ""
+
+msgid "New Tickets Widget"
+msgstr ""
 
 msgid "New Translation"
 msgstr "Neu"
@@ -3334,6 +3379,9 @@ msgstr "Einmal pro Tag"
 msgid "Online and offline processing of service jobs"
 msgstr "Online- und Offline-Bearbeitung von Serviceaufträgen"
 
+msgid "Open"
+msgstr ""
+
 msgid "Open Sidebars"
 msgstr "Geöffnete Sidebars"
 
@@ -3434,6 +3482,9 @@ msgid "Paramater"
 msgstr ""
 
 msgid "Parameter"
+msgstr ""
+
+msgid "Parameters"
 msgstr ""
 
 msgid "Parent Category"
@@ -3556,6 +3607,12 @@ msgstr "Prioritäen wurden erfolgreich entfernt."
 
 msgid "Priority"
 msgstr "Priorität"
+
+msgid "Priority Chart"
+msgstr ""
+
+msgid "Priority Chart Widget"
+msgstr ""
 
 msgid "Priority Data"
 msgstr "Prioritätsdaten"
@@ -3683,11 +3740,17 @@ msgstr "Frontend-Konfigurationen erneut laden?"
 msgid "Reminder Tickets"
 msgstr "Erinnerungstickets"
 
+msgid "Remove Address"
+msgstr ""
+
 msgid "Remove dependency to organisation"
 msgstr "Abhängigkeit zur Organisation lösen"
 
 msgid "Remove Filter"
 msgstr "Filter löschen"
+
+msgid "Remove Mail Accounts"
+msgstr ""
 
 msgid "Remove Notifications"
 msgstr "Benachrichtigungen löschen"
@@ -3700,6 +3763,9 @@ msgstr "Prioritäten löschen"
 
 msgid "Remove States"
 msgstr "Status löschen"
+
+msgid "Remove Text Modules"
+msgstr ""
 
 msgid "Remove translations"
 msgstr "Übersetzungen löschen"
@@ -3789,6 +3855,9 @@ msgstr "Verantwortliche Tickets"
 
 msgid "Result names"
 msgstr "Ergebnisbezeichnungen"
+
+msgid "Results"
+msgstr ""
 
 msgid "Results advanced search"
 msgstr "Ergebnis Komplexsuche"
@@ -3881,6 +3950,9 @@ msgstr "Suchergebnisse"
 
 msgid "Search successfully saved."
 msgstr "Suche wurde gespeichert."
+
+msgid "Search Templates"
+msgstr ""
 
 msgid "Search template successfully removed."
 msgstr "Suchvorlage wurde erfolgreich entfernt."
@@ -4039,6 +4111,9 @@ msgstr "Überspringen"
 msgid "Skip & Continue"
 msgstr "Überspringen & Weiter"
 
+msgid "Small Widget"
+msgstr ""
+
 msgid "Solution"
 msgstr "Lösung"
 
@@ -4095,6 +4170,12 @@ msgstr "Status-Informationen"
 
 msgid "States"
 msgstr "Status"
+
+msgid "States Chart"
+msgstr ""
+
+msgid "States Chart Widget"
+msgstr ""
 
 msgid "States successfully removed."
 msgstr "Status wurden erfolgreich entfernt."
@@ -4224,6 +4305,9 @@ msgstr "Textbaustein"
 
 msgid "Text Modules"
 msgstr "Textbausteine"
+
+msgid "Text Modules successfully removed."
+msgstr ""
 
 msgid "Text Module successfully created."
 msgstr "Textbaustein wurde erfolgreich angelegt."
@@ -4600,6 +4684,9 @@ msgstr "Wert wurde erfolgreich angelegt."
 
 msgid "Version"
 msgstr "Version"
+
+msgid "Viewable States"
+msgstr ""
 
 msgid "Votes"
 msgstr "Bewertungen"

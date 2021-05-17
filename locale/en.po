@@ -95,6 +95,15 @@ msgstr ""
 msgid "Address successfully created."
 msgstr ""
 
+msgid "Address successfully removed."
+msgstr ""
+
+msgid "Add Table Widget"
+msgstr ""
+
+msgid "Add Widget"
+msgstr ""
+
 msgid "Admin"
 msgstr ""
 
@@ -303,6 +312,9 @@ msgstr ""
 msgid "Automation: Notifications"
 msgstr ""
 
+msgid "Available Dashboard Widgets"
+msgstr ""
+
 msgid "Available Output Formats"
 msgstr ""
 
@@ -435,6 +447,9 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
+msgid "Closed"
+msgstr ""
+
 msgid "Closed at"
 msgstr ""
 
@@ -532,6 +547,9 @@ msgid "Config Item Version Compare"
 msgstr "Asset Version Compare"
 
 msgid "Configuration"
+msgstr ""
+
+msgid "Configuration Mode"
 msgstr ""
 
 msgid "Confirmation through customer signature"
@@ -2851,6 +2869,9 @@ msgstr ""
 msgid "Macro"
 msgstr ""
 
+msgid "Mail Accounts successfully removed."
+msgstr ""
+
 msgid "Mail Account successfully fetched."
 msgstr ""
 
@@ -2894,6 +2915,15 @@ msgid "My locked tickets with new articles"
 msgstr ""
 
 msgid "My Open Tickets"
+msgstr ""
+
+msgid "My Open Tickets Table"
+msgstr ""
+
+msgid "My Open Tickets Table Widget"
+msgstr ""
+
+msgid "My Open Tickets Widget"
 msgstr ""
 
 msgid "My Organisation"
@@ -3013,7 +3043,22 @@ msgstr ""
 msgid "New Tickets"
 msgstr ""
 
+msgid "New Tickets Chart"
+msgstr ""
+
+msgid "New Tickets Chart Widget"
+msgstr ""
+
 msgid "New Tickets (recent 7 days)"
+msgstr ""
+
+msgid "New Tickets Table"
+msgstr ""
+
+msgid "New Tickets Table Widget"
+msgstr ""
+
+msgid "New Tickets Widget"
 msgstr ""
 
 msgid "New Translation"
@@ -3190,6 +3235,9 @@ msgstr ""
 msgid "Online and offline processing of service jobs"
 msgstr ""
 
+msgid "Open"
+msgstr ""
+
 msgid "Open Sidebars"
 msgstr ""
 
@@ -3290,6 +3338,9 @@ msgid "Paramater"
 msgstr ""
 
 msgid "Parameter"
+msgstr ""
+
+msgid "Parameters"
 msgstr ""
 
 msgid "Parent Category"
@@ -3410,6 +3461,12 @@ msgid "Priorities successfully removed."
 msgstr ""
 
 msgid "Priority"
+msgstr ""
+
+msgid "Priority Chart"
+msgstr ""
+
+msgid "Priority Chart Widget"
 msgstr ""
 
 msgid "Priority Data"
@@ -3535,10 +3592,16 @@ msgstr ""
 msgid "Reminder Tickets"
 msgstr ""
 
+msgid "Remove Address"
+msgstr ""
+
 msgid "Remove dependency to organisation"
 msgstr ""
 
 msgid "Remove Filter"
+msgstr ""
+
+msgid "Remove Mail Accounts"
 msgstr ""
 
 msgid "Remove Notifications"
@@ -3551,6 +3614,9 @@ msgid "Remove Priorities"
 msgstr ""
 
 msgid "Remove States"
+msgstr ""
+
+msgid "Remove Text Modules"
 msgstr ""
 
 msgid "Remove translations"
@@ -3638,6 +3704,9 @@ msgid "Responsible Tickets"
 msgstr ""
 
 msgid "Result names"
+msgstr ""
+
+msgid "Results"
 msgstr ""
 
 msgid "Results advanced search"
@@ -3729,6 +3798,9 @@ msgstr ""
 
 msgid "Search successfully saved."
 msgstr "Search successfully saved."
+
+msgid "Search Templates"
+msgstr ""
 
 msgid "Search template successfully removed."
 msgstr ""
@@ -3886,6 +3958,9 @@ msgstr ""
 msgid "Skip & Continue"
 msgstr ""
 
+msgid "Small Widget"
+msgstr ""
+
 msgid "Solution"
 msgstr ""
 
@@ -3941,6 +4016,12 @@ msgid "State Information"
 msgstr ""
 
 msgid "States"
+msgstr ""
+
+msgid "States Chart"
+msgstr ""
+
+msgid "States Chart Widget"
 msgstr ""
 
 msgid "States successfully removed."
@@ -4070,6 +4151,9 @@ msgid "Text Module"
 msgstr ""
 
 msgid "Text Modules"
+msgstr ""
+
+msgid "Text Modules successfully removed."
 msgstr ""
 
 msgid "Text Module successfully created."
@@ -4434,6 +4518,9 @@ msgid "Value successfully created."
 msgstr ""
 
 msgid "Version"
+msgstr ""
+
+msgid "Viewable States"
 msgstr ""
 
 msgid "Votes"
