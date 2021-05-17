@@ -348,17 +348,21 @@ export abstract class KIXObjectFormService {
         forUpdate: boolean, property: string, field: FormFieldConfiguration, value: any, formInstance: FormInstance,
         parameter: Array<[string, any]>
     ): Promise<void> {
-        let preparedValue;
+        let preparedValues: Array<[string, any]>;
         if (forUpdate) {
-            preparedValue = await this.prepareUpdateValue(property, field, value.value, formInstance);
+            preparedValues = await this.prepareUpdateValue(property, field, value.value, formInstance);
         } else {
-            preparedValue = await this.prepareCreateValue(property, field, value.value, formInstance);
-            if (property === 'ICON' && preparedValue[1] && !(preparedValue[1] as ObjectIcon).Content) {
-                preparedValue[1] = null;
-            }
+            preparedValues = await this.prepareCreateValue(property, field, value.value, formInstance);
         }
-        if (preparedValue) {
-            preparedValue.forEach((pv) => parameter.push([pv[0], pv[1]]));
+
+        if (Array.isArray(preparedValues)) {
+            preparedValues.forEach((pv) => {
+                if (pv[0] === 'ICON' && !(pv[1] as ObjectIcon)?.Content) {
+                    parameter.push([pv[0], null]);
+                } else {
+                    parameter.push([pv[0], pv[1]]);
+                }
+            });
         }
     }
 
