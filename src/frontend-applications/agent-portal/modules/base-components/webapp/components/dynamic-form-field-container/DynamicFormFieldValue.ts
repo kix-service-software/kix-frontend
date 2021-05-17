@@ -49,6 +49,8 @@ export class DynamicFormFieldValue {
 
     public isBetween: boolean = false;
 
+    public label: string = '';
+
     public autoCompleteConfiguration: AutoCompleteConfiguration;
     public autoCompleteCallback: (limit: number, searchValue: string) => Promise<TreeNode[]>;
 
@@ -120,6 +122,14 @@ export class DynamicFormFieldValue {
                 this.valueTreeHandler.setSelection(this.valueTreeHandler.getSelectedNodes(), false, true, true);
                 this.valueTreeHandler.setTree([]);
             }
+
+            this.value.additionalOptions = null;
+        }
+
+        // get label (needed if field is required)
+        if (this.required) {
+            const objectType = this.value.objectType ? this.value.objectType : this.manager.objectType;
+            this.label = await LabelService.getInstance().getPropertyText(this.value.property, objectType);
         }
 
         await this.manager.setValue(this.value, silent);
@@ -182,7 +192,7 @@ export class DynamicFormFieldValue {
                         if (this.value.operator) {
                             operationNode = operationNodes.find((n) => n.id === this.value.operator);
                         } else {
-                            this.value.operator = operationNodes[0].id;
+                            this.value.operator = operationNode.id;
                         }
                         this.operationTreeHandler.setSelection([operationNode], true);
                     }
@@ -480,7 +490,8 @@ export class DynamicFormFieldValue {
         let loadingOptions: KIXObjectLoadingOptions;
         const option = this.inputOptions.find((o) => o[0] === ObjectReferenceOptions.LOADINGOPTIONS);
         if (option) {
-            loadingOptions = option[1] as KIXObjectLoadingOptions;
+            loadingOptions = { ...option[1] as KIXObjectLoadingOptions };
+            loadingOptions.filter = loadingOptions.filter ? [...loadingOptions.filter] : [];
         } else {
             loadingOptions = new KIXObjectLoadingOptions();
         }

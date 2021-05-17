@@ -21,12 +21,12 @@ import { TableFactoryService, TableEventData, TableEvent, TableContentProvider, 
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { UserProperty } from '../../../model/UserProperty';
-import { AgentService } from '../../core';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { User } from '../../../model/User';
 import { SortOrder } from '../../../../../model/SortOrder';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { AdminContext } from '../../../../admin/webapp/core';
+import { AdminContext } from '../../../../admin/webapp/core/AdminContext';
+import { AgentService } from '../../core/AgentService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

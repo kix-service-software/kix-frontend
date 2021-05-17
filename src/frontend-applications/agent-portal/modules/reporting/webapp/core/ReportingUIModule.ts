@@ -34,6 +34,10 @@ import { ReportDefinitionFormService } from './form/ReportDefinitionFormService'
 import { EditReportDefinitionContext as EditReportDefinitionDialogContext } from './context/EditReportDefinitionDialogContext';
 import { NewReportDialogContext } from './context/NewReportDialogContext';
 import { ReportFormService } from './form/ReportFormService';
+import { JobTypes } from '../../../job/model/JobTypes';
+import { JobFormService } from '../../../job/webapp/core';
+import { CreateReportActionJobFormManager } from './form/CreateReportActionJobFormManager';
+import { ReportingJobFormManager } from './form/ReportingJobFormManager';
 
 export class UIModule implements IUIModule {
 
@@ -98,6 +102,11 @@ export class UIModule implements IUIModule {
         );
         ContextService.getInstance().registerContext(newReportContext);
         ServiceRegistry.registerServiceInstance(ReportFormService.getInstance());
+
+        JobFormService.getInstance().registerJobFormManager(JobTypes.REPORTING, new ReportingJobFormManager());
+
+        const manager = JobFormService.getInstance().getAllJobFormManager();
+        manager.forEach((m) => m.addExtendedJobFormManager(new CreateReportActionJobFormManager()));
     }
 
 }

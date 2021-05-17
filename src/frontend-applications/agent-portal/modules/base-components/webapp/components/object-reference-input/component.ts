@@ -84,6 +84,24 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     private async load(preload: boolean = true): Promise<void> {
         let nodes = [];
+
+        if (!this.autocomplete) {
+            nodes = await this.loadNodes().catch(() => []);
+        }
+
+        const additionalNodes = await this.loadAdditionalNodes().catch(() => []);
+        nodes = [...nodes, ...additionalNodes];
+
+        if (preload) {
+            const preloadedNodes = await this.preloadNodes().catch(() => []);
+            nodes = [...preloadedNodes, ...nodes];
+        }
+
+        this.createTreeHandler(nodes);
+    }
+
+    private async loadNodes(): Promise<TreeNode[]> {
+        let nodes: TreeNode[] = [];
         const objectOption = this.state.field.options.find((o) => o.option === ObjectReferenceOptions.OBJECT);
         const configLoadingOptions = this.state.field.options.find(
             (o) => o.option === ObjectReferenceOptions.LOADINGOPTIONS
@@ -96,36 +114,37 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
         const loadingOptions = configLoadingOptions ? configLoadingOptions.value : null;
 
-        if (objectOption) {
-            if (!this.autocomplete) {
-                this.objects = await KIXObjectService.loadObjects(
-                    objectOption.value, objectIds, loadingOptions
-                );
-                const structureOption = this.state.field.options.find(
-                    (o) => o.option === ObjectReferenceOptions.USE_OBJECT_SERVICE
-                );
+        this.objects = await KIXObjectService.loadObjects(
+            objectOption.value, objectIds, loadingOptions
+        );
+        const structureOption = this.state.field.options.find(
+            (o) => o.option === ObjectReferenceOptions.USE_OBJECT_SERVICE
+        );
 
-                const showInvalid = this.showInvalidNodes();
-                const invalidClickable = this.areInvalidClickable();
+        const showInvalid = this.isShowInvalidNodes();
+        const invalidClickable = this.isInvalidClickable();
 
-                const objectId = await UIUtil.getEditObjectId(objectOption.value);
+        const objectId = await UIUtil.getEditObjectId(objectOption.value);
 
-                if (structureOption && structureOption.value) {
-                    nodes = await KIXObjectService.prepareObjectTree(
-                        this.objects, showInvalid, invalidClickable, objectId ? [objectId] : null
-                    );
-                } else {
-                    for (const o of this.objects) {
-                        const node = await this.createTreeNode(o);
-                        if (node) {
-                            nodes.push(node);
-                        }
-                    }
+        if (structureOption && structureOption.value) {
+            nodes = await KIXObjectService.prepareObjectTree(
+                this.objects, showInvalid, invalidClickable, objectId ? [objectId] : null
+            );
+        } else {
+            for (const o of this.objects) {
+                const node = await this.createTreeNode(o);
+                if (node) {
+                    nodes.push(node);
                 }
-                SortUtil.sortObjects(nodes, 'label', DataType.STRING);
             }
         }
+        SortUtil.sortObjects(nodes, 'label', DataType.STRING);
 
+        return nodes;
+    }
+
+    private async loadAdditionalNodes(): Promise<TreeNode[]> {
+        let nodes: TreeNode[] = [];
         const additionalNodes = this.state.field.options.find(
             (o) => o.option === ObjectReferenceOptions.ADDITIONAL_NODES
         );
@@ -139,16 +158,23 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             nodes = [...additionalNodes.value, ...nodes];
         }
 
-        if (preload) {
-            const preloadPatternOption = this.state.field.options.find(
-                (o) => o.option === ObjectReferenceOptions.AUTOCOMPLETE_PRELOAD_PATTERN
-            );
+        return nodes;
+    }
 
-            const searchValue = preloadPatternOption ? preloadPatternOption.value : null;
-            const preloadedNodes = await this.search(10, searchValue);
-            nodes = [...preloadedNodes, ...nodes];
+    private async preloadNodes(): Promise<TreeNode[]> {
+        let nodes: TreeNode[] = [];
+        const preloadPatternOption = this.state.field.options.find(
+            (o) => o.option === ObjectReferenceOptions.AUTOCOMPLETE_PRELOAD_PATTERN
+        );
+
+        if (preloadPatternOption && preloadPatternOption.value) {
+            nodes = await this.search(10, preloadPatternOption.value);
         }
 
+        return nodes;
+    }
+
+    private createTreeHandler(nodes: TreeNode[]): void {
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
         if (treeHandler) {
             const keepSelectionOption = this.state.field.options.find(
@@ -161,14 +187,14 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         }
     }
 
-    private showInvalidNodes(): boolean {
+    private isShowInvalidNodes(): boolean {
         const showValidOption = this.state.field.options
             ? this.state.field.options.find((o) => o.option === FormFieldOptions.SHOW_INVALID)
             : null;
         return showValidOption ? showValidOption.value : true;
     }
 
-    private areInvalidClickable(): boolean {
+    private isInvalidClickable(): boolean {
         const validClickableOption = this.state.field.options
             ? this.state.field.options.find((o) => o.option === FormFieldOptions.INVALID_CLICKABLE)
             : null;
@@ -214,19 +240,18 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                             }
                         }
                     }
-                    const freeTextOption = this.state.field.options.find(
-                        (o) => o.option === ObjectReferenceOptions.FREETEXT
-                    );
-
-                    if (freeTextOption && freeTextOption.value) {
-                        const freeTextNodes = objectIds
-                            .filter((oid) => !selectedNodes.some((sn) => sn.id.toString() === oid.toString()))
-                            .map((v) => new TreeNode(v, v));
-                        selectedNodes = [...selectedNodes, ...freeTextNodes];
-                    }
-
                 }
             }
+
+            const freeTextOption = this.state.field.options.find((o) => o.option === ObjectReferenceOptions.FREETEXT);
+
+            if (freeTextOption && freeTextOption.value) {
+                const freeTextNodes = objectIds
+                    .filter((oid) => !selectedNodes.some((sn) => sn.id.toString() === oid.toString()))
+                    .map((v) => new TreeNode(v, v));
+                selectedNodes = [...selectedNodes, ...freeTextNodes];
+            }
+
             treeHandler.selectNone(true);
             setTimeout(() => treeHandler.setSelection(selectedNodes, true, true, true), 200);
         } else if (treeHandler) {
@@ -350,10 +375,10 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         if (typeof o === 'string') {
             return new TreeNode(o, o);
         } else {
-            const showInvalid = this.showInvalidNodes();
+            const showInvalid = this.isShowInvalidNodes();
             // typeof o.ValidID === 'undefined' - needed for objects without ValidID like ValidObject
             if (typeof o.ValidID === 'undefined' || o.ValidID === 1 || showInvalid) {
-                const invalidClickable = this.areInvalidClickable();
+                const invalidClickable = this.isInvalidClickable();
                 const text = await LabelService.getInstance().getObjectText(o);
                 const icon = LabelService.getInstance().getObjectIcon(o);
                 let tooltip = await LabelService.getInstance().getTooltip(o);

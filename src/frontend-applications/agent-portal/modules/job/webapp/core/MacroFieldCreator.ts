@@ -7,6 +7,7 @@
  * --
  */
 
+import { DefaultSelectInputFormOption } from '../../../../model/configuration/DefaultSelectInputFormOption';
 import { FormContext } from '../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldOption } from '../../../../model/configuration/FormFieldOption';
@@ -18,8 +19,12 @@ import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptio
 import { FormFactory } from '../../../base-components/webapp/core/FormFactory';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
+import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { JobProperty } from '../../model/JobProperty';
+import { JobType } from '../../model/JobType';
+import { JobTypes } from '../../model/JobTypes';
 import { Macro } from '../../model/Macro';
 import { MacroAction } from '../../model/MacroAction';
 import { MacroActionType } from '../../model/MacroActionType';
@@ -27,38 +32,54 @@ import { MacroActionTypeOption } from '../../model/MacroActionTypeOption';
 import { MacroActionTypeResult } from '../../model/MacroActionTypeResult';
 import { MacroProperty } from '../../model/MacroProperty';
 import { AbstractJobFormManager } from './AbstractJobFormManager';
+import { JobFormService } from './JobFormService';
+import { JobService } from './JobService';
 
 export class MacroFieldCreator {
     public static async createMacroField(
-        macro: Macro, formInstance: FormInstance, jobManager: AbstractJobFormManager, parentInstanceId: string = ''
+        macro: Macro, formInstance: FormInstance, jobManager: AbstractJobFormManager, parentInstanceId: string = '',
+        allowEmpty: boolean = false
     ): Promise<FormFieldConfiguration> {
         const macroField = new FormFieldConfiguration(
-            'job-form-field-macro', '', JobProperty.MACROS, 'job-input-macro'
+            'job-form-field-macro', '', JobProperty.MACROS, 'default-select-input'
         );
 
-        macroField.required = false;
-        macroField.empty = true;
+        const types = await KIXObjectService.loadObjects<JobType>(KIXObjectType.JOB_TYPE).catch((): JobType[] => []);
+        const typeNodes = types.map((t) => new TreeNode(t.Name, t.DisplayName));
+        macroField.options.push(new FormFieldOption(DefaultSelectInputFormOption.NODES, typeNodes));
+        macroField.options.push(new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false));
+
+        let type = macro?.Type;
+
+        if (parentInstanceId === '') {
+            macroField.readonly = true;
+            const typeValue = await formInstance?.getFormFieldValueByProperty<string>(JobProperty.TYPE);
+            type = macro ? type : typeValue?.value;
+        }
+
+        macroField.defaultValue = new FormFieldValue<string>(type);
+
+        macroField.required = true;
         macroField.label = 'Translatable#Macro';
-        macroField.asStructure = true;
         macroField.showLabel = true;
         macroField.instanceId = `${parentInstanceId}###MACRO###${IdService.generateDateBasedId()}`;
         macroField.draggableFields = true;
 
         if (macro && formInstance && formInstance.getFormContext() === FormContext.EDIT) {
-            macroField.options = [
-                new FormFieldOption('MacroId', macro.ID)
-            ];
+            macroField.options.push(new FormFieldOption('MacroId', macro.ID));
 
             if (macro.ExecOrder && macro.ExecOrder.length) {
                 const actions = this.getSortedActions(macro);
 
                 for (const action of actions) {
-                    const actionField = await this.createActionField(macroField, action);
+                    const actionField = await this.createActionField(macroField, type, action, formInstance);
 
                     const childFields = await this.createActionOptionFields(
                         action.Type, actionField.instanceId, macro.Type, formInstance, jobManager, action
                     );
                     actionField.children = childFields;
+
+                    formInstance.setDefaultValueAndParent(childFields, actionField);
 
                     macroField.children.push(actionField);
 
@@ -80,9 +101,14 @@ export class MacroFieldCreator {
                     macroField.children[i].label = label;
                 }
             }
-        } else {
-            const actionField = await this.createActionField(macroField, null);
+        } else if (macroField.defaultValue && macroField.defaultValue.value) {
+            const actionField = await this.createActionField(macroField, type, null, formInstance);
             macroField.children.push(actionField);
+        }
+
+        if (allowEmpty) {
+            macroField.empty = !macro;
+            macroField.countMin = 0;
         }
 
         return macroField;
@@ -108,20 +134,31 @@ export class MacroFieldCreator {
     }
 
     public static async createActionField(
-        macroField: FormFieldConfiguration, action: MacroAction
+        macroField: FormFieldConfiguration, type: JobTypes | string, action: MacroAction, formInstance: FormInstance
     ): Promise<FormFieldConfiguration> {
         const actionField = new FormFieldConfiguration(
-            'job-form-field-actions', '1. Action', JobProperty.MACRO_ACTIONS, 'job-input-actions',
-            false, 'Translatable#Helptext_Admin_JobCreateEdit_Actions'
+            'job-form-field-actions', '1. Action', JobProperty.MACRO_ACTIONS, 'default-select-input',
+            true, 'Translatable#Helptext_Admin_JobCreateEdit_Actions'
         );
 
-        actionField.options = [
-            new FormFieldOption('ActionId', action ? action.ID : null)
-        ];
+        actionField.options.push(new FormFieldOption('ActionId', action ? action.ID : null));
+        actionField.options.push(new FormFieldOption(DefaultSelectInputFormOption.UNIQUE, false));
+
+        if (!type && macroField) {
+            const macroValue = formInstance.getFormFieldValue<string>(macroField.instanceId);
+            type = macroValue && macroValue.value ? macroValue.value : null;
+        }
+
+        const nodes = await JobService.getInstance().getTreeNodes(
+            JobProperty.MACRO_ACTIONS, null, null, null, null, { id: type }
+        ).catch(() => []);
+
+        actionField.options.push(new FormFieldOption(DefaultSelectInputFormOption.MULTI, false));
+        actionField.options.push(new FormFieldOption(DefaultSelectInputFormOption.NODES, nodes));
 
         actionField.countDefault = 1;
         actionField.countMax = 200;
-        actionField.countMin = 0;
+        actionField.countMin = 1;
         actionField.defaultValue = new FormFieldValue(action ? action.Type : null);
         actionField.instanceId = `${macroField.instanceId}###${actionField.property}###${IdService.generateDateBasedId()}`;
         actionField.parentInstanceId = macroField.instanceId;
@@ -131,7 +168,7 @@ export class MacroFieldCreator {
     }
 
     public static async createActionOptionFields(
-        actionType: string, actionFieldInstanceId: string, jobType: string,
+        actionType: string, actionFieldInstanceId: string, macroType: string,
         formInstance: FormInstance, jobManager: AbstractJobFormManager, action?: MacroAction,
     ): Promise<FormFieldConfiguration[]> {
         const fieldOrderMap: Map<string, number> = new Map();
@@ -140,7 +177,7 @@ export class MacroFieldCreator {
             console.error('Missing "actionFieldInstanceId" or actionType!');
         } else {
             const macroActionTypes = await KIXObjectService.loadObjects<MacroActionType>(
-                KIXObjectType.MACRO_ACTION_TYPE, [actionType], null, { id: jobType }, true
+                KIXObjectType.MACRO_ACTION_TYPE, [actionType], null, { id: macroType }, true
             ).catch((error): MacroActionType[] => []);
 
             if (Array.isArray(macroActionTypes) && macroActionTypes.length) {
@@ -150,7 +187,7 @@ export class MacroFieldCreator {
                         const option = options[optionName] as MacroActionTypeOption;
                         if (option) {
                             const optionField = await this.createOptionField(
-                                action, option, actionType, actionFieldInstanceId, jobType, formInstance, jobManager
+                                action, option, actionType, actionFieldInstanceId, macroType, formInstance, jobManager
                             );
 
                             // split values if it is an array option field
@@ -248,14 +285,14 @@ export class MacroFieldCreator {
 
     public static async createOptionField(
         action: MacroAction, option: MacroActionTypeOption, actionType: string, actionFieldInstanceId: string,
-        jobType: string, formInstance: FormInstance, jobManager: AbstractJobFormManager
+        macroType: string, formInstance: FormInstance, jobManager: AbstractJobFormManager
     ): Promise<FormFieldConfiguration> {
         const nameOption = new FormFieldOption('OptionName', option.Name);
 
-        if (jobManager) {
+        if (jobManager && option.Name !== 'MacroID') {
             for (const extendedManager of jobManager.extendedJobFormManager) {
-                const result = extendedManager.createOptionField(
-                    action, option, actionType, actionFieldInstanceId, jobType
+                const result = await extendedManager.createOptionField(
+                    action, option, actionType, actionFieldInstanceId, macroType, formInstance
                 );
 
                 if (result) {
@@ -270,7 +307,6 @@ export class MacroFieldCreator {
             }
         }
 
-        // FIXME: do not use default value
         let defaultValue;
         if (action && action.Parameters) {
             defaultValue = action.Parameters[option.Name];
@@ -286,7 +322,7 @@ export class MacroFieldCreator {
         optionField.defaultValue = typeof defaultValue !== 'undefined' ? new FormFieldValue(defaultValue) : undefined;
         optionField.property = optionField.instanceId;
 
-        if (actionType === 'Loop' && option.Name === 'MacroID') {
+        if (option.Name === 'MacroID') {
             let subMacro: Macro;
             if (defaultValue) {
                 let macroIds: number[] = defaultValue;
@@ -303,7 +339,13 @@ export class MacroFieldCreator {
                     subMacro = macros[0];
                 }
             }
-            optionField = await this.createMacroField(subMacro, formInstance, jobManager, actionFieldInstanceId);
+
+            let subJobFormManager: AbstractJobFormManager;
+            if (subMacro) {
+                subJobFormManager = JobFormService.getInstance().getJobFormManager(subMacro.Type);
+            }
+
+            optionField = await this.createMacroField(subMacro, formInstance, subJobFormManager, actionFieldInstanceId);
         }
 
         optionField.parentInstanceId = actionFieldInstanceId;

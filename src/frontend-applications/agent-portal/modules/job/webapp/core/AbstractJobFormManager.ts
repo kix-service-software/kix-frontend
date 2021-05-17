@@ -275,6 +275,11 @@ export class AbstractJobFormManager {
                     }
                 }
                 break;
+            case JobProperty.MACROS:
+                if (job && formContext === FormContext.EDIT) {
+                    value = job.Type;
+                }
+                break;
             default:
         }
         return value;
@@ -286,9 +291,14 @@ export class AbstractJobFormManager {
         return [[property, value]];
     }
 
-    public postPrepareOptionValue(actionType: string, optionName: string, value: any, parameter: {}): any {
+    public async postPrepareOptionValue(
+        actionType: string, optionName: string, value: any, parameter: {},
+        field: FormFieldConfiguration, formInstance: FormInstance
+    ): Promise<any> {
         for (const extendedManager of this.extendedJobFormManager) {
-            const result = extendedManager.postPrepareOptionValue(actionType, optionName, value, parameter);
+            const result = await extendedManager.postPrepareOptionValue(
+                actionType, optionName, value, parameter, field, formInstance
+            );
             if (typeof result !== 'undefined') {
                 return result;
             }

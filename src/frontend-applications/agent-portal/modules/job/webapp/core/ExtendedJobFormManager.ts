@@ -37,16 +37,10 @@ export class ExtendedJobFormManager {
         return null;
     }
 
-    public createOptionFields(
-        actionType: string, actionFieldInstanceId: string, type: string, action?: MacroAction
-    ): Promise<FormFieldConfiguration[]> {
-        return null;
-    }
-
-    public createOptionField(
+    public async createOptionField(
         action: MacroAction, option: MacroActionTypeOption, actionType: string, actionFieldInstanceId: string,
-        jobType: string
-    ) {
+        jobType: string, formInstance: FormInstance
+    ): Promise<FormFieldConfiguration> {
         return null;
     }
 
@@ -58,12 +52,10 @@ export class ExtendedJobFormManager {
         return null;
     }
 
-    public prepareCreateValue(property: string, formField: FormFieldConfiguration, value: any):
-        Promise<Array<[string, any]>> {
-        return null;
-    }
-
-    public postPrepareOptionValue(actionType: string, optionName: string, value: any, parameter: {}): any {
+    public async postPrepareOptionValue(
+        actionType: string, optionName: string, value: any, parameter: {},
+        field: FormFieldConfiguration, formInstance: FormInstance
+    ): Promise<any> {
         return;
     }
 
@@ -82,7 +74,7 @@ export class ExtendedJobFormManager {
         return new FormFieldConfiguration(
             `job-action-${actionType}-${option.Name}`, option.Label,
             `${actionFieldInstanceId}###${option.Name}`,
-            fieldType, Boolean(option.Required), option.Description, undefined,
+            fieldType, Boolean(option.Required), option.Description, [],
             typeof defaultValue !== 'undefined' ? new FormFieldValue(defaultValue) : undefined,
             null, null, null, countDefault, countMax, countMin,
         );

@@ -45,6 +45,7 @@ export class CreateConfigItemVersionUtil {
                     parameter.push([property, value]);
                     break;
                 case ConfigItemProperty.LINKS:
+                case ConfigItemProperty.CLASS_ID:
                     continue;
                 default:
                     data = await CreateConfigItemVersionUtil.prepareData(data, formField, formInstance);

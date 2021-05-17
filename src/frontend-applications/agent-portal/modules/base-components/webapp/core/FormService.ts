@@ -63,11 +63,13 @@ export class FormService {
     }
 
     public async addForm(form: FormConfiguration): Promise<void> {
-        const formIndex = this.forms.findIndex((f) => f.id === form.id);
-        if (formIndex !== -1) {
-            this.forms.splice(formIndex, 1, form);
-        } else {
-            this.forms.push(form);
+        if (form) {
+            const formIndex = this.forms.findIndex((f) => f.id === form.id);
+            if (formIndex !== -1) {
+                this.forms.splice(formIndex, 1, form);
+            } else {
+                this.forms.push(form);
+            }
         }
     }
 

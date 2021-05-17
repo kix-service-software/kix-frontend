@@ -573,7 +573,7 @@ export class JobAPIService extends KIXObjectAPIService {
             uri = this.buildUri(uri, action.ID);
         }
 
-        if (action.Type === 'Loop') {
+        if (action.Parameters['MacroID']) {
             let macro = action.Parameters['MacroID'];
             if (Array.isArray(macro) && macro.length) {
                 macro = macro[0];

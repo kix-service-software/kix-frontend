@@ -50,7 +50,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
 
         const chartConfig1 = new ChartComponentConfiguration(
-            'home-dashboard-ticket-chart-widget-priorities-config', 'Priority Chart', ConfigurationType.Chart,
+            'home-dashboard-ticket-chart-widget-priorities-config', 'Translatable#Priority Chart',
+            ConfigurationType.Chart,
             {
                 type: 'bar',
                 options: {
@@ -89,7 +90,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(chartConfig1);
 
         const chartWidgetConfig1 = new TicketChartWidgetConfiguration(
-            'home-dashboard-ticket-chart-widget-priorities-chart', 'Priority Chart', ConfigurationType.ChartWidget,
+            'home-dashboard-ticket-chart-widget-priorities-chart', 'Translatable#Priority Chart',
+            ConfigurationType.ChartWidget,
             TicketProperty.PRIORITY_ID,
             new ConfigurationDefinition(
                 'home-dashboard-ticket-chart-widget-priorities-config', ConfigurationType.Chart
@@ -99,7 +101,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(chartWidgetConfig1);
 
         const chart1 = new WidgetConfiguration(
-            'home-dashboard-ticket-chart-widget-priorities', 'Priority Chart Widget', ConfigurationType.Widget,
+            'home-dashboard-ticket-chart-widget-priorities', 'Translatable#Priority Chart Widget',
+            ConfigurationType.Widget,
             'ticket-chart-widget', 'Overview Ticket Priorities', [],
             new ConfigurationDefinition(
                 'home-dashboard-ticket-chart-widget-priorities-chart', ConfigurationType.ChartWidget
@@ -109,7 +112,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(chart1);
 
         const chartConfig2 = new ChartComponentConfiguration(
-            'home-dashboard-ticket-chart-widget-states-config', 'States Chart', ConfigurationType.Chart,
+            'home-dashboard-ticket-chart-widget-states-config', 'Translatable#States Chart', ConfigurationType.Chart,
             {
                 type: 'pie',
                 options: {
@@ -142,7 +145,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(chartConfig2);
 
         const chartWidgetConfig2 = new TicketChartWidgetConfiguration(
-            'home-dashboard-ticket-chart-widget-states-chart', 'States Chart', ConfigurationType.ChartWidget,
+            'home-dashboard-ticket-chart-widget-states-chart', 'Translatable#States Chart',
+            ConfigurationType.ChartWidget,
             TicketProperty.STATE_ID,
             new ConfigurationDefinition('home-dashboard-ticket-chart-widget-states-config', ConfigurationType.Chart),
             null, new KIXObjectLoadingOptions([stateTypeFilterCriteria])
@@ -150,7 +154,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(chartWidgetConfig2);
 
         const chart2 = new WidgetConfiguration(
-            'home-dashboard-ticket-chart-widget-states', 'Priority Chart Widget', ConfigurationType.Widget,
+            'home-dashboard-ticket-chart-widget-states', 'Translatable#States Chart Widget', ConfigurationType.Widget,
             'ticket-chart-widget', 'Overview Ticket States', [],
             new ConfigurationDefinition(
                 'home-dashboard-ticket-chart-widget-states-chart', ConfigurationType.ChartWidget
@@ -160,7 +164,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(chart2);
 
         const chartConfig3 = new ChartComponentConfiguration(
-            'home-dashboard-ticket-chart-widget-new-config', 'New Tickets Chart', ConfigurationType.Chart,
+            'home-dashboard-ticket-chart-widget-new-config', 'Translatable#New Tickets Chart', ConfigurationType.Chart,
             {
                 type: 'line',
                 options: {
@@ -186,7 +190,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(chartConfig3);
 
         const chartWidgetConfig3 = new TicketChartWidgetConfiguration(
-            'home-dashboard-ticket-chart-widget-new-chart', 'States Chart', ConfigurationType.ChartWidget,
+            'home-dashboard-ticket-chart-widget-new-chart', 'Translatable#New Tickets Chart',
+            ConfigurationType.ChartWidget,
             TicketProperty.CREATED,
             new ConfigurationDefinition('home-dashboard-ticket-chart-widget-new-config', ConfigurationType.Chart),
             null, new KIXObjectLoadingOptions([stateTypeFilterCriteria])
@@ -194,7 +199,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(chartWidgetConfig3);
 
         const chart3 = new WidgetConfiguration(
-            'home-dashboard-ticket-chart-widget-new', 'New Tickets Chart Widget', ConfigurationType.Widget,
+            'home-dashboard-ticket-chart-widget-new', 'Translatable#New Tickets Chart Widget', ConfigurationType.Widget,
             'ticket-chart-widget', 'Translatable#New Tickets (recent 7 days)', [],
             new ConfigurationDefinition('home-dashboard-ticket-chart-widget-new-chart',
                 ConfigurationType.ChartWidget),
@@ -203,7 +208,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(chart3);
 
         const tableMyOpenTicketsConfiguration = new TableConfiguration(
-            'home-dashboard-ticket-table-myOpenTickets', 'My Open Tickets Table', ConfigurationType.Table,
+            'home-dashboard-ticket-table-myOpenTickets', 'Translatable#My Open Tickets Table', ConfigurationType.Table,
             KIXObjectType.TICKET,
             new KIXObjectLoadingOptions(
                 [
@@ -222,14 +227,14 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(tableMyOpenTicketsConfiguration);
 
         const tableMyOpenTicketsWidgetConfiguration = new TableWidgetConfiguration(
-            'home-dashboard-ticket-table-myOpenTickets-widget', 'My Open Tickets Table Widget',
+            'home-dashboard-ticket-table-myOpenTickets-widget', 'Translatable#My Open Tickets Table Widget',
             ConfigurationType.TableWidget, KIXObjectType.TICKET, [TicketProperty.AGE, SortOrder.DOWN],
             new ConfigurationDefinition('home-dashboard-ticket-table-myOpenTickets', ConfigurationType.Table)
         );
         configurations.push(tableMyOpenTicketsWidgetConfiguration);
 
         const myOpenTicketsWidget = new WidgetConfiguration(
-            'home-dashboard-myOpenTickets-widget', 'My Open Tickets Widget', ConfigurationType.Widget,
+            'home-dashboard-myOpenTickets-widget', 'Translatable#My Open Tickets Widget', ConfigurationType.Widget,
             'table-widget', 'Translatable#My Open Tickets', ['bulk-action', 'csv-export-action'],
             new ConfigurationDefinition(
                 'home-dashboard-ticket-table-myOpenTickets-widget', ConfigurationType.TableWidget
@@ -239,7 +244,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(myOpenTicketsWidget);
 
         const newTicketsTableConfig = new TableConfiguration(
-            'home-dashboard-ticket-table-new', 'New Tickets Table', ConfigurationType.Table,
+            'home-dashboard-ticket-table-new', 'Translatable#New Tickets Table', ConfigurationType.Table,
             KIXObjectType.TICKET,
             new KIXObjectLoadingOptions(
                 [
@@ -282,7 +287,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(newTicketsTableConfig);
 
         const newTicketsTableWidget = new TableWidgetConfiguration(
-            'home-dashboard-ticket-new-table-widget', 'New Tickets Table Widget', ConfigurationType.TableWidget,
+            'home-dashboard-ticket-new-table-widget', 'Translatable#New Tickets Table Widget',
+            ConfigurationType.TableWidget,
             KIXObjectType.TICKET, [TicketProperty.AGE, SortOrder.UP],
             new ConfigurationDefinition('home-dashboard-ticket-table-new', ConfigurationType.Table),
             null, null, true
@@ -290,7 +296,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(newTicketsTableWidget);
 
         const newTicketsWidget = new WidgetConfiguration(
-            'home-dashboard-new-tickets-widget', 'New Tickets Widget', ConfigurationType.Widget,
+            'home-dashboard-new-tickets-widget', 'Translatable#New Tickets Widget', ConfigurationType.Widget,
             'table-widget', 'New Tickets', ['bulk-action', 'csv-export-action'],
             new ConfigurationDefinition('home-dashboard-ticket-new-table-widget', ConfigurationType.TableWidget),
             null, false, true, 'kix-icon-ticket', false
@@ -299,7 +305,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         // sidebars
         const notesSidebar = new WidgetConfiguration(
-            'home-dashboard-notes-widget', 'Notes', ConfigurationType.Widget,
+            'home-dashboard-notes-widget', 'Translatable#Notes', ConfigurationType.Widget,
             'notes-widget', 'Translatable#Notes', [], null, null,
             false, false, 'kix-icon-note', false
         );
@@ -335,7 +341,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         'home-dashboard-new-tickets-widget', 'home-dashboard-new-tickets-widget', null,
                         [new UIComponentPermission('tickets', [CRUD.READ])]
                     )
-                ]
+                ], [], [], [], [], [],
+                true
             )
         );
 

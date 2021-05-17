@@ -160,7 +160,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
         if (loadingOptions) {
             if (loadingOptions.limit) {
-                query = { ...query, limit: loadingOptions.limit };
+                query = { ...query, limit: loadingOptions.limit, searchlimit: loadingOptions.limit };
             }
 
             if (loadingOptions.sortOrder) {

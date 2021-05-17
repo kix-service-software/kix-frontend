@@ -20,7 +20,7 @@ import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 export class FilterUtil {
 
     public static prepareFilterValue(value: string): string {
-        return value ? value.toString().toLocaleLowerCase().toLocaleString().replace(/\u200E/g, '') : '';
+        return value ? value?.toString().toLocaleLowerCase().toLocaleString().replace(/\u200E/g, '') : '';
     }
 
     public static stringContains(displayValue: string, filterValue: string): boolean {
@@ -84,24 +84,24 @@ export class FilterUtil {
         }
 
         const criterionValue = objectValue !== null && typeof objectValue !== 'undefined'
-            ? objectValue.toString().toLocaleLowerCase()
+            ? objectValue?.toString().toLocaleLowerCase()
             : objectValue;
 
         switch (operator) {
             case SearchOperator.EQUALS:
-                filterValue = filterValue ? filterValue.toString().toLocaleLowerCase() : filterValue;
+                filterValue = filterValue ? filterValue?.toString().toLocaleLowerCase() : filterValue;
                 return filterValue === criterionValue;
             case SearchOperator.NOT_EQUALS:
                 filterValue = filterValue !== undefined && filterValue !== null
-                    ? filterValue.toString().toLocaleLowerCase()
+                    ? filterValue?.toString().toLocaleLowerCase()
                     : filterValue;
                 return filterValue !== criterionValue;
             case SearchOperator.CONTAINS:
                 filterValue = filterValue !== undefined && filterValue !== null
                     ? filterValue
                     : '';
-                return objectValue.toString().toLocaleLowerCase().indexOf(
-                    filterValue.toString().toLocaleLowerCase()
+                return objectValue?.toString().toLocaleLowerCase().indexOf(
+                    filterValue?.toString().toLocaleLowerCase()
                 ) !== -1;
             case SearchOperator.LESS_THAN:
                 return objectValue < Number(filterValue);
@@ -127,12 +127,12 @@ export class FilterUtil {
                         if (typeof objectValue === 'number') {
                             return objectValue === cv;
                         } else if (Array.isArray(objectValue)) {
-                            return objectValue.some((v) => v.toString() === cv.toString());
+                            return objectValue.some((v) => v?.toString() === cv?.toString());
                         } else if (typeof objectValue === 'boolean') {
                             return Boolean(cv) === objectValue;
                         } else {
                             return objectValue
-                                ? objectValue.toString().split(',').some((v) => v === cv.toString())
+                                ? objectValue?.toString().split(',').some((v) => v === cv?.toString())
                                 : false;
                         }
                     }

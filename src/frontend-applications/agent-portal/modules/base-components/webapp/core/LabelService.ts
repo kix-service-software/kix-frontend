@@ -40,8 +40,8 @@ export class LabelService {
         return this.labelProviders.find((lp) => lp.isLabelProviderFor(object));
     }
 
-    public getLabelProviderForType<T extends KIXObject>(objectType: KIXObjectType | string): LabelProvider<T> {
-        return this.labelProviders.find((lp) => lp.isLabelProviderForType(objectType));
+    public getLabelProviderForType<T extends LabelProvider>(objectType: KIXObjectType | string): T {
+        return this.labelProviders.find((lp) => lp.isLabelProviderForType(objectType)) as any;
     }
 
     public async getDFDisplayValues(

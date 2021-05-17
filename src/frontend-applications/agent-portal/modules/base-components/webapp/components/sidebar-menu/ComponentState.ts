@@ -15,7 +15,8 @@ export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public sidebars: ConfiguredWidget[] = [],
-        public contextType: ContextType = null
+        public contextType: ContextType = null,
+        public isContextCustomizable: boolean = false
     ) {
         super();
     }

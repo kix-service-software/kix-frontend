@@ -13,6 +13,7 @@
         "require ./components/permission-input",
         "require ./components/setup-superuser",
         "require ./components/setup-admin-password",
-        "require ./core"
+        "require ./core",
+        "require ./core/UserUIModule"
     ]
 }

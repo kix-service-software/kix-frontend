@@ -102,6 +102,7 @@ class Component implements ISearchFormListener {
             if (cache.status === CacheState.VALID) {
                 SearchService.getInstance().provideResult(this.objectType);
                 this.state.resultCount = cache.result.length;
+                this.state.limit = cache.limit;
 
                 await this.setCanSearch();
                 this.state.manager.reset(false);
@@ -182,6 +183,7 @@ class Component implements ISearchFormListener {
         }
 
         this.state.resultCount = 0;
+        this.state.limit = 500;
 
         SearchFormInstance.getInstance().reset();
 
@@ -215,10 +217,11 @@ class Component implements ISearchFormListener {
                 ApplicationEvent.TOGGLE_LOADING_SHIELD, new LoadingShieldEventData(true, hint)
             );
 
-            const result = await SearchService.getInstance().executeSearch<KIXObject>(null, this.objectType)
-                .catch((error: Error) => {
-                    BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
-                });
+            const result = await SearchService.getInstance().executeSearch<KIXObject>(
+                null, this.objectType, null, this.state.limit
+            ).catch((error: Error) => {
+                BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
+            });
 
             const currentColumns = this.state.table.getColumns();
             const removeColumnIds = currentColumns.filter(

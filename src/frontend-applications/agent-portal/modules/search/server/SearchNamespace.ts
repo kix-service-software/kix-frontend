@@ -22,6 +22,10 @@ import { DeleteSearchRequest } from '../model/DeleteSearchRequest';
 import { ISocketResponse } from '../../../modules/base-components/webapp/core/ISocketResponse';
 
 import cookie = require('cookie');
+import { IdService } from '../../../model/IdService';
+import { SearchCache } from '../model/SearchCache';
+import { CacheService } from '../../../server/services/cache';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
 export class SearchNamespace extends SocketNameSpace {
 
@@ -52,33 +56,37 @@ export class SearchNamespace extends SocketNameSpace {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';
 
-        const user = await UserService.getInstance().getUserByToken(token)
-            .catch((): User => null);
-
-        if (user && data.search) {
-            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-            const preferenceId = serverConfig.NOTIFICATION_CLIENT_ID + 'searchprofiles';
-
-            const searchPreference = user.Preferences.find((p) => p.ID === preferenceId);
-            let searchConfig = {};
-
-            if (searchPreference) {
-                searchConfig = JSON.parse(searchPreference.Value);
-                if (data.existingName !== null && data.existingName !== data.search.name) {
-                    delete searchConfig[data.existingName];
-                }
-            }
-            searchConfig[data.search.name] = data.search;
-
-            const value = JSON.stringify(searchConfig);
-            await UserService.getInstance().setPreferences(token, 'SearchNamespace', [[preferenceId, value]]);
-
+        if (data.search) {
+            await this.saveUserSearch(data.search, token);
             return new SocketResponse(SearchEvent.SAVE_SEARCH_FINISHED, { requestId: data.requestId });
         } else {
             return new SocketResponse(
                 SocketEvent.ERROR, new SocketErrorResponse(data.requestId, 'No user or search available.')
             );
         }
+    }
+
+    private async saveUserSearch(search: SearchCache, token: string): Promise<void> {
+        const user = await UserService.getInstance().getUserByToken(token)
+            .catch((): User => null);
+
+        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+        const preferenceId = serverConfig.NOTIFICATION_CLIENT_ID + 'searchprofiles';
+
+        const searchPreference = user.Preferences.find((p) => p.ID === preferenceId);
+        let searchConfig = {};
+
+        if (searchPreference) {
+            searchConfig = JSON.parse(searchPreference.Value);
+            delete searchConfig[search.id];
+        }
+        if (!search.id) {
+            search.id = IdService.generateDateBasedId('SearchCache');
+        }
+        searchConfig[search.id] = search;
+
+        const value = JSON.stringify(searchConfig);
+        await UserService.getInstance().setPreferences(token, 'SearchNamespace', [[preferenceId, value]]);
     }
 
     private async loadSearch(data: ISocketRequest, client: SocketIO.Socket): Promise<SocketResponse> {
@@ -97,6 +105,10 @@ export class SearchNamespace extends SocketNameSpace {
                 const search = JSON.parse(searchPreference.Value);
                 for (const s in search) {
                     if (search[s]) {
+                        if (!search[s].id) {
+                            search[s].id = IdService.generateDateBasedId('SearchCache');
+                            await this.saveUserSearch(search, token);
+                        }
                         searchConfigs.push(search[s]);
                     }
                 }
@@ -120,8 +132,8 @@ export class SearchNamespace extends SocketNameSpace {
 
             if (searchPreference) {
                 const search = JSON.parse(searchPreference.Value);
-                if (data.name && search[data.name]) {
-                    delete search[data.name];
+                if (data.id && search[data.id]) {
+                    delete search[data.id];
                     const value = JSON.stringify(search);
                     await UserService.getInstance().setPreferences(token, 'SearchNamespace', [[preferenceId, value]]);
                 }

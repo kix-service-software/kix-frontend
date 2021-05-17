@@ -20,7 +20,6 @@ import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { DynamicFieldFormUtil } from '../../../base-components/webapp/core/DynamicFieldFormUtil';
 import { ValidationSeverity } from '../../../base-components/webapp/core/ValidationSeverity';
 import { ValidationResult } from '../../../base-components/webapp/core/ValidationResult';
-import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
 
 export abstract class BulkManager extends AbstractDynamicFormManager {
 

@@ -6,21 +6,94 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<div.widget-container class={
-    "show-object": state.widgets && state.widgets.length
-}>
-    <if(state.widgets)>
-        <for|kixWidget| of=state.widgets>
-            <div.widget-frame class={
-                large: component.isLarge(kixWidget),
-                small: !component.isLarge(kixWidget)
-            }>
-                <${component.getTemplate(kixWidget)} ...{
-                    instanceId: kixWidget.instanceId,
-                    contextType: "MAIN"
-                }/>
+<div.widget-container>
+    <if(state.configurationMode)>
+        <div.widget-configuration-toolbar>
+            <div.widget-chooser>
+                <span.widget-chooser-title>
+                    <translation-string pattern="Translatable#Search Templates"/>
+                </span>
+                <form-list treeId=state.searchBookmarkTreeId/>
+                <button.form-button
+                    type="button"
+                    on-click("addSearchbookmarkWidget")
+                    title=state.translations["Translatable#Add Widget"]>
+                    <span.kix-icon-check/>
+                    <translation-string pattern="Translatable#Add Widget"/>
+                </button>
             </div>
-        </for>
+            <div.widget-chooser>
+                <span.widget-chooser-title>
+                    <translation-string pattern="Translatable#Available Dashboard Widgets"/>
+                </span>
+                <form-list treeId=state.contextTreeId/>
+                <button.form-button
+                    type="button"
+                    on-click("addContextWidget")
+                    title=state.translations["Translatable#Add Widget"]>
+                    <span.kix-icon-check/>
+                    <translation-string pattern="Translatable#Add Widget"/>
+                </button>
+            </div>
+            <div.submit-buttons>
+                <button.cancel-button
+                    type="button"
+                    on-click("cancel")
+                    title=state.translations["Translatable#Cancel"]>
+                    <span.kix-icon-check/>
+                    <translation-string pattern="Translatable#Cancel"/>
+                </button>
+                <button.submit-button
+                    type="button"
+                    on-click("saveWidgets")
+                    title=state.translations["Translatable#Save"]>
+                    <span.kix-icon-check/>
+                    <translation-string pattern="Translatable#Save"/>
+                </button>
+            </div>
+        </div>
     </if>
+    <div.widget-container-content class={
+        "show-object": state.widgets && state.widgets.length,
+        "configuration-mode": state.configurationMode
+    }>
+        <if(state.widgets)>
+            <for|kixWidget| of=state.widgets>
+                <div.widget-frame
+                    class={
+                        blackbox: state.configurationMode,
+                        large: component.isLarge(kixWidget),
+                        small: !component.isLarge(kixWidget),
+                        drag: state.dragOverInstanceId === kixWidget.instanceId
+                    }
+                    draggable=(state.configurationMode ? "true" : "false")
+                    on-dragstart("drag", kixWidget)
+                    on-drop("drop", kixWidget)
+                    on-dragover("allowDrop", kixWidget)>
+                    <if(state.configurationMode)>
+                        <div.header>
+                            <icon icon=kixWidget.configuration.icon/>
+                            <span>
+                                <translation-string pattern=kixWidget.configuration.title/>
+                            </span>
+                            <span.kix-icon-close class="close" on-click("removeWidget", kixWidget)/>
+                        </div>
+                        <div.widget-size>
+                            <input
+                                type="checkbox"
+                                on-click("widgetSizeChanged", kixWidget)
+                                checked=(kixWidget.size === "small")/>
+                            <translation-string pattern="Translatable#Small Widget"/>
+                        </div>
+                    </if>
+                    <else>
+                        <${component.getTemplate(kixWidget)} ...{
+                            instanceId: kixWidget.instanceId,
+                            contextType: "MAIN"
+                        }/>
+                    </else>
+                </div>
+            </for>
+        </if>
+    </div>
 </div>

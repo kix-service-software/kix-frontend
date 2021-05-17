@@ -22,7 +22,7 @@ export class ComponentState {
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Ticket: Text Modules',
             [
-                'text-module-create', 'text-module-duplicate', 'text-module-csv-export-action'
+                'text-module-create', 'text-module-duplicate', 'text-module-table-delete', 'text-module-csv-export-action'
             ], null,
             new TableWidgetConfiguration(
                 null, null, null,

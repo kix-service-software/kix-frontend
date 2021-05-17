@@ -14,7 +14,7 @@ import { AdminContext } from '../../core/AdminContext';
 import { ContextType } from '../../../../../model/ContextType';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
 import { AdminModule } from '../../../model/AdminModule';
-import { AdministrationSocketClient } from '../../core';
+import { AdministrationSocketClient } from '../../core/AdministrationSocketClient';
 import { AdminModuleCategory } from '../../../model/AdminModuleCategory';
 
 class Component extends AbstractMarkoComponent<ComponentState> {

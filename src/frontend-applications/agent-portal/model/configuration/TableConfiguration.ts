@@ -40,7 +40,8 @@ export class TableConfiguration implements IConfiguration {
         public routingConfiguration?: RoutingConfiguration | DialogRoutingConfiguration,
         public fixedFirstColumn: boolean = false,
         public additionalTableObjectsHandler: AdditionalTableObjectsHandlerConfiguration[] = [],
-        public intersection: boolean = true
+        public intersection: boolean = true,
+        public searchId: string = null
     ) {
 
         if (!headerHeight) {

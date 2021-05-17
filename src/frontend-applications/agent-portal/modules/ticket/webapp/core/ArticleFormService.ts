@@ -134,7 +134,7 @@ export class ArticleFormService extends KIXObjectFormService {
         let fieldPromises = [];
         if (channel.Name === 'note') {
             fieldPromises = [
-                this.getVisibleField(formInstance, clear),
+                this.getCustomerVisibleField(formInstance, clear),
                 this.getSubjectField(formInstance, clear),
                 this.getBodyField(formInstance, clear),
                 this.getAttachmentField(formInstance, clear)
@@ -147,7 +147,7 @@ export class ArticleFormService extends KIXObjectFormService {
             ], null);
         } else if (channel.Name === 'email') {
             fieldPromises = [
-                this.getVisibleField(formInstance, clear),
+                this.getCustomerVisibleField(formInstance, clear),
                 this.getFromField(formInstance, clear),
                 this.getToOrCcField(formInstance, clear),
                 this.getSubjectField(formInstance, clear),
@@ -163,19 +163,22 @@ export class ArticleFormService extends KIXObjectFormService {
         return fields;
     }
 
-    private async getVisibleField(formInstance: FormInstance, clear: boolean): Promise<FormFieldConfiguration> {
-        const isTicket = formInstance && formInstance.getFormContext() === FormContext.NEW
+    private async getCustomerVisibleField(formInstance: FormInstance, clear: boolean): Promise<FormFieldConfiguration> {
+        const isNewTicketContext = formInstance
+            && formInstance.getFormContext() === FormContext.NEW
             && formInstance.getObjectType() === KIXObjectType.TICKET;
-        const defaultValue = new FormFieldValue(null);
-        defaultValue.value = true;
+        const defaultValue = new FormFieldValue(true);
+
+        const hint = isNewTicketContext
+            ? 'Translatable#Helptext_Tickets_TicketCreate_CustomerVisible'
+            : 'Translatable#Helptext_Tickets_ArticleCreateEdit_CustomerVisible';
 
         let field = new FormFieldConfiguration(
             'visible-input',
             'Translatable#Show in Customer Portal', ArticleProperty.CUSTOMER_VISIBLE, 'customer-visible-input', false,
-            isTicket
-                ? 'Translatable#Helptext_Tickets_TicketCreate_CustomerVisible'
-                : 'Translatable#Helptext_Tickets_ArticleCreateEdit_CustomerVisible', null, defaultValue
+            hint, null, defaultValue
         );
+
         if (!clear && formInstance) {
             const existingField = formInstance.getFormFieldByProperty(ArticleProperty.CUSTOMER_VISIBLE);
             if (existingField) {
@@ -522,7 +525,8 @@ export class ArticleFormService extends KIXObjectFormService {
             ArticleProperty.FROM,
             ArticleProperty.BODY,
             ArticleProperty.SUBJECT,
-            ArticleProperty.ATTACHMENTS
+            ArticleProperty.ATTACHMENTS,
+            ArticleProperty.CUSTOMER_VISIBLE
         ];
         formFields = formFields.filter((f) => !filterProperties.some((fp) => f.property === fp));
         for (const field of formFields) {
@@ -561,6 +565,10 @@ export class ArticleFormService extends KIXObjectFormService {
                     field.options = [
                         new FormFieldOption('NO_CHANNEL', true)
                     ];
+                    field.label = label;
+                    break;
+                case ArticleProperty.CUSTOMER_VISIBLE:
+                    field.inputComponent = 'customer-visible-input';
                     field.label = label;
                     break;
                 default:

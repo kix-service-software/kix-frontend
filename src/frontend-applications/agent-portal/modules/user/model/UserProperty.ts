@@ -21,6 +21,8 @@ export enum UserProperty {
 
     USER_PASSWORD = 'UserPw',
 
+    USAGE_CONTEXT = 'UsageContext',
+
     IS_AGENT = 'IsAgent',
 
     IS_CUSTOMER = 'IsCustomer',

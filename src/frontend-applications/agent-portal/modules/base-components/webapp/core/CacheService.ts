@@ -13,6 +13,7 @@ import { ObjectUpdatedEventData } from '../../../../model/ObjectUpdatedEventData
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { EventService } from './EventService';
 import { ApplicationEvent } from './ApplicationEvent';
+import { ObjectUpdatedEvent } from '../../../../model/ObjectUpdatedEvent';
 
 export class BrowserCacheService {
 
@@ -93,12 +94,14 @@ export class BrowserCacheService {
     }
 
     public async updateCaches(events: ObjectUpdatedEventData[]): Promise<void> {
-        for (const event of events) {
-            if (event.RequestID !== ClientStorageService.getClientRequestId()) {
-                if (!event.Namespace.startsWith(KIXObjectType.TRANSLATION_PATTERN)) {
-                    this.deleteKeys(event.Namespace);
-                }
-            }
+        if (events.some((e) => e.Event === ObjectUpdatedEvent.CLEAR_CACHE)) {
+            this.clear();
+        } else {
+            events = events
+                .filter((e) => e.RequestID !== ClientStorageService.getClientRequestId())
+                .filter((e) => !e.Namespace.startsWith(KIXObjectType.TRANSLATION_PATTERN));
+
+            events.forEach((e) => this.deleteKeys(e.Namespace));
         }
     }
 
@@ -182,12 +185,14 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 cacheKeyPrefixes.push(KIXObjectType.TICKET);
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
+                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
                 break;
             case KIXObjectType.CONTACT:
                 cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
                 cacheKeyPrefixes.push(KIXObjectType.TICKET);
                 cacheKeyPrefixes.push(KIXObjectType.USER);
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
+                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
                 break;
             case KIXObjectType.PERMISSION:
             case KIXObjectType.ROLE:
@@ -214,6 +219,8 @@ export class BrowserCacheService {
                 break;
             case KIXObjectType.CONFIG_ITEM_VERSION:
                 cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
+                cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
+                cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 break;
             case KIXObjectType.GENERAL_CATALOG_ITEM:
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);

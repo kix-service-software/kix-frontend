@@ -23,7 +23,7 @@ class Component {
         const context = await ContextService.getInstance().getContext<ReportingContext>(
             ReportingContext.CONTEXT_ID
         );
-        this.state.contentWidgets = context.getContent();
+        this.state.contentWidgets = await context.getContent();
     }
 }
 

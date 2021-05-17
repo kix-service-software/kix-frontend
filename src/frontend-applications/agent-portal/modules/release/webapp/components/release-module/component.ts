@@ -20,7 +20,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         const context = await ContextService.getInstance().getContext<ReleaseContext>(ReleaseContext.CONTEXT_ID);
-        this.state.contentWidgets = context.getContent();
+        this.state.contentWidgets = await context.getContent();
     }
 }
 

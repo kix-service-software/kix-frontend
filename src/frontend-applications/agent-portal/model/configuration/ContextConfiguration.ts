@@ -27,7 +27,8 @@ export class ContextConfiguration implements IConfiguration {
         public actions: string[] = [],
         public overlays: ConfiguredWidget[] = [],
         public others: ConfiguredWidget[] = [],
-        public dialogs: ConfiguredDialogWidget[] = []
+        public dialogs: ConfiguredDialogWidget[] = [],
+        public customizable: boolean = false
     ) { }
 
 }
