@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2021-04-08 13:46+0000\n"
+"PO-Revision-Date: 2021-05-18 12:46+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
@@ -90,13 +90,13 @@ msgid "add notes here"
 msgstr "Notizen hinzufügen"
 
 msgid "Add Object"
-msgstr "Objekt Anlegen"
+msgstr "Objekt anlegen"
 
 msgid "Address successfully created."
 msgstr "Adresse wurde erfolgreich angelegt."
 
 msgid "Address successfully removed."
-msgstr ""
+msgstr "E-Mail Adresse(n) wurde(n) erfolgreich gelöscht."
 
 msgid "Add Table Widget"
 msgstr ""
@@ -1203,9 +1203,8 @@ msgstr "Filtern in Liste"
 msgid "Filter successfully created."
 msgstr "Filter wurde erfolgreich angelegt."
 
-#, fuzzy
 msgid "Filter successfully removed."
-msgstr "Filter wurde erfolgreich angelegt."
+msgstr "Filter wurde(n) erfolgreich gelöscht."
 
 msgid ""
 "Find this saved search within the Dropdown Bookmarks, located in the header "
@@ -3014,7 +3013,7 @@ msgid "Macro"
 msgstr ""
 
 msgid "Mail Accounts successfully removed."
-msgstr ""
+msgstr "E-Mail Konten wurden erfolgreich gelöscht."
 
 msgid "Mail Account successfully fetched."
 msgstr "E-Mail-Konto wurde erfolgreich abgerufen."
@@ -3311,7 +3310,7 @@ msgid "Notifications for Tickets"
 msgstr "Benachrichtigungen für Tickets"
 
 msgid "Notifications successfully removed."
-msgstr "Benachrichtigungen wurden erfolgreich entfernt."
+msgstr "Benachrichtigung(en) wurde(n) erfolgreich gelöscht."
 
 msgid "Notification successfully created."
 msgstr "Benachrichtigung wurde erfolgreich angelegt."
@@ -3603,7 +3602,7 @@ msgid "Priorities"
 msgstr "Prioritäten"
 
 msgid "Priorities successfully removed."
-msgstr "Prioritäen wurden erfolgreich entfernt."
+msgstr "Priorität(en) wurde(n) erfolgreich gelöscht."
 
 msgid "Priority"
 msgstr "Priorität"
@@ -3741,7 +3740,7 @@ msgid "Reminder Tickets"
 msgstr "Erinnerungstickets"
 
 msgid "Remove Address"
-msgstr ""
+msgstr "Adresse(n) löschen"
 
 msgid "Remove dependency to organisation"
 msgstr "Abhängigkeit zur Organisation lösen"
@@ -3750,7 +3749,7 @@ msgid "Remove Filter"
 msgstr "Filter löschen"
 
 msgid "Remove Mail Accounts"
-msgstr ""
+msgstr "E-Mail Konten löschen"
 
 msgid "Remove Notifications"
 msgstr "Benachrichtigungen löschen"
@@ -3857,7 +3856,7 @@ msgid "Result names"
 msgstr "Ergebnisbezeichnungen"
 
 msgid "Results"
-msgstr ""
+msgstr "Ergebnisse"
 
 msgid "Results advanced search"
 msgstr "Ergebnis Komplexsuche"
@@ -3955,7 +3954,7 @@ msgid "Search Templates"
 msgstr ""
 
 msgid "Search template successfully removed."
-msgstr "Suchvorlage wurde erfolgreich entfernt."
+msgstr "Suchvorlage(n) wurde(n) erfolgreich gelöscht."
 
 msgid "Search Tickets"
 msgstr "Suche Tickets"
@@ -4178,7 +4177,7 @@ msgid "States Chart Widget"
 msgstr ""
 
 msgid "States successfully removed."
-msgstr "Status wurden erfolgreich entfernt."
+msgstr "Status wurde(n) erfolgreich gelöscht."
 
 msgid "State successfully created."
 msgstr "Status wurde erfolgreich angelegt."
@@ -4307,7 +4306,7 @@ msgid "Text Modules"
 msgstr "Textbausteine"
 
 msgid "Text Modules successfully removed."
-msgstr ""
+msgstr "Textbaustein(e) wurde(n) erfolgreich gelöscht."
 
 msgid "Text Module successfully created."
 msgstr "Textbaustein wurde erfolgreich angelegt."
@@ -4486,7 +4485,7 @@ msgid "Translations"
 msgstr "Übersetzungen"
 
 msgid "Translations successfully removed."
-msgstr "Übersetzungen wurden erfolgreich entfernt."
+msgstr "Übersetzung(en) wurde(n) erfolgreich gelöscht."
 
 msgid "Translation successfully created."
 msgstr "Übersetzung wurde erfolgreich angelegt."
@@ -4510,7 +4509,7 @@ msgid "Types"
 msgstr "Typen"
 
 msgid "Types successfully removed."
-msgstr "Typen wurden erfolgreich entfernt."
+msgstr "Typ(en) wurde(n) erfolgreich gelöscht."
 
 msgid "Type successfully created."
 msgstr "Typ wurde erfolgreich angelegt."
