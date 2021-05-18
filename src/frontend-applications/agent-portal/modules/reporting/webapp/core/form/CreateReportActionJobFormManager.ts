@@ -95,7 +95,7 @@ export class CreateReportActionJobFormManager extends ExtendedJobFormManager {
                 }
 
                 return field;
-            } else if (option.Name === 'OutputFormat') {
+            } else if (option.Name === 'OutputFormats') {
                 const field = this.getOptionField(
                     option, actionType, actionFieldInstanceId, null
                 );
@@ -110,7 +110,7 @@ export class CreateReportActionJobFormManager extends ExtendedJobFormManager {
 
                 if (action) {
                     const definitionId = action.Parameters['DefinitionID'];
-                    await this.handleOutputFormatField(formInstance, field, definitionId, action.Parameters['OutputFormat']);
+                    await this.handleOutputFormatField(formInstance, field, definitionId, action.Parameters['OutputFormats']);
                 }
 
                 return field;
