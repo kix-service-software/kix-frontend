@@ -29,4 +29,11 @@ export class ReportingJobFormManager extends AbstractJobFormManager {
         return planType === ExecPlanTypes.TIME_BASED;
     }
 
+    protected async getExecPlanPage(formInstance: FormInstance): Promise<FormPageConfiguration> {
+        const timeGroup = await this.getTimeGroup(formInstance.getFormContext());
+        return new FormPageConfiguration(
+            this.execPageId, 'Translatable#Execution Plan', undefined, undefined, undefined, [timeGroup]
+        );
+    }
+
 }

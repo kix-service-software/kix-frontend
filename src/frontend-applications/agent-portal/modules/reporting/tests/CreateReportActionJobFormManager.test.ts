@@ -37,7 +37,7 @@ const optionsMock = {
     OutputFormat: {
         "Description": "The requested output format.",
         "Label": "Output Format",
-        "Name": "OutputFormat",
+        "Name": "OutputFormats",
         "Order": 3,
         "Required": 1
     },
@@ -55,7 +55,7 @@ const actionMock = {
     "MacroID": 10,
     "Parameters": {
         "DefinitionID": 2,
-        "OutputFormat": "CSV",
+        "OutputFormats": "CSV",
         "Parameters": {
             "EndDate": "2021-04-16",
             "OrganisationIDList": [
