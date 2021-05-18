@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2021-04-07 12:46+0000\n"
+"PO-Revision-Date: 2021-05-18 12:46+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: English <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/en/>\n"
@@ -96,7 +96,7 @@ msgid "Address successfully created."
 msgstr ""
 
 msgid "Address successfully removed."
-msgstr ""
+msgstr "Email Address(es) successfully removed."
 
 msgid "Add Table Widget"
 msgstr ""
@@ -1188,9 +1188,8 @@ msgstr ""
 msgid "Filter successfully created."
 msgstr ""
 
-#, fuzzy
 msgid "Filter successfully removed."
-msgstr "Search successfully saved."
+msgstr "Filter(s) successfully removed."
 
 msgid ""
 "Find this saved search within the Dropdown Bookmarks, located in the header "
@@ -2870,7 +2869,7 @@ msgid "Macro"
 msgstr ""
 
 msgid "Mail Accounts successfully removed."
-msgstr ""
+msgstr "Email Account(s) successfully removed."
 
 msgid "Mail Account successfully fetched."
 msgstr ""
@@ -3167,7 +3166,7 @@ msgid "Notifications for Tickets"
 msgstr ""
 
 msgid "Notifications successfully removed."
-msgstr ""
+msgstr "Notification(s) successfully removed."
 
 msgid "Notification successfully created."
 msgstr "Notification successfully created."
@@ -3593,7 +3592,7 @@ msgid "Reminder Tickets"
 msgstr ""
 
 msgid "Remove Address"
-msgstr ""
+msgstr "Remove Adress(es)"
 
 msgid "Remove dependency to organisation"
 msgstr ""
@@ -3602,7 +3601,7 @@ msgid "Remove Filter"
 msgstr ""
 
 msgid "Remove Mail Accounts"
-msgstr ""
+msgstr "Remove Email Account(s)"
 
 msgid "Remove Notifications"
 msgstr ""
@@ -3803,7 +3802,7 @@ msgid "Search Templates"
 msgstr ""
 
 msgid "Search template successfully removed."
-msgstr ""
+msgstr "Search template(s) successfully removed."
 
 msgid "Search Tickets"
 msgstr ""
@@ -4025,7 +4024,7 @@ msgid "States Chart Widget"
 msgstr ""
 
 msgid "States successfully removed."
-msgstr ""
+msgstr "State(s) successfully removed."
 
 msgid "State successfully created."
 msgstr ""
@@ -4154,7 +4153,7 @@ msgid "Text Modules"
 msgstr ""
 
 msgid "Text Modules successfully removed."
-msgstr ""
+msgstr "Text Module(s) successfully removed."
 
 msgid "Text Module successfully created."
 msgstr ""
@@ -4323,7 +4322,7 @@ msgid "Translations"
 msgstr ""
 
 msgid "Translations successfully removed."
-msgstr ""
+msgstr "Translation(s) successfully removed."
 
 msgid "Translation successfully created."
 msgstr ""
@@ -4347,7 +4346,7 @@ msgid "Types"
 msgstr ""
 
 msgid "Types successfully removed."
-msgstr ""
+msgstr "Type(s) successfully removed."
 
 msgid "Type successfully created."
 msgstr ""
