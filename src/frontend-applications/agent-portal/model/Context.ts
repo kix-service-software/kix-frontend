@@ -107,7 +107,6 @@ export abstract class Context {
                 actions = [...actions, ...extendedActions];
             }
         }
-        actions.sort((a, b) => SortUtil.compareNumber(a.data.Rank, b.data.Rank, SortOrder.UP, false));
         return actions;
     }
 
