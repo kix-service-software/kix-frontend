@@ -15,6 +15,7 @@ import { ValidationResult } from '../ValidationResult';
 import { DynamicFieldTypes } from '../../../../dynamic-fields/model/DynamicFieldTypes';
 import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
 
 export abstract class ExtendedDynamicFormManager implements IDynamicFormManager {
 
@@ -119,7 +120,7 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
         return null;
     }
 
-    public isMultiselect(property: string): Promise<boolean> {
+    public isMultiselect(property: string, operator: SearchOperator | string): Promise<boolean> {
         return null;
     }
 

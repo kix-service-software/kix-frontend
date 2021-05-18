@@ -20,6 +20,7 @@ import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { DynamicFieldFormUtil } from '../../../base-components/webapp/core/DynamicFieldFormUtil';
 import { ValidationSeverity } from '../../../base-components/webapp/core/ValidationSeverity';
 import { ValidationResult } from '../../../base-components/webapp/core/ValidationResult';
+import { SearchOperator } from '../../../search/model/SearchOperator';
 
 export abstract class BulkManager extends AbstractDynamicFormManager {
 
@@ -66,7 +67,7 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
         );
 
         for (const v of values) {
-            const isMultiSelect = await this.isMultiselect(v.property);
+            const isMultiSelect = await this.isMultiselect(v.property, v.operator);
             parameter.push([
                 v.property,
                 v.operator === PropertyOperator.CLEAR
@@ -126,8 +127,8 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
         return validationResult;
     }
 
-    public async isMultiselect(property: string): Promise<boolean> {
-        const result = await super.isMultiselect(property);
+    public async isMultiselect(property: string, operator: SearchOperator | string): Promise<boolean> {
+        const result = await super.isMultiselect(property, operator);
         if (result !== null && typeof result !== 'undefined') {
             return result;
         }

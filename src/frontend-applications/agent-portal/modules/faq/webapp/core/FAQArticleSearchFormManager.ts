@@ -143,7 +143,7 @@ export class FAQArticleSearchFormManager extends SearchFormManager {
         return SearchOperatorUtil.getText(operator as SearchOperator);
     }
 
-    public async isMultiselect(property: string): Promise<boolean> {
+    public async isMultiselect(property: string, operator: SearchOperator | string): Promise<boolean> {
         return property !== FAQArticleProperty.CUSTOMER_VISIBLE;
     }
 
