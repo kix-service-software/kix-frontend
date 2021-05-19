@@ -162,13 +162,7 @@ export class FormInstance {
     }
 
     public async removeFormField(formField: FormFieldConfiguration): Promise<void> {
-        let fields: FormFieldConfiguration[];
-
-        if (formField.parent) {
-            fields = formField.parent.children;
-        } else {
-            fields = await this.getFields(formField);
-        }
+        const fields: FormFieldConfiguration[] = this.getFields(formField);
 
         if (Array.isArray(fields)) {
             const index = fields.findIndex((c) => c.instanceId === formField.instanceId);
@@ -412,8 +406,6 @@ export class FormInstance {
         const field = await this.getFormFieldByProperty(property);
         if (field) {
             return this.getFormFieldValue(field.instanceId);
-        } else {
-            return this.getFormFieldValue(property);
         }
 
         return this.fixedValues.has(property) ? this.fixedValues.get(property)[1] : undefined;

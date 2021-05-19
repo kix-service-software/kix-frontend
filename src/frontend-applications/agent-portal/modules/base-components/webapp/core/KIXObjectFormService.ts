@@ -32,6 +32,7 @@ import { FormInstance } from './FormInstance';
 import { KIXObjectService } from './KIXObjectService';
 import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core/DynamicFormFieldOption';
 import { PlaceholderService } from './PlaceholderService';
+import { FormFactory } from './FormFactory';
 
 export abstract class KIXObjectFormService {
 
@@ -60,6 +61,8 @@ export abstract class KIXObjectFormService {
         for (const extendedService of this.extendedFormServices) {
             await extendedService.prePrepareForm(form, kixObject, formInstance);
         }
+
+        FormFactory.initForm(form);
 
         const formFieldValues: Map<string, FormFieldValue<any>> = formInstance.getAllFormFieldValues();
         for (const p of form.pages) {
@@ -144,7 +147,7 @@ export abstract class KIXObjectFormService {
             }
         }
 
-        formInstance.provideFormFieldValues(values, null, false, false);
+        formInstance.provideFormFieldValues(values, null, true, false);
     }
 
     protected async getValue(
