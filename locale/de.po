@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2021-05-18 12:46+0000\n"
+"PO-Revision-Date: 2021-05-19 10:46+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
@@ -99,10 +99,10 @@ msgid "Address successfully removed."
 msgstr "E-Mail Adresse(n) wurde(n) erfolgreich gelöscht."
 
 msgid "Add Table Widget"
-msgstr ""
+msgstr "Tabellenwidget hinzufügen"
 
 msgid "Add Widget"
-msgstr ""
+msgstr "Widget hinzufügen"
 
 msgid "Admin"
 msgstr "Admin"
@@ -301,7 +301,7 @@ msgid "Attachments"
 msgstr "Anlagen"
 
 msgid "Attribut"
-msgstr "Offene Tickets des Kontaktes"
+msgstr "Attribut"
 
 msgid "Attribute"
 msgstr "Attribut"
@@ -325,7 +325,7 @@ msgid "Automation: Notifications"
 msgstr "Automatisierung: Benachrichtigungen"
 
 msgid "Available Dashboard Widgets"
-msgstr ""
+msgstr "Verfügbare Dashboard Widgets"
 
 msgid "Available Output Formats"
 msgstr "Verfügbare Ausgabeformate"
@@ -563,7 +563,7 @@ msgid "Configuration"
 msgstr "Konfiguration"
 
 msgid "Configuration Mode"
-msgstr ""
+msgstr "Konfigurationsmodus"
 
 msgid "Confirmation through customer signature"
 msgstr "Bestätigung durch Unterschrift des Kunden"
@@ -3484,7 +3484,7 @@ msgid "Parameter"
 msgstr ""
 
 msgid "Parameters"
-msgstr ""
+msgstr "Parameter"
 
 msgid "Parent Category"
 msgstr "Übergeordnete Kategorie"
@@ -3951,7 +3951,7 @@ msgid "Search successfully saved."
 msgstr "Suche wurde gespeichert."
 
 msgid "Search Templates"
-msgstr ""
+msgstr "Suchvorlagen"
 
 msgid "Search template successfully removed."
 msgstr "Suchvorlage(n) wurde(n) erfolgreich gelöscht."
@@ -4111,7 +4111,7 @@ msgid "Skip & Continue"
 msgstr "Überspringen & Weiter"
 
 msgid "Small Widget"
-msgstr ""
+msgstr "Kleines Widget"
 
 msgid "Solution"
 msgstr "Lösung"
@@ -4530,7 +4530,7 @@ msgid "Unlocked Tickets"
 msgstr "Freie Tickets"
 
 msgid "Unlock Ticket"
-msgstr "Freies Ticket"
+msgstr "Ticket entsperren"
 
 msgid "Unlock Timeout"
 msgstr "Entsperrzeit"
