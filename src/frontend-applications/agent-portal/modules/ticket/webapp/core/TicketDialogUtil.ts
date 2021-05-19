@@ -60,7 +60,7 @@ export class TicketDialogUtil {
 
         let dialogContext: Context;
         if (articleId && context) {
-            dialogContext = await ContextService.getInstance().getContext<TicketDetailsContext>(
+            dialogContext = await ContextService.getInstance().getContext<EditTicketDialogContext>(
                 EditTicketDialogContext.CONTEXT_ID
             );
             dialogContext.setAdditionalInformation('REFERENCED_ARTICLE_ID', articleId);

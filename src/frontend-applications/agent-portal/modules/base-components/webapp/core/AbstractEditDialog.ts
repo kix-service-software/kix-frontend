@@ -46,11 +46,15 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
         this.contextId = detailsContextId;
     }
 
-    public async onMount(): Promise<void> {
-        DialogService.getInstance().setMainDialogHint(
-            // tslint:disable-next-line:max-line-length
-            'Translatable#For keyboard navigation, press Ctrl to switch focus to dialog. See manual for more detailed information.'
-        );
+    public async onMount(preventHint?: boolean): Promise<void> {
+        // FIXME: prevent hint if necessary
+        // without, an interfering component state update could create an unwanted behavior (KIX2018-5562)
+        if (!preventHint) {
+            DialogService.getInstance().setMainDialogHint(
+                // tslint:disable-next-line:max-line-length
+                'Translatable#For keyboard navigation, press Ctrl to switch focus to dialog. See manual for more detailed information.'
+            );
+        }
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Cancel', 'Translatable#Save'
         ]);

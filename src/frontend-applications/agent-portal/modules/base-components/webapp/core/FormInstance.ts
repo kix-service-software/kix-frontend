@@ -412,8 +412,6 @@ export class FormInstance {
         const field = await this.getFormFieldByProperty(property);
         if (field) {
             return this.getFormFieldValue(field.instanceId);
-        } else {
-            return this.getFormFieldValue(property);
         }
 
         return this.fixedValues.has(property) ? this.fixedValues.get(property)[1] : undefined;
