@@ -139,8 +139,8 @@ export class TicketSearchFormManager extends SearchFormManager {
         return SearchOperatorUtil.getText(operator as SearchOperator);
     }
 
-    public async isMultiselect(property: string): Promise<boolean> {
-        const result = await super.isMultiselect(property);
+    public async isMultiselect(property: string, operator: SearchOperator | string): Promise<boolean> {
+        const result = await super.isMultiselect(property, operator);
         if (result !== null && typeof result !== 'undefined') {
             return result;
         }

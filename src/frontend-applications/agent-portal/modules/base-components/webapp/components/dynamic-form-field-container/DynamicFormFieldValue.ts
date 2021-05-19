@@ -222,7 +222,7 @@ export class DynamicFormFieldValue {
 
             this.isDropdown = inputType === InputFieldTypes.DROPDOWN || inputType === InputFieldTypes.OBJECT_REFERENCE;
             this.isAutocomplete = inputType === InputFieldTypes.OBJECT_REFERENCE;
-            this.isMultiselect = await this.manager.isMultiselect(property);
+            this.isMultiselect = await this.manager.isMultiselect(property, this.value.operator);
             this.isFreeText = this.inputOptions
                 ? this.inputOptions.some((o) => o[0] === ObjectReferenceOptions.FREETEXT && Boolean(o[1]))
                 : false;
