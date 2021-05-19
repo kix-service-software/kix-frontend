@@ -162,13 +162,7 @@ export class FormInstance {
     }
 
     public async removeFormField(formField: FormFieldConfiguration): Promise<void> {
-        let fields: FormFieldConfiguration[];
-
-        if (formField.parent) {
-            fields = formField.parent.children;
-        } else {
-            fields = await this.getFields(formField);
-        }
+        const fields: FormFieldConfiguration[] = this.getFields(formField);
 
         if (Array.isArray(fields)) {
             const index = fields.findIndex((c) => c.instanceId === formField.instanceId);
