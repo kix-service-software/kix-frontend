@@ -44,6 +44,7 @@ export class MacroFieldCreator {
             'job-form-field-macro', '', JobProperty.MACROS, 'default-select-input'
         );
 
+        // FIXME: load macro types (currently identical to job types)
         const types = await KIXObjectService.loadObjects<JobType>(KIXObjectType.JOB_TYPE).catch((): JobType[] => []);
         const typeNodes = types.map((t) => new TreeNode(t.Name, t.DisplayName));
         macroField.options.push(new FormFieldOption(DefaultSelectInputFormOption.NODES, typeNodes));
@@ -245,6 +246,7 @@ export class MacroFieldCreator {
                     resultField.instanceId = `${actionFieldInstanceId}###ResultGroup###${result.Name}`;
                     resultField.required = false;
                     resultField.hint = result.Description;
+                    resultField.translateLabel = false;
 
                     let defaultValue: string;
                     if (action && action.ResultVariables) {

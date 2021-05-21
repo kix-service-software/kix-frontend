@@ -41,8 +41,8 @@ export class MailFilterTableDuplicateAction extends AbstractAction {
             const id = selectedRows[0].getRowObject().getObject().ID;
             if (id) {
                 ContextService.getInstance().setDialogContext(
-                    null, KIXObjectType.MAIL_FILTER,
-                    ContextMode.CREATE_ADMIN, id
+                    null, KIXObjectType.MAIL_FILTER, ContextMode.CREATE_ADMIN, id, true,
+                    'Translatable#Communication: Email'
                 );
             }
         }
