@@ -288,9 +288,6 @@ msgstr ""
 msgid "Attachments"
 msgstr ""
 
-msgid "Attribut"
-msgstr ""
-
 msgid "Attribute"
 msgstr ""
 
