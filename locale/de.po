@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2021-05-19 10:46+0000\n"
-"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
+"PO-Revision-Date: 2021-05-21 08:47+0000\n"
+"Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
 "Language: de\n"
@@ -63,7 +63,7 @@ msgid "Account successfully created."
 msgstr "Konto wurde erfolgreich angelegt."
 
 msgid "Account time has to be an integer."
-msgstr ""
+msgstr "Zu buchende Zeit muss eine ganze Zahl sein."
 
 msgid "Action"
 msgstr "Aktion"
@@ -284,7 +284,7 @@ msgid "Assign Links"
 msgstr "Verknüpfung zuordnen"
 
 msgid "Assign Team / Queue"
-msgstr "Zuordnung zu Team"
+msgstr "Team/Queue zuordnen"
 
 msgid "At least {0} values must be selected"
 msgstr "Es müssen mindestens {0} Werte ausgewählt werden."
@@ -331,7 +331,7 @@ msgid "Available Output Formats"
 msgstr "Verfügbare Ausgabeformate"
 
 msgid "Avatar"
-msgstr ""
+msgstr "Avatar"
 
 msgid "back to"
 msgstr "Zurück zu"
@@ -422,7 +422,7 @@ msgid "Charset"
 msgstr "Zeichensatz"
 
 msgid "Checklists"
-msgstr ""
+msgstr "Checklisten"
 
 msgid "Choose a command"
 msgstr "Wählen Sie ein Kommando"
@@ -461,7 +461,7 @@ msgid "Close"
 msgstr "Schließen"
 
 msgid "Closed"
-msgstr ""
+msgstr "Geschlossen"
 
 msgid "Closed at"
 msgstr "Geschlossen am"
@@ -611,7 +611,7 @@ msgid "Country"
 msgstr "Land"
 
 msgid "Create"
-msgstr ""
+msgstr "Erstellen"
 
 msgid "Create Address"
 msgstr "Adresse wird angelegt"
@@ -662,7 +662,7 @@ msgid "Create Dynamic Field"
 msgstr "Dynamisches Feld wird angelegt"
 
 msgid "Create Email Account"
-msgstr ""
+msgstr "Emailkonto Erstellen"
 
 msgid "Create FAQ Article"
 msgstr "FAQ Artikel wird angelegt"
@@ -710,7 +710,7 @@ msgid "Create the report with output format {0} and defaults?"
 msgstr "Bericht mit Ausgabeformat {0} und Standardwerten erstellen?"
 
 msgid "Create Ticket"
-msgstr "Ticket anlegen"
+msgstr "Erstelle Ticket"
 
 msgid "Create Translation"
 msgstr "Übersetzung wird angelegt"
@@ -779,7 +779,7 @@ msgid "Day(s)"
 msgstr "Tag(e)"
 
 msgid "DBMS"
-msgstr ""
+msgstr "DBMS"
 
 msgid "Default"
 msgstr "Standard"
@@ -862,7 +862,6 @@ msgstr "Duplizieren"
 msgid "Dynamic Field"
 msgstr "Dynamisches Feld"
 
-#, fuzzy
 msgid "DynamicField"
 msgstr "Dynamisches Feld"
 
@@ -1017,7 +1016,7 @@ msgid "Enable attachments"
 msgstr "Anlagen zulassen"
 
 msgid "End date/time is not given"
-msgstr ""
+msgstr "Enddatum/-zeit fehlt"
 
 msgid "ends with"
 msgstr "endet mit"
@@ -1026,13 +1025,13 @@ msgid "End time"
 msgstr "Endzeitpunkt"
 
 msgid "End value is not given"
-msgstr ""
+msgstr "Endwert fehlt"
 
 msgid "Enter search value"
 msgstr "Suchbegriff eingeben"
 
 msgid "Envelope From"
-msgstr ""
+msgstr "Envelope From"
 
 msgid "equals"
 msgstr "ist gleich"
@@ -1169,18 +1168,17 @@ msgstr "Jetzt abrufen"
 msgid "Field"
 msgstr "Feld"
 
-#, fuzzy
 msgid "Field {0} has an invalid value ({1})."
-msgstr "Feld '{0}' enthält einen ungültigen Wert ({1})."
+msgstr "Feld {0} enthält einen ungültigen Wert ({1})."
 
 msgid "Field Agent App"
-msgstr ""
+msgstr "Field Agent App"
 
 msgid "Field Agent App (Android)"
-msgstr ""
+msgstr "Field Agent App (Android)"
 
 msgid "Field Agent App (iOS)"
-msgstr ""
+msgstr "Field Agent App (iOS)"
 
 msgid "Field Information"
 msgstr "Feld Informationen"
@@ -3939,7 +3937,7 @@ msgid "Scheduling"
 msgstr "Zeitplanung"
 
 msgid "Search"
-msgstr "Suche"
+msgstr "Suchen"
 
 msgid "Search {0} will be deleted. Are you sure?"
 msgstr "Suche {0} wird gelöscht. Sind Sie sicher?"
@@ -4437,7 +4435,7 @@ msgid "Ticket: States"
 msgstr "Ticket: Status"
 
 msgid "Ticket successfully created."
-msgstr "Ticket wurde erfolgreich angelegt."
+msgstr "Ticket erstellt."
 
 msgid "Ticket: Text Modules"
 msgstr "Ticket: Textbausteine"
