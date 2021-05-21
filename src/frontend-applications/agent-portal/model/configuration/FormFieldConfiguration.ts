@@ -46,7 +46,8 @@ export class FormFieldConfiguration implements IConfiguration {
         public draggableFields: boolean = false,
         public defaultHint: string = hint,
         public type: ConfigurationType = ConfigurationType.FormField,
-        public visible: boolean = true
+        public visible: boolean = true,
+        public translateLabel: boolean = true
     ) {
         this.instanceId = existingFieldId ? existingFieldId : null;
     }

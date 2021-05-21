@@ -6,14 +6,10 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<div.form-field
-    class={
-        additionalFieldControlsNeeded: input.additionalFieldControlsNeeded,
-        "show-object": state.show
-    }
-    draggable=state.draggable
-    on-dragstart("handleDragStart")
-    on-dragend("handleDragEnd")>
+<div.form-field class={
+    additionalFieldControlsNeeded: input.additionalFieldControlsNeeded,
+    "show-object": state.show
+} draggable=state.draggable on-dragstart("handleDragStart") on-dragend("handleDragEnd")>
     <div.field-label class={
         "no-label": !state.label || !state.field.showLabel
     }>
@@ -21,9 +17,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <if(state.field.required && state.field.showLabel)>
                 <span.required-field>*</span>
             </if>
-            <if(state.field.showLabel)>
-                <translation-string pattern=state.label/>
-            </if>
+            <if(state.field.showLabel)>${state.label}</if>
         </span>
     </div>
     <div.field-icon>
@@ -47,10 +41,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </div>
         </else>
     </div>
-    <if(
-        component.hasChildren() &&
-        (!state.field.empty || state.field.asStructure)
-    )>
+    <if(component.hasChildren() && (!state.field.empty || state.field.asStructure))>
         <span.minimize-icon-container>
             <if(state.minimized)>
                 <span.kix-icon-sort-down on-click("minimize")/>
@@ -69,10 +60,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <${input.additionalFieldControls}/>
             </if>
             <if(state.canDraggable)>
-                <div.form-control-button.button-without-text.drag-button
-                    title=state.translations["Translatable#Sort"]
-                    on-mouseenter("setDraggable", true)
-                    on-mouseleave("setDraggable", false)>
+                <div.form-control-button.button-without-text.drag-button title=state.translations["Translatable#Sort"] on-mouseenter("setDraggable", true) on-mouseleave("setDraggable", false)>
                     <span.kix-icon-sort-up/>
                     <span.kix-icon-sort-down/>
                 </div>
@@ -80,17 +68,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </div>
     </if>
 </div>
-<if(
-    !state.minimized &&
-    (!state.field.empty || state.field.asStructure) &&
-    component.hasChildren()
-)>
+<if(!state.minimized && (!state.field.empty || state.field.asStructure) && component.hasChildren())>
     <div.sub-field-container>
-        <field-container
-            level=(state.level + 1)
-            fields=state.field.children
-            formId=state.formId
-            additionalFieldControlsNeeded=input.additionalFieldControlsNeeded
-            draggable=state.field.draggableFields/>
+        <field-container level=(state.level + 1) fields=state.field.children formId=state.formId additionalFieldControlsNeeded=input.additionalFieldControlsNeeded draggable=state.field.draggableFields/>
     </div>
 </if>

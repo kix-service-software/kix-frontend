@@ -126,18 +126,24 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
         const objectId = await UIUtil.getEditObjectId(objectOption.value);
 
+        const translatableOption = this.state.field.options.find(
+            (o) => o.option === ObjectReferenceOptions.TRANSLATABLE
+        );
+        const translatable = !translatableOption || Boolean(translatableOption.value);
+
         if (structureOption && structureOption.value) {
             nodes = await KIXObjectService.prepareObjectTree(
-                this.objects, showInvalid, invalidClickable, objectId ? [objectId] : null
+                this.objects, showInvalid, invalidClickable, objectId ? [objectId] : null, translatable
             );
         } else {
             for (const o of this.objects) {
-                const node = await this.createTreeNode(o);
+                const node = await this.createTreeNode(o, translatable);
                 if (node) {
                     nodes.push(node);
                 }
             }
         }
+
         SortUtil.sortObjects(nodes, 'label', DataType.STRING);
 
         return nodes;
@@ -371,7 +377,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         return nodes;
     }
 
-    private async createTreeNode(o: KIXObject): Promise<TreeNode> {
+    private async createTreeNode(o: KIXObject, translatable?: boolean): Promise<TreeNode> {
         if (typeof o === 'string') {
             return new TreeNode(o, o);
         } else {
@@ -379,9 +385,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             // typeof o.ValidID === 'undefined' - needed for objects without ValidID like ValidObject
             if (typeof o.ValidID === 'undefined' || o.ValidID === 1 || showInvalid) {
                 const invalidClickable = this.isInvalidClickable();
-                const text = await LabelService.getInstance().getObjectText(o);
+                const text = await LabelService.getInstance().getObjectText(o, null, null, translatable);
                 const icon = LabelService.getInstance().getObjectIcon(o);
-                let tooltip = await LabelService.getInstance().getTooltip(o);
+                let tooltip = await LabelService.getInstance().getTooltip(o, translatable);
 
                 tooltip = (tooltip && tooltip !== text) ? text + ': ' + tooltip : text;
                 return new TreeNode(
