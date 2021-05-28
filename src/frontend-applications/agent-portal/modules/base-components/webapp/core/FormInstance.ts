@@ -109,9 +109,10 @@ export class FormInstance {
         }
     }
 
-    private setDefaultValueAndParent(formFields: FormFieldConfiguration[], parent?: FormFieldConfiguration): void {
+    public setDefaultValueAndParent(formFields: FormFieldConfiguration[], parent?: FormFieldConfiguration): void {
         formFields.forEach((f) => {
             f.parent = parent;
+            f.parentInstanceId = parent?.instanceId;
 
             if (!f.instanceId) {
                 f.instanceId = IdService.generateDateBasedId(f.property);
@@ -161,13 +162,7 @@ export class FormInstance {
     }
 
     public async removeFormField(formField: FormFieldConfiguration): Promise<void> {
-        let fields: FormFieldConfiguration[];
-
-        if (formField.parent) {
-            fields = formField.parent.children;
-        } else {
-            fields = await this.getFields(formField);
-        }
+        const fields: FormFieldConfiguration[] = this.getFields(formField);
 
         if (Array.isArray(fields)) {
             const index = fields.findIndex((c) => c.instanceId === formField.instanceId);
@@ -289,7 +284,7 @@ export class FormInstance {
                 this.form.objectType, ServiceType.FORM
             );
             if (service) {
-                const newField = await service.getNewFormField(formField, null, withChildren);
+                const newField = await service.getNewFormField(this, formField, null, withChildren);
                 fields.splice(index + 1, 0, newField);
                 this.setDefaultValueAndParent([newField], formField.parent);
                 await service.updateFields(fields, this);
@@ -311,14 +306,15 @@ export class FormInstance {
         parent: FormFieldConfiguration, children: FormFieldConfiguration[], clearChildren: boolean = false
     ): Promise<void> {
         if (parent) {
-            parent = await this.getFormField(parent.instanceId);
             if (!parent.children) {
                 parent.children = [];
             }
+
             if (clearChildren) {
                 parent.children.forEach((c) => this.deleteFieldValues(c));
                 parent.children = [];
             }
+
             children.forEach((f) => parent.children.push(f));
             this.setDefaultValueAndParent(children, parent);
 
@@ -355,14 +351,14 @@ export class FormInstance {
     ): Promise<void> {
         const instanceValues: Array<[string, any]> = values.map((v) => {
             const formField = this.getFormFieldByProperty(v[0]);
-            return [formField ? formField.instanceId : null, v[1]];
+            return [formField ? formField.instanceId : v[0], v[1]];
         });
 
         this.provideFormFieldValues(instanceValues.filter((iv) => iv[0] !== null), originInstanceId, silent);
     }
 
     public async provideFormFieldValues<T>(
-        values: Array<[string, T]>, originInstanceId: string, silent?: boolean
+        values: Array<[string, T]>, originInstanceId: string, silent?: boolean, validate: boolean = this.form.validation
     ): Promise<void> {
         const changedFieldValues: Array<[FormFieldConfiguration, FormFieldValue]> = [];
         for (const newValue of values) {
@@ -376,7 +372,7 @@ export class FormInstance {
             formFieldValue.value = value;
 
             const formField = this.getFormField(instanceId);
-            if (this.form.validation) {
+            if (validate) {
                 const result = await FormValidationService.getInstance().validate(formField, this.form.id);
                 formFieldValue.valid = result.findIndex((vr) => vr.severity === ValidationSeverity.ERROR) === -1;
             }

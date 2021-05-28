@@ -87,8 +87,6 @@ class Component implements IKIXObjectSearchListener {
     ): Promise<void> {
         this.state.table = null;
         if (objectType) {
-            this.state.loading = true;
-
             const isSearchMainObject = cache.objectType === objectType;
 
             let objectIds = [];
@@ -98,12 +96,13 @@ class Component implements IKIXObjectSearchListener {
             }
             const resultCount: number = objectIds.length;
 
-            const titleLabel = await TranslationService.translate('Translatable#Hit List', []);
             this.state.resultIcon = LabelService.getInstance().getObjectIconForType(objectType);
+
+            const titleLabel = await TranslationService.translate('Translatable#Hit List', []);
             const objectName = await LabelService.getInstance().getObjectName(objectType, true);
             this.state.resultTitle = `${titleLabel} ${objectName} (${resultCount})`;
 
-            let emptyResultHint;
+            let emptyResultHint: string;
             if (!cache) {
                 emptyResultHint = 'Translatable#No search query found.';
             }
@@ -137,8 +136,7 @@ class Component implements IKIXObjectSearchListener {
                             }
                             const columns = await searchDefinition.getTableColumnConfiguration(parameter);
                             await table.addColumns(columns);
-                        }
-                        if (eventId === TableEvent.TABLE_READY) {
+                        } else if (eventId === TableEvent.TABLE_READY) {
                             this.state.filterCount = this.state.table.isFiltered()
                                 ? this.state.table.getRowCount()
                                 : null;

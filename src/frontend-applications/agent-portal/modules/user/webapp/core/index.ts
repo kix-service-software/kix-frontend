@@ -11,6 +11,5 @@ export { AgentEvent } from './AgentEvent';
 export { AgentService } from './AgentService';
 export { AgentSocketClient } from './AgentSocketClient';
 export { UsersEvent } from './UsersEvent';
-export { UIModule as UserUIModule } from './UserUIModule';
 export { PersonalSettingsFormService } from './PersonalSettingsFormService';
 export { PersonalSettingsDialogContext } from './PersonalSettingsDialogContext';

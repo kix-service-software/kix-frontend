@@ -24,6 +24,10 @@ const expect = chai.expect;
 
 describe('AuthenticationNamespace', () => {
 
+    before(() => {
+        require('../TestSetup');
+    });
+
     describe('Check the permissions', () => {
 
         let originalOptionsMethod;

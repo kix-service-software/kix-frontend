@@ -66,9 +66,13 @@ export class FormFactory {
             field.existingFieldId,
             field.showLabel,
             field.name,
-            field.draggableFields
+            field.draggableFields,
+            field.defaultHint,
+            field.type,
+            field.visible
         );
-        clonedField.instanceId = IdService.generateDateBasedId();
+        clonedField.instanceId = field.instanceId || IdService.generateDateBasedId();
+        clonedField.parent = field.parent;
         return clonedField;
     }
 

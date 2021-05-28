@@ -49,10 +49,12 @@ class Component {
         if (this.state.field.property === this.state.field.label) {
             const form = await FormService.getInstance().getForm(this.state.formId);
             this.state.label = await LabelService.getInstance().getPropertyText(
-                this.state.field.property, form.objectType
+                this.state.field.property, form.objectType, null, this.state.field.translateLabel
             );
         } else {
-            this.state.label = await TranslationService.translate(this.state.field.label);
+            this.state.label = await TranslationService.translate(
+                this.state.field.label, undefined, undefined, !this.state.field.translateLabel
+            );
         }
 
         const hint = await TranslationService.translate(this.state.field.hint);
@@ -86,13 +88,15 @@ class Component {
     private async hasInvalidChildren(field: FormFieldConfiguration = this.state.field): Promise<boolean> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         let hasInvalidChildren = false;
-        for (const child of field.children) {
-            const value = formInstance.getFormFieldValue(child.instanceId);
-            if (!value.valid) {
-                return true;
-            }
+        if (Array.isArray(field.children)) {
+            for (const child of field.children) {
+                const value = formInstance.getFormFieldValue(child.instanceId);
+                if (!value.valid) {
+                    return true;
+                }
 
-            hasInvalidChildren = await this.hasInvalidChildren(child);
+                hasInvalidChildren = await this.hasInvalidChildren(child);
+            }
         }
 
         return hasInvalidChildren;

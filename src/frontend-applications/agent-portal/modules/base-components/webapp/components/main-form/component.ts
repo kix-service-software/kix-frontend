@@ -63,6 +63,8 @@ class FormComponent {
                 }, 500);
             }
         }
+
+        this.state.loading = false;
     }
 
     public onDestroy(): void {

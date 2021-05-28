@@ -19,6 +19,8 @@ import { SocketErrorResponse } from '../../../../modules/base-components/webapp/
 import { LoadSearchResponse } from '../../model/LoadSearchResponse';
 import { ISocketRequest } from '../../../../modules/base-components/webapp/core/ISocketRequest';
 import { DeleteSearchRequest } from '../../model/DeleteSearchRequest';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
 
 export class SearchSocketClient extends SocketClient {
 
@@ -37,13 +39,13 @@ export class SearchSocketClient extends SocketClient {
         this.socket = this.createSocket('search', true);
     }
 
-    public async saveSearch(search: SearchCache, existingName: string): Promise<void> {
+    public async saveSearch(search: SearchCache): Promise<void> {
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<void>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();
 
             const request = new SaveSearchRequest(
-                requestId, ClientStorageService.getClientRequestId(), search, existingName
+                requestId, ClientStorageService.getClientRequestId(), search
             );
 
             const timeout = window.setTimeout(() => {
@@ -52,6 +54,7 @@ export class SearchSocketClient extends SocketClient {
 
             this.socket.on(SearchEvent.SAVE_SEARCH_FINISHED, (result: ISocketResponse) => {
                 if (result.requestId === requestId) {
+                    BrowserCacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
                     window.clearTimeout(timeout);
                     resolve();
                 }
@@ -104,7 +107,7 @@ export class SearchSocketClient extends SocketClient {
         });
     }
 
-    public async deleteSearch(name: string): Promise<void> {
+    public async deleteSearch(id: string): Promise<void> {
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<void>((resolve, reject) => {
 
@@ -129,7 +132,7 @@ export class SearchSocketClient extends SocketClient {
                 }
             });
 
-            const request = new DeleteSearchRequest(requestId, ClientStorageService.getClientRequestId(), name);
+            const request = new DeleteSearchRequest(requestId, ClientStorageService.getClientRequestId(), id);
             this.socket.emit(SearchEvent.DELETE_SEARCH, request);
         });
     }

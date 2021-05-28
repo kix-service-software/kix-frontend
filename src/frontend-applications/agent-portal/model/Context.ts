@@ -32,6 +32,7 @@ import { AbstractAction } from '../modules/base-components/webapp/core/AbstractA
 import { SortUtil } from './SortUtil';
 import { SortOrder } from './SortOrder';
 import { AuthenticationSocketClient } from '../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { AgentService } from '../modules/user/webapp/core/AgentService';
 
 export abstract class Context {
 
@@ -106,7 +107,6 @@ export abstract class Context {
                 actions = [...actions, ...extendedActions];
             }
         }
-        actions.sort((a, b) => SortUtil.compareNumber(a.data.Rank, b.data.Rank, SortOrder.UP, false));
         return actions;
     }
 
@@ -247,7 +247,7 @@ export abstract class Context {
         return lanes;
     }
 
-    public getContent(show: boolean = false): ConfiguredWidget[] {
+    public async getContent(show: boolean = false): Promise<ConfiguredWidget[]> {
         let content = this.configuration.content;
 
         if (show && content) {
@@ -256,7 +256,9 @@ export abstract class Context {
             );
         }
 
-        return content;
+        const userWidgets = await this.getUserWidgetList('content');
+        const widgets = this.mergeWidgetLists(content, userWidgets);
+        return widgets;
     }
 
     public getExplorer(show: boolean = false): ConfiguredWidget[] {
@@ -279,6 +281,42 @@ export abstract class Context {
         }
 
         return sidebars;
+    }
+
+    private async getUserWidgetList(contextWidgetList: string): Promise<Array<string | ConfiguredWidget>> {
+        let widgets: ConfiguredWidget[] = [];
+        const currentUser = await AgentService.getInstance().getCurrentUser();
+        const widgetListPreference = currentUser.Preferences.find((p) => p.ID === 'ContextWidgetLists');
+        if (widgetListPreference) {
+            try {
+                const value = JSON.parse(widgetListPreference.Value);
+                const contextLists = value[this.descriptor.contextId];
+                if (contextLists) {
+                    widgets = contextLists[contextWidgetList] || [];
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        return widgets;
+    }
+
+    private mergeWidgetLists(
+        contextWidgets: ConfiguredWidget[], userWidgets: Array<string | ConfiguredWidget> = []
+    ): ConfiguredWidget[] {
+        const widgets: ConfiguredWidget[] = userWidgets.length ? [] : contextWidgets;
+
+        userWidgets.forEach((w) => {
+            if (typeof w === 'string') {
+                const widget = contextWidgets.find((cw) => cw.instanceId === w);
+                widgets.push(widget);
+            } else {
+                widgets.push(w);
+            }
+        });
+
+        return widgets;
     }
 
     public toggleSidebarWidget(instanceId: string): void {
@@ -366,6 +404,10 @@ export abstract class Context {
             if (!configuration) {
                 configuration = this.configuration.others.find((cw) => cw.instanceId === instanceId);
             }
+
+            if (!configuration) {
+                configuration = await this.getUserWidgetConfiguration(instanceId);
+            }
         }
 
         if (configuration && Array.isArray(configuration.permissions)) {
@@ -377,6 +419,36 @@ export abstract class Context {
 
         return configuration;
     }
+
+    private async getUserWidgetConfiguration(instanceId: string): Promise<ConfiguredWidget> {
+        let widget: ConfiguredWidget;
+
+        const currentUser = await AgentService.getInstance().getCurrentUser();
+        const widgetListPreference = currentUser.Preferences.find((p) => p.ID === 'ContextWidgetLists');
+        if (widgetListPreference) {
+            const value = JSON.parse(widgetListPreference.Value);
+            const contextLists = value[this.descriptor.contextId];
+            if (contextLists) {
+                for (const contextWidgetList in contextLists) {
+                    if (Array.isArray(contextLists[contextWidgetList])) {
+                        const widgets: Array<string | ConfiguredWidget> = contextLists[contextWidgetList];
+
+                        widget = widgets
+                            .filter((w) => typeof w !== 'string')
+                            .map((w): ConfiguredWidget => w as ConfiguredWidget)
+                            .find((w) => w.instanceId === instanceId);
+
+                        if (widget) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return widget;
+    }
+
     public async getWidgetConfiguration(instanceId: string): Promise<WidgetConfiguration> {
         const configuredWidget = await this.getConfiguredWidget(instanceId);
         return configuredWidget ? configuredWidget.configuration : null;

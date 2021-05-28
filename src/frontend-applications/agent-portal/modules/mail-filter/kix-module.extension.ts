@@ -46,7 +46,7 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         ),
         new UIComponent(
             'edit-mail-filter-dialog', '/kix-module-mail-filter$0/webapp/components/edit-mail-filter-dialog', []
-        ),
+        )
     ];
 
     public webDependencies: string[] = [

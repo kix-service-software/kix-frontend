@@ -74,7 +74,7 @@ class Component extends FormInputComponent<JSON, ComponentState> {
     }
 
     private async createEditor(type: string, value?: any): Promise<void> {
-        await this.destroyEditor();
+        this.destroyEditor();
         this.schema = await DynamicFieldService.getInstance().getConfigSchema(type);
         if (this.schema) {
             this.state.prepared = true;

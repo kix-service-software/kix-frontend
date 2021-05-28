@@ -8,39 +8,128 @@
  */
 
 .widget-container {
-    display: grid;
-    grid-template-columns: [first-line] repeat(3, minmax(100px, 1fr)) [last-line];
-    grid-auto-rows: auto;
-    grid-gap: @margin-default;
-    grid-auto-flow: row;
+    .widget-configuration-toolbar {
+        display: grid;
+        grid-auto-flow: row;
+        grid-column-gap: @margin-small;
+        grid-row-gap: @margin-small;
+        margin-bottom: 1rem;
+        box-shadow: 2px 2px 2px 0 @secondary-2;
+        padding: 1rem;
+        background-color: @secondary-6;
 
-    .widget-frame {
-        width: 100%;
+        .widget-chooser {
+            display: grid;
+            grid-template-columns: max-content max-content;
+            grid-column-gap: @margin-small;
+            grid-row-gap: @margin-small;
+            align-items: center;
 
-        &.small {
-            .content-widget {
-                max-height: 15rem;
+            .widget-chooser-title {
+                grid-column: 1 /span 2;
+                font-weight: bold;
+            }
 
-                >.widget-header {
-                    // TODO: da aktuell keine "actions" --> wieder auf 8 zu 2 ändern
-                    grid-template-columns: 9fr 1fr;
-                }
-
-                >.widget-content {
-                    height: 15rem - @default-widget-header-height;
-                    overflow: hidden;
-                }
-
-                &.minimized {
-                    >.widget-content {
-                        height: unset;
-                    }
-                }
+            .form-list {
+                width: 20rem;
             }
         }
 
-        &.large {
-            grid-column: first-line / last-line;
+        .submit-buttons {
+            justify-self: end;
+            display: grid;
+            grid-auto-columns: max-content;
+            grid-auto-flow: column;
+            grid-column-gap: @margin-small;
+        }
+    }
+
+    .widget-container-content {
+        display: grid;
+        grid-template-columns: [first-line] repeat(3, minmax(100px, 1fr)) [last-line];
+        grid-auto-rows: auto;
+        grid-gap: @margin-default;
+        grid-auto-flow: row;
+
+        &.configuration-mode {
+            box-shadow: 2px 2px 2px 0 #c6c6c6;
+            background-color: #ffffff;
+            padding: 1rem;
+        }
+
+        .widget-frame {
+            width: 100%;
+
+
+
+            &.blackbox {
+                border: 1px solid @secondary-2;
+                border-radius: 3px;
+                ;
+                max-height: 15rem;
+
+                &.drag {
+                    >div.header {
+                        background-color: @primary-0;
+                    }
+
+                    opacity: 0.7;
+                }
+
+                >div.header {
+                    display: grid;
+                    align-items: center;
+                    grid-auto-flow: column;
+                    grid-template-columns: max-content max-content auto;
+                    grid-column-gap: @margin-small;
+                    padding: @margin-small;
+                    box-sizing: border-box;
+                    background-color: @secondary-2;
+                    font-weight: bold;
+                    cursor: pointer;
+
+                    .close {
+                        justify-self: end;
+                    }
+                }
+
+                >div.widget-size {
+                    padding: @margin-small;
+                    box-sizing: border-box;
+                    display: grid;
+                    align-items: center;
+                    grid-auto-flow: column;
+                    grid-auto-columns: max-content;
+                    grid-column-gap: @margin-small;
+                }
+
+            }
+
+            &.small {
+                .content-widget {
+                    max-height: 15rem;
+
+                    >.widget-header {
+                        // TODO: da aktuell keine "actions" --> wieder auf 8 zu 2 ändern
+                        grid-template-columns: 9fr 1fr;
+                    }
+
+                    >.widget-content {
+                        height: 15rem - @default-widget-header-height;
+                        overflow: hidden;
+                    }
+
+                    &.minimized {
+                        >.widget-content {
+                            height: unset;
+                        }
+                    }
+                }
+            }
+
+            &.large {
+                grid-column: first-line / last-line;
+            }
         }
     }
 }

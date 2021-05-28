@@ -9,3 +9,4 @@
 
 export { TextModuleCreateAction } from './TextModuleCreateAction';
 export { TextModuleDuplicateAction } from './TextModuleDuplicateAction';
+export { TextModuleTableDeleteAction } from './TextModuleTableDeleteAction';

@@ -121,6 +121,12 @@ export class ReportDefinitionLabelProvider extends LabelProvider<ReportDefinitio
         return reportDefinitionLabel;
     }
 
+    public async getObjectText(
+        object: ReportDefinition, id?: boolean, title?: boolean, translatable?: boolean
+    ): Promise<string> {
+        return object.Name;
+    }
+
     public getObjectIcon(object?: ReportDefinition): string | ObjectIcon {
         if (object) {
             return new ObjectIcon(null, KIXObjectType.REPORT_DEFINITION, object.ID, null, null, 'kix-icon-kpi');

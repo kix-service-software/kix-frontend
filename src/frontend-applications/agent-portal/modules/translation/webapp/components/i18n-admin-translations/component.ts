@@ -36,7 +36,7 @@ import { DialogRoutingConfiguration } from '../../../../../model/configuration/D
 import { EditTranslationDialogContext } from '../../core/admin/context';
 import { SortOrder } from '../../../../../model/SortOrder';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { AdminContext } from '../../../../admin/webapp/core';
+import { AdminContext } from '../../../../admin/webapp/core/AdminContext';
 import { ContextType } from '../../../../../model/ContextType';
 
 class Component extends AbstractMarkoComponent<ComponentState> {

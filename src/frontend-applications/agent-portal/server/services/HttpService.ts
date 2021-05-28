@@ -44,16 +44,20 @@ export class HttpService {
 
     private constructor() {
         const serverConfig: IServerConfiguration = ConfigurationService.getInstance().getServerConfiguration();
-        this.apiURL = serverConfig.BACKEND_API_URL;
+        this.apiURL = serverConfig?.BACKEND_API_URL;
         this.request = require('request-promise');
 
         const certPath = ConfigurationService.getInstance().certDirectory + '/backend.pem';
-        this.backendCertificate = fs.readFileSync(certPath);
+        try {
+            this.backendCertificate = fs.readFileSync(certPath);
+        } catch (error) {
+            LoggingService.getInstance().error(error);
+        }
 
-        if (serverConfig.LOG_REQUEST_QUEUES_INTERVAL) {
+        if (serverConfig?.LOG_REQUEST_QUEUES_INTERVAL) {
             setInterval(
                 () => LoggingService.getInstance().debug(`HTTP Request Queue Length: ${this.requestCounter}`),
-                serverConfig.LOG_REQUEST_QUEUES_INTERVAL
+                serverConfig?.LOG_REQUEST_QUEUES_INTERVAL
             );
         }
     }

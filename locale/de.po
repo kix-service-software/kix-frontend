@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2021-04-07 12:46+0000\n"
+"PO-Revision-Date: 2021-05-26 13:47+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
@@ -30,7 +30,7 @@ msgid "{0} imported"
 msgstr "{0} importiert"
 
 msgid "{0} is required."
-msgstr "{0} ist erforderlich."
+msgstr "{0} ist ein Pflichtfeld."
 
 msgid "{0} Link created"
 msgstr "{0} Verknüpfung(en) angelegt"
@@ -63,7 +63,7 @@ msgid "Account successfully created."
 msgstr "Konto wurde erfolgreich angelegt."
 
 msgid "Account time has to be an integer."
-msgstr ""
+msgstr "Zu buchende Zeit muss eine ganze Zahl sein."
 
 msgid "Action"
 msgstr "Aktion"
@@ -90,10 +90,19 @@ msgid "add notes here"
 msgstr "Notizen hinzufügen"
 
 msgid "Add Object"
-msgstr "Objekt Anlegen"
+msgstr "Objekt anlegen"
 
 msgid "Address successfully created."
 msgstr "Adresse wurde erfolgreich angelegt."
+
+msgid "Address successfully removed."
+msgstr "E-Mail Adresse(n) wurde(n) erfolgreich gelöscht."
+
+msgid "Add Table Widget"
+msgstr "Tabellenwidget hinzufügen"
+
+msgid "Add Widget"
+msgstr "Widget hinzufügen"
 
 msgid "Admin"
 msgstr "Admin"
@@ -275,7 +284,7 @@ msgid "Assign Links"
 msgstr "Verknüpfung zuordnen"
 
 msgid "Assign Team / Queue"
-msgstr "Zuordnung zu Team"
+msgstr "Team/Queue zuordnen"
 
 msgid "At least {0} values must be selected"
 msgstr "Es müssen mindestens {0} Werte ausgewählt werden."
@@ -290,9 +299,6 @@ msgstr "Name des Anhangs"
 
 msgid "Attachments"
 msgstr "Anlagen"
-
-msgid "Attribut"
-msgstr "Offene Tickets des Kontaktes"
 
 msgid "Attribute"
 msgstr "Attribut"
@@ -315,11 +321,14 @@ msgstr "Automatisierung: Jobs"
 msgid "Automation: Notifications"
 msgstr "Automatisierung: Benachrichtigungen"
 
+msgid "Available Dashboard Widgets"
+msgstr "Verfügbare Dashboard Widgets"
+
 msgid "Available Output Formats"
 msgstr "Verfügbare Ausgabeformate"
 
 msgid "Avatar"
-msgstr ""
+msgstr "Avatar"
 
 msgid "back to"
 msgstr "Zurück zu"
@@ -410,7 +419,7 @@ msgid "Charset"
 msgstr "Zeichensatz"
 
 msgid "Checklists"
-msgstr ""
+msgstr "Checklisten"
 
 msgid "Choose a command"
 msgstr "Wählen Sie ein Kommando"
@@ -447,6 +456,9 @@ msgstr "Leeren"
 
 msgid "Close"
 msgstr "Schließen"
+
+msgid "Closed"
+msgstr "Geschlossen"
 
 msgid "Closed at"
 msgstr "Geschlossen am"
@@ -547,6 +559,9 @@ msgstr "Asset-Versionsvergleich"
 msgid "Configuration"
 msgstr "Konfiguration"
 
+msgid "Configuration Mode"
+msgstr "Konfigurationsmodus"
+
 msgid "Confirmation through customer signature"
 msgstr "Bestätigung durch Unterschrift des Kunden"
 
@@ -593,7 +608,7 @@ msgid "Country"
 msgstr "Land"
 
 msgid "Create"
-msgstr ""
+msgstr "Erstellen"
 
 msgid "Create Address"
 msgstr "Adresse wird angelegt"
@@ -644,7 +659,7 @@ msgid "Create Dynamic Field"
 msgstr "Dynamisches Feld wird angelegt"
 
 msgid "Create Email Account"
-msgstr ""
+msgstr "Emailkonto Erstellen"
 
 msgid "Create FAQ Article"
 msgstr "FAQ Artikel wird angelegt"
@@ -761,7 +776,7 @@ msgid "Day(s)"
 msgstr "Tag(e)"
 
 msgid "DBMS"
-msgstr ""
+msgstr "DBMS"
 
 msgid "Default"
 msgstr "Standard"
@@ -844,7 +859,6 @@ msgstr "Duplizieren"
 msgid "Dynamic Field"
 msgstr "Dynamisches Feld"
 
-#, fuzzy
 msgid "DynamicField"
 msgstr "Dynamisches Feld"
 
@@ -999,7 +1013,7 @@ msgid "Enable attachments"
 msgstr "Anlagen zulassen"
 
 msgid "End date/time is not given"
-msgstr ""
+msgstr "Enddatum/-zeit fehlt"
 
 msgid "ends with"
 msgstr "endet mit"
@@ -1008,13 +1022,13 @@ msgid "End time"
 msgstr "Endzeitpunkt"
 
 msgid "End value is not given"
-msgstr ""
+msgstr "Endwert fehlt"
 
 msgid "Enter search value"
 msgstr "Suchbegriff eingeben"
 
 msgid "Envelope From"
-msgstr ""
+msgstr "Envelope From"
 
 msgid "equals"
 msgstr "ist gleich"
@@ -1151,18 +1165,17 @@ msgstr "Jetzt abrufen"
 msgid "Field"
 msgstr "Feld"
 
-#, fuzzy
 msgid "Field {0} has an invalid value ({1})."
-msgstr "Feld '{0}' enthält einen ungültigen Wert ({1})."
+msgstr "Feld {0} enthält einen ungültigen Wert ({1})."
 
 msgid "Field Agent App"
-msgstr ""
+msgstr "Field Agent App"
 
 msgid "Field Agent App (Android)"
-msgstr ""
+msgstr "Field Agent App (Android)"
 
 msgid "Field Agent App (iOS)"
-msgstr ""
+msgstr "Field Agent App (iOS)"
 
 msgid "Field Information"
 msgstr "Feld Informationen"
@@ -1185,9 +1198,8 @@ msgstr "Filtern in Liste"
 msgid "Filter successfully created."
 msgstr "Filter wurde erfolgreich angelegt."
 
-#, fuzzy
 msgid "Filter successfully removed."
-msgstr "Filter wurde erfolgreich angelegt."
+msgstr "Filter wurde(n) erfolgreich gelöscht."
 
 msgid ""
 "Find this saved search within the Dropdown Bookmarks, located in the header "
@@ -1848,7 +1860,8 @@ msgstr ""
 msgid "Helptext_Admin_Tickets_QueueCreate_UnlockTimeout"
 msgstr ""
 "Wenn ein Agent ein Ticket sperrt und es vor Ablauf der Entsperrzeit nicht "
-"schließt, wird es entsperrt und wieder für andere Agenten verfügbar gemacht."
+"schließt, wird es entsperrt und wieder für andere Agenten verfügbar gemacht "
+"(Eingabe in Minuten)."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_Validity"
 msgstr "Das Team kann nur verwendet werden, wenn es „gültig“ gesetzt ist."
@@ -2916,7 +2929,6 @@ msgstr "Legende"
 msgid "Let's go"
 msgstr "Los geht's"
 
-#, fuzzy
 msgid "Lets go"
 msgstr "Los geht's"
 
@@ -2995,6 +3007,9 @@ msgstr "Logs"
 msgid "Macro"
 msgstr ""
 
+msgid "Mail Accounts successfully removed."
+msgstr "E-Mail Konten wurden erfolgreich gelöscht."
+
 msgid "Mail Account successfully fetched."
 msgstr "E-Mail-Konto wurde erfolgreich abgerufen."
 
@@ -3039,6 +3054,15 @@ msgstr "Meine gesperrten Tickets mit neuen Artikeln"
 
 msgid "My Open Tickets"
 msgstr "Meine offenen Tickets"
+
+msgid "My Open Tickets Table"
+msgstr ""
+
+msgid "My Open Tickets Table Widget"
+msgstr ""
+
+msgid "My Open Tickets Widget"
+msgstr ""
 
 msgid "My Organisation"
 msgstr "Eigene Firma"
@@ -3157,8 +3181,23 @@ msgstr "Neues Ticket"
 msgid "New Tickets"
 msgstr "Neue Tickets"
 
+msgid "New Tickets Chart"
+msgstr ""
+
+msgid "New Tickets Chart Widget"
+msgstr ""
+
 msgid "New Tickets (recent 7 days)"
 msgstr "Neue Tickets der letzten 7 Tage"
+
+msgid "New Tickets Table"
+msgstr ""
+
+msgid "New Tickets Table Widget"
+msgstr ""
+
+msgid "New Tickets Widget"
+msgstr ""
 
 msgid "New Translation"
 msgstr "Neu"
@@ -3265,6 +3304,9 @@ msgstr "Benachrichtigungen"
 msgid "Notifications for Tickets"
 msgstr "Benachrichtigungen für Tickets"
 
+msgid "Notifications successfully removed."
+msgstr "Benachrichtigung(en) wurde(n) erfolgreich gelöscht."
+
 msgid "Notification successfully created."
 msgstr "Benachrichtigung wurde erfolgreich angelegt."
 
@@ -3330,6 +3372,9 @@ msgstr "Einmal pro Tag"
 
 msgid "Online and offline processing of service jobs"
 msgstr "Online- und Offline-Bearbeitung von Serviceaufträgen"
+
+msgid "Open"
+msgstr ""
 
 msgid "Open Sidebars"
 msgstr "Geöffnete Sidebars"
@@ -3432,6 +3477,9 @@ msgstr ""
 
 msgid "Parameter"
 msgstr ""
+
+msgid "Parameters"
+msgstr "Parameter"
 
 msgid "Parent Category"
 msgstr "Übergeordnete Kategorie"
@@ -3549,10 +3597,16 @@ msgid "Priorities"
 msgstr "Prioritäten"
 
 msgid "Priorities successfully removed."
-msgstr "Prioritäen wurden erfolgreich entfernt."
+msgstr "Priorität(en) wurde(n) erfolgreich gelöscht."
 
 msgid "Priority"
 msgstr "Priorität"
+
+msgid "Priority Chart"
+msgstr ""
+
+msgid "Priority Chart Widget"
+msgstr ""
 
 msgid "Priority Data"
 msgstr "Prioritätsdaten"
@@ -3680,11 +3734,20 @@ msgstr "Frontend-Konfigurationen erneut laden?"
 msgid "Reminder Tickets"
 msgstr "Erinnerungstickets"
 
+msgid "Remove Address"
+msgstr "Adresse(n) löschen"
+
 msgid "Remove dependency to organisation"
 msgstr "Abhängigkeit zur Organisation lösen"
 
 msgid "Remove Filter"
 msgstr "Filter löschen"
+
+msgid "Remove Mail Accounts"
+msgstr "E-Mail Konten löschen"
+
+msgid "Remove Notifications"
+msgstr "Benachrichtigungen löschen"
 
 msgid "Remove parameter"
 msgstr "Parameter löschen"
@@ -3694,6 +3757,9 @@ msgstr "Prioritäten löschen"
 
 msgid "Remove States"
 msgstr "Status löschen"
+
+msgid "Remove Text Modules"
+msgstr ""
 
 msgid "Remove translations"
 msgstr "Übersetzungen löschen"
@@ -3753,15 +3819,13 @@ msgid "Report successfully created."
 msgstr "Bericht wurde erfolgreich angelegt."
 
 msgid "Required"
-msgstr "Erforderlich"
+msgstr "Pflichtfeld"
 
-#, fuzzy
 msgid "Required field {0} has no value."
 msgstr "Benötigtes Feld '{0}' hat keinen Wert."
 
-#, fuzzy
 msgid "Required field {0} is no JSON."
-msgstr "Benötigtes Feld '{0}' ist kein gültiges JSON-Format"
+msgstr "Benötigtes Feld '{0}' ist kein gültiges JSON-Format."
 
 msgid "Reset"
 msgstr "Zurücksetzen"
@@ -3783,6 +3847,9 @@ msgstr "Verantwortliche Tickets"
 
 msgid "Result names"
 msgstr "Ergebnisbezeichnungen"
+
+msgid "Results"
+msgstr "Ergebnisse"
 
 msgid "Results advanced search"
 msgstr "Ergebnis Komplexsuche"
@@ -3865,7 +3932,7 @@ msgid "Scheduling"
 msgstr "Zeitplanung"
 
 msgid "Search"
-msgstr "Suche"
+msgstr "Suchen"
 
 msgid "Search {0} will be deleted. Are you sure?"
 msgstr "Suche {0} wird gelöscht. Sind Sie sicher?"
@@ -3876,8 +3943,11 @@ msgstr "Suchergebnisse"
 msgid "Search successfully saved."
 msgstr "Suche wurde gespeichert."
 
+msgid "Search Templates"
+msgstr "Suchvorlagen"
+
 msgid "Search template successfully removed."
-msgstr "Suchvorlage wurde erfolgreich entfernt."
+msgstr "Suchvorlage(n) wurde(n) erfolgreich gelöscht."
 
 msgid "Search Tickets"
 msgstr "Suche Tickets"
@@ -4033,6 +4103,9 @@ msgstr "Überspringen"
 msgid "Skip & Continue"
 msgstr "Überspringen & Weiter"
 
+msgid "Small Widget"
+msgstr "Kleines Widget"
+
 msgid "Solution"
 msgstr "Lösung"
 
@@ -4090,8 +4163,14 @@ msgstr "Status-Informationen"
 msgid "States"
 msgstr "Status"
 
+msgid "States Chart"
+msgstr ""
+
+msgid "States Chart Widget"
+msgstr ""
+
 msgid "States successfully removed."
-msgstr "Status wurden erfolgreich entfernt."
+msgstr "Status wurde(n) erfolgreich gelöscht."
 
 msgid "State successfully created."
 msgstr "Status wurde erfolgreich angelegt."
@@ -4218,6 +4297,9 @@ msgstr "Textbaustein"
 
 msgid "Text Modules"
 msgstr "Textbausteine"
+
+msgid "Text Modules successfully removed."
+msgstr "Textbaustein(e) wurde(n) erfolgreich gelöscht."
 
 msgid "Text Module successfully created."
 msgstr "Textbaustein wurde erfolgreich angelegt."
@@ -4348,7 +4430,7 @@ msgid "Ticket: States"
 msgstr "Ticket: Status"
 
 msgid "Ticket successfully created."
-msgstr "Ticket wurde erfolgreich angelegt."
+msgstr "Ticket erstellt."
 
 msgid "Ticket: Text Modules"
 msgstr "Ticket: Textbausteine"
@@ -4396,7 +4478,7 @@ msgid "Translations"
 msgstr "Übersetzungen"
 
 msgid "Translations successfully removed."
-msgstr "Übersetzungen wurden erfolgreich entfernt."
+msgstr "Übersetzung(en) wurde(n) erfolgreich gelöscht."
 
 msgid "Translation successfully created."
 msgstr "Übersetzung wurde erfolgreich angelegt."
@@ -4420,7 +4502,7 @@ msgid "Types"
 msgstr "Typen"
 
 msgid "Types successfully removed."
-msgstr "Typen wurden erfolgreich entfernt."
+msgstr "Typ(en) wurde(n) erfolgreich gelöscht."
 
 msgid "Type successfully created."
 msgstr "Typ wurde erfolgreich angelegt."
@@ -4441,7 +4523,7 @@ msgid "Unlocked Tickets"
 msgstr "Freie Tickets"
 
 msgid "Unlock Ticket"
-msgstr "Freies Ticket"
+msgstr "Ticket entsperren"
 
 msgid "Unlock Timeout"
 msgstr "Entsperrzeit"
@@ -4563,9 +4645,8 @@ msgstr "Nutzerverwaltung"
 msgid "User Management: Roles"
 msgstr "Nutzerverwaltung: Rollen"
 
-#, fuzzy
 msgid "User Management: Users ({0})"
-msgstr "Nutzerverwaltung: Nutzer"
+msgstr "Nutzerverwaltung: Nutzer ({0})"
 
 msgid "User manual"
 msgstr "Handbuch für Anwender"
@@ -4585,7 +4666,6 @@ msgstr "Gültigkeit"
 msgid "Value"
 msgstr "Wert"
 
-#, fuzzy
 msgid "Value of field {0} is too long (max: {1})."
 msgstr "Wert des Feldes '{0}' ist zu  lang (max: {1})."
 
@@ -4594,6 +4674,9 @@ msgstr "Wert wurde erfolgreich angelegt."
 
 msgid "Version"
 msgstr "Version"
+
+msgid "Viewable States"
+msgstr ""
 
 msgid "Votes"
 msgstr "Bewertungen"
@@ -4690,6 +4773,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Attribut"
+#~ msgstr "Attribut"
 
 #~ msgid "Button with 3 points = Here you can find further actions"
 #~ msgstr "Button mit 3 Punkten  =  Hier befinden sich weitere Aktionen"

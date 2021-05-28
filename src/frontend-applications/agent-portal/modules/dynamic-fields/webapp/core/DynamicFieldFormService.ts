@@ -19,6 +19,7 @@ import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { DynamicFieldTypes } from '../../model/DynamicFieldTypes';
 import { DynamicFieldProperty } from '../../model/DynamicFieldProperty';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
+import { CheckListItem } from './CheckListItem';
 
 export class DynamicFieldFormService extends KIXObjectFormService {
 
@@ -84,7 +85,9 @@ export class DynamicFieldFormService extends KIXObjectFormService {
                         value.PossibleValues = possibleValueArray;
                         value.TranslatableValues = Boolean(value.TranslatableValues === '1');
                     } else if (dynamicField.FieldType === DynamicFieldTypes.CHECK_LIST) {
-                        value.DefaultValue = JSON.parse(value.DefaultValue);
+                        const checklist = JSON.parse(value.DefaultValue);
+                        this.prepareChecklistConfig(checklist);
+                        value.DefaultValue = checklist;
                     }
                 }
                 formFieldValue = dynamicField && formContext === FormContext.EDIT
@@ -99,6 +102,16 @@ export class DynamicFieldFormService extends KIXObjectFormService {
                 this.prepareFormFieldValues(f.children, dynamicField, formFieldValues, formContext);
             }
         }
+    }
+
+    private prepareChecklistConfig(checklist: CheckListItem[]): void {
+        checklist.forEach((ci) => {
+            if (!ci.sub) {
+                ci.sub = [];
+            } else {
+                this.prepareChecklistConfig(ci.sub);
+            }
+        });
     }
 
     public async postPrepareValues(

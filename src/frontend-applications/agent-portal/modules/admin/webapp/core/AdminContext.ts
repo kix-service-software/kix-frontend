@@ -58,8 +58,8 @@ export class AdminContext extends Context {
         return url;
     }
 
-    public setAdminModule(adminModuleId: string, categoryName: string): void {
-        if (!this.adminModuleId || this.adminModuleId !== adminModuleId) {
+    public setAdminModule(adminModuleId: string, categoryName: string, force: boolean = false): void {
+        if (force || !this.adminModuleId || this.adminModuleId !== adminModuleId) {
             this.adminModuleId = adminModuleId;
             this.categoryName = categoryName;
             this.filterValue = null;

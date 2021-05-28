@@ -102,5 +102,5 @@
 			"});"
 		],
 		"description": "singleton pattern implementation"
-	},
+	}
 }

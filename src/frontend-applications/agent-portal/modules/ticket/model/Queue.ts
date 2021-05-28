@@ -24,7 +24,7 @@ export class Queue extends KIXObject {
     public FollowUpLock: number;
     public Fullname: string;
     public Name: string;
-    public ParentID: number | string;
+    public ParentID: number;
     public Signature: string;
     public SubQueues: Queue[];
     public SystemAddressID: number;

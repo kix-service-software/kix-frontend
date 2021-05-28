@@ -94,20 +94,22 @@ export class ContextHistory {
 
     public getHistory(limit: number, currentContext: Context): ContextHistoryEntry[] {
         const history = [];
-        this.contextHistory
-            .sort((a, b) => b.lastVisitDate - a.lastVisitDate)
-            .forEach((he) => {
-                if (he.contextId !== currentContext.getDescriptor().contextId ||
-                    he.objectId !== currentContext.getObjectId()
-                ) {
-                    if (!history.some((h) =>
-                        he.contextId === currentContext.getDescriptor().contextId &&
-                        he.objectId === currentContext.getObjectId()
-                    )) {
-                        history.push(he);
+        if (currentContext) {
+            this.contextHistory
+                .sort((a, b) => b.lastVisitDate - a.lastVisitDate)
+                .forEach((he) => {
+                    if (he.contextId !== currentContext.getDescriptor().contextId ||
+                        he.objectId !== currentContext.getObjectId()
+                    ) {
+                        if (!history.some((h) =>
+                            he.contextId === currentContext.getDescriptor().contextId &&
+                            he.objectId === currentContext.getObjectId()
+                        )) {
+                            history.push(he);
+                        }
                     }
-                }
-            });
+                });
+        }
         return history.slice(0, limit > 0 ? limit : this.contextHistory.length);
     }
 

@@ -31,6 +31,8 @@ import { ExtendedKIXObjectFormService } from './ExtendedKIXObjectFormService';
 import { FormInstance } from './FormInstance';
 import { KIXObjectService } from './KIXObjectService';
 import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core/DynamicFormFieldOption';
+import { PlaceholderService } from './PlaceholderService';
+import { FormFactory } from './FormFactory';
 
 export abstract class KIXObjectFormService {
 
@@ -59,6 +61,8 @@ export abstract class KIXObjectFormService {
         for (const extendedService of this.extendedFormServices) {
             await extendedService.prePrepareForm(form, kixObject, formInstance);
         }
+
+        FormFactory.initForm(form);
 
         const formFieldValues: Map<string, FormFieldValue<any>> = formInstance.getAllFormFieldValues();
         for (const p of form.pages) {
@@ -91,13 +95,14 @@ export abstract class KIXObjectFormService {
         formContext: FormContext, formInstance: FormInstance
     ): Promise<void> {
         if (formContext === FormContext.NEW) {
-            await this.handleCountValues(formFields);
+            await this.handleCountValues(formFields, formInstance);
         } else if (formContext === FormContext.EDIT) {
             await DynamicFieldFormUtil.getInstance().handleDynamicFieldValues(
                 formFields, kixObject, this, formFieldValues, formInstance.getObjectType()
             );
         }
 
+        const values = [];
         for (const f of formFields) {
             let formFieldValue: FormFieldValue;
 
@@ -112,6 +117,8 @@ export abstract class KIXObjectFormService {
                 f,
                 formContext
             );
+
+            values.push([f.instanceId, value]);
 
             // TODO: move handling to this.getValue - object FormServices have to use super
             if (f.property === 'ICON') {
@@ -139,6 +146,8 @@ export abstract class KIXObjectFormService {
                 await this.prepareFormFieldValues(f.children, kixObject, formFieldValues, formContext, formInstance);
             }
         }
+
+        formInstance.provideFormFieldValues(values, null, true, false);
     }
 
     protected async getValue(
@@ -161,7 +170,7 @@ export abstract class KIXObjectFormService {
         return value;
     }
 
-    protected async handleCountValues(formFields: FormFieldConfiguration[]): Promise<void> {
+    protected async handleCountValues(formFields: FormFieldConfiguration[], formInstance: FormInstance): Promise<void> {
         const fields = [...formFields];
         for (const field of fields) {
             if (!field.asStructure) {
@@ -169,7 +178,7 @@ export abstract class KIXObjectFormService {
                     field.empty = false;
 
                     for (let i = 1; i < field.countMin; i++) {
-                        const newField = await this.getNewFormField(field);
+                        const newField = await this.getNewFormField(formInstance, field);
                         const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
                         formFields.splice(index, 0, newField);
                     }
@@ -179,7 +188,7 @@ export abstract class KIXObjectFormService {
                 if (countDefault > 1 && countDefault > field.countMin && countDefault <= field.countMax) {
                     const c = field.countMin === 0 ? 1 : field.countMin;
                     for (let i = c; i < countDefault; i++) {
-                        const newField = await this.getNewFormField(field);
+                        const newField = await this.getNewFormField(formInstance, field);
                         const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
                         formFields.splice(index, 0, newField);
                     }
@@ -200,7 +209,8 @@ export abstract class KIXObjectFormService {
     }
 
     public async getNewFormField(
-        f: FormFieldConfiguration, parent?: FormFieldConfiguration, withChildren: boolean = true
+        formInstance: FormInstance, f: FormFieldConfiguration,
+        parent?: FormFieldConfiguration, withChildren: boolean = true
     ): Promise<FormFieldConfiguration> {
         const newField = new FormFieldConfiguration(
             f.id,
@@ -221,7 +231,7 @@ export abstract class KIXObjectFormService {
                     || typeof child.countDefault !== 'number'
                     || child.countDefault > existingChildren.length
                 ) {
-                    const newChild = await this.getNewFormField(child, newField);
+                    const newChild = await this.getNewFormField(formInstance, child, newField);
                     children.push(newChild);
                 }
             }
@@ -269,6 +279,9 @@ export abstract class KIXObjectFormService {
         if (!formId) {
             return parameter;
         }
+
+        const context = ContextService.getInstance().getActiveContext();
+        const object = await context?.getObject();
 
         const formInstance = await FormService.getInstance().getFormInstance(formId);
         const formValues = formInstance.getAllFormFieldValues();
@@ -341,17 +354,21 @@ export abstract class KIXObjectFormService {
         forUpdate: boolean, property: string, field: FormFieldConfiguration, value: any, formInstance: FormInstance,
         parameter: Array<[string, any]>
     ): Promise<void> {
-        let preparedValue;
+        let preparedValues: Array<[string, any]>;
         if (forUpdate) {
-            preparedValue = await this.prepareUpdateValue(property, field, value.value, formInstance);
+            preparedValues = await this.prepareUpdateValue(property, field, value.value, formInstance);
         } else {
-            preparedValue = await this.prepareCreateValue(property, field, value.value, formInstance);
-            if (property === 'ICON' && preparedValue[1] && !(preparedValue[1] as ObjectIcon).Content) {
-                preparedValue[1] = null;
-            }
+            preparedValues = await this.prepareCreateValue(property, field, value.value, formInstance);
         }
-        if (preparedValue) {
-            preparedValue.forEach((pv) => parameter.push([pv[0], pv[1]]));
+
+        if (Array.isArray(preparedValues)) {
+            preparedValues.forEach((pv) => {
+                if (pv[0] === 'ICON' && !(pv[1] as ObjectIcon)?.Content) {
+                    parameter.push([pv[0], null]);
+                } else {
+                    parameter.push([pv[0], pv[1]]);
+                }
+            });
         }
     }
 

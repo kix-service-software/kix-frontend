@@ -74,11 +74,7 @@ export class MacroActionTableFactory extends TableFactory {
         if (defaultToggle) {
             tableConfiguration.toggle = true;
             tableConfiguration.toggleOptions = new ToggleOptions(
-                'object-information', 'object', [], false,
-                {
-                    flat: false
-                },
-                'preparedParameters'
+                'macro-action-details', 'macroAction', [], false,
             );
         }
 
