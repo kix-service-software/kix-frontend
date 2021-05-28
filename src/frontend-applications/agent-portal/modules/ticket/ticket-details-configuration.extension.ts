@@ -147,6 +147,28 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         ],
                     },
                     {
+                        title: 'Translatable#Description',
+                        style: '',
+                        separator: true,
+                        values: [
+                            [
+                                {
+                                    componentId: 'dynamic-field-value',
+                                    componentData: {
+                                        name: 'WorkOrder'
+                                    },
+                                    conditions: [
+                                        {
+                                            property: 'DynamicFields.WorkOrder',
+                                            operator: SearchOperator.NOT_EQUALS,
+                                            value: null
+                                        }
+                                    ]
+                                }
+                            ]
+                        ],
+                    },
+                    {
                         title: 'Translatable#Assignees',
                         style: '',
                         separator: true,

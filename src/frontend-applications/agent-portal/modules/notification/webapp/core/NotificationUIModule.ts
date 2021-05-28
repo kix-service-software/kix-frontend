@@ -13,7 +13,8 @@ import {
     NotificationService, NotificationTableFactory, NotificationLabelProvider,
     NotificationEmailRecipientValidator, NotificationFilterValidator, NotificationFormService,
     NotificationFilterTableFactory, NotificationCreateAction, NewNotificationDialogContext,
-    NotificationEditAction, EditNotificationDialogContext, NotificationDetailsContext
+    NotificationEditAction, EditNotificationDialogContext, NotificationDetailsContext,
+    NotificationTableDeleteAction
 } from '.';
 import { TableFactoryService } from '../../../base-components/webapp/core/table';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
@@ -68,6 +69,8 @@ export class UIModule implements IUIModule {
             ]
         );
         ContextService.getInstance().registerContext(editNotificationDialogContext);
+
+        ActionFactory.getInstance().registerAction('notification-table-delete', NotificationTableDeleteAction);
 
         const notificationDetailsContext = new ContextDescriptor(
             NotificationDetailsContext.CONTEXT_ID, [KIXObjectType.NOTIFICATION],

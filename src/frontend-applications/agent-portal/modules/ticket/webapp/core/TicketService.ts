@@ -230,6 +230,12 @@ export class TicketService extends KIXObjectService<Ticket> {
                 }
                 break;
             case TicketProperty.STATE_TYPE:
+                const openLabel = await TranslationService.translate('Translatable#Open');
+                nodes.push(new TreeNode('Open', openLabel));
+
+                const closedLabel = await TranslationService.translate('Translatable#Closed');
+                nodes.push(new TreeNode('Closed', closedLabel));
+                break;
             case TicketProperty.STATE_TYPE_ID:
                 let stateTypes = await KIXObjectService.loadObjects<TicketState>(KIXObjectType.TICKET_STATE_TYPE);
                 if (!showInvalid) {
@@ -241,9 +247,9 @@ export class TicketService extends KIXObjectService<Ticket> {
                     );
                     const text = await LabelService.getInstance().getObjectText(s);
                     nodes.push(new TreeNode(
-                        property === TicketProperty.STATE_TYPE ? s.Name : s.ID,
-                        text, (icons && icons.length) ? icons[0] : null, undefined, undefined, undefined,
+                        s.ID, text, (icons && icons.length) ? icons[0] : null,
                         undefined, undefined, undefined, undefined, undefined, undefined,
+                        undefined, undefined, undefined,
                         s.ValidID === 1 || invalidClickable,
                         undefined, undefined, undefined, undefined,
                         s.ValidID !== 1

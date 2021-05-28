@@ -64,8 +64,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         // assigned permission widget
         const tableConfig = new TableConfiguration(
             'user-role-details-asigned-permission-table', 'User role assigned permission table',
-            ConfigurationType.Table,
-            KIXObjectType.ROLE_PERMISSION
+            ConfigurationType.Table, KIXObjectType.ROLE_PERMISSION, null, 24
         );
         configurations.push(tableConfig);
 

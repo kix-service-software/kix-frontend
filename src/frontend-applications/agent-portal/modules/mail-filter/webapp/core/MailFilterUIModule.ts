@@ -12,7 +12,8 @@ import { ServiceRegistry } from '../../../../modules/base-components/webapp/core
 import {
     MailFilterService, MailFilterTableFactory, MailFilterLabelProvider,
     MailFilterMatchTableFactory, MailFilterSetTableFactory, MailFilterCreateAction, NewMailFilterDialogContext,
-    MailFilterEditAction, EditMailFilterDialogContext, MailFilterDetailsContext
+    MailFilterEditAction, EditMailFilterDialogContext, MailFilterDetailsContext, MailFilterTableDuplicateAction,
+    MailFilterDuplicateAction
 } from '.';
 import { MailFilterFormService } from './MailFilterFormService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
@@ -76,6 +77,9 @@ export class UIModule implements IUIModule {
             ]
         );
         ContextService.getInstance().registerContext(editMailFilterDialogContext);
+
+        ActionFactory.getInstance().registerAction('mail-filter-duplicate', MailFilterDuplicateAction);
+        ActionFactory.getInstance().registerAction('mail-filter-table-duplicate', MailFilterTableDuplicateAction);
 
         const mailFilterDetailsContext = new ContextDescriptor(
             MailFilterDetailsContext.CONTEXT_ID, [KIXObjectType.MAIL_FILTER],

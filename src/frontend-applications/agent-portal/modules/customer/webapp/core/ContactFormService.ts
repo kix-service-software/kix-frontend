@@ -42,6 +42,7 @@ import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpeci
 import { RoleProperty } from '../../../user/model/RoleProperty';
 import { Role } from '../../../user/model/Role';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
+import { IdService } from '../../../../model/IdService';
 
 export class ContactFormService extends KIXObjectFormService {
 
@@ -144,6 +145,7 @@ export class ContactFormService extends KIXObjectFormService {
                 'Translatable#Helptext_Users_UserCreateEdit_Access', null,
                 accessValue, null, accessChildren
             );
+            access.instanceId = IdService.generateDateBasedId();
             accessGroup = new FormGroupConfiguration(
                 'user-information-group', 'Translatable#User Information', null, null,
                 [access]
@@ -192,15 +194,17 @@ export class ContactFormService extends KIXObjectFormService {
         const value = formInstance
             ? await formInstance.getFormFieldValueByProperty(UserProperty.USER_LOGIN)
             : null;
-        return new FormFieldConfiguration(
+        const loginField = new FormFieldConfiguration(
             'contact-form-field-login',
             'Translatable#Login Name', UserProperty.USER_LOGIN, null, true,
             'Translatable#Helptext_User_UserCreateEdit_Login', null, value
         );
+        loginField.instanceId = IdService.generateDateBasedId();
+        return loginField;
     }
 
     private async addPasswordField(formInstance?: FormInstance): Promise<FormFieldConfiguration> {
-        return new FormFieldConfiguration(
+        const passwordField = new FormFieldConfiguration(
             'contact-form-field-password',
             'Translatable#Password', UserProperty.USER_PASSWORD, null, !Boolean(this.assignedUserId),
             'Translatable#Helptext_User_UserCreateEdit_Password',
@@ -209,6 +213,9 @@ export class ContactFormService extends KIXObjectFormService {
             ], null, null, null, null, null, null, null, null, null, null, null, null, null,
             this.assignedUserId ? 'Translatable#not modified' : null
         );
+
+        passwordField.instanceId = IdService.generateDateBasedId();
+        return passwordField;
     }
 
     private async addRolesField(
@@ -241,6 +248,7 @@ export class ContactFormService extends KIXObjectFormService {
                 new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true)
             ], new FormFieldValue(roleIds)
         );
+        roleField.instanceId = IdService.generateDateBasedId();
 
         return new FormFieldConfiguration(
             'contact-form-field-roles-container', 'Translatable#Role Assignment', 'ROLES_CONTAINER', null,
@@ -284,6 +292,7 @@ export class ContactFormService extends KIXObjectFormService {
             const notificationField = await this.getNotifiactionField(formInstance);
             preferencesField.children.push(notificationField);
         }
+        preferencesField.instanceId = IdService.generateDateBasedId();
         return preferencesField;
     }
 
@@ -295,6 +304,7 @@ export class ContactFormService extends KIXObjectFormService {
             'contact-form-field-user-language', 'Translatable#Language', PersonalSettingsProperty.USER_LANGUAGE,
             'language-input', true, 'Translatable#Helptext_User_UserCreateEdit_Preferences_UserLanguage', null, value
         );
+        languageField.instanceId = IdService.generateDateBasedId();
         return languageField;
     }
 
@@ -320,6 +330,7 @@ export class ContactFormService extends KIXObjectFormService {
                 new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true)
             ], value
         );
+        queueField.instanceId = IdService.generateDateBasedId();
         return queueField;
     }
 
@@ -327,7 +338,7 @@ export class ContactFormService extends KIXObjectFormService {
         const value = formInstance
             ? await formInstance.getFormFieldValueByProperty(UserProperty.NOTIFICATIONS)
             : null;
-        return new FormFieldConfiguration(
+        const notificationField = new FormFieldConfiguration(
             'contact-form-field-user-notifications', 'Translatable#Notifications for Tickets',
             PersonalSettingsProperty.NOTIFICATIONS,
             'object-reference-input', false, 'Translatable#Helptext_User_UserCreateEdit_Preferences_Notifications',
@@ -347,6 +358,9 @@ export class ContactFormService extends KIXObjectFormService {
                 new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true)
             ], value
         );
+
+        notificationField.instanceId = IdService.generateDateBasedId();
+        return notificationField;
     }
 
     public async prepareCreateValue(

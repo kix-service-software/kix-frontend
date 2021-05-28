@@ -22,7 +22,7 @@ export class MailFilterCreateAction extends AbstractAction {
     public async run(event: any): Promise<void> {
         ContextService.getInstance().setDialogContext(
             null, KIXObjectType.MAIL_FILTER, ContextMode.CREATE_ADMIN, null, true,
-            'Translatable#Communication: Email', undefined, 'new-mail-filter-form'
+            'Translatable#Communication: Email'
         );
     }
 

@@ -7,6 +7,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 <div.widget-bar>
+    <if(state.isContextCustomizable)>
+        <div.bar-icon.configuration-mode
+            on-click("toggleConfigurationMode")
+            title=state.translations["Translatable#Configuration Mode"]>
+            <span.kix-icon-gear/>
+        </div>
+    </if>
     <if(Array.isArray(state.sidebars) && state.sidebars.length)>
         <div.bar-icon.sidebar-toggle
             class={

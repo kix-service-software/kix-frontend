@@ -17,6 +17,9 @@ import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { MacroActionType } from '../../model/MacroActionType';
 import { Macro } from '../../model/Macro';
+import { LabelValueGroup } from '../../../../model/LabelValueGroup';
+import { LabelValueGroupValue } from '../../../../model/LabelValueGroupValue';
+import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
 
 export class MacroActionLabelProvider extends LabelProvider {
 
@@ -126,6 +129,50 @@ export class MacroActionLabelProvider extends LabelProvider {
         }
 
         return icons;
+    }
+
+    public async getLabelValueGroups(macroAction: MacroAction): Promise<LabelValueGroup[]> {
+        let groups: LabelValueGroup[] = [];
+        if (macroAction) {
+            const resultGroup = this.createResultGroup(macroAction);
+            const parameterGroup = this.createParameterGroup(macroAction);
+
+            groups = [resultGroup, parameterGroup];
+        }
+
+        return groups;
+    }
+
+    private createResultGroup(macroAction: MacroAction): LabelValueGroup {
+        const resultVariables: LabelValueGroup[] = [];
+        if (resultVariables) {
+            for (const result in macroAction.ResultVariables) {
+                if (macroAction.ResultVariables[result]) {
+                    const value = new LabelValueGroupValue(macroAction.ResultVariables[result]);
+                    resultVariables.push(new LabelValueGroup(result, value));
+                }
+            }
+        }
+
+        return new LabelValueGroup('Translatable#Results', null, null, null, resultVariables);
+    }
+
+    private createParameterGroup(macroAction: MacroAction): LabelValueGroup {
+        const parameterValues: LabelValueGroup[] = [];
+        if (parameterValues) {
+            for (const result in macroAction.Parameters) {
+                if (macroAction.Parameters[result]) {
+                    let value = new LabelValueGroupValue(macroAction.Parameters[result]);
+                    if (typeof value.value === 'object') {
+                        const stringValue = BrowserUtil.formatJSON(value.value);
+                        value = new LabelValueGroupValue(stringValue, true);
+                    }
+                    parameterValues.push(new LabelValueGroup(result, value));
+                }
+            }
+        }
+
+        return new LabelValueGroup('Translatable#Parameters', null, null, null, parameterValues);
     }
 
 }

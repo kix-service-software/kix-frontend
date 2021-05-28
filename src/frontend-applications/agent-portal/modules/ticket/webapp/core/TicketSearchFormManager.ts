@@ -139,15 +139,17 @@ export class TicketSearchFormManager extends SearchFormManager {
         return SearchOperatorUtil.getText(operator as SearchOperator);
     }
 
-    public async isMultiselect(property: string): Promise<boolean> {
-        const result = await super.isMultiselect(property);
+    public async isMultiselect(property: string, operator: SearchOperator | string): Promise<boolean> {
+        const result = await super.isMultiselect(property, operator, true);
         if (result !== null && typeof result !== 'undefined') {
             return result;
         }
+
         if (
             property === TicketProperty.LOCK_ID
             || property === 'Queue.FollowUpID'
             || property === ArticleProperty.CUSTOMER_VISIBLE
+            || property === TicketProperty.STATE_TYPE
         ) {
             return false;
         }

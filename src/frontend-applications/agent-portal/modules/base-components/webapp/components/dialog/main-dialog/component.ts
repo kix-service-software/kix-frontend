@@ -125,6 +125,7 @@ export class MainDialogComponent implements IMainDialogListener {
         this.dialogTitle = title;
     }
 
+    // FIXME: depricated - hint should be known on "open"
     public setHint(hint: string): void {
         this.state.dialogHint = hint;
     }

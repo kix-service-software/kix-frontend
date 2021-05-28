@@ -28,8 +28,16 @@ class Component extends FormInputComponent<string, ComponentState> {
     public onInput(input: any): void {
         super.onInput(input);
 
+        let language: string;
+        const languageOption = this.state.field?.options?.find(
+            (o) => o.option === FormFieldOptions.LANGUAGE
+        );
+        if (languageOption) {
+            language = languageOption.value;
+        }
+
         setTimeout(() => {
-            this.initCodeEditor();
+            this.initCodeEditor(language);
         }, 100);
     }
 
@@ -69,9 +77,10 @@ class Component extends FormInputComponent<string, ComponentState> {
         }
     }
 
-    private initCodeEditor(): void {
+    private initCodeEditor(language?: string): void {
 
         if (this.codeMirror) {
+            this.codeMirror.options.mode = language;
             this.codeMirror.refresh();
             return;
         }
@@ -80,8 +89,7 @@ class Component extends FormInputComponent<string, ComponentState> {
             window.clearTimeout(this.createEditorTimeout);
         }
         this.createEditorTimeout = setTimeout(() => {
-            let language: string;
-            const languageOption = this.state.field.options.find(
+            const languageOption = this.state.field?.options?.find(
                 (o) => o.option === FormFieldOptions.LANGUAGE
             );
             if (languageOption) {

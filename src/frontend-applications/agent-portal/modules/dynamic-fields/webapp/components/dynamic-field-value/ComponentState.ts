@@ -9,6 +9,7 @@
 
 import { Label } from '../../../../base-components/webapp/core/Label';
 import { DynamicField } from '../../../model/DynamicField';
+import { DynamicFieldValue } from '../../../model/DynamicFieldValue';
 
 export class ComponentState {
 
@@ -16,7 +17,8 @@ export class ComponentState {
         public labels: Label[] = [],
         public checklist: any = null,
         public prepared: boolean = false,
-        public field: DynamicField = null
+        public field: DynamicField = null,
+        public dfValue: DynamicFieldValue = null
     ) { }
 
 }

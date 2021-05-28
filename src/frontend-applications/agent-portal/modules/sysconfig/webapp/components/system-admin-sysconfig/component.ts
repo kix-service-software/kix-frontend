@@ -38,7 +38,7 @@ import { SysConfigOptionType } from '../../../model/SysConfigOptionType';
 import { SysConfigOptionProperty } from '../../../model/SysConfigOptionProperty';
 import { SortOrder } from '../../../../../model/SortOrder';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { AdminContext } from '../../../../admin/webapp/core';
+import { AdminContext } from '../../../../admin/webapp/core/AdminContext';
 import { ContextType } from '../../../../../model/ContextType';
 
 class Component extends AbstractMarkoComponent<ComponentState> {

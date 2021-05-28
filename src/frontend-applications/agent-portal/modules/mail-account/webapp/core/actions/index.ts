@@ -10,3 +10,4 @@
 export { MailAccountCreateAction } from './MailAccountCreateAction';
 export { MailAccountEditAction } from './MailAccountEditAction';
 export { MailAccountFetchAction } from './MailAccountFetchAction';
+export { MailAccountTableDeleteAction } from './MailAccountTableDeleteAction';

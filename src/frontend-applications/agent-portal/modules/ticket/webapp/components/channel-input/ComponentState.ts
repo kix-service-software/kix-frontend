@@ -16,7 +16,8 @@ export class ComponentState extends FormInputComponentState<number> {
         public channels: Channel[] = null,
         public currentChannel: Channel = null,
         public channelNames: Array<[number, string]> = [],
-        public noChannel: boolean = false
+        public noChannel: boolean = false,
+        public loading: boolean = true
     ) {
         super();
     }

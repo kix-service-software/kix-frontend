@@ -22,7 +22,6 @@ import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptio
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 import { KIXObjectFormService } from '../../../base-components/webapp/core/KIXObjectFormService';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
-import { UserProperty } from '../../model/UserProperty';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';

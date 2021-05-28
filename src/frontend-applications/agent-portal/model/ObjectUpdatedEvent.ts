@@ -13,6 +13,8 @@ export enum ObjectUpdatedEvent {
 
     CREATE = 'CREATE',
 
-    DELETE = 'DELETE'
+    DELETE = 'DELETE',
+
+    CLEAR_CACHE = 'CLEAR_CACHE'
 
 }

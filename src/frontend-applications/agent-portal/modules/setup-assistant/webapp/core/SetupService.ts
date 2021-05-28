@@ -27,6 +27,7 @@ import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { RoutingService } from '../../../base-components/webapp/core/RoutingService';
 import { SetupStepCompletedEventData } from './SetupStepCompletedEventData';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
 
 export class SetupService {
 
@@ -111,11 +112,36 @@ export class SetupService {
         );
     }
 
-    public async isSetupAssitantNeeded(): Promise<boolean> {
-        let needSetup = false;
+    public async setSetupAssistentIfNeeded(): Promise<boolean> {
+        const isSetupNeeded = await this.isSetupNeeded();
+
+        if (isSetupNeeded) {
+            await ContextService.getInstance().setContext('admin', null, null);
+            const context = ContextService.getInstance().getActiveContext();
+            if (context && typeof context['setAdminModule'] !== 'undefined') {
+                (context as any).setAdminModule('setup-assistant', '');
+            }
+        }
+
+        return isSetupNeeded;
+    }
+
+    private async isSetupNeeded(): Promise<boolean> {
+        const isAllowedUser = await this.isAllowedUser();
+
+        const steps = await this.getSetupSteps();
+        const hasOpenSteps = steps.some((s) => !s.completed && !s.skipped);
+
+        const isSetupNeeded = isAllowedUser && hasOpenSteps;
+        return isSetupNeeded;
+    }
+
+    private async isAllowedUser(): Promise<boolean> {
+        let isAllowedUser = false;
+
         const currentUser = await AgentService.getInstance().getCurrentUser();
         if (currentUser.UserID === 1) {
-            needSetup = true;
+            isAllowedUser = true;
         } else {
             const roles = await KIXObjectService.loadObjects<Role>(
                 KIXObjectType.ROLE, null, new KIXObjectLoadingOptions([
@@ -124,14 +150,11 @@ export class SetupService {
 
             if (Array.isArray(roles) && roles.length) {
                 const superuserRoleId = roles[0].ID;
-                needSetup = currentUser.RoleIDs.some((rid) => rid === superuserRoleId);
+                isAllowedUser = currentUser.RoleIDs.some((rid) => rid === superuserRoleId);
             }
         }
 
-        const steps = await this.getSetupSteps();
-        needSetup = needSetup && steps.some((s) => !s.completed && !s.skipped);
-
-        return needSetup;
+        return isAllowedUser;
     }
 
 }

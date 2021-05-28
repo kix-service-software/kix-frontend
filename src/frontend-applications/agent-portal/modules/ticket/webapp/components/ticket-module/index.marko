@@ -6,10 +6,13 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.ticket-dashboard>
     <div.ticket-search>
-        <input.input-style type="text" on-keyup("keyUp") value=state.filterValue placeholder=state.placeholder/>
+        <input.input-style
+            type="text"
+            on-keyup("keyUp")
+            value=state.filterValue
+            placeholder=state.placeholder/>
         <button.button.button-without-text
             type="button"
             title=state.translations["Translatable#Help"]
@@ -24,5 +27,5 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <translation-string pattern="Translatable#Search"/>
         </button>
     </div>
-    <widget-container widgets=state.contentWidgets/>
+    <widget-container widgets=state.contentWidgets contextWidgetList="content"/>
 </div>

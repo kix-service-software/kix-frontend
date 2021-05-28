@@ -38,7 +38,6 @@ class FieldContainerComponent {
     }
 
     public async onMount(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.formId);
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Add', 'Translatable#Delete'
         ]);
@@ -50,7 +49,6 @@ class FieldContainerComponent {
             }
         };
         EventService.getInstance().subscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FIELD_REMOVED, this.formSubscriber);
         EventService.getInstance().subscribe(FormEvent.FORM_FIELD_ORDER_CHANGED, this.formSubscriber);
     }
 

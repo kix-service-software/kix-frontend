@@ -9,3 +9,4 @@
 
 export { NotificationCreateAction } from './NotificationCreateAction';
 export { NotificationEditAction } from './NotificationEditAction';
+export { NotificationTableDeleteAction } from './NotificationTableDeleteAction';

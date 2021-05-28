@@ -14,7 +14,7 @@ export class DeleteSearchRequest implements ISocketRequest {
     public constructor(
         public requestId: string,
         public clientRequestId: string,
-        public name: string,
+        public id: string,
     ) { }
 
 }

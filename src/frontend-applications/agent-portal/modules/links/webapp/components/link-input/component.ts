@@ -97,13 +97,15 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
         }, 50);
     }
 
-    private createLabels(): void {
-        this.state.labels = this.state.linkDescriptions.map((ld) => {
-            const linkLabel = ld.linkTypeDescription.asSource
+    private async createLabels(): Promise<void> {
+        const labels = [];
+        for (const ld of this.state.linkDescriptions) {
+            const linkLabel = await TranslationService.translate(ld.linkTypeDescription.asSource
                 ? ld.linkTypeDescription.linkType.SourceName
-                : ld.linkTypeDescription.linkType.TargetName;
-            return new Label(ld.linkableObject, null, null, null, `(${linkLabel})`);
-        });
+                : ld.linkTypeDescription.linkType.TargetName);
+            labels.push(new Label(ld.linkableObject, null, null, null, `(${linkLabel})`));
+        }
+        this.state.labels = labels;
     }
 
 }

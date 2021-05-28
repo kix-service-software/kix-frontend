@@ -9,10 +9,12 @@
 
 import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
 import { MailFilter } from '../../model/MailFilter';
+import { FormContext } from '../../../../model/configuration/FormContext';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { MailFilterProperty } from '../../model/MailFilterProperty';
 import { MailFilterMatch } from '../../model/MailFilterMatch';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class MailFilterFormService extends KIXObjectFormService {
 
@@ -34,8 +36,17 @@ export class MailFilterFormService extends KIXObjectFormService {
         return kixObjectType === KIXObjectType.MAIL_FILTER;
     }
 
-    protected async getValue(property: string, value: any, mailFilter: MailFilter): Promise<any> {
+    protected async getValue(property: string, value: any, mailFilter: MailFilter,
+        formField: FormFieldConfiguration, formContext: FormContext
+    ): Promise<any> {
         switch (property) {
+            case MailFilterProperty.NAME:
+                if (formContext === FormContext.NEW && mailFilter) {
+                    value = await TranslationService.translate(
+                        'Translatable#Copy of {0}', [value]
+                    );
+                }
+                break;
             case MailFilterProperty.MATCH:
                 if (Array.isArray(value)) {
                     (value as MailFilterMatch[]).forEach((m) => {
@@ -44,6 +55,7 @@ export class MailFilterFormService extends KIXObjectFormService {
                 }
                 break;
             default:
+                value = super.getValue(property, value, mailFilter, formField, formContext);
         }
         return value;
     }

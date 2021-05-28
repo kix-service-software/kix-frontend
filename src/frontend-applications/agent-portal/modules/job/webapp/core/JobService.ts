@@ -22,6 +22,7 @@ import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpec
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { JobRun } from '../../model/JobRun';
 import { JobTypes } from '../../model/JobTypes';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class JobService extends KIXObjectService<Job> {
 
@@ -105,13 +106,16 @@ export class JobService extends KIXObjectService<Job> {
 
     public async prepareObjectTree(
         objects: JobType[], showInvalid?: boolean,
-        invalidClickable?: boolean, filterIds?: Array<string | number>
+        invalidClickable?: boolean, filterIds?: Array<string | number>,
+        translatable?: boolean
     ): Promise<TreeNode[]> {
         const nodes: TreeNode[] = [];
         if (objects && objects.length) {
             if (objects[0].KIXObjectType === KIXObjectType.JOB_TYPE) {
                 for (const o of objects) {
-                    nodes.push(new TreeNode(o.Name, o.DisplayName));
+                    const displayValue = translatable
+                        ? await TranslationService.translate(o.DisplayName) : o.DisplayName;
+                    nodes.push(new TreeNode(o.Name, displayValue));
                 }
             }
         }

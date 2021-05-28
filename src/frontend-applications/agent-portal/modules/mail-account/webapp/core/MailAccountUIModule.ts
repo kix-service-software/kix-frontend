@@ -12,7 +12,7 @@ import { ServiceRegistry } from '../../../../modules/base-components/webapp/core
 import {
     MailAccountFormService, MailAccountTableFactory, MailAccountLabelProvider,
     MailAccountCreateAction, NewMailAccountDialogContext, MailAccountEditAction, MailAccountFetchAction,
-    EditMailAccountDialogContext, MailAccountDetailsContext
+    MailAccountTableDeleteAction, EditMailAccountDialogContext, MailAccountDetailsContext
 } from '.';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../base-components/webapp/core/table';
@@ -58,6 +58,7 @@ export class UIModule implements IUIModule {
 
         ActionFactory.getInstance().registerAction('mail-account-edit', MailAccountEditAction);
         ActionFactory.getInstance().registerAction('mail-account-fetch', MailAccountFetchAction);
+        ActionFactory.getInstance().registerAction('mail-account-table-delete', MailAccountTableDeleteAction );
 
         const editMailAccountDialogContext = new ContextDescriptor(
             EditMailAccountDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_ACCOUNT],

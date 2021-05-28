@@ -25,25 +25,20 @@ import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
 import { JobTypes } from '../../model/JobTypes';
-import { TicketJobFormManager } from './TicketJobFormManager';
 import { SyncJobFormManager } from './SyncJobFormManager';
 import { JobRunHistoryTableFactory } from './table/JobRunHistoryTableFactory';
 import { JobRunLabelProvider } from './JobRunLabelProvider';
 import { JobRunLogLabelProvider } from './JobRunLogLabelProvider';
 import { JobRunLogTableFactory } from './table/JobRunLogTableFactory';
-import { AbstractJobFormManager } from './AbstractJobFormManager';
-import { FetchAssetAttributes } from './extended-form-manager/FetchAssetAttributes';
-import { TicketArticleCreate } from './extended-form-manager/TicketArticleCreate';
-import { TicketCreateDynamicFields } from './extended-form-manager/TicketCreateDynamicFields';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
-import { FormValidationService } from '../../../base-components/webapp/core/FormValidationService';
-import { JobFilterValidator } from './form/validators/JobFilterValidator';
 import { DynamicFieldSet } from './extended-form-manager/DynamicFieldSet';
+import { MacroFieldJobFormManager } from './form/MacroFieldJobFormManager';
+import { AssembleObject } from './extended-form-manager/AssembleObject';
 
 export class UIModule implements IUIModule {
 
-    public priority: number = 402;
+    public priority: number = 50000;
 
     public name: string = 'JobUIModule';
 
@@ -100,25 +95,14 @@ export class UIModule implements IUIModule {
         );
         ContextService.getInstance().registerContext(editJobDialogContext);
 
-        FormValidationService.getInstance().registerValidator(new JobFilterValidator());
-        JobFormService.getInstance().registerJobFormManager(JobTypes.TICKET, new TicketJobFormManager());
         JobFormService.getInstance().registerJobFormManager(JobTypes.SYNCHRONISATION, new SyncJobFormManager());
 
-        const manager = JobFormService.getInstance().getJobFormManager(JobTypes.TICKET);
-        if (manager) {
-            (manager as AbstractJobFormManager).addExtendedJobFormManager(
-                new TicketArticleCreate()
-            );
-            (manager as AbstractJobFormManager).addExtendedJobFormManager(
-                new FetchAssetAttributes()
-            );
-            (manager as AbstractJobFormManager).addExtendedJobFormManager(
-                new TicketCreateDynamicFields()
-            );
-            (manager as AbstractJobFormManager).addExtendedJobFormManager(
-                new DynamicFieldSet()
-            );
-        }
-    }
+        const manager = JobFormService.getInstance().getAllJobFormManager();
+        manager.forEach((m) => {
+            m.addExtendedJobFormManager(new DynamicFieldSet());
+            m.addExtendedJobFormManager(new MacroFieldJobFormManager());
+            m.addExtendedJobFormManager(new AssembleObject());
+        });
 
+    }
 }

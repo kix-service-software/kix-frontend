@@ -12,6 +12,8 @@ export enum JobTypes {
 
     TICKET = 'Ticket',
 
-    SYNCHRONISATION = 'Synchronisation'
+    SYNCHRONISATION = 'Synchronisation',
+
+    REPORTING = 'Reporting'
 
 }

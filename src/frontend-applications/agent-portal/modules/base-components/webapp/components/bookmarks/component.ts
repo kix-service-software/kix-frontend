@@ -51,7 +51,7 @@ class Component {
     }
 
     private async bookmarksChanged(): Promise<void> {
-        const availableBookmarks = [];
+        const availableBookmarks: TreeNode[] = [];
         this.bookmarks = BookmarkService.getInstance().getBookmarks();
         for (const b of this.bookmarks) {
             if (await AuthenticationSocketClient.getInstance().checkPermissions(b.permissions)) {
@@ -61,7 +61,6 @@ class Component {
                     bookmarkTitle));
             }
         }
-        availableBookmarks.sort((a, b) => SortUtil.compareString(a, b, SortOrder.UP));
         this.treeHandler.setTree(availableBookmarks);
     }
 

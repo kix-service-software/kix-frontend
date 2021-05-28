@@ -330,7 +330,7 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
                         if (i === 0) {
                             formFieldValues.set(field.instanceId, new FormFieldValue(dfValue[i]));
                         } else {
-                            const newField = await formService.getNewFormField(field);
+                            const newField = await formService.getNewFormField(null, field);
                             formFieldValues.set(newField.instanceId, new FormFieldValue(dfValue[i]));
                             const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
                             formFields.splice(index + i, 0, newField);
@@ -344,7 +344,7 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
                         const count = dfValue.length === 0 ? countDefault : field.countMin - dfValue.length;
 
                         for (let i = 1; i < count; i++) {
-                            const newField = await formService.getNewFormField(field);
+                            const newField = await formService.getNewFormField(null, field);
                             formFieldValues.set(newField.instanceId, new FormFieldValue(null, false));
                             const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
                             formFields.splice(index, 0, newField);

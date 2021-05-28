@@ -24,12 +24,10 @@ export class LoadSearchAction extends AbstractAction {
 
     public async run(): Promise<void> {
         let hint = await TranslationService.translate('Translatable#Search', []);
-        hint = `${hint} ${this.data}`;
+        hint = `${hint} ${this.data?.name}`;
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: true, hint });
-        if (this.data && typeof this.data === 'string') {
-            await SearchService.getInstance().loadSearch(this.data);
-        }
+        await SearchService.getInstance().executeSearchCache(this.data?.id, this.data?.name);
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
         ContextService.getInstance().setContext(SearchContext.CONTEXT_ID, null, null, null, null, true);

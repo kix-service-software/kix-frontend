@@ -155,6 +155,8 @@ export class CacheService {
             case KIXObjectType.CONFIG_ITEM:
             case KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION:
                 cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM_CLASS);
+                cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
+                cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 break;
             case KIXObjectType.PERSONAL_SETTINGS:
             case KIXObjectType.USER_PREFERENCE:
@@ -178,12 +180,14 @@ export class CacheService {
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 cacheKeyPrefixes.push(KIXObjectType.TICKET);
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
+                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
                 break;
             case KIXObjectType.CONTACT:
                 cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
                 cacheKeyPrefixes.push(KIXObjectType.TICKET);
                 cacheKeyPrefixes.push(KIXObjectType.USER);
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
+                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
                 break;
             case KIXObjectType.PERMISSION:
             case KIXObjectType.ROLE:
@@ -200,6 +204,8 @@ export class CacheService {
                 break;
             case KIXObjectType.CONFIG_ITEM_VERSION:
                 cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
+                cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
+                cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 break;
             case KIXObjectType.SYS_CONFIG_OPTION_DEFINITION:
             case KIXObjectType.SYS_CONFIG_OPTION:

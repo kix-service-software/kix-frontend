@@ -11,8 +11,7 @@ import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { JobProperty } from '../../../model/JobProperty';
-import { JobFormService, JobService } from '../../core';
-import { ArticleProperty } from '../../../../ticket/model/ArticleProperty';
+import { JobFormService } from '../../core';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { InputFieldTypes } from '../../../../../modules/base-components/webapp/core/InputFieldTypes';
@@ -20,8 +19,6 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { ContextType } from '../../../../../model/ContextType';
 import { SearchService } from '../../../../search/webapp/core';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 
@@ -52,35 +49,11 @@ class Component extends FormInputComponent<{}, ComponentState> {
                     this.setManager();
                     await this.setCurrentValue();
                 }
-
-                await this.handleArticleProperties();
             }
         };
         EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
 
         this.state.prepared = true;
-    }
-
-    private async handleArticleProperties() {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context && context.getDescriptor().contextType === ContextType.DIALOG) {
-            const selectedEvents = context.getAdditionalInformation(JobProperty.EXEC_PLAN_EVENTS);
-            const hasArticleEvent = selectedEvents
-                ? await JobService.getInstance().hasArticleEvent(selectedEvents)
-                : false;
-
-            if (hasArticleEvent) {
-                await this.addRequiredArticleProperties();
-            } else {
-                await this.unrequireArticleProperties();
-            }
-
-            const dynamicFormComponent = (this as any).getComponent('job-filter-dynamic-form');
-            if (dynamicFormComponent) {
-                dynamicFormComponent.updateValues();
-            }
-
-        }
     }
 
     private async setManager(): Promise<void> {
@@ -109,52 +82,6 @@ class Component extends FormInputComponent<{}, ComponentState> {
                     super.provideValue(filterValues, true);
                 }, 200);
             });
-        }
-    }
-
-    private async addRequiredArticleProperties(): Promise<void> {
-        const values = this.state.manager.getValues();
-
-        const channelValue = values.find((v) => v.property === ArticleProperty.CHANNEL_ID);
-        if (channelValue) {
-            channelValue.required = true;
-        } else {
-            this.state.manager.setValue(
-                new ObjectPropertyValue(ArticleProperty.CHANNEL_ID, null, null, [], true, true, KIXObjectType.ARTICLE)
-            );
-        }
-
-        const senderTypeValue = values.find((v) => v.property === ArticleProperty.SENDER_TYPE_ID);
-        if (senderTypeValue) {
-            senderTypeValue.required = true;
-        } else {
-            this.state.manager.setValue(
-                new ObjectPropertyValue(
-                    ArticleProperty.SENDER_TYPE_ID, null, null, [], true, true, KIXObjectType.ARTICLE
-                )
-            );
-        }
-    }
-
-    private async unrequireArticleProperties(): Promise<void> {
-        const values = this.state.manager.getValues();
-
-        const channelValue = values.find((v) => v.property === ArticleProperty.CHANNEL_ID);
-        if (channelValue) {
-            if (Array.isArray(channelValue.value) && channelValue.value.length) {
-                channelValue.required = false;
-            } else {
-                this.state.manager.removeValue(channelValue);
-            }
-        }
-
-        const senderTypeValue = values.find((v) => v.property === ArticleProperty.SENDER_TYPE_ID);
-        if (senderTypeValue) {
-            if (Array.isArray(senderTypeValue.value) && senderTypeValue.value.length) {
-                senderTypeValue.required = false;
-            } else {
-                this.state.manager.removeValue(senderTypeValue);
-            }
         }
     }
 
@@ -207,15 +134,6 @@ class Component extends FormInputComponent<{}, ComponentState> {
             [], false, true, objectType, null, null,
             fromBackend ? criteria.Field : criteria.property
         );
-        if (
-            fromBackend
-            && (
-                filterValue.property === ArticleProperty.CHANNEL_ID
-                || filterValue.property === ArticleProperty.SENDER_TYPE_ID
-            )
-        ) {
-            filterValue.required = true;
-        }
         this.state.manager.setValue(filterValue);
     }
 }
