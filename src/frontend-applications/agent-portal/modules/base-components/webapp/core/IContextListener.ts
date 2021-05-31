@@ -12,9 +12,9 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export interface IContextListener {
 
-    sidebarToggled(): void;
+    sidebarRightToggled(): void;
 
-    explorerBarToggled(): void;
+    sidebarLeftToggled(): void;
 
     objectChanged(
         objectId: string | number, object: KIXObject | any, type: KIXObjectType | string, changedProperties?: string[]

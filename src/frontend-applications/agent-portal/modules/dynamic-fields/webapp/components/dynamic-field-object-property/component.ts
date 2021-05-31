@@ -118,19 +118,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public labelClicked(label: Label): void {
-        if (label && label.id) {
-            if (this.state.field.FieldType === DynamicFieldTypes.CI_REFERENCE) {
-                const routingConfig = new RoutingConfiguration(
-                    'config-item-details', KIXObjectType.CONFIG_ITEM,
-                    ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID
-                );
-                RoutingService.getInstance().routeToContext(routingConfig, label.id);
-            } else if (this.state.field.FieldType === DynamicFieldTypes.TICKET_REFERENCE) {
-                const routingConfig = new RoutingConfiguration(
-                    'ticket-details', KIXObjectType.TICKET, ContextMode.DETAILS, TicketProperty.TICKET_ID
-                );
-                RoutingService.getInstance().routeToContext(routingConfig, label.id);
-            }
+        const contextMap = {};
+        contextMap[DynamicFieldTypes.CI_REFERENCE] = 'config-item-details';
+        contextMap[DynamicFieldTypes.TICKET_REFERENCE] = 'ticket-details';
+
+        const contextId = contextMap[label?.id];
+
+        if (contextId) {
+            ContextService.getInstance().setActiveContext(contextId, label.id);
         }
     }
 

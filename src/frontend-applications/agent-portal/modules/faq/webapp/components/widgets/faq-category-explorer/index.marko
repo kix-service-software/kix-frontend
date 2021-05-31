@@ -6,22 +6,27 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.faq-category-explorer>
     <widget
         instanceId=state.instanceId
-        minimizable=false
-        minimized=false
-        explorer=true
-        title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Translatable#FAQ Categories")>
+        title=(
+            state.widgetConfiguration
+                ? state.widgetConfiguration.title
+                : "Translatable#FAQ Categories"
+        )>
         <@content>
-            <span.show-all class={
-                active: !state.activeNode
-            } on-click("showAll")>
+            <div.show-all
+                class={
+                    active: !state.activeNode
+                }
+                on-click("showAll")>
                 <translation-string pattern="Translatable#Show all"/>
-            </span>
+            </div>
             <if(state.nodes)>
-                <tree tree=state.nodes activeNode=state.activeNode on-nodeClicked("activeNodeChanged")/>
+                <tree
+                    tree=state.nodes
+                    activeNode=state.activeNode
+                    on-nodeClicked("activeNodeChanged")/>
             </if>
         </@content>
     </widget>

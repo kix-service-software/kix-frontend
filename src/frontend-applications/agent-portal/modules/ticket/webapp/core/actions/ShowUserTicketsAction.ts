@@ -29,10 +29,11 @@ export class ShowUserTicketsAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
+        await ContextService.getInstance().setActiveContext(TicketListContext.CONTEXT_ID);
+
         const ticketIds = this.data as number[];
-        const context = await ContextService.getInstance().getContext<TicketListContext>(TicketListContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext() as TicketListContext;
         await context.loadTickets(ticketIds, this.text);
-        await ContextService.getInstance().setContext(TicketListContext.CONTEXT_ID, null, null, null, null, false);
     }
 
 }

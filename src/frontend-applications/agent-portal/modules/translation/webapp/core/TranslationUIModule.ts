@@ -53,20 +53,22 @@ export class UIModule implements IUIModule {
         const newTranslationDialogContext = new ContextDescriptor(
             NewTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION_PATTERN],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-translation-dialog', ['translations'], NewTranslationDialogContext,
+            false, 'object-dialog', ['translations'], NewTranslationDialogContext,
             [
                 new UIComponentPermission('system/i18n/translations', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#New Translation', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(newTranslationDialogContext);
 
         const editTranslationDialogContext = new ContextDescriptor(
             EditTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION_PATTERN],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-translation-dialog', ['translations'], EditTranslationDialogContext,
+            false, 'object-dialog', ['translations'], EditTranslationDialogContext,
             [
                 new UIComponentPermission('system/i18n/translations', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Edit Translation', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(editTranslationDialogContext);
     }

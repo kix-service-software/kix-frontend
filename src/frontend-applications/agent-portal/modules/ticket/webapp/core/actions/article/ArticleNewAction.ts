@@ -37,10 +37,7 @@ export class ArticleNewAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            NewTicketArticleContext.CONTEXT_ID, KIXObjectType.ARTICLE, ContextMode.CREATE_SUB,
-            null, true, null, true
-        );
+        ContextService.getInstance().setActiveContext(NewTicketArticleContext.CONTEXT_ID);
     }
 
 }

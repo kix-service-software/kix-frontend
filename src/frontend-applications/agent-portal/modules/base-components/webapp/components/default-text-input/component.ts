@@ -13,6 +13,7 @@ import { FormInputComponent } from '../../../../../modules/base-components/webap
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 import { InputFieldTypes } from '../../../../../modules/base-components/webapp/core/InputFieldTypes';
 import { FormService } from '../../core/FormService';
+import { ContextService } from '../../core/ContextService';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -41,6 +42,7 @@ class Component extends FormInputComponent<string, ComponentState> {
             ? this.state.field.placeholder
             : this.state.field.required ? this.state.field.label : '';
         this.state.placeholder = await TranslationService.translate(placeholderText);
+        (this as any).setStateDirty('field');
     }
 
     public async onMount(): Promise<void> {
@@ -48,7 +50,8 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<string>(this.state.field.instanceId);
         if (value) {
             this.state.currentValue = value.value;

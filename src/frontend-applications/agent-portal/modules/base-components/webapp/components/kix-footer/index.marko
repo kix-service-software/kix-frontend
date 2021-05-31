@@ -6,11 +6,12 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.kix-footer>
-    <div.left-text>
-        <translation-string pattern=input.leftText/>
-    </div>
+    <if(input.leftText || input.rightText)>
+        <div.left-text>
+            <translation-string pattern=input.leftText/>
+        </div>
+    </if>
     <div>
         <if(state.releaseInfo)>${state.kixProduct + " " + state.kixVersion + " " + state.buildNumber + " | "}</if>
         <if(state.currentUserLogin)>
@@ -24,7 +25,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </a>
         </if>
     </div>
-    <div.right-text>
-        <translation-string pattern=input.rightText/>
-    </div>
+    <if(input.leftText || input.rightText)>
+        <div.right-text>
+            <translation-string pattern=input.rightText/>
+        </div>
+    </if>
 </div>

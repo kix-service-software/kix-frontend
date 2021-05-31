@@ -31,7 +31,7 @@ export class MailFilterSetTableContentProvider extends TableContentProvider<Mail
     public async loadData(): Promise<Array<RowObject<MailFilterSet>>> {
         let rowObjects = [];
         if (this.contextId) {
-            const context = await ContextService.getInstance().getContext(this.contextId);
+            const context = ContextService.getInstance().getActiveContext();
             const mailFilter = await context.getObject<MailFilter>();
             if (mailFilter && Array.isArray(mailFilter.Set)) {
                 rowObjects = SortUtil.sortObjects(mailFilter.Set, 'Key', DataType.STRING)

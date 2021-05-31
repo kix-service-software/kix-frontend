@@ -14,7 +14,6 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextType } from '../../../../model/ContextType';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
-import { ContextFactory } from '../../../base-components/webapp/core/ContextFactory';
 import { SearchContext } from './SearchContext';
 import { NewSearchAction, EditSearchAction, SaveSearchAction, DeleteSearchAction, LoadSearchAction } from './actions';
 import { SearchService } from './SearchService';
@@ -30,14 +29,16 @@ export class UIModule implements IUIModule {
     }
 
     public async register(): Promise<void> {
-        const dialogs = await ContextFactory.getInstance().getContextDescriptors(ContextMode.SEARCH);
-        if (dialogs && dialogs.length) {
-            const searchContext = new ContextDescriptor(
-                SearchContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN, ContextMode.DASHBOARD,
-                false, 'search', ['search'], SearchContext
-            );
-            ContextService.getInstance().registerContext(searchContext);
 
+        const searchContext = new ContextDescriptor(
+            SearchContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN, ContextMode.DASHBOARD,
+            false, 'search', ['search'], SearchContext, [],
+            'Translatable#Search', 'kix-icon-search'
+        );
+        ContextService.getInstance().registerContext(searchContext);
+
+        const dialogs = await ContextService.getInstance().getContextDescriptors(ContextMode.SEARCH);
+        if (dialogs && dialogs.length) {
             ActionFactory.getInstance().registerAction('new-search-action', NewSearchAction);
             ActionFactory.getInstance().registerAction('edit-search-action', EditSearchAction);
             ActionFactory.getInstance().registerAction('save-search-action', SaveSearchAction);

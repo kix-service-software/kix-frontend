@@ -77,13 +77,13 @@ export class OrganisationContext extends Context {
     public setFilterValue(filterValue: string): void {
         this.filterValue = filterValue;
         this.loadOrganisations();
-        ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
+        // ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
     }
 
     public setAdditionalInformation(key: string, value: any): void {
         super.setAdditionalInformation(key, value);
         if (key === OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING) {
-            ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
+            // ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
         }
     }
 

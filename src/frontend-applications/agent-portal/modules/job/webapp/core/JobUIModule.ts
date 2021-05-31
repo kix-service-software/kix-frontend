@@ -67,7 +67,8 @@ export class UIModule implements IUIModule {
             true, 'object-details-page', ['jobs'], JobDetailsContext,
             [
                 new UIComponentPermission('system/automation/jobs', [CRUD.READ])
-            ]
+            ],
+            'Translatable#Job Details', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(jobDetailsContext);
 
@@ -77,10 +78,11 @@ export class UIModule implements IUIModule {
         const newJobDialogContext = new ContextDescriptor(
             NewJobDialogContext.CONTEXT_ID, [KIXObjectType.JOB],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-job-dialog', ['jobs'], NewJobDialogContext,
+            false, 'object-dialog', ['jobs'], NewJobDialogContext,
             [
                 new UIComponentPermission('system/automation/jobs', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#New Job', 'kix-icon-gear', JobDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(newJobDialogContext);
 
@@ -88,10 +90,11 @@ export class UIModule implements IUIModule {
         const editJobDialogContext = new ContextDescriptor(
             EditJobDialogContext.CONTEXT_ID, [KIXObjectType.JOB],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-job-dialog', ['jobs'], EditJobDialogContext,
+            false, 'object-dialog', ['jobs'], EditJobDialogContext,
             [
                 new UIComponentPermission('system/automation/jobs', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Edit Job', 'kix-icon-gear', JobDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(editJobDialogContext);
 

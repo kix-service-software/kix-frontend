@@ -18,7 +18,6 @@ import { ActionFactory } from '../../../../../modules/base-components/webapp/cor
 import { ConfigItemImage } from '../../../model/ConfigItemImage';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ImagesLoadingOptions } from '../../../model/ImagesLoadingOptions';
-import { DialogService } from '../../../../../modules/base-components/webapp/core/DialogService';
 import { Context } from '../../../../../model/Context';
 
 class Component {
@@ -53,8 +52,8 @@ class Component {
                     this.initWidget(context, object);
                 }
             },
-            sidebarToggled: () => { return; },
-            explorerBarToggled: () => { return; },
+            sidebarRightToggled: () => { return; },
+            sidebarLeftToggled: () => { return; },
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
             scrollInformationChanged: () => { return; },
@@ -102,7 +101,8 @@ class Component {
     }
 
     public openImageDialog(imageId: string | number): void {
-        DialogService.getInstance().openImageDialog(this.images, imageId);
+        // TODO: Image dialog
+        // DialogService.getInstance().openImageDialog(this.images, imageId);
     }
 }
 

@@ -60,8 +60,17 @@
                                 min-width: 2.75rem;
                                 grid-template-columns: max-content;
 
-                                >span:not(.icon) {
+                                >span:not(.icon):not(.no-icon) {
                                     display: none;
+                                }
+
+                                >span:not(.icon).no-icon {
+                                    font-size: 0;
+                                    width: 1rem;
+
+                                    &::first-letter {
+                                        font-size: 1rem;
+                                    }
                                 }
                             }
                         }

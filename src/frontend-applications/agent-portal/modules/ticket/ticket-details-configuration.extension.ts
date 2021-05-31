@@ -561,7 +561,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     }
                 ]
             },
-            false, false, 'kix-icon-man-house'
+            false, true, 'kix-icon-man-house'
         );
         configurations.push(contactInfoCard);
 
@@ -615,7 +615,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     ],
                 ), null, false, false, null
             ),
-            false, false, 'kix-icon-faq', false, true
+            false, true, 'kix-icon-faq', false, true
         );
         configurations.push(suggestedFAQWidget);
 

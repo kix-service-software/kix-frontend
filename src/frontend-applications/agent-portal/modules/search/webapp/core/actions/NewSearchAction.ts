@@ -26,9 +26,14 @@ export class NewSearchAction extends AbstractAction {
 
         if (cache) {
             cache.status = CacheState.INVALID;
-        }
 
-        ContextService.getInstance().setDialogContext(null, objectType, ContextMode.SEARCH);
+            const descriptors = ContextService.getInstance().getContextDescriptors(ContextMode.SEARCH);
+            const descriptor = descriptors.find((d) => d.kixObjectTypes.some((ot) => ot === cache.objectType));
+
+            if (descriptor) {
+                ContextService.getInstance().setActiveContext(descriptor.contextId);
+            }
+        }
     }
 
 }

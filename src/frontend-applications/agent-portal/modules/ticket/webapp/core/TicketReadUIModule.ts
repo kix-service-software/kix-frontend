@@ -151,7 +151,8 @@ export class UIModule implements IUIModule {
             false, 'search-ticket-dialog', ['tickets'], TicketSearchContext,
             [
                 new UIComponentPermission('tickets', [CRUD.READ])
-            ]
+            ],
+            'Translatable#Ticket', 'kix-icon-ticket'
         );
         ContextService.getInstance().registerContext(searchContext);
 

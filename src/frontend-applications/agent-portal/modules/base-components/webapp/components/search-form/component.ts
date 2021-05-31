@@ -20,7 +20,6 @@ import { SearchFormInstance } from '../../../../../modules/base-components/webap
 import { SearchService, SearchContext } from '../../../../search/webapp/core';
 import { CacheState } from '../../../../search/model/CacheState';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
-import { DialogService } from '../../../../../modules/base-components/webapp/core/DialogService';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
 import { SearchProperty } from '../../../../search/model/SearchProperty';
@@ -146,7 +145,7 @@ class Component implements ISearchFormListener {
     }
 
     private async setDefaults(): Promise<void> {
-        const context = await ContextService.getInstance().getContext(SearchContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext();
         if (context) {
             context.reset();
         }
@@ -203,7 +202,7 @@ class Component implements ISearchFormListener {
         if (cache) {
             cache.status = CacheState.VALID;
         }
-        DialogService.getInstance().closeMainDialog();
+        ContextService.getInstance().toggleActiveContext();
     }
 
     public async search(): Promise<void> {
@@ -218,7 +217,7 @@ class Component implements ISearchFormListener {
             );
 
             const result = await SearchService.getInstance().executeSearch<KIXObject>(
-                null, this.objectType, null, this.state.limit
+                null, this.objectType, null
             ).catch((error: Error) => {
                 BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
             });
@@ -277,7 +276,7 @@ class Component implements ISearchFormListener {
 
     public submit(): void {
         if (this.state.resultCount) {
-            DialogService.getInstance().submitMainDialog();
+            ContextService.getInstance().setActiveContext(SearchContext.CONTEXT_ID);
         }
     }
 

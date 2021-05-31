@@ -225,6 +225,14 @@ class Component {
         (this as any).emit('widgetsChanged', this.state.widgets);
     }
 
+    public toggleConfigurationMode(): void {
+        if (this.state.configurationMode) {
+            this.disableConfigurationMode(true);
+        } else {
+            this.enableConfigurationMode();
+        }
+    }
+
 }
 
 module.exports = Component;

@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import * as Bowser from 'bowser';
-import { AgentService } from '../../../user/webapp/core';
+import { AgentService } from '../../../user/webapp/core/AgentService';
 
 class Component {
 

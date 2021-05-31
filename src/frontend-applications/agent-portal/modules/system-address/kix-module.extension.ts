@@ -33,13 +33,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             'admin-system-addresses', '/kix-module-system-address$0/webapp/components/admin-system-addresses', []
         ),
         new UIComponent(
-            'new-system-address-dialog', '/kix-module-system-address$0/webapp/components/new-system-address-dialog', []
-        ),
-        new UIComponent(
-            'edit-system-address-dialog',
-            '/kix-module-system-address$0/webapp/components/edit-system-address-dialog', []
-        ),
-        new UIComponent(
             'system-address-info-widget',
             '/kix-module-system-address$0/webapp/components/system-address-info-widget', []
         )

@@ -32,12 +32,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<QueueDetailsContext>(
-            QueueDetailsContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
         context.registerListener('queue-signature-widget', {
-            sidebarToggled: () => { return; },
-            explorerBarToggled: () => { return; },
+            sidebarRightToggled: () => { return; },
+            sidebarLeftToggled: () => { return; },
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
             scrollInformationChanged: () => { return; },

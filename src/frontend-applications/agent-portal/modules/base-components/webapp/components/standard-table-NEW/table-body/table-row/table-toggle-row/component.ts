@@ -50,8 +50,8 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         const context = ContextService.getInstance().getActiveContext();
         const listenerId = this.state.row ? this.state.row.getRowId() : IdService.generateDateBasedId();
         context.registerListener((listenerId + '-toggle'), {
-            sidebarToggled: () => { this.setWidth(); },
-            explorerBarToggled: () => { this.setWidth(); },
+            sidebarRightToggled: () => { this.setWidth(); },
+            sidebarLeftToggled: () => { this.setWidth(); },
             objectChanged: () => { return; },
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },

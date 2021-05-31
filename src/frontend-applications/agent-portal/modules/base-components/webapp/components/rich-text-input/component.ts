@@ -12,6 +12,7 @@ import { FormInputComponent } from '../../../../../modules/base-components/webap
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 import { AutocompleteFormFieldOption } from '../../../../../model/AutocompleteFormFieldOption';
 import { FormService } from '../../core/FormService';
+import { ContextService } from '../../core/ContextService';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -44,7 +45,8 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = context?.getFormManager()?.getFormInstance();
         const value = (await formInstance).getFormFieldValue<string>(this.state.field.instanceId);
         if (value) {
             this.state.currentValue = value.value;

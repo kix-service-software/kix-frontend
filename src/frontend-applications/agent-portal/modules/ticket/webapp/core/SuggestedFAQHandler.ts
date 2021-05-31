@@ -44,7 +44,7 @@ export class SuggestedFAQHandler implements IAdditionalTableObjectsHandler {
             const context = ContextService.getInstance().getActiveContext();
             const ticket = await context.getObject<Ticket>();
             const formId = context.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
-            const formInstance = formId ? await FormService.getInstance().getFormInstance(formId) : null;
+            const formInstance = formId ? await context?.getFormManager()?.getFormInstance() : null;
             const filter: FilterCriteria[] = await this.getFilter(handlerConfig, ticket, formInstance);
 
             if (filter && filter.length) {

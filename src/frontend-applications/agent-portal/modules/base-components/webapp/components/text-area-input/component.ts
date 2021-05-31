@@ -11,6 +11,7 @@ import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { FormService } from '../../core/FormService';
+import { ContextService } from '../../core/ContextService';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 
 declare var CodeMirror: any;
@@ -64,16 +65,6 @@ class Component extends FormInputComponent<string, ComponentState> {
             setTimeout(() => {
                 this.initCodeEditor();
             }, 100);
-        }
-    }
-
-    protected async setInvalidState(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        if (formInstance && this.state.field) {
-            const value = formInstance.getFormFieldValue(this.state.field.instanceId);
-            if (value && !this.codeMirror) {
-                this.state.invalid = !value.valid;
-            }
         }
     }
 
@@ -143,7 +134,8 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<string>(this.state.field.instanceId);
         if (value) {
             this.state.currentValue = value.value;

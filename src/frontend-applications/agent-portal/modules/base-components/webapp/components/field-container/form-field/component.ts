@@ -9,14 +9,15 @@
 
 import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
-import { IdService } from '../../../../../../model/IdService';
 import { FormService } from '../../../../../../modules/base-components/webapp/core/FormService';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
-import { KIXModulesService } from '../../../../../../modules/base-components/webapp/core/KIXModulesService';
 import { EventService } from '../../../core/EventService';
 import { FormEvent } from '../../../core/FormEvent';
 import { IEventSubscriber } from '../../../core/IEventSubscriber';
 import { LabelService } from '../../../core/LabelService';
+import { ContextService } from '../../../core/ContextService';
+import { Context } from 'mocha';
+import { KIXModulesService } from '../../../core/KIXModulesService';
 
 class Component {
 
@@ -62,7 +63,18 @@ class Component {
             ? (hint.startsWith('Helptext_') ? null : hint)
             : null;
 
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+
+        const value = formInstance?.getFormFieldValue(this.state.field.instanceId);
+        if (value && Array.isArray(value.errorMessages) && value.errorMessages.length) {
+            this.state.errorMessages = value.errorMessages;
+        } else {
+            this.state.errorMessages = [];
+        }
+
         this.state.show = true;
+
     }
 
     public async onMount(): Promise<void> {
@@ -72,21 +84,37 @@ class Component {
                 if (this.hasChildren()) {
                     this.state.minimized = this.state.minimized && !(await this.hasInvalidChildren());
                 }
+
+                const isUpdateEvent = eventId === FormEvent.FIELD_VALIDATED
+                    || eventId === FormEvent.FIELD_READONLY_CHANGED;
+
+                if (isUpdateEvent && this.state.field.instanceId === data?.instanceId) {
+                    this.update();
+                }
             }
         };
+
+        EventService.getInstance().subscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
+        EventService.getInstance().subscribe(FormEvent.FIELD_VALIDATED, this.formSubscriber);
+        EventService.getInstance().subscribe(FormEvent.FIELD_READONLY_CHANGED, this.formSubscriber);
         EventService.getInstance().subscribe(FormEvent.FORM_VALIDATED, this.formSubscriber);
         EventService.getInstance().subscribe(FormEvent.FORM_PAGE_VALIDATED, this.formSubscriber);
+
 
         this.update();
     }
 
     public onDestroy(): void {
+        EventService.getInstance().unsubscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
+        EventService.getInstance().subscribe(FormEvent.FIELD_VALIDATED, this.formSubscriber);
+        EventService.getInstance().subscribe(FormEvent.FIELD_READONLY_CHANGED, this.formSubscriber);
         EventService.getInstance().unsubscribe(FormEvent.FORM_VALIDATED, this.formSubscriber);
         EventService.getInstance().unsubscribe(FormEvent.FORM_PAGE_VALIDATED, this.formSubscriber);
     }
 
     private async hasInvalidChildren(field: FormFieldConfiguration = this.state.field): Promise<boolean> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         let hasInvalidChildren = false;
         if (Array.isArray(field.children)) {
             for (const child of field.children) {

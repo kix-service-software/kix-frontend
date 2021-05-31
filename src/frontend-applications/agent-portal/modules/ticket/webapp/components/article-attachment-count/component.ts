@@ -22,9 +22,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
-            TicketDetailsContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         if (context) {
             const articles = await context.getObjectList<Article>(KIXObjectType.ARTICLE);

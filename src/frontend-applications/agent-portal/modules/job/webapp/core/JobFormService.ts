@@ -105,7 +105,7 @@ export class JobFormService extends KIXObjectFormService {
             if (execPlans && !!execPlans.length) {
                 const eventExecPlans = execPlans.filter((ep) => ep.Type === ExecPlanTypes.EVENT_BASED);
                 if (eventExecPlans && !!eventExecPlans.length) {
-                    const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+                    const context = ContextService.getInstance().getActiveContext();
                     if (context) {
                         context.setAdditionalInformation(
                             JobProperty.EXEC_PLAN_EVENTS, eventExecPlans[0].Parameters.Event

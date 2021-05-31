@@ -15,6 +15,7 @@ import { FormService } from '../../../base-components/webapp/core/FormService';
 import { ValidationSeverity } from '../../../base-components/webapp/core/ValidationSeverity';
 import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
 import { MailFilterMatch } from '../../model/MailFilterMatch';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
 
 export class MailFilterMatchValidator implements IFormFieldValidator {
 
@@ -27,7 +28,8 @@ export class MailFilterMatchValidator implements IFormFieldValidator {
     public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
 
         if (formField.property === MailFilterProperty.MATCH) {
-            const formInstance = await FormService.getInstance().getFormInstance(formId);
+            const context = ContextService.getInstance().getActiveContext();
+            const formInstance = await context?.getFormManager()?.getFormInstance();
             const value = formInstance.getFormFieldValue<MailFilterMatch[]>(formField.instanceId);
             if (value && value.value && Array.isArray(value.value)) {
                 for (const matchValue of value.value) {

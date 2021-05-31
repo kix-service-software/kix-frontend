@@ -40,15 +40,15 @@ class Component {
 
     public async onMount(): Promise<void> {
         this.additionalFilterCriteria = [];
-        const context = await ContextService.getInstance().getContext<FAQContext>(FAQContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context
             ? await context.getWidgetConfiguration(this.state.instanceId)
             : undefined;
 
         if (this.state.widgetConfiguration.contextDependent) {
             context.registerListener('faq-article-list-context-listener', {
-                explorerBarToggled: () => { return; },
-                sidebarToggled: () => { return; },
+                sidebarLeftToggled: () => { return; },
+                sidebarRightToggled: () => { return; },
                 objectChanged: () => { return; },
                 objectListChanged: this.contextObjectListChanged.bind(this),
                 filteredObjectListChanged: () => { return; },
@@ -102,7 +102,7 @@ class Component {
 
         this.state.table = table;
 
-        const context = await ContextService.getInstance().getContext<FAQContext>(FAQContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext() as FAQContext;
         this.setCategoryFilter(context.categoryId);
         if (this.state.widgetConfiguration.contextDependent && context) {
             const objects = await context.getObjectList(KIXObjectType.FAQ_ARTICLE);

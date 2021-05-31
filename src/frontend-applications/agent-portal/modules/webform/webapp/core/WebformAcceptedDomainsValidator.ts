@@ -10,10 +10,10 @@
 import { IFormFieldValidator } from '../../../base-components/webapp/core/IFormFieldValidator';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { ValidationResult } from '../../../base-components/webapp/core/ValidationResult';
-import { FormService } from '../../../base-components/webapp/core/FormService';
 import { ValidationSeverity } from '../../../base-components/webapp/core/ValidationSeverity';
 import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
 import { WebformProperty } from '../../model/WebformProperty';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
 
 export class WebformAcceptedDomainsValidator implements IFormFieldValidator {
 
@@ -26,7 +26,8 @@ export class WebformAcceptedDomainsValidator implements IFormFieldValidator {
     public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
 
         if (formField.property === WebformProperty.ACCEPTED_DOMAINS) {
-            const formInstance = await FormService.getInstance().getFormInstance(formId);
+            const context = ContextService.getInstance().getActiveContext();
+            const formInstance = await context?.getFormManager()?.getFormInstance();
             const value = formInstance.getFormFieldValue<string>(formField.instanceId);
             if (value && value.value && !value.value.match(/^\*$/)) {
                 try {

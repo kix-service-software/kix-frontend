@@ -51,7 +51,8 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<string[]>(this.state.field.instanceId);
         if (value && Array.isArray(value.value)) {
             const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);

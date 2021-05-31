@@ -162,13 +162,13 @@ class ComponentContextListener implements IContextListener {
 
     public constructor(private actionListComponent: Component) { }
 
-    public sidebarToggled(): void {
+    public sidebarRightToggled(): void {
         setTimeout(() => {
             this.actionListComponent.prepareActionLists();
         }, 50);
     }
 
-    public explorerBarToggled(): void {
+    public sidebarLeftToggled(): void {
         setTimeout(() => {
             this.actionListComponent.prepareActionLists();
         }, 50);

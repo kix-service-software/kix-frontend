@@ -41,7 +41,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const configurations = [];
         const editDialogWidget = new WidgetConfiguration(
             'cmdb-ci-class-edit-dialog-widget', 'Edit Dialog Widget', ConfigurationType.Widget,
-            'edit-config-item-class-dialog', 'Translatable#Edit Class', [], null, null,
+            'object-dialog-form-widget', 'Translatable#Edit Class', [], null, null,
             false, false, 'kix-icon-edit'
         );
         configurations.push(editDialogWidget);
@@ -49,13 +49,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-                this.getModuleId(), [], [], [], [], [], [], [], [],
+                this.getModuleId(), [], [], [],
                 [
                     new ConfiguredDialogWidget(
                         'cmdb-ci-class-edit-dialog-widget', 'cmdb-ci-class-edit-dialog-widget',
                         KIXObjectType.CONFIG_ITEM_CLASS, ContextMode.EDIT_ADMIN
                     )
-                ]
+                ], [], [], [], []
             )
         );
         return configurations;

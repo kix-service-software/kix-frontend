@@ -7,7 +7,6 @@
  * --
  */
 
-import { UserDetailsContext } from '../../context';
 import { UserTableContentProvider } from './UserTableContentProvider';
 import { TableFactory } from '../../../../../../base-components/webapp/core/table/TableFactory';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
@@ -15,9 +14,7 @@ import { TableConfiguration } from '../../../../../../../model/configuration/Tab
 import { Table } from '../../../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoadingOptions';
 import { UserProperty } from '../../../../../model/UserProperty';
-import {
-    DefaultColumnConfiguration
-} from '../../../../../../../model/configuration/DefaultColumnConfiguration';
+import { DefaultColumnConfiguration } from '../../../../../../../model/configuration/DefaultColumnConfiguration';
 import { DataType } from '../../../../../../../model/DataType';
 import { KIXObjectProperty } from '../../../../../../../model/kix/KIXObjectProperty';
 import { TableHeaderHeight } from '../../../../../../../model/configuration/TableHeaderHeight';
@@ -26,6 +23,7 @@ import { RoutingConfiguration } from '../../../../../../../model/configuration/R
 import { ContextMode } from '../../../../../../../model/ContextMode';
 import { ContactProperty } from '../../../../../../customer/model/ContactProperty';
 import { IColumnConfiguration } from '../../../../../../../model/configuration/IColumnConfiguration';
+import { UserDetailsContext } from '../../context/user';
 
 export class UserTableFactory extends TableFactory {
 

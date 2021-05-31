@@ -37,10 +37,10 @@ class Component {
             : undefined;
 
         context.registerListener('contact-assigned-organisations-component', {
-            explorerBarToggled: () => { return; },
+            sidebarLeftToggled: () => { return; },
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
-            sidebarToggled: () => { return; },
+            sidebarRightToggled: () => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: (contactId: string, contact: Contact, type: KIXObjectType) => {
                 if (type === KIXObjectType.CONTACT) {

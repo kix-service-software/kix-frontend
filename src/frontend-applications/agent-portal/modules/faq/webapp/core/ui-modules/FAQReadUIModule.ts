@@ -77,7 +77,8 @@ export class UIModule implements IUIModule {
             false, 'faq', ['faqarticles'], FAQContext,
             [
                 new UIComponentPermission('faq/articles', [CRUD.READ])
-            ]
+            ],
+            'Translatable#FAQ Dashboard', 'kix-icon-faq'
         );
         ContextService.getInstance().registerContext(faqContextDescriptor);
 
@@ -87,7 +88,8 @@ export class UIModule implements IUIModule {
             true, 'object-details-page', ['faqarticles'], FAQDetailsContext,
             [
                 new UIComponentPermission('faq/articles', [CRUD.READ])
-            ]
+            ],
+            'Translatable#FAQ Details', 'kix-icon-faq'
         );
         ContextService.getInstance().registerContext(faqDetailsContextDescriptor);
 
@@ -96,7 +98,8 @@ export class UIModule implements IUIModule {
             false, 'search-faq-article-dialog', ['faqarticles'], FAQArticleSearchContext,
             [
                 new UIComponentPermission('faq/articles', [CRUD.READ])
-            ]
+            ],
+            'Translatable#FAQ', 'kix-icon-faq'
         );
         ContextService.getInstance().registerContext(searchFAQArticleContext);
     }

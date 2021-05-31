@@ -54,9 +54,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             []
         ),
         new UIComponent(
-            'new-dynamic-field-dialog', '/kix-module-dynamic-fields$0/webapp/components/new-dynamic-field-dialog', []
-        ),
-        new UIComponent(
             'dynamic-form-config-input', '/kix-module-dynamic-fields$0/webapp/components/dynamic-form-config-input', []
         ),
         new UIComponent(
@@ -68,9 +65,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             'dynamic-field-object-property',
             '/kix-module-dynamic-fields$0/webapp/components/dynamic-field-object-property',
             []
-        ),
-        new UIComponent(
-            'edit-dynamic-field-dialog', '/kix-module-dynamic-fields$0/webapp/components/edit-dynamic-field-dialog', []
         ),
         new UIComponent(
             'dynamic-field-value', '/kix-module-dynamic-fields$0/webapp/components/dynamic-field-value', []

@@ -326,7 +326,7 @@ describe('CreateReportActionJobFormManager', () => {
                 }
 
                 const manager = new CreateReportActionJobFormManager();
-                const formInstance = new FormInstance();
+                const formInstance = new FormInstance(null);
                 field = await manager.createOptionField(actionMock as any, optionsMock.Parameters, 'CreateReport', 'TestId', null, formInstance);
             });
 

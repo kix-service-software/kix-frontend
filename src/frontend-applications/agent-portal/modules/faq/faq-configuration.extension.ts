@@ -76,7 +76,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         const faqCategoryExplorer = new WidgetConfiguration(
             'faq-dashboard-category-explorer', 'Category Explorer', ConfigurationType.Widget,
             'faq-category-explorer', 'Translatable#FAQ Categories', [], null, null,
-            false, false, 'kix-icon-faq', false
+            false, true, 'kix-icon-faq', false
         );
         configurations.push(faqCategoryExplorer);
 

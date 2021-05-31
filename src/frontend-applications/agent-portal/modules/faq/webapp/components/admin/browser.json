@@ -1,7 +1,5 @@
 {
     "dependencies": [
-        "require ./dialogs/edit-faq-category-dialog",
-        "require ./dialogs/new-faq-category-dialog",
         "require ./faq-admin-categories",
         "require ./widgets/faq-category-info-widget"
     ]

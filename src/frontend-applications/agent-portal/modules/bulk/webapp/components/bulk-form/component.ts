@@ -16,7 +16,6 @@ import { EventService } from '../../../../../modules/base-components/webapp/core
 import {
     TableEvent, TableFactoryService, TableEventData, ValueState
 } from '../../../../base-components/webapp/core/table';
-import { DialogService } from '../../../../../modules/base-components/webapp/core/DialogService';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
@@ -83,12 +82,14 @@ class Component {
     }
 
     public cancel(): void {
-        DialogService.getInstance().closeMainDialog();
+        // TODO: remove Context
+        // DialogService.getInstance().closeMainDialog();
     }
 
     public submit(): void {
         if (this.state.run) {
-            DialogService.getInstance().submitMainDialog();
+            // TODO: submit result
+            // DialogService.getInstance().submitMainDialog();
         }
     }
 
@@ -250,7 +251,7 @@ class Component {
     }
 
     private async updateTable(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<BulkDialogContext>(BulkDialogContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext();
         const oldObjects = await context.getObjectList(this.state.bulkManager.objectType);
         const idsToLoad = oldObjects ? oldObjects.map((o) => o.ObjectId) : null;
 

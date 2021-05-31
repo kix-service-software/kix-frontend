@@ -177,7 +177,6 @@ class Component {
             while (container
                 && container.className !== 'tab-content'
                 && container.parentNode
-                && container.parentNode.className !== 'overlay-dialog'
                 && container.parentNode.className !== 'lane-widget') {
                 container = container.parentNode;
             }

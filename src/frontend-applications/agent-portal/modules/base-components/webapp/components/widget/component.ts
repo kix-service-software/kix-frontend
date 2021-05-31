@@ -27,15 +27,12 @@ class WidgetComponent implements IEventSubscriber {
 
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId ? input.instanceId : IdService.generateDateBasedId();
-        this.state.explorer = input.explorer;
 
-        const isSidebar = this.state.widgetType === WidgetType.SIDEBAR;
         this.state.minimizable = typeof input.minimizable !== 'undefined'
             ? input.minimizable
-            : !isSidebar;
+            : this.state.minimizable;
 
         this.state.closable = typeof input.closable !== 'undefined' ? input.closable : false;
-        this.state.isDialog = typeof input.isDialog !== 'undefined' ? input.isDialog : false;
         this.state.contextType = input.contextType;
         this.eventSubscriberId = typeof input.eventSubscriberPrefix !== 'undefined'
             ? input.eventSubscriberPrefix
@@ -48,18 +45,20 @@ class WidgetComponent implements IEventSubscriber {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext(this.state.contextType);
+        const context = ContextService.getInstance().getActiveContext();
 
         this.state.widgetType = WidgetService.getInstance().getWidgetType(this.state.instanceId, context);
+
+        // set before config (prevent await delay)
+        if (this.state.widgetType === WidgetType.SIDEBAR) {
+            this.state.minimized = !context.isSidebarWidgetOpen(this.state.instanceId);
+        }
 
         const config = await context.getWidgetConfiguration(this.state.instanceId);
         this.state.widgetConfiguration = config;
 
-        if (this.state.widgetType === WidgetType.SIDEBAR) {
-            this.state.minimizable = false;
-            this.state.minimized = false;
-        } else {
-            this.state.minimizable = config ? config.minimizable : false;
+        this.state.minimizable = config ? config.minimizable : false;
+        if (this.state.widgetType !== WidgetType.SIDEBAR && config) {
             this.state.minimized = config ? config.minimized : false;
         }
 
@@ -91,6 +90,12 @@ class WidgetComponent implements IEventSubscriber {
             ) {
                 this.state.minimized = !this.state.minimized;
                 (this as any).emit('minimizedChanged', this.state.minimized);
+                if (this.state.widgetType === WidgetType.SIDEBAR) {
+                    const context = ContextService.getInstance().getActiveContext();
+                    if (context) {
+                        context.toggleSidebarWidget(this.state.instanceId);
+                    }
+                }
             }
         }
     }
@@ -99,10 +104,6 @@ class WidgetComponent implements IEventSubscriber {
         if (this.state.minimized !== state) {
             this.minimizeWidget(true, null);
         }
-    }
-
-    public minimizeExplorer(): void {
-        ContextService.getInstance().getActiveContext(this.state.contextType).toggleExplorerBar();
     }
 
     public hasHeaderContent(headerContent: any): boolean {
@@ -129,34 +130,24 @@ class WidgetComponent implements IEventSubscriber {
     private getWidgetTypeClass(type: WidgetType): string {
         let typeClass: string;
 
-        if (this.state.isDialog) {
-            typeClass = 'dialog-widget';
-        } else {
-            switch (type) {
-                case WidgetType.DIALOG:
-                    typeClass = 'dialog-widget';
-                    break;
-                case WidgetType.OVERLAY_DIALOG:
-                    typeClass = 'overlay-dialog-widget';
-                    break;
-                case WidgetType.SIDEBAR:
-                    typeClass = 'sidebar-widget';
-                    break;
-                case WidgetType.LANE:
-                    typeClass = 'lane-widget';
-                    break;
-                case WidgetType.EXPLORER:
-                    typeClass = 'explorer-widget';
-                    break;
-                case WidgetType.GROUP:
-                    typeClass = 'group-widget';
-                    break;
-                case WidgetType.OVERLAY:
-                    typeClass = 'overlay-widget';
-                    break;
-                default:
-                    typeClass = 'content-widget';
-            }
+        switch (type) {
+            case WidgetType.DIALOG:
+                typeClass = 'dialog-widget';
+                break;
+            case WidgetType.SIDEBAR:
+                typeClass = 'sidebar-widget';
+                break;
+            case WidgetType.LANE:
+                typeClass = 'lane-widget';
+                break;
+            case WidgetType.GROUP:
+                typeClass = 'group-widget';
+                break;
+            case WidgetType.OVERLAY:
+                typeClass = 'overlay-widget';
+                break;
+            default:
+                typeClass = 'content-widget';
         }
 
         return typeClass;
@@ -201,7 +192,6 @@ class WidgetComponent implements IEventSubscriber {
     public getWidgetTypeActionDisplaySetting(): boolean {
         return (
             this.state.widgetType === WidgetType.SIDEBAR
-            || this.state.widgetType === WidgetType.EXPLORER
             || this.state.widgetType === WidgetType.OVERLAY
         ) ? false : true;
     }

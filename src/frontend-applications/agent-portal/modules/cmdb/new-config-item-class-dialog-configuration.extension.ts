@@ -40,7 +40,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const configurations = [];
         const newDialogWidget = new WidgetConfiguration(
             'cmdb-ci-class-new-dialog-widget', 'Dialog WIdget', ConfigurationType.Widget,
-            'new-config-item-class-dialog', 'Translatable#New Class', [], null, null, false, false,
+            'object-dialog-form-widget', 'Translatable#New Class', [], null, null, false, false,
             'kix-icon-new-gear'
         );
         configurations.push(newDialogWidget);
@@ -48,13 +48,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-                this.getModuleId(), [], [], [], [], [], [], [], [],
+                this.getModuleId(), [], [], [],
                 [
                     new ConfiguredDialogWidget(
                         'cmdb-ci-class-new-dialog-widget', 'cmdb-ci-class-new-dialog-widget',
                         KIXObjectType.CONFIG_ITEM_CLASS, ContextMode.CREATE_ADMIN
                     )
-                ]
+                ], [], [], [], []
             )
         );
         return configurations;

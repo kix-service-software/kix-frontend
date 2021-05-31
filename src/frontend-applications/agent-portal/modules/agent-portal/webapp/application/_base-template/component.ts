@@ -8,7 +8,6 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { IdService } from '../../../../../model/IdService';
 import { ContextType } from '../../../../../model/ContextType';
 import { Context } from '../../../../../model/Context';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
@@ -20,15 +19,15 @@ import { IUIModule } from '../../../../../model/IUIModule';
 import { ClientNotificationSocketClient } from '../../../../notification/webapp/core/ClientNotificationSocketClient';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
+import { MobileShowEvent } from '../../../model/MobileShowEvent';
+import { MobileShowEventData } from '../../../model/MobileShowEventData';
 
 class Component {
 
     public state: ComponentState;
-    private contextListernerId: string;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
-        this.contextListernerId = IdService.generateDateBasedId('base-template-');
     }
 
     public onInput(input: any): void {
@@ -56,9 +55,7 @@ class Component {
         ContextService.getInstance().registerListener({
             constexServiceListenerId: 'BASE-TEMPLATE',
             contextChanged: (contextId: string, context: Context, type: ContextType) => {
-                if (type === ContextType.MAIN) {
-                    this.setContext(context);
-                }
+                this.setContext(context);
             },
             contextRegistered: () => { return; }
         });
@@ -79,7 +76,7 @@ class Component {
             eventSubscriberId: 'BASE-TEMPLATE-REFRESH',
             eventPublished: (data: any, eventId: string) => {
                 this.state.reload = true;
-                const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+                const context = ContextService.getInstance().getActiveContext();
                 if (context) {
                     context.reset();
                 }
@@ -91,7 +88,19 @@ class Component {
             }
         });
 
-        window.addEventListener('resize', this.hideSidebarIfNeeded.bind(this), false);
+        EventService.getInstance().subscribe(MobileShowEvent.SHOW_MOBILE, {
+            eventSubscriberId: 'BASE-TEMPLATE-MOBILE',
+            eventPublished: (data, eventId: MobileShowEvent | string) => {
+                this.state.activeMobile = (data === MobileShowEventData.SHOW_MAIN_MENU) ?
+                    1 : (data === MobileShowEventData.SHOW_LEFT_SIDEBAR) ?
+                        2 : (data === MobileShowEventData.SHOW_RIGHT_SIDEBAR) ?
+                            3 : data ? 4 : null;
+            }
+        });
+
+        window.addEventListener('resize', this.resizeHandling.bind(this), false);
+
+        await RoutingService.getInstance().routeToInitialContext();
 
         this.state.initialized = true;
         this.state.loading = false;
@@ -99,14 +108,10 @@ class Component {
         const end = Date.now();
 
         console.debug(`mount base template: ${(end - start) / 1000} sec.`);
-
-        setTimeout(() => {
-            RoutingService.getInstance().routeToInitialContext();
-        }, 2000);
     }
 
     public onDestroy(): void {
-        window.removeEventListener('resize', this.hideSidebarIfNeeded.bind(this), false);
+        window.removeEventListener('resize', this.resizeHandling.bind(this), false);
         ContextService.getInstance().unregisterListener('BASE-TEMPLATE');
     }
 
@@ -118,36 +123,12 @@ class Component {
 
     private setContext(context: Context = ContextService.getInstance().getActiveContext()): void {
         if (context) {
-            this.state.hasExplorer = context.isExplorerBarShown();
-            this.hideSidebarIfNeeded();
-            this.state.showSidebar = context.areSidebarsShown();
-            context.registerListener(this.contextListernerId, {
-                sidebarToggled: () => {
-                    this.state.showSidebar = context.areSidebarsShown();
-                },
-                explorerBarToggled: () => {
-                    this.state.hasExplorer = context.isExplorerBarShown();
-                },
-                objectChanged: () => { return; },
-                objectListChanged: () => { return; },
-                filteredObjectListChanged: () => { return; },
-                scrollInformationChanged: () => { return; },
-                additionalInformationChanged: () => { return; }
-            });
+            this.resizeHandling();
         }
     }
 
-    private hideSidebarIfNeeded(): void {
-        const context: Context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-        if (context &&
-            context.areSidebarsShown() &&
-            (
-                (!this.state.hasExplorer && window.innerWidth <= 1475) ||
-                (this.state.hasExplorer && window.innerWidth <= 1700)
-            )
-        ) {
-            context.closeAllSidebars();
-        }
+    private resizeHandling(): void {
+        this.state.isMobile = Boolean(window.innerWidth <= 1024);
     }
 
     private async initModules(): Promise<void> {

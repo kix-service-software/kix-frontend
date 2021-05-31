@@ -19,9 +19,7 @@ export class ContactTableDependingAction extends AbstractAction {
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Activate dependency to organisation';
         this.icon = 'kix-icon-dependence';
-        const context = await ContextService.getInstance().getContext<OrganisationContext>(
-            OrganisationContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         if (context) {
             const isDepending = context.getAdditionalInformation(
@@ -32,9 +30,7 @@ export class ContactTableDependingAction extends AbstractAction {
     }
 
     public async setData(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<OrganisationContext>(
-            OrganisationContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         if (context) {
             if (this.isActive) {
@@ -48,9 +44,7 @@ export class ContactTableDependingAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        const context = await ContextService.getInstance().getContext<OrganisationContext>(
-            OrganisationContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext() as OrganisationContext;
         if (context) {
             this.isActive = !this.isActive;
             context.setAdditionalInformation(

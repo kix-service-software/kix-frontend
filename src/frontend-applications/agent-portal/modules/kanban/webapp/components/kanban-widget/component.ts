@@ -68,7 +68,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.contextListenerId = 'kanban-widget' + this.widgetConfiguration.instanceId;
                 context.registerListener(this.contextListenerId, {
                     additionalInformationChanged: () => null,
-                    explorerBarToggled: () => null,
+                    sidebarLeftToggled: () => null,
                     filteredObjectListChanged: () => {
                         this.state.prepared = false;
 
@@ -83,7 +83,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     objectChanged: () => null,
                     objectListChanged: () => null,
                     scrollInformationChanged: () => null,
-                    sidebarToggled: () => null
+                    sidebarRightToggled: () => null
                 });
             }
 
@@ -227,7 +227,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             .catch(() => null);
 
         if (this.widgetConfiguration.contextDependent) {
-            const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+            const context = ContextService.getInstance().getActiveContext();
             if (context) {
                 context.reloadObjectList(KIXObjectType.TICKET, false);
             }
@@ -244,7 +244,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         let tickets: Ticket[] = [];
 
         if (this.widgetConfiguration.contextDependent) {
-            const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+            const context = ContextService.getInstance().getActiveContext();
             const alltickets = context.getFilteredObjectList<Ticket>(KIXObjectType.TICKET);
             tickets = alltickets.filter((t) => t.StateType === stateType);
         } else {

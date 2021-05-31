@@ -38,16 +38,12 @@ export class ConfigItemDetailsContext extends Context {
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM, reload: boolean = false
     ): Promise<O> {
-        const object = await this.loadConfigItem();
+        let object;
 
-        if (reload) {
-            if (object) {
-                this.setObjectList(KIXObjectType.CONFIG_ITEM_VERSION, object.Versions);
-            }
-            this.listeners.forEach(
-                (l) => l.objectChanged(Number(this.objectId), object, KIXObjectType.CONFIG_ITEM)
-            );
+        if (objectType === KIXObjectType.CONFIG_ITEM) {
+            object = await this.loadConfigItem();
         }
+
         return object as any;
     }
 
@@ -62,6 +58,15 @@ export class ConfigItemDetailsContext extends Context {
         );
 
         return await this.loadDetailsObject<ConfigItem>(KIXObjectType.CONFIG_ITEM, loadingOptions);
+    }
+
+    public async getObjectList<T = KIXObject>(objectType: KIXObjectType | string): Promise<T[]> {
+        if (objectType === KIXObjectType.CONFIG_ITEM_VERSION) {
+            const asset = await this.getObject<ConfigItem>();
+            return asset.Versions as any[];
+        }
+
+        return super.getObjectList(objectType);
     }
 
 }

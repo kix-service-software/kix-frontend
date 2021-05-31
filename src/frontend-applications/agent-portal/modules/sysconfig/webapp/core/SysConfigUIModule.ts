@@ -49,12 +49,13 @@ export class UIModule implements IUIModule {
         );
 
         const editSysConfigDialogContext = new ContextDescriptor(
-            EditSysConfigDialogContext.CONTEXT_ID, [KIXObjectType.SYS_CONFIG_OPTION_DEFINITION],
+            EditSysConfigDialogContext.CONTEXT_ID, [KIXObjectType.SYS_CONFIG_OPTION],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
             false, 'edit-sysconfig-dialog', ['sysconfig'], EditSysConfigDialogContext,
             [
                 new UIComponentPermission('system/config/FQDN', [CRUD.UPDATE])
-            ]
+            ],
+            'Translatable#Edit Sysconfig', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(editSysConfigDialogContext);
 

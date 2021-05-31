@@ -137,11 +137,11 @@ export class TicketService extends KIXObjectService<Ticket> {
             )
         ];
 
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const context = ContextService.getInstance().getActiveContext();
         const object = await context?.getObject();
         if (
             object?.KIXObjectType === KIXObjectType.TICKET
-            && context?.getDescriptor()?.contextMode === ContextMode.DETAILS
+            && context?.descriptor?.contextMode === ContextMode.DETAILS
         ) {
             filter.push(
                 new FilterCriteria(
@@ -418,8 +418,8 @@ export class TicketService extends KIXObjectService<Ticket> {
 
     public async getObjectUrl(object?: KIXObject, objectId?: string | number): Promise<string> {
         const id = object ? object.ObjectId : objectId;
-        const context = await ContextService.getInstance().getContext(TicketDetailsContext.CONTEXT_ID);
-        return context.getDescriptor().urlPaths[0] + '/' + id;
+        const context = ContextService.getInstance().getActiveContext();
+        return context.descriptor.urlPaths[0] + '/' + id;
     }
 
     public async getPreparedArticleBodyContent(article: Article): Promise<[string, InlineContent[]]> {

@@ -22,6 +22,8 @@ import { KIXObjectFormService } from './KIXObjectFormService';
 import { ServiceType } from './ServiceType';
 import { FormPageConfiguration } from '../../../../model/configuration/FormPageConfiguration';
 import { FormGroupConfiguration } from '../../../../model/configuration/FormGroupConfiguration';
+import { Error } from '../../../../../../server/model/Error';
+import { Context } from '../../../../model/Context';
 
 export class FormService {
 
@@ -33,8 +35,6 @@ export class FormService {
         }
         return FormService.INSTANCE;
     }
-
-    private formInstances: Map<string, Promise<FormInstance>> = new Map();
 
     private formFieldValueHandler: Map<KIXObjectType | string, FormFieldValueHandler[]> = new Map();
 
@@ -73,27 +73,18 @@ export class FormService {
         }
     }
 
-    public async getFormInstance(
-        formId: string, cache: boolean = true, kixObject?: KIXObject, readonly?: boolean
+    public async createFormInstance(
+        formId: string, kixObject: KIXObject, context: Context
     ): Promise<FormInstance> {
-        if (formId) {
-            if (!this.formInstances.has(formId) || !cache) {
-                const formInstance = this.getNewFormInstance(formId, kixObject, readonly);
-                this.formInstances.set(formId, formInstance);
-            }
-            return await this.formInstances.get(formId);
+        if (!formId) {
+            throw new Error('1', 'Missing required parameter formId.');
         }
-        return;
-    }
 
-    private getNewFormInstance(formId: string, kixObject: KIXObject, readonly?: boolean): Promise<FormInstance> {
-        return new Promise<FormInstance>(async (resolve, reject) => {
-            this.deleteFormInstance(formId);
-            const formInstance = new FormInstance();
-            await formInstance.initFormInstance(formId, kixObject, readonly);
-            EventService.getInstance().publish(FormEvent.FORM_INITIALIZED, formInstance);
-            resolve(formInstance);
-        });
+        const formInstance = new FormInstance(context);
+        await formInstance.initFormInstance(formId, kixObject);
+        EventService.getInstance().publish(FormEvent.FORM_INITIALIZED, formInstance);
+
+        return formInstance;
     }
 
     public async getForm(formId: string): Promise<FormConfiguration> {
@@ -102,12 +93,6 @@ export class FormService {
             form = await KIXModulesSocketClient.getInstance().loadFormConfiguration(formId);
         }
         return { ...form };
-    }
-
-    public deleteFormInstance(formId: string): void {
-        if (formId && this.formInstances.has(formId)) {
-            this.formInstances.delete(formId);
-        }
     }
 
     public async getFormIdByContext(formContext: FormContext, formObject: KIXObjectType | string): Promise<string> {

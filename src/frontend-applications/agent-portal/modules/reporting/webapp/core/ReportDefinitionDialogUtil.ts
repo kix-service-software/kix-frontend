@@ -7,7 +7,6 @@
  * --
  */
 
-import { ContextMode } from '../../../../model/ContextMode';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { ReportDefinition } from '../../model/ReportDefinition';
@@ -19,9 +18,8 @@ export class ReportDefinitionDialogUtil {
     public static async openCreateReportDialog(
         reportDefinition: ReportDefinition, outputFormat?: string
     ): Promise<void> {
-        await ContextService.getInstance().setDialogContext(
-            NewReportDialogContext.CONTEXT_ID, KIXObjectType.REPORT, ContextMode.CREATE_SUB, null, true, 'Translatable#Create Report', true,
-            'kix-icon-kpi', null, null,
+        await ContextService.getInstance().setActiveContext(
+            NewReportDialogContext.CONTEXT_ID, null, null,
             [
                 [KIXObjectType.REPORT_DEFINITION, reportDefinition],
                 [ReportDefinitionProperty.AVAILABLE_OUTPUT_FORMATS, outputFormat]

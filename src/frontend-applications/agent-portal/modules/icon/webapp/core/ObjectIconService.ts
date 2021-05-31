@@ -49,7 +49,7 @@ export class ObjectIconService extends KIXObjectService<ObjectIcon> {
             );
             icons = icon ? [icon as any] : [];
         } else if (objectIds && objectIds.length) {
-            icons = icons.filter((i) => objectIds.some((oid) => oid === i.ID));
+            icons = icons.filter((i) => objectIds.some((oid) => Number(oid) === Number(i.ID)));
         }
 
         return icons as any[];

@@ -196,7 +196,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     }
                 ]
             },
-            false, false, 'kix-icon-man-house'
+            false, true, 'kix-icon-man-house'
         );
         configurations.push(contactInfoCard);
 
@@ -305,7 +305,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         const widget = new WidgetConfiguration(
             'ticket-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
-            'edit-ticket-dialog', 'Translatable#Edit Ticket', [], null, null, false, false, 'kix-icon-edit'
+            'object-dialog-form-widget', 'Translatable#Edit Ticket', [], null, null, false, false, 'kix-icon-edit'
         );
         configurations.push(widget);
 
@@ -322,13 +322,13 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         'ticket-edit-dialog-suggested-faq-widget', 'ticket-edit-dialog-suggested-faq-widget'
                     )
                 ],
-                [], [], [], [], [], [], [],
+                [], [],
                 [
                     new ConfiguredDialogWidget(
                         'ticket-edit-dialog-widget', 'ticket-edit-dialog-widget',
                         KIXObjectType.TICKET, ContextMode.EDIT
                     )
-                ]
+                ], [], [], [], []
             )
         );
 

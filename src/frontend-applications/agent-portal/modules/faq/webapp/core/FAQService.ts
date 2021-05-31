@@ -236,8 +236,8 @@ export class FAQService extends KIXObjectService {
 
     public async getObjectUrl(object?: KIXObject, objectId?: string | number): Promise<string> {
         const id = object ? object.ObjectId : objectId;
-        const context = await ContextService.getInstance().getContext(FAQDetailsContext.CONTEXT_ID);
-        return context.getDescriptor().urlPaths[0] + '/' + id;
+        const context = ContextService.getInstance().getActiveContext();
+        return context.descriptor.urlPaths[0] + '/' + id;
     }
 
     protected getResource(objectType: KIXObjectType | string): string {

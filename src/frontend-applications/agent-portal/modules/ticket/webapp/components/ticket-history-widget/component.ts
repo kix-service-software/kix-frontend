@@ -28,18 +28,16 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
-            TicketDetailsContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context
             ? await context.getWidgetConfiguration(this.state.instanceId)
             : undefined;
 
         context.registerListener('ticket-history-widget', {
-            explorerBarToggled: () => { return; },
+            sidebarLeftToggled: () => { return; },
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
-            sidebarToggled: () => { return; },
+            sidebarRightToggled: () => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: (ticketId: string, ticket: Ticket, type: KIXObjectType) => {
                 if (type === KIXObjectType.TICKET) {

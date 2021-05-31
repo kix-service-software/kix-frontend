@@ -7,11 +7,9 @@
  * --
  */
 
-import { RoleDetailsContext, EditUserRoleDialogContext } from '../context';
 import { AbstractAction } from '../../../../../../modules/base-components/webapp/core/AbstractAction';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../../model/ContextMode';
+import { EditUserRoleDialogContext } from '../context/EditUserRoleDialogContext';
 
 export class UserRoleEditAction extends AbstractAction {
 
@@ -21,17 +19,12 @@ export class UserRoleEditAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        const context = await ContextService.getInstance().getContext<RoleDetailsContext>(
-            RoleDetailsContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         if (context) {
             const id = context.getObjectId();
             if (id) {
-                ContextService.getInstance().setDialogContext(
-                    EditUserRoleDialogContext.CONTEXT_ID, KIXObjectType.ROLE,
-                    ContextMode.EDIT_ADMIN, id
-                );
+                ContextService.getInstance().setActiveContext(EditUserRoleDialogContext.CONTEXT_ID, id);
             }
         }
     }

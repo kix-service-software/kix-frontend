@@ -24,6 +24,7 @@ import { FilterType } from '../../../../../model/FilterType';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { ContactService } from '../../../../customer/webapp/core';
 import { FormService } from '../../../../base-components/webapp/core/FormService';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends FormInputComponent<string[], ComponentState> {
 
@@ -49,7 +50,8 @@ class Component extends FormInputComponent<string[], ComponentState> {
 
     public async getCurrentNodes(): Promise<TreeNode[]> {
         const nodes = [];
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const defaultValue = formInstance ? formInstance.getFormFieldValue<string>(this.state.field.instanceId) : null;
         if (defaultValue && defaultValue.value) {
             const contactEmails: string[] = Array.isArray(defaultValue.value)

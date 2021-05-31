@@ -35,7 +35,7 @@ export class ConfigItemClassDefinitionTableContentProvider extends TableContentP
 
         const isCurrentText = await TranslationService.translate('Translatable#(Current definition)');
 
-        const context = await ContextService.getInstance().getContext(ConfigItemClassDetailsContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext();
         const configItemClass = await context.getObject<ConfigItemClass>();
         if (configItemClass && configItemClass.Definitions && !!configItemClass.Definitions.length) {
 

@@ -12,7 +12,6 @@ import { CompareConfigItemVersionDialogContext } from '../../core';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { DialogService } from '../../../../../modules/base-components/webapp/core/DialogService';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
 
 class Component {
@@ -31,9 +30,7 @@ class Component {
             'Translatable#Close Dialog'
         ]);
 
-        this.context = await ContextService.getInstance().getContext<CompareConfigItemVersionDialogContext>(
-            CompareConfigItemVersionDialogContext.CONTEXT_ID
-        );
+        this.context = ContextService.getInstance().getActiveContext();
         this.state.compareWidget = await this.context.getWidgetConfiguration('compare-ci-version-widget');
 
         const versions = await this.context.getObjectList(KIXObjectType.CONFIG_ITEM_VERSION);
@@ -41,10 +38,6 @@ class Component {
             const text = await TranslationService.translate('Translatable#Selected Versions', []);
             this.state.title = `${text} (${versions.length})`;
         }
-    }
-
-    public async submit(): Promise<void> {
-        DialogService.getInstance().closeMainDialog();
     }
 
     public getCompareWidgetTemplate(instanceId: string): any {

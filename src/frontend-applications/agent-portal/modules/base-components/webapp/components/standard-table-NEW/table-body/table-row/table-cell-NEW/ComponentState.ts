@@ -8,12 +8,11 @@
  */
 
 import { RoutingConfiguration } from '../../../../../../../../model/configuration/RoutingConfiguration';
-import { DialogRoutingConfiguration } from '../../../../../../../../model/configuration/DialogRoutingConfiguration';
 
 export class ComponentState {
 
     public constructor(
-        public routingConfiguration: RoutingConfiguration | DialogRoutingConfiguration = null,
+        public routingConfiguration: RoutingConfiguration = null,
         public object: any = null,
         public objectId: string | number = null,
         public showDefaultCell: boolean = true,

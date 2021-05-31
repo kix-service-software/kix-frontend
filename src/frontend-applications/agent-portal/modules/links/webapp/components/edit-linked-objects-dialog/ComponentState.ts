@@ -7,8 +7,10 @@
  * --
  */
 
+import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
 import { Table } from '../../../../base-components/webapp/core/table';
+import { CreateLinkDescription } from '../../../server/api/CreateLinkDescription';
 
 
 
@@ -20,9 +22,11 @@ export class ComponentState extends AbstractComponentState {
         public table: Table = null,
         public canDelete: boolean = false,
         public canSubmit: boolean = false,
-        public filterCount: number = null,
         public allowDelete: boolean = false,
-        public allowCreate: boolean = false
+        public allowCreate: boolean = false,
+        public linkDescriptions: CreateLinkDescription[] = [],
+        public mainObject: KIXObject = null,
+        public title: string = 'Edit Links'
     ) {
         super();
     }

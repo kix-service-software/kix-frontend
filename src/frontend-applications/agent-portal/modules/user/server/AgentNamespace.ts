@@ -21,9 +21,9 @@ import { GetCurrentUserRequest } from '../../../modules/base-components/webapp/c
 import { User } from '../model/User';
 import { GetCurrentUserResponse } from '../../../modules/base-components/webapp/core/GetCurrentUserResponse';
 import { PersonalSettingsService } from './PersonalSettingsService';
-import { AgentEvent } from '../webapp/core';
 
 import cookie = require('cookie');
+import { AgentEvent } from '../webapp/core/AgentEvent';
 
 export class AgentNamespace extends SocketNameSpace {
 

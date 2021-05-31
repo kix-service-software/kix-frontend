@@ -15,6 +15,7 @@ import { FormService } from '../../../base-components/webapp/core/FormService';
 import { ValidationSeverity } from '../../../base-components/webapp/core/ValidationSeverity';
 import { ObjectReferenceOptions } from './ObjectReferenceOptions';
 import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
+import { ContextService } from './ContextService';
 
 export class ObjectReferenceCountValidator implements IFormFieldValidator {
 
@@ -33,7 +34,8 @@ export class ObjectReferenceCountValidator implements IFormFieldValidator {
     }
 
     public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
-        const formInstance = await FormService.getInstance().getFormInstance(formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue(formField.instanceId);
         const fieldValue = value ? value.value : null;
         if (fieldValue && Array.isArray(fieldValue)) {

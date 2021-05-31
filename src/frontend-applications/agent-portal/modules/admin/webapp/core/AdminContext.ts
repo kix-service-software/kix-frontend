@@ -8,7 +8,6 @@
  */
 
 import { Context } from '../../../../model/Context';
-import { ContextService } from '../../../base-components/webapp/core/ContextService';
 
 export class AdminContext extends Context {
 
@@ -64,13 +63,13 @@ export class AdminContext extends Context {
             this.categoryName = categoryName;
             this.filterValue = null;
             this.listeners.forEach((l) => l.objectChanged(null, null, null));
-            ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
+            // ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
         }
     }
 
     public setFilterValue(filterValue: string): void {
         this.filterValue = filterValue;
-        ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
+        // ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
     }
 
     public reset(refresh?: boolean): void {

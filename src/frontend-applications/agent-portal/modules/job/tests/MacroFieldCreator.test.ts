@@ -64,7 +64,7 @@ describe('MacroFieldCreator', () => {
             macro.ExecOrder = [ownerSetAction.ID];
             macro.Actions = [ownerSetAction];
 
-            const formInstance = new FormInstance();
+            const formInstance = new FormInstance(null);
             const form = new FormConfiguration('', '', [], KIXObjectType.JOB, true, FormContext.EDIT);
             (formInstance as any).form = form;
 
@@ -235,7 +235,7 @@ describe('MacroFieldCreator', () => {
             ownerSetParameter.Name = 'OwnerSet';
             ownerSetParameter.Options = { OwnerLoginOrID: ownerSetParameterOption };
 
-            formInstance = new FormInstance();
+            formInstance = new FormInstance(null);
             const form = new FormConfiguration('', '', [], KIXObjectType.JOB, true, FormContext.EDIT);
             (formInstance as any).form = form;
 

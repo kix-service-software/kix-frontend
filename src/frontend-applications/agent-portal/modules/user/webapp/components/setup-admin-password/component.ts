@@ -32,6 +32,7 @@ import { SetupStepCompletedEventData } from '../../../../setup-assistant/webapp/
 import { User } from '../../../model/User';
 import { FormInstance } from '../../../../base-components/webapp/core/FormInstance';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -53,10 +54,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public onInput(input: any) {
         this.step = input.step;
         this.state.completed = this.step ? this.step.completed : false;
-    }
-
-    public onDestroy(): void {
-        FormService.getInstance().deleteFormInstance(this.state.formId);
     }
 
     private async prepareForm(): Promise<void> {
@@ -101,7 +98,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             .catch((): User[] => []);
 
         if (users && users.length) {
-            const formInstance = await FormService.getInstance().getFormInstance(formId);
+            const context = ContextService.getInstance().getActiveContext();
+            const formInstance = await context?.getFormManager()?.getFormInstance();
 
             formInstance.provideFormFieldValuesForProperties([
                 [UserProperty.USER_LOGIN, users[0].UserLogin]
@@ -110,7 +108,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async submit(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
 
         const result = await formInstance.validateForm();
         const validationError = result.some((r) => r && r.severity === ValidationSeverity.ERROR);
@@ -119,7 +118,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         } else {
             BrowserUtil.toggleLoadingShield(true, 'Translatable#Change Admin Password');
             await this.updateUser(formInstance);
-            FormService.getInstance().deleteFormInstance(this.state.formId);
             BrowserUtil.toggleLoadingShield(false);
         }
     }

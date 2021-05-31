@@ -13,6 +13,7 @@ import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextMode } from '../../../../../model/ContextMode';
+import { OrganisationSearchContext } from '../context';
 
 export class OrganisationSearchAction extends AbstractAction {
 
@@ -26,7 +27,7 @@ export class OrganisationSearchAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        ContextService.getInstance().setDialogContext(null, KIXObjectType.ORGANISATION, ContextMode.SEARCH, null, true);
+        ContextService.getInstance().setActiveContext(OrganisationSearchContext.CONTEXT_ID);
     }
 
 }

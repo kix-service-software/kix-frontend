@@ -7,8 +7,6 @@
  * --
  */
 
-import { ContextDescriptor } from '../../../../model/ContextDescriptor';
-import { ContextConfiguration } from '../../../../model/configuration/ContextConfiguration';
 import { Context } from '../../../../model/Context';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
@@ -20,15 +18,6 @@ import { KIXObject } from '../../../../model/kix/KIXObject';
 export class EditDynamicFieldDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'edit-dynamic-field-dialog-context';
-    public formListenerId: string;
-
-    public constructor(
-        descriptor: ContextDescriptor,
-        objectId: string | number = null,
-        configuration: ContextConfiguration = null
-    ) {
-        super(descriptor, objectId, configuration);
-    }
 
     public async getObject<O extends KIXObject>(
         kixObjectType: KIXObjectType = KIXObjectType.DYNAMIC_FIELD

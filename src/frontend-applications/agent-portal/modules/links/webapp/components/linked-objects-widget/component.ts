@@ -42,7 +42,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context
             ? await context.getWidgetConfiguration(this.state.instanceId)
             : undefined;
@@ -51,8 +51,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             objectChanged: (id: string | number, object: KIXObject, type: KIXObjectType) => {
                 this.prepareTable(context);
             },
-            sidebarToggled: () => { return; },
-            explorerBarToggled: () => { return; },
+            sidebarRightToggled: () => { return; },
+            sidebarLeftToggled: () => { return; },
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
             scrollInformationChanged: () => { return; },

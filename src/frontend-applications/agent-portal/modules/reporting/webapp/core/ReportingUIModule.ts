@@ -77,7 +77,7 @@ export class UIModule implements IUIModule {
 
         const newReportDefintionContext = new ContextDescriptor(
             NewReportDefinitionDialogContext.CONTEXT_ID, [KIXObjectType.REPORT_DEFINITION], ContextType.DIALOG,
-            ContextMode.CREATE, false, 'new-report-definition-dialog', [], NewReportDefinitionDialogContext,
+            ContextMode.CREATE, false, 'object-dialog', [], NewReportDefinitionDialogContext,
             [
                 new UIComponentPermission('reporting/reportdefinitions', [CRUD.CREATE], true)
             ]
@@ -86,7 +86,7 @@ export class UIModule implements IUIModule {
 
         const editReportContext = new ContextDescriptor(
             EditReportDefinitionDialogContext.CONTEXT_ID, [KIXObjectType.REPORT_DEFINITION], ContextType.DIALOG,
-            ContextMode.EDIT, false, 'edit-report-definition-dialog', [], EditReportDefinitionDialogContext,
+            ContextMode.EDIT, false, 'object-dialog', [], EditReportDefinitionDialogContext,
             [
                 new UIComponentPermission('reporting/reportdefinitions', [CRUD.CREATE], true)
             ]
@@ -98,7 +98,7 @@ export class UIModule implements IUIModule {
 
         const newReportContext = new ContextDescriptor(
             NewReportDialogContext.CONTEXT_ID, [KIXObjectType.REPORT], ContextType.DIALOG,
-            ContextMode.CREATE_SUB, false, 'new-report-dialog', [], NewReportDialogContext, []
+            ContextMode.CREATE_SUB, false, 'object-dialog', [], NewReportDialogContext, []
         );
         ContextService.getInstance().registerContext(newReportContext);
         ServiceRegistry.registerServiceInstance(ReportFormService.getInstance());

@@ -39,7 +39,10 @@ import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { QueueProperty } from '../../model/QueueProperty';
-import { AgentService } from '../../../user/webapp/core';
+import { AgentService } from '../../../user/webapp/core/AgentService';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class TicketFormService extends KIXObjectFormService {
 
@@ -59,6 +62,21 @@ export class TicketFormService extends KIXObjectFormService {
 
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.TICKET;
+    }
+
+    protected async postPrepareForm(
+        form: FormConfiguration, formInstance: FormInstance,
+        formFieldValues: Map<string, FormFieldValue<any>>, kixObject: KIXObject
+    ): Promise<void> {
+        const value = await formInstance.getFormFieldValueByProperty<number>(ArticleProperty.CHANNEL_ID);
+        if (value && value.value) {
+            const channelFields = await ArticleFormService.getInstance().getFormFieldsForChannel(
+                formInstance, value.value, form.id, true
+            );
+
+            const field = formInstance.getFormFieldByProperty(ArticleProperty.CHANNEL_ID);
+            formInstance.addFieldChildren(field, channelFields, true);
+        }
     }
 
     protected async getValue(

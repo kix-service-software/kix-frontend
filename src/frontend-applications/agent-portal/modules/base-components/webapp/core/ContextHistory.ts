@@ -10,7 +10,6 @@
 import { ContextHistoryEntry } from './ContextHistoryEntry';
 import { ContextService } from './ContextService';
 import { BrowserHistoryState } from './BrowserHistoryState';
-import { DialogService } from './DialogService';
 import { RoutingService } from './RoutingService';
 import { ContextType } from '../../../../model/ContextType';
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
@@ -50,9 +49,10 @@ export class ContextHistory {
     }
 
     private navigateBack(event: any): void {
-        const activeContext = ContextService.getInstance().getActiveContext();
-        if (activeContext && activeContext.getDescriptor().contextType === ContextType.DIALOG) {
-            DialogService.getInstance().closeMainDialog();
+        const context = ContextService.getInstance().getActiveContext();
+        if (context && context.descriptor.contextType === ContextType.DIALOG) {
+            // TODO: remove Context
+            // DialogService.getInstance().closeMainDialog();
             window.history.forward();
         } else {
             if (event && event.state) {
@@ -61,7 +61,7 @@ export class ContextHistory {
                     state.contextId, null, null, null
                 );
 
-                RoutingService.getInstance().routeToContext(routingConfiguration, state.objectId, false, false);
+                ContextService.getInstance().setActiveContext(routingConfiguration.contextId, state.objectId);
             }
         }
     }
@@ -69,7 +69,7 @@ export class ContextHistory {
     public async addHistoryEntry(context: Context): Promise<void> {
         if (context) {
             const entry = this.contextHistory.find(
-                (he) => he.contextId === context.getDescriptor().contextId && he.objectId === context.getObjectId()
+                (he) => he.contextId === context.contextId && he.objectId === context.getObjectId()
             );
 
             const displayText = await context.getDisplayText();
@@ -81,9 +81,9 @@ export class ContextHistory {
                 const newEntry = new ContextHistoryEntry(
                     context.getIcon(),
                     displayText,
-                    context.getDescriptor().contextId,
+                    context.contextId,
                     context.getObjectId(),
-                    context.getDescriptor(),
+                    context.descriptor,
                     new Date().getTime()
                 );
                 this.contextHistory.push(newEntry);
@@ -98,11 +98,11 @@ export class ContextHistory {
             this.contextHistory
                 .sort((a, b) => b.lastVisitDate - a.lastVisitDate)
                 .forEach((he) => {
-                    if (he.contextId !== currentContext.getDescriptor().contextId ||
+                    if (he.contextId !== currentContext.descriptor?.contextId ||
                         he.objectId !== currentContext.getObjectId()
                     ) {
                         if (!history.some((h) =>
-                            he.contextId === currentContext.getDescriptor().contextId &&
+                            he.contextId === currentContext.descriptor?.contextId &&
                             he.objectId === currentContext.getObjectId()
                         )) {
                             history.push(he);

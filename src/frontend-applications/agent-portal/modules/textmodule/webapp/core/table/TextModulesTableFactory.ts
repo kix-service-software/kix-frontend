@@ -15,12 +15,13 @@ import { TextModulesTableContentProvider } from './TextModulesTableContentProvid
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
-import { DialogRoutingConfiguration } from '../../../../../model/configuration/DialogRoutingConfiguration';
 import { ContextMode } from '../../../../../model/ContextMode';
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
 import { DataType } from '../../../../../model/DataType';
 import { TextModuleProperty } from '../../../model/TextModuleProperty';
+import { EditTextModuleDialogContext } from '../context';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
 
 export class TextModulesTableFactory extends TableFactory {
 
@@ -76,9 +77,8 @@ export class TextModulesTableFactory extends TableFactory {
         }
 
         if (defaultRouting) {
-            tableConfiguration.routingConfiguration = new DialogRoutingConfiguration(
-                null, KIXObjectType.TEXT_MODULE, ContextMode.EDIT_ADMIN, TextModuleProperty.ID, null, true,
-                undefined, true
+            tableConfiguration.routingConfiguration = new RoutingConfiguration(
+                EditTextModuleDialogContext.CONTEXT_ID, null, null, TextModuleProperty.ID
             );
         }
 

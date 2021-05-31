@@ -9,14 +9,11 @@
 
 import { WidgetComponentState } from '../../../../../modules/base-components/webapp/core/WidgetComponentState';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
-import { ContextType } from '../../../../../model/ContextType';
 
 export class ComponentState extends WidgetComponentState {
 
     public constructor(
-        public widgetType: WidgetType = null,
-        public isDialog: WidgetType = null,
-        public contextType: ContextType = null
+        public widgetType: WidgetType = null
     ) {
         super();
     }

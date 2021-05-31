@@ -10,10 +10,21 @@
 import { Context } from './Context';
 import { AbstractAction } from '../modules/base-components/webapp/core/AbstractAction';
 import { KIXObject } from './kix/KIXObject';
+import { ContextPreference } from './ContextPreference';
 
 export class ContextExtension {
 
     public async getAdditionalActions(context: Context, object?: KIXObject): Promise<AbstractAction[]> {
+        return;
+    }
+
+    public async addStorableAdditionalInformation(
+        context: Context, contextPreference: ContextPreference
+    ): Promise<void> {
+        return;
+    }
+
+    public async loadAdditionalInformation(context: Context, contextPreference: ContextPreference): Promise<void> {
         return;
     }
 

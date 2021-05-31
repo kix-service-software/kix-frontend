@@ -66,7 +66,7 @@ export class FAQContext extends Context {
             this.listeners.forEach(
                 (l) => l.objectChanged(this.categoryId, this.categoryId, KIXObjectType.FAQ_CATEGORY)
             );
-            ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
+            // ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
         }
     }
 

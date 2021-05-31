@@ -9,9 +9,9 @@
 
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { FAQContext } from '../../core/context/FAQContext';
 import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
+import { FAQContext } from '../../core/context/FAQContext';
 
 class Component {
 
@@ -22,7 +22,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = (await ContextService.getInstance().getContext(FAQContext.CONTEXT_ID) as FAQContext);
+        const context = ContextService.getInstance().getActiveContext() as FAQContext;
         const widgets = await context.getContent();
         this.state.contentWidgets = widgets ? widgets.filter((w) => Boolean(w.configuration)) : [];
         if (!context.categoryId) {

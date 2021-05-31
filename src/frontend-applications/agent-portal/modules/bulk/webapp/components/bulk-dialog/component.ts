@@ -30,7 +30,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<BulkDialogContext>(BulkDialogContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext();
         if (context) {
             const objects = await context.getObjectList(null);
             if (objects && !!objects.length) {

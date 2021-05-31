@@ -1,0 +1,69 @@
+/**
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+.application-tools {
+    display: grid;
+    grid-auto-flow: column;
+
+    >div {
+        color: @secondary-6;
+        cursor: pointer;
+    }
+
+    >a {
+        color: @secondary-6;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}
+
+// "mobile"
+@media only screen and (max-width: @mobile-breakpoint) {
+    .application-tools {
+        grid-auto-columns: max-content;
+        font-size: 4rem;
+        height: 4rem;
+
+        >div {
+
+            &:hover {
+                color: @primary-2;
+            }
+        }
+
+        >a:hover {
+            color: @primary-2;
+        }
+    }
+}
+
+// not "mobile"
+@media only screen and (min-width: @mobile-breakpoint + 1px) {
+    .application-tools {
+        align-self: end;
+        gap: 0 .125rem;
+        .icon-font-size-normal;
+
+        >div {
+            display: grid;
+            justify-items: center;
+            grid-template-rows: @toolbar-icon-size @toolbar-icon-size;
+
+            &:hover {
+                color: @secondary-2
+            }
+        }
+
+        >a:hover {
+            color: @secondary-2
+        }
+    }
+}

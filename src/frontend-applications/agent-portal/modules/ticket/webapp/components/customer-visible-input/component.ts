@@ -44,7 +44,8 @@ class Component extends FormInputComponent<any, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
         if (value) {
             if (Array.isArray(value.value)) {
@@ -63,7 +64,8 @@ class Component extends FormInputComponent<any, ComponentState> {
     private async checkValues(): Promise<boolean> {
         let setCheckAndDisabled = false;
         if (this.state.formId) {
-            const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+            const context = ContextService.getInstance().getActiveContext();
+            const formInstance = await context?.getFormManager()?.getFormInstance();
             if (formInstance) {
                 const channelValue = await formInstance.getFormFieldValueByProperty<number>(ArticleProperty.CHANNEL_ID);
                 if (channelValue && channelValue.value && channelValue.value === 2) {
@@ -80,7 +82,7 @@ class Component extends FormInputComponent<any, ComponentState> {
     private async getOrganisation(formInstance: FormInstance): Promise<Organisation> {
         let orgId;
         if (formInstance.getObjectType() === KIXObjectType.ARTICLE) {
-            const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+            const context = ContextService.getInstance().getActiveContext();
             if (context) {
                 const ticket = await context.getObject<Ticket>(KIXObjectType.TICKET);
                 if (ticket) {

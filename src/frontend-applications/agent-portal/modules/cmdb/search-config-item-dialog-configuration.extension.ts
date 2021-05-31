@@ -47,7 +47,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             'cmdb-ci-search-help-widget', 'Widget', ConfigurationType.Widget,
             'help-widget', 'Translatable#Help', [],
             new ConfigurationDefinition('cmdb-ci-search-dialog-help-widget-config', ConfigurationType.HelpWidget),
-            null, false, false, 'kix-icon-query', false
+            null, false, true, 'kix-icon-query', false
         );
         configurations.push(helpWidget);
 
@@ -68,13 +68,13 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         [new UIComponentPermission('faq/articles', [CRUD.READ])]
                     )
                 ],
-                [], [], [], [], [], [], [],
+                [], [],
                 [
                     new ConfiguredDialogWidget(
                         'cmdb-ci-search-dialog-widget', 'cmdb-ci-search-dialog-widget',
                         KIXObjectType.CONFIG_ITEM, ContextMode.SEARCH
                     )
-                ]
+                ], [], [], [], []
             )
         );
 

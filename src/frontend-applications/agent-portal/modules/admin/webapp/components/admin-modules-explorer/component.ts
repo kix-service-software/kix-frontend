@@ -30,8 +30,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<AdminContext>(AdminContext.CONTEXT_ID);
-        if (context) {
+        const context = ContextService.getInstance().getActiveContext() as AdminContext;
+        if (context instanceof AdminContext) {
             this.state.filterValue = context.getAdditionalInformation('EXPLORER_FILTER_ADMIN');
             if (this.state.filterValue) {
                 const filter = (this as any).getComponent('admin-modules-explorer-filter');
@@ -142,8 +142,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async publishToContext(node: TreeNode, force: boolean = false): Promise<void> {
         this.state.activeNode = node;
         if (node) {
-            const context = await ContextService.getInstance().getContext<AdminContext>(AdminContext.CONTEXT_ID);
-            if (context) {
+            const context = await ContextService.getInstance().getActiveContext();
+            if (context instanceof AdminContext) {
                 context.setAdminModule(node.id, node.parent ? node.parent.label : '', force);
             }
         }
@@ -151,8 +151,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async filter(textFilterValue?: string): Promise<void> {
         this.state.filterValue = textFilterValue;
-        const context = await ContextService.getInstance().getContext<AdminContext>(AdminContext.CONTEXT_ID);
-        if (context) {
+        const context = ContextService.getInstance().getActiveContext();
+        if (context instanceof AdminContext) {
             context.setAdditionalInformation('EXPLORER_FILTER_ADMIN', this.state.filterValue);
         }
     }

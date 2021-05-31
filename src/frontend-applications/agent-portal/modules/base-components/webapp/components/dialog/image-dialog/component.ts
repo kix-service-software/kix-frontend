@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { IImageDialogListener } from '../../../../../../modules/base-components/webapp/core/IImageDialogListener';
-import { DialogService } from '../../../../../../modules/base-components/webapp/core/DialogService';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
 import { DisplayImageDescription } from '../../../../../../modules/base-components/webapp/core/DisplayImageDescription';
 
@@ -24,7 +23,7 @@ export class Component implements IImageDialogListener {
     }
 
     public async onMount(): Promise<void> {
-        DialogService.getInstance().registerImageDialogListener(this);
+
 
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Next Image', 'Translatable#Previous Image', 'Translatable#Download'

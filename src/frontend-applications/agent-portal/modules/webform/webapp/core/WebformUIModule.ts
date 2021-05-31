@@ -48,21 +48,24 @@ export class UIModule implements IUIModule {
         const newWebformDialogContext = new ContextDescriptor(
             NewWebformDialogContext.CONTEXT_ID, [KIXObjectType.WEBFORM],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-webform-dialog', ['webforms'], NewWebformDialogContext
+            false, 'object-dialog', ['webforms'], NewWebformDialogContext, [],
+            'Translatable#New Webform', 'kix-icon-gear', WebformDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(newWebformDialogContext);
 
         const webformDetailsContext = new ContextDescriptor(
             WebformDetailsContext.CONTEXT_ID, [KIXObjectType.WEBFORM],
             ContextType.MAIN, ContextMode.DETAILS,
-            false, 'object-details-page', ['webforms'], WebformDetailsContext
+            false, 'object-details-page', ['webforms'], WebformDetailsContext, [],
+            'Translatable#Webform Details', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(webformDetailsContext);
 
         const editWebformDialogContext = new ContextDescriptor(
             EditWebformDialogContext.CONTEXT_ID, [KIXObjectType.WEBFORM],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-webform-dialog', ['webforms'], EditWebformDialogContext
+            false, 'object-dialog', ['webforms'], EditWebformDialogContext, [],
+            'Translatable#Edit Webform', 'kix-icon-gear', WebformDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(editWebformDialogContext);
 

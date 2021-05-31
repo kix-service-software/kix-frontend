@@ -16,11 +16,12 @@ import { GeneralCatalogItemProperty } from '../../../model/GeneralCatalogItemPro
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
-import { DialogRoutingConfiguration } from '../../../../../model/configuration/DialogRoutingConfiguration';
 import { ContextMode } from '../../../../../model/ContextMode';
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
 import { DataType } from '../../../../../model/DataType';
+import { EditGeneralCatalogDialogContext } from '../context';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
 
 export class GeneralCatalogTableFactory extends TableFactory {
 
@@ -65,10 +66,8 @@ export class GeneralCatalogTableFactory extends TableFactory {
         }
 
         if (defaultRouting) {
-            tableConfiguration.routingConfiguration = new DialogRoutingConfiguration(
-                null, KIXObjectType.GENERAL_CATALOG_ITEM, ContextMode.EDIT_ADMIN,
-                GeneralCatalogItemProperty.ID, null, true,
-                undefined, true, 'general-catalog-edit-form'
+            tableConfiguration.routingConfiguration = new RoutingConfiguration(
+                EditGeneralCatalogDialogContext.CONTEXT_ID
             );
         }
 

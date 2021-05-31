@@ -52,7 +52,7 @@ export abstract class KIXObjectFormService {
         form: FormConfiguration, formInstance: FormInstance, kixObject?: KIXObject
     ): Promise<void> {
         if (!kixObject) {
-            const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+            const dialogContext = ContextService.getInstance().getActiveContext();
             if (dialogContext) {
                 kixObject = await dialogContext.getObject(form.objectType);
             }
@@ -267,7 +267,7 @@ export abstract class KIXObjectFormService {
     }
 
     public async getFormParameter(
-        formId: string, forUpdate: boolean = false, createOptions?: KIXObjectSpecificCreateOptions
+        forUpdate: boolean = false, createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<Array<[string, any]>> {
         let parameter: Array<[string, any]> = [];
 
@@ -276,14 +276,8 @@ export abstract class KIXObjectFormService {
             predefinedParameterValues.forEach((pv) => parameter.push([pv[0], pv[1]]));
         }
 
-        if (!formId) {
-            return parameter;
-        }
-
         const context = ContextService.getInstance().getActiveContext();
-        const object = await context?.getObject();
-
-        const formInstance = await FormService.getInstance().getFormInstance(formId);
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const formValues = formInstance.getAllFormFieldValues();
         const iterator = formValues.keys();
         let key = iterator.next();

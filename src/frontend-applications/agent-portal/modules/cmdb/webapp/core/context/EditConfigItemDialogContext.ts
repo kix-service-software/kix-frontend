@@ -8,8 +8,6 @@
  */
 
 import { Context } from '../../../../../model/Context';
-import { ContextDescriptor } from '../../../../../model/ContextDescriptor';
-import { ContextConfiguration } from '../../../../../model/configuration/ContextConfiguration';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
@@ -20,15 +18,6 @@ import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
 export class EditConfigItemDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'edit-config-item-dialog-context';
-    public formListenerId: string;
-
-    public constructor(
-        descriptor: ContextDescriptor,
-        objectId: string | number = null,
-        configuration: ContextConfiguration = null
-    ) {
-        super(descriptor, objectId, configuration);
-    }
 
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM, reload: boolean = false, changedProperties?: string[]

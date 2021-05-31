@@ -1,8 +1,6 @@
 {
     "dependencies": [
         "require ./components/admin-general-catalog",
-        "require ./components/edit-general-catalog-dialog",
-        "require ./components/new-general-catalog-dialog",
         "require ./core"
     ]
 }

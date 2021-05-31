@@ -18,7 +18,6 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { Ticket } from '../../../../ticket/model/Ticket';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
-import { AgentService } from '../../../../user/webapp/core';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { DateTimeUtil } from '../../../../base-components/webapp/core/DateTimeUtil';
@@ -31,6 +30,7 @@ import { ContextType } from '../../../../../model/ContextType';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
 import { Contact } from '../../../../customer/model/Contact';
 import { ContactProperty } from '../../../../customer/model/ContactProperty';
+import { AgentService } from '../../../../user/webapp/core/AgentService';
 
 declare const tui: any;
 
@@ -62,7 +62,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     this.contextListenerId = 'calendar widget' + this.widgetConfiguration.instanceId;
                     context.registerListener(this.contextListenerId, {
                         additionalInformationChanged: () => null,
-                        explorerBarToggled: () => null,
+                        sidebarLeftToggled: () => null,
                         filteredObjectListChanged: () => {
                             this.state.prepared = false;
                             setTimeout(() => this.initWidget(), 50);
@@ -70,7 +70,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         objectChanged: () => null,
                         objectListChanged: () => null,
                         scrollInformationChanged: () => null,
-                        sidebarToggled: () => null
+                        sidebarRightToggled: () => null
                     });
                 }
 
@@ -96,7 +96,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         let tickets = [];
 
         if (this.widgetConfiguration.contextDependent) {
-            const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+            const context = ContextService.getInstance().getActiveContext();
             tickets = context.getFilteredObjectList(KIXObjectType.TICKET);
         } else {
             const ticketFilter = [
@@ -325,7 +325,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     .then(() => {
                         this.calendar.updateSchedule(schedule.id, schedule.calendarId, changes);
                         if (this.widgetConfiguration.contextDependent) {
-                            const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+                            const context = ContextService.getInstance().getActiveContext();
                             if (context) {
                                 context.reloadObjectList(KIXObjectType.TICKET, true);
                             }

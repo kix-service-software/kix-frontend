@@ -1,6 +1,7 @@
 {
-    "tags-dir": [
-        "./kix-header",
-        "./main-menu"
-    ]
+        "tags-dir": [
+                "./kix-header",
+                "./main-menu",
+                "./tabbar"
+        ]
 }

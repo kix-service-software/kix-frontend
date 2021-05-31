@@ -74,7 +74,8 @@ class Component extends FormInputComponent<string[], ComponentState> {
 
             const bccAction = this.state.actions.find((a) => a.id === ArticleProperty.BCC);
             if (bccAction) {
-                const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+                const context = ContextService.getInstance().getActiveContext();
+                const formInstance = await context?.getFormManager()?.getFormInstance();
                 const bccValue = await formInstance.getFormFieldValueByProperty(ArticleProperty.BCC);
                 if (bccValue && bccValue.value) {
                     this.actionClicked(bccAction);
@@ -92,7 +93,8 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const value = this.state.field ? formInstance.getFormFieldValue<number>(this.state.field.instanceId) : null;
         if (value && value.value) {
             let contactValues: any[] = Array.isArray(value.value) ? [...value.value] : [value.value];
@@ -151,7 +153,8 @@ class Component extends FormInputComponent<string[], ComponentState> {
         const additionalTypeOption = this.state.field.options.find((o) => o.option === 'ADDITIONAL_RECIPIENT_TYPES');
         const actions = [];
         if (additionalTypeOption && additionalTypeOption.value && Array.isArray(additionalTypeOption.value)) {
-            const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+            const context = ContextService.getInstance().getActiveContext();
+            const formInstance = await context?.getFormManager()?.getFormInstance();
             for (const property of additionalTypeOption.value) {
                 const label = await LabelService.getInstance().getPropertyText(
                     property, KIXObjectType.ARTICLE
@@ -175,7 +178,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
 
     private async getReplyAllAction(): Promise<FormInputAction> {
         let action: FormInputAction = null;
-        const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        const context = ContextService.getInstance().getActiveContext();
         if (context) {
             const addReplyAll = context.getAdditionalInformation('ARTICLE_REPLY');
             if (addReplyAll) {
@@ -194,7 +197,8 @@ class Component extends FormInputComponent<string[], ComponentState> {
         if (action.id === 'ReplyAll') {
             await this.handleReplyAll();
         } else {
-            const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+            const context = ContextService.getInstance().getActiveContext();
+            const formInstance = await context?.getFormManager()?.getFormInstance();
             let field = this.state.field.children.find((f) => f.property === action.id);
             if (field) {
                 formInstance.removeFormField(field);
@@ -216,8 +220,8 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     private async handleReplyAll(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        const context = ContextService.getInstance().getActiveContext();
+        const dialogContext = ContextService.getInstance().getActiveContext();
         if (this.state.field.property === ArticleProperty.TO && context && dialogContext) {
             const replyId = dialogContext.getAdditionalInformation('REFERENCED_ARTICLE_ID');
             const articles = await context.getObjectList<Article>(KIXObjectType.ARTICLE);

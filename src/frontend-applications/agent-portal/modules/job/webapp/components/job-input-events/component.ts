@@ -60,7 +60,8 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     private async getJobFormManager(): Promise<AbstractJobFormManager> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         if (formInstance) {
             const value = await formInstance.getFormFieldValueByProperty<string>(JobProperty.TYPE);
             if (value && value.value) {
@@ -71,7 +72,8 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<string[] | string>(this.state.field.instanceId);
         if (value) {
             const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);

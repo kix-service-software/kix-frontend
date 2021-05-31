@@ -13,6 +13,7 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { DefaultSelectInputFormOption } from '../../../../../model/configuration/DefaultSelectInputFormOption';
 import { TreeNode, TreeService, TreeHandler } from '../../core/tree';
 import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
+import { ContextService } from '../../core/ContextService';
 
 class Component extends FormInputComponent<string | number | string[] | number[], CompontentState> {
 
@@ -31,6 +32,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             ? this.state.field.placeholder
             : this.state.field.required ? this.state.field.label : '';
         this.state.placeholder = await TranslationService.translate(placeholderText);
+        (this as any).setStateDirty('field');
     }
 
     public async onMount(): Promise<void> {
@@ -78,7 +80,8 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<string | number | string[] | number[]>(
             this.state.field.instanceId
         );
@@ -114,7 +117,8 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     }
 
     private async handleUnique(nodes: TreeNode[]): Promise<TreeNode[]> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         if (formInstance) {
             const fieldList = await formInstance.getFields(this.state.field);
             let usedValues = [];

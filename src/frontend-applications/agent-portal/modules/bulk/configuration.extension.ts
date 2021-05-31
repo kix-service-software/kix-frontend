@@ -36,13 +36,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-                this.getModuleId(), [], [], [], [], [], [], [], [],
+                this.getModuleId(), [], [], [],
                 [
                     new ConfiguredDialogWidget(
                         'bulk-dialog-widget', 'bulk-dialog-widget',
                         KIXObjectType.ANY, ContextMode.EDIT_BULK
                     )
-                ]
+                ], [], [], [], []
             )
         );
         return configurations;

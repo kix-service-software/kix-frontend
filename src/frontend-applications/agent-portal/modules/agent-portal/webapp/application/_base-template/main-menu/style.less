@@ -7,122 +7,132 @@
  * --
  */
 
-ul.main-menu,
-ul.user-menu {
-    border-top-right-radius: @border-radius;
-    border-bottom-right-radius: @border-radius;
-    margin-bottom: @margin-small/4;
-    box-shadow: @shadow-1;
-
-    li {
-        .font-size-normal;
-        background: @primary-3;
-        color: @default-light-font-color;
-        height: @main-menu-height;
-        width: @main-menu-width;
-        border-top: 1px solid @primary-4;
-        border-bottom: 1px solid @primary-0;
-        transition: width .25s, border-radius .25s;
-        display: block;
+// "mobile"
+@media only screen and (max-width: @mobile-breakpoint) {
+    .mobile-main-menu-container {
+        width: 100%;
+        padding-left: (2 * @margin-small);
         box-sizing: border-box;
-        font-weight: bold;
 
-        &:first-child {
-            border-top-right-radius: @border-radius;
-        }
+        ul.main-menu,
+        ul.user-menu {
+            margin-bottom: (2 * @margin-small);
+            list-style-type: none;
 
-        &:last-child {
-            border-bottom-right-radius: @border-radius;
-        }
+            li {
+                width: 100%;
+                border-radius: .25rem;
+                margin-bottom: .25rem;
+                color: @secondary-6;
+                background: @primary-2;
+                padding: 0 @margin-small;
+                border: 1px solid @secondary-6;
+                box-sizing: border-box;
 
-        &.active,
-        &:hover {
-            width: @main-menu-active-width;
-            border-top-right-radius: @border-radius;
-            border-bottom-right-radius: @border-radius;
-            padding-right: @main-menu-active-width - @main-menu-width;
-            box-shadow: @shadow-1;
-            border-top: 1px solid @primary-3;
-        }
+                >a {
+                    >span {
+                        display: grid;
+                        grid-template-columns: 3rem auto;
+                        gap: 0 .25rem;
+                        font-size: 1.25rem;
+                        align-items: center;
+                        height: 3rem;
 
-        &:hover:not(.active) {
-            transition: width 1s, border-radius 1s;
-
-            a {
-                width: @main-menu-active-width;
-                border-top-right-radius: @border-radius;
-                border-bottom-right-radius: @border-radius;
-                border-left: 0;
-
-                span.hover-label {
-                    width: @main-menu-active-width;
-                }
-
-                span.label-wrapper {
-                    opacity: 0;
+                        [class^="kix-icon-"],
+                        [class*=" kix-icon-"] {
+                            font-size: 2.5rem;
+                            line-height: 3rem;
+                        }
+                    }
                 }
             }
         }
 
-        &.active {
-            background: @primary-1;
-        }
-
-        &.active+li:not(:hover),
-        &:hover+li:not(.active) {
-            border-top: 1px solid @primary-3;
-        }
-
-        a {
-            display: block;
-            height: 100%;
-            border-left: 2px solid @primary-1;
-            text-decoration: none;
-            text-align: center;
-            overflow: hidden;
-            position: relative;
-
-            >span>.icon {
-                display: inline-block;
-
-                [class^="kix-icon-"],
-                [class*=" kix-icon-"] {
-                    .icon-font-size-small;
-                    position: relative;
-                    top: 5px;
-                }
-            }
-
-            span.label-wrapper {
-                opacity: 1;
-                transition: opacity .125s;
-            }
-
-            span.hover-label {
-                position: absolute;
-                display: inline-block;
-                height: 100%;
-                left: 0;
-                width: 0;
-                transition: width .5s, border-radius .25s;
-                overflow: hidden;
-                background: @primary-1;
-            }
-        }
-    }
-
-    &.image-only li {
-        span.label-wrapper {
-            line-height: @main-menu-height;
-
-            [class^="kix-icon-"],
-            [class*=" kix-icon-"] {
-                .icon-font-size-normal;
-            }
+        >.context-list {
+            padding-top: 1rem;
+            border-top: 1px solid @secondary-6;
+            box-sizing: border-box;
         }
     }
 }
 
-ul.user-menu li {
-    background-color: @primary-2;
+// not "mobile"
+@media only screen and (min-width: (@mobile-breakpoint + 1px)) {
+    .main-menu-container {
+        width: 100%;
+        height: 100%;
+        background-color: #e2e2e2;
+        padding: 0.5rem 0.25rem;
+        box-sizing: border-box;
+
+        ul.main-menu,
+        ul.user-menu {
+
+            li {
+                font-size: 1rem;
+                color: #b0b0b0;
+                height: 3rem;
+                box-sizing: border-box;
+                border-radius: 6px;
+
+                &.active {
+                    background: @primary-1;
+                    color: #fff;
+                }
+
+                &:hover {
+                    color: #0a7cb3;
+                }
+
+                a {
+                    display: block;
+                    height: 100%;
+                    text-decoration: none;
+                    text-align: center;
+                    overflow: hidden;
+                    position: relative;
+
+                    span.label-wrapper {
+                        opacity: 1;
+                        transition: opacity .125s;
+                    }
+
+                    >span>.icon {
+                        display: inline-block;
+
+                        [class^="kix-icon-"],
+                        [class*=" kix-icon-"] {
+                            .icon-font-size-small;
+                            position: relative;
+                            top: 5px;
+                        }
+                    }
+
+                    span.hover-label {
+                        position: absolute;
+                        display: inline-block;
+                        height: 100%;
+                        left: 0;
+                        width: 0;
+                        overflow: hidden;
+                        background: @primary-1;
+                        transition: width .5s, border-radius .25s;
+                    }
+                }
+            }
+
+            &.image-only li {
+                span.label-wrapper {
+                    line-height: @main-menu-height;
+
+                    [class^="kix-icon-"],
+                    [class*=" kix-icon-"] {
+                        .icon-font-size-normal;
+                    }
+                }
+            }
+        }
+    }
+
+
 }

@@ -59,18 +59,20 @@ export class UIModule implements IUIModule {
             true, 'object-details-page', ['organisations'], OrganisationDetailsContext,
             [
                 new UIComponentPermission('organisations', [CRUD.READ])
-            ]
+            ],
+            'Translatable#Organisation Details', 'kix-icon-man-house'
         );
         ContextService.getInstance().registerContext(organisationDetailsContext);
 
-        const searchContactContext = new ContextDescriptor(
+        const organisationsSearchContext = new ContextDescriptor(
             OrganisationSearchContext.CONTEXT_ID, [KIXObjectType.ORGANISATION], ContextType.DIALOG, ContextMode.SEARCH,
             false, 'search-organisation-dialog', ['organisations'], OrganisationSearchContext,
             [
                 new UIComponentPermission('organisations', [CRUD.READ])
-            ]
+            ],
+            'Translatable#Organisation', 'kix-icon-man-house'
         );
-        ContextService.getInstance().registerContext(searchContactContext);
+        ContextService.getInstance().registerContext(organisationsSearchContext);
     }
 
     private registerActions(): void {

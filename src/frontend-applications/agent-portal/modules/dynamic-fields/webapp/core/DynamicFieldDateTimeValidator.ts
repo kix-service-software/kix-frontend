@@ -18,6 +18,7 @@ import { DynamicFormFieldOption } from './DynamicFormFieldOption';
 import { DynamicField } from '../../model/DynamicField';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { DynamicFieldTypes } from '../../model/DynamicFieldTypes';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
 
 export class DynamicFieldDateTimeValidator implements IFormFieldValidator {
 
@@ -28,7 +29,8 @@ export class DynamicFieldDateTimeValidator implements IFormFieldValidator {
     }
 
     public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
-        const formInstance = await FormService.getInstance().getFormInstance(formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue(formField.instanceId);
         const fieldValue = value ? value.value : null;
         if (fieldValue && fieldValue instanceof Date) {

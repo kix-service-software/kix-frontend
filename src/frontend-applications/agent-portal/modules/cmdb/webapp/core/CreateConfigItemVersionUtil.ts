@@ -20,10 +20,9 @@ import { FormInstance } from '../../../base-components/webapp/core/FormInstance'
 
 export class CreateConfigItemVersionUtil {
 
-    public static async createParameter(formId: string): Promise<Array<[string, any]>> {
+    public static async createParameter(formInstance: FormInstance): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
 
-        const formInstance = await FormService.getInstance().getFormInstance(formId);
         const form = formInstance.getForm();
 
         let fields: FormFieldConfiguration[] = [];
