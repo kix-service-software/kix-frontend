@@ -20,6 +20,7 @@ import { KIXObjectService } from '../../../../../../modules/base-components/weba
 import { SystemAddress } from '../../../../../system-address/model/SystemAddress';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { DynamicField } from '../../../../../dynamic-fields/model/DynamicField';
+import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 
 export class NotificationEmailRecipientValidator implements IFormFieldValidator {
 
@@ -30,7 +31,8 @@ export class NotificationEmailRecipientValidator implements IFormFieldValidator 
     }
 
     public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
-        const formInstance = await FormService.getInstance().getFormInstance(formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const emailValue = await formInstance.getFormFieldValueByProperty<string[]>(
             NotificationProperty.DATA_RECIPIENT_EMAIL
         );

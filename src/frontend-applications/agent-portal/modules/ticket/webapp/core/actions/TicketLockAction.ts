@@ -75,7 +75,7 @@ export class TicketLockAction extends AbstractAction<Ticket> {
         ).catch((error) => null);
 
         setTimeout(async () => {
-            const context = await ContextService.getInstance().getContext(TicketDetailsContext.CONTEXT_ID);
+            const context = ContextService.getInstance().getActiveContext();
             await context.getObject(KIXObjectType.TICKET, true);
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
             BrowserUtil.openSuccessOverlay(successHint);

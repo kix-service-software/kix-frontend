@@ -39,12 +39,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             'admin-mail-accounts', '/kix-module-mail-account$0/webapp/components/admin-mail-accounts', []
         ),
         new UIComponent(
-            'new-mail-account-dialog', '/kix-module-mail-account$0/webapp/components/new-mail-account-dialog', []
-        ),
-        new UIComponent(
-            'edit-mail-account-dialog', '/kix-module-mail-account$0/webapp/components/edit-mail-account-dialog', []
-        ),
-        new UIComponent(
             'setup-mail-account',
             '/kix-module-mail-account$0/webapp/components/setup-mail-account',
             []

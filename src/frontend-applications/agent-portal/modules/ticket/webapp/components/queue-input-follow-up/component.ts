@@ -18,6 +18,7 @@ import { LabelService } from '../../../../../modules/base-components/webapp/core
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -54,7 +55,8 @@ class Component extends FormInputComponent<number, ComponentState> {
     }
 
     protected async setCurrentNode(nodes: TreeNode[]): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const defaultValue = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
         if (defaultValue && defaultValue.value) {
             if (defaultValue.value) {
@@ -73,7 +75,8 @@ class Component extends FormInputComponent<number, ComponentState> {
     }
 
     private async showFollowUpLock(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         let field = this.state.field.children.find((f) => f.property === QueueProperty.FOLLOW_UP_LOCK);
 
         const value = formInstance.getFormFieldValue(this.state.field.instanceId);

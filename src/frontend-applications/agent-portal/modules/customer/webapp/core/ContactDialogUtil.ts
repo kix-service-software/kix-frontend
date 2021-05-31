@@ -8,41 +8,31 @@
  */
 
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
-import { NewContactDialogContext, ContactDetailsContext, EditContactDialogContext } from '.';
-import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../model/ContextMode';
+import { NewContactDialogContext, EditContactDialogContext } from '.';
 import { Contact } from '../../model/Contact';
 
 export class ContactDialogUtil {
 
     public static async create(): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            NewContactDialogContext.CONTEXT_ID, KIXObjectType.CONTACT, ContextMode.CREATE
-        );
+        ContextService.getInstance().setActiveContext(NewContactDialogContext.CONTEXT_ID);
     }
 
     public static async edit(contactId?: string | number): Promise<void> {
         if (!contactId) {
-            const context = await ContextService.getInstance().getContext<ContactDetailsContext>(
-                ContactDetailsContext.CONTEXT_ID
-            );
-
-            if (context) {
-                contactId = context.getObjectId();
-            }
+            const context = ContextService.getInstance().getActiveContext();
+            contactId = context?.getObjectId();
         }
 
-        if (contactId) {
-            ContextService.getInstance().setDialogContext(
-                EditContactDialogContext.CONTEXT_ID, KIXObjectType.CONTACT, ContextMode.EDIT, contactId
-            );
-        }
+        const additionalInformation: Array<[string, any]> = [
+            ['CONTACT_ID', contactId]
+        ];
+        ContextService.getInstance().setActiveContext(
+            EditContactDialogContext.CONTEXT_ID, contactId, null, additionalInformation
+        );
     }
 
     public static async duplicate(contact: Contact): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            NewContactDialogContext.CONTEXT_ID, KIXObjectType.CONTACT, ContextMode.CREATE, contact.ID
-        );
+        ContextService.getInstance().setActiveContext(NewContactDialogContext.CONTEXT_ID, contact?.ID);
     }
 
 }

@@ -6,9 +6,6 @@
         "require ./components/reportresult-list-cell",
         "require ./components/reportdefinition-outputformat-list-cell",
         "require ./components/create-new-report-cell",
-        "require ./components/new-report-definition-dialog",
-        "require ./components/edit-report-definition-dialog",
-        "require ./components/new-report-dialog",
         "require ./core/ReportingUIModule"
     ]
 }

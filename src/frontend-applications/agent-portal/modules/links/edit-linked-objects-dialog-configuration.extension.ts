@@ -30,20 +30,20 @@ class Extension extends KIXExtension implements IConfigurationExtension {
 
         const widget = new WidgetConfiguration(
             'link-objects-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
-            'edit-linked-objects-dialog', 'Translatable#Edit Links', [], null, null, false, false, 'kix-icon-link'
+            'object-dialog-form-widget', 'Translatable#Edit Links', [], null, null, false, false, 'kix-icon-link'
         );
         configurations.push(widget);
 
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-                this.getModuleId(), [], [], [], [], [], [], [], [],
+                this.getModuleId(), [], [], [],
                 [
                     new ConfiguredDialogWidget(
                         'link-objects-edit-dialog-widget', 'link-objects-edit-dialog-widget',
                         KIXObjectType.LINK, ContextMode.EDIT_LINKS
                     )
-                ]
+                ], [], [], [], []
             )
         );
         return configurations;

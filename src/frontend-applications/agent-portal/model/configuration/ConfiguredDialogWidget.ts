@@ -11,6 +11,8 @@ import { ConfiguredWidget } from './ConfiguredWidget';
 import { KIXObjectType } from '../kix/KIXObjectType';
 import { ContextMode } from '../ContextMode';
 import { UIComponentPermission } from '../UIComponentPermission';
+import { WidgetConfiguration } from './WidgetConfiguration';
+import { WidgetSize } from './WidgetSize';
 
 export class ConfiguredDialogWidget extends ConfiguredWidget {
 
@@ -19,9 +21,11 @@ export class ConfiguredDialogWidget extends ConfiguredWidget {
         configurationId: string,
         public kixObjectType: KIXObjectType | string,
         public contextMode: ContextMode,
-        public permissions: UIComponentPermission[] = []
+        permissions: UIComponentPermission[] = [],
+        configuration?: WidgetConfiguration,
+        size: WidgetSize = WidgetSize.LARGE
     ) {
-        super(instanceId, configurationId);
+        super(instanceId, configurationId, configuration, permissions, size);
     }
 
 }

@@ -73,7 +73,7 @@ class Component {
     public async onMount(): Promise<void> {
         this.state.filterPlaceholder = await TranslationService.translate(this.state.filterPlaceholder);
         this.additionalFilterCriteria = [];
-        const context = ContextService.getInstance().getActiveContext(this.contextType);
+        const context = ContextService.getInstance().getActiveContext();
 
         if (this.useContext) {
             this.state.widgetConfiguration = context
@@ -156,7 +156,7 @@ class Component {
             this.state.widgetConfiguration.contextObjectDependent
         ) {
             this.contextListener = {
-                explorerBarToggled: () => { return; },
+                sidebarLeftToggled: () => { return; },
                 filteredObjectListChanged: () => { return; },
                 objectChanged: () => { return; },
                 objectListChanged: (objectType: KIXObjectType | string) => {
@@ -174,14 +174,14 @@ class Component {
                         }
                     }
                 },
-                sidebarToggled: () => { return; },
+                sidebarRightToggled: () => { return; },
                 scrollInformationChanged: (objectType: KIXObjectType | string, objectId: string | number) => {
                     this.scrollToRow(objectType, objectId);
                 },
                 additionalInformationChanged: () => { return; }
             };
 
-            const context = ContextService.getInstance().getActiveContext(this.contextType);
+            const context = ContextService.getInstance().getActiveContext();
             context.registerListener('table-widget-' + this.state.instanceId, this.contextListener);
         }
     }
@@ -256,7 +256,7 @@ class Component {
         EventService.getInstance().unsubscribe(TableEvent.RELOAD, this.subscriber);
         EventService.getInstance().unsubscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
 
-        const context = ContextService.getInstance().getActiveContext(this.contextType);
+        const context = ContextService.getInstance().getActiveContext();
         if (context) {
             context.unregisterListener('table-widget-' + this.state.instanceId);
         }
@@ -304,9 +304,9 @@ class Component {
         ) {
             this.objectType = settings.tableConfiguration && settings.tableConfiguration.objectType
                 ? settings.tableConfiguration.objectType : settings.objectType; // table prior table widget
-            const context = ContextService.getInstance().getActiveContext(this.contextType);
+            const context = ContextService.getInstance().getActiveContext();
             const contextId = this.state.widgetConfiguration.contextDependent
-                ? context.getDescriptor().contextId
+                ? context.contextId
                 : null;
 
             const table = await TableFactoryService.getInstance().createTable(

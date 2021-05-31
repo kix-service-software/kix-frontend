@@ -6,11 +6,6 @@
                 "module": "NamespaceRegistry.extension"
             }
         },
-        "kix:menu:main": {
-            "search-menu-main": {
-                "module": "search-menu.extension"
-            }
-        },
         "kix:configuration": {
             "search-configuration": {
                 "module": "search-configuration.extension"

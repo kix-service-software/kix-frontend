@@ -33,13 +33,12 @@ class Component {
 
     public async onMount(): Promise<void> {
         if (!SearchService.getInstance().getSearchCache()) {
-            const searchContext = await ContextService.getInstance().getContext<SearchContext>(
-                SearchContext.CONTEXT_ID
-            );
+            const searchContext = ContextService.getInstance().getActiveContext() as SearchContext;
             if (searchContext) {
                 searchContext.setSearchCache(null);
             }
-            ContextService.getInstance().setDialogContext(null, null, ContextMode.SEARCH);
+            // TODO: Search Handling
+            // ContextService.getInstance().setContext(null, null, ContextMode.SEARCH);
         }
     }
 }

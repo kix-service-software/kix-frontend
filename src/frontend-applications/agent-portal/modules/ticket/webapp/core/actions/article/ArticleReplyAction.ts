@@ -69,7 +69,7 @@ export class ArticleReplyAction extends AbstractAction {
     }
     private async openDialog(): Promise<void> {
         if (this.articleId) {
-            const context = await ContextService.getInstance().getContext(NewTicketArticleContext.CONTEXT_ID);
+            const context = ContextService.getInstance().getActiveContext();
             if (context) {
                 context.reset();
                 context.setAdditionalInformation('REFERENCED_ARTICLE_ID', this.articleId);
@@ -79,10 +79,7 @@ export class ArticleReplyAction extends AbstractAction {
                 );
                 context.setAdditionalInformation('NEW_ARTICLE_TAB_ICON', 'kix-icon-mail-answer-outline');
             }
-            ContextService.getInstance().setDialogContext(
-                NewTicketArticleContext.CONTEXT_ID, KIXObjectType.ARTICLE, ContextMode.CREATE_SUB,
-                this.articleId, false, null, true
-            );
+            ContextService.getInstance().setActiveContext(NewTicketArticleContext.CONTEXT_ID, this.articleId);
         }
     }
 }

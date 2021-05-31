@@ -1,6 +1,7 @@
 {
     "dependencies": [
         "./style.less",
+        "./static/hamburger.min.css",
         "../../../../static/thirdparty/socket.io.js"
     ]
 }

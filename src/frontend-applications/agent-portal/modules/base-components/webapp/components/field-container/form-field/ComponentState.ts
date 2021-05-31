@@ -21,7 +21,8 @@ export class ComponentState extends AbstractComponentState {
         public show: boolean = false,
         public canDraggable: boolean = false,
         public draggable: string = 'false',
-        public label: string = ''
+        public label: string = '',
+        public errorMessages: string[] = []
     ) {
         super();
     }

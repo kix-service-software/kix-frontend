@@ -11,8 +11,7 @@ import { AbstractAction } from '../../../../../modules/base-components/webapp/co
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../model/ContextMode';
+import { NewJobDialogContext } from '../context';
 
 export class JobCreateAction extends AbstractAction {
 
@@ -26,11 +25,7 @@ export class JobCreateAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-            null, KIXObjectType.JOB, ContextMode.CREATE_ADMIN, null, true,
-            'Translatable#Automation'
-        );
+        ContextService.getInstance().setActiveContext(NewJobDialogContext.CONTEXT_ID);
     }
 
 }

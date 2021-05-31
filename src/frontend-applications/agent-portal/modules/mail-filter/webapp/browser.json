@@ -2,10 +2,8 @@
     "dependencies": [
         "require ./core",
         "require ./components/admin-mail-filters",
-        "require ./components/edit-mail-filter-dialog",
         "require ./components/mail-filter-match-form-input",
         "require ./components/mail-filter-match-input",
-        "require ./components/mail-filter-set-form-input",
-        "require ./components/new-mail-filter-dialog"
+        "require ./components/mail-filter-set-form-input"
     ]
 }

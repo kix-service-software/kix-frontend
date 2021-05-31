@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.tab-container>
     <widget
         instanceId="tab-widget"
@@ -28,7 +27,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             <if(component.getIcon(tab))>
                                 <icon icon=component.getIcon(tab) showUnknown=false/>
                             </if>
-                            <span>${component.getTitle(tab)}</span>
+                            <span class={
+                                "no-icon": !component.getIcon(tab)
+                            }>${component.getTitle(tab)}</span>
                         </li>
                     </for>
                 </ul>
@@ -51,9 +52,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <if(state.showSidebar)>
                         <sidebar contextType=state.contextType/>
                     </if>
-                    <div.site-menu-wrapper>
-                        <sidebar-menu contextType=state.contextType/>
-                    </div>
                 </if>
             </div>
         </@content>

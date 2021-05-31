@@ -16,10 +16,12 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ChannelProperty } from '../../../model/ChannelProperty';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
-import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { ServiceRegistry } from '../../../../base-components/webapp/core/ServiceRegistry';
+import { ServiceType } from '../../../../base-components/webapp/core/ServiceType';
+import { FormService } from '../../../../base-components/webapp/core/FormService';
 import { ArticleFormService } from '../../core';
-import { ServiceType } from '../../../../../modules/base-components/webapp/core/ServiceType';
-import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
+import { FormInstance } from '../../../../base-components/webapp/core/FormInstance';
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -29,6 +31,7 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     public onInput(input: any): void {
         super.onInput(input);
+        (this as any).setStateDirty('field');
     }
 
     public async onMount(): Promise<void> {
@@ -44,7 +47,8 @@ class Component extends FormInputComponent<number, ComponentState> {
             await this.loadChannels();
         }
 
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
         if (value && value.value) {
             let channelId = Number(value.value);
@@ -54,7 +58,7 @@ class Component extends FormInputComponent<number, ComponentState> {
             if (!this.state.currentChannel || channelId !== this.state.currentChannel.ID) {
                 const channel = this.state.channels.find((ch) => ch.ID === channelId);
                 this.state.currentChannel = channel;
-                await this.setFields();
+                await this.setFields(formInstance);
             }
         }
 
@@ -117,20 +121,17 @@ class Component extends FormInputComponent<number, ComponentState> {
     public async channelClicked(channel: Channel): Promise<void> {
         if (!this.state.field.readonly && !this.isActive(channel)) {
             this.state.currentChannel = channel;
-            this.setFields();
             super.provideValue(this.state.currentChannel ? this.state.currentChannel.ID : null);
         }
     }
 
-    private async setFields(clear?: boolean): Promise<void> {
+    private async setFields(formInstance: FormInstance, clear?: boolean): Promise<void> {
         const formService = ServiceRegistry.getServiceInstance<ArticleFormService>(
             KIXObjectType.ARTICLE, ServiceType.FORM
         );
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-
         if (this.state.currentChannel) {
             const channelFields = await formService.getFormFieldsForChannel(
-                this.state.currentChannel, this.state.formId, clear
+                formInstance, this.state.currentChannel?.ID, this.state.formId, clear
             );
             setTimeout(() => formInstance.addFieldChildren(this.state.field, channelFields, true), 500);
         } else {

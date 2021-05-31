@@ -1,0 +1,155 @@
+/**
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+div.tabbar {
+    color: @secondary-0;
+
+    div.tab-scroll {
+        display: none;
+    }
+
+    div.tab-content {
+        display: grid;
+        scroll-behavior: smooth;
+
+        .tab {
+            display: grid;
+            grid-template-columns: max-content auto max-content;
+            grid-column-gap: @margin-small;
+            align-items: center;
+            border-bottom: 2px solid @secondary-3;
+            border-top: 2px solid @secondary-3;
+            border-left: 1px solid @secondary-2;
+            background-color: @secondary-3;
+            box-sizing: border-box;
+
+            padding: 0 1rem 0 0;
+            height: 3rem;
+
+            cursor: pointer;
+
+            &[active] {
+                background-color: @secondary-5;
+                font-weight: bold;
+                color: @secondary-0;
+            }
+
+            &.drag {
+                border: 1px solid @primary-6;
+                background-color: lighten(@primary-6, 20);
+            }
+
+            &.blocked {
+                background-color: lighten(@secondary-3, 30);
+                color: lighten(@secondary-0, 30);
+            }
+
+            div.tab-icon-container {
+                display: grid;
+                grid-auto-flow: column;
+                grid-auto-columns: max-content;
+                grid-column-gap: 0.25rem;
+            }
+
+            span.display-text {
+                .shorten-text();
+                user-select: none;
+            }
+        }
+    }
+}
+
+// "mobile"
+@media only screen and (max-width: @mobile-breakpoint) {
+    div.tabbar {
+        gap: @margin-small;
+
+        div.tab-scroll {
+            display: none;
+        }
+
+        div.tab-content {
+            grid-auto-flow: row;
+            gap: .25rem;
+
+            .tab {
+                border-radius: .25rem;
+                border: 1px solid @secondary-6;
+                color: @secondary-1;
+
+                &:hover {
+                    border-color: @secondary-0;
+                    color: @secondary-0;
+                }
+
+                div.tab-icon-container {
+                    font-size: 1.75rem;
+                    padding-left: .25rem;
+                }
+
+                span.display-text {
+                    font-size: 1.125rem;
+                }
+            }
+        }
+    }
+}
+
+// not "mobile"
+@media only screen and (min-width: @mobile-breakpoint + 1px) {
+    div.tabbar {
+        display: grid;
+        grid-template-columns: 2rem auto 2rem;
+        height: 3rem;
+        background: @secondary-3;
+
+        div.tab-scroll {
+            box-sizing: border-box;
+            width: 2rem;
+            font-size: 2rem;
+            display: grid;
+            align-content: center;
+            justify-content: center;
+            transition: background-color 0.25s;
+            cursor: pointer;
+
+            &.left {
+                border-right: 1px solid @secondary-2;
+            }
+
+            &.right {
+                border-left: 1px solid @secondary-2;
+            }
+
+            &:hover {
+                background-color: darken(@secondary-3, 20%);
+            }
+        }
+
+        div.tab-content {
+            grid-auto-flow: column;
+            grid-auto-columns: max-content;
+            overflow: hidden;
+
+            .tab {
+                max-width: 15rem;
+                padding: 0 1rem;
+                height: unset;
+                color: @secondary-0;
+
+                &[active] {
+                    border-bottom: 2px solid @primary-3;
+                }
+
+                &:hover {
+                    border-bottom: 2px solid @primary-6;
+                }
+            }
+        }
+    }
+}

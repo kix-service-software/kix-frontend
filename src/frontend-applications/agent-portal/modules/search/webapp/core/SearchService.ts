@@ -39,6 +39,7 @@ import { LabelService } from '../../../base-components/webapp/core/LabelService'
 import { TableConfiguration } from '../../../../model/configuration/TableConfiguration';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { SearchEvent } from '../../model/SearchEvent';
+import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 
 export class SearchService {
 
@@ -90,7 +91,7 @@ export class SearchService {
     }
 
     public async provideResult(objectType: KIXObjectType | string, objects: KIXObject[] = null): Promise<void> {
-        const context = await ContextService.getInstance().getContext<SearchContext>(SearchContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext();
         if (context && this.searchCache) {
             if (objects) {
                 context.setObjectList(objectType, objects);
@@ -101,74 +102,70 @@ export class SearchService {
     }
 
     public async executeSearch<T extends KIXObject = KIXObject>(
-        formId: string, objectType: KIXObjectType | string, excludeObjects?: KIXObject[], limit?: number
+        formInstance: FormInstance, objectType: KIXObjectType | string, excludeObjects?: KIXObject[]
     ): Promise<T[]> {
         let objects;
 
-        if (!formId) {
+        if (!formInstance) {
             const criteria = SearchFormInstance.getInstance().getCriteria().filter(
                 (c) => typeof c.value !== 'undefined' && c.value !== null && c.value !== ''
             );
 
             this.searchCache = new SearchCache<T>(
-                this.searchCache?.id, objectType, criteria, [], null, CacheState.VALID, this.searchCache?.name, limit
+                this.searchCache?.id, objectType, criteria, [], null, CacheState.VALID,
+                this.searchCache?.name, this.searchCache?.limit
             );
 
-            const context = await ContextService.getInstance().getContext<SearchContext>(SearchContext.CONTEXT_ID);
+            const context = ContextService.getInstance().getActiveContext() as SearchContext;
             context.setSearchCache(this.searchCache);
 
             objects = await this.doSearch();
             this.provideResult(objectType);
         } else {
-            const formInstance = await FormService.getInstance().getFormInstance(formId);
-            if (formInstance) {
-                const formObjectType = formInstance.getObjectType();
-                const searchDefinition = this.getSearchDefinition(formObjectType);
-                const formFieldValues = formInstance.getAllFormFieldValues();
-                let criteria = [];
+            const formObjectType = formInstance.getObjectType();
+            const searchDefinition = this.getSearchDefinition(formObjectType);
+            const formFieldValues = formInstance.getAllFormFieldValues();
+            let criteria = [];
 
-                const iterator = formFieldValues.keys();
-                let key = iterator.next();
-                while (key.value) {
-                    const formFieldInstanceId = key.value;
-                    const value = formFieldValues.get(formFieldInstanceId);
+            const iterator = formFieldValues.keys();
+            let key = iterator.next();
+            while (key.value) {
+                const formFieldInstanceId = key.value;
+                const value = formFieldValues.get(formFieldInstanceId);
 
-                    if (value.value && value.value !== '') {
-                        const formField = await formInstance.getFormField(formFieldInstanceId);
-                        if (formField) {
-                            const preparedCriteria = await searchDefinition.prepareSearchFormValue(
-                                formField.property, value.value
-                            );
-                            criteria = [...criteria, ...preparedCriteria];
-                        }
+                if (value.value && value.value !== '') {
+                    const formField = await formInstance.getFormField(formFieldInstanceId);
+                    if (formField) {
+                        const preparedCriteria = await searchDefinition.prepareSearchFormValue(
+                            formField.property, value.value
+                        );
+                        criteria = [...criteria, ...preparedCriteria];
                     }
-
-                    key = iterator.next();
                 }
 
-                if (excludeObjects && !!excludeObjects.length) {
-                    criteria.push(new FilterCriteria(
-                        excludeObjects[0].getIdPropertyName(),
-                        SearchOperator.NOT_EQUALS,
-                        FilterDataType.STRING,
-                        FilterType.AND,
-                        excludeObjects[0].ObjectId.toString()
-                    ));
-                }
-
-                criteria = criteria.filter((c) => {
-                    if (Array.isArray(c.value)) {
-                        return c.value.length > 0;
-                    } else {
-                        return c.value !== null && c.value !== undefined && c.value !== '';
-                    }
-                });
-
-                const loadingOptions = searchDefinition.getLoadingOptions(criteria);
-                objects = await KIXObjectService.loadObjects(formObjectType, null, loadingOptions, null, false);
-            } else {
-                throw new Error('No form found: ' + formId);
+                key = iterator.next();
             }
+
+            if (excludeObjects && !!excludeObjects.length) {
+                criteria.push(new FilterCriteria(
+                    excludeObjects[0].getIdPropertyName(),
+                    SearchOperator.NOT_EQUALS,
+                    FilterDataType.STRING,
+                    FilterType.AND,
+                    excludeObjects[0].ObjectId.toString()
+                ));
+            }
+
+            criteria = criteria.filter((c) => {
+                if (Array.isArray(c.value)) {
+                    return c.value.length > 0;
+                } else {
+                    return c.value !== null && c.value !== undefined && c.value !== '';
+                }
+            });
+
+            const loadingOptions = searchDefinition.getLoadingOptions(criteria);
+            objects = await KIXObjectService.loadObjects(formObjectType, null, loadingOptions, null, false);
         }
 
         return (objects as any);

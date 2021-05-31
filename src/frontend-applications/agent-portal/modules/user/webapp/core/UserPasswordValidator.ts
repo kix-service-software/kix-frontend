@@ -11,12 +11,12 @@ import { IFormFieldValidator } from '../../../../modules/base-components/webapp/
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { PersonalSettingsProperty } from '../../model/PersonalSettingsProperty';
 import { ValidationResult } from '../../../../modules/base-components/webapp/core/ValidationResult';
-import { FormService } from '../../../../modules/base-components/webapp/core/FormService';
 import { ValidationSeverity } from '../../../../modules/base-components/webapp/core/ValidationSeverity';
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
-import { AgentService } from '.';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { AgentService } from './AgentService';
 
 export class UserPasswordValidator implements IFormFieldValidator {
 
@@ -29,7 +29,8 @@ export class UserPasswordValidator implements IFormFieldValidator {
     }
 
     public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
-        const formInstance = await FormService.getInstance().getFormInstance(formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const password = await formInstance.getFormFieldValueByProperty<string>(
             PersonalSettingsProperty.USER_PASSWORD
         );
@@ -83,7 +84,7 @@ export class UserPasswordValidator implements IFormFieldValidator {
         return value && value.value && value.value !== '';
     }
 
-    private async  checkCurrentPassword(currentPassword: string): Promise<boolean> {
+    private async checkCurrentPassword(currentPassword: string): Promise<boolean> {
         return await AgentService.getInstance().checkPassword(currentPassword);
     }
 

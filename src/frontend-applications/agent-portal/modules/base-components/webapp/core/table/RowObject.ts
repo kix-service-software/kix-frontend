@@ -7,7 +7,6 @@
  * --
  */
 
-import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { TableValue } from './TableValue';
 import { ValueState } from './ValueState';
 

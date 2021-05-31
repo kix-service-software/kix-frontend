@@ -285,7 +285,7 @@ export class BrowserUtil {
         return this.userColors.get(userId);
     }
 
-    public static async prepareUrlParams(params: Array<[string, any]>): Promise<string[]> {
+    public static async prepareUrlParameter(params: Array<[string, any]>): Promise<string[]> {
         const urlParams = [];
         if (Array.isArray(params)) {
             const context = ContextService.getInstance().getActiveContext();
@@ -362,6 +362,19 @@ export class BrowserUtil {
         });
 
         return json;
+    }
+
+    public static jsonStringifyreplacerFunc() {
+        const visited = new WeakSet();
+        return (key: string, value: any) => {
+            if (typeof value === 'object' && value !== null) {
+                if (visited.has(value)) {
+                    return;
+                }
+                visited.add(value);
+            }
+            return value;
+        };
     }
 
 }

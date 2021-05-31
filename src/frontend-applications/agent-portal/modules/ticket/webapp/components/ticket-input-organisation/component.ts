@@ -15,6 +15,7 @@ import { KIXObjectService } from '../../../../../modules/base-components/webapp/
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { FormService } from '../../../../base-components/webapp/core/FormService';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -42,7 +43,8 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     public async setCurrentValue(): Promise<void> {
         let nodes = [];
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
         if (value && value.value) {
             if (!isNaN(value.value)) {

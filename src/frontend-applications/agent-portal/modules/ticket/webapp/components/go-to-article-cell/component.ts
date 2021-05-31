@@ -31,7 +31,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         event.stopPropagation();
         event.preventDefault();
 
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const context = ContextService.getInstance().getActiveContext();
         if (context) {
             context.provideScrollInformation(KIXObjectType.ARTICLE, this.state.cell.getValue().objectValue);
         }

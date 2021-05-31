@@ -14,6 +14,7 @@ import { ValidationResult } from '../../../../../../modules/base-components/weba
 import { FormService } from '../../../../../../modules/base-components/webapp/core/FormService';
 import { ValidationSeverity } from '../../../../../../modules/base-components/webapp/core/ValidationSeverity';
 import { DynamicField } from '../../../../../dynamic-fields/model/DynamicField';
+import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 
 export class PendingTimeValidator implements IFormFieldValidator {
 
@@ -24,7 +25,8 @@ export class PendingTimeValidator implements IFormFieldValidator {
     }
 
     public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
-        const formInstance = await FormService.getInstance().getFormInstance(formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const formFieldValue = formInstance.getFormFieldValue<Date>(formField.instanceId);
 
         let result = new ValidationResult(ValidationSeverity.OK, '');

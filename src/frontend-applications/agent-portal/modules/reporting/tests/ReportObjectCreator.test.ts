@@ -36,7 +36,7 @@ describe('Report Object Creator', () => {
             const form = new FormConfiguration('', '', [], KIXObjectType.REPORT, false, FormContext.NEW);
             await ReportFormCreator.createFormPages(form, MockData.ReportDefinitionMock as ReportDefinition);
 
-            const formInstance = new FormInstance();
+            const formInstance = new FormInstance(null);
             (formInstance as any).form = form;
 
             const outputFormatField = formInstance.getFormFieldByProperty(ReportDefinitionProperty.AVAILABLE_OUTPUT_FORMATS);

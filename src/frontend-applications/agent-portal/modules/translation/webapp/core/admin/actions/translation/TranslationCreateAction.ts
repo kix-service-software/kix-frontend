@@ -12,8 +12,6 @@ import { UIComponentPermission } from '../../../../../../../model/UIComponentPer
 import { CRUD } from '../../../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../../../modules/base-components/webapp/core/ContextService';
 import { NewTranslationDialogContext } from '../../context';
-import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../../../model/ContextMode';
 
 export class TranslationCreateAction extends AbstractAction {
 
@@ -27,10 +25,7 @@ export class TranslationCreateAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            NewTranslationDialogContext.CONTEXT_ID, KIXObjectType.TRANSLATION_PATTERN,
-            ContextMode.CREATE_ADMIN, null, true, 'Translatable#Internationalisation'
-        );
+        ContextService.getInstance().setActiveContext(NewTranslationDialogContext.CONTEXT_ID);
     }
 
 }

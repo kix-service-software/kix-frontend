@@ -13,6 +13,7 @@ import { EventService } from './EventService';
 import { FormEvent } from './FormEvent';
 import { IEventSubscriber } from './IEventSubscriber';
 import { FormValuesChangedEventData } from './FormValuesChangedEventData';
+import { ContextService } from './ContextService';
 
 export abstract class FormInputComponent<T, C extends FormInputComponentState<T>> {
 
@@ -35,7 +36,8 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
     }
 
     private async doUpdate(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         this.state.formContext = formInstance.getFormContext();
 
         if (!this.state.field) {
@@ -93,14 +95,16 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
     public abstract setCurrentValue(): Promise<void>;
 
     protected async provideValue(value: T, silent?: boolean): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         formInstance.provideFormFieldValues<any>(
             [[this.state.field.instanceId, value]], this.state.field.instanceId, silent
         );
     }
 
     protected async setInvalidState(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         if (formInstance && this.state.field) {
             const value = formInstance.getFormFieldValue(this.state.field.instanceId);
             if (value) {
@@ -110,7 +114,8 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
     }
 
     public async focusLost(event?: any): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         if (formInstance && formInstance.getForm().validation) {
             await formInstance.validateField(this.state.field);
             FormInputComponent.prototype.callSetInvalidState.call(this);

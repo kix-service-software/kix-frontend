@@ -36,12 +36,12 @@ export class EmailRecipientValidator implements IFormFieldValidator {
     }
 
     public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
-        const formInstance = await FormService.getInstance().getFormInstance(formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         let toValue = await formInstance.getFormFieldValueByProperty<string[]>(ArticleProperty.TO);
         let checkToValue = true;
         if (!this.isDefined(toValue)) {
-            const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
-            if (context && context.getDescriptor().contextMode === ContextMode.CREATE) {
+            if (context && context.descriptor.contextMode === ContextMode.CREATE) {
                 const contactValue = await formInstance.getFormFieldValueByProperty<string>(TicketProperty.CONTACT_ID);
                 toValue = new FormFieldValue([contactValue.value], contactValue.valid);
                 checkToValue = false;

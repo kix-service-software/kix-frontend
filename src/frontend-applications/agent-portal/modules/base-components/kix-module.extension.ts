@@ -65,6 +65,12 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent(
             'object-avatar-label', '/kix-module-base-components$0/webapp/components/object-avatar-label', []
         ),
+        new UIComponent('object-dialog', '/kix-module-base-components$0/webapp/components/object-dialog', []),
+        new UIComponent(
+            'object-dialog-form-widget',
+            '/kix-module-base-components$0/webapp/components/object-dialog-form-widget',
+            []
+        ),
         new UIComponent(
             'object-details-page', '/kix-module-base-components$0/webapp/components/object-details-page', []
         ),
@@ -99,12 +105,10 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         ),
         new UIComponent('toast', '/kix-module-base-components$0/webapp/components/overlay/toast', []),
         new UIComponent('overlay-icon', '/kix-module-base-components$0/webapp/components/overlay-icon', []),
-        new UIComponent('quick-search', '/kix-module-base-components$0/webapp/components/quick-search', []),
         new UIComponent('rich-text-input', '/kix-module-base-components$0/webapp/components/rich-text-input', []),
         new UIComponent('router-outlet', '/kix-module-base-components$0/webapp/components/router-outlet', []),
         new UIComponent('search-form', '/kix-module-base-components$0/webapp/components/search-form', []),
         new UIComponent('sidebar', '/kix-module-base-components$0/webapp/components/sidebar', []),
-        new UIComponent('sidebar-menu', '/kix-module-base-components$0/webapp/components/sidebar-menu', []),
         new UIComponent('standard-table-NEW', '/kix-module-base-components$0/webapp/components/standard-table-NEW', []),
 
         new UIComponent(

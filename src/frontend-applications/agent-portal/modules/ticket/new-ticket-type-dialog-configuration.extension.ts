@@ -41,7 +41,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const configurations = [];
         const widget = new WidgetConfiguration(
             'ticket-type-new-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
-            'new-ticket-type-dialog', 'Translatable#New Type', [], null, null,
+            'object-dialog-form-widget', 'Translatable#New Type', [], null, null,
             false, false, 'kix-icon-new-gear'
         );
         configurations.push(widget);
@@ -49,13 +49,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), 'Ticket Type New Dialog', ConfigurationType.Context,
-                this.getModuleId(), [], [], [], [], [], [], [], [],
+                this.getModuleId(), [], [], [],
                 [
                     new ConfiguredDialogWidget(
                         'ticket-type-new-dialog-widget', 'ticket-type-new-dialog-widget',
                         KIXObjectType.TICKET_TYPE, ContextMode.CREATE_ADMIN
                     )
-                ]
+                ], [], [], [], []
             )
         );
         return configurations;

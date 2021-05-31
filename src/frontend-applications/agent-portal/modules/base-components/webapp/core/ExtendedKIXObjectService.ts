@@ -50,6 +50,10 @@ export abstract class ExtendedKIXObjectService<T extends KIXObject = KIXObject> 
         return null;
     }
 
+    public async postUpdateObjectByForm(ticketId: string | number, objectType: KIXObjectType | string): Promise<void> {
+        return null;
+    }
+
     public prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
         return null;
     }

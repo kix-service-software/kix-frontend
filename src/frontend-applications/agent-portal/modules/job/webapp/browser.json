@@ -1,7 +1,6 @@
 {
     "dependencies": [
         "require ./components/admin-jobs",
-        "require ./components/edit-job-dialog",
         "require ./components/job-details-exec-plans-widget",
         "require ./components/job-details-filter-widget",
         "require ./components/job-filter-cell-content",
@@ -9,7 +8,6 @@
         "require ./components/job-input-fetchAssetAttributesMapping",
         "require ./components/job-input-filter",
         "require ./components/job-input-ticketCreateDynamicField",
-        "require ./components/new-job-dialog",
         "require ./components/job-run-history-widget",
         "require ./components/job-run-log-download-cell",
         "require ./components/job-run-logs",

@@ -31,15 +31,11 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent(
             'user-admin-roles', '/kix-module-user$0/webapp/components/user-admin-roles', []),
         new UIComponent(
-            'new-user-role-dialog', '/kix-module-user$0/webapp/components/new-user-role-dialog', []),
-        new UIComponent(
             'user-role-info-widget', '/kix-module-user$0/webapp/components/user-role-info-widget', []),
         new UIComponent(
             'user-role-assigned-users-widget',
             '/kix-module-user$0/webapp/components/user-role-assigned-users-widget', []
         ),
-        new UIComponent(
-            'edit-user-role-dialog', '/kix-module-user$0/webapp/components/edit-user-role-dialog', []),
         new UIComponent('user-admin-users', '/kix-module-user$0/webapp/components/user-admin-users', []),
         new UIComponent(
             'user-personal-settings-widget',

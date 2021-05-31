@@ -12,6 +12,7 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { TreeNode, TreeService, TreeHandler } from '../../core/tree';
 import { FormService } from '../../core/FormService';
+import { ContextService } from '../../core/ContextService';
 
 class Component extends FormInputComponent<string, CompontentState> {
 
@@ -59,7 +60,8 @@ class Component extends FormInputComponent<string, CompontentState> {
 
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
 
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<string>(this.state.field.instanceId);
         if (value) {
             lang = value.value;

@@ -60,6 +60,8 @@ class Component extends FormInputComponent<number | string, ComponentState> {
             : this.state.field.required ? this.state.field.label : '';
 
         this.state.placeholder = await TranslationService.translate(placeholderText);
+
+        (this as any).setStateDirty('field');
     }
 
     public async onMount(): Promise<void> {
@@ -84,9 +86,7 @@ class Component extends FormInputComponent<number | string, ComponentState> {
     }
 
     private async actionClicked(action: FormInputAction): Promise<void> {
-        const context = await ContextService.getInstance().getContext(
-            'new-contact-dialog-context'
-        );
+        const context = ContextService.getInstance().getActiveContext();
         if (context) {
             context.setAdditionalInformation('RETURN_TO_PREVIOUS_TAB', new PreviousTabData(
                 KIXObjectType.TICKET,
@@ -100,9 +100,7 @@ class Component extends FormInputComponent<number | string, ComponentState> {
 
     public async setCurrentValue(): Promise<void> {
         let nodes = [];
-        const newTicketDialogContext = await ContextService.getInstance().getContext<NewTicketDialogContext>(
-            NewTicketDialogContext.CONTEXT_ID
-        );
+        const newTicketDialogContext = ContextService.getInstance().getActiveContext();
 
         let contactId: number | string = null;
 
@@ -113,7 +111,8 @@ class Component extends FormInputComponent<number | string, ComponentState> {
             }
         }
 
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const contactValue = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
 
         contactId = contactId

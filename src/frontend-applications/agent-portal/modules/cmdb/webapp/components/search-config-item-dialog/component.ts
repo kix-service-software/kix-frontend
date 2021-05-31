@@ -12,7 +12,6 @@ import { AbstractMarkoComponent } from '../../../../../modules/base-components/w
 import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { FormContext } from '../../../../../model/configuration/FormContext';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { DialogService } from '../../../../../modules/base-components/webapp/core/DialogService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -24,11 +23,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.formId = await FormService.getInstance().getFormIdByContext(
             FormContext.SEARCH, KIXObjectType.CONFIG_ITEM
         );
-        DialogService.getInstance().setMainDialogHint('Translatable#The search only includes current versions.');
     }
 
     public async cancel(): Promise<void> {
-        DialogService.getInstance().closeMainDialog();
+        // TODO: remove Context
+        // DialogService.getInstance().closeMainDialog();
     }
 
 }

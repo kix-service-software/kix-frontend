@@ -17,9 +17,9 @@ export class RoutingConfiguration {
 
     public constructor(
         public contextId: string,
-        public objectType: KIXObjectType | string,
-        public contextMode: ContextMode,
-        public objectIdProperty: string,
+        public objectType?: KIXObjectType | string,
+        public contextMode?: ContextMode,
+        public objectIdProperty?: string,
         public history: boolean = false,
         public externalLink?: boolean,
         public replaceObjectId?: string | number,

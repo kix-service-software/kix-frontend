@@ -79,7 +79,7 @@ export class Component {
                     );
                 });
 
-            const context = await ContextService.getInstance().getContext(FAQDetailsContext.CONTEXT_ID);
+            const context = ContextService.getInstance().getActiveContext();
             await context.getObject(KIXObjectType.FAQ_ARTICLE, true);
         }
     }

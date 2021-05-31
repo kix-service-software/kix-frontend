@@ -19,6 +19,7 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 import { IdService } from '../../../../../model/IdService';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -66,7 +67,8 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const formValue = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
         const treeHandler = TreeService.getInstance().getTreeHandler(this.treeId);
         if (formValue && treeHandler) {
@@ -89,7 +91,8 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     private async handleIMAPFolderField(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         let field = this.state.field.children.find((f) => f.property === MailAccountProperty.IMAP_FOLDER);
         const showFolderField = this.showIMAPFolderField();
         if (field && !showFolderField) {

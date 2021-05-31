@@ -8,14 +8,20 @@
  */
 
 
-import { UserDetailsContext } from '../context';
 import { AbstractAction } from '../../../../../../modules/base-components/webapp/core/AbstractAction';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../../model/ContextMode';
 import { EditContactDialogContext } from '../../../../../customer/webapp/core';
 import { UIComponentPermission } from '../../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
+import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
+import { FilterCriteria } from '../../../../../../model/FilterCriteria';
+import { FilterDataType } from '../../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../../model/FilterType';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
+import { Contact } from '../../../../../customer/model/Contact';
+import { ContactProperty } from '../../../../../customer/model/ContactProperty';
+import { SearchOperator } from '../../../../../search/model/SearchOperator';
 
 export class UserEditAction extends AbstractAction {
 
@@ -30,27 +36,42 @@ export class UserEditAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<UserDetailsContext>(
-            UserDetailsContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         if (context) {
-            const id = context.getObjectId();
-            if (id) {
-                const dialogContext = await ContextService.getInstance().getContext(
-                    EditContactDialogContext.CONTEXT_ID
-                );
-                if (dialogContext) {
-                    dialogContext.reset();
-                    dialogContext.setAdditionalInformation('IS_AGENT_DIALOG', true);
-                    dialogContext.setAdditionalInformation('USER_ID', id);
-                }
-                ContextService.getInstance().setDialogContext(
-                    EditContactDialogContext.CONTEXT_ID, KIXObjectType.CONTACT,
-                    ContextMode.EDIT
+            const userId = context.getObjectId();
+            if (userId) {
+                const contactId = await this.getContactId(userId);
+                const additionalInformation: Array<[string, any]> = [
+                    ['IS_AGENT_DIALOG', true],
+                    ['USER_ID', userId],
+                    ['CONTACT_ID', contactId]
+                ];
+                await ContextService.getInstance().setActiveContext(
+                    EditContactDialogContext.CONTEXT_ID, null, null, additionalInformation
                 );
             }
         }
+    }
+
+    private async getContactId(userId: number | string): Promise<number> {
+        let contact: Contact;
+        if (userId) {
+            const contacts = await KIXObjectService.loadObjects<Contact>(
+                KIXObjectType.CONTACT, null,
+                new KIXObjectLoadingOptions(
+                    [
+                        new FilterCriteria(
+                            ContactProperty.ASSIGNED_USER_ID, SearchOperator.EQUALS,
+                            FilterDataType.NUMERIC, FilterType.AND, userId
+                        )
+                    ]
+                ), null, true
+            ).catch(() => [] as Contact[]);
+            contact = contacts && contacts.length ? contacts[0] : null;
+        }
+
+        return contact?.ID;
     }
 
 }

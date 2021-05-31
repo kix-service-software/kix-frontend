@@ -1,8 +1,6 @@
 {
         "dependencies": [
                 "require ./components/admin-mail-accounts",
-                "require ./components/edit-mail-account-dialog",
-                "require ./components/new-mail-account-dialog",
                 "require ./components/mail-account-info-widget",
                 "require ./components/mail-account-input-types",
                 "require ./components/setup-mail-account",

@@ -8,4 +8,3 @@
  */
 
 export { EditLinkedObjectsDialogContext } from './EditLinkedObjectsDialogContext';
-export { LinkObjectDialogContext } from './LinkObjectDialogContext';

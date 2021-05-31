@@ -22,9 +22,7 @@ export class LoadFAQAricleAction extends AbstractAction {
 
     public async run(): Promise<void> {
         if (this.data) {
-            ContextService.getInstance().setContext(
-                FAQDetailsContext.CONTEXT_ID, KIXObjectType.FAQ_ARTICLE, ContextMode.DETAILS, this.data
-            );
+            ContextService.getInstance().setActiveContext(FAQDetailsContext.CONTEXT_ID, this.data);
         }
     }
 

@@ -28,7 +28,6 @@ import { KIXObjectService } from '../../../../../../modules/base-components/weba
 import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
 import { Context } from '../../../../../../model/Context';
 import { DisplayImageDescription } from '../../../../../base-components/webapp/core/DisplayImageDescription';
-import { DialogService } from '../../../../../base-components/webapp/core/DialogService';
 import { FAQArticleHandler } from '../../../core/FAQArticleHandler';
 
 class Component {
@@ -60,7 +59,7 @@ class Component {
 
         WidgetService.getInstance().setWidgetType('faq-article-group', WidgetType.GROUP);
 
-        const context = await ContextService.getInstance().getContext<FAQDetailsContext>(FAQDetailsContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context
             ? await context.getWidgetConfiguration(this.state.instanceId)
             : undefined;
@@ -71,8 +70,8 @@ class Component {
                     this.initWidget(context, faqArticle);
                 }
             },
-            sidebarToggled: () => { return; },
-            explorerBarToggled: () => { return; },
+            sidebarRightToggled: () => { return; },
+            sidebarLeftToggled: () => { return; },
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
             scrollInformationChanged: () => { return; },
@@ -144,7 +143,8 @@ class Component {
 
     public async download(attachment: Attachment): Promise<void> {
         if (this.images && this.images.some((i) => i.imageId === attachment.ID)) {
-            DialogService.getInstance().openImageDialog(this.images, attachment.ID);
+            // TODO: Image dialog
+            // DialogService.getInstance().openImageDialog(this.images, attachment.ID);
         } else {
             const attachmentWithContent = await this.loadAttachment(attachment);
             if (attachmentWithContent) {

@@ -35,7 +35,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public onDestroy(): void {
         if (this.state.template) {
             TableFactoryService.getInstance().destroyTable('import-export-template-' + this.state.template.ID);
-            const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+            const context = ContextService.getInstance().getActiveContext();
             if (context) {
                 context.deleteObjectList('RUNS_OF_TEMPLATE_' + this.state.template.ID);
             }
@@ -43,7 +43,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async prepareTable(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const context = ContextService.getInstance().getActiveContext();
         if (context) {
             context.setObjectList(
                 'RUNS_OF_TEMPLATE_' + this.state.template.ID, this.state.template.Runs ?
@@ -54,7 +54,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 'import-export-template-' + this.state.template.ID + '-runs',
                 KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN, null,
                 // use template id
-                [this.state.template.ID], context.getDescriptor().contextId
+                [this.state.template.ID], context.contextId
             );
 
             this.state.table = table;

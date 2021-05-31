@@ -123,7 +123,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                         }
                         break;
                     case 'ARTICLE':
-                        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+                        const dialogContext = ContextService.getInstance().getActiveContext();
                         if (dialogContext) {
                             const articleId = dialogContext.getAdditionalInformation('REFERENCED_ARTICLE_ID');
                             if (articleId) {
@@ -326,11 +326,11 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
 
     public async getTicket(): Promise<Ticket> {
         let newObject = new Ticket();
-        const mainContext = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const mainContext = ContextService.getInstance().getActiveContext();
         if (mainContext) {
             this.setObject(newObject, await mainContext.getObject());
         }
-        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        const dialogContext = ContextService.getInstance().getActiveContext();
         if (dialogContext) {
             const formId = dialogContext.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
             const form = formId ? await FormService.getInstance().getForm(formId) : null;
@@ -398,10 +398,10 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
 
     private async getArticleSubject(): Promise<string> {
         let subject = '';
-        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        const dialogContext = ContextService.getInstance().getActiveContext();
         if (dialogContext) {
-            const formId = dialogContext.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
-            const formInstance = formId ? await FormService.getInstance().getFormInstance(formId) : null;
+            const context = ContextService.getInstance().getActiveContext();
+            const formInstance = await context?.getFormManager()?.getFormInstance();
             const subjectValue = formInstance
                 ? await formInstance.getFormFieldValueByProperty(ArticleProperty.SUBJECT) : null;
             subject = subjectValue && subjectValue.value ? subjectValue.value.toString() : '';

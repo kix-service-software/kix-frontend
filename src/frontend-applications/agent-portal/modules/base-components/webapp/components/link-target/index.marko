@@ -6,16 +6,17 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(!state.loading)>
     <if(state.url)>
-        <a href=state.url on-click("linkClicked") target="_blank">
+        <a href=state.url on-click("linkClicked")>
             <if(input.content)>
                 <${input.content}/>
             </if>
         </a>
     </if>
     <else-if(input.content)>
-        <${input.content}/>
+        <div on-click("linkClicked")>
+            <${input.content}/>
+        </div>
     </else-if>
 </if>

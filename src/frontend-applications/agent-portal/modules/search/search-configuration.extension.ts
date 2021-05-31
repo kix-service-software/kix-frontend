@@ -29,7 +29,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         const searchResultExplorer = new WidgetConfiguration(
             'search-dashboard-result-explorer', 'Search Explorer', ConfigurationType.Widget,
             'search-result-explorer', 'Translatable#Search Results', [], null, null,
-            false, false, 'kix-icon-search', false
+            false, true, 'kix-icon-search', false
         );
         configurations.push(searchResultExplorer);
 

@@ -27,8 +27,17 @@
     .button-container {
         display: grid;
         justify-content: end;
-        grid-auto-flow: column;
-        grid-column-gap: 1rem;
+        gap: 1rem;
         padding: 1rem;
+
+        // "mobile"
+        @media only screen and (max-width: @mobile-breakpoint) {
+            grid-template-columns: repeat(auto-fill, @button-min-width);
+        }
+
+        // not "mobile"
+        @media only screen and (min-width: @mobile-breakpoint + 1px) {
+            grid-auto-flow: column;
+        }
     }
 }

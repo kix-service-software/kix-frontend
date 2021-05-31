@@ -20,7 +20,7 @@ class HomeComponent {
     }
 
     public async onMount(): Promise<void> {
-        const context = (await ContextService.getInstance().getContext(HomeContext.CONTEXT_ID) as HomeContext);
+        const context = ContextService.getInstance().getActiveContext();
         this.state.contentWidgets = await context.getContent();
     }
 

@@ -21,9 +21,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<OrganisationContext>(
-            OrganisationContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext() as OrganisationContext;
         this.state.contentWidgets = await context.getContent();
 
         this.state.translations = await TranslationService.createTranslationObject([
@@ -46,10 +44,10 @@ class Component {
     }
 
     public async search(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<OrganisationContext>(
-            OrganisationContext.CONTEXT_ID
-        );
-        context.setFilterValue(this.state.filterValue);
+        const context = ContextService.getInstance().getActiveContext();
+        if (context instanceof OrganisationContext) {
+            context.setFilterValue(this.state.filterValue);
+        }
     }
 
 }

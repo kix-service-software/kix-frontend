@@ -18,6 +18,7 @@ import { ServiceType } from '../../../../base-components/webapp/core/ServiceType
 import { SortUtil } from '../../../../../model/SortUtil';
 import { ContactFormService } from '../../core';
 import { UserProperty } from '../../../../user/model/UserProperty';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends FormInputComponent<string[], ComponentState> {
 
@@ -59,10 +60,13 @@ class Component extends FormInputComponent<string[], ComponentState> {
         if (treeHandler) {
             treeHandler.setTree(nodes, null, true);
         }
+
+        (this as any).setStateDirty('field');
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<number[] | number>(this.state.field.instanceId);
         if (value) {
             const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
@@ -95,7 +99,8 @@ class Component extends FormInputComponent<string[], ComponentState> {
             const formService = ServiceRegistry.getServiceInstance<ContactFormService>(
                 KIXObjectType.CONTACT, ServiceType.FORM
             );
-            const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+            const context = ContextService.getInstance().getActiveContext();
+            const formInstance = await context?.getFormManager()?.getFormInstance();
 
             if (formService && formInstance) {
                 if (this.currentAccesses) {

@@ -18,7 +18,6 @@ import { TicketPriority } from '../../model/TicketPriority';
 import { TicketType } from '../../model/TicketType';
 import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
 import { User } from '../../../user/model/User';
-import { AgentService } from '../../../user/webapp/core';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
 import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
@@ -29,6 +28,7 @@ import { UserProperty } from '../../../user/model/UserProperty';
 import { StateType } from '../../model/StateType';
 import { QueueProperty } from '../../model/QueueProperty';
 import { ArticleProperty } from '../../model/ArticleProperty';
+import { AgentService } from '../../../user/webapp/core/AgentService';
 
 export class TicketLabelProvider extends LabelProvider<Ticket> {
 

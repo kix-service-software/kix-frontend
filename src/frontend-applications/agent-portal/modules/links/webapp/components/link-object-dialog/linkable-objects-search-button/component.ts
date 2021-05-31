@@ -23,10 +23,6 @@ class Component {
         this.state = new ComponentState();
     }
 
-    public onInput(input: any): void {
-        this.state.formId = input.formId;
-    }
-
     public async onMount(): Promise<void> {
         this.state.translations = await TranslationService.createTranslationObject(['Translatable#Start search']);
         this.formSubscriber = {

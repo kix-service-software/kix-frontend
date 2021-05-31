@@ -20,6 +20,7 @@ import { AdditionalContextInformation } from '../../../../base-components/webapp
 import { ServiceRegistry } from '../../../../base-components/webapp/core/ServiceRegistry';
 import { KIXObjectFormService } from '../../../../base-components/webapp/core/KIXObjectFormService';
 import { ServiceType } from '../../../../base-components/webapp/core/ServiceType';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 export class NewTicketDialogContext extends Context {
 
@@ -55,6 +56,10 @@ export class NewTicketDialogContext extends Context {
                 }
             }
         });
+    }
+
+    public async getDisplayText(short: boolean = false): Promise<string> {
+        return await TranslationService.translate('Translatable#New Ticket');
     }
 
     public async setFormObject(overwrite: boolean = true): Promise<void> {

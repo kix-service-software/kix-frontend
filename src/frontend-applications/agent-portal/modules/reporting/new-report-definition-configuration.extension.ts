@@ -28,7 +28,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const configurations = [];
         const newDialogWidget = new WidgetConfiguration(
             'report-definition-new-dialog-widget', 'New Dialog Widget', ConfigurationType.Widget,
-            'new-report-definition-dialog', 'Translatable#New Report Definition', [], null, null,
+            'object-dialog-form-widget', 'Translatable#New Report Definition', [], null, null,
             false, false, 'kix-icon-plus-blank'
         );
         configurations.push(newDialogWidget);
@@ -36,13 +36,14 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-                this.getModuleId(), [], [], [], [], [], [], [], [],
+                this.getModuleId(), [], [], [],
                 [
                     new ConfiguredDialogWidget(
                         'report-definition-new-dialog-widget', 'report-definition-new-dialog-widget',
                         KIXObjectType.REPORT_DEFINITION, ContextMode.CREATE
                     )
-                ]
+                ], [], [], [], []
+
             )
         );
 

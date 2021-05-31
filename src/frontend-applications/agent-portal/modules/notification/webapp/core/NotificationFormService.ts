@@ -47,7 +47,7 @@ export class NotificationFormService extends KIXObjectFormService {
 
     protected async prePrepareForm(form: FormConfiguration, notification?: Notification): Promise<void> {
         if (notification && notification.Events) {
-            const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+            const context = ContextService.getInstance().getActiveContext();
             if (context) {
                 context.setAdditionalInformation(
                     NotificationProperty.DATA_EVENTS, notification.Events

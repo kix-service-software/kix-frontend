@@ -54,7 +54,7 @@ export class SearchContext extends Context {
 
     public setSearchCache(cache: SearchCache): void {
         this.searchCache = cache;
-        ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
+        // ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
     }
 
     public getIcon(): string | ObjectIcon {

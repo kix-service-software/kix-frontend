@@ -76,14 +76,12 @@ export class CMDBContext extends Context {
         if (!this.classId || this.classId !== classId) {
             this.classId = classId;
             this.loadConfigItems();
-            ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
         }
     }
 
     public setFilterValue(filterValue: string): void {
         this.filterValue = filterValue;
         this.loadConfigItems();
-        ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
     }
 
     public async loadConfigItems(): Promise<void> {

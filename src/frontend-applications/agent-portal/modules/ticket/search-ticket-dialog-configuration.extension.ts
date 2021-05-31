@@ -47,7 +47,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             'ticket-search-help-widget', 'Help Widget', ConfigurationType.Widget,
             'help-widget', 'Translatable#Help', [],
             new ConfigurationDefinition('ticket-search-help-widget-config', ConfigurationType.HelpWidget),
-            null, false, false, 'kix-icon-query', false
+            null, false, true, 'kix-icon-query', false
         );
         configurations.push(helpWidget);
 
@@ -68,13 +68,13 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         [new UIComponentPermission('faq/articles', [CRUD.READ])]
                     )
                 ],
-                [], [], [], [], [], [], [],
+                [], [],
                 [
                     new ConfiguredDialogWidget(
                         'ticket-search-dialog-widget', 'ticket-search-dialog-widget',
                         KIXObjectType.TICKET, ContextMode.SEARCH
                     )
-                ]
+                ], [], [], [], []
             )
         );
         return configurations;

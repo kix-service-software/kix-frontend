@@ -14,6 +14,7 @@ import { FormInputComponent } from '../../core/FormInputComponent';
 import { FormService } from '../../core/FormService';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
+import { ContextService } from '../../core/ContextService';
 
 class Component extends FormInputComponent<any, ComponentState> {
 
@@ -56,7 +57,8 @@ class Component extends FormInputComponent<any, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<FilterCriteria[]>(this.state.field.instanceId);
         if (this.state.manager && value && Array.isArray(value.value)) {
             for (const criteria of value.value) {

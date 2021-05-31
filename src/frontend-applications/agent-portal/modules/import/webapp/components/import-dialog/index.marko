@@ -6,16 +6,18 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <widget instanceId=state.instanceId>
     <@content>
         <div.import-container>
             <if(state.importManager)>
                 <if(state.importConfigFormId)>
-                    <main-form formId=state.importConfigFormId key="input-configuration-form"/>
+                    <main-form/>
                 </if>
                 <div.form.import-attributes-container>
-                    <widget instanceId="dynamic-form-field-group" title=state.translations["Translatable#Replace Values"] key="attributes">
+                    <widget
+                        instanceId="dynamic-form-field-group"
+                        title=state.translations["Translatable#Replace Values"]
+                        key="attributes">
                         <@content>
                             <div.import-attributes>
                                 <dynamic-form-field-container manager=state.importManager/>
@@ -31,12 +33,15 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <standard-table-NEW table=state.table/>
                     </div>
                 </if>
-                <div.dialog-button-container>
-                    <button.cancel-button type="button" on-click("cancel") title=state.translations["Translatable#Cancel"]>
-                        <span.kix-icon-close/>
-                        <translation-string pattern="Translatable#Cancel"/>
-                    </button>
-                    <div.submit-buttons>
+                <div.dialog-control>
+                    <div.dialog-button-container>
+                        <button.cancel-button
+                            type="button"
+                            on-click("cancel")
+                            title=state.translations["Translatable#Cancel"]>
+                            <span.kix-icon-close/>
+                            <translation-string pattern="Translatable#Cancel"/>
+                        </button>
                         <button.submit-button
                             type="button"
                             on-click("submit")

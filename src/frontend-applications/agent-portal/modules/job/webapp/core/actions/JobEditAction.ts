@@ -12,8 +12,6 @@ import { AbstractAction } from '../../../../../modules/base-components/webapp/co
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../model/ContextMode';
 
 export class JobEditAction extends AbstractAction {
 
@@ -27,17 +25,12 @@ export class JobEditAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        const context = await ContextService.getInstance().getContext<JobDetailsContext>(
-            JobDetailsContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         if (context) {
             const id = context.getObjectId();
             if (id) {
-                ContextService.getInstance().setDialogContext(
-                    EditJobDialogContext.CONTEXT_ID, KIXObjectType.JOB,
-                    ContextMode.EDIT_ADMIN, id
-                );
+                ContextService.getInstance().setActiveContext(EditJobDialogContext.CONTEXT_ID, id);
             }
         }
     }

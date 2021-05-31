@@ -28,6 +28,9 @@ import { AdditionalContextInformation } from '../../../base-components/webapp/co
 import { FormService } from '../../../base-components/webapp/core/FormService';
 import { ArticleProperty } from '../../model/ArticleProperty';
 import { Attachment } from '../../../../model/kix/Attachment';
+import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
+import { ArticleFormService } from './ArticleFormService';
+import { ServiceType } from '../../../base-components/webapp/core/ServiceType';
 
 export class TicketFormFieldValueHandler extends FormFieldValueHandler {
 
@@ -81,6 +84,25 @@ export class TicketFormFieldValueHandler extends FormFieldValueHandler {
                 if (pendingField) {
                     formInstance.removeFormField(pendingField);
                 }
+            }
+        }
+
+        const channelValue = changedFieldValues.find((cv) => cv[0] && cv[0].property === ArticleProperty.CHANNEL_ID);
+        if (channelValue && channelValue[1]) {
+            const field = channelValue[0];
+            const value = channelValue[1];
+
+            const formService = ServiceRegistry.getServiceInstance<ArticleFormService>(
+                KIXObjectType.ARTICLE, ServiceType.FORM
+            );
+
+            if (value.value) {
+                const channelFields = await formService.getFormFieldsForChannel(
+                    formInstance, value.value, formInstance.getForm().id, false
+                );
+                formInstance.addFieldChildren(field, channelFields, true);
+            } else {
+                formInstance.addFieldChildren(field, [], true);
             }
         }
     }
@@ -141,20 +163,17 @@ export class TicketFormFieldValueHandler extends FormFieldValueHandler {
 
     private async handleAppendFAQArticleHTML(faqArticleHTML: string): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
-        const formId = context.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
-        if (formId) {
-            const formInstance = await FormService.getInstance().getFormInstance(formId);
-            if (formInstance) {
-                const bodyField = formInstance.getFormFieldByProperty(ArticleProperty.BODY);
-                if (bodyField) {
-                    let newValue = faqArticleHTML;
-                    const value = formInstance.getFormFieldValue<string>(bodyField.instanceId);
-                    if (value && value.value) {
-                        newValue = value.value + faqArticleHTML;
-                    }
-
-                    formInstance.provideFormFieldValues([[bodyField.instanceId, newValue]], null);
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        if (formInstance) {
+            const bodyField = formInstance.getFormFieldByProperty(ArticleProperty.BODY);
+            if (bodyField) {
+                let newValue = faqArticleHTML;
+                const value = formInstance.getFormFieldValue<string>(bodyField.instanceId);
+                if (value && value.value) {
+                    newValue = value.value + faqArticleHTML;
                 }
+
+                formInstance.provideFormFieldValues([[bodyField.instanceId, newValue]], null);
             }
         }
     }
@@ -162,20 +181,17 @@ export class TicketFormFieldValueHandler extends FormFieldValueHandler {
     private async handleAppendFAQArticleAttachments(faqAttachmnents: Attachment[]): Promise<void> {
         if (Array.isArray(faqAttachmnents) && faqAttachmnents.length) {
             const context = ContextService.getInstance().getActiveContext();
-            const formId = context.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
-            if (formId) {
-                const formInstance = await FormService.getInstance().getFormInstance(formId);
-                if (formInstance) {
-                    const attachmentField = formInstance.getFormFieldByProperty(ArticleProperty.ATTACHMENTS);
-                    if (attachmentField) {
-                        let newValue = faqAttachmnents;
-                        const value = formInstance.getFormFieldValue(attachmentField.instanceId);
-                        if (value && Array.isArray(value.value)) {
-                            newValue = [...value.value, ...faqAttachmnents];
-                        }
-
-                        formInstance.provideFormFieldValues([[attachmentField.instanceId, newValue]], null);
+            const formInstance = await context?.getFormManager()?.getFormInstance();
+            if (formInstance) {
+                const attachmentField = formInstance.getFormFieldByProperty(ArticleProperty.ATTACHMENTS);
+                if (attachmentField) {
+                    let newValue = faqAttachmnents;
+                    const value = formInstance.getFormFieldValue(attachmentField.instanceId);
+                    if (value && Array.isArray(value.value)) {
+                        newValue = [...value.value, ...faqAttachmnents];
                     }
+
+                    formInstance.provideFormFieldValues([[attachmentField.instanceId, newValue]], null);
                 }
             }
         }

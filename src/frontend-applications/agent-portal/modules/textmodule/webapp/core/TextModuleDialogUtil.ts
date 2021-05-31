@@ -8,25 +8,17 @@
  */
 
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../model/ContextMode';
 import { NewTextModuleDialogContext } from './context';
 import { TextModule } from '../../model/TextModule';
 
 export class TextModuleDialogUtil {
 
     public static async create(): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            NewTextModuleDialogContext.CONTEXT_ID, KIXObjectType.TEXT_MODULE, ContextMode.CREATE_ADMIN, null, true,
-            'Translatable#Ticket'
-        );
+        ContextService.getInstance().setActiveContext(NewTextModuleDialogContext.CONTEXT_ID);
     }
 
     public static async duplicate(textModule: TextModule): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            NewTextModuleDialogContext.CONTEXT_ID, KIXObjectType.TEXT_MODULE, ContextMode.CREATE_ADMIN, textModule.ID,
-            true, 'Translatable#Ticket'
-        );
+        ContextService.getInstance().setActiveContext(NewTextModuleDialogContext.CONTEXT_ID, textModule.ID);
     }
 
 }

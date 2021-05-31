@@ -11,7 +11,6 @@ import { ComponentState } from './ComponentState';
 import { FormService } from '../../../../../../modules/base-components/webapp/core/FormService';
 import { FormContext } from '../../../../../../model/configuration/FormContext';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
-import { DialogService } from '../../../../../../modules/base-components/webapp/core/DialogService';
 
 class Component {
 
@@ -28,7 +27,8 @@ class Component {
     }
 
     public async cancel(): Promise<void> {
-        DialogService.getInstance().closeMainDialog();
+        // TODO: remove Context
+        // DialogService.getInstance().closeMainDialog();
     }
 
 }

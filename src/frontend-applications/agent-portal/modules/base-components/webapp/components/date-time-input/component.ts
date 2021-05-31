@@ -12,7 +12,7 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
-import { FormService } from '../../core/FormService';
+import { ContextService } from '../../core/ContextService';
 import { InputFieldTypes } from '../../core/InputFieldTypes';
 
 class Component extends FormInputComponent<string | Date, ComponentState> {
@@ -48,6 +48,7 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
             ? this.state.field.placeholder
             : this.state.field.required ? this.state.field.label : '';
         this.state.placeholder = await TranslationService.translate(placeholderText);
+        (this as any).setStateDirty('field');
     }
 
     public async onMount(): Promise<void> {
@@ -56,7 +57,8 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
 
     public async setCurrentValue(): Promise<void> {
         this.state.prepared = false;
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<string>(this.state.field.instanceId);
         if (value && value.value) {
             this.state.currentValue = new Date(value.value);

@@ -33,8 +33,8 @@ export class Component {
             'Translatable#Cancel', 'Translatable#Submit'
         ]);
 
-        const context = ContextService.getInstance().getActiveContext(this.state.contextType);
-        this.state.contextId = context.getDescriptor().contextId;
+        const context = ContextService.getInstance().getActiveContext();
+        this.state.contextId = context.contextId;
         this.state.widgetConfiguration = context
             ? await context.getWidgetConfiguration(this.state.instanceId)
             : undefined;

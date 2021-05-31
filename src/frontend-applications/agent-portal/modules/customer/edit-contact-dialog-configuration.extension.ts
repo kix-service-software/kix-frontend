@@ -41,20 +41,20 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const configurations = [];
         const widget = new WidgetConfiguration(
             'contact-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
-            'edit-contact-dialog', 'Translatable#Edit Contact', [], null, null, false, false, 'kix-icon-edit'
+            'object-dialog-form-widget', 'Translatable#Edit Contact', [], null, null, false, false, 'kix-icon-edit'
         );
         configurations.push(widget);
 
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-                this.getModuleId(), [], [], [], [], [], [], [], [],
+                this.getModuleId(), [], [], [],
                 [
                     new ConfiguredDialogWidget(
                         'contact-edit-dialog-widget', 'contact-edit-dialog-widget',
                         KIXObjectType.CONTACT, ContextMode.EDIT
                     )
-                ]
+                ], [], [], [], []
             )
         );
 

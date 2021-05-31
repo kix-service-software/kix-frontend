@@ -27,17 +27,12 @@ export class ConfigItemClassEditAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<ConfigItemClassDetailsContext>(
-            ConfigItemClassDetailsContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         if (context) {
             const classId = context.getObjectId();
             if (classId) {
-                ContextService.getInstance().setDialogContext(
-                    EditConfigItemClassDialogContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM_CLASS,
-                    ContextMode.EDIT_ADMIN, classId
-                );
+                ContextService.getInstance().setActiveContext(EditConfigItemClassDialogContext.CONTEXT_ID, classId);
             }
         }
     }

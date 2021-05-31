@@ -8,10 +8,18 @@
  */
 
 import { Context } from '../../../../../model/Context';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 
 export class EditLinkedObjectsDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'edit-linked-objects-dialog-context';
+
+    public async getObject<O extends KIXObject>(
+        objectType: KIXObjectType | string = null, reload: boolean = false, changedProperties?: string[]
+    ): Promise<O> {
+        return null;
+    }
 
 }

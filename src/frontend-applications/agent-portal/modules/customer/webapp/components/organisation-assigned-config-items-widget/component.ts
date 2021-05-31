@@ -36,10 +36,10 @@ class Component {
             : undefined;
 
         context.registerListener('organisation-assigned-config-items-component', {
-            explorerBarToggled: () => { return; },
+            sidebarLeftToggled: () => { return; },
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
-            sidebarToggled: () => { return; },
+            sidebarRightToggled: () => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: (orgId: string, organisation: Organisation, type: KIXObjectType) => {
                 if (type === KIXObjectType.ORGANISATION) {

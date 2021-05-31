@@ -15,9 +15,9 @@ import { ContextMode } from '../../../../model/ContextMode';
 export class UIUtil {
 
     public static async getEditObjectId(type: KIXObjectType | string): Promise<number> {
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
-        const dialogContextMode = dialogContext ? dialogContext.getDescriptor().contextMode : null;
+        const context = ContextService.getInstance().getActiveContext();
+        const dialogContext = ContextService.getInstance().getActiveContext();
+        const dialogContextMode = dialogContext ? dialogContext.descriptor.contextMode : null;
         const isEditDialog = dialogContextMode
             && dialogContextMode === ContextMode.EDIT
             || dialogContextMode === ContextMode.EDIT_ADMIN ?

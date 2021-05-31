@@ -63,20 +63,22 @@ export class UIModule implements IUIModule {
         const newDynamicFieldContext = new ContextDescriptor(
             NewDynamicFieldDialogContext.CONTEXT_ID, [KIXObjectType.DYNAMIC_FIELD],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-dynamic-field-dialog', ['dynamicfields'], NewDynamicFieldDialogContext,
+            false, 'object-dialog', ['dynamicfields'], NewDynamicFieldDialogContext,
             [
                 new UIComponentPermission('system/dynamicfields', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#New Dynamic Field', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(newDynamicFieldContext);
 
         const editDynamicFieldContext = new ContextDescriptor(
             EditDynamicFieldDialogContext.CONTEXT_ID, [KIXObjectType.DYNAMIC_FIELD],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-dynamic-field-dialog', ['dynamicfields'], EditDynamicFieldDialogContext,
+            false, 'object-dialog', ['dynamicfields'], EditDynamicFieldDialogContext,
             [
                 new UIComponentPermission('system/dynamicfields', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Edit Dynamic Field', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(editDynamicFieldContext);
 

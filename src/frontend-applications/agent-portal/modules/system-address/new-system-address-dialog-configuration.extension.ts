@@ -42,7 +42,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const configurations = [];
         const widget = new WidgetConfiguration(
             'system-address-new-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
-            'new-system-address-dialog', 'Translatable#New Address',
+            'object-dialog-form-widget', 'Translatable#New Address',
             [], null, null, false, false, 'kix-icon-new-gear'
         );
         configurations.push(widget);
@@ -50,13 +50,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-                this.getModuleId(), [], [], [], [], [], [], [], [],
+                this.getModuleId(), [], [], [],
                 [
                     new ConfiguredDialogWidget(
                         'system-address-new-dialog-widget', 'system-address-new-dialog-widget',
                         KIXObjectType.SYSTEM_ADDRESS, ContextMode.CREATE_ADMIN
                     )
-                ]
+                ], [], [], [], []
             )
         );
 

@@ -137,7 +137,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     private async provideContextContent(): Promise<void> {
         if (this.state.table.getContextId()) {
-            const context = await ContextService.getInstance().getContext(this.state.table.getContextId());
+            const context = ContextService.getInstance().getActiveContext();
             if (context) {
                 const objects = this.state.table.getRows()
                     .filter((r) => r.getRowObject() !== null && typeof r.getRowObject() !== 'undefined')

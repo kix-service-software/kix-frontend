@@ -13,8 +13,6 @@ import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
 import { NewTicketArticleContext } from '../..';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
-import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../../model/ContextMode';
 import { AuthenticationSocketClient } from '../../../../../base-components/webapp/core/AuthenticationSocketClient';
 
 export class ArticleForwardAction extends AbstractAction {
@@ -70,7 +68,7 @@ export class ArticleForwardAction extends AbstractAction {
 
     private async openDialog(): Promise<void> {
         if (this.articleId) {
-            const context = await ContextService.getInstance().getContext(NewTicketArticleContext.CONTEXT_ID);
+            const context = ContextService.getInstance().getActiveContext();
             if (context) {
                 context.reset();
                 context.setAdditionalInformation('REFERENCED_ARTICLE_ID', this.articleId);
@@ -80,10 +78,7 @@ export class ArticleForwardAction extends AbstractAction {
                 );
                 context.setAdditionalInformation('NEW_ARTICLE_TAB_ICON', 'kix-icon-mail-forward-outline');
             }
-            ContextService.getInstance().setDialogContext(
-                NewTicketArticleContext.CONTEXT_ID, KIXObjectType.ARTICLE, ContextMode.CREATE_SUB,
-                this.articleId, false, null, true
-            );
+            ContextService.getInstance().setActiveContext(NewTicketArticleContext.CONTEXT_ID, this.articleId);
         }
     }
 }

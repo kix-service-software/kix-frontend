@@ -11,9 +11,7 @@ import { AbstractAction } from '../../../../../../../modules/base-components/web
 import { UIComponentPermission } from '../../../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../../../modules/base-components/webapp/core/ContextService';
-import { FAQCategoryDetailsContext, EditFAQCategoryDialogContext } from '../..';
-import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../../../model/ContextMode';
+import { EditFAQCategoryDialogContext } from '../..';
 
 export class FAQCategoryEditAction extends AbstractAction {
 
@@ -27,17 +25,12 @@ export class FAQCategoryEditAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<FAQCategoryDetailsContext>(
-            FAQCategoryDetailsContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         if (context) {
             const id = context.getObjectId();
             if (id) {
-                ContextService.getInstance().setDialogContext(
-                    EditFAQCategoryDialogContext.CONTEXT_ID, KIXObjectType.FAQ_CATEGORY,
-                    ContextMode.EDIT_ADMIN, id
-                );
+                ContextService.getInstance().setActiveContext(EditFAQCategoryDialogContext.CONTEXT_ID, id);
             }
         }
     }

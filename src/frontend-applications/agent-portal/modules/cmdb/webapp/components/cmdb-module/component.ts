@@ -21,7 +21,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<CMDBContext>(CMDBContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext() as CMDBContext;
         this.state.contentWidgets = await context.getContent();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Search',
@@ -40,8 +40,10 @@ class Component {
     }
 
     public async search(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<CMDBContext>(CMDBContext.CONTEXT_ID);
-        context.setFilterValue(this.state.filterValue);
+        const context = ContextService.getInstance().getActiveContext();
+        if (context instanceof CMDBContext) {
+            context.setFilterValue(this.state.filterValue);
+        }
     }
 
 }

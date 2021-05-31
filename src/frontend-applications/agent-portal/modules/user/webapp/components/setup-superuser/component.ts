@@ -42,6 +42,7 @@ import { Contact } from '../../../../customer/model/Contact';
 import { SetupStepCompletedEventData } from '../../../../setup-assistant/webapp/core/SetupStepCompletedEventData';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -65,10 +66,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.step = input.step;
         this.update = this.step && this.step.result && this.step.result.contactId && this.step.result.userId;
         this.state.completed = this.step ? this.step.completed : false;
-    }
-
-    public onDestroy(): void {
-        FormService.getInstance().deleteFormInstance(this.state.formId);
     }
 
     private async prepareForm(): Promise<void> {
@@ -139,7 +136,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         ).catch((): Contact[] => []);
 
         if (contacts && contacts.length) {
-            const formInstance = await FormService.getInstance().getFormInstance(formId);
+            const context = ContextService.getInstance().getActiveContext();
+            const formInstance = await context?.getFormManager()?.getFormInstance();
 
             formInstance.provideFormFieldValuesForProperties([
                 [ContactProperty.LASTNAME, contacts[0].Lastname],
@@ -152,7 +150,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async submit(logout: boolean): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
 
         const roles = await KIXObjectService.loadObjects<Role>(
             KIXObjectType.ROLE, null,

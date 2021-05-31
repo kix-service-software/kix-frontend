@@ -53,19 +53,21 @@ export class UIModule implements IUIModule {
         const newTextModuleDialogContext = new ContextDescriptor(
             NewTextModuleDialogContext.CONTEXT_ID, [KIXObjectType.TEXT_MODULE],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-text-module-dialog', ['text-modules'], NewTextModuleDialogContext,
+            false, 'object-dialog', ['text-modules'], NewTextModuleDialogContext,
             [
                 new UIComponentPermission('system/communication/systemaddresses', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#New Textmodule', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(newTextModuleDialogContext);
         const editTextModuleDialogContext = new ContextDescriptor(
             EditTextModuleDialogContext.CONTEXT_ID, [KIXObjectType.TEXT_MODULE],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-text-module-dialog', ['text-modules'], EditTextModuleDialogContext,
+            false, 'object-dialog', ['text-modules'], EditTextModuleDialogContext,
             [
                 new UIComponentPermission('system/communication/systemaddresses', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Edit Textmodule', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(editTextModuleDialogContext);
     }

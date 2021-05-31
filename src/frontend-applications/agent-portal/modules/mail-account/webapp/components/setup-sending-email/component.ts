@@ -37,6 +37,7 @@ import { SetupStep } from '../../../../setup-assistant/webapp/core/SetupStep';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFieldTypes';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { SystemAddress } from '../../../../system-address/model/SystemAddress';
 import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
@@ -192,7 +193,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
                 const changedValue = data.changedValues.find((cv) => cv[0].property === 'SendmailModule');
                 if (changedValue) {
-                    const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+                    const context = ContextService.getInstance().getActiveContext();
+                    const formInstance = await context?.getFormManager()?.getFormInstance();
                     if (changedValue[1].value) {
                         let value = changedValue[1].value;
                         if (Array.isArray(changedValue[1].value) && changedValue[1].value.length) {
@@ -232,7 +234,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.subscriber);
-        FormService.getInstance().deleteFormInstance(this.state.formId);
     }
 
     private async initSystemAddress(): Promise<void> {
@@ -324,7 +325,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async initFormValues(formId: string, configKeys: string[] = this.configKeys): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
 
         const sysconfigOptions = await KIXObjectService.loadObjects<SysConfigOption>(
             KIXObjectType.SYS_CONFIG_OPTION, configKeys
@@ -345,7 +347,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async submit(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
 
         const result = await formInstance.validateForm();
         const validationError = result.some((r) => r && r.severity === ValidationSeverity.ERROR);

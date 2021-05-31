@@ -12,9 +12,6 @@
             }
         },
         "kix:configuration": {
-            "link-objects-dialog-configuration": {
-                "module": "link-objects-dialog-configuration.extension"
-            },
             "edit-linked-objects-dialog-configuration": {
                 "module": "edit-linked-objects-dialog-configuration.extension"
             }

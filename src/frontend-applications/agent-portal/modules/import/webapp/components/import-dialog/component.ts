@@ -16,7 +16,6 @@ import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { ContextType } from '../../../../../model/ContextType';
 import { ImportService, ImportPropertyOperator } from '../../core';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
@@ -43,7 +42,6 @@ import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/
 import { OverlayService } from '../../../../../modules/base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
 import { ComponentContent } from '../../../../../modules/base-components/webapp/core/ComponentContent';
-import { DialogService } from '../../../../../modules/base-components/webapp/core/DialogService';
 import { Error } from '../../../../../../../server/model/Error';
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
@@ -102,9 +100,9 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        this.context = ContextService.getInstance().getActiveContext();
         if (this.context) {
-            const types = this.context.getDescriptor().kixObjectTypes;
+            const types = this.context.descriptor.kixObjectTypes;
             if (types && !!types.length && typeof types[0] === 'string' && types[0].length) {
                 this.objectType = types[0];
 
@@ -160,7 +158,6 @@ class Component {
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
-        FormService.getInstance().deleteFormInstance(this.state.importConfigFormId);
         if (this.state.importManager) {
             this.state.importManager.unregisterListener(this.formListenerId);
             this.state.importManager.reset();
@@ -230,7 +227,6 @@ class Component {
             ]
         );
 
-        FormService.getInstance().deleteFormInstance(form.id);
         await FormService.getInstance().addForm(form);
 
         this.state.importConfigFormId = form.id;
@@ -245,7 +241,7 @@ class Component {
             );
             const table = await TableFactoryService.getInstance().createTable(
                 `import-dialog-list-${this.objectType}`, this.objectType,
-                configuration, null, this.context.getDescriptor().contextId,
+                configuration, null, this.context.contextId,
                 false, null, true, false, true
             );
             table.sort('CSV_LINE', SortOrder.UP);
@@ -360,7 +356,8 @@ class Component {
         this.errorObjects = [];
         this.finishedObjects = [];
         this.selectedObjects = [];
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.importConfigFormId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         if (formInstance) {
             const source = await formInstance.getFormFieldValueByProperty('source');
             let ok = false;
@@ -593,12 +590,14 @@ class Component {
     }
 
     public cancel(): void {
-        DialogService.getInstance().closeMainDialog();
+        // TODO: remove Context
+        // DialogService.getInstance().closeMainDialog();
     }
 
     public submit(): void {
         if (this.state.run) {
-            DialogService.getInstance().closeMainDialog();
+            // TODO: remove Context
+            // DialogService.getInstance().closeMainDialog();
         }
     }
 

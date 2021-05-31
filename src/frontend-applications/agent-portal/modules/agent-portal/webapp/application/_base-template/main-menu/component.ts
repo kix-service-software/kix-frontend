@@ -14,11 +14,15 @@ import { ContextType } from '../../../../../../model/ContextType';
 import { Context } from '../../../../../../model/Context';
 import { ContextDescriptor } from '../../../../../../model/ContextDescriptor';
 import { MenuEntry } from '../../../../../../model/MenuEntry';
-import { ContextFactory } from '../../../../../base-components/webapp/core/ContextFactory';
+import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
+import { MobileShowEvent } from '../../../../model/MobileShowEvent';
+import { EventService } from '../../../../../base-components/webapp/core/EventService';
+import { MobileShowEventData } from '../../../../model/MobileShowEventData';
 
 class KIXMenuComponent {
 
     public state: ComponentState;
+    public eventSubscriber: IEventSubscriber;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -37,14 +41,33 @@ class KIXMenuComponent {
             }
         });
 
+        window.addEventListener('resize', this.resizeHandling.bind(this), false);
+        this.resizeHandling();
+
+        this.eventSubscriber = {
+            eventSubscriberId: 'main-menu-mobile',
+            eventPublished: (data, eventId: MobileShowEvent | string) => {
+                if (eventId === MobileShowEvent.SHOW_MOBILE) {
+                    this.state.showMobile = data === MobileShowEventData.SHOW_MAIN_MENU;
+                }
+            }
+        };
+        EventService.getInstance().subscribe(MobileShowEvent.SHOW_MOBILE, this.eventSubscriber);
+
         await this.loadEntries();
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const context = ContextService.getInstance().getActiveContext();
         this.setActiveMenuEntry(context);
         this.state.loading = false;
     }
 
     public onDestroy(): void {
         ContextService.getInstance().unregisterListener('main-menu-listener');
+        window.removeEventListener('resize', this.resizeHandling.bind(this), false);
+        EventService.getInstance().unsubscribe(MobileShowEvent.SHOW_MOBILE, this.eventSubscriber);
+    }
+
+    private resizeHandling(): void {
+        this.state.isMobile = Boolean(window.innerWidth <= 1024);
     }
 
     private async loadEntries(): Promise<void> {
@@ -65,22 +88,17 @@ class KIXMenuComponent {
     }
 
     private async setShownEntries(entries: MenuEntry[]): Promise<void> {
-        for (const entry of entries) {
-            const context = ContextFactory.getInstance().getContextDescriptor(entry.mainContextId);
-            if (context) {
-                entry.show = true;
-            }
-        }
+        entries.forEach((e) => e.show = ContextService.getInstance().hasContextDescriptor(e.mainContextId));
     }
 
     private setActiveMenuEntry(context: Context): void {
-        if (context && context.getDescriptor()) {
+        if (context && context.descriptor) {
             this.state.primaryMenuEntries.forEach(
-                (me) => me.active = me.contextIds.some((id) => id === context.getDescriptor().contextId)
+                (me) => me.active = me.contextIds.some((id) => id === context.contextId)
             );
 
             this.state.secondaryMenuEntries.forEach(
-                (me) => me.active = me.contextIds.some((id) => id === context.getDescriptor().contextId)
+                (me) => me.active = me.contextIds.some((id) => id === context.contextId)
             );
 
             (this as any).setStateDirty('primaryMenuEntries');

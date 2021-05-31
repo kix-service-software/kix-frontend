@@ -23,7 +23,6 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
 import { AttachmentLoadingOptions } from '../../../model/AttachmentLoadingOptions';
 import { DisplayImageDescription } from '../../../../base-components/webapp/core/DisplayImageDescription';
-import { DialogService } from '../../../../base-components/webapp/core/DialogService';
 import { LabelValueGroupValue } from '../../../../../model/LabelValueGroupValue';
 
 class Component {
@@ -107,7 +106,8 @@ class Component {
             }
 
             if (images.length && images.some((i) => i.imageId === attachment.ID)) {
-                DialogService.getInstance().openImageDialog(images, attachment.ID);
+                // TODO: image dialog
+                // DialogService.getInstance().openImageDialog(images, attachment.ID);
             } else {
                 const attachments = await KIXObjectService.loadObjects<ConfigItemAttachment>(
                     KIXObjectType.CONFIG_ITEM_ATTACHMENT, [attachment.ID], undefined,

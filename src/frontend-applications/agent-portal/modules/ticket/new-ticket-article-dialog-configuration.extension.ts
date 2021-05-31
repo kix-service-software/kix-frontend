@@ -47,13 +47,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             'ticket-article-new-dialog-help-widget', 'Help Widget', ConfigurationType.Widget,
             'help-widget', 'Translatable#Text Modules', [],
             new ConfigurationDefinition('ticket-article-new-dialog-help-widget-config', ConfigurationType.HelpWidget),
-            null, false, false, 'kix-icon-textblocks'
+            null, false, true, 'kix-icon-textblocks'
         );
         configurations.push(helpWidget);
 
         const newDialogWidget = new WidgetConfiguration(
             'ticket-article-new-dialog-widget', 'New Article DIalog Widget', ConfigurationType.Widget,
-            'new-ticket-article-dialog', 'Translatable#New Article', [], null, null,
+            'object-dialog-form-widget', 'Translatable#New Article', [], null, null,
             false, false, 'kix-icon-new-note'
         );
         configurations.push(newDialogWidget);
@@ -65,13 +65,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     new ConfiguredWidget(
                         'ticket-article-new-dialog-help-widget', 'ticket-article-new-dialog-help-widget'
                     )
-                ], [], [], [], [], [], [], [],
+                ], [], [],
                 [
                     new ConfiguredDialogWidget(
                         'ticket-article-new-dialog-widget', 'ticket-article-new-dialog-widget',
                         KIXObjectType.ARTICLE, ContextMode.CREATE_SUB
                     )
-                ]
+                ], [], [], [], []
             )
         );
 

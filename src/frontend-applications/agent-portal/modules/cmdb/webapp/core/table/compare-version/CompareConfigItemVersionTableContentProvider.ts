@@ -35,7 +35,7 @@ export class CompareConfigItemVersionTableContentProvider extends TableContentPr
     public async loadData(): Promise<Array<RowObject<Version>>> {
         let rowObjects = [];
         if (this.contextId) {
-            const context = await ContextService.getInstance().getContext(this.contextId);
+            const context = ContextService.getInstance().getActiveContext();
             const versionList = await context.getObjectList(KIXObjectType.CONFIG_ITEM_VERSION);
             const versions = versionList as Version[];
             if (versions) {

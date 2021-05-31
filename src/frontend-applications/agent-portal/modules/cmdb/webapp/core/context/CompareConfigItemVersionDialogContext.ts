@@ -35,9 +35,7 @@ export class CompareConfigItemVersionDialogContext extends Context {
                 )
             ];
 
-            const context = await ContextService.getInstance().getContext<ConfigItemDetailsContext>(
-                ConfigItemDetailsContext.CONTEXT_ID
-            );
+            const context = ContextService.getInstance().getActiveContext();
             const configItem = await context.getObject<ConfigItem>(KIXObjectType.CONFIG_ITEM);
 
             versions.forEach((v) => {

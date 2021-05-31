@@ -78,7 +78,8 @@ export class UIModule implements IUIModule {
             true, 'object-details-page', ['configitems'], ConfigItemDetailsContext,
             [
                 new UIComponentPermission('cmdb/configitems', [CRUD.READ])
-            ]
+            ],
+            'Translatable#Bulk', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(configItemDetailsContext);
 
@@ -88,7 +89,8 @@ export class UIModule implements IUIModule {
 
             [
                 new UIComponentPermission('cmdb/configitems', [CRUD.READ])
-            ]
+            ],
+            'Translatable#Asset', 'kix-icon-ci'
         );
         ContextService.getInstance().registerContext(searchConfigItemContext);
 
@@ -99,7 +101,8 @@ export class UIModule implements IUIModule {
 
             [
                 new UIComponentPermission('cmdb/configitems', [CRUD.READ])
-            ]
+            ],
+            'Translatable#Compare Asset Versions', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(compareConfigItemContext);
     }

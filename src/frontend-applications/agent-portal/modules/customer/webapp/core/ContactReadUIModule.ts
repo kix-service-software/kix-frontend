@@ -58,7 +58,8 @@ export class UIModule implements IUIModule {
             true, 'object-details-page', ['contacts'], ContactDetailsContext,
             [
                 new UIComponentPermission('contacts', [CRUD.READ])
-            ]
+            ],
+            'Translatable#Contact Details', 'kix-icon-man'
         );
         ContextService.getInstance().registerContext(organisationDetailsContext);
 
@@ -67,7 +68,8 @@ export class UIModule implements IUIModule {
             false, 'search-contact-dialog', ['contacts'], ContactSearchContext,
             [
                 new UIComponentPermission('contacts', [CRUD.READ])
-            ]
+            ],
+            'Translatable#Contact', 'kix-icon-man'
         );
         ContextService.getInstance().registerContext(searchContactContext);
     }

@@ -30,7 +30,7 @@ export class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext() as TicketContext;
         this.state.widgetConfiguration = context
             ? await context.getWidgetConfiguration(this.state.instanceId)
             : undefined;
@@ -67,7 +67,7 @@ export class Component {
     public async activeNodeChanged(node: TreeNode): Promise<void> {
         this.state.activeNode = node;
 
-        const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext() as TicketContext;
         context.setQueue(node.id);
         context.setAdditionalInformation('STRUCTURE', this.getStructureInformation());
     }
@@ -83,12 +83,13 @@ export class Component {
     }
 
     public async showAll(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
         this.state.activeNode = null;
-
         const allText = await TranslationService.translate('Translatable#All');
 
-        context.setQueue(null);
+        const context = ContextService.getInstance().getActiveContext();
+        if (context instanceof TicketContext) {
+            context.setQueue(null);
+        }
         context.setAdditionalInformation('STRUCTURE', [allText]);
     }
 

@@ -11,9 +11,7 @@ import { AbstractAction } from '../../../../../../../modules/base-components/web
 import { UIComponentPermission } from '../../../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../../../modules/base-components/webapp/core/ContextService';
-import { TicketStateDetailsContext, EditTicketStateDialogContext } from '../..';
-import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../../../model/ContextMode';
+import { EditTicketStateDialogContext } from '../..';
 import { AuthenticationSocketClient } from '../../../../../../base-components/webapp/core/AuthenticationSocketClient';
 
 export class TicketStateEditAction extends AbstractAction {
@@ -37,17 +35,12 @@ export class TicketStateEditAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<TicketStateDetailsContext>(
-            TicketStateDetailsContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         if (context) {
             const id = context.getObjectId();
             if (id) {
-                ContextService.getInstance().setDialogContext(
-                    EditTicketStateDialogContext.CONTEXT_ID, KIXObjectType.TICKET_STATE,
-                    ContextMode.EDIT_ADMIN, id
-                );
+                ContextService.getInstance().setActiveContext(EditTicketStateDialogContext.CONTEXT_ID, id);
             }
         }
     }

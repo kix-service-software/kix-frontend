@@ -55,6 +55,8 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             : this.state.field.required ? this.state.field.label : '';
 
         this.state.placeholder = await TranslationService.translate(placeholderText);
+
+        (this as any).setStateDirty('field');
     }
 
     public async onMount(): Promise<void> {
@@ -208,8 +210,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const formValue = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formValue = formInstance?.getFormFieldValue<number>(this.state.field.instanceId);
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
 
         if (treeHandler && formValue && typeof formValue.value !== 'undefined' && formValue.value !== null) {

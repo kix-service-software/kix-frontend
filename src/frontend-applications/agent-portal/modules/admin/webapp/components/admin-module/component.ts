@@ -33,16 +33,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             },
             contextRegistered: () => { return; }
         });
-        const context = await ContextService.getInstance().getContext<AdminContext>(AdminContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext();
         context.registerListener('admin-module-context-listener', {
-            explorerBarToggled: () => { return; },
-            sidebarToggled: () => { return; },
+            sidebarLeftToggled: () => { return; },
+            sidebarRightToggled: () => { return; },
             objectChanged: this.moduleChanged.bind(this),
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
             scrollInformationChanged: () => { return; },
             additionalInformationChanged: () => { return; }
         });
+
+        this.moduleChanged();
     }
 
     public onDestroy(): void {
@@ -50,7 +52,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async moduleChanged(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<AdminContext>(AdminContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext() as AdminContext;
         const categories = await AdministrationSocketClient.getInstance().loadAdminCategories();
         const module = this.findAdminModule(categories, context.adminModuleId);
         if (module) {

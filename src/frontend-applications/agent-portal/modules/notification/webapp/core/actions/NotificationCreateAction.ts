@@ -11,8 +11,7 @@ import { AbstractAction } from '../../../../../modules/base-components/webapp/co
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../model/ContextMode';
+import { NewNotificationDialogContext } from '../context';
 
 export class NotificationCreateAction extends AbstractAction {
 
@@ -26,10 +25,7 @@ export class NotificationCreateAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            null, KIXObjectType.NOTIFICATION, ContextMode.CREATE_ADMIN, null, true,
-            'Translatable#Automation'
-        );
+        ContextService.getInstance().setActiveContext(NewNotificationDialogContext.CONTEXT_ID);
     }
 
 }

@@ -74,17 +74,20 @@ class Component {
     public onMount(): void {
         const context = ContextService.getInstance().getActiveContext();
         context.registerListener(this.state.chartId, {
-            sidebarToggled: () => {
+            sidebarRightToggled: () => {
                 setTimeout(() => {
-                    if (
-                        (!context.isExplorerBarShown() && window.innerWidth > 1475) ||
-                        (context.isExplorerBarShown() && window.innerWidth > 1700)
-                    ) {
+                    if (window.innerWidth > 1600) {
                         this.createChart();
                     }
                 }, 10);
             },
-            explorerBarToggled: () => { setTimeout(() => { this.createChart(); }, 10); },
+            sidebarLeftToggled: () => {
+                setTimeout(() => {
+                    if (window.innerWidth > 1300) {
+                        this.createChart();
+                    }
+                }, 10);
+            },
             objectChanged: () => { return; },
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },

@@ -20,8 +20,8 @@ import { ContextMode } from '../../../../../model/ContextMode';
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
 import { DataType } from '../../../../../model/DataType';
-import { DialogRoutingConfiguration } from '../../../../../model/configuration/DialogRoutingConfiguration';
 import { EditReportDefinitionContext } from '../context/EditReportDefinitionDialogContext';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
 
 export class ReportDefinitionTableFactory extends TableFactory {
 
@@ -70,10 +70,9 @@ export class ReportDefinitionTableFactory extends TableFactory {
         }
 
         if (defaultRouting) {
-            tableConfiguration.routingConfiguration = new DialogRoutingConfiguration(
+            tableConfiguration.routingConfiguration = new RoutingConfiguration(
                 EditReportDefinitionContext.CONTEXT_ID, KIXObjectType.REPORT_DEFINITION,
-                ContextMode.EDIT, ReportDefinitionProperty.ID, null, true, undefined, true,
-                undefined, undefined, true
+                ContextMode.EDIT, ReportDefinitionProperty.ID, true, false, undefined, true
             );
         }
 

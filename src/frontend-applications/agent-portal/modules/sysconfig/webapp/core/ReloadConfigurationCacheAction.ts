@@ -39,7 +39,8 @@ export class ReloadConfigurationCacheAction extends AbstractAction {
                 await ContextSocketClient.getInstance().rebuildConfiguration().catch(() => null);
                 await KIXModulesSocketClient.getInstance().rebuildConfiguration().catch(() => null);
 
-                await ContextService.getInstance().resetAll();
+                // TODO: reload contexts
+                // await ContextService.getInstance().resetAll();
 
                 EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
                 EventService.getInstance().publish(SysconfigEvent.SYSCONFIG_OPTIONS_UPDATED);

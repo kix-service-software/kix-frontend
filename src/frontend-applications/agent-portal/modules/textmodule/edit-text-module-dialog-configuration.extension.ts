@@ -43,7 +43,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
 
         const widget = new WidgetConfiguration(
             'text-module-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
-            'edit-text-module-dialog', 'Translatable#Edit Text Module',
+            'object-dialog-form-widget', 'Translatable#Edit Text Module',
             [], null, null, false, false, 'kix-icon-edit'
         );
         configurations.push(widget);
@@ -51,13 +51,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), 'Textmodule Edit Dialog', ConfigurationType.Context,
-                this.getModuleId(), [], [], [], [], [], [], [], [],
+                this.getModuleId(), [], [], [],
                 [
                     new ConfiguredDialogWidget(
                         'text-module-edit-dialog-widget', 'text-module-edit-dialog-widget',
                         KIXObjectType.TEXT_MODULE, ContextMode.EDIT_ADMIN
                     )
-                ]
+                ], [], [], [], []
             )
         );
 

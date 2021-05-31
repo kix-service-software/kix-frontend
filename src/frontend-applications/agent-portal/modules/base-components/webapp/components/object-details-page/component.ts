@@ -34,8 +34,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.subscriber = {
             eventSubscriberId: 'object-details',
             eventPublished: (data: any, eventId: string) => {
-                const currentContext = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-                if (data.objectType === currentContext.getDescriptor().kixObjectTypes[0]) {
+                const currentContext = ContextService.getInstance().getActiveContext();
+                if (data.objectType === currentContext.descriptor.kixObjectTypes[0]) {
                     this.prepareWidget();
                     this.prepareActions();
                 }
@@ -75,8 +75,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.lanes = [];
         this.state.contentWidgets = [];
 
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-        this.state.instanceId = context.getDescriptor().contextId;
+        const context = ContextService.getInstance().getActiveContext();
+        this.state.instanceId = context.contextId;
 
         const lanes = context.getLanes(true);
         if (Array.isArray(lanes)) {
@@ -96,7 +96,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async prepareWidget(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const context = ContextService.getInstance().getActiveContext();
         this.state.error = null;
 
         const object = await context.getObject().catch((error) => null);
@@ -111,7 +111,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async prepareActions(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const context = ContextService.getInstance().getActiveContext();
         const config = context.getConfiguration();
         const object = await context.getObject().catch((error) => null);
 

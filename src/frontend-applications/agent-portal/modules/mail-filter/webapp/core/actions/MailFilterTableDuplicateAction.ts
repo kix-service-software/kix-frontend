@@ -12,8 +12,7 @@ import { UIComponentPermission } from '../../../../../model/UIComponentPermissio
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { Row } from '../../../../base-components/webapp/core/table';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../model/ContextMode';
+import { NewMailFilterDialogContext } from '../context';
 
 export class MailFilterTableDuplicateAction extends AbstractAction {
 
@@ -40,10 +39,7 @@ export class MailFilterTableDuplicateAction extends AbstractAction {
             const selectedRows: Row = this.data.getSelectedRows();
             const id = selectedRows[0].getRowObject().getObject().ID;
             if (id) {
-                ContextService.getInstance().setDialogContext(
-                    null, KIXObjectType.MAIL_FILTER, ContextMode.CREATE_ADMIN, id, true,
-                    'Translatable#Communication: Email'
-                );
+                ContextService.getInstance().setActiveContext(NewMailFilterDialogContext.CONTEXT_ID, id);
             }
         }
     }

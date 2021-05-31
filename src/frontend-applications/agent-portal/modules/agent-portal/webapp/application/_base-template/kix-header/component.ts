@@ -8,24 +8,6 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
-import { ContextMode } from '../../../../../../model/ContextMode';
-
-import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
-import { ComponentContent } from '../../../../../../modules/base-components/webapp/core/ComponentContent';
-import { ToastContent } from '../../../../../../modules/base-components/webapp/core/ToastContent';
-import { OverlayService } from '../../../../../../modules/base-components/webapp/core/OverlayService';
-import { OverlayType } from '../../../../../../modules/base-components/webapp/core/OverlayType';
-import { RoutingConfiguration } from '../../../../../../model/configuration/RoutingConfiguration';
-import { ContextHistory } from '../../../../../../modules/base-components/webapp/core/ContextHistory';
-
-
-
-import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
-import { ContextFactory } from '../../../../../base-components/webapp/core/ContextFactory';
-import { ObjectIconLoadingOptions } from '../../../../../../server/model/ObjectIconLoadingOptions';
-import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
-import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
 
 class Component {
 
@@ -36,60 +18,17 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        this.state.translations = await TranslationService.createTranslationObject([
-            'Translatable#Personal Settings', 'Translatable#Switch to customer portal.',
-            'Translatable#Help', 'Translatable#Logout'
-        ]);
-
-        const logoLoadingOptions = new ObjectIconLoadingOptions('agent-portal-logo', 'agent-portal-logo');
-        const icons = await KIXObjectService.loadObjects<ObjectIcon>(
-            KIXObjectType.OBJECT_ICON, null, null, logoLoadingOptions
-        );
-        if (icons && icons.length) {
-            this.state.logoIcon = icons[0];
-        }
-
-        const dialogs = await await ContextFactory.getInstance().getContextDescriptors(ContextMode.CREATE);
-        this.state.allowNew = dialogs && (dialogs.length > 0);
+        window.addEventListener('resize', this.resizeHandling.bind(this), false);
+        this.resizeHandling();
     }
 
-    public openDialog(event: any): void {
-        event.stopPropagation();
-        event.preventDefault();
-        ContextService.getInstance().setDialogContext(null, null, ContextMode.CREATE, null, true);
+    public onDestroy(): void {
+        window.removeEventListener('resize', this.resizeHandling.bind(this), false);
     }
 
-    public async showTemporaryComingSoon(): Promise<void> {
-        const text = await TranslationService.translate('Translatable#We are working on this functionality.');
-        const content = new ComponentContent(
-            'toast',
-            new ToastContent('kix-icon-magicwand', text, 'Coming Soon')
-        );
-        OverlayService.getInstance().openOverlay(OverlayType.HINT_TOAST, null, content, '');
+    private resizeHandling(): void {
+        this.state.isMobile = Boolean(window.innerWidth <= 1024);
     }
-
-    public showPersonalSettings(): void {
-        // TODO: there should be a module which register the action to open
-        // this Dialog to avoid unnecessary dependencies
-        ContextService.getInstance().setDialogContext(
-            'personal-settings-dialog-context', KIXObjectType.PERSONAL_SETTINGS,
-            ContextMode.PERSONAL_SETTINGS, null, true
-        );
-    }
-
-    public getReleaseRoutingConfig(): RoutingConfiguration {
-        // TODO: there should be a module which register the action to open
-        // this Dialog to avoid unnecessary dependencies
-        return new RoutingConfiguration(
-            'release', null, ContextMode.DASHBOARD, null
-        );
-    }
-
-    public async logout(): Promise<void> {
-        ContextHistory.getInstance().removeBrowserListener();
-        window.location.replace('/auth/logout');
-    }
-
 }
 
 module.exports = Component;

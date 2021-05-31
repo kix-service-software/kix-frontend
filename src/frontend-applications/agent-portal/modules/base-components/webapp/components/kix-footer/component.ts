@@ -16,7 +16,7 @@ import { SysConfigOption } from '../../../../sysconfig/model/SysConfigOption';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ReleaseInfo } from '../../../../../model/ReleaseInfo';
-import { AgentService } from '../../../../user/webapp/core';
+import { AgentService } from '../../../../user/webapp/core/AgentService';
 
 class Component {
 

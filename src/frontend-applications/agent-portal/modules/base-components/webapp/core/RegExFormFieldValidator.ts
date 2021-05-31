@@ -14,6 +14,7 @@ import { ValidationSeverity } from './ValidationSeverity';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
+import { ContextService } from './ContextService';
 
 export class RegExFormFieldValidator implements IFormFieldValidator {
 
@@ -28,7 +29,8 @@ export class RegExFormFieldValidator implements IFormFieldValidator {
     }
 
     public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
-        const formInstance = await FormService.getInstance().getFormInstance(formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue(formField.instanceId);
         const fieldValue = value ? value.value : null;
         if (fieldValue && typeof fieldValue === 'string' && fieldValue !== '') {
