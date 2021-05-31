@@ -50,11 +50,11 @@ export class ImportAction extends AbstractAction<Table> {
         if (this.objectType) {
             const contextDescriptor = ContextService.getInstance().getContextDescriptors(ContextMode.IMPORT);
 
-            if (Array.isArray(contextDescriptor) && context.length) {
+            if (Array.isArray(contextDescriptor) && contextDescriptor.length) {
 
                 const descriptor = contextDescriptor.find((c) => c.kixObjectTypes.some((o) => o === this.objectType));
                 if (descriptor) {
-                    ContextService.getInstance().setActiveContext(descriptor.contextId);
+                    await ContextService.getInstance().setActiveContext(descriptor.contextId);
                 }
             }
         }

@@ -228,8 +228,9 @@ class Component {
         );
 
         await FormService.getInstance().addForm(form);
-
-        this.state.importConfigFormId = form.id;
+        const context = ContextService.getInstance().getActiveContext();
+        await context?.getFormManager().setFormId(form.id);
+        this.state.prepared = true;
     }
 
     private async createTable(): Promise<void> {
