@@ -24,8 +24,6 @@ import { EventService } from '../../../base-components/webapp/core/EventService'
 import { FAQEvent } from '../../../faq/webapp/core';
 import { IEventSubscriber } from '../../../base-components/webapp/core/IEventSubscriber';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
-import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
-import { FormService } from '../../../base-components/webapp/core/FormService';
 import { ArticleProperty } from '../../model/ArticleProperty';
 import { Attachment } from '../../../../model/kix/Attachment';
 import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
