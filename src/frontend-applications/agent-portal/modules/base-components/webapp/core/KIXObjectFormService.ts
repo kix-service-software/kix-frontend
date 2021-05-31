@@ -32,6 +32,7 @@ import { FormInstance } from './FormInstance';
 import { KIXObjectService } from './KIXObjectService';
 import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core/DynamicFormFieldOption';
 import { PlaceholderService } from './PlaceholderService';
+import { FormFactory } from './FormFactory';
 
 export abstract class KIXObjectFormService {
 
@@ -60,6 +61,8 @@ export abstract class KIXObjectFormService {
         for (const extendedService of this.extendedFormServices) {
             await extendedService.prePrepareForm(form, kixObject, formInstance);
         }
+
+        FormFactory.initForm(form);
 
         const formFieldValues: Map<string, FormFieldValue<any>> = formInstance.getAllFormFieldValues();
         for (const p of form.pages) {
@@ -99,6 +102,7 @@ export abstract class KIXObjectFormService {
             );
         }
 
+        const values = [];
         for (const f of formFields) {
             let formFieldValue: FormFieldValue;
 
@@ -113,6 +117,8 @@ export abstract class KIXObjectFormService {
                 f,
                 formContext
             );
+
+            values.push([f.instanceId, value]);
 
             // TODO: move handling to this.getValue - object FormServices have to use super
             if (f.property === 'ICON') {
@@ -140,6 +146,8 @@ export abstract class KIXObjectFormService {
                 await this.prepareFormFieldValues(f.children, kixObject, formFieldValues, formContext, formInstance);
             }
         }
+
+        formInstance.provideFormFieldValues(values, null, true, false);
     }
 
     protected async getValue(
@@ -286,8 +294,6 @@ export abstract class KIXObjectFormService {
             const value = formValues.get(formFieldInstanceId);
 
             if (value && typeof value.value !== 'undefined' && property) {
-                value.value = await PlaceholderService.getInstance().replacePlaceholders(value.value, object);
-
                 if (property === KIXObjectProperty.DYNAMIC_FIELDS) {
                     parameter = await DynamicFieldFormUtil.getInstance().handleDynamicField(field, value, parameter);
                 } else {
@@ -348,17 +354,21 @@ export abstract class KIXObjectFormService {
         forUpdate: boolean, property: string, field: FormFieldConfiguration, value: any, formInstance: FormInstance,
         parameter: Array<[string, any]>
     ): Promise<void> {
-        let preparedValue;
+        let preparedValues: Array<[string, any]>;
         if (forUpdate) {
-            preparedValue = await this.prepareUpdateValue(property, field, value.value, formInstance);
+            preparedValues = await this.prepareUpdateValue(property, field, value.value, formInstance);
         } else {
-            preparedValue = await this.prepareCreateValue(property, field, value.value, formInstance);
-            if (property === 'ICON' && preparedValue[1] && !(preparedValue[1] as ObjectIcon).Content) {
-                preparedValue[1] = null;
-            }
+            preparedValues = await this.prepareCreateValue(property, field, value.value, formInstance);
         }
-        if (preparedValue) {
-            preparedValue.forEach((pv) => parameter.push([pv[0], pv[1]]));
+
+        if (Array.isArray(preparedValues)) {
+            preparedValues.forEach((pv) => {
+                if (pv[0] === 'ICON' && !(pv[1] as ObjectIcon)?.Content) {
+                    parameter.push([pv[0], null]);
+                } else {
+                    parameter.push([pv[0], pv[1]]);
+                }
+            });
         }
     }
 

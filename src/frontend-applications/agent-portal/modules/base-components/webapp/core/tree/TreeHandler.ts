@@ -10,6 +10,7 @@
 import { TreeNode } from './TreeNode';
 import { TreeUtil } from './TreeUtil';
 import { TreeNavigationHandler } from './TreeNavigationHandler';
+import { SortUtil } from '../../../../../model/SortUtil';
 
 export class TreeHandler {
 
@@ -246,6 +247,9 @@ export class TreeHandler {
                 });
                 this.selectedNodes = selection;
             }
+
+            // sort to keep always same order (is impotant in report jobs (output formats))
+            this.selectedNodes = SortUtil.sortObjects(this.selectedNodes, 'label');
 
             this.listener.forEach((l) => l(this.getSelectedNodes()));
             if (!silent) {

@@ -15,6 +15,7 @@ import { TreeNode } from '../tree';
 import { ValidationResult } from '../ValidationResult';
 import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
 
 export interface IDynamicFormManager {
 
@@ -78,7 +79,7 @@ export interface IDynamicFormManager {
 
     clearValueOnPropertyChange(property: string): Promise<boolean>;
 
-    isMultiselect(property: string): Promise<boolean>;
+    isMultiselect(property: string, operator: SearchOperator | string): Promise<boolean>;
 
     validate(): Promise<ValidationResult[]>;
 

@@ -470,9 +470,11 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return InputFieldTypes.TEXT;
     }
 
-    public async isMultiselect(property: string, forSearch?: boolean): Promise<boolean> {
+    public async isMultiselect(
+        property: string, operator: SearchOperator | string, forSearch?: boolean
+    ): Promise<boolean> {
         for (const extendedManager of this.extendedFormManager) {
-            const result = await extendedManager.isMultiselect(property);
+            const result = await extendedManager.isMultiselect(property, operator);
             if (result !== undefined && result !== null) {
                 return result;
             }
@@ -489,9 +491,15 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
                     field.FieldType === DynamicFieldTypes.CI_REFERENCE
                 )
             ) {
+                // return true OR false (not only one of them)
                 return field.Config && (forSearch || Number(field.Config.CountMax) > 1);
             }
         }
+
+        if (operator === SearchOperator.EQUALS) {
+            return false;
+        }
+
         return;
     }
 

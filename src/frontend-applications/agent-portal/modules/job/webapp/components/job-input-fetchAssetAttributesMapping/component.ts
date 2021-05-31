@@ -24,7 +24,7 @@ class Component extends FormInputComponent<[string, string], ComponentState> {
     }
 
     private async update(): Promise<void> {
-        this.state.assetLabel = await TranslationService.translate('Translatable#Attribut');
+        this.state.assetLabel = await TranslationService.translate('Translatable#Attribute');
         this.state.dfLabel = await TranslationService.translate('Translatable#DynamicField');
     }
 

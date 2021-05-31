@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2021-04-07 12:46+0000\n"
+"PO-Revision-Date: 2021-05-26 13:47+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: English <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/en/>\n"
@@ -93,6 +93,15 @@ msgid "Add Object"
 msgstr ""
 
 msgid "Address successfully created."
+msgstr ""
+
+msgid "Address successfully removed."
+msgstr "Email Address(es) successfully removed."
+
+msgid "Add Table Widget"
+msgstr ""
+
+msgid "Add Widget"
 msgstr ""
 
 msgid "Admin"
@@ -279,9 +288,6 @@ msgstr ""
 msgid "Attachments"
 msgstr ""
 
-msgid "Attribut"
-msgstr ""
-
 msgid "Attribute"
 msgstr ""
 
@@ -301,6 +307,9 @@ msgid "Automation: Jobs"
 msgstr ""
 
 msgid "Automation: Notifications"
+msgstr ""
+
+msgid "Available Dashboard Widgets"
 msgstr ""
 
 msgid "Available Output Formats"
@@ -435,6 +444,9 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
+msgid "Closed"
+msgstr ""
+
 msgid "Closed at"
 msgstr ""
 
@@ -532,6 +544,9 @@ msgid "Config Item Version Compare"
 msgstr "Asset Version Compare"
 
 msgid "Configuration"
+msgstr ""
+
+msgid "Configuration Mode"
 msgstr ""
 
 msgid "Confirmation through customer signature"
@@ -1170,9 +1185,8 @@ msgstr ""
 msgid "Filter successfully created."
 msgstr ""
 
-#, fuzzy
 msgid "Filter successfully removed."
-msgstr "Search successfully saved."
+msgstr "Filter(s) successfully removed."
 
 msgid ""
 "Find this saved search within the Dropdown Bookmarks, located in the header "
@@ -1768,7 +1782,7 @@ msgid "Helptext_Admin_Tickets_QueueCreate_UnlockTimeout"
 msgstr ""
 "If an agent locks a ticket, but does not close the ticket before expiry of "
 "the unlock timeout, the ticket will be opened again and available for other "
-"agents."
+"agents (entry in minutes)."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_Validity"
 msgstr "The team can only be used within the system if set “valid”."
@@ -2851,6 +2865,9 @@ msgstr ""
 msgid "Macro"
 msgstr ""
 
+msgid "Mail Accounts successfully removed."
+msgstr "Email Account(s) successfully removed."
+
 msgid "Mail Account successfully fetched."
 msgstr ""
 
@@ -2894,6 +2911,15 @@ msgid "My locked tickets with new articles"
 msgstr ""
 
 msgid "My Open Tickets"
+msgstr ""
+
+msgid "My Open Tickets Table"
+msgstr ""
+
+msgid "My Open Tickets Table Widget"
+msgstr ""
+
+msgid "My Open Tickets Widget"
 msgstr ""
 
 msgid "My Organisation"
@@ -3013,7 +3039,22 @@ msgstr ""
 msgid "New Tickets"
 msgstr ""
 
+msgid "New Tickets Chart"
+msgstr ""
+
+msgid "New Tickets Chart Widget"
+msgstr ""
+
 msgid "New Tickets (recent 7 days)"
+msgstr ""
+
+msgid "New Tickets Table"
+msgstr ""
+
+msgid "New Tickets Table Widget"
+msgstr ""
+
+msgid "New Tickets Widget"
 msgstr ""
 
 msgid "New Translation"
@@ -3122,7 +3163,7 @@ msgid "Notifications for Tickets"
 msgstr ""
 
 msgid "Notifications successfully removed."
-msgstr ""
+msgstr "Notification(s) successfully removed."
 
 msgid "Notification successfully created."
 msgstr "Notification successfully created."
@@ -3188,6 +3229,9 @@ msgid "Once per day"
 msgstr ""
 
 msgid "Online and offline processing of service jobs"
+msgstr ""
+
+msgid "Open"
 msgstr ""
 
 msgid "Open Sidebars"
@@ -3290,6 +3334,9 @@ msgid "Paramater"
 msgstr ""
 
 msgid "Parameter"
+msgstr ""
+
+msgid "Parameters"
 msgstr ""
 
 msgid "Parent Category"
@@ -3410,6 +3457,12 @@ msgid "Priorities successfully removed."
 msgstr ""
 
 msgid "Priority"
+msgstr ""
+
+msgid "Priority Chart"
+msgstr ""
+
+msgid "Priority Chart Widget"
 msgstr ""
 
 msgid "Priority Data"
@@ -3535,11 +3588,17 @@ msgstr ""
 msgid "Reminder Tickets"
 msgstr ""
 
+msgid "Remove Address"
+msgstr "Remove Adress(es)"
+
 msgid "Remove dependency to organisation"
 msgstr ""
 
 msgid "Remove Filter"
 msgstr ""
+
+msgid "Remove Mail Accounts"
+msgstr "Remove Email Account(s)"
 
 msgid "Remove Notifications"
 msgstr ""
@@ -3551,6 +3610,9 @@ msgid "Remove Priorities"
 msgstr ""
 
 msgid "Remove States"
+msgstr ""
+
+msgid "Remove Text Modules"
 msgstr ""
 
 msgid "Remove translations"
@@ -3638,6 +3700,9 @@ msgid "Responsible Tickets"
 msgstr ""
 
 msgid "Result names"
+msgstr ""
+
+msgid "Results"
 msgstr ""
 
 msgid "Results advanced search"
@@ -3730,8 +3795,11 @@ msgstr ""
 msgid "Search successfully saved."
 msgstr "Search successfully saved."
 
-msgid "Search template successfully removed."
+msgid "Search Templates"
 msgstr ""
+
+msgid "Search template successfully removed."
+msgstr "Search template(s) successfully removed."
 
 msgid "Search Tickets"
 msgstr ""
@@ -3886,6 +3954,9 @@ msgstr ""
 msgid "Skip & Continue"
 msgstr ""
 
+msgid "Small Widget"
+msgstr ""
+
 msgid "Solution"
 msgstr ""
 
@@ -3943,8 +4014,14 @@ msgstr ""
 msgid "States"
 msgstr ""
 
-msgid "States successfully removed."
+msgid "States Chart"
 msgstr ""
+
+msgid "States Chart Widget"
+msgstr ""
+
+msgid "States successfully removed."
+msgstr "State(s) successfully removed."
 
 msgid "State successfully created."
 msgstr ""
@@ -4071,6 +4148,9 @@ msgstr ""
 
 msgid "Text Modules"
 msgstr ""
+
+msgid "Text Modules successfully removed."
+msgstr "Text Module(s) successfully removed."
 
 msgid "Text Module successfully created."
 msgstr ""
@@ -4239,7 +4319,7 @@ msgid "Translations"
 msgstr ""
 
 msgid "Translations successfully removed."
-msgstr ""
+msgstr "Translation(s) successfully removed."
 
 msgid "Translation successfully created."
 msgstr ""
@@ -4263,7 +4343,7 @@ msgid "Types"
 msgstr ""
 
 msgid "Types successfully removed."
-msgstr ""
+msgstr "Type(s) successfully removed."
 
 msgid "Type successfully created."
 msgstr ""
@@ -4434,6 +4514,9 @@ msgid "Value successfully created."
 msgstr ""
 
 msgid "Version"
+msgstr ""
+
+msgid "Viewable States"
 msgstr ""
 
 msgid "Votes"

@@ -49,7 +49,6 @@ class FieldContainerComponent {
             }
         };
         EventService.getInstance().subscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FIELD_REMOVED, this.formSubscriber);
         EventService.getInstance().subscribe(FormEvent.FORM_FIELD_ORDER_CHANGED, this.formSubscriber);
     }
 

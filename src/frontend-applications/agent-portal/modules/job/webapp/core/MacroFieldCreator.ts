@@ -38,23 +38,24 @@ import { JobService } from './JobService';
 export class MacroFieldCreator {
     public static async createMacroField(
         macro: Macro, formInstance: FormInstance, jobManager: AbstractJobFormManager, parentInstanceId: string = '',
-        allowEmpty: boolean = false
+        allowEmpty: boolean = false, type?: string
     ): Promise<FormFieldConfiguration> {
         const macroField = new FormFieldConfiguration(
             'job-form-field-macro', '', JobProperty.MACROS, 'default-select-input'
         );
 
+        // FIXME: load macro types (currently identical to job types)
         const types = await KIXObjectService.loadObjects<JobType>(KIXObjectType.JOB_TYPE).catch((): JobType[] => []);
         const typeNodes = types.map((t) => new TreeNode(t.Name, t.DisplayName));
         macroField.options.push(new FormFieldOption(DefaultSelectInputFormOption.NODES, typeNodes));
         macroField.options.push(new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false));
 
-        let type = macro?.Type;
+        type = type || macro?.Type;
 
         if (parentInstanceId === '') {
             macroField.readonly = true;
             const typeValue = await formInstance?.getFormFieldValueByProperty<string>(JobProperty.TYPE);
-            type = macro ? type : typeValue?.value;
+            type = type || macro ? type : typeValue?.value;
         }
 
         macroField.defaultValue = new FormFieldValue<string>(type);
@@ -245,6 +246,7 @@ export class MacroFieldCreator {
                     resultField.instanceId = `${actionFieldInstanceId}###ResultGroup###${result.Name}`;
                     resultField.required = false;
                     resultField.hint = result.Description;
+                    resultField.translateLabel = false;
 
                     let defaultValue: string;
                     if (action && action.ResultVariables) {

@@ -49,10 +49,12 @@ class Component {
         if (this.state.field.property === this.state.field.label) {
             const form = await FormService.getInstance().getForm(this.state.formId);
             this.state.label = await LabelService.getInstance().getPropertyText(
-                this.state.field.property, form.objectType
+                this.state.field.property, form.objectType, null, this.state.field.translateLabel
             );
         } else {
-            this.state.label = await TranslationService.translate(this.state.field.label);
+            this.state.label = await TranslationService.translate(
+                this.state.field.label, undefined, undefined, !this.state.field.translateLabel
+            );
         }
 
         const hint = await TranslationService.translate(this.state.field.hint);

@@ -484,23 +484,29 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     }
 
     public static async prepareObjectTree(
-        objects: KIXObject[], showInvalid?: boolean, invalidClickable?: boolean, filterIds?: Array<string | number>
+        objects: KIXObject[], showInvalid?: boolean, invalidClickable?: boolean, filterIds?: Array<string | number>,
+        translatable?: boolean
     ): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
         if (objects && !!objects.length) {
             const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objects[0].KIXObjectType);
-            nodes = await service.prepareObjectTree(objects, showInvalid, invalidClickable, filterIds);
+            nodes = await service.prepareObjectTree(objects, showInvalid, invalidClickable, filterIds, translatable);
         }
         return nodes;
     }
 
     public async prepareObjectTree(
-        objects: KIXObject[], showInvalid?: boolean, invalidClickable?: boolean, filterIds?: Array<string | number>
+        objects: KIXObject[], showInvalid?: boolean, invalidClickable?: boolean, filterIds?: Array<string | number>,
+        translatable?: boolean
     ): Promise<TreeNode[]> {
         const nodes: TreeNode[] = [];
         if (objects && !!objects.length) {
             for (const o of objects) {
-                nodes.push(new TreeNode(o.ObjectId, await LabelService.getInstance().getObjectText(o)));
+                nodes.push(
+                    new TreeNode(
+                        o.ObjectId, await LabelService.getInstance().getObjectText(o, null, null, translatable)
+                    )
+                );
             }
         }
         return nodes;

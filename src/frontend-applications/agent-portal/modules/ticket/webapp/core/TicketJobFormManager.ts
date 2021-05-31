@@ -51,4 +51,5 @@ class TicketJobFilterFormManager extends TicketSearchFormManager {
 
         return operations;
     }
+
 }
