@@ -43,9 +43,9 @@ export class RoutingService {
             await this.routeToURL(history);
         }
 
-        await SetupService.getInstance().setSetupAssistentIfNeeded();
-        await this.setReleaseContext();
         this.setHomeContext();
+        await this.setReleaseContext();
+        await SetupService.getInstance().setSetupAssistentIfNeeded();
     }
 
     private async setReleaseContext(): Promise<void> {

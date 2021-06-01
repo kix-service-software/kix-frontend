@@ -15,7 +15,8 @@ export class ComponentState extends WidgetComponentState {
     public constructor(
         public nodes: TreeNode[] = [],
         public activeNode: TreeNode = null,
-        public filterValue: string = null
+        public filterValue: string = null,
+        public prepared: boolean = false
     ) {
         super();
     }

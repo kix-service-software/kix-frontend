@@ -47,6 +47,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 await this.prepareCategoryTreeNodes(categories);
             }
 
+            this.sortNodes();
+            this.state.prepared = true;
+
             setTimeout(() => {
                 this.setActiveNode(context.adminModuleId, true);
             }, 500);
@@ -74,40 +77,33 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async prepareCategoryTreeNodes(
-        modules: Array<AdminModuleCategory | AdminModule>, parent?: TreeNode
+        modules: Array<AdminModuleCategory | AdminModule> = [], parent?: TreeNode
     ): Promise<void> {
         const adminModules: TreeNode[] = [];
-        if (modules) {
-
-            for (const m of modules) {
-                if (m instanceof AdminModuleCategory) {
-                    const name = await TranslationService.translate(m.name);
-                    const categoryNode = new TreeNode(
-                        m.id, name, m.icon, null,
-                        [], null, null, null, null, false, true, true
-                    );
-                    this.prepareCategoryTreeNodes(m.children, categoryNode);
-                    this.prepareModuleTreeNodes(m.modules, categoryNode);
-                    if (parent) {
-                        parent.children.push(categoryNode);
-                    } else {
-                        this.state.nodes.push(categoryNode);
-                        this.sortNodes();
-                        (this as any).setStateDirty('nodes');
-                    }
+        for (const m of modules) {
+            if (m instanceof AdminModuleCategory) {
+                const name = await TranslationService.translate(m.name);
+                const categoryNode = new TreeNode(
+                    m.id, name, m.icon, null,
+                    [], null, null, null, null, false, true, true
+                );
+                await this.prepareCategoryTreeNodes(m.children, categoryNode);
+                await this.prepareModuleTreeNodes(m.modules, categoryNode);
+                if (parent) {
+                    parent.children.push(categoryNode);
                 } else {
-                    const allowed = await AuthenticationSocketClient.getInstance().checkPermissions(m.permissions);
-                    if (allowed) {
-                        const name = await TranslationService.translate(m.name);
-                        this.state.nodes.push(new TreeNode(
-                            m.id, name, m.icon,
-                            undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
-                            undefined, undefined, undefined,
-                            ['MODULE']
-                        ));
-                        this.sortNodes();
-                        (this as any).setStateDirty('nodes');
-                    }
+                    this.state.nodes.push(categoryNode);
+                }
+            } else {
+                const allowed = await AuthenticationSocketClient.getInstance().checkPermissions(m.permissions);
+                if (allowed) {
+                    const name = await TranslationService.translate(m.name);
+                    this.state.nodes.push(new TreeNode(
+                        m.id, name, m.icon,
+                        undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+                        undefined, undefined, undefined,
+                        ['MODULE']
+                    ));
                 }
             }
         }
@@ -128,8 +124,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     parent.children.push(node);
                 } else {
                     this.state.nodes.push(node);
-                    this.sortNodes();
-                    (this as any).setStateDirty('nodes');
                 }
             }
         }
@@ -158,11 +152,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private sortNodes(nodes: TreeNode[] = this.state.nodes): TreeNode[] {
-        return nodes.sort((a, b) => {
-            if (a.children) {
-                a.children = this.sortNodes(a.children);
-            }
+        nodes.filter((n) => Array.isArray(n.children) && n.children.length)
+            .forEach((n) => this.sortNodes(n.children));
 
+        return nodes.sort((a, b) => {
             if (a.flags.some((f) => f === 'MODULE') && !b.flags.some((f) => f === 'MODULE')) {
                 return -1;
             } else if (!a.flags.some((f) => f === 'MODULE') && b.flags.some((f) => f === 'MODULE')) {

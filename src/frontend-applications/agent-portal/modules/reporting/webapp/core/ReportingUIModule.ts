@@ -77,7 +77,7 @@ export class UIModule implements IUIModule {
 
         const newReportDefintionContext = new ContextDescriptor(
             NewReportDefinitionDialogContext.CONTEXT_ID, [KIXObjectType.REPORT_DEFINITION], ContextType.DIALOG,
-            ContextMode.CREATE, false, 'object-dialog', [], NewReportDefinitionDialogContext,
+            ContextMode.CREATE_ADMIN, false, 'object-dialog', [], NewReportDefinitionDialogContext,
             [
                 new UIComponentPermission('reporting/reportdefinitions', [CRUD.CREATE], true)
             ]
@@ -86,7 +86,7 @@ export class UIModule implements IUIModule {
 
         const editReportContext = new ContextDescriptor(
             EditReportDefinitionDialogContext.CONTEXT_ID, [KIXObjectType.REPORT_DEFINITION], ContextType.DIALOG,
-            ContextMode.EDIT, false, 'object-dialog', [], EditReportDefinitionDialogContext,
+            ContextMode.EDIT_ADMIN, false, 'object-dialog', [], EditReportDefinitionDialogContext,
             [
                 new UIComponentPermission('reporting/reportdefinitions', [CRUD.CREATE], true)
             ]
