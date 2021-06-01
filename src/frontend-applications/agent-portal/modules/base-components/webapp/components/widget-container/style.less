@@ -56,15 +56,8 @@
         grid-gap: @margin-default;
         grid-auto-flow: row;
 
-        // "mobile"
-        @media only screen and (max-width: @mobile-breakpoint) {
-            grid-template-columns: minmax(100px, 1fr);
-        }
-
         // not "mobile"
         @media only screen and (min-width: @mobile-breakpoint + 1px) {
-            grid-template-columns: [first-line] repeat(3, minmax(100px, 1fr)) [last-line];
-
             .widget-frame.large {
                 grid-column: first-line / last-line;
             }
