@@ -191,7 +191,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.subscriber = {
             eventSubscriberId: 'setup-sending-mail-subscriber',
             eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
-                const changedValue = data.changedValues.find((cv) => cv[0].property === 'SendmailModule');
+                const changedValue = data.changedValues.find((cv) => cv[0]?.property === 'SendmailModule');
                 if (changedValue) {
                     const context = ContextService.getInstance().getActiveContext();
                     const formInstance = await context?.getFormManager()?.getFormInstance();
