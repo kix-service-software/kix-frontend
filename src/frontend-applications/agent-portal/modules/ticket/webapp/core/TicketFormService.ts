@@ -43,6 +43,7 @@ import { AgentService } from '../../../user/webapp/core/AgentService';
 import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { IdService } from '../../../../model/IdService';
 
 export class TicketFormService extends KIXObjectFormService {
 
@@ -76,6 +77,50 @@ export class TicketFormService extends KIXObjectFormService {
 
             const field = formInstance.getFormFieldByProperty(ArticleProperty.CHANNEL_ID);
             formInstance.addFieldChildren(field, channelFields, true);
+        }
+        const stateValue = await formInstance.getFormFieldValueByProperty<number>(TicketProperty.STATE_ID);
+        if (stateValue && stateValue.value) {
+            const isPending = stateValue.value
+                ? await TicketService.isPendingState(stateValue.value)
+                : false;
+
+            if (isPending) {
+                await this.setPendingTimeField(formInstance, kixObject as Ticket, form.formContext);
+            }
+        }
+    }
+
+    // TODO: nearly (value handling, await on provide) copied from TicketFormFieldValueHandler - can use same function?
+    private async setPendingTimeField(
+        formInstance: FormInstance, ticket: Ticket, formContext: FormContext
+    ): Promise<void> {
+        const existingField = formInstance.getFormFieldByProperty(TicketProperty.PENDING_TIME);
+
+        if (!existingField) {
+            const label = await LabelService.getInstance().getPropertyText(
+                TicketProperty.PENDING_TIME, KIXObjectType.TICKET
+            );
+            const pendingField = new FormFieldConfiguration(
+                'pending-time-field',
+                label, TicketProperty.PENDING_TIME, 'ticket-input-state-pending', true,
+                null, null, null, undefined, undefined, undefined, undefined, undefined,
+                null, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+                false
+            );
+
+            const stateField = formInstance.getFormFieldByProperty(TicketProperty.STATE_ID);
+            if (stateField) {
+                formInstance.addFieldChildren(stateField, [pendingField]);
+            } else {
+                pendingField.instanceId = IdService.generateDateBasedId();
+                formInstance.getForm().pages[0].groups[0].formFields.push(pendingField);
+            }
+
+            const date = await this.getValue(TicketProperty.PENDING_TIME, null, ticket, pendingField, formContext);
+
+            await formInstance.provideFormFieldValues(
+                [[pendingField.instanceId, date]], null, true, false
+            );
         }
     }
 
