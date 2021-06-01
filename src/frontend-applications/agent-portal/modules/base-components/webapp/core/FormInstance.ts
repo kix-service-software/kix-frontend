@@ -389,12 +389,12 @@ export class FormInstance {
             changedFieldValues.push([formField, formFieldValue]);
         }
 
-        if (!silent) {
-            const dialogContext = ContextService.getInstance().getActiveContext();
-            if (dialogContext) {
-                await dialogContext.setFormObject();
-            }
+        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        if (dialogContext) {
+            await dialogContext.setFormObject();
+        }
 
+        if (!silent) {
             EventService.getInstance().publish(
                 FormEvent.VALUES_CHANGED, new FormValuesChangedEventData(this, changedFieldValues, originInstanceId)
             );
