@@ -10,7 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { FormInputAction } from '../../../../../modules/base-components/webapp/core/FormInputAction';
 import { Label } from '../../../../../modules/base-components/webapp/core/Label';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
@@ -20,7 +19,6 @@ import { EventService } from '../../../../../modules/base-components/webapp/core
 import { TabContainerEvent } from '../../../../../modules/base-components/webapp/core/TabContainerEvent';
 import { TabContainerEventData } from '../../../../../modules/base-components/webapp/core/TabContainerEventData';
 import { TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
-import { NewTicketDialogContext } from '../../core';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { FormValidationService } from '../../../../../modules/base-components/webapp/core/FormValidationService';
@@ -117,7 +115,7 @@ class Component extends FormInputComponent<number | string, ComponentState> {
 
         contactId = contactId
             ? contactId
-            : Array.isArray(contactValue.value) ? contactValue.value[0] : contactValue.value;
+            : Array.isArray(contactValue?.value) ? contactValue?.value[0] : contactValue?.value;
         if (contactId) {
             if (!isNaN(Number(contactId))) {
                 // check if this contact is valid, if required

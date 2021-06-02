@@ -115,6 +115,11 @@ export abstract class Context {
         if (urlParams) {
             urlParams.forEach((value: string, key: string) => this.setAdditionalInformation(key, value));
         }
+
+        const formId = this.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
+        if (formId) {
+            this.formManager.setFormId(formId);
+        }
     }
 
     public getFormManager(): ContextFormManager {

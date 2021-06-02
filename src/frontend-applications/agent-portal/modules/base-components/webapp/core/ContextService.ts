@@ -216,9 +216,8 @@ export class ContextService {
     ): Promise<void> {
         const context = this.contextInstances.find((i) => i.instanceId === instanceId);
         if (context && context.instanceId !== this.activeContext?.instanceId) {
-            await context.initContext(urlParams);
-
             additionalInformation.forEach((ai) => context.setAdditionalInformation(ai[0], ai[1]));
+            await context.initContext(urlParams);
 
             const previousContext = this.getActiveContext();
             this.setDocumentHistory(true, previousContext, context, objectId);

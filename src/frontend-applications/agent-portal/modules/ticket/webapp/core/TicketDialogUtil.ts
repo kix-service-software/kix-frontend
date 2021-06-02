@@ -15,6 +15,7 @@ import { Ticket } from '../../model/Ticket';
 import { Contact } from '../../../customer/model/Contact';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { Context } from '../../../../model/Context';
+import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
 
 
 export class TicketDialogUtil {
@@ -42,7 +43,7 @@ export class TicketDialogUtil {
 
     public static async editTicket(
         ticketId?: number, articleId?: number, icon?: ObjectIcon | string, text?: string,
-        additionalInformation: Array<[string, any]> = []
+        additionalInformation: Array<[string, any]> = [], formId?: string
     ): Promise<Context> {
 
         const context = ContextService.getInstance().getActiveContext();
@@ -57,10 +58,12 @@ export class TicketDialogUtil {
                 additionalInformation.push(['REFERENCED_ARTICLE_ID', articleId]);
             }
 
+            additionalInformation.push([AdditionalContextInformation.FORM_ID, formId]);
+
             editContext = await ContextService.getInstance().setActiveContext(
                 EditTicketDialogContext.CONTEXT_ID, ticketId, null, additionalInformation
-
             );
+
             editContext.setIcon(icon);
             editContext.setDisplayText(text);
         }

@@ -69,7 +69,6 @@ export class EditTicketDialogContext extends Context {
             null, null, null,
             [
                 KIXObjectProperty.DYNAMIC_FIELDS,
-                KIXObjectProperty.DYNAMIC_FIELDS,
                 TicketProperty.ARTICLES,
                 ArticleProperty.ATTACHMENTS
             ]

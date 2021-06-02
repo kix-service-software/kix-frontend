@@ -67,8 +67,10 @@ class Component extends FormInputComponent<number, ComponentState> {
         }
 
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
-        treeHandler.setTree(nodes);
-        treeHandler.setSelection(nodes, true, true);
+        if (treeHandler) {
+            treeHandler.setTree(nodes);
+            treeHandler.setSelection(nodes, true, true);
+        }
     }
 
     public nodesChanged(nodes: TreeNode[]): void {
