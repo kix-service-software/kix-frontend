@@ -7,7 +7,6 @@
  * --
  */
 
-import { ComponentRouter } from '../../../../model/ComponentRouter';
 import { AgentService } from '../../../user/webapp/core/AgentService';
 import { KIXModulesSocketClient } from './KIXModulesSocketClient';
 import { ContextService } from './ContextService';
@@ -30,25 +29,30 @@ export class RoutingService {
 
     private constructor() { }
 
-    private componentRouters: ComponentRouter[] = [];
-
     public async routeToInitialContext(history: boolean = false, useURL: boolean = true): Promise<void> {
         await ContextService.getInstance().initUserContextInstances();
-        const contextList = ContextService.getInstance().getContextInstances();
-        if (contextList.length) {
-            await ContextService.getInstance().setContextByInstanceId(contextList[0].instanceId);
-        }
 
+        let routed: boolean = false;
         if (useURL) {
-            await this.routeToURL(history);
+            routed = await this.routeToURL(history);
         }
 
-        this.setHomeContext();
-        await this.setReleaseContext();
-        await SetupService.getInstance().setSetupAssistentIfNeeded();
+        routed = routed || await this.setReleaseContext();
+        routed = routed || await SetupService.getInstance().setSetupAssistentIfNeeded();
+
+        if (!routed) {
+            const contextList = ContextService.getInstance().getContextInstances();
+            if (contextList.length) {
+                await ContextService.getInstance().setContextByInstanceId(contextList[0].instanceId);
+            } else {
+                this.setHomeContextIfNeeded();
+            }
+        }
     }
 
-    private async setReleaseContext(): Promise<void> {
+    private async setReleaseContext(): Promise<boolean> {
+        let routed: boolean = false;
+
         const needReleaseInfo = await this.isReleaseInfoNeeded();
         if (needReleaseInfo) {
             await ContextService.getInstance().setActiveContext('release');
@@ -58,7 +62,10 @@ export class RoutingService {
             AgentService.getInstance().setPreferences([
                 [this.VISITED_KEY, buildNumber.toString()]
             ]);
+            routed = true;
         }
+
+        return routed;
     }
 
     private async isReleaseInfoNeeded(): Promise<boolean> {
@@ -74,14 +81,19 @@ export class RoutingService {
         return !releaseInfoVisited || (buildNumber && releaseInfoVisited !== buildNumber.toString());
     }
 
-    private setHomeContext(): void {
+    private setHomeContextIfNeeded(): boolean {
+        let routed: boolean = false;
         const contextList = ContextService.getInstance().getContextInstances();
         if (Array.isArray(contextList) && !contextList.length) {
             ContextService.getInstance().setActiveContext('home');
+            routed = true;
         }
+
+        return routed;
     }
 
-    private async routeToURL(history: boolean = false): Promise<void> {
+    private async routeToURL(history: boolean = false): Promise<boolean> {
+        let routed: boolean = false;
         const parsedUrl = new URL(window.location.href);
         const path = parsedUrl.pathname === '/' ? [] : parsedUrl.pathname.split('/');
         if (path.length > 1) {
@@ -89,10 +101,13 @@ export class RoutingService {
             const objectId = path[2];
             if (contextUrl && contextUrl !== '') {
                 await ContextService.getInstance().setContextByUrl(contextUrl, objectId);
+                routed = true;
             }
         }
 
         this.handleURLParams(parsedUrl.searchParams);
+
+        return routed;
     }
 
     private handleURLParams(params: URLSearchParams): void {

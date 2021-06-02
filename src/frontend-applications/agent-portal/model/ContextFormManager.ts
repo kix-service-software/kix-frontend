@@ -112,8 +112,6 @@ export class ContextFormManager {
                         ContextFormManagerEvents.FORM_INSTANCE_CHANGED, this.formInstance
                     );
                 }
-
-                // await this.context.getStorageManager().getStorableContextPreference();
             }
         }
 

@@ -111,7 +111,8 @@ export class SetupService {
         );
     }
 
-    public async setSetupAssistentIfNeeded(): Promise<void> {
+    public async setSetupAssistentIfNeeded(): Promise<boolean> {
+        let routed: boolean = false;
         const isSetupNeeded = await this.isSetupNeeded();
 
         if (isSetupNeeded) {
@@ -120,7 +121,10 @@ export class SetupService {
             if (context instanceof AdminContext) {
                 context.setAdminModule('setup-assistant', '');
             }
+            routed = true;
         }
+
+        return routed;
     }
 
     private async isSetupNeeded(): Promise<boolean> {
