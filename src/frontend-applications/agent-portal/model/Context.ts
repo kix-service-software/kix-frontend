@@ -112,6 +112,10 @@ export abstract class Context {
     }
 
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
+        for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {
+            await extension.initContext(this, urlParams);
+        }
+
         if (urlParams) {
             urlParams.forEach((value: string, key: string) => this.setAdditionalInformation(key, value));
         }

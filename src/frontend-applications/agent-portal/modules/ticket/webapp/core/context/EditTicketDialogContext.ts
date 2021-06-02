@@ -35,7 +35,7 @@ export class EditTicketDialogContext extends Context {
     private organisation: Organisation;
 
     public async initContext(): Promise<void> {
-        super.initContext();
+        await super.initContext();
         await this.setFormObject(false);
     }
 

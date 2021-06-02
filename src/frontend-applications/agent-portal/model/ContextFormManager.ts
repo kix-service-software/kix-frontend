@@ -113,7 +113,7 @@ export class ContextFormManager {
                     );
                 }
 
-                await this.context.getStorageManager().getStorableContextPreference();
+                // await this.context.getStorageManager().getStorableContextPreference();
             }
         }
 

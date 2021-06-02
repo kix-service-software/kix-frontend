@@ -87,7 +87,8 @@ export class ContextService {
     }
 
     private async getContextInstance(
-        contextId: string, objectId?: string | number, createNewInstance: boolean = true
+        contextId: string, objectId?: string | number, createNewInstance: boolean = true,
+        additionalInformation: Array<[string, any]> = []
     ): Promise<Context> {
         let context = this.contextInstances.find((c) => c.equals(contextId, objectId));
 
@@ -100,6 +101,12 @@ export class ContextService {
 
         if ((!context || isNewDialog) && createNewInstance) {
             context = await this.createContextInstance(contextId, objectId);
+
+            additionalInformation.forEach((ai) => context.setAdditionalInformation(ai[0], ai[1]));
+
+            if (context?.descriptor?.contextType === ContextType.DIALOG) {
+                await this.updateStorage(context?.instanceId);
+            }
         }
         return context;
     }
@@ -211,33 +218,39 @@ export class ContextService {
     }
 
     public async setContextByInstanceId(
-        instanceId: string, objectId?: string | number, urlParams?: URLSearchParams,
-        additionalInformation: Array<[string, any]> = []
+        instanceId: string, objectId?: string | number, urlParams?: URLSearchParams
     ): Promise<void> {
         const context = this.contextInstances.find((i) => i.instanceId === instanceId);
         if (context && context.instanceId !== this.activeContext?.instanceId) {
-            additionalInformation.forEach((ai) => context.setAdditionalInformation(ai[0], ai[1]));
-            await context.initContext(urlParams);
+            let error: boolean = false;
 
-            const previousContext = this.getActiveContext();
-            this.setDocumentHistory(true, previousContext, context, objectId);
-            this.activeContext = context;
+            await context.initContext(urlParams).catch((e) => {
+                console.error(e);
+                this.removeContext(instanceId);
+                error = true;
+            });
 
-            EventService.getInstance().publish(RoutingEvent.ROUTE_TO,
-                {
-                    componentId: context.descriptor.componentId,
-                    data: { objectId: context.getObjectId() }
-                }
-            );
+            if (!error) {
+                const previousContext = this.getActiveContext();
+                this.setDocumentHistory(true, previousContext, context, objectId);
+                this.activeContext = context;
 
-            EventService.getInstance().publish(ContextEvents.CONTEXT_CHANGED, context);
+                EventService.getInstance().publish(RoutingEvent.ROUTE_TO,
+                    {
+                        componentId: context.descriptor.componentId,
+                        data: { objectId: context.getObjectId() }
+                    }
+                );
 
-            // TODO: Use Event
-            this.serviceListener.forEach(
-                (sl) => sl.contextChanged(
-                    context.contextId, context, context.descriptor.contextType, null, previousContext
-                )
-            );
+                EventService.getInstance().publish(ContextEvents.CONTEXT_CHANGED, context);
+
+                // TODO: Use Event
+                this.serviceListener.forEach(
+                    (sl) => sl.contextChanged(
+                        context.contextId, context, context.descriptor.contextType, null, previousContext
+                    )
+                );
+            }
         }
     }
 
@@ -245,9 +258,9 @@ export class ContextService {
         contextId: string, objectId?: string | number, urlParams?: URLSearchParams,
         additionalInformation: Array<[string, any]> = []
     ): Promise<Context> {
-        const context = await this.getContextInstance(contextId, objectId);
+        const context = await this.getContextInstance(contextId, objectId, true, additionalInformation);
         if (context) {
-            await this.setContextByInstanceId(context.instanceId, objectId, urlParams, additionalInformation);
+            await this.setContextByInstanceId(context.instanceId, objectId, urlParams);
         }
         return context;
     }
@@ -337,10 +350,6 @@ export class ContextService {
                 ? this.contextInstances.findIndex((c) => c.instanceId === this.activeContext.instanceId)
                 : this.contextInstances.length - 1;
             this.contextInstances.splice(index + 1, 0, newContext);
-
-            if (newContext.descriptor?.contextType === ContextType.DIALOG) {
-                this.updateStorage(newContext?.instanceId);
-            }
 
             EventService.getInstance().publish(ContextEvents.CONTEXT_CREATED, newContext);
         }

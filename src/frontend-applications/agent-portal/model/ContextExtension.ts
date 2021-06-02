@@ -14,6 +14,10 @@ import { ContextPreference } from './ContextPreference';
 
 export class ContextExtension {
 
+    public async initContext(context: Context, urlParams?: URLSearchParams): Promise<void> {
+        return;
+    }
+
     public async getAdditionalActions(context: Context, object?: KIXObject): Promise<AbstractAction[]> {
         return;
     }
