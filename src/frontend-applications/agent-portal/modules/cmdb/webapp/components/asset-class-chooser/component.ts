@@ -24,6 +24,8 @@ import { FilterDataType } from '../../../../../model/FilterDataType';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { FilterType } from '../../../../../model/FilterType';
 import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
+import { SortUtil } from '../../../../../model/SortUtil';
+import { DataType } from '../../../../../model/DataType';
 
 export class Component {
 
@@ -74,6 +76,9 @@ export class Component {
                 nodes.push(new TreeNode(c.ID, name, icon));
             }
         }
+
+        SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+
         return nodes;
     }
 
