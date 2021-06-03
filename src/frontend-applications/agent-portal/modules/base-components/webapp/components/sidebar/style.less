@@ -96,6 +96,9 @@
         }
 
         .sidebar-toggle {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
             cursor: pointer;
             display: grid;
             grid-auto-flow: column;
@@ -105,7 +108,8 @@
             grid-column-gap: 0.5rem;
             color: #5b5b5b;
             padding: 0.5rem;
-            border-radius: 6px;
+            background-color: #ededed;
+
 
             &:hover {
                 background-color: darken(@secondary-3, 5%);
