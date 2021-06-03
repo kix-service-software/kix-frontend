@@ -9,9 +9,7 @@
 
 import { TableContentProvider } from '../../../../../base-components/webapp/core/table/TableContentProvider';
 import { Version } from '../../../../model/Version';
-import {
-    Table, RowObject, TableValue, ValueState
-} from '../../../../../base-components/webapp/core/table';
+import { Table, RowObject, TableValue, ValueState } from '../../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';

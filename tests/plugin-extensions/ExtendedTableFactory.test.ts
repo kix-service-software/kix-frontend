@@ -30,8 +30,8 @@ describe('ExtendedTestTableFactory', () => {
     });
 
     describe('Create table with empty columns', () => {
-        it('Should modify configurations and empty the columns', () => {
-            const table = tableFactory.createTable(
+        it('Should modify configurations and empty the columns', async () => {
+            const table = await tableFactory.createTable(
                 'test-table', new TableConfiguration(
                     'test', 'test', ConfigurationType.Table, KIXObjectType.TICKET, null, null,
                     [new DefaultColumnConfiguration('test', 'test', ConfigurationType.TableColumn, 'test')]
@@ -44,8 +44,8 @@ describe('ExtendedTestTableFactory', () => {
             expect(table.getTableConfiguration().tableColumns).empty;
         });
 
-        it('Should modify configurations if the standard is used', () => {
-            const table = tableFactory.createTable('test-table')
+        it('Should modify configurations if the standard is used', async () => {
+            const table = await tableFactory.createTable('test-table')
 
             expect(table).exist;
             expect(table.getTableConfiguration()).exist;

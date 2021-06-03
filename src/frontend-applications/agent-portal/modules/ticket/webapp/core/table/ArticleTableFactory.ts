@@ -29,10 +29,10 @@ export class ArticleTableFactory extends TableFactory {
         EventService.getInstance().subscribe(TableEvent.ROW_TOGGLED, new ArticleTableToggleSubscriber());
     }
 
-    public createTable(
+    public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
-    ): Table {
+    ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(
             tableConfiguration, defaultRouting, defaultToggle, short

@@ -16,17 +16,21 @@ import { DefaultColumnConfiguration } from '../../../../../../model/configuratio
 import { DataType } from '../../../../../../model/DataType';
 import { TableHeaderHeight } from '../../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../../model/configuration/TableRowHeight';
+import { IColumnConfiguration } from '../../../../../../model/configuration/IColumnConfiguration';
+import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
+import { Version } from '../../../../model/Version';
+import { version } from 'winston';
 
 export class CompareConfigItemVersionTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_VERSION_COMPARE;
 
-    public createTable(
+    public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean
-    ): Table {
+    ): Promise<Table> {
 
-        tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
+        tableConfiguration = await this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
 
         const table = new Table(tableKey, tableConfiguration);
 
@@ -38,15 +42,30 @@ export class CompareConfigItemVersionTableFactory extends TableFactory {
         return table;
     }
 
-    private setDefaultTableConfiguration(
+    private async setDefaultTableConfiguration(
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
-    ): TableConfiguration {
-        const columns = tableConfiguration
-            ? tableConfiguration.tableColumns
-            : [new DefaultColumnConfiguration(null, null, null,
+    ): Promise<TableConfiguration> {
+        const columns: IColumnConfiguration[] = [
+            new DefaultColumnConfiguration(null, null, null,
                 'CONFIG_ITEM_ATTRIBUTE', true, false, true, false, 250, false, false, false, DataType.STRING, true,
                 'multiline-cell'
-            )];
+            )
+        ];
+
+        const context = ContextService.getInstance().getActiveContext();
+        const versions = await context.getObjectList<Version>(KIXObjectType.CONFIG_ITEM_VERSION);
+
+        versions.sort((a, b) => a.VersionID - b.VersionID);
+        for (const v of versions) {
+            const versionNumber = this.getVersionNumber(v.VersionID, versions);
+            const column = new DefaultColumnConfiguration(
+                null, null, null,
+                v.VersionID.toString(), true, false, true, false, 250,
+                false, false, false, DataType.STRING, true, 'multiline-cell',
+                `Version ${versionNumber}`
+            );
+            columns.push(column);
+        }
 
         tableConfiguration = new TableConfiguration(null, null, null,
             KIXObjectType.CONFIG_ITEM_VERSION_COMPARE, null, null, columns, [], false, false, null, null,
@@ -55,5 +74,10 @@ export class CompareConfigItemVersionTableFactory extends TableFactory {
         tableConfiguration.displayLimit = 18;
 
         return tableConfiguration;
+    }
+
+    private getVersionNumber(versionId: number, versions: Version[]): number {
+        const index = versions.findIndex((v) => v.VersionID === versionId);
+        return index + 1;
     }
 }

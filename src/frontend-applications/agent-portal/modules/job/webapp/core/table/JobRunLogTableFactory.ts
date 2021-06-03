@@ -24,11 +24,11 @@ export class JobRunLogTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.JOB_RUN_LOG;
 
-    public createTable(
+    public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, sshort?: boolean,
         objectType?: KIXObjectType, objects?: KIXObject[]
-    ): Table {
+    ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration);
         const table = new Table(tableKey, tableConfiguration);

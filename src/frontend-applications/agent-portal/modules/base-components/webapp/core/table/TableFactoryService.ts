@@ -118,7 +118,7 @@ export class TableFactoryService {
         if (!table) {
             const factory = this.factories.find((f) => f.isFactoryFor(objectType));
             if (factory) {
-                table = factory.createTable(
+                table = await factory.createTable(
                     tableKey, tableConfiguration, objectIds, contextId,
                     defaultRouting, defaultToggle, short, objectType, objects
                 );

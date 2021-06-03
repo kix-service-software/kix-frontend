@@ -31,13 +31,14 @@ class Component {
         ]);
 
         this.context = ContextService.getInstance().getActiveContext();
-        this.state.compareWidget = await this.context.getWidgetConfiguration('compare-ci-version-widget');
 
         const versions = await this.context.getObjectList(KIXObjectType.CONFIG_ITEM_VERSION);
         if (versions) {
             const text = await TranslationService.translate('Translatable#Selected Versions', []);
             this.state.title = `${text} (${versions.length})`;
         }
+
+        this.state.compareWidget = await this.context.getWidgetConfiguration('compare-ci-version-widget');
     }
 
     public getCompareWidgetTemplate(instanceId: string): any {
