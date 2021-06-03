@@ -71,7 +71,6 @@ export class ArticleReplyAction extends AbstractAction {
         if (this.articleId) {
             const context = ContextService.getInstance().getActiveContext();
             if (context) {
-                context.reset();
                 context.setAdditionalInformation('REFERENCED_ARTICLE_ID', this.articleId);
                 context.setAdditionalInformation('ARTICLE_REPLY', true);
                 context.setAdditionalInformation(

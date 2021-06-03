@@ -28,14 +28,10 @@ class Component {
     public onCreate(input: any): void {
         this.state = new ComponentState();
         this.contextServiceListernerId = IdService.generateDateBasedId('sidebar-');
-    }
-
-    public onInput(input: any): void {
         this.state.isLeft = input.isLeft;
     }
 
     public async onMount(): Promise<void> {
-        this.state.loading = true;
         ContextService.getInstance().registerListener({
             constexServiceListenerId: this.contextServiceListernerId,
             contextChanged: (contextId: string, context: Context, type: ContextType) => {
@@ -68,10 +64,6 @@ class Component {
         };
 
         EventService.getInstance().subscribe(MobileShowEvent.SHOW_MOBILE, this.eventSubscriber);
-
-        setTimeout(() => {
-            this.state.loading = false;
-        }, 100);
     }
 
     private resizeHandling(): void {
@@ -101,21 +93,18 @@ class Component {
         this.updateSidebars(context);
     }
 
-    private updateSidebars(context: Context): void {
-        this.state.loading = true;
+    private async updateSidebars(context: Context): Promise<void> {
         this.state.sidebars = [];
-        setTimeout(async () => {
-            if (context) {
-                const sidebars = this.state.isLeft ? context.getSidebarsLeft() : context.getSidebarsRight();
-                if (Array.isArray(sidebars)) {
-                    for (const cw of sidebars) {
-                        const template = await this.getSidebarTemplate(cw.instanceId);
-                        this.state.sidebars.push([cw.instanceId, template]);
-                    }
+        if (context) {
+            const sidebars = this.state.isLeft ? context.getSidebarsLeft() : context.getSidebarsRight();
+            if (Array.isArray(sidebars)) {
+                for (const cw of sidebars) {
+                    const template = await this.getSidebarTemplate(cw.instanceId);
+                    this.state.sidebars.push([cw.instanceId, template]);
                 }
             }
-            this.state.loading = false;
-        }, 100);
+        }
+        (this as any).setStateDirty('sidebars');
     }
 
     public toggleSidebarArea(): void {

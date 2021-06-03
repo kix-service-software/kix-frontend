@@ -54,7 +54,7 @@ export class SearchContext extends Context {
 
     public setSearchCache(cache: SearchCache): void {
         this.searchCache = cache;
-        // ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
+        ContextService.getInstance().setDocumentHistory(true, this, this, null);
     }
 
     public getIcon(): string | ObjectIcon {
@@ -64,11 +64,6 @@ export class SearchContext extends Context {
     public async getDisplayText(short: boolean = false): Promise<string> {
         const title = await TranslationService.translate('Translatable#Results advanced search');
         return title;
-    }
-
-    public reset(): void {
-        super.reset();
-        SearchService.getInstance().clearSearchCache();
     }
 
 }

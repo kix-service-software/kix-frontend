@@ -28,7 +28,6 @@ export class UserCreateAction extends AbstractAction {
     public async run(event: any): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         if (context) {
-            context.reset();
             context.setAdditionalInformation('IS_AGENT_DIALOG', true);
         }
         ContextService.getInstance().setActiveContext(NewContactDialogContext.CONTEXT_ID);

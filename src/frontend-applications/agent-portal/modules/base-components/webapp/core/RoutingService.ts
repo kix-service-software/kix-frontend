@@ -95,12 +95,13 @@ export class RoutingService {
     private async routeToURL(history: boolean = false): Promise<boolean> {
         let routed: boolean = false;
         const parsedUrl = new URL(window.location.href);
+        const urlParams = parsedUrl.searchParams;
         const path = parsedUrl.pathname === '/' ? [] : parsedUrl.pathname.split('/');
         if (path.length > 1) {
             const contextUrl = path[1];
             const objectId = path[2];
             if (contextUrl && contextUrl !== '') {
-                await ContextService.getInstance().setContextByUrl(contextUrl, objectId);
+                await ContextService.getInstance().setContextByUrl(contextUrl, objectId, urlParams);
                 routed = true;
             }
         }

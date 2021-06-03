@@ -43,7 +43,7 @@ export class Component {
         this.state.nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy, true, false, null, true);
 
         if (context.queueId) {
-            this.activeNodeChanged(this.getActiveNode(context.queueId));
+            this.state.activeNode = this.getActiveNode(context.queueId);
         } else {
             this.showAll();
         }

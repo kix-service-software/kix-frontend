@@ -20,6 +20,7 @@ import { KIXObjectService } from '../../../../../modules/base-components/webapp/
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
 import { SearchProperty } from '../../../../search/model/SearchProperty';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 export class TicketContext extends Context {
 
@@ -72,14 +73,14 @@ export class TicketContext extends Context {
         if (!this.queueId || this.queueId !== queueId) {
             this.queueId = queueId;
             this.loadTickets();
-            // ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
+            ContextService.getInstance().setDocumentHistory(true, this, this, null);
         }
     }
 
     public setFilterValue(filterValue: string): void {
         this.filterValue = filterValue;
         this.loadTickets();
-        // ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
+        ContextService.getInstance().setDocumentHistory(true, this, this, null);
     }
 
     private async loadTickets(silent: boolean = false): Promise<void> {
@@ -132,12 +133,6 @@ export class TicketContext extends Context {
         this.setFilteredObjectList(KIXObjectType.TICKET, tickets, silent);
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
-    }
-
-    public reset(): void {
-        super.reset();
-        this.queueId = null;
-        this.filterValue = null;
     }
 
     public reloadObjectList(objectType: KIXObjectType, silent: boolean = false): Promise<void> {

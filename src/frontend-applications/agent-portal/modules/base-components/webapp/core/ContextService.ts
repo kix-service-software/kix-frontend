@@ -88,7 +88,7 @@ export class ContextService {
 
     private async getContextInstance(
         contextId: string, objectId?: string | number, createNewInstance: boolean = true,
-        additionalInformation: Array<[string, any]> = []
+        additionalInformation: Array<[string, any]> = [], urlParams?: URLSearchParams
     ): Promise<Context> {
         let context = this.contextInstances.find((c) => c.equals(contextId, objectId));
 
@@ -100,7 +100,7 @@ export class ContextService {
             && createModes.some((cm) => cm === context?.descriptor?.contextMode);
 
         if ((!context || isNewDialog) && createNewInstance) {
-            context = await this.createContextInstance(contextId, objectId);
+            context = await this.createContextInstance(contextId, objectId, undefined, urlParams);
 
             additionalInformation.forEach((ai) => context.setAdditionalInformation(ai[0], ai[1]));
 
@@ -207,50 +207,40 @@ export class ContextService {
         await this.removeContext(this.activeContext?.instanceId, targetContextId, targetObjectId);
     }
 
-    public async setContextByUrl(contextUrl: string, objectId?: string | number): Promise<void> {
+    public async setContextByUrl(
+        contextUrl: string, objectId?: string | number, urlParams?: URLSearchParams
+    ): Promise<void> {
         const contextMode = objectId ? ContextMode.DETAILS : ContextMode.DASHBOARD;
         const descriptor = this.contextDescriptorList.find(
             (cd) => cd.urlPaths.some((p) => p === contextUrl) && cd.contextMode === contextMode
         );
         if (descriptor) {
-            await this.setActiveContext(descriptor.contextId, objectId);
+            await this.setActiveContext(descriptor.contextId, objectId, urlParams);
         }
     }
 
-    public async setContextByInstanceId(
-        instanceId: string, objectId?: string | number, urlParams?: URLSearchParams
-    ): Promise<void> {
+    public async setContextByInstanceId(instanceId: string, objectId?: string | number): Promise<void> {
         const context = this.contextInstances.find((i) => i.instanceId === instanceId);
         if (context && context.instanceId !== this.activeContext?.instanceId) {
-            let error: boolean = false;
+            const previousContext = this.getActiveContext();
+            this.setDocumentHistory(true, previousContext, context, objectId);
+            this.activeContext = context;
 
-            await context.initContext(urlParams).catch((e) => {
-                console.error(e);
-                this.removeContext(instanceId);
-                error = true;
-            });
+            EventService.getInstance().publish(RoutingEvent.ROUTE_TO,
+                {
+                    componentId: context.descriptor.componentId,
+                    data: { objectId: context.getObjectId() }
+                }
+            );
 
-            if (!error) {
-                const previousContext = this.getActiveContext();
-                this.setDocumentHistory(true, previousContext, context, objectId);
-                this.activeContext = context;
+            EventService.getInstance().publish(ContextEvents.CONTEXT_CHANGED, context);
 
-                EventService.getInstance().publish(RoutingEvent.ROUTE_TO,
-                    {
-                        componentId: context.descriptor.componentId,
-                        data: { objectId: context.getObjectId() }
-                    }
-                );
-
-                EventService.getInstance().publish(ContextEvents.CONTEXT_CHANGED, context);
-
-                // TODO: Use Event
-                this.serviceListener.forEach(
-                    (sl) => sl.contextChanged(
-                        context.contextId, context, context.descriptor.contextType, null, previousContext
-                    )
-                );
-            }
+            // TODO: Use Event
+            this.serviceListener.forEach(
+                (sl) => sl.contextChanged(
+                    context.contextId, context, context.descriptor.contextType, null, previousContext
+                )
+            );
         }
     }
 
@@ -258,9 +248,9 @@ export class ContextService {
         contextId: string, objectId?: string | number, urlParams?: URLSearchParams,
         additionalInformation: Array<[string, any]> = []
     ): Promise<Context> {
-        const context = await this.getContextInstance(contextId, objectId, true, additionalInformation);
+        const context = await this.getContextInstance(contextId, objectId, true, additionalInformation, urlParams);
         if (context) {
-            await this.setContextByInstanceId(context.instanceId, objectId, urlParams);
+            await this.setContextByInstanceId(context.instanceId, objectId);
         }
         return context;
     }
@@ -332,7 +322,7 @@ export class ContextService {
     }
 
     private async createContextInstance(
-        contextId: string, objectId?: string | number, instanceId?: string
+        contextId: string, objectId?: string | number, instanceId?: string, urlParams?: URLSearchParams
     ): Promise<Context> {
         objectId = objectId?.toString();
         const promiseKey = JSON.stringify({ contextId, objectId });
@@ -355,6 +345,12 @@ export class ContextService {
         }
 
         this.contextCreatePromises.delete(promiseKey);
+
+        await newContext.initContext(urlParams).catch((e) => {
+            console.error(e);
+            this.removeContext(instanceId);
+        });
+
         return newContext;
     }
 
