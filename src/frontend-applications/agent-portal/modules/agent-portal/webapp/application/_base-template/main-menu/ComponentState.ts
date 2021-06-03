@@ -8,8 +8,9 @@
  */
 
 import { MenuEntry } from '../../../../../../model/MenuEntry';
+import { AbstractComponentState } from '../../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public primaryMenuEntries: MenuEntry[] = [],
@@ -18,6 +19,8 @@ export class ComponentState {
         public loading: boolean = true,
         public isMobile: boolean = false,
         public showMobile: boolean = false
-    ) { }
+    ) {
+        super();
+    }
 
 }
