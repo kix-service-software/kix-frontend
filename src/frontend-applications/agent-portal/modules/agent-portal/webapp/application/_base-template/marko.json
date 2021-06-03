@@ -2,6 +2,7 @@
         "tags-dir": [
                 "./kix-header",
                 "./main-menu",
+                "./personal-toolbar",
                 "./tabbar"
         ]
 }

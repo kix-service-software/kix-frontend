@@ -85,11 +85,17 @@
         >div.toolbar-group {
             gap: 0 .125rem;
             grid-auto-flow: column;
+            background-color: #0a7cb3;
+            border-radius: 6px;
+            padding: 0.25rem;
+            grid-column-gap: 0.5rem;
 
             >div {
                 grid-template-rows: @toolbar-icon-size @toolbar-icon-size;
                 grid-template-columns: auto auto;
                 justify-items: center;
+                justify-content: center;
+                width: 2rem;
 
                 &:hover,
                 a:hover {

@@ -49,8 +49,10 @@
 @media only screen and (min-width: @mobile-breakpoint + 1px) {
     .application-tools {
         align-self: end;
-        gap: 0 .125rem;
-        .icon-font-size-normal;
+        display: grid;
+        grid-auto-flow: column;
+        grid-column-gap: @margin-small;
+        font-size: 2rem;
 
         >div {
             display: grid;

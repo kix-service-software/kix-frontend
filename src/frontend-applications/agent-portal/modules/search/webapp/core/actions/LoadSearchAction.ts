@@ -30,7 +30,7 @@ export class LoadSearchAction extends AbstractAction {
         await SearchService.getInstance().executeSearchCache(this.data?.id, this.data?.name);
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
-        // ContextService.getInstance().setContext(SearchContext.CONTEXT_ID, null, true);
+        ContextService.getInstance().setActiveContext(SearchContext.CONTEXT_ID);
     }
 
 }
