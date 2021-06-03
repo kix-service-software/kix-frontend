@@ -7,7 +7,6 @@
  * --
  */
 
-import { ITableFactory } from './ITableFactory';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
@@ -16,7 +15,7 @@ import { IColumnConfiguration } from '../../../../../model/configuration/IColumn
 import { Row } from './Row';
 import { Column } from './Column';
 
-export abstract class ExtendedTableFactory implements ITableFactory {
+export abstract class ExtendedTableFactory {
 
     public objectType: KIXObjectType | string;
 
@@ -30,11 +29,11 @@ export abstract class ExtendedTableFactory implements ITableFactory {
         return;
     }
 
-    public createTable(
+    public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<string | number>,
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
         objectType?: string, objects?: KIXObject[]
-    ): Table {
+    ): Promise<Table> {
         return null;
     }
 

@@ -28,10 +28,10 @@ export class LogFileTableFactory extends TableFactory {
 
     public objectType: KIXObjectType | string = KIXObjectType.LOG_FILE;
 
-    public createTable(
+    public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean
-    ): Table {
+    ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
         const table = new Table(tableKey, tableConfiguration);

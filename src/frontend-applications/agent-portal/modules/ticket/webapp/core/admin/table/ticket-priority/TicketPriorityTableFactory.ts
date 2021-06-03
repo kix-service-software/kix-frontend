@@ -29,10 +29,10 @@ export class TicketPriorityTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.TICKET_PRIORITY;
 
-    public createTable(
+    public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean
-    ): Table {
+    ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
         const table = new Table(tableKey, tableConfiguration);

@@ -24,10 +24,10 @@ export class ConfigItemTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM;
 
-    public createTable(
+    public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
-    ): Table {
+    ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(
             tableConfiguration, defaultRouting, defaultToggle, short

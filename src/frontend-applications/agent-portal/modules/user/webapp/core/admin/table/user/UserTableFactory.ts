@@ -29,10 +29,10 @@ export class UserTableFactory extends TableFactory {
 
     public objectType: KIXObjectType | string = KIXObjectType.USER;
 
-    public createTable(
+    public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean
-    ): Table {
+    ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
         const table = new Table(tableKey, tableConfiguration);
