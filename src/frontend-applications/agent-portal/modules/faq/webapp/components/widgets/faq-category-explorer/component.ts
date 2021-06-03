@@ -23,6 +23,8 @@ import { TreeNode } from '../../../../../base-components/webapp/core/tree';
 import { LabelService } from '../../../../../../modules/base-components/webapp/core/LabelService';
 import { KIXObjectService } from '../../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
+import { SortUtil } from '../../../../../../model/SortUtil';
+import { DataType } from '../../../../../../model/DataType';
 
 export class Component {
 
@@ -99,6 +101,8 @@ export class Component {
                 ));
             }
         }
+
+        SortUtil.sortObjects(nodes, 'label', DataType.STRING);
 
         return nodes;
     }

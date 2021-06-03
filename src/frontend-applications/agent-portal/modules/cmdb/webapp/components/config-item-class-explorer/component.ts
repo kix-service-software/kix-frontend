@@ -18,6 +18,8 @@ import { CMDBContext } from '../../core';
 import { TreeNode, TreeNodeProperty } from '../../../../base-components/webapp/core/tree';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { SortUtil } from '../../../../../model/SortUtil';
+import { DataType } from '../../../../../model/DataType';
 
 export class Component {
 
@@ -88,6 +90,9 @@ export class Component {
                 nodes.push(new TreeNode(c.ID, name, icon, null, null, null, null, null, properties));
             }
         }
+
+        SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+
         return nodes;
     }
 
