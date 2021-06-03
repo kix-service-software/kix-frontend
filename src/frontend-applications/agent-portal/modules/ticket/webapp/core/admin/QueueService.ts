@@ -22,6 +22,8 @@ import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
 import { FollowUpType } from '../../../model/FollowUpType';
+import { SortUtil } from '../../../../../model/SortUtil';
+import { DataType } from '../../../../../model/DataType';
 
 export class QueueService extends KIXObjectService<Queue> {
 
@@ -116,6 +118,9 @@ export class QueueService extends KIXObjectService<Queue> {
                 nodes.push(treeNode);
             }
         }
+
+        SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+
         return nodes;
     }
 
