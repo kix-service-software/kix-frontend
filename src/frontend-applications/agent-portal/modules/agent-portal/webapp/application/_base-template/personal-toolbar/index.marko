@@ -9,24 +9,36 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <if(state.show)>
     <div.kix-toolbar>
         <div.toolbar-group>
-            <div title=state.translations["Translatable#Personal Kanban Board"] on-click("showKanban")>
+            <personal-bookmarks/>
+            <div
+                title=state.translations["Translatable#Personal Kanban Board"]
+                on-click("showKanban")>
                 <div.action-icon>
                     <icon icon="kix-icon-kanban"/>
                 </div>
                 <div.action-text>
                     <if(state.isMobile)>
-                        ${state.translations["Translatable#Personal Kanban Board"] + " (" + state.ownedTicketsCount + ")"}
+                        ${state.translations[
+                        "Translatable#Personal Kanban Board"
+                        ] +
+                        " (" +
+                        state.ownedTicketsCount +
+                        ")"}
                     </if>
                     <else>${state.ownedTicketsCount}</else>
                 </div>
             </div>
-            <div title=state.translations["Translatable#Personal Ticket Calendar"] on-click("showCalendar")>
+            <div
+                title=state.translations["Translatable#Personal Ticket Calendar"]
+                on-click("showCalendar")>
                 <div.action-icon>
                     <icon icon="kix-icon-calendar"/>
                 </div>
                 <div.action-text>
                     <if(state.isMobile)>
-                        ${state.translations["Translatable#Personal Ticket Calendar"] +
+                        ${state.translations[
+                        "Translatable#Personal Ticket Calendar"
+                        ] +
                         " (" +
                         state.ownedTicketsCount +
                         ")"}
