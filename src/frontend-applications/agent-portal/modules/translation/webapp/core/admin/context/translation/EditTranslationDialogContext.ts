@@ -40,7 +40,7 @@ export class EditTranslationDialogContext extends Context {
 
     public async getDisplayText(short: boolean = false): Promise<string> {
         const object = await this.getObject<TranslationPattern>();
-        return object.Value;
+        return object?.Value;
     }
 
 }
