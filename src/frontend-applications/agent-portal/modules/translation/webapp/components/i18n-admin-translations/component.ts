@@ -78,7 +78,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         );
 
         tableConfiguration.routingConfiguration = new RoutingConfiguration(
-            EditTranslationDialogContext.CONTEXT_ID
+            EditTranslationDialogContext.CONTEXT_ID, KIXObjectType.TRANSLATION_PATTERN,
+            ContextMode.EDIT_ADMIN, TranslationPatternProperty.ID
         );
 
         this.state.table = await TableFactoryService.getInstance().createTable(
