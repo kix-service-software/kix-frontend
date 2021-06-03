@@ -18,8 +18,10 @@ import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEv
 import { MobileShowEvent } from '../../../../model/MobileShowEvent';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { MobileShowEventData } from '../../../../model/MobileShowEventData';
+import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 
-class KIXMenuComponent {
+class Component extends AbstractMarkoComponent {
 
     public state: ComponentState;
     public eventSubscriber: IEventSubscriber;
@@ -85,6 +87,11 @@ class KIXMenuComponent {
 
         this.state.primaryMenuEntries = [...primaryEntries];
         this.state.secondaryMenuEntries = [...secondaryEntries];
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            ...primaryEntries.map((e) => e.text),
+            ...secondaryEntries.map((e) => e.text)
+        ]);
     }
 
     private async setShownEntries(entries: MenuEntry[]): Promise<void> {
@@ -107,4 +114,4 @@ class KIXMenuComponent {
 
 }
 
-module.exports = KIXMenuComponent;
+module.exports = Component;

@@ -16,7 +16,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <if(menuEntry.show)>
                         <li
                             key=menuEntry.text
-                            title=menuEntry.text
+                            title=state.translations[menuEntry.text]
                             class={
                                 active: menuEntry.active
                             }>
@@ -32,6 +32,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <if(menuEntry.show)>
                         <li
                             key=menuEntry.text
+                            title=state.translations[menuEntry.text]
                             class={
                                 active: menuEntry.active
                             }>
