@@ -103,7 +103,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 const displayText = await context.getDisplayText();
 
                 const isDialog = context.descriptor?.contextType === ContextType.DIALOG;
-                const active = ContextService.getInstance().getActiveContext()?.contextId === context.contextId;
+                const active = ContextService.getInstance().getActiveContext()?.instanceId === context.instanceId;
                 const isPinned = await ContextService.getInstance().isContextStored(context.instanceId);
 
                 const tab = new ContextTab(
