@@ -12,6 +12,7 @@ import { ContextService } from '../../../../modules/base-components/webapp/core/
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextMode } from '../../../../model/ContextMode';
 import { ConfigItem } from '../../model/ConfigItem';
+import { ConfigItemProperty } from '../../model/ConfigItemProperty';
 
 export class ConfigItemDialogUtil {
 
@@ -30,9 +31,9 @@ export class ConfigItemDialogUtil {
     }
 
     public static async duplicate(configItem: ConfigItem): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
         ContextService.getInstance().setActiveContext(
-            NewConfigItemDialogContext.CONTEXT_ID, context?.getObjectId()
+            NewConfigItemDialogContext.CONTEXT_ID, configItem.ConfigItemID, null,
+            [[ConfigItemProperty.CLASS_ID, configItem.ClassID]]
         );
     }
 
