@@ -55,10 +55,11 @@ export class Component {
         this.state.nodes = await this.prepareTreeNodes(ciClasses);
 
         const formInstance = await context.getFormManager().getFormInstance();
-        if (!formInstance) {
-            if (this.state.nodes?.length) {
-                this.activeNodeChanged(this.state.nodes[0]);
-            }
+        const classId = context.getAdditionalInformation(ConfigItemProperty.CLASS_ID);
+        if (classId) {
+            this.activeNodeChanged(this.state.nodes.find((n) => n.id === classId));
+        } else if (!formInstance && this.state.nodes?.length) {
+            this.activeNodeChanged(this.state.nodes[0]);
         } else if (this.state.nodes?.length) {
             const classIdValue = await formInstance.getFormFieldValueByProperty(ConfigItemProperty.CLASS_ID);
             if (classIdValue?.value) {
