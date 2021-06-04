@@ -47,6 +47,8 @@ class Component extends FormInputComponent<number, ComponentState> {
         const formInstance = await context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
         if (value && value.value) {
+            const icon = LabelService.getInstance().getObjectIconForType(KIXObjectType.ORGANISATION);
+
             if (!isNaN(value.value)) {
                 const organisations = await KIXObjectService.loadObjects(
                     KIXObjectType.ORGANISATION, [value.value]
@@ -55,12 +57,13 @@ class Component extends FormInputComponent<number, ComponentState> {
                 if (organisations && organisations.length) {
                     const organisation = organisations[0];
                     const displayValue = await LabelService.getInstance().getObjectText(organisation);
-                    const currentNode = new TreeNode(organisation.ObjectId, displayValue, 'kix-icon-man-bubble');
+
+                    const currentNode = new TreeNode(organisation.ObjectId, displayValue, icon);
                     nodes = [currentNode];
                 }
             } else {
                 const currentNode = new TreeNode(
-                    value.value, value.value.toString(), 'kix-icon-man-bubble'
+                    value.value, value.value.toString(), icon
                 );
                 nodes = [currentNode];
             }

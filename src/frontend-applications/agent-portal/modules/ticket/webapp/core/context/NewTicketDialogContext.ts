@@ -83,7 +83,7 @@ export class NewTicketDialogContext extends Context {
         }
     }
 
-    public async getObject<O extends KIXObject>(kixObjectType: KIXObjectType): Promise<O> {
+    public async getObject<O extends KIXObject>(kixObjectType: KIXObjectType = KIXObjectType.TICKET): Promise<O> {
         let object;
         if (kixObjectType === KIXObjectType.TICKET) {
             object = this.getAdditionalInformation(AdditionalContextInformation.FORM_OBJECT);
