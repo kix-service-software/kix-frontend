@@ -114,10 +114,4 @@ export class EditTicketDialogContext extends Context {
         return this.objectLists.get(objectType) as any[];
     }
 
-    public reset(): void {
-        super.reset();
-        this.contact = null;
-        this.organisation = null;
-    }
-
 }

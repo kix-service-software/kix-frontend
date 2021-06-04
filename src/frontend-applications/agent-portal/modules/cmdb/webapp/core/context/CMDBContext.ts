@@ -76,12 +76,14 @@ export class CMDBContext extends Context {
         if (!this.classId || this.classId !== classId) {
             this.classId = classId;
             this.loadConfigItems();
+            ContextService.getInstance().setDocumentHistory(true, this, this, null);
         }
     }
 
     public setFilterValue(filterValue: string): void {
         this.filterValue = filterValue;
         this.loadConfigItems();
+        ContextService.getInstance().setDocumentHistory(true, this, this, null);
     }
 
     public async loadConfigItems(): Promise<void> {
@@ -145,13 +147,6 @@ export class CMDBContext extends Context {
 
     public async getObjectList<T = KIXObject>(objectType: KIXObjectType): Promise<T[]> {
         return await super.getObjectList(objectType);
-    }
-
-    public reset(): void {
-        super.reset();
-        this.classId = null;
-        this.filterValue = null;
-        this.loadConfigItems();
     }
 
     public reloadObjectList(objectType: KIXObjectType | string): Promise<void> {

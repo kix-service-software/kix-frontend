@@ -18,7 +18,6 @@ export class ComponentState extends AbstractComponentState {
         public isSmall: boolean = false,
         public sidebars: Array<[string, any]> = [],
         public showSidebarArea: boolean = false,
-        public loading: boolean = false,
         public showMobile: boolean = false
     ) {
         super();

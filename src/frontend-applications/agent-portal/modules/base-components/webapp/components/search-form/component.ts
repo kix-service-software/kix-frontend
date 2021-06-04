@@ -146,10 +146,6 @@ class Component implements ISearchFormListener {
 
     private async setDefaults(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            context.reset();
-        }
-
         const defaultProperties = (SearchFormInstance.getInstance().getForm() as any).defaultSearchProperties;
         if (defaultProperties) {
             this.state.manager.reset(false);

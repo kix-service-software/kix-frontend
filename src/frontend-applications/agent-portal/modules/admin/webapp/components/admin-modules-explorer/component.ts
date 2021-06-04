@@ -51,13 +51,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.prepared = true;
 
             setTimeout(() => {
-                this.setActiveNode(context.adminModuleId, true);
+                this.state.activeNode = this.getActiveNode(context?.adminModuleId);
             }, 500);
         }
-    }
-
-    private setActiveNode(adminModuleId: string, force: boolean = false): void {
-        this.publishToContext(this.getActiveNode(adminModuleId), force);
     }
 
     private getActiveNode(adminModuleId: string, nodes: TreeNode[] = this.state.nodes): TreeNode {

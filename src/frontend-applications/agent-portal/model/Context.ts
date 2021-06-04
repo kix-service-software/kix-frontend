@@ -545,12 +545,6 @@ export abstract class Context {
         this.listeners.forEach((l) => l.scrollInformationChanged(this.scrollInormation[0], this.scrollInormation[1]));
     }
 
-    public reset(): void {
-        this.resetAdditionalInformation();
-        this.objectId = null;
-        this.objectLists.clear();
-    }
-
     public async reloadObjectList(objectType: KIXObjectType | string, silent: boolean = false): Promise<void> {
         return;
     }

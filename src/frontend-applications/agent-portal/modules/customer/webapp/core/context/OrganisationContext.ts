@@ -77,13 +77,13 @@ export class OrganisationContext extends Context {
     public setFilterValue(filterValue: string): void {
         this.filterValue = filterValue;
         this.loadOrganisations();
-        // ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
+        ContextService.getInstance().setDocumentHistory(true, this, this, null);
     }
 
     public setAdditionalInformation(key: string, value: any): void {
         super.setAdditionalInformation(key, value);
         if (key === OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING) {
-            // ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
+            ContextService.getInstance().setDocumentHistory(true, this, this, null);
         }
     }
 
@@ -157,12 +157,6 @@ export class OrganisationContext extends Context {
 
         this.setObjectList(KIXObjectType.CONTACT, contacts);
         EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS_FINISHED, KIXObjectType.CONTACT);
-    }
-
-    public reset(): void {
-        super.reset();
-        this.filterValue = null;
-        this.initContext(null);
     }
 
     public reloadObjectList(objectType: KIXObjectType | string): Promise<void> {

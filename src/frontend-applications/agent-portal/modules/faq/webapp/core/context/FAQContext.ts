@@ -66,7 +66,7 @@ export class FAQContext extends Context {
             this.listeners.forEach(
                 (l) => l.objectChanged(this.categoryId, this.categoryId, KIXObjectType.FAQ_CATEGORY)
             );
-            // ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
+            ContextService.getInstance().setDocumentHistory(true, this, this, null);
         }
     }
 
@@ -92,12 +92,6 @@ export class FAQContext extends Context {
             KIXObjectType.FAQ_ARTICLE, null, loadingOptions, null, false
         ).catch((error) => []);
         this.setObjectList(KIXObjectType.FAQ_ARTICLE, faqArticles);
-    }
-
-    public reset(): void {
-        super.reset();
-        this.categoryId = null;
-        this.loadFAQArticles();
     }
 
     public reloadObjectList(objectType: KIXObjectType | string): Promise<void> {

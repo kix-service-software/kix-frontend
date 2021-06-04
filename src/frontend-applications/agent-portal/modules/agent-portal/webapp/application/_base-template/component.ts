@@ -76,10 +76,6 @@ class Component {
             eventSubscriberId: 'BASE-TEMPLATE-REFRESH',
             eventPublished: (data: any, eventId: string) => {
                 this.state.reload = true;
-                const context = ContextService.getInstance().getActiveContext();
-                if (context) {
-                    context.reset();
-                }
 
                 setTimeout(() => {
                     this.state.reload = false;

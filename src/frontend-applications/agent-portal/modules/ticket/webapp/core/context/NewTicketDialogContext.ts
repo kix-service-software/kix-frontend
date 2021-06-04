@@ -83,12 +83,6 @@ export class NewTicketDialogContext extends Context {
         }
     }
 
-    public reset(refresh?: boolean): void {
-        super.reset();
-        this.contact = null;
-        this.organisation = null;
-    }
-
     public async getObject<O extends KIXObject>(kixObjectType: KIXObjectType): Promise<O> {
         let object;
         if (kixObjectType === KIXObjectType.TICKET) {
