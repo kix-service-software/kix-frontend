@@ -388,7 +388,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             // typeof o.ValidID === 'undefined' - needed for objects without ValidID like ValidObject
             if (typeof o.ValidID === 'undefined' || o.ValidID === 1 || showInvalid) {
                 const invalidClickable = this.isInvalidClickable();
-                const text = await LabelService.getInstance().getObjectText(o, null, null, translatable);
+                const text = await LabelService.getInstance().getObjectText(o, undefined, undefined, translatable);
                 const icon = LabelService.getInstance().getObjectIcon(o);
                 let tooltip = await LabelService.getInstance().getTooltip(o, translatable);
 
