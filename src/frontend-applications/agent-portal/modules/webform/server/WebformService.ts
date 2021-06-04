@@ -186,6 +186,7 @@ export class WebformService {
             [ArticleProperty.SUBJECT, request.subject],
             [ArticleProperty.BODY, request.message],
             [ArticleProperty.SENDER_TYPE_ID, 3],
+            [ArticleProperty.CUSTOMER_VISIBLE, 1],
             [ArticleProperty.CHANNEL_ID, 1],
         ];
         const attachments = this.prepareFiles(request.files);
