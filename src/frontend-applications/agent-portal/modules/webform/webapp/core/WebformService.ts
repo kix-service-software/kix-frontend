@@ -53,7 +53,7 @@ export class WebformService extends KIXObjectService<Webform> {
     ): Promise<O[]> {
         let webforms = await WebformSocketClient.getInstance().loadWebforms();
         if (objectIds && objectIds.length) {
-            webforms = webforms.filter((wf) => objectIds.some((oid) => wf.ObjectId === oid));
+            webforms = webforms.filter((wf) => objectIds.some((oid) => Number(wf.ObjectId) === Number(oid)));
         }
         return webforms as any[];
     }
