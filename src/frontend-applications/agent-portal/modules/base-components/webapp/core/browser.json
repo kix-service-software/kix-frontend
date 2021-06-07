@@ -36,7 +36,6 @@
         "require ./DisplayImageDescription",
         "require ./EventService",
         "require ./FilterUtil",
-        "require ./FormDropdownItem",
         "require ./FormFactory",
         "require ./FormFieldValueChangeEvent",
         "require ./FormInputAction",
