@@ -15,9 +15,14 @@ import { ContextType } from '../../../../../model/ContextType';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
 import { AdminModule } from '../../../model/AdminModule';
 import { AdministrationSocketClient } from '../../core/AdministrationSocketClient';
-import { AdminModuleCategory } from '../../../model/AdminModuleCategory';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
+import { IdService } from '../../../../../model/IdService';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
+
+    private subscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -33,54 +38,28 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             },
             contextRegistered: () => { return; }
         });
-        const context = ContextService.getInstance().getActiveContext();
-        context.registerListener('admin-module-context-listener', {
-            sidebarLeftToggled: () => { return; },
-            sidebarRightToggled: () => { return; },
-            objectChanged: this.moduleChanged.bind(this),
-            objectListChanged: () => { return; },
-            filteredObjectListChanged: () => { return; },
-            scrollInformationChanged: () => { return; },
-            additionalInformationChanged: () => { return; }
-        });
-
         this.moduleChanged();
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(),
+            eventPublished: (data: any, eventId: string) => {
+                this.moduleChanged();
+            }
+        };
+
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
     }
 
     public onDestroy(): void {
-        ContextService.getInstance().unregisterListener('admin-module-context-service-listener');
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
     }
 
     public async moduleChanged(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext() as AdminContext;
-        const categories = await AdministrationSocketClient.getInstance().loadAdminCategories();
-        const module = this.findAdminModule(categories, context.adminModuleId);
-        if (module) {
+        const module = await AdministrationSocketClient.getInstance().getAdminModule(context.adminModuleId);
+        if (module instanceof AdminModule) {
             this.state.template = KIXModulesService.getComponentTemplate(module.componentId);
         }
-    }
-
-    private findAdminModule(modules: Array<AdminModuleCategory | AdminModule>, moduleId: string): AdminModule {
-        for (const module of modules) {
-            if (module instanceof AdminModuleCategory) {
-                if (Array.isArray(module.modules)) {
-                    let found = this.findAdminModule(module.modules, moduleId);
-                    if (found) {
-                        return found;
-                    } else if (Array.isArray(module.children)) {
-                        found = this.findAdminModule(module.children, moduleId);
-                        if (found) {
-                            return found;
-                        }
-                    }
-                }
-            } else {
-                if (module.id === moduleId) {
-                    return module;
-                }
-            }
-        }
-        return null;
     }
 }
 

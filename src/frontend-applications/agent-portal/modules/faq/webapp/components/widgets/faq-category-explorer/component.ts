@@ -25,10 +25,14 @@ import { KIXObjectService } from '../../../../../../modules/base-components/weba
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
 import { SortUtil } from '../../../../../../model/SortUtil';
 import { DataType } from '../../../../../../model/DataType';
+import { ContextEvents } from '../../../../../base-components/webapp/core/ContextEvents';
+import { EventService } from '../../../../../base-components/webapp/core/EventService';
+import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 
 export class Component {
 
     private state: ComponentState;
+    private subscriber: IEventSubscriber;
 
     public listenerId: string;
 
@@ -62,20 +66,25 @@ export class Component {
 
         this.state.nodes = await this.prepareTreeNodes(faqCategories);
 
-        this.setActiveNode(context.categoryId);
+        this.state.activeNode = this.getActiveNode(context.categoryId);
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(),
+            eventPublished: (data: any, eventId: string) => {
+                this.state.activeNode = this.getActiveNode(context?.categoryId);
+            }
+        };
+
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
     }
 
-    private setActiveNode(categoryId: number): void {
-        if (categoryId) {
-            this.activeNodeChanged(this.getActiveNode(categoryId));
-        } else {
-            this.showAll();
-        }
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
     }
 
     private getActiveNode(categoryId: number, nodes: TreeNode[] = this.state.nodes
     ): TreeNode {
-        let activeNode = nodes.find((n) => n.id === categoryId);
+        let activeNode = nodes?.find((n) => n.id === categoryId);
         if (!activeNode) {
             for (const node of nodes) {
                 activeNode = this.getActiveNode(categoryId, node.children);

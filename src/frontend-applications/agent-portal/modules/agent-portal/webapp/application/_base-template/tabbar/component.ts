@@ -51,6 +51,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 } else if (
                     eventId === ContextEvents.CONTEXT_ICON_CHANGED
                     || eventId === ContextEvents.CONTEXT_DISPLAY_TEXT_CHANGED
+                    || eventId === ContextEvents.CONTEXT_PARAMETER_CHANGED
                 ) {
                     const tab = this.state.contextTabs.find((t) => t.contextInstanceId === data.instanceId);
                     if (tab) {
@@ -73,6 +74,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_ICON_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_DISPLAY_TEXT_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_REORDERED, this.subscriber);
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
     }
 
     public onDestroy(): void {
@@ -84,6 +86,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_ICON_CHANGED, this.subscriber);
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_DISPLAY_TEXT_CHANGED, this.subscriber);
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_REORDERED, this.subscriber);
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
     }
 
     private toggleActiveEntry(): void {

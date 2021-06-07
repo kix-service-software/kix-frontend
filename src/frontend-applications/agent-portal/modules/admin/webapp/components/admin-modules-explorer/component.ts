@@ -17,8 +17,14 @@ import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { AdminModuleCategory } from '../../../model/AdminModuleCategory';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { IdService } from '../../../../../model/IdService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
+
+    private subscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -53,7 +59,20 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             setTimeout(() => {
                 this.state.activeNode = this.getActiveNode(context?.adminModuleId);
             }, 500);
+
+            this.subscriber = {
+                eventSubscriberId: IdService.generateDateBasedId(),
+                eventPublished: (data: any, eventId: string) => {
+                    this.state.activeNode = this.getActiveNode(context?.adminModuleId);
+                }
+            };
+
+            EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
         }
+    }
+
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
     }
 
     private getActiveNode(adminModuleId: string, nodes: TreeNode[] = this.state.nodes): TreeNode {
@@ -129,12 +148,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.publishToContext(node);
     }
 
-    private async publishToContext(node: TreeNode, force: boolean = false): Promise<void> {
+    private async publishToContext(node: TreeNode): Promise<void> {
         this.state.activeNode = node;
         if (node) {
             const context = await ContextService.getInstance().getActiveContext();
             if (context instanceof AdminContext) {
-                context.setAdminModule(node.id, node.parent ? node.parent.label : '', force);
+                context.setAdminModule(node.id);
             }
         }
     }

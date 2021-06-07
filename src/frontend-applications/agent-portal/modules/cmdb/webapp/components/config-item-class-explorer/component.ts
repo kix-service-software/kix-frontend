@@ -20,13 +20,16 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { DataType } from '../../../../../model/DataType';
+import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 
 export class Component {
 
     private state: ComponentState;
+    private subscriber: IEventSubscriber;
 
     public listenerId: string;
-
     public textFilterValue: string;
 
     public onCreate(input: any): void {
@@ -44,24 +47,27 @@ export class Component {
         const context = ContextService.getInstance().getActiveContext() as CMDBContext;
         if (context) {
             this.state.widgetConfiguration = await context.getWidgetConfiguration(this.state.instanceId);
-            this.setActiveNode(context.classId);
-        } else {
-            this.showAll();
+            this.state.activeNode = this.getActiveNode(context.classId);
         }
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(),
+            eventPublished: (data: any, eventId: string) => {
+                this.state.activeNode = this.getActiveNode(context?.classId);
+            }
+        };
+
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
     }
 
-    private setActiveNode(classId: number): void {
-        if (classId) {
-            this.activeNodeChanged(this.getActiveNode(classId));
-        } else {
-            this.showAll();
-        }
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
     }
 
     private getActiveNode(classId: number, nodes: TreeNode[] = this.state.nodes
     ): TreeNode {
-        let activeNode = nodes.find((n) => n.id === classId);
-        if (!activeNode) {
+        let activeNode = nodes?.find((n) => n.id === classId);
+        if (!activeNode && Array.isArray(nodes)) {
             for (const node of nodes) {
                 activeNode = this.getActiveNode(classId, node.children);
                 if (activeNode) {

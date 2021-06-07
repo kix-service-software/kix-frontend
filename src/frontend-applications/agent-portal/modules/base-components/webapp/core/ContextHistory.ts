@@ -36,11 +36,11 @@ export class ContextHistory {
             this.navigateBack(event);
         });
 
-        window.addEventListener('beforeunload', this.beforeunload);
+        window.addEventListener('beforeunload', this.beforeunload.bind(this));
     }
 
     public removeBrowserListener(): void {
-        window.removeEventListener('beforeunload', this.beforeunload);
+        window.removeEventListener('beforeunload', this.beforeunload.bind(this));
     }
 
     private beforeunload(event: any): any {
@@ -49,20 +49,8 @@ export class ContextHistory {
     }
 
     private navigateBack(event: any): void {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context && context.descriptor.contextType === ContextType.DIALOG) {
-            // TODO: remove Context
-            // DialogService.getInstance().closeMainDialog();
-            window.history.forward();
-        } else {
-            if (event && event.state) {
-                const state: BrowserHistoryState = event.state;
-                const routingConfiguration = new RoutingConfiguration(
-                    state.contextId, null, null, null
-                );
-
-                ContextService.getInstance().setActiveContext(routingConfiguration.contextId, state.objectId);
-            }
+        if (event && event.state) {
+            RoutingService.getInstance().routeToURL(false);
         }
     }
 

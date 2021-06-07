@@ -37,6 +37,37 @@ export class AdministrationSocketClient extends SocketClient {
 
     private categories: AdminModuleCategory[];
 
+    public async getAdminModule(id: string): Promise<AdminModuleCategory | AdminModule> {
+        const categories = await this.loadAdminCategories();
+        const module = this.findModule(id, categories);
+        return module;
+    }
+
+    private findModule(
+        id: string, categories: Array<AdminModuleCategory | AdminModule>
+    ): AdminModuleCategory | AdminModule {
+        for (const c of categories) {
+            if (c.id === id) {
+                return c;
+            }
+
+            if (c instanceof AdminModuleCategory) {
+                const module = this.findModule(id, c.children);
+                if (module) {
+                    return module;
+                }
+
+                for (const m of c.modules) {
+                    if (m.id === id) {
+                        return m;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
     public async loadAdminCategories(): Promise<Array<AdminModuleCategory | AdminModule>> {
         if (this.categories) {
             return this.categories;

@@ -126,6 +126,10 @@ export abstract class Context {
         }
     }
 
+    public async update(urlParams: URLSearchParams): Promise<void> {
+        return;
+    }
+
     public getFormManager(): ContextFormManager {
         return this.formManager;
     }

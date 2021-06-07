@@ -21,6 +21,10 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
 import { SearchProperty } from '../../../../search/model/SearchProperty';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { timeStamp } from 'console';
+import { LabelService } from '../../../../base-components/webapp/core/LabelService';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 
 export class TicketContext extends Context {
 
@@ -34,18 +38,24 @@ export class TicketContext extends Context {
     }
 
     public async getDisplayText(): Promise<string> {
-        return 'Ticket Dashboard';
+        let text = await TranslationService.translate('Translatable#Tickets');
+        if (this.queueId) {
+            const queueName = await LabelService.getInstance().getPropertyValueDisplayText(
+                KIXObjectType.TICKET, TicketProperty.QUEUE_ID, this.queueId
+            );
+            text = await TranslationService.translate('Translatable#Tickets: {0}', [queueName]);
+        }
+        return text;
     }
 
-    public async initContext(urlParams: URLSearchParams): Promise<void> {
-        if (urlParams) {
-            if (urlParams.has('queueId') && !isNaN(Number(urlParams.get('queueId')))) {
-                this.queueId = Number(urlParams.get('queueId'));
-            }
+    public async update(urlParams: URLSearchParams): Promise<void> {
+        this.handleURLParams(urlParams);
+    }
 
-            if (urlParams.has('filter')) {
-                this.filterValue = decodeURI(urlParams.get('filter'));
-            }
+    private handleURLParams(urlParams: URLSearchParams): void {
+        if (urlParams) {
+            this.setQueue(urlParams.has('queueId') ? Number(urlParams.get('queueId')) : null, false);
+            this.setFilterValue(urlParams.has('filter') ? decodeURI(urlParams.get('filter')) : null, false);
         }
     }
 
@@ -69,18 +79,28 @@ export class TicketContext extends Context {
         return url;
     }
 
-    public setQueue(queueId: number): void {
+    public async setQueue(queueId: number, history: boolean = true): Promise<void> {
         if (!this.queueId || this.queueId !== queueId) {
             this.queueId = queueId;
             this.loadTickets();
-            ContextService.getInstance().setDocumentHistory(true, this, this, null);
+
+            EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
+
+            if (history) {
+                ContextService.getInstance().setDocumentHistory(true, this, this, null);
+            }
         }
     }
 
-    public setFilterValue(filterValue: string): void {
+    public setFilterValue(filterValue: string, history: boolean = true): void {
         this.filterValue = filterValue;
         this.loadTickets();
-        ContextService.getInstance().setDocumentHistory(true, this, this, null);
+
+        EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
+
+        if (history) {
+            ContextService.getInstance().setDocumentHistory(true, this, this, null);
+        }
     }
 
     private async loadTickets(silent: boolean = false): Promise<void> {
