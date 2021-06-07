@@ -107,6 +107,8 @@ export class ContextService {
             if (context?.descriptor?.contextType === ContextType.DIALOG) {
                 await this.updateStorage(context?.instanceId);
             }
+        } else if (urlParams) {
+            await context.update(urlParams);
         }
         return context;
     }
@@ -208,22 +210,27 @@ export class ContextService {
     }
 
     public async setContextByUrl(
-        contextUrl: string, objectId?: string | number, urlParams?: URLSearchParams
+        contextUrl: string, objectId?: string | number, urlParams?: URLSearchParams, history: boolean = true
     ): Promise<void> {
         const contextMode = objectId ? ContextMode.DETAILS : ContextMode.DASHBOARD;
         const descriptor = this.contextDescriptorList.find(
             (cd) => cd.urlPaths.some((p) => p === contextUrl) && cd.contextMode === contextMode
         );
         if (descriptor) {
-            await this.setActiveContext(descriptor.contextId, objectId, urlParams);
+            await this.setActiveContext(descriptor.contextId, objectId, urlParams, [], history);
         }
     }
 
-    public async setContextByInstanceId(instanceId: string, objectId?: string | number): Promise<void> {
+    public async setContextByInstanceId(
+        instanceId: string, objectId?: string | number, history: boolean = true
+    ): Promise<void> {
         const context = this.contextInstances.find((i) => i.instanceId === instanceId);
         if (context && context.instanceId !== this.activeContext?.instanceId) {
             const previousContext = this.getActiveContext();
-            this.setDocumentHistory(true, previousContext, context, objectId);
+            if (history) {
+                this.setDocumentHistory(true, previousContext, context, objectId);
+            }
+
             this.activeContext = context;
 
             EventService.getInstance().publish(RoutingEvent.ROUTE_TO,
@@ -246,11 +253,11 @@ export class ContextService {
 
     public async setActiveContext(
         contextId: string, objectId?: string | number, urlParams?: URLSearchParams,
-        additionalInformation: Array<[string, any]> = []
+        additionalInformation: Array<[string, any]> = [], history: boolean = true
     ): Promise<Context> {
         const context = await this.getContextInstance(contextId, objectId, true, additionalInformation, urlParams);
         if (context) {
-            await this.setContextByInstanceId(context.instanceId, objectId);
+            await this.setContextByInstanceId(context.instanceId, objectId, history);
         }
         return context;
     }

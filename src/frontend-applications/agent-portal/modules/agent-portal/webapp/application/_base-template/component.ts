@@ -21,6 +21,7 @@ import { ContextService } from '../../../../../modules/base-components/webapp/co
 import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
 import { MobileShowEvent } from '../../../model/MobileShowEvent';
 import { MobileShowEventData } from '../../../model/MobileShowEventData';
+import { ContextHistory } from '../../../../base-components/webapp/core/ContextHistory';
 
 class Component {
 
@@ -45,6 +46,8 @@ class Component {
         await this.checkAuthentication();
 
         ClientNotificationSocketClient.getInstance();
+
+        ContextHistory.getInstance();
 
         const startInitModules = Date.now();
         await KIXModulesService.getInstance().init();

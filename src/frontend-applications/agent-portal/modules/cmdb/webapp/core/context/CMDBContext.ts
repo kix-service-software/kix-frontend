@@ -23,6 +23,8 @@ import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { LabelService } from '../../../../base-components/webapp/core/LabelService';
+import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 
 export class CMDBContext extends Context {
 
@@ -36,19 +38,24 @@ export class CMDBContext extends Context {
     }
 
     public async getDisplayText(): Promise<string> {
-        const title = await TranslationService.translate('Translatable#CMDB Dashboard');
-        return title;
+        let text = await TranslationService.translate('Translatable#Assets');
+        if (this.classId) {
+            const className = await LabelService.getInstance().getPropertyValueDisplayText(
+                KIXObjectType.CONFIG_ITEM, ConfigItemProperty.CLASS_ID, this.classId
+            );
+            text = await TranslationService.translate('Assets: {0}', [className]);
+        }
+        return text;
     }
 
-    public async initContext(urlParams: URLSearchParams): Promise<void> {
-        if (urlParams) {
-            if (urlParams.has('classId') && !isNaN(Number(urlParams.get('classId')))) {
-                this.classId = Number(urlParams.get('classId'));
-            }
+    public async update(urlParams: URLSearchParams): Promise<void> {
+        this.handleURLParams(urlParams);
+    }
 
-            if (urlParams.has('filter')) {
-                this.filterValue = decodeURI(urlParams.get('filter'));
-            }
+    private handleURLParams(urlParams: URLSearchParams): void {
+        if (urlParams) {
+            this.setCIClass(urlParams.has('classId') ? Number(urlParams.get('classId')) : null, false);
+            this.setFilterValue(urlParams.has('filter') ? decodeURI(urlParams.get('filter')) : null, false);
         }
     }
 
@@ -72,18 +79,26 @@ export class CMDBContext extends Context {
         return url;
     }
 
-    public setCIClass(classId: number): void {
+    public setCIClass(classId: number, history: boolean = true): void {
         if (!this.classId || this.classId !== classId) {
             this.classId = classId;
             this.loadConfigItems();
-            ContextService.getInstance().setDocumentHistory(true, this, this, null);
+
+            EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
+            if (history) {
+                ContextService.getInstance().setDocumentHistory(true, this, this, null);
+            }
         }
     }
 
-    public setFilterValue(filterValue: string): void {
+    public setFilterValue(filterValue: string, history: boolean = true): void {
         this.filterValue = filterValue;
         this.loadConfigItems();
-        ContextService.getInstance().setDocumentHistory(true, this, this, null);
+
+        EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
+        if (history) {
+            ContextService.getInstance().setDocumentHistory(true, this, this, null);
+        }
     }
 
     public async loadConfigItems(): Promise<void> {

@@ -13,10 +13,14 @@ import { ContextService } from '../../../../../modules/base-components/webapp/co
 import { TicketContext, QueueService } from '../../core';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 
 export class Component {
 
     private state: ComponentState;
+    private subscriber: IEventSubscriber;
 
     public listenerId: string;
 
@@ -35,23 +39,30 @@ export class Component {
             ? await context.getWidgetConfiguration(this.state.instanceId)
             : undefined;
         await this.loadQueues(context);
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(),
+            eventPublished: (data: any, eventId: string) => {
+                this.state.activeNode = this.getActiveNode(context?.queueId);
+            }
+        };
+
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
+    }
+
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
     }
 
     private async loadQueues(context: TicketContext): Promise<void> {
         this.state.nodes = null;
         const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy();
         this.state.nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy, true, false, null, true);
-
-        if (context.queueId) {
-            this.state.activeNode = this.getActiveNode(context.queueId);
-        } else {
-            this.showAll();
-        }
     }
 
 
     private getActiveNode(queueId: number, nodes: TreeNode[] = this.state.nodes): TreeNode {
-        let activeNode = nodes.find((n) => n.id === queueId);
+        let activeNode = nodes?.find((n) => n.id === queueId);
         if (!activeNode) {
             for (const node of nodes) {
                 activeNode = this.getActiveNode(queueId, node.children);

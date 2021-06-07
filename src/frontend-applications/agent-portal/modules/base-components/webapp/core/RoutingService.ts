@@ -92,7 +92,7 @@ export class RoutingService {
         return routed;
     }
 
-    private async routeToURL(history: boolean = false): Promise<boolean> {
+    public async routeToURL(history: boolean = false): Promise<boolean> {
         let routed: boolean = false;
         const parsedUrl = new URL(window.location.href);
         const urlParams = parsedUrl.searchParams;
@@ -101,7 +101,7 @@ export class RoutingService {
             const contextUrl = path[1];
             const objectId = path[2];
             if (contextUrl && contextUrl !== '') {
-                await ContextService.getInstance().setContextByUrl(contextUrl, objectId, urlParams);
+                await ContextService.getInstance().setContextByUrl(contextUrl, objectId, urlParams, history);
                 routed = true;
             }
         }

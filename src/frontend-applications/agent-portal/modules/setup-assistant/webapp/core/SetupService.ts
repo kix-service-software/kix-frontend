@@ -119,7 +119,7 @@ export class SetupService {
             await ContextService.getInstance().setActiveContext('admin');
             const context = ContextService.getInstance().getActiveContext();
             if (context instanceof AdminContext) {
-                context.setAdminModule('setup-assistant', '');
+                context.setAdminModule('setup-assistant');
             }
             routed = true;
         }
