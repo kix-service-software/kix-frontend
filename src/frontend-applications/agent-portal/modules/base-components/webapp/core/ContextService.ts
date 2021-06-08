@@ -66,12 +66,9 @@ export class ContextService {
 
     private async createStoredContext(contextPreference: ContextPreference): Promise<void> {
         const context = await this.createContext(
-            contextPreference.contextDescriptor.contextId, contextPreference.objectId, contextPreference.instanceId
+            contextPreference.contextDescriptor.contextId, contextPreference.objectId, contextPreference.instanceId,
+            contextPreference
         );
-
-        if (context) {
-            await context.getStorageManager()?.loadStoredValues(contextPreference);
-        }
     }
 
     public getContextDescriptors(contextMode: ContextMode): ContextDescriptor[] {
@@ -87,8 +84,8 @@ export class ContextService {
     }
 
     private async getContextInstance(
-        contextId: string, objectId?: string | number, createNewInstance: boolean = true,
-        additionalInformation: Array<[string, any]> = [], urlParams?: URLSearchParams
+        contextId: string, objectId?: string | number, createNewInstanceIfNecessary: boolean = true,
+        additionalInformation: Array<[string, any]> = [], urlParams?: URLSearchParams, forceNew?: boolean
     ): Promise<Context> {
         let context = this.contextInstances.find((c) => c.equals(contextId, objectId));
 
@@ -99,10 +96,10 @@ export class ContextService {
         const isNewDialog = context?.descriptor?.contextType === ContextType.DIALOG
             && createModes.some((cm) => cm === context?.descriptor?.contextMode);
 
-        if ((!context || isNewDialog) && createNewInstance) {
-            context = await this.createContextInstance(contextId, objectId, undefined, urlParams);
-
-            additionalInformation.forEach((ai) => context.setAdditionalInformation(ai[0], ai[1]));
+        if ((!context || isNewDialog || forceNew) && createNewInstanceIfNecessary) {
+            context = await this.createContextInstance(
+                contextId, objectId, context?.instanceId, urlParams, additionalInformation
+            );
 
             if (context?.descriptor?.contextType === ContextType.DIALOG) {
                 await this.updateStorage(context?.instanceId);
@@ -137,12 +134,15 @@ export class ContextService {
         );
     }
 
-    public async createContext(contextId: string, objectId: string | number, instanceId?: string): Promise<Context> {
+    public async createContext(
+        contextId: string, objectId: string | number, instanceId?: string,
+        contextPreference?: ContextPreference
+    ): Promise<Context> {
         let context = this.contextInstances.find(
             (c) => c.instanceId === instanceId || c.equals(contextId, objectId)
         );
         if (!context) {
-            context = await this.createContextInstance(contextId, objectId, instanceId);
+            context = await this.createContextInstance(contextId, objectId, instanceId, null, null, contextPreference);
         }
 
         return context;
@@ -253,9 +253,11 @@ export class ContextService {
 
     public async setActiveContext(
         contextId: string, objectId?: string | number, urlParams?: URLSearchParams,
-        additionalInformation: Array<[string, any]> = [], history: boolean = true
+        additionalInformation: Array<[string, any]> = [], history: boolean = true, forceNew?: boolean
     ): Promise<Context> {
-        const context = await this.getContextInstance(contextId, objectId, true, additionalInformation, urlParams);
+        const context = await this.getContextInstance(
+            contextId, objectId, true, additionalInformation, urlParams, forceNew
+        );
         if (context) {
             await this.setContextByInstanceId(context.instanceId, objectId, history);
         }
@@ -329,7 +331,9 @@ export class ContextService {
     }
 
     private async createContextInstance(
-        contextId: string, objectId?: string | number, instanceId?: string, urlParams?: URLSearchParams
+        contextId: string, objectId?: string | number, instanceId?: string, urlParams?: URLSearchParams,
+        additionalInformation: Array<[string, any]> = [],
+        contextPreference?: ContextPreference
     ): Promise<Context> {
         objectId = objectId?.toString();
         const promiseKey = JSON.stringify({ contextId, objectId });
@@ -342,21 +346,30 @@ export class ContextService {
         const contextPromise = this.contextCreatePromises.get(promiseKey);
         const newContext = await contextPromise.catch((): Context => null);
 
+        this.contextCreatePromises.delete(promiseKey);
+
         if (newContext) {
             const index = this.activeContext
                 ? this.contextInstances.findIndex((c) => c.instanceId === this.activeContext.instanceId)
                 : this.contextInstances.length - 1;
             this.contextInstances.splice(index + 1, 0, newContext);
 
+            // TODO: create tests for: additional infos and preferences known prior or in init
+            // add information prior init, some extensions may need them in init
+            if (additionalInformation) {
+                additionalInformation.forEach((ai) => newContext.setAdditionalInformation(ai[0], ai[1]));
+            }
+            if (contextPreference) {
+                await newContext.getStorageManager()?.loadStoredValues(contextPreference);
+            }
+
+            await newContext.initContext(urlParams).catch((e) => {
+                console.error(e);
+                this.removeContext(instanceId);
+            });
+
             EventService.getInstance().publish(ContextEvents.CONTEXT_CREATED, newContext);
         }
-
-        this.contextCreatePromises.delete(promiseKey);
-
-        await newContext.initContext(urlParams).catch((e) => {
-            console.error(e);
-            this.removeContext(instanceId);
-        });
 
         return newContext;
     }
