@@ -34,6 +34,7 @@ import { ContextStorageManager } from './ContextStorageManager';
 import { ContextEvents } from '../modules/base-components/webapp/core/ContextEvents';
 import { ContextPreference } from './ContextPreference';
 import { AgentService } from '../modules/user/webapp/core/AgentService';
+import { UV_FS_O_FILEMAP } from 'constants';
 
 export abstract class Context {
 
@@ -123,6 +124,10 @@ export abstract class Context {
         const formId = this.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
         if (formId) {
             this.formManager.setFormId(formId);
+        }
+
+        if (urlParams) {
+            await this.update(urlParams);
         }
     }
 
