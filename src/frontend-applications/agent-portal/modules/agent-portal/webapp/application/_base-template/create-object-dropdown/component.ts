@@ -8,7 +8,9 @@
  */
 
 import { Context } from '../../../../../../model/Context';
+import { ContextDescriptor } from '../../../../../../model/ContextDescriptor';
 import { ContextMode } from '../../../../../../model/ContextMode';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { SortUtil } from '../../../../../../model/SortUtil';
 import { ContextEvents } from '../../../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
@@ -42,27 +44,17 @@ class Component {
         this.values = this.values.sort((a, b) => SortUtil.compareString(a[1], b[1]));
 
         if (this.values.length) {
-            this.state.selectedValue = this.values[0];
-            if (window.innerWidth > 1024) {
-                this.state.values = this.values.filter((v) => v[0] !== this.state.selectedValue[0]);
-            } else {
-                this.state.values = this.values;
-            }
+            this.setValues(
+                descriptors,
+                ContextService.getInstance().getActiveContext()?.descriptor
+            );
         }
 
         this.subscriber = {
             eventSubscriberId: 'new-object-dropdown',
             eventPublished: (data: Context, eventId: string) => {
                 if (eventId === ContextEvents.CONTEXT_CHANGED) {
-                    const descriptor = descriptors.find(
-                        (d) => d.kixObjectTypes[0] === data.descriptor.kixObjectTypes[0]
-                    );
-                    if (descriptor) {
-                        const value = this.values.find((v) => v[0] === descriptor.contextId);
-                        if (value) {
-                            this.state.selectedValue = value;
-                        }
-                    }
+                    this.setValues(descriptors, data.descriptor);
                 }
             }
         };
@@ -77,13 +69,26 @@ class Component {
     public async valueClicked(value: [string, string, string | ObjectIcon], event: any): Promise<void> {
         event.stopPropagation();
         event.preventDefault();
-        this.state.selectedValue = value;
+        ContextService.getInstance().setActiveContext(value[0]);
+    }
+
+    private setValues(descriptors: ContextDescriptor[], currentDescriptor?: ContextDescriptor) {
+        let createDescriptor = descriptors.find((d) => d.kixObjectTypes[0] === currentDescriptor?.kixObjectTypes[0]);
+        if (!createDescriptor) {
+            createDescriptor = descriptors.find((d) => d.kixObjectTypes[0] === KIXObjectType.TICKET);
+        }
+
+        if (createDescriptor) {
+            this.state.selectedValue = this.values.find((v) => v[0] === createDescriptor.contextId);
+        } else {
+            this.state.selectedValue = this.values[0];
+        }
+
         if (window.innerWidth > 1024) {
             this.state.values = this.values.filter((v) => v[0] !== this.state.selectedValue[0]);
         } else {
             this.state.values = this.values;
         }
-        ContextService.getInstance().setActiveContext(value[0]);
     }
 
 }
