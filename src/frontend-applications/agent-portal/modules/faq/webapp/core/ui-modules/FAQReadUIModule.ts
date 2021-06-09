@@ -78,7 +78,7 @@ export class UIModule implements IUIModule {
             [
                 new UIComponentPermission('faq/articles', [CRUD.READ])
             ],
-            'Translatable#FAQ Dashboard', 'kix-icon-faq'
+            'Translatable#FAQ', 'kix-icon-faq'
         );
         ContextService.getInstance().registerContext(faqContextDescriptor);
 

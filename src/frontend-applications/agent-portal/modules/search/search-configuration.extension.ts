@@ -43,7 +43,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         configurations.push(
             new ContextConfiguration(
-                this.getModuleId(), 'Search Dashboard', ConfigurationType.Context,
+                this.getModuleId(), 'Search', ConfigurationType.Context,
                 this.getModuleId(),
                 [],
                 [
