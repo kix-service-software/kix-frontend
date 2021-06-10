@@ -7,12 +7,11 @@
  * --
  */
 
-import { CompareConfigItemVersionDialogContext } from '../context';
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 import { Table } from '../../../../base-components/webapp/core/table';
 import { Version } from '../../../model/Version';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { CompareConfigItemVersionContext } from '../context';
 
 export class ConfigItemVersionCompareAction extends AbstractAction<Table> {
 
@@ -42,13 +41,14 @@ export class ConfigItemVersionCompareAction extends AbstractAction<Table> {
     }
 
     private async openDialog(versions: Version[]): Promise<void> {
-        let context = ContextService.getInstance().getActiveContext();
+        const context = ContextService.getInstance().getActiveContext();
+
+        const additionalInformation: Array<[string, any]> = [
+            ['VERSION_IDS', versions.map((v) => v.VersionID)]
+        ];
 
         await ContextService.getInstance().setActiveContext(
-            CompareConfigItemVersionDialogContext.CONTEXT_ID, context?.getObjectId()
+            CompareConfigItemVersionContext.CONTEXT_ID, context?.getObjectId(), null, additionalInformation
         );
-
-        context = ContextService.getInstance().getActiveContext();
-        context?.setObjectList(KIXObjectType.CONFIG_ITEM_VERSION, versions);
     }
 }

@@ -19,7 +19,6 @@ import { TableRowHeight } from '../../../../../../model/configuration/TableRowHe
 import { IColumnConfiguration } from '../../../../../../model/configuration/IColumnConfiguration';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { Version } from '../../../../model/Version';
-import { version } from 'winston';
 
 export class CompareConfigItemVersionTableFactory extends TableFactory {
 
@@ -53,18 +52,25 @@ export class CompareConfigItemVersionTableFactory extends TableFactory {
         ];
 
         const context = ContextService.getInstance().getActiveContext();
-        const versions = await context.getObjectList<Version>(KIXObjectType.CONFIG_ITEM_VERSION);
 
-        versions.sort((a, b) => a.VersionID - b.VersionID);
-        for (const v of versions) {
-            const versionNumber = this.getVersionNumber(v.VersionID, versions);
-            const column = new DefaultColumnConfiguration(
-                null, null, null,
-                v.VersionID.toString(), true, false, true, false, 250,
-                false, false, false, DataType.STRING, true, 'multiline-cell',
-                `Version ${versionNumber}`
-            );
-            columns.push(column);
+        const versions = await context.getObjectList<Version>(KIXObjectType.CONFIG_ITEM_VERSION);
+        versions?.sort((a, b) => a.VersionID - b.VersionID);
+
+        const allVersions = await context.getObjectList<Version>('ALL_VERIONS');
+        allVersions?.sort((a, b) => a.VersionID - b.VersionID);
+
+        if (Array.isArray(versions)) {
+
+            for (const v of versions) {
+                const versionNumber = this.getVersionNumber(v.VersionID, allVersions);
+                const column = new DefaultColumnConfiguration(
+                    null, null, null,
+                    v.VersionID.toString(), true, false, true, false, 250,
+                    false, false, false, DataType.STRING, true, 'multiline-cell',
+                    `Version ${versionNumber}`
+                );
+                columns.push(column);
+            }
         }
 
         tableConfiguration = new TableConfiguration(null, null, null,
@@ -80,4 +86,5 @@ export class CompareConfigItemVersionTableFactory extends TableFactory {
         const index = versions.findIndex((v) => v.VersionID === versionId);
         return index + 1;
     }
+
 }
