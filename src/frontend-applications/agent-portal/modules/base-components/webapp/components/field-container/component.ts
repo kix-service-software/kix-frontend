@@ -8,7 +8,6 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { KIXObjectFormService } from '../../../../../modules/base-components/webapp/core/KIXObjectFormService';
@@ -16,18 +15,14 @@ import { ServiceType } from '../../../../../modules/base-components/webapp/core/
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
-import { IEventSubscriber } from '../../core/IEventSubscriber';
-import { EventService } from '../../core/EventService';
-import { FormEvent } from '../../core/FormEvent';
 import { ContextService } from '../../core/ContextService';
-import { IdService } from '../../../../../model/IdService';
 
 class Component {
 
     private state: ComponentState;
     private formId: string;
-    private formSubscriber: IEventSubscriber;
     private fields: FormFieldConfiguration[];
+    private updateTimeout: any;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -37,6 +32,7 @@ class Component {
         this.state.level = typeof input.level !== 'undefined' ? input.level : 0;
         this.formId = input.formId;
         this.fields = input.fields;
+        this.initFields(this.fields);
     }
 
     public async onMount(): Promise<void> {
@@ -44,44 +40,35 @@ class Component {
             'Translatable#Add', 'Translatable#Delete'
         ]);
 
-        this.formSubscriber = {
-            eventSubscriberId: IdService.generateDateBasedId('FieldContainer'),
-            eventPublished: (data: any, eventId: string) => {
-                this.initFields(this.fields);
-            }
-        };
-        EventService.getInstance().subscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FORM_FIELD_ORDER_CHANGED, this.formSubscriber);
-
         this.initFields(this.fields);
     }
 
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.FIELD_REMOVED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.FORM_FIELD_ORDER_CHANGED, this.formSubscriber);
-    }
-
     private async initFields(fields: FormFieldConfiguration[] = []): Promise<void> {
-        if (this.formId) {
-            const context = ContextService.getInstance().getActiveContext();
-            const formInstance = await context?.getFormManager()?.getFormInstance();
-            let availableFields: FormFieldConfiguration[] = fields;
-
-            const formService = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
-                formInstance.getObjectType(), ServiceType.FORM
-            );
-            if (formService && fields) {
-                const fieldsWithPermission = [];
-                for (const field of fields) {
-                    if (await formService.hasPermissions(field)) {
-                        fieldsWithPermission.push(field);
-                    }
-                }
-                availableFields = fieldsWithPermission;
-            }
-            this.state.fields = availableFields;
+        if (this.updateTimeout) {
+            window.clearTimeout(this.updateTimeout);
         }
+
+        this.updateTimeout = setTimeout(async () => {
+            if (this.formId) {
+                const context = ContextService.getInstance().getActiveContext();
+                const formInstance = await context?.getFormManager()?.getFormInstance();
+                let availableFields: FormFieldConfiguration[] = fields;
+
+                const formService = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
+                    formInstance.getObjectType(), ServiceType.FORM
+                );
+                if (formService && fields) {
+                    const fieldsWithPermission = [];
+                    for (const field of fields) {
+                        if (await formService.hasPermissions(field)) {
+                            fieldsWithPermission.push(field);
+                        }
+                    }
+                    availableFields = fieldsWithPermission;
+                }
+                this.state.fields = availableFields;
+            }
+        }, 50);
     }
 
     public canRemove(field: FormFieldConfiguration): boolean {

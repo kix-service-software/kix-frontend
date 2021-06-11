@@ -24,9 +24,19 @@ import { MacroFieldCreator } from '../MacroFieldCreator';
 
 export class MacroFieldJobFormManager extends ExtendedJobFormManager {
 
+
+    private static INSTANCE: MacroFieldJobFormManager;
+
+    public static getInstance(): MacroFieldJobFormManager {
+        if (!MacroFieldJobFormManager.INSTANCE) {
+            MacroFieldJobFormManager.INSTANCE = new MacroFieldJobFormManager();
+        }
+        return MacroFieldJobFormManager.INSTANCE;
+    }
+
     private subscriber: IEventSubscriber;
 
-    public constructor() {
+    private constructor() {
         super();
 
         this.subscriber = {
