@@ -213,14 +213,16 @@ export class ContextService {
 
     public async setContextByUrl(
         contextUrl: string, objectId?: string | number, urlParams?: URLSearchParams, history: boolean = true
-    ): Promise<void> {
+    ): Promise<Context> {
+        let context: Context;
         const contextMode = objectId ? ContextMode.DETAILS : ContextMode.DASHBOARD;
         const descriptor = this.contextDescriptorList.find(
             (cd) => cd.urlPaths.some((p) => p === contextUrl) && cd.contextMode === contextMode
         );
         if (descriptor) {
-            await this.setActiveContext(descriptor.contextId, objectId, urlParams, [], history);
+            context = await this.setActiveContext(descriptor.contextId, objectId, urlParams, [], history);
         }
+        return context;
     }
 
     public async setContextByInstanceId(
