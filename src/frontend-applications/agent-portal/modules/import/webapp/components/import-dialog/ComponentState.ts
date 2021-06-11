@@ -10,11 +10,12 @@
 import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
 import { ImportManager } from '../../core';
 import { Table } from '../../../../base-components/webapp/core/table';
+import { IdService } from '../../../../../model/IdService';
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public instanceId: string = null,
+        public instanceId: string = IdService.generateDateBasedId('import-dialog-'),
         public importManager: ImportManager = null,
         public table: Table = null,
         public tableTitle: string = null,
