@@ -67,8 +67,8 @@ class Component {
     private importFormTimeout;
     private formSubscriber: IEventSubscriber;
 
-    public onCreate(input: any): void {
-        this.state = new ComponentState(input.instanceId);
+    public onCreate(): void {
+        this.state = new ComponentState();
         WidgetService.getInstance().setWidgetType('dynamic-form-field-group', WidgetType.GROUP);
         this.importConfigs = new Map(
             [
