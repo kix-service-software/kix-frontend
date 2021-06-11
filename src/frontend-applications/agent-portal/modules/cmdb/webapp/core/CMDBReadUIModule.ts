@@ -15,7 +15,7 @@ import {
     ConfigItemLabelProvider, ConfigItemClassLabelProvider, ConfigItemClassDefinitionLabelProvider,
     ConfigItemHistoryLabelProvider, ConfigItemVersionLabelProvider, ConfigItemVersionCompareLabelProvider,
     ConfigItemSearchDefinition, CMDBContext, ConfigItemDetailsContext, ConfigItemSearchContext,
-    CompareConfigItemVersionDialogContext, ConfigItemVersionCompareAction
+    CompareConfigItemVersionContext, ConfigItemVersionCompareAction
 } from '.';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TableFactoryService, TableCSSHandlerRegistry } from '../../../base-components/webapp/core/table';
@@ -95,10 +95,9 @@ export class UIModule implements IUIModule {
         ContextService.getInstance().registerContext(searchConfigItemContext);
 
         const compareConfigItemContext = new ContextDescriptor(
-            CompareConfigItemVersionDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_VERSION_COMPARE],
-            ContextType.DIALOG, ContextMode.EDIT,
-            false, 'compare-config-item-version-dialog', ['configitems'], CompareConfigItemVersionDialogContext,
-
+            CompareConfigItemVersionContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_VERSION_COMPARE],
+            ContextType.MAIN, ContextMode.DETAILS,
+            false, 'compare-config-item-version-dialog', ['versioncompare'], CompareConfigItemVersionContext,
             [
                 new UIComponentPermission('cmdb/configitems', [CRUD.READ])
             ],

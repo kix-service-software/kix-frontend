@@ -8,7 +8,7 @@
  */
 
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
-import { CompareConfigItemVersionDialogContext } from './webapp/core/context/CompareConfigItemVersionDialogContext';
+import { CompareConfigItemVersionContext } from './webapp/core/context/CompareConfigItemVersionContext';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
 import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
@@ -19,13 +19,12 @@ import { ContextConfiguration } from '../../model/configuration/ContextConfigura
 import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
 import { ConfiguredDialogWidget } from '../../model/configuration/ConfiguredDialogWidget';
 import { ContextMode } from '../../model/ContextMode';
-
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
-        return CompareConfigItemVersionDialogContext.CONTEXT_ID;
+        return CompareConfigItemVersionContext.CONTEXT_ID;
     }
 
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {

@@ -8,7 +8,7 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { CompareConfigItemVersionDialogContext } from '../../core';
+import { CompareConfigItemVersionContext } from '../../core';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -18,7 +18,7 @@ class Component {
 
     private state: ComponentState;
 
-    private context: CompareConfigItemVersionDialogContext;
+    private context: CompareConfigItemVersionContext;
 
     public onCreate(): void {
         this.state = new ComponentState();

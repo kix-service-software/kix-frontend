@@ -18,7 +18,7 @@ import { ServiceType } from '../../base-components/webapp/core/ServiceType';
 import { TableFactoryService, TableCSSHandlerRegistry } from '../../base-components/webapp/core/table';
 import { LabelService } from '../../base-components/webapp/core/LabelService';
 import { ActionFactory } from '../../base-components/webapp/core/ActionFactory';
-import { CMDBReadUIModule, CMDBService, ConfigItemFormService, ConfigItemVersionTableFactory, CompareConfigItemVersionTableFactory, ConfigItemHistoryTableFactory, ConfigItemLabelProvider, ConfigItemClassLabelProvider, ConfigItemClassDefinitionLabelProvider, ConfigItemHistoryLabelProvider, ConfigItemVersionLabelProvider, ConfigItemVersionCompareLabelProvider, ConfigItemSearchDefinition, CMDBContext, ConfigItemDetailsContext, ConfigItemSearchContext, CompareConfigItemVersionDialogContext, ConfigItemTableFactory } from '../webapp/core';
+import { CMDBReadUIModule, CMDBService, ConfigItemFormService, ConfigItemVersionTableFactory, CompareConfigItemVersionTableFactory, ConfigItemHistoryTableFactory, ConfigItemLabelProvider, ConfigItemClassLabelProvider, ConfigItemClassDefinitionLabelProvider, ConfigItemHistoryLabelProvider, ConfigItemVersionLabelProvider, ConfigItemVersionCompareLabelProvider, ConfigItemSearchDefinition, CMDBContext, ConfigItemDetailsContext, ConfigItemSearchContext, CompareConfigItemVersionContext, ConfigItemTableFactory } from '../webapp/core';
 import { SearchService } from '../../search/webapp/core';
 import { PostproductivCSSHandler } from '../webapp/core/table/PostproductivCSSHandler';
 
