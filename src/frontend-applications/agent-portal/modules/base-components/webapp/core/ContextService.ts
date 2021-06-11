@@ -154,10 +154,13 @@ export class ContextService {
         let removed = false;
 
         if (this.canRemove(instanceId)) {
-            await this.switchToTargetContext(instanceId, targetContextId, targetObjectId);
+            let sourceContext: any;
 
             const index = this.contextInstances.findIndex((c) => c.instanceId === instanceId);
             if (index !== -1) {
+
+                sourceContext = this.contextInstances[index].getAdditionalInformation('SourceContext');
+
                 const isStored = await this.isContextStored(instanceId);
                 if (isStored) {
                     await this.updateStorage(instanceId, true);
@@ -167,6 +170,8 @@ export class ContextService {
                 EventService.getInstance().publish(ContextEvents.CONTEXT_REMOVED, context[0]);
             }
             removed = true;
+
+            await this.switchToTargetContext(sourceContext, targetContextId, targetObjectId);
         }
 
         return removed;
@@ -182,23 +187,20 @@ export class ContextService {
     }
 
     private async switchToTargetContext(
-        instanceId: string, targetContextId?: string, targetObjectId?: string | number
+        sourceContext: any, targetContextId?: string, targetObjectId?: string | number
     ): Promise<void> {
-        if (this.activeContext?.instanceId === instanceId) {
-            if (targetContextId) {
-                await this.setActiveContext(targetContextId, targetObjectId);
+        if (targetContextId) {
+            await this.setActiveContext(targetContextId, targetObjectId);
+        } else {
+            const context = await this.getContextInstance(sourceContext?.instanceId, null, false);
+            if (context) {
+                await this.setContextByInstanceId(sourceContext.instanceId);
+            } else if (this.contextInstances.length - 1 > 0) {
+                await this.setContextByInstanceId(
+                    this.contextInstances[this.contextInstances.length - 1].instanceId
+                );
             } else {
-                const sourceContext = this.activeContext.getAdditionalInformation('SourceContext');
-                const context = await this.getContextInstance(sourceContext?.instanceId, null, false);
-                if (context) {
-                    await this.setContextByInstanceId(sourceContext.instanceId);
-                } else if (this.contextInstances.length - 1 > 0) {
-                    await this.setContextByInstanceId(
-                        this.contextInstances[this.contextInstances.length - 2].instanceId
-                    );
-                } else {
-                    await this.setActiveContext('home');
-                }
+                await this.setActiveContext('home');
             }
         }
     }
