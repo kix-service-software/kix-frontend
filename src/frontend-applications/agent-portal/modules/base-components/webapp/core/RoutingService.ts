@@ -101,8 +101,12 @@ export class RoutingService {
             const contextUrl = path[1];
             const objectId = path[2];
             if (contextUrl && contextUrl !== '') {
-                await ContextService.getInstance().setContextByUrl(contextUrl, objectId, urlParams, history);
-                routed = true;
+                const context = await ContextService.getInstance().setContextByUrl(
+                    contextUrl, objectId, urlParams, history
+                );
+                if (context) {
+                    routed = true;
+                }
             }
         }
 
