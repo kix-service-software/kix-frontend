@@ -172,7 +172,16 @@ export abstract class Context {
     }
 
     public getIcon(): string | ObjectIcon {
-        return this.icon ? this.icon : this.descriptor.icon;
+        let icon = this.icon;
+        if (!icon) {
+            icon = this.getAdditionalInformation(AdditionalContextInformation.ICON);
+        }
+
+        if (!icon) {
+            icon = this.descriptor.icon;
+        }
+
+        return icon;
     }
 
     public setIcon(icon: ObjectIcon | string): void {
@@ -181,10 +190,15 @@ export abstract class Context {
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        if (this.displayText) {
-            return await TranslationService.translate(this.displayText);
+        let displayText = this.displayText;
+        if (!displayText) {
+            displayText = this.getAdditionalInformation(AdditionalContextInformation.DISPLAY_TEXT);
         }
-        return await TranslationService.translate(this.descriptor.displayText);
+        if (!displayText) {
+            displayText = this.descriptor.displayText;
+        }
+
+        return await TranslationService.translate(displayText);
     }
 
     public setDisplayText(text: string): void {
@@ -594,11 +608,27 @@ export abstract class Context {
         for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {
             await extension.addStorableAdditionalInformation(this, contextPreference);
         }
+
+        contextPreference[AdditionalContextInformation.DISPLAY_TEXT] = this.getAdditionalInformation(
+            AdditionalContextInformation.DISPLAY_TEXT
+        );
+
+        contextPreference[AdditionalContextInformation.ICON] = JSON.stringify(
+            this.getAdditionalInformation(AdditionalContextInformation.ICON)
+        );
     }
 
     public async loadAdditionalInformation(contextPreference: ContextPreference): Promise<void> {
         for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {
             await extension.loadAdditionalInformation(this, contextPreference);
+        }
+        this.setAdditionalInformation(
+            AdditionalContextInformation.DISPLAY_TEXT, contextPreference[AdditionalContextInformation.DISPLAY_TEXT]
+        );
+
+        const iconValue = contextPreference[AdditionalContextInformation.ICON];
+        if (iconValue) {
+            this.setAdditionalInformation(AdditionalContextInformation.ICON, JSON.parse(iconValue));
         }
     }
 
