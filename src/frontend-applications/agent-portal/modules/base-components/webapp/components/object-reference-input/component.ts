@@ -413,7 +413,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     }
 
     protected async prepareLoadingOptions(loadingOptions: KIXObjectLoadingOptions): Promise<KIXObjectLoadingOptions> {
-        const lo = new KIXObjectLoadingOptions(
+        const preparedLoadingOptions = new KIXObjectLoadingOptions(
             [],
             loadingOptions.sortOrder,
             loadingOptions.limit,
@@ -433,13 +433,13 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     const preparedCriterion = new FilterCriteria(
                         criterion.property, criterion.operator, criterion.type, criterion.filterType, value
                     );
-                    lo.filter.push(preparedCriterion);
+                    preparedLoadingOptions.filter.push(preparedCriterion);
                 } else {
-                    lo.filter.push(criterion);
+                    preparedLoadingOptions.filter.push(criterion);
                 }
             }
         }
-        return loadingOptions;
+        return preparedLoadingOptions;
     }
 }
 

@@ -126,7 +126,7 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
                         break;
                     default:
                         for (const extendedUtil of this.extendedUtils) {
-                            await extendedUtil.createDynamicFormField(field);
+                            await extendedUtil.createDynamicFormField(field, objectType);
                         }
                 }
 
