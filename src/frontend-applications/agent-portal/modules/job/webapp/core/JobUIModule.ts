@@ -103,7 +103,7 @@ export class UIModule implements IUIModule {
         const manager = JobFormService.getInstance().getAllJobFormManager();
         manager.forEach((m) => {
             m.addExtendedJobFormManager(new DynamicFieldSet());
-            m.addExtendedJobFormManager(new MacroFieldJobFormManager());
+            m.addExtendedJobFormManager(MacroFieldJobFormManager.getInstance());
             m.addExtendedJobFormManager(new AssembleObject());
         });
 
