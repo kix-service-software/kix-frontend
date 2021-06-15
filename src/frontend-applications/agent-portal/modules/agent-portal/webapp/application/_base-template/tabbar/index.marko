@@ -7,9 +7,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 <div.tabbar>
-    <div.tab-scroll.left on-click("scrollTabs", true) class={
-        blocked: state.blocked
-    }>
+    <div.tab-scroll.left
+        on-click("scrollTabs", true)
+        class={
+            blocked: state.blocked
+        }>
         <span.fa.fa-caret-left/>
     </div>
     <div.tab-content key="tabbar-tab-content">
@@ -25,23 +27,32 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 on-dragover("dragOver", tab)
                 on-drop("drop", tab)
                 data-instanceid=tab.contextInstanceId
-                data-contexttype=(tab.contextDescriptor ? tab.contextDescriptor.contextType : "")
-                data-contextmode=(tab.contextDescriptor ? tab.contextDescriptor.contextMode : "")
+                data-contexttype=(
+                    tab.contextDescriptor
+                        ? tab.contextDescriptor.contextType
+                        : ""
+                )
+                data-contextmode=(
+                    tab.contextDescriptor
+                        ? tab.contextDescriptor.contextMode
+                        : ""
+                )
                 data-objectid=tab.objectid
-                data-contextid=(tab.contextDescriptor ? tab.contextDescriptor.contextId : "")
+                data-contextid=(
+                    tab.contextDescriptor
+                        ? tab.contextDescriptor.contextId
+                        : ""
+                )
                 class={
-                                blocked: state.blocked,
-                                drag: state.dragOverInstanceId === tab.contextInstanceId
-                            }>
+                    blocked: state.blocked,
+                    drag: state.dragOverInstanceId === tab.contextInstanceId
+                }>
                 <div.tab-icon-container>
                     <if(tab.refresh)>
                         <span.kix-icon-arrow-refresh/>
                     </if>
                     <if(tab.pinned)>
                         <span.fa.fa-thumbtack/>
-                    </if>
-                    <if(tab.isDialog)>
-                        <span.kix-icon-edit/>
                     </if>
                     <icon icon=tab.icon/>
                 </div>
@@ -52,9 +63,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </div>
         </for>
     </div>
-    <div.tab-scroll.right on-click("scrollTabs", false) class={
-        blocked: state.blocked
-    }>
+    <div.tab-scroll.right
+        on-click("scrollTabs", false)
+        class={
+            blocked: state.blocked
+        }>
         <span.fa.fa-caret-right/>
     </div>
 </div>
