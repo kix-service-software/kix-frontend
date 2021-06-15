@@ -35,15 +35,13 @@ export class ObjectIconService extends KIXObjectService<ObjectIcon> {
 
     public async loadObjects<O extends KIXObject>(
         objectType: KIXObjectType | string, objectIds: Array<string | number>,
-        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: ObjectIconLoadingOptions
     ): Promise<O[]> {
         let icons = await super.loadObjects<ObjectIcon>(KIXObjectType.OBJECT_ICON, null);
         if (objectLoadingOptions && objectLoadingOptions instanceof ObjectIconLoadingOptions) {
             const icon = icons.find(
                 (i) => {
-                    const objectId = objectLoadingOptions.objectId
-                        ? objectLoadingOptions.objectId.toString()
-                        : null;
+                    const objectId = objectLoadingOptions?.objectId?.toString();
                     return i.ObjectID.toString() === objectId && i.Object === objectLoadingOptions.object;
                 }
             );
@@ -53,6 +51,15 @@ export class ObjectIconService extends KIXObjectService<ObjectIcon> {
         }
 
         return icons as any[];
+    }
+
+    public async getObjectIcon(
+        object: string | KIXObjectType, objectId: string | number
+    ): Promise<ObjectIcon | string> {
+        const icons = await this.loadObjects(null, null, null, new ObjectIconLoadingOptions(object, objectId));
+        return Array.isArray(icons) && icons.length
+            ? icons[0] as any
+            : null;
     }
 
     public isServiceFor(kixObjectType: KIXObjectType | string) {
