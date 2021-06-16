@@ -26,11 +26,11 @@ import { ContextService } from '../../../../base-components/webapp/core/ContextS
 import { KIXModulesService } from '../../../../base-components/webapp/core/KIXModulesService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
-import { ContextType } from '../../../../../model/ContextType';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
 import { Contact } from '../../../../customer/model/Contact';
 import { ContactProperty } from '../../../../customer/model/ContactProperty';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
+import { Context } from '../../../../../model/Context';
 
 declare const tui: any;
 
@@ -41,6 +41,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private contextListenerId: string;
     private widgetConfiguration: WidgetConfiguration;
     private creatingCalendar: boolean;
+    private schedules: any[];
+    private context: Context;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -51,21 +53,21 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            this.widgetConfiguration = await context.getWidgetConfiguration(this.state.instanceId);
+        this.context = ContextService.getInstance().getActiveContext();
+        if (this.context) {
+            this.widgetConfiguration = await this.context.getWidgetConfiguration(this.state.instanceId);
             if (this.widgetConfiguration && this.widgetConfiguration.configuration) {
                 this.calendarConfig = (this.widgetConfiguration.configuration as CalendarConfiguration);
                 this.initWidget();
 
                 if (this.widgetConfiguration.contextDependent) {
                     this.contextListenerId = 'calendar widget' + this.widgetConfiguration.instanceId;
-                    context.registerListener(this.contextListenerId, {
+                    this.context.registerListener(this.contextListenerId, {
                         additionalInformationChanged: () => null,
                         sidebarLeftToggled: () => null,
-                        filteredObjectListChanged: () => {
-                            this.state.prepared = false;
-                            setTimeout(() => this.initWidget(), 50);
+                        filteredObjectListChanged: async () => {
+                            const tickets = await this.loadTickets();
+                            this.updateCalendarSchedules(tickets);
                         },
                         objectChanged: () => null,
                         objectListChanged: () => null,
@@ -79,10 +81,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onDestroy(): void {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            context.unregisterListener(this.contextListenerId);
-        }
+        this.context?.unregisterListener(this.contextListenerId);
+        this.calendar?.destroy();
     }
 
     private async initWidget(): Promise<void> {
@@ -92,12 +92,22 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.creatingCalendar = true;
 
+        const tickets = await this.loadTickets();
+
+        this.state.prepared = true;
+
+        setTimeout(async () => {
+            await this.createCalendar(tickets);
+            this.creatingCalendar = false;
+        }, 100);
+    }
+
+    private async loadTickets(): Promise<Ticket[]> {
         const user = await AgentService.getInstance().getCurrentUser();
         let tickets = [];
 
         if (this.widgetConfiguration.contextDependent) {
-            const context = ContextService.getInstance().getActiveContext();
-            tickets = context.getFilteredObjectList(KIXObjectType.TICKET);
+            tickets = this.context?.getFilteredObjectList(KIXObjectType.TICKET);
         } else {
             const ticketFilter = [
                 new FilterCriteria(
@@ -117,12 +127,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             );
         }
 
-        this.state.prepared = true;
-
-        setTimeout(async () => {
-            await this.createCalendar(tickets);
-            this.creatingCalendar = false;
-        }, 50);
+        return tickets;
     }
 
     private async createCalendar(tickets: Ticket[]): Promise<void> {
@@ -187,10 +192,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         });
 
-        this.state.loading = true;
-        const schedules = await this.createSchedules(tickets);
-        this.calendar.createSchedules(schedules);
-        this.state.loading = false;
+        await this.updateCalendarSchedules(tickets);
 
         this.setCurrentDate();
 
@@ -200,6 +202,20 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const guide = event.guide;
             guide.clearGuideElement();
         });
+    }
+
+    private async updateCalendarSchedules(tickets: Ticket[]): Promise<void> {
+        this.state.loading = true;
+
+        if (!Array.isArray(this.schedules)) {
+            this.schedules = [];
+        }
+
+        this.schedules.forEach((s) => this.calendar?.deleteSchedule(s.id, s.calendarId));
+
+        this.schedules = await this.createSchedules(tickets);
+        this.calendar.createSchedules(this.schedules);
+        this.state.loading = false;
     }
 
     private async createSchedules(tickets: Ticket[]): Promise<any[]> {
