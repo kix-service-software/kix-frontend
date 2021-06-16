@@ -45,10 +45,8 @@ class Component {
         ContextService.getInstance().setActiveContext('personal-settings-dialog-context');
     }
 
-    public getReleaseRoutingConfig(): RoutingConfiguration {
-        return new RoutingConfiguration(
-            'release', null, ContextMode.DASHBOARD, null
-        );
+    public showHelp(): void {
+        ContextService.getInstance().setActiveContext('release');
     }
 
     public async logout(): Promise<void> {

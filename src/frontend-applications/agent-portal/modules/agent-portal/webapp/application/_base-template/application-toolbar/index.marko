@@ -10,13 +10,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <div title=state.translations["Translatable#Personal Settings"]>
         <span.kix-icon-gear on-click("showPersonalSettings")/>
     </div>
-    <link-target routingConfiguration=component.getReleaseRoutingConfig()>
-        <@content>
-            <div title=state.translations["Translatable#Help"]>
-                <span.kix-icon-query.as-button/>
-            </div>
-        </@content>
-    </link-target>
+    <div title=state.translations["Translatable#Help"]>
+        <span.kix-icon-query.as-button on-click("showHelp")/>
+    </div>
     <div title=state.translations["Translatable#Logout"]>
         <span.kix-icon-logout on-click("logout")/>
     </div>
