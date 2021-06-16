@@ -54,7 +54,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async prepareConfigurations(): Promise<void> {
-        const start = Date.now();
         const context = ContextService.getInstance().getActiveContext();
 
         const lanes = context.getLanes(true);
@@ -74,13 +73,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         }
         (this as any).setStateDirty('contentWidgets');
-
-        const end = Date.now();
-        console.debug('prepareConfigurations: ' + (end - start));
     }
 
     private async prepareWidget(): Promise<void> {
-        const start = Date.now();
         const context = ContextService.getInstance().getActiveContext();
         this.state.error = null;
 
@@ -93,20 +88,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         } else {
             this.state.title = await context.getDisplayText();
         }
-
-        const end = Date.now();
-        console.debug('prepareWidget: ' + (end - start));
     }
 
     private async prepareActions(): Promise<void> {
-        const start = Date.now();
         const context = ContextService.getInstance().getActiveContext();
         const config = context.getConfiguration();
 
-        const objectStart = Date.now();
         const object = await context.getObject().catch((error) => null);
-        const objectEnd = Date.now();
-        console.debug('getObject: ' + (objectEnd - objectStart));
 
         if (config && object) {
 
@@ -120,9 +108,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
             WidgetService.getInstance().registerActions(this.state.instanceId, generalActions);
         }
-
-        const end = Date.now();
-        console.debug('prepareActions: ' + (end - start));
     }
 
     private async getWidgetTemplate(instanceId: string): Promise<any> {
