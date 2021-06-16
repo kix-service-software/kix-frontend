@@ -7,7 +7,6 @@
  * --
  */
 
-import { KIXModulesSocketClient } from './KIXModulesSocketClient';
 import { IKIXModuleExtension } from '../../../../model/IKIXModuleExtension';
 
 export class KIXModulesService {
@@ -27,18 +26,12 @@ export class KIXModulesService {
 
     private tags: Map<string, string>;
 
-    public async init(): Promise<void> {
+    public async init(modules: IKIXModuleExtension[]): Promise<void> {
         this.tags = new Map();
-
-        const start = Date.now();
-
-        this.modules = await KIXModulesSocketClient.getInstance().loadModules();
+        this.modules = modules;
         this.modules.forEach((m) => {
             m.uiComponents.forEach((c) => this.tags.set(c.tagId, c.componentPath));
         });
-
-        const end = Date.now();
-        console.debug(`Modules loaded: ${end - start}ms`);
     }
 
     public getModules(): IKIXModuleExtension[] {

@@ -17,6 +17,9 @@ import { SysConfigService } from '../../modules/sysconfig/server/SysConfigServic
 import { SysConfigOption } from '../../modules/sysconfig/model/SysConfigOption';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { SysConfigKey } from '../../modules/sysconfig/model/SysConfigKey';
+import { PluginService } from '../../../../server/services/PluginService';
+import { IKIXModuleExtension } from '../../model/IKIXModuleExtension';
+import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
 
 export class ApplicationRouter extends KIXRouter {
 
@@ -95,9 +98,15 @@ export class ApplicationRouter extends KIXRouter {
 
             const templatePath = path.join('..', '..', 'modules', 'agent-portal', 'webapp', 'application');
             const template = require(templatePath);
+
+            const modules = await PluginService.getInstance().getExtensions<IKIXModuleExtension>(
+                AgentPortalExtensions.MODULES
+            );
+
             res.marko(template, {
                 socketTimeout: options && options.length ? options[0].Value : 30000,
-                favIcon
+                favIcon,
+                modules
             });
         }
     }

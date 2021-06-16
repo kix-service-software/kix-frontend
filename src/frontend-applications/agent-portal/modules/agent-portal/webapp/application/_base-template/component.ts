@@ -22,10 +22,13 @@ import { ClientStorageService } from '../../../../base-components/webapp/core/Cl
 import { MobileShowEvent } from '../../../model/MobileShowEvent';
 import { MobileShowEventData } from '../../../model/MobileShowEventData';
 import { ContextHistory } from '../../../../base-components/webapp/core/ContextHistory';
+import { IKIXModuleExtension } from '../../../../../model/IKIXModuleExtension';
 
 class Component {
 
     public state: ComponentState;
+
+    private modules: IKIXModuleExtension[];
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -35,6 +38,8 @@ class Component {
         if (input && input.socketTimeout) {
             ClientStorageService.setSocketTimeout(input.socketTimeout);
         }
+
+        this.modules = input.modules;
     }
 
     public async onMount(): Promise<void> {
@@ -50,7 +55,7 @@ class Component {
         ContextHistory.getInstance();
 
         const startInitModules = Date.now();
-        await KIXModulesService.getInstance().init();
+        await KIXModulesService.getInstance().init(this.modules);
         await this.initModules();
         const endInitModules = Date.now();
         console.debug(`modules initialization finished: ${endInitModules - startInitModules}ms`);
@@ -62,8 +67,6 @@ class Component {
             },
             contextRegistered: () => { return; }
         });
-
-        this.setContext();
 
         EventService.getInstance().subscribe(ApplicationEvent.APP_LOADING, {
             eventSubscriberId: 'BASE-TEMPLATE',
@@ -99,7 +102,7 @@ class Component {
 
         window.addEventListener('resize', this.resizeHandling.bind(this), false);
 
-        await RoutingService.getInstance().routeToInitialContext();
+        RoutingService.getInstance().routeToInitialContext();
 
         this.state.initialized = true;
         this.state.loading = false;
