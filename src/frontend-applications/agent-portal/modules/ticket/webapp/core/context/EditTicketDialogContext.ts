@@ -114,4 +114,8 @@ export class EditTicketDialogContext extends Context {
         return this.objectLists.get(objectType) as any[];
     }
 
+    public getObjectId(): number {
+        return Number(this.objectId);
+    }
+
 }
