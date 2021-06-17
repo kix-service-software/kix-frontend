@@ -6,53 +6,49 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.calendar-container>
     <widget instanceId=input.instanceId title="Ticket Calendar">
         <@content>
-            <if(state.prepared)>
-                <div.calendar-header>
-                    <div.calendar-date>
-                        <div.month>${state.currentDate}</div>
+            <div.calendar-header>
+                <div.calendar-date>
+                    <div.month>${state.currentDate}</div>
+                </div>
+                <div.calendar-controls>
+                    <span.kix-icon-circle-prior on-click("prev")/>
+                    <div.calendar-button.today on-click("today")>
+                        <translation-string pattern="Translatable#Today"/>
                     </div>
-                    <div.calendar-controls>
-                        <span.kix-icon-circle-prior on-click("prev")/>
-                        <div.calendar-button.today on-click("today")>
-                            <translation-string pattern="Translatable#Today"/>
-                        </div>
-                        <span.kix-icon-circle-next on-click("next")/>
-                        <div.calendar-button.switch on-click("changeView")>
-                            <if(state.view === "month")>
-                                <span.kix-icon-calendar-week/>
-                            </if>
-                            <else>
-                                <span.kix-icon-calendar-month/>
-                            </else>
-                            <translation-string pattern=state.viewLabel/>
-                        </div>
+                    <span.kix-icon-circle-next on-click("next")/>
+                    <div.calendar-button.switch on-click("changeView")>
+                        <if(state.view === "month")>
+                            <span.kix-icon-calendar-week/>
+                        </if>
+                        <else>
+                            <span.kix-icon-calendar-month/>
+                        </else>
+                        <translation-string pattern=state.viewLabel/>
                     </div>
                 </div>
-                <div id="calendar"/>
-                <div.calendar-legend>
-                    <if(state.loading)>
-                        <span.kix-icon-arrow-refresh/>
-                        <translation-string pattern="Translatable#Reload Calendar Data ..."/>
-                    </if>
-                    <ul>
-                        <for|calendar| of=state.calendars>
-                            <li
-                                class={
-                                                                inactive: !calendar.visible
-                                                            }
-                                style=("border-color:" + calendar.bgColor)
-                                on-click("toggleCalendar", calendar)>${calendar.name}</li>
-                        </for>
-                    </ul>
-                </div>
-            </if>
-            <else>
-                <loading-spinner/>
-            </else>
+            </div>
+            <div id="calendar"/>
+            <div.calendar-legend>
+                <if(state.loading)>
+                    <span.kix-icon-arrow-refresh/>
+                    <translation-string pattern="Translatable#Reload Calendar Data ..."/>
+                </if>
+                <ul>
+                    <for|calendar| of=state.calendars>
+                        <li
+                            class={
+                                inactive: !calendar.visible
+                            }
+                            style=("border-color:" + calendar.bgColor)
+                            on-click("toggleCalendar", calendar)>
+                            ${calendar.name}
+                        </li>
+                    </for>
+                </ul>
+            </div>
         </@content>
     </widget>
 </div>
