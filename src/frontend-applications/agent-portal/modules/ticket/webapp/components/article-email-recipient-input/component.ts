@@ -177,18 +177,16 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     private async getReplyAllAction(): Promise<FormInputAction> {
-        let action: FormInputAction = null;
+        let action: FormInputAction;
         const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            const addReplyAll = context.getAdditionalInformation('ARTICLE_REPLY');
-            if (addReplyAll) {
-                action = new FormInputAction(
-                    'ReplyAll', new Label(null, 'ReplyAll', 'kix-icon-mail-answerall-outline', null, null,
-                        await TranslationService.translate('Translatable#Reply all')
-                    ),
-                    this.actionClicked.bind(this), false, false
-                );
-            }
+        const articleId = context?.getAdditionalInformation('REFERENCED_ARTICLE_ID');
+        if (articleId) {
+            action = new FormInputAction(
+                'ReplyAll', new Label(null, 'ReplyAll', 'kix-icon-mail-answerall-outline', null, null,
+                    await TranslationService.translate('Translatable#Reply all')
+                ),
+                this.actionClicked.bind(this), false, false
+            );
         }
         return action;
     }
