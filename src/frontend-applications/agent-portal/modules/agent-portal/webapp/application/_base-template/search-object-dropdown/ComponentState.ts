@@ -15,10 +15,6 @@ export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public placeholder: string = '',
-        public prepared: boolean = false,
-        public treeId: string = 'new-object-dropdown',
-        public values: Array<[string, string, string | ObjectIcon]> = [],
-        public selectedValue: [string, string, string | ObjectIcon] = null,
         public searchValue: string = null
     ) {
         super();

@@ -94,12 +94,12 @@ export class UIModule implements IUIModule {
         ContextService.getInstance().registerContext(faqDetailsContextDescriptor);
 
         const searchFAQArticleContext = new ContextDescriptor(
-            FAQArticleSearchContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE], ContextType.DIALOG, ContextMode.SEARCH,
-            false, 'search-faq-article-dialog', ['faqarticles'], FAQArticleSearchContext,
+            FAQArticleSearchContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE], ContextType.MAIN, ContextMode.SEARCH,
+            false, 'search', ['faqarticles'], FAQArticleSearchContext,
             [
                 new UIComponentPermission('faq/articles', [CRUD.READ])
             ],
-            'Translatable#FAQ', 'kix-icon-faq'
+            'Translatable#FAQ', 'kix-icon-faq', null, 400
         );
         ContextService.getInstance().registerContext(searchFAQArticleContext);
     }

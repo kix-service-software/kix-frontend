@@ -147,12 +147,12 @@ export class UIModule implements IUIModule {
         ContextService.getInstance().registerContext(ticketDetailsContextDescriptor);
 
         const searchContext = new ContextDescriptor(
-            TicketSearchContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.DIALOG, ContextMode.SEARCH,
-            false, 'search-ticket-dialog', ['tickets'], TicketSearchContext,
+            TicketSearchContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.MAIN, ContextMode.SEARCH,
+            false, 'search', ['tickets'], TicketSearchContext,
             [
                 new UIComponentPermission('tickets', [CRUD.READ])
             ],
-            'Translatable#Ticket', 'kix-icon-ticket'
+            'Translatable#Ticket', 'kix-icon-ticket', null, 100
         );
         ContextService.getInstance().registerContext(searchContext);
 

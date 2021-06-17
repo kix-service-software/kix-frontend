@@ -110,7 +110,7 @@ export class RoutingService {
             }
         }
 
-        this.handleURLParams(parsedUrl.searchParams);
+        this.handleURLParams(urlParams);
 
         return routed;
     }

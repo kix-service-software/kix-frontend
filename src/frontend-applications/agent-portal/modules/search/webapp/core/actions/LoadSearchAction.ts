@@ -14,8 +14,9 @@ import { ApplicationEvent } from '../../../../../modules/base-components/webapp/
 import { SearchService } from '../SearchService';
 import { SearchContext } from '../SearchContext';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { SearchCache } from '../../../model/SearchCache';
 
-export class LoadSearchAction extends AbstractAction {
+export class LoadSearchAction extends AbstractAction<SearchCache> {
 
     public async initAction(): Promise<void> {
         this.icon = 'kix-icon-search';
@@ -27,10 +28,9 @@ export class LoadSearchAction extends AbstractAction {
         hint = `${hint} ${this.data?.name}`;
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: true, hint });
-        await SearchService.getInstance().executeSearchCache(this.data?.id, this.data?.name);
+        await SearchService.getInstance().executeSearchCache(this.data?.id, this.data?.name, null, null, true);
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
-        ContextService.getInstance().setActiveContext(SearchContext.CONTEXT_ID);
     }
 
 }

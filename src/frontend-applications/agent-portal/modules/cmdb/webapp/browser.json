@@ -15,7 +15,6 @@
         "require ./components/config-item-version-compare-legend",
         "require ./components/config-item-version-details",
         "require ./components/go-to-version-cell",
-        "require ./components/search-config-item-dialog",
         "require ./core"
     ]
 }

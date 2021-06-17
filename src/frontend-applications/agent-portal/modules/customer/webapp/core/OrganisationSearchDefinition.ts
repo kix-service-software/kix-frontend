@@ -12,6 +12,8 @@ import { SearchDefinition, SearchResultCategory } from '../../../search/webapp/c
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { SearchProperty } from '../../../search/model/SearchProperty';
+import { OrganisationProperty } from '../../model/OrganisationProperty';
 
 export class OrganisationSearchDefinition extends SearchDefinition {
 
@@ -20,7 +22,7 @@ export class OrganisationSearchDefinition extends SearchDefinition {
         this.formManager = new OrganisationSearchFormManager();
     }
 
-    public async getSearchResultCategories(): Promise<SearchResultCategory> {
+    public async getSearchResultCategories(): Promise<SearchResultCategory[]> {
         const categories: SearchResultCategory[] = [];
 
         if (await this.checkReadPermissions('contacts')) {
@@ -34,11 +36,19 @@ export class OrganisationSearchDefinition extends SearchDefinition {
             );
         }
 
-        return new SearchResultCategory('Translatable#Organisations', KIXObjectType.ORGANISATION, categories);
+        return [new SearchResultCategory('Translatable#Organisations', KIXObjectType.ORGANISATION, categories)];
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
         return new KIXObjectLoadingOptions(criteria, null, this.limit, ['Tickets', 'Contacts']);
+    }
+
+    public getDefaultSearchCriteria(): string[] {
+        return [
+            SearchProperty.FULLTEXT,
+            OrganisationProperty.NAME,
+            OrganisationProperty.NUMBER
+        ];
     }
 
 }

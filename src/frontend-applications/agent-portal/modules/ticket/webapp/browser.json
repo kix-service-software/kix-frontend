@@ -9,7 +9,6 @@
         "require ./components/customer-visible-input",
         "require ./components/go-to-article-cell",
         "require ./components/queue-input-follow-up",
-        "require ./components/search-ticket-dialog",
         "require ./components/ticket-admin-priorities",
         "require ./components/ticket-admin-queues",
         "require ./components/ticket-admin-states",

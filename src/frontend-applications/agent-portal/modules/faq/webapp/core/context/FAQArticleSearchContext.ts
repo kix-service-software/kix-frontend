@@ -7,12 +7,14 @@
  * --
  */
 
-import { Context } from '../../../../../model/Context';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { SearchContext } from '../../../../search/webapp/core';
 
-export class FAQArticleSearchContext extends Context {
+export class FAQArticleSearchContext extends SearchContext {
 
     public static CONTEXT_ID: string = 'search-faq-article-context';
 
+    public getIcon(): string | ObjectIcon {
+        return 'kix-icon-search-faq';
+    }
 }

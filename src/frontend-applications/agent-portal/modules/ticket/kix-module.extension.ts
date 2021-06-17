@@ -72,7 +72,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent('customer-visible-input', '/kix-module-ticket$0/webapp/components/customer-visible-input', []),
         new UIComponent('go-to-article-cell', '/kix-module-ticket$0/webapp/components/go-to-article-cell', []),
         new UIComponent('queue-input-follow-up', '/kix-module-ticket$0/webapp/components/queue-input-follow-up', []),
-        new UIComponent('search-ticket-dialog', '/kix-module-ticket$0/webapp/components/search-ticket-dialog', []),
         new UIComponent(
             'ticket-admin-priorities', '/kix-module-ticket$0/webapp/components/ticket-admin-priorities', []
         ),

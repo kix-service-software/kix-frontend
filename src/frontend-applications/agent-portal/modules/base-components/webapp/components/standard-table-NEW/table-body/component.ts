@@ -48,6 +48,8 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         EventService.getInstance().subscribe(TableEvent.RELOAD, this);
         EventService.getInstance().subscribe(TableEvent.RELOADED, this);
 
+        this.state.rows = this.table.getRows();
+
         setTimeout(() => {
             this.state.ready = true;
         }, 100);

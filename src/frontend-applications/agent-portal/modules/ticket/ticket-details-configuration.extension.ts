@@ -35,7 +35,6 @@ import { TableRowHeight } from '../../model/configuration/TableRowHeight';
 import { ContextMode } from '../../model/ContextMode';
 import { FilterType } from '../../model/FilterType';
 import { FilterDataType } from '../../model/FilterDataType';
-import { CacheState } from '../search/model/CacheState';
 import { ArticleProperty } from './model/ArticleProperty';
 import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 import { ObjectInformationWidgetConfiguration } from '../../model/configuration/ObjectInformationWidgetConfiguration';
@@ -515,8 +514,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                             filterType: FilterType.AND,
                                                             value: 2
                                                         }
-                                                    ],
-                                                    status: CacheState.VALID
+                                                    ]
                                                 }
                                             ]
                                         ]
@@ -549,8 +547,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                             filterType: FilterType.AND,
                                                             value: 2
                                                         }
-                                                    ],
-                                                    status: CacheState.VALID
+                                                    ]
                                                 }
                                             ]
                                         ]

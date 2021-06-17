@@ -47,9 +47,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent('faq', '/kix-module-faq$0/webapp/components/faq-module', []),
         new UIComponent('faq-vote-selector', '/kix-module-faq$0/webapp/components/faq-vote-selector', []),
         new UIComponent(
-            'search-faq-article-dialog', '/kix-module-faq$0/webapp/components/dialogs/search-faq-article-dialog', []
-        ),
-        new UIComponent(
             'faq-article-content-widget', '/kix-module-faq$0/webapp/components/widgets/faq-article-content-widget', []
         ),
         new UIComponent(

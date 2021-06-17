@@ -48,16 +48,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         setTimeout(() => {
             this.state.prepared = true;
             setTimeout(async () => {
-
                 this.setTableHeight();
-
-                EventService.getInstance().publish(
-                    TableEvent.TABLE_INITIALIZED,
-                    new TableEventData(this.state.table.getTableId())
-                );
-                EventService.getInstance().publish(
-                    TableEvent.TABLE_READY, new TableEventData(this.state.table.getTableId())
-                );
             }, 50);
         }, 20);
     }

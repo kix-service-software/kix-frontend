@@ -40,7 +40,7 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
         );
     }
 
-    public async getSearchResultCategories(): Promise<SearchResultCategory> {
+    public async getSearchResultCategories(): Promise<SearchResultCategory[]> {
         const categories: SearchResultCategory[] = [];
 
         if (await this.checkReadPermissions('tickets')) {
@@ -54,7 +54,7 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
             );
         }
 
-        return new SearchResultCategory('FAQ', KIXObjectType.FAQ_ARTICLE, categories);
+        return [new SearchResultCategory('FAQ', KIXObjectType.FAQ_ARTICLE, categories)];
     }
 
     public async prepareFormFilterCriteria(criteria: FilterCriteria[]): Promise<FilterCriteria[]> {
@@ -173,5 +173,13 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
         }
 
         return criteria;
+    }
+
+    public getDefaultSearchCriteria(): string[] {
+        return [
+            SearchProperty.FULLTEXT,
+            FAQArticleProperty.TITLE, FAQArticleProperty.CATEGORY_ID,
+            KIXObjectProperty.VALID_ID
+        ];
     }
 }

@@ -32,7 +32,8 @@ export class ContextDescriptor {
         public permissions: UIComponentPermission[] = [],
         public displayText: string = '',
         public icon?: ObjectIcon | string,
-        public targetContextId?: string
+        public targetContextId?: string,
+        public priority: number = 1000
     ) { }
 
     public isContextFor(kixObjectType: KIXObjectType | string): boolean {

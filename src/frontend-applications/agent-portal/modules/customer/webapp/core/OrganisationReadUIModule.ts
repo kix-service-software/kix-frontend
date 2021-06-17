@@ -65,12 +65,12 @@ export class UIModule implements IUIModule {
         ContextService.getInstance().registerContext(organisationDetailsContext);
 
         const organisationsSearchContext = new ContextDescriptor(
-            OrganisationSearchContext.CONTEXT_ID, [KIXObjectType.ORGANISATION], ContextType.DIALOG, ContextMode.SEARCH,
-            false, 'search-organisation-dialog', ['organisations'], OrganisationSearchContext,
+            OrganisationSearchContext.CONTEXT_ID, [KIXObjectType.ORGANISATION], ContextType.MAIN, ContextMode.SEARCH,
+            false, 'search', ['organisations'], OrganisationSearchContext,
             [
                 new UIComponentPermission('organisations', [CRUD.READ])
             ],
-            'Translatable#Organisation', 'kix-icon-man-house'
+            'Translatable#Organisation', 'kix-icon-man-house', null, 300
         );
         ContextService.getInstance().registerContext(organisationsSearchContext);
     }

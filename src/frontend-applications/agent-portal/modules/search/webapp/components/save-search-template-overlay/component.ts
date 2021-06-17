@@ -13,6 +13,10 @@ import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { SearchService } from '../../core/SearchService';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { SearchContext } from '../../core';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -27,16 +31,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const bookmarks = await SearchService.getInstance().getSearchBookmarks();
         const nodes = bookmarks.map((b) => new TreeNode(b.actionData.id, b.title, b.icon));
 
-        const cache = SearchService.getInstance().getSearchCache();
-        if (cache) {
-            const currentNode = nodes.find((n) => n.id === cache.id);
-            if (currentNode) {
-                currentNode.selected = true;
-                this.currentSearch = currentNode.id;
-                this.state.name = currentNode.label;
-            } else {
-                this.currentSearch = null;
-            }
+        const context = ContextService.getInstance().getActiveContext<SearchContext>();
+        const cache = context.getSearchCache();
+        const currentNode = nodes.find((n) => n.id === cache?.id);
+        if (currentNode) {
+            currentNode.selected = true;
+            this.currentSearch = currentNode.id;
+            this.state.name = currentNode.label;
+        } else {
+            this.currentSearch = null;
         }
 
         return nodes;
@@ -70,8 +73,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             } else {
                 this.state.nameInvalid = false;
 
-                await SearchService.getInstance().saveCache(this.state.name);
+                const context = ContextService.getInstance().getActiveContext<SearchContext>();
+                await context?.saveCache(this.state.name);
                 BrowserUtil.openSuccessOverlay('Translatable#Search successfully saved.');
+
+                EventService.getInstance().publish(ContextEvents.CONTEXT_DISPLAY_TEXT_CHANGED, context);
 
                 (this as any).emit('closeOverlay');
             }

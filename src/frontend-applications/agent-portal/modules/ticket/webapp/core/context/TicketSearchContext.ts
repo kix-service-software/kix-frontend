@@ -7,9 +7,14 @@
  * --
  */
 
-import { Context } from '../../../../../model/Context';
-export class TicketSearchContext extends Context {
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { SearchContext } from '../../../../search/webapp/core';
+export class TicketSearchContext extends SearchContext {
 
     public static CONTEXT_ID: string = 'search-ticket-context';
+
+    public getIcon(): string | ObjectIcon {
+        return 'kix-icon-search-ticket';
+    }
 
 }

@@ -44,7 +44,7 @@ export class UIModule implements IUIModule {
             [
                 new UIComponentPermission('cmdb/configitems', [CRUD.CREATE])
             ],
-            'Translatable#Asset', 'kix-icon-ci', ConfigItemDetailsContext.CONTEXT_ID
+            'Translatable#Asset', 'kix-icon-ci', ConfigItemDetailsContext.CONTEXT_ID, 200
         );
         ContextService.getInstance().registerContext(newConfigItemDialogContext);
 

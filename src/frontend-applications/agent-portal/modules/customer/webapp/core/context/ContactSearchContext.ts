@@ -7,10 +7,15 @@
  * --
  */
 
-import { Context } from '../../../../../model/Context';
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { SearchContext } from '../../../../search/webapp/core';
 
-export class ContactSearchContext extends Context {
+export class ContactSearchContext extends SearchContext {
 
     public static CONTEXT_ID: string = 'search-contact-context';
+
+    public getIcon(): string | ObjectIcon {
+        return 'kix-icon-search-man-bubble';
+    }
 
 }

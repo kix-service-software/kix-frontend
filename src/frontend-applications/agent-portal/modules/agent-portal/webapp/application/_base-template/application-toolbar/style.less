@@ -48,16 +48,17 @@
 // not "mobile"
 @media only screen and (min-width: @mobile-breakpoint + 1px) {
     .application-tools {
-        align-self: end;
+        align-self: center;
         display: grid;
         grid-auto-flow: column;
         grid-column-gap: @margin-small;
         font-size: 2rem;
+        border-radius: 6px;
+        padding: 0.25rem;
 
         >div {
             display: grid;
             justify-items: center;
-            grid-template-rows: @toolbar-icon-size @toolbar-icon-size;
 
             &:hover {
                 color: @secondary-2

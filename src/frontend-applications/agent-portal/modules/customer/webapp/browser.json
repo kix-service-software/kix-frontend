@@ -10,8 +10,6 @@
         "require ./components/organisation-assigned-tickets-widget",
         "require ./components/organisation-assigned-config-items-widget",
         "require ./components/organisation-module",
-        "require ./components/search-contact-dialog",
-        "require ./components/search-organisation-dialog",
         "require ./components/contact-input-access",
         "require ./components/setup-my-organisation",
         "require ./core"

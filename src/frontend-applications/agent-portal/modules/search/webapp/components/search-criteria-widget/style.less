@@ -10,34 +10,29 @@
 .criteria-container {
     padding: 0 1rem 1rem 1rem;
 
-    .search-criteria-list {
+    >.search-limit {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-column-gap: 5rem;
-        grid-auto-rows: min-content;
-        overflow-y: auto;
-        height: 15rem - @default-widget-header-height - (@margin-widget-content * 2);
-        background-color: @secondary-5;
-        padding: 0.875rem;
+        grid-template-columns: max-content auto;
+        grid-column-gap: @margin-small;
+        align-items: center;
+        margin: 2rem 0 0rem 0;
 
-        .search-criteria-list-item {
-            display: grid;
-            grid-template-columns: 1fr 3fr;
-            border-radius: @border-radius;
-            align-items: start;
-
-            .key {
-                .shorten-text;
-            }
-
-            &:not(:first-child) {
-                margin-top: @margin-small;
-            }
-
-            >.label-list {
-                margin: unset;
-                min-height: 2rem;
-            }
+        >input {
+            width: 5rem;
+            text-align: right;
         }
+    }
+
+    >.search-criteria {
+        margin-left: 1.5rem;
+    }
+
+    .search-button-container {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: max-content;
+        grid-column-gap: @margin-small;
+        margin-top: 1rem;
+        justify-content: end;
     }
 }

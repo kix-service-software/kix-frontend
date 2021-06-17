@@ -1,5 +1,0 @@
-{
-    "dependencies": [
-        "require ./search-faq-article-dialog"
-    ]
-}
