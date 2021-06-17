@@ -13,8 +13,7 @@ import { ObjectIcon } from '../../../../../../icon/model/ObjectIcon';
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public logoIcon: ObjectIcon = null,
-        public loading: boolean = true
+        public logoIcon: ObjectIcon = null
     ) {
         super();
     }

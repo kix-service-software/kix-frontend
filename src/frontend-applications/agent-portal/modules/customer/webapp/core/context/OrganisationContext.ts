@@ -24,7 +24,7 @@ import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextU
 import { OrganisationService } from '../OrganisationService';
 import { ContactService } from '../ContactService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { ContextPreference } from '../../../../../model/ContextPreference';
 
 export class OrganisationContext extends Context {
 
@@ -33,6 +33,18 @@ export class OrganisationContext extends Context {
     public filterValue: string;
 
     public async initContext(urlParams: URLSearchParams): Promise<void> {
+        super.initContext(urlParams);
+
+        if (this.filterValue) {
+            this.loadOrganisations();
+        }
+    }
+
+    public async update(urlParams: URLSearchParams): Promise<void> {
+        this.handleURLParams(urlParams);
+    }
+
+    private handleURLParams(urlParams: URLSearchParams): void {
         if (urlParams) {
             if (urlParams.has('dependent')) {
                 this.setAdditionalInformation(
@@ -47,7 +59,6 @@ export class OrganisationContext extends Context {
         } else {
             this.setAdditionalInformation(OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING, false);
         }
-
     }
 
     public async getUrl(): Promise<string> {
@@ -74,16 +85,25 @@ export class OrganisationContext extends Context {
         return url;
     }
 
-    public setFilterValue(filterValue: string): void {
+    public async setFilterValue(filterValue: string): Promise<void> {
         this.filterValue = filterValue;
         this.loadOrganisations();
         ContextService.getInstance().setDocumentHistory(true, this, this, null);
+
+        const isStored = await ContextService.getInstance().isContextStored(this.instanceId);
+        if (isStored) {
+            ContextService.getInstance().updateStorage(this.instanceId);
+        }
     }
 
-    public setAdditionalInformation(key: string, value: any): void {
+    public async setAdditionalInformation(key: string, value: any): Promise<void> {
         super.setAdditionalInformation(key, value);
         if (key === OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING) {
             ContextService.getInstance().setDocumentHistory(true, this, this, null);
+            const isStored = await ContextService.getInstance().isContextStored(this.instanceId);
+            if (isStored) {
+                ContextService.getInstance().updateStorage(this.instanceId);
+            }
         }
     }
 
@@ -165,6 +185,22 @@ export class OrganisationContext extends Context {
         } else if (objectType === KIXObjectType.CONTACT) {
             return this.loadContacts();
         }
+    }
+
+    public async addStorableAdditionalInformation(contextPreference: ContextPreference): Promise<void> {
+        super.addStorableAdditionalInformation(contextPreference);
+        contextPreference['FILTER_VALUE'] = this.filterValue;
+        contextPreference[OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING] =
+            this.getAdditionalInformation(OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING);
+    }
+
+    public async loadAdditionalInformation(contextPreference: ContextPreference): Promise<void> {
+        super.loadAdditionalInformation(contextPreference);
+        this.filterValue = contextPreference['FILTER_VALUE'];
+        this.setAdditionalInformation(
+            OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING,
+            contextPreference[OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING]
+        );
     }
 
 }

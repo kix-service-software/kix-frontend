@@ -39,6 +39,8 @@ export class ContextService {
         return ContextService.INSTANCE;
     }
 
+    private constructor() { }
+
     private contextDescriptorList: ContextDescriptor[] = [];
     private contextInstances: Context[] = [];
     private contextCreatePromises: Map<string, Promise<Context>> = new Map();
@@ -69,6 +71,7 @@ export class ContextService {
             contextPreference.contextDescriptor.contextId, contextPreference.objectId, contextPreference.instanceId,
             contextPreference
         );
+        EventService.getInstance().publish(ContextEvents.CONTEXT_CHANGED, context);
     }
 
     public getContextDescriptors(contextMode: ContextMode): ContextDescriptor[] {
@@ -86,8 +89,8 @@ export class ContextService {
     }
 
     private async getContextInstance(
-        contextId: string, objectId?: string | number, createNewInstanceIfNecessary: boolean = true,
-        additionalInformation: Array<[string, any]> = [], urlParams?: URLSearchParams, forceNew?: boolean
+        contextId: string, objectId?: string | number, additionalInformation: Array<[string, any]> = [],
+        urlParams?: URLSearchParams
     ): Promise<Context> {
         let context = this.contextInstances.find((c) => c.equals(contextId, objectId));
 
@@ -98,7 +101,7 @@ export class ContextService {
 
         const allowMultiple = multiContextModes.some((cm) => cm === context?.descriptor?.contextMode);
 
-        if ((!context || allowMultiple || forceNew) && createNewInstanceIfNecessary) {
+        if ((!context || allowMultiple)) {
             context = await this.createContextInstance(
                 contextId, objectId, undefined, urlParams, additionalInformation
             );
@@ -199,7 +202,7 @@ export class ContextService {
             await this.setContextByInstanceId(sourceContext.instanceId);
         } else if (targetContextId) {
             await this.setActiveContext(targetContextId, targetObjectId);
-        } else if (this.contextInstances.length - 1 > 0) {
+        } else if (this.contextInstances.length > 0) {
             await this.setContextByInstanceId(
                 this.contextInstances[this.contextInstances.length - 1].instanceId
             );
@@ -266,10 +269,10 @@ export class ContextService {
 
     public async setActiveContext(
         contextId: string, objectId?: string | number, urlParams?: URLSearchParams,
-        additionalInformation: Array<[string, any]> = [], history: boolean = true, forceNew?: boolean
+        additionalInformation: Array<[string, any]> = [], history: boolean = true
     ): Promise<Context> {
         const context = await this.getContextInstance(
-            contextId, objectId, true, additionalInformation, urlParams, forceNew
+            contextId, objectId, additionalInformation, urlParams
         );
         if (context) {
             await this.setContextByInstanceId(context.instanceId, objectId, history);

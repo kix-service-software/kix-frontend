@@ -26,7 +26,7 @@ export class KIXModulesService {
 
     private tags: Map<string, string>;
 
-    public async init(modules: IKIXModuleExtension[]): Promise<void> {
+    public init(modules: IKIXModuleExtension[]): void {
         this.tags = new Map();
         this.modules = modules;
         this.modules.forEach((m) => {

@@ -47,6 +47,8 @@ export class Component {
             }
         };
 
+        this.state.activeNode = this.getActiveNode(context?.queueId);
+
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
     }
 

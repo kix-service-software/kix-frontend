@@ -22,12 +22,21 @@ import { LabelService } from '../../../../base-components/webapp/core/LabelServi
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
+import { ContextPreference } from '../../../../../model/ContextPreference';
 
 export class FAQContext extends Context {
 
     public static CONTEXT_ID: string = 'faq';
 
     public categoryId: number;
+
+    public async initContext(urlParams?: URLSearchParams): Promise<void> {
+        super.initContext();
+
+        if (this.categoryId) {
+            this.loadFAQArticles();
+        }
+    }
 
     public getIcon(): string {
         return 'kix-icon-faq';
@@ -80,6 +89,11 @@ export class FAQContext extends Context {
                 ContextService.getInstance().setDocumentHistory(true, this, this, null);
             }
         }
+
+        const isStored = await ContextService.getInstance().isContextStored(this.instanceId);
+        if (isStored) {
+            ContextService.getInstance().updateStorage(this.instanceId);
+        }
     }
 
     private async loadFAQArticles(): Promise<void> {
@@ -110,6 +124,16 @@ export class FAQContext extends Context {
         if (objectType === KIXObjectType.FAQ_ARTICLE) {
             return this.loadFAQArticles();
         }
+    }
+
+    public async addStorableAdditionalInformation(contextPreference: ContextPreference): Promise<void> {
+        super.addStorableAdditionalInformation(contextPreference);
+        contextPreference['CATEGORY_ID'] = this.categoryId;
+    }
+
+    public async loadAdditionalInformation(contextPreference: ContextPreference): Promise<void> {
+        super.loadAdditionalInformation(contextPreference);
+        this.categoryId = contextPreference['CATEGORY_ID'];
     }
 
 }

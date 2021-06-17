@@ -25,6 +25,7 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
+import { ContextPreference } from '../../../../../model/ContextPreference';
 
 export class CMDBContext extends Context {
 
@@ -32,6 +33,14 @@ export class CMDBContext extends Context {
 
     public classId: number;
     public filterValue: string;
+
+    public async initContext(urlParams?: URLSearchParams): Promise<void> {
+        super.initContext();
+
+        if (this.classId || this.filterValue) {
+            this.loadConfigItems();
+        }
+    }
 
     public getIcon(): string {
         return 'kix-icon-cmdb';
@@ -79,7 +88,7 @@ export class CMDBContext extends Context {
         return url;
     }
 
-    public setCIClass(classId: number, history: boolean = true): void {
+    public async setCIClass(classId: number, history: boolean = true): Promise<void> {
         if (!this.classId || this.classId !== classId) {
             this.classId = classId;
             this.loadConfigItems();
@@ -89,15 +98,25 @@ export class CMDBContext extends Context {
                 ContextService.getInstance().setDocumentHistory(true, this, this, null);
             }
         }
+
+        const isStored = await ContextService.getInstance().isContextStored(this.instanceId);
+        if (isStored) {
+            ContextService.getInstance().updateStorage(this.instanceId);
+        }
     }
 
-    public setFilterValue(filterValue: string, history: boolean = true): void {
+    public async setFilterValue(filterValue: string, history: boolean = true): Promise<void> {
         this.filterValue = filterValue;
         this.loadConfigItems();
 
         EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
         if (history) {
             ContextService.getInstance().setDocumentHistory(true, this, this, null);
+        }
+
+        const isStored = await ContextService.getInstance().isContextStored(this.instanceId);
+        if (isStored) {
+            ContextService.getInstance().updateStorage(this.instanceId);
         }
     }
 
@@ -168,6 +187,18 @@ export class CMDBContext extends Context {
         if (objectType === KIXObjectType.CONFIG_ITEM) {
             return this.loadConfigItems();
         }
+    }
+
+    public async addStorableAdditionalInformation(contextPreference: ContextPreference): Promise<void> {
+        super.addStorableAdditionalInformation(contextPreference);
+        contextPreference['CLASS_ID'] = this.classId;
+        contextPreference['FILTER_VALUE'] = this.filterValue;
+    }
+
+    public async loadAdditionalInformation(contextPreference: ContextPreference): Promise<void> {
+        super.loadAdditionalInformation(contextPreference);
+        this.classId = contextPreference['CLASS_ID'];
+        this.filterValue = contextPreference['FILTER_VALUE'];
     }
 
 }
