@@ -58,7 +58,7 @@ class Component extends FormInputComponent<string, ComponentState> {
         if (this.state.currentValue === '') {
             this.state.currentValue = null;
         }
-        super.provideValue(this.state.currentValue, true);
+        super.provideValue(this.state.currentValue);
     }
 
 }
