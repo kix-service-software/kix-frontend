@@ -192,19 +192,17 @@ export class ContextService {
     private async switchToTargetContext(
         sourceContext: any, targetContextId?: string, targetObjectId?: string | number
     ): Promise<void> {
-        if (targetContextId) {
+        const context = this.contextInstances.find((c) => c.instanceId === sourceContext?.instanceId);
+        if (context) {
+            await this.setContextByInstanceId(sourceContext.instanceId);
+        } else if (targetContextId) {
             await this.setActiveContext(targetContextId, targetObjectId);
+        } else if (this.contextInstances.length - 1 > 0) {
+            await this.setContextByInstanceId(
+                this.contextInstances[this.contextInstances.length - 1].instanceId
+            );
         } else {
-            const context = this.contextInstances.find((c) => c.instanceId === sourceContext?.instanceId);
-            if (context) {
-                await this.setContextByInstanceId(sourceContext.instanceId);
-            } else if (this.contextInstances.length - 1 > 0) {
-                await this.setContextByInstanceId(
-                    this.contextInstances[this.contextInstances.length - 1].instanceId
-                );
-            } else {
-                await this.setActiveContext('home');
-            }
+            await this.setActiveContext('home');
         }
     }
 
