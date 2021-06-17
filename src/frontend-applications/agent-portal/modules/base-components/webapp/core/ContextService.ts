@@ -26,6 +26,7 @@ import { ContextPreference } from '../../../../model/ContextPreference';
 import { RoutingEvent } from './RoutingEvent';
 import { ConfiguredWidget } from '../../../../model/configuration/ConfiguredWidget';
 import { AgentService } from '../../../user/webapp/core/AgentService';
+import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
 
 export class ContextService {
 
@@ -160,29 +161,55 @@ export class ContextService {
         let removed = false;
 
         if (this.canRemove(instanceId)) {
-            let sourceContext: any;
+            const confirmed = await this.checkDialogConfirmation();
 
-            const index = this.contextInstances.findIndex((c) => c.instanceId === instanceId);
-            if (index !== -1) {
+            if (confirmed) {
+                let sourceContext: any;
 
-                sourceContext = this.contextInstances[index].getAdditionalInformation('SourceContext');
+                const index = this.contextInstances.findIndex((c) => c.instanceId === instanceId);
+                if (index !== -1) {
 
-                const isStored = await this.isContextStored(instanceId);
-                if (isStored) {
-                    await this.updateStorage(instanceId, true);
+                    sourceContext = this.contextInstances[index].getAdditionalInformation('SourceContext');
+
+                    const isStored = await this.isContextStored(instanceId);
+                    if (isStored) {
+                        await this.updateStorage(instanceId, true);
+                    }
+                    const context = this.contextInstances.splice(index, 1);
+                    await context[0].destroy();
+                    EventService.getInstance().publish(ContextEvents.CONTEXT_REMOVED, context[0]);
                 }
-                const context = this.contextInstances.splice(index, 1);
-                await context[0].destroy();
-                EventService.getInstance().publish(ContextEvents.CONTEXT_REMOVED, context[0]);
-            }
-            removed = true;
+                removed = true;
 
-            if (switchToTarget) {
-                await this.switchToTargetContext(sourceContext, targetContextId, targetObjectId);
+                if (switchToTarget) {
+                    await this.switchToTargetContext(sourceContext, targetContextId, targetObjectId);
+                }
             }
         }
 
         return removed;
+    }
+
+
+    private checkDialogConfirmation(): Promise<boolean> {
+        return new Promise<boolean>((resolve, reject) => {
+            if (this.activeContext?.descriptor?.contextType === ContextType.DIALOG) {
+                BrowserUtil.openConfirmOverlay(
+                    'Translatable#Cancel',
+                    'Translatable#Any data you have entered will be lost. Continue?',
+                    () => resolve(true),
+                    () => resolve(false),
+                    ['Translatable#Yes', 'Translatable#No'],
+                    false,
+                    [
+                        PersonalSettingsProperty.DONT_ASK_DIALOG_ON_CLOSE,
+                        'Translatable#Always close dialog tab without asking'
+                    ]
+                );
+            } else {
+                resolve(true);
+            }
+        });
     }
 
     private canRemove(instanceId: string): boolean {
