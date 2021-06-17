@@ -27,8 +27,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        await this.addContextTabs();
         this.initContextEventListener();
+        await this.addContextTabs();
     }
 
     private async addContextTabs(): Promise<void> {
