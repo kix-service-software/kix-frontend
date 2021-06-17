@@ -51,11 +51,10 @@ class Component {
         await this.checkAuthentication();
 
         ClientNotificationSocketClient.getInstance();
-
         ContextHistory.getInstance();
 
         const startInitModules = Date.now();
-        await KIXModulesService.getInstance().init(this.modules);
+        KIXModulesService.getInstance().init(this.modules);
         await this.initModules();
         const endInitModules = Date.now();
         console.debug(`modules initialization finished: ${endInitModules - startInitModules}ms`);

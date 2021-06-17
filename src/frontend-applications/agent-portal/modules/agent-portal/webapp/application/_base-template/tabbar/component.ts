@@ -102,22 +102,22 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const hasTab = this.state.contextTabs.some((e) => e.contextInstanceId === context.instanceId);
 
             if (!hasTab) {
-                const icon = context.getIcon();
-                const displayText = await context.getDisplayText();
-
-                const isDialog = context.descriptor?.contextType === ContextType.DIALOG;
-                const active = ContextService.getInstance().getActiveContext()?.instanceId === context.instanceId;
-                const isPinned = await ContextService.getInstance().isContextStored(context.instanceId);
-
                 const tab = new ContextTab(
-                    icon, displayText, context.instanceId, context.getObjectId(), context.descriptor,
-                    isDialog, active, false, isPinned
+                    null, null, context.instanceId, context.getObjectId(), context.descriptor
                 );
 
                 const index = ContextService.getInstance().getContextInstances().findIndex(
                     (c) => c.instanceId === tab.contextInstanceId
                 );
                 this.state.contextTabs.splice(index, 0, tab);
+
+                tab.icon = context.getIcon();
+                tab.displayText = await context.getDisplayText();
+
+                tab.isDialog = context.descriptor?.contextType === ContextType.DIALOG;
+                tab.active = ContextService.getInstance().getActiveContext()?.instanceId === context.instanceId;
+                tab.pinned = await ContextService.getInstance().isContextStored(context.instanceId);
+
                 (this as any).setStateDirty('contextTabs');
             }
 

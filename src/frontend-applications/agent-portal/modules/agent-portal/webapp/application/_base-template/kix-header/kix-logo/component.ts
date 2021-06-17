@@ -29,7 +29,6 @@ class Component {
         if (icons && icons.length) {
             this.state.logoIcon = icons[0];
         }
-        this.state.loading = false;
     }
 }
 

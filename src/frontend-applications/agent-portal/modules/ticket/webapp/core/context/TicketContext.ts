@@ -21,10 +21,10 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
 import { SearchProperty } from '../../../../search/model/SearchProperty';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { timeStamp } from 'console';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
+import { ContextPreference } from '../../../../../model/ContextPreference';
 
 export class TicketContext extends Context {
 
@@ -32,6 +32,14 @@ export class TicketContext extends Context {
 
     public queueId: number;
     public filterValue: string;
+
+    public async initContext(urlParams?: URLSearchParams): Promise<void> {
+        super.initContext();
+
+        if (this.queueId || this.filterValue) {
+            this.loadTickets();
+        }
+    }
 
     public getIcon(): string {
         return 'kix-icon-ticket';
@@ -89,10 +97,15 @@ export class TicketContext extends Context {
             if (history) {
                 ContextService.getInstance().setDocumentHistory(true, this, this, null);
             }
+
+            const isStored = await ContextService.getInstance().isContextStored(this.instanceId);
+            if (isStored) {
+                ContextService.getInstance().updateStorage(this.instanceId);
+            }
         }
     }
 
-    public setFilterValue(filterValue: string, history: boolean = true): void {
+    public async setFilterValue(filterValue: string, history: boolean = true): Promise<void> {
         this.filterValue = filterValue;
         this.loadTickets();
 
@@ -100,6 +113,11 @@ export class TicketContext extends Context {
 
         if (history) {
             ContextService.getInstance().setDocumentHistory(true, this, this, null);
+        }
+
+        const isStored = await ContextService.getInstance().isContextStored(this.instanceId);
+        if (isStored) {
+            ContextService.getInstance().updateStorage(this.instanceId);
         }
     }
 
@@ -159,6 +177,18 @@ export class TicketContext extends Context {
         if (objectType === KIXObjectType.TICKET) {
             return this.loadTickets(silent);
         }
+    }
+
+    public async addStorableAdditionalInformation(contextPreference: ContextPreference): Promise<void> {
+        super.addStorableAdditionalInformation(contextPreference);
+        contextPreference['QUEUE_ID'] = this.queueId;
+        contextPreference['FILTER_VALUE'] = this.filterValue;
+    }
+
+    public async loadAdditionalInformation(contextPreference: ContextPreference): Promise<void> {
+        super.loadAdditionalInformation(contextPreference);
+        this.queueId = contextPreference['QUEUE_ID'];
+        this.filterValue = contextPreference['FILTER_VALUE'];
     }
 
 }
