@@ -61,7 +61,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         );
     }
 
-    public async getSearchResultCategories(): Promise<SearchResultCategory> {
+    public async getSearchResultCategories(): Promise<SearchResultCategory[]> {
         const categories: SearchResultCategory[] = [];
 
         if (await this.checkReadPermissions('tickets')) {
@@ -74,7 +74,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 new SearchResultCategory('FAQs', KIXObjectType.FAQ_ARTICLE)
             );
         }
-        return new SearchResultCategory('Config Items', KIXObjectType.CONFIG_ITEM, categories);
+        return [new SearchResultCategory('Config Items', KIXObjectType.CONFIG_ITEM, categories)];
     }
 
     public async prepareFormFilterCriteria(criteria: FilterCriteria[]): Promise<FilterCriteria[]> {
@@ -308,6 +308,17 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
             KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions, null, false
         );
         return items;
+    }
+
+    public getDefaultSearchCriteria(): string[] {
+        return [
+            SearchProperty.FULLTEXT,
+            ConfigItemProperty.CLASS_ID,
+            ConfigItemProperty.NAME,
+            ConfigItemProperty.NUMBER,
+            ConfigItemProperty.CUR_INCI_STATE_ID,
+            ConfigItemProperty.CUR_DEPL_STATE_ID
+        ];
     }
 
 }

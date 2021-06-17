@@ -8,12 +8,20 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 <div.search-result-explorer>
     <widget
+        key=state.componentKey
         instanceId=state.instanceId
         contextType=state.contextType
-        title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Translatable#Search Results")>
+        title=(
+            state.widgetConfiguration
+                ? state.widgetConfiguration.title
+                : "Translatable#Search Results"
+        )>
         <@content>
             <if(state.nodes)>
-                <tree tree=state.nodes activeNode=state.activeNode on-nodeClicked("activeNodeChanged")/>
+                <tree
+                    tree=state.nodes
+                    activeNode=state.activeNode
+                    on-nodeClicked("activeNodeChanged")/>
             </if>
         </@content>
     </widget>

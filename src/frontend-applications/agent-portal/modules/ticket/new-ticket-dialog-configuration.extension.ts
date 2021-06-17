@@ -41,7 +41,6 @@ import { AdditionalTableObjectsHandlerConfiguration } from '../base-components/w
 import { DynamicFormFieldOption } from '../dynamic-fields/webapp/core';
 import { FAQArticleProperty } from '../faq/model/FAQArticleProperty';
 import { ObjectIcon } from '../icon/model/ObjectIcon';
-import { CacheState } from '../search/model/CacheState';
 import { SearchOperator } from '../search/model/SearchOperator';
 import { ArticleProperty } from './model/ArticleProperty';
 import { QueueProperty } from './model/QueueProperty';
@@ -152,8 +151,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                             filterType: FilterType.AND,
                                                             value: 2
                                                         }
-                                                    ],
-                                                    status: CacheState.VALID
+                                                    ]
                                                 }
                                             ]
                                         ]
@@ -185,8 +183,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                             filterType: FilterType.AND,
                                                             value: 2
                                                         }
-                                                    ],
-                                                    status: CacheState.VALID
+                                                    ]
                                                 }
                                             ]
                                         ]

@@ -7,8 +7,17 @@
  * --
  */
 
-export class ComponentState {
+import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
+import { IdService } from '../../../../../model/IdService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+
+export class ComponentState extends AbstractComponentState {
     public constructor(
-        public history: boolean = false
-    ) { }
+        public resultWidget: [KIXObjectType | string, WidgetConfiguration, string, string | ObjectIcon] = null,
+        public componentKey: string = IdService.generateDateBasedId()
+    ) {
+        super();
+    }
 }

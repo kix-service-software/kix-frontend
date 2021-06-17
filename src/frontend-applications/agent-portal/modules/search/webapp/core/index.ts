@@ -7,7 +7,6 @@
  * --
  */
 
-export { IKIXObjectSearchListener } from './IKIXObjectSearchListener';
 export { SearchContext } from './SearchContext';
 export { SearchDefinition } from './SearchDefinition';
 export { SearchOperatorUtil } from './SearchOperatorUtil';

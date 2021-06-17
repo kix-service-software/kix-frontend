@@ -49,7 +49,7 @@ export class UIModule implements IUIModule {
             [
                 new UIComponentPermission('contacts', [CRUD.CREATE])
             ],
-            'Translatable#Contact', 'kix-icon-man-bubble', ContactDetailsContext.CONTEXT_ID
+            'Translatable#Contact', 'kix-icon-man-bubble', ContactDetailsContext.CONTEXT_ID, 301
         );
         ContextService.getInstance().registerContext(newContactContext);
 

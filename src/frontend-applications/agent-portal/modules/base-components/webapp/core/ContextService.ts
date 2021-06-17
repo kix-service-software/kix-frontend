@@ -72,7 +72,9 @@ export class ContextService {
     }
 
     public getContextDescriptors(contextMode: ContextMode): ContextDescriptor[] {
-        return this.contextDescriptorList.filter((cd) => cd.contextMode === contextMode);
+        return this.contextDescriptorList
+            .filter((cd) => cd.contextMode === contextMode)
+            .sort((a, b) => a.priority - b.priority);
     }
 
     public getContextDescriptor(contextId: string): ContextDescriptor {
@@ -89,16 +91,16 @@ export class ContextService {
     ): Promise<Context> {
         let context = this.contextInstances.find((c) => c.equals(contextId, objectId));
 
-        const createModes = [
+        const multiContextModes = [
+            ContextMode.SEARCH,
             ContextMode.CREATE, ContextMode.CREATE_ADMIN, ContextMode.CREATE_LINK, ContextMode.CREATE_SUB
         ];
 
-        const isNewDialog = context?.descriptor?.contextType === ContextType.DIALOG
-            && createModes.some((cm) => cm === context?.descriptor?.contextMode);
+        const allowMultiple = multiContextModes.some((cm) => cm === context?.descriptor?.contextMode);
 
-        if ((!context || isNewDialog || forceNew) && createNewInstanceIfNecessary) {
+        if ((!context || allowMultiple || forceNew) && createNewInstanceIfNecessary) {
             context = await this.createContextInstance(
-                contextId, objectId, context?.instanceId, urlParams, additionalInformation
+                contextId, objectId, undefined, urlParams, additionalInformation
             );
 
             if (context?.descriptor?.contextType === ContextType.DIALOG) {
@@ -216,13 +218,19 @@ export class ContextService {
         contextUrl: string, objectId?: string | number, urlParams?: URLSearchParams, history: boolean = true
     ): Promise<Context> {
         let context: Context;
-        const contextMode = objectId ? ContextMode.DETAILS : ContextMode.DASHBOARD;
+        let contextMode = objectId ? ContextMode.DETAILS : ContextMode.DASHBOARD;
+
+        if (urlParams && urlParams.has('search')) {
+            contextMode = ContextMode.SEARCH;
+        }
+
         const descriptor = this.contextDescriptorList.find(
             (cd) => cd.urlPaths.some((p) => p === contextUrl) && cd.contextMode === contextMode
         );
         if (descriptor) {
             context = await this.setActiveContext(descriptor.contextId, objectId, urlParams, [], history);
         }
+
         return context;
     }
 

@@ -94,7 +94,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         if (this.objects) {
             objects = this.objects;
         } else if (this.table.getTableConfiguration().searchId) {
-            objects = await SearchService.getInstance().doSearch(null, this.table.getTableConfiguration().searchId);
+            objects = await SearchService.getInstance().executeSearchCache(this.table.getTableConfiguration().searchId);
         } else if (this.contextId && !this.objectIds) {
             const context = ContextService.getInstance().getActiveContext();
             objects = context ? await context.getObjectList(this.objectType) : [];
@@ -124,7 +124,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                     for (const column of columns) {
 
                         // ignore dynamic fields, they will be added in prepareSpecificValues
-                        if (!column.property.startsWith(`${KIXObjectProperty.DYNAMIC_FIELDS}.`)) {
+                        if (!column.property?.startsWith(`${KIXObjectProperty.DYNAMIC_FIELDS}.`)) {
                             const tableValue = new TableValue(column.property, o[column.property], null, null, null);
                             values.push(tableValue);
                         }

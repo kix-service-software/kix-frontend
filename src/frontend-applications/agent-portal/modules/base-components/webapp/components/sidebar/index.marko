@@ -52,7 +52,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         }>
             <if(state.showSidebarArea || state.isMobile)>
                 <for|sidebar| of=state.sidebars>
-                    <div.sidebar-widget-container key=("sidebar-" + sidebar[0])>
+                    <div.sidebar-widget-container key=("sidebar-" + sidebar[2])>
                         <${sidebar[1]} ...{
                             instanceId: sidebar[0]
                         }/>

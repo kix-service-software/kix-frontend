@@ -153,7 +153,7 @@ class LinkDialogComponent {
                 : null;
 
             const objects = await SearchService.getInstance().executeSearch(
-                formInstance, null, excludeObjects
+                formInstance, excludeObjects
             );
 
             context.setObjectList(formInstance.getObjectType(), objects);
@@ -181,7 +181,7 @@ class LinkDialogComponent {
             `link-object-dialog-${objectType}`, objectType, tableConfiguration, null,
             EditLinkedObjectsDialogContext.CONTEXT_ID, true, null, true
         );
-        await table.addColumns([
+        await table.addAdditionalColumns([
             TableFactoryService.getInstance().getDefaultColumnConfiguration(objectType, 'LinkedAs')
         ]);
 

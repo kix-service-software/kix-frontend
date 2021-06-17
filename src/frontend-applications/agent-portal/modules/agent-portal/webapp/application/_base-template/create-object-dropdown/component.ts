@@ -41,7 +41,6 @@ class Component {
             const displayText = await TranslationService.translate(cd.displayText);
             this.values.push([cd.contextId, displayText, cd.icon]);
         }
-        this.values = this.values.sort((a, b) => SortUtil.compareString(a[1], b[1]));
 
         if (this.values.length) {
             this.setValues(

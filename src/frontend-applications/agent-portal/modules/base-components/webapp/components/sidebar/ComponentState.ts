@@ -16,7 +16,7 @@ export class ComponentState extends AbstractComponentState {
         public isLeft: boolean = false,
         public isMobile: boolean = false,
         public isSmall: boolean = false,
-        public sidebars: Array<[string, any]> = [],
+        public sidebars: Array<[string, any, string]> = [],
         public showSidebarArea: boolean = false,
         public showMobile: boolean = false
     ) {

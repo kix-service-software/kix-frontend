@@ -45,7 +45,6 @@ import { TableConfiguration } from '../../model/configuration/TableConfiguration
 import { TableHeaderHeight } from '../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../model/configuration/TableRowHeight';
 import { FAQArticleProperty } from '../faq/model/FAQArticleProperty';
-import { CacheState } from '../search/model/CacheState';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -151,8 +150,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                             filterType: FilterType.AND,
                                                             value: 2
                                                         }
-                                                    ],
-                                                    status: CacheState.VALID
+                                                    ]
                                                 }
                                             ]
                                         ]
@@ -184,8 +182,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                             filterType: FilterType.AND,
                                                             value: 2
                                                         }
-                                                    ],
-                                                    status: CacheState.VALID
+                                                    ]
                                                 }
                                             ]
                                         ]

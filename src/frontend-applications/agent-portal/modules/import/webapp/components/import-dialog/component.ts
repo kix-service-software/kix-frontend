@@ -507,7 +507,7 @@ class Component {
                 const newColumnConfigs = await this.getColumnConfig();
                 this.state.table.removeColumns(this.state.table.getColumns().map((c) => c.getColumnId()));
                 if (!!newColumnConfigs.length) {
-                    await this.state.table.addColumns(newColumnConfigs);
+                    await this.state.table.addAdditionalColumns(newColumnConfigs);
                 }
             }
         } else {

@@ -7,10 +7,12 @@
  * --
  */
 
-export enum CacheState {
+import { ObjectIcon } from '../../../../../../icon/model/ObjectIcon';
 
-    VALID = 'VALID',
+export class ComponentState {
 
-    INVALID = 'INVALID'
+    public constructor(
+        public values: Array<[string, string, string | ObjectIcon]> = [],
+    ) { }
 
 }

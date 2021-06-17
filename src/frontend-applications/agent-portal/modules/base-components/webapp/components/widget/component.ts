@@ -28,6 +28,8 @@ class WidgetComponent implements IEventSubscriber {
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId ? input.instanceId : IdService.generateDateBasedId();
 
+        this.state.widgetConfiguration = input.configuration;
+
         this.state.minimizable = typeof input.minimizable !== 'undefined'
             ? input.minimizable
             : this.state.minimizable;
@@ -54,15 +56,16 @@ class WidgetComponent implements IEventSubscriber {
             this.state.minimized = !context.isSidebarWidgetOpen(this.state.instanceId);
         }
 
-        const config = await context.getWidgetConfiguration(this.state.instanceId);
-        this.state.widgetConfiguration = config;
-
-        this.state.minimizable = config ? config.minimizable : false;
-        if (this.state.widgetType !== WidgetType.SIDEBAR && config) {
-            this.state.minimized = config ? config.minimized : false;
+        if (!this.state.widgetConfiguration) {
+            const config = await context.getWidgetConfiguration(this.state.instanceId);
+            this.state.widgetConfiguration = config;
         }
 
-        // TODO: Enum für events nutzen (ohne Prefix), falls es mehrer geben sollte
+        this.state.minimizable = this.state.widgetConfiguration?.minimizable;
+        if (this.state.widgetType !== WidgetType.SIDEBAR) {
+            this.state.minimized = this.state.widgetConfiguration?.minimized;
+        }
+
         EventService.getInstance().subscribe(this.eventSubscriberId + 'SetMinimizedToFalse', this);
     }
 

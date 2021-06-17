@@ -12,6 +12,9 @@ import { SearchDefinition, SearchResultCategory } from '../../../search/webapp/c
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { UserProperty } from '../../../user/model/UserProperty';
+import { ContactProperty } from '../../model/ContactProperty';
+import { SearchProperty } from '../../../search/model/SearchProperty';
 
 export class ContactSearchDefinition extends SearchDefinition {
 
@@ -24,7 +27,7 @@ export class ContactSearchDefinition extends SearchDefinition {
         return new KIXObjectLoadingOptions(criteria, null, this.limit, ['Tickets'], null);
     }
 
-    public async getSearchResultCategories(): Promise<SearchResultCategory> {
+    public async getSearchResultCategories(): Promise<SearchResultCategory[]> {
         const categories: SearchResultCategory[] = [];
 
         if (await this.checkReadPermissions('organisations')) {
@@ -37,7 +40,17 @@ export class ContactSearchDefinition extends SearchDefinition {
                 new SearchResultCategory('Translatable#Tickets', KIXObjectType.TICKET)
             );
         }
-        return new SearchResultCategory('Translatable#Contacts', KIXObjectType.CONTACT, categories);
+        return [new SearchResultCategory('Translatable#Contacts', KIXObjectType.CONTACT, categories)];
+    }
+
+    public getDefaultSearchCriteria(): string[] {
+        return [
+            SearchProperty.FULLTEXT,
+            ContactProperty.FIRSTNAME,
+            ContactProperty.LASTNAME,
+            ContactProperty.EMAIL,
+            UserProperty.USER_LOGIN
+        ];
     }
 
 }

@@ -52,9 +52,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent('cmdb-module', '/kix-module-cmdb$0/webapp/components/cmdb-module', []),
         new UIComponent('config-item-info', '/kix-module-cmdb$0/webapp/components/config-item-info', []),
         new UIComponent(
-            'search-config-item-dialog', '/kix-module-cmdb$0/webapp/components/search-config-item-dialog', []
-        ),
-        new UIComponent(
             'config-item-version-details', '/kix-module-cmdb$0/webapp/components/config-item-version-details', []
         ),
         new UIComponent(

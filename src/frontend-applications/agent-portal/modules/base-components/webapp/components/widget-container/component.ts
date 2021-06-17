@@ -102,7 +102,7 @@ class Component {
     private async loadSearchTemplates(): Promise<void> {
         const searchBookmarks = await SearchService.getInstance().getSearchBookmarks();
 
-        const nodes = searchBookmarks.map((b) => new TreeNode(b.title, b.title, b.icon));
+        const nodes = searchBookmarks.map((b) => new TreeNode(b.actionData, b.title, b.icon));
 
         this.searchBookmarksTreeHandler = TreeService.getInstance().getTreeHandler(this.state.searchBookmarkTreeId);
         if (this.searchBookmarksTreeHandler) {
@@ -160,7 +160,7 @@ class Component {
         if (this.searchBookmarksTreeHandler) {
             const nodes = this.searchBookmarksTreeHandler.getSelectedNodes();
             if (nodes.length) {
-                const widget = await SearchService.getInstance().createTableWidget(nodes[0].id);
+                const widget = await SearchService.getInstance().createTableWidget(nodes[0].id.id, nodes[0].id.name);
                 if (widget) {
                     this.state.widgets.push(widget);
                     this.searchBookmarksTreeHandler.selectNone();

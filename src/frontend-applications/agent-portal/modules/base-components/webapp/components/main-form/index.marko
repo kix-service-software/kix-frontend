@@ -24,10 +24,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             type="password"
             name="fakepasswordremembered"
             autocomplete="off"/>
-        <if(state.isSearchContext && !state.loading)>
-            <search-form formId=state.formId objectType=state.objectType/>
-        </if>
-        <else-if(state.formInstance && state.formInstance.form && state.formId)>
+        <if(state.formInstance && state.formInstance.form && state.formId)>
             <for|page, index| of=state.formInstance.form.pages>
                 <${state.formInstance.form.pages.length > 1 ? "div" : ""} class={
                     active: index === state.activePageIndex,
@@ -65,7 +62,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </for>
                 </>
             </for>
-        </else-if>
+        </if>
     </form>
     <form-page-menu
         pages=(state.formInstance ? state.formInstance.form.pages : [])

@@ -84,13 +84,13 @@ export class UIModule implements IUIModule {
         ContextService.getInstance().registerContext(configItemDetailsContext);
 
         const searchConfigItemContext = new ContextDescriptor(
-            ConfigItemSearchContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM], ContextType.DIALOG, ContextMode.SEARCH,
-            false, 'search-config-item-dialog', ['configitems'], ConfigItemSearchContext,
+            ConfigItemSearchContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM], ContextType.MAIN, ContextMode.SEARCH,
+            false, 'search', ['configitems'], ConfigItemSearchContext,
 
             [
                 new UIComponentPermission('cmdb/configitems', [CRUD.READ])
             ],
-            'Translatable#Asset', 'kix-icon-ci'
+            'Translatable#Asset', 'kix-icon-ci', null, 200
         );
         ContextService.getInstance().registerContext(searchConfigItemContext);
 

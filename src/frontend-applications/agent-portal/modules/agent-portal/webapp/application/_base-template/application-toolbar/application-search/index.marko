@@ -6,10 +6,12 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<widget instanceId="search-ticket-dialog">
-    <@content>
-        <if(state.formId)>
-            <main-form/>
-        </if>
-    </@content>
-</widget>
+
+<div.application-search>
+    <span.kix-icon-new-search.application-search-button on-click("valueClicked")/>
+    <ul>
+        <for|value| of=state.values>
+            <li on-click("valueClicked", value)>${value[1]}</li>
+        </for>
+    </ul>
+</div>

@@ -15,66 +15,69 @@ import { ContextService } from '../../../../../modules/base-components/webapp/co
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { IKIXObjectSearchListener } from '../../core/IKIXObjectSearchListener';
 import { IKIXObjectService } from '../../../../../modules/base-components/webapp/core/IKIXObjectService';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { SearchContext } from '../../core';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
 
 
-export class Component implements IKIXObjectSearchListener {
+export class Component {
 
     private state: ComponentState;
     private rootCategory: SearchResultCategory;
 
-    public listenerId: string;
-
     public onCreate(input: any): void {
-        this.state = new ComponentState(input.instanceId);
-        this.listenerId = IdService.generateDateBasedId('search-result-explorer-');
+        this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
+        this.state.instanceId = input.instanceId;
         this.state.contextType = input.contextType;
     }
 
     public async onMount(): Promise<void> {
-        SearchService.getInstance().registerListener(this);
-        const context = ContextService.getInstance().getActiveContext();
+        const context = ContextService.getInstance().getActiveContext<SearchContext>();
+
         this.state.contextId = context.contextId;
         this.state.widgetConfiguration = context
             ? await context.getWidgetConfiguration(this.state.instanceId)
             : undefined;
-        this.prepareTree();
-        const activeCategory = SearchService.getInstance().getActiveSearchResultExplorerCategory();
+
+        await this.prepareTree();
+
+        const activeCategory = context.getSearchResultCategory();
         if (activeCategory) {
             this.state.activeNode = this.getActiveNode(activeCategory.objectType);
         }
-    }
 
-    public searchCleared(): void {
-        SearchService.getInstance().setActiveSearchResultExplorerCategory(null);
-        this.state.nodes = null;
-    }
-
-    public async searchFinished(): Promise<void> {
-        await this.prepareTree();
-        this.activeNodeChanged(this.state.nodes[0], true);
-    }
-
-    public searchResultCategoryChanged(): void {
-        return;
+        context.registerListener('search-result-explorer', {
+            additionalInformationChanged: () => null,
+            filteredObjectListChanged: () => null,
+            objectChanged: () => null,
+            objectListChanged: async (objectType: KIXObjectType | string, objects: KIXObject[]) => {
+                if (objectType === context.getSearchCache()?.objectType) {
+                    this.prepareTree();
+                }
+            },
+            scrollInformationChanged: () => null,
+            sidebarLeftToggled: () => null,
+            sidebarRightToggled: () => null
+        });
     }
 
     private async prepareTree(): Promise<void> {
-        this.rootCategory = await SearchService.getInstance().getSearchResultCategories();
+        const context = ContextService.getInstance().getActiveContext<SearchContext>();
+        this.rootCategory = context.getSearchResultCategory();
         this.state.nodes = this.rootCategory ? await this.prepareTreeNodes([this.rootCategory], true) : [];
     }
 
     private async prepareTreeNodes(categories: SearchResultCategory[], isRoot: boolean = false): Promise<TreeNode[]> {
         const nodes: TreeNode[] = [];
-        const searchCache = SearchService.getInstance().getSearchCache();
+
+        const context = ContextService.getInstance().getActiveContext<SearchContext>();
+        const searchCache = context.getSearchCache();
         if (searchCache && categories) {
-            const objectService
-                = ServiceRegistry.getServiceInstance<IKIXObjectService>(searchCache.objectType);
+            const objectService = ServiceRegistry.getServiceInstance<IKIXObjectService>(searchCache.objectType);
             if (objectService) {
                 for (const category of categories) {
                     if (isRoot) {
@@ -89,7 +92,7 @@ export class Component implements IKIXObjectSearchListener {
                     const children = await this.prepareTreeNodes(category.children);
 
                     nodes.push(new TreeNode(
-                        category.objectType,
+                        category,
                         label + ` (${category.objectIds.length})`,
                         null, null,
                         children,
@@ -101,13 +104,14 @@ export class Component implements IKIXObjectSearchListener {
         return nodes;
     }
 
-    public activeNodeChanged(node: TreeNode, forceSet: boolean = false): void {
+    public async activeNodeChanged(node: TreeNode, forceSet: boolean = false): Promise<void> {
         this.state.activeNode = node;
         if (this.state.activeNode) {
-            const newActiveCategory = this.getActiveCategory(this.state.activeNode.id);
-            const activeCategory = SearchService.getInstance().getActiveSearchResultExplorerCategory();
+            const newActiveCategory = this.getActiveCategory(this.state.activeNode.id.objectType);
+            const context = ContextService.getInstance().getActiveContext<SearchContext>();
+            const activeCategory = await context.getSearchResultCategory();
             if (forceSet || !activeCategory || newActiveCategory.label !== activeCategory.label) {
-                SearchService.getInstance().setActiveSearchResultExplorerCategory(newActiveCategory);
+                context.setSearchResultCategory(newActiveCategory);
             }
         }
     }
@@ -132,7 +136,7 @@ export class Component implements IKIXObjectSearchListener {
         objectType: KIXObjectType | string,
         nodes: TreeNode[] = this.state.nodes
     ): TreeNode {
-        let activeNode = nodes.find((n) => n.id === objectType);
+        let activeNode = nodes.find((n) => n.id.objectType === objectType);
         if (!activeNode) {
             for (const node of nodes) {
                 activeNode = this.getActiveNode(objectType, node.children);

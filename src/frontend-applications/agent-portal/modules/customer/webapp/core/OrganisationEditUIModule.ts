@@ -63,7 +63,7 @@ export class UIModule implements IUIModule {
             [
                 new UIComponentPermission('organisations', [CRUD.CREATE])
             ],
-            'Translatable#Organisation', 'kix-icon-man-house', OrganisationDetailsContext.CONTEXT_ID
+            'Translatable#Organisation', 'kix-icon-man-house', OrganisationDetailsContext.CONTEXT_ID, 300
         );
         ContextService.getInstance().registerContext(newOrganisationContext);
 

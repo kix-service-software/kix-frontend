@@ -7,74 +7,160 @@
  * --
  */
 
-import { IKIXObjectSearchListener } from '../../core/IKIXObjectSearchListener';
 import { ComponentState } from './ComponentState';
 import { SearchService } from '../../core/SearchService';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
-import { Label } from '../../../../../modules/base-components/webapp/core/Label';
-import { SearchOperatorUtil } from '../../core/SearchOperatorUtil';
-import { SortUtil } from '../../../../../model/SortUtil';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { SearchEvent } from '../../../model/SearchEvent';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { IdService } from '../../../../../model/IdService';
-import { SearchCache } from '../../../model/SearchCache';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { SearchContext } from '../../core';
+import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 
-class Component implements IKIXObjectSearchListener {
+class Component {
 
     public listenerId: string = 'search-criteria-widget';
 
     private state: ComponentState;
-
     private subscriber: IEventSubscriber;
+    private managerListenerId: string;
+    private contextInstanceId: string;
+
+    private keyListenerElement: any;
+    private keyListener: any;
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        SearchService.getInstance().registerListener(this);
         this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Attributes', 'Translatable#Reset data', 'Translatable#Cancel',
+            'Translatable#Detailed search results', 'Translatable#Start search',
             'Translatable#New Search', 'Translatable#Edit Search'
         ]);
 
         await this.prepareActions();
 
-        this.searchFinished();
-        this.state.loading = false;
         WidgetService.getInstance().updateActions(this.state.instanceId);
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('search-criteria-widget'),
-            eventPublished: () => {
-                this.setTitle();
+            eventPublished: (data: SearchContext, eventId: string) => {
+                if (data.instanceId === this.contextInstanceId) {
+                    if (eventId === SearchEvent.SEARCH_DELETED) {
+                        this.initManager();
+                    }
+                    this.setTitle();
+                }
             }
         };
 
         EventService.getInstance().subscribe(SearchEvent.SAVE_SEARCH_FINISHED, this.subscriber);
+        EventService.getInstance().subscribe(SearchEvent.SEARCH_DELETED, this.subscriber);
+
+        this.keyListenerElement = (this as any).getEl('search-criteria-container');
+        if (this.keyListenerElement) {
+            this.keyListener = this.keyDown.bind(this);
+            this.keyListenerElement.addEventListener('keydown', this.keyListener);
+        }
+
+        const context = ContextService.getInstance().getActiveContext();
+        this.contextInstanceId = context?.instanceId;
+        const searchDefinition = SearchService.getInstance().getSearchDefinition(
+            context.descriptor.kixObjectTypes[0]
+        );
+        this.state.manager = searchDefinition?.formManager;
+        this.setTitle();
+        this.initManager();
+    }
+
+    private async initManager(): Promise<void> {
+        this.state.manager?.reset();
+
+        const context = ContextService.getInstance().getActiveContext<SearchContext>();
+        const cache = context.getSearchCache();
+
+        this.state.limit = cache.limit;
+
+        if (this.state.manager && Array.isArray(cache?.criteria) && cache?.criteria.length) {
+            for (const criteria of cache.criteria) {
+                this.state.manager?.setValue(
+                    new ObjectPropertyValue(criteria.property, criteria.operator, criteria.value)
+                );
+            }
+        } else {
+            await this.setDefaults();
+        }
+
+        const dynamicFormComponent = (this as any).getComponent('search-criteria-dynamic-form');
+        if (dynamicFormComponent) {
+            dynamicFormComponent.updateValues();
+        }
+
+        this.managerListenerId = IdService.generateDateBasedId('search-criteria-widget');
+        this.state.manager?.registerListener(this.managerListenerId, async () => {
+            const values = this.state.manager.getValues();
+            this.state.canSearch = values.length > 0;
+
+            const searchDefinition = SearchService.getInstance().getSearchDefinition(
+                context.getSearchCache().objectType
+            );
+            const criteria: FilterCriteria[] = [];
+            for (const v of values) {
+                criteria.push(searchDefinition.getFilterCriteria(v));
+            }
+
+            context.getSearchCache().setCriteria(criteria);
+        });
     }
 
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(SearchEvent.SAVE_SEARCH_FINISHED, this.subscriber);
+        this.state.manager?.unregisterListener(this.managerListenerId);
+
+        if (this.keyListenerElement) {
+            this.keyListenerElement.removeEventListener('keydown', this.keyListener);
+        }
     }
 
     private async prepareActions(): Promise<void> {
         this.state.contentActions = await ActionFactory.getInstance().generateActions(
-            ['edit-search-action', 'save-search-action', 'delete-search-action']
+            ['save-search-action', 'delete-search-action']
         );
-        const actions = await ActionFactory.getInstance().generateActions(['new-search-action']);
-        WidgetService.getInstance().registerActions(this.state.instanceId, actions);
     }
 
-    public searchCleared(): void {
-        this.searchFinished();
+    public async search(): Promise<void> {
+        const hint = await TranslationService.translate('Translatable#Search');
+        BrowserUtil.toggleLoadingShield(true, hint);
+        const context = ContextService.getInstance().getActiveContext<SearchContext>();
+        await SearchService.getInstance().searchObjects(context?.getSearchCache());
+        BrowserUtil.toggleLoadingShield(false);
+    }
+
+    public limitChanged(event: any): void {
+        this.state.limit = event.target.value;
+        const context = ContextService.getInstance().getActiveContext<SearchContext>();
+        context.getSearchCache().limit = this.state.limit;
+    }
+
+    public resetSearch(): void {
+        this.state.manager?.unregisterListener(this.managerListenerId);
+
+        const context = ContextService.getInstance().getActiveContext<SearchContext>();
+        context.resetSearch();
     }
 
     private async setTitle(): Promise<void> {
-        const cache = SearchService.getInstance().getSearchCache();
+        const context = ContextService.getInstance().getActiveContext<SearchContext>();
+        const cache = context?.getSearchCache();
+
         const titleLabel = await TranslationService.translate('Translatable#Selected Search Criteria');
         const searchLabel = await TranslationService.translate('Translatable#Search');
         if (cache.name) {
@@ -85,78 +171,28 @@ class Component implements IKIXObjectSearchListener {
         }
     }
 
-    public async searchFinished(): Promise<void> {
-        const cache = SearchService.getInstance().getSearchCache();
-        const titleLabel = await TranslationService.translate('Translatable#Selected Search Criteria');
-        this.state.displayCriteria = [];
-
-        if (cache) {
-            const searchDefinition = SearchService.getInstance().getSearchDefinition(cache.objectType);
-
-            await this.setTitle();
-            const displayCriteria: Array<[string, string, Label[]]> = [];
-
-            const parameter = [];
-            for (const criteria of cache.criteria) {
-                parameter.push([criteria.property, criteria.value]);
+    private async setDefaults(): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext<SearchContext>();
+        const cache = context?.getSearchCache();
+        const searchDefinition = SearchService.getInstance().getSearchDefinition(cache?.objectType);
+        const criteria = searchDefinition.getDefaultSearchCriteria();
+        if (Array.isArray(criteria)) {
+            for (const p of criteria) {
+                const operators = await this.state.manager.getOperations(p);
+                this.state.manager.setValue(new ObjectPropertyValue(p, operators ? operators[0] : null, null));
             }
-
-            const properties = await SearchService.getInstance().getSearchProperties(
-                cache.objectType, parameter
-            );
-
-            const criterias = cache.criteria.filter(
-                (c) => typeof c.value !== 'undefined' && c.value !== null && c.value !== ''
-            );
-            for (const criteria of criterias) {
-                const labels: Label[] = [];
-                if (Array.isArray(criteria.value)) {
-                    for (const v of criteria.value) {
-                        const value = await searchDefinition.getDisplaySearchValue(
-                            criteria.property, parameter, v, criteria.type
-                        );
-                        const icons = await LabelService.getInstance().getIconsForType(
-                            cache.objectType, null, criteria.property, v
-                        );
-                        labels.push(new Label(null, value, icons ? icons[0] : null, value, null, value, false));
-                    }
-                } else {
-                    const value = await searchDefinition.getDisplaySearchValue(
-                        criteria.property, parameter, criteria.value, criteria.type
-                    );
-                    const icons = await LabelService.getInstance().getIconsForType(
-                        cache.objectType, null, criteria.property, criteria.value
-                    );
-                    labels.push(new Label(null, value, icons ? icons[0] : null, value, null, value, false));
-                }
-
-                const searchProperty = properties.find((p) => p[0] === criteria.property);
-                let displayProperty = searchProperty ? searchProperty[1] : null;
-                if (!displayProperty) {
-                    displayProperty = await LabelService.getInstance().getPropertyText(
-                        criteria.property, cache.objectType
-                    );
-                } else {
-                    displayProperty = await TranslationService.translate(displayProperty);
-                }
-
-                const label = await SearchOperatorUtil.getText(criteria.operator);
-                displayCriteria.push([displayProperty, label, labels]);
-            }
-            displayCriteria.sort((a, b) => SortUtil.compareString(a[0], b[0]));
-            WidgetService.getInstance().updateActions(this.state.instanceId);
-
-            this.state.contentActions = [...this.state.contentActions];
-
-            setTimeout(() => this.state.displayCriteria = displayCriteria, 100);
-        } else {
-            this.state.title = `${titleLabel}:`;
         }
     }
 
-    public searchResultCategoryChanged(): void {
-        return;
+    public keyDown(event: any): void {
+        if ((event.ctrlKey && event.key === 'Enter') && this.state.canSearch) {
+            if (event.preventDefault) {
+                event.preventDefault();
+            }
+            this.search();
+        }
     }
+
 }
 
 module.exports = Component;

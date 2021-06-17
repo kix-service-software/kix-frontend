@@ -42,7 +42,7 @@ export class UIModule implements IUIModule {
             [
                 new UIComponentPermission('faq/articles', [CRUD.CREATE])
             ],
-            'Translatable#FAQ', 'kix-icon-faq', FAQDetailsContext.CONTEXT_ID
+            'Translatable#FAQ', 'kix-icon-faq', FAQDetailsContext.CONTEXT_ID, 400
         );
         ContextService.getInstance().registerContext(newFAQArticleContext);
 
