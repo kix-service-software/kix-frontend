@@ -134,7 +134,7 @@ export class ArticleFormService extends KIXObjectFormService {
         const channel = Array.isArray(channels) && channels.length ? channels[0] : null;
 
         let fieldPromises = [];
-        if (channel.Name === 'note') {
+        if (channel?.Name === 'note') {
             fieldPromises = [
                 this.getCustomerVisibleField(formInstance, clear),
                 this.getSubjectField(formInstance, clear),
@@ -147,7 +147,7 @@ export class ArticleFormService extends KIXObjectFormService {
                 [ArticleProperty.CC, null],
                 [ArticleProperty.BCC, null],
             ], null);
-        } else if (channel.Name === 'email') {
+        } else if (channel?.Name === 'email') {
             fieldPromises = [
                 this.getCustomerVisibleField(formInstance, clear),
                 this.getFromField(formInstance, clear),
