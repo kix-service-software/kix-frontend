@@ -11,7 +11,9 @@ export class ComponentState {
 
     public constructor(
         public text: string = '',
-        public hasButtons: boolean = false
+        public hasButtons: boolean = false,
+        public decision: [string, string] = null,
+        public decisionChecked: boolean = false
     ) { }
 
 }

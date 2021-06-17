@@ -53,6 +53,8 @@ export class PersonalSettingsFormService extends KIXObjectFormService {
             value = value.split(',').map((v) => Number(v));
         } else if (property === PersonalSettingsProperty.NOTIFICATIONS) {
             value = await this.handleNotifications(value);
+        } else if (property === PersonalSettingsProperty.DONT_ASK_DIALOG_ON_CLOSE) {
+            value = Boolean(Number(value));
         }
 
         return value;

@@ -19,6 +19,8 @@ export enum PersonalSettingsProperty {
 
     USER_PASSWORD_CONFIRM = 'USER_PASSWORD_CONFIRM',
 
-    NOTIFICATIONS = 'NotificationTransport'
+    NOTIFICATIONS = 'NotificationTransport',
+
+    DONT_ASK_DIALOG_ON_CLOSE = 'DONT_ASK_DIALOG_CLOSE'
 
 }

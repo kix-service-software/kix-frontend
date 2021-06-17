@@ -6,23 +6,28 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<widget instanceId="personal-settings-dialog">
+<widget
+    instanceId="personal-settings-dialog"
+    title="Translatable#Personal Settings"
+    icon="kix-icon-gear">
     <@content>
         <div.personal-settings-dialog-container>
             <main-form/>
             <div.dialog-control>
                 <div.dialog-button-container>
-                    <button.button-without-text.cancel-button
+                    <button.cancel-button
                         type="button"
                         on-click("cancel")
                         title=state.translations["Translatable#Cancel"]>
                         <span.kix-icon-close/>
+                        <span>${state.translations["Translatable#Cancel"]}</span>
                     </button>
-                    <button.button-without-text.submit-button
+                    <button.submit-button
                         type="button"
                         on-click("submit")
                         title=state.translations["Translatable#Save"]>
                         <span.kix-icon-check/>
+                        <span>${state.translations["Translatable#Save"]}</span>
                     </button>
                 </div>
             </div>

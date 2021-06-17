@@ -25,6 +25,7 @@ import { ContextHistory } from './ContextHistory';
 import { ContextService } from './ContextService';
 import { PlaceholderService } from './PlaceholderService';
 import { InlineContent } from './InlineContent';
+import { AgentService } from '../../../user/webapp/core/AgentService';
 
 
 export class BrowserUtil {
@@ -44,15 +45,24 @@ export class BrowserUtil {
         }, 500);
     }
 
-    public static openConfirmOverlay(
+    public static async openConfirmOverlay(
         title: string = 'Sure?', confirmText: string = 'Are you sure?',
         confirmCallback: () => void = null, cancelCallback: () => void = null,
-        labels: [string, string] = ['Yes', 'No'], closeButton?: boolean
-    ): void {
-        const content = new ComponentContent(
-            'confirm-overlay', new ConfirmOverlayContent(confirmText, confirmCallback, cancelCallback, labels)
-        );
-        OverlayService.getInstance().openOverlay(OverlayType.CONFIRM, null, content, title, null, closeButton);
+        labels: [string, string] = ['Yes', 'No'], closeButton?: boolean, decision?: [string, string]
+    ): Promise<void> {
+        const preference = decision ? await AgentService.getInstance().getUserPreference(decision[0]) : null;
+        if (preference && Boolean(Number(preference.Value))) {
+            confirmCallback();
+        } else {
+            const content = new ComponentContent(
+                'confirm-overlay',
+                new ConfirmOverlayContent(confirmText, confirmCallback, cancelCallback, labels, decision)
+            );
+            OverlayService.getInstance().openOverlay(
+                OverlayType.CONFIRM, null, content, title, null, closeButton,
+                undefined, undefined, undefined, undefined, undefined
+            );
+        }
     }
 
     public static openAppRefreshOverlay(
