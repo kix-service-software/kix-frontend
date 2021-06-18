@@ -102,7 +102,7 @@ export class ContextService {
 
         const allowMultiple = multiContextModes.some((cm) => cm === context?.descriptor?.contextMode);
 
-        if ((!context || allowMultiple)) {
+        if (!context || allowMultiple) {
             context = await this.createContextInstance(
                 contextId, objectId, undefined, urlParams, additionalInformation
             );

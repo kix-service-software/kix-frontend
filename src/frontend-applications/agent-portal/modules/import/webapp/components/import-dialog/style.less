@@ -33,3 +33,30 @@
         }
     }
 }
+
+// FIXME: copied from object-dialog
+.import-dialog-control {
+    position: sticky;
+    bottom: 0;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: auto;
+    padding: 0.5rem 1rem;
+    box-shadow: 0px 2px 4px #00000029;
+    background-color: @secondary-3;
+
+    .dialog-button-container {
+        justify-self: end;
+        display: grid;
+        grid-auto-columns: max-content;
+        grid-auto-flow: column;
+        grid-column-gap: 1rem;
+        padding: 0.5rem;
+        border-radius: 3px;
+    }
+
+    .dialog-loading-text {
+        align-self: center;
+        justify-self: center;
+    }
+}

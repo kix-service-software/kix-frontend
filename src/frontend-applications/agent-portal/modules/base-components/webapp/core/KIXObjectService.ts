@@ -515,6 +515,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         }
         return nodes;
     }
+
     public static async search(
         objectType: KIXObjectType | string, searchValue: string, loadingOptions?: KIXObjectLoadingOptions,
         additionalFilter?: FilterCriteria[], onlyValidObjects: boolean = false

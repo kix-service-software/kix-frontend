@@ -78,7 +78,7 @@ export class QueueService extends KIXObjectService<Queue> {
 
     public async prepareObjectTree(
         queues: Queue[], showInvalid?: boolean, invalidClickable: boolean = false,
-        filterIds?: number[], includeTicketStats: boolean = false
+        filterIds?: number[], translatable?: boolean, includeTicketStats: boolean = false
     ): Promise<TreeNode[]> {
         const nodes = [];
         if (queues && !!queues.length) {
@@ -99,7 +99,7 @@ export class QueueService extends KIXObjectService<Queue> {
                 }
 
                 const subTree = await this.prepareObjectTree(
-                    queue.SubQueues, showInvalid, invalidClickable, filterIds, includeTicketStats
+                    queue.SubQueues, showInvalid, invalidClickable, filterIds, translatable, includeTicketStats
                 );
 
                 const treeNode = new TreeNode(

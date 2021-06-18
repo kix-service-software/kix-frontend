@@ -299,7 +299,8 @@ class Component {
                     this.cancelBulkProcess = true;
                     resolve();
                 },
-                [ignoreButton, cancelButton]
+                [ignoreButton, cancelButton],
+                undefined, undefined, true
             );
         });
     }

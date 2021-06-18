@@ -48,7 +48,8 @@ export class BrowserUtil {
     public static async openConfirmOverlay(
         title: string = 'Sure?', confirmText: string = 'Are you sure?',
         confirmCallback: () => void = null, cancelCallback: () => void = null,
-        labels: [string, string] = ['Yes', 'No'], closeButton?: boolean, decision?: [string, string]
+        labels: [string, string] = ['Yes', 'No'], closeButton?: boolean, decision?: [string, string],
+        focusConfirm?: boolean
     ): Promise<void> {
         const preference = decision ? await AgentService.getInstance().getUserPreference(decision[0]) : null;
         if (preference && Boolean(Number(preference.Value))) {
@@ -56,7 +57,7 @@ export class BrowserUtil {
         } else {
             const content = new ComponentContent(
                 'confirm-overlay',
-                new ConfirmOverlayContent(confirmText, confirmCallback, cancelCallback, labels, decision)
+                new ConfirmOverlayContent(confirmText, confirmCallback, cancelCallback, labels, decision, focusConfirm)
             );
             OverlayService.getInstance().openOverlay(
                 OverlayType.CONFIRM, null, content, title, null, closeButton,
