@@ -20,6 +20,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <if(state.hasButtons)>
     <div.confirm-overlay-buttons>
         <button.cancel-button
+            key="confirm-cancel-button"
             type="button"
             on-click("closeOverlay", false)
             title=component.getButtonLabel()>
@@ -27,6 +28,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <translation-string pattern=component.getButtonLabel()/>
         </button>
         <button.submit-button
+            key="confirm-submit-button"
             type="button"
             on-click("closeOverlay", true)
             title=component.getButtonLabel(true)>

@@ -13,6 +13,7 @@ export class ConfirmOverlayContent {
         public confirmCallback: () => void = null,
         public cancelCallback: () => void = null,
         public buttonLabels: [string, string] = ['Yes', 'No'],
-        public decision?: [string, string]
+        public decision?: [string, string],
+        public focusConfirm?: boolean
     ) { }
 }

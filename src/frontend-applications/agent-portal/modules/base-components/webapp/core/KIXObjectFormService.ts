@@ -13,17 +13,14 @@ import { FormConfiguration } from '../../../../model/configuration/FormConfigura
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { ContextService } from './ContextService';
-import { ContextType } from '../../../../model/ContextType';
 import { FormContext } from '../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { LabelService } from './LabelService';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
-import { InlineContent } from './InlineContent';
 import { AuthenticationSocketClient } from './AuthenticationSocketClient';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
-import { FormService } from './FormService';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { DynamicFieldFormUtil } from './DynamicFieldFormUtil';
 import { IdService } from '../../../../model/IdService';
@@ -31,7 +28,6 @@ import { ExtendedKIXObjectFormService } from './ExtendedKIXObjectFormService';
 import { FormInstance } from './FormInstance';
 import { KIXObjectService } from './KIXObjectService';
 import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core/DynamicFormFieldOption';
-import { PlaceholderService } from './PlaceholderService';
 import { FormFactory } from './FormFactory';
 
 export abstract class KIXObjectFormService {

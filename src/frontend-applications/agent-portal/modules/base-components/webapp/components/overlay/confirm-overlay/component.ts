@@ -38,6 +38,14 @@ class OverlayComponent extends AbstractMarkoComponent<ComponentState> {
             const preference = await AgentService.getInstance().getUserPreference(input.decision[0]);
             this.state.decisionChecked = preference && Boolean(Number(preference.Value));
         }
+
+        let button = (this as any).getEl('confirm-cancel-button');
+        if (input.focusConfirm) {
+            button = (this as any).getEl('confirm-submit-button');
+        }
+        if (button) {
+            button.focus();
+        }
     }
 
     public closeOverlay(confirm: boolean = false): void {

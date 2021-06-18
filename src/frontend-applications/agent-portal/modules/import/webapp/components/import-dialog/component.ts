@@ -724,7 +724,8 @@ class Component {
                     this.cancelImportProcess = true;
                     resolve();
                 },
-                [ignoreText, cancelText]
+                [ignoreText, cancelText],
+                undefined, undefined, true
             );
         });
     }
