@@ -9,7 +9,6 @@
 
 import { Context } from '../../../../../model/Context';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 import { TicketProperty } from '../../../model/TicketProperty';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
@@ -18,9 +17,6 @@ import { Ticket } from '../../../model/Ticket';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { Organisation } from '../../../../customer/model/Organisation';
 import { Contact } from '../../../../customer/model/Contact';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
-import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
 import { ServiceRegistry } from '../../../../base-components/webapp/core/ServiceRegistry';
 import { ServiceType } from '../../../../base-components/webapp/core/ServiceType';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';

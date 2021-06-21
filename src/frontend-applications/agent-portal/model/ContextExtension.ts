@@ -18,6 +18,10 @@ export class ContextExtension {
         return;
     }
 
+    public async postInitContext(context: Context): Promise<void> {
+        return;
+    }
+
     public async getAdditionalActions(context: Context, object?: KIXObject): Promise<AbstractAction[]> {
         return;
     }

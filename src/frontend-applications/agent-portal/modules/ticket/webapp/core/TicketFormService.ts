@@ -44,6 +44,8 @@ import { FormConfiguration } from '../../../../model/configuration/FormConfigura
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { IdService } from '../../../../model/IdService';
+import { Context } from '../../../../model/Context';
+import { Article } from '../../model/Article';
 
 export class TicketFormService extends KIXObjectFormService {
 
@@ -156,8 +158,38 @@ export class TicketFormService extends KIXObjectFormService {
                         ? new Date(ticket[TicketProperty.PENDING_TIME]) : null;
                 }
                 break;
+            case ArticleProperty.SUBJECT:
+                value = await ArticleFormService.getInstance().getSubjectFieldValue();
+                break;
+            case ArticleProperty.BODY:
+                value = await ArticleFormService.getInstance().getBodyFieldValue();
+                break;
+            case ArticleProperty.ATTACHMENTS:
+                value = await ArticleFormService.getInstance().getAttachmentFieldValue();
+                break;
+            case ArticleProperty.TO:
+                value = await ArticleFormService.getInstance().getToFieldValue(
+                    ContextService.getInstance().getActiveContext()
+                );
+                break;
             case ArticleProperty.CHANNEL_ID:
-                if (formContext === FormContext.NEW) {
+                const dialogContext = ContextService.getInstance().getActiveContext();
+                if (dialogContext) {
+                    const isReplyDialog = dialogContext.getAdditionalInformation('ARTICLE_REPLY');
+                    if (isReplyDialog) {
+                        const referencedArticle = await ArticleFormService.getInstance().getReferencedArticle(
+                            dialogContext, ticket
+                        );
+                        if (referencedArticle) {
+                            value = referencedArticle.ChannelID;
+                        }
+                    } else {
+                        const isForwardDialog = dialogContext.getAdditionalInformation('ARTICLE_FORWARD');
+                        if (isForwardDialog) {
+                            value = 2;
+                        }
+                    }
+                } else if (formContext === FormContext.NEW) {
                     const channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL);
                     if (channels && channels.length) {
                         value = channels[0].ID;
