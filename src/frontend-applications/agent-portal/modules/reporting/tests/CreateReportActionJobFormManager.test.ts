@@ -19,7 +19,6 @@ import { FormInstance } from '../../base-components/webapp/core/FormInstance';
 import { InputFieldTypes } from '../../base-components/webapp/core/InputFieldTypes';
 import { KIXObjectService } from '../../base-components/webapp/core/KIXObjectService';
 import { ObjectReferenceOptions } from '../../base-components/webapp/core/ObjectReferenceOptions';
-import { MacroAction } from '../../job/model/MacroAction';
 import { ReportDefinitionProperty } from '../model/ReportDefinitionProperty';
 import { CreateReportActionJobFormManager } from '../webapp/core/form/CreateReportActionJobFormManager';
 
@@ -55,7 +54,7 @@ const actionMock = {
     "MacroID": 10,
     "Parameters": {
         "DefinitionID": 2,
-        "OutputFormats": "CSV",
+        "OutputFormats": ["CSV"],
         "Parameters": {
             "EndDate": "2021-04-16",
             "OrganisationIDList": [
@@ -502,7 +501,11 @@ describe('CreateReportActionJobFormManager', () => {
             it('Should have the correct OutputFormat as default value', () => {
                 expect(field.defaultValue).exist;
                 expect(field.defaultValue.value).exist;
-                expect(field.defaultValue.value).equals("CSV");
+                expect(Array.isArray(field.defaultValue.value)).true;
+                if (Array.isArray(field.defaultValue.value)) {
+                    expect(field.defaultValue.value.length).equals(1);
+                    expect(field.defaultValue.value[0]).equals("CSV");
+                }
             });
 
         });
