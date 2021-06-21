@@ -340,7 +340,7 @@ export class ArticleFormService extends KIXObjectFormService {
         return field;
     }
 
-    private async getSubjectFieldValue(): Promise<string> {
+    public async getSubjectFieldValue(): Promise<string> {
         let value;
         const dialogContext = ContextService.getInstance().getActiveContext();
         if (dialogContext) {
@@ -385,7 +385,7 @@ export class ArticleFormService extends KIXObjectFormService {
         return value;
     }
 
-    private async getAttachmentFieldValue(): Promise<Attachment[]> {
+    public async getAttachmentFieldValue(): Promise<Attachment[]> {
         let value;
         const newValue: Attachment[] = [];
 
@@ -415,7 +415,7 @@ export class ArticleFormService extends KIXObjectFormService {
         return !!newValue.length ? newValue : null;
     }
 
-    private async getToFieldValue(dialogContext: Context): Promise<string> {
+    public async getToFieldValue(dialogContext: Context): Promise<string> {
         let value;
         const isReplyDialog = dialogContext.getAdditionalInformation('ARTICLE_REPLY');
         if (isReplyDialog) {
@@ -432,7 +432,7 @@ export class ArticleFormService extends KIXObjectFormService {
         return value;
     }
 
-    private async getReferencedValue<T = string>(property: string, dialogContext?: Context): Promise<T> {
+    public async getReferencedValue<T = string>(property: string, dialogContext?: Context): Promise<T> {
         let value: T;
         const referencedArticle = await this.getReferencedArticle(dialogContext);
         if (referencedArticle) {
@@ -441,7 +441,7 @@ export class ArticleFormService extends KIXObjectFormService {
         return value;
     }
 
-    private async getReferencedArticle(dialogContext?: Context, ticket?: Ticket): Promise<Article> {
+    public async getReferencedArticle(dialogContext?: Context, ticket?: Ticket): Promise<Article> {
         let article: Article = null;
         if (!dialogContext) {
             dialogContext = ContextService.getInstance().getActiveContext();

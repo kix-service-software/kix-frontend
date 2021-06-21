@@ -276,6 +276,11 @@ export class ContextService {
 
             this.activeContext = context;
 
+            const contextExtensions = this.getContextExtensions(context.contextId);
+            for (const extension of contextExtensions) {
+                await extension.postInitContext(context);
+            }
+
             EventService.getInstance().publish(RoutingEvent.ROUTE_TO,
                 {
                     componentId: context.descriptor.componentId,
