@@ -99,11 +99,6 @@ export class PersonalSettingsFormService extends KIXObjectFormService {
         formContext?: FormContext, formInstance?: FormInstance
     ): Promise<Array<[string, any]>> {
 
-        const queuesParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
-        if (queuesParameter) {
-            queuesParameter[1] = Array.isArray(queuesParameter[1]) ? queuesParameter[1].join(',') : '';
-        }
-
         const notificationParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.NOTIFICATIONS);
         if (notificationParameter) {
             const transport = 'Email';
