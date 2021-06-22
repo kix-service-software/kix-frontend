@@ -50,41 +50,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </a>
                 </div>
             </div>
-            <if(state.hasFAQAccess)>
-                <div>
-                    <div.header>
-                        <icon icon="kix-icon-faq"/>
-                        <h2>
-                            <translation-string pattern="Translatable#Helping FAQ Contributions"/>
-                        </h2>
-                    </div>
-                    <p>
-                        <translation-string pattern="Translatable#The following FAQ entries will provide you with a basic overview of how KIX 18 works"/>:
-                    </p>
-                    <ul.link-list>
-                        <li>
-                            <a href=(component.baseFAQUri + state.faqIds[0]) on-click("faqClicked", state.faqIds[0])>
-                                <translation-string pattern="Translatable#General information on working with KIX 18"/>
-                            </a>
-                        </li>
-                        <li>
-                            <a href=(component.baseFAQUri + state.faqIds[1]) on-click("faqClicked", state.faqIds[1])>
-                                <translation-string pattern="Translatable#How do I create a new ticket?"/>
-                            </a>
-                        </li>
-                        <li>
-                            <a href=(component.baseFAQUri + state.faqIds[2]) on-click("faqClicked", state.faqIds[2])>
-                                <translation-string pattern="Translatable#Selected ticket functions"/>
-                            </a>
-                        </li>
-                        <li>
-                            <a href=(component.baseFAQUri + state.faqIds[3]) on-click("faqClicked", state.faqIds[3])>
-                                <translation-string pattern="Translatable#How do I search in KIX 18?"/>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </if>
             <if(state.hasConfigAccess && (state.userManualLink || state.adminManualLink))>
                 <div>
                     <div.header>
