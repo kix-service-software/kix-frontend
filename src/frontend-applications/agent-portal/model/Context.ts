@@ -108,6 +108,10 @@ export abstract class Context {
     }
 
     public async destroy(): Promise<void> {
+        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, {
+            eventSubscriberId: this.descriptor.contextId + '-update-listener',
+            eventPublished: null
+        });
         return;
     }
 
