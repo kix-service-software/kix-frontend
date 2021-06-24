@@ -280,6 +280,7 @@ export class ContextService {
             for (const extension of contextExtensions) {
                 await extension.postInitContext(context);
             }
+            await context.update(null);
 
             EventService.getInstance().publish(RoutingEvent.ROUTE_TO,
                 {

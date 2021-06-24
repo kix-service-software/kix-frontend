@@ -10,7 +10,6 @@
 import { FormConfiguration } from '../../../../../model/configuration/FormConfiguration';
 import { FormContext } from '../../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
-import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
@@ -57,13 +56,13 @@ export class ReportDefinitionFormService extends KIXObjectFormService {
                 if (eventId === FormEvent.FIELD_EMPTY_STATE_CHANGED) {
                     const field: FormFieldConfiguration = data.field;
                     if (field && field.property === ReportDefinitionProperty.PARAMTER) {
+                        const formInstance: FormInstance = data.formInstance;
                         if (field.empty) {
                             field.empty = true;
-                            const formInstance: FormInstance = data.formInstance;
                             formInstance.addFieldChildren(field, [], true);
                         } else {
                             field.empty = false;
-                            ReportDefinitionFormCreator.createParameterFields(field, null);
+                            ReportDefinitionFormCreator.createParameterFields(field, null, formInstance);
                         }
                     }
                 }
@@ -81,7 +80,7 @@ export class ReportDefinitionFormService extends KIXObjectFormService {
     protected async prePrepareForm(
         form: FormConfiguration, reportDefinition: ReportDefinition, formInstance: FormInstance
     ): Promise<void> {
-        await ReportDefinitionFormCreator.createFormPages(form, reportDefinition);
+        await ReportDefinitionFormCreator.createFormPages(form, reportDefinition, formInstance);
     }
 
     public async postPrepareValues(
