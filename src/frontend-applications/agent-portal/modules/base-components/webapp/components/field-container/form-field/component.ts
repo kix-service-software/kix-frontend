@@ -119,7 +119,7 @@ class Component {
         if (Array.isArray(field.children)) {
             for (const child of field.children) {
                 const value = formInstance.getFormFieldValue(child.instanceId);
-                if (!value.valid) {
+                if (value && !value.valid) {
                     return true;
                 }
 
