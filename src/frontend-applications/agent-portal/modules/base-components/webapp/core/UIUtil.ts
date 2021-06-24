@@ -9,20 +9,23 @@
 
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextService } from './ContextService';
-import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
 
 export class UIUtil {
 
     public static async getEditObjectId(type: KIXObjectType | string): Promise<number> {
-        const context = ContextService.getInstance().getActiveContext();
         const dialogContext = ContextService.getInstance().getActiveContext();
-        const dialogContextMode = dialogContext ? dialogContext.descriptor.contextMode : null;
-        const isEditDialog = dialogContextMode
-            && dialogContextMode === ContextMode.EDIT
-            || dialogContextMode === ContextMode.EDIT_ADMIN ?
-            true : false;
-        const object = context && isEditDialog ? await context.getObject() : null;
+        const dialogContextMode = dialogContext?.descriptor?.contextMode;
+        const isEditDialog = dialogContextMode && (
+            dialogContextMode === ContextMode.EDIT ||
+            dialogContextMode === ContextMode.EDIT_ADMIN
+        ) ? true : false;
+
+        // check if "edit dialog" context supports objecttype
+        const contextObjectType = isEditDialog && dialogContext?.descriptor?.kixObjectTypes?.length === 1 ?
+            dialogContext.descriptor.kixObjectTypes[0] : null;
+        const object = type && contextObjectType && type === contextObjectType ?
+            await dialogContext.getObject(type) : null;
         return object && object.KIXObjectType === type
             ? Number(object.ObjectId)
             : null;
