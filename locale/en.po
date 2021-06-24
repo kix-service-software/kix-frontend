@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2021-06-24 13:47+0000\n"
+"PO-Revision-Date: 2021-06-24 16:52+0000\n"
 "Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
 "Language-Team: English <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/en/>\n"
@@ -2389,19 +2389,19 @@ msgstr ""
 "processing."
 
 msgid "Helptext_Tickets_TicketCreate_Priority"
-msgstr "The Priority marks the ticket urgency."
+msgstr ""
 
 msgid "Helptext_Tickets_TicketCreate_Queue"
-msgstr "Insert the scope of responsitility for the ticket."
+msgstr ""
 
 msgid "Helptext_Tickets_TicketCreate_State"
-msgstr "The state marks the recent ticket process state."
+msgstr ""
 
 msgid "Helptext_Tickets_TicketCreate_Subject"
 msgstr "Briefly summarize the ticket topic."
 
 msgid "Helptext_Tickets_TicketCreate_Type"
-msgstr "The ticket type classifies which type of request the ticket is."
+msgstr ""
 
 msgid "Helptext_Tickets_TicketEdit_AffectedAsset"
 msgstr ""
@@ -2983,7 +2983,7 @@ msgid "Next Image"
 msgstr ""
 
 msgid "No"
-msgstr ""
+msgstr "No"
 
 msgid "No."
 msgstr ""
@@ -3094,13 +3094,13 @@ msgid "Number of version"
 msgstr ""
 
 msgid "Object"
-msgstr ""
+msgstr "Object"
 
 msgid "Object Id"
 msgstr ""
 
 msgid "Object ID"
-msgstr ""
+msgstr "Object ID"
 
 msgid "Objects"
 msgstr ""
@@ -3151,7 +3151,7 @@ msgid "Operator"
 msgstr ""
 
 msgid "Organisation"
-msgstr ""
+msgstr "Organisation"
 
 msgid "Organisation Details"
 msgstr ""
@@ -3226,7 +3226,7 @@ msgid "Overview Versions"
 msgstr ""
 
 msgid "Owner"
-msgstr ""
+msgstr "Owner"
 
 msgid "Paramater"
 msgstr ""
