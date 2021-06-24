@@ -156,12 +156,11 @@ export class ContextService {
 
     public async removeContext(
         instanceId: string, targetContextId?: string, targetObjectId?: string | number,
-        switchToTarget: boolean = true
+        switchToTarget: boolean = true, silent? :boolean
     ): Promise<boolean> {
         let removed = false;
-
         if (this.canRemove(instanceId)) {
-            const confirmed = await this.checkDialogConfirmation();
+            const confirmed = await this.checkDialogConfirmation(silent);
 
             if (confirmed) {
                 let sourceContext: any;
@@ -191,7 +190,7 @@ export class ContextService {
     }
 
 
-    private checkDialogConfirmation(): Promise<boolean> {
+    private checkDialogConfirmation(silent?: boolean): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
             if (this.activeContext?.descriptor?.contextType === ContextType.DIALOG) {
                 BrowserUtil.openConfirmOverlay(
@@ -204,7 +203,9 @@ export class ContextService {
                     [
                         PersonalSettingsProperty.DONT_ASK_DIALOG_ON_CLOSE,
                         'Translatable#Always close dialog tab without asking'
-                    ]
+                    ],
+                    null,
+                    silent
                 );
             } else {
                 resolve(true);
@@ -239,9 +240,9 @@ export class ContextService {
     }
 
     public async toggleActiveContext(
-        targetContextId?: string, targetObjectId?: string | number
+        targetContextId?: string, targetObjectId?: string | number, silent?: boolean
     ): Promise<void> {
-        await this.removeContext(this.activeContext?.instanceId, targetContextId, targetObjectId);
+        await this.removeContext(this.activeContext?.instanceId, targetContextId, targetObjectId, true, silent);
     }
 
     public async setContextByUrl(
