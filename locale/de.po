@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2021-06-24 09:11+0000\n"
+"PO-Revision-Date: 2021-06-24 13:47+0000\n"
 "Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
@@ -84,7 +84,7 @@ msgid "Additional recipients"
 msgstr "Zusätzliche Empfänger"
 
 msgid "Add new Links"
-msgstr ""
+msgstr "Neue Verknüpfung hinzufügen"
 
 msgid "add notes here"
 msgstr "Notizen hinzufügen"
@@ -102,7 +102,7 @@ msgid "Admin"
 msgstr "Admin"
 
 msgid "Admin: {0}"
-msgstr ""
+msgstr "Admin: {0}"
 
 msgid "Administration"
 msgstr "Administration"
@@ -170,7 +170,7 @@ msgid "All tickets"
 msgstr "Alle Tickets"
 
 msgid "Always close dialog tab without asking"
-msgstr ""
+msgstr "Dialog immer ohne Rückfrage schließen"
 
 msgid "A maximum of {0} values can be selected."
 msgstr "Es können maximal {0} Werte ausgewählt werden."
@@ -209,7 +209,7 @@ msgid "An error occurred."
 msgstr "Es ist ein Fehler aufgetreten."
 
 msgid "Any data you have entered will be lost. Continue?"
-msgstr ""
+msgstr "Alle eingegebenen Daten werden verworfen. Fortfahren?"
 
 msgid "Approved"
 msgstr "Genehmigt"
@@ -242,10 +242,10 @@ msgid "Asset"
 msgstr "Asset"
 
 msgid "Asset Class Details"
-msgstr ""
+msgstr "Assetklassendetails"
 
 msgid "Asset Classes"
-msgstr ""
+msgstr "Assetklassen"
 
 msgid "Assets"
 msgstr "Assets"
@@ -294,14 +294,14 @@ msgstr "Es müssen mindestens {0} Werte ausgewählt werden."
 
 msgid "At least one of the fields To, Cc or Bcc must contain an entry."
 msgstr ""
-"Mindestens eins der Felder  'An', 'Cc' oder 'Bcc' muss einen Eintrag "
+"Mindestens eins der Felder 'An', 'Cc' oder 'Bcc' muss einen Eintrag "
 "enthalten."
 
 msgid "Attachment Name"
 msgstr "Name des Anhangs"
 
 msgid "Attachments"
-msgstr "Anlagen"
+msgstr "Anhänge"
 
 msgid "Attribute"
 msgstr "Attribut"
@@ -313,7 +313,7 @@ msgid "Attributes to be edited"
 msgstr "Zu ändernde Attribute"
 
 msgid "Ausblenden"
-msgstr ""
+msgstr "Ausblenden"
 
 msgid "Automatic time measurement"
 msgstr "Automatische Zeitmessung"
@@ -349,7 +349,7 @@ msgid "between"
 msgstr "zwischen"
 
 msgid "Body"
-msgstr "Nachrichteninhalt"
+msgstr "Body"
 
 msgid "Bulk"
 msgstr ""
@@ -515,10 +515,10 @@ msgid "Compare"
 msgstr "Vergleichen"
 
 msgid "Compare: {0}"
-msgstr ""
+msgstr "Vergleichen: {0}"
 
 msgid "Compare Asset Versions"
-msgstr ""
+msgstr "Assetversionen Vergleichen"
 
 msgid "Compare Versions"
 msgstr "Versionen vergleichen"
@@ -566,7 +566,7 @@ msgid "Contact Details"
 msgstr "Kontakt Details"
 
 msgid "Contact Information"
-msgstr "Kontakt Informationen"
+msgstr "Kontaktinformationen"
 
 msgid "Contacts"
 msgstr "Kontakte"
@@ -587,7 +587,7 @@ msgid "Could not handle request."
 msgstr "Anfrage konnte nicht bearbeitet werden."
 
 msgid "Could not load file {0}."
-msgstr "Offene Tickets des Kunden"
+msgstr "Konnte Datei nicht laden {0}."
 
 msgid "Country"
 msgstr "Land"
@@ -596,7 +596,7 @@ msgid "Create"
 msgstr "Erstellen"
 
 msgid "Create Article"
-msgstr "Artikel anlegen"
+msgstr "Artikel erstellen"
 
 msgid "created"
 msgstr "erstellt"
@@ -776,7 +776,7 @@ msgid "Download Result"
 msgstr "Ergebnis herunterladen"
 
 msgid "draft successfully saved"
-msgstr ""
+msgstr "Entwurf gesichert"
 
 msgid "Duplicate"
 msgstr "Duplizieren"
@@ -809,7 +809,7 @@ msgid "Edit Address"
 msgstr "Adresse bearbeiten"
 
 msgid "Edit Asset Class"
-msgstr ""
+msgstr "Assetklasse Bearbeiten"
 
 msgid "Edit CI Class"
 msgstr "Asset Klasse bearbeiten"
@@ -830,7 +830,7 @@ msgid "edited"
 msgstr "bearbeitet"
 
 msgid "Edit Email Address"
-msgstr ""
+msgstr "Emailadresse Bearbeiten"
 
 msgid "Edit Email Filter"
 msgstr "E-Mail Filter bearbeiten"
@@ -854,10 +854,10 @@ msgid "Edit Links"
 msgstr "Verknüpfungen bearbeiten"
 
 msgid "Edit Mail Account"
-msgstr ""
+msgstr "Mailkonto Bearbeiten"
 
 msgid "Edit Mail Filter"
-msgstr ""
+msgstr "Mailfilter Bearbeiten"
 
 msgid "Edit Notification"
 msgstr "Benachrichtigung bearbeiten"
@@ -881,7 +881,7 @@ msgid "Edit Report"
 msgstr "Berichtsdefinition bearbeiten"
 
 msgid "Edit Report Definition"
-msgstr ""
+msgstr "Reportdefinition Bearbeiten"
 
 msgid "Edit Role"
 msgstr "Rolle bearbeiten"
@@ -893,13 +893,13 @@ msgid "Edit State"
 msgstr "Status bearbeiten"
 
 msgid "Edit Sysconfig"
-msgstr ""
+msgstr "SysConfig Bearbeiten"
 
 msgid "Edit Team"
-msgstr ""
+msgstr "Team Bearbeiten"
 
 msgid "Edit Textmodule"
-msgstr ""
+msgstr "Textbaustein Bearbeiten"
 
 msgid "Edit Text Module"
 msgstr "Textbausteine bearbeiten"
@@ -932,7 +932,7 @@ msgid "Email Address"
 msgstr "E-Mail Adresse"
 
 msgid "Email Address Details"
-msgstr ""
+msgstr "Emailadressdetails"
 
 msgid "Email Addresses"
 msgstr "E-Mail Adressen"
@@ -1070,7 +1070,7 @@ msgid "FAQ Category"
 msgstr "FAQ Kategorie"
 
 msgid "FAQ Category Details Context"
-msgstr ""
+msgstr "FAQ Kategorie Details"
 
 msgid "FAQ Category Information"
 msgstr "FAQ-Kategorie-Informationen"
@@ -1145,11 +1145,11 @@ msgid ""
 "Find this saved search within the Dropdown Bookmarks, located in the header "
 "menu right besides the New-button"
 msgstr ""
-"Die hier gespeicherte Suche finden Sie im Kopfmenü der Anwendung über das "
-"Dropdown Lesezeichen, welches neben dem Neu-Button angezeigt wird."
+"Gespeicherte Suche finden Sie im Kopfmenü der Anwendung über das Favoriten-"
+"Icon."
 
 msgid "finished"
-msgstr "fertig"
+msgstr "beendet"
 
 msgid "First Name"
 msgstr "Vorname"
@@ -1179,7 +1179,7 @@ msgid "Friday"
 msgstr "Freitag"
 
 msgid "From"
-msgstr "Von"
+msgstr "From"
 
 msgid "Fullname"
 msgstr "Vollständiger Name"
@@ -1191,10 +1191,10 @@ msgid "General Catalog"
 msgstr "General Catalog"
 
 msgid "General Catalog Item"
-msgstr "General Catalog Item"
+msgstr "General Catalog Eintrag"
 
 msgid "General Catalog Items"
-msgstr "General Catalog Items"
+msgstr "General Catalog Einträge"
 
 msgid "Hello"
 msgstr "Hallo"
@@ -1310,7 +1310,7 @@ msgstr ""
 
 msgid "Helptext_Admin_JobCreateEdit_Events"
 msgstr ""
-"Wählen Sie aus, welche Events an Tickets oder Artikeln diesen Job auslöst.  "
+"Wählen Sie aus, welche Events an Tickets oder Artikeln diesen Job auslöst. "
 "Mehrfachauswahl möglich."
 
 msgid "Helptext_Admin_JobCreateEdit_Filter"
@@ -1550,7 +1550,7 @@ msgstr ""
 
 msgid "Helptext_Admin_NotificationEdit_AdditionalRecipient"
 msgstr ""
-"Tragen Sie eine syntaktisch korrekte E-Mail-Adresse ein, an die die "
+"Tragen Sie eine syntaktisch korrekte E-Mail-Adresse ein, an jene die "
 "Benachrichtigung zusätzlich zu den oben definierten Empfängern versendet "
 "werden soll."
 
@@ -1678,7 +1678,7 @@ msgid "Helptext_Admin_SysConfigSearch"
 msgstr ""
 "Durchsuchbar sind die Eigenschaften in den Spalten \"Name\", \"Kontext\" und "
 "\"Metadaten\". Wird nur ein Teil einer Bezeichnung gesucht, muss dieser in * "
-"gesetzt werden (Wildcard-Suche).  Zusätzlich möglich ist die Eingabe von "
+"gesetzt werden (Wildcard-Suche). Zusätzlich möglich ist die Eingabe von "
 "\"modified\" = findet alle geänderten Schlüssel & \"!modified\" = findet "
 "alle nicht geänderten Schlüssel."
 
@@ -1713,7 +1713,7 @@ msgstr ""
 "Schlagworte helfen, einen Textbaustein schnell zu finden & auszuwählen."
 
 msgid "Helptext_Admin_TextModuleCreate_Language"
-msgstr "Geben Sie die Sprache an, in der der Textbaustein angelegt ist."
+msgstr "Geben Sie die Sprache an, in jener der Textbaustein angelegt ist."
 
 msgid "Helptext_Admin_TextModuleCreate_Name"
 msgstr ""
@@ -2043,7 +2043,7 @@ msgstr ""
 "Wählen Sie die Organisation, welcher der Kontakt zugeordnet sein soll. Bei "
 "der Eingabe von mindestens 3 Zeichen wird Ihnen eine Liste mit bereits im "
 "System registrierten Organisationen vorgeschlagen. Sie können „*“ als "
-"Platzhalter verwenden.  („KNR“ und „Name“ der Organisation möglich)"
+"Platzhalter verwenden („KNR“ und „Name“ der Organisation möglich)."
 
 msgid "Helptext_Customers_ContactCreate_Phone"
 msgstr ""
@@ -2155,7 +2155,7 @@ msgstr ""
 "Self Service Portal sichtbar."
 
 msgid "Helptext_FAQ_ArticleCreate_Language"
-msgstr "Geben sie die Sprache an, in der der FAQ-Artikel verfasst ist."
+msgstr "Geben sie die Sprache an, in welcher der FAQ-Artikel verfasst ist."
 
 msgid "Helptext_FAQ_ArticleCreate_RelatedAssets"
 msgstr ""
@@ -2391,7 +2391,7 @@ msgstr ""
 
 msgid "Helptext_Ticket_Dashboard_Search"
 msgstr ""
-"Durchsuchbar sind die Ticket-Eigenschaften \"Ticket#\", \"Titel\", "
+"Durchsuchbar sind die Ticket-Eigenschaften \"Ticketnummer\", \"Titel\", "
 "\"Artikelinhalt\", \"Von\", \"An\", \"Cc\". Verwendung von Wildcards (*) ist "
 "möglich."
 
@@ -2436,8 +2436,8 @@ msgid "Helptext_Tickets_ArticleCreate_ReceiverCc"
 msgstr ""
 "Der An-Empfänger einer E-Mail, die aus einem neuen Ticket heraus versendet "
 "wird, ist automatisch der „Kontakt“. Hier können Sie weitere Empfänger aus "
-"dem System wählen oder E-Mail-Adressen eingeben, die die Nachricht in Kopie "
-"erhalten."
+"dem System wählen oder E-Mail-Adressen eingeben, welche die Nachricht in "
+"Kopie erhalten."
 
 msgid "Helptext_Tickets_ArticleCreate_ReceiverTo"
 msgstr ""
@@ -2473,7 +2473,7 @@ msgid "Helptext_Tickets_TicketCreate_AffectedAsset"
 msgstr ""
 "Tragen Sie hier ggf. betroffene Geräte ein. Diese werden anschließend am "
 "Ticket verknüpft. Sie können nach der Asset Nummer und/oder dem Asset Name "
-"suchen. Es können maximal 15 Assets gewählt werden."
+"suchen. Die maximale Anzahl der Einträge ist begrenzt."
 
 msgid "Helptext_Tickets_TicketCreate_Body"
 msgstr ""
@@ -2494,7 +2494,7 @@ msgstr ""
 "\", \"|\" und \"*\" benutzen, um die Suche zu verfeinern. Die Suche "
 "berücksichtigt alle Eigenschaften des Kontakes. Über klick auf den Button "
 "rechts im Formularfeld können Sie einen neuen Kontakt anlegen & mit dem "
-"Speichern automatisch hierher zurückkehren.  Für unbekannte Kontakte ist die "
+"Speichern automatisch hierher zurückkehren. Für unbekannte Kontakte ist die "
 "Eingabe einer syntaktisch korrekten E-Mail-Adresse (name@beispiel.de) "
 "ebenfalls möglich."
 
@@ -2517,11 +2517,11 @@ msgid "Helptext_Tickets_TicketCreate_Priority"
 msgstr "Die Priorität kennzeichnet die Dringlichkeit eines Tickets."
 
 msgid "Helptext_Tickets_TicketCreate_Queue"
-msgstr "Geben Sie hier einen Zuständigkeitsbereich für das Ticket an."
+msgstr "Geben Sie hier eine für das Ticket zuständige Bearbeitergruppe an."
 
 msgid "Helptext_Tickets_TicketCreate_State"
 msgstr ""
-"Der Status definiert, in welchem Bearbeitungszustand sich ein Ticket "
+"Der Status definiert, in welchem Bearbeitungszustand sich das Ticket "
 "befindet."
 
 msgid "Helptext_Tickets_TicketCreate_Subject"
@@ -2529,8 +2529,8 @@ msgstr "Fassen Sie das Thema des Tickets kurz zusammen."
 
 msgid "Helptext_Tickets_TicketCreate_Type"
 msgstr ""
-"Der Ticket-Typ dient der Einordnung, um welche Art von Anfrage es sich bei "
-"dem Ticket handelt."
+"Der Ticket-Typ dient der Einordnung, um welche Art von Anfrage es sich "
+"handelt."
 
 msgid "Helptext_Tickets_TicketEdit_AffectedAsset"
 msgstr ""
@@ -2741,7 +2741,7 @@ msgid "Job"
 msgstr "Job"
 
 msgid "Job Details"
-msgstr ""
+msgstr "Job Details"
 
 msgid "Job Information"
 msgstr "Job Informationen"
@@ -2789,7 +2789,7 @@ msgid "Last Name"
 msgstr "Nachname"
 
 msgid "Layer"
-msgstr ""
+msgstr "Layer"
 
 msgid "Legend"
 msgstr "Legende"
@@ -2846,7 +2846,7 @@ msgid "Localisation"
 msgstr "Lokalisierung"
 
 msgid "Lock"
-msgstr "Sperren"
+msgstr "Sperre"
 
 msgid "Locked"
 msgstr "Gesperrt"
@@ -2873,10 +2873,10 @@ msgid "Logs"
 msgstr "Logs"
 
 msgid "Macro"
-msgstr ""
+msgstr "Makro"
 
 msgid "Mail Account Details"
-msgstr ""
+msgstr "Mailkonto Details"
 
 msgid "Mail Accounts successfully removed."
 msgstr "E-Mail Konten wurden erfolgreich gelöscht."
@@ -2885,7 +2885,7 @@ msgid "Mail Account successfully fetched."
 msgstr "E-Mail-Konto wurde erfolgreich abgerufen."
 
 msgid "Mail Filter Details"
-msgstr ""
+msgstr "Mailfilter Details"
 
 msgid "Management using clear checklists"
 msgstr "Führung durch übersichtliche Checklisten"
@@ -2918,7 +2918,7 @@ msgid "Month"
 msgstr "Monat"
 
 msgid "Multiple"
-msgstr ""
+msgstr "Mehrfach"
 
 msgid "My locked tickets"
 msgstr "Meine gesperrten Tickets"
@@ -2930,13 +2930,13 @@ msgid "My Open Tickets"
 msgstr "Meine offenen Tickets"
 
 msgid "My Open Tickets Table"
-msgstr ""
+msgstr "Meine Offenen Tickets Tabelle"
 
 msgid "My Open Tickets Table Widget"
-msgstr ""
+msgstr "Meine Offenen Tickets Tabellenwidget"
 
 msgid "My Open Tickets Widget"
-msgstr ""
+msgstr "Meine Offenen Tickets Widget"
 
 msgid "My Organisation"
 msgstr "Eigene Firma"
@@ -2981,7 +2981,7 @@ msgid "New Article"
 msgstr "Neuer Artikel"
 
 msgid "New Asset Class"
-msgstr ""
+msgstr "Neue Assetklasse"
 
 msgid "New Category"
 msgstr "Neue Kategorie"
@@ -2999,7 +2999,7 @@ msgid "New Dynamic Field"
 msgstr "Neues Dynamisches Feld"
 
 msgid "New Email Address"
-msgstr ""
+msgstr "Neue Emailadresse"
 
 msgid "New Email Filter"
 msgstr "Neuer E-Mail Filter"
@@ -3017,16 +3017,16 @@ msgid "New Filter"
 msgstr "Neuer Filter"
 
 msgid "New General Catalog"
-msgstr ""
+msgstr "Neuer General Katalog"
 
 msgid "New Job"
 msgstr "Neuer Job"
 
 msgid "New Mail Account"
-msgstr ""
+msgstr "Neues Mailkonto"
 
 msgid "New Mail Filter"
-msgstr ""
+msgstr "Neuer Mailfilter"
 
 msgid "New Notification"
 msgstr "Neue Benachrichtigung"
@@ -3059,10 +3059,10 @@ msgid "New State"
 msgstr "Neuer Status"
 
 msgid "New Team"
-msgstr ""
+msgstr "Neues Team"
 
 msgid "New Textmodule"
-msgstr ""
+msgstr "Neuer Textbaustein"
 
 msgid "New Text Module"
 msgstr "Neuer Textbaustein"
@@ -3074,22 +3074,22 @@ msgid "New Tickets"
 msgstr "Neue Tickets"
 
 msgid "New Tickets Chart"
-msgstr ""
+msgstr "Neuer Ticketchart"
 
 msgid "New Tickets Chart Widget"
-msgstr ""
+msgstr "Neues Ticketchart-Widget"
 
 msgid "New Tickets (recent 7 days)"
 msgstr "Neue Tickets der letzten 7 Tage"
 
 msgid "New Tickets Table"
-msgstr ""
+msgstr "Neue Tickettabelle"
 
 msgid "New Tickets Table Widget"
-msgstr ""
+msgstr "Neues Tickettabellen-Widget"
 
 msgid "New Tickets Widget"
-msgstr ""
+msgstr "Neue Tickets-Widget"
 
 msgid "New Translation"
 msgstr "Neu"
@@ -3167,13 +3167,13 @@ msgid "Notification"
 msgstr "Benachrichtigung"
 
 msgid "Notification Details"
-msgstr ""
+msgstr "Benachrichtigungsdetails"
 
 msgid "Notification Envelope From"
-msgstr ""
+msgstr "Notification Envelope From"
 
 msgid "Notification Envelope From Fallback"
-msgstr ""
+msgstr "Notification Envelope From Fallback"
 
 msgid "Notification Information"
 msgstr "Benachrichtigungsinformation"
@@ -3257,16 +3257,16 @@ msgid "Online and offline processing of service jobs"
 msgstr "Online- und Offline-Bearbeitung von Serviceaufträgen"
 
 msgid "Open"
-msgstr ""
+msgstr "Offen"
 
 msgid "Open left sidebar"
-msgstr ""
+msgstr "Linke Sidebar Öffnen"
 
 msgid "Open main menu"
-msgstr ""
+msgstr "Hauptmenu Öffnen"
 
 msgid "Open right sidebar"
-msgstr ""
+msgstr "Rechte Sidebar Öffnen"
 
 msgid "Open Sidebars"
 msgstr "Geöffnete Sidebars"
@@ -3281,10 +3281,10 @@ msgid "Open Tickets of Organisation"
 msgstr "Offene Tickets der Organisation"
 
 msgid "Open toolbar"
-msgstr ""
+msgstr "Toolbar Öffnen"
 
 msgid "Operator"
-msgstr ""
+msgstr "Operator"
 
 msgid "Organisation"
 msgstr "Organisation"
@@ -3293,7 +3293,7 @@ msgid "Organisation Details"
 msgstr "Kundendetails"
 
 msgid "Organisation ID"
-msgstr "Organisation ID"
+msgstr "Organisations-ID"
 
 msgid "Organisation Information"
 msgstr "Organisations-Informationen"
@@ -3317,7 +3317,7 @@ msgid "Output Formats"
 msgstr "Ausgabeformate"
 
 msgid "Output Handler"
-msgstr ""
+msgstr "Output Handler"
 
 msgid "Overall"
 msgstr "Gesamt"
@@ -3365,10 +3365,10 @@ msgid "Owner"
 msgstr "Bearbeiter"
 
 msgid "Paramater"
-msgstr ""
+msgstr "Parameter"
 
 msgid "Parameter"
-msgstr ""
+msgstr "Parameter"
 
 msgid "Parameters"
 msgstr "Parameter"
@@ -3429,7 +3429,7 @@ msgstr ""
 "Platzieren Sie diesen Code dort, wo das Webformular geöffnet werden soll."
 
 msgid "Plan: {0} - {1}"
-msgstr ""
+msgstr "Plan: {0} - {1}"
 
 msgid "Plan Begin"
 msgstr "Plan Beginn"
@@ -3444,13 +3444,13 @@ msgid "Please enter a search term for a organisation."
 msgstr "Bitte geben Sie einen Suchbegriff für eine Organisation ein."
 
 msgid "Please logout and login again with the new user."
-msgstr ""
+msgstr "Bitte abmelden und mit dem neuen Nutzer wieder anmelden."
 
 msgid "Please select a contact"
 msgstr "Wählen Sie bitte einen Kontakt."
 
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 msgid "Possible Values"
 msgstr "Mögliche Werte"
@@ -3465,7 +3465,7 @@ msgid "Prepare Ticket for print"
 msgstr "Ticket für den Druck vorbereiten"
 
 msgid "Preview"
-msgstr ""
+msgstr "Vorschau"
 
 msgid "previous"
 msgstr "zurück"
@@ -3492,16 +3492,16 @@ msgid "Priority"
 msgstr "Priorität"
 
 msgid "Priority Chart"
-msgstr ""
+msgstr "Prioritäts-Chart"
 
 msgid "Priority Chart Widget"
-msgstr ""
+msgstr "Prioritäts-Chart-Widget"
 
 msgid "Priority Data"
 msgstr "Prioritätsdaten"
 
 msgid "Priority Details"
-msgstr ""
+msgstr "Prioritätsdetails"
 
 msgid "Priority Information"
 msgstr "Prioritäten-Informationen"
@@ -3597,16 +3597,16 @@ msgid "Refresh Page"
 msgstr "Seite neu laden"
 
 msgid "Related Assets"
-msgstr ""
+msgstr "Relevante Assets"
 
 msgid "Related Tickets"
-msgstr ""
+msgstr "Verwandte Tickets"
 
 msgid "Reload Agent Portal Configurations"
 msgstr "Frontend-Konfigurationen neu laden"
 
 msgid "Reload Calendar Data ..."
-msgstr ""
+msgstr "Kalenderdaten neu laden ..."
 
 msgid "Reload Frontend Configurations"
 msgstr "Lade Frontend-Konfigurationen neu"
@@ -3642,7 +3642,7 @@ msgid "Remove States"
 msgstr "Status löschen"
 
 msgid "Remove Text Modules"
-msgstr ""
+msgstr "Textbausteine Entfernen"
 
 msgid "Remove translations"
 msgstr "Übersetzungen löschen"
@@ -3669,7 +3669,7 @@ msgid "Report"
 msgstr "Bericht"
 
 msgid "Report Definition"
-msgstr "Berichtsdefinition"
+msgstr "Reportdefinition"
 
 msgid "Report Definitions"
 msgstr "Berichtsdefinitionen"
@@ -3732,7 +3732,7 @@ msgid "Role Assignment"
 msgstr "Rollenzuordnung"
 
 msgid "Role Details"
-msgstr ""
+msgstr "Rollendetails"
 
 msgid "Role Information"
 msgstr "Rollen-Informationen"
@@ -3785,7 +3785,7 @@ msgid "Save notification template"
 msgstr "Layout Benachrichtigungen speichern"
 
 msgid "Save Organisation"
-msgstr ""
+msgstr "Organisation Sichern"
 
 msgid "Save Outbox Settings"
 msgstr "Postausgangseinstellungen speichern"
@@ -3806,13 +3806,13 @@ msgid "Search"
 msgstr "Suchen"
 
 msgid "Search: {0}"
-msgstr ""
+msgstr "Suche: {0}"
 
 msgid "Search {0} will be deleted. Are you sure?"
 msgstr "Suche {0} wird gelöscht. Sind Sie sicher?"
 
 msgid "Search error!"
-msgstr ""
+msgstr "Fehler bei Suche!"
 
 msgid "Search Results"
 msgstr "Suchergebnisse"
@@ -3857,7 +3857,7 @@ msgid "Sender Address (Email)"
 msgstr "Absender E-Mail"
 
 msgid "Sender Type"
-msgstr "Absendertyp"
+msgstr "Sendertyp"
 
 msgid "Send to"
 msgstr "Senden an"
@@ -3885,9 +3885,9 @@ msgstr "Setup Assistent"
 
 msgid "setup_assistant_add_mail_account_text"
 msgstr ""
-"Richten Sie ein E-Mail Konto ein, von dem Sie E-Mails abrufen möchten. Wenn "
-"Sie mehr als ein Konto einrichten wollen, haben Sie im Admin-Bereich "
-"\"Kommunikation/E-Mail/E-Mail Konten\" die Möglichkeit dazu."
+"Richten Sie ein E-Mail Konto ein, von dem Sie E-Mails abrufen möchten. "
+"Benötigen Sie mehr als ein Konto, können Sie weitere im Admin-Bereich "
+"\"Kommunikation/E-Mail/E-Mail Konten\" hinzufügen."
 
 msgid "setup_assistant_change_admin_password_text"
 msgstr ""
@@ -3987,7 +3987,7 @@ msgid "Start by"
 msgstr "Gestartet von"
 
 msgid "Start date/time is not given"
-msgstr ""
+msgstr "Startdatum/-zeit ist nicht angegeben"
 
 msgid "Start Import"
 msgstr "Import starten"
@@ -4008,10 +4008,10 @@ msgid "Start time has to be before end time"
 msgstr "Der Startzeitpunkt muss vor dem Endzeitpunkt liegen."
 
 msgid "Start value is greater than end value"
-msgstr ""
+msgstr "Startwert ist größer als Endwert"
 
 msgid "Start value is not given"
-msgstr ""
+msgstr "Startwert ist nicht angegeben"
 
 msgid "State"
 msgstr "Status"
@@ -4020,7 +4020,7 @@ msgid "State Data"
 msgstr "Stammdaten"
 
 msgid "State Details"
-msgstr ""
+msgstr "Statusdetails"
 
 msgid "State Information"
 msgstr "Status-Informationen"
@@ -4029,10 +4029,10 @@ msgid "States"
 msgstr "Status"
 
 msgid "States Chart"
-msgstr ""
+msgstr "Status-Chart"
 
 msgid "States Chart Widget"
-msgstr ""
+msgstr "Status-Chart-Widget"
 
 msgid "States successfully removed."
 msgstr "Status wurde(n) erfolgreich gelöscht."
@@ -4059,7 +4059,7 @@ msgid "Submit"
 msgstr "Übernehmen"
 
 msgid "Success"
-msgstr ""
+msgstr "Erfolg"
 
 msgid "Success!"
 msgstr "Erfolgreich!"
@@ -4152,7 +4152,7 @@ msgid "Team Backlog"
 msgstr "Team Backlog"
 
 msgid "Team Details"
-msgstr ""
+msgstr "Teamdetails"
 
 msgid "Template"
 msgstr "Vorlage"
@@ -4185,7 +4185,7 @@ msgid "The Job {0} will be ran now. Are you sure?"
 msgstr "Der Job {0} wird jetzt ausgeführt. Sind Sie sicher?"
 
 msgid "The password is changed for Admin."
-msgstr ""
+msgstr "Das Passwort für Admin wurde geändert."
 
 msgid ""
 "The quick and easy way to provide technical customer service while on the "
@@ -4270,7 +4270,7 @@ msgid "Tickets"
 msgstr "Tickets"
 
 msgid "Tickets: {0}"
-msgstr ""
+msgstr "Tickets: {0}"
 
 msgid "Tickets for Assets"
 msgstr "Tickets zu Assets"
@@ -4303,7 +4303,7 @@ msgid "Title"
 msgstr "Titel"
 
 msgid "To"
-msgstr "An"
+msgstr "To"
 
 msgid "to Article"
 msgstr "zum Artikel"
@@ -4339,7 +4339,7 @@ msgid "Type Data"
 msgstr "Typdaten"
 
 msgid "Type Details"
-msgstr ""
+msgstr "Typdetails"
 
 msgid "Type Information"
 msgstr "Typ-Informationen"
@@ -4411,7 +4411,7 @@ msgid "User"
 msgstr "Nutzer"
 
 msgid "User Details"
-msgstr ""
+msgstr "Nutzerdetails"
 
 msgid "User Information"
 msgstr "Nutzer Informationen"
@@ -4444,13 +4444,13 @@ msgid "Value"
 msgstr "Wert"
 
 msgid "Value of field {0} is too long (max: {1})."
-msgstr "Wert des Feldes '{0}' ist zu  lang (max: {1})."
+msgstr "Wert des Feldes '{0}' ist zu lang (max: {1})."
 
 msgid "Version"
 msgstr "Version"
 
 msgid "Viewable States"
-msgstr ""
+msgstr "Sichtbare Status"
 
 msgid "Votes"
 msgstr "Bewertungen"
@@ -4483,7 +4483,7 @@ msgid "Webform"
 msgstr "Webformular"
 
 msgid "Webform Details"
-msgstr ""
+msgstr "Webform-Details"
 
 msgid "Webform Options"
 msgstr "Webformular Optionen"
