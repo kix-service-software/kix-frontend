@@ -59,9 +59,6 @@ msgstr ""
 msgid "Account Information"
 msgstr ""
 
-msgid "Account successfully created."
-msgstr ""
-
 msgid "Account time has to be an integer."
 msgstr ""
 
@@ -86,13 +83,10 @@ msgstr ""
 msgid "Additional recipients"
 msgstr ""
 
+msgid "Add new Links"
+msgstr ""
+
 msgid "add notes here"
-msgstr ""
-
-msgid "Add Object"
-msgstr ""
-
-msgid "Address successfully created."
 msgstr ""
 
 msgid "Address successfully removed."
@@ -107,6 +101,9 @@ msgstr ""
 msgid "Admin"
 msgstr ""
 
+msgid "Admin: {0}"
+msgstr ""
+
 msgid "Administration"
 msgstr ""
 
@@ -114,9 +111,6 @@ msgid "Administrator's Guide"
 msgstr ""
 
 msgid "Admin Password"
-msgstr ""
-
-msgid "Advanced Search"
 msgstr ""
 
 msgid "Affected Assets"
@@ -173,6 +167,9 @@ msgstr ""
 msgid "All tickets"
 msgstr ""
 
+msgid "Always close dialog tab without asking"
+msgstr ""
+
 msgid "A maximum of {0} values can be selected."
 msgstr ""
 
@@ -201,6 +198,9 @@ msgstr ""
 msgid "An error occurred."
 msgstr ""
 
+msgid "Any data you have entered will be lost. Continue?"
+msgstr ""
+
 msgid "Approved"
 msgstr ""
 
@@ -225,13 +225,16 @@ msgstr ""
 msgid "Article Overview"
 msgstr ""
 
-msgid "Article successfully created."
-msgstr ""
-
 msgid "Article Text"
 msgstr ""
 
 msgid "Asset"
+msgstr ""
+
+msgid "Asset Class Details"
+msgstr ""
+
+msgid "Asset Classes"
 msgstr ""
 
 msgid "Assets"
@@ -297,6 +300,9 @@ msgstr ""
 msgid "Attributes to be edited"
 msgstr ""
 
+msgid "Ausblenden"
+msgstr ""
+
 msgid "Automatic time measurement"
 msgstr ""
 
@@ -318,9 +324,6 @@ msgstr ""
 msgid "Avatar"
 msgstr ""
 
-msgid "back to"
-msgstr ""
-
 msgid "Based on class definition"
 msgstr ""
 
@@ -336,7 +339,7 @@ msgstr ""
 msgid "Body"
 msgstr ""
 
-msgid "Bookmarks"
+msgid "Bulk"
 msgstr ""
 
 msgid "Bulk Action"
@@ -361,9 +364,6 @@ msgid "Can not use file (no known properties found)."
 msgstr ""
 
 msgid "Category"
-msgstr ""
-
-msgid "Category successfully created."
 msgstr ""
 
 msgid "Cause"
@@ -426,9 +426,6 @@ msgstr "Asset Classes"
 msgid "CI Class Information"
 msgstr "Asset Class Information"
 
-msgid "CI Class successfully created."
-msgstr "Asset Class successfully created."
-
 msgid "City"
 msgstr ""
 
@@ -465,9 +462,6 @@ msgstr "Assets"
 msgid "CMDB: CI Classes"
 msgstr "Assets: Asset Classes"
 
-msgid "CMDB Dashboard"
-msgstr "Asset Dashboard"
-
 msgid "CMDB Explorer"
 msgstr "Asset Explorer"
 
@@ -489,9 +483,6 @@ msgstr ""
 msgid "Communication"
 msgstr ""
 
-msgid "Communication: Email"
-msgstr ""
-
 msgid "Communication: Email: Email Addresses"
 msgstr ""
 
@@ -508,6 +499,12 @@ msgid "Communication: Webform"
 msgstr ""
 
 msgid "Compare"
+msgstr ""
+
+msgid "Compare: {0}"
+msgstr ""
+
+msgid "Compare Asset Versions"
 msgstr ""
 
 msgid "Compare Versions"
@@ -534,19 +531,10 @@ msgstr "Assets"
 msgid "Config Items Count: {0}"
 msgstr "Assets Count: {0}"
 
-msgid "Config Item Search"
-msgstr "Asset Search"
-
-msgid "Config Item successfully created."
-msgstr "Asset successfully created."
-
 msgid "Config Item Version Compare"
 msgstr "Asset Version Compare"
 
 msgid "Configuration"
-msgstr ""
-
-msgid "Configuration Mode"
 msgstr ""
 
 msgid "Confirmation through customer signature"
@@ -561,16 +549,13 @@ msgstr ""
 msgid "Contact"
 msgstr ""
 
+msgid "Contact Details"
+msgstr ""
+
 msgid "Contact Information"
 msgstr ""
 
 msgid "Contacts"
-msgstr ""
-
-msgid "Contact Search"
-msgstr ""
-
-msgid "Contact successfully created."
 msgstr ""
 
 msgid "contained in"
@@ -597,22 +582,7 @@ msgstr ""
 msgid "Create"
 msgstr ""
 
-msgid "Create Address"
-msgstr ""
-
 msgid "Create Article"
-msgstr ""
-
-msgid "Create Category"
-msgstr ""
-
-msgid "Create CI Class"
-msgstr "Create Asset Class"
-
-msgid "Create Config Item"
-msgstr "Create Asset"
-
-msgid "Create Contact"
 msgstr ""
 
 msgid "created"
@@ -642,43 +612,16 @@ msgstr ""
 msgid "Created with User"
 msgstr ""
 
-msgid "Create Dynamic Field"
-msgstr ""
-
 msgid "Create Email Account"
-msgstr ""
-
-msgid "Create FAQ Article"
-msgstr ""
-
-msgid "Create Filter"
-msgstr ""
-
-msgid "Create Job"
 msgstr ""
 
 msgid "Create Links"
 msgstr ""
 
-msgid "Create Notification"
-msgstr ""
-
-msgid "Create Organisation"
-msgstr ""
-
 msgid "Create Priority"
 msgstr ""
 
-msgid "Create Queue"
-msgstr "Create Team"
-
 msgid "Create Report"
-msgstr ""
-
-msgid "Create Report Definition"
-msgstr ""
-
-msgid "Create Role"
 msgstr ""
 
 msgid "Create State"
@@ -687,25 +630,10 @@ msgstr ""
 msgid "Create Superuser Account"
 msgstr ""
 
-msgid "Create Text Module"
-msgstr ""
-
 msgid "Create the report with output format {0} and defaults?"
 msgstr ""
 
-msgid "Create Ticket"
-msgstr ""
-
-msgid "Create Translation"
-msgstr ""
-
 msgid "Create Type"
-msgstr ""
-
-msgid "Create Value"
-msgstr ""
-
-msgid "Create Webform"
 msgstr ""
 
 msgid "CSV-Export"
@@ -745,9 +673,6 @@ msgid "Customer Portal"
 msgstr "Self Service Portal"
 
 msgid "CW"
-msgstr ""
-
-msgid "Data has been updated."
 msgstr ""
 
 msgid "Datasource"
@@ -822,9 +747,6 @@ msgstr ""
 msgid "Do not forget to replace <YOUR_FRONTEND_HOST> placeholder."
 msgstr ""
 
-msgid "Don't show again"
-msgstr ""
-
 msgid ". (dot)"
 msgstr ""
 
@@ -840,6 +762,9 @@ msgstr ""
 msgid "Download Result"
 msgstr ""
 
+msgid "draft successfully saved"
+msgstr ""
+
 msgid "Duplicate"
 msgstr ""
 
@@ -850,9 +775,6 @@ msgid "DynamicField"
 msgstr ""
 
 msgid "Dynamic Fields"
-msgstr ""
-
-msgid "Dynamic field successfully created."
 msgstr ""
 
 msgid "Dynamic Field Type"
@@ -873,6 +795,9 @@ msgstr ""
 msgid "Edit Address"
 msgstr ""
 
+msgid "Edit Asset Class"
+msgstr ""
+
 msgid "Edit CI Class"
 msgstr "Edit Asset Class"
 
@@ -885,13 +810,13 @@ msgstr "Edit Asset"
 msgid "Edit Contact"
 msgstr ""
 
-msgid "Edit Core Data"
-msgstr ""
-
 msgid "Edit Dynamic Field"
 msgstr ""
 
 msgid "edited"
+msgstr ""
+
+msgid "Edit Email Address"
 msgstr ""
 
 msgid "Edit Email Filter"
@@ -915,10 +840,13 @@ msgstr ""
 msgid "Edit Links"
 msgstr ""
 
-msgid "Edit Notification"
+msgid "Edit Mail Account"
 msgstr ""
 
-msgid "Edit Object"
+msgid "Edit Mail Filter"
+msgstr ""
+
+msgid "Edit Notification"
 msgstr ""
 
 msgid "Edit Objects"
@@ -939,6 +867,9 @@ msgstr "Edit Team"
 msgid "Edit Report"
 msgstr "Edit Report Definition"
 
+msgid "Edit Report Definition"
+msgstr ""
+
 msgid "Edit Role"
 msgstr ""
 
@@ -946,6 +877,15 @@ msgid "Edit Search"
 msgstr ""
 
 msgid "Edit State"
+msgstr ""
+
+msgid "Edit Sysconfig"
+msgstr ""
+
+msgid "Edit Team"
+msgstr ""
+
+msgid "Edit Textmodule"
 msgstr ""
 
 msgid "Edit Text Module"
@@ -976,6 +916,9 @@ msgid "Email Accounts"
 msgstr ""
 
 msgid "Email Address"
+msgstr ""
+
+msgid "Email Address Details"
 msgstr ""
 
 msgid "Email Addresses"
@@ -1104,9 +1047,6 @@ msgstr ""
 msgid "FAQ Article History"
 msgstr ""
 
-msgid "FAQ Article successfully created."
-msgstr ""
-
 msgid "FAQ Attributes"
 msgstr ""
 
@@ -1116,19 +1056,22 @@ msgstr ""
 msgid "FAQ Category"
 msgstr ""
 
+msgid "FAQ Category Details Context"
+msgstr ""
+
 msgid "FAQ Category Information"
 msgstr ""
 
 msgid "FAQ Data"
 msgstr ""
 
+msgid "FAQ Details"
+msgstr ""
+
 msgid "FAQ Information"
 msgstr ""
 
 msgid "FAQ rating"
-msgstr ""
-
-msgid "FAQ Search"
 msgstr ""
 
 msgid "Favorites"
@@ -1182,9 +1125,6 @@ msgstr ""
 msgid "Filter in list"
 msgstr ""
 
-msgid "Filter successfully created."
-msgstr ""
-
 msgid "Filter successfully removed."
 msgstr "Filter(s) successfully removed."
 
@@ -1206,11 +1146,6 @@ msgid "Follow Up Ticket Lock"
 msgstr ""
 
 msgid "Force"
-msgstr ""
-
-msgid ""
-"For keyboard navigation, press Ctrl to switch focus to dialog. See manual "
-"for more detailed information."
 msgstr ""
 
 msgid "Format"
@@ -1246,12 +1181,6 @@ msgstr ""
 msgid "General Catalog Items"
 msgstr ""
 
-msgid "General information on how to work with KIX 18"
-msgstr ""
-
-msgid "General information on working with KIX 18"
-msgstr ""
-
 msgid "Hello"
 msgstr ""
 
@@ -1260,9 +1189,6 @@ msgstr ""
 
 msgid "Help, hints & tricks"
 msgstr ""
-
-msgid "Helping FAQ Contributions"
-msgstr "Helpfull FAQ articles"
 
 msgid "Helptext_Admin_DynamicFieldCreate_Config"
 msgstr ""
@@ -1934,9 +1860,6 @@ msgstr "The name of an asset class needs to be unique."
 msgid "Helptext_CMDB_ConfigItemClassCreate_Valid"
 msgstr "The asset class can only be used within the system if set “valid”."
 
-msgid "Helptext_CMDB_ConfigItemCreate_Class"
-msgstr "Please select an asset class. The form will be completed then."
-
 msgid "Helptext_CMDB_ConfigItemCreateEdit_Class"
 msgstr ""
 
@@ -1947,9 +1870,6 @@ msgstr ""
 
 msgid "Helptext_CMDB_ConfigItemCreateEdit_IncidentState"
 msgstr "The incident state describes the current asset condition."
-
-msgid "Helptext_CMDB_ConfigItemCreateEdit_Links"
-msgstr "Linkt this asset to a ticket, a FAQ article or another asset."
 
 msgid "Helptext_CMDB_ConfigItemCreateEdit_Name"
 msgstr ""
@@ -2128,9 +2048,6 @@ msgstr ""
 msgid "Helptext_FAQ_ArticleCreate_Language"
 msgstr "Insert the FAQ article language."
 
-msgid "Helptext_FAQ_ArticleCreate_Links"
-msgstr "Link this FAQ article with a ticket, an asset or another FAQ article."
-
 msgid "Helptext_FAQ_ArticleCreate_RelatedAssets"
 msgstr ""
 
@@ -2202,6 +2119,9 @@ msgstr ""
 "An optional mapping of named results of the macro action and their variable "
 "names. The variable can be used as special placeholder in following actions "
 "like \"${VariableName}\"."
+
+msgid "Helptext_PersonalSettings_Always_close_dialog_tab_without_asking_Hint"
+msgstr ""
 
 msgid "Helptext_PersonalSettings_MyQueues_Hint"
 msgstr ""
@@ -2337,37 +2257,6 @@ msgstr ""
 "Choose the output format for your report. The report will be available in "
 "the table \"Overview Reports\" and can be downloaded from there. Creating "
 "the report may take a while."
-
-msgid "Helptext_Search_ConfigItem"
-msgstr ""
-"The search only considers current versions. The FAQ article \"How to search "
-"in KIX 18?\" offers a detailed explanation for the search operators. You can "
-"find this article in the module \"FAQ\" or via the bookmarks in the header "
-"menu."
-
-msgid "Helptext_Search_Contact"
-msgstr ""
-"The FAQ article \"How to search in KIX 18?\" offers a detailed explanation "
-"for the search operators. You can find this article in the module \"FAQ\" or "
-"via the bookmarks in the header menu."
-
-msgid "Helptext_Search_FAQArticle"
-msgstr ""
-"The FAQ article \"How to search in KIX 18?\" offers a detailed explanation "
-"for the search operators. You can find this article in the module \"FAQ\" or "
-"via the bookmarks in the header menu."
-
-msgid "Helptext_Search_Organisation"
-msgstr ""
-"The FAQ article \"How to search in KIX 18?\" offers a detailed explanation "
-"for the search operators. You can find this article in the module \"FAQ\" or "
-"via the bookmarks in the header menu."
-
-msgid "Helptext_Search_Ticket"
-msgstr ""
-"The FAQ article \"How to search in KIX 18?\" offers a detailed explanation "
-"for the search operators. You can find this article in the module \"FAQ\" or "
-"via the bookmarks in the header menu."
 
 msgid "Helptext_Textmodules_ArticleCreate"
 msgstr ""
@@ -2601,9 +2490,6 @@ msgstr ""
 msgid "History"
 msgstr ""
 
-msgid "Hit List"
-msgstr ""
-
 msgid "Hit List ({0})"
 msgstr ""
 
@@ -2611,12 +2497,6 @@ msgid "Home"
 msgstr ""
 
 msgid "Host"
-msgstr ""
-
-msgid "How do I create a new ticket?"
-msgstr ""
-
-msgid "How do I search in KIX 18?"
 msgstr ""
 
 msgid "Icon"
@@ -2644,9 +2524,6 @@ msgid "Import configurations"
 msgstr ""
 
 msgid "Import Contacts"
-msgstr ""
-
-msgid "Import Data"
 msgstr ""
 
 msgid "Import/Export"
@@ -2730,13 +2607,13 @@ msgstr ""
 msgid "Job"
 msgstr ""
 
+msgid "Job Details"
+msgstr ""
+
 msgid "Job Information"
 msgstr ""
 
 msgid "Jobs"
-msgstr ""
-
-msgid "Job successfully created."
 msgstr ""
 
 msgid "Job successfully ran."
@@ -2865,10 +2742,16 @@ msgstr ""
 msgid "Macro"
 msgstr ""
 
+msgid "Mail Account Details"
+msgstr ""
+
 msgid "Mail Accounts successfully removed."
 msgstr "Email Account(s) successfully removed."
 
 msgid "Mail Account successfully fetched."
+msgstr ""
+
+msgid "Mail Filter Details"
 msgstr ""
 
 msgid "Management using clear checklists"
@@ -2964,6 +2847,9 @@ msgstr ""
 msgid "New Article"
 msgstr ""
 
+msgid "New Asset Class"
+msgstr ""
+
 msgid "New Category"
 msgstr ""
 
@@ -2977,6 +2863,9 @@ msgid "New Contact"
 msgstr ""
 
 msgid "New Dynamic Field"
+msgstr ""
+
+msgid "New Email Address"
 msgstr ""
 
 msgid "New Email Filter"
@@ -2994,13 +2883,19 @@ msgstr ""
 msgid "New Filter"
 msgstr ""
 
+msgid "New General Catalog"
+msgstr ""
+
 msgid "New Job"
 msgstr ""
 
-msgid "New Notification"
+msgid "New Mail Account"
 msgstr ""
 
-msgid "New Object"
+msgid "New Mail Filter"
+msgstr ""
+
+msgid "New Notification"
 msgstr ""
 
 msgid "New Organisation"
@@ -3028,6 +2923,12 @@ msgid "New Search"
 msgstr ""
 
 msgid "New State"
+msgstr ""
+
+msgid "New Team"
+msgstr ""
+
+msgid "New Textmodule"
 msgstr ""
 
 msgid "New Text Module"
@@ -3072,9 +2973,6 @@ msgstr ""
 msgid "New Value"
 msgstr ""
 
-msgid "New Version created"
-msgstr ""
-
 msgid "New Webform"
 msgstr ""
 
@@ -3117,12 +3015,6 @@ msgstr ""
 msgid "No rating available."
 msgstr ""
 
-msgid "No search query."
-msgstr ""
-
-msgid "No search query found."
-msgstr ""
-
 msgid "No signature defined."
 msgstr ""
 
@@ -3140,6 +3032,9 @@ msgstr ""
 
 msgid "Notification"
 msgstr "Notification"
+
+msgid "Notification Details"
+msgstr ""
 
 msgid "Notification Envelope From"
 msgstr ""
@@ -3164,9 +3059,6 @@ msgstr ""
 
 msgid "Notifications successfully removed."
 msgstr "Notification(s) successfully removed."
-
-msgid "Notification successfully created."
-msgstr "Notification successfully created."
 
 msgid "Notification Template"
 msgstr "Notifications Template"
@@ -3234,6 +3126,15 @@ msgstr ""
 msgid "Open"
 msgstr ""
 
+msgid "Open left sidebar"
+msgstr ""
+
+msgid "Open main menu"
+msgstr ""
+
+msgid "Open right sidebar"
+msgstr ""
+
 msgid "Open Sidebars"
 msgstr ""
 
@@ -3246,10 +3147,16 @@ msgstr ""
 msgid "Open Tickets of Organisation"
 msgstr ""
 
+msgid "Open toolbar"
+msgstr ""
+
 msgid "Operator"
 msgstr ""
 
 msgid "Organisation"
+msgstr ""
+
+msgid "Organisation Details"
 msgstr ""
 
 msgid "Organisation ID"
@@ -3262,12 +3169,6 @@ msgid "Organisations"
 msgstr ""
 
 msgid "Organisations Dashboard"
-msgstr ""
-
-msgid "Organisation Search"
-msgstr ""
-
-msgid "Organisation successfully created."
 msgstr ""
 
 msgid "Other"
@@ -3432,9 +3333,6 @@ msgstr ""
 msgid "Preview"
 msgstr ""
 
-msgid "Preview ({0})"
-msgstr ""
-
 msgid "previous"
 msgstr ""
 
@@ -3468,10 +3366,10 @@ msgstr ""
 msgid "Priority Data"
 msgstr ""
 
-msgid "Priority Information"
+msgid "Priority Details"
 msgstr ""
 
-msgid "Priority successfully created."
+msgid "Priority Information"
 msgstr ""
 
 msgid "Queue"
@@ -3482,12 +3380,6 @@ msgstr "Team Information"
 
 msgid "Queues"
 msgstr "Teams"
-
-msgid "Queue successfully created."
-msgstr "Team successfully created."
-
-msgid "Quick search (Tickets)"
-msgstr ""
 
 msgid "QuickstartGuide_Text_End"
 msgstr "Now you are ready to start with KIX 18. Have fun!"
@@ -3648,12 +3540,6 @@ msgstr ""
 msgid "Report Definition(s) deleted."
 msgstr ""
 
-msgid "Report definition successfully created."
-msgstr ""
-
-msgid "Report Definition successfully updated."
-msgstr ""
-
 msgid "Report Information"
 msgstr ""
 
@@ -3667,9 +3553,6 @@ msgid "Reports"
 msgstr ""
 
 msgid "Report(s) deleted."
-msgstr ""
-
-msgid "Report successfully created."
 msgstr ""
 
 msgid "Required"
@@ -3705,13 +3588,13 @@ msgstr ""
 msgid "Results"
 msgstr ""
 
-msgid "Results advanced search"
-msgstr ""
-
 msgid "Role"
 msgstr ""
 
 msgid "Role Assignment"
+msgstr ""
+
+msgid "Role Details"
 msgstr ""
 
 msgid "Role Information"
@@ -3721,9 +3604,6 @@ msgid "Roles"
 msgstr ""
 
 msgid "Roles/Permissions"
-msgstr ""
-
-msgid "Role successfully created."
 msgstr ""
 
 msgid "Row"
@@ -3786,7 +3666,13 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
+msgid "Search: {0}"
+msgstr ""
+
 msgid "Search {0} will be deleted. Are you sure?"
+msgstr ""
+
+msgid "Search error!"
 msgstr ""
 
 msgid "Search Results"
@@ -3801,26 +3687,17 @@ msgstr ""
 msgid "Search template successfully removed."
 msgstr "Search template(s) successfully removed."
 
-msgid "Search Tickets"
-msgstr ""
-
 msgid "Search Title"
 msgstr ""
 
 msgid "Select all"
 msgstr ""
 
-msgid "Select Config Item Class"
-msgstr "Select Asset Class"
-
 msgid "Selected {0} ({1})"
 msgstr ""
 
 msgid "Selected Search Criteria"
 msgstr ""
-
-msgid "Selected ticket functions"
-msgstr "Selected ticket functions"
 
 msgid "Selected Versions"
 msgstr ""
@@ -3832,9 +3709,6 @@ msgid "Select image file"
 msgstr ""
 
 msgid "; (semicolon)"
-msgstr ""
-
-msgid "Send"
 msgstr ""
 
 msgid "Send despite out of office"
@@ -3851,9 +3725,6 @@ msgstr ""
 
 msgid "Send to all role members"
 msgstr ""
-
-msgid "send to background"
-msgstr "Continue in background"
 
 msgid "Send to these agents"
 msgstr ""
@@ -4008,6 +3879,9 @@ msgstr ""
 msgid "State Data"
 msgstr ""
 
+msgid "State Details"
+msgstr ""
+
 msgid "State Information"
 msgstr ""
 
@@ -4022,9 +3896,6 @@ msgstr ""
 
 msgid "States successfully removed."
 msgstr "State(s) successfully removed."
-
-msgid "State successfully created."
-msgstr ""
 
 msgid "State Type"
 msgstr ""
@@ -4045,6 +3916,9 @@ msgid "Subject with Ticketnumber"
 msgstr ""
 
 msgid "Submit"
+msgstr ""
+
+msgid "Success"
 msgstr ""
 
 msgid "Success!"
@@ -4137,6 +4011,9 @@ msgstr ""
 msgid "Team Backlog"
 msgstr ""
 
+msgid "Team Details"
+msgstr ""
+
 msgid "Template"
 msgstr ""
 
@@ -4152,9 +4029,6 @@ msgstr ""
 msgid "Text Modules successfully removed."
 msgstr "Text Module(s) successfully removed."
 
-msgid "Text Module successfully created."
-msgstr ""
-
 msgid "Text separator"
 msgstr ""
 
@@ -4167,11 +4041,6 @@ msgstr ""
 msgid "The following {0} entries will be deleted. Are you sure?"
 msgstr ""
 
-msgid ""
-"The following FAQ entries will provide you with a basic overview of how KIX "
-"18 works"
-msgstr ""
-
 msgid "The Job {0} will be ran now. Are you sure?"
 msgstr ""
 
@@ -4182,9 +4051,6 @@ msgid ""
 "The quick and easy way to provide technical customer service while on the "
 "go. Whether you're dealing with a technical problem or maintenance work: "
 "Switch over to paperless documentation and save both time and money."
-msgstr ""
-
-msgid "The search only includes current versions."
 msgstr ""
 
 msgid ""
@@ -4255,10 +4121,7 @@ msgstr ""
 msgid "Tickets"
 msgstr ""
 
-msgid "Ticket Search"
-msgstr ""
-
-msgid "Ticket search error!"
+msgid "Tickets: {0}"
 msgstr ""
 
 msgid "Tickets for Assets"
@@ -4268,9 +4131,6 @@ msgid "Tickets for Contact"
 msgstr ""
 
 msgid "Ticket: States"
-msgstr ""
-
-msgid "Ticket successfully created."
 msgstr ""
 
 msgid "Ticket: Text Modules"
@@ -4321,9 +4181,6 @@ msgstr ""
 msgid "Translations successfully removed."
 msgstr "Translation(s) successfully removed."
 
-msgid "Translation successfully created."
-msgstr ""
-
 msgid "Tuesday"
 msgstr ""
 
@@ -4331,6 +4188,9 @@ msgid "Type"
 msgstr ""
 
 msgid "Type Data"
+msgstr ""
+
+msgid "Type Details"
 msgstr ""
 
 msgid "Type Information"
@@ -4344,9 +4204,6 @@ msgstr ""
 
 msgid "Types successfully removed."
 msgstr "Type(s) successfully removed."
-
-msgid "Type successfully created."
-msgstr ""
 
 msgid "unequal"
 msgstr ""
@@ -4378,9 +4235,6 @@ msgstr ""
 msgid "Unread Articles"
 msgstr ""
 
-msgid "Unsupported dynamic field type {0}."
-msgstr ""
-
 msgid "until"
 msgstr "until/equal or less"
 
@@ -4390,79 +4244,10 @@ msgstr ""
 msgid "Unwatch Ticket"
 msgstr ""
 
-msgid "Update Agent"
-msgstr ""
-
-msgid "Update CI Class"
-msgstr "Update Asset Class"
-
-msgid "Update Config Item"
-msgstr "Update Asset"
-
-msgid "Update Contact"
-msgstr ""
-
-msgid "Update Dynamic Field"
-msgstr ""
-
 msgid "Update Email Account"
 msgstr ""
 
-msgid "Update Email Address"
-msgstr ""
-
-msgid "Update Email Filter"
-msgstr ""
-
-msgid "Update FAQ Article"
-msgstr ""
-
-msgid "Update FAQ Category"
-msgstr ""
-
-msgid "Update Job"
-msgstr ""
-
-msgid "Update Key"
-msgstr ""
-
-msgid "Update Notification"
-msgstr ""
-
-msgid "Update Organisation"
-msgstr ""
-
-msgid "Update Priority"
-msgstr ""
-
-msgid "Update Queue"
-msgstr "Update Team"
-
-msgid "Update Report Definition"
-msgstr ""
-
 msgid "Update Role"
-msgstr ""
-
-msgid "Update State"
-msgstr ""
-
-msgid "Update Text Module"
-msgstr ""
-
-msgid "Update Ticket"
-msgstr ""
-
-msgid "Update Translation"
-msgstr ""
-
-msgid "Update Type"
-msgstr ""
-
-msgid "Update Value"
-msgstr ""
-
-msgid "Update Webform"
 msgstr ""
 
 msgid "URL"
@@ -4475,6 +4260,9 @@ msgid "Use KIX CSS"
 msgstr ""
 
 msgid "User"
+msgstr ""
+
+msgid "User Details"
 msgstr ""
 
 msgid "User Information"
@@ -4508,9 +4296,6 @@ msgid "Value"
 msgstr ""
 
 msgid "Value of field {0} is too long (max: {1})."
-msgstr ""
-
-msgid "Value successfully created."
 msgstr ""
 
 msgid "Version"
@@ -4549,10 +4334,10 @@ msgstr ""
 msgid "Webform"
 msgstr ""
 
-msgid "Webform Options"
+msgid "Webform Details"
 msgstr ""
 
-msgid "Webform successfully created."
+msgid "Webform Options"
 msgstr ""
 
 msgid "Wednesday"
@@ -4614,6 +4399,95 @@ msgstr ""
 
 msgid "ZIP"
 msgstr ""
+
+#~ msgid "CI Class successfully created."
+#~ msgstr "Asset Class successfully created."
+
+#~ msgid "CMDB Dashboard"
+#~ msgstr "Asset Dashboard"
+
+#~ msgid "Config Item Search"
+#~ msgstr "Asset Search"
+
+#~ msgid "Config Item successfully created."
+#~ msgstr "Asset successfully created."
+
+#~ msgid "Create CI Class"
+#~ msgstr "Create Asset Class"
+
+#~ msgid "Create Config Item"
+#~ msgstr "Create Asset"
+
+#~ msgid "Create Queue"
+#~ msgstr "Create Team"
+
+#~ msgid "Helping FAQ Contributions"
+#~ msgstr "Helpfull FAQ articles"
+
+#~ msgid "Helptext_CMDB_ConfigItemCreate_Class"
+#~ msgstr "Please select an asset class. The form will be completed then."
+
+#~ msgid "Helptext_CMDB_ConfigItemCreateEdit_Links"
+#~ msgstr "Linkt this asset to a ticket, a FAQ article or another asset."
+
+#~ msgid "Helptext_FAQ_ArticleCreate_Links"
+#~ msgstr ""
+#~ "Link this FAQ article with a ticket, an asset or another FAQ article."
+
+#~ msgid "Helptext_Search_ConfigItem"
+#~ msgstr ""
+#~ "The search only considers current versions. The FAQ article \"How to "
+#~ "search in KIX 18?\" offers a detailed explanation for the search "
+#~ "operators. You can find this article in the module \"FAQ\" or via the "
+#~ "bookmarks in the header menu."
+
+#~ msgid "Helptext_Search_Contact"
+#~ msgstr ""
+#~ "The FAQ article \"How to search in KIX 18?\" offers a detailed "
+#~ "explanation for the search operators. You can find this article in the "
+#~ "module \"FAQ\" or via the bookmarks in the header menu."
+
+#~ msgid "Helptext_Search_FAQArticle"
+#~ msgstr ""
+#~ "The FAQ article \"How to search in KIX 18?\" offers a detailed "
+#~ "explanation for the search operators. You can find this article in the "
+#~ "module \"FAQ\" or via the bookmarks in the header menu."
+
+#~ msgid "Helptext_Search_Organisation"
+#~ msgstr ""
+#~ "The FAQ article \"How to search in KIX 18?\" offers a detailed "
+#~ "explanation for the search operators. You can find this article in the "
+#~ "module \"FAQ\" or via the bookmarks in the header menu."
+
+#~ msgid "Helptext_Search_Ticket"
+#~ msgstr ""
+#~ "The FAQ article \"How to search in KIX 18?\" offers a detailed "
+#~ "explanation for the search operators. You can find this article in the "
+#~ "module \"FAQ\" or via the bookmarks in the header menu."
+
+#~ msgid "Notification successfully created."
+#~ msgstr "Notification successfully created."
+
+#~ msgid "Queue successfully created."
+#~ msgstr "Team successfully created."
+
+#~ msgid "Select Config Item Class"
+#~ msgstr "Select Asset Class"
+
+#~ msgid "Selected ticket functions"
+#~ msgstr "Selected ticket functions"
+
+#~ msgid "send to background"
+#~ msgstr "Continue in background"
+
+#~ msgid "Update CI Class"
+#~ msgstr "Update Asset Class"
+
+#~ msgid "Update Config Item"
+#~ msgstr "Update Asset"
+
+#~ msgid "Update Queue"
+#~ msgstr "Update Team"
 
 #~ msgid "Customer Dashboard"
 #~ msgstr "Organisation Dashboard"
