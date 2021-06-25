@@ -11,9 +11,6 @@ import { Error } from '../../../../../../server/model/Error';
 import { ContextMode } from '../../../../model/ContextMode';
 import { BrowserUtil } from './BrowserUtil';
 import { ContextService } from './ContextService';
-import { EventService } from './EventService';
-import { FormEvent } from './FormEvent';
-import { FormService } from './FormService';
 import { KIXObjectService } from './KIXObjectService';
 import { ValidationSeverity } from './ValidationSeverity';
 
@@ -26,7 +23,7 @@ export class ObjectDialogUtil {
         ContextMode.EDIT_LINKS,
     ];
 
-    public static async submit(): Promise<void> {
+    public static async submit(silent?: boolean): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         const formId = await context?.getFormManager()?.getFormId();
 
@@ -46,10 +43,10 @@ export class ObjectDialogUtil {
             submitFunc(context.descriptor.kixObjectTypes[0], formId, objectId)
                 .then(async (newObjectId: number | string) => {
                     await ContextService.getInstance().toggleActiveContext(
-                        context.descriptor.targetContextId, newObjectId
+                        context.descriptor.targetContextId, newObjectId, silent
                     );
 
-                    BrowserUtil.openSuccessOverlay('Translatable#Success');
+                    await BrowserUtil.openSuccessOverlay('Translatable#Success');
                 }).catch((error: Error) => {
                     BrowserUtil.openErrorOverlay(
                         error.Message ? `${error.Code}: ${error.Message}` : error.toString()
