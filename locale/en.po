@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2021-06-24 16:52+0000\n"
+"PO-Revision-Date: 2021-06-25 08:47+0000\n"
 "Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
 "Language-Team: English <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/en/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Weblate 4.4\n"
 
 msgid "{0}/{1} {2} imported"
-msgstr ""
+msgstr "{0}/{1} {2} imported"
 
 msgid "{0}. Action"
 msgstr "{0}. Action"
@@ -24,52 +24,52 @@ msgid "0 data sets found."
 msgstr "Nothing found."
 
 msgid "{0} File(s) added"
-msgstr ""
+msgstr "{0} File(s) added"
 
 msgid "{0} imported"
-msgstr ""
+msgstr "{0} imported"
 
 msgid "{0} is required."
-msgstr ""
+msgstr "{0} is required."
 
 msgid "{0} Link created"
-msgstr ""
+msgstr "{0} Link created"
 
 msgid "{0} link(s) assigned."
-msgstr ""
+msgstr "{0} link(s) assigned."
 
 msgid "Accepted domains"
-msgstr ""
+msgstr "Accepted domains"
 
 msgid "Accept KIX Header"
-msgstr ""
+msgstr "Accept KIX Header"
 
 msgid "Access"
-msgstr ""
+msgstr "Access"
 
 msgid "Access denied"
-msgstr ""
+msgstr "Access denied"
 
 msgid "Access Level"
-msgstr ""
+msgstr "Access Level"
 
 msgid "Accounted Time: {0}"
-msgstr ""
+msgstr "Accounted Time: {0}"
 
 msgid "Account Information"
-msgstr ""
+msgstr "Account Information"
 
 msgid "Account time has to be an integer."
 msgstr "Accounted time has to be an integer."
 
 msgid "Action"
-msgstr ""
+msgstr "Action"
 
 msgid "Actions"
 msgstr "Actions"
 
 msgid "Activate dependency to organisation"
-msgstr ""
+msgstr "Activate dependency to organisation"
 
 msgid "Add"
 msgstr ""
@@ -1595,7 +1595,7 @@ msgid "Helptext_Admin_SysConfigEdit_Description"
 msgstr "Explains how this configuration works."
 
 msgid "Helptext_Admin_SysConfigEdit_Name"
-msgstr "The  name cannot be changed."
+msgstr "The name cannot be changed."
 
 msgid "Helptext_Admin_SysConfigEdit_Validity"
 msgstr ""
@@ -3414,10 +3414,10 @@ msgstr ""
 
 msgid "QuickstartGuide_Text_Start"
 msgstr ""
-"Welcome to KIX 18 - Thank you for your interest in our new Service "
-"Management System. See for yourself how easy it is to optimize your service "
-"processes with the new intuitive and modern interface. May we invite you to "
-"a short guided tour?"
+"Welcome to KIX 18 - Thank you for your interest in KIX. Get a look on its "
+"all new and modern user interface. See how easily it can be adapted and "
+"customized in order to match your services processes. May we invite you on a "
+"short introduction?"
 
 msgid "QuickstartGuide_Text_Tables"
 msgstr ""
@@ -3620,7 +3620,7 @@ msgid "Run"
 msgstr ""
 
 msgid "running"
-msgstr "läuft"
+msgstr "running"
 
 msgid "Saturday"
 msgstr ""
