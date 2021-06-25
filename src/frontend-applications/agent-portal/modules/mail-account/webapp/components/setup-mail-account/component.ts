@@ -40,7 +40,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             'Translatable#Save & Fetch', 'Translatable#Skip & Continue'
         ]);
 
-        this.prepareForm();
+        await this.prepareForm();
         this.state.prepared = true;
     }
 
@@ -75,6 +75,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             this.update ? FormContext.EDIT : FormContext.NEW, KIXObjectType.MAIL_ACCOUNT
         );
         if (formId) {
+            this.state.formId = formId;
             const context = ContextService.getInstance().getActiveContext();
             context?.getFormManager()?.setFormId(formId);
         }
