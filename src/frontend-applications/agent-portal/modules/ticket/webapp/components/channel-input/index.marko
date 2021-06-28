@@ -6,7 +6,7 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<if(state.channels && !state.loading)>
+<if(state.channels && !state.loading && state.field)>
     <div.channel-list>
         <for|channel| of=state.channels>
             <div.channel-item

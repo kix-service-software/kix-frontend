@@ -62,6 +62,7 @@ export class MacroFieldCreator {
 
         macroField.required = true;
         macroField.label = 'Translatable#Macro';
+        macroField.hint = 'Translatable#Relevant Macro type';
         macroField.showLabel = true;
         macroField.instanceId = `${parentInstanceId}###MACRO###${IdService.generateDateBasedId()}`;
         macroField.draggableFields = true;
