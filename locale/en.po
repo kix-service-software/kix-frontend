@@ -342,6 +342,9 @@ msgstr ""
 msgid "Bulk"
 msgstr ""
 
+msgid "Bulk {0}"
+msgstr ""
+
 msgid "Bulk Action"
 msgstr ""
 
@@ -445,9 +448,6 @@ msgid "Closed"
 msgstr ""
 
 msgid "Closed at"
-msgstr ""
-
-msgid "Close Dialog"
 msgstr ""
 
 msgid "Close Overlay"
@@ -784,9 +784,6 @@ msgid "Dynamic Field Types"
 msgstr ""
 
 msgid "Edit"
-msgstr ""
-
-msgid "Edit {0}"
 msgstr ""
 
 msgid "Edit Account"
@@ -4246,9 +4243,6 @@ msgid "Unwatch Ticket"
 msgstr ""
 
 msgid "Update Email Account"
-msgstr ""
-
-msgid "Update Role"
 msgstr ""
 
 msgid "URL"

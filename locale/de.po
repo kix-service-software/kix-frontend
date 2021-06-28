@@ -354,6 +354,9 @@ msgstr "Body"
 msgid "Bulk"
 msgstr "Menge"
 
+msgid "Bulk {0}"
+msgstr ""
+
 msgid "Bulk Action"
 msgstr "Sammelaktion"
 
@@ -459,9 +462,6 @@ msgstr "Geschlossen"
 
 msgid "Closed at"
 msgstr "Geschlossen am"
-
-msgid "Close Dialog"
-msgstr "Dialog schließen"
 
 msgid "Close Overlay"
 msgstr "Schließen"
@@ -798,9 +798,6 @@ msgstr "Dynamische Feldtypen"
 
 msgid "Edit"
 msgstr "Bearbeiten"
-
-msgid "Edit {0}"
-msgstr "{0} bearbeiten"
 
 msgid "Edit Account"
 msgstr "Konto bearbeiten"
@@ -4398,9 +4395,6 @@ msgstr "Ticket nicht mehr beobachten"
 msgid "Update Email Account"
 msgstr "Aktualisierung wird durchgeführt"
 
-msgid "Update Role"
-msgstr "Aktualisierung wird durchgeführt"
-
 msgid "URL"
 msgstr "URL"
 
@@ -4550,6 +4544,15 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Close Dialog"
+#~ msgstr "Dialog schließen"
+
+#~ msgid "Edit {0}"
+#~ msgstr "{0} bearbeiten"
+
+#~ msgid "Update Role"
+#~ msgstr "Aktualisierung wird durchgeführt"
 
 #~ msgid "Account successfully created."
 #~ msgstr "Konto wurde erfolgreich angelegt."
