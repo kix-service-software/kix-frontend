@@ -21,6 +21,7 @@ import { Context } from './Context';
 import { ContextMode } from './ContextMode';
 import { ContextPreference } from './ContextPreference';
 import { IdService } from './IdService';
+import { KIXObject } from './kix/KIXObject';
 
 export class ContextFormManager {
 
@@ -99,10 +100,12 @@ export class ContextFormManager {
         return formContext;
     }
 
-    public async getFormInstance(createNewInstance?: boolean, silent?: boolean): Promise<FormInstance> {
+    public async getFormInstance(
+        createNewInstance?: boolean, silent?: boolean, object?: KIXObject
+    ): Promise<FormInstance> {
         if (!this.formInstance || createNewInstance) {
             const formId = await this.getFormId();
-            const object = await this.context.getObject();
+            object ||= await this.context.getObject();
             if (formId) {
                 this.formInstance = await FormService.getInstance().createFormInstance(
                     formId, object, this.context

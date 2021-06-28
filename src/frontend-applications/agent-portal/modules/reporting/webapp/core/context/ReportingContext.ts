@@ -22,13 +22,14 @@ import { Report } from '../../../model/Report';
 import { ReportDefinition } from '../../../model/ReportDefinition';
 import { ReportResultLoadingOptions } from '../../../model/ReportResultLoadingOptions';
 import { ReportDefinitionProperty } from '../../../model/ReportDefinitionProperty';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 
 export class ReportingContext extends Context {
 
     public static CONTEXT_ID: string = 'reporting';
 
-    private subscriber: IEventSubscriber;
+    public async update(urlParams: URLSearchParams): Promise<void> {
+        this.loadReportDefinitions();
+    }
 
     public getIcon(): string {
         return 'kix-icon-kpi';

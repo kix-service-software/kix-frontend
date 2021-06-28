@@ -49,10 +49,10 @@ export class BrowserUtil {
         title: string = 'Sure?', confirmText: string = 'Are you sure?',
         confirmCallback: () => void = null, cancelCallback: () => void = null,
         labels: [string, string] = ['Yes', 'No'], closeButton?: boolean, decision?: [string, string],
-        focusConfirm?: boolean
+        focusConfirm?: boolean, silent? :boolean
     ): Promise<void> {
         const preference = decision ? await AgentService.getInstance().getUserPreference(decision[0]) : null;
-        if (preference && Boolean(Number(preference.Value))) {
+        if ((preference && Boolean(Number(preference.Value))) || silent) {
             confirmCallback();
         } else {
             const content = new ComponentContent(

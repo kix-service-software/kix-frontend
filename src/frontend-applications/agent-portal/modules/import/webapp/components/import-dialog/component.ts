@@ -146,8 +146,7 @@ class Component {
 
     public async onInput(input: any): Promise<any> {
         this.state.translations = await TranslationService.createTranslationObject([
-            'Translatable#Cancel', 'Translatable#Replace Values',
-            'Translatable#Close Dialog', 'Translatable#Start Import'
+            'Translatable#Cancel', 'Translatable#Replace Values', 'Translatable#Start Import'
         ]);
 
         return input;
@@ -591,15 +590,7 @@ class Component {
     }
 
     public cancel(): void {
-        // TODO: remove Context
-        // DialogService.getInstance().closeMainDialog();
-    }
-
-    public submit(): void {
-        if (this.state.run) {
-            // TODO: remove Context
-            // DialogService.getInstance().closeMainDialog();
-        }
+        ContextService.getInstance().toggleActiveContext();
     }
 
     public async run(): Promise<void> {

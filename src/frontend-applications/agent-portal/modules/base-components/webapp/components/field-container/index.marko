@@ -31,30 +31,28 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             on-dragEnd("dragEnd")>
             <@additionalFieldControls>
                 <if(input.additionalFieldControlsNeeded)>
-                    <if(!field.asStructure)>
-                        <if(component.canAdd(field))>
-                            <button.form-control-button.button-without-text
-                                type="button"
-                                title=state.translations["Translatable#Add"]
-                                on-click("addField", field)>
-                                <span.kix-icon-plus-blank/>
-                            </button>
-                        </if>
-                        <else>
-                            <span/>
-                        </else>
-                        <if(component.canRemove(field))>
-                            <button.form-control-button.button-without-text
-                                type="button"
-                                title=state.translations["Translatable#Delete"]
-                                on-click("removeField", field)>
-                                <span.kix-icon-minus/>
-                            </button>
-                        </if>
-                        <else>
-                            <span/>
-                        </else>
+                    <if(component.canAdd(field))>
+                        <button.form-control-button.button-without-text
+                            type="button"
+                            title=state.translations["Translatable#Add"]
+                            on-click("addField", field)>
+                            <span.kix-icon-plus-blank/>
+                        </button>
                     </if>
+                    <else>
+                        <span/>
+                    </else>
+                    <if(component.canRemove(field))>
+                        <button.form-control-button.button-without-text
+                            type="button"
+                            title=state.translations["Translatable#Delete"]
+                            on-click("removeField", field)>
+                            <span.kix-icon-minus/>
+                        </button>
+                    </if>
+                    <else>
+                        <span/>
+                    </else>
                 </if>
             </@additionalFieldControls>
         </form-field>

@@ -345,7 +345,7 @@ class Component {
         BrowserUtil.toggleLoadingShield(false);
         if (createLinksOK && deleteLinksOK) {
             BrowserUtil.openSuccessOverlay('Translatable#Links updated.');
-            ContextService.getInstance().toggleActiveContext();
+            ContextService.getInstance().toggleActiveContext(undefined, undefined, true);
         }
     }
 

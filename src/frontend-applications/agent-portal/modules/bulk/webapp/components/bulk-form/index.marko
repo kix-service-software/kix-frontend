@@ -6,18 +6,14 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.bulk-form>
     <if(state.bulkManager)>
-        <widget instanceId="bulk-form-group" title=state.translations["Translatable#Attributes to be edited"] key="attributes">
-            <@content>
-                <div.bulk-value>
-                    <dynamic-form-field-container manager=state.bulkManager key="bulk-dynamic-form"/>
-                </div>
-            </@content>
-        </widget>
+        <dynamic-form-field-container manager=state.bulkManager key=state.componentId/>
         <div.dialog-button-container>
-            <button.form-blank-cancel-button type="button" on-click("reset") title=state.translations["Translatable#Reset data"]>
+            <button.form-blank-cancel-button
+                type="button"
+                on-click("reset")
+                title=state.translations["Translatable#Reset data"]>
                 <span.kix-icon-delete/>
                 <translation-string pattern="Translatable#Reset data"/>
             </button>
@@ -30,21 +26,25 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <standard-table-NEW table=state.table/>
             </div>
         </if>
-        <div.dialog-button-container>
-            <button.cancel-button type="button" on-click("cancel") title=state.translations["Translatable#Cancel"]>
-                <span.kix-icon-close/>
-                <translation-string pattern="Translatable#Cancel"/>
-            </button>
-            <div.submit-buttons>
-                <button.submit-button type="button" on-click("submit") title=state.translations["Translatable#Close Dialog"] disabled=!state.run>
-                    <span.kix-icon-check/>
-                    <translation-string pattern="Translatable#Close Dialog"/>
+        <div.dialog-control>
+            <div.dialog-button-container>
+                <button.cancel-button
+                    type="button"
+                    on-click("cancel")
+                    title=state.translations["Translatable#Cancel"]>
+                    <span.kix-icon-close/>
+                    <translation-string pattern="Translatable#Cancel"/>
                 </button>
-                <button.submit-button type="button" on-click("run") title=state.translations["Translatable#Execute now"] disabled=!state.canRun>
+                <button.submit-button
+                    type="button"
+                    on-click("run")
+                    title=state.translations["Translatable#Execute now"]
+                    disabled=!state.canRun>
                     <span.kix-icon-edit/>
                     <translation-string pattern="Translatable#Execute now"/>
                 </button>
             </div>
         </div>
     </if>
+    <loading-shield/>
 </div>

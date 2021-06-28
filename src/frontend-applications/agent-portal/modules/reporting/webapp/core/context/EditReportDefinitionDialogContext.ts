@@ -11,6 +11,7 @@ import { Context } from '../../../../../model/Context';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ReportDefinition } from '../../../model/ReportDefinition';
 
 export class EditReportDefinitionContext extends Context {
@@ -31,6 +32,16 @@ export class EditReportDefinitionContext extends Context {
             }
         }
         return object;
+    }
+
+    public async getDisplayText(): Promise<string> {
+        let text = await TranslationService.translate('Translatable#Edit Report Definition');
+        const reportDefinition = await this.getObject<ReportDefinition>();
+        if (reportDefinition) {
+            text = reportDefinition.Name;
+        }
+
+        return text;
     }
 
 }

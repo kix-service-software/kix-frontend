@@ -25,10 +25,7 @@ import { ValidationSeverity } from '../../../../base-components/webapp/core/Vali
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { Error } from '../../../../../../../server/model/Error';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { SetupStep } from '../../../../setup-assistant/webapp/core/SetupStep';
-import { SetupEvent } from '../../../../setup-assistant/webapp/core/SetupEvent';
-import { SetupStepCompletedEventData } from '../../../../setup-assistant/webapp/core/SetupStepCompletedEventData';
 import { User } from '../../../model/User';
 import { FormInstance } from '../../../../base-components/webapp/core/FormInstance';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
@@ -89,6 +86,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         FormService.getInstance().addForm(form);
         this.state.formId = form.id;
+
+        const context = ContextService.getInstance().getActiveContext();
+        context?.getFormManager()?.setFormId(this.state.formId);
 
         setTimeout(() => this.initFormValues(form.id), 500);
     }

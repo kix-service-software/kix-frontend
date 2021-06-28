@@ -7,6 +7,7 @@
  * --
  */
 
+import { IdService } from '../../../../../model/IdService';
 import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
 import { Table } from '../../../../base-components/webapp/core/table';
 import { BulkManager } from '../../core/BulkManager';
@@ -19,7 +20,8 @@ export class ComponentState extends AbstractComponentState {
         public bulkManager: BulkManager = null,
         public tableTitle: string = '',
         public canRun: boolean = false,
-        public run: boolean = false
+        public run: boolean = false,
+        public componentId: string = IdService.generateDateBasedId()
     ) {
         super();
     }

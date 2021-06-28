@@ -103,6 +103,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         FormService.getInstance().addForm(form);
         this.state.formId = form.id;
 
+        const context = ContextService.getInstance().getActiveContext();
+        context?.getFormManager()?.setFormId(this.state.formId);
+
         setTimeout(() => this.initFormValues(form.id), 100);
     }
 
