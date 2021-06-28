@@ -57,49 +57,10 @@ export class BulkAction extends AbstractAction<Table>  {
     }
 
     private async openDialog(selectedObjects: KIXObject[]): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-
+        const context = await ContextService.getInstance().setActiveContext(BulkDialogContext.CONTEXT_ID);
         if (context) {
             context.setObjectList(this.objectType, selectedObjects);
         }
-
-        context.setDialogSubscriberId(this.eventSubscriberId);
-        // EventService.getInstance().subscribe(DialogEvents.DIALOG_CANCELED, this);
-        // EventService.getInstance().subscribe(DialogEvents.DIALOG_FINISHED, this);
-
-        ContextService.getInstance().setActiveContext(BulkDialogContext.CONTEXT_ID);
     }
 
-    // public async eventPublished(data: DialogEventData, eventId: string, subscriberId: string): Promise<void> {
-    //     if (data && data.dialogId === 'bulk-dialog' && subscriberId === this.eventSubscriberId) {
-    //         EventService.getInstance().unsubscribe(DialogEvents.DIALOG_CANCELED, this);
-    //         EventService.getInstance().unsubscribe(DialogEvents.DIALOG_FINISHED, this);
-
-    //         if (eventId === DialogEvents.DIALOG_FINISHED) {
-    //             this.data.selectNone();
-    //         }
-
-    //         let selectedObjects: KIXObject[];
-    //         if (eventId === DialogEvents.DIALOG_CANCELED) {
-    //             selectedObjects = this.data.getSelectedRows().map((r) => r.getRowObject().getObject());
-    //         }
-
-    //         const bulkManager = BulkService.getInstance().getBulkManager(this.objectType);
-    //         if (bulkManager && bulkManager.getBulkRunState()) {
-    //             const tableConstextId = this.data.getContextId();
-    //             const context = tableConstextId
-    //                 ? ContextService.getInstance().getActiveContext(ContextType.MAIN)
-    //                 : null;
-
-    //             if (context) {
-    //                 await context.reloadObjectList(this.data.getObjectType());
-    //             } else {
-    //                 await this.data.reload();
-    //             }
-    //             if (selectedObjects && selectedObjects.length) {
-    //                 selectedObjects.forEach((o) => this.data.selectRowByObject(o));
-    //             }
-    //         }
-    //     }
-    // }
 }

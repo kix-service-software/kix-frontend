@@ -48,23 +48,26 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         on-linksAdded("linksAdded")/>
                 </@content>
             </widget>
-            <div.dialog-control>
-                <div.dialog-button-container>
-                    <button.button-without-text.cancel-button
-                        type="button"
-                        on-click("cancel")
-                        title=state.translations["Translatable#Cancel"]>
-                        <span.kix-icon-close/>
-                    </button>
-                    <button.button-without-text.submit-button
-                        type="button"
-                        on-click("submit")
-                        title=state.translations["Translatable#Submit"]
-                        disabled=!state.canSubmit>
-                        <span.kix-icon-check/>
-                    </button>
-                </div>
-            </div>
         </if>
     </@content>
 </widget>
+<div.dialog-control>
+    <div.dialog-button-container>
+        <button.cancel-button
+            disabled=state.processing
+            type="button"
+            on-click("cancel")
+            title=state.translations["Translatable#Cancel"]>
+            <span.kix-icon-close/>
+            <span>${state.translations["Translatable#Cancel"]}</span>
+        </button>
+        <button.submit-button
+            disabled=state.processing
+            type="button"
+            on-click("submit")
+            title=state.translations["Translatable#Submit"]>
+            <span.kix-icon-check/>
+            <span>${state.translations["Translatable#Submit"]}</span>
+        </button>
+    </div>
+</div>
