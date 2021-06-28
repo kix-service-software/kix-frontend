@@ -53,11 +53,11 @@ export class EmailRecipientValidator implements IFormFieldValidator {
 
         if (this.isDefined(toValue) || this.isDefined(ccValue) || this.isDefined(bccValue)) {
             let value;
-            if (formField.property === ArticleProperty.TO) {
+            if (formField.property === ArticleProperty.TO && toValue) {
                 value = toValue.value;
-            } else if (formField.property === ArticleProperty.CC) {
+            } else if (formField.property === ArticleProperty.CC && ccValue) {
                 value = ccValue.value;
-            } else if (formField.property === ArticleProperty.BCC) {
+            } else if (formField.property === ArticleProperty.BCC && bccValue) {
                 value = bccValue.value;
             }
 
