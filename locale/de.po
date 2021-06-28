@@ -844,7 +844,7 @@ msgstr "FAQ Artikel bearbeiten"
 msgid "Edit FAQ Category"
 msgstr "FAQ Kategorie bearbeiten"
 
-msgid "New General Catalog"
+msgid "Edit General Catalog"
 msgstr "General Katalog bearbeiten"
 
 msgid "Edit Job"
