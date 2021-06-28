@@ -19,7 +19,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             "no-operation": dynamicValue.operationIsNone,
             "with-options": Array.isArray(state.options) && state.options.length
         }
-        key="dynamic-form-field-value-[]">
+        key=dynamicValue.id>
         <if(Array.isArray(state.options) && state.options.length)>
             <div>
                 <for|option| of=state.options>
@@ -53,7 +53,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     disabled=dynamicValue.readonly
                     readonly=dynamicValue.readonly
                     placeholder=dynamicValue.operationsPlaceholder
-                    on-input("operationStringChanged", dynamicValue)/>
+                    on-input("operationStringChanged", dynamicValue)
+                    key=("operation-" + dynamicValue.id)/>
             </if>
             <else>
                 <form-list

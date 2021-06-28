@@ -166,8 +166,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async tabDblClicked(tab: ContextTab): Promise<void> {
         if (!this.state.blocked) {
             this.state.blocked = true;
-            await ContextService.getInstance().updateStorage(tab.contextInstanceId, tab.pinned);
-            tab.pinned = !tab.pinned;
+            const success = await ContextService.getInstance().updateStorage(tab.contextInstanceId, tab.pinned);
+            if (success) {
+                tab.pinned = !tab.pinned;
+            }
             (this as any).setStateDirty('contextTabs');
             this.state.blocked = false;
         }
