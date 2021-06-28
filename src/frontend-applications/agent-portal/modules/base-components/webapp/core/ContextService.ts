@@ -156,7 +156,7 @@ export class ContextService {
 
     public async removeContext(
         instanceId: string, targetContextId?: string, targetObjectId?: string | number,
-        switchToTarget: boolean = true, silent? :boolean
+        switchToTarget: boolean = true, silent?: boolean
     ): Promise<boolean> {
         let removed = false;
         if (this.canRemove(instanceId)) {
@@ -226,10 +226,10 @@ export class ContextService {
         sourceContext: any, targetContextId?: string, targetObjectId?: string | number
     ): Promise<void> {
         const context = this.contextInstances.find((c) => c.instanceId === sourceContext?.instanceId);
-        if (context) {
-            await this.setContextByInstanceId(sourceContext.instanceId);
-        } else if (targetContextId) {
+        if (targetContextId) {
             await this.setActiveContext(targetContextId, targetObjectId);
+        } else if (context) {
+            await this.setContextByInstanceId(sourceContext.instanceId);
         } else if (this.contextInstances.length > 0) {
             await this.setContextByInstanceId(
                 this.contextInstances[this.contextInstances.length - 1].instanceId
