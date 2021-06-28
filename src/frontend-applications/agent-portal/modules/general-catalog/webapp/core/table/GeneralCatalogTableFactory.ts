@@ -16,7 +16,6 @@ import { GeneralCatalogItemProperty } from '../../../model/GeneralCatalogItemPro
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
-import { ContextMode } from '../../../../../model/ContextMode';
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
 import { DataType } from '../../../../../model/DataType';
@@ -67,7 +66,7 @@ export class GeneralCatalogTableFactory extends TableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                EditGeneralCatalogDialogContext.CONTEXT_ID
+                EditGeneralCatalogDialogContext.CONTEXT_ID, null, null, GeneralCatalogItemProperty.ID
             );
         }
 
