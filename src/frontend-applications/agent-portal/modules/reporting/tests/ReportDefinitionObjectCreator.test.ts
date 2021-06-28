@@ -52,10 +52,11 @@ describe('Report Definition Object Creator', () => {
             return [];
         }
 
-        const form = new FormConfiguration('', '', [], KIXObjectType.REPORT_DEFINITION, false, FormContext.NEW);
-        await ReportDefinitionFormCreator.createFormPages(form, MockData.ReportDefinitionMock as ReportDefinition);
-
         formInstance = new FormInstance(null);
+        const form = new FormConfiguration('', '', [], KIXObjectType.REPORT_DEFINITION, false, FormContext.NEW);
+        (formInstance as any).form = form;
+        await ReportDefinitionFormCreator.createFormPages(form, MockData.ReportDefinitionMock as ReportDefinition, formInstance);
+
         (formInstance as any).form = form;
 
         for (const p of form.pages) {

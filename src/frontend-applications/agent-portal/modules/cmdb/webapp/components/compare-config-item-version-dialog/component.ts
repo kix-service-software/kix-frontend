@@ -25,11 +25,6 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-
-        this.state.translations = await TranslationService.createTranslationObject([
-            'Translatable#Close Dialog'
-        ]);
-
         this.context = ContextService.getInstance().getActiveContext();
 
         const versions = await this.context.getObjectList(KIXObjectType.CONFIG_ITEM_VERSION);

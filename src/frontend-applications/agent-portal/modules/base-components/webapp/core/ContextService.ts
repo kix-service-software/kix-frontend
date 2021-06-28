@@ -51,7 +51,7 @@ export class ContextService {
     private contextExtensions: Map<string, ContextExtension[]> = new Map();
 
     private storedContexts: ContextPreference[];
-    private storageProcessQueue: Array<Promise<void>> = [];
+    private storageProcessQueue: Array<Promise<boolean>> = [];
 
     public registerContext(contextDescriptor: ContextDescriptor): void {
         if (!this.contextDescriptorList.some((d) => d.contextId === contextDescriptor.contextId)) {
@@ -107,13 +107,18 @@ export class ContextService {
                 contextId, objectId, undefined, urlParams, additionalInformation
             );
 
-            if (context?.descriptor?.contextType === ContextType.DIALOG) {
+            if (this.isStorableDialogContext(context)) {
                 await this.updateStorage(context?.instanceId);
             }
         } else if (urlParams) {
             await context.update(urlParams);
         }
         return context;
+    }
+
+    private isStorableDialogContext(context: Context): boolean {
+        return context?.descriptor?.contextType === ContextType.DIALOG
+            && context?.descriptor?.contextMode !== ContextMode.EDIT_BULK;
     }
 
     public getContextInstances(type?: ContextType, mode?: ContextMode): Context[] {
@@ -156,12 +161,11 @@ export class ContextService {
 
     public async removeContext(
         instanceId: string, targetContextId?: string, targetObjectId?: string | number,
-        switchToTarget: boolean = true
+        switchToTarget: boolean = true, silent?: boolean
     ): Promise<boolean> {
         let removed = false;
-
         if (this.canRemove(instanceId)) {
-            const confirmed = await this.checkDialogConfirmation();
+            const confirmed = await this.checkDialogConfirmation(silent);
 
             if (confirmed) {
                 let sourceContext: any;
@@ -191,7 +195,7 @@ export class ContextService {
     }
 
 
-    private checkDialogConfirmation(): Promise<boolean> {
+    private checkDialogConfirmation(silent?: boolean): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
             if (this.activeContext?.descriptor?.contextType === ContextType.DIALOG) {
                 BrowserUtil.openConfirmOverlay(
@@ -204,7 +208,9 @@ export class ContextService {
                     [
                         PersonalSettingsProperty.DONT_ASK_DIALOG_ON_CLOSE,
                         'Translatable#Always close dialog tab without asking'
-                    ]
+                    ],
+                    null,
+                    silent
                 );
             } else {
                 resolve(true);
@@ -239,9 +245,9 @@ export class ContextService {
     }
 
     public async toggleActiveContext(
-        targetContextId?: string, targetObjectId?: string | number
+        targetContextId?: string, targetObjectId?: string | number, silent?: boolean
     ): Promise<void> {
-        await this.removeContext(this.activeContext?.instanceId, targetContextId, targetObjectId);
+        await this.removeContext(this.activeContext?.instanceId, targetContextId, targetObjectId, true, silent);
     }
 
     public async setContextByUrl(
@@ -280,6 +286,7 @@ export class ContextService {
             for (const extension of contextExtensions) {
                 await extension.postInitContext(context);
             }
+            await context.update(null);
 
             EventService.getInstance().publish(RoutingEvent.ROUTE_TO,
                 {
@@ -512,25 +519,31 @@ export class ContextService {
         return [...this.storedContexts];
     }
 
-    public async updateStorage(instanceId: string, remove?: boolean): Promise<void> {
+    public async updateStorage(instanceId: string, remove?: boolean): Promise<boolean> {
         const execute = this.storageProcessQueue.length === 0;
         const promise = this.createStoragePromise(instanceId, remove);
         if (promise) {
             if (execute) {
-                await promise;
+                return promise;
             } else {
                 this.storageProcessQueue.push(promise);
             }
         }
     }
 
-    private createStoragePromise(instanceId: string, remove?: boolean): Promise<void> {
-        const context = this.getContext(instanceId);
-        if (!context) {
-            return null;
-        }
+    private createStoragePromise(instanceId: string, remove?: boolean): Promise<boolean> {
+        return new Promise<boolean>(async (resolve, reject) => {
+            const context = this.getContext(instanceId);
+            if (!context) {
+                resolve(false);
+                return;
+            }
 
-        return new Promise<void>(async (resolve, reject) => {
+            if (context.descriptor?.contextType === ContextType.DIALOG && !this.isStorableDialogContext(context)) {
+                resolve(false);
+                return;
+            }
+
             const index = this.storedContexts.findIndex((c) => c.instanceId === context.instanceId);
             if (index !== -1) {
                 this.storedContexts.splice(index, 1);
@@ -564,7 +577,7 @@ export class ContextService {
                 await promise[0];
             }
 
-            resolve();
+            resolve(true);
         });
     }
 

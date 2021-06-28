@@ -36,6 +36,7 @@ import { UIComponentPermission } from '../../../../../model/UIComponentPermissio
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -107,34 +108,38 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         );
 
         const formId = await FormService.getInstance().getFormIdByContext(FormContext.EDIT, KIXObjectType.ORGANISATION);
+        if (formId) {
+            this.state.formId = formId;
 
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
-        const form = formInstance.getForm();
-        if (form && Array.isArray(form.pages) && form.pages.length) {
-            if (!this.organisation || !this.canOrganisationUpdate) {
-                form.pages[0].groups = [];
+            const context = ContextService.getInstance().getActiveContext();
+            await context?.getFormManager()?.setFormId(this.state.formId);
+
+            const formInstance = await context?.getFormManager()?.getFormInstance(true, undefined, this.organisation);
+            const form = formInstance.getForm();
+            if (form && Array.isArray(form.pages) && form.pages.length) {
+                if (!this.organisation || !this.canOrganisationUpdate) {
+                    form.pages[0].groups = [];
+                }
+                form.pages[0].groups.push(sysConfigGroup);
             }
-            form.pages[0].groups.push(sysConfigGroup);
+
+            if (!this.canOrganisationUpdate) {
+                formInstance.setFormReadonly();
+                formInstance.setGroupReadonly(sysConfigGroup, false);
+            }
+
+            setTimeout(() => this.initSysconfigFormValues(form.id), 100);
         }
-
-        if (!this.canOrganisationUpdate) {
-            formInstance.setFormReadonly();
-            formInstance.setGroupReadonly(sysConfigGroup, false);
-        }
-
-        this.state.formId = form.id;
-
-        setTimeout(() => {
-            this.initSysconfigFormValues(form.id);
-        }, 100);
     }
 
     private async initOrganisation(): Promise<void> {
         let organisations: Organisation[];
         if (this.step.result && this.step.result.organisationId) {
             organisations = await KIXObjectService.loadObjects<Organisation>(
-                KIXObjectType.ORGANISATION, [this.step.result.organisationId]
+                KIXObjectType.ORGANISATION, [this.step.result.organisationId],
+                new KIXObjectLoadingOptions(
+                    undefined, undefined, 1, [KIXObjectProperty.DYNAMIC_FIELDS]
+                )
             );
         } else {
             organisations = await KIXObjectService.loadObjects<Organisation>(
@@ -145,7 +150,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                             OrganisationProperty.NUMBER, SearchOperator.EQUALS,
                             FilterDataType.STRING, FilterType.AND, 'MY_ORGA'
                         )
-                    ]
+                    ], undefined, 1, [KIXObjectProperty.DYNAMIC_FIELDS]
                 )
             );
         }
@@ -189,7 +194,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
             await this.saveSysconfigValues(formInstance).catch(() => null);
 
-            const organisationId = this.organisation ? this.organisation.ID : null;
+            const organisationId = this.organisation?.ID || null;
             await SetupService.getInstance().stepCompleted(this.step.id, { organisationId });
 
             BrowserUtil.toggleLoadingShield(false);

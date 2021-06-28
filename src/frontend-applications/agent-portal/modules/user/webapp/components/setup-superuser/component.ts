@@ -35,11 +35,8 @@ import { RoleProperty } from '../../../model/RoleProperty';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { SetupStep } from '../../../../setup-assistant/webapp/core/SetupStep';
-import { SetupEvent } from '../../../../setup-assistant/webapp/core/SetupEvent';
 import { Contact } from '../../../../customer/model/Contact';
-import { SetupStepCompletedEventData } from '../../../../setup-assistant/webapp/core/SetupStepCompletedEventData';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
@@ -123,6 +120,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         FormService.getInstance().addForm(form);
         this.state.formId = form.id;
+
+        const context = ContextService.getInstance().getActiveContext();
+        context?.getFormManager()?.setFormId(this.state.formId);
 
         if (this.update) {
             setTimeout(() => this.initFormValues(form.id), 500);

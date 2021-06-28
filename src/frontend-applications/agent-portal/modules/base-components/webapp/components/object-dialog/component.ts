@@ -38,15 +38,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const context = ContextService.getInstance().getActiveContext();
             const formInstance = await context?.getFormManager()?.getFormInstance();
             formInstance?.setFormReadonly(true);
-            await ObjectDialogUtil.submit().catch(() => null);
+            await ObjectDialogUtil.submit(true).catch(() => null);
             formInstance?.setFormReadonly(false);
             this.state.processing = false;
             BrowserUtil.toggleLoadingShield(false, '');
         }, 100);
     }
 
-    public cancel(): void {
-        ContextService.getInstance().toggleActiveContext();
+    public async cancel(): Promise<void> {
+        await ContextService.getInstance().toggleActiveContext();
     }
 
 }

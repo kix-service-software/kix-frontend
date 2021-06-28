@@ -10,12 +10,8 @@
 import { ComponentState } from './ComponentState';
 import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
-import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
-import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import {
-    TableEvent, TableFactoryService, TableEventData, ValueState
-} from '../../../../base-components/webapp/core/table';
+import { TableEvent, TableFactoryService, TableEventData, ValueState } from '../../../../base-components/webapp/core/table';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
@@ -46,24 +42,25 @@ class Component {
         this.state = new ComponentState();
         this.errorObjects = [];
         this.finishedObjects = [];
-        WidgetService.getInstance().setWidgetType('bulk-form-group', WidgetType.GROUP);
     }
 
     public onInput(input: any): void {
-        this.state.bulkManager = input.bulkManager;
-        this.state.bulkManager.registerListener('bulk-dialog-listener', () => {
-            this.state.bulkManager.hasDefinedValues().then((hasDefinedValues) => {
-                return this.state.canRun = hasDefinedValues && !!this.state.bulkManager.objects.length;
-            });
-        });
+        if (!this.state.bulkManager) {
+            this.state.bulkManager = input.bulkManager;
+        }
     }
 
     public async onMount(): Promise<void> {
         this.createTable();
         this.state.translations = await TranslationService.createTranslationObject([
-            'Translatable#Cancel', 'Translatable#Reset data', 'Translatable#Close Dialog',
+            'Translatable#Cancel', 'Translatable#Reset data',
             'Translatable#Execute now', 'Translatable#Attributes to be edited'
         ]);
+
+        this.state.bulkManager?.registerListener('bulk-dialog-listener', async () => {
+            const hasDefinedValues = await this.state.bulkManager.hasDefinedValues();
+            this.state.canRun = hasDefinedValues && !!this.state.bulkManager.objects.length;
+        });
     }
 
     public onDestroy(): void {
@@ -74,7 +71,7 @@ class Component {
     }
 
     public async reset(): Promise<void> {
-        this.state.bulkManager.reset();
+        this.state.bulkManager?.reset();
         const dynamicFormComponent = (this as any).getComponent('bulk-dynamic-form');
         if (dynamicFormComponent) {
             dynamicFormComponent.updateValues();
@@ -82,15 +79,7 @@ class Component {
     }
 
     public cancel(): void {
-        // TODO: remove Context
-        // DialogService.getInstance().closeMainDialog();
-    }
-
-    public submit(): void {
-        if (this.state.run) {
-            // TODO: submit result
-            // DialogService.getInstance().submitMainDialog();
-        }
+        ContextService.getInstance().toggleActiveContext();
     }
 
     private async createTable(): Promise<void> {

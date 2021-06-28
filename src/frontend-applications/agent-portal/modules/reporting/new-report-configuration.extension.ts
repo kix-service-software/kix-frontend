@@ -17,6 +17,9 @@ import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { ContextMode } from '../../model/ContextMode';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { NewReportDialogContext } from './webapp/core/context/NewReportDialogContext';
+import { FormConfiguration } from '../../model/configuration/FormConfiguration';
+import { FormContext } from '../../model/configuration/FormContext';
+import { ModuleConfigurationService } from '../../server/services/configuration';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -50,7 +53,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
     }
 
     public async getFormConfigurations(): Promise<IConfiguration[]> {
-        return [];
+        const configurations = [];
+        const formId = 'report-new-form';
+
+        configurations.push(new FormConfiguration(formId, 'Translatable#New Report', [], KIXObjectType.REPORT));
+        ModuleConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.REPORT, formId);
+
+        return configurations;
     }
 
 }
