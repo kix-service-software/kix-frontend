@@ -60,7 +60,7 @@ export class UIModule implements IUIModule {
             [
                 new UIComponentPermission('system/generalcatalog', [CRUD.CREATE])
             ],
-            'Translatable#New General Catalog', 'kix-icon-gear'
+            'Translatable#Edit General Catalog', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(editGeneralCatalogDialogContext);
 
