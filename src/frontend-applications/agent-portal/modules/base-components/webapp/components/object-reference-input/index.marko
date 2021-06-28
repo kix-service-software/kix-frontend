@@ -15,7 +15,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         on-focusLost("focusLost")
         on-nodesChanged("nodesChanged")
         invalid=state.invalid
-        readonly=state.field.readonly
+        readonly=(state.field ? state.field.readonly : undefined)
         multiselect=state.multiselect
         treeId=state.treeId
         freeText=state.freeText/>
