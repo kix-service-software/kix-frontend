@@ -93,7 +93,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'cmdb-admin-ci-class-create'
                 ],
                 [
-                    'cmdb-admin-ci-class-edit', 'print-action'
+                    'cmdb-admin-ci-class-edit'
                 ],
                 [],
                 [
