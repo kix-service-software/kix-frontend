@@ -9,9 +9,7 @@
 
 import { IUIModule } from '../../../../model/IUIModule';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
-import {
-    NewConfigItemDialogContext, EditConfigItemDialogContext, ConfigItemCreateAction, ConfigItemEditAction
-} from '.';
+import { NewConfigItemDialogContext, EditConfigItemDialogContext, ConfigItemCreateAction, ConfigItemEditAction } from '.';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';

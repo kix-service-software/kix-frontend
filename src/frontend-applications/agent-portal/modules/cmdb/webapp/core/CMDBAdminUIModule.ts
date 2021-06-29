@@ -9,12 +9,7 @@
 
 import { IUIModule } from '../../../../model/IUIModule';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
-import {
-    ConfigItemClassService, ConfigItemClassFormService,
-    ConfigItemClassTableFactory, ConfigItemClassDefinitionTableFactory, ConfigItemClassLabelProvider,
-    ConfigItemClassDefinitionLabelProvider, ConfigItemClassCreateAction, NewConfigItemClassDialogContext,
-    ConfigItemClassEditAction, EditConfigItemClassDialogContext, ConfigItemClassDetailsContext
-} from '.';
+import { ConfigItemClassService, ConfigItemClassFormService, ConfigItemClassTableFactory, ConfigItemClassDefinitionTableFactory, ConfigItemClassLabelProvider, ConfigItemClassDefinitionLabelProvider, ConfigItemClassCreateAction, NewConfigItemClassDialogContext, ConfigItemClassEditAction, EditConfigItemClassDialogContext, ConfigItemClassDetailsContext } from '.';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../base-components/webapp/core/table';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';

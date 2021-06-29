@@ -118,7 +118,7 @@ export class ContextService {
 
     private isStorableDialogContext(context: Context): boolean {
         return context?.descriptor?.contextType === ContextType.DIALOG
-            && context?.descriptor?.contextMode !== ContextMode.EDIT_BULK;
+            && context?.descriptor?.storeable;
     }
 
     public getContextInstances(type?: ContextType, mode?: ContextMode): Context[] {

@@ -8,10 +8,7 @@
  */
 
 import { IUIModule } from '../../../../model/IUIModule';
-import {
-    OrganisationImportManager, NewOrganisationDialogContext, EditOrganisationDialogContext,
-    OrganisationImportDialogContext, OrganisationCreateAction, OrganisationEditAction
-} from '.';
+import { OrganisationImportManager, NewOrganisationDialogContext, EditOrganisationDialogContext, OrganisationImportDialogContext, OrganisationCreateAction, OrganisationEditAction } from '.';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextType } from '../../../../model/ContextType';
@@ -85,7 +82,8 @@ export class UIModule implements IUIModule {
             [
                 new UIComponentPermission('organisations', [CRUD.CREATE])
             ],
-            'Translatable#Organisations', 'kix-icon-gear'
+            'Translatable#Organisations', 'kix-icon-gear',
+            undefined, undefined, false
         );
         ContextService.getInstance().registerContext(organisationImportDialogContext);
     }

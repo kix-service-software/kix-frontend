@@ -9,11 +9,7 @@
 
 import { IUIModule } from '../../../../model/IUIModule';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
-import {
-    JobService, JobFormService, JobLabelProvider, MacroActionLabelProvider,
-    JobTableFactory, JobDetailsContext, JobExecuteAction, JobCreateAction, NewJobDialogContext,
-    JobEditAction, EditJobDialogContext
-} from '.';
+import { JobService, JobFormService, JobLabelProvider, MacroActionLabelProvider, JobTableFactory, JobDetailsContext, JobExecuteAction, JobCreateAction, NewJobDialogContext, JobEditAction, EditJobDialogContext } from '.';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { TableFactoryService } from '../../../base-components/webapp/core/table';
@@ -82,7 +78,8 @@ export class UIModule implements IUIModule {
             [
                 new UIComponentPermission('system/automation/jobs', [CRUD.CREATE])
             ],
-            'Translatable#New Job', 'kix-icon-gear', JobDetailsContext.CONTEXT_ID
+            'Translatable#New Job', 'kix-icon-gear', JobDetailsContext.CONTEXT_ID,
+            undefined, false
         );
         ContextService.getInstance().registerContext(newJobDialogContext);
 
@@ -94,7 +91,8 @@ export class UIModule implements IUIModule {
             [
                 new UIComponentPermission('system/automation/jobs', [CRUD.CREATE])
             ],
-            'Translatable#Edit Job', 'kix-icon-gear', JobDetailsContext.CONTEXT_ID
+            'Translatable#Edit Job', 'kix-icon-gear', JobDetailsContext.CONTEXT_ID,
+            undefined, false
         );
         ContextService.getInstance().registerContext(editJobDialogContext);
 

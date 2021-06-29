@@ -80,7 +80,8 @@ export class UIModule implements IUIModule {
             ContextMode.CREATE_ADMIN, false, 'object-dialog', [], NewReportDefinitionDialogContext,
             [
                 new UIComponentPermission('reporting/reportdefinitions', [CRUD.CREATE], true)
-            ], 'Translatable#Report Definition', 'kix-icon-kpi'
+            ], 'Translatable#Report Definition', 'kix-icon-kpi',
+            undefined, undefined, false
         );
         ContextService.getInstance().registerContext(newReportDefintionContext);
 
@@ -89,7 +90,8 @@ export class UIModule implements IUIModule {
             ContextMode.EDIT_ADMIN, false, 'object-dialog', [], EditReportDefinitionDialogContext,
             [
                 new UIComponentPermission('reporting/reportdefinitions', [CRUD.CREATE], true)
-            ], 'Translatable#Edit Report Definition', 'kix-icon-kpi'
+            ], 'Translatable#Edit Report Definition', 'kix-icon-kpi',
+            undefined, undefined, false
         );
         ContextService.getInstance().registerContext(editReportContext);
 
