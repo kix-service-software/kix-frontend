@@ -29,7 +29,7 @@ class TicketArticleAttchementListComponent {
         }
     }
 
-    private async prepareImages() {
+    private async prepareImages(): Promise<void> {
         const attachmentPromises: Array<Promise<DisplayImageDescription>> = [];
         const imageAttachments = this.state.attachments.filter((a) => a.ContentType.match(/^image\//));
         if (imageAttachments && imageAttachments.length) {

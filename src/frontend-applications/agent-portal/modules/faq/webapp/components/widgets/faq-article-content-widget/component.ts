@@ -12,10 +12,8 @@ import { IdService } from '../../../../../../model/IdService';
 import { WidgetService } from '../../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../../model/configuration/WidgetType';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
-import { FAQDetailsContext } from '../../../core/context/FAQDetailsContext';
 import { FAQArticle } from '../../../../model/FAQArticle';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
-import { FAQService } from '../../../core';
 import { LabelService } from '../../../../../../modules/base-components/webapp/core/LabelService';
 import { FAQArticleProperty } from '../../../../model/FAQArticleProperty';
 import { BrowserUtil } from '../../../../../../modules/base-components/webapp/core/BrowserUtil';
@@ -29,6 +27,9 @@ import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
 import { Context } from '../../../../../../model/Context';
 import { DisplayImageDescription } from '../../../../../base-components/webapp/core/DisplayImageDescription';
 import { FAQArticleHandler } from '../../../core/FAQArticleHandler';
+import { EventService } from '../../../../../base-components/webapp/core/EventService';
+import { ImageViewerEvent } from '../../../../../agent-portal/model/ImageViewerEvent';
+import { ImageViewerEventData } from '../../../../../agent-portal/model/ImageViewerEventData';
 
 class Component {
 
@@ -143,8 +144,10 @@ class Component {
 
     public async download(attachment: Attachment): Promise<void> {
         if (this.images && this.images.some((i) => i.imageId === attachment.ID)) {
-            // TODO: Image dialog
-            // DialogService.getInstance().openImageDialog(this.images, attachment.ID);
+            EventService.getInstance().publish(
+                ImageViewerEvent.OPEN_VIEWER,
+                new ImageViewerEventData(this.images, attachment.ID)
+            );
         } else {
             const attachmentWithContent = await this.loadAttachment(attachment);
             if (attachmentWithContent) {

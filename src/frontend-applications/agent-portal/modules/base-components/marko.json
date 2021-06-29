@@ -5,7 +5,6 @@
     ],
     "tags-dir": [
         "./webapp/components/",
-        "./webapp/components/dialog",
         "./webapp/components/field-container",
         "./webapp/components/form-list",
         "./webapp/components/form-list-tree",

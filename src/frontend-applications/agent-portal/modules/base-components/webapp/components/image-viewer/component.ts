@@ -8,9 +8,12 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { IImageDialogListener } from '../../../../../../modules/base-components/webapp/core/IImageDialogListener';
-import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
-import { DisplayImageDescription } from '../../../../../../modules/base-components/webapp/core/DisplayImageDescription';
+import { IImageDialogListener } from '../../core/IImageDialogListener';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { DisplayImageDescription } from '../../core/DisplayImageDescription';
+import { EventService } from '../../core/EventService';
+import { ImageViewerEvent } from '../../../../agent-portal/model/ImageViewerEvent';
+import { ImageViewerEventData } from '../../../../agent-portal/model/ImageViewerEventData';
 
 export class Component implements IImageDialogListener {
 
@@ -23,7 +26,17 @@ export class Component implements IImageDialogListener {
     }
 
     public async onMount(): Promise<void> {
-
+        EventService.getInstance().subscribe(ImageViewerEvent.OPEN_VIEWER, {
+            eventSubscriberId: 'image-viewer',
+            eventPublished: async (data: ImageViewerEventData) => {
+                if (data && data.imageDescriptions) {
+                    if (this.state.show) {
+                        this.close();
+                    }
+                    this.open(data.imageDescriptions, data.showImageId);
+                }
+            }
+        });
 
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Next Image', 'Translatable#Previous Image', 'Translatable#Download'
