@@ -85,8 +85,8 @@ export class ContextService {
         return this.contextDescriptorList.find((d) => d.contextId === contextId);
     }
 
-    public getContext(instanceId: string): Context {
-        return this.contextInstances.find((i) => i.instanceId === instanceId);
+    public getContext<T extends Context = Context>(instanceId: string): T {
+        return this.contextInstances.find((i) => i.instanceId === instanceId) as T;
     }
 
     private async getContextInstance(

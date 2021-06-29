@@ -164,15 +164,12 @@ export class SearchService {
     public async executeFullTextSearch<T extends KIXObject>(
         objectType: KIXObjectType | string, searchValue: string
     ): Promise<T[]> {
-        const searchCache = new SearchCache<T>(
-            null, null,
-            objectType,
-            [
-                new FilterCriteria(
-                    SearchProperty.FULLTEXT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
-                )
-            ], []
-        );
+        const searchCache = new SearchCache<T>(null, null, objectType, [], []);
+        searchCache.criteria = [
+            new FilterCriteria(
+                SearchProperty.FULLTEXT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+            )
+        ];
 
         searchCache.fulltextValue = searchValue;
 

@@ -79,6 +79,7 @@ export abstract class SearchContext extends Context {
 
     public setSearchCache(cache: SearchCache): void {
         this.searchCache = cache;
+        EventService.getInstance().publish(SearchEvent.SEARCH_CACHE_CHANGED, this);
         ContextService.getInstance().setDocumentHistory(true, this, this, null);
     }
 
@@ -163,6 +164,7 @@ export abstract class SearchContext extends Context {
         }
 
         EventService.getInstance().publish(SearchEvent.SEARCH_DELETED, this);
+        ContextService.getInstance().setDocumentHistory(true, this, this, null);
     }
 
 }
