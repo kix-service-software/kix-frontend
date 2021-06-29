@@ -3602,6 +3602,9 @@ msgstr "Relevante Assets"
 msgid "Related Tickets"
 msgstr "Verwandte Tickets"
 
+msgid "Relevant Macro type"
+msgstr ""
+
 msgid "Reload Agent Portal Configurations"
 msgstr "Frontend-Konfigurationen neu laden"
 

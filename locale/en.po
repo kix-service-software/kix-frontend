@@ -3463,6 +3463,9 @@ msgstr ""
 msgid "Related Tickets"
 msgstr ""
 
+msgid "Relevant Macro type"
+msgstr ""
+
 msgid "Reload Agent Portal Configurations"
 msgstr "Reload Frontend Configurations"
 
