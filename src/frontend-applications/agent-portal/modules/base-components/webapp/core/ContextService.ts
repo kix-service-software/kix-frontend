@@ -165,7 +165,7 @@ export class ContextService {
     ): Promise<boolean> {
         let removed = false;
         if (this.canRemove(instanceId)) {
-            const confirmed = await this.checkDialogConfirmation(silent);
+            const confirmed = await this.checkDialogConfirmation(instanceId, silent);
 
             if (confirmed) {
                 let sourceContext: any;
@@ -195,9 +195,10 @@ export class ContextService {
     }
 
 
-    private checkDialogConfirmation(silent?: boolean): Promise<boolean> {
+    private checkDialogConfirmation(contextInstanceId: string, silent?: boolean): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
-            if (this.activeContext?.descriptor?.contextType === ContextType.DIALOG) {
+            const context = this.contextInstances.find((ci) => ci.instanceId === contextInstanceId);
+            if (context?.descriptor?.contextType === ContextType.DIALOG) {
                 BrowserUtil.openConfirmOverlay(
                     'Translatable#Cancel',
                     'Translatable#Any data you have entered will be lost. Continue?',
