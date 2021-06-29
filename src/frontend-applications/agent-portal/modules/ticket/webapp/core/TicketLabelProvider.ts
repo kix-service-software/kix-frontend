@@ -566,9 +566,9 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 break;
             case TicketProperty.OWNER_ID:
             case TicketProperty.OWNER:
-                if (ticket && ticket.ResponsibleID) {
+                if (ticket && ticket.OwnerID) {
                     const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [ticket.ResponsibleID],
+                        KIXObjectType.USER, [ticket.OwnerID],
                         new KIXObjectLoadingOptions(
                             null, null, 1, [UserProperty.CONTACT]
                         ), null, true, true, true
