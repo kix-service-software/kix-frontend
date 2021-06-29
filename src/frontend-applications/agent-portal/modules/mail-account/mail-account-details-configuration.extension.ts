@@ -85,7 +85,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'mail-account-create'
                 ],
                 [
-                    'mail-account-edit', 'mail-account-fetch', 'print-action'
+                    'mail-account-edit', 'mail-account-fetch'
                 ],
                 [],
                 [

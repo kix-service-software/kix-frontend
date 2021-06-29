@@ -60,7 +60,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'ticket-admin-type-create'
                 ],
                 [
-                    'ticket-admin-type-edit', 'print-action'
+                    'ticket-admin-type-edit'
                 ],
                 [],
                 [
