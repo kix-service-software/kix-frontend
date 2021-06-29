@@ -10,12 +10,7 @@
 // tslint:disable: max-line-length
 import { SocketNameSpace } from './SocketNameSpace';
 import { KIXModulesEvent } from '../../modules/base-components/webapp/core/KIXModulesEvent';
-import { LoadKIXModulesRequest } from '../../modules/base-components/webapp/core/LoadKIXModulesRequest';
 import { SocketResponse } from '../../modules/base-components/webapp/core/SocketResponse';
-import { PluginService } from '../../../../server/services/PluginService';
-import { IKIXModuleExtension } from '../../model/IKIXModuleExtension';
-import { LoadKIXModulesResponse } from '../../modules/base-components/webapp/core/LoadKIXModulesResponse';
-import { SocketEvent } from '../../modules/base-components/webapp/core/SocketEvent';
 import { SocketErrorResponse } from '../../modules/base-components/webapp/core/SocketErrorResponse';
 import { LoadFormConfigurationsRequest } from '../../modules/base-components/webapp/core/LoadFormConfigurationsRequest';
 import { ModuleConfigurationService } from '../services/configuration';
@@ -26,7 +21,6 @@ import { LoadFormConfigurationsResponse } from '../../modules/base-components/we
 import { ISocketRequest } from '../../modules/base-components/webapp/core/ISocketRequest';
 import { LoadReleaseInfoResponse } from '../../modules/base-components/webapp/core/LoadReleaseInfoResponse';
 import { Socket } from 'socket.io';
-import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
 import { ReleaseInfoUtil } from '../../../../server/ReleaseInfoUtil';
 import { LoadFormConfigurationRequest } from '../../modules/base-components/webapp/core/LoadFormConfigurationRequest';
 import { LoadFormConfigurationResponse } from '../../modules/base-components/webapp/core/LoadFormConfigurationResponse';
@@ -43,8 +37,6 @@ import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { CacheService } from '../services/cache';
 import { ISocketResponse } from '../../modules/base-components/webapp/core/ISocketResponse';
 // tslint:enable
-
-import cookie = require('cookie');
 
 export class KIXModuleNamespace extends SocketNameSpace {
 
@@ -68,8 +60,6 @@ export class KIXModuleNamespace extends SocketNameSpace {
     }
 
     protected registerEvents(client: Socket): void {
-        this.registerEventHandler(client, KIXModulesEvent.LOAD_MODULES, this.loadModules.bind(this));
-
         this.registerEventHandler(client, KIXModulesEvent.LOAD_FORM_CONFIGURATIONS,
             this.loadFormConfigurations.bind(this));
 
@@ -144,35 +134,6 @@ export class KIXModuleNamespace extends SocketNameSpace {
             });
         }
         return this.rebuildPromise;
-    }
-
-    private async loadModules(data: LoadKIXModulesRequest, client: SocketIO.Socket): Promise<SocketResponse> {
-        let kixModulesResponse = await CacheService.getInstance().get('KIX_MODULES');
-        if (!kixModulesResponse) {
-            kixModulesResponse = await PluginService.getInstance().getExtensions<IKIXModuleExtension>(
-                AgentPortalExtensions.MODULES
-            ).then(async (modules) => {
-                const uiModules = modules.map((m) => {
-                    return {
-                        id: m.id,
-                        external: m.external,
-                        initComponents: m.initComponents,
-                        uiComponents: m.uiComponents,
-                        webDependencies: m.webDependencies,
-                        applications: m.applications
-                    };
-                });
-
-                const socketResponse = new SocketResponse(
-                    KIXModulesEvent.LOAD_MODULES_FINISHED,
-                    new LoadKIXModulesResponse(data.requestId, uiModules)
-                );
-                CacheService.getInstance().set('KIX_MODULES_RESPONSE', socketResponse);
-                return socketResponse;
-            }).catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
-
-        }
-        return kixModulesResponse;
     }
 
     private async loadFormConfigurations(
