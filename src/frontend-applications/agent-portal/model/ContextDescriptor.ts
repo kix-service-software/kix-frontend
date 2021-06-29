@@ -33,7 +33,8 @@ export class ContextDescriptor {
         public displayText: string = '',
         public icon?: ObjectIcon | string,
         public targetContextId?: string,
-        public priority: number = 1000
+        public priority: number = 1000,
+        public storeable: boolean = true
     ) { }
 
     public isContextFor(kixObjectType: KIXObjectType | string): boolean {
