@@ -41,7 +41,7 @@ class Component {
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
     }
 
-    public async valueClicked(value: [string, string, string | ObjectIcon], event: any): Promise<void> {
+    public async searchClicked(event: any): Promise<void> {
         event.stopPropagation();
         event.preventDefault();
         this.search();
