@@ -172,6 +172,7 @@ export class MacroFieldCreator {
     public static async createActionOptionFields(
         actionType: string, actionFieldInstanceId: string, macroType: string,
         formInstance: FormInstance, jobManager: AbstractJobFormManager, action?: MacroAction,
+        actionField?: FormFieldConfiguration
     ): Promise<FormFieldConfiguration[]> {
         const fieldOrderMap: Map<string, number> = new Map();
         let fields: FormFieldConfiguration[] = [];
@@ -184,6 +185,11 @@ export class MacroFieldCreator {
 
             if (Array.isArray(macroActionTypes) && macroActionTypes.length) {
                 const options = macroActionTypes[0].Options;
+
+                if (actionField) {
+                    actionField.hint = macroActionTypes[0].Description;
+                }
+
                 for (const optionName in options) {
                     if (optionName) {
                         const option = options[optionName] as MacroActionTypeOption;

@@ -86,7 +86,7 @@ export class MacroFieldJobFormManager extends ExtendedJobFormManager {
             const type = Array.isArray(typeValue?.value) ? typeValue.value[0] : typeValue?.value;
             const manager = JobFormService.getInstance().getJobFormManager(type);
             fields = await MacroFieldCreator.createActionOptionFields(
-                actionType, actionField.instanceId, type, formInstance, manager, null
+                actionType, actionField.instanceId, type, formInstance, manager, null, actionField
             );
         }
 
