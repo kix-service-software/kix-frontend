@@ -175,6 +175,10 @@ export class ContextService {
 
                     sourceContext = this.contextInstances[index].getAdditionalInformation('SourceContext');
 
+                    if (switchToTarget) {
+                        await this.switchToTargetContext(sourceContext, targetContextId, targetObjectId);
+                    }
+
                     const isStored = await this.isContextStored(instanceId);
                     if (isStored) {
                         await this.updateStorage(instanceId, true);
@@ -182,11 +186,8 @@ export class ContextService {
                     const context = this.contextInstances.splice(index, 1);
                     await context[0].destroy();
                     EventService.getInstance().publish(ContextEvents.CONTEXT_REMOVED, context[0]);
-                }
-                removed = true;
 
-                if (switchToTarget) {
-                    await this.switchToTargetContext(sourceContext, targetContextId, targetObjectId);
+                    removed = true;
                 }
             }
         }
