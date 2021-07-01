@@ -60,6 +60,8 @@ export class UIModule implements IUIModule {
 
     public priority: number = 100;
 
+    protected doRegisterContexts: boolean = true;
+
     public async register(): Promise<void> {
         PlaceholderService.getInstance().registerPlaceholderHandler(TicketPlaceholderHandler.getInstance());
 
@@ -102,7 +104,6 @@ export class UIModule implements IUIModule {
 
         FormService.getInstance().addFormFieldValueHandler(new TicketFormFieldValueHandler());
 
-        await this.registerContexts();
         this.registerTicketActions();
 
         JobFormService.getInstance().registerJobFormManager(JobTypes.TICKET, new TicketJobFormManager());
@@ -112,6 +113,10 @@ export class UIModule implements IUIModule {
             ticketManager.addExtendedJobFormManager(new TicketArticleCreate());
             ticketManager.addExtendedJobFormManager(new FetchAssetAttributes());
             ticketManager.addExtendedJobFormManager(new TicketCreateDynamicFields());
+        }
+
+        if (this.doRegisterContexts) {
+            await this.registerContexts();
         }
     }
 
