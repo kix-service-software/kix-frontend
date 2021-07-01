@@ -12,11 +12,13 @@ import { UIComponentPermission } from '../../../../../../model/UIComponentPermis
 import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
 import { NewTicketArticleContext } from '../..';
-import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../../model/ContextMode';
 import { AuthenticationSocketClient } from '../../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
+import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 
 export class ArticleNewAction extends AbstractAction {
+
+    private ticketId: number = null;
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#New Article';
@@ -28,16 +30,29 @@ export class ArticleNewAction extends AbstractAction {
         const context = ContextService.getInstance().getActiveContext();
         const objectId = context.getObjectId();
 
-        const permissions = [
-            new UIComponentPermission(`tickets/${objectId}/articles`, [CRUD.CREATE])
-        ];
+        if (objectId) {
+            this.ticketId = Number(objectId);
+            const permissions = [
+                new UIComponentPermission(`tickets/${objectId}/articles`, [CRUD.CREATE])
+            ];
+            show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        }
 
-        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
         return show;
     }
 
     public async run(): Promise<void> {
-        ContextService.getInstance().setActiveContext(NewTicketArticleContext.CONTEXT_ID);
+        ContextService.getInstance().setActiveContext(NewTicketArticleContext.CONTEXT_ID,
+            undefined, undefined,
+            [
+                ['REFERENCED_TICKET_ID', this.ticketId],
+                [
+                    AdditionalContextInformation.DISPLAY_TEXT,
+                    await TranslationService.translate(this.text)
+                ],
+                [AdditionalContextInformation.ICON, this.icon]
+            ]
+        );
     }
 
 }

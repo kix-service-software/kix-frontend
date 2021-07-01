@@ -70,7 +70,9 @@ export class EmailRecipientValidator implements IFormFieldValidator {
         } else if (checkToValue) {
             return new ValidationResult(
                 ValidationSeverity.ERROR,
-                'Translatable#At least one of the fields To, Cc or Bcc must contain an entry.'
+                await TranslationService.translate(
+                    'Translatable#At least one of the fields To, Cc or Bcc must contain an entry.'
+                )
             );
         }
 

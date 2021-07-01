@@ -58,7 +58,6 @@ class Component extends FormInputComponent<number, ComponentState> {
             if (!this.state.currentChannel || channelId !== this.state.currentChannel.ID) {
                 const channel = this.state.channels.find((ch) => ch.ID === channelId);
                 this.state.currentChannel = channel;
-                await this.setFields(formInstance);
             }
         }
 
@@ -122,20 +121,6 @@ class Component extends FormInputComponent<number, ComponentState> {
         if (!this.state.field.readonly && !this.isActive(channel)) {
             this.state.currentChannel = channel;
             super.provideValue(this.state.currentChannel ? this.state.currentChannel.ID : null);
-        }
-    }
-
-    private async setFields(formInstance: FormInstance, clear?: boolean): Promise<void> {
-        const formService = ServiceRegistry.getServiceInstance<ArticleFormService>(
-            KIXObjectType.ARTICLE, ServiceType.FORM
-        );
-        if (this.state.currentChannel) {
-            const channelFields = await formService.getFormFieldsForChannel(
-                formInstance, this.state.currentChannel?.ID, this.state.formId, clear
-            );
-            setTimeout(() => formInstance.addFieldChildren(this.state.field, channelFields, true), 500);
-        } else {
-            formInstance.addFieldChildren(this.state.field, [], true);
         }
     }
 
