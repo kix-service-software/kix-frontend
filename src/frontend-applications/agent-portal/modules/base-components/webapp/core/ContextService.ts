@@ -170,11 +170,16 @@ export class ContextService {
 
             if (confirmed) {
                 let sourceContext: any;
+                let useSourceContext: boolean;
 
                 const index = this.contextInstances.findIndex((c) => c.instanceId === instanceId);
                 if (index !== -1) {
 
                     sourceContext = this.contextInstances[index].getAdditionalInformation('SourceContext');
+
+                    useSourceContext = this.contextInstances[index].getAdditionalInformation(
+                        'USE_SOURCE_CONTEXT'
+                    );
 
                     const isStored = await this.isContextStored(instanceId);
                     if (isStored) {
@@ -187,7 +192,9 @@ export class ContextService {
                     this.activeContextIndex--;
 
                     if (switchToTarget) {
-                        await this.switchToTargetContext(sourceContext, targetContextId, targetObjectId);
+                        await this.switchToTargetContext(
+                            sourceContext, targetContextId, targetObjectId, useSourceContext
+                        );
                     }
 
                     removed = true;
@@ -233,10 +240,10 @@ export class ContextService {
     }
 
     private async switchToTargetContext(
-        sourceContext: any, targetContextId?: string, targetObjectId?: string | number
+        sourceContext: any, targetContextId?: string, targetObjectId?: string | number, useSourceContext?: boolean
     ): Promise<void> {
         const context = this.contextInstances.find((c) => c.instanceId === sourceContext?.instanceId);
-        if (targetContextId) {
+        if (!useSourceContext && targetContextId) {
             await this.setActiveContext(targetContextId, targetObjectId);
         } else if (context) {
             await this.setContextByInstanceId(sourceContext.instanceId);

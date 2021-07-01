@@ -34,6 +34,7 @@ import { Contact } from '../../../../customer/model/Contact';
 import { AutoCompleteConfiguration } from '../../../../../model/configuration/AutoCompleteConfiguration';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
+import { NewContactDialogContext } from '../../../../customer/webapp/core';
 
 class Component extends FormInputComponent<number | string, ComponentState> {
 
@@ -84,16 +85,12 @@ class Component extends FormInputComponent<number | string, ComponentState> {
     }
 
     private async actionClicked(action: FormInputAction): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            context.setAdditionalInformation('RETURN_TO_PREVIOUS_TAB', new PreviousTabData(
-                KIXObjectType.TICKET,
-                'new-ticket-dialog'
-            ));
-            EventService.getInstance().publish(
-                TabContainerEvent.CHANGE_TAB, new TabContainerEventData('new-contact-dialog')
-            );
-        }
+        ContextService.getInstance().setActiveContext(
+            NewContactDialogContext.CONTEXT_ID, null, null, [
+            ['USE_SOURCE_CONTEXT', true],
+            ['PROVIDE_CONTACT_ID_TO_SOURCE_CONTEXT', true]
+        ]
+        );
     }
 
     public async setCurrentValue(): Promise<void> {
