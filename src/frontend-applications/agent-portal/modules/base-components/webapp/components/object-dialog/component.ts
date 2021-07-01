@@ -12,7 +12,6 @@ import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ObjectDialogUtil } from '../../core/ObjectDialogUtil';
-import { BrowserUtil } from '../../core/BrowserUtil';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -32,17 +31,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async submit(): Promise<void> {
-        BrowserUtil.toggleLoadingShield(true, this.state.translations['Translatable#Save']);
-        setTimeout(async () => {
-            this.state.processing = true;
-            const context = ContextService.getInstance().getActiveContext();
-            const formInstance = await context?.getFormManager()?.getFormInstance();
-            formInstance?.setFormReadonly(true);
-            await ObjectDialogUtil.submit().catch(() => null);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        formInstance?.setFormReadonly(true);
+        await ObjectDialogUtil.submit().catch(() => {
             formInstance?.setFormReadonly(false);
-            this.state.processing = false;
-            BrowserUtil.toggleLoadingShield(false, '');
-        }, 100);
+        });
     }
 
     public async cancel(): Promise<void> {

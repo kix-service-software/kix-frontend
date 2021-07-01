@@ -191,7 +191,7 @@ class Component {
 
         const editText = await TranslationService.translate('Translatable#edited');
         BrowserUtil.toggleLoadingShield(
-            true, `${this.finishedObjects.length}/${objects.length} ${objectName} ${editText}`,
+            'BULK_SHIELD', true, `${this.finishedObjects.length}/${objects.length} ${objectName} ${editText}`,
             0, this.cancelBulk.bind(this)
         );
 
@@ -211,7 +211,7 @@ class Component {
                     this.errorObjects.push(object);
                     this.state.table.setRowObjectValueState([object], ValueState.HIGHLIGHT_ERROR);
                     const errorText = await TranslationService.translate('Translatable#An error occurred.');
-                    BrowserUtil.toggleLoadingShield(true, errorText);
+                    BrowserUtil.toggleLoadingShield('BULK_SHIELD', true, errorText);
                     end = Date.now();
                     await this.handleObjectEditError(
                         object, (this.finishedObjects.length + this.errorObjects.length), objects.length
@@ -236,7 +236,7 @@ class Component {
             BrowserUtil.openSuccessOverlay(toast);
         }
 
-        BrowserUtil.toggleLoadingShield(false);
+        BrowserUtil.toggleLoadingShield('BULK_SHIELD', false);
     }
 
     private async updateTable(): Promise<void> {
@@ -261,7 +261,8 @@ class Component {
 
         const editText = await TranslationService.translate('Translatable#edited');
         BrowserUtil.toggleLoadingShield(
-            true, `${finishedCount}/${objectCount} ${objectName} ${editText}`, time, this.cancelBulk.bind(this)
+            'BULK_SHIELD', true, `${finishedCount}/${objectCount} ${objectName} ${editText}`, time,
+            this.cancelBulk.bind(this)
         );
     }
 

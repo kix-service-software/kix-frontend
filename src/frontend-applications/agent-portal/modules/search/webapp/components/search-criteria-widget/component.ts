@@ -139,10 +139,10 @@ class Component {
 
     public async search(): Promise<void> {
         const hint = await TranslationService.translate('Translatable#Search');
-        BrowserUtil.toggleLoadingShield(true, hint);
+        BrowserUtil.toggleLoadingShield('SEARCH_CRITERIA_SHIELD', true, hint);
         const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
         await SearchService.getInstance().searchObjects(context?.getSearchCache());
-        BrowserUtil.toggleLoadingShield(false);
+        BrowserUtil.toggleLoadingShield('SEARCH_CRITERIA_SHIELD', false);
     }
 
     public limitChanged(event: any): void {

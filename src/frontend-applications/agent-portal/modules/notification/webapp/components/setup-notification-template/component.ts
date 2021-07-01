@@ -138,13 +138,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (validationError) {
                 BrowserUtil.showValidationError(result);
             } else {
-                BrowserUtil.toggleLoadingShield(true, 'Translatable#Save notification template');
+                BrowserUtil.toggleLoadingShield('SETUP_NOTIFICATION_SHIELD', true, 'Translatable#Save notification template');
 
                 await this.saveSysconfigValues(formInstance).catch(() => null);
                 if (this.state.isSetup) {
                     await SetupService.getInstance().stepCompleted(this.step.id, null);
                 }
-                BrowserUtil.toggleLoadingShield(false);
+                BrowserUtil.toggleLoadingShield('SETUP_NOTIFICATION_SHIELD', false);
             }
         }
     }
