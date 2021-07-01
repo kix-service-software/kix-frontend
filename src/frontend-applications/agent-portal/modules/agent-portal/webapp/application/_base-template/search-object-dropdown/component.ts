@@ -59,40 +59,47 @@ class Component {
     }
 
     public async search(): Promise<void> {
-        EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Search' }
-        );
-
         const element = (this as any).getEl('searchObjectInput');
-        const context = ContextService.getInstance().getActiveContext();
+        if (element.value) {
+            EventService.getInstance().publish(
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Search' }
+            );
 
-        const searchDescriptors = ContextService.getInstance().getContextDescriptors(ContextMode.SEARCH);
-        const searchContextDescriptor = searchDescriptors.find(
-            (sd) => sd.kixObjectTypes.some((ot) => ot === context.descriptor.kixObjectTypes[0])
-        );
-        const hasTicketSearchContext = searchDescriptors.some((sd) => sd.contextId === TicketSearchContext.CONTEXT_ID);
+            const context = ContextService.getInstance().getActiveContext();
 
-        let contextId: string = searchContextDescriptor?.contextId;
-        if (!searchContextDescriptor && hasTicketSearchContext) {
-            contextId = TicketSearchContext.CONTEXT_ID;
-        } else if (!searchContextDescriptor && searchDescriptors.length) {
-            contextId = searchDescriptors[0].contextId;
-        }
+            const searchDescriptors = ContextService.getInstance().getContextDescriptors(ContextMode.SEARCH);
+            const searchContextDescriptor = searchDescriptors.find(
+                (sd) => sd.kixObjectTypes.some((ot) => ot === context.descriptor.kixObjectTypes[0])
+            );
+            const hasTicketSearchContext = searchDescriptors.some(
+                (sd) => sd.contextId === TicketSearchContext.CONTEXT_ID
+            );
 
-        if (searchContextDescriptor || contextId) {
-            const descriptor = searchContextDescriptor || ContextService.getInstance().getContextDescriptor(contextId);
-            if (descriptor && element) {
-                await SearchService.getInstance().executeFullTextSearch(
-                    descriptor.kixObjectTypes[0], element.value
-                ).catch((error) => {
-                    OverlayService.getInstance().openOverlay(
-                        OverlayType.WARNING, null, new StringContent(error), 'Translatable#Search error!', null, true
-                    );
-                });
+            let contextId: string = searchContextDescriptor?.contextId;
+            if (!searchContextDescriptor && hasTicketSearchContext) {
+                contextId = TicketSearchContext.CONTEXT_ID;
+            } else if (!searchContextDescriptor && searchDescriptors.length) {
+                contextId = searchDescriptors[0].contextId;
+            }
 
-                EventService.getInstance().publish(
-                    ApplicationEvent.APP_LOADING, { loading: false, hint: '' }
+            if (searchContextDescriptor || contextId) {
+                const descriptor = searchContextDescriptor || ContextService.getInstance().getContextDescriptor(
+                    contextId
                 );
+                if (descriptor && element) {
+                    await SearchService.getInstance().executeFullTextSearch(
+                        descriptor.kixObjectTypes[0], element.value
+                    ).catch((error) => {
+                        OverlayService.getInstance().openOverlay(
+                            OverlayType.WARNING, null, new StringContent(error), 'Translatable#Search error!',
+                            null, true
+                        );
+                    });
+
+                    EventService.getInstance().publish(
+                        ApplicationEvent.APP_LOADING, { loading: false, hint: '' }
+                    );
+                }
             }
         }
     }
