@@ -48,6 +48,7 @@ export class ContextService {
 
     private serviceListener: Map<string, IContextServiceListener> = new Map();
     private activeContext: Context;
+    private activeContextIndex: number;
     private contextExtensions: Map<string, ContextExtension[]> = new Map();
 
     private storedContexts: ContextPreference[];
@@ -175,10 +176,6 @@ export class ContextService {
 
                     sourceContext = this.contextInstances[index].getAdditionalInformation('SourceContext');
 
-                    if (switchToTarget) {
-                        await this.switchToTargetContext(sourceContext, targetContextId, targetObjectId);
-                    }
-
                     const isStored = await this.isContextStored(instanceId);
                     if (isStored) {
                         await this.updateStorage(instanceId, true);
@@ -186,6 +183,12 @@ export class ContextService {
                     const context = this.contextInstances.splice(index, 1);
                     await context[0].destroy();
                     EventService.getInstance().publish(ContextEvents.CONTEXT_REMOVED, context[0]);
+
+                    this.activeContextIndex--;
+
+                    if (switchToTarget) {
+                        await this.switchToTargetContext(sourceContext, targetContextId, targetObjectId);
+                    }
 
                     removed = true;
                 }
@@ -283,6 +286,7 @@ export class ContextService {
             }
 
             this.activeContext = context;
+            this.activeContextIndex = this.contextInstances.findIndex((c) => c.instanceId === instanceId);
 
             const contextExtensions = this.getContextExtensions(context.contextId);
             for (const extension of contextExtensions) {
@@ -406,8 +410,8 @@ export class ContextService {
         this.contextCreatePromises.delete(promiseKey);
 
         if (newContext) {
-            const index = this.activeContext
-                ? this.contextInstances.findIndex((c) => c.instanceId === this.activeContext.instanceId)
+            const index = this.activeContextIndex >= 0
+                ? this.activeContextIndex
                 : this.contextInstances.length - 1;
             this.contextInstances.splice(index + 1, 0, newContext);
 
