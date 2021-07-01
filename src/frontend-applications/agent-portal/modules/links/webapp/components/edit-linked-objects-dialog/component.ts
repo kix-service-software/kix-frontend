@@ -342,7 +342,7 @@ class Component {
             createLinksOK = await this.addLinks();
         }
 
-        BrowserUtil.toggleLoadingShield(false);
+        BrowserUtil.toggleLoadingShield('APP_SHIELD', false);
         if (createLinksOK && deleteLinksOK) {
             BrowserUtil.openSuccessOverlay('Translatable#Links updated.');
             ContextService.getInstance().toggleActiveContext(undefined, undefined, true);
@@ -351,7 +351,7 @@ class Component {
 
     private async addLinks(): Promise<boolean> {
         const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.LINK_OBJECT);
-        BrowserUtil.toggleLoadingShield(true, 'Translatable#Create Links');
+        BrowserUtil.toggleLoadingShield('APP_SHIELD', true, 'Translatable#Create Links');
         let ok = true;
         for (const newLinkObject of this.newLinkObjects) {
             await service.createObject(
@@ -372,7 +372,7 @@ class Component {
     }
 
     private async deleteLinks(linkIdsToDelete: number[]): Promise<boolean> {
-        BrowserUtil.toggleLoadingShield(true, 'Translatable#Links will be removed.');
+        BrowserUtil.toggleLoadingShield('APP_SHIELD', true, 'Translatable#Links will be removed.');
         const failIds = await KIXObjectService.deleteObject(KIXObjectType.LINK_OBJECT, linkIdsToDelete);
         return !failIds || !!!failIds.length;
     }

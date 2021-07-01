@@ -14,20 +14,24 @@
     right: 0;
     left: 0;
     background: rgba(0, 0, 0, 0.2);
-    z-index: 35;
+    z-index: 500;
+
     >.loading-info {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translateY(-50%) translateX(-50%);
         text-align: center;
+
         >.loading-spinner {
             width: 9em;
             height: 9em;
+
             >.child::before {
                 background-color: @secondary-6;
             }
         }
+
         >span {
             font-weight: bold;
             font-size: @h1-font-size;

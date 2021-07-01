@@ -172,7 +172,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             BrowserUtil.showValidationError(result);
         } else {
 
-            BrowserUtil.toggleLoadingShield(true, 'Translatable#Create Superuser Account');
+            BrowserUtil.toggleLoadingShield('SETUP_SUPERUSER_SHIELD', true, 'Translatable#Create Superuser Account');
 
             if (this.update) {
                 formInstance.provideFixedValue(
@@ -183,7 +183,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 await this.createUser();
             }
 
-            BrowserUtil.toggleLoadingShield(false);
+            BrowserUtil.toggleLoadingShield('SETUP_SUPERUSER_SHIELD', false);
 
             if (logout) {
                 BrowserUtil.logout();

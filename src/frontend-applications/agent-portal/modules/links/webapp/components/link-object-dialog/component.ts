@@ -116,7 +116,7 @@ class LinkDialogComponent {
     }
 
     public async linkableObjectChanged(nodes: TreeNode[]): Promise<void> {
-        BrowserUtil.toggleLoadingShield(true);
+        BrowserUtil.toggleLoadingShield('APP_SHIELD', true);
 
         this.selectedObjects = [];
         this.state.resultCount = 0;
@@ -140,11 +140,11 @@ class LinkDialogComponent {
         await this.setLinkTypes();
         this.setSubmitState();
         await this.prepareResultTable();
-        BrowserUtil.toggleLoadingShield(false);
+        BrowserUtil.toggleLoadingShield('APP_SHIELD', false);
     }
 
     private async executeSearch(): Promise<void> {
-        BrowserUtil.toggleLoadingShield(true);
+        BrowserUtil.toggleLoadingShield('APP_SHIELD', true);
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
         if (formInstance.hasValues()) {
@@ -162,7 +162,7 @@ class LinkDialogComponent {
             this.setSubmitState();
         }
 
-        BrowserUtil.toggleLoadingShield(false);
+        BrowserUtil.toggleLoadingShield('APP_SHIELD', false);
     }
 
     private async prepareResultTable(): Promise<void> {

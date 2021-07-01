@@ -99,19 +99,19 @@ class Component {
             this.showValidationError(result);
         } else {
             const loadingHint = await TranslationService.translate('Translatable#Save Settings');
-            BrowserUtil.toggleLoadingShield(true, loadingHint);
+            BrowserUtil.toggleLoadingShield('PERSONAL_SETTINGS_SHIELD', true, loadingHint);
             await AgentService.getInstance().setPreferencesByForm()
                 .then(async () => {
                     TranslationService.getInstance().resetTranslations();
                     setTimeout(async () => {
-                        BrowserUtil.toggleLoadingShield(false);
+                        BrowserUtil.toggleLoadingShield('PERSONAL_SETTINGS_SHIELD', false);
                         EventService.getInstance().publish(ApplicationEvent.REFRESH);
                         const toast = await TranslationService.translate('Translatable#Changes saved.');
                         BrowserUtil.openSuccessOverlay(toast);
                         ContextService.getInstance().toggleActiveContext();
                     }, 100);
                 }).catch((error: Error) => {
-                    BrowserUtil.toggleLoadingShield(false);
+                    BrowserUtil.toggleLoadingShield('PERSONAL_SETTINGS_SHIELD', false);
                     BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
                 });
         }

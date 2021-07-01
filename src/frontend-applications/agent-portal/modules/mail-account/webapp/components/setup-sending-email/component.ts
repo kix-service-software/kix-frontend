@@ -358,7 +358,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (validationError) {
             BrowserUtil.showValidationError(result);
         } else {
-            BrowserUtil.toggleLoadingShield(true, 'Translatable#Save Outbox Settings');
+            BrowserUtil.toggleLoadingShield('SETUP_SENDING_MAIL_SHIELD', true, 'Translatable#Save Outbox Settings');
 
             if (this.systemAddress && this.canUpdateSystemAddress) {
                 await KIXObjectService.updateObjectByForm(
@@ -378,7 +378,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 }
             }
 
-            BrowserUtil.toggleLoadingShield(false);
+            BrowserUtil.toggleLoadingShield('SETUP_SENDING_MAIL_SHIELD', false);
         }
     }
     private async saveSysconfigValues(formInstance: FormInstance): Promise<void> {
