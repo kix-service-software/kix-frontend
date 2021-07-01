@@ -363,9 +363,6 @@ msgstr "Sammelaktion"
 msgid "Cancel"
 msgstr "Abbrechen"
 
-msgid "Cancel Process"
-msgstr "Bearbeiten wird abgebrochen"
-
 msgid "Can not create link ({0})"
 msgstr "Verknüpfung konnte nicht angelegt werden ({0})"
 
@@ -3870,6 +3867,9 @@ msgstr "Senden an"
 msgid "Send to all role members"
 msgstr "Senden an Agenten-Rollen"
 
+msgid "send to background"
+msgstr "Im Hintergrund fortsetzen"
+
 msgid "Send to these agents"
 msgstr "Senden an Agenten"
 
@@ -4551,6 +4551,9 @@ msgstr "PLZ"
 msgid "ZIP"
 msgstr "PLZ"
 
+#~ msgid "Cancel Process"
+#~ msgstr "Bearbeiten wird abgebrochen"
+
 #~ msgid "Close Dialog"
 #~ msgstr "Dialog schließen"
 
@@ -4827,9 +4830,6 @@ msgstr "PLZ"
 
 #~ msgid "Send"
 #~ msgstr "Senden"
-
-#~ msgid "send to background"
-#~ msgstr "Im Hintergrund fortsetzen"
 
 #~ msgid "State successfully created."
 #~ msgstr "Status wurde erfolgreich angelegt."

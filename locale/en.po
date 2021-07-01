@@ -351,9 +351,6 @@ msgstr ""
 msgid "Cancel"
 msgstr "Cancel"
 
-msgid "Cancel Process"
-msgstr ""
-
 msgid "Can not create link ({0})"
 msgstr ""
 
@@ -3727,6 +3724,9 @@ msgstr ""
 msgid "Send to all role members"
 msgstr ""
 
+msgid "send to background"
+msgstr "Continue in background"
+
 msgid "Send to these agents"
 msgstr ""
 
@@ -4475,9 +4475,6 @@ msgstr ""
 
 #~ msgid "Selected ticket functions"
 #~ msgstr "Selected ticket functions"
-
-#~ msgid "send to background"
-#~ msgstr "Continue in background"
 
 #~ msgid "Update CI Class"
 #~ msgstr "Update Asset Class"
