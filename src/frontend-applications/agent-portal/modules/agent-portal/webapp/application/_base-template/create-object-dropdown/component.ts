@@ -11,7 +11,6 @@ import { Context } from '../../../../../../model/Context';
 import { ContextDescriptor } from '../../../../../../model/ContextDescriptor';
 import { ContextMode } from '../../../../../../model/ContextMode';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
-import { SortUtil } from '../../../../../../model/SortUtil';
 import { ContextEvents } from '../../../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
