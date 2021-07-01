@@ -26,9 +26,7 @@ import { IEventSubscriber } from '../../../base-components/webapp/core/IEventSub
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { ArticleProperty } from '../../model/ArticleProperty';
 import { Attachment } from '../../../../model/kix/Attachment';
-import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
-import { ArticleFormService } from './ArticleFormService';
-import { ServiceType } from '../../../base-components/webapp/core/ServiceType';
+import { FormService } from '../../../base-components/webapp/core/FormService';
 
 export class TicketFormFieldValueHandler extends FormFieldValueHandler {
 
@@ -85,22 +83,10 @@ export class TicketFormFieldValueHandler extends FormFieldValueHandler {
             }
         }
 
-        const channelValue = changedFieldValues.find((cv) => cv[0] && cv[0].property === ArticleProperty.CHANNEL_ID);
-        if (channelValue && channelValue[1]) {
-            const field = channelValue[0];
-            const value = channelValue[1];
-
-            const formService = ServiceRegistry.getServiceInstance<ArticleFormService>(
-                KIXObjectType.ARTICLE, ServiceType.FORM
-            );
-
-            if (value.value) {
-                const channelFields = await formService.getFormFieldsForChannel(
-                    formInstance, value.value, formInstance.getForm().id, false
-                );
-                formInstance.addFieldChildren(field, channelFields, true);
-            } else {
-                formInstance.addFieldChildren(field, [], true);
+        const valueHandler = FormService.getInstance().getFormFieldValueHandler(KIXObjectType.ARTICLE);
+        if (valueHandler) {
+            for (const handler of valueHandler) {
+                handler.handleFormFieldValues(formInstance, changedFieldValues);
             }
         }
     }

@@ -75,7 +75,7 @@ class Component extends FormInputComponent<number, ComponentState> {
         if (queueValue && queueValue.value) {
             queueId = queueValue.value;
         } else if (context) {
-            const ticket = await context.getObject<Ticket>();
+            const ticket = await context.getObject<Ticket>(KIXObjectType.TICKET);
             if (ticket) {
                 queueId = ticket.QueueID;
             }

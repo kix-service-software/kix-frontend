@@ -47,8 +47,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     </div>
     <if(state.errorMessages && state.errorMessages.length)>
         <div.validation-errors>
-            <for|error| of=state.errorMessages>
-                <span>${error}</span>
+            <for|error, index| of=state.errorMessages>
+                <span>${error}${index < state.errorMessages.length - 1 ? " " : ""}</span>
             </for>
         </div>
     </if>

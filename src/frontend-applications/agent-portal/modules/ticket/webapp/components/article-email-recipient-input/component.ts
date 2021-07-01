@@ -16,7 +16,6 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { AutoCompleteConfiguration } from '../../../../../model/configuration/AutoCompleteConfiguration';
 import { ArticleProperty } from '../../../model/ArticleProperty';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { SystemAddress } from '../../../../system-address/model/SystemAddress';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
@@ -27,7 +26,6 @@ import { FilterType } from '../../../../../model/FilterType';
 import { FormInputAction } from '../../../../../modules/base-components/webapp/core/FormInputAction';
 import { Label } from '../../../../../modules/base-components/webapp/core/Label';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { ContextType } from '../../../../../model/ContextType';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { Article } from '../../../model/Article';
@@ -60,7 +58,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
 
         await this.prepareActions();
 
-        if (this.state.field.property === ArticleProperty.CC) {
+        if (this.state.field?.property === ArticleProperty.CC) {
             this.ccSubscriber = {
                 eventSubscriberId: 'article-email-cc-recipient-input',
                 eventPublished: (data: any, eventId: string) => {
@@ -150,7 +148,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     private async prepareActions(): Promise<void> {
-        const additionalTypeOption = this.state.field.options.find((o) => o.option === 'ADDITIONAL_RECIPIENT_TYPES');
+        const additionalTypeOption = this.state.field?.options?.find((o) => o.option === 'ADDITIONAL_RECIPIENT_TYPES');
         const actions = [];
         if (additionalTypeOption && additionalTypeOption.value && Array.isArray(additionalTypeOption.value)) {
             const context = ContextService.getInstance().getActiveContext();
@@ -167,7 +165,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
                 actions.push(action);
             }
         }
-        if (this.state.field.property === ArticleProperty.TO) {
+        if (this.state.field?.property === ArticleProperty.TO) {
             const replyAllAction = await this.getReplyAllAction();
             if (replyAllAction) {
                 actions.push(replyAllAction);

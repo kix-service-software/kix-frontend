@@ -13,13 +13,13 @@ import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
 import { NewTicketArticleContext } from '../..';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
-import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../../model/ContextMode';
 import { AuthenticationSocketClient } from '../../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
 
 export class ArticleReplyAction extends AbstractAction {
 
     private articleId: number = null;
+    private ticketId: number = null;
 
     public hasLink: boolean = true;
 
@@ -33,11 +33,14 @@ export class ArticleReplyAction extends AbstractAction {
         const context = ContextService.getInstance().getActiveContext();
         const objectId = context.getObjectId();
 
-        const permissions = [
-            new UIComponentPermission(`tickets/${objectId}/articles`, [CRUD.CREATE])
-        ];
+        if (objectId) {
+            this.ticketId = Number(objectId);
+            const permissions = [
+                new UIComponentPermission(`tickets/${objectId}/articles`, [CRUD.CREATE])
+            ];
+            show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        }
 
-        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
         return show;
     }
 
@@ -61,7 +64,7 @@ export class ArticleReplyAction extends AbstractAction {
     }
 
     public canRun(): boolean {
-        return this.articleId !== null;
+        return this.articleId !== null && this.ticketId !== null;
     }
 
     public async getLinkData(): Promise<string> {
@@ -69,16 +72,19 @@ export class ArticleReplyAction extends AbstractAction {
     }
     private async openDialog(): Promise<void> {
         if (this.articleId) {
-            const context = ContextService.getInstance().getActiveContext();
-            if (context) {
-                context.setAdditionalInformation('REFERENCED_ARTICLE_ID', this.articleId);
-                context.setAdditionalInformation('ARTICLE_REPLY', true);
-                context.setAdditionalInformation(
-                    'NEW_ARTICLE_TAB_TITLE', await TranslationService.translate('Translatable#Reply')
-                );
-                context.setAdditionalInformation('NEW_ARTICLE_TAB_ICON', 'kix-icon-mail-answer-outline');
-            }
-            ContextService.getInstance().setActiveContext(NewTicketArticleContext.CONTEXT_ID, this.articleId);
+            ContextService.getInstance().setActiveContext(NewTicketArticleContext.CONTEXT_ID, this.articleId,
+                undefined,
+                [
+                    ['REFERENCED_TICKET_ID', this.ticketId],
+                    ['REFERENCED_ARTICLE_ID', this.articleId],
+                    ['ARTICLE_REPLY', true],
+                    [
+                        AdditionalContextInformation.DISPLAY_TEXT,
+                        await TranslationService.translate(this.text)
+                    ],
+                    [AdditionalContextInformation.ICON, this.icon]
+                ]
+            );
         }
     }
 }
