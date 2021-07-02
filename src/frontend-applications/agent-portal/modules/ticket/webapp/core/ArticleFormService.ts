@@ -475,6 +475,8 @@ export class ArticleFormService extends KIXObjectFormService {
             if (referencedArticleId) {
                 let articles: Article[] = ticket ? ticket.Articles : [];
                 if (!Array.isArray(articles) || !articles.length) {
+
+                    // "KIX-Start mode"
                     const referencedTicketId = dialogContext.getAdditionalInformation('REFERENCED_TICKET_ID');
                     if (referencedTicketId) {
                         let loadingOptions;
@@ -488,6 +490,14 @@ export class ArticleFormService extends KIXObjectFormService {
                             KIXObjectType.ARTICLE, [referencedArticleId], loadingOptions,
                             new ArticleLoadingOptions(referencedTicketId), true
                         ).catch(() => [] as Article[]);
+                    }
+
+                    // "KIX Pro mode"
+                    else {
+                        const context = ContextService.getInstance().getActiveContext();
+                        if (context) {
+                            articles = await context.getObjectList<Article>(KIXObjectType.ARTICLE);
+                        }
                     }
                 }
                 article = articles.find((a) => a.ArticleID === referencedArticleId);
