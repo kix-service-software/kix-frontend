@@ -72,7 +72,7 @@ class Component {
             this.keyListenerElement.addEventListener('keydown', this.keyListener);
         }
 
-        const context = ContextService.getInstance().getActiveContext();
+        const context = ContextService.getInstance().getActiveContext<SearchContext>();
         this.contextInstanceId = context?.instanceId;
         const searchDefinition = SearchService.getInstance().getSearchDefinition(
             context.descriptor.kixObjectTypes[0]
@@ -80,6 +80,19 @@ class Component {
         this.state.manager = searchDefinition?.formManager;
         this.setTitle();
         this.initManager();
+
+        this.managerListenerId = IdService.generateDateBasedId('search-criteria-widget');
+        this.state.manager?.registerListener(this.managerListenerId, async () => {
+            const values = this.state.manager.getValues();
+            this.state.canSearch = values.length > 0;
+
+            const criteria: FilterCriteria[] = [];
+            for (const v of values) {
+                criteria.push(searchDefinition.getFilterCriteria(v));
+            }
+
+            context?.getSearchCache()?.setCriteria(criteria);
+        });
     }
 
     private async initManager(): Promise<void> {
@@ -104,22 +117,6 @@ class Component {
         if (dynamicFormComponent) {
             dynamicFormComponent.updateValues();
         }
-
-        this.managerListenerId = IdService.generateDateBasedId('search-criteria-widget');
-        this.state.manager?.registerListener(this.managerListenerId, async () => {
-            const values = this.state.manager.getValues();
-            this.state.canSearch = values.length > 0;
-
-            const searchDefinition = SearchService.getInstance().getSearchDefinition(
-                context.getSearchCache()?.objectType
-            );
-            const criteria: FilterCriteria[] = [];
-            for (const v of values) {
-                criteria.push(searchDefinition.getFilterCriteria(v));
-            }
-
-            context.getSearchCache()?.setCriteria(criteria);
-        });
     }
 
     public onDestroy(): void {
@@ -152,8 +149,6 @@ class Component {
     }
 
     public resetSearch(): void {
-        this.state.manager?.unregisterListener(this.managerListenerId);
-
         const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
         context.resetSearch();
     }

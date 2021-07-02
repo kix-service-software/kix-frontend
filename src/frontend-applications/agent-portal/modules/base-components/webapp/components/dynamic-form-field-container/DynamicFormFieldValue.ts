@@ -70,12 +70,16 @@ export class DynamicFormFieldValue {
     public constructor(
         public manager: IDynamicFormManager,
         public value = new ObjectPropertyValue(null, null, null),
-        public id: string = IdService.generateDateBasedId('dynamic-value-'),
+        public id?: string,
         public removable: boolean = true,
         public readonly: boolean = value.readonly,
         public changeable: boolean = value.changeable,
         public required: boolean = value.required
     ) {
+
+        if (!id) {
+            this.id = this.value.id;
+        }
         this.propertyTreeHandler = new TreeHandler([], null, null, false);
         TreeService.getInstance().registerTreeHandler('property-' + this.id, this.propertyTreeHandler);
 

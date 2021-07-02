@@ -34,6 +34,7 @@ import { TranslationService } from '../../../../modules/translation/webapp/core/
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
 import { ContextMode } from '../../../../model/ContextMode';
+import { SearchProperty } from '../../../search/model/SearchProperty';
 
 
 export class FAQService extends KIXObjectService {
@@ -73,31 +74,7 @@ export class FAQService extends KIXObjectService {
     public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
         const filter: FilterCriteria[] = [
             new FilterCriteria(
-                FAQArticleProperty.NUMBER, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                FAQArticleProperty.TITLE, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                FAQArticleProperty.KEYWORDS, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                FAQArticleProperty.FIELD_1, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                FAQArticleProperty.FIELD_2, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                FAQArticleProperty.FIELD_3, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                FAQArticleProperty.FIELD_4, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                FAQArticleProperty.FIELD_5, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                FAQArticleProperty.FIELD_6, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
             )
         ];
 

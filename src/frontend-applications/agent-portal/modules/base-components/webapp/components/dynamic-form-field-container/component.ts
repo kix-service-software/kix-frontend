@@ -38,7 +38,7 @@ class Component {
         const currentValues = this.manager.getValues();
 
         this.state.dynamicValues = this.state.dynamicValues.filter(
-            (dv) => !currentValues.some((cv) => cv.id === dv.id)
+            (dv) => currentValues.some((cv) => cv.id === dv.id)
         );
 
         for (const cv of currentValues) {
@@ -53,7 +53,7 @@ class Component {
                 }
                 existingValue.required = cv.required;
             } else {
-                const value = new DynamicFormFieldValue(this.manager, cv);
+                const value = new DynamicFormFieldValue(this.manager, cv, cv.id);
                 await value.init();
                 this.state.dynamicValues.push(value);
             }
@@ -83,7 +83,8 @@ class Component {
                     new ObjectPropertyValue(
                         v.property, v.operator, v.value, v.options, v.required, v.valid,
                         v.objectType, v.readonly, v.changeable, v.id, v.additionalOptions
-                    )
+                    ),
+                    v.id
                 );
                 initPromises.push(formFieldValue.init());
                 values.push(formFieldValue);
