@@ -37,8 +37,8 @@ export class RoutingService {
             routed = await this.routeToURL(history);
         }
 
-        routed = routed || await this.setReleaseContext();
-        routed = routed || await SetupService.getInstance().setSetupAssistentIfNeeded();
+        routed = await this.setReleaseContext() || routed;
+        routed = await SetupService.getInstance().setSetupAssistentIfNeeded() || routed;
 
         if (!routed) {
             const contextList = ContextService.getInstance().getContextInstances();
