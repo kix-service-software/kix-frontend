@@ -71,7 +71,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async createMyQueuesLabels(user: User): Promise<void> {
         const myQueues = user.Preferences.find((p) => p.ID === PersonalSettingsProperty.MY_QUEUES);
         if (myQueues && myQueues.Value) {
-            const queueIds = Array.isArray(myQueues) ? myQueues : myQueues.Value.split(',').map((v) => Number(v));
+            const queueIds = Array.isArray(myQueues.Value) ? myQueues.Value :
+                myQueues.Value.split(',').map((v) => Number(v));
             const queues = await KIXObjectService.loadObjects('Queue', queueIds);
             this.state.queueLabels = queues.map((q) => new Label(q, null, null, null, null, null, true));
         }
