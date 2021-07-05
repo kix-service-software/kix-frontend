@@ -100,9 +100,9 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
                     field.label = dynamicField.Label;
                 }
 
-                field.defaultValue = config.DefaultValue
+                field.defaultValue = !field.defaultValue && config.DefaultValue
                     ? new FormFieldValue(config.DefaultValue, true)
-                    : null;
+                    : field.defaultValue;
 
                 switch (dynamicField.FieldType) {
                     case DynamicFieldTypes.TEXT:
