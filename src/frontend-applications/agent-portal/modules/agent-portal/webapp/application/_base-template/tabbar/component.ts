@@ -15,6 +15,7 @@ import { ContextEvents } from '../../../../../base-components/webapp/core/Contex
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
+import { HomeContext } from '../../../../../home/webapp/core';
 import { ComponentState } from './ComponentState';
 import { ContextTab } from './ContextTab';
 
@@ -132,6 +133,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             tab.refresh = false;
             ContextService.getInstance().setContextByInstanceId(tab.contextInstanceId);
         }
+    }
+
+    public canClose(): boolean {
+        const instances = ContextService.getInstance().getContextInstances();
+        let isHomeContext: boolean = false;
+        if (instances.length === 1) {
+            isHomeContext = instances[0].contextId === HomeContext.CONTEXT_ID;
+        }
+        return instances.length > 1 || !isHomeContext;
     }
 
     public async closeTab(tab: ContextTab, event: any): Promise<void> {
