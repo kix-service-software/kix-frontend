@@ -134,6 +134,10 @@ export abstract class Context {
         }
     }
 
+    public async postInit(): Promise<void> {
+        return;
+    }
+
     public async update(urlParams: URLSearchParams): Promise<void> {
         return;
     }
