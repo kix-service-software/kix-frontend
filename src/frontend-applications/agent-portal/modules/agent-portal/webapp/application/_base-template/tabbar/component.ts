@@ -139,7 +139,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         event.stopPropagation();
 
         this.state.blocked = true;
-        const removed = await ContextService.getInstance().removeContext(tab.contextInstanceId);
+
+        const context = ContextService.getInstance().getActiveContext();
+
+        const switchToTarget = context?.instanceId === tab.contextInstanceId;
+        const removed = await ContextService.getInstance().removeContext(
+            tab.contextInstanceId, null, null, switchToTarget
+        );
         this.state.blocked = false;
         if (removed) {
             this.removeEntry(tab.contextInstanceId);
