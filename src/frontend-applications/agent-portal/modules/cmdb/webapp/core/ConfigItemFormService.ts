@@ -158,13 +158,17 @@ export class ConfigItemFormService extends KIXObjectFormService {
         formField: FormFieldConfiguration, formContext: FormContext
     ): Promise<any> {
         if (value) {
+            const context = ContextService.getInstance().getActiveContext();
+            const duplicate = context?.getAdditionalInformation('DUPLICATE');
             switch (property) {
                 case ConfigItemProperty.NAME:
-                    if (formContext === FormContext.NEW) {
+                    if (formContext === FormContext.NEW && duplicate) {
                         const ciName = await TranslationService.translate(
                             'Translatable#Copy of {0}', [value]
                         );
                         value = ciName;
+                    } else {
+                        value = null;
                     }
                     break;
                 case KIXObjectProperty.LINKS:

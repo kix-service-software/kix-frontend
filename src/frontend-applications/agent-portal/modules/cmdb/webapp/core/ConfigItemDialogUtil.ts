@@ -33,7 +33,10 @@ export class ConfigItemDialogUtil {
     public static async duplicate(configItem: ConfigItem): Promise<void> {
         ContextService.getInstance().setActiveContext(
             NewConfigItemDialogContext.CONTEXT_ID, configItem.ConfigItemID, null,
-            [[ConfigItemProperty.CLASS_ID, configItem.ClassID]]
+            [
+                [ConfigItemProperty.CLASS_ID, configItem.ClassID],
+                ['DUPLICATE', true]
+            ]
         );
     }
 
