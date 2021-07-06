@@ -274,10 +274,10 @@ export abstract class KIXObjectFormService {
 
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
-        const formValues = formInstance.getAllFormFieldValues();
-        const iterator = formValues.keys();
-        let key = iterator.next();
-        while (key.value) {
+        const formValues = formInstance?.getAllFormFieldValues();
+        const iterator = formValues?.keys();
+        let key = iterator?.next();
+        while (key?.value) {
             const formFieldInstanceId = key.value;
             const field = await formInstance.getFormField(formFieldInstanceId);
             const property = field ? field.property : null;
@@ -294,10 +294,10 @@ export abstract class KIXObjectFormService {
             key = iterator.next();
         }
 
-        const fixedValues = formInstance.getFixedValues();
-        const fixedIterator = fixedValues.keys();
-        let fixedKey = fixedIterator.next();
-        while (fixedKey.value) {
+        const fixedValues = formInstance?.getFixedValues();
+        const fixedIterator = fixedValues?.keys();
+        let fixedKey = fixedIterator?.next();
+        while (fixedKey?.value) {
             const property = fixedKey.value;
             const value = fixedValues.get(property) || [];
             const dfName = KIXObjectService.getDynamicFieldName(property);
@@ -312,10 +312,10 @@ export abstract class KIXObjectFormService {
             fixedKey = fixedIterator.next();
         }
 
-        const templateValues = formInstance.getTemplateValues();
-        const templateIterator = templateValues.keys();
-        let templateKey = templateIterator.next();
-        while (templateKey.value) {
+        const templateValues = formInstance?.getTemplateValues();
+        const templateIterator = templateValues?.keys();
+        let templateKey = templateIterator?.next();
+        while (templateKey?.value) {
             const property = templateKey.value;
             const field = formInstance.getFormFieldByProperty(property);
             if (!field) {
@@ -333,9 +333,11 @@ export abstract class KIXObjectFormService {
             templateKey = templateIterator.next();
         }
 
-        parameter = await this.postPrepareValues(
-            parameter, createOptions, formInstance.getForm().formContext, formInstance
-        );
+        if (formInstance) {
+            parameter = await this.postPrepareValues(
+                parameter, createOptions, formInstance?.getForm().formContext, formInstance
+            );
+        }
 
         return parameter;
     }
