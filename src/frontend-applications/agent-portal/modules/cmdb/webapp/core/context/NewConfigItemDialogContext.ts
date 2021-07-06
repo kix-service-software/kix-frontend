@@ -45,8 +45,8 @@ export class NewConfigItemDialogContext extends Context {
         return object;
     }
 
-    public async initContext(urlParams?: URLSearchParams): Promise<void> {
-        await super.initContext(urlParams);
+    public async postInit(): Promise<void> {
+        await super.postInit();
 
         const instance = await this.getFormManager().getFormInstance();
         if (!await this.getFormManager().getFormId()) {

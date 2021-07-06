@@ -295,6 +295,8 @@ export class ContextService {
             this.activeContext = context;
             this.activeContextIndex = this.contextInstances.findIndex((c) => c.instanceId === instanceId);
 
+            await this.activeContext.postInit();
+
             const contextExtensions = this.getContextExtensions(context.contextId);
             for (const extension of contextExtensions) {
                 await extension.postInitContext(context);
