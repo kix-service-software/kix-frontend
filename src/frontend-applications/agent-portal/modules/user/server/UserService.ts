@@ -130,7 +130,7 @@ export class UserService extends KIXObjectAPIService {
             return await super.executeUpdateOrCreateRequest(
                 token, clientRequestId, parameter, uri, objectType, 'UserPreferenceID', true
             ).catch((error: Error) => {
-                LoggingService.getInstance().error(`${ error.Code }: ${ error.Message }`, error);
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                 throw new Error(error.Code, error.Message);
             });
 
@@ -260,16 +260,26 @@ export class UserService extends KIXObjectAPIService {
                 }
             } else if (currentPreferences.some((p) => p.ID === param[0])) {
                 const paramValue = param[1] === null ? '' : param[1];
-                await this.updateObject(
-                    token, clientRequestId, KIXObjectType.USER_PREFERENCE,
-                    [
-                        ['Value', paramValue]
-                    ],
-                    param[0],
-                    options
-                ).catch((error: Error) => {
-                    errors.push(error);
-                });
+                if (
+                    paramValue && (typeof paramValue === 'string' || (Array.isArray(paramValue) && paramValue.length))
+                ) {
+                    await this.updateObject(
+                        token, clientRequestId, KIXObjectType.USER_PREFERENCE,
+                        [
+                            ['Value', paramValue]
+                        ],
+                        param[0], options
+                    ).catch((error: Error) => {
+                        errors.push(error);
+                    });
+                } else {
+                    const uri = this.buildUri('session', 'user', 'preferences', param[0]);
+                    await this.sendDeleteRequest<void>(token, clientRequestId, [uri], KIXObjectType.USER_PREFERENCE)
+                        .catch((error: Error) => {
+                            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                            throw new Error(error.Code, error.Message);
+                        });
+                }
             } else {
                 const paramValue = param[1] === null ? '' : param[1];
                 await this.createObject(
