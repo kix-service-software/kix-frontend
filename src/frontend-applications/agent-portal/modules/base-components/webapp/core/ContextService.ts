@@ -521,9 +521,14 @@ export class ContextService {
             const preference = await AgentService.getInstance().getUserPreference('AgentPortalContextList');
             if (preference) {
                 try {
-                    contextList = JSON.parse(preference.Value);
+                    const value: string | string[] = preference.Value;
+                    if (typeof value === 'string') {
+                        contextList = [JSON.parse(value)];
+                    } else if (Array.isArray(value)) {
+                        contextList = (value as string[]).map((v) => JSON.parse(v));
+                    }
                 } catch (error) {
-                    console.error('Could not load COntextList from Preferences.');
+                    console.error('Could not load ContextList from Preferences.');
                     console.error(error);
                 }
             }
@@ -579,8 +584,9 @@ export class ContextService {
                 }
             }
 
+            const value = this.storedContexts.map((p) => JSON.stringify(p));
             await AgentService.getInstance().setPreferences(
-                [['AgentPortalContextList', JSON.stringify(this.storedContexts)]]
+                [['AgentPortalContextList', value.length ? value : null]]
             );
 
             if (stored) {
@@ -616,7 +622,7 @@ export class ContextService {
                 });
 
                 await AgentService.getInstance().setPreferences(
-                    [['AgentPortalContextList', JSON.stringify(this.storedContexts)]]
+                    [['AgentPortalContextList', this.storedContexts.map((p) => JSON.stringify(p))]]
                 );
             }
         }
