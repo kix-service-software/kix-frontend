@@ -169,11 +169,11 @@ export class CompareConfigItemVersionTableContentProvider extends TableContentPr
                         if (displayValue) {
                             if (rd.Type === 'Date') {
                                 displayValue = await DateTimeUtil.getLocalDateString(displayValue);
-                            } else if (rd.Type === 'Attachment' && rd.Value) {
-                                displayValue = rd.Value.Filename;
                             } else {
                                 displayValue = await TranslationService.translate(displayValue);
                             }
+                        } else if (rd.Type === 'Attachment' && rd.Value) {
+                            displayValue = `${rd.Value.Filename} (${rd.Value.Filesize})`;
                         }
                         values.push(new TableValue(version.VersionID.toString(), displayValue, displayValue));
                     }
