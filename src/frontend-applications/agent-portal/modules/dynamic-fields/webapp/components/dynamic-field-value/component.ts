@@ -83,14 +83,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
 
             const dfValue = dynamicFields
-                ? dynamicFields.find((dfv) => dfv.Name === this.state.field.Name)
+                ? dynamicFields.find((dfv) => dfv.Name === this.state.field?.Name)
                 : null;
             this.state.dfValue = dfValue;
             if (dfValue) {
-                if (this.state.field.FieldType === DynamicFieldTypes.CHECK_LIST) {
+                if (this.state.field?.FieldType === DynamicFieldTypes.CHECK_LIST) {
                     this.setCheckListValues(dfValue);
                 } else {
-                    if (this.state.field.FieldType === DynamicFieldTypes.CI_REFERENCE) {
+                    if (this.state.field?.FieldType === DynamicFieldTypes.CI_REFERENCE) {
                         this.state.labels = await LabelService.getInstance().createLabelsFromDFValue(
                             this.object.KIXObjectType, dfValue
                         );

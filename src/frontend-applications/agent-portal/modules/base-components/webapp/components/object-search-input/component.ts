@@ -11,7 +11,6 @@ import { ComponentState } from './ComponentState';
 import { SearchService } from '../../../../search/webapp/core';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 import { FormInputComponent } from '../../core/FormInputComponent';
-import { FormService } from '../../core/FormService';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { ContextService } from '../../core/ContextService';
@@ -27,12 +26,12 @@ class Component extends FormInputComponent<any, ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const option = this.state.field.options.find((o) => o.option === FormFieldOptions.OBJECT_TYPE);
+        const option = this.state.field?.options.find((o) => o.option === FormFieldOptions.OBJECT_TYPE);
         if (option && option.value) {
             const searchDefinition = SearchService.getInstance().getSearchDefinition(option.value);
 
             let ignoreProperties = [];
-            const ignoreOption = this.state.field.options.find((o) => o.option === FormFieldOptions.IGNORE_PROPERTIES);
+            const ignoreOption = this.state.field?.options.find((o) => o.option === FormFieldOptions.IGNORE_PROPERTIES);
             if (ignoreOption && Array.isArray(ignoreOption.value)) {
                 ignoreProperties = ignoreOption.value;
             }
@@ -41,7 +40,7 @@ class Component extends FormInputComponent<any, ComponentState> {
             this.state.manager.reset();
             this.state.manager.init();
 
-            this.state.manager.registerListener(this.state.field.instanceId, () => {
+            this.state.manager.registerListener(this.state.field?.instanceId, () => {
                 const filterCriteria = [];
                 const values = this.state.manager.getValues();
                 values.forEach((v) => {
@@ -59,7 +58,7 @@ class Component extends FormInputComponent<any, ComponentState> {
     public async setCurrentValue(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
-        const value = formInstance.getFormFieldValue<FilterCriteria[]>(this.state.field.instanceId);
+        const value = formInstance.getFormFieldValue<FilterCriteria[]>(this.state.field?.instanceId);
         if (this.state.manager && value && Array.isArray(value.value)) {
             for (const criteria of value.value) {
                 this.state.manager.setValue(

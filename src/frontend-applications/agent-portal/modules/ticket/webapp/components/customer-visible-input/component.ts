@@ -9,8 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../base-components/webapp/core/FormInputComponent';
-import { FormService } from '../../../../base-components/webapp/core/FormService';
-import { IdService } from '../../../../../model/IdService';
 import { ArticleProperty } from '../../../model/ArticleProperty';
 import { TicketProperty } from '../../../model/TicketProperty';
 import { Organisation } from '../../../../customer/model/Organisation';
@@ -20,7 +18,6 @@ import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOp
 import { OrganisationProperty } from '../../../../customer/model/OrganisationProperty';
 import { Contact } from '../../../../customer/model/Contact';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { ContextType } from '../../../../../model/ContextType';
 import { Ticket } from '../../../model/Ticket';
 import { FormInstance } from '../../../../base-components/webapp/core/FormInstance';
 
@@ -46,7 +43,7 @@ class Component extends FormInputComponent<any, ComponentState> {
     public async setCurrentValue(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
-        const value = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        const value = formInstance.getFormFieldValue<number>(this.state.field?.instanceId);
         if (value) {
             if (Array.isArray(value.value)) {
                 this.state.checked = Boolean(value.value[0]);

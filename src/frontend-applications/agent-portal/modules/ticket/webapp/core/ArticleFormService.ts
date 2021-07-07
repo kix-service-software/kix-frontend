@@ -13,12 +13,10 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { Ticket } from '../../model/Ticket';
 import { ArticleProperty } from '../../model/ArticleProperty';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
-import { ContextType } from '../../../../model/ContextType';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { FormContext } from '../../../../model/configuration/FormContext';
 import { FormFieldOption } from '../../../../model/configuration/FormFieldOption';
 import { Channel } from '../../model/Channel';
-import { FormService } from '../../../../modules/base-components/webapp/core/FormService';
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
 import { AutocompleteFormFieldOption } from '../../../../model/AutocompleteFormFieldOption';
@@ -162,11 +160,6 @@ export class ArticleFormService extends KIXObjectFormService {
                 this.getAttachmentField(formInstance, clear)
             ];
 
-            formInstance.provideFormFieldValuesForProperties([
-                [ArticleProperty.TO, null],
-                [ArticleProperty.CC, null],
-                [ArticleProperty.BCC, null],
-            ], null);
         } else if (channel?.Name === 'email') {
             fieldPromises = [
                 this.getCustomerVisibleField(formInstance, clear),
