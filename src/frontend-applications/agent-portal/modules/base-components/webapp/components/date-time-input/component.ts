@@ -26,27 +26,27 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
 
         this.state.currentValue = typeof input.currentValue !== 'undefined' ?
             input.currentValue : this.state.currentValue;
-        if (this.state.field && this.state.field.options) {
-            const typeOption = this.state.field.options.find(
+        if (this.state.field && this.state.field?.options) {
+            const typeOption = this.state.field?.options.find(
                 (o) => o.option === FormFieldOptions.INPUT_FIELD_TYPE
             );
             if (typeOption) {
                 this.state.inputType = typeOption.value.toString();
             }
 
-            const minDateOption = this.state.field.options.find((o) => o.option === FormFieldOptions.MIN_DATE);
+            const minDateOption = this.state.field?.options.find((o) => o.option === FormFieldOptions.MIN_DATE);
             this.state.minDate = minDateOption ? minDateOption.value : null;
 
-            const maxDateOption = this.state.field.options.find((o) => o.option === FormFieldOptions.MAX_DATE);
+            const maxDateOption = this.state.field?.options.find((o) => o.option === FormFieldOptions.MAX_DATE);
             this.state.maxDate = maxDateOption ? maxDateOption.value : null;
         }
         this.update();
     }
 
     private async update(): Promise<void> {
-        const placeholderText = this.state.field.placeholder
-            ? this.state.field.placeholder
-            : this.state.field.required ? this.state.field.label : '';
+        const placeholderText = this.state.field?.placeholder
+            ? this.state.field?.placeholder
+            : this.state.field?.required ? this.state.field?.label : '';
         this.state.placeholder = await TranslationService.translate(placeholderText);
         (this as any).setStateDirty('field');
     }
@@ -59,7 +59,7 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
         this.state.prepared = false;
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
-        const value = formInstance.getFormFieldValue<string>(this.state.field.instanceId);
+        const value = formInstance.getFormFieldValue<string>(this.state.field?.instanceId);
         if (value && value.value) {
             this.state.currentValue = new Date(value.value);
             this.state.dateValue = DateTimeUtil.getKIXDateString(this.state.currentValue);

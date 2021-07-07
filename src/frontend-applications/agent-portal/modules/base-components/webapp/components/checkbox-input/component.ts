@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
-import { FormService } from '../../core/FormService';
 import { ContextService } from '../../core/ContextService';
 
 class Component extends FormInputComponent<any, ComponentState> {
@@ -30,7 +29,7 @@ class Component extends FormInputComponent<any, ComponentState> {
     public async setCurrentValue(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
-        const value = formInstance.getFormFieldValue<boolean>(this.state.field.instanceId);
+        const value = formInstance.getFormFieldValue<boolean>(this.state.field?.instanceId);
         if (value) {
             this.state.checked = Boolean(value.value);
         }

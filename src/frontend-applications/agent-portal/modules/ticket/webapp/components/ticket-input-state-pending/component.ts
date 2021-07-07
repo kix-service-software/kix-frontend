@@ -36,7 +36,7 @@ class Component extends FormInputComponent<Date, ComponentState> {
         let date = new Date();
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
-        const value = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        const value = formInstance.getFormFieldValue<number>(this.state.field?.instanceId);
         if (value.value) {
             date = new Date(value.value);
         } else {

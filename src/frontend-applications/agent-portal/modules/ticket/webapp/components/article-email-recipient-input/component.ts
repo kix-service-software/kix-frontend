@@ -93,7 +93,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
     public async setCurrentValue(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
-        const value = this.state.field ? formInstance.getFormFieldValue<number>(this.state.field.instanceId) : null;
+        const value = this.state.field ? formInstance.getFormFieldValue<number>(this.state.field?.instanceId) : null;
         if (value && value.value) {
             let contactValues: any[] = Array.isArray(value.value) ? [...value.value] : [value.value];
             contactValues = contactValues.map((v) => v.replace(/.+ <(.+)>/, '$1'));
@@ -195,7 +195,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
         } else {
             const context = ContextService.getInstance().getActiveContext();
             const formInstance = await context?.getFormManager()?.getFormInstance();
-            let field = this.state.field.children.find((f) => f.property === action.id);
+            let field = this.state.field?.children.find((f) => f.property === action.id);
             if (field) {
                 formInstance.removeFormField(field);
                 action.active = false;
@@ -218,7 +218,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
     private async handleReplyAll(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         const dialogContext = ContextService.getInstance().getActiveContext();
-        if (this.state.field.property === ArticleProperty.TO && context && dialogContext) {
+        if (this.state.field?.property === ArticleProperty.TO && context && dialogContext) {
             const replyId = dialogContext.getAdditionalInformation('REFERENCED_ARTICLE_ID');
             const articles = await context.getObjectList<Article>(KIXObjectType.ARTICLE);
             if (replyId && articles && articles.length) {
@@ -243,7 +243,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
     private async handleCcField(replyArticle: Article, filterList: string[]): Promise<void> {
         const ccAction = this.state.actions.find((a) => a.id === ArticleProperty.CC);
         if (ccAction) {
-            const ccField = this.state.field.children.find((f) => f.property === ArticleProperty.CC);
+            const ccField = this.state.field?.children.find((f) => f.property === ArticleProperty.CC);
             if (!ccField) {
                 this.ccReadySubscriber = {
                     eventSubscriberId: 'article-email-to-recipient-input',

@@ -46,9 +46,9 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     public async update(): Promise<void> {
-        const placeholderText = this.state.field.placeholder
-            ? this.state.field.placeholder
-            : this.state.field.required ? this.state.field.label : '';
+        const placeholderText = this.state.field?.placeholder
+            ? this.state.field?.placeholder
+            : this.state.field?.required ? this.state.field?.label : '';
 
         this.state.placeholder = await TranslationService.translate(placeholderText);
     }
@@ -69,7 +69,7 @@ class Component extends FormInputComponent<string, ComponentState> {
     public async setCurrentValue(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
-        const formValue = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        const formValue = formInstance.getFormFieldValue<number>(this.state.field?.instanceId);
         const treeHandler = TreeService.getInstance().getTreeHandler(this.treeId);
         if (formValue && treeHandler) {
             const nodes = treeHandler.getTree();
@@ -93,7 +93,7 @@ class Component extends FormInputComponent<string, ComponentState> {
     private async handleIMAPFolderField(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
-        let field = this.state.field.children.find((f) => f.property === MailAccountProperty.IMAP_FOLDER);
+        let field = this.state.field?.children.find((f) => f.property === MailAccountProperty.IMAP_FOLDER);
         const showFolderField = this.showIMAPFolderField();
         if (field && !showFolderField) {
             formInstance.removeFormField(field);

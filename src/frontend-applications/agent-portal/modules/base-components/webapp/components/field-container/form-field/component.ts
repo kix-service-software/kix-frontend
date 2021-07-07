@@ -47,18 +47,18 @@ class Component {
             ['Translatable#Sort']
         );
 
-        if (this.state.field.property === this.state.field.label) {
+        if (this.state.field?.property === this.state.field?.label) {
             const form = await FormService.getInstance().getForm(this.state.formId);
             this.state.label = await LabelService.getInstance().getPropertyText(
-                this.state.field.property, form.objectType, null, this.state.field.translateLabel
+                this.state.field?.property, form.objectType, null, this.state.field?.translateLabel
             );
         } else {
             this.state.label = await TranslationService.translate(
-                this.state.field.label, undefined, undefined, !this.state.field.translateLabel
+                this.state.field?.label, undefined, undefined, !this.state.field?.translateLabel
             );
         }
 
-        const hint = await TranslationService.translate(this.state.field.hint);
+        const hint = await TranslationService.translate(this.state.field?.hint);
         this.state.hint = hint
             ? (hint.startsWith('Helptext_') ? null : hint)
             : null;
@@ -66,7 +66,7 @@ class Component {
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
 
-        const value = formInstance?.getFormFieldValue(this.state.field.instanceId);
+        const value = formInstance?.getFormFieldValue(this.state.field?.instanceId);
         if (value && Array.isArray(value.errorMessages) && value.errorMessages.length) {
             this.state.errorMessages = value.errorMessages;
         } else {
@@ -79,7 +79,7 @@ class Component {
 
     public async onMount(): Promise<void> {
         this.formSubscriber = {
-            eventSubscriberId: this.state.field.instanceId,
+            eventSubscriberId: this.state.field?.instanceId,
             eventPublished: async (data: any, eventId: string) => {
                 if (this.hasChildren()) {
                     this.state.minimized = this.state.minimized && !(await this.hasInvalidChildren());
@@ -88,7 +88,7 @@ class Component {
                 const isUpdateEvent = eventId === FormEvent.FIELD_VALIDATED
                     || eventId === FormEvent.FIELD_READONLY_CHANGED;
 
-                if (isUpdateEvent && this.state.field.instanceId === data?.instanceId) {
+                if (isUpdateEvent && this.state.field?.instanceId === data?.instanceId) {
                     this.update();
                 }
             }
@@ -131,7 +131,7 @@ class Component {
     }
 
     public getInputComponent(): any {
-        const componentId = this.state.field.inputComponent ? this.state.field.inputComponent : 'default-text-input';
+        const componentId = this.state.field?.inputComponent ? this.state.field?.inputComponent : 'default-text-input';
         return KIXModulesService.getComponentTemplate(componentId);
     }
 
@@ -140,7 +140,7 @@ class Component {
     }
 
     public hasChildren(): boolean {
-        return this.state.field.children && this.state.field.children.length > 0;
+        return this.state.field?.children && this.state.field?.children.length > 0;
     }
 
     public getPaddingLeft(): string {
@@ -170,8 +170,8 @@ class Component {
         if (root) {
             root.classList.add('dragging');
         }
-        event.dataTransfer.setData('Text', this.state.field.instanceId);
-        (this as any).emit('dragStart', this.state.field.instanceId);
+        event.dataTransfer.setData('Text', this.state.field?.instanceId);
+        (this as any).emit('dragStart', this.state.field?.instanceId);
     }
 
     public async handleDragEnd(event) {
@@ -179,7 +179,7 @@ class Component {
         if (root) {
             root.classList.remove('dragging');
         }
-        (this as any).emit('dragEnd', this.state.field.instanceId);
+        (this as any).emit('dragEnd', this.state.field?.instanceId);
     }
 }
 

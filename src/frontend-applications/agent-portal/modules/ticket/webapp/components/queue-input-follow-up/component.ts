@@ -33,9 +33,9 @@ class Component extends FormInputComponent<number, ComponentState> {
     }
 
     public async update(): Promise<void> {
-        const placeholderText = this.state.field.placeholder
-            ? this.state.field.placeholder
-            : this.state.field.required ? this.state.field.label : '';
+        const placeholderText = this.state.field?.placeholder
+            ? this.state.field?.placeholder
+            : this.state.field?.required ? this.state.field?.label : '';
 
         this.state.placeholder = await TranslationService.translate(placeholderText);
     }
@@ -57,7 +57,7 @@ class Component extends FormInputComponent<number, ComponentState> {
     protected async setCurrentNode(nodes: TreeNode[]): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
-        const defaultValue = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        const defaultValue = formInstance.getFormFieldValue<number>(this.state.field?.instanceId);
         if (defaultValue && defaultValue.value) {
             if (defaultValue.value) {
                 const node = nodes.find((n) => n.id === defaultValue.value);
@@ -77,9 +77,9 @@ class Component extends FormInputComponent<number, ComponentState> {
     private async showFollowUpLock(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
-        let field = this.state.field.children.find((f) => f.property === QueueProperty.FOLLOW_UP_LOCK);
+        let field = this.state.field?.children.find((f) => f.property === QueueProperty.FOLLOW_UP_LOCK);
 
-        const value = formInstance.getFormFieldValue(this.state.field.instanceId);
+        const value = formInstance.getFormFieldValue(this.state.field?.instanceId);
         const showLockField = value && value.value && value.value === 1;
 
         if (field && !showLockField) {

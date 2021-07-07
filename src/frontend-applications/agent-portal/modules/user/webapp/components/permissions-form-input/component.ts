@@ -89,7 +89,7 @@ class Component extends FormInputComponent<any[], ComponentState> {
         const permissionDescriptions: CreatePermissionDescription[] = [];
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
-        const value = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        const value = formInstance.getFormFieldValue<number>(this.state.field?.instanceId);
         if (value && Array.isArray(value.value)) {
             value.value.forEach((permission: Permission) => {
                 permissionManager.setValue(

@@ -21,6 +21,7 @@ import { ServiceRegistry } from '../../../../base-components/webapp/core/Service
 import { KIXObjectFormService } from '../../../../base-components/webapp/core/KIXObjectFormService';
 import { ServiceType } from '../../../../base-components/webapp/core/ServiceType';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 
 export class NewTicketDialogContext extends Context {
 
@@ -29,12 +30,14 @@ export class NewTicketDialogContext extends Context {
     private contact: any;
     private organisation: any;
 
+    private subscriber: IEventSubscriber;
+
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
-        super.initContext(urlParams);
+        await super.initContext(urlParams);
         this.contact = null;
         this.organisation = null;
 
-        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, {
+        this.subscriber = {
             eventSubscriberId: NewTicketDialogContext.CONTEXT_ID,
             eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
                 const form = data.formInstance.getForm();
@@ -55,7 +58,13 @@ export class NewTicketDialogContext extends Context {
                     }
                 }
             }
-        });
+        };
+        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.subscriber);
+    }
+
+    public async destroy(): Promise<void> {
+        await super.destroy();
+        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.subscriber);
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {

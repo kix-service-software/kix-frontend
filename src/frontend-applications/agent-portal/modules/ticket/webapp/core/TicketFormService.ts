@@ -133,7 +133,7 @@ export class TicketFormService extends KIXObjectFormService {
                 value = ticket ? ticket.ContactID : null;
                 if (!value) {
                     const context = ContextService.getInstance().getActiveContext();
-                    const contact = await context.getObject<Contact>(KIXObjectType.CONTACT);
+                    const contact = await context?.getObject<Contact>(KIXObjectType.CONTACT);
                     value = contact ? contact.ID : null;
                 }
                 break;
@@ -141,11 +141,11 @@ export class TicketFormService extends KIXObjectFormService {
                 value = ticket ? ticket.OrganisationID : null;
                 if (!value) {
                     const context = ContextService.getInstance().getActiveContext();
-                    const organisation = await context.getObject<Organisation>(KIXObjectType.ORGANISATION);
+                    const organisation = await context?.getObject<Organisation>(KIXObjectType.ORGANISATION);
                     if (organisation) {
                         value = organisation;
                     } else {
-                        const contact = await context.getObject<Contact>(KIXObjectType.CONTACT);
+                        const contact = await context?.getObject<Contact>(KIXObjectType.CONTACT);
                         value = contact ? contact.PrimaryOrganisationID : null;
                     }
                 }

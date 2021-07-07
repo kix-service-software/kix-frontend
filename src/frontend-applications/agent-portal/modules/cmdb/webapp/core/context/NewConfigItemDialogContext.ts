@@ -48,7 +48,6 @@ export class NewConfigItemDialogContext extends Context {
     public async postInit(): Promise<void> {
         await super.postInit();
 
-        const instance = await this.getFormManager().getFormInstance();
         if (!await this.getFormManager().getFormId()) {
             const firstClass = await this.getFirstClass();
             if (firstClass) {

@@ -13,11 +13,7 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { FormInputAction } from '../../../../../modules/base-components/webapp/core/FormInputAction';
 import { Label } from '../../../../../modules/base-components/webapp/core/Label';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { PreviousTabData } from '../../../../../modules/base-components/webapp/core/PreviousTabData';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import { TabContainerEvent } from '../../../../../modules/base-components/webapp/core/TabContainerEvent';
-import { TabContainerEventData } from '../../../../../modules/base-components/webapp/core/TabContainerEventData';
 import { TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
@@ -54,9 +50,9 @@ class Component extends FormInputComponent<number | string, ComponentState> {
     }
 
     public async update(): Promise<void> {
-        const placeholderText = this.state.field.placeholder
-            ? this.state.field.placeholder
-            : this.state.field.required ? this.state.field.label : '';
+        const placeholderText = this.state.field?.placeholder
+            ? this.state.field?.placeholder
+            : this.state.field?.required ? this.state.field?.label : '';
 
         this.state.placeholder = await TranslationService.translate(placeholderText);
 
@@ -68,7 +64,7 @@ class Component extends FormInputComponent<number | string, ComponentState> {
         this.state.searchCallback = this.searchContacts.bind(this);
         this.state.autoCompleteConfiguration = new AutoCompleteConfiguration();
 
-        const additionalTypeOption = this.state.field.options.find((o) => o.option === 'SHOW_NEW_CONTACT');
+        const additionalTypeOption = this.state.field?.options.find((o) => o.option === 'SHOW_NEW_CONTACT');
         const actions = [];
         if (additionalTypeOption && additionalTypeOption.value) {
             actions.push(new FormInputAction(
@@ -108,7 +104,7 @@ class Component extends FormInputComponent<number | string, ComponentState> {
 
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
-        const contactValue = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        const contactValue = formInstance.getFormFieldValue<number>(this.state.field?.instanceId);
 
         contactId = contactId
             ? contactId
@@ -116,7 +112,7 @@ class Component extends FormInputComponent<number | string, ComponentState> {
         if (contactId) {
             if (!isNaN(Number(contactId))) {
                 // check if this contact is valid, if required
-                const onlyValidOption = this.state.field.options.find((o) =>
+                const onlyValidOption = this.state.field?.options.find((o) =>
                     o.option === FormFieldOptions.SHOW_INVALID);
                 let canSelect = true;
                 if (onlyValidOption && !onlyValidOption.value) {
@@ -171,7 +167,7 @@ class Component extends FormInputComponent<number | string, ComponentState> {
         const nodes = [];
         const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.CONTACT);
         if (service) {
-            const onlyValidOption = this.state.field.options.find((o) => o.option === FormFieldOptions.SHOW_INVALID);
+            const onlyValidOption = this.state.field?.options.find((o) => o.option === FormFieldOptions.SHOW_INVALID);
             const filter = await service.prepareFullTextFilter(searchValue);
             if (onlyValidOption && !onlyValidOption.value) {
                 filter.push(

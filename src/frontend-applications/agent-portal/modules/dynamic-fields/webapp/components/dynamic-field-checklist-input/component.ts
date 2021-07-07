@@ -33,7 +33,7 @@ class Component extends FormInputComponent<CheckListItem[], ComponentState> {
     public async setCurrentValue(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
-        const value = formInstance.getFormFieldValue<[]>(this.state.field.instanceId);
+        const value = formInstance.getFormFieldValue<[]>(this.state.field?.instanceId);
         if (value) {
             let checklist = value.value;
             if (typeof checklist === 'string') {

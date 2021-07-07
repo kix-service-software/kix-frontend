@@ -52,7 +52,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
         const nodes = [];
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
-        const defaultValue = formInstance ? formInstance.getFormFieldValue<string>(this.state.field.instanceId) : null;
+        const defaultValue = formInstance ? formInstance.getFormFieldValue<string>(this.state.field?.instanceId) : null;
         if (defaultValue && defaultValue.value) {
             const contactEmails: string[] = Array.isArray(defaultValue.value)
                 ? defaultValue.value
