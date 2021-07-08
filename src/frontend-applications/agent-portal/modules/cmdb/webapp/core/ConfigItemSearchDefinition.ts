@@ -77,8 +77,10 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         return [new SearchResultCategory('Config Items', KIXObjectType.CONFIG_ITEM, categories)];
     }
 
-    public async prepareFormFilterCriteria(criteria: FilterCriteria[]): Promise<FilterCriteria[]> {
-        criteria = await super.prepareFormFilterCriteria(criteria);
+    public async prepareFormFilterCriteria(
+        criteria: FilterCriteria[], forSearch: boolean = true
+    ): Promise<FilterCriteria[]> {
+        criteria = await super.prepareFormFilterCriteria(criteria, forSearch);
 
         const classIdCriteria = criteria.find((c) => c.property === ConfigItemProperty.CLASS_ID);
         let classIds;
@@ -91,14 +93,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         for (const searchCriteria of criteria) {
             switch (searchCriteria.property) {
                 case SearchProperty.FULLTEXT:
-                    newCriteria.push(new FilterCriteria(
-                        ConfigItemProperty.NUMBER, SearchOperator.LIKE,
-                        FilterDataType.STRING, FilterType.OR, `*${searchCriteria.value}*`
-                    ));
-                    newCriteria.push(new FilterCriteria(
-                        ConfigItemProperty.NAME, SearchOperator.LIKE,
-                        FilterDataType.STRING, FilterType.OR, `*${searchCriteria.value}*`
-                    ));
+                    newCriteria.push(searchCriteria);
                     break;
                 case ConfigItemProperty.NAME:
                     newCriteria.push(new FilterCriteria(
@@ -107,23 +102,8 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                     ));
                     break;
                 case ConfigItemProperty.CLASS_ID:
-                    newCriteria.push(new FilterCriteria(
-                        'ClassIDs', searchCriteria.operator,
-                        searchCriteria.type, searchCriteria.filterType, searchCriteria.value
-                    ));
-                    break;
                 case ConfigItemProperty.CUR_DEPL_STATE_ID:
-                    newCriteria.push(new FilterCriteria(
-                        'DeplStateIDs', searchCriteria.operator,
-                        searchCriteria.type, searchCriteria.filterType, searchCriteria.value
-                    ));
-                    break;
                 case ConfigItemProperty.CUR_INCI_STATE_ID:
-                    newCriteria.push(new FilterCriteria(
-                        'InciStateIDs', searchCriteria.operator,
-                        searchCriteria.type, searchCriteria.filterType, searchCriteria.value
-                    ));
-                    break;
                 case VersionProperty.NUMBER:
                 case KIXObjectProperty.CHANGE_BY:
                 case KIXObjectProperty.CREATE_BY:
@@ -135,7 +115,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                     newCriteria.push(searchCriteria);
                     break;
                 default:
-                    if (classIds) {
+                    if (classIds && forSearch) {
                         const path = await ConfigItemClassAttributeUtil.getAttributePath(
                             searchCriteria.property, classIds
                         );
@@ -157,6 +137,8 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                             }
                             newCriteria.push(attributeCriteria);
                         }
+                    } else {
+                        newCriteria.push(searchCriteria);
                     }
             }
         }
@@ -175,16 +157,6 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 criteria.push(
                     new FilterCriteria(property, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.AND, value)
                 );
-                break;
-            case SearchProperty.FULLTEXT:
-                criteria.push(new FilterCriteria(
-                    ConfigItemProperty.NUMBER, SearchOperator.LIKE,
-                    FilterDataType.STRING, FilterType.OR, `*${value}*`
-                ));
-                criteria.push(new FilterCriteria(
-                    ConfigItemProperty.NAME, SearchOperator.LIKE,
-                    FilterDataType.STRING, FilterType.OR, `*${value}*`
-                ));
                 break;
             default:
                 const preparedCriteria = await super.prepareSearchFormValue(property, value);
