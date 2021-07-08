@@ -45,9 +45,9 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         return new ConfigItemSearchFormManager(ignoreProperties);
     }
 
-    public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
+    public getLoadingOptions(criteria: FilterCriteria[], limit: number): KIXObjectLoadingOptions {
         return new KIXObjectLoadingOptions(
-            criteria, null, this.limit,
+            criteria, null, limit,
             [VersionProperty.DATA, VersionProperty.PREPARED_DATA, 'Links', ConfigItemProperty.CURRENT_VERSION],
             [VersionProperty.DATA, VersionProperty.PREPARED_DATA, 'Links']
         );

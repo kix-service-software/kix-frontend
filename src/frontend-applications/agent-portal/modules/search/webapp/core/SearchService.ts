@@ -119,7 +119,7 @@ export class SearchService {
             }
         });
 
-        const loadingOptions = searchDefinition.getLoadingOptions(criteria);
+        const loadingOptions = searchDefinition.getLoadingOptions(criteria, null);
         objects = await KIXObjectService.loadObjects(formObjectType, null, loadingOptions, null, false);
 
         return (objects as any);
@@ -141,14 +141,10 @@ export class SearchService {
 
         const searchDefinition = this.getSearchDefinition(searchCache.objectType);
 
-        if (!searchCache.limit) {
-            searchCache.limit = searchDefinition.getLimit();
-        }
-
         let preparedCriteria = await searchDefinition.prepareFormFilterCriteria([...searchCache.criteria]);
         preparedCriteria = this.prepareCriteria(preparedCriteria);
 
-        const loadingOptions = searchDefinition.getLoadingOptions(preparedCriteria);
+        const loadingOptions = searchDefinition.getLoadingOptions(preparedCriteria, searchCache.limit);
         const objects = await KIXObjectService.loadObjects(
             searchCache.objectType, null, loadingOptions, null, false
         );
