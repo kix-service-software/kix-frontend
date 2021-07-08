@@ -28,9 +28,9 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
         this.formManager = new FAQArticleSearchFormManager();
     }
 
-    public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
+    public getLoadingOptions(criteria: FilterCriteria[], limit: number): KIXObjectLoadingOptions {
         return new KIXObjectLoadingOptions(
-            criteria, null, this.limit, [KIXObjectProperty.LINKS, FAQArticleProperty.VOTES], [KIXObjectProperty.LINKS]
+            criteria, null, limit, [KIXObjectProperty.LINKS, FAQArticleProperty.VOTES], [KIXObjectProperty.LINKS]
         );
     }
 

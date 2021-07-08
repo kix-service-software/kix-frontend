@@ -23,8 +23,8 @@ export class ContactSearchDefinition extends SearchDefinition {
         this.formManager = new ContactSearchFormManager();
     }
 
-    public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(criteria, null, this.limit, ['Tickets'], null);
+    public getLoadingOptions(criteria: FilterCriteria[], limit: number): KIXObjectLoadingOptions {
+        return new KIXObjectLoadingOptions(criteria, null, limit, ['Tickets'], null);
     }
 
     public async getSearchResultCategories(): Promise<SearchResultCategory[]> {
