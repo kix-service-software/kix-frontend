@@ -642,7 +642,7 @@ class Component {
                 }).catch(async (error) => {
                     this.errorObjects.push(object);
                     this.state.table.setRowObjectValueState([object], ValueState.HIGHLIGHT_ERROR);
-                    BrowserUtil.toggleLoadingShield('APP_SHIELD', true, 'Translatable#An error occurred.');
+                    BrowserUtil.toggleLoadingShield('APP_SHIELD', false, 'Translatable#An error occurred.');
                     end = Date.now();
                     await this.handleObjectEditError(object, error);
                 });
