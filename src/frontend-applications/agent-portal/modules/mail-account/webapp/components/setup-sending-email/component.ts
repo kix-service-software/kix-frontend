@@ -95,25 +95,31 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         const typeHint = sysconfigDefinitions.find((o) => o.Name === 'SendmailModule').Description || '';
         const typeReadonly = sysconfigOptions.find((o) => o.Name === 'SendmailModule').ReadOnly;
-        const typeGroup = new FormGroupConfiguration(
-            'setup-sending-email-form-type-group', 'Translatable#Type', null, null,
+
+        const sendMailModuleField = new FormFieldConfiguration(
+            'SendmailModule', 'Translatable#Type', 'SendmailModule', 'default-select-input', true, typeHint,
             [
-                new FormFieldConfiguration(
-                    'SendmailModule', 'Translatable#Type', 'SendmailModule', 'default-select-input', true, typeHint,
+                new FormFieldOption(DefaultSelectInputFormOption.NODES,
                     [
-                        new FormFieldOption(DefaultSelectInputFormOption.NODES,
-                            [
-                                new TreeNode('Kernel::System::Email::DoNotSendEmail', 'DoNotSendEmail'),
-                                new TreeNode('Kernel::System::Email::SMTP', 'SMTP'),
-                                new TreeNode('Kernel::System::Email::SMTPS', 'SMTPS'),
-                                new TreeNode('Kernel::System::Email::SMTPTLS', 'SMTPTLS')
-                            ]
-                        )
-                    ],
-                    null, null, null, null, null, null, null, null, null, null, null, null,
-                    typeReadonly
+                        new TreeNode('Kernel::System::Email::DoNotSendEmail', 'DoNotSendEmail'),
+                        new TreeNode('Kernel::System::Email::SMTP', 'SMTP'),
+                        new TreeNode('Kernel::System::Email::SMTPS', 'SMTPS'),
+                        new TreeNode('Kernel::System::Email::SMTPTLS', 'SMTPTLS')
+                    ]
                 )
-            ]
+            ],
+            null, null, null, null, null, null, null, null, null, null, null, null,
+            typeReadonly
+        );
+
+        const sendMailModuleValue = sysconfigDefinitions.find((o) => o.Name === 'SendmailModule').Default;
+        if (sendMailModuleValue?.startsWith('Kernel::System::Email::SMTP')) {
+            const smtpFields = await this.getSMTPFields();
+            sendMailModuleField.children = smtpFields;
+        }
+
+        const typeGroup = new FormGroupConfiguration(
+            'setup-sending-email-form-type-group', 'Translatable#Type', null, null, [sendMailModuleField]
         );
 
         const envelopeFromHint = sysconfigDefinitions.find((o) => o.Name === 'SendmailEnvelopeFrom').Description || '';
