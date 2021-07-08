@@ -145,7 +145,7 @@ export class SearchService {
             searchCache.limit = searchDefinition.getLimit();
         }
 
-        let preparedCriteria = await searchDefinition.prepareFormFilterCriteria(searchCache.criteria);
+        let preparedCriteria = await searchDefinition.prepareFormFilterCriteria([...searchCache.criteria]);
         preparedCriteria = this.prepareCriteria(preparedCriteria);
 
         const loadingOptions = searchDefinition.getLoadingOptions(preparedCriteria);

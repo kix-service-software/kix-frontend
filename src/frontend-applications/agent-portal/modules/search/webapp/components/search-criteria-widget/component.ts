@@ -35,6 +35,8 @@ class Component {
     private keyListenerElement: any;
     private keyListener: any;
 
+    private valueChangedTimeout: any;
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -83,15 +85,21 @@ class Component {
 
         this.managerListenerId = IdService.generateDateBasedId('search-criteria-widget');
         this.state.manager?.registerListener(this.managerListenerId, async () => {
-            const values = this.state.manager.getValues();
-            this.state.canSearch = values.length > 0;
-
-            const criteria: FilterCriteria[] = [];
-            for (const v of values) {
-                criteria.push(searchDefinition.getFilterCriteria(v));
+            if (this.valueChangedTimeout) {
+                window.clearTimeout(this.valueChangedTimeout);
             }
 
-            context?.getSearchCache()?.setCriteria(criteria);
+            this.valueChangedTimeout = setTimeout(() => {
+                const values = this.state.manager.getValues();
+                this.state.canSearch = values.length > 0;
+
+                const criteria: FilterCriteria[] = [];
+                for (const v of values) {
+                    criteria.push(searchDefinition.getFilterCriteria(v));
+                }
+
+                context?.getSearchCache()?.setCriteria(criteria);
+            }, 100);
         });
     }
 

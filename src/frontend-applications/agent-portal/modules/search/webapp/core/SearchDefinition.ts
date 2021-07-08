@@ -99,7 +99,9 @@ export abstract class SearchDefinition {
         return null;
     }
 
-    public async prepareFormFilterCriteria(criteria: FilterCriteria[]): Promise<FilterCriteria[]> {
+    public async prepareFormFilterCriteria(
+        criteria: FilterCriteria[], forSearch: boolean = true
+    ): Promise<FilterCriteria[]> {
         const filteredCriteria = criteria.filter((c) => {
             if (Array.isArray(c.value)) {
                 return c.value.length > 0;
