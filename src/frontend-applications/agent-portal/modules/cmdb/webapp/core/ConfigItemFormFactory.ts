@@ -29,6 +29,15 @@ import { ConfigItemProperty } from '../../model/ConfigItemProperty';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { IdService } from '../../../../model/IdService';
 import { ExtendedConfigItemFormFactory } from './ExtendedConfigItemFormFactory';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { FormPageConfiguration } from '../../../../model/configuration/FormPageConfiguration';
+import { FormGroupConfiguration } from '../../../../model/configuration/FormGroupConfiguration';
+import { FormService } from '../../../base-components/webapp/core/FormService';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { ContextMode } from '../../../../model/ContextMode';
+import { VersionProperty } from '../../model/VersionProperty';
+import { Context } from '../../../../model/Context';
 
 export class ConfigItemFormFactory {
 
@@ -47,6 +56,95 @@ export class ConfigItemFormFactory {
 
     public addExtendedConfigItemFormFactory(factory: ExtendedConfigItemFormFactory): void {
         this.extendedConfigItemFormFactories.push(factory);
+    }
+
+    public async createAndProvideForm(classId: number, context?: Context): Promise<void> {
+        if (!context) {
+            context = ContextService.getInstance().getActiveContext();
+        }
+        const formContext = context?.descriptor?.contextMode === ContextMode.CREATE
+            ? FormContext.NEW
+            : FormContext.EDIT;
+
+        const form = this.createForm(classId, formContext);
+
+        await this.addCIClassAttributesToForm(form, classId);
+
+        await FormService.getInstance().addForm(form);
+        await context?.getFormManager()?.setFormId(form?.id);
+
+        const formInstance = await context.getFormManager().getFormInstance();
+        formInstance?.provideFixedValue(ConfigItemProperty.CLASS_ID, new FormFieldValue(classId));
+    }
+
+    private createForm(classId: number, formContext: FormContext): FormConfiguration {
+        const nameField = new FormFieldConfiguration(
+            'cmdb-config-item-new-form-field-name',
+            'Translatable#Name', VersionProperty.NAME, null, true,
+            'Translatable#Helptext_CMDB_ConfigItemCreateEdit_Name',
+            null, null, null, null, null, 1, 1, 1,
+            null, null, null, false, false
+        );
+
+        const deplStateField = new FormFieldConfiguration(
+            'cmdb-config-item-new-form-field-deploymentstate',
+            'Translatable#Deployment State', VersionProperty.DEPL_STATE_ID, 'object-reference-input',
+            true, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_DeploymentState',
+            [
+                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.GENERAL_CATALOG_ITEM),
+                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                    new KIXObjectLoadingOptions([
+                        new FilterCriteria(
+                            KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                            FilterType.AND, 1
+                        ),
+                        new FilterCriteria(
+                            GeneralCatalogItemProperty.CLASS, SearchOperator.EQUALS, FilterDataType.STRING,
+                            FilterType.AND, 'ITSM::ConfigItem::DeploymentState'
+                        )
+                    ])
+                ),
+                new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false)
+            ],
+            null, null, null, null, 1, 1, 1, null, null, null, false, false
+        );
+
+        const inciStateField = new FormFieldConfiguration(
+            'cmdb-config-item-new-form-field-incidentstate',
+            'Translatable#Incident state', VersionProperty.INCI_STATE_ID, 'object-reference-input',
+            true, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_IncidentState',
+            [
+                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.GENERAL_CATALOG_ITEM),
+                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                    new KIXObjectLoadingOptions([
+                        new FilterCriteria(
+                            KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                            FilterType.AND, 1
+                        ),
+                        new FilterCriteria(
+                            GeneralCatalogItemProperty.CLASS, SearchOperator.EQUALS, FilterDataType.STRING,
+                            FilterType.AND, 'ITSM::Core::IncidentState'
+                        )
+                    ])
+                ),
+                new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false)
+            ],
+            null, null, null, null, 1, 1, 1, null, null, null, false, false
+        );
+
+        const group = new FormGroupConfiguration(
+            'cmdb-config-item-new-form-group-main', 'Translatable#Config Item Data', [], null,
+            [nameField, deplStateField, inciStateField]
+        );
+
+        const page = new FormPageConfiguration(
+            'cmdb-config-item-new-form-page', 'Translatable#New Config Item', [], true, false, [group]
+        );
+
+        const formId = `new-asset-form-${classId}`;
+        return new FormConfiguration(
+            formId, 'Translatable#New Config Item', [], KIXObjectType.CONFIG_ITEM, true, formContext, null, [page]
+        );
     }
 
     public async addCIClassAttributesToForm(form: FormConfiguration, classId: number): Promise<void> {

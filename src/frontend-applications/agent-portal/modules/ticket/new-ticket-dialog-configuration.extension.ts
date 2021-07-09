@@ -41,7 +41,6 @@ import { AdditionalTableObjectsHandlerConfiguration } from '../base-components/w
 import { DynamicFormFieldOption } from '../dynamic-fields/webapp/core';
 import { FAQArticleProperty } from '../faq/model/FAQArticleProperty';
 import { ObjectIcon } from '../icon/model/ObjectIcon';
-import { CacheState } from '../search/model/CacheState';
 import { SearchOperator } from '../search/model/SearchOperator';
 import { ArticleProperty } from './model/ArticleProperty';
 import { QueueProperty } from './model/QueueProperty';
@@ -152,8 +151,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                             filterType: FilterType.AND,
                                                             value: 2
                                                         }
-                                                    ],
-                                                    status: CacheState.VALID
+                                                    ]
                                                 }
                                             ]
                                         ]
@@ -185,8 +183,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                             filterType: FilterType.AND,
                                                             value: 2
                                                         }
-                                                    ],
-                                                    status: CacheState.VALID
+                                                    ]
                                                 }
                                             ]
                                         ]
@@ -197,7 +194,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     }
                 ]
             },
-            false, false, 'kix-icon-man-house'
+            false, true, 'kix-icon-man-house'
         );
         configurations.push(contactInfoCard);
 
@@ -335,7 +332,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         const dialogWidget = new WidgetConfiguration(
             'ticket-new-dialog-widget', 'New Ticket Dialog', ConfigurationType.Widget,
-            'new-ticket-dialog', 'Translatable#New Ticket', [], null, null,
+            'object-dialog-form-widget', 'Translatable#New Ticket', [], null, null,
             false, false, 'kix-icon-new-ticket'
         );
         configurations.push(dialogWidget);
@@ -354,12 +351,12 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         'ticket-new-dialog-suggested-faq-widget', 'ticket-new-dialog-suggested-faq-widget'
                     )
                 ],
-                [], [], [], [], [], [], [],
+                [], [],
                 [
                     new ConfiguredDialogWidget(
                         'ticket-new-dialog-widget', 'ticket-new-dialog-widget', KIXObjectType.TICKET, ContextMode.CREATE
                     )
-                ]
+                ], [], [], [], []
             )
         );
 

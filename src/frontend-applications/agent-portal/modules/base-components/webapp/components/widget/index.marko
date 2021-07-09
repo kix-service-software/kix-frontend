@@ -6,29 +6,33 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<div.show-object class=component.getWidgetClasses()>
+<div.show-object
+    class=component.getWidgetClasses()
+    data-widgettype=state.widgetType
+    data-instanceid=state.instanceId
+    data-configurationtype=(state.widgetConfiguration ? state.widgetConfiguration.type : "")
+    data-widgetid=(state.widgetConfiguration ? state.widgetConfiguration.widgetid : "")>
     <div.widget-header.show-object
         class={
-                minimizable: state.minimizable
-            }
+            minimizable: state.minimizable
+        }
         on-click("minimizeWidget", false)
         on-mousedown("headerMousedown", false)>
         <span.header-left>
-            <if(input.explorer)>
-                <span.kix-icon-triangle-left.as-button on-click("minimizeExplorer")>
-                    <span.path1/>
-                    <span.path2/>
-                </span>
-            </if>
             <if(input.title)>
                 <div.widget-title class={
                     "with-icon": component.isInputDefined(input.icon)
                 }>
                     <if(component.isInputDefined(input.icon))>
-                        <icon icon=input.icon on-click("minimizeWidget", true) on-mousedown("headerMousedown", true)/>
+                        <icon
+                            icon=input.icon
+                            on-click("minimizeWidget", true)
+                            on-mousedown("headerMousedown", true)/>
                     </if>
-                    <h2 title=state.translations[input.title] on-click("minimizeWidget", true) on-mousedown("headerMousedown", true)>
+                    <h2
+                        title=state.translations[input.title]
+                        on-click("minimizeWidget", true)
+                        on-mousedown("headerMousedown", true)>
                         <translation-string pattern=input.title/>
                     </h2>
                 </div>
@@ -43,7 +47,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </if>
         </span>
         <span.header-right>
-            <action-list list=input.actions instanceId=state.instanceId displayText=component.getWidgetTypeActionDisplaySetting()/>
+            <action-list
+                list=input.actions
+                instanceId=state.instanceId
+                displayText=component.getWidgetTypeActionDisplaySetting()/>
             <if(state.minimizable)>
                 <span.minimize-icon-wrapper>
                     <if(state.minimized)>
@@ -73,19 +80,21 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </for>
         </ul>
     </if>
-    <div.widget-content>
-        <if(component.isInputDefined(input.contentActions))>
-            <!-- TODO: ContentAction analog der "header" Actions umsetzen (über WidgetService) -->
-            <if(component.isContentWidget())>
-                <div.content-actions key=("content-actions" + Math.random())>
-                    <action-list list=input.contentActions/>
-                </div>
+    <if(!state.minimized)>
+        <div.widget-content>
+            <if(component.isInputDefined(input.contentActions))>
+                <!-- TODO: ContentAction analog der "header" Actions umsetzen (über WidgetService) -->
+                <if(component.isContentWidget())>
+                    <div.content-actions key=("content-actions" + Math.random())>
+                        <action-list list=input.contentActions/>
+                    </div>
+                </if>
             </if>
-        </if>
-        <if(!state.minimized && component.isInputDefined(input.content))>
-            <${component.isSidebarWidget() ? "div" : null} class="scroll-container">
-                <${input.content} key=state.instanceId/>
-            </>
-        </if>
-    </div>
+            <if(component.isInputDefined(input.content))>
+                <${component.isSidebarWidget() ? "div" : null} class="scroll-container">
+                    <${input.content} key=state.instanceId/>
+                </>
+            </if>
+        </div>
+    </if>
 </div>

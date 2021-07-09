@@ -10,9 +10,6 @@
 // default "css"
 @border-radius: 3px;
 @shadow-color: @secondary-2;
-@shadow-1: 2px 2px 2px 0 @shadow-color;
-@shadow-2: 2px 2px 6px 0 @secondary-0;
-@shadow-3: 2px 2px 10px 3px @shadow-color;
 
 .shadow-1(@color: @shadow-color) {
     box-shadow: 2px 2px 2px 0 @color;
@@ -26,6 +23,10 @@
     box-shadow: 2px 2px 6px 0 @color;
 }
 
+.shadow-3(@color: @shadow-color) {
+    box-shadow: 2px 2px 10px 3px @color;
+}
+
 html {
     height: 100%;
     box-sizing: border-box;
@@ -36,7 +37,6 @@ html {
         height: 100%;
         box-sizing: border-box;
         position: relative;
-        min-width: 72rem;
     }
 }
 

@@ -13,17 +13,14 @@ import { FormConfiguration } from '../../../../model/configuration/FormConfigura
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { ContextService } from './ContextService';
-import { ContextType } from '../../../../model/ContextType';
 import { FormContext } from '../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { LabelService } from './LabelService';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
-import { InlineContent } from './InlineContent';
 import { AuthenticationSocketClient } from './AuthenticationSocketClient';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
-import { FormService } from './FormService';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { DynamicFieldFormUtil } from './DynamicFieldFormUtil';
 import { IdService } from '../../../../model/IdService';
@@ -31,7 +28,6 @@ import { ExtendedKIXObjectFormService } from './ExtendedKIXObjectFormService';
 import { FormInstance } from './FormInstance';
 import { KIXObjectService } from './KIXObjectService';
 import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core/DynamicFormFieldOption';
-import { PlaceholderService } from './PlaceholderService';
 import { FormFactory } from './FormFactory';
 
 export abstract class KIXObjectFormService {
@@ -52,7 +48,7 @@ export abstract class KIXObjectFormService {
         form: FormConfiguration, formInstance: FormInstance, kixObject?: KIXObject
     ): Promise<void> {
         if (!kixObject) {
-            const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+            const dialogContext = ContextService.getInstance().getActiveContext();
             if (dialogContext) {
                 kixObject = await dialogContext.getObject(form.objectType);
             }
@@ -267,7 +263,7 @@ export abstract class KIXObjectFormService {
     }
 
     public async getFormParameter(
-        formId: string, forUpdate: boolean = false, createOptions?: KIXObjectSpecificCreateOptions
+        forUpdate: boolean = false, createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<Array<[string, any]>> {
         let parameter: Array<[string, any]> = [];
 
@@ -276,18 +272,12 @@ export abstract class KIXObjectFormService {
             predefinedParameterValues.forEach((pv) => parameter.push([pv[0], pv[1]]));
         }
 
-        if (!formId) {
-            return parameter;
-        }
-
         const context = ContextService.getInstance().getActiveContext();
-        const object = await context?.getObject();
-
-        const formInstance = await FormService.getInstance().getFormInstance(formId);
-        const formValues = formInstance.getAllFormFieldValues();
-        const iterator = formValues.keys();
-        let key = iterator.next();
-        while (key.value) {
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formValues = formInstance?.getAllFormFieldValues();
+        const iterator = formValues?.keys();
+        let key = iterator?.next();
+        while (key?.value) {
             const formFieldInstanceId = key.value;
             const field = await formInstance.getFormField(formFieldInstanceId);
             const property = field ? field.property : null;
@@ -304,10 +294,10 @@ export abstract class KIXObjectFormService {
             key = iterator.next();
         }
 
-        const fixedValues = formInstance.getFixedValues();
-        const fixedIterator = fixedValues.keys();
-        let fixedKey = fixedIterator.next();
-        while (fixedKey.value) {
+        const fixedValues = formInstance?.getFixedValues();
+        const fixedIterator = fixedValues?.keys();
+        let fixedKey = fixedIterator?.next();
+        while (fixedKey?.value) {
             const property = fixedKey.value;
             const value = fixedValues.get(property) || [];
             const dfName = KIXObjectService.getDynamicFieldName(property);
@@ -322,10 +312,10 @@ export abstract class KIXObjectFormService {
             fixedKey = fixedIterator.next();
         }
 
-        const templateValues = formInstance.getTemplateValues();
-        const templateIterator = templateValues.keys();
-        let templateKey = templateIterator.next();
-        while (templateKey.value) {
+        const templateValues = formInstance?.getTemplateValues();
+        const templateIterator = templateValues?.keys();
+        let templateKey = templateIterator?.next();
+        while (templateKey?.value) {
             const property = templateKey.value;
             const field = formInstance.getFormFieldByProperty(property);
             if (!field) {
@@ -343,9 +333,11 @@ export abstract class KIXObjectFormService {
             templateKey = templateIterator.next();
         }
 
-        parameter = await this.postPrepareValues(
-            parameter, createOptions, formInstance.getForm().formContext, formInstance
-        );
+        if (formInstance) {
+            parameter = await this.postPrepareValues(
+                parameter, createOptions, formInstance?.getForm().formContext, formInstance
+            );
+        }
 
         return parameter;
     }

@@ -35,13 +35,11 @@ import { RoleProperty } from '../../../model/RoleProperty';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { SetupStep } from '../../../../setup-assistant/webapp/core/SetupStep';
-import { SetupEvent } from '../../../../setup-assistant/webapp/core/SetupEvent';
 import { Contact } from '../../../../customer/model/Contact';
-import { SetupStepCompletedEventData } from '../../../../setup-assistant/webapp/core/SetupStepCompletedEventData';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -65,10 +63,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.step = input.step;
         this.update = this.step && this.step.result && this.step.result.contactId && this.step.result.userId;
         this.state.completed = this.step ? this.step.completed : false;
-    }
-
-    public onDestroy(): void {
-        FormService.getInstance().deleteFormInstance(this.state.formId);
     }
 
     private async prepareForm(): Promise<void> {
@@ -127,6 +121,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         FormService.getInstance().addForm(form);
         this.state.formId = form.id;
 
+        const context = ContextService.getInstance().getActiveContext();
+        context?.getFormManager()?.setFormId(this.state.formId);
+
         if (this.update) {
             setTimeout(() => this.initFormValues(form.id), 500);
         }
@@ -139,7 +136,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         ).catch((): Contact[] => []);
 
         if (contacts && contacts.length) {
-            const formInstance = await FormService.getInstance().getFormInstance(formId);
+            const context = ContextService.getInstance().getActiveContext();
+            const formInstance = await context?.getFormManager()?.getFormInstance();
 
             formInstance.provideFormFieldValuesForProperties([
                 [ContactProperty.LASTNAME, contacts[0].Lastname],
@@ -152,7 +150,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async submit(logout: boolean): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
 
         const roles = await KIXObjectService.loadObjects<Role>(
             KIXObjectType.ROLE, null,
@@ -173,7 +172,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             BrowserUtil.showValidationError(result);
         } else {
 
-            BrowserUtil.toggleLoadingShield(true, 'Translatable#Create Superuser Account');
+            BrowserUtil.toggleLoadingShield('SETUP_SUPERUSER_SHIELD', true, 'Translatable#Create Superuser Account');
 
             if (this.update) {
                 formInstance.provideFixedValue(
@@ -184,7 +183,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 await this.createUser();
             }
 
-            BrowserUtil.toggleLoadingShield(false);
+            BrowserUtil.toggleLoadingShield('SETUP_SUPERUSER_SHIELD', false);
 
             if (logout) {
                 BrowserUtil.logout();

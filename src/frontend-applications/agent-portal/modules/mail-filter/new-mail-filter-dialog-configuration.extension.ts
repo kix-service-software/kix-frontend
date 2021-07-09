@@ -52,13 +52,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             'mail-filter-new-dialog-help-widget', 'Widget', ConfigurationType.Widget,
             'help-widget', null, [],
             new ConfigurationDefinition('mail-filter-new-dialog-help-widget-config', ConfigurationType.HelpWidget),
-            null, false, false, 'kix-icon-query'
+            null, false, true, 'kix-icon-query'
         );
         configurations.push(filterHelpSidebar);
 
         const dialogWidget = new WidgetConfiguration(
             'mail-filter-new-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
-            'new-mail-filter-dialog', 'Translatable#New Email Filter',
+            'object-dialog-form-widget', 'Translatable#New Email Filter',
             [], null, null, false, false, 'kix-icon-new-gear'
         );
         configurations.push(dialogWidget);
@@ -70,13 +70,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 [
                     new ConfiguredWidget('mail-filter-new-dialog-help-widget', 'mail-filter-new-dialog-help-widget')
                 ],
-                [], [], [], [], [], [], [],
+                [], [],
                 [
                     new ConfiguredDialogWidget(
                         'mail-filter-new-dialog-widget', 'mail-filter-new-dialog-widget',
                         KIXObjectType.MAIL_FILTER, ContextMode.CREATE_ADMIN
                     )
-                ]
+                ], [], [], [], []
             )
         );
 

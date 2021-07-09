@@ -29,18 +29,16 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<ConfigItemDetailsContext>(
-            ConfigItemDetailsContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context
             ? await context.getWidgetConfiguration(this.state.instanceId)
             : undefined;
 
         context.registerListener('config-item-history-widget', {
-            explorerBarToggled: () => { return; },
+            sidebarLeftToggled: () => { return; },
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
-            sidebarToggled: () => { return; },
+            sidebarRightToggled: () => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: (configItemId: string, configItem: ConfigItem, type: KIXObjectType) => {
                 if (type === KIXObjectType.CONFIG_ITEM) {

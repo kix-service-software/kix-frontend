@@ -8,14 +8,17 @@
  */
 
 import { Context } from '../../../../model/Context';
+import { ContextEvents } from '../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { EventService } from '../../../base-components/webapp/core/EventService';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { AdministrationSocketClient } from './AdministrationSocketClient';
 
 export class AdminContext extends Context {
 
     public static CONTEXT_ID: string = 'admin';
 
     public adminModuleId: string;
-    public categoryName: string;
     public filterValue: string;
 
     public getIcon(): string {
@@ -23,18 +26,23 @@ export class AdminContext extends Context {
     }
 
     public async getDisplayText(): Promise<string> {
-        return 'Admin Dashboard';
+        let text = await TranslationService.translate('Translatable#Admin');
+        if (this.adminModuleId) {
+            const module = await AdministrationSocketClient.getInstance().getAdminModule(this.adminModuleId);
+            const moduleName = await TranslationService.translate(module?.name);
+            text = await TranslationService.translate('Translatable#Admin: {0}', [moduleName]);
+        }
+        return text;
     }
 
-    public async initContext(urlParams: URLSearchParams): Promise<void> {
-        if (urlParams) {
-            if (urlParams.has('moduleId')) {
-                this.adminModuleId = decodeURI(urlParams.get('moduleId'));
-            }
+    public async update(urlParams: URLSearchParams): Promise<void> {
+        this.handleURLParams(urlParams);
+    }
 
-            if (urlParams.has('filter')) {
-                this.filterValue = decodeURI(urlParams.get('filter'));
-            }
+    private handleURLParams(urlParams: URLSearchParams): void {
+        if (urlParams) {
+            this.setAdminModule(urlParams.has('moduleId') ? decodeURI(urlParams.get('moduleId')) : null, false);
+            this.setFilterValue(urlParams.has('filter') ? decodeURI(urlParams.get('filter')) : null, false);
         }
     }
 
@@ -58,27 +66,24 @@ export class AdminContext extends Context {
         return url;
     }
 
-    public setAdminModule(adminModuleId: string, categoryName: string, force: boolean = false): void {
-        if (force || !this.adminModuleId || this.adminModuleId !== adminModuleId) {
+    public async setAdminModule(adminModuleId: string, history: boolean = true): Promise<void> {
+        if (!this.adminModuleId || this.adminModuleId !== adminModuleId) {
             this.adminModuleId = adminModuleId;
-            this.categoryName = categoryName;
             this.filterValue = null;
-            this.listeners.forEach((l) => l.objectChanged(null, null, null));
-            ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
+
+            EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
+            if (history) {
+                ContextService.getInstance().setDocumentHistory(true, this, this, null);
+            }
         }
     }
 
-    public setFilterValue(filterValue: string): void {
+    public setFilterValue(filterValue: string, history: boolean = true): void {
         this.filterValue = filterValue;
-        ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
-    }
 
-    public reset(refresh?: boolean): void {
-        super.reset();
-        if (!refresh) {
-            this.adminModuleId = null;
-            this.categoryName = null;
-            this.filterValue = null;
+        EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
+        if (history) {
+            ContextService.getInstance().setDocumentHistory(true, this, this, null);
         }
     }
 

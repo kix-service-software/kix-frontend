@@ -1,8 +1,6 @@
 {
     "dependencies": [
-        "require ./components/edit-translation-dialog",
         "require ./components/i18n-admin-translations",
-        "require ./components/new-translation-dialog",
         "require ./core"
     ]
 }

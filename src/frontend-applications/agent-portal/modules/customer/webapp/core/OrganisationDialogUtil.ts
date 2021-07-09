@@ -8,24 +8,18 @@
  */
 
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
-import { NewOrganisationDialogContext, OrganisationDetailsContext, EditOrganisationDialogContext } from '.';
-import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../model/ContextMode';
+import { NewOrganisationDialogContext, EditOrganisationDialogContext } from '.';
 import { Organisation } from '../../model/Organisation';
 
 export class OrganisationDialogUtil {
 
     public static async create(): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            NewOrganisationDialogContext.CONTEXT_ID, KIXObjectType.ORGANISATION, ContextMode.CREATE
-        );
+        ContextService.getInstance().setActiveContext(NewOrganisationDialogContext.CONTEXT_ID);
     }
 
     public static async edit(organisationId?: string | number): Promise<void> {
         if (!organisationId) {
-            const context = await ContextService.getInstance().getContext<OrganisationDetailsContext>(
-                OrganisationDetailsContext.CONTEXT_ID
-            );
+            const context = ContextService.getInstance().getActiveContext();
 
             if (context) {
                 organisationId = context.getObjectId();
@@ -33,16 +27,12 @@ export class OrganisationDialogUtil {
         }
 
         if (organisationId) {
-            ContextService.getInstance().setDialogContext(
-                EditOrganisationDialogContext.CONTEXT_ID, KIXObjectType.ORGANISATION, ContextMode.EDIT, organisationId
-            );
+            ContextService.getInstance().setActiveContext(EditOrganisationDialogContext.CONTEXT_ID, organisationId);
         }
     }
 
     public static async duplicate(organisation: Organisation): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            NewOrganisationDialogContext.CONTEXT_ID, KIXObjectType.ORGANISATION, ContextMode.CREATE, organisation.ID
-        );
+        ContextService.getInstance().setActiveContext(NewOrganisationDialogContext.CONTEXT_ID, organisation?.ID);
     }
 
 }

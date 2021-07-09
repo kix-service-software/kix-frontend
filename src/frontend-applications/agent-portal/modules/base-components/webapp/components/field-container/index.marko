@@ -6,70 +6,68 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<if(!state.loading)>
-    <if(
-        input.draggable &&
-        state.fields.length > 1 &&
-        state.dragStartInstanceId &&
-        state.dragStartIndex !== 0
-    )>
-        <div.field-drop-zone
-            on-drop("handleDrop", 0)
-            on-dragover("allowDrop")
-            on-dragenter("handleDragEnter")
-            on-dragleave("handleDragLeave")/>
-    </if>
-    <for|field, index| of=state.fields>
-        <if(field.visible)>
-            <form-field
-                field=field
-                level=state.level
-                formId=input.formId
-                additionalFieldControlsNeeded=input.additionalFieldControlsNeeded
-                draggable=(input.draggable && state.fields.length > 1)
-                key=field.instanceId
-                on-dragStart("dragStart")
-                on-dragEnd("dragEnd")>
-                <@additionalFieldControls>
-                    <if(input.additionalFieldControlsNeeded)>
-                        <if(component.canAdd(field))>
-                            <button.form-control-button.button-without-text
-                                type="button"
-                                title=state.translations["Translatable#Add"]
-                                on-click("addField", field)>
-                                <span.kix-icon-plus-blank/>
-                            </button>
-                        </if>
-                        <else>
-                            <span/>
-                        </else>
-                        <if(component.canRemove(field))>
-                            <button.form-control-button.button-without-text
-                                type="button"
-                                title=state.translations["Translatable#Delete"]
-                                on-click("removeField", field)>
-                                <span.kix-icon-minus/>
-                            </button>
-                        </if>
-                        <else>
-                            <span/>
-                        </else>
-                    </if>
-                </@additionalFieldControls>
-            </form-field>
-            <if(
-                input.draggable &&
-                state.fields.length > 1 &&
-                state.dragStartInstanceId &&
-                state.dragStartIndex !== index &&
-                state.dragStartIndex !== index + 1
-            )>
-                <div.field-drop-zone
-                    on-drop("handleDrop", index + 1)
-                    on-dragover("allowDrop")
-                    on-dragenter("handleDragEnter")
-                    on-dragleave("handleDragLeave")/>
-            </if>
-        </if>
-    </for>
+<if(
+    input.draggable &&
+    state.fields.length > 1 &&
+    state.dragStartInstanceId &&
+    state.dragStartIndex !== 0
+)>
+    <div.field-drop-zone
+        on-drop("handleDrop", 0)
+        on-dragover("allowDrop")
+        on-dragenter("handleDragEnter")
+        on-dragleave("handleDragLeave")/>
 </if>
+<for|field, index| of=state.fields>
+    <if(field.visible)>
+        <form-field
+            field=field
+            level=state.level
+            formId=input.formId
+            additionalFieldControlsNeeded=input.additionalFieldControlsNeeded
+            draggable=(input.draggable && state.fields.length > 1)
+            key=field.instanceId
+            on-dragStart("dragStart")
+            on-dragEnd("dragEnd")>
+            <@additionalFieldControls>
+                <if(input.additionalFieldControlsNeeded)>
+                    <if(component.canAdd(field))>
+                        <button.form-control-button.button-without-text
+                            type="button"
+                            title=state.translations["Translatable#Add"]
+                            on-click("addField", field)>
+                            <span.kix-icon-plus-blank/>
+                        </button>
+                    </if>
+                    <else>
+                        <span/>
+                    </else>
+                    <if(component.canRemove(field))>
+                        <button.form-control-button.button-without-text
+                            type="button"
+                            title=state.translations["Translatable#Delete"]
+                            on-click("removeField", field)>
+                            <span.kix-icon-minus/>
+                        </button>
+                    </if>
+                    <else>
+                        <span/>
+                    </else>
+                </if>
+            </@additionalFieldControls>
+        </form-field>
+        <if(
+            input.draggable &&
+            state.fields.length > 1 &&
+            state.dragStartInstanceId &&
+            state.dragStartIndex !== index &&
+            state.dragStartIndex !== index + 1
+        )>
+            <div.field-drop-zone
+                on-drop("handleDrop", index + 1)
+                on-dragover("allowDrop")
+                on-dragenter("handleDragEnter")
+                on-dragleave("handleDragLeave")/>
+        </if>
+    </if>
+</for>

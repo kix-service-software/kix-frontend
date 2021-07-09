@@ -10,10 +10,6 @@
 import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
 import { ConfigItem } from '../../model/ConfigItem';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
-import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
-import { ContextType } from '../../../../model/ContextType';
-import { ConfigItemFormFactory } from '.';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { FormContext } from '../../../../model/configuration/FormContext';
@@ -33,6 +29,14 @@ import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptio
 import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { ConfigItemImage } from '../../model/ConfigItemImage';
+import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
+import { Version } from '../../model/Version';
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { CreateConfigItemVersionUtil } from './CreateConfigItemVersionUtil';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { ConfigItemFormFactory } from './ConfigItemFormFactory';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 
 export class ConfigItemFormService extends KIXObjectFormService {
@@ -55,14 +59,13 @@ export class ConfigItemFormService extends KIXObjectFormService {
     }
 
     protected async prePrepareForm(form: FormConfiguration): Promise<void> {
-        if (form) {
+        if (form && form.formContext === FormContext.EDIT) {
             const context = ContextService.getInstance().getActiveContext();
-            if (context.getDescriptor().contextType === ContextType.DIALOG && form.formContext !== FormContext.LINK) {
-                const ciClassId = context.getAdditionalInformation('CI_CLASS_ID');
-                await ConfigItemFormFactory.getInstance().addCIClassAttributesToForm(form, ciClassId);
-            }
+            const configItem = await context.getObject<ConfigItem>();
+            await ConfigItemFormFactory.getInstance().addCIClassAttributesToForm(form, configItem.ClassID);
         }
     }
+
 
     public async prepareFormFieldValues(
         formFields: FormFieldConfiguration[], configItem: ConfigItem, formFieldValues: Map<string, FormFieldValue<any>>,
@@ -155,13 +158,19 @@ export class ConfigItemFormService extends KIXObjectFormService {
         formField: FormFieldConfiguration, formContext: FormContext
     ): Promise<any> {
         if (value) {
+            const context = ContextService.getInstance().getActiveContext();
+            const duplicate = context?.getAdditionalInformation('DUPLICATE');
             switch (property) {
                 case ConfigItemProperty.NAME:
                     if (formContext === FormContext.NEW) {
-                        const ciName = await TranslationService.translate(
-                            'Translatable#Copy of {0}', [value]
-                        );
-                        value = ciName;
+                        if (duplicate) {
+                            const ciName = await TranslationService.translate(
+                                'Translatable#Copy of {0}', [value]
+                            );
+                            value = ciName;
+                        } else {
+                            value = null;
+                        }
                     }
                     break;
                 case KIXObjectProperty.LINKS:
@@ -291,5 +300,60 @@ export class ConfigItemFormService extends KIXObjectFormService {
             default:
         }
         return hasPermissions;
+    }
+
+    public async postPrepareValues(
+        parameter: Array<[string, any]>, createOptions: KIXObjectSpecificCreateOptions,
+        formContext: FormContext, formInstance: FormInstance
+    ): Promise<Array<[string, any]>> {
+        let parameterResult = [];
+        if (formContext === FormContext.NEW && formInstance.getObjectType() === KIXObjectType.CONFIG_ITEM) {
+            parameterResult = parameter.filter((p) => p[0] === ConfigItemProperty.CLASS_ID);
+
+            for (const p of parameter) {
+                const property = p[0];
+                const formValue = p[1];
+                const value = formValue ? formValue.value : null;
+                switch (property) {
+                    case ConfigItemProperty.IMAGES:
+                        if (value) {
+                            const images = await this.prepareImages(value as File[]);
+                            if (Array.isArray(images) && images.length) {
+                                parameterResult.push([ConfigItemProperty.IMAGES, images]);
+                            }
+                        }
+                        break;
+                    case ConfigItemProperty.LINKS:
+                        parameterResult.push([property, value]);
+                        break;
+                    default:
+                }
+            }
+
+            const version = new Version();
+            const versionParameter = await CreateConfigItemVersionUtil.createParameter(formInstance);
+            versionParameter.forEach((p) => {
+                version[p[0]] = p[1];
+            });
+            parameterResult.push([ConfigItemProperty.VERSION, version]);
+        } else if (formContext === FormContext.EDIT && formInstance.getObjectType() === KIXObjectType.CONFIG_ITEM) {
+            parameterResult = await CreateConfigItemVersionUtil.createParameter(formInstance);
+        }
+
+        return parameterResult;
+    }
+
+    private async prepareImages(files: File[]): Promise<ConfigItemImage[]> {
+        const images = [];
+        for (const f of files) {
+            if (f && f.name) {
+                const image = new ConfigItemImage();
+                image.Filename = f.name;
+                image.Content = await BrowserUtil.readFile(f);
+                image.ContentType = f.type;
+                images.push(image);
+            }
+        }
+        return images;
     }
 }

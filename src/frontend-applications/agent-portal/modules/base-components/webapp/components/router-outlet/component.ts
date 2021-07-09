@@ -7,16 +7,15 @@
  * --
  */
 
-import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
-import { IRoutingServiceListener } from '../../../../../modules/base-components/webapp/core/IRoutingServiceListener';
-import { EventService } from '../../core/EventService';
-import { IdService } from '../../../../../model/IdService';
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../core/ContextService';
-import { IEventSubscriber } from '../../core/IEventSubscriber';
+import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
+import { EventService } from '../../core/EventService';
 import { RoutingEvent } from '../../core/RoutingEvent';
+import { IEventSubscriber } from '../../core/IEventSubscriber';
+import { IdService } from '../../../../../model/IdService';
+import { ContextService } from '../../core/ContextService';
 
-export class RouterOutletComponent implements IRoutingServiceListener {
+export class RouterOutletComponent {
 
     private state: ComponentState;
     private subscriber: IEventSubscriber;
@@ -33,7 +32,7 @@ export class RouterOutletComponent implements IRoutingServiceListener {
 
         const context = ContextService.getInstance().getActiveContext();
         if (context) {
-            this.state.componentId = context.getDescriptor()?.componentId;
+            this.state.componentId = context.descriptor?.componentId;
             this.state.data = { objectId: context.getObjectId() };
             this.state.template = KIXModulesService.getComponentTemplate(this.state.componentId);
         }

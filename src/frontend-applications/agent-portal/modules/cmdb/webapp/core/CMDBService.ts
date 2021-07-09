@@ -11,9 +11,6 @@ import { KIXObjectService } from '../../../../modules/base-components/webapp/cor
 import { ConfigItem } from '../../model/ConfigItem';
 import { ConfigItemImage } from '../../model/ConfigItemImage';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { CreateConfigItemUtil } from './CreateConfigItemUtil';
-import { CreateConfigItemVersionUtil } from './CreateConfigItemVersionUtil';
-import { CreateConfigItemVersionOptions } from '../../model/CreateConfigItemVersionOptions';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { ConfigItemProperty } from '../../model/ConfigItemProperty';
@@ -33,6 +30,7 @@ import { ContextMode } from '../../../../model/ContextMode';
 import { ConfigItemAttachment } from '../../model/ConfigItemAttachment';
 import { Version } from '../../model/Version';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { CreateConfigItemVersionOptions } from '../../model/CreateConfigItemVersionOptions';
 
 export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> {
 
@@ -65,20 +63,6 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
 
     public getLinkObjectName(): string {
         return 'ConfigItem';
-    }
-
-    public async createConfigItem(formId: string, classId: number): Promise<string | number> {
-        const parameter = await CreateConfigItemUtil.createParameter(formId, classId);
-        const configItemId = await KIXObjectService.createObject(KIXObjectType.CONFIG_ITEM, parameter, null, false);
-        return configItemId;
-    }
-
-    public async createConfigItemVersion(formId: string, configItemId: number): Promise<string | number> {
-        const parameter = await CreateConfigItemVersionUtil.createParameter(formId);
-        const versionId = await KIXObjectService.createObject(
-            KIXObjectType.CONFIG_ITEM_VERSION, parameter, new CreateConfigItemVersionOptions(configItemId), false
-        );
-        return versionId;
     }
 
     public async searchConfigItemsByClass(
@@ -245,8 +229,8 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
 
     public async getObjectUrl(object?: KIXObject, objectId?: string | number): Promise<string> {
         const id = object ? object.ObjectId : objectId;
-        const context = await ContextService.getInstance().getContext(ConfigItemDetailsContext.CONTEXT_ID);
-        return context.getDescriptor().urlPaths[0] + '/' + id;
+        const context = ContextService.getInstance().getActiveContext();
+        return context.descriptor.urlPaths[0] + '/' + id;
     }
 
     protected getResource(objectType: KIXObjectType): string {
@@ -268,21 +252,6 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         );
     }
 
-    public async prepareFullTextFilter(searchValue): Promise<FilterCriteria[]> {
-        searchValue = `*${searchValue}*`;
-
-        return [
-            new FilterCriteria(
-                ConfigItemProperty.NUMBER, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                ConfigItemProperty.NAME, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, searchValue
-            )
-        ];
-    }
-
     public async getObjectTypeForProperty(property: string): Promise<KIXObjectType | string> {
         let objectType;
 
@@ -296,5 +265,19 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
             default:
         }
         return objectType;
+    }
+
+    public async updateObject(
+        objectType: KIXObjectType | string, parameter: Array<[string, any]>, objectId: number | string,
+        cacheKeyPrefix: string = objectType, silent?: boolean
+    ): Promise<string | number> {
+        if (objectType === KIXObjectType.CONFIG_ITEM) {
+            await KIXObjectService.createObject(
+                KIXObjectType.CONFIG_ITEM_VERSION, parameter,
+                new CreateConfigItemVersionOptions(Number(objectId)), false
+            );
+            return objectId;
+        }
+        return super.updateObject(objectType, parameter, objectId, cacheKeyPrefix, silent);
     }
 }

@@ -11,7 +11,6 @@ import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { RoleLabelProvider } from '../../core/RoleLabelProvider';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { RoleDetailsContext } from '../../core/admin';
 import { Role } from '../../../model/Role';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
@@ -29,13 +28,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         this.state.labelProvider = new RoleLabelProvider();
 
-        const context = await ContextService.getInstance().getContext<RoleDetailsContext>(
-            RoleDetailsContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         context.registerListener('user-role-info-widget', {
-            sidebarToggled: () => { return; },
-            explorerBarToggled: () => { return; },
+            sidebarRightToggled: () => { return; },
+            sidebarLeftToggled: () => { return; },
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
             scrollInformationChanged: () => { return; },

@@ -13,6 +13,7 @@ import { Context } from './Context';
 import { KIXObjectType } from './kix/KIXObjectType';
 import { ContextConfiguration } from './configuration/ContextConfiguration';
 import { UIComponentPermission } from './UIComponentPermission';
+import { ObjectIcon } from '../modules/icon/model/ObjectIcon';
 
 export class ContextDescriptor {
 
@@ -25,9 +26,15 @@ export class ContextDescriptor {
         public componentId: string,
         public urlPaths: string[],
         public contextClass: new (
-            descriptor: ContextDescriptor, objectId: string | number, configuration: ContextConfiguration
+            descriptor: ContextDescriptor, objectId: string | number, configuration: ContextConfiguration,
+            instanceId?: string
         ) => Context,
-        public permissions: UIComponentPermission[] = []
+        public permissions: UIComponentPermission[] = [],
+        public displayText: string = '',
+        public icon?: ObjectIcon | string,
+        public targetContextId?: string,
+        public priority: number = 1000,
+        public storeable: boolean = true
     ) { }
 
     public isContextFor(kixObjectType: KIXObjectType | string): boolean {

@@ -49,7 +49,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const configurations = [];
         const dialogWidget = new WidgetConfiguration(
             'mail-account-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
-            'edit-mail-account-dialog', 'Translatable#Edit Account',
+            'object-dialog-form-widget', 'Translatable#Edit Account',
             [], null, null, false, false, 'kix-icon-edit'
         );
         configurations.push(dialogWidget);
@@ -57,13 +57,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-                this.getModuleId(), [], [], [], [], [], [], [], [],
+                this.getModuleId(), [], [], [],
                 [
                     new ConfiguredDialogWidget(
                         'mail-account-edit-dialog-widget', 'mail-account-edit-dialog-widget',
                         KIXObjectType.MAIL_ACCOUNT, ContextMode.EDIT_ADMIN
                     )
-                ]
+                ], [], [], [], []
             )
         );
 

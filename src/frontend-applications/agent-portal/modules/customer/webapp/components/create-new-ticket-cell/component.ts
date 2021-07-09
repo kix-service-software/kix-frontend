@@ -11,10 +11,8 @@ import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { Cell } from '../../../../base-components/webapp/core/table';
 import { Contact } from '../../../model/Contact';
-import { ContextMode } from '../../../../../model/ContextMode';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { ContextFactory } from '../../../../base-components/webapp/core/ContextFactory';
+import { NewTicketDialogContext } from '../../../../ticket/webapp/core';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -32,18 +30,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async update(contact: Contact): Promise<void> {
-        if (contact && contact instanceof Contact) {
-            const dialogs = await ContextFactory.getInstance().getContextDescriptors(
-                ContextMode.CREATE, KIXObjectType.TICKET
-            );
-            this.state.show = contact.ValidID === 1 && dialogs && dialogs.length > 0;
-        }
+        this.state.show = contact &&
+            contact instanceof Contact &&
+            ContextService.getInstance().hasContextDescriptor(NewTicketDialogContext.CONTEXT_ID);
     }
 
     public labelClicked(event: any): void {
         event.stopPropagation();
         event.preventDefault();
-        ContextService.getInstance().setDialogContext(null, KIXObjectType.TICKET, ContextMode.CREATE, null, true);
+        ContextService.getInstance().setActiveContext(NewTicketDialogContext.CONTEXT_ID);
     }
 
 }

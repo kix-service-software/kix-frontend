@@ -8,10 +8,7 @@
  */
 
 import { IUIModule } from '../../../../model/IUIModule';
-import {
-    OrganisationImportManager, NewOrganisationDialogContext, EditOrganisationDialogContext,
-    OrganisationImportDialogContext, OrganisationCreateAction, OrganisationEditAction
-} from '.';
+import { OrganisationImportManager, NewOrganisationDialogContext, EditOrganisationDialogContext, OrganisationImportDialogContext, OrganisationCreateAction, OrganisationEditAction } from '.';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextType } from '../../../../model/ContextType';
@@ -24,6 +21,7 @@ import { SetupService } from '../../../setup-assistant/webapp/core/SetupService'
 import { SetupStep } from '../../../setup-assistant/webapp/core/SetupStep';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { OrganisationDetailsContext } from './context';
 
 export class UIModule implements IUIModule {
 
@@ -58,20 +56,22 @@ export class UIModule implements IUIModule {
         const newOrganisationContext = new ContextDescriptor(
             NewOrganisationDialogContext.CONTEXT_ID, [KIXObjectType.ORGANISATION],
             ContextType.DIALOG, ContextMode.CREATE,
-            false, 'new-organisation-dialog', ['organisations'], NewOrganisationDialogContext,
+            false, 'object-dialog', ['organisations'], NewOrganisationDialogContext,
             [
                 new UIComponentPermission('organisations', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Organisation', 'kix-icon-man-house', OrganisationDetailsContext.CONTEXT_ID, 300
         );
         ContextService.getInstance().registerContext(newOrganisationContext);
 
         const editOrganisationContext = new ContextDescriptor(
             EditOrganisationDialogContext.CONTEXT_ID, [KIXObjectType.ORGANISATION],
             ContextType.DIALOG, ContextMode.EDIT,
-            false, 'edit-organisation-dialog', ['organisations'], EditOrganisationDialogContext,
+            false, 'object-dialog', ['organisations'], EditOrganisationDialogContext,
             [
                 new UIComponentPermission('organisations', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Organisation', 'kix-icon-man-house', OrganisationDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(editOrganisationContext);
 
@@ -81,7 +81,9 @@ export class UIModule implements IUIModule {
             false, 'import-dialog', ['organisations'], OrganisationImportDialogContext,
             [
                 new UIComponentPermission('organisations', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Organisations', 'kix-icon-gear',
+            undefined, undefined, false
         );
         ContextService.getInstance().registerContext(organisationImportDialogContext);
     }

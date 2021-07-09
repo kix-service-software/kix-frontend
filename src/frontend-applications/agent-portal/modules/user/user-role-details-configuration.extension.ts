@@ -8,7 +8,6 @@
  */
 
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
-import { RoleDetailsContext } from './webapp/core/admin';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
 import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
@@ -25,6 +24,7 @@ import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
 
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { RoleDetailsContext } from './webapp/core/admin/context/RoleDetailsContext';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -105,7 +105,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'user-admin-role-create-action'
                 ],
                 [
-                    'user-admin-role-edit-action', 'print-action'
+                    'user-admin-role-edit-action'
                 ],
                 [],
                 [

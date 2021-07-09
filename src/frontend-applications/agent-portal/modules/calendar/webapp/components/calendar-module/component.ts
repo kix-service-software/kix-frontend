@@ -19,7 +19,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<CalendarContext>(CalendarContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext();
         if (context) {
             this.state.widgets = await context.getContent();
         }

@@ -8,20 +8,9 @@
  */
 
 import { Context } from '../../../../../../../model/Context';
-import { ContextDescriptor } from '../../../../../../../model/ContextDescriptor';
-import { ContextConfiguration } from '../../../../../../../model/configuration/ContextConfiguration';
 
 export class NewTicketTypeDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'new-ticket-type-dialog-context';
-    public formListenerId: string;
-
-    public constructor(
-        descriptor: ContextDescriptor,
-        objectId: string | number = null,
-        configuration: ContextConfiguration = null
-    ) {
-        super(descriptor, objectId, configuration);
-    }
 
 }

@@ -42,7 +42,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
 
         const widget = new WidgetConfiguration(
             'dynamic-field-new-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
-            'new-dynamic-field-dialog', 'Translatable#New Dynamic Field', [], null, null,
+            'object-dialog-form-widget', 'Translatable#New Dynamic Field', [], null, null,
             false, false, 'kix-icon-new-gear'
         );
         configurations.push(widget);
@@ -50,13 +50,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-                this.getModuleId(), [], [], [], [], [], [], [], [],
+                this.getModuleId(), [], [], [],
                 [
                     new ConfiguredDialogWidget(
                         'dynamic-field-new-dialog-widget', 'dynamic-field-new-dialog-widget',
                         KIXObjectType.DYNAMIC_FIELD, ContextMode.CREATE_ADMIN
                     )
-                ]
+                ], [], [], [], []
             )
         );
         return configurations;

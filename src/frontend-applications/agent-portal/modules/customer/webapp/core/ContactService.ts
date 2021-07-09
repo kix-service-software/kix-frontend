@@ -19,6 +19,8 @@ import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { SearchProperty } from '../../../search/model/SearchProperty';
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { NewContactDialogContext } from './context';
 
 export class ContactService extends KIXObjectService<Contact> {
 
@@ -86,8 +88,8 @@ export class ContactService extends KIXObjectService<Contact> {
 
     public async getObjectUrl(object?: KIXObject, objectId?: string | number): Promise<string> {
         const id = object ? object.ObjectId : objectId;
-        const context = await ContextService.getInstance().getContext(ContactDetailsContext.CONTEXT_ID);
-        return context.getDescriptor().urlPaths[0] + '/' + id;
+        const context = ContextService.getInstance().getActiveContext();
+        return context.descriptor.urlPaths[0] + '/' + id;
     }
 
     public async prepareFullTextFilter(searchValue): Promise<FilterCriteria[]> {
@@ -107,5 +109,17 @@ export class ContactService extends KIXObjectService<Contact> {
         } else {
             return super.createObjectByForm(objectType, formId, null, cacheKeyPrefix);
         }
+    }
+
+    public async createObjectByForm(
+        objectType: KIXObjectType | string, formId: string, createOptions?: KIXObjectSpecificCreateOptions,
+        cacheKeyPrefix: string = objectType
+    ): Promise<string | number> {
+        const contactId = await super.createObjectByForm(objectType, formId, createOptions, cacheKeyPrefix);
+
+        const context = ContextService.getInstance().getActiveContext<NewContactDialogContext>();
+        context?.setAdditionalInformation('NEW_CONTACT_ID', contactId);
+
+        return contactId;
     }
 }

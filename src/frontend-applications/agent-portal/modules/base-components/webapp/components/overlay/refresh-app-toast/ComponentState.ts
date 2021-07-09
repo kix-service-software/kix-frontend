@@ -10,8 +10,7 @@
 export class ComponentState {
 
     public constructor(
-        public message: string = '',
-        public reloadApp: boolean = false
+        public message: string = ''
     ) { }
 
 }

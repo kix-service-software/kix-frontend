@@ -31,7 +31,7 @@ export class JobFilterTableContentProvider extends TableContentProvider<any> {
     }
 
     public async loadData(): Promise<RowObject[]> {
-        const context = await ContextService.getInstance().getContext(JobDetailsContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext();
         const job = context ? await context.getObject<Job>() : null;
 
         const rowObjects: RowObject[] = [];

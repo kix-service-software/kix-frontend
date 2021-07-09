@@ -6,33 +6,38 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(!state.loading)>
     <widget instanceId="edit-sysconfig-dialog">
         <@content>
-            <if(state.formId)>
-                <main-form formId=state.formId/>
-            </if>
-            <div.dialog-button-container>
-                <button.cancel-button type="button" on-click("cancel") title=state.translations["Translatable#Cancel"]>
-                    <span.kix-icon-close/>
-                    <translation-string pattern="Translatable#Cancel"/>
-                </button>
-                <if(state.reset)>
-                    <button.form-blank-cancel-button
+            <main-form/>
+            <div.dialog-control>
+                <div.dialog-button-container>
+                    <button.cancel-button
                         type="button"
-                        on-click("reset")
-                        title=state.translations["Translatable#Reset to Default"]>
-                        <span.kix-icon-arrow-rotate-left/>
-                        <translation-string pattern="Translatable#Reset to Default"/>
+                        on-click("cancel")
+                        title=state.translations["Translatable#Cancel"]>
+                        <span.kix-icon-close/>
+                        <translation-string pattern="Translatable#Cancel"/>
                     </button>
-                </if>
-                <if(state.formId)>
-                    <button.submit-button type="button" on-click("submit") title=state.translations["Translatable#Save"]>
+                    <if(state.reset)>
+                        <button.form-blank-cancel-button
+                            type="button"
+                            on-click("reset")
+                            title=state.translations[
+                                "Translatable#Reset to Default"
+                            ]>
+                            <span.kix-icon-arrow-rotate-left/>
+                            <translation-string pattern="Translatable#Reset to Default"/>
+                        </button>
+                    </if>
+                    <button.submit-button
+                        type="button"
+                        on-click("submit")
+                        title=state.translations["Translatable#Save"]>
                         <span.kix-icon-check/>
                         <translation-string pattern="Translatable#Save"/>
                     </button>
-                </if>
+                </div>
             </div>
         </@content>
     </widget>

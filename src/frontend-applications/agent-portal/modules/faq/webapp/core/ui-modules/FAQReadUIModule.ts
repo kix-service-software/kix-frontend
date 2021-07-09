@@ -18,8 +18,6 @@ import { TableFactoryService } from '../../../../base-components/webapp/core/tab
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { SearchService } from '../../../../search/webapp/core';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
 import { ContextDescriptor } from '../../../../../model/ContextDescriptor';
 import { FAQContext } from '../context/FAQContext';
 import { ContextType } from '../../../../../model/ContextType';
@@ -27,11 +25,8 @@ import { ContextMode } from '../../../../../model/ContextMode';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { FAQDetailsContext } from '../context/FAQDetailsContext';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
-import { Bookmark } from '../../../../../model/Bookmark';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
-import { BookmarkService } from '../../../../../modules/base-components/webapp/core/BookmarkService';
-import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FAQArticleVoteFormService } from '../FAQArticleVoteFormService';
 
 
@@ -62,12 +57,6 @@ export class UIModule implements IUIModule {
 
         await this.registerContexts();
         this.registerActions();
-        await this.registerBookmarks();
-
-        EventService.getInstance().subscribe(ApplicationEvent.REFRESH, {
-            eventSubscriberId: 'FAQReadUIModule',
-            eventPublished: () => this.registerBookmarks()
-        });
     }
 
     private async registerContexts(): Promise<void> {
@@ -77,7 +66,8 @@ export class UIModule implements IUIModule {
             false, 'faq', ['faqarticles'], FAQContext,
             [
                 new UIComponentPermission('faq/articles', [CRUD.READ])
-            ]
+            ],
+            'Translatable#FAQ', 'kix-icon-faq'
         );
         ContextService.getInstance().registerContext(faqContextDescriptor);
 
@@ -87,16 +77,18 @@ export class UIModule implements IUIModule {
             true, 'object-details-page', ['faqarticles'], FAQDetailsContext,
             [
                 new UIComponentPermission('faq/articles', [CRUD.READ])
-            ]
+            ],
+            'Translatable#FAQ Details', 'kix-icon-faq'
         );
         ContextService.getInstance().registerContext(faqDetailsContextDescriptor);
 
         const searchFAQArticleContext = new ContextDescriptor(
-            FAQArticleSearchContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE], ContextType.DIALOG, ContextMode.SEARCH,
-            false, 'search-faq-article-dialog', ['faqarticles'], FAQArticleSearchContext,
+            FAQArticleSearchContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE], ContextType.MAIN, ContextMode.SEARCH,
+            false, 'search', ['faqarticles'], FAQArticleSearchContext,
             [
                 new UIComponentPermission('faq/articles', [CRUD.READ])
-            ]
+            ],
+            'Translatable#FAQ', 'kix-icon-faq', null, 400
         );
         ContextService.getInstance().registerContext(searchFAQArticleContext);
     }
@@ -104,42 +96,6 @@ export class UIModule implements IUIModule {
     private registerActions(): void {
         ActionFactory.getInstance().registerAction('faq-article-vote-action', FAQArticleVoteAction);
         ActionFactory.getInstance().registerAction('load-faq-article-action', LoadFAQAricleAction);
-    }
-
-    private async registerBookmarks(): Promise<void> {
-        const language = await TranslationService.getUserLanguage();
-
-        const isGerman = language === 'de';
-
-        const faqIds = [
-            isGerman ? 1 : 2,
-            isGerman ? 3 : 4,
-            isGerman ? 5 : 6,
-            isGerman ? 7 : 8,
-        ];
-
-        const bookmarks = [
-            new Bookmark(
-                'Translatable#General information on how to work with KIX 18',
-                'kix-icon-faq', 'load-faq-article-action',
-                faqIds[0],
-                [new UIComponentPermission('faq/articles', [CRUD.READ])]
-            ),
-            new Bookmark(
-                'Translatable#How do I search in KIX 18?', 'kix-icon-faq', 'load-faq-article-action', faqIds[1],
-                [new UIComponentPermission('faq/articles', [CRUD.READ])]
-            ),
-            new Bookmark(
-                'Translatable#How do I create a new ticket?', 'kix-icon-faq', 'load-faq-article-action', faqIds[3],
-                [new UIComponentPermission('faq/articles', [CRUD.READ])]
-            ),
-            new Bookmark(
-                'Translatable#Selected ticket functions', 'kix-icon-faq', 'load-faq-article-action', faqIds[2],
-                [new UIComponentPermission('faq/articles', [CRUD.READ])]
-            )
-        ];
-
-        BookmarkService.getInstance().publishBookmarks('faq', bookmarks);
     }
 
 }

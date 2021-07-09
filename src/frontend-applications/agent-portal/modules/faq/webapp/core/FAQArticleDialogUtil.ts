@@ -7,25 +7,18 @@
  * --
  */
 
-import { FAQDetailsContext } from './context/FAQDetailsContext';
-import { NewFAQArticleDialogContext, EditFAQArticleDialogContext } from './context';
+import { EditFAQArticleDialogContext, NewFAQArticleDialogContext } from './context';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../model/ContextMode';
 
 export class FAQArticleDialogUtil {
 
     public static async create(): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            NewFAQArticleDialogContext.CONTEXT_ID, KIXObjectType.FAQ_ARTICLE, ContextMode.CREATE
-        );
+        ContextService.getInstance().setActiveContext(NewFAQArticleDialogContext.CONTEXT_ID);
     }
 
     public static async edit(faqArticleId?: string | number): Promise<void> {
         if (!faqArticleId) {
-            const context = await ContextService.getInstance().getContext<FAQDetailsContext>(
-                FAQDetailsContext.CONTEXT_ID
-            );
+            const context = ContextService.getInstance().getActiveContext();
 
             if (context) {
                 faqArticleId = context.getObjectId();
@@ -33,9 +26,7 @@ export class FAQArticleDialogUtil {
         }
 
         if (faqArticleId) {
-            ContextService.getInstance().setDialogContext(
-                EditFAQArticleDialogContext.CONTEXT_ID, KIXObjectType.FAQ_ARTICLE, ContextMode.EDIT, faqArticleId
-            );
+            ContextService.getInstance().setActiveContext(EditFAQArticleDialogContext.CONTEXT_ID, faqArticleId);
         }
     }
 

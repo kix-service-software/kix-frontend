@@ -8,24 +8,21 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { KIXObjectFormService } from '../../../../../modules/base-components/webapp/core/KIXObjectFormService';
 import { ServiceType } from '../../../../../modules/base-components/webapp/core/ServiceType';
-import { FormInstance } from '../../../../../modules/base-components/webapp/core/FormInstance';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
-import { IEventSubscriber } from '../../core/IEventSubscriber';
-import { EventService } from '../../core/EventService';
-import { FormEvent } from '../../core/FormEvent';
+import { ContextService } from '../../core/ContextService';
 
-class FieldContainerComponent {
+class Component {
 
     private state: ComponentState;
     private formId: string;
-    private formSubscriber: IEventSubscriber;
+    private fields: FormFieldConfiguration[];
+    private updateTimeout: any;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -34,7 +31,8 @@ class FieldContainerComponent {
     public onInput(input: any): void {
         this.state.level = typeof input.level !== 'undefined' ? input.level : 0;
         this.formId = input.formId;
-        this.initFields(input.fields);
+        this.fields = input.fields;
+        this.initFields(this.fields);
     }
 
     public async onMount(): Promise<void> {
@@ -42,41 +40,35 @@ class FieldContainerComponent {
             'Translatable#Add', 'Translatable#Delete'
         ]);
 
-        this.formSubscriber = {
-            eventSubscriberId: 'FieldContainer',
-            eventPublished: (data: any, eventId: string) => {
-                (this as any).setStateDirty('fields');
-            }
-        };
-        EventService.getInstance().subscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
-        EventService.getInstance().subscribe(FormEvent.FORM_FIELD_ORDER_CHANGED, this.formSubscriber);
+        this.initFields(this.fields);
     }
 
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.FIELD_REMOVED, this.formSubscriber);
-        EventService.getInstance().unsubscribe(FormEvent.FORM_FIELD_ORDER_CHANGED, this.formSubscriber);
-    }
-
-    private async initFields(fields: FormFieldConfiguration[]): Promise<void> {
-        if (this.formId) {
-            const formInstance = await FormService.getInstance().getFormInstance(this.formId);
-            let availableFields: FormFieldConfiguration[] = fields;
-
-            const formService = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
-                formInstance.getObjectType(), ServiceType.FORM
-            );
-            if (formService && fields) {
-                const fieldsWithPermission = [];
-                for (const field of fields) {
-                    if (await formService.hasPermissions(field)) {
-                        fieldsWithPermission.push(field);
-                    }
-                }
-                availableFields = fieldsWithPermission;
-            }
-            this.state.fields = availableFields;
+    private async initFields(fields: FormFieldConfiguration[] = []): Promise<void> {
+        if (this.updateTimeout) {
+            window.clearTimeout(this.updateTimeout);
         }
+
+        this.updateTimeout = setTimeout(async () => {
+            if (this.formId) {
+                const context = ContextService.getInstance().getActiveContext();
+                const formInstance = await context?.getFormManager()?.getFormInstance();
+                let availableFields: FormFieldConfiguration[] = fields;
+
+                const formService = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
+                    formInstance.getObjectType(), ServiceType.FORM
+                );
+                if (formService && fields) {
+                    const fieldsWithPermission = [];
+                    for (const field of fields) {
+                        if (await formService.hasPermissions(field)) {
+                            fieldsWithPermission.push(field);
+                        }
+                    }
+                    availableFields = fieldsWithPermission;
+                }
+                this.state.fields = availableFields;
+            }
+        }, 50);
     }
 
     public canRemove(field: FormFieldConfiguration): boolean {
@@ -99,7 +91,8 @@ class FieldContainerComponent {
             propertyFields = this.filterDynamicFields(field, propertyFields);
         }
 
-        const formInstance = await FormService.getInstance().getFormInstance(this.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         if (propertyFields.length === 1) {
             formInstance.setFieldEmptyState(field, true);
         } else {
@@ -145,7 +138,8 @@ class FieldContainerComponent {
     }
 
     public async addField(field: FormFieldConfiguration): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         if (field.empty) {
             formInstance.setFieldEmptyState(field, false);
         } else {
@@ -189,7 +183,8 @@ class FieldContainerComponent {
         event.stopPropagation();
         event.preventDefault();
 
-        const formInstance = await FormService.getInstance().getFormInstance(this.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         if (formInstance && this.state.dragStartInstanceId) {
             const fieldComponent = (this as any).getComponent(this.state.dragStartInstanceId);
             let wasMinimized = false;
@@ -212,4 +207,4 @@ class FieldContainerComponent {
 
 }
 
-module.exports = FieldContainerComponent;
+module.exports = Component;

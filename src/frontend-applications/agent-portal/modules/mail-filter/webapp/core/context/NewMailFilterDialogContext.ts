@@ -12,6 +12,5 @@ import { Context } from '../../../../../model/Context';
 export class NewMailFilterDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'new-mail-filter-dialog-context';
-    public formListenerId: string;
 
 }

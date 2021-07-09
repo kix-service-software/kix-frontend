@@ -34,4 +34,9 @@ export class EditContactDialogContext extends Context {
         }
         return object;
     }
+
+    public getObjectId(): string | number {
+        return this.getAdditionalInformation('CONTACT_ID');
+    }
+
 }

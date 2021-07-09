@@ -7,18 +7,15 @@
  * --
  */
 
-import { Context } from '../../../../../model/Context';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { SearchContext } from '../../../../search/webapp/core';
 
-export class ContactSearchContext extends Context {
+export class ContactSearchContext extends SearchContext {
 
     public static CONTEXT_ID: string = 'search-contact-context';
 
-    public async getUrl(): Promise<string> {
-        const context = await ContextService.getInstance().getContext<SearchContext>(SearchContext.CONTEXT_ID);
-        const url = await context.getUrl();
-        return url;
+    public getIcon(): string | ObjectIcon {
+        return 'kix-icon-search-man-bubble';
     }
 
 }

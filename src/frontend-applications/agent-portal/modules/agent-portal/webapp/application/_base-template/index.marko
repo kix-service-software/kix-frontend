@@ -6,38 +6,53 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<div.wrapper>
+<div.app-wrapper class={
+    blur: state.activeMobile
+}>
     <if(state.initialized)>
         <if(!state.reload)>
-            <kix-header/>
-            <div.content-wrapper class={
-                "with-explorer": state.hasExplorer,
-                "with-sidebar": state.showSidebar
-            }>
-                <main-menu no-update/>
-                <div.site-navigation no-update>
-                    <back-to/>
-                    <breadcrumb/>
-                </div>
-                <explorerbar contextType="MAIN" no-update/>
-                <div.content no-update>
-                    <router-outlet id="base-router"/>
-                </div>
-                <if(state.showSidebar)>
-                    <sidebar contextType="MAIN" no-update/>
+            <div.header-wrapper>
+                <kix-header/>
+                <if(!state.isMobile)>
+                    <tabbar/>
                 </if>
-                <div.site-menu-wrapper no-update>
-                    <sidebar-menu contextType="MAIN"/>
-                </div>
             </div>
-            <kix-footer/>
-            <image-dialog/>
-            <main-dialog/>
-            <overlay-dialog/>
+            <div.main-menu-wrapper active=(state.activeMobile === 1)>
+                <main-menu no-update/>
+            </div>
+            <div.sidebar-left-wrapper active=(state.activeMobile === 2)>
+                <sidebar isLeft=true no-update/>
+            </div>
+            <div.content-wrapper no-update>
+                <router-outlet id="base-router"/>
+            </div>
+            <div.sidebar-right-wrapper active=(state.activeMobile === 3)>
+                <sidebar no-update/>
+            </div>
+            <div.footer-wrapper>
+                <kix-footer/>
+            </div>
+            <image-viewer/>
             <overlay/>
+            <if(state.isMobile)>
+                <if(state.activeMobile === 4)>
+                    <div.mobile-toolbar-wrapper active>
+                        <div.application-toolbar-wrapper>
+                            <application-toolbar/>
+                        </div>
+                        <div.search-object-dropdown-wrapper>
+                            <search-object-dropdown/>
+                        </div>
+                        <div.personal-toolbar-wrapper>
+                            <personal-toolbar/>
+                        </div>
+                    </div>
+                </if>
+                <mobile-shields/>
+            </if>
         </if>
     </if>
+    <loading-shield shieldId="APP_SHIELD"/>
     <if(state.loading)>
         <div.app-loading-shield>
             <div.loading-info>

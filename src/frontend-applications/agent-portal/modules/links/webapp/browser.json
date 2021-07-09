@@ -1,9 +1,9 @@
 {
     "dependencies": [
-        "require ./components/edit-linked-objects-dialog",
         "require ./components/link-input",
         "require ./components/link-object-dialog",
         "require ./components/linked-objects-widget",
+        "require ./components/edit-linked-objects-dialog",
         "require ./core"
     ]
 }

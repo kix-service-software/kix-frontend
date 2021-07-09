@@ -8,7 +8,6 @@
  */
 
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
-import { UserDetailsContext } from './webapp/core/admin';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
 import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
@@ -24,8 +23,8 @@ import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 import { ContextMode } from '../../model/ContextMode';
 import { ObjectInformationWidgetConfiguration } from '../../model/configuration/ObjectInformationWidgetConfiguration';
 import { RoutingConfiguration } from '../../model/configuration/RoutingConfiguration';
-
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { UserDetailsContext } from './webapp/core/admin/context/user';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -116,7 +115,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'user-admin-user-create-action'
                 ],
                 [
-                    'user-admin-user-edit-action', 'print-action'
+                    'user-admin-user-edit-action'
                 ],
                 [],
                 [

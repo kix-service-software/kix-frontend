@@ -9,9 +9,7 @@
 
 import { TableContentProvider } from '../../../../../base-components/webapp/core/table/TableContentProvider';
 import { Version } from '../../../../model/Version';
-import {
-    Table, RowObject, TableValue, ValueState
-} from '../../../../../base-components/webapp/core/table';
+import { Table, RowObject, TableValue, ValueState } from '../../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
@@ -35,7 +33,7 @@ export class CompareConfigItemVersionTableContentProvider extends TableContentPr
     public async loadData(): Promise<Array<RowObject<Version>>> {
         let rowObjects = [];
         if (this.contextId) {
-            const context = await ContextService.getInstance().getContext(this.contextId);
+            const context = ContextService.getInstance().getActiveContext();
             const versionList = await context.getObjectList(KIXObjectType.CONFIG_ITEM_VERSION);
             const versions = versionList as Version[];
             if (versions) {
@@ -171,11 +169,11 @@ export class CompareConfigItemVersionTableContentProvider extends TableContentPr
                         if (displayValue) {
                             if (rd.Type === 'Date') {
                                 displayValue = await DateTimeUtil.getLocalDateString(displayValue);
-                            } else if (rd.Type === 'Attachment' && rd.Value) {
-                                displayValue = rd.Value.Filename;
                             } else {
                                 displayValue = await TranslationService.translate(displayValue);
                             }
+                        } else if (rd.Type === 'Attachment' && rd.Value) {
+                            displayValue = `${rd.Value.Filename} (${rd.Value.Filesize})`;
                         }
                         values.push(new TableValue(version.VersionID.toString(), displayValue, displayValue));
                     }

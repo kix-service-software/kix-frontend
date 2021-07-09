@@ -25,6 +25,8 @@ import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
+import { UserPreference } from '../../model/UserPreference';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
 
 export class AgentService extends KIXObjectService<User> {
 
@@ -86,13 +88,13 @@ export class AgentService extends KIXObjectService<User> {
         return currentUser;
     }
 
-    public async setPreferencesByForm(formId: string): Promise<void> {
+    public async setPreferencesByForm(): Promise<void> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
             KIXObjectType.PERSONAL_SETTINGS, ServiceType.FORM
         );
         let parameter: Array<[string, any]>;
         if (service) {
-            parameter = await service.getFormParameter(formId);
+            parameter = await service.getFormParameter();
         }
 
         await AgentSocketClient.getInstance().setPreferences(parameter);
@@ -120,5 +122,32 @@ export class AgentService extends KIXObjectService<User> {
                 FilterType.OR, searchValue.toLocaleLowerCase()
             )
         ];
+    }
+
+    public async getPinnedContexts(): Promise<Array<[string, string, string | number]>> {
+        let contextList: Array<[string, string, string | number]> = [];
+        const tabPreference = await this.getUserPreference('AgentPortalContextList');
+        if (tabPreference) {
+            try {
+                contextList = Array.isArray(tabPreference.Value)
+                    ? tabPreference.Value.map((v) => JSON.parse(v))
+                    : [];
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        return contextList;
+    }
+
+    public async replacePinnedContexts(contextList: Array<[string, string | number]>): Promise<void> {
+        const value = contextList.length ? contextList.map((c) => JSON.stringify(c)) : null;
+        await this.setPreferences([['AgentPortalContextList', value]]);
+    }
+
+    public async getUserPreference(id: string): Promise<UserPreference> {
+        const currentUser = await this.getCurrentUser();
+        const preference = currentUser?.Preferences.find((p) => p.ID === id);
+        return preference;
     }
 }

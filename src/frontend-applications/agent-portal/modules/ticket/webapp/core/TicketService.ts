@@ -47,7 +47,6 @@ import { TicketLock } from '../../model/TicketLock';
 import { Watcher } from '../../model/Watcher';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
-import { ContextType } from '../../../../model/ContextType';
 import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
 import { Queue } from '../../model/Queue';
@@ -55,6 +54,9 @@ import { QueueProperty } from '../../model/QueueProperty';
 import { TicketPriorityProperty } from '../../model/TicketPriorityProperty';
 import { TicketStateProperty } from '../../model/TicketStateProperty';
 import { TicketTypeProperty } from '../../model/TicketTypeProperty';
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { CreateTicketArticleOptions } from '../../model/CreateTicketArticleOptions';
+import { Error } from '../../../../../../server/model/Error';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -137,11 +139,11 @@ export class TicketService extends KIXObjectService<Ticket> {
             )
         ];
 
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const context = ContextService.getInstance().getActiveContext();
         const object = await context?.getObject();
         if (
             object?.KIXObjectType === KIXObjectType.TICKET
-            && context?.getDescriptor()?.contextMode === ContextMode.DETAILS
+            && context?.descriptor?.contextMode === ContextMode.DETAILS
         ) {
             filter.push(
                 new FilterCriteria(
@@ -418,8 +420,8 @@ export class TicketService extends KIXObjectService<Ticket> {
 
     public async getObjectUrl(object?: KIXObject, objectId?: string | number): Promise<string> {
         const id = object ? object.ObjectId : objectId;
-        const context = await ContextService.getInstance().getContext(TicketDetailsContext.CONTEXT_ID);
-        return context.getDescriptor().urlPaths[0] + '/' + id;
+        const context = ContextService.getInstance().getActiveContext();
+        return context.descriptor.urlPaths[0] + '/' + id;
     }
 
     public async getPreparedArticleBodyContent(article: Article): Promise<[string, InlineContent[]]> {
@@ -483,6 +485,24 @@ export class TicketService extends KIXObjectService<Ticket> {
         return new RoutingConfiguration(
             TicketDetailsContext.CONTEXT_ID, KIXObjectType.TICKET, ContextMode.DETAILS, TicketProperty.TICKET_ID
         );
+    }
+
+    public async createObjectByForm(
+        objectType: KIXObjectType | string, formId: string, createOptions?: KIXObjectSpecificCreateOptions,
+        cacheKeyPrefix?: string
+    ): Promise<string | number> {
+        if (objectType === KIXObjectType.ARTICLE) {
+            const dialogContext = ContextService.getInstance().getActiveContext();
+            const referencedTicketId = dialogContext?.getAdditionalInformation('REFERENCED_TICKET_ID');
+            if (referencedTicketId) {
+                // TODO: keep given createOptions?
+                const articleCreateOptions = new CreateTicketArticleOptions(referencedTicketId);
+                return super.createObjectByForm(objectType, formId, articleCreateOptions, cacheKeyPrefix);
+            } else {
+                throw new Error('', 'Could not create article without ID of relevant ticket!');
+            }
+        }
+        return super.createObjectByForm(objectType, formId, createOptions, cacheKeyPrefix);
     }
 
     public static async getDefaultQueueID(): Promise<number> {

@@ -9,19 +9,28 @@
 
 .kix-footer {
     .font-size-small();
-    color: @secondary-2;
+    color: @secondary-0;
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
     align-content: center;
-    margin: @margin-default 0 .625rem;
+    margin: @margin-small 0 0.25rem;
 
-    >div {
+    >div.right-text,
+    >div.left-text {
         .shorten-text;
         padding: 0 1rem;
     }
 
-    >div:last-child {
+    >div:not(.right-text):not(.left-text) {
+        justify-self: center;
+        text-align: center;
+        padding: 0 1rem;
+    }
+
+    >div.right-text {
         justify-self: end;
     }
 }

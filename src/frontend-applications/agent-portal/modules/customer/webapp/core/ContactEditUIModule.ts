@@ -10,10 +10,7 @@
 import { IUIModule } from '../../../../model/IUIModule';
 import { ContactImportManager } from './ContactImportManager';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
-import {
-    NewContactDialogContext, EditContactDialogContext, ContactImportDialogContext,
-    ContactCreateAction, ContactEditAction
-} from '.';
+import { NewContactDialogContext, EditContactDialogContext, ContactImportDialogContext, ContactCreateAction, ContactEditAction } from '.';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
@@ -23,6 +20,7 @@ import { ImportService } from '../../../import/webapp/core/ImportService';
 import { ContactDuplicateAction } from './actions/ContactDuplicateAction';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { ContactDetailsContext } from './context';
 
 export class UIModule implements IUIModule {
 
@@ -44,19 +42,21 @@ export class UIModule implements IUIModule {
     private async registerContexts(): Promise<void> {
         const newContactContext = new ContextDescriptor(
             NewContactDialogContext.CONTEXT_ID, [KIXObjectType.CONTACT], ContextType.DIALOG, ContextMode.CREATE,
-            false, 'new-contact-dialog', ['contacts'], NewContactDialogContext,
+            false, 'object-dialog', ['contacts'], NewContactDialogContext,
             [
                 new UIComponentPermission('contacts', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Contact', 'kix-icon-man-bubble', ContactDetailsContext.CONTEXT_ID, 301
         );
         ContextService.getInstance().registerContext(newContactContext);
 
         const editContactContext = new ContextDescriptor(
             EditContactDialogContext.CONTEXT_ID, [KIXObjectType.CONTACT], ContextType.DIALOG, ContextMode.EDIT,
-            false, 'edit-contact-dialog', ['contacts'], EditContactDialogContext,
+            false, 'object-dialog', ['contacts'], EditContactDialogContext,
             [
                 new UIComponentPermission('contacts', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Contact', 'kix-icon-gear', ContactDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(editContactContext);
 
@@ -66,7 +66,9 @@ export class UIModule implements IUIModule {
             false, 'import-dialog', ['contacts'], ContactImportDialogContext,
             [
                 new UIComponentPermission('contacts', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Import Contacts', 'kix-icon-gear',
+            undefined, undefined, false
         );
         ContextService.getInstance().registerContext(contactImportDialogContext);
     }

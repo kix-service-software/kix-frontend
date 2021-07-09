@@ -46,19 +46,21 @@ export class UIModule implements IUIModule {
         const newGeneralCatalogDialogContext = new ContextDescriptor(
             NewGeneralCatalogDialogContext.CONTEXT_ID, [KIXObjectType.GENERAL_CATALOG_ITEM],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            true, 'new-general-catalog-dialog', ['generalcatalog'], NewGeneralCatalogDialogContext,
+            true, 'object-dialog', ['generalcatalog'], NewGeneralCatalogDialogContext,
             [
                 new UIComponentPermission('system/generalcatalog', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#New General Catalog', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(newGeneralCatalogDialogContext);
         const editGeneralCatalogDialogContext = new ContextDescriptor(
             EditGeneralCatalogDialogContext.CONTEXT_ID, [KIXObjectType.GENERAL_CATALOG_ITEM],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            true, 'edit-general-catalog-dialog', ['generalcatalog'], EditGeneralCatalogDialogContext,
+            true, 'object-dialog', ['generalcatalog'], EditGeneralCatalogDialogContext,
             [
                 new UIComponentPermission('system/generalcatalog', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Edit General Catalog', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(editGeneralCatalogDialogContext);
 

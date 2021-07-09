@@ -8,6 +8,7 @@
  */
 
 .widget-container {
+
     .widget-configuration-toolbar {
         display: grid;
         grid-auto-flow: row;
@@ -45,6 +46,23 @@
     }
 
     .widget-container-content {
+
+        .widget-frame {
+            width: 100%;
+        }
+
+        display: grid;
+        grid-auto-rows: auto;
+        grid-gap: @margin-default;
+        grid-auto-flow: row;
+
+        // not "mobile"
+        @media only screen and (min-width: @mobile-breakpoint + 1px) {
+            .widget-frame.large {
+                grid-column: first-line / last-line;
+            }
+        }
+
         display: grid;
         grid-template-columns: [first-line] repeat(3, minmax(100px, 1fr)) [last-line];
         grid-auto-rows: auto;
@@ -130,6 +148,24 @@
             &.large {
                 grid-column: first-line / last-line;
             }
+        }
+    }
+
+    .customize-section {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: max-content;
+        grid-column-gap: 0.5rem;
+        justify-content: center;
+        align-items: center;
+        margin-top: 1rem;
+        font-size: 1.15rem;
+
+        color: @primary-1;
+
+        &:hover {
+            cursor: pointer;
+            color: darken(@primary-1, 60%);
         }
     }
 }

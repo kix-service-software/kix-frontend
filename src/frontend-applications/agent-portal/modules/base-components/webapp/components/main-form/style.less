@@ -8,10 +8,11 @@
  */
 
 @form-property-column: 14.5rem;
+@form-property-column-mobile: 6.5rem;
 @form-property-hint-column: 2rem;
 
 .form {
-    padding-left: @margin-widget-content;
+    padding: @margin-widget-content;
 
     .form-field {
         opacity: 0;
@@ -26,6 +27,15 @@
 
         &.additionalFieldControlsNeeded {
             grid-template-columns: @form-property-column @form-property-hint-column auto max-content max-content;
+        }
+
+        // "mobile"
+        @media only screen and (max-width: @mobile-breakpoint) {
+            grid-template-columns: @form-property-column-mobile @form-property-hint-column auto max-content;
+
+            &.additionalFieldControlsNeeded {
+                grid-template-columns: @form-property-column-mobile @form-property-hint-column auto max-content max-content;
+            }
         }
 
         >.field-label {

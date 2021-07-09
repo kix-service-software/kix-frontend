@@ -11,8 +11,7 @@ import { AbstractAction } from '../../../../../../../modules/base-components/web
 import { UIComponentPermission } from '../../../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../../../modules/base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../../../model/ContextMode';
+import { NewTicketTypeDialogContext } from '../../context';
 
 export class TicketTypeCreateAction extends AbstractAction {
 
@@ -26,10 +25,7 @@ export class TicketTypeCreateAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-            null, KIXObjectType.TICKET_TYPE, ContextMode.CREATE_ADMIN, null, true, 'Translatable#Ticket'
-        );
+        ContextService.getInstance().setActiveContext(NewTicketTypeDialogContext.CONTEXT_ID);
     }
 
 }

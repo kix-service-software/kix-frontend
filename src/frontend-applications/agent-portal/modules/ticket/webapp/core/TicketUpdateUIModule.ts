@@ -23,6 +23,7 @@ import { ActionFactory } from '../../../../modules/base-components/webapp/core/A
 import { BulkService } from '../../../bulk/webapp/core';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { TicketDetailsContext } from './context';
 
 export class UIModule implements IUIModule {
 
@@ -49,10 +50,11 @@ export class UIModule implements IUIModule {
     private registerContexts(): void {
         const editTicketContext = new ContextDescriptor(
             EditTicketDialogContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.DIALOG, ContextMode.EDIT,
-            false, 'edit-ticket-dialog', ['tickets'], EditTicketDialogContext,
+            false, 'object-dialog', ['tickets'], EditTicketDialogContext,
             [
                 new UIComponentPermission('tickets', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Edit Ticket', 'kix-icon-ticket', TicketDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(editTicketContext);
     }

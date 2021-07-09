@@ -11,8 +11,7 @@ import { AbstractAction } from '../../../../../../modules/base-components/webapp
 import { UIComponentPermission } from '../../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../../model/ContextMode';
+import { NewConfigItemClassDialogContext } from '../context';
 
 export class ConfigItemClassCreateAction extends AbstractAction {
 
@@ -26,10 +25,7 @@ export class ConfigItemClassCreateAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-            null, KIXObjectType.CONFIG_ITEM_CLASS, ContextMode.CREATE_ADMIN, null, true, 'Translatable#CMDB'
-        );
+        ContextService.getInstance().setActiveContext(NewConfigItemClassDialogContext.CONTEXT_ID);
     }
 
 }

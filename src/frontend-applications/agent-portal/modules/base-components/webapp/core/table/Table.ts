@@ -46,7 +46,8 @@ export class Table implements Table {
     private filteredRows: Row[] = null;
     private columns: Column[] = [];
     private contentProvider: ITableContentProvider;
-    private columnConfiguration: IColumnConfiguration[];
+    private columnConfigurations: IColumnConfiguration[];
+    private additionalColumnConfigurations: IColumnConfiguration[] = [];
 
     private filterValue: string;
     private filterCriteria: UIFilterCriterion[];
@@ -88,7 +89,7 @@ export class Table implements Table {
     }
 
     public setColumnConfiguration(columnConfiguration: IColumnConfiguration[]) {
-        this.columnConfiguration = columnConfiguration;
+        this.columnConfigurations = columnConfiguration;
     }
 
     public async initialize(): Promise<void> {
@@ -96,8 +97,14 @@ export class Table implements Table {
             this.initialized = true;
 
             this.columns = [];
-            if (this.columnConfiguration) {
-                for (const c of this.columnConfiguration) {
+            if (this.columnConfigurations) {
+                for (const c of this.columnConfigurations) {
+                    await this.createColumn(c);
+                }
+            }
+
+            if (this.additionalColumnConfigurations) {
+                for (const c of this.additionalColumnConfigurations) {
                     await this.createColumn(c);
                 }
             }
@@ -122,6 +129,18 @@ export class Table implements Table {
             }
 
             this.toggleFirstRow();
+
+            setTimeout(() => {
+                setTimeout(async () => {
+                    EventService.getInstance().publish(
+                        TableEvent.TABLE_INITIALIZED,
+                        new TableEventData(this.getTableId())
+                    );
+                    EventService.getInstance().publish(
+                        TableEvent.TABLE_READY, new TableEventData(this.getTableId())
+                    );
+                }, 50);
+            }, 20);
         }
     }
 
@@ -139,7 +158,7 @@ export class Table implements Table {
             criteria.forEach((c) => parameter.push([c.property, c.value]));
 
             const columns = await searchDefinition.getTableColumnConfiguration(parameter);
-            await this.addColumns(columns);
+            await this.addAdditionalColumns(columns);
         }
     }
 
@@ -362,7 +381,7 @@ export class Table implements Table {
     public removeColumns(columnIds: string[]): Column[] | IColumnConfiguration[] {
         const removedColumns = [];
         if (!this.initialized) {
-            this.columnConfiguration = this.columnConfiguration.filter((cc) => {
+            this.columnConfigurations = this.columnConfigurations.filter((cc) => {
                 if (columnIds.some((id) => id === cc.property)) {
                     removedColumns.push(cc);
                     return false;
@@ -384,20 +403,25 @@ export class Table implements Table {
         return removedColumns;
     }
 
-    public async addColumns(columnConfigs: IColumnConfiguration[]): Promise<void> {
+    public removeAdditonalColumns(): void {
+        this.removeColumns(this.additionalColumnConfigurations.map((c) => c.id));
+    }
+
+    public async addAdditionalColumns(additionalColumnConfigs: IColumnConfiguration[]): Promise<void> {
         if (!this.initialized) {
-            if (!this.columnConfiguration) {
-                this.columnConfiguration = [...columnConfigs];
+            if (!this.additionalColumnConfigurations) {
+                this.additionalColumnConfigurations = [...additionalColumnConfigs];
             } else {
-                this.columnConfiguration.push(...columnConfigs);
+                this.additionalColumnConfigurations.push(...additionalColumnConfigs);
             }
         } else {
-            for (const c of columnConfigs) {
+            for (const c of additionalColumnConfigs) {
                 if (!this.hasColumn(c.property)) {
                     await this.createColumn(c);
                     this.updateRowValues();
                 }
             }
+
             this.reload(true, false);
         }
     }

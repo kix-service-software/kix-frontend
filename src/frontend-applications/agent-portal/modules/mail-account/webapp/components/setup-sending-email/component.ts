@@ -37,6 +37,7 @@ import { SetupStep } from '../../../../setup-assistant/webapp/core/SetupStep';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFieldTypes';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { SystemAddress } from '../../../../system-address/model/SystemAddress';
 import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
@@ -94,25 +95,31 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         const typeHint = sysconfigDefinitions.find((o) => o.Name === 'SendmailModule').Description || '';
         const typeReadonly = sysconfigOptions.find((o) => o.Name === 'SendmailModule').ReadOnly;
-        const typeGroup = new FormGroupConfiguration(
-            'setup-sending-email-form-type-group', 'Translatable#Type', null, null,
+
+        const sendMailModuleField = new FormFieldConfiguration(
+            'SendmailModule', 'Translatable#Type', 'SendmailModule', 'default-select-input', true, typeHint,
             [
-                new FormFieldConfiguration(
-                    'SendmailModule', 'Translatable#Type', 'SendmailModule', 'default-select-input', true, typeHint,
+                new FormFieldOption(DefaultSelectInputFormOption.NODES,
                     [
-                        new FormFieldOption(DefaultSelectInputFormOption.NODES,
-                            [
-                                new TreeNode('Kernel::System::Email::DoNotSendEmail', 'DoNotSendEmail'),
-                                new TreeNode('Kernel::System::Email::SMTP', 'SMTP'),
-                                new TreeNode('Kernel::System::Email::SMTPS', 'SMTPS'),
-                                new TreeNode('Kernel::System::Email::SMTPTLS', 'SMTPTLS')
-                            ]
-                        )
-                    ],
-                    null, null, null, null, null, null, null, null, null, null, null, null,
-                    typeReadonly
+                        new TreeNode('Kernel::System::Email::DoNotSendEmail', 'DoNotSendEmail'),
+                        new TreeNode('Kernel::System::Email::SMTP', 'SMTP'),
+                        new TreeNode('Kernel::System::Email::SMTPS', 'SMTPS'),
+                        new TreeNode('Kernel::System::Email::SMTPTLS', 'SMTPTLS')
+                    ]
                 )
-            ]
+            ],
+            null, null, null, null, null, null, null, null, null, null, null, null,
+            typeReadonly
+        );
+
+        const sendMailModuleValue = sysconfigDefinitions.find((o) => o.Name === 'SendmailModule').Default;
+        if (sendMailModuleValue?.startsWith('Kernel::System::Email::SMTP')) {
+            const smtpFields = await this.getSMTPFields();
+            sendMailModuleField.children = smtpFields;
+        }
+
+        const typeGroup = new FormGroupConfiguration(
+            'setup-sending-email-form-type-group', 'Translatable#Type', null, null, [sendMailModuleField]
         );
 
         const envelopeFromHint = sysconfigDefinitions.find((o) => o.Name === 'SendmailEnvelopeFrom').Description || '';
@@ -190,9 +197,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.subscriber = {
             eventSubscriberId: 'setup-sending-mail-subscriber',
             eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
-                const changedValue = data.changedValues.find((cv) => cv[0].property === 'SendmailModule');
+                const changedValue = data.changedValues.find((cv) => cv[0]?.property === 'SendmailModule');
                 if (changedValue) {
-                    const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+                    const context = ContextService.getInstance().getActiveContext();
+                    const formInstance = await context?.getFormManager()?.getFormInstance();
                     if (changedValue[1].value) {
                         let value = changedValue[1].value;
                         if (Array.isArray(changedValue[1].value) && changedValue[1].value.length) {
@@ -227,12 +235,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         FormService.getInstance().addForm(form);
         this.state.formId = form.id;
 
+        const activeContext = ContextService.getInstance().getActiveContext();
+        activeContext?.getFormManager()?.setFormId(this.state.formId);
+
         setTimeout(() => this.initFormValues(form.id), 100);
     }
 
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.subscriber);
-        FormService.getInstance().deleteFormInstance(this.state.formId);
     }
 
     private async initSystemAddress(): Promise<void> {
@@ -324,7 +334,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async initFormValues(formId: string, configKeys: string[] = this.configKeys): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
 
         const sysconfigOptions = await KIXObjectService.loadObjects<SysConfigOption>(
             KIXObjectType.SYS_CONFIG_OPTION, configKeys
@@ -345,14 +356,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async submit(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
 
         const result = await formInstance.validateForm();
         const validationError = result.some((r) => r && r.severity === ValidationSeverity.ERROR);
         if (validationError) {
             BrowserUtil.showValidationError(result);
         } else {
-            BrowserUtil.toggleLoadingShield(true, 'Translatable#Save Outbox Settings');
+            BrowserUtil.toggleLoadingShield('SETUP_SENDING_MAIL_SHIELD', true, 'Translatable#Save Outbox Settings');
 
             if (this.systemAddress && this.canUpdateSystemAddress) {
                 await KIXObjectService.updateObjectByForm(
@@ -372,7 +384,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 }
             }
 
-            BrowserUtil.toggleLoadingShield(false);
+            BrowserUtil.toggleLoadingShield('SETUP_SENDING_MAIL_SHIELD', false);
         }
     }
     private async saveSysconfigValues(formInstance: FormInstance): Promise<void> {

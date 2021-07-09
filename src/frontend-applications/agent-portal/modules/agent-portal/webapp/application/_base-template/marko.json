@@ -1,6 +1,9 @@
 {
-    "tags-dir": [
-        "./kix-header",
-        "./main-menu"
-    ]
+        "tags-dir": [
+                "./application-toolbar",
+                "./kix-header",
+                "./main-menu",
+                "./personal-toolbar",
+                "./tabbar"
+        ]
 }

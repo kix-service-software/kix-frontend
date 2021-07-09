@@ -57,7 +57,7 @@ class Component extends FormInputComponent<FilterCriteria[], ComponentState> {
 
     private async handleArticleProperties() {
         const context = ContextService.getInstance().getActiveContext();
-        if (context && context.getDescriptor().contextType === ContextType.DIALOG) {
+        if (context && context.descriptor.contextType === ContextType.DIALOG) {
             const selectedEvents = context.getAdditionalInformation(NotificationProperty.DATA_EVENTS);
             const hasArticleEvent = selectedEvents
                 ? await NotificationService.getInstance().hasArticleEvent(selectedEvents)
@@ -152,8 +152,9 @@ class Component extends FormInputComponent<FilterCriteria[], ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const value = formInstance.getFormFieldValue<any>(this.state.field.instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const value = formInstance.getFormFieldValue<any>(this.state.field?.instanceId);
         if (value && value.value) {
 
             // value is frontend filter criteria (set in dialog)

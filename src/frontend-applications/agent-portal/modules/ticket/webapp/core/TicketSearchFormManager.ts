@@ -52,8 +52,8 @@ export class TicketSearchFormManager extends SearchFormManager {
         }
 
         const context = ContextService.getInstance().getActiveContext();
-        const isDialogContext = context.getDescriptor().contextType === ContextType.DIALOG;
-        const isSearchMode = context.getDescriptor().contextMode === ContextMode.SEARCH;
+        const isDialogContext = context.descriptor.contextType === ContextType.DIALOG;
+        const isSearchMode = context.descriptor.contextMode === ContextMode.SEARCH;
         if (context && isDialogContext && !isSearchMode) {
             properties.push(['Queue.FollowUpID', null]);
         }

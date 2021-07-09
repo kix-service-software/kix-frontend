@@ -64,9 +64,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             'contact-assigned-config-items-widget',
             '/kix-module-customer$0/webapp/components/contact-assigned-config-items-widget', []
         ),
-        new UIComponent('new-contact-dialog', '/kix-module-customer$0/webapp/components/new-contact-dialog', []),
-        new UIComponent('edit-contact-dialog', '/kix-module-customer$0/webapp/components/edit-contact-dialog', []),
-        new UIComponent('search-contact-dialog', '/kix-module-customer$0/webapp/components/search-contact-dialog', []),
         new UIComponent(
             'create-new-ticket-cell', '/kix-module-customer$0/webapp/components/create-new-ticket-cell', []
         ),
@@ -82,15 +79,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent(
             'organisation-assigned-config-items-widget',
             '/kix-module-customer$0/webapp/components/organisation-assigned-config-items-widget', []
-        ),
-        new UIComponent(
-            'new-organisation-dialog', '/kix-module-customer$0/webapp/components/new-organisation-dialog', []
-        ),
-        new UIComponent(
-            'edit-organisation-dialog', '/kix-module-customer$0/webapp/components/edit-organisation-dialog', []
-        ),
-        new UIComponent(
-            'search-organisation-dialog', '/kix-module-customer$0/webapp/components/search-organisation-dialog', []
         ),
         new UIComponent('contact-input-access', '/kix-module-customer$0/webapp/components/contact-input-access', []),
         new UIComponent('setup-my-organisation', '/kix-module-customer$0/webapp/components/setup-my-organisation', [])

@@ -30,7 +30,7 @@ export class JobRunHistoryContentProvider extends TableContentProvider<JobRun> {
     public async loadData(): Promise<Array<RowObject<JobRun>>> {
         const rowObjects = [];
         if (this.contextId) {
-            const context = await ContextService.getInstance().getContext(this.contextId);
+            const context = ContextService.getInstance().getActiveContext();
             const jobId = await context.getObjectId();
             if (jobId) {
                 const jobRuns = await KIXObjectService.loadObjects<JobRun>(

@@ -11,22 +11,18 @@ import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { ContextType } from '../../../../../model/ContextType';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../model/ContextMode';
-import { TicketDetailsContext } from '../../core';
 import { Ticket } from '../../../model/Ticket';
-import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { TicketProperty } from '../../../model/TicketProperty';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { Queue } from '../../../model/Queue';
-import { AgentService } from '../../../../user/webapp/core';
 import { SystemAddress } from '../../../../system-address/model/SystemAddress';
 import { TreeNode, TreeHandler } from '../../../../base-components/webapp/core/tree';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
+import { AgentService } from '../../../../user/webapp/core/AgentService';
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -42,9 +38,9 @@ class Component extends FormInputComponent<number, ComponentState> {
     }
 
     public async update(): Promise<void> {
-        const placeholderText = this.state.field.placeholder
-            ? this.state.field.placeholder
-            : this.state.field.required ? this.state.field.label : '';
+        const placeholderText = this.state.field?.placeholder
+            ? this.state.field?.placeholder
+            : this.state.field?.required ? this.state.field?.label : '';
 
         this.state.placeholder = await TranslationService.translate(placeholderText);
     }
@@ -73,20 +69,15 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     public async setCurrentValue(): Promise<void> {
         let queueId: number;
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const queueValue = await formInstance.getFormFieldValueByProperty<number>(TicketProperty.QUEUE_ID);
         if (queueValue && queueValue.value) {
             queueId = queueValue.value;
-        } else {
-            const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
-                TicketDetailsContext.CONTEXT_ID
-            );
-
-            if (context) {
-                const ticket = await context.getObject<Ticket>();
-                if (ticket) {
-                    queueId = ticket.QueueID;
-                }
+        } else if (context) {
+            const ticket = await context.getObject<Ticket>(KIXObjectType.TICKET);
+            if (ticket) {
+                queueId = ticket.QueueID;
             }
         }
 

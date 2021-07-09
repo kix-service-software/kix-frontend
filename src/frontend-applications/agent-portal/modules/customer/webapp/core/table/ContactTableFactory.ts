@@ -29,10 +29,10 @@ export class ContactTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.CONTACT;
 
-    public createTable(
+    public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: string[], contextId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
-    ): Table {
+    ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, short);
 

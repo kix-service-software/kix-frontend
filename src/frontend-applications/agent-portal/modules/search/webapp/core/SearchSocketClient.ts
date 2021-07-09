@@ -85,7 +85,11 @@ export class SearchSocketClient extends SocketClient {
             this.socket.on(SearchEvent.SEARCH_LOADED, (result: LoadSearchResponse) => {
                 if (result.requestId === requestId) {
                     window.clearTimeout(timeout);
-                    resolve(result.search);
+                    const searches: SearchCache[] = [];
+                    if (Array.isArray(result.search)) {
+                        result.search.forEach((s) => searches.push(SearchCache.create(s)));
+                    }
+                    resolve(searches);
                 }
             });
 

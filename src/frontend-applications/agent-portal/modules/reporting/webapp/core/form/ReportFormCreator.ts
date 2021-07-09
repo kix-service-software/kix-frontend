@@ -84,9 +84,11 @@ export class ReportFormCreator {
         }
 
         if (outputFormat) {
-            outputFormatField.defaultValue = new FormFieldValue(outputFormat);
+            outputFormatField.defaultValue = new FormFieldValue(
+                Array.isArray(outputFormat) ? outputFormat : [outputFormat]
+            );
         } else if (nodes.length) {
-            outputFormatField.defaultValue = new FormFieldValue(nodes[0].id);
+            outputFormatField.defaultValue = new FormFieldValue([nodes[0].id]);
         }
 
         outputFormatField.options.push(new FormFieldOption(DefaultSelectInputFormOption.NODES, nodes));

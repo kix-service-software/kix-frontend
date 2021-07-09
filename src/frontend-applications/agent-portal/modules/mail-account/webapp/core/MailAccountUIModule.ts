@@ -49,10 +49,11 @@ export class UIModule implements IUIModule {
         const newMailAccountDialogContext = new ContextDescriptor(
             NewMailAccountDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_ACCOUNT],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-mail-account-dialog', ['mail-accounts'], NewMailAccountDialogContext,
+            false, 'object-dialog', ['mail-accounts'], NewMailAccountDialogContext,
             [
                 new UIComponentPermission('system/communication/mailaccounts', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#New Mail Account', 'kix-icon-mail', MailAccountDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(newMailAccountDialogContext);
 
@@ -63,10 +64,11 @@ export class UIModule implements IUIModule {
         const editMailAccountDialogContext = new ContextDescriptor(
             EditMailAccountDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_ACCOUNT],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-mail-account-dialog', ['mail-accounts'], EditMailAccountDialogContext,
+            false, 'object-dialog', ['mail-accounts'], EditMailAccountDialogContext,
             [
                 new UIComponentPermission('system/communication/mailaccounts', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Edit Mail Account', 'kix-icon-mail', MailAccountDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(editMailAccountDialogContext);
 
@@ -76,7 +78,8 @@ export class UIModule implements IUIModule {
             false, 'object-details-page', ['mail-accounts'], MailAccountDetailsContext,
             [
                 new UIComponentPermission('system/communication/mailaccounts', [CRUD.READ])
-            ]
+            ],
+            'Translatable#Mail Account Details', 'kix-icon-mail'
         );
         ContextService.getInstance().registerContext(mailAccountDetailsContext);
 

@@ -111,7 +111,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     new ConfiguredWidget('webform-details-code-widget', 'webform-details-code-widget')
                 ],
                 [],
-                ['webform-create-action'], ['webform-edit-action', 'print-action'],
+                ['webform-create-action'], ['webform-edit-action'],
                 [],
                 [
                     new ConfiguredWidget('webform-details-object-info-widget', 'webform-details-object-info-widget')

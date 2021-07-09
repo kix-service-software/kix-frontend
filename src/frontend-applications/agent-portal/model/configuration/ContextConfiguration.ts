@@ -14,21 +14,21 @@ import { ConfiguredDialogWidget } from './ConfiguredDialogWidget';
 
 export class ContextConfiguration implements IConfiguration {
 
-    public constructor(
-        public id: string,
-        public name: string,
-        public type: string | ConfigurationType,
-        public contextId: string,
-        public sidebars: ConfiguredWidget[] = [],
-        public explorer: ConfiguredWidget[] = [],
-        public lanes: ConfiguredWidget[] = [],
-        public content: ConfiguredWidget[] = [],
-        public generalActions: string[] = [],
-        public actions: string[] = [],
-        public overlays: ConfiguredWidget[] = [],
-        public others: ConfiguredWidget[] = [],
-        public dialogs: ConfiguredDialogWidget[] = [],
-        public customizable: boolean = false
-    ) { }
+        public constructor(
+                public id: string,
+                public name: string,
+                public type: string | ConfigurationType,
+                public contextId: string,
+                public sidebars: ConfiguredWidget[] = [],
+                public explorer: ConfiguredWidget[] = [],
+                public lanes: ConfiguredWidget[] = [],
+                public content: ConfiguredWidget[] = [],
+                public generalActions: string[] = [],
+                public actions: string[] = [],
+                public overlays: ConfiguredWidget[] = [],
+                public others: ConfiguredWidget[] = [],
+                public dialogs: ConfiguredDialogWidget[] = [],
+                public customizable: boolean = false
+        ) { }
 
 }

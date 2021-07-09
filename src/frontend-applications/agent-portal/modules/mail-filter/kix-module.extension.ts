@@ -32,9 +32,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             '/kix-module-mail-filter$0/webapp/components/admin-mail-filters', []
         ),
         new UIComponent(
-            'new-mail-filter-dialog', '/kix-module-mail-filter$0/webapp/components/new-mail-filter-dialog', []
-        ),
-        new UIComponent(
             'mail-filter-match-form-input',
             '/kix-module-mail-filter$0/webapp/components/mail-filter-match-form-input', []
         ),

@@ -29,7 +29,7 @@ export class ArticleTableContentProvider extends TableContentProvider<Article> {
     public async loadData(): Promise<Array<RowObject<Article>>> {
         const rowObjects = [];
         if (this.contextId) {
-            const context = await ContextService.getInstance().getContext(this.contextId);
+            const context = ContextService.getInstance().getActiveContext();
             const articles = await context.getObjectList<Article>(KIXObjectType.ARTICLE);
             if (articles) {
                 articles.sort((a, b) => b.ArticleID - a.ArticleID);

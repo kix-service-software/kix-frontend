@@ -17,15 +17,12 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import {
-    TableEvent, TableFactoryService, TableEventData, Table, ValueState
-} from '../../../../base-components/webapp/core/table';
+import { TableEvent, TableFactoryService, TableEventData, Table, ValueState } from '../../../../base-components/webapp/core/table';
 import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
-import { LinkUtil, LinkObjectDialogContext } from '../../core';
+import { EditLinkedObjectsDialogContext, LinkUtil } from '../../core';
 import { FormContext } from '../../../../../model/configuration/FormContext';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
-import { DialogService } from '../../../../../modules/base-components/webapp/core/DialogService';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { SearchService } from '../../../../search/webapp/core';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
@@ -45,7 +42,6 @@ class LinkDialogComponent {
     private state: ComponentState;
     private linkTypeDescriptions: LinkTypeDescription[] = [];
     private newLinks: CreateLinkDescription[] = [];
-    private resultListenerId: string;
     private linkPartners: Array<[string, KIXObjectType]> = [];
     private rootObject: KIXObject = null;
     public selectedObjects: KIXObject[] = [];
@@ -67,7 +63,6 @@ class LinkDialogComponent {
             : this.state.linkDescriptions;
         this.newLinks = [];
         this.objectType = input.objectType;
-        this.resultListenerId = input.resultListenerId;
         this.rootObject = input.rootObject;
     }
 
@@ -83,14 +78,12 @@ class LinkDialogComponent {
         this.setLinkTypes();
 
         this.setSubmitState();
-        this.state.loading = false;
     }
 
     public async onDestroy(): Promise<void> {
         this.state.linkDescriptions = null;
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
-        FormService.getInstance().deleteFormInstance(this.state.formId);
         TableFactoryService.getInstance().destroyTable(`link-object-dialog-`, true);
     }
 
@@ -115,66 +108,52 @@ class LinkDialogComponent {
     }
 
     public async keyPressed(event: any): Promise<void> {
-        if (this.state.formId) {
-            const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-            if (event.key === 'Enter' && formInstance.hasValues()) {
-                this.executeSearch();
-            }
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        if (event.key === 'Enter' && formInstance.hasValues()) {
+            this.executeSearch();
         }
     }
 
     public async linkableObjectChanged(nodes: TreeNode[]): Promise<void> {
-        BrowserUtil.toggleLoadingShield(true);
+        BrowserUtil.toggleLoadingShield('APP_SHIELD', true);
 
         this.selectedObjects = [];
         this.state.resultCount = 0;
 
-        this.state.formId = null;
+        const context = ContextService.getInstance().getActiveContext();
 
-        const context = await ContextService.getInstance().getContext<LinkObjectDialogContext>(
-            LinkObjectDialogContext.CONTEXT_ID
-        );
-
-        let formId: string;
         if (nodes && nodes.length) {
-            formId = nodes[0].id.toString();
+            const formId = nodes[0].id.toString();
+            await context?.getFormManager()?.setFormId(formId);
+
             this.linkLabel = nodes[0].label;
-            const formInstance = await FormService.getInstance().getFormInstance(formId, false);
+            const formInstance = await context?.getFormManager()?.getFormInstance();
             if (formInstance) {
                 context.setObjectList(formInstance.getObjectType(), []);
             }
         } else {
             this.state.table = null;
-            formId = null;
             this.state.resultCount = 0;
         }
 
         await this.setLinkTypes();
-
-        (this as any).setStateDirty('currentLinkableObjectNode');
-
-        setTimeout(async () => {
-            this.setSubmitState();
-            this.state.formId = formId;
-            await this.prepareResultTable();
-            BrowserUtil.toggleLoadingShield(false);
-        }, 50);
+        this.setSubmitState();
+        await this.prepareResultTable();
+        BrowserUtil.toggleLoadingShield('APP_SHIELD', false);
     }
 
     private async executeSearch(): Promise<void> {
-        BrowserUtil.toggleLoadingShield(true);
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        if (this.state.formId && formInstance.hasValues()) {
+        BrowserUtil.toggleLoadingShield('APP_SHIELD', true);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        if (formInstance.hasValues()) {
             const excludeObjects = this.rootObject && formInstance.getObjectType() === this.rootObject.KIXObjectType
                 ? [this.rootObject]
                 : null;
 
             const objects = await SearchService.getInstance().executeSearch(
-                this.state.formId, null, excludeObjects
-            );
-
-            const context = await ContextService.getInstance().getContext<LinkObjectDialogContext>(
-                LinkObjectDialogContext.CONTEXT_ID
+                formInstance, excludeObjects
             );
 
             context.setObjectList(formInstance.getObjectType(), objects);
@@ -183,48 +162,47 @@ class LinkDialogComponent {
             this.setSubmitState();
         }
 
-        BrowserUtil.toggleLoadingShield(false);
+        BrowserUtil.toggleLoadingShield('APP_SHIELD', false);
     }
 
     private async prepareResultTable(): Promise<void> {
         this.state.table = null;
 
-        if (this.state.formId) {
-            const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
 
-            const objectType = formInstance.getObjectType();
+        const objectType = formInstance.getObjectType();
 
-            const tableConfiguration = new TableConfiguration(null, null, null,
-                objectType, null, 5, null, [], true, false,
-                null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
-            );
-            const table = await TableFactoryService.getInstance().createTable(
-                `link-object-dialog-${objectType}`, objectType, tableConfiguration, null,
-                LinkObjectDialogContext.CONTEXT_ID, true, null, true
-            );
-            await table.addColumns([
-                TableFactoryService.getInstance().getDefaultColumnConfiguration(objectType, 'LinkedAs')
-            ]);
+        const tableConfiguration = new TableConfiguration(null, null, null,
+            objectType, null, 5, null, [], true, false,
+            null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+        );
+        const table = await TableFactoryService.getInstance().createTable(
+            `link-object-dialog-${objectType}`, objectType, tableConfiguration, null,
+            EditLinkedObjectsDialogContext.CONTEXT_ID, true, null, true
+        );
+        await table.addAdditionalColumns([
+            TableFactoryService.getInstance().getDefaultColumnConfiguration(objectType, 'LinkedAs')
+        ]);
 
-            this.tableSubscriber = {
-                eventSubscriberId: 'link-object-dialog',
-                eventPublished: (data: TableEventData, eventId: string) => {
-                    if (data && data.tableId === table.getTableId()) {
-                        if (eventId === TableEvent.TABLE_READY) {
-                            this.setLinkedAsValues(table, this.state.linkDescriptions);
-                            this.markNotSelectableRows();
-                        }
-                        this.selectedObjects = table.getSelectedRows().map((r) => r.getRowObject().getObject());
-                        this.setSubmitState();
+        this.tableSubscriber = {
+            eventSubscriberId: 'link-object-dialog',
+            eventPublished: (data: TableEventData, eventId: string) => {
+                if (data && data.tableId === table.getTableId()) {
+                    if (eventId === TableEvent.TABLE_READY) {
+                        this.setLinkedAsValues(table, this.state.linkDescriptions);
+                        this.markNotSelectableRows();
                     }
+                    this.selectedObjects = table.getSelectedRows().map((r) => r.getRowObject().getObject());
+                    this.setSubmitState();
                 }
-            };
+            }
+        };
 
-            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
-            EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
+        EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
+        EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
 
-            setTimeout(() => this.state.table = table, 50);
-        }
+        setTimeout(() => this.state.table = table, 50);
     }
 
     private setLinkedAsValues(table: Table, links: CreateLinkDescription[] = []) {
@@ -269,11 +247,7 @@ class LinkDialogComponent {
             );
             this.state.linkDescriptions = [...this.state.linkDescriptions, ...newLinks];
             this.newLinks = [...this.newLinks, ...newLinks];
-            // TODO: obsolet, use DialogEvnets.DIALOG_CANCELED or DIALOG_FINISHED
-            DialogService.getInstance().publishDialogResult(
-                this.resultListenerId,
-                [this.state.linkDescriptions, newLinks]
-            );
+            (this as any).emit('linksAdded', [this.state.linkDescriptions, newLinks]);
 
             const toast = await TranslationService.translate(
                 'Translatable#{0} link(s) assigned.', [newLinks.length]

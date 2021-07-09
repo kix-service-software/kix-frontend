@@ -36,15 +36,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         WidgetService.getInstance().setWidgetType('notification-message-group', WidgetType.GROUP);
         this.state.labelProvider = new NotificationLabelProvider();
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context
             ? await context.getWidgetConfiguration(this.state.instanceId)
             : undefined;
         this.contextListenerId = IdService.generateDateBasedId('notification-text-widget');
 
         context.registerListener(this.contextListenerId, {
-            sidebarToggled: () => { return; },
-            explorerBarToggled: () => { return; },
+            sidebarRightToggled: () => { return; },
+            sidebarLeftToggled: () => { return; },
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
             scrollInformationChanged: () => { return; },
@@ -63,7 +63,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onDestroy() {
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const context = ContextService.getInstance().getActiveContext();
         context.unregisterListener(this.contextListenerId);
     }
 

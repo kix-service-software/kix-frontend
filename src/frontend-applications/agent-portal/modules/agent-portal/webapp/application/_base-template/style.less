@@ -7,63 +7,30 @@
  * --
  */
 
-.hide-sidebar() {
-    >.sidebar-shield {
-        display: block;
-    }
+@mobile-breakpoint: 1024px; // have to be px (used for calculations)
+@sidebar-left-breakpoint: 1300px; // have to be px (used for calculations)
+@sidebar-right-breakpoint: 1600px; // have to be px (used for calculations)
 
-    >.sidebar-area {
-        position: absolute;
-        right: 4.5rem;
-    }
-}
-
-.hide-3rd-widget() {
-    >.content {
-        >div {
-            .widget-container {
-                grid-template-columns: [first-line] repeat(2, 1fr) [last-line];
-
-                >.small+.small+.small {
-                    display: none;
-                }
-            }
-        }
-    }
-}
-
-.hide-2rd-widget() {
-    >.content {
-        >div {
-            .widget-container {
-
-                >.small {
-                    grid-column: first-line / last-line;
-                }
-
-                >.small+.small {
-                    display: none;
-                }
-            }
-        }
-    }
-}
-
-.wrapper {
+.app-wrapper {
     position: relative;
     box-sizing: border-box;
     background: @secondary-5;
-    min-width: 72rem;
+    min-width: @mobile-header-min-width;
+
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: max-content auto max-content;
+    height: 100vh;
 
     >.app-loading-shield {
         position: fixed;
+        top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-        top: -@header-height - @margin-default;
-        text-align: center;
-        background: fade(@secondary-6, 70%);
         z-index: 1000;
+        background: fade(@secondary-6, 70%);
+        text-align: center;
 
         >.loading-info {
             position: absolute;
@@ -79,110 +46,35 @@
         }
     }
 
-    >header {
-        z-index: 200
+    >.header-wrapper {
+        z-index: 110;
+    }
+
+    >.sidebar-left-wrapper,
+    >.sidebar-right-wrapper {
+        position: relative;
+        z-index: 100;
+    }
+
+    >.main-menu-wrapper,
+    >.content-wrapper {
+        position: relative;
+        overflow: auto;
+        z-index: 1; // needed, else scrollbars could overlay other elements with higher z-index and also in mobile modus (overlap sidebar-right-wrapper if not shown)
     }
 
     >.content-wrapper {
-        position: relative;
-        padding: @margin-default + @header-height 0 0;
-        display: grid;
-        grid-template-rows: max-content 1fr;
-        grid-gap: @margin-middle @margin-default;
-        grid-template-columns: [main-menu-wrapper] @main-menu-width [content] minmax(40rem, auto) [sidebar-menu-wrapper] min-content;
-        min-width: 72rem;
-
-        &.with-explorer {
-            grid-template-columns: [main-menu-wrapper] @main-menu-width [explorer-bar] min-content [content] minmax(40rem, auto) [sidebar-menu-wrapper] min-content;
-        }
-
-        &.with-sidebar:not(.with-explorer) {
-            grid-template-columns: [main-menu-wrapper] @main-menu-width [content] minmax(40rem, auto) [sidebar-area] min-content [sidebar-menu-wrapper] min-content;
-
-            // first breakpoint - hide sidebar
-            @media only screen and (max-width: 1475px) {
-                grid-template-columns: [main-menu-wrapper] @main-menu-width [content] minmax(40rem, auto) [sidebar-menu-wrapper] min-content;
-
-                .hide-sidebar();
-            }
-        }
-
-        &.with-explorer.with-sidebar {
-            grid-template-columns: [main-menu-wrapper] @main-menu-width [explorer-bar] min-content [content] minmax(40rem, auto) [sidebar-area] min-content [sidebar-menu-wrapper] min-content;
-
-            // first breakpoint - hide sidebar
-            @media only screen and (max-width: 1700px) {
-                grid-template-columns: [main-menu-wrapper] @main-menu-width [explorer-bar] min-content [content] minmax(40rem, auto) [sidebar-menu-wrapper] min-content;
-
-                .hide-sidebar();
-            }
-        }
-
-        &:not(.with-explorer) {
-
-            // second breakpoint - hide 3rd small widget
-            @media only screen and (max-width: 1300px) {
-                .hide-3rd-widget();
-            }
-        }
-
-        &.with-explorer {
-
-            // second breakpoint - hide 3rd small widget
-            @media only screen and (max-width: 1550px) {
-                .hide-3rd-widget();
-            }
-
-            // third breakpoint - hide 2nd small widget
-            @media only screen and (max-width: 1100px) {
-                .hide-2rd-widget();
-            }
-        }
-
-        >.main-menu-wrapper,
-        >.site-menu-wrapper {
-            grid-row: 1 / span 2;
-            z-index: 1;
-
-            .widget-bar {
-                margin-top: 14.5rem - @margin-default;
-            }
-        }
-
-        >.site-navigation {
-            grid-row: 1;
-            display: grid;
-            grid-template-columns: 9rem auto;
-            grid-column-gap: @margin-small;
-        }
-
-        &.with-explorer {
-            >.site-navigation {
-                grid-column: explorer-bar / span 2;
-            }
-        }
-
-        >.explorerbar,
-        >.content,
-        >.sidebar-area {
-            grid-row: 2;
-            z-index: 1;
-        }
+        margin: 2rem 1rem 0 1rem;
     }
 
-    .image-dialog-container {
+    .image-viewer-container {
         position: relative;
         z-index: 800;
-    }
 
-    .main-dialog-container {
-        position: relative;
-        z-index: 500;
-    }
-
-    .overlay-dialog-container {
-        position: relative;
-        z-index: 600;
+        ~.overlay,
+        ~.overlay-shield {
+            z-index: 650;
+        }
     }
 
     .overlay-shield {
@@ -192,13 +84,96 @@
     .overlay {
         z-index: 300;
     }
+}
 
-    .image-dialog-container~.overlay,
-    .main-dialog-container~.overlay,
-    .overlay-dialog-container~.overlay,
-    .image-dialog-container~.overlay-shield,
-    .main-dialog-container~.overlay-shield,
-    .overlay-dialog-container~.overlay-shield {
-        z-index: 650;
+// "mobile"
+@media only screen and (max-width: @mobile-breakpoint) {
+    .app-wrapper {
+        grid-template-columns: minmax(@mobile-header-min-width, auto);
+
+        &.blur {
+
+            .header-wrapper,
+            .content-wrapper,
+            .footer-wrapper {
+                filter: blur(5px);
+            }
+        }
+
+        >.main-menu-wrapper,
+        >.sidebar-left-wrapper,
+        >.sidebar-right-wrapper,
+        >.mobile-toolbar-wrapper {
+            position: fixed;
+            top: 6rem;
+            bottom: 2rem;
+            max-width: (@sidebar-width + 1rem);
+            box-sizing: border-box;
+            color: @secondary-0;
+
+            &[active] {
+                width: 100%;
+                z-index: 2001;
+            }
+        }
+
+        >.mobile-toolbar-wrapper {
+            padding-right: (2 * @margin-small);
+            display: grid;
+            grid-template-rows: max-content 1fr;
+            gap: 2rem;
+
+            >.application-toolbar-wrapper {
+                position: absolute;
+                top: -(6rem - @margin-small);
+            }
+
+            >.search-object-dropdown-wrapper {
+                justify-self: end;
+            }
+
+            >.personal-toolbar-wrapper {
+                overflow: auto;
+            }
+        }
+
+        >.mobile-toolbar-wrapper,
+        >.sidebar-right-wrapper {
+            right: 0;
+        }
+    }
+}
+
+// not "mobile"
+@media only screen and (min-width: @mobile-breakpoint + 1px) {
+    .app-wrapper {
+        grid-template-columns: [main-menu] (@main-menu-width) [sidebar-left] max-content [content] minmax(25rem, 1fr) [sidebar-right] max-content;
+
+        >.header-wrapper,
+        >.footer-wrapper {
+            grid-column: 1/ span 4;
+        }
+
+        >.content-wrapper {
+            grid-column: 3;
+        }
+    }
+}
+
+// sidbear left
+@media only screen and (min-width: @sidebar-left-breakpoint + 1px) {
+    .app-wrapper {
+        >.sidebar-left-wrapper {
+            overflow: auto;
+        }
+    }
+}
+
+// sidebar right
+@media only screen and (min-width: @sidebar-right-breakpoint + 1px) {
+    .app-wrapper {
+        >.sidebar-right-wrapper {
+            overflow: auto;
+        }
     }
 }

@@ -39,10 +39,10 @@ class Component {
         const context = ContextService.getInstance().getActiveContext();
         this.contextListenerId = IdService.generateDateBasedId('object-information-widget-');
         context.registerListener(this.contextListenerId, {
-            explorerBarToggled: () => { return; },
+            sidebarLeftToggled: () => { return; },
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
-            sidebarToggled: () => { return; },
+            sidebarRightToggled: () => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: async (contactId: string, object: KIXObject, type: KIXObjectType) => {
                 this.initWidget();

@@ -17,9 +17,6 @@ import { ConfiguredWidget } from './configuration/ConfiguredWidget';
 import { WidgetConfiguration } from './configuration/WidgetConfiguration';
 import { WidgetType } from './configuration/WidgetType';
 import { ContextMode } from './ContextMode';
-import { FormContext } from './configuration/FormContext';
-import { FormService } from '../modules/base-components/webapp/core/FormService';
-import { BreadcrumbInformation } from './BreadcrumbInformation';
 import { KIXObjectService } from '../modules/base-components/webapp/core/KIXObjectService';
 import { ObjectIcon } from '../modules/icon/model/ObjectIcon';
 import { EventService } from '../modules/base-components/webapp/core/EventService';
@@ -29,9 +26,13 @@ import { KIXObjectLoadingOptions } from './KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from './KIXObjectSpecificLoadingOptions';
 import { ContextService } from '../modules/base-components/webapp/core/ContextService';
 import { AbstractAction } from '../modules/base-components/webapp/core/AbstractAction';
-import { SortUtil } from './SortUtil';
-import { SortOrder } from './SortOrder';
 import { AuthenticationSocketClient } from '../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { ContextFormManager } from './ContextFormManager';
+import { IdService } from './IdService';
+import { TranslationService } from '../modules/translation/webapp/core/TranslationService';
+import { ContextStorageManager } from './ContextStorageManager';
+import { ContextEvents } from '../modules/base-components/webapp/core/ContextEvents';
+import { ContextPreference } from './ContextPreference';
 import { AgentService } from '../modules/user/webapp/core/AgentService';
 
 export abstract class Context {
@@ -40,7 +41,9 @@ export abstract class Context {
 
     public explorerMinimizedStates: Map<string, boolean> = new Map();
     public explorerBarExpanded: boolean = true;
-    public shownSidebars: string[] = [];
+    public openSidebarWidgets: string[] = [];
+
+    public contextId: string;
 
     private dialogSubscriberId: string = null;
     private additionalInformation: Map<string, any> = new Map();
@@ -49,17 +52,41 @@ export abstract class Context {
     protected filteredObjectLists: Map<KIXObjectType | string, KIXObject[]> = new Map();
 
     private scrollInormation: [KIXObjectType | string, string | number] = null;
+    private displayText: string;
+    private icon: ObjectIcon | string;
 
     public constructor(
-        protected descriptor: ContextDescriptor,
+        public descriptor: ContextDescriptor,
         protected objectId: string | number = null,
-        protected configuration: ContextConfiguration = null
+        protected configuration: ContextConfiguration = null,
+        public instanceId?: string,
+        protected formManager?: ContextFormManager,
+        protected storageManager?: ContextStorageManager
     ) {
         if (this.configuration) {
             this.setConfiguration(configuration);
         }
 
+        if (!instanceId) {
+            this.instanceId = IdService.generateDateBasedId();
+        }
+
+        if (!formManager) {
+            this.formManager = new ContextFormManager(this);
+        } else {
+            this.formManager.setContext(this);
+        }
+
+        if (!storageManager) {
+            this.storageManager = new ContextStorageManager(this);
+        } else {
+            this.storageManager.setContext(this);
+        }
+
         if (this.descriptor) {
+
+            this.contextId = descriptor.contextId;
+
             EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, {
                 eventSubscriberId: this.descriptor.contextId + '-update-listener',
                 eventPublished: async (data: any) => {
@@ -80,10 +107,45 @@ export abstract class Context {
         }
     }
 
+    public async destroy(): Promise<void> {
+        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, {
+            eventSubscriberId: this.descriptor.contextId + '-update-listener',
+            eventPublished: null
+        });
+        return;
+    }
+
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
+        for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {
+            await extension.initContext(this, urlParams);
+        }
+
         if (urlParams) {
             urlParams.forEach((value: string, key: string) => this.setAdditionalInformation(key, value));
         }
+
+        if (urlParams) {
+            await this.update(urlParams);
+        }
+    }
+
+    public async postInit(): Promise<void> {
+        const formId = this.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
+        if (formId) {
+            this.formManager.setFormId(formId);
+        }
+    }
+
+    public async update(urlParams: URLSearchParams): Promise<void> {
+        return;
+    }
+
+    public getFormManager(): ContextFormManager {
+        return this.formManager;
+    }
+
+    public getStorageManager(): ContextStorageManager {
+        return this.storageManager;
     }
 
     public async getUrl(): Promise<string> {
@@ -115,19 +177,42 @@ export abstract class Context {
     }
 
     public getIcon(): string | ObjectIcon {
-        return 'kix-icon-unknown';
+        let icon = this.icon;
+        if (!icon) {
+            icon = this.getAdditionalInformation(AdditionalContextInformation.ICON);
+        }
+
+        if (!icon) {
+            icon = this.descriptor.icon;
+        }
+
+        return icon;
+    }
+
+    public setIcon(icon: ObjectIcon | string): void {
+        this.icon = icon;
+        EventService.getInstance().publish(ContextEvents.CONTEXT_ICON_CHANGED, this);
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        return this.descriptor.contextId;
+        let displayText = this.displayText;
+        if (!displayText) {
+            displayText = this.getAdditionalInformation(AdditionalContextInformation.DISPLAY_TEXT);
+        }
+        if (!displayText) {
+            displayText = this.descriptor.displayText;
+        }
+
+        return await TranslationService.translate(displayText);
+    }
+
+    public setDisplayText(text: string): void {
+        this.displayText = text;
+        EventService.getInstance().publish(ContextEvents.CONTEXT_DISPLAY_TEXT_CHANGED, this);
     }
 
     public getAdditionalInformation(key: string): any {
         return this.additionalInformation.get(key);
-    }
-
-    public getDescriptor(): ContextDescriptor {
-        return this.descriptor;
     }
 
     public getConfiguration(): ContextConfiguration {
@@ -136,17 +221,20 @@ export abstract class Context {
 
     public setConfiguration(configuration: ContextConfiguration): void {
         this.configuration = configuration;
-        this.shownSidebars = [...this.configuration.sidebars.map((s) => s.instanceId)];
-        if (this.shownSidebars.length) {
-            this.filterShownSidebarsByPreference();
+        this.openSidebarWidgets = [
+            ...this.configuration.explorer.map((s) => s.instanceId),
+            ...this.configuration.sidebars.map((s) => s.instanceId)
+        ];
+        if (this.openSidebarWidgets.length) {
+            this.filterSidebarWidgetsByPreference();
         }
     }
 
-    private filterShownSidebarsByPreference(): void {
-        const shownSidebarsOption = ClientStorageService.getOption(this.configuration.id + '-context-shown-sidebars');
-        if (shownSidebarsOption || shownSidebarsOption === '') {
-            const shownSidebarsInPreference = shownSidebarsOption.split('###');
-            this.shownSidebars = this.shownSidebars.filter(
+    private filterSidebarWidgetsByPreference(left: boolean = false): void {
+        const opendedSidebarsOption = ClientStorageService.getOption(`${this.configuration.id}-context-open-sidebar-widgets`);
+        if (opendedSidebarsOption || opendedSidebarsOption === '') {
+            const shownSidebarsInPreference = opendedSidebarsOption.split('###');
+            this.openSidebarWidgets = this.openSidebarWidgets.filter(
                 (s) => shownSidebarsInPreference.some((sP) => sP === s)
             );
         }
@@ -203,7 +291,7 @@ export abstract class Context {
 
     public async setObjectId(objectId: string | number, objectType: KIXObjectType | string): Promise<void> {
         this.objectId = objectId;
-        await this.getObject(objectType, true);
+        this.getObject(objectType, true);
     }
 
     public getObjectId(): string | number {
@@ -261,26 +349,24 @@ export abstract class Context {
         return widgets;
     }
 
-    public getExplorer(show: boolean = false): ConfiguredWidget[] {
-        let explorer = this.configuration.explorer;
+    public getSidebarsLeft(show: boolean = false): ConfiguredWidget[] {
+        let sidebarsLeft = this.configuration.explorer;
 
-        if (show && explorer) {
-            explorer = explorer.filter(
-                (ex) => this.configuration.explorer.some((e) => ex.instanceId === e.instanceId)
-            );
+        if (show && sidebarsLeft) {
+            sidebarsLeft = sidebarsLeft.filter((sb) => this.openSidebarWidgets.some((s) => sb.instanceId === s));
         }
 
-        return explorer;
+        return sidebarsLeft;
     }
 
-    public getSidebars(show: boolean = false): ConfiguredWidget[] {
-        let sidebars = this.configuration.sidebars;
+    public getSidebarsRight(show: boolean = false): ConfiguredWidget[] {
+        let sidebarsRight = this.configuration.sidebars;
 
-        if (show && sidebars) {
-            sidebars = sidebars.filter((sb) => sb.configuration && this.shownSidebars.some((s) => sb.instanceId === s));
+        if (show && sidebarsRight) {
+            sidebarsRight = sidebarsRight.filter((sb) => this.openSidebarWidgets.some((s) => sb.instanceId === s));
         }
 
-        return sidebars;
+        return sidebarsRight;
     }
 
     private async getUserWidgetList(contextWidgetList: string): Promise<Array<string | ConfiguredWidget>> {
@@ -320,63 +406,50 @@ export abstract class Context {
     }
 
     public toggleSidebarWidget(instanceId: string): void {
-        const sidebar = this.configuration.sidebars.find((s) => s.instanceId === instanceId);
-        if (sidebar) {
-
-            const index = this.shownSidebars.findIndex((s) => s === instanceId);
-            if (index !== -1) {
-                this.shownSidebars.splice(index, 1);
-            } else {
-                this.shownSidebars.push(instanceId);
+        if (instanceId) {
+            let sidebar = this.configuration.sidebars.find((s) => s.instanceId === instanceId);
+            if (!sidebar) {
+                sidebar = this.configuration.explorer.find((s) => s.instanceId === instanceId);
             }
-
-            this.setShownSidebarPreference();
-            this.listeners.forEach((l) => l.sidebarToggled());
+            if (sidebar) {
+                const index = this.openSidebarWidgets.findIndex((s) => s === instanceId);
+                if (index !== -1) {
+                    this.openSidebarWidgets.splice(index, 1);
+                } else {
+                    this.openSidebarWidgets.push(instanceId);
+                }
+                this.setShownSidebarPreference();
+            }
         }
-    }
-
-    public closeAllSidebars(): void {
-        this.shownSidebars = [];
-        this.setShownSidebarPreference();
-        this.listeners.forEach((l) => l.sidebarToggled());
-    }
-
-    public openAllSidebars(): void {
-        this.shownSidebars = [];
-        this.shownSidebars = this.configuration.sidebars.map((s) => s.instanceId);
-        this.setShownSidebarPreference();
-        this.listeners.forEach((l) => l.sidebarToggled());
     }
 
     private setShownSidebarPreference(): void {
         ClientStorageService.setOption(
-            this.configuration.id + '-context-shown-sidebars',
-            this.shownSidebars ? this.shownSidebars.map((s) => s).join('###') : ''
+            `${this.configuration.id}-context-open-sidebar-widgets`,
+            this.openSidebarWidgets ? this.openSidebarWidgets.map((s) => s).join('###') : ''
         );
     }
 
-    public toggleExplorerBar(): void {
-        this.explorerBarExpanded = !this.explorerBarExpanded;
-        this.listeners.forEach((l) => l.explorerBarToggled());
+    public isSidebarWidgetOpen(instanceId: string): boolean {
+        return this.openSidebarWidgets.some((s) => s === instanceId);
     }
 
-    public isExplorerExpanded(explorerId: string): boolean {
-        let expanded = false;
-        if (this.explorerMinimizedStates.has(explorerId)) {
-            expanded = this.explorerMinimizedStates.get(explorerId);
+    public toggleSidebar(open: boolean = false, left: boolean = false, setOption: boolean = true): void {
+        if (setOption) {
+            ClientStorageService.setOption(
+                `${this.configuration.id}-context-opened-sidebar-${left ? 'left' : 'right'}`,
+                open.toString()
+            );
         }
-
-        return expanded;
+        this.listeners.forEach((l) => left ? l.sidebarLeftToggled() : l.sidebarRightToggled());
     }
 
-    public isExplorerBarShown(): boolean {
-        const explorer = this.getExplorer(true);
-        return explorer ? explorer.length > 0 : false;
-    }
-
-    public areSidebarsShown(): boolean {
-        const sidebars = this.shownSidebars;
-        return sidebars ? sidebars.length > 0 : false;
+    public isSidebarOpen(left: boolean = false): boolean {
+        const option = ClientStorageService.getOption(`${this.configuration.id}-context-opened-sidebar-${left ? 'left' : 'right'}`);
+        if (option && (option === 'false' || option === '0')) {
+            return false;
+        }
+        return true;
     }
 
     public async getConfiguredWidget(instanceId: string): Promise<ConfiguredWidget> {
@@ -458,12 +531,12 @@ export abstract class Context {
         let widgetType: WidgetType;
 
         if (this.configuration) {
-            const sidebar = this.configuration.sidebars.find((sw) => sw.instanceId === instanceId);
-            widgetType = sidebar ? WidgetType.SIDEBAR : undefined;
+            const sidebarRight = this.configuration.sidebars.find((sw) => sw.instanceId === instanceId);
+            widgetType = sidebarRight ? WidgetType.SIDEBAR : undefined;
 
             if (!widgetType) {
-                const explorer = this.configuration.explorer.find((ex) => ex.instanceId === instanceId);
-                widgetType = explorer ? WidgetType.EXPLORER : undefined;
+                const sidebarLeft = this.configuration.explorer.find((ex) => ex.instanceId === instanceId);
+                widgetType = sidebarLeft ? WidgetType.SIDEBAR : undefined;
             }
 
             if (!widgetType) {
@@ -500,30 +573,6 @@ export abstract class Context {
         this.listeners.forEach((l) => l.scrollInformationChanged(this.scrollInormation[0], this.scrollInormation[1]));
     }
 
-    public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
-        const text = await this.getDisplayText();
-        return new BreadcrumbInformation(this.getIcon(), [], text);
-    }
-
-    public reset(): void {
-        this.resetAdditionalInformation();
-        this.objectId = null;
-        this.objectLists.clear();
-    }
-
-    public async getFormId(
-        contextMode: ContextMode, objectType: KIXObjectType | string, objectId: string | number
-    ): Promise<string> {
-        const formContext =
-            contextMode === ContextMode.EDIT ||
-                contextMode === ContextMode.EDIT_ADMIN ||
-                contextMode === ContextMode.EDIT_BULK
-                ? FormContext.EDIT
-                : FormContext.NEW;
-
-        return await FormService.getInstance().getFormIdByContext(formContext, objectType);
-    }
-
     public async reloadObjectList(objectType: KIXObjectType | string, silent: boolean = false): Promise<void> {
         return;
     }
@@ -534,29 +583,66 @@ export abstract class Context {
         objectSpecificLoadingOptions: KIXObjectSpecificLoadingOptions = null,
         silent: boolean = true, cache?: boolean, forceIds?: boolean
     ): Promise<T> {
-
-        // use timeout to prevent loading with "wrong/old" objectId
         if (!this.loadingPromise) {
             this.loadingPromise = new Promise<T>(async (resolve, reject) => {
-                setTimeout(async () => {
-                    let object: T;
+                let object: T;
 
-                    if (this.objectId) {
-                        const objects = await KIXObjectService.loadObjects<T>(
-                            objectType, [Number(this.objectId)], loadingOptions, objectSpecificLoadingOptions,
-                            silent, cache, forceIds
-                        ).catch((error) => {
-                            console.error(error);
-                            return [];
-                        });
+                if (this.objectId) {
+                    const objects = await KIXObjectService.loadObjects<T>(
+                        objectType, [Number(this.objectId)], loadingOptions, objectSpecificLoadingOptions,
+                        silent, cache, forceIds
+                    ).catch((error) => {
+                        console.error(error);
+                        return [];
+                    });
 
-                        object = objects?.length ? objects[0] : null;
-                    }
-                    this.loadingPromise = null;
-                    resolve(object);
-                }, 150);
+                    object = objects?.length ? objects[0] : null;
+                }
+                this.loadingPromise = null;
+                resolve(object);
             });
         }
         return this.loadingPromise;
     }
+
+    public async addStorableAdditionalInformation(contextPreference: ContextPreference): Promise<void> {
+        for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {
+            await extension.addStorableAdditionalInformation(this, contextPreference);
+        }
+
+        contextPreference[AdditionalContextInformation.DISPLAY_TEXT] = this.getAdditionalInformation(
+            AdditionalContextInformation.DISPLAY_TEXT
+        );
+
+        contextPreference[AdditionalContextInformation.ICON] = JSON.stringify(
+            this.getAdditionalInformation(AdditionalContextInformation.ICON)
+        );
+    }
+
+    public async loadAdditionalInformation(contextPreference: ContextPreference): Promise<void> {
+        for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {
+            await extension.loadAdditionalInformation(this, contextPreference);
+        }
+        this.setAdditionalInformation(
+            AdditionalContextInformation.DISPLAY_TEXT, contextPreference[AdditionalContextInformation.DISPLAY_TEXT]
+        );
+
+        const iconValue = contextPreference[AdditionalContextInformation.ICON];
+        if (iconValue) {
+            this.setAdditionalInformation(AdditionalContextInformation.ICON, JSON.parse(iconValue));
+        }
+    }
+
+    public equals(contextId: string, objectId?: string | number, context?: Context): boolean {
+        if (context) {
+            contextId = context.contextId;
+            objectId = context.getObjectId();
+        }
+
+        objectId = objectId ? objectId.toString() : null;
+        const contextObjectId = this.getObjectId() ? this.getObjectId().toString() : null;
+
+        return contextId === this.descriptor.contextId && objectId === contextObjectId;
+    }
+
 }

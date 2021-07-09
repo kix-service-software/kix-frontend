@@ -9,15 +9,11 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { AgentService } from '../../../../user/webapp/core';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { HomeContext } from '../../../../home/webapp/core';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../model/ContextMode';
-import { ContextType } from '../../../../../model/ContextType';
 import { SliderContent } from '../../../model/SliderContent';
 import { SliderWidgetConfiguration } from '../../../model/SliderWidgetConfiguration';
+import { AgentService } from '../../../../user/webapp/core/AgentService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -80,10 +76,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }, 200);
     }
 
-    public async showHome(): Promise<void> {
-        await ContextService.getInstance().setContext(
-            HomeContext.CONTEXT_ID, KIXObjectType.ANY, ContextMode.DASHBOARD
-        );
+    public closeReleaseInfos(): void {
+        ContextService.getInstance().toggleActiveContext();
     }
 
     public previousSlider(): void {
@@ -99,7 +93,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async prepareSliderList(userId: number): Promise<void> {
-        const currentContext = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const currentContext = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = currentContext
             ? await currentContext.getWidgetConfiguration(this.state.instanceId)
             : undefined;

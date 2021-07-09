@@ -8,8 +8,6 @@
  */
 
 import { Context } from '../../../../../../../model/Context';
-import { ContextDescriptor } from '../../../../../../../model/ContextDescriptor';
-import { ContextConfiguration } from '../../../../../../../model/configuration/ContextConfiguration';
 import { KIXObject } from '../../../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoadingOptions';
@@ -20,15 +18,6 @@ import { TranslationPattern } from '../../../../../model/TranslationPattern';
 export class EditTranslationDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'edit-translation-dialog-context';
-    public formListenerId: string;
-
-    public constructor(
-        descriptor: ContextDescriptor,
-        objectId: string | number = null,
-        configuration: ContextConfiguration = null
-    ) {
-        super(descriptor, objectId, configuration);
-    }
 
     public async getObject<O extends KIXObject>(
         kixObjectType: KIXObjectType = KIXObjectType.TRANSLATION_PATTERN
@@ -48,4 +37,10 @@ export class EditTranslationDialogContext extends Context {
         }
         return object;
     }
+
+    public async getDisplayText(short: boolean = false): Promise<string> {
+        const object = await this.getObject<TranslationPattern>();
+        return object?.Value;
+    }
+
 }

@@ -52,10 +52,11 @@ export class UIModule implements IUIModule {
         const newNotificationDialogContext = new ContextDescriptor(
             NewNotificationDialogContext.CONTEXT_ID, [KIXObjectType.NOTIFICATION],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-notification-dialog', ['notifications'], NewNotificationDialogContext,
+            false, 'object-dialog', ['notifications'], NewNotificationDialogContext,
             [
                 new UIComponentPermission('system/communication/notifications', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#New Notification', 'kix-icon-gear', NotificationDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(newNotificationDialogContext);
 
@@ -63,10 +64,11 @@ export class UIModule implements IUIModule {
         const editNotificationDialogContext = new ContextDescriptor(
             EditNotificationDialogContext.CONTEXT_ID, [KIXObjectType.NOTIFICATION],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-notification-dialog', ['notifications'], EditNotificationDialogContext,
+            false, 'object-dialog', ['notifications'], EditNotificationDialogContext,
             [
                 new UIComponentPermission('system/communication/notifications', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Edit Notification', 'kix-icon-gear', NotificationDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(editNotificationDialogContext);
 
@@ -78,7 +80,8 @@ export class UIModule implements IUIModule {
             false, 'object-details-page', ['notifications'], NotificationDetailsContext,
             [
                 new UIComponentPermission('system/communication/notifications', [CRUD.READ])
-            ]
+            ],
+            'Translatable#Notification Details', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(notificationDetailsContext);
 

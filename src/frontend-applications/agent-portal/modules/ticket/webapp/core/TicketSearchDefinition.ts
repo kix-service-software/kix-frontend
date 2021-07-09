@@ -43,7 +43,7 @@ export class TicketSearchDefinition extends SearchDefinition {
         );
     }
 
-    public async getSearchResultCategories(): Promise<SearchResultCategory> {
+    public async getSearchResultCategories(): Promise<SearchResultCategory[]> {
         const categories: SearchResultCategory[] = [];
 
         if (await this.checkReadPermissions('contacts')) {
@@ -57,11 +57,13 @@ export class TicketSearchDefinition extends SearchDefinition {
             );
         }
 
-        return new SearchResultCategory('Translatable#Tickets', KIXObjectType.TICKET, categories);
+        return [new SearchResultCategory('Translatable#Tickets', KIXObjectType.TICKET, categories)];
     }
 
-    public async prepareFormFilterCriteria(criteria: FilterCriteria[]): Promise<FilterCriteria[]> {
-        criteria = await super.prepareFormFilterCriteria(criteria);
+    public async prepareFormFilterCriteria(
+        criteria: FilterCriteria[], forSearch: boolean = true
+    ): Promise<FilterCriteria[]> {
+        criteria = await super.prepareFormFilterCriteria(criteria, forSearch);
         const fulltextCriteriaIndex = criteria.findIndex((c) => c.property === SearchProperty.FULLTEXT);
         if (fulltextCriteriaIndex !== -1) {
             const value = criteria[fulltextCriteriaIndex].value;
@@ -161,5 +163,9 @@ export class TicketSearchDefinition extends SearchDefinition {
     private isArticleProperty(property: string): boolean {
         const articleProperty = Object.keys(ArticleProperty).map((p) => ArticleProperty[p]);
         return articleProperty.some((p) => p === property);
+    }
+
+    public getDefaultSearchCriteria(): string[] {
+        return [SearchProperty.FULLTEXT, TicketProperty.TITLE, TicketProperty.QUEUE_ID];
     }
 }

@@ -14,6 +14,13 @@ import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOp
 import { VersionProperty } from '../../../model/VersionProperty';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../model/FilterType';
+import { ConfigItemClass } from '../../../model/ConfigItemClass';
+import { ConfigItemFormFactory } from '../ConfigItemFormFactory';
 
 export class NewConfigItemDialogContext extends Context {
 
@@ -36,6 +43,30 @@ export class NewConfigItemDialogContext extends Context {
             object = objects && objects.length ? objects[0] : null;
         }
         return object;
+    }
+
+    public async postInit(): Promise<void> {
+        await super.postInit();
+
+        if (!await this.getFormManager().getFormId()) {
+            const firstClass = await this.getFirstClass();
+            if (firstClass) {
+                ConfigItemFormFactory.getInstance().createAndProvideForm(firstClass.ID, this);
+            }
+        }
+    }
+
+    private async getFirstClass(): Promise<ConfigItemClass> {
+        const loadingOptions = new KIXObjectLoadingOptions([
+            new FilterCriteria(
+                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
+            )
+        ]);
+        const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
+            KIXObjectType.CONFIG_ITEM_CLASS, null, loadingOptions, null, false
+        ).catch((): ConfigItemClass[] => []);
+
+        return ciClasses?.length ? ciClasses[0] : null;
     }
 
 }

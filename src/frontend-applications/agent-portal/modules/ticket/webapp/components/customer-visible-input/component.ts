@@ -9,8 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../base-components/webapp/core/FormInputComponent';
-import { FormService } from '../../../../base-components/webapp/core/FormService';
-import { IdService } from '../../../../../model/IdService';
 import { ArticleProperty } from '../../../model/ArticleProperty';
 import { TicketProperty } from '../../../model/TicketProperty';
 import { Organisation } from '../../../../customer/model/Organisation';
@@ -20,7 +18,6 @@ import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOp
 import { OrganisationProperty } from '../../../../customer/model/OrganisationProperty';
 import { Contact } from '../../../../customer/model/Contact';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { ContextType } from '../../../../../model/ContextType';
 import { Ticket } from '../../../model/Ticket';
 import { FormInstance } from '../../../../base-components/webapp/core/FormInstance';
 
@@ -44,8 +41,9 @@ class Component extends FormInputComponent<any, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const value = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const value = formInstance.getFormFieldValue<number>(this.state.field?.instanceId);
         if (value) {
             if (Array.isArray(value.value)) {
                 this.state.checked = Boolean(value.value[0]);
@@ -63,7 +61,8 @@ class Component extends FormInputComponent<any, ComponentState> {
     private async checkValues(): Promise<boolean> {
         let setCheckAndDisabled = false;
         if (this.state.formId) {
-            const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+            const context = ContextService.getInstance().getActiveContext();
+            const formInstance = await context?.getFormManager()?.getFormInstance();
             if (formInstance) {
                 const channelValue = await formInstance.getFormFieldValueByProperty<number>(ArticleProperty.CHANNEL_ID);
                 if (channelValue && channelValue.value && channelValue.value === 2) {
@@ -80,7 +79,7 @@ class Component extends FormInputComponent<any, ComponentState> {
     private async getOrganisation(formInstance: FormInstance): Promise<Organisation> {
         let orgId;
         if (formInstance.getObjectType() === KIXObjectType.ARTICLE) {
-            const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+            const context = ContextService.getInstance().getActiveContext();
             if (context) {
                 const ticket = await context.getObject<Ticket>(KIXObjectType.TICKET);
                 if (ticket) {

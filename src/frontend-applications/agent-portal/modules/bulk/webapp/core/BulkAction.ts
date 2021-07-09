@@ -9,19 +9,14 @@
 
 import { AbstractAction } from '../../../../modules/base-components/webapp/core/AbstractAction';
 import { Table } from '../../../base-components/webapp/core/table';
-import { IEventSubscriber } from '../../../../modules/base-components/webapp/core/IEventSubscriber';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { IdService } from '../../../../model/IdService';
 import { BulkService, BulkDialogContext } from '.';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
-import { EventService } from '../../../../modules/base-components/webapp/core/EventService';
-import { DialogEvents } from '../../../../modules/base-components/webapp/core/DialogEvents';
-import { ContextMode } from '../../../../model/ContextMode';
-import { DialogEventData } from '../../../../modules/base-components/webapp/core/DialogEventData';
 
 
-export class BulkAction extends AbstractAction<Table> implements IEventSubscriber {
+export class BulkAction extends AbstractAction<Table>  {
 
     public hasLink: boolean = false;
 
@@ -62,49 +57,10 @@ export class BulkAction extends AbstractAction<Table> implements IEventSubscribe
     }
 
     private async openDialog(selectedObjects: KIXObject[]): Promise<void> {
-        const context = await ContextService.getInstance().getContext<BulkDialogContext>(
-            BulkDialogContext.CONTEXT_ID
-        );
-
+        const context = await ContextService.getInstance().setActiveContext(BulkDialogContext.CONTEXT_ID);
         if (context) {
             context.setObjectList(this.objectType, selectedObjects);
         }
-
-        context.setDialogSubscriberId(this.eventSubscriberId);
-        EventService.getInstance().subscribe(DialogEvents.DIALOG_CANCELED, this);
-        EventService.getInstance().subscribe(DialogEvents.DIALOG_FINISHED, this);
-
-        ContextService.getInstance().setDialogContext(BulkDialogContext.CONTEXT_ID, null, ContextMode.EDIT_BULK);
     }
 
-    public async eventPublished(data: DialogEventData, eventId: string, subscriberId: string): Promise<void> {
-        if (data && data.dialogId === 'bulk-dialog' && subscriberId === this.eventSubscriberId) {
-            EventService.getInstance().unsubscribe(DialogEvents.DIALOG_CANCELED, this);
-            EventService.getInstance().unsubscribe(DialogEvents.DIALOG_FINISHED, this);
-
-            if (eventId === DialogEvents.DIALOG_FINISHED) {
-                this.data.selectNone();
-            }
-
-            let selectedObjects: KIXObject[];
-            if (eventId === DialogEvents.DIALOG_CANCELED) {
-                selectedObjects = this.data.getSelectedRows().map((r) => r.getRowObject().getObject());
-            }
-
-            const bulkManager = BulkService.getInstance().getBulkManager(this.objectType);
-            if (bulkManager && bulkManager.getBulkRunState()) {
-                const tableConstextId = this.data.getContextId();
-                const context = tableConstextId ? await ContextService.getInstance().getContext(tableConstextId) : null;
-
-                if (context) {
-                    await context.reloadObjectList(this.data.getObjectType());
-                } else {
-                    await this.data.reload();
-                }
-                if (selectedObjects && selectedObjects.length) {
-                    selectedObjects.forEach((o) => this.data.selectRowByObject(o));
-                }
-            }
-        }
-    }
 }

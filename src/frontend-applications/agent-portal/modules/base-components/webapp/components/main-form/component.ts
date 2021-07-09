@@ -24,6 +24,8 @@ import { EventService } from '../../core/EventService';
 import { ApplicationEvent } from '../../core/ApplicationEvent';
 import { IEventSubscriber } from '../../core/IEventSubscriber';
 import { FormEvent } from '../../core/FormEvent';
+import { ContextService } from '../../core/ContextService';
+import { ContextFormManagerEvents } from '../../core/ContextFormManagerEvents';
 
 
 class FormComponent {
@@ -38,31 +40,44 @@ class FormComponent {
         this.state = new ComponentState(input.formId);
     }
 
-    public onInput(input: any): void {
-        if (!this.state.formId && !this.state.formInstance) {
-            this.state.formId = input.formId;
-            this.prepareForm();
-        }
-    }
-
     public async onMount(): Promise<void> {
-        if (!this.state.formInstance) {
-            await this.prepareForm();
+        await this.prepareForm();
 
-            this.keyListenerElement = (this as any).getEl();
-            if (this.keyListenerElement) {
-                this.keyListenerElement.dispatchEvent(new KeyboardEvent('keypress', { key: 'Tab' }));
-                this.keyListener = this.keyDown.bind(this);
-                this.keyListenerElement.addEventListener('keydown', this.keyListener);
+        this.keyListenerElement = (this as any).getEl();
+        if (this.keyListenerElement) {
+            this.keyListenerElement.dispatchEvent(new KeyboardEvent('keypress', { key: 'Tab' }));
+            this.keyListener = this.keyDown.bind(this);
+            this.keyListenerElement.addEventListener('keydown', this.keyListener);
 
-                setTimeout(() => {
-                    const elements = this.keyListenerElement.getElementsByClassName('field-input');
-                    if (elements && elements.length && elements.item(0).firstElementChild) {
-                        elements.item(0).firstElementChild.focus();
-                    }
-                }, 500);
-            }
+            setTimeout(() => {
+                const elements = this.keyListenerElement.getElementsByClassName('field-input');
+                if (elements && elements.length && elements.item(0).firstElementChild) {
+                    elements.item(0).firstElementChild.focus();
+                }
+            }, 500);
         }
+
+        this.formSubscriber = {
+            eventSubscriberId: this.state.formId,
+            eventPublished: (data: any, eventId: string) => {
+                if (eventId === ContextFormManagerEvents.FORM_INSTANCE_CHANGED) {
+                    this.state.formInstance = null;
+                    this.state.formId = null;
+                    setTimeout(() => this.prepareForm(), 20);
+                } else {
+                    this.setNeeded();
+                    (this as any).setStateDirty('formInstance');
+                }
+            }
+        };
+
+        EventService.getInstance().subscribe(ContextFormManagerEvents.FORM_INSTANCE_CHANGED, this.formSubscriber);
+        EventService.getInstance().subscribe(FormEvent.FORM_FIELD_ORDER_CHANGED, this.formSubscriber);
+        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
+        EventService.getInstance().subscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
+        EventService.getInstance().subscribe(FormEvent.FIELD_REMOVED, this.formSubscriber);
+        EventService.getInstance().subscribe(FormEvent.FORM_PAGE_ADDED, this.formSubscriber);
+        EventService.getInstance().subscribe(FormEvent.FORM_PAGES_REMOVED, this.formSubscriber);
 
         this.state.loading = false;
     }
@@ -72,6 +87,7 @@ class FormComponent {
             this.keyListenerElement.removeEventListener('keydown', this.keyDown.bind(this));
         }
 
+        EventService.getInstance().unsubscribe(ContextFormManagerEvents.FORM_INSTANCE_CHANGED, this.formSubscriber);
         EventService.getInstance().unsubscribe(FormEvent.FORM_FIELD_ORDER_CHANGED, this.formSubscriber);
         EventService.getInstance().unsubscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
         EventService.getInstance().unsubscribe(FormEvent.FIELD_REMOVED, this.formSubscriber);
@@ -90,41 +106,32 @@ class FormComponent {
     }
 
     private async prepareForm(): Promise<void> {
-        this.state.formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        this.state.formInstance = await context?.getFormManager()?.getFormInstance();
         if (this.state.formInstance) {
+            this.state.formId = this.state.formInstance.getForm()?.id;
             this.setNeeded();
             this.state.objectType = this.state.formInstance.getObjectType();
             this.state.isSearchContext = this.state.formInstance.getFormContext() === FormContext.SEARCH;
             WidgetService.getInstance().setWidgetType('form-group', WidgetType.GROUP);
 
-            this.state.loading = false;
-
             this.prepareMultiGroupHandling();
-
-            this.formSubscriber = {
-                eventSubscriberId: this.state.formId,
-                eventPublished: (data: any, eventId: string) => {
-                    this.setNeeded();
-                    (this as any).setStateDirty('formInstance');
-                }
-            };
-            EventService.getInstance().subscribe(FormEvent.FORM_FIELD_ORDER_CHANGED, this.formSubscriber);
-            EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
-            EventService.getInstance().subscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
-            EventService.getInstance().subscribe(FormEvent.FIELD_REMOVED, this.formSubscriber);
-            EventService.getInstance().subscribe(FormEvent.FORM_PAGE_ADDED, this.formSubscriber);
-            EventService.getInstance().subscribe(FormEvent.FORM_PAGES_REMOVED, this.formSubscriber);
         }
+
+        this.state.loading = false;
     }
 
     private setNeeded(): void {
         this.state.additionalFieldControlsNeeded = false;
-        PAGES: for (const page of this.state.formInstance.getForm().pages) {
-            for (const group of page.groups) {
-                for (const field of group.formFields) {
-                    this.state.additionalFieldControlsNeeded = this.additionalFieldControlsNeeded(field);
-                    if (this.state.additionalFieldControlsNeeded) {
-                        break PAGES;
+        const pages = this.state.formInstance?.getForm()?.pages;
+        if (Array.isArray(pages)) {
+            PAGES: for (const page of pages) {
+                for (const group of page.groups) {
+                    for (const field of group.formFields) {
+                        this.state.additionalFieldControlsNeeded = this.additionalFieldControlsNeeded(field);
+                        if (this.state.additionalFieldControlsNeeded) {
+                            break PAGES;
+                        }
                     }
                 }
             }

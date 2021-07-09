@@ -9,8 +9,7 @@
 
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../model/ContextMode';
+import { NewMailFilterDialogContext } from '../context';
 
 export class MailFilterCreateAction extends AbstractAction {
 
@@ -20,10 +19,7 @@ export class MailFilterCreateAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            null, KIXObjectType.MAIL_FILTER, ContextMode.CREATE_ADMIN, null, true,
-            'Translatable#Communication: Email'
-        );
+        ContextService.getInstance().setActiveContext(NewMailFilterDialogContext.CONTEXT_ID);
     }
 
 }

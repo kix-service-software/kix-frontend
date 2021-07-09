@@ -32,7 +32,7 @@ describe('FormInstance - Order', () => {
         beforeEach(async () => {
             const form = someTestFunctions.getForm();
             FormService.getInstance().addForm(form);
-            formInstance = new FormInstance();
+            formInstance = new FormInstance(null);
             (formInstance as any).form = form;
         });
 

@@ -6,53 +6,68 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<widget instanceId="edit-linked-objects-dialog">
+<widget
+    instanceId="edit-linked-objects-dialog"
+    icon="kix-icon-link"
+    title=state.title>
     <@content>
-        <div.edit-linked-objects-dialog-container>
-            <div.table-head>
-                <span>
-                    <translation-string pattern="Translatable#Existing Links ({0})" placeholders=[state.linkObjectCount]/>
-                </span>
-                <filter on-filter("filter") key="edit-linked-objects-filter"/>
-            </div>
-            <if(state.table)>
-                <standard-table-NEW table=state.table/>
-            </if>
-            <div.dialog-button-container>
-                <if(state.allowDelete)>
-                    <button.form-blank-cancel-button
-                        type="button"
-                        on-click("markToDelete")
-                        title=state.translations["Translatable#Delete Link"]>
-                        <span.kix-icon-trash/>
-                        <translation-string pattern="Translatable#Delete Link"/>
-                    </button>
+        <if(state.mainObject)>
+            <div.edit-linked-objects-dialog-container>
+                <div.table-head>
+                    <span>
+                        <translation-string
+                            pattern="Translatable#Existing Links ({0})"
+                            placeholders=[state.linkObjectCount]/>
+                    </span>
+                </div>
+                <if(state.table)>
+                    <standard-table-NEW table=state.table/>
                 </if>
-                <if(state.allowCreate)>
-                    <button.form-blank-button
-                        type="button"
-                        on-click("openAddLinkDialog")
-                        title=state.translations["Translatable#Assign Link"]>
-                        <span.kix-icon-new-link/>
-                        <translation-string pattern="Translatable#Assign Link"/>
-                    </button>
-                </if>
+                <div.dialog-button-container>
+                    <if(state.allowDelete)>
+                        <button.form-blank-cancel-button
+                            type="button"
+                            on-click("markToDelete")
+                            title=state.translations["Translatable#Delete Link"]>
+                            <span.kix-icon-trash/>
+                            <translation-string pattern="Translatable#Delete Link"/>
+                        </button>
+                    </if>
+                </div>
             </div>
-        </div>
-        <div.dialog-button-container>
-            <button.cancel-button type="button" on-click("cancel") title=state.translations["Translatable#Cancel"]>
-                <span.kix-icon-close/>
-                <translation-string pattern="Translatable#Cancel"/>
-            </button>
-            <button.submit-button
-                type="button"
-                on-click("submit")
-                title=state.translations["Translatable#Submit"]
-                disabled=!state.canSubmit>
-                <span.kix-icon-check/>
-                <translation-string pattern="Translatable#Submit"/>
-            </button>
-        </div>
+            <widget
+                instanceId="add-linked-objects-form"
+                minimizable=true
+                minimized=false
+                title="Translatable#Add new Links">
+                <@content>
+                    <link-object-dialog
+                        linkDescriptions=state.linkDescriptions
+                        objectType=state.mainObject.KIXObjectType
+                        rootObject=state.mainObject
+                        on-linksAdded("linksAdded")/>
+                </@content>
+            </widget>
+        </if>
     </@content>
 </widget>
+<div.dialog-control>
+    <div.dialog-button-container>
+        <button.cancel-button
+            disabled=state.processing
+            type="button"
+            on-click("cancel")
+            title=state.translations["Translatable#Cancel"]>
+            <span.kix-icon-close/>
+            <span>${state.translations["Translatable#Cancel"]}</span>
+        </button>
+        <button.submit-button
+            disabled=state.processing
+            type="button"
+            on-click("submit")
+            title=state.translations["Translatable#Submit"]>
+            <span.kix-icon-check/>
+            <span>${state.translations["Translatable#Submit"]}</span>
+        </button>
+    </div>
+</div>

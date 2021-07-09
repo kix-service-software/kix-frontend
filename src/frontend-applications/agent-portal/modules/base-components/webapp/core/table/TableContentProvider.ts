@@ -41,14 +41,14 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     public async initialize(): Promise<void> {
         if (!this.initialized) {
             if (this.contextId) {
-                const context = await ContextService.getInstance().getContext(this.contextId);
+                const context = ContextService.getInstance().getActiveContext();
                 if (context) {
                     context.registerListener(this.table.getTableId() + '-content-provider', {
-                        explorerBarToggled: () => { return; },
+                        sidebarLeftToggled: () => { return; },
                         filteredObjectListChanged: () => { return; },
                         objectChanged: this.objectChanged.bind(this),
                         objectListChanged: this.objectListChanged.bind(this),
-                        sidebarToggled: () => { return; },
+                        sidebarRightToggled: () => { return; },
                         scrollInformationChanged: () => { return; },
                         additionalInformationChanged: () => { return; }
                     });
@@ -60,7 +60,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
     public async destroy(): Promise<void> {
         if (this.contextId) {
-            const context = await ContextService.getInstance().getContext(this.contextId);
+            const context = ContextService.getInstance().getActiveContext();
             if (context) {
                 context.unregisterListener(this.table.getTableId() + '-content-provider');
             }
@@ -94,9 +94,9 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         if (this.objects) {
             objects = this.objects;
         } else if (this.table.getTableConfiguration().searchId) {
-            objects = await SearchService.getInstance().doSearch(null, this.table.getTableConfiguration().searchId);
+            objects = await SearchService.getInstance().executeSearchCache(this.table.getTableConfiguration().searchId);
         } else if (this.contextId && !this.objectIds) {
-            const context = await ContextService.getInstance().getContext(this.contextId);
+            const context = ContextService.getInstance().getActiveContext();
             objects = context ? await context.getObjectList(this.objectType) : [];
         } else if (!this.objectIds || (this.objectIds && this.objectIds.length > 0)) {
             const forceIds = (this.objectIds && this.objectIds.length > 0) ? true : false;
@@ -124,7 +124,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                     for (const column of columns) {
 
                         // ignore dynamic fields, they will be added in prepareSpecificValues
-                        if (!column.property.startsWith(`${KIXObjectProperty.DYNAMIC_FIELDS}.`)) {
+                        if (!column.property?.startsWith(`${KIXObjectProperty.DYNAMIC_FIELDS}.`)) {
                             const tableValue = new TableValue(column.property, o[column.property], null, null, null);
                             values.push(tableValue);
                         }

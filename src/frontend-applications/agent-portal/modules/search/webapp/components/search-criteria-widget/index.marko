@@ -6,20 +6,43 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<if(!state.loading)>
-    <widget title=state.title instanceId=state.instanceId contentActions=state.contentActions>
-        <@content>
-            <div.criteria-container>
-                <div.search-criteria-list>
-                    <for|criteria| of=state.displayCriteria>
-                        <div.search-criteria-list-item>
-                            <div.key title=(criteria[0] + " (" + criteria[1] + ")")>${criteria[0]} (${criteria[1]}):</div>
-                            <label-list labels=criteria[2] removeLabels=false/>
-                        </div>
-                    </for>
+<widget
+    title=state.title
+    instanceId=state.instanceId
+    contentActions=state.contentActions>
+    <@content>
+        <div.criteria-container key="search-criteria-container">
+            <if(state.manager)>
+                <div.search-criteria>
+                    <dynamic-form-field-container
+                        manager=state.manager
+                        key="search-criteria-dynamic-form"/>
                 </div>
-            </div>
-        </@content>
-    </widget>
-</if>
+                <div.search-limit>
+                    <span>
+                        <translation-string pattern="Translatable#Limit:"/>
+                    </span>
+                    <input.input-style type="number" value=state.limit on-input("limitChanged")/>
+                </div>
+                <div.search-button-container>
+                    <button.form-blank-cancel-button
+                        type="button"
+                        on-click("resetSearch")
+                        title=state.translations["Translatable#Reset data"]>
+                        <span.kix-icon-delete/>
+                        <translation-string pattern="Translatable#Reset data"/>
+                    </button>
+                    <button.form-blank-submit-button
+                        type="button"
+                        on-click("search")
+                        title=state.translations["Translatable#Start search"]
+                        disabled=!state.canSearch>
+                        <span.kix-icon-search/>
+                        <translation-string pattern="Translatable#Start search" placeholders=[]/>
+                    </button>
+                </div>
+            </if> 
+            <loading-shield shieldId="SEARCH_CRITERIA_SHIELD"/>
+        </div>
+    </@content>
+</widget>

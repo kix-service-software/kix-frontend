@@ -48,8 +48,8 @@ class Component {
             this.cmdbChartConfiguration.configuration.chartConfiguration.data.datasets[0].data = [];
 
             currentContext.registerListener('CMDBChartComponent' + IdService.generateDateBasedId(), {
-                explorerBarToggled: () => { return; },
-                sidebarToggled: () => { return; },
+                sidebarLeftToggled: () => { return; },
+                sidebarRightToggled: () => { return; },
                 objectChanged: () => { return; },
                 objectListChanged: () => { return; },
                 scrollInformationChanged: () => { return; },

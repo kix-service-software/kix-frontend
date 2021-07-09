@@ -1,0 +1,54 @@
+/**
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+.app-wrapper {
+
+    >.app-shield,
+    >.app-mobile-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1000;
+    }
+
+    >.app-shield {
+        background: fade(@secondary-4, 70%);
+    }
+
+    >.app-mobile-background {
+        max-width: @sidebar-width + 2rem;
+        width: 100%;
+        background: #ededed;
+        display: grid;
+        grid-template-columns: auto;
+        grid-auto-flow: column;
+        grid-auto-columns: max-content;
+
+        &.show-right {
+            left: unset;
+        }
+
+        >.close-mobile {
+            justify-self: end;
+            height: 4rem;
+            box-sizing: border-box;
+            font-size: 4rem;
+            line-height: 4rem;
+            color: @secondary-0;
+            transition: color .25s;
+            cursor: pointer;
+
+            &:hover {
+                color: @secondary-2;
+            }
+        }
+    }
+}

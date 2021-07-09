@@ -9,14 +9,15 @@
 
 import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
-import { IdService } from '../../../../../../model/IdService';
 import { FormService } from '../../../../../../modules/base-components/webapp/core/FormService';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
-import { KIXModulesService } from '../../../../../../modules/base-components/webapp/core/KIXModulesService';
 import { EventService } from '../../../core/EventService';
 import { FormEvent } from '../../../core/FormEvent';
 import { IEventSubscriber } from '../../../core/IEventSubscriber';
 import { LabelService } from '../../../core/LabelService';
+import { ContextService } from '../../../core/ContextService';
+import { Context } from 'mocha';
+import { KIXModulesService } from '../../../core/KIXModulesService';
 
 class Component {
 
@@ -46,52 +47,79 @@ class Component {
             ['Translatable#Sort']
         );
 
-        if (this.state.field.property === this.state.field.label) {
+        if (this.state.field?.property === this.state.field?.label) {
             const form = await FormService.getInstance().getForm(this.state.formId);
             this.state.label = await LabelService.getInstance().getPropertyText(
-                this.state.field.property, form.objectType, null, this.state.field.translateLabel
+                this.state.field?.property, form.objectType, null, this.state.field?.translateLabel
             );
         } else {
             this.state.label = await TranslationService.translate(
-                this.state.field.label, undefined, undefined, !this.state.field.translateLabel
+                this.state.field?.label, undefined, undefined, !this.state.field?.translateLabel
             );
         }
 
-        const hint = await TranslationService.translate(this.state.field.hint);
+        const hint = await TranslationService.translate(this.state.field?.hint);
         this.state.hint = hint
             ? (hint.startsWith('Helptext_') ? null : hint)
             : null;
 
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+
+        const value = formInstance?.getFormFieldValue(this.state.field?.instanceId);
+        if (value && Array.isArray(value.errorMessages) && value.errorMessages.length) {
+            this.state.errorMessages = value.errorMessages;
+        } else {
+            this.state.errorMessages = [];
+        }
+
         this.state.show = true;
+
     }
 
     public async onMount(): Promise<void> {
         this.formSubscriber = {
-            eventSubscriberId: this.state.field.instanceId,
+            eventSubscriberId: this.state.field?.instanceId,
             eventPublished: async (data: any, eventId: string) => {
                 if (this.hasChildren()) {
                     this.state.minimized = this.state.minimized && !(await this.hasInvalidChildren());
                 }
+
+                const isUpdateEvent = eventId === FormEvent.FIELD_VALIDATED
+                    || eventId === FormEvent.FIELD_READONLY_CHANGED;
+
+                if (isUpdateEvent && this.state.field?.instanceId === data?.instanceId) {
+                    this.update();
+                }
             }
         };
+
+        EventService.getInstance().subscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
+        EventService.getInstance().subscribe(FormEvent.FIELD_VALIDATED, this.formSubscriber);
+        EventService.getInstance().subscribe(FormEvent.FIELD_READONLY_CHANGED, this.formSubscriber);
         EventService.getInstance().subscribe(FormEvent.FORM_VALIDATED, this.formSubscriber);
         EventService.getInstance().subscribe(FormEvent.FORM_PAGE_VALIDATED, this.formSubscriber);
+
 
         this.update();
     }
 
     public onDestroy(): void {
+        EventService.getInstance().unsubscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
+        EventService.getInstance().subscribe(FormEvent.FIELD_VALIDATED, this.formSubscriber);
+        EventService.getInstance().subscribe(FormEvent.FIELD_READONLY_CHANGED, this.formSubscriber);
         EventService.getInstance().unsubscribe(FormEvent.FORM_VALIDATED, this.formSubscriber);
         EventService.getInstance().unsubscribe(FormEvent.FORM_PAGE_VALIDATED, this.formSubscriber);
     }
 
     private async hasInvalidChildren(field: FormFieldConfiguration = this.state.field): Promise<boolean> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         let hasInvalidChildren = false;
         if (Array.isArray(field.children)) {
             for (const child of field.children) {
                 const value = formInstance.getFormFieldValue(child.instanceId);
-                if (!value.valid) {
+                if (value && !value.valid) {
                     return true;
                 }
 
@@ -103,7 +131,7 @@ class Component {
     }
 
     public getInputComponent(): any {
-        const componentId = this.state.field.inputComponent ? this.state.field.inputComponent : 'default-text-input';
+        const componentId = this.state.field?.inputComponent ? this.state.field?.inputComponent : 'default-text-input';
         return KIXModulesService.getComponentTemplate(componentId);
     }
 
@@ -112,7 +140,7 @@ class Component {
     }
 
     public hasChildren(): boolean {
-        return this.state.field.children && this.state.field.children.length > 0;
+        return this.state.field?.children && this.state.field?.children.length > 0;
     }
 
     public getPaddingLeft(): string {
@@ -142,8 +170,8 @@ class Component {
         if (root) {
             root.classList.add('dragging');
         }
-        event.dataTransfer.setData('Text', this.state.field.instanceId);
-        (this as any).emit('dragStart', this.state.field.instanceId);
+        event.dataTransfer.setData('Text', this.state.field?.instanceId);
+        (this as any).emit('dragStart', this.state.field?.instanceId);
     }
 
     public async handleDragEnd(event) {
@@ -151,7 +179,7 @@ class Component {
         if (root) {
             root.classList.remove('dragging');
         }
-        (this as any).emit('dragEnd', this.state.field.instanceId);
+        (this as any).emit('dragEnd', this.state.field?.instanceId);
     }
 }
 

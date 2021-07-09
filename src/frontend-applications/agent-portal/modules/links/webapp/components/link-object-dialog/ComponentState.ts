@@ -21,11 +21,9 @@ export class ComponentState {
         public resultCount: number = 0,
         public currentLinkTypeDescription: LinkTypeDescription = null,
         public linkDescriptions: CreateLinkDescription[] = null,
-        public formId: string = null,
         public canSubmit: boolean = false,
         public tableId: string = null,
         public filterCount: number = null,
-        public loading: boolean = true,
         public translations: any = {},
         public linkTypeTreeId: string = IdService.generateDateBasedId('linkTypeTreeId')
     ) { }

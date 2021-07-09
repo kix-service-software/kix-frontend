@@ -84,7 +84,7 @@ class TabLaneComponent implements IEventSubscriber {
                     if (type === ContextType.DIALOG) {
                         this.prepareContext(context);
                     }
-                    if (oldContext && oldContext.getDescriptor().contextType === ContextType.DIALOG) {
+                    if (oldContext && oldContext.descriptor.contextType === ContextType.DIALOG) {
                         oldContext.unregisterListener(this.contextListenerId);
                     }
                 },
@@ -114,7 +114,7 @@ class TabLaneComponent implements IEventSubscriber {
         EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_TITLE, this);
         EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_ICON, this);
         EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_TAB, this);
-        const context: Context = ContextService.getInstance().getActiveContext(this.state.contextType);
+        const context: Context = ContextService.getInstance().getActiveContext();
         if (context) {
             context.unregisterListener(this.contextListenerId);
         }
@@ -132,9 +132,9 @@ class TabLaneComponent implements IEventSubscriber {
             ? this.state.activeTab.configuration.title
             : '';
         if (tab) {
-            const context = ContextService.getInstance().getActiveContext(this.state.contextType);
+            const context = ContextService.getInstance().getActiveContext();
             if (context) {
-                const object = await context.getObject(context.getDescriptor().kixObjectTypes[0]);
+                const object = await context.getObject(context.descriptor.kixObjectTypes[0]);
 
                 this.state.contentActions = await ActionFactory.getInstance().generateActions(
                     tab.configuration ? tab.configuration.actions : [], [object]
@@ -153,13 +153,13 @@ class TabLaneComponent implements IEventSubscriber {
     }
 
     private prepareContext(
-        context: Context = ContextService.getInstance().getActiveContext(this.state.contextType)
+        context: Context = ContextService.getInstance().getActiveContext()
     ): void {
         context.registerListener(this.contextListenerId, {
-            sidebarToggled: () => {
-                this.state.showSidebar = context.areSidebarsShown();
+            sidebarRightToggled: () => {
+                // this.state.showSidebar = context.areSidebarsRightShown();
             },
-            explorerBarToggled: () => { return; },
+            sidebarLeftToggled: () => { return; },
             objectChanged: () => { return; },
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
@@ -170,19 +170,12 @@ class TabLaneComponent implements IEventSubscriber {
     }
 
     public hideSidebarIfNeeded(): void {
-        const context: Context = ContextService.getInstance().getActiveContext(this.state.contextType);
-        if (context &&
-            context.areSidebarsShown() &&
-            window.innerWidth <= 1400
-        ) {
-            context.closeAllSidebars();
-        }
+        const context: Context = ContextService.getInstance().getActiveContext();
     }
 
     private setSidebars(): void {
-        const context = ContextService.getInstance().getActiveContext(this.state.contextType);
-        this.state.hasSidebars = context ? context.getSidebars().length > 0 : false;
-        this.state.showSidebar = context.areSidebarsShown();
+        const context = ContextService.getInstance().getActiveContext();
+        this.state.hasSidebars = context ? context.getSidebarsRight().length > 0 : false;
     }
 
     public isActiveTab(tabId: string): boolean {

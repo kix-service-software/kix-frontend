@@ -23,10 +23,16 @@ import { TreeNode } from '../../../../../base-components/webapp/core/tree';
 import { LabelService } from '../../../../../../modules/base-components/webapp/core/LabelService';
 import { KIXObjectService } from '../../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
+import { SortUtil } from '../../../../../../model/SortUtil';
+import { DataType } from '../../../../../../model/DataType';
+import { ContextEvents } from '../../../../../base-components/webapp/core/ContextEvents';
+import { EventService } from '../../../../../base-components/webapp/core/EventService';
+import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 
 export class Component {
 
     private state: ComponentState;
+    private subscriber: IEventSubscriber;
 
     public listenerId: string;
 
@@ -40,7 +46,7 @@ export class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<FAQContext>(FAQContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext() as FAQContext;
         this.state.widgetConfiguration = context
             ? await context.getWidgetConfiguration(this.state.instanceId)
             : undefined;
@@ -60,20 +66,25 @@ export class Component {
 
         this.state.nodes = await this.prepareTreeNodes(faqCategories);
 
-        this.setActiveNode(context.categoryId);
+        this.state.activeNode = this.getActiveNode(context.categoryId);
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(),
+            eventPublished: (data: any, eventId: string) => {
+                this.state.activeNode = this.getActiveNode(context?.categoryId);
+            }
+        };
+
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
     }
 
-    private setActiveNode(categoryId: number): void {
-        if (categoryId) {
-            this.activeNodeChanged(this.getActiveNode(categoryId));
-        } else {
-            this.showAll();
-        }
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
     }
 
     private getActiveNode(categoryId: number, nodes: TreeNode[] = this.state.nodes
     ): TreeNode {
-        let activeNode = nodes.find((n) => n.id === categoryId);
+        let activeNode = nodes?.find((n) => n.id === categoryId);
         if (!activeNode) {
             for (const node of nodes) {
                 activeNode = this.getActiveNode(categoryId, node.children);
@@ -100,6 +111,8 @@ export class Component {
             }
         }
 
+        SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+
         return nodes;
     }
 
@@ -122,13 +135,13 @@ export class Component {
     public async activeNodeChanged(node: TreeNode): Promise<void> {
         this.state.activeNode = node;
 
-        const context = await ContextService.getInstance().getContext<FAQContext>(FAQContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext() as FAQContext;
         context.setAdditionalInformation('STRUCTURE', [node.label]);
         context.setFAQCategoryId(node.id);
     }
 
     public async showAll(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<FAQContext>(FAQContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext() as FAQContext;
         this.state.activeNode = null;
         const allText = await TranslationService.translate('Translatable#All');
         context.setAdditionalInformation('STRUCTURE', [allText]);

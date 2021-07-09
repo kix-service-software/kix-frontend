@@ -61,7 +61,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'ticket-admin-priority-create'
                 ],
                 [
-                    'ticket-admin-priority-edit', 'print-action'
+                    'ticket-admin-priority-edit'
                 ],
                 [],
                 [

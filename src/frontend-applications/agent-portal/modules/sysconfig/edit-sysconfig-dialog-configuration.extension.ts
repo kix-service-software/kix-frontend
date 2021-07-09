@@ -40,7 +40,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new WidgetConfiguration(
                 'sysconfig-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
-                'edit-sysconfig-dialog', 'Translatable#Edit Key',
+                'object-dialog-form-widget', 'Translatable#Edit Key',
                 [], null, null, false, false, 'kix-icon-edit'
             )
         );
@@ -48,13 +48,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-                this.getModuleId(), [], [], [], [], [], [], [], [],
+                this.getModuleId(), [], [], [],
                 [
                     new ConfiguredDialogWidget(
                         'sysconfig-edit-dialog-widget', 'sysconfig-edit-dialog-widget',
                         KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, ContextMode.EDIT_ADMIN
                     )
-                ]
+                ], [], [], [], []
             )
         );
 
@@ -141,7 +141,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         );
 
         ModuleConfigurationService.getInstance().registerForm(
-            [FormContext.EDIT], KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, formId
+            [FormContext.EDIT], KIXObjectType.SYS_CONFIG_OPTION, formId
         );
 
         return configurations;

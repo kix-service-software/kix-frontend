@@ -17,16 +17,14 @@ import { ValidationSeverity } from '../../../../base-components/webapp/core/Vali
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { Error } from '../../../../../../../server/model/Error';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { SetupStep } from '../../../../setup-assistant/webapp/core/SetupStep';
-import { SetupEvent } from '../../../../setup-assistant/webapp/core/SetupEvent';
-import { SetupStepCompletedEventData } from '../../../../setup-assistant/webapp/core/SetupStepCompletedEventData';
 import { MailAccount } from '../../../model/MailAccount';
 import { MailAccountProperty } from '../../../model/MailAccountProperty';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -42,7 +40,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             'Translatable#Save & Fetch', 'Translatable#Skip & Continue'
         ]);
 
-        this.prepareForm();
+        await this.prepareForm();
         this.state.prepared = true;
     }
 
@@ -52,9 +50,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.completed = this.step ? this.step.completed : false;
     }
 
-    public onDestroy(): void {
-        FormService.getInstance().deleteFormInstance(this.state.formId);
-    }
+
 
     private async prepareForm(): Promise<void> {
         let account: MailAccount;
@@ -75,18 +71,19 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         }
 
-        this.state.formId = await FormService.getInstance().getFormIdByContext(
+        const formId = await FormService.getInstance().getFormIdByContext(
             this.update ? FormContext.EDIT : FormContext.NEW, KIXObjectType.MAIL_ACCOUNT
         );
-        if (this.state.formId) {
-            FormService.getInstance().getFormInstance(
-                this.state.formId, false, account, !this.state.canUpdate ? true : null
-            );
+        if (formId) {
+            this.state.formId = formId;
+            const context = ContextService.getInstance().getActiveContext();
+            context?.getFormManager()?.setFormId(formId);
         }
     }
 
     public async submit(logout: boolean): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
 
         const result = await formInstance.validateForm();
         const validationError = result.some((r) => r && r.severity === ValidationSeverity.ERROR);
@@ -95,7 +92,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         } else {
 
             BrowserUtil.toggleLoadingShield(
-                true, this.update ? 'Translatable#Update Email Account' : 'Translatable#Create Email Account'
+                'SETUP_MAIL_SHIELD', true, this.update ? 'Translatable#Update Email Account' : 'Translatable#Create Email Account'
             );
 
             if (this.update) {
@@ -104,7 +101,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 await this.createAccount();
             }
 
-            BrowserUtil.toggleLoadingShield(false);
+            BrowserUtil.toggleLoadingShield('SETUP_MAIL_SHIELD', false);
         }
     }
 

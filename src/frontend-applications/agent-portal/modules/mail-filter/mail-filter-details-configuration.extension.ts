@@ -120,7 +120,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'mail-filter-create'
                 ],
                 [
-                    'mail-filter-duplicate', 'mail-filter-edit', 'print-action'
+                    'mail-filter-duplicate', 'mail-filter-edit'
                 ],
                 [],
                 [

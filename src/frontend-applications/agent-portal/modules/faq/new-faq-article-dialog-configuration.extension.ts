@@ -48,7 +48,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const configurations = [];
         const widget = new WidgetConfiguration(
             'faq-article-new-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
-            'new-faq-article-dialog', 'Translatable#New FAQ', [], null, null,
+            'object-dialog-form-widget', 'Translatable#New FAQ', [], null, null,
             false, false, 'kix-icon-new-faq'
         );
         configurations.push(widget);
@@ -56,13 +56,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-                this.getModuleId(), [], [], [], [], [], [], [], [],
+                this.getModuleId(), [], [], [],
                 [
                     new ConfiguredDialogWidget(
                         'faq-article-new-dialog-widget', 'faq-article-new-dialog-widget',
                         KIXObjectType.FAQ_ARTICLE, ContextMode.CREATE
                     )
-                ]
+                ], [], [], [], []
             )
         );
 
@@ -132,13 +132,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 'faq-article-new-form-field-attachments',
                 'Translatable#Attachments', FAQArticleProperty.ATTACHMENTS, 'attachment-input', false,
                 'Translatable#Helptext_FAQ_ArticleCreate_Attachments'
-            )
-        );
-        configurations.push(
-            new FormFieldConfiguration(
-                'faq-article-new-form-field-links',
-                'Link FAQ with', FAQArticleProperty.LINK, 'link-input', false,
-                'Translatable#Helptext_FAQ_ArticleCreate_Links'
             )
         );
         configurations.push(

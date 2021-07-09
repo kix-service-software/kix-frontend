@@ -45,11 +45,6 @@
         .info-row-title {
             font-weight: bold;
             font-size: 1.25rem;
-
-            &.separator {
-                border-bottom: 1px solid @secondary-2;
-                padding-bottom: 1rem;
-            }
         }
 
         .info-row-content {
@@ -124,18 +119,43 @@
     }
 }
 
-@media only screen and (max-width: 1280px) {
+@smaller-info-breakpoint: 1280px; // have to be px (used for calculations)
+
+@media only screen and (min-width: @smaller-info-breakpoint + 1px) {
     .info-container {
-        display: grid;
-        grid-template-columns: unset;
+        .info-rows {
+            .info-row-title.separator {
+                border-bottom: 1px solid @secondary-2;
+                padding-bottom: 1rem;
+            }
+        }
+    }
+}
+
+// TODO: use "display: block", -> reducing to one grid column and even "grid-auto-flow: column" does not work (why?)
+@media only screen and (max-width: @smaller-info-breakpoint) {
+    .info-container {
+        display: block;
 
         .info-rows {
-            display: grid;
-            grid-template-columns: unset;
+            display: block;
 
+            >div:not(:last-of-type) {
+                margin-bottom: 1rem;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: @smaller-info-breakpoint/2) {
+    .info-container {
+        .info-rows {
             .info-row-content {
-                display: grid;
-                grid-auto-flow: row;
+                display: block;
+
+                >div:not(:last-of-type) {
+                    margin-bottom: 1rem;
+                }
             }
         }
     }

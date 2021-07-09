@@ -1,8 +1,6 @@
 {
     "dependencies": [
         "require ./components/admin-webforms",
-        "require ./components/edit-webform-dialog",
-        "require ./components/new-webform-dialog",
         "require ./components/webform-code-content",
         "require ./components/webform-code-widget",
         "require ./core"

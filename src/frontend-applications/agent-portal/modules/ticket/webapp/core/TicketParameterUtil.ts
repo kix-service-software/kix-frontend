@@ -135,7 +135,7 @@ export class TicketParameterUtil {
             parameter.push([ArticleProperty.SENDER_TYPE_ID, senderTypes[0].ID]);
         }
 
-        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        const dialogContext = ContextService.getInstance().getActiveContext();
         if (dialogContext) {
             const referencedArticleId = dialogContext.getAdditionalInformation('REFERENCED_ARTICLE_ID');
             if (referencedArticleId) {

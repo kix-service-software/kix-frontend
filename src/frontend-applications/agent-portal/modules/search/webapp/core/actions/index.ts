@@ -7,8 +7,6 @@
  * --
  */
 
-export { NewSearchAction } from './NewSearchAction';
-export { EditSearchAction } from './EditSearchAction';
 export { DeleteSearchAction } from './DeleteSearchAction';
 export { SaveSearchAction } from './SaveSearchAction';
 export { LoadSearchAction } from './LoadSearchAction';

@@ -37,20 +37,13 @@ class Component {
     public state: ComponentState;
 
     private additionalFilterCriteria: UIFilterCriterion[] = [];
-
     private objectType: KIXObjectType | string;
-
     private subscriber: IEventSubscriber;
-
-    private contextType: ContextType;
-
     private configuredTitle: boolean = true;
-
     private useContext: boolean = true;
-
     private contextListener: IContextListener;
-
     private formSubscriber: IEventSubscriber;
+    private prepareTitleTimeout: any;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -58,7 +51,6 @@ class Component {
 
     public onInput(input: ComponentInput): void {
         this.state.instanceId = input.instanceId;
-        this.contextType = input.contextType;
         this.configuredTitle = typeof input.title !== 'undefined';
         if (this.configuredTitle) {
             this.state.title = input.title;
@@ -73,7 +65,7 @@ class Component {
     public async onMount(): Promise<void> {
         this.state.filterPlaceholder = await TranslationService.translate(this.state.filterPlaceholder);
         this.additionalFilterCriteria = [];
-        const context = ContextService.getInstance().getActiveContext(this.contextType);
+        const context = ContextService.getInstance().getActiveContext();
 
         if (this.useContext) {
             this.state.widgetConfiguration = context
@@ -156,7 +148,7 @@ class Component {
             this.state.widgetConfiguration.contextObjectDependent
         ) {
             this.contextListener = {
-                explorerBarToggled: () => { return; },
+                sidebarLeftToggled: () => { return; },
                 filteredObjectListChanged: () => { return; },
                 objectChanged: () => { return; },
                 objectListChanged: (objectType: KIXObjectType | string) => {
@@ -172,16 +164,18 @@ class Component {
                         } else if (this.state.table) {
                             this.state.filterValue = this.state.table.getFilterValue();
                         }
+
+                        this.prepareTitle();
                     }
                 },
-                sidebarToggled: () => { return; },
+                sidebarRightToggled: () => { return; },
                 scrollInformationChanged: (objectType: KIXObjectType | string, objectId: string | number) => {
                     this.scrollToRow(objectType, objectId);
                 },
                 additionalInformationChanged: () => { return; }
             };
 
-            const context = ContextService.getInstance().getActiveContext(this.contextType);
+            const context = ContextService.getInstance().getActiveContext();
             context.registerListener('table-widget-' + this.state.instanceId, this.contextListener);
         }
     }
@@ -256,7 +250,7 @@ class Component {
         EventService.getInstance().unsubscribe(TableEvent.RELOAD, this.subscriber);
         EventService.getInstance().unsubscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
 
-        const context = ContextService.getInstance().getActiveContext(this.contextType);
+        const context = ContextService.getInstance().getActiveContext();
         if (context) {
             context.unregisterListener('table-widget-' + this.state.instanceId);
         }
@@ -275,26 +269,33 @@ class Component {
         }
     }
 
-    private async prepareTitle(): Promise<void> {
-        let count = 0;
-        if (this.state.table) {
-            count = this.state.table.getRowCount(true);
+    private prepareTitle(): void {
+
+        if (this.prepareTitleTimeout) {
+            window.clearTimeout(this.prepareTitleTimeout);
         }
 
-        const searchId = this.state.table?.getTableConfiguration()?.searchId;
-        if (searchId) {
-            const cache = await SearchService.getInstance().loadSearchCache(searchId);
-            const countString = count > 0 ? ' (' + count + ')' : '';
-            this.state.title = cache?.name + countString;
-        } else if (!this.configuredTitle) {
-            let title = WidgetService.getInstance().getWidgetTitle(this.state.instanceId);
-            if (!title) {
-                title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : '';
+        this.prepareTitleTimeout = setTimeout(async () => {
+            let count = 0;
+            if (this.state.table) {
+                count = this.state.table.getRowCount(true);
             }
-            title = await TranslationService.translate(title);
-            const countString = count > 0 ? ' (' + count + ')' : '';
-            this.state.title = title + countString;
-        }
+
+            const searchId = this.state.table?.getTableConfiguration()?.searchId;
+            if (searchId) {
+                const cache = await SearchService.getInstance().loadSearchCache(searchId);
+                const countString = count > 0 ? ' (' + count + ')' : '';
+                this.state.title = cache?.name + countString;
+            } else if (!this.configuredTitle) {
+                let title = WidgetService.getInstance().getWidgetTitle(this.state.instanceId);
+                if (!title) {
+                    title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : '';
+                }
+                title = await TranslationService.translate(title);
+                const countString = count > 0 ? ' (' + count + ')' : '';
+                this.state.title = title + countString;
+            }
+        }, 200);
     }
 
     private async prepareTable(): Promise<void> {
@@ -304,9 +305,9 @@ class Component {
         ) {
             this.objectType = settings.tableConfiguration && settings.tableConfiguration.objectType
                 ? settings.tableConfiguration.objectType : settings.objectType; // table prior table widget
-            const context = ContextService.getInstance().getActiveContext(this.contextType);
+            const context = ContextService.getInstance().getActiveContext();
             const contextId = this.state.widgetConfiguration.contextDependent
-                ? context.getDescriptor().contextId
+                ? context.contextId
                 : null;
 
             const table = await TableFactoryService.getInstance().createTable(

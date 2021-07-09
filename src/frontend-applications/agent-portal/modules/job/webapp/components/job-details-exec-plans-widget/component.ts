@@ -34,16 +34,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         WidgetService.getInstance().setWidgetType('job-exec-plan-group', WidgetType.GROUP);
 
-        const context = await ContextService.getInstance().getContext<JobDetailsContext>(JobDetailsContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext() as JobDetailsContext;
         if (context) {
             this.state.widgetConfiguration = await context.getWidgetConfiguration(this.state.instanceId);
             this.initWidget(context);
 
             context.registerListener('jop-exec-plan-widget', {
-                explorerBarToggled: () => { return; },
+                sidebarLeftToggled: () => { return; },
                 filteredObjectListChanged: () => { return; },
                 objectListChanged: () => { return; },
-                sidebarToggled: () => { return; },
+                sidebarRightToggled: () => { return; },
                 scrollInformationChanged: () => { return; },
                 objectChanged: (id: string | number, job: Job, type: KIXObjectType) => {
                     if (type === KIXObjectType.JOB) {

@@ -84,8 +84,6 @@ export class ReportDefinitionDeleteAction extends AbstractAction {
                     });
             }
 
-            ContextService.getInstance().updateObjectLists(KIXObjectType.REPORT_DEFINITION);
-
             setTimeout(() => {
                 const content = new ComponentContent(
                     'toast',

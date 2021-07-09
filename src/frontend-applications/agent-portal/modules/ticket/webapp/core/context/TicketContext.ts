@@ -21,6 +21,10 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
 import { SearchProperty } from '../../../../search/model/SearchProperty';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { LabelService } from '../../../../base-components/webapp/core/LabelService';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
+import { ContextPreference } from '../../../../../model/ContextPreference';
 
 export class TicketContext extends Context {
 
@@ -29,23 +33,37 @@ export class TicketContext extends Context {
     public queueId: number;
     public filterValue: string;
 
+    public async initContext(urlParams?: URLSearchParams): Promise<void> {
+        super.initContext();
+
+        if (this.queueId || this.filterValue) {
+            this.loadTickets();
+        }
+    }
+
     public getIcon(): string {
         return 'kix-icon-ticket';
     }
 
     public async getDisplayText(): Promise<string> {
-        return 'Ticket Dashboard';
+        let text = await TranslationService.translate('Translatable#Tickets');
+        if (this.queueId) {
+            const queueName = await LabelService.getInstance().getPropertyValueDisplayText(
+                KIXObjectType.TICKET, TicketProperty.QUEUE_ID, this.queueId
+            );
+            text = await TranslationService.translate('Translatable#Tickets: {0}', [queueName]);
+        }
+        return text;
     }
 
-    public async initContext(urlParams: URLSearchParams): Promise<void> {
-        if (urlParams) {
-            if (urlParams.has('queueId') && !isNaN(Number(urlParams.get('queueId')))) {
-                this.queueId = Number(urlParams.get('queueId'));
-            }
+    public async update(urlParams: URLSearchParams): Promise<void> {
+        this.handleURLParams(urlParams);
+    }
 
-            if (urlParams.has('filter')) {
-                this.filterValue = decodeURI(urlParams.get('filter'));
-            }
+    private handleURLParams(urlParams: URLSearchParams): void {
+        if (urlParams) {
+            this.setQueue(urlParams.has('queueId') ? Number(urlParams.get('queueId')) : null, false);
+            this.setFilterValue(urlParams.has('filter') ? decodeURI(urlParams.get('filter')) : null, false);
         }
     }
 
@@ -69,18 +87,38 @@ export class TicketContext extends Context {
         return url;
     }
 
-    public setQueue(queueId: number): void {
+    public async setQueue(queueId: number, history: boolean = true): Promise<void> {
         if (!this.queueId || this.queueId !== queueId) {
             this.queueId = queueId;
             this.loadTickets();
-            ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
+
+            EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
+
+            if (history) {
+                ContextService.getInstance().setDocumentHistory(true, this, this, null);
+            }
+
+            const isStored = await ContextService.getInstance().isContextStored(this.instanceId);
+            if (isStored) {
+                ContextService.getInstance().updateStorage(this.instanceId);
+            }
         }
     }
 
-    public setFilterValue(filterValue: string): void {
+    public async setFilterValue(filterValue: string, history: boolean = true): Promise<void> {
         this.filterValue = filterValue;
         this.loadTickets();
-        ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
+
+        EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
+
+        if (history) {
+            ContextService.getInstance().setDocumentHistory(true, this, this, null);
+        }
+
+        const isStored = await ContextService.getInstance().isContextStored(this.instanceId);
+        if (isStored) {
+            ContextService.getInstance().updateStorage(this.instanceId);
+        }
     }
 
     private async loadTickets(silent: boolean = false): Promise<void> {
@@ -135,16 +173,22 @@ export class TicketContext extends Context {
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
     }
 
-    public reset(): void {
-        super.reset();
-        this.queueId = null;
-        this.filterValue = null;
-    }
-
     public reloadObjectList(objectType: KIXObjectType, silent: boolean = false): Promise<void> {
         if (objectType === KIXObjectType.TICKET) {
             return this.loadTickets(silent);
         }
+    }
+
+    public async addStorableAdditionalInformation(contextPreference: ContextPreference): Promise<void> {
+        super.addStorableAdditionalInformation(contextPreference);
+        contextPreference['QUEUE_ID'] = this.queueId;
+        contextPreference['FILTER_VALUE'] = this.filterValue;
+    }
+
+    public async loadAdditionalInformation(contextPreference: ContextPreference): Promise<void> {
+        super.loadAdditionalInformation(contextPreference);
+        this.queueId = contextPreference['QUEUE_ID'];
+        this.filterValue = contextPreference['FILTER_VALUE'];
     }
 
 }

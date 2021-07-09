@@ -17,8 +17,8 @@ import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { IdService } from '../../../../../model/IdService';
-import { DialogService } from '../../../../../modules/base-components/webapp/core/DialogService';
 import { Label } from '../../../../../modules/base-components/webapp/core/Label';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescription[], ComponentState> {
 
@@ -47,27 +47,29 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
     }
 
     public async openDialog(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const objectType = formInstance.getObjectType();
 
         const objectName = await LabelService.getInstance().getObjectName(objectType);
         const dialogTitle = await TranslationService.translate('Translatable#link {0}', [objectName]);
 
         const resultListenerId = 'result-listener-link-' + objectType + IdService.generateDateBasedId();
-        DialogService.getInstance().openOverlayDialog(
-            'link-object-dialog',
-            {
-                linkDescriptions: this.state.linkDescriptions,
-                objectType,
-                resultListenerId
-            },
-            dialogTitle,
-            'kix-icon-link'
-        );
-        DialogService.getInstance()
-            .registerDialogResultListener<CreateLinkDescription[][]>(
-                resultListenerId, 'object-link', this.linksChanged.bind(this)
-            );
+        // TODO: Overlay
+        // DialogService.getInstance().openOverlayDialog(
+        //     'link-object-dialog',
+        //     {
+        //         linkDescriptions: this.state.linkDescriptions,
+        //         objectType,
+        //         resultListenerId
+        //     },
+        //     dialogTitle,
+        //     'kix-icon-link'
+        // );
+        // DialogService.getInstance()
+        //     .registerDialogResultListener<CreateLinkDescription[][]>(
+        //         resultListenerId, 'object-link', this.linksChanged.bind(this)
+        //     );
     }
 
     private linksChanged(result: CreateLinkDescription[][]): void {

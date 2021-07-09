@@ -10,7 +10,6 @@
 import { AbstractAction } from '../../../base-components/webapp/core/AbstractAction';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../model/ContextMode';
 import { Table } from '../../../base-components/webapp/core/table';
 import { EditSysConfigDialogContext } from './context';
 
@@ -35,16 +34,9 @@ export class SysconfigEditAction extends AbstractAction<Table> {
         const rows = this.data.getSelectedRows();
         const syconfigKeys = rows.map((r) => r.getRowObject().getObject());
 
-        const context = await ContextService.getInstance().getContext<EditSysConfigDialogContext>(
-            EditSysConfigDialogContext.CONTEXT_ID
-        );
-
-        if (context) {
-            context.setObjectList(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, syconfigKeys);
+        const editContext = await ContextService.getInstance().setActiveContext(EditSysConfigDialogContext.CONTEXT_ID);
+        if (editContext) {
+            editContext.setObjectList(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, syconfigKeys);
         }
-
-        ContextService.getInstance().setDialogContext(
-            EditSysConfigDialogContext.CONTEXT_ID, KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, ContextMode.EDIT
-        );
     }
 }

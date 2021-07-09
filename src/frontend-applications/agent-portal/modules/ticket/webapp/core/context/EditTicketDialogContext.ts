@@ -9,7 +9,6 @@
 
 import { Context } from '../../../../../model/Context';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 import { TicketProperty } from '../../../model/TicketProperty';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
@@ -18,9 +17,6 @@ import { Ticket } from '../../../model/Ticket';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { Organisation } from '../../../../customer/model/Organisation';
 import { Contact } from '../../../../customer/model/Contact';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
-import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
 import { ServiceRegistry } from '../../../../base-components/webapp/core/ServiceRegistry';
 import { ServiceType } from '../../../../base-components/webapp/core/ServiceType';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
@@ -35,36 +31,8 @@ export class EditTicketDialogContext extends Context {
     private organisation: Organisation;
 
     public async initContext(): Promise<void> {
-        super.initContext();
-        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, {
-            eventSubscriberId: EditTicketDialogContext.CONTEXT_ID,
-            eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
-                if (eventId === FormEvent.VALUES_CHANGED) {
-                    const organisationValue = data.changedValues.find(
-                        (cv) => cv[0] && cv[0].property === TicketProperty.ORGANISATION_ID
-                    );
-                    if (organisationValue) {
-                        this.handleOrganisation(organisationValue[1]);
-                    }
-
-                    const contactValue = data.changedValues.find(
-                        (cv) => cv[0] && cv[0].property === TicketProperty.CONTACT_ID
-                    );
-                    if (contactValue) {
-                        this.handleContact(contactValue[1]);
-                    }
-                }
-            }
-
-        });
-
+        await super.initContext();
         await this.setFormObject(false);
-
-        const ticket = await this.getObject<Ticket>(KIXObjectType.TICKET);
-        if (ticket) {
-            this.handleContact(new FormFieldValue(ticket.ContactID));
-            this.handleOrganisation(new FormFieldValue(ticket.OrganisationID));
-        }
     }
 
     public async setFormObject(overwrite: boolean = true): Promise<void> {
@@ -94,7 +62,12 @@ export class EditTicketDialogContext extends Context {
     private async loadTicket(): Promise<Ticket> {
         const ticketId = this.getObjectId();
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS, TicketProperty.ARTICLES, ArticleProperty.ATTACHMENTS]
+            null, null, null,
+            [
+                KIXObjectProperty.DYNAMIC_FIELDS,
+                TicketProperty.ARTICLES,
+                ArticleProperty.ATTACHMENTS
+            ]
         );
 
         let tickets: Ticket[];
@@ -137,62 +110,8 @@ export class EditTicketDialogContext extends Context {
         return this.objectLists.get(objectType) as any[];
     }
 
-    public reset(): void {
-        super.reset();
-        this.contact = null;
-        this.organisation = null;
-    }
-
-    private async handleOrganisation(value: FormFieldValue): Promise<void> {
-        let organisationId = null;
-        if (value && value.value) {
-            if (!isNaN(value.value)) {
-                const organisations = await KIXObjectService.loadObjects<Organisation>(
-                    KIXObjectType.ORGANISATION, [value.value]
-                );
-                if (organisations && organisations.length) {
-                    this.organisation = organisations[0];
-                    organisationId = this.organisation ? this.organisation.ID : null;
-                }
-            } else {
-                organisationId = value.value;
-                this.organisation = null;
-            }
-        } else {
-            this.organisation = null;
-        }
-
-        await this.setFormObject();
-
-        this.listeners.forEach(
-            (l) => l.objectChanged(organisationId, this.organisation, KIXObjectType.ORGANISATION)
-        );
-    }
-
-    private async handleContact(value: FormFieldValue): Promise<void> {
-        let contactId = null;
-        if (value && value.value) {
-            if (!isNaN(value.value)) {
-                const contacts = await KIXObjectService.loadObjects<Contact>(
-                    KIXObjectType.CONTACT, [value.value]
-                );
-                if (contacts && contacts.length) {
-                    this.contact = contacts[0];
-                    contactId = this.contact ? this.contact.ID : null;
-                }
-            } else {
-                contactId = value.value;
-                this.contact = null;
-            }
-        } else {
-            this.contact = null;
-        }
-
-        await this.setFormObject();
-
-        this.listeners.forEach(
-            (l) => l.objectChanged(contactId, this.contact, KIXObjectType.CONTACT)
-        );
+    public getObjectId(): number {
+        return Number(this.objectId);
     }
 
 }

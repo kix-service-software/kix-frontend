@@ -327,9 +327,9 @@ describe('Table Tests', () => {
                 new DefaultColumnConfiguration(null, null, null, '2'),
                 new DefaultColumnConfiguration(null, null, null, '3')
             ]);
-            expect(table['columnConfiguration']).exist;
-            expect(table['columnConfiguration']).is.an('array');
-            expect(table['columnConfiguration'].length).equal(4);
+            expect(table['columnConfigurations']).exist;
+            expect(table['columnConfigurations']).is.an('array');
+            expect(table['columnConfigurations'].length).equal(4);
         });
     });
 
@@ -445,7 +445,7 @@ describe('Table Tests', () => {
             const column1 = new DefaultColumnConfiguration(null, null, null, '4');
             const column2 = new DefaultColumnConfiguration(null, null, null, '5');
 
-            await table.addColumns([column1, column2]);
+            await table.addAdditionalColumns([column1, column2]);
             await table.initialize();
 
             const columns = table.getColumns();
@@ -464,7 +464,7 @@ describe('Table Tests', () => {
             const column2 = new DefaultColumnConfiguration(null, null, null, '5');
 
             await table.initialize();
-            await table.addColumns([column1, column2]);
+            await table.addAdditionalColumns([column1, column2]);
 
             const columns = table.getColumns();
             expect(columns).exist;
@@ -492,7 +492,7 @@ describe('Table Tests', () => {
 
         it('Should add the column only one time.', async () => {
             const column = new DefaultColumnConfiguration(null, null, null, '2');
-            await table.addColumns([column, column]);
+            await table.addAdditionalColumns([column, column]);
 
             const columns = table.getColumns();
             expect(columns).exist;

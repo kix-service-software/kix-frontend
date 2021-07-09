@@ -17,6 +17,7 @@ import { ContextService } from '../../../../modules/base-components/webapp/core/
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { TicketDetailsContext } from './context';
 
 export class UIModule implements IUIModule {
 
@@ -36,10 +37,11 @@ export class UIModule implements IUIModule {
     private async registerContexts(): Promise<void> {
         const newTicketContext = new ContextDescriptor(
             NewTicketDialogContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.DIALOG, ContextMode.CREATE,
-            false, 'new-ticket-dialog', ['tickets'], NewTicketDialogContext,
+            false, 'object-dialog', ['tickets'], NewTicketDialogContext,
             [
                 new UIComponentPermission('tickets', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Ticket', 'kix-icon-ticket', TicketDetailsContext.CONTEXT_ID, 100
         );
         ContextService.getInstance().registerContext(newTicketContext);
     }

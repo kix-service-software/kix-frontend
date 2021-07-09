@@ -11,8 +11,7 @@ import { AbstractAction } from '../../../../../../../modules/base-components/web
 import { UIComponentPermission } from '../../../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../../../modules/base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../../../model/ContextMode';
+import { NewFAQCategoryDialogContext } from '../../context';
 
 export class FAQCategoryCreateAction extends AbstractAction {
 
@@ -26,9 +25,7 @@ export class FAQCategoryCreateAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            null, KIXObjectType.FAQ_CATEGORY, ContextMode.CREATE_ADMIN, null, true, 'Translatable#Knowledge Database'
-        );
+        ContextService.getInstance().setActiveContext(NewFAQCategoryDialogContext.CONTEXT_ID);
     }
 
 }

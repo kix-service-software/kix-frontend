@@ -10,7 +10,7 @@
 import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
-import { FormService } from '../../core/FormService';
+import { ContextService } from '../../core/ContextService';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 
 declare var CodeMirror: any;
@@ -44,13 +44,13 @@ class Component extends FormInputComponent<string, ComponentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
 
-        const placeholderText = this.state.field.placeholder
-            ? this.state.field.placeholder
-            : this.state.field.required ? this.state.field.label : '';
+        const placeholderText = this.state.field?.placeholder
+            ? this.state.field?.placeholder
+            : this.state.field?.required ? this.state.field?.label : '';
 
         this.state.placeholder = await TranslationService.translate(placeholderText);
-        if (this.state.field && this.state.field.options) {
-            const rowOption = this.state.field.options.find(
+        if (this.state.field && this.state.field?.options) {
+            const rowOption = this.state.field?.options.find(
                 (o) => o.option === 'ROWS'
             );
             if (rowOption && !isNaN(Number(rowOption.value)) && rowOption.value > 0) {
@@ -64,16 +64,6 @@ class Component extends FormInputComponent<string, ComponentState> {
             setTimeout(() => {
                 this.initCodeEditor();
             }, 100);
-        }
-    }
-
-    protected async setInvalidState(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        if (formInstance && this.state.field) {
-            const value = formInstance.getFormFieldValue(this.state.field.instanceId);
-            if (value && !this.codeMirror) {
-                this.state.invalid = !value.valid;
-            }
         }
     }
 
@@ -97,7 +87,7 @@ class Component extends FormInputComponent<string, ComponentState> {
             }
 
             if (language) {
-                const textareaElement = (this as any).getEl(this.state.field.instanceId);
+                const textareaElement = (this as any).getEl(this.state.field?.instanceId);
                 if (textareaElement) {
                     this.codeMirror = CodeMirror.fromTextArea(
                         textareaElement,
@@ -105,7 +95,7 @@ class Component extends FormInputComponent<string, ComponentState> {
                             value: this.state.currentValue,
                             lineNumbers: true,
                             mode: language,
-                            readOnly: this.state.field.readonly,
+                            readOnly: this.state.field?.readonly,
                             extraKeys: {
                                 'Ctrl-Space': 'autocomplete'
                             }
@@ -143,8 +133,9 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const value = formInstance.getFormFieldValue<string>(this.state.field.instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const value = formInstance.getFormFieldValue<string>(this.state.field?.instanceId);
         if (value) {
             this.state.currentValue = value.value;
         }

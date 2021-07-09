@@ -1,8 +1,6 @@
 {
     "dependencies": [
         "require ./components/admin-notifications",
-        "require ./components/edit-notification-dialog",
-        "require ./components/new-notification-dialog",
         "require ./components/notification-filter-cell-content",
         "require ./components/notification-info-widget",
         "require ./components/notification-input-email-recipient",

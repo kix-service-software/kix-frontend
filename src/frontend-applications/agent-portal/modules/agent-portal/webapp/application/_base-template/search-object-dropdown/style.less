@@ -1,0 +1,44 @@
+/**
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+.search-object-dropdown-container {
+    position: relative;
+    font-size: 1rem;
+    border-radius: @border-radius;
+    display: inline-grid;
+    grid-template-columns: max-content max-content;
+    background: @secondary-6;
+
+    .search-object-input {
+        max-height: unset;
+        border: none;
+        width: 15rem;
+    }
+
+    .search-button {
+        cursor: pointer;
+        background-color: @primary-2;
+        color: @secondary-6;
+
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: max-content;
+        grid-column-gap: .75rem;
+        align-items: center;
+
+        height: 100%;
+        border-top-left-radius: @border-radius;
+        border-bottom-left-radius: @border-radius;
+        padding: 0 .75rem 0 .5rem;
+
+        &:hover {
+            background-color: @primary-0;
+        }
+    }
+}

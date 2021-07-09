@@ -11,7 +11,6 @@ import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { UserLabelProvider } from '../../core/UserLabelProvider';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { UserDetailsContext } from '../../core/admin';
 import { User } from '../../../model/User';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
@@ -32,13 +31,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         this.state.labelProvider = new UserLabelProvider();
-        const context = await ContextService.getInstance().getContext<UserDetailsContext>(
-            UserDetailsContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         context.registerListener('user-personal-settings-widget', {
-            sidebarToggled: () => { return; },
-            explorerBarToggled: () => { return; },
+            sidebarRightToggled: () => { return; },
+            sidebarLeftToggled: () => { return; },
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
             scrollInformationChanged: () => { return; },
@@ -74,7 +71,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async createMyQueuesLabels(user: User): Promise<void> {
         const myQueues = user.Preferences.find((p) => p.ID === PersonalSettingsProperty.MY_QUEUES);
         if (myQueues && myQueues.Value) {
-            const queueIds = myQueues.Value.split(',').map((v) => Number(v));
+            const queueIds = Array.isArray(myQueues.Value) ? myQueues.Value :
+                myQueues.Value.split(',').map((v) => Number(v));
             const queues = await KIXObjectService.loadObjects('Queue', queueIds);
             this.state.queueLabels = queues.map((q) => new Label(q, null, null, null, null, null, true));
         }

@@ -12,8 +12,6 @@ import { AbstractAction } from '../../../../../modules/base-components/webapp/co
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../model/ContextMode';
 
 export class LinkedObjectsEditAction extends AbstractAction {
 
@@ -28,10 +26,9 @@ export class LinkedObjectsEditAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        await ContextService.getInstance().setDialogContext(
-            EditLinkedObjectsDialogContext.CONTEXT_ID,
-            KIXObjectType.LINK,
-            ContextMode.EDIT_LINKS
+        const context = ContextService.getInstance().getActiveContext();
+        await ContextService.getInstance().setActiveContext(
+            EditLinkedObjectsDialogContext.CONTEXT_ID, context?.getObjectId()
         );
     }
 }

@@ -31,7 +31,7 @@ export class ConfigItemVersionContentProvider extends TableContentProvider<Versi
     public async loadData(): Promise<Array<RowObject<Version>>> {
         const rowObjects = [];
         if (this.contextId) {
-            const context = await ContextService.getInstance().getContext(this.contextId);
+            const context = ContextService.getInstance().getActiveContext();
             const versions = await context.getObjectList(KIXObjectType.CONFIG_ITEM_VERSION);
             if (versions) {
                 const translatedCurrentVersion = await TranslationService.translate('Translatable#current');

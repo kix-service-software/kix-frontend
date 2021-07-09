@@ -36,15 +36,22 @@ export class ContextConfigurationResolver {
     public async resolve(
         token: string, configuration: ContextConfiguration, sysConfigOptions: SysConfigOption[]
     ): Promise<ContextConfiguration> {
+        if (!configuration.sidebars && configuration['sidebars']) {
+            configuration.sidebars = configuration['sidebars'];
+            delete configuration['sidebars'];
+        }
+        if (!configuration.explorer && configuration['explorer']) {
+            configuration.explorer = configuration['explorer'];
+            delete configuration['explorer'];
+        }
 
         const configIds = [
-            ...configuration.content.map((c) => c.configurationId),
-            ...configuration.lanes.map((c) => c.configurationId),
-            ...configuration.sidebars.map((c) => c.configurationId),
-            ...configuration.explorer.map((c) => c.configurationId),
-            ...configuration.overlays.map((c) => c.configurationId),
-            ...configuration.others.map((c) => c.configurationId),
-            ...configuration.dialogs.map((c) => c.configurationId)
+            ...(configuration.content || []).map((c) => c.configurationId),
+            ...(configuration.lanes || []).map((c) => c.configurationId),
+            ...(configuration.sidebars || []).map((c) => c.configurationId),
+            ...(configuration.explorer || []).map((c) => c.configurationId),
+            ...(configuration.overlays || []).map((c) => c.configurationId),
+            ...(configuration.others || []).map((c) => c.configurationId)
         ];
 
         const configurations = await ResolverUtil.loadConfigurations(token, configIds, [], sysConfigOptions);
@@ -55,13 +62,12 @@ export class ContextConfigurationResolver {
         await this.resolveWidgetConfigurations(token, configuration.explorer, configurations, sysConfigOptions);
         await this.resolveWidgetConfigurations(token, configuration.overlays, configurations, sysConfigOptions);
         await this.resolveWidgetConfigurations(token, configuration.others, configurations, sysConfigOptions);
-        await this.resolveWidgetConfigurations(token, configuration.dialogs, configurations, sysConfigOptions);
 
         return configuration;
     }
 
     private async resolveWidgetConfigurations(
-        token: string, widgets: ConfiguredWidget[], configurations: WidgetConfiguration[],
+        token: string, widgets: ConfiguredWidget[] = [], configurations: WidgetConfiguration[],
         sysConfigOptions: SysConfigOption[]
     ): Promise<void> {
         for (const w of widgets) {

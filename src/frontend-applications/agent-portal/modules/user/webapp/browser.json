@@ -1,7 +1,5 @@
 {
     "dependencies": [
-        "require ./components/edit-user-role-dialog",
-        "require ./components/new-user-role-dialog",
         "require ./components/user-admin-roles",
         "require ./components/user-admin-users",
         "require ./components/user-assigned-roles-widget",
@@ -13,7 +11,6 @@
         "require ./components/permission-input",
         "require ./components/setup-superuser",
         "require ./components/setup-admin-password",
-        "require ./core",
         "require ./core/UserUIModule"
     ]
 }

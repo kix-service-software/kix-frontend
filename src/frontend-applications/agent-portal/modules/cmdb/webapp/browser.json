@@ -1,5 +1,6 @@
 {
     "dependencies": [
+        "require ./components/asset-class-chooser",
         "require ./components/cmdb-admin-ci-classes",
         "require ./components/cmdb-module",
         "require ./components/compare-config-item-version-dialog",
@@ -13,14 +14,7 @@
         "require ./components/config-item-info",
         "require ./components/config-item-version-compare-legend",
         "require ./components/config-item-version-details",
-        "require ./components/edit-config-item-class-dialog",
-        "require ./components/edit-config-item-dialog",
-        "require ./components/edit-general-catalog-dialog",
         "require ./components/go-to-version-cell",
-        "require ./components/new-config-item-class-dialog",
-        "require ./components/new-config-item-dialog",
-        "require ./components/new-general-catalog-dialog",
-        "require ./components/search-config-item-dialog",
         "require ./core"
     ]
 }

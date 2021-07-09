@@ -18,6 +18,7 @@ import { ServiceType } from '../../../../base-components/webapp/core/ServiceType
 import { SortUtil } from '../../../../../model/SortUtil';
 import { ContactFormService } from '../../core';
 import { UserProperty } from '../../../../user/model/UserProperty';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends FormInputComponent<string[], ComponentState> {
 
@@ -42,9 +43,9 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     public async update(): Promise<void> {
-        const placeholderText = this.state.field.placeholder
-            ? this.state.field.placeholder
-            : this.state.field.required ? this.state.field.label : '';
+        const placeholderText = this.state.field?.placeholder
+            ? this.state.field?.placeholder
+            : this.state.field?.required ? this.state.field?.label : '';
 
         this.state.placeholder = await TranslationService.translate(placeholderText);
     }
@@ -59,11 +60,14 @@ class Component extends FormInputComponent<string[], ComponentState> {
         if (treeHandler) {
             treeHandler.setTree(nodes, null, true);
         }
+
+        (this as any).setStateDirty('field');
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const value = formInstance.getFormFieldValue<number[] | number>(this.state.field.instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const value = formInstance.getFormFieldValue<number[] | number>(this.state.field?.instanceId);
         if (value) {
             const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
             if (treeHandler) {
@@ -91,11 +95,12 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     private async setFields(clear: boolean = true): Promise<void> {
-        if (!this.state.field.children || !this.state.field.children.length || clear) {
+        if (!this.state.field?.children || !this.state.field?.children.length || clear) {
             const formService = ServiceRegistry.getServiceInstance<ContactFormService>(
                 KIXObjectType.CONTACT, ServiceType.FORM
             );
-            const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+            const context = ContextService.getInstance().getActiveContext();
+            const formInstance = await context?.getFormManager()?.getFormInstance();
 
             if (formService && formInstance) {
                 if (this.currentAccesses) {

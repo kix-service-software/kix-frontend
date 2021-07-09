@@ -31,7 +31,7 @@ import { KIXObjectFormService } from './KIXObjectFormService';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { FormGroupConfiguration } from '../../../../model/configuration/FormGroupConfiguration';
 import { ContextService } from './ContextService';
-import { ContextType } from '../../../../model/ContextType';
+import { Context } from '../../../../model/Context';
 
 export class FormInstance {
 
@@ -42,6 +42,10 @@ export class FormInstance {
     private savedValues: Map<string, [FormFieldConfiguration, FormFieldValue<any>]> = null;
 
     private form: FormConfiguration;
+
+    public instanceId: string = IdService.generateDateBasedId('FormInstance');
+
+    public constructor(public context: Context) { }
 
     public provideFixedValue(property: string, value: FormFieldValue, templateField?: FormFieldConfiguration): void {
         this.fixedValues.set(property, [templateField, value]);
@@ -64,13 +68,10 @@ export class FormInstance {
         this.templateValues.set(property, [templateField, value]);
     }
 
-    public async initFormInstance(formId: string, kixObject: KIXObject, readonly?: boolean): Promise<void> {
+    public async initFormInstance(formId: string, kixObject: KIXObject): Promise<void> {
         this.form = await FormService.getInstance().getForm(formId);
         FormFactory.initForm(this.form);
         await this.initFormFields(kixObject);
-        if (typeof readonly !== 'undefined' && readonly !== null) {
-            this.setFormReadonly(readonly);
-        }
     }
 
     public setFormReadonly(readonly: boolean = true): void {
@@ -88,6 +89,7 @@ export class FormInstance {
     private setFieldsReadonly(formFields: FormFieldConfiguration[], readonly: boolean = true): void {
         formFields.forEach((f) => {
             f.readonly = readonly;
+            EventService.getInstance().publish(FormEvent.FIELD_READONLY_CHANGED, { instanceId: f.instanceId });
             if (Array.isArray(f.children) && f.children.length) {
                 this.setFieldsReadonly(f.children, readonly);
             }
@@ -347,14 +349,14 @@ export class FormInstance {
     }
 
     public async provideFormFieldValuesForProperties(
-        values: Array<[string, any]>, originInstanceId: string, silent?: boolean
+        values: Array<[string, any]>, originInstanceId: string, silent?: boolean, validate: boolean = true
     ): Promise<void> {
         const instanceValues: Array<[string, any]> = values.map((v) => {
             const formField = this.getFormFieldByProperty(v[0]);
             return [formField ? formField.instanceId : v[0], v[1]];
         });
 
-        this.provideFormFieldValues(instanceValues.filter((iv) => iv[0] !== null), originInstanceId, silent);
+        this.provideFormFieldValues(instanceValues.filter((iv) => iv[0] !== null), originInstanceId, silent, validate);
     }
 
     public async provideFormFieldValues<T>(
@@ -374,13 +376,22 @@ export class FormInstance {
             const formField = this.getFormField(instanceId);
             if (validate) {
                 const result = await FormValidationService.getInstance().validate(formField, this.form.id);
-                formFieldValue.valid = result.findIndex((vr) => vr.severity === ValidationSeverity.ERROR) === -1;
+                formFieldValue.valid = true;
+                formFieldValue.errorMessages = [];
+                result.forEach((r) => {
+                    if (r.severity === ValidationSeverity.ERROR) {
+                        formFieldValue.valid = false;
+                        formFieldValue.errorMessages.push(r.message);
+                    }
+                });
+                EventService.getInstance().publish(FormEvent.FIELD_VALIDATED, formField);
             }
             changedFieldValues.push([formField, formFieldValue]);
         }
 
         if (!silent) {
-            const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+            const dialogContext = ContextService.getInstance().getActiveContext();
+
             if (dialogContext) {
                 await dialogContext.setFormObject();
             }
@@ -591,13 +602,22 @@ export class FormInstance {
         const fieldResult = await FormValidationService.getInstance().validate(field, this.form.id);
         const formFieldValue = this.getFormFieldValue(field.instanceId);
         if (formFieldValue) {
-            formFieldValue.valid = fieldResult.findIndex((vr) => vr.severity === ValidationSeverity.ERROR) === -1;
+            formFieldValue.valid = true;
+            formFieldValue.errorMessages = [];
+            fieldResult.forEach((r) => {
+                if (r.severity === ValidationSeverity.ERROR) {
+                    formFieldValue.valid = false;
+                    formFieldValue.errorMessages.push(r.message);
+                }
+            });
             result = fieldResult;
             if ((!field.empty || field.asStructure) && field.children && !!field.children.length) {
                 const childrenResult = await this.validateFields(field.children);
                 result = [...result, ...childrenResult];
             }
         }
+
+        EventService.getInstance().publish(FormEvent.FIELD_VALIDATED, field);
         return result;
     }
 

@@ -40,7 +40,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const configurations = [];
         const widget = new WidgetConfiguration(
             'ticket-state-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
-            'edit-ticket-state-dialog', 'Translatable#Edit State', [], null, null,
+            'object-dialog-form-widget', 'Translatable#Edit State', [], null, null,
             false, false, 'kix-icon-edit'
         );
         configurations.push(widget);
@@ -48,13 +48,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), 'Ticket State Edit Dialog', ConfigurationType.Context,
-                this.getModuleId(), [], [], [], [], [], [], [], [],
+                this.getModuleId(), [], [], [],
                 [
                     new ConfiguredDialogWidget(
                         'ticket-state-edit-dialog-widget', 'ticket-state-edit-dialog-widget',
                         KIXObjectType.TICKET_STATE, ContextMode.EDIT_ADMIN
                     )
-                ]
+                ], [], [], [], []
             )
         );
 

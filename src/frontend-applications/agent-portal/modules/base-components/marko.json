@@ -5,7 +5,6 @@
     ],
     "tags-dir": [
         "./webapp/components/",
-        "./webapp/components/dialog",
         "./webapp/components/field-container",
         "./webapp/components/form-list",
         "./webapp/components/form-list-tree",
@@ -14,6 +13,7 @@
         "./webapp/components/standard-table-NEW",
         "./webapp/components/tree",
         "./webapp/components/overlay",
-        "./webapp/components/placeholder"
+        "./webapp/components/placeholder",
+        "./webapp/components/object-dialog"
     ]
 }

@@ -13,28 +13,18 @@ import { LinkObject } from '../../../model/LinkObject';
 import { CreateLinkDescription } from '../../../server/api/CreateLinkDescription';
 import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { ContextType } from '../../../../../model/ContextType';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import {
-    AuthenticationSocketClient
-} from '../../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { AuthenticationSocketClient } from '../../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { LinkUtil, EditLinkedObjectsDialogContext } from '../../core';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { DataType } from '../../../../../model/DataType';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { DialogService } from '../../../../../modules/base-components/webapp/core/DialogService';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import {
-    TableEvent, TableFactoryService, TableEventData, ValueState
-} from '../../../../base-components/webapp/core/table';
+import { TableEvent, TableFactoryService, TableEventData, ValueState } from '../../../../base-components/webapp/core/table';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
-import { KIXObjectPropertyFilter } from '../../../../../model/KIXObjectPropertyFilter';
-
-
-
 import { LinkType } from '../../../model/LinkType';
 import { LinkTypeDescription } from '../../../model/LinkTypeDescription';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
@@ -44,11 +34,11 @@ import { Error } from '../../../../../../../server/model/Error';
 import { IKIXObjectService } from '../../../../../modules/base-components/webapp/core/IKIXObjectService';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { Context } from '../../../../../model/Context';
 
 class Component {
 
     private state: ComponentState;
-    private mainObject: KIXObject = null;
     private availableLinkObjects: LinkObject[] = [];
     private newLinkObjects: LinkObject[] = [];
     private deleteLinkObjects: LinkObject[] = [];
@@ -57,11 +47,9 @@ class Component {
     private linkDescriptions: CreateLinkDescription[] = [];
 
     private tableSubscriber: IEventSubscriber;
-    private linkDialogListenerId: string;
 
     public onCreate(input: any): void {
         this.state = new ComponentState(input.instanceId);
-        this.mainObject = null;
         this.availableLinkObjects = [];
         this.newLinkObjects = [];
         this.deleteLinkObjects = [];
@@ -71,31 +59,38 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Cancel', 'Translatable#Assign Link', 'Translatable#Delete Link', 'Translatable#Submit'
         ]);
 
-        if (context) {
+        this.state.allowCreate = await AuthenticationSocketClient.getInstance().checkPermissions(
+            [new UIComponentPermission('links', [CRUD.CREATE])]
+        );
 
-            this.state.allowCreate = await AuthenticationSocketClient.getInstance().checkPermissions(
-                [new UIComponentPermission('links', [CRUD.CREATE])]
-            );
+        this.state.allowDelete = this.state.allowCreate;
 
-            this.state.allowDelete = this.state.allowCreate;
+        const context = ContextService.getInstance().getActiveContext();
+        let sourceContext: Context;
 
-            const contextObject = await context.getObject();
+        const sourceContextInformation = context?.getAdditionalInformation('SourceContext');
+        if (sourceContextInformation) {
+            sourceContext = ContextService.getInstance().getContext(sourceContextInformation?.instanceId);
+        }
 
+        const contextObject = await sourceContext?.getObject();
+        const text = await TranslationService.translate('Translatable#Edit Links');
+        this.state.title = text + ' - ' + await sourceContext?.getDisplayText();
+
+        if (contextObject) {
             const objects = await KIXObjectService.loadObjects(
                 contextObject.KIXObjectType, [contextObject.ObjectId],
                 new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.LINKS], [KIXObjectProperty.LINKS])
             );
 
             if (objects && objects.length) {
-                this.mainObject = objects[0];
+                this.state.mainObject = objects[0];
 
-                this.availableLinkObjects = await LinkUtil.getLinkObjects(this.mainObject);
+                this.availableLinkObjects = await LinkUtil.getLinkObjects(this.state.mainObject);
                 this.availableLinkObjects.sort((a, b) => {
                     return SortUtil.compareValues(a.linkedObjectType, b.linkedObjectType, DataType.STRING);
                 });
@@ -104,22 +99,25 @@ class Component {
                 await this.reviseLinkObjects();
                 await this.setInitialLinkDescriptions();
 
-                const editLinksContext = await ContextService.getInstance().getContext<EditLinkedObjectsDialogContext>(
-                    EditLinkedObjectsDialogContext.CONTEXT_ID
-                );
+                const editLinksContext = ContextService.getInstance().getActiveContext();
                 editLinksContext.setObjectList(KIXObjectType.LINK_OBJECT, this.availableLinkObjects);
 
                 await this.prepareTable();
 
-                this.linkDialogListenerId = 'result-listener-link-' + this.mainObject.KIXObjectType + '-edit-links';
-                DialogService.getInstance()
-                    .registerDialogResultListener<CreateLinkDescription[][]>(
-                        this.linkDialogListenerId, 'object-link', this.linksChanged.bind(this)
-                    );
+                this.setLinkDescriptions();
             }
         }
 
         this.state.loading = false;
+    }
+
+    private setLinkDescriptions(): void {
+        this.state.linkDescriptions = this.linkDescriptions.filter((ld) => !this.deleteLinkObjects
+            .some((dlo) =>
+                dlo.linkedObjectType === ld.linkableObject.KIXObjectType &&
+                dlo.linkedObjectKey.toString() === ld.linkableObject.ObjectId.toString()
+            )
+        );
     }
 
     public onDestroy(): void {
@@ -127,6 +125,14 @@ class Component {
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_FILTERED, this.tableSubscriber);
         TableFactoryService.getInstance().destroyTable('edit-linked-objects-dialog');
+    }
+
+    public async linksAdded(result: CreateLinkDescription[][]): Promise<void> {
+        this.linkDescriptions = result[0];
+        await this.addNewLinks(result[1]);
+        this.state.table.setRowObjectValueState(this.deleteLinkObjects, ValueState.HIGHLIGHT_REMOVED);
+        this.setCanSubmit();
+        this.setLinkDescriptions();
     }
 
     private async reviseLinkObjects(): Promise<void> {
@@ -179,10 +185,10 @@ class Component {
             );
 
             if (linkedObject) {
-                const link = this.mainObject.Links.find((l) => l.ID === lo.ObjectId);
+                const link = this.state.mainObject.Links.find((l) => l.ID === lo.ObjectId);
                 if (link) {
                     const linkType = linkTypes.find(
-                        (lt) => LinkUtil.isLinkType(lt, link, lo, this.mainObject)
+                        (lt) => LinkUtil.isLinkType(lt, link, lo, this.state.mainObject)
                     );
                     if (linkType) {
                         this.linkDescriptions.push(
@@ -232,42 +238,6 @@ class Component {
         this.state.canDelete = !!this.selectedLinkObjects.length;
     }
 
-    public async filter(textFilterValue?: string, filter?: KIXObjectPropertyFilter): Promise<void> {
-        this.state.table.setFilter(textFilterValue, filter ? filter.criteria : []);
-        this.state.table.filter();
-    }
-
-    public async openAddLinkDialog(): Promise<void> {
-        const objectName = await LabelService.getInstance().getObjectName(this.mainObject.KIXObjectType);
-        const dialogTitle = await TranslationService.translate('Translatable#link {0}', [objectName]);
-
-        const linkDescriptions = this.linkDescriptions.filter((ld) => !this.deleteLinkObjects
-            .some((dlo) =>
-                dlo.linkedObjectType === ld.linkableObject.KIXObjectType &&
-                dlo.linkedObjectKey.toString() === ld.linkableObject.ObjectId.toString()
-            )
-        );
-
-        DialogService.getInstance().openOverlayDialog(
-            'link-object-dialog',
-            {
-                linkDescriptions,
-                objectType: this.mainObject.KIXObjectType,
-                resultListenerId: this.linkDialogListenerId,
-                rootObject: this.mainObject
-            },
-            dialogTitle,
-            'kix-icon-new-link'
-        );
-    }
-
-    private async linksChanged(result: CreateLinkDescription[][]): Promise<void> {
-        this.linkDescriptions = result[0];
-        await this.addNewLinks(result[1]);
-        this.state.table.setRowObjectValueState(this.deleteLinkObjects, ValueState.HIGHLIGHT_REMOVED);
-        this.setCanSubmit();
-    }
-
     private async addNewLinks(newLinkDescriptions: CreateLinkDescription[]): Promise<void> {
         if (newLinkDescriptions.length) {
             const newLinkObjects: LinkObject[] = [];
@@ -292,9 +262,7 @@ class Component {
             this.availableLinkObjects = [...this.availableLinkObjects, ...newLinkObjects];
             this.newLinkObjects = [...this.newLinkObjects, ...newLinkObjects];
 
-            const context = await ContextService.getInstance().getContext<EditLinkedObjectsDialogContext>(
-                EditLinkedObjectsDialogContext.CONTEXT_ID
-            );
+            const context = ContextService.getInstance().getActiveContext();
             context.setObjectList(KIXObjectType.LINK_OBJECT, [...this.availableLinkObjects]);
             context.getObjectList(KIXObjectType.LINK_OBJECT);
 
@@ -346,7 +314,7 @@ class Component {
     }
 
     public cancel(): void {
-        DialogService.getInstance().closeMainDialog();
+        ContextService.getInstance().toggleActiveContext();
     }
 
     private setCanSubmit(): void {
@@ -374,26 +342,22 @@ class Component {
             createLinksOK = await this.addLinks();
         }
 
-        BrowserUtil.toggleLoadingShield(false);
+        BrowserUtil.toggleLoadingShield('APP_SHIELD', false);
         if (createLinksOK && deleteLinksOK) {
             BrowserUtil.openSuccessOverlay('Translatable#Links updated.');
-            DialogService.getInstance().submitMainDialog();
-            const activeContext = ContextService.getInstance().getActiveContext();
-            if (activeContext) {
-                activeContext.getObject(null, true);
-            }
+            ContextService.getInstance().toggleActiveContext(undefined, undefined, true);
         }
     }
 
     private async addLinks(): Promise<boolean> {
         const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.LINK_OBJECT);
-        BrowserUtil.toggleLoadingShield(true, 'Translatable#Create Links');
+        BrowserUtil.toggleLoadingShield('APP_SHIELD', true, 'Translatable#Create Links');
         let ok = true;
         for (const newLinkObject of this.newLinkObjects) {
             await service.createObject(
                 KIXObjectType.LINK_OBJECT,
                 newLinkObject,
-                new CreateLinkObjectOptions(this.mainObject)
+                new CreateLinkObjectOptions(this.state.mainObject)
             ).catch(async (error) => {
                 const msg = await TranslationService.translate(
                     'Translatable#Can not create link ({0})',
@@ -408,7 +372,7 @@ class Component {
     }
 
     private async deleteLinks(linkIdsToDelete: number[]): Promise<boolean> {
-        BrowserUtil.toggleLoadingShield(true, 'Translatable#Links will be removed.');
+        BrowserUtil.toggleLoadingShield('APP_SHIELD', true, 'Translatable#Links will be removed.');
         const failIds = await KIXObjectService.deleteObject(KIXObjectType.LINK_OBJECT, linkIdsToDelete);
         return !failIds || !!!failIds.length;
     }

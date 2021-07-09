@@ -307,7 +307,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         const notesSidebar = new WidgetConfiguration(
             'home-dashboard-notes-widget', 'Translatable#Notes', ConfigurationType.Widget,
             'notes-widget', 'Translatable#Notes', [], null, null,
-            false, false, 'kix-icon-note', false
+            false, true, 'kix-icon-note', false
         );
         configurations.push(notesSidebar);
 

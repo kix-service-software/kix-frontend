@@ -118,6 +118,13 @@ class Extension extends KIXExtension implements IPersonalSettingsExtension {
                         )
                     )
                 ]
+            ),
+            new PersonalSetting(
+                'Translatable#Notifications',
+                PersonalSettingsProperty.DONT_ASK_DIALOG_ON_CLOSE,
+                'Translatable#Always close dialog tab without asking',
+                'Translatable#Helptext_PersonalSettings_Always_close_dialog_tab_without_asking_Hint',
+                'checkbox-input'
             )
         ];
     }

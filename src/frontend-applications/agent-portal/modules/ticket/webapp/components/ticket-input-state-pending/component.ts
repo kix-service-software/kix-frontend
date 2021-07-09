@@ -15,6 +15,7 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { SysConfigOption } from '../../../../sysconfig/model/SysConfigOption';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { SysConfigKey } from '../../../../sysconfig/model/SysConfigKey';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends FormInputComponent<Date, ComponentState> {
 
@@ -33,8 +34,9 @@ class Component extends FormInputComponent<Date, ComponentState> {
 
     public async setCurrentValue(): Promise<void> {
         let date = new Date();
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const value = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const value = formInstance.getFormFieldValue<number>(this.state.field?.instanceId);
         if (value.value) {
             date = new Date(value.value);
         } else {

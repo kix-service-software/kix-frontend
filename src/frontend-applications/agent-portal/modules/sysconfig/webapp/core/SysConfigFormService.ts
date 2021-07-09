@@ -50,9 +50,7 @@ export class SysConfigFormService extends KIXObjectFormService {
     }
 
     protected async prePrepareForm(form: FormConfiguration, kixObject?: KIXObject): Promise<void> {
-        const context = await ContextService.getInstance().getContext<EditSysConfigDialogContext>(
-            EditSysConfigDialogContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         if (context) {
             const sysconfigKeys = await context.getObjectList(
@@ -127,9 +125,7 @@ export class SysConfigFormService extends KIXObjectFormService {
     }
 
     public async initValues(form: FormConfiguration, formInstance: FormInstance): Promise<void> {
-        const context = await ContextService.getInstance().getContext<EditSysConfigDialogContext>(
-            EditSysConfigDialogContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         const sysconfigKeys = await context.getObjectList(
             KIXObjectType.SYS_CONFIG_OPTION_DEFINITION
@@ -211,9 +207,7 @@ export class SysConfigFormService extends KIXObjectFormService {
         const option = formField.options ? formField.options.find((o) => o.option === 'SYSCONFIG_NAME') : null;
 
         if (option) {
-            const context = await ContextService.getInstance().getContext<EditSysConfigDialogContext>(
-                EditSysConfigDialogContext.CONTEXT_ID
-            );
+            const context = ContextService.getInstance().getActiveContext();
 
             const sysconfigKeys = await context.getObjectList(
                 KIXObjectType.SYS_CONFIG_OPTION_DEFINITION

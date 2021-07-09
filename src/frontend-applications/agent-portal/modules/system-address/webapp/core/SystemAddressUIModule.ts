@@ -47,10 +47,11 @@ export class UIModule implements IUIModule {
         const newSystemAddressDialogContext = new ContextDescriptor(
             NewSystemAddressDialogContext.CONTEXT_ID, [KIXObjectType.SYSTEM_ADDRESS],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-system-address-dialog', ['system-addresses'], NewSystemAddressDialogContext,
+            false, 'object-dialog', ['system-addresses'], NewSystemAddressDialogContext,
             [
                 new UIComponentPermission('system/communication/systemaddresses', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#New Email Address', 'kix-icon-mail', SystemAddressDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(newSystemAddressDialogContext);
 
@@ -59,10 +60,11 @@ export class UIModule implements IUIModule {
         const editSystemAddressDialogContext = new ContextDescriptor(
             EditSystemAddressDialogContext.CONTEXT_ID, [KIXObjectType.SYSTEM_ADDRESS],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-system-address-dialog', ['system-addresses'], EditSystemAddressDialogContext,
+            false, 'object-dialog', ['system-addresses'], EditSystemAddressDialogContext,
             [
                 new UIComponentPermission('system/communication/systemaddresses', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Edit Email Address', 'kix-icon-mail', SystemAddressDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(editSystemAddressDialogContext);
 
@@ -72,7 +74,8 @@ export class UIModule implements IUIModule {
             false, 'object-details-page', ['system-addresses'], SystemAddressDetailsContext,
             [
                 new UIComponentPermission('system/communication/systemaddresses', [CRUD.READ])
-            ]
+            ],
+            'Translatable#Email Address Details', 'kix-icon-mail'
         );
         ContextService.getInstance().registerContext(systemAddressDetailsContext);
     }

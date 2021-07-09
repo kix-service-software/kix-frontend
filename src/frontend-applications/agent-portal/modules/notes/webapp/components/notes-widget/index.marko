@@ -6,13 +6,11 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.notes-container class={
     "note-editor-active": state.editorActive
 }>
     <widget
         instanceId=input.instanceId
-        minimizable=false
         title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Translatable#Notes")
         icon=(state.widgetConfiguration && state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "kix-icon-note")>
         <@content>

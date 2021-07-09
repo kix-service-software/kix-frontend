@@ -32,7 +32,7 @@ export class MacroActionTableContentProvider extends TableContentProvider<any> {
     }
 
     public async loadData(): Promise<RowObject[]> {
-        const context = await ContextService.getInstance().getContext(JobDetailsContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext();
         const job = context ? await context.getObject<Job>(KIXObjectType.MACRO_ACTION) : null;
 
         const rowObjectPromises: Array<Promise<RowObject<MacroAction>>> = [];

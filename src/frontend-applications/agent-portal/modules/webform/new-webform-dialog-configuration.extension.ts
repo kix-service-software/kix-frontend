@@ -49,7 +49,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const configurations = [];
         const newDialogWidget = new WidgetConfiguration(
             'web-form-new-dialog-widget', 'Webform New Dialog Widget', ConfigurationType.Widget,
-            'new-webform-dialog', 'Translatable#New Webform', [], null, null,
+            'object-dialog-form-widget', 'Translatable#New Webform', [], null, null,
             false, false, 'kix-icon-new-gear'
         );
         configurations.push(newDialogWidget);
@@ -57,13 +57,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-                this.getModuleId(), [], [], [], [], [], [], [], [],
+                this.getModuleId(), [], [], [],
                 [
                     new ConfiguredDialogWidget(
                         'web-form-new-dialog-widget', 'web-form-new-dialog-widget',
                         KIXObjectType.WEBFORM, ContextMode.CREATE_ADMIN
                     )
-                ]
+                ], [], [], [], []
             )
         );
         return configurations;
@@ -288,7 +288,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                                 )
                             ], undefined, undefined, undefined, undefined,
                             [
-                                ['requiredPermission', 'TicketRead,TicketCreate']
+                                ['requiredPermission', 'TicketCreate']
                             ]
                         )
                     )

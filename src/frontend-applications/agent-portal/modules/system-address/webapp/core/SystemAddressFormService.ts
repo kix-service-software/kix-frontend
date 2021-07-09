@@ -36,9 +36,9 @@ export class SystemAddressFormService extends KIXObjectFormService {
 
 
     public async getFormParameter(
-        formId: string, forUpdate: boolean = false, createOptions?: KIXObjectSpecificCreateOptions
+        forUpdate: boolean = false, createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<Array<[string, any]>> {
-        let parameter = await super.getFormParameter(formId, forUpdate, createOptions);
+        let parameter = await super.getFormParameter(forUpdate, createOptions);
 
         // filter parameter (updated by setup assistant)
         if (forUpdate) {

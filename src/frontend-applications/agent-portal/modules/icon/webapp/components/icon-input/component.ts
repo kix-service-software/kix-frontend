@@ -17,6 +17,7 @@ import { OverlayType } from '../../../../../modules/base-components/webapp/core/
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
 import { ObjectIcon } from '../../../model/ObjectIcon';
 import { FormService } from '../../../../base-components/webapp/core/FormService';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends FormInputComponent<any, ComponentState> {
 
@@ -59,8 +60,9 @@ class Component extends FormInputComponent<any, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const value = formInstance.getFormFieldValue<string | ObjectIcon>(this.state.field.instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const value = formInstance.getFormFieldValue<string | ObjectIcon>(this.state.field?.instanceId);
         if (value) {
             this.state.icon = value.value;
         }

@@ -166,7 +166,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'notification-create'
                 ],
                 [
-                    'notification-edit', 'print-action'
+                    'notification-edit'
                 ],
                 [],
                 [

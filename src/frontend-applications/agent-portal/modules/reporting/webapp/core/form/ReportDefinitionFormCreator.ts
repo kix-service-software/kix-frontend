@@ -44,10 +44,12 @@ import { ReportingFormUtil } from './ReportingFormUtil';
 
 export class ReportDefinitionFormCreator {
 
-    public static async createFormPages(form: FormConfiguration, reportDefinition: ReportDefinition): Promise<void> {
+    public static async createFormPages(
+        form: FormConfiguration, reportDefinition: ReportDefinition, formInstance: FormInstance
+    ): Promise<void> {
         const commonPage = await this.createCommonPage(reportDefinition);
-        const dataSourcePage = await this.createDataSourcePage(reportDefinition);
-        const outputFormatsPage = await this.createOutputFormatsPage(reportDefinition);
+        const dataSourcePage = await this.createDataSourcePage(reportDefinition, formInstance);
+        const outputFormatsPage = await this.createOutputFormatsPage(reportDefinition, formInstance);
 
         form.pages = [commonPage, dataSourcePage, outputFormatsPage];
     }
@@ -110,16 +112,18 @@ export class ReportDefinitionFormCreator {
         );
     }
 
-    private static async createDataSourcePage(reportDefinition: ReportDefinition): Promise<FormPageConfiguration> {
+    private static async createDataSourcePage(
+        reportDefinition: ReportDefinition, formInstance: FormInstance
+    ): Promise<FormPageConfiguration> {
         const dataSource = reportDefinition ? reportDefinition.DataSource : 'GenericSQL';
         const dataSourceField = this.createDataSourceField(dataSource);
         const outputHandlerField = ReportDefinitionFormCreator.createOutputHandlerFields(reportDefinition);
         const optionFields = await ReportDefinitionFormCreator.createDataSourceOptionFields(
-            reportDefinition, dataSource, dataSourceField
+            reportDefinition, dataSource, formInstance
         );
         dataSourceField.children = optionFields;
 
-        const parameterFields = await this.createDataSourceParameterFields(reportDefinition);
+        const parameterFields = await this.createDataSourceParameterFields(reportDefinition, formInstance);
         const dsGroup = new FormGroupConfiguration(
             'report-datasource-group', '', [], null, [dataSourceField]
         );
@@ -130,6 +134,13 @@ export class ReportDefinitionFormCreator {
         const parameterGroup = new FormGroupConfiguration(
             'report-datasource-parameter-group', '', [], null, parameterFields
         );
+
+        const optionFieldValues: Array<[string, any]> = optionFields.map((f) => [f.instanceId, f.defaultValue.value]);
+        await formInstance.provideFormFieldValues([
+            [dataSourceField.instanceId, dataSourceField.defaultValue.value],
+            [outputHandlerField.instanceId, outputHandlerField.defaultValue.value],
+            ...optionFieldValues
+        ], null);
 
         return new FormPageConfiguration(
             'report-datasource-page', 'Translatable#Datasource', [], true, false,
@@ -172,7 +183,7 @@ export class ReportDefinitionFormCreator {
     }
 
     public static async createDataSourceOptionFields(
-        reportDefinition: ReportDefinition, dataSource: string, dataSourceField: FormFieldConfiguration
+        reportDefinition: ReportDefinition, dataSource: string, formInstance: FormInstance
     ): Promise<FormFieldConfiguration[]> {
         const datasources = await KIXObjectService.loadObjects<DataSource>(
             KIXObjectType.REPORT_DATA_SOURCE, [dataSource]
@@ -191,11 +202,15 @@ export class ReportDefinitionFormCreator {
                             const sqlConfig = reportDefinition.Config['DataSource']['SQL'];
                             for (const dbms in sqlConfig) {
                                 if (sqlConfig[dbms]) {
-                                    optionFields.push(this.createDBMSField(dbms, parameter, sqlConfig[dbms]));
+                                    const dbmsField = await this.createDBMSField(
+                                        dbms, parameter, formInstance, sqlConfig[dbms]
+                                    );
+                                    optionFields.push(dbmsField);
                                 }
                             }
                         } else {
-                            optionFields.push(this.createDBMSField('any', parameter));
+                            const dbmsField = await this.createDBMSField('any', parameter, formInstance);
+                            optionFields.push(dbmsField);
                         }
                     }
                 }
@@ -204,10 +219,13 @@ export class ReportDefinitionFormCreator {
         return optionFields;
     }
 
-    private static createDBMSField(
-        dbms: string, parameter: ReportDataSourceOption, sqlValue?: string
-    ): FormFieldConfiguration {
+    private static async createDBMSField(
+        dbms: string, parameter: ReportDataSourceOption, formInstance: FormInstance, sqlValue?: string
+    ): Promise<FormFieldConfiguration> {
         const sqlField = this.createSQLField(parameter, sqlValue);
+
+        await formInstance.provideFormFieldValues([[sqlField.instanceId, sqlField.defaultValue?.value]], null);
+
         const dbmsField = new FormFieldConfiguration(
             'DBMS', 'Translatable#DBMS', 'DBMS', 'default-select-input',
             true, 'Translatable#Helptext_Reporting_ReportCreate_Datasource_DBMS',
@@ -243,7 +261,9 @@ export class ReportDefinitionFormCreator {
         const sqlField = new FormFieldConfiguration(
             parameter.Name, parameter.Label, parameter.Name, 'text-area-input',
             Boolean(parameter.Required), parameter.Description,
-            [new FormFieldOption(FormFieldOptions.LANGUAGE, 'sql')],
+            [
+                new FormFieldOption(FormFieldOptions.LANGUAGE, 'sql')
+            ],
             new FormFieldValue(value)
         );
         sqlField.instanceId = IdService.generateDateBasedId();
@@ -251,24 +271,26 @@ export class ReportDefinitionFormCreator {
     }
 
     private static async createDataSourceParameterFields(
-        reportDefinition: ReportDefinition
+        reportDefinition: ReportDefinition, formInstance: FormInstance
     ): Promise<FormFieldConfiguration[]> {
         const fields = [];
         if (reportDefinition && Array.isArray(reportDefinition.Config['Parameters'])) {
             const parameters: ReportParameter[] = reportDefinition.Config['Parameters'];
             for (const parameter of parameters) {
-                const field = await this.createParameterField(parameter);
+                const field = await this.createParameterField(parameter, formInstance);
                 fields.push(field);
             }
         } else {
-            const field = await this.createParameterField(null);
+            const field = await this.createParameterField(null, formInstance);
             fields.push(field);
         }
 
         return fields;
     }
 
-    private static async createParameterField(parameter: ReportParameter): Promise<FormFieldConfiguration> {
+    private static async createParameterField(
+        parameter: ReportParameter, formInstance: FormInstance
+    ): Promise<FormFieldConfiguration> {
         const parameterField = new FormFieldConfiguration(
             'report-parameter', 'Translatable#Parameter', ReportDefinitionProperty.PARAMTER, null,
             false, 'Translatable#Helptext_Reporting_ReportCreate_Parameter', []
@@ -282,13 +304,13 @@ export class ReportDefinitionFormCreator {
 
         if (parameter) {
             parameterField.empty = false;
-            await this.createParameterFields(parameterField, parameter);
+            await this.createParameterFields(parameterField, parameter, formInstance);
         }
         return parameterField;
     }
 
     public static async createParameterFields(
-        parameterField: FormFieldConfiguration, parameter: ReportParameter
+        parameterField: FormFieldConfiguration, parameter: ReportParameter, formInstance: FormInstance
     ): Promise<void> {
         const nameField = new FormFieldConfiguration(
             'report-parameter-name', 'Translatable#Name', ReportParameterProperty.NAME, null,
@@ -387,7 +409,8 @@ export class ReportDefinitionFormCreator {
         parameterField.children.push(referencesField);
 
         const possibleValuesField = new FormFieldConfiguration(
-            'report-parameter-posiible-values', 'Translatable#Possible Values', ReportParameterProperty.POSSIBLE_VALUES,
+            'report-parameter-posiible-values', 'Translatable#Possible Values',
+            ReportParameterProperty.POSSIBLE_VALUES,
             null, false, 'Translatable#Helptext_Reporting_ReportCreate_ParameterPossibleValues', []
         );
         possibleValuesField.instanceId = IdService.generateDateBasedId();
@@ -407,6 +430,19 @@ export class ReportDefinitionFormCreator {
         defaultField.parentInstanceId = parameterField.instanceId;
         ReportingFormUtil.setInputComponent(defaultField, parameter);
         parameterField.children.push(defaultField);
+
+        await formInstance.provideFormFieldValues([
+            [nameField.instanceId, nameField.defaultValue?.value],
+            [labelField.instanceId, labelField.defaultValue?.value],
+            [descriptionField.instanceId, descriptionField.defaultValue?.value],
+            [dataTypeField.instanceId, dataTypeField.defaultValue?.value],
+            [requiredField.instanceId, requiredField.defaultValue?.value],
+            [multipleField.instanceId, multipleField.defaultValue?.value],
+            [readonlyField.instanceId, readonlyField.defaultValue?.value],
+            [referencesField.instanceId, referencesField.defaultValue?.value],
+            [possibleValuesField.instanceId, possibleValuesField.defaultValue?.value],
+            [defaultField.instanceId, defaultField.defaultValue?.value]
+        ], null);
     }
 
     private static getReferenceNodes(): TreeNode[] {
@@ -420,20 +456,27 @@ export class ReportDefinitionFormCreator {
         ];
     }
 
-    private static async createOutputFormatsPage(reportDefinition: ReportDefinition): Promise<FormPageConfiguration> {
+    private static async createOutputFormatsPage(
+        reportDefinition: ReportDefinition, formInstance: FormInstance
+    ): Promise<FormPageConfiguration> {
         const titleField = new FormFieldConfiguration(
             'report-ouputformats-title', 'Translatable#Title', ReportDefinitionProperty.CONFIG_TITLE, null, false,
             'Translatable#Helptext_Reporting_ReportDefinitionCreate_Title'
         );
+        titleField.instanceId = IdService.generateDateBasedId();
         titleField.defaultValue = reportDefinition && reportDefinition.Config[ReportDefinitionProperty.CONFIG_TITLE]
             ? new FormFieldValue(reportDefinition.Config[ReportDefinitionProperty.CONFIG_TITLE])
             : null;
 
-        const outputFormatFields = await this.createOutputFormatFields(reportDefinition);
+        const outputFormatFields = await this.createOutputFormatFields(reportDefinition, formInstance);
 
         const group = new FormGroupConfiguration(
             'report-outputformats-group', 'Report Output Format Group', [], null, [titleField, ...outputFormatFields]
         );
+
+        await formInstance.provideFormFieldValues([
+            [titleField.instanceId, titleField.defaultValue?.value],
+        ], null);
 
         return new FormPageConfiguration(
             'report-outputformats-page', 'Translatable#Output Format', [], true, false, [group]
@@ -441,11 +484,12 @@ export class ReportDefinitionFormCreator {
     }
 
     public static async createOutputFormatFields(
-        reportDefinition: ReportDefinition
+        reportDefinition: ReportDefinition, formInstance: FormInstance
     ): Promise<FormFieldConfiguration[]> {
         const outputFormatFields = [];
 
         if (reportDefinition) {
+            const values: Array<[string, any]> = [];
             const outputFormats = reportDefinition.Config['OutputFormats'];
             for (const format in outputFormats) {
                 if (!outputFormats[format]) {
@@ -457,7 +501,12 @@ export class ReportDefinitionFormCreator {
                 const fields = await this.createOutputFormatOptionsFields(format, outputFormat);
                 outputFormatField.children = fields;
                 outputFormatFields.push(outputFormatField);
+
+                values.push([outputFormatField.instanceId, outputFormatField.defaultValue.value]);
+                fields.forEach((f) => values.push([f.instanceId, f.defaultValue.value]));
             }
+
+            await formInstance.provideFormFieldValues(values, null);
         }
 
         if (!outputFormatFields.length) {
@@ -549,7 +598,7 @@ export class ReportDefinitionFormCreator {
     ): Promise<void> {
         const value = formInstance.getFormFieldValue<string>(field.instanceId);
         if (value) {
-            const options = await this.createDataSourceOptionFields(null, value.value, field);
+            const options = await this.createDataSourceOptionFields(null, value.value, formInstance);
             formInstance.addFieldChildren(field, options, true);
         } else {
             formInstance.addFieldChildren(field, [], true);

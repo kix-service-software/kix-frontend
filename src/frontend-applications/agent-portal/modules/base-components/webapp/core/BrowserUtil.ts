@@ -25,6 +25,7 @@ import { ContextHistory } from './ContextHistory';
 import { ContextService } from './ContextService';
 import { PlaceholderService } from './PlaceholderService';
 import { InlineContent } from './InlineContent';
+import { AgentService } from '../../../user/webapp/core/AgentService';
 
 
 export class BrowserUtil {
@@ -44,15 +45,25 @@ export class BrowserUtil {
         }, 500);
     }
 
-    public static openConfirmOverlay(
+    public static async openConfirmOverlay(
         title: string = 'Sure?', confirmText: string = 'Are you sure?',
         confirmCallback: () => void = null, cancelCallback: () => void = null,
-        labels: [string, string] = ['Yes', 'No'], closeButton?: boolean
-    ): void {
-        const content = new ComponentContent(
-            'confirm-overlay', new ConfirmOverlayContent(confirmText, confirmCallback, cancelCallback, labels)
-        );
-        OverlayService.getInstance().openOverlay(OverlayType.CONFIRM, null, content, title, null, closeButton);
+        labels: [string, string] = ['Yes', 'No'], closeButton?: boolean, decision?: [string, string],
+        focusConfirm?: boolean, silent?: boolean
+    ): Promise<void> {
+        const preference = decision ? await AgentService.getInstance().getUserPreference(decision[0]) : null;
+        if ((preference && Boolean(Number(preference.Value))) || silent) {
+            confirmCallback();
+        } else {
+            const content = new ComponentContent(
+                'confirm-overlay',
+                new ConfirmOverlayContent(confirmText, confirmCallback, cancelCallback, labels, decision, focusConfirm)
+            );
+            OverlayService.getInstance().openOverlay(
+                OverlayType.CONFIRM, null, content, title, null, closeButton,
+                undefined, undefined, undefined, undefined, undefined
+            );
+        }
     }
 
     public static openAppRefreshOverlay(
@@ -251,11 +262,12 @@ export class BrowserUtil {
     }
 
     public static toggleLoadingShield(
-        loading: boolean, hint?: string, time?: number, cancelCallback?: () => void, cancelButtonText?: string
+        shieldId: string, loading: boolean, hint?: string, time?: number,
+        cancelCallback?: () => void, cancelButtonText?: string
     ): void {
         EventService.getInstance().publish(
             ApplicationEvent.TOGGLE_LOADING_SHIELD,
-            new LoadingShieldEventData(loading, hint, time, cancelCallback, cancelButtonText)
+            new LoadingShieldEventData(shieldId, loading, hint, time, cancelCallback, cancelButtonText)
         );
     }
 
@@ -285,7 +297,7 @@ export class BrowserUtil {
         return this.userColors.get(userId);
     }
 
-    public static async prepareUrlParams(params: Array<[string, any]>): Promise<string[]> {
+    public static async prepareUrlParameter(params: Array<[string, any]>): Promise<string[]> {
         const urlParams = [];
         if (Array.isArray(params)) {
             const context = ContextService.getInstance().getActiveContext();
@@ -362,6 +374,19 @@ export class BrowserUtil {
         });
 
         return json;
+    }
+
+    public static jsonStringifyreplacerFunc() {
+        const visited = new WeakSet();
+        return (key: string, value: any) => {
+            if (typeof value === 'object' && value !== null) {
+                if (visited.has(value)) {
+                    return;
+                }
+                visited.add(value);
+            }
+            return value;
+        };
     }
 
 }

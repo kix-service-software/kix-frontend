@@ -6,16 +6,17 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<form-list
-    searchCallback=state.searchCallback
-    autoCompleteConfiguration=state.autoCompleteConfiguration
-    freeText=true
-    on-focusLost("focusLost")
-    on-nodesChanged("emailChanged")
-    invalid=state.invalid
-    autocomplete=true
-    multiselect=true
-    readonly=state.field.readonly
-    placeholder=state.field.placeholder
-    loadNodes=state.loadNodes/>
+<if(state.field)>
+    <form-list
+        searchCallback=state.searchCallback
+        autoCompleteConfiguration=state.autoCompleteConfiguration
+        freeText=true
+        on-focusLost("focusLost")
+        on-nodesChanged("emailChanged")
+        invalid=state.invalid
+        autocomplete=true
+        multiselect=true
+        readonly=state.field.readonly
+        placeholder=state.field.placeholder
+        loadNodes=state.loadNodes/>
+</if>

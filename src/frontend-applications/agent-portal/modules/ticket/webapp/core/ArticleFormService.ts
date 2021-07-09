@@ -13,12 +13,10 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { Ticket } from '../../model/Ticket';
 import { ArticleProperty } from '../../model/ArticleProperty';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
-import { ContextType } from '../../../../model/ContextType';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { FormContext } from '../../../../model/configuration/FormContext';
 import { FormFieldOption } from '../../../../model/configuration/FormFieldOption';
 import { Channel } from '../../model/Channel';
-import { FormService } from '../../../../modules/base-components/webapp/core/FormService';
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
 import { AutocompleteFormFieldOption } from '../../../../model/AutocompleteFormFieldOption';
@@ -45,6 +43,9 @@ import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceReg
 import { TicketFormService } from './TicketFormService';
 import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
 import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
+import { ArticleLoadingOptions } from '../../model/ArticleLoadingOptions';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 
 export class ArticleFormService extends KIXObjectFormService {
 
@@ -75,7 +76,7 @@ export class ArticleFormService extends KIXObjectFormService {
     protected async getValue(property: string, value: any, ticket?: Ticket): Promise<any> {
         switch (property) {
             case ArticleProperty.CHANNEL_ID:
-                const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+                const dialogContext = ContextService.getInstance().getActiveContext();
                 if (dialogContext) {
                     const isReplyDialog = dialogContext.getAdditionalInformation('ARTICLE_REPLY');
                     if (isReplyDialog) {
@@ -87,6 +88,8 @@ export class ArticleFormService extends KIXObjectFormService {
                         const isForwardDialog = dialogContext.getAdditionalInformation('ARTICLE_FORWARD');
                         if (isForwardDialog) {
                             value = 2;
+                        } else {
+                            value ||= 1;
                         }
                     }
                 }
@@ -99,7 +102,7 @@ export class ArticleFormService extends KIXObjectFormService {
     protected async prePrepareForm(
         form: FormConfiguration, ticket: Ticket, formInstance: FormInstance
     ) {
-        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        const dialogContext = ContextService.getInstance().getActiveContext();
         if (dialogContext) {
             const isForwardDialog = dialogContext.getAdditionalInformation('ARTICLE_FORWARD');
             if (isForwardDialog) {
@@ -124,15 +127,32 @@ export class ArticleFormService extends KIXObjectFormService {
         }
     }
 
+    protected async postPrepareForm(
+        form: FormConfiguration, formInstance: FormInstance,
+        formFieldValues: Map<string, FormFieldValue<any>>, kixObject: KIXObject
+    ): Promise<void> {
+        const value = await formInstance.getFormFieldValueByProperty<number>(ArticleProperty.CHANNEL_ID);
+        if (value && value.value) {
+            const channelFields = await this.getFormFieldsForChannel(
+                formInstance, value.value, form.id, true
+            );
+
+            const field = formInstance.getFormFieldByProperty(ArticleProperty.CHANNEL_ID);
+            formInstance.addFieldChildren(field, channelFields, true);
+        }
+    }
+
     public async getFormFieldsForChannel(
-        channel: Channel, formId: string, clear: boolean = false
+        formInstance: FormInstance, channelId: number, formId: string, clear: boolean = false
     ): Promise<FormFieldConfiguration[]> {
         let fields: FormFieldConfiguration[] = [];
 
-        const formInstance = await FormService.getInstance().getFormInstance(formId);
+        const channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL, [channelId])
+            .catch((): Channel[] => []);
+        const channel = Array.isArray(channels) && channels.length ? channels[0] : null;
 
         let fieldPromises = [];
-        if (channel.Name === 'note') {
+        if (channel?.Name === 'note') {
             fieldPromises = [
                 this.getCustomerVisibleField(formInstance, clear),
                 this.getSubjectField(formInstance, clear),
@@ -140,12 +160,7 @@ export class ArticleFormService extends KIXObjectFormService {
                 this.getAttachmentField(formInstance, clear)
             ];
 
-            formInstance.provideFormFieldValuesForProperties([
-                [ArticleProperty.TO, null],
-                [ArticleProperty.CC, null],
-                [ArticleProperty.BCC, null],
-            ], null);
-        } else if (channel.Name === 'email') {
+        } else if (channel?.Name === 'email') {
             fieldPromises = [
                 this.getCustomerVisibleField(formInstance, clear),
                 this.getFromField(formInstance, clear),
@@ -305,9 +320,9 @@ export class ArticleFormService extends KIXObjectFormService {
         let label = 'Translatable#Cc';
         let actions = [ArticleProperty.BCC];
         let referencedValue;
-        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        const dialogContext = ContextService.getInstance().getActiveContext();
         const referencedArticle = dialogContext ? await this.getReferencedArticle(dialogContext) : null;
-        if (dialogContext && dialogContext.getDescriptor().contextMode !== ContextMode.CREATE) {
+        if (dialogContext && dialogContext.descriptor.contextMode !== ContextMode.CREATE) {
             property = ArticleProperty.TO;
             label = 'Translatable#To';
             actions = [ArticleProperty.CC, ArticleProperty.BCC];
@@ -338,9 +353,9 @@ export class ArticleFormService extends KIXObjectFormService {
         return field;
     }
 
-    private async getSubjectFieldValue(): Promise<string> {
+    public async getSubjectFieldValue(): Promise<string> {
         let value;
-        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        const dialogContext = ContextService.getInstance().getActiveContext();
         if (dialogContext) {
             value = await this.getReferencedValue(ArticleProperty.SUBJECT, dialogContext);
             if (value) {
@@ -383,11 +398,11 @@ export class ArticleFormService extends KIXObjectFormService {
         return value;
     }
 
-    private async getAttachmentFieldValue(): Promise<Attachment[]> {
+    public async getAttachmentFieldValue(): Promise<Attachment[]> {
         let value;
         const newValue: Attachment[] = [];
 
-        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        const dialogContext = ContextService.getInstance().getActiveContext();
         if (dialogContext) {
             const isForwardDialog = dialogContext.getAdditionalInformation('ARTICLE_FORWARD');
             if (isForwardDialog) {
@@ -413,7 +428,7 @@ export class ArticleFormService extends KIXObjectFormService {
         return !!newValue.length ? newValue : null;
     }
 
-    private async getToFieldValue(dialogContext: Context): Promise<string> {
+    public async getToFieldValue(dialogContext: Context): Promise<string> {
         let value;
         const isReplyDialog = dialogContext.getAdditionalInformation('ARTICLE_REPLY');
         if (isReplyDialog) {
@@ -430,28 +445,52 @@ export class ArticleFormService extends KIXObjectFormService {
         return value;
     }
 
-    private async getReferencedValue<T = string>(property: string, dialogContext?: Context): Promise<T> {
+    public async getReferencedValue<T = string>(property: string, dialogContext?: Context): Promise<T> {
         let value: T;
-        const referencedArticle = await this.getReferencedArticle(dialogContext);
+        const referencedArticle = await this.getReferencedArticle(
+            dialogContext, undefined, property === ArticleProperty.ATTACHMENTS
+        );
         if (referencedArticle) {
             value = referencedArticle[property];
         }
         return value;
     }
 
-    private async getReferencedArticle(dialogContext?: Context, ticket?: Ticket): Promise<Article> {
+    public async getReferencedArticle(
+        dialogContext?: Context, ticket?: Ticket, withAttachments?: boolean
+    ): Promise<Article> {
         let article: Article = null;
         if (!dialogContext) {
-            dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+            dialogContext = ContextService.getInstance().getActiveContext();
         }
         if (dialogContext) {
             const referencedArticleId = dialogContext.getAdditionalInformation('REFERENCED_ARTICLE_ID');
             if (referencedArticleId) {
                 let articles: Article[] = ticket ? ticket.Articles : [];
                 if (!Array.isArray(articles) || !articles.length) {
-                    const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-                    if (context) {
-                        articles = await context.getObjectList<Article>(KIXObjectType.ARTICLE);
+
+                    // "KIX-Start mode"
+                    const referencedTicketId = dialogContext.getAdditionalInformation('REFERENCED_TICKET_ID');
+                    if (referencedTicketId) {
+                        let loadingOptions;
+                        if (withAttachments) {
+                            loadingOptions = new KIXObjectLoadingOptions(
+                                undefined, undefined, undefined,
+                                [ArticleProperty.ATTACHMENTS]
+                            );
+                        }
+                        articles = await KIXObjectService.loadObjects<Article>(
+                            KIXObjectType.ARTICLE, [referencedArticleId], loadingOptions,
+                            new ArticleLoadingOptions(referencedTicketId), true
+                        ).catch(() => [] as Article[]);
+                    }
+
+                    // "KIX Pro mode"
+                    else {
+                        const context = ContextService.getInstance().getActiveContext();
+                        if (context) {
+                            articles = await context.getObjectList<Article>(KIXObjectType.ARTICLE);
+                        }
                     }
                 }
                 article = articles.find((a) => a.ArticleID === referencedArticleId);
@@ -500,7 +539,7 @@ export class ArticleFormService extends KIXObjectFormService {
         if (queueParam && queueParam[1]) {
             queueId = queueParam[1];
         } else {
-            const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+            const context = ContextService.getInstance().getActiveContext();
             if (context) {
                 const ticket = context.getAdditionalInformation(AdditionalContextInformation.FORM_OBJECT);
                 queueId = ticket ? ticket.QueueID : null;

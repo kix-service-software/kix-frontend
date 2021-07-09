@@ -7,14 +7,13 @@
  * --
  */
 
-import { DialogRoutingConfiguration } from '../../../../../model/configuration/DialogRoutingConfiguration';
 import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 
 export class ComponentState {
 
     public constructor(
-        public routingConfiguration: RoutingConfiguration | DialogRoutingConfiguration = null,
+        public routingConfiguration: RoutingConfiguration = null,
         public objectId: string | number = null,
         public object: KIXObject = null,
         public url: string = null,

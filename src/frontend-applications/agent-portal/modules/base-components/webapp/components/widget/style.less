@@ -12,9 +12,9 @@
 @widget-header-grid-gap: 1rem;
 
 .widget(@header-background: @secondary-2, @header-color: @secondary-0, @widget-header-height: @default-widget-header-height, @widget-header-action-separator-color: @secondary-1) {
+    .shadow-1();
     position: relative;
     box-sizing: border-box;
-    box-shadow: @shadow-1;
     -webkit-animation: fadein 1s;
     /* Safari, Chrome and Opera > 12.1 */
     -moz-animation: fadein 1s;
@@ -211,8 +211,11 @@
 .sidebar-widget {
     .widget(@primary-2, @default-light-font-color, @widget-header-action-separator-color: @secondary-6);
 
+    box-shadow: unset;
+
     .widget-header {
         grid-template-columns: 8fr 2fr;
+        border-radius: 6px;
 
         .action-list-wrapper {
 
@@ -234,47 +237,10 @@
     >.widget-content {
 
         padding: @margin-small;
+        background-color: unset;
 
         >.scroll-container {
             overflow: auto;
-        }
-    }
-}
-
-.explorer-widget {
-    .widget();
-    min-height: 15rem;
-    max-height: 43rem;
-    width: @explorer-width;
-    background-color: @secondary-6;
-
-    >.widget-header {
-        grid-template-columns: 8fr 2fr;
-
-        >.header-left {
-            grid-template-columns: max-content minmax(auto, max-content);
-        }
-    }
-
-    >.widget-content {
-        overflow: auto;
-        padding: 1rem .875rem;
-        max-height: 43rem - @default-widget-header-height;
-        min-height: 15rem - @default-widget-header-height;
-
-        >span.show-all {
-            display: inline-block;
-            margin-bottom: 1rem;
-            cursor: pointer;
-
-            &:hover {
-                color: @primary-0;
-            }
-
-            &.active {
-                color: @primary-0;
-                font-weight: bold;
-            }
         }
     }
 }
@@ -285,9 +251,9 @@
     box-shadow: unset;
 
     >.widget-header {
+        .shadow-1();
         padding-left: @margin-default + 1rem;
         border-radius: @border-radius;
-        box-shadow: @shadow-1;
         grid-template-columns: 1fr 0fr; // TODO: temporary, should be changed for possible lane actions - consider different behavior for lane with tabs
 
         >.header-left {
@@ -322,6 +288,7 @@
         z-index: 1;
 
         li {
+            .shadow-1();
             border: 1px solid @primary-2;
             border-top-right-radius: @border-radius;
             border-bottom-right-radius: @border-radius;
@@ -332,7 +299,6 @@
             background-color: @secondary-6;
             text-align: center;
             box-sizing: border-box;
-            box-shadow: @shadow-1;
             display: grid;
             align-content: center;
             cursor: pointer;
@@ -357,6 +323,7 @@
     }
 
     >.widget-content {
+        .shadow-1();
         margin: 0 @margin-default;
         padding: 0.5rem;
         border: 1px solid @primary-2;
@@ -364,7 +331,6 @@
         background-color: @secondary-6;
         min-height: 5.75em;
         max-height: 64rem;
-        box-shadow: @shadow-1;
         overflow: auto;
     }
 
@@ -476,25 +442,6 @@
             >div:last-child {
                 padding-right: 0;
             }
-        }
-    }
-}
-
-.overlay-dialog-widget {
-    .widget(@primary-0, @secondary-6, @overlay-widget-header-height);
-    .full-size();
-
-    >.widget-content {
-        .full-size();
-        top: @overlay-widget-header-height;
-        border: 2px solid @primary-0;
-        overflow: hidden;
-
-        >.overlay-dialog-spacer {
-            .full-size;
-            margin: (@margin-default - @margin-small);
-            padding: 0 1.5rem 1rem;
-            overflow: auto;
         }
     }
 }

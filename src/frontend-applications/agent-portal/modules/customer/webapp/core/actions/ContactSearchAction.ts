@@ -9,8 +9,7 @@
 
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../model/ContextMode';
+import { ContactSearchContext } from '../context';
 
 export class ContactSearchAction extends AbstractAction {
 
@@ -20,7 +19,7 @@ export class ContactSearchAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        ContextService.getInstance().setDialogContext(null, KIXObjectType.CONTACT, ContextMode.SEARCH, null, true);
+        ContextService.getInstance().setActiveContext(ContactSearchContext.CONTEXT_ID);
     }
 
 }

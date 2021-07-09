@@ -7,20 +7,10 @@
  * --
  */
 
-import { ComponentRouter } from '../../../../model/ComponentRouter';
-import { IRoutingServiceListener } from './IRoutingServiceListener';
-import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
 import { AgentService } from '../../../user/webapp/core/AgentService';
 import { KIXModulesSocketClient } from './KIXModulesSocketClient';
 import { ContextService } from './ContextService';
-import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../model/ContextMode';
-import { Context } from 'vm';
-import { ContextFactory } from './ContextFactory';
-import { BrowserUtil } from './BrowserUtil';
 import { ActionFactory } from './ActionFactory';
-import { EventService } from './EventService';
-import { ApplicationEvent } from './ApplicationEvent';
 import { SetupService } from '../../../setup-assistant/webapp/core/SetupService';
 
 export class RoutingService {
@@ -39,40 +29,43 @@ export class RoutingService {
 
     private constructor() { }
 
-    private componentRouters: ComponentRouter[] = [];
-    private serviceListener: IRoutingServiceListener[] = [];
-    private routingConfigurations: RoutingConfiguration[] = [];
-
-    public registerServiceListener(listener: IRoutingServiceListener): void {
-        this.serviceListener.push(listener);
-    }
-
-    public registerRoutingConfiguration(configuration: RoutingConfiguration): void {
-        this.routingConfigurations.push(configuration);
-    }
-
     public async routeToInitialContext(history: boolean = false, useURL: boolean = true): Promise<void> {
-        const isSetupAssistantNeeded = await SetupService.getInstance().setSetupAssistentIfNeeded();
-        if (!isSetupAssistantNeeded) {
-            const needReleaseInfo = await this.isReleaseInfoNeeded();
-            if (needReleaseInfo) {
-                ContextService.getInstance().setContext(
-                    'release', KIXObjectType.ANY, ContextMode.DASHBOARD
-                );
+        await ContextService.getInstance().initUserContextInstances();
 
-                const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
-                const buildNumber = releaseInfo ? releaseInfo.buildNumber : null;
-                AgentService.getInstance().setPreferences([
-                    [this.VISITED_KEY, buildNumber.toString()]
-                ]);
-            } else if (useURL) {
-                this.routeToURL(history);
+        let routed: boolean = false;
+        if (useURL) {
+            routed = await this.routeToURL(history);
+        }
+
+        routed = await this.setReleaseContext() || routed;
+        routed = await SetupService.getInstance().setSetupAssistentIfNeeded() || routed;
+
+        if (!routed) {
+            const contextList = ContextService.getInstance().getContextInstances();
+            if (contextList.length) {
+                await ContextService.getInstance().setContextByInstanceId(contextList[0].instanceId);
             } else {
-                ContextService.getInstance().setContext(
-                    'home', KIXObjectType.ANY, ContextMode.DASHBOARD, null, false
-                );
+                this.setHomeContextIfNeeded();
             }
         }
+    }
+
+    private async setReleaseContext(): Promise<boolean> {
+        let routed: boolean = false;
+
+        const needReleaseInfo = await this.isReleaseInfoNeeded();
+        if (needReleaseInfo) {
+            await ContextService.getInstance().setActiveContext('release');
+
+            const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+            const buildNumber = releaseInfo ? releaseInfo.buildNumber : null;
+            AgentService.getInstance().setPreferences([
+                [this.VISITED_KEY, buildNumber.toString()]
+            ]);
+            routed = true;
+        }
+
+        return routed;
     }
 
     private async isReleaseInfoNeeded(): Promise<boolean> {
@@ -88,49 +81,44 @@ export class RoutingService {
         return !releaseInfoVisited || (buildNumber && releaseInfoVisited !== buildNumber.toString());
     }
 
-    private async routeToURL(history: boolean = false): Promise<void> {
+    private setHomeContextIfNeeded(): boolean {
+        let routed: boolean = false;
+        const contextList = ContextService.getInstance().getContextInstances();
+        if (Array.isArray(contextList) && !contextList.length) {
+            ContextService.getInstance().setActiveContext('home');
+            routed = true;
+        }
+
+        return routed;
+    }
+
+    public async routeToURL(history: boolean = false): Promise<boolean> {
+        let routed: boolean = false;
         const parsedUrl = new URL(window.location.href);
+        const urlParams = parsedUrl.searchParams;
         const path = parsedUrl.pathname === '/' ? [] : parsedUrl.pathname.split('/');
         if (path.length > 1) {
             const contextUrl = path[1];
             const objectId = path[2];
-
-            let context: Context;
             if (contextUrl && contextUrl !== '') {
-                context = await ContextFactory.getContextForUrl(contextUrl, objectId);
-            }
-
-            if (context) {
-                await ContextService.getInstance().setContext(
-                    context.getDescriptor().contextId, null,
-                    context.getDescriptor().contextMode, objectId, undefined, history, false, true,
-                    parsedUrl.searchParams
+                const context = await ContextService.getInstance().setContextByUrl(
+                    contextUrl, objectId, urlParams, history
                 );
-            } else {
-                if (contextUrl !== 'login') {
-                    BrowserUtil.openAccessDeniedOverlay();
+                if (context) {
+                    routed = true;
                 }
-                await this.setHomeContext();
             }
-        } else {
-            await this.setHomeContext();
         }
 
-        this.handleRequest(parsedUrl.searchParams);
+        this.handleURLParams(urlParams);
+
+        return routed;
     }
 
-    private async setHomeContext(): Promise<void> {
-        await ContextService.getInstance().setContext(
-            'home', KIXObjectType.ANY, ContextMode.DASHBOARD, null, null, null, false, true
-        );
-    }
-
-    private handleRequest(params: URLSearchParams): void {
+    private handleURLParams(params: URLSearchParams): void {
         setTimeout(async () => {
             if (params.has('new')) {
-                await ContextService.getInstance().setDialogContext(null, null, ContextMode.CREATE, null, true,
-                    undefined, undefined, undefined, undefined, undefined, undefined, params
-                );
+                // await ContextService.getInstance().setDialogContext(null, null, ContextMode.CREATE);
             } else if (params.has('actionId')) {
                 const actionId = params.get('actionId');
                 const data = params.get('data');
@@ -141,56 +129,4 @@ export class RoutingService {
             }
         }, 2500);
     }
-
-    public async routeToContext(
-        routingConfiguration: RoutingConfiguration, objectId: string | number, addHistory: boolean = true,
-        reset: boolean = true, params?: string
-    ): Promise<void> {
-        if (routingConfiguration) {
-            EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
-            await ContextService.getInstance().setContext(
-                routingConfiguration.contextId,
-                routingConfiguration.objectType,
-                routingConfiguration.contextMode,
-                objectId, reset, routingConfiguration.history,
-                addHistory, null, new URLSearchParams(params)
-            );
-        }
-    }
-
-    public async buildUrl(routingConfiguration: RoutingConfiguration, objectId: string | number): Promise<string> {
-        let url;
-        const descriptor = ContextFactory.getInstance().getContextDescriptor(routingConfiguration.contextId);
-        if (descriptor) {
-            url = descriptor.urlPaths[0];
-            if (descriptor.contextMode === ContextMode.DETAILS) {
-                url += '/' + objectId;
-            }
-        }
-
-        return url;
-    }
-
-    public routeTo(
-        routerId: string, componentId: string, data: any, parameterValue: string = null
-    ): void {
-        let router = this.componentRouters.find((r) => r.routerId === routerId);
-        if (!router) {
-            const componentRouter = new ComponentRouter(routerId, componentId, parameterValue, data);
-            this.componentRouters.push(componentRouter);
-            router = componentRouter;
-        }
-
-        router.componentId = componentId;
-        router.data = data;
-        router.parameterValue = parameterValue;
-        this.notifyListener(router);
-    }
-
-    private notifyListener(router: ComponentRouter): void {
-        for (const listener of this.serviceListener) {
-            listener.routedTo(router);
-        }
-    }
-
 }

@@ -57,10 +57,11 @@ export class UIModule implements IUIModule {
         const newMailFilterDialogContext = new ContextDescriptor(
             NewMailFilterDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_FILTER],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-mail-account-dialog', ['mail-filters'], NewMailFilterDialogContext,
+            false, 'object-dialog', ['mail-filters'], NewMailFilterDialogContext,
             [
                 new UIComponentPermission('system/communication/mailfilters', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#New Mail Filter', 'kix-icon-gear', MailFilterDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(newMailFilterDialogContext);
 
@@ -71,10 +72,11 @@ export class UIModule implements IUIModule {
         const editMailFilterDialogContext = new ContextDescriptor(
             EditMailFilterDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_FILTER],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-mail-filter-dialog', ['mail-filters'], EditMailFilterDialogContext,
+            false, 'object-dialog', ['mail-filters'], EditMailFilterDialogContext,
             [
                 new UIComponentPermission('system/communication/mailfilters', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Edit Mail Filter', 'kix-icon-gear', MailFilterDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(editMailFilterDialogContext);
 
@@ -87,7 +89,8 @@ export class UIModule implements IUIModule {
             false, 'object-details-page', ['mail-filters'], MailFilterDetailsContext,
             [
                 new UIComponentPermission('system/communication/mailfilters', [CRUD.READ])
-            ]
+            ],
+            'Translatable#Mail Filter Details', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(mailFilterDetailsContext);
     }

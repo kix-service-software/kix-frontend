@@ -9,9 +9,7 @@
 
 import { IUIModule } from '../../../../model/IUIModule';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
-import {
-    NewConfigItemDialogContext, EditConfigItemDialogContext, ConfigItemCreateAction, ConfigItemEditAction
-} from '.';
+import { NewConfigItemDialogContext, EditConfigItemDialogContext, ConfigItemCreateAction, ConfigItemEditAction } from '.';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
@@ -20,6 +18,7 @@ import { ActionFactory } from '../../../../modules/base-components/webapp/core/A
 import { ConfigItemDuplicateAction } from './actions';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { ConfigItemDetailsContext } from './context';
 
 export class UIModule implements IUIModule {
 
@@ -39,19 +38,21 @@ export class UIModule implements IUIModule {
     private async registerContexts(): Promise<void> {
         const newConfigItemDialogContext = new ContextDescriptor(
             NewConfigItemDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM], ContextType.DIALOG, ContextMode.CREATE,
-            false, 'new-config-item-dialog', ['configitems'], NewConfigItemDialogContext,
+            false, 'object-dialog', ['configitems'], NewConfigItemDialogContext,
             [
                 new UIComponentPermission('cmdb/configitems', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Asset', 'kix-icon-ci', ConfigItemDetailsContext.CONTEXT_ID, 200
         );
         ContextService.getInstance().registerContext(newConfigItemDialogContext);
 
         const editConfigItemContext = new ContextDescriptor(
             EditConfigItemDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM], ContextType.DIALOG, ContextMode.EDIT,
-            false, 'edit-config-item-dialog', ['configitems'], EditConfigItemDialogContext,
+            false, 'object-dialog', ['configitems'], EditConfigItemDialogContext,
             [
                 new UIComponentPermission('cmdb/configitems', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Asset', 'kix-icon-ci', ConfigItemDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(editConfigItemContext);
     }

@@ -11,14 +11,12 @@ import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { FormConfiguration } from '../../../../../model/configuration/FormConfiguration';
-import { AgentService } from '../../core';
 import { FormGroupConfiguration } from '../../../../../model/configuration/FormGroupConfiguration';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { FormContext } from '../../../../../model/configuration/FormContext';
 import { FormPageConfiguration } from '../../../../../model/configuration/FormPageConfiguration';
-import { DialogService } from '../../../../../modules/base-components/webapp/core/DialogService';
 import { ValidationSeverity } from '../../../../../modules/base-components/webapp/core/ValidationSeverity';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
@@ -29,6 +27,8 @@ import { OverlayService } from '../../../../../modules/base-components/webapp/co
 import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
 import { PersonalSetting } from '../../../model/PersonalSetting';
 import { Error } from '../../../../../../../server/model/Error';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { AgentService } from '../../core/AgentService';
 
 
 class Component {
@@ -45,19 +45,15 @@ class Component {
             ['Translatable#Cancel', 'Translatable#Save']
         );
 
-        const form = await this.prepareForm();
-        await FormService.getInstance().addForm(form);
-        this.state.formId = form.id;
+        await this.prepareForm();
+
+        const context = ContextService.getInstance().getActiveContext();
+        context.getFormManager().setFormId('personal-settings');
+
         this.state.loading = false;
     }
 
-    public async onDestroy(): Promise<void> {
-        if (this.state.formId) {
-            FormService.getInstance().deleteFormInstance(this.state.formId);
-        }
-    }
-
-    private async prepareForm(): Promise<FormConfiguration> {
+    private async prepareForm(): Promise<void> {
         const personalSettings: PersonalSetting[] = await AgentService.getInstance().getPersonalSettings();
 
         const formGroups: FormGroupConfiguration[] = [];
@@ -76,7 +72,7 @@ class Component {
         });
 
         const formName = await TranslationService.translate('Translatable#Personal Settings');
-        return new FormConfiguration(
+        const form = new FormConfiguration(
             'personal-settings', formName,
             [], KIXObjectType.PERSONAL_SETTINGS, true, FormContext.EDIT, null,
             [
@@ -86,39 +82,38 @@ class Component {
                 )
             ]
         );
+
+        await FormService.getInstance().addForm(form);
     }
 
-    public async cancel(): Promise<void> {
-        DialogService.getInstance().closeMainDialog();
+    public cancel(): void {
+        ContextService.getInstance().toggleActiveContext();
     }
 
     public async submit(): Promise<void> {
-        if (this.state.formId) {
-            setTimeout(async () => {
-                const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-                const result = await formInstance.validateForm();
-                const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
-                if (validationError) {
-                    this.showValidationError(result);
-                } else {
-                    const loadingHint = await TranslationService.translate('Translatable#Save Settings');
-                    BrowserUtil.toggleLoadingShield(true, loadingHint);
-                    await AgentService.getInstance().setPreferencesByForm(this.state.formId)
-                        .then(async () => {
-                            TranslationService.getInstance().resetTranslations();
-                            setTimeout(async () => {
-                                BrowserUtil.toggleLoadingShield(false);
-                                DialogService.getInstance().submitMainDialog();
-                                EventService.getInstance().publish(ApplicationEvent.REFRESH);
-                                const toast = await TranslationService.translate('Translatable#Changes saved.');
-                                BrowserUtil.openSuccessOverlay(toast);
-                            }, 100);
-                        }).catch((error: Error) => {
-                            BrowserUtil.toggleLoadingShield(false);
-                            BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
-                        });
-                }
-            });
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const result = await formInstance.validateForm();
+        const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
+        if (validationError) {
+            this.showValidationError(result);
+        } else {
+            const loadingHint = await TranslationService.translate('Translatable#Save Settings');
+            BrowserUtil.toggleLoadingShield('PERSONAL_SETTINGS_SHIELD', true, loadingHint);
+            await AgentService.getInstance().setPreferencesByForm()
+                .then(async () => {
+                    TranslationService.getInstance().resetTranslations();
+                    setTimeout(async () => {
+                        BrowserUtil.toggleLoadingShield('PERSONAL_SETTINGS_SHIELD', false);
+                        EventService.getInstance().publish(ApplicationEvent.REFRESH);
+                        const toast = await TranslationService.translate('Translatable#Changes saved.');
+                        BrowserUtil.openSuccessOverlay(toast);
+                        ContextService.getInstance().toggleActiveContext();
+                    }, 100);
+                }).catch((error: Error) => {
+                    BrowserUtil.toggleLoadingShield('PERSONAL_SETTINGS_SHIELD', false);
+                    BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
+                });
         }
     }
 

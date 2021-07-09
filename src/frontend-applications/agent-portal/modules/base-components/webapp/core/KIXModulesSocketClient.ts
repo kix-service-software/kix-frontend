@@ -9,9 +9,7 @@
 
 import { SocketClient } from './SocketClient';
 import { ClientStorageService } from './ClientStorageService';
-import { LoadKIXModulesRequest } from './LoadKIXModulesRequest';
 import { KIXModulesEvent } from './KIXModulesEvent';
-import { LoadKIXModulesResponse } from './LoadKIXModulesResponse';
 import { SocketErrorResponse } from './SocketErrorResponse';
 import { SocketEvent } from './SocketEvent';
 import { LoadFormConfigurationsRequest } from './LoadFormConfigurationsRequest';
@@ -20,7 +18,6 @@ import { LoadReleaseInfoResponse } from './LoadReleaseInfoResponse';
 import { ISocketRequest } from './ISocketRequest';
 import { LoadFormConfigurationRequest } from './LoadFormConfigurationRequest';
 import { LoadFormConfigurationResponse } from './LoadFormConfigurationResponse';
-import { IKIXModuleExtension } from '../../../../model/IKIXModuleExtension';
 import { IdService } from '../../../../model/IdService';
 import { FormContext } from '../../../../model/configuration/FormContext';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
@@ -43,29 +40,6 @@ export class KIXModulesSocketClient extends SocketClient {
     public constructor() {
         super();
         this.socket = this.createSocket('kixmodules', true);
-    }
-
-    public async loadModules(): Promise<IKIXModuleExtension[]> {
-
-        return new Promise<IKIXModuleExtension[]>((resolve, reject) => {
-            const requestId = IdService.generateDateBasedId();
-            const request = new LoadKIXModulesRequest(requestId, ClientStorageService.getClientRequestId());
-
-            this.socket.on(KIXModulesEvent.LOAD_MODULES_FINISHED, (result: LoadKIXModulesResponse) => {
-                if (requestId === result.requestId) {
-                    resolve(result.modules);
-                }
-            });
-
-            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
-                if (error.requestId === requestId) {
-                    console.error(error.error);
-                    reject(error.error);
-                }
-            });
-
-            this.socket.emit(KIXModulesEvent.LOAD_MODULES, request);
-        });
     }
 
     public async loadFormConfigurations(

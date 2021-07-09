@@ -10,8 +10,6 @@
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
-import { ContextMode } from '../../../../../model/ContextMode';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { NewReportDefinitionDialogContext } from '../context/NewReportDefinitionDialogContext';
 
@@ -27,10 +25,7 @@ export class ReportDefinitionCreateAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            NewReportDefinitionDialogContext.CONTEXT_ID, KIXObjectType.REPORT_DEFINITION, ContextMode.CREATE,
-            null, null, 'Translatable#New Report Definition', true
-        );
+        ContextService.getInstance().setActiveContext(NewReportDefinitionDialogContext.CONTEXT_ID);
     }
 
 }

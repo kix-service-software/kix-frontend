@@ -32,15 +32,7 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent(
             'admin-general-catalog',
             '/kix-module-general-catalog$0/webapp/components/admin-general-catalog', []
-        ),
-        new UIComponent(
-            'edit-general-catalog-dialog',
-            '/kix-module-general-catalog$0/webapp/components/edit-general-catalog-dialog', []
-        ),
-        new UIComponent(
-            'new-general-catalog-dialog',
-            '/kix-module-general-catalog$0/webapp/components/new-general-catalog-dialog', []
-        ),
+        )
     ];
 
     public webDependencies: string[] = [

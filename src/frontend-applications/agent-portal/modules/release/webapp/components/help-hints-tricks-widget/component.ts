@@ -23,6 +23,7 @@ import {
 } from '../../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     public baseFAQUri: string;
@@ -65,13 +66,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public faqClicked(id: number, event: any): void {
         event.stopPropagation();
         event.preventDefault();
-
-        const routingConfiguration = new RoutingConfiguration(
-            FAQDetailsContext.CONTEXT_ID, KIXObjectType.FAQ_ARTICLE,
-            ContextMode.DETAILS, null
-        );
-
-        RoutingService.getInstance().routeToContext(routingConfiguration, id);
+        ContextService.getInstance().setActiveContext(FAQDetailsContext.CONTEXT_ID, id);
     }
 
     private async checkReadPermissions(resource: string): Promise<boolean> {

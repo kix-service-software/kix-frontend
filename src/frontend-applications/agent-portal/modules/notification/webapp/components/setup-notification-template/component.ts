@@ -29,6 +29,7 @@ import { FormFieldValue } from '../../../../../model/configuration/FormFieldValu
 import { SetupStep } from '../../../../setup-assistant/webapp/core/SetupStep';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
 import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -102,17 +103,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         FormService.getInstance().addForm(form);
         this.state.formId = form.id;
 
+        const context = ContextService.getInstance().getActiveContext();
+        context?.getFormManager()?.setFormId(this.state.formId);
+
         setTimeout(() => this.initFormValues(form.id), 100);
     }
 
-    public onDestroy(): void {
-        if (this.state.formId) {
-            FormService.getInstance().deleteFormInstance(this.state.formId);
-        }
-    }
-
     private async initFormValues(formId: string, configKeys: string[] = this.configKeys): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
 
         if (formInstance) {
             const sysconfigOptions = await KIXObjectService.loadObjects<SysConfigOption>(
@@ -130,7 +129,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async submit(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
 
         if (formInstance) {
             const result = await formInstance.validateForm();
@@ -138,13 +138,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (validationError) {
                 BrowserUtil.showValidationError(result);
             } else {
-                BrowserUtil.toggleLoadingShield(true, 'Translatable#Save notification template');
+                BrowserUtil.toggleLoadingShield('SETUP_NOTIFICATION_SHIELD', true, 'Translatable#Save notification template');
 
                 await this.saveSysconfigValues(formInstance).catch(() => null);
                 if (this.state.isSetup) {
                     await SetupService.getInstance().stepCompleted(this.step.id, null);
                 }
-                BrowserUtil.toggleLoadingShield(false);
+                BrowserUtil.toggleLoadingShield('SETUP_NOTIFICATION_SHIELD', false);
             }
         }
     }
@@ -173,7 +173,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async preview(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         if (formInstance) {
             const htmlStringValue = await formInstance.getFormFieldValueByProperty<string>('Notification::Template');
             if (htmlStringValue && htmlStringValue.value) {

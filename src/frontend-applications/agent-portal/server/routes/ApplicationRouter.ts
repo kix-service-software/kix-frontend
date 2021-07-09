@@ -17,6 +17,12 @@ import { SysConfigService } from '../../modules/sysconfig/server/SysConfigServic
 import { SysConfigOption } from '../../modules/sysconfig/model/SysConfigOption';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { SysConfigKey } from '../../modules/sysconfig/model/SysConfigKey';
+import { PluginService } from '../../../../server/services/PluginService';
+import { IKIXModuleExtension } from '../../model/IKIXModuleExtension';
+import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
+import { KIXModuleNamespace } from '../socket-namespaces/KIXModuleNamespace';
+import { UIComponent } from '../../model/UIComponent';
+import { PermissionService } from '../services/PermissionService';
 
 export class ApplicationRouter extends KIXRouter {
 
@@ -95,11 +101,54 @@ export class ApplicationRouter extends KIXRouter {
 
             const templatePath = path.join('..', '..', 'modules', 'agent-portal', 'webapp', 'application');
             const template = require(templatePath);
+
+            const modules = await PluginService.getInstance().getExtensions<IKIXModuleExtension>(
+                AgentPortalExtensions.MODULES
+            );
+
+            const createPromises: Array<Promise<IKIXModuleExtension>> = [];
+            for (const uiModule of modules) {
+                createPromises.push(this.createUIModule(token, uiModule));
+            }
+
+            const uiModules = await Promise.all(createPromises);
+
             res.marko(template, {
                 socketTimeout: options && options.length ? options[0].Value : 30000,
-                favIcon
+                favIcon,
+                modules: uiModules
             });
         }
+    }
+
+    public async createUIModule(token: string, uiModule: IKIXModuleExtension): Promise<IKIXModuleExtension> {
+        const initComponents = await this.filterUIComponents(
+            token, [...uiModule.initComponents]
+        );
+
+        const uiComponents = await this.filterUIComponents(
+            token, [...uiModule.uiComponents]
+        );
+
+        return {
+            id: uiModule.id,
+            external: uiModule.external,
+            initComponents,
+            uiComponents,
+            webDependencies: uiModule.webDependencies,
+            applications: uiModule.applications
+        };
+    }
+
+    public async filterUIComponents(token: string, uiComponents: UIComponent[]): Promise<UIComponent[]> {
+        const components: UIComponent[] = [];
+        for (const component of uiComponents) {
+            if (await PermissionService.getInstance().checkPermissions(token, component.permissions)) {
+                components.push(component);
+            }
+        }
+
+        return components;
     }
 
     private clearRequireCache(configPath: string): void {

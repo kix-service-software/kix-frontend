@@ -7,40 +7,94 @@
  * --
  */
 
+import { ConfigurationType } from '../../../../../model/configuration/ConfigurationType';
+import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
+import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { LabelService } from '../../../../base-components/webapp/core/LabelService';
+import { Table } from '../../../../base-components/webapp/core/table';
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { SearchContext, SearchResultCategory, SearchService } from '../../core';
 import { ComponentState } from './ComponentState';
-import { IdService } from '../../../../../model/IdService';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { ContextMode } from '../../../../../model/ContextMode';
-import { SearchService } from '../../core/SearchService';
-import { SearchContext } from '../../core';
 
-class Component {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public listenerId: string;
-    public constexServiceListenerId: string;
-
-    private state: ComponentState;
+    private resultWidgets: Array<[KIXObjectType | string, WidgetConfiguration, string, string | ObjectIcon]> = [];
 
     public onCreate(): void {
         this.state = new ComponentState();
-        this.listenerId = 'kix-search-module-listener';
-        this.constexServiceListenerId = IdService.generateDateBasedId('search-module-');
-    }
-
-    public onInput(input: any): void {
-        this.state.history = input.history;
     }
 
     public async onMount(): Promise<void> {
-        if (!SearchService.getInstance().getSearchCache()) {
-            const searchContext = await ContextService.getInstance().getContext<SearchContext>(
-                SearchContext.CONTEXT_ID
+        this.resultWidgets = [];
+        const context = ContextService.getInstance().getActiveContext<SearchContext>();
+        context.registerListener('search-module', {
+            objectListChanged: async (objectType: KIXObjectType | string, objectList: KIXObject[]) => {
+                const resultWidget = this.resultWidgets.find((rw) => rw[0] === objectType);
+                if (resultWidget) {
+                    const title = await this.getTitle(objectType);
+                    resultWidget[2] = `${title} (${objectList?.length})`;
+                }
+
+                this.state.resultWidget = resultWidget;
+
+                setTimeout(async () => {
+                    if (objectType === context?.getSearchCache()?.objectType) {
+                        const searchDefinition = SearchService.getInstance().getSearchDefinition(objectType);
+                        const columns = await searchDefinition?.getTableColumnConfigurations(context?.getSearchCache());
+
+                        const tableWidget = (this as any).getComponent('search-result-table-' + objectType);
+                        const table: Table = tableWidget?.getTable();
+                        table?.removeAdditonalColumns();
+                        table?.addAdditionalColumns(columns);
+                    }
+                }, 50);
+            },
+            additionalInformationChanged: () => null,
+            filteredObjectListChanged: () => null,
+            objectChanged: () => null,
+            scrollInformationChanged: () => null,
+            sidebarLeftToggled: () => null,
+            sidebarRightToggled: () => null,
+        });
+
+        const categories = await context.getSearchResultCategories();
+        await this.createTableWidgets(categories);
+
+        const category = context.getSearchResultCategory();
+        this.state.resultWidget = this.resultWidgets.find((rw) => rw[0] === category?.objectType);
+    }
+
+    private async createTableWidgets(categories: SearchResultCategory[]): Promise<void> {
+        for (const category of categories) {
+
+            const icon = LabelService.getInstance().getObjectIconForType(category.objectType);
+
+            const widgetConfiguration = new WidgetConfiguration(
+                'search-result-widget-' + category.label, category.label, ConfigurationType.TableWidget,
+                'table-widget', category.label, [], null,
+                new TableWidgetConfiguration('', '', null, category.objectType),
+                false, false, icon, true
             );
-            if (searchContext) {
-                searchContext.setSearchCache(null);
+
+            const title = await this.getTitle(category.objectType);
+
+            this.resultWidgets.push([category.objectType, widgetConfiguration, title, icon]);
+
+            if (Array.isArray(category.children) && category.children.length) {
+                await this.createTableWidgets(category.children);
             }
-            ContextService.getInstance().setDialogContext(null, null, ContextMode.SEARCH);
         }
+    }
+
+    private async getTitle(objectType: KIXObjectType | string): Promise<string> {
+        const objectName = await LabelService.getInstance().getObjectName(objectType, true);
+        const title = await TranslationService.translate('Hit List: {0}', [objectName]);
+        return title;
     }
 }
 

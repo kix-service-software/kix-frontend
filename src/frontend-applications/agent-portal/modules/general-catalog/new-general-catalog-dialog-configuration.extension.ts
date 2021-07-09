@@ -47,7 +47,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const configurations = [];
         const widget = new WidgetConfiguration(
             'general-catalog-new-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
-            'new-general-catalog-dialog', 'Translatable#New Value', [], null, null, false, false,
+            'object-dialog-form-widget', 'Translatable#New Value', [], null, null, false, false,
             'kix-icon-new-gear'
         );
         configurations.push(widget);
@@ -55,13 +55,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-                this.getModuleId(), [], [], [], [], [], [], [], [],
+                this.getModuleId(), [], [], [],
                 [
                     new ConfiguredDialogWidget(
                         'general-catalog-new-dialog-widget', 'general-catalog-new-dialog-widget',
                         KIXObjectType.GENERAL_CATALOG_ITEM, ContextMode.CREATE_ADMIN
                     )
-                ]
+                ], [], [], [], [],
             )
         );
         return configurations;

@@ -12,11 +12,8 @@ import { Table } from '../../../../base-components/webapp/core/table';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { IdService } from '../../../../../model/IdService';
 import { ImportService } from '../';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { ContextMode } from '../../../../../model/ContextMode';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import { DialogEvents } from '../../../../../modules/base-components/webapp/core/DialogEvents';
-import { DialogEventData } from '../../../../../modules/base-components/webapp/core/DialogEventData';
 
 export class ImportAction extends AbstractAction<Table> {
 
@@ -51,25 +48,15 @@ export class ImportAction extends AbstractAction<Table> {
 
     private async openDialog(): Promise<void> {
         if (this.objectType) {
-            const context = await ContextService.getInstance().getContextByTypeAndMode(
-                this.objectType, ContextMode.IMPORT
-            );
-            if (context) {
-                context.setDialogSubscriberId(this.eventSubscriberId);
-                EventService.getInstance().subscribe(DialogEvents.DIALOG_CANCELED, this);
-                EventService.getInstance().subscribe(DialogEvents.DIALOG_FINISHED, this);
+            const contextDescriptor = ContextService.getInstance().getContextDescriptors(ContextMode.IMPORT);
 
-                ContextService.getInstance().setDialogContext(
-                    context.getDescriptor().contextId, this.objectType, ContextMode.IMPORT, null, true
-                );
+            if (Array.isArray(contextDescriptor) && contextDescriptor.length) {
+
+                const descriptor = contextDescriptor.find((c) => c.kixObjectTypes.some((o) => o === this.objectType));
+                if (descriptor) {
+                    await ContextService.getInstance().setActiveContext(descriptor.contextId);
+                }
             }
-        }
-    }
-
-    public async eventPublished(eventData: DialogEventData, eventId: string, subscriberId: string): Promise<void> {
-        if (eventData && eventData.dialogId.match('import-dialog') && subscriberId === this.eventSubscriberId) {
-            EventService.getInstance().unsubscribe(DialogEvents.DIALOG_CANCELED, this);
-            EventService.getInstance().unsubscribe(DialogEvents.DIALOG_FINISHED, this);
         }
     }
 }
