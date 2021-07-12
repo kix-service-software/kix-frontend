@@ -270,7 +270,7 @@ export class Ticket extends KIXObject {
         {
             Property: TicketProperty.LOCK_ID,
             Operations: [SearchOperator.EQUALS],
-            DataType: FilterDataType.DATETIME,
+            DataType: FilterDataType.NUMERIC,
             InputType: InputFieldTypes.DROPDOWN
         },
         {
