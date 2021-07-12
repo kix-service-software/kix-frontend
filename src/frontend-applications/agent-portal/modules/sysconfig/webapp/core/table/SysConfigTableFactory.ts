@@ -18,17 +18,18 @@ import { DataType } from '../../../../../model/DataType';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
-import { DialogRoutingConfiguration } from '../../../../../model/configuration/DialogRoutingConfiguration';
 import { ContextMode } from '../../../../../model/ContextMode';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
+import { EditSysConfigDialogContext } from '../context';
 
 export class SysConfigTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.SYS_CONFIG_OPTION_DEFINITION;
 
-    public createTable(
+    public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean
-    ): Table {
+    ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
         const table = new Table(tableKey, tableConfiguration);
@@ -89,11 +90,8 @@ export class SysConfigTableFactory extends TableFactory {
         }
 
         if (defaultRouting) {
-
-            tableConfiguration.routingConfiguration = new DialogRoutingConfiguration(
-                null, KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, ContextMode.EDIT_ADMIN,
-                SysConfigOptionDefinitionProperty.NAME, null, true,
-                undefined, true, 'sysconfig-edit-form'
+            tableConfiguration.routingConfiguration = new RoutingConfiguration(
+                EditSysConfigDialogContext.CONTEXT_ID, null, null, SysConfigOptionDefinitionProperty.NAME
             );
         }
 

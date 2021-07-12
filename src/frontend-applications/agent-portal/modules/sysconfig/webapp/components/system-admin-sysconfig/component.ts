@@ -25,8 +25,6 @@ import { FilterType } from '../../../../../model/FilterType';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
-import { DialogRoutingConfiguration } from '../../../../../model/configuration/DialogRoutingConfiguration';
-import { ContextMode } from '../../../../../model/ContextMode';
 import { WidgetService } from '../../../../base-components/webapp/core/WidgetService';
 import { ActionFactory } from '../../../../base-components/webapp/core/ActionFactory';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
@@ -40,6 +38,8 @@ import { SortOrder } from '../../../../../model/SortOrder';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { AdminContext } from '../../../../admin/webapp/core/AdminContext';
 import { ContextType } from '../../../../../model/ContextType';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
+import { EditSysConfigDialogContext } from '../../core';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -81,10 +81,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             null, null, null, false, false
         );
 
-        tableConfiguration.routingConfiguration = new DialogRoutingConfiguration(
-            null, KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, ContextMode.EDIT_ADMIN,
-            SysConfigOptionDefinitionProperty.NAME, null, true,
-            undefined, true, 'sysconfig-edit-form'
+        tableConfiguration.routingConfiguration = new RoutingConfiguration(
+            EditSysConfigDialogContext.CONTEXT_ID, null, null, SysConfigOptionDefinitionProperty.NAME
         );
 
         this.state.table.setContentProvider(new SysConfigContentProvider(this));
@@ -119,8 +117,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public search(): void {
         this.state.filterValue = this.filterValue;
 
-        const context = ContextService.getInstance().getActiveContext<AdminContext>(ContextType.MAIN);
-        context.setFilterValue(this.filterValue);
+        const context = ContextService.getInstance().getActiveContext();
+        if (context instanceof AdminContext) {
+            context.setFilterValue(this.filterValue);
+        }
 
         this.state.table.reload(true);
 

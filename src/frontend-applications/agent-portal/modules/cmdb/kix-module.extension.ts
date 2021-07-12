@@ -38,6 +38,7 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
     ];
 
     public uiComponents: UIComponent[] = [
+        new UIComponent('asset-class-chooser', '/kix-module-cmdb$0/webapp/components/asset-class-chooser', []),
         new UIComponent('cmdb-admin-ci-classes', '/kix-module-cmdb$0/webapp/components/cmdb-admin-ci-classes', []),
         new UIComponent(
             'config-item-class-info-widget', '/kix-module-cmdb$0/webapp/components/config-item-class-info-widget', []
@@ -46,27 +47,10 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             'config-item-class-definition', '/kix-module-cmdb$0/webapp/components/config-item-class-definition', []
         ),
         new UIComponent(
-            'new-config-item-class-dialog', '/kix-module-cmdb$0/webapp/components/new-config-item-class-dialog', []
-        ),
-        new UIComponent(
-            'edit-config-item-class-dialog', '/kix-module-cmdb$0/webapp/components/edit-config-item-class-dialog', []
-        ),
-        new UIComponent(
             'cmdb-admin-general-catalog', '/kix-module-cmdb$0/webapp/components/cmdb-admin-general-catalog', []
-        ),
-        new UIComponent(
-            'new-general-catalog-dialog', '/kix-module-cmdb$0/webapp/components/new-general-catalog-dialog', []
-        ),
-        new UIComponent(
-            'edit-general-catalog-dialog', '/kix-module-cmdb$0/webapp/components/edit-general-catalog-dialog', []
         ),
         new UIComponent('cmdb-module', '/kix-module-cmdb$0/webapp/components/cmdb-module', []),
         new UIComponent('config-item-info', '/kix-module-cmdb$0/webapp/components/config-item-info', []),
-        new UIComponent('new-config-item-dialog', '/kix-module-cmdb$0/webapp/components/new-config-item-dialog', []),
-        new UIComponent('edit-config-item-dialog', '/kix-module-cmdb$0/webapp/components/edit-config-item-dialog', []),
-        new UIComponent(
-            'search-config-item-dialog', '/kix-module-cmdb$0/webapp/components/search-config-item-dialog', []
-        ),
         new UIComponent(
             'config-item-version-details', '/kix-module-cmdb$0/webapp/components/config-item-version-details', []
         ),

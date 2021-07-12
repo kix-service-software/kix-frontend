@@ -8,9 +8,23 @@
  */
 
 import { Context } from '../../../../../model/Context';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { ReportDefinition } from '../../../model/ReportDefinition';
 
 export class NewReportDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'new-report-dialog-context';
+
+    public async getDisplayText(): Promise<string> {
+        let text = await TranslationService.translate('Translatable#Report');
+
+        const definition = this.getAdditionalInformation(KIXObjectType.REPORT_DEFINITION) as ReportDefinition;
+        if (definition) {
+            text = definition.Name;
+        }
+
+        return text;
+    }
 
 }

@@ -6,10 +6,16 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.search-dashboard>
-    <search-criteria-widget/>
+    <search-criteria-widget key=state.componentKey/>
     <div.search-result-widget>
-        <search-result-list-widget/>
+        <if(state.resultWidget)>
+            <table-widget
+                key=("search-result-table-" + state.resultWidget[0])
+                useContext=false
+                widgetConfiguration=state.resultWidget[1]
+                title=state.resultWidget[2]
+                icon=state.resultWidget[3]/>
+        </if>
     </div>
 </div>

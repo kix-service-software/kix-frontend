@@ -17,6 +17,9 @@ import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { ContextMode } from '../../model/ContextMode';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { NewReportDefinitionDialogContext } from './webapp/core/context/NewReportDefinitionDialogContext';
+import { FormConfiguration } from '../../model/configuration/FormConfiguration';
+import { FormContext } from '../../model/configuration/FormContext';
+import { ModuleConfigurationService } from '../../server/services/configuration';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -28,7 +31,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const configurations = [];
         const newDialogWidget = new WidgetConfiguration(
             'report-definition-new-dialog-widget', 'New Dialog Widget', ConfigurationType.Widget,
-            'new-report-definition-dialog', 'Translatable#New Report Definition', [], null, null,
+            'object-dialog-form-widget', 'Translatable#New Report Definition', [], null, null,
             false, false, 'kix-icon-plus-blank'
         );
         configurations.push(newDialogWidget);
@@ -36,13 +39,14 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-                this.getModuleId(), [], [], [], [], [], [], [], [],
+                this.getModuleId(), [], [], [],
                 [
                     new ConfiguredDialogWidget(
                         'report-definition-new-dialog-widget', 'report-definition-new-dialog-widget',
                         KIXObjectType.REPORT_DEFINITION, ContextMode.CREATE
                     )
-                ]
+                ], [], [], [], []
+
             )
         );
 
@@ -50,7 +54,17 @@ class Extension extends KIXExtension implements IConfigurationExtension {
     }
 
     public async getFormConfigurations(): Promise<IConfiguration[]> {
-        return [];
+        const configurations = [];
+        const formId = 'report-definition-new-form';
+
+        configurations.push(
+            new FormConfiguration(formId, 'Translatable#New Report Definition', [], KIXObjectType.REPORT_DEFINITION)
+        );
+        ModuleConfigurationService.getInstance().registerForm(
+            [FormContext.NEW], KIXObjectType.REPORT_DEFINITION, formId
+        );
+
+        return configurations;
     }
 
 }

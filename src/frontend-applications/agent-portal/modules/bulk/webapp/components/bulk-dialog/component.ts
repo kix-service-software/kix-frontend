@@ -9,17 +9,17 @@
 
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { BulkDialogContext } from '../../core/BulkDialogContext';
 import { BulkService } from '../../core/BulkService';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import { TabContainerEvent } from '../../../../../modules/base-components/webapp/core/TabContainerEvent';
-import { TabContainerEventData } from '../../../../../modules/base-components/webapp/core/TabContainerEventData';
+import { IdService } from '../../../../../model/IdService';
+import { Context } from '../../../../../model/Context';
 
 class Component {
 
     private state: ComponentState;
+    private listenerId: string;
+    private context: Context;
 
     public onCreate(input: any): void {
         this.state = new ComponentState(input.instanceId);
@@ -30,30 +30,42 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<BulkDialogContext>(BulkDialogContext.CONTEXT_ID);
-        if (context) {
-            const objects = await context.getObjectList(null);
-            if (objects && !!objects.length) {
-                const objectType = objects[0].KIXObjectType;
-                BulkService.getInstance().initBulkManager(objectType, objects);
-                const bulkManager = BulkService.getInstance().getBulkManager(objectType);
-                bulkManager.reset(false);
-                this.state.bulkManager = bulkManager;
+        this.listenerId = IdService.generateDateBasedId();
+        this.context = ContextService.getInstance().getActiveContext();
+        this.context?.registerListener(this.listenerId, {
+            additionalInformationChanged: () => null,
+            filteredObjectListChanged: () => null,
+            objectChanged: () => null,
+            objectListChanged: () => this.update(),
+            scrollInformationChanged: () => null,
+            sidebarLeftToggled: () => null,
+            sidebarRightToggled: () => null,
+        });
 
-                const objectName = await LabelService.getInstance().getObjectName(objectType, true);
-
-                const title = await TranslationService.translate('Translatable#Edit {0}', [objectName]);
-
-                EventService.getInstance().publish(
-                    TabContainerEvent.CHANGE_TITLE, new TabContainerEventData('bulk-dialog', title)
-                );
-            }
-        }
+        this.update();
     }
 
     public onDestroy(): void {
+        this.context.unregisterListener(this.listenerId);
+
         if (this.state.bulkManager) {
             this.state.bulkManager.reset();
+        }
+    }
+
+    private async update(): Promise<void> {
+        const objects = await this.context?.getObjectList(null);
+        if (Array.isArray(objects) && objects.length) {
+            const objectType = objects[0].KIXObjectType;
+            BulkService.getInstance().initBulkManager(objectType, objects);
+            const bulkManager = BulkService.getInstance().getBulkManager(objectType);
+            bulkManager.reset(false);
+            this.state.bulkManager = bulkManager;
+
+            const objectName = await LabelService.getInstance().getObjectName(objectType, true);
+            this.state.title = await TranslationService.translate('Translatable#Bulk {0}', [objectName]);
+
+            this.state.icon = LabelService.getInstance().getObjectIconForType(objectType);
         }
     }
 }

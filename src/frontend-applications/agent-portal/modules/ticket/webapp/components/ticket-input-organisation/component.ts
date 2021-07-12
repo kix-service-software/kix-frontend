@@ -14,7 +14,7 @@ import { TreeNode, TreeService } from '../../../../base-components/webapp/core/t
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
-import { FormService } from '../../../../base-components/webapp/core/FormService';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -42,9 +42,12 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     public async setCurrentValue(): Promise<void> {
         let nodes = [];
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const value = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const value = formInstance.getFormFieldValue<number>(this.state.field?.instanceId);
         if (value && value.value) {
+            const icon = LabelService.getInstance().getObjectIconForType(KIXObjectType.ORGANISATION);
+
             if (!isNaN(value.value)) {
                 const organisations = await KIXObjectService.loadObjects(
                     KIXObjectType.ORGANISATION, [value.value]
@@ -53,20 +56,23 @@ class Component extends FormInputComponent<number, ComponentState> {
                 if (organisations && organisations.length) {
                     const organisation = organisations[0];
                     const displayValue = await LabelService.getInstance().getObjectText(organisation);
-                    const currentNode = new TreeNode(organisation.ObjectId, displayValue, 'kix-icon-man-bubble');
+
+                    const currentNode = new TreeNode(organisation.ObjectId, displayValue, icon);
                     nodes = [currentNode];
                 }
             } else {
                 const currentNode = new TreeNode(
-                    value.value, value.value.toString(), 'kix-icon-man-bubble'
+                    value.value, value.value.toString(), icon
                 );
                 nodes = [currentNode];
             }
         }
 
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
-        treeHandler.setTree(nodes);
-        treeHandler.setSelection(nodes, true, true);
+        if (treeHandler) {
+            treeHandler.setTree(nodes);
+            treeHandler.setSelection(nodes, true, true);
+        }
     }
 
     public nodesChanged(nodes: TreeNode[]): void {

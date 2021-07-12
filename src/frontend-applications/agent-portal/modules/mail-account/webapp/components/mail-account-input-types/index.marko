@@ -6,8 +6,7 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<if(state.prepared)>
+<if(state.prepared && state.field)>
     <form-list
         placeholder=state.placeholder
         required=state.field.required

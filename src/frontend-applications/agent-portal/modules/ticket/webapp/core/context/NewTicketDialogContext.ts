@@ -20,6 +20,8 @@ import { AdditionalContextInformation } from '../../../../base-components/webapp
 import { ServiceRegistry } from '../../../../base-components/webapp/core/ServiceRegistry';
 import { KIXObjectFormService } from '../../../../base-components/webapp/core/KIXObjectFormService';
 import { ServiceType } from '../../../../base-components/webapp/core/ServiceType';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 
 export class NewTicketDialogContext extends Context {
 
@@ -28,12 +30,14 @@ export class NewTicketDialogContext extends Context {
     private contact: any;
     private organisation: any;
 
+    private subscriber: IEventSubscriber;
+
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
-        super.initContext(urlParams);
+        await super.initContext(urlParams);
         this.contact = null;
         this.organisation = null;
 
-        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, {
+        this.subscriber = {
             eventSubscriberId: NewTicketDialogContext.CONTEXT_ID,
             eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
                 const form = data.formInstance.getForm();
@@ -54,7 +58,17 @@ export class NewTicketDialogContext extends Context {
                     }
                 }
             }
-        });
+        };
+        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.subscriber);
+    }
+
+    public async destroy(): Promise<void> {
+        await super.destroy();
+        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.subscriber);
+    }
+
+    public async getDisplayText(short: boolean = false): Promise<string> {
+        return await TranslationService.translate('Translatable#New Ticket');
     }
 
     public async setFormObject(overwrite: boolean = true): Promise<void> {
@@ -78,13 +92,7 @@ export class NewTicketDialogContext extends Context {
         }
     }
 
-    public reset(refresh?: boolean): void {
-        super.reset();
-        this.contact = null;
-        this.organisation = null;
-    }
-
-    public async getObject<O extends KIXObject>(kixObjectType: KIXObjectType): Promise<O> {
+    public async getObject<O extends KIXObject>(kixObjectType: KIXObjectType = KIXObjectType.TICKET): Promise<O> {
         let object;
         if (kixObjectType === KIXObjectType.TICKET) {
             object = this.getAdditionalInformation(AdditionalContextInformation.FORM_OBJECT);

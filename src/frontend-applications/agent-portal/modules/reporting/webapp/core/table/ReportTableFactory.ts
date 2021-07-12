@@ -23,10 +23,10 @@ export class ReportTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.REPORT;
 
-    public createTable(
+    public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: string[], contextId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean
-    ): Table {
+    ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting);
         const table = new Table(tableKey, tableConfiguration, contextId);

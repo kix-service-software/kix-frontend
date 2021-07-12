@@ -33,17 +33,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context
             ? await context.getWidgetConfiguration(this.state.instanceId)
             : undefined;
 
         this.contextListenerId = IdService.generateDateBasedId('notification-info-widget-');
         context.registerListener(this.contextListenerId, {
-            explorerBarToggled: () => { return; },
+            sidebarLeftToggled: () => { return; },
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
-            sidebarToggled: () => { return; },
+            sidebarRightToggled: () => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: async (accountId: string, notification: Notification, type: KIXObjectType) => {
                 this.initWidget(notification);
@@ -55,7 +55,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onDestroy() {
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const context = ContextService.getInstance().getActiveContext();
         context.unregisterListener(this.contextListenerId);
     }
 

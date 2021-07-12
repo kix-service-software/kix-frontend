@@ -12,8 +12,7 @@ import { AbstractComponentState } from '../../../../../../modules/base-component
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public canSearch: boolean = false,
-        public formId: string = null,
+        public canSearch: boolean = false
     ) {
         super();
     }

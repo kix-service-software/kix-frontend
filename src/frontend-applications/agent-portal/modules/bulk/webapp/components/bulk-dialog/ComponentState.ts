@@ -7,13 +7,16 @@
  * --
  */
 
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { BulkManager } from '../../core/BulkManager';
 
 export class ComponentState {
 
     public constructor(
         public instanceId: string = null,
-        public bulkManager: BulkManager = null
+        public bulkManager: BulkManager = null,
+        public title: string = 'Translatable#Bulk',
+        public icon: ObjectIcon | string = 'kix-icon-gear'
     ) { }
 
 }

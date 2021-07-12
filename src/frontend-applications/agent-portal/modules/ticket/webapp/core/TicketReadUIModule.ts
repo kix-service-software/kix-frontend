@@ -49,6 +49,7 @@ import { FetchAssetAttributes } from './form/extended-form-manager/FetchAssetAtt
 import { TicketArticleCreate } from './form/extended-form-manager/TicketArticleCreate';
 import { TicketCreateDynamicFields } from './form/extended-form-manager/TicketCreateDynamicFields';
 import { TicketJobFormManager } from './TicketJobFormManager';
+import { ArticleFormFieldValueHandler } from './ArticleFormFieldValueHandler';
 
 export class UIModule implements IUIModule {
 
@@ -59,6 +60,8 @@ export class UIModule implements IUIModule {
     }
 
     public priority: number = 100;
+
+    protected doRegisterContexts: boolean = true;
 
     public async register(): Promise<void> {
         PlaceholderService.getInstance().registerPlaceholderHandler(TicketPlaceholderHandler.getInstance());
@@ -101,8 +104,8 @@ export class UIModule implements IUIModule {
         ServiceRegistry.registerAdditionalTableObjectsHandler(new SuggestedFAQHandler());
 
         FormService.getInstance().addFormFieldValueHandler(new TicketFormFieldValueHandler());
+        FormService.getInstance().addFormFieldValueHandler(new ArticleFormFieldValueHandler());
 
-        await this.registerContexts();
         this.registerTicketActions();
 
         JobFormService.getInstance().registerJobFormManager(JobTypes.TICKET, new TicketJobFormManager());
@@ -112,6 +115,10 @@ export class UIModule implements IUIModule {
             ticketManager.addExtendedJobFormManager(new TicketArticleCreate());
             ticketManager.addExtendedJobFormManager(new FetchAssetAttributes());
             ticketManager.addExtendedJobFormManager(new TicketCreateDynamicFields());
+        }
+
+        if (this.doRegisterContexts) {
+            await this.registerContexts();
         }
     }
 
@@ -147,11 +154,12 @@ export class UIModule implements IUIModule {
         ContextService.getInstance().registerContext(ticketDetailsContextDescriptor);
 
         const searchContext = new ContextDescriptor(
-            TicketSearchContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.DIALOG, ContextMode.SEARCH,
-            false, 'search-ticket-dialog', ['tickets'], TicketSearchContext,
+            TicketSearchContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.MAIN, ContextMode.SEARCH,
+            false, 'search', ['tickets'], TicketSearchContext,
             [
                 new UIComponentPermission('tickets', [CRUD.READ])
-            ]
+            ],
+            'Translatable#Ticket', 'kix-icon-ticket', null, 100
         );
         ContextService.getInstance().registerContext(searchContext);
 

@@ -13,8 +13,6 @@ import { AbstractAction } from '../../../../../modules/base-components/webapp/co
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../model/ContextMode';
 import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 
 export class MailAccountEditAction extends AbstractAction {
@@ -38,17 +36,12 @@ export class MailAccountEditAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<MailAccountDetailsContext>(
-            MailAccountDetailsContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         if (context) {
             const id = context.getObjectId();
             if (id) {
-                ContextService.getInstance().setDialogContext(
-                    EditMailAccountDialogContext.CONTEXT_ID, KIXObjectType.MAIL_ACCOUNT,
-                    ContextMode.EDIT_ADMIN, id
-                );
+                ContextService.getInstance().setActiveContext(EditMailAccountDialogContext.CONTEXT_ID, id);
             }
         }
     }

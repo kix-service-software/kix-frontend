@@ -29,13 +29,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new WidgetConfiguration(
                 'admin-dashboard-category-explorer', 'Category Explorer', ConfigurationType.Widget,
-                'admin-modules-explorer', 'Translatable#Administration', [], null, null, false, false, null, false
+                'admin-modules-explorer', 'Translatable#Administration', [], null, null, false, true, null, false
             )
         );
 
         configurations.push(
             new ContextConfiguration(
-                this.getModuleId(), 'Admin Dashboard', ConfigurationType.Context,
+                this.getModuleId(), 'Admin', ConfigurationType.Context,
                 this.getModuleId(),
                 [],
                 [

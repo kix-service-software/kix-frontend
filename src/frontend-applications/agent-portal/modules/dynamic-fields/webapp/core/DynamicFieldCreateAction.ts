@@ -11,8 +11,7 @@ import { AbstractAction } from '../../../base-components/webapp/core/AbstractAct
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../model/ContextMode';
+import { NewDynamicFieldDialogContext } from './NewDynamicFieldDialogContext';
 
 export class DynamicFieldCreateAction extends AbstractAction {
 
@@ -26,10 +25,7 @@ export class DynamicFieldCreateAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-            null, KIXObjectType.DYNAMIC_FIELD, ContextMode.CREATE_ADMIN, null, true, 'Translatable#System'
-        );
+        ContextService.getInstance().setActiveContext(NewDynamicFieldDialogContext.CONTEXT_ID);
     }
 
 }

@@ -59,7 +59,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'ticket-admin-state-create'
                 ],
                 [
-                    'ticket-admin-state-edit', 'print-action'
+                    'ticket-admin-state-edit'
                 ],
                 [],
                 [

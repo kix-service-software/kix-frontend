@@ -734,7 +734,7 @@ describe('MacroObjectCreator', () => {
         let macroObject: Macro;
 
         before(async () => {
-            formInstance = new FormInstance();
+            formInstance = new FormInstance(null);
 
             const jobNameField = new FormFieldConfiguration('', '', JobProperty.NAME, null);
             jobNameField.instanceId = JobProperty.NAME;
@@ -805,7 +805,7 @@ describe('MacroObjectCreator', () => {
         let macroObject: Macro;
 
         before(async () => {
-            formInstance = new FormInstance();
+            formInstance = new FormInstance(null);
 
             const jobNameField = new FormFieldConfiguration('', '', JobProperty.NAME, null);
             jobNameField.instanceId = JobProperty.NAME;

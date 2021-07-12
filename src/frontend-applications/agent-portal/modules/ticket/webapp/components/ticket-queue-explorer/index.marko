@@ -6,22 +6,27 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.ticket-queue-explorer>
     <widget
         instanceId=state.instanceId
-        minimizable=false
-        minimized=false
-        explorer=true
-        title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Queues")>
+        title=(
+            state.widgetConfiguration
+                ? state.widgetConfiguration.title
+                : "Queues"
+        )>
         <@content>
-            <span.show-all class={
-                active: !state.activeNode
-            } on-click("showAll")>
+            <div.show-all
+                class={
+                    active: !state.activeNode
+                }
+                on-click("showAll")>
                 <translation-string pattern="Translatable#Show Backlog"/>
-            </span>
+            </div>
             <if(state.nodes)>
-                <tree tree=state.nodes activeNode=state.activeNode on-nodeClicked("activeNodeChanged")/>
+                <tree
+                    tree=state.nodes
+                    activeNode=state.activeNode
+                    on-nodeClicked("activeNodeChanged")/>
             </if>
             <else>
                 <loading-spinner/>

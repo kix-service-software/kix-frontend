@@ -9,27 +9,54 @@
 
 .import-container {
     margin-left: 1.5rem;
+
     .import-attributes-container {
         .import-attributes {
             margin-left: @form-property-column + @form-property-hint-column;
         }
     }
+
     >.object-table {
         margin: 4rem 0 0 1rem;
+
         .object-table-head {
             display: grid;
             grid-template-columns: max-content max-content;
             grid-gap: @margin-default;
             margin-bottom: @margin-small;
             align-items: center;
+
             >span:first-child {
                 font-weight: bold;
                 display: inline-block;
             }
         }
     }
-    >.dialog-button-container {
-        padding-right: 0;
-        margin-left: 1rem;
+}
+
+// FIXME: copied from object-dialog
+.import-dialog-control {
+    position: sticky;
+    bottom: 0;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: auto;
+    padding: 0.5rem 1rem;
+    box-shadow: 0px 2px 4px #00000029;
+    background-color: @secondary-3;
+
+    .dialog-button-container {
+        justify-self: end;
+        display: grid;
+        grid-auto-columns: max-content;
+        grid-auto-flow: column;
+        grid-column-gap: 1rem;
+        padding: 0.5rem;
+        border-radius: 3px;
+    }
+
+    .dialog-loading-text {
+        align-self: center;
+        justify-self: center;
     }
 }

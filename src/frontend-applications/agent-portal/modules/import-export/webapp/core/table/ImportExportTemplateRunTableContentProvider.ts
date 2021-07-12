@@ -29,7 +29,7 @@ export class ImportExportTemplateRunTableContentProvider extends TableContentPro
         let objects = [];
         // first object id is template id
         if (this.contextId && this.objectIds && this.objectIds[0]) {
-            const context = await ContextService.getInstance().getContext(this.contextId);
+            const context = ContextService.getInstance().getActiveContext();
             objects = context ? await context.getObjectList('RUNS_OF_TEMPLATE_' + this.objectIds[0]) : [];
         }
         return await this.getRowObjects(objects);

@@ -102,6 +102,7 @@ export class UserService extends KIXObjectAPIService {
 
             const myQueues = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
             if (myQueues) {
+                myQueues[1] = myQueues[1] === null ? '' : myQueues[1];
                 preferences.push({ ID: PersonalSettingsProperty.MY_QUEUES, Value: myQueues[1] });
             }
 
@@ -126,14 +127,13 @@ export class UserService extends KIXObjectAPIService {
                 }
             }
 
-            const id = await super.executeUpdateOrCreateRequest(
+            return await super.executeUpdateOrCreateRequest(
                 token, clientRequestId, parameter, uri, objectType, 'UserPreferenceID', true
             ).catch((error: Error) => {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                 throw new Error(error.Code, error.Message);
             });
 
-            return id;
         }
     }
 
@@ -250,6 +250,7 @@ export class UserService extends KIXObjectAPIService {
         );
 
         for (const param of parameter) {
+
             if (param[0] === PersonalSettingsProperty.USER_PASSWORD) {
                 if (param[1] !== null && param[1] !== '') {
                     await this.executeUpdateOrCreateRequest(
@@ -258,22 +259,34 @@ export class UserService extends KIXObjectAPIService {
                     );
                 }
             } else if (currentPreferences.some((p) => p.ID === param[0])) {
-                await this.updateObject(
-                    token, clientRequestId, KIXObjectType.USER_PREFERENCE,
-                    [
-                        ['Value', param[1]]
-                    ],
-                    param[0],
-                    options
-                ).catch((error: Error) => {
-                    errors.push(error);
-                });
+                const paramValue = param[1] === null ? '' : param[1];
+                if (
+                    paramValue && (typeof paramValue === 'string' || (Array.isArray(paramValue) && paramValue.length))
+                ) {
+                    await this.updateObject(
+                        token, clientRequestId, KIXObjectType.USER_PREFERENCE,
+                        [
+                            ['Value', paramValue]
+                        ],
+                        param[0], options
+                    ).catch((error: Error) => {
+                        errors.push(error);
+                    });
+                } else {
+                    const uri = this.buildUri('session', 'user', 'preferences', param[0]);
+                    await this.sendDeleteRequest<void>(token, clientRequestId, [uri], KIXObjectType.USER_PREFERENCE)
+                        .catch((error: Error) => {
+                            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                            throw new Error(error.Code, error.Message);
+                        });
+                }
             } else {
+                const paramValue = param[1] === null ? '' : param[1];
                 await this.createObject(
                     token, clientRequestId, KIXObjectType.USER_PREFERENCE,
                     [
                         ['ID', param[0]],
-                        ['Value', param[1]]
+                        ['Value', paramValue]
                     ],
                     options
                 ).catch((error: Error) => {

@@ -22,6 +22,8 @@ import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
 import { FollowUpType } from '../../../model/FollowUpType';
+import { SortUtil } from '../../../../../model/SortUtil';
+import { DataType } from '../../../../../model/DataType';
 
 export class QueueService extends KIXObjectService<Queue> {
 
@@ -76,7 +78,7 @@ export class QueueService extends KIXObjectService<Queue> {
 
     public async prepareObjectTree(
         queues: Queue[], showInvalid?: boolean, invalidClickable: boolean = false,
-        filterIds?: number[], includeTicketStats: boolean = false
+        filterIds?: number[], translatable?: boolean, includeTicketStats: boolean = false
     ): Promise<TreeNode[]> {
         const nodes = [];
         if (queues && !!queues.length) {
@@ -97,7 +99,7 @@ export class QueueService extends KIXObjectService<Queue> {
                 }
 
                 const subTree = await this.prepareObjectTree(
-                    queue.SubQueues, showInvalid, invalidClickable, filterIds, includeTicketStats
+                    queue.SubQueues, showInvalid, invalidClickable, filterIds, translatable, includeTicketStats
                 );
 
                 const treeNode = new TreeNode(
@@ -116,6 +118,9 @@ export class QueueService extends KIXObjectService<Queue> {
                 nodes.push(treeNode);
             }
         }
+
+        SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+
         return nodes;
     }
 

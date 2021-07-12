@@ -8,17 +8,17 @@
  */
 
 import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
+import { IdService } from '../../../../../model/IdService';
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 
 export class ComponentState {
 
     public constructor(
-        public instanceId: string = null,
+        public instanceId: string = IdService.generateDateBasedId(),
         public lanes: Array<[string, any]> = [],
         public contentWidgets: Array<[string, any]> = [],
         public actions: AbstractAction[] = [],
         public error: any = null,
         public title: string = '',
-        public loading: boolean = true
     ) { }
 }

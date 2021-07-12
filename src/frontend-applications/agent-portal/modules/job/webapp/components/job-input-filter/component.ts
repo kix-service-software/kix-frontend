@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
-import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { JobProperty } from '../../../model/JobProperty';
 import { JobFormService } from '../../core';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
@@ -21,6 +20,7 @@ import { IEventSubscriber } from '../../../../base-components/webapp/core/IEvent
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
 import { SearchService } from '../../../../search/webapp/core';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends FormInputComponent<{}, ComponentState> {
 
@@ -57,7 +57,8 @@ class Component extends FormInputComponent<{}, ComponentState> {
     }
 
     private async setManager(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const typeValue = await formInstance.getFormFieldValueByProperty<string>(JobProperty.TYPE);
         const type = typeValue && typeValue.value ? typeValue.value : null;
 
@@ -94,8 +95,9 @@ class Component extends FormInputComponent<{}, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const value = formInstance.getFormFieldValue<any>(this.state.field.instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const value = formInstance.getFormFieldValue<any>(this.state.field?.instanceId);
         if (value && value.value) {
 
             // value is frontend filter criteria (set in dialog)

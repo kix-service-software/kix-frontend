@@ -8,13 +8,11 @@
  */
 
 import { AbstractComponentState } from '../../../../../../modules/base-components/webapp/core/AbstractComponentState';
-import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public allowNew: boolean = false,
-        public logoIcon: ObjectIcon = null
+        public isMobile: boolean = false
     ) {
         super();
     }

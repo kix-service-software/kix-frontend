@@ -9,30 +9,23 @@
 
 import { ObjectUpdatedEventData } from '../../../../model/ObjectUpdatedEventData';
 import { ContextService } from './ContextService';
-import { ContextType } from '../../../../model/ContextType';
 import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { BrowserUtil } from './BrowserUtil';
-import { ContextMode } from '../../../../model/ContextMode';
-import { Context } from '../../../../model/Context';
-import { AdditionalContextInformation } from './AdditionalContextInformation';
 
 export class NotificationHandler {
 
     public static async handleUpdateNotifications(events: ObjectUpdatedEventData[]): Promise<void> {
-        const activeContext = ContextService.getInstance().getActiveContext();
-        if (activeContext && activeContext.getDescriptor().contextType === ContextType.MAIN) {
-            await NotificationHandler.checkForPermissionUpdate(activeContext, events);
-            NotificationHandler.checkForDataUpdate(activeContext, events);
-        }
+        await NotificationHandler.checkForPermissionUpdate(events);
+        NotificationHandler.checkForDataUpdate(events);
     }
 
-    private static async checkForPermissionUpdate(context: Context, events: ObjectUpdatedEventData[]): Promise<void> {
+    private static async checkForPermissionUpdate(events: ObjectUpdatedEventData[]): Promise<void> {
         const user = await AgentSocketClient.getInstance().getCurrentUser();
 
         let userIsAffacted = events
-            .filter((e) => e.Namespace === `${KIXObjectType.ROLE}.${KIXObjectType.USER}`)
-            .map((e) => Number(e.ObjectID.split('::')[1]))
+            .filter((e) => e.ObjectID && e.Namespace === `${KIXObjectType.ROLE}.${KIXObjectType.USER}`)
+            .map((e) => Number(e.ObjectID?.split('::')[1]))
             .some((uid) => uid === user.UserID);
 
         userIsAffacted = userIsAffacted || events
@@ -41,8 +34,8 @@ export class NotificationHandler {
             .some((roleId) => user.RoleIDs.some((rid) => rid === roleId));
 
         userIsAffacted = userIsAffacted || events
-            .filter((e) => e.Namespace === `${KIXObjectType.ROLE}.${KIXObjectType.PERMISSION}`)
-            .map((e) => Number(e.ObjectID.split('::')[0]))
+            .filter((e) => e.ObjectID && e.Namespace === `${KIXObjectType.ROLE}.${KIXObjectType.PERMISSION}`)
+            .map((e) => Number(e.ObjectID?.split('::')[0]))
             .some((roleId) => user.RoleIDs.some((rid) => rid === roleId));
 
         if (userIsAffacted) {
@@ -50,45 +43,23 @@ export class NotificationHandler {
         }
     }
 
-    private static checkForDataUpdate(context: Context, events: ObjectUpdatedEventData[]): void {
-        if (!context.getAdditionalInformation(AdditionalContextInformation.DONT_SHOW_UPDATE_NOTIFICATION)) {
-            let showRefreshNotification = false;
-            let notifiactionObjectType: KIXObjectType | string;
-
-            if (context.getDescriptor().contextMode === ContextMode.DETAILS) {
-                showRefreshNotification = events.some((e) => {
-                    const objectType = this.getObjectType(e.Namespace);
-                    const isObjectType = context.getDescriptor().kixObjectTypes.some((ot) => ot === objectType);
-                    const eventObjectId = e.ObjectID && typeof e.ObjectID === 'string'
-                        ? e.ObjectID.split('::')
-                        : [];
-                    const isObject = eventObjectId[0] === context.getObjectId().toString();
-                    if (isObjectType && isObject) {
-                        notifiactionObjectType = objectType;
-                        return true;
-                    }
-                    return false;
-                });
-            } else if (context.getDescriptor().contextMode === ContextMode.DASHBOARD) {
-                showRefreshNotification = events.some((e) => {
-                    const objectType = this.getObjectType(e.Namespace);
-                    const isObjectType = context.getDescriptor().kixObjectTypes.some((ot) => ot === objectType);
-                    if (isObjectType) {
-                        notifiactionObjectType = objectType;
-                        return true;
-                    }
-                    return false;
-                });
+    private static checkForDataUpdate(events: ObjectUpdatedEventData[]): void {
+        const updates: Array<[KIXObjectType | string, string | number]> = events.map(
+            (e): [KIXObjectType | string, string | number] => {
+                const objectType = this.getObjectType(e.Namespace);
+                let eventObjectId = e.ObjectID;
+                if (eventObjectId && typeof eventObjectId === 'string') {
+                    eventObjectId = eventObjectId.split('::')[0];
+                }
+                return [objectType, eventObjectId];
             }
+        );
 
-            if (showRefreshNotification) {
-                BrowserUtil.openAppRefreshOverlay('Translatable#Data has been updated.', notifiactionObjectType);
-            }
-        }
+        ContextService.getInstance().notifyUpdates(updates);
     }
 
     private static getObjectType(namespace: string): string {
-        const objects = namespace.split('.');
+        const objects = namespace?.split('.');
         if (objects.length > 1) {
             if (objects[0] === 'FAQ') {
                 if (objects[1] === 'Category') {

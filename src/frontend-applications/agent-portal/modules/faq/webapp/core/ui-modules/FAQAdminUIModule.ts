@@ -48,11 +48,12 @@ export class UIModule implements IUIModule {
 
         const newFAQCategoryContext = new ContextDescriptor(
             NewFAQCategoryDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_CATEGORY], ContextType.DIALOG,
-            ContextMode.CREATE_ADMIN, false, 'new-faq-category-dialog', ['faqcategories'],
+            ContextMode.CREATE_ADMIN, false, 'object-dialog', ['faqcategories'],
             NewFAQCategoryDialogContext,
             [
                 new UIComponentPermission('system/faq/categories', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#New FAQ Category', 'kix-icon-gear', FAQCategoryDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(newFAQCategoryContext);
 
@@ -60,11 +61,12 @@ export class UIModule implements IUIModule {
 
         const editFAQCategoryContext = new ContextDescriptor(
             EditFAQCategoryDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_CATEGORY], ContextType.DIALOG,
-            ContextMode.EDIT_ADMIN, false, 'edit-faq-category-dialog', ['faqcategories'],
+            ContextMode.EDIT_ADMIN, false, 'object-dialog', ['faqcategories'],
             EditFAQCategoryDialogContext,
             [
                 new UIComponentPermission('system/faq/categories', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Edit FAQ Category', 'kix-icon-gear', FAQCategoryDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(editFAQCategoryContext);
 
@@ -74,7 +76,8 @@ export class UIModule implements IUIModule {
             true, 'object-details-page', ['faqcategories'], FAQCategoryDetailsContext,
             [
                 new UIComponentPermission('system/faq/categories', [CRUD.READ])
-            ]
+            ],
+            'Translatable#FAQ Category Details Context', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(faqCategoryDetailsContextDescriptor);
 

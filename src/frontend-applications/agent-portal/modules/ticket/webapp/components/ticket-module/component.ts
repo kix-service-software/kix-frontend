@@ -21,7 +21,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext() as TicketContext;
         this.state.contentWidgets = await context.getContent();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Search',
@@ -29,7 +29,7 @@ class Component {
         ]);
 
         this.state.placeholder = await TranslationService.translate('Translatable#Please enter a search term.');
-        this.state.filterValue = context.filterValue;
+        this.state.filterValue = context?.filterValue;
     }
 
     public keyUp(event: any): void {
@@ -40,8 +40,10 @@ class Component {
     }
 
     public async search(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
-        context.setFilterValue(this.state.filterValue);
+        const context = ContextService.getInstance().getActiveContext();
+        if (context instanceof TicketContext) {
+            context.setFilterValue(this.state.filterValue);
+        }
     }
 
 }

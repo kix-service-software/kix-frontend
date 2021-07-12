@@ -18,7 +18,6 @@ import { TicketPriority } from '../../model/TicketPriority';
 import { TicketType } from '../../model/TicketType';
 import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
 import { User } from '../../../user/model/User';
-import { AgentService } from '../../../user/webapp/core';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
 import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
@@ -29,6 +28,7 @@ import { UserProperty } from '../../../user/model/UserProperty';
 import { StateType } from '../../model/StateType';
 import { QueueProperty } from '../../model/QueueProperty';
 import { ArticleProperty } from '../../model/ArticleProperty';
+import { AgentService } from '../../../user/webapp/core/AgentService';
 
 export class TicketLabelProvider extends LabelProvider<Ticket> {
 
@@ -446,7 +446,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
         ticket: Ticket, id: boolean = true, title: boolean = true, translatable: boolean = true
     ): Promise<string> {
         let returnString = '';
-        if (ticket) {
+        if (ticket && ticket.Title) {
             if (id) {
                 let ticketHook: string = '';
                 let ticketHookDivider: string = '';
@@ -466,16 +466,16 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                     ticketHookDivider = dividerConfig[0].Value ? dividerConfig[0].Value : '';
                 }
 
-                returnString = ticketHook + ticketHookDivider + ticket.TicketNumber;
+                if (ticket.TicketNumber) {
+                    returnString = ticketHook + ticketHookDivider + ticket.TicketNumber;
+                }
             }
             if (title) {
                 returnString += (id ? ' - ' : '') + ticket.Title;
             }
 
-        } else {
-            const ticketLabel = await TranslationService.translate('Translatable#Ticket');
-            returnString = ticketLabel;
         }
+
         return returnString;
     }
 
@@ -566,9 +566,9 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 break;
             case TicketProperty.OWNER_ID:
             case TicketProperty.OWNER:
-                if (ticket && ticket.ResponsibleID) {
+                if (ticket && ticket.OwnerID) {
                     const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [ticket.ResponsibleID],
+                        KIXObjectType.USER, [ticket.OwnerID],
                         new KIXObjectLoadingOptions(
                             null, null, 1, [UserProperty.CONTACT]
                         ), null, true, true, true

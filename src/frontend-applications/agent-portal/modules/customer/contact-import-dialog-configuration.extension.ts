@@ -40,7 +40,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             'contact-import-dialog-help-widget', 'Help Widget', ConfigurationType.Widget,
             'help-widget', 'Translatable#Help', [],
             new ConfigurationDefinition('contact-import-dialog-help-widget-config', ConfigurationType.HelpWidget),
-            null, false, false, 'kix-icon-query'
+            null, false, true, 'kix-icon-query'
         );
         configurations.push(helpWidget);
 
@@ -57,13 +57,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 [
                     new ConfiguredWidget('contact-import-dialog-help-widget', 'contact-import-dialog-help-widget')
                 ],
-                [], [], [], [], [], [], [],
+                [], [],
                 [
                     new ConfiguredDialogWidget(
                         'contact-import-dialog-widget', 'contact-import-dialog-widget',
                         KIXObjectType.CONTACT, ContextMode.IMPORT
                     )
-                ]
+                ], [], [], [], []
             )
         );
         return configurations;

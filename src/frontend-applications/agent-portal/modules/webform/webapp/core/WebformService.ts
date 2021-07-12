@@ -53,7 +53,7 @@ export class WebformService extends KIXObjectService<Webform> {
     ): Promise<O[]> {
         let webforms = await WebformSocketClient.getInstance().loadWebforms();
         if (objectIds && objectIds.length) {
-            webforms = webforms.filter((wf) => objectIds.some((oid) => wf.ObjectId === oid));
+            webforms = webforms.filter((wf) => objectIds.some((oid) => Number(wf.ObjectId) === Number(oid)));
         }
         return webforms as any[];
     }
@@ -62,7 +62,7 @@ export class WebformService extends KIXObjectService<Webform> {
         objectType: KIXObjectType, formId: string, createOptions?: KIXObjectSpecificCreateOptions,
         cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
-        const webform = await this.getWebformFromForm(formId);
+        const webform = await this.getWebformFromForm();
         const objectId = await WebformSocketClient.getInstance().createUpdateWebform(webform)
             .catch(async (error: Error) => {
                 const content = new ComponentContent('list-with-title',
@@ -82,7 +82,7 @@ export class WebformService extends KIXObjectService<Webform> {
     public async updateObjectByForm(
         objectType: KIXObjectType, formId: string, objectId: number | string, cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
-        const webform = await this.getWebformFromForm(formId);
+        const webform = await this.getWebformFromForm();
         const updatedObjectId = await WebformSocketClient.getInstance().createUpdateWebform(webform, Number(objectId))
             .catch(async (error: Error) => {
                 const content = new ComponentContent('list-with-title',
@@ -99,12 +99,12 @@ export class WebformService extends KIXObjectService<Webform> {
         return updatedObjectId;
     }
 
-    private async getWebformFromForm(formId: string): Promise<Webform> {
+    private async getWebformFromForm(): Promise<Webform> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
             KIXObjectType.WEBFORM, ServiceType.FORM
         );
 
-        const parameter: Array<[string, any]> = await service.getFormParameter(formId);
+        const parameter: Array<[string, any]> = await service.getFormParameter();
         return new Webform(null,
             this.getParameterValue(parameter, WebformProperty.BUTTON_LABEL),
             this.getParameterValue(parameter, WebformProperty.TITLE),

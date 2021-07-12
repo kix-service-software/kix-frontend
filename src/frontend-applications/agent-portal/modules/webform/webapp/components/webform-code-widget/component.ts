@@ -25,13 +25,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<WebformDetailsContext>(
-            WebformDetailsContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         context.registerListener('webform-code-widget', {
-            sidebarToggled: () => { return; },
-            explorerBarToggled: () => { return; },
+            sidebarRightToggled: () => { return; },
+            sidebarLeftToggled: () => { return; },
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
             scrollInformationChanged: () => { return; },
@@ -55,9 +53,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onDestroy(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<WebformDetailsContext>(
-            WebformDetailsContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
         context.unregisterListener('webform-code-widget');
     }
 

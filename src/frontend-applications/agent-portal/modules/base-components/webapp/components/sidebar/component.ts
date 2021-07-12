@@ -13,109 +13,112 @@ import { ContextService } from '../../../../../modules/base-components/webapp/co
 import { Context } from '../../../../../model/Context';
 import { ContextType } from '../../../../../model/ContextType';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { IEventSubscriber } from '../../core/IEventSubscriber';
+import { MobileShowEvent } from '../../../../agent-portal/model/MobileShowEvent';
+import { EventService } from '../../core/EventService';
+import { MobileShowEventData } from '../../../../agent-portal/model/MobileShowEventData';
 
 class Component {
 
     private state: ComponentState;
-    private contextListernerId: string;
     private contextServiceListernerId: string;
+    public eventSubscriber: IEventSubscriber;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
-        this.contextListernerId = IdService.generateDateBasedId('sidebar-');
         this.contextServiceListernerId = IdService.generateDateBasedId('sidebar-');
+        this.state.isLeft = input.isLeft;
     }
 
-    public onInput(input: any): void {
-        this.state.contextType = input.contextType;
-    }
-
-    public onMount(): void {
-        this.state.loading = true;
+    public async onMount(): Promise<void> {
         ContextService.getInstance().registerListener({
             constexServiceListenerId: this.contextServiceListernerId,
             contextChanged: (contextId: string, context: Context, type: ContextType) => {
-                if (type === this.state.contextType) {
-                    this.setContext(context);
-                }
+                this.setContext(context);
+                this.handleShowSidebarAreaState(context);
             },
             contextRegistered: () => { return; }
         });
-        this.setContext(ContextService.getInstance().getActiveContext(this.state.contextType));
-        setTimeout(() => {
-            this.state.loading = false;
-        }, 100);
+        this.setContext(ContextService.getInstance().getActiveContext());
+
+        this.state.translations = await TranslationService.createTranslationObject(
+            [
+                'Translatable#Close Sidebars',
+                'Translatable#Open Sidebars'
+            ]
+        );
+
+        window.addEventListener('resize', this.resizeHandling.bind(this), false);
+        this.resizeHandling();
+
+        this.eventSubscriber = {
+            eventSubscriberId: `sidebar-mobile-${this.state.isLeft ? 'left' : 'right'}`,
+            eventPublished: (data, eventId: MobileShowEvent | string) => {
+                if (eventId === MobileShowEvent.SHOW_MOBILE) {
+                    this.state.showMobile
+                        = (this.state.isLeft && data === MobileShowEventData.SHOW_LEFT_SIDEBAR)
+                        || (!this.state.isLeft && data === MobileShowEventData.SHOW_RIGHT_SIDEBAR);
+                }
+            }
+        };
+
+        EventService.getInstance().subscribe(MobileShowEvent.SHOW_MOBILE, this.eventSubscriber);
+    }
+
+    private resizeHandling(): void {
+        this.state.isMobile = Boolean(window.innerWidth <= 1024);
+        this.state.isSmall = this.state.isLeft
+            ? Boolean(window.innerWidth <= 1300) : Boolean(window.innerWidth <= 1600);
+        this.handleShowSidebarAreaState();
+    }
+
+    private handleShowSidebarAreaState(context: Context = ContextService.getInstance().getActiveContext()) {
+        if (this.state.isSmall) {
+            if (this.state.showSidebarArea) {
+                this.toggleSidebarArea();
+            }
+        } else if (context) {
+            this.state.showSidebarArea = context.isSidebarOpen(this.state.isLeft);
+        }
     }
 
     public onDestroy(): void {
         ContextService.getInstance().unregisterListener(this.contextServiceListernerId);
+        window.removeEventListener('resize', this.resizeHandling.bind(this), false);
+        EventService.getInstance().unsubscribe(MobileShowEvent.SHOW_MOBILE, this.eventSubscriber);
     }
 
     private setContext(context: Context): void {
-        if (context) {
-            context.registerListener(this.contextListernerId, {
-                sidebarToggled: () => {
-                    this.updateSidebars(context);
-                },
-                explorerBarToggled: () => { return; },
-                objectChanged: () => { return; },
-                objectListChanged: () => { return; },
-                filteredObjectListChanged: () => { return; },
-                scrollInformationChanged: () => { return; },
-                additionalInformationChanged: () => { return; }
-            });
-        }
         this.updateSidebars(context);
     }
 
-    private updateSidebars(context: Context): void {
-        this.state.loading = true;
+    private async updateSidebars(context: Context): Promise<void> {
         this.state.sidebars = [];
-        setTimeout(async () => {
-            this.state.showSidebar = context ? context.areSidebarsShown() : false;
-            if (this.state.showSidebar) {
-                const sidebars = context.getSidebars(true);
-                if (Array.isArray(sidebars)) {
-                    for (const cw of sidebars) {
-                        const template = await this.getSidebarTemplate(cw.instanceId);
-                        this.state.sidebars.push([cw.instanceId, template]);
-                    }
+        if (context) {
+            const sidebars = this.state.isLeft ? context.getSidebarsLeft() : context.getSidebarsRight();
+            if (Array.isArray(sidebars)) {
+                for (const cw of sidebars) {
+                    const template = await this.getSidebarTemplate(cw.instanceId);
+                    this.state.sidebars.push([cw.instanceId, template, IdService.generateDateBasedId(cw.instanceId)]);
                 }
-
-                this.setShieldHeight(context);
-            } else {
-                this.state.sidebars = [];
             }
-            this.state.loading = false;
-        }, 100);
+        }
+        (this as any).setStateDirty('sidebars');
+    }
+
+    public toggleSidebarArea(): void {
+        this.state.showSidebarArea = !this.state.showSidebarArea;
+        const context = ContextService.getInstance().getActiveContext();
+        if (context) {
+            context.toggleSidebar(this.state.showSidebarArea, this.state.isLeft, !this.state.isSmall);
+        }
     }
 
     public async getSidebarTemplate(instanceId: string): Promise<any> {
-        const context = ContextService.getInstance().getActiveContext(this.state.contextType);
+        const context = ContextService.getInstance().getActiveContext();
         const config = context ? await context.getWidgetConfiguration(instanceId) : undefined;
         return config ? KIXModulesService.getComponentTemplate(config.widgetId) : undefined;
-    }
-
-    private setShieldHeight(context: Context): void {
-        const shield = (this as any).getEl();
-        if (shield && context) {
-            const visible = getComputedStyle(shield).getPropertyValue('display');
-            const sidebarArea = shield.nextElementSibling;
-            if (visible && visible !== 'none' && sidebarArea) {
-                const isDialogContext = context.getDescriptor().contextType === ContextType.DIALOG;
-                setTimeout(() => {
-                    const sidebarHeight = sidebarArea.getBoundingClientRect().height;
-                    const formHeight = isDialogContext && shield.previousElementSibling
-                        ? shield.previousElementSibling.getBoundingClientRect().height : 0;
-                    const relevantHeight = sidebarHeight && sidebarHeight > formHeight
-                        ? sidebarHeight : formHeight ? formHeight : null;
-                    if (relevantHeight) {
-                        const addHeight = isDialogContext ? '1rem' : '13.5rem';
-                        shield.style.height = `calc(${relevantHeight}px + ${addHeight})`;
-                    }
-                }, 200);
-            }
-        }
     }
 }
 

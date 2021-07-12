@@ -59,7 +59,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         const queueExplorerConfig = new WidgetConfiguration(
             'ticket-dashboard-queue-explorer', 'Ticket Queue Explorer', ConfigurationType.Widget,
             'ticket-queue-explorer', 'Translatable#Queues', [], null,
-            false, false, null
+            null, false, true
         );
         configurations.push(queueExplorerConfig);
 
@@ -247,7 +247,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             'ticket-dashboard-ticket-list-widget', 'Ticket List Widget', ConfigurationType.Widget,
             'table-widget', 'Translatable#Overview Tickets',
             [
-                'ticket-create-action', 'bulk-action', 'csv-export-action', 'ticket-search-action'
+                'bulk-action', 'csv-export-action'
             ],
             new ConfigurationDefinition('ticket-dashboard-table-widget-settings', ConfigurationType.TableWidget),
             null, false, false, 'kix-icon-ticket', true

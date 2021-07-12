@@ -1,0 +1,127 @@
+/**
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+@toolbar-icon-size: 1.5rem;
+
+.kix-toolbar {
+    display: grid;
+    align-self: end;
+
+    >div.toolbar-group {
+        display: grid;
+
+        >div {
+            display: grid;
+            cursor: pointer;
+
+            >.new-icon {
+                vertical-align: super;
+            }
+        }
+    }
+}
+
+// "mobile"
+@media only screen and (max-width: @mobile-breakpoint) {
+    .kix-toolbar {
+        gap: .5rem;
+
+        div.toolbar-group {
+            gap: .25rem;
+
+            >div {
+                grid-template-columns: 3rem auto;
+                gap: 0 .25rem;
+                position: relative;
+                color: @secondary-6;
+                background: @primary-2;
+                border: 1px solid @secondary-6;
+                padding: 0 .5rem;
+                border-radius: .25rem;
+                align-items: center;
+
+                &:hover {
+                    color: @primary-1;
+                    border-color: @primary-1;
+                }
+
+                >.action-icon {
+
+                    [class^="kix-icon-"],
+                    [class*=" kix-icon-"] {
+                        font-size: 2.5rem;
+                        line-height: 3rem;
+                    }
+                }
+
+                >.action-text {
+                    font-size: 1.25rem;
+                }
+
+                >.new-icon {
+                    position: absolute;
+                    left: 2.25rem;
+                    top: .25rem;
+                    font-size: 1.25rem;
+                }
+
+            }
+        }
+    }
+}
+
+// not "mobile"
+@media only screen and (min-width: @mobile-breakpoint + 1px) {
+    .kix-toolbar {
+        gap: 0 .75rem;
+        grid-auto-flow: column;
+
+        >div.toolbar-group {
+            gap: 0 .125rem;
+            grid-auto-flow: column;
+            background-color: #0a7cb3;
+            border-radius: 6px;
+            padding: 0.25rem;
+            grid-column-gap: 0.5rem;
+
+            >div {
+                grid-template-rows: @toolbar-icon-size @toolbar-icon-size;
+                grid-template-columns: auto auto;
+                justify-items: center;
+                justify-content: center;
+                width: 2rem;
+
+                &:hover,
+                a:hover {
+                    color: @secondary-2
+                }
+
+                >.action-icon {
+
+                    [class^="kix-icon-"],
+                    [class*=" kix-icon-"] {
+                        .icon-font-size-normal;
+                    }
+                }
+
+                >.action-text {
+                    .font-size-normal;
+                    grid-row: 2;
+                }
+
+                >.new-icon {
+                    font-size: .875rem;
+                    margin-left: -5px;
+                    margin-right: -3px;
+                }
+            }
+        }
+    }
+
+}

@@ -9,7 +9,6 @@
 
 import { User } from '../../model/User';
 import { PlaceholderService } from '../../../../modules/base-components/webapp/core/PlaceholderService';
-import { AgentService } from '.';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { UserProperty } from '../../model/UserProperty';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
@@ -17,6 +16,7 @@ import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/Da
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { ContactProperty } from '../../../customer/model/ContactProperty';
 import { AbstractPlaceholderHandler } from '../../../base-components/webapp/core/AbstractPlaceholderHandler';
+import { AgentService } from './AgentService';
 
 export class UserPlaceholderHandler extends AbstractPlaceholderHandler {
 

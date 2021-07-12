@@ -48,16 +48,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         setTimeout(() => {
             this.state.prepared = true;
             setTimeout(async () => {
-
                 this.setTableHeight();
-
-                EventService.getInstance().publish(
-                    TableEvent.TABLE_INITIALIZED,
-                    new TableEventData(this.state.table.getTableId())
-                );
-                EventService.getInstance().publish(
-                    TableEvent.TABLE_READY, new TableEventData(this.state.table.getTableId())
-                );
             }, 50);
         }, 20);
     }
@@ -137,7 +128,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     private async provideContextContent(): Promise<void> {
         if (this.state.table.getContextId()) {
-            const context = await ContextService.getInstance().getContext(this.state.table.getContextId());
+            const context = ContextService.getInstance().getActiveContext();
             if (context) {
                 const objects = this.state.table.getRows()
                     .filter((r) => r.getRowObject() !== null && typeof r.getRowObject() !== 'undefined')

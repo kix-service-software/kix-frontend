@@ -6,34 +6,46 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<div.main-menu-wrapper>
-    <if(!state.loading)>
-        <ul.menu.main-menu class={
-            "image-only": !state.showText
-        }>
-            <for|menuEntry| of=state.primaryMenuEntries>
-                <if(menuEntry.show)>
-                    <li key=menuEntry.text class={
-                        active: menuEntry.active
-                    }>
-                        <menu-entry entry=menuEntry/>
-                    </li>
-                </if>
-            </for>
-        </ul>
-        <ul.menu.user-menu class={
-            "image-only": !state.showText
-        }>
-            <for|menuEntry| of=state.secondaryMenuEntries>
-                <if(menuEntry.show)>
-                    <li key=menuEntry.text class={
-                        active: menuEntry.active
-                    }>
-                        <menu-entry entry=menuEntry/>
-                    </li>
-                </if>
-            </for>
-        </ul>
-    </if>
-</div>
+<if(!state.isMobile || state.showMobile)>
+    <div class=(state.isMobile ? "mobile-main-menu-container" : "main-menu-container")>
+        <if(!state.loading)>
+            <ul.menu.main-menu class={
+                "image-only": !state.showText && !state.isMobile
+            }>
+                <for|menuEntry| of=state.primaryMenuEntries>
+                    <if(menuEntry.show)>
+                        <li
+                            key=menuEntry.text
+                            title=state.translations[menuEntry.text]
+                            class={
+                                active: menuEntry.active
+                            }>
+                            <menu-entry entry=menuEntry isMobile=state.isMobile/>
+                        </li>
+                    </if>
+                </for>
+            </ul>
+            <ul.menu.user-menu class={
+                "image-only": !state.showText && !state.isMobile
+            }>
+                <for|menuEntry| of=state.secondaryMenuEntries>
+                    <if(menuEntry.show)>
+                        <li
+                            key=menuEntry.text
+                            title=state.translations[menuEntry.text]
+                            class={
+                                active: menuEntry.active
+                            }>
+                            <menu-entry entry=menuEntry isMobile=state.isMobile/>
+                        </li>
+                    </if>
+                </for>
+            </ul>
+            <if(state.isMobile)>
+                <div.context-list>
+                    <tabbar/>
+                </div>
+            </if>
+        </if>
+    </div>
+</if>

@@ -201,7 +201,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'faq-article-create-action'
                 ],
                 [
-                    'linked-objects-edit-action', 'faq-article-edit-action', 'print-action'
+                    'linked-objects-edit-action', 'faq-article-edit-action'
                 ],
                 [],
                 [

@@ -9,29 +9,27 @@
 
 
 import { RoleTableContentProvider } from './RoleTableContentProvider';
-import { RoleDetailsContext } from '../../context';
 import { TableFactory } from '../../../../../../base-components/webapp/core/table/TableFactory';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../../../model/configuration/TableConfiguration';
 import { Table } from '../../../../../../base-components/webapp/core/table';
-import {
-    DefaultColumnConfiguration
-} from '../../../../../../../model/configuration/DefaultColumnConfiguration';
+import { DefaultColumnConfiguration } from '../../../../../../../model/configuration/DefaultColumnConfiguration';
 import { RoleProperty } from '../../../../../model/RoleProperty';
 import { DataType } from '../../../../../../../model/DataType';
 import { TableHeaderHeight } from '../../../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../../../model/configuration/TableRowHeight';
 import { RoutingConfiguration } from '../../../../../../../model/configuration/RoutingConfiguration';
 import { ContextMode } from '../../../../../../../model/ContextMode';
+import { RoleDetailsContext } from '../../context/RoleDetailsContext';
 
 export class RoleTableFactory extends TableFactory {
 
     public objectType: KIXObjectType | string = KIXObjectType.ROLE;
 
-    public createTable(
+    public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean
-    ): Table {
+    ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
         const table = new Table(tableKey, tableConfiguration);

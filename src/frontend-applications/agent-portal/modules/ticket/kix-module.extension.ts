@@ -70,36 +70,8 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent('article-receiver-list', '/kix-module-ticket$0/webapp/components/article-receiver-list', []),
         new UIComponent('channel-input', '/kix-module-ticket$0/webapp/components/channel-input', []),
         new UIComponent('customer-visible-input', '/kix-module-ticket$0/webapp/components/customer-visible-input', []),
-        new UIComponent('edit-ticket-dialog', '/kix-module-ticket$0/webapp/components/edit-ticket-dialog', []),
-        new UIComponent(
-            'edit-ticket-priority-dialog', '/kix-module-ticket$0/webapp/components/edit-ticket-priority-dialog', []
-        ),
-        new UIComponent(
-            'edit-ticket-queue-dialog', '/kix-module-ticket$0/webapp/components/edit-ticket-queue-dialog', []
-        ),
-        new UIComponent(
-            'edit-ticket-state-dialog', '/kix-module-ticket$0/webapp/components/edit-ticket-state-dialog', []
-        ),
-        new UIComponent(
-            'edit-ticket-type-dialog', '/kix-module-ticket$0/webapp/components/edit-ticket-type-dialog', []
-        ),
         new UIComponent('go-to-article-cell', '/kix-module-ticket$0/webapp/components/go-to-article-cell', []),
-        new UIComponent(
-            'new-ticket-article-dialog', '/kix-module-ticket$0/webapp/components/new-ticket-article-dialog', []
-        ),
-        new UIComponent('new-ticket-dialog', '/kix-module-ticket$0/webapp/components/new-ticket-dialog', []),
-        new UIComponent(
-            'new-ticket-priority-dialog', '/kix-module-ticket$0/webapp/components/new-ticket-priority-dialog', []
-        ),
-        new UIComponent(
-            'new-ticket-queue-dialog', '/kix-module-ticket$0/webapp/components/new-ticket-queue-dialog', []
-        ),
-        new UIComponent(
-            'new-ticket-state-dialog', '/kix-module-ticket$0/webapp/components/new-ticket-state-dialog', []
-        ),
-        new UIComponent('new-ticket-type-dialog', '/kix-module-ticket$0/webapp/components/new-ticket-type-dialog', []),
         new UIComponent('queue-input-follow-up', '/kix-module-ticket$0/webapp/components/queue-input-follow-up', []),
-        new UIComponent('search-ticket-dialog', '/kix-module-ticket$0/webapp/components/search-ticket-dialog', []),
         new UIComponent(
             'ticket-admin-priorities', '/kix-module-ticket$0/webapp/components/ticket-admin-priorities', []
         ),

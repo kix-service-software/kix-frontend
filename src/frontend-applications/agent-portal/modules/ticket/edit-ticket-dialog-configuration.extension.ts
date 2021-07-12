@@ -45,7 +45,6 @@ import { TableConfiguration } from '../../model/configuration/TableConfiguration
 import { TableHeaderHeight } from '../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../model/configuration/TableRowHeight';
 import { FAQArticleProperty } from '../faq/model/FAQArticleProperty';
-import { CacheState } from '../search/model/CacheState';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -151,8 +150,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                             filterType: FilterType.AND,
                                                             value: 2
                                                         }
-                                                    ],
-                                                    status: CacheState.VALID
+                                                    ]
                                                 }
                                             ]
                                         ]
@@ -184,8 +182,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                             filterType: FilterType.AND,
                                                             value: 2
                                                         }
-                                                    ],
-                                                    status: CacheState.VALID
+                                                    ]
                                                 }
                                             ]
                                         ]
@@ -196,7 +193,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     }
                 ]
             },
-            false, false, 'kix-icon-man-house'
+            false, true, 'kix-icon-man-house'
         );
         configurations.push(contactInfoCard);
 
@@ -305,7 +302,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         const widget = new WidgetConfiguration(
             'ticket-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
-            'edit-ticket-dialog', 'Translatable#Edit Ticket', [], null, null, false, false, 'kix-icon-edit'
+            'object-dialog-form-widget', 'Translatable#Edit Ticket', [], null, null, false, false, 'kix-icon-edit'
         );
         configurations.push(widget);
 
@@ -322,13 +319,13 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         'ticket-edit-dialog-suggested-faq-widget', 'ticket-edit-dialog-suggested-faq-widget'
                     )
                 ],
-                [], [], [], [], [], [], [],
+                [], [],
                 [
                     new ConfiguredDialogWidget(
                         'ticket-edit-dialog-widget', 'ticket-edit-dialog-widget',
                         KIXObjectType.TICKET, ContextMode.EDIT
                     )
-                ]
+                ], [], [], [], []
             )
         );
 

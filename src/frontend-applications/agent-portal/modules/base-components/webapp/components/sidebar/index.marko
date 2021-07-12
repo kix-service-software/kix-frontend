@@ -6,20 +6,62 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<div.sidebar-shield/>
-<div.sidebar-area class={
-    "show-object": state.sidebars && !state.loading
-}>
-    <if(!state.loading && state.showSidebar && state.sidebars)>
-        <for|sidebar| of=state.sidebars>
-            <div.sidebar key=("sidebar-" + sidebar[0])>
-                <${sidebar[1]} ...{
-                    instanceId: sidebar[0],
-                    minimizable: false,
-                    contextType: state.contextType
-                }/>
+<if(
+    Array.isArray(state.sidebars) &&
+    state.sidebars.length &&
+    (!state.isMobile || state.showMobile)
+)>
+    <div.sidebar
+        id=(state.isLeft ? "sidebar-left" : "sidebar-right")
+        class={
+            "sidebars-shown": state.showSidebarArea || state.isMobile
+        }>
+        <if(!state.isMobile)>
+            <div.sidebar-toggle
+                on-click("toggleSidebarArea")
+                title=(
+                    state.showSidebarArea
+                        ? state.translations["Translatable#Close Sidebars"]
+                        : state.translations["Translatable#Open Sidebars"]
+                )>
+                <if(state.isLeft)>
+                    <if(state.showSidebarArea)>
+                        <translation-string pattern="Translatable#Ausblenden"/>
+                    </if>
+                    <i class=(
+                        state.showSidebarArea
+                            ? "fas fa-angle-double-left"
+                            : "fas fa-angle-double-right"
+                    )/>
+                </if>
+                <else>
+                    <i class=(
+                        state.showSidebarArea
+                            ? "fas fa-angle-double-right"
+                            : "fas fa-angle-double-left"
+                    )/>
+                    <if(state.showSidebarArea)>
+                        <translation-string pattern="Translatable#Ausblenden"/>
+                    </if>
+                </else>
             </div>
-        </for>
+        </if>
+        <div.sidebar-widgets-container class={
+            "show-object":
+                state.sidebars && !state.loading && state.showSidebarArea
+        }>
+            <if(state.showSidebarArea || state.isMobile)>
+                <for|sidebar| of=state.sidebars>
+                    <div.sidebar-widget-container key=("sidebar-" + sidebar[2])>
+                        <${sidebar[1]} ...{
+                            instanceId: sidebar[0]
+                        }/>
+                    </div>
+                </for>
+            </if>
+        </div>
+    </div>
+    <if(state.isSmall && !state.isMobile)>
+        <div.sidebar-blocker/>
     </if>
-</div>
+</if>

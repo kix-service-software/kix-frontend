@@ -17,6 +17,7 @@ import { FormFieldConfiguration } from '../../../model/configuration/FormFieldCo
 import { FormFieldOptions } from '../../../model/configuration/FormFieldOptions';
 import { FormGroupConfiguration } from '../../../model/configuration/FormGroupConfiguration';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { FormInstance } from '../../base-components/webapp/core/FormInstance';
 import { KIXObjectService } from '../../base-components/webapp/core/KIXObjectService';
 import { ObjectReferenceOptions } from '../../base-components/webapp/core/ObjectReferenceOptions';
 import { TreeNode } from '../../base-components/webapp/core/tree';
@@ -52,7 +53,10 @@ describe('Report Definition Form Creator', () => {
             }
 
             form = new FormConfiguration('report-definition-test-form', 'report-definition-test-form', [], KIXObjectType.REPORT_DEFINITION);
-            await ReportDefinitionFormCreator.createFormPages(form, null);
+
+            const formInstance = new FormInstance(null);
+            (formInstance as any).form = form;
+            await ReportDefinitionFormCreator.createFormPages(form, null, formInstance);
         });
 
         after(() => {
@@ -555,7 +559,9 @@ describe('Report Definition Form Creator', () => {
             }
 
             form = new FormConfiguration('report-definition-test-form', 'report-definition-test-form', [], KIXObjectType.REPORT_DEFINITION);
-            await ReportDefinitionFormCreator.createFormPages(form, MockData.TicketListDefaultReportMock as ReportDefinition);
+            const formInstance = new FormInstance(null);
+            (formInstance as any).form = form;
+            await ReportDefinitionFormCreator.createFormPages(form, MockData.TicketListDefaultReportMock as ReportDefinition, formInstance);
         });
 
         after(() => {

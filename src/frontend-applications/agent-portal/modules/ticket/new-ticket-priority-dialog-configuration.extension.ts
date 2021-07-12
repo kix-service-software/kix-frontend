@@ -40,7 +40,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const configurations = [];
         const widget = new WidgetConfiguration(
             'ticket-priority-new-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
-            'new-ticket-priority-dialog', 'Translatable#New Priority', [], null, null,
+            'object-dialog-form-widget', 'Translatable#New Priority', [], null, null,
             false, false, 'kix-icon-new-gear'
         );
         configurations.push(widget);
@@ -48,13 +48,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), 'Ticket Priority New Dialog', ConfigurationType.Context,
-                this.getModuleId(), [], [], [], [], [], [], [], [],
+                this.getModuleId(), [], [], [],
                 [
                     new ConfiguredDialogWidget(
                         'ticket-priority-new-dialog-widget', 'ticket-priority-new-dialog-widget',
                         KIXObjectType.TICKET_PRIORITY, ContextMode.CREATE_ADMIN
                     )
-                ]
+                ], [], [], [], []
             )
         );
 

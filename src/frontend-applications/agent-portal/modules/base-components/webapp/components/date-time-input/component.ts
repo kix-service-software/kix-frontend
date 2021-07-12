@@ -12,7 +12,7 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
-import { FormService } from '../../core/FormService';
+import { ContextService } from '../../core/ContextService';
 import { InputFieldTypes } from '../../core/InputFieldTypes';
 
 class Component extends FormInputComponent<string | Date, ComponentState> {
@@ -26,28 +26,29 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
 
         this.state.currentValue = typeof input.currentValue !== 'undefined' ?
             input.currentValue : this.state.currentValue;
-        if (this.state.field && this.state.field.options) {
-            const typeOption = this.state.field.options.find(
+        if (this.state.field && this.state.field?.options) {
+            const typeOption = this.state.field?.options.find(
                 (o) => o.option === FormFieldOptions.INPUT_FIELD_TYPE
             );
             if (typeOption) {
                 this.state.inputType = typeOption.value.toString();
             }
 
-            const minDateOption = this.state.field.options.find((o) => o.option === FormFieldOptions.MIN_DATE);
+            const minDateOption = this.state.field?.options.find((o) => o.option === FormFieldOptions.MIN_DATE);
             this.state.minDate = minDateOption ? minDateOption.value : null;
 
-            const maxDateOption = this.state.field.options.find((o) => o.option === FormFieldOptions.MAX_DATE);
+            const maxDateOption = this.state.field?.options.find((o) => o.option === FormFieldOptions.MAX_DATE);
             this.state.maxDate = maxDateOption ? maxDateOption.value : null;
         }
         this.update();
     }
 
     private async update(): Promise<void> {
-        const placeholderText = this.state.field.placeholder
-            ? this.state.field.placeholder
-            : this.state.field.required ? this.state.field.label : '';
+        const placeholderText = this.state.field?.placeholder
+            ? this.state.field?.placeholder
+            : this.state.field?.required ? this.state.field?.label : '';
         this.state.placeholder = await TranslationService.translate(placeholderText);
+        (this as any).setStateDirty('field');
     }
 
     public async onMount(): Promise<void> {
@@ -56,8 +57,9 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
 
     public async setCurrentValue(): Promise<void> {
         this.state.prepared = false;
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const value = formInstance.getFormFieldValue<string>(this.state.field.instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const value = formInstance.getFormFieldValue<string>(this.state.field?.instanceId);
         if (value && value.value) {
             this.state.currentValue = new Date(value.value);
             this.state.dateValue = DateTimeUtil.getKIXDateString(this.state.currentValue);

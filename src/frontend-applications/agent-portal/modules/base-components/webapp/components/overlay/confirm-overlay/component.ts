@@ -10,6 +10,7 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ConfirmOverlayContent } from '../../../../../../modules/base-components/webapp/core/ConfirmOverlayContent';
+import { AgentService } from '../../../../../user/webapp/core/AgentService';
 
 class OverlayComponent extends AbstractMarkoComponent<ComponentState> {
 
@@ -24,9 +25,27 @@ class OverlayComponent extends AbstractMarkoComponent<ComponentState> {
     public onInput(input: ConfirmOverlayContent): void {
         this.confirmCallback = input.confirmCallback;
         this.cancelCallback = input.cancelCallback;
+        this.update(input);
+    }
+
+    private async update(input: any): Promise<void> {
         this.buttonLabels = Array.isArray(input.buttonLabels) ? input.buttonLabels : null;
         this.state.hasButtons = Array.isArray(this.buttonLabels);
         this.state.text = input.text;
+        if (input.decision) {
+            this.state.decision = input.decision;
+
+            const preference = await AgentService.getInstance().getUserPreference(input.decision[0]);
+            this.state.decisionChecked = preference && Boolean(Number(preference.Value));
+        }
+
+        let button = (this as any).getEl('confirm-cancel-button');
+        if (input.focusConfirm) {
+            button = (this as any).getEl('confirm-submit-button');
+        }
+        if (button) {
+            button.focus();
+        }
     }
 
     public closeOverlay(confirm: boolean = false): void {
@@ -50,6 +69,11 @@ class OverlayComponent extends AbstractMarkoComponent<ComponentState> {
                 return this.buttonLabels[1] || 'No';
             }
         }
+    }
+
+    public toggleDecision(event: any): void {
+        this.state.decisionChecked = !this.state.decisionChecked;
+        AgentService.getInstance().setPreferences([[this.state.decision[0], this.state.decisionChecked]]);
     }
 }
 

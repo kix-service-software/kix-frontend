@@ -51,7 +51,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         const organisationTableWidget = new WidgetConfiguration(
             'customer-dashboard-organisations-widget', 'Organisations Widget', ConfigurationType.Widget,
             'table-widget', 'Translatable#Overview Organisations',
-            ['organisation-search-action', 'organisation-create-action', 'import-action', 'csv-export-action'],
+            ['import-action', 'csv-export-action'],
             new ConfigurationDefinition('customer-dashboard-table-widget', ConfigurationType.TableWidget), null,
             false, true, 'kix-icon-man-house', true
         );
@@ -74,7 +74,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         const contactListWidget = new WidgetConfiguration(
             'customer-dashboard-contacts-widget', 'Contacts Widget', ConfigurationType.Widget,
             'contact-list-widget', 'Translatable#Overview Contacts',
-            ['contact-search-action', 'contact-create-action', 'import-action', 'contact-csv-export-action'],
+            ['import-action', 'contact-csv-export-action'],
             new ConfigurationDefinition(
                 'customer-dashboard-contacts-table-widget', ConfigurationType.TableWidget
             ),

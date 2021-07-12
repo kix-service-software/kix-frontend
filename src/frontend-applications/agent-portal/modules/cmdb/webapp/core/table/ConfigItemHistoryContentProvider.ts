@@ -29,7 +29,7 @@ export class ConfigItemHistoryContentProvider extends TableContentProvider<Confi
     public async loadData(): Promise<Array<RowObject<ConfigItemHistory>>> {
         const rowObjects = [];
         if (this.contextId) {
-            const context = await ContextService.getInstance().getContext(this.contextId);
+            const context = ContextService.getInstance().getActiveContext();
             const configItem = await context.getObject<ConfigItem>();
             if (configItem) {
                 for (const ch of configItem.History) {

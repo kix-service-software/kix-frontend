@@ -29,12 +29,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
     public uiComponents: UIComponent[] = [
         new UIComponent(
             'ticket-admin-text-modules', '/kix-module-textmodule$0/webapp/components/ticket-admin-text-modules', []
-        ),
-        new UIComponent(
-            'new-text-module-dialog', '/kix-module-textmodule$0/webapp/components/new-text-module-dialog', []
-        ),
-        new UIComponent(
-            'edit-text-module-dialog', '/kix-module-textmodule$0/webapp/components/edit-text-module-dialog', []
         )
     ];
 

@@ -9,12 +9,7 @@
 
 import { IUIModule } from '../../../../model/IUIModule';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
-import {
-    ConfigItemClassService, ConfigItemClassFormService,
-    ConfigItemClassTableFactory, ConfigItemClassDefinitionTableFactory, ConfigItemClassLabelProvider,
-    ConfigItemClassDefinitionLabelProvider, ConfigItemClassCreateAction, NewConfigItemClassDialogContext,
-    ConfigItemClassEditAction, EditConfigItemClassDialogContext, ConfigItemClassDetailsContext
-} from '.';
+import { ConfigItemClassService, ConfigItemClassFormService, ConfigItemClassTableFactory, ConfigItemClassDefinitionTableFactory, ConfigItemClassLabelProvider, ConfigItemClassDefinitionLabelProvider, ConfigItemClassCreateAction, NewConfigItemClassDialogContext, ConfigItemClassEditAction, EditConfigItemClassDialogContext, ConfigItemClassDetailsContext } from '.';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../base-components/webapp/core/table';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
@@ -53,10 +48,11 @@ export class UIModule implements IUIModule {
         const newConfigItemClassDetailsContext = new ContextDescriptor(
             NewConfigItemClassDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_CLASS],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            true, 'new-config-item-class-dialog', ['configitemclasses'], NewConfigItemClassDialogContext,
+            true, 'object-dialog', ['configitemclasses'], NewConfigItemClassDialogContext,
             [
                 new UIComponentPermission('system/cmdb/classes', [CRUD.READ])
-            ]
+            ],
+            'Translatable#New Asset Class', 'kix-icon-ci', ConfigItemClassDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(newConfigItemClassDetailsContext);
 
@@ -65,10 +61,11 @@ export class UIModule implements IUIModule {
         const editConfigItemClassContext = new ContextDescriptor(
             EditConfigItemClassDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_CLASS],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            true, 'edit-config-item-class-dialog', ['configitemclasses'], EditConfigItemClassDialogContext,
+            true, 'object-dialog', ['configitemclasses'], EditConfigItemClassDialogContext,
             [
                 new UIComponentPermission('system/cmdb/classes', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Edit Asset Class', 'kix-icon-ci', ConfigItemClassDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(editConfigItemClassContext);
 
@@ -78,7 +75,8 @@ export class UIModule implements IUIModule {
             true, 'object-details-page', ['configitemclasses'], ConfigItemClassDetailsContext,
             [
                 new UIComponentPermission('system/cmdb/classes', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Asset Class Details', 'kix-icon-ci'
         );
         ContextService.getInstance().registerContext(configItemClassDetailsContext);
     }

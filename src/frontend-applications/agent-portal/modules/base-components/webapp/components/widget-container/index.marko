@@ -96,4 +96,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </for>
         </if>
     </div>
+    <if(!state.configurationMode && state.customizable)>
+        <div.customize-section on-click("toggleConfigurationMode")>
+            <span.kix-icon-gear/>
+            <span>Customize Dashboard</span>
+        </div>
+    </if>
 </div>

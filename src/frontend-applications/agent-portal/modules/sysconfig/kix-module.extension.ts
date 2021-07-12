@@ -30,7 +30,7 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent(
             'system-admin-sysconfig', '/kix-module-sysconfig$0/webapp/components/system-admin-sysconfig', []
         ),
-        new UIComponent('edit-sysconfig-dialog', '/kix-module-sysconfig$0/webapp/components/edit-sysconfig-dialog', []),
+        new UIComponent('edit-sysconfig-dialog', '/kix-module-sysconfig$0/webapp/components/edit-sysconfig-dialog', [])
     ];
 
     public webDependencies: string[] = [

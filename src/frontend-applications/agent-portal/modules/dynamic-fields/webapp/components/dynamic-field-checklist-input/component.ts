@@ -13,6 +13,7 @@ import { FormService } from '../../../../base-components/webapp/core/FormService
 import { CheckListItem } from '../../core/CheckListItem';
 
 import { DynamicFieldFormUtil } from '../../../../base-components/webapp/core/DynamicFieldFormUtil';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends FormInputComponent<CheckListItem[], ComponentState> {
 
@@ -30,8 +31,9 @@ class Component extends FormInputComponent<CheckListItem[], ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const value = formInstance.getFormFieldValue<[]>(this.state.field.instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const value = formInstance.getFormFieldValue<[]>(this.state.field?.instanceId);
         if (value) {
             let checklist = value.value;
             if (typeof checklist === 'string') {

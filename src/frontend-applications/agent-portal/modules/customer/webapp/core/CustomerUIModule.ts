@@ -34,7 +34,8 @@ export class UIModule implements IUIModule {
             [
                 new UIComponentPermission('organisations', [CRUD.READ], true),
                 new UIComponentPermission('contacts', [CRUD.READ], true)
-            ]
+            ],
+            'Translatable#Organisations Dashboard', 'kix-icon-man-bubble'
         );
         ContextService.getInstance().registerContext(organisationListContext);
     }

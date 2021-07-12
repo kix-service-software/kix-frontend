@@ -9,18 +9,22 @@
 
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
 import { ContextType } from '../../../../../model/ContextType';
+import { IdService } from '../../../../../model/IdService';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
+import { WidgetComponentState } from '../../../../base-components/webapp/core/WidgetComponentState';
 
 
-export class ComponentState {
+export class ComponentState extends WidgetComponentState {
 
     public constructor(
-        public instanceId: string = null,
+        public componentKey: string = IdService.generateDateBasedId(),
         public widgetConfiguration: WidgetConfiguration = null,
         public contextType: ContextType = null,
         public contextId: string = null,
         public nodes: TreeNode[] = [],
         public activeNode: TreeNode = null
-    ) { }
+    ) {
+        super();
+    }
 
 }

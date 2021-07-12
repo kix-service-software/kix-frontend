@@ -42,7 +42,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
 
         const widget = new WidgetConfiguration(
             'contact-new-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
-            'new-contact-dialog', 'Translatable#New Contact',
+            'object-dialog-form-widget', 'Translatable#New Contact',
             [], null, null, false, false, 'kix-icon-man-bubble-new'
         );
         configurations.push(widget);
@@ -50,13 +50,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-                this.getModuleId(), [], [], [], [], [], [], [], [],
+                this.getModuleId(), [], [], [],
                 [
                     new ConfiguredDialogWidget(
                         'contact-new-dialog-widget', 'contact-new-dialog-widget',
                         KIXObjectType.CONTACT, ContextMode.CREATE
                     )
-                ]
+                ], [], [], [], []
             )
         );
 

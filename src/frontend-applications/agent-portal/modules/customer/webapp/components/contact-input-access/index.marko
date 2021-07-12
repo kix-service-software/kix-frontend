@@ -6,8 +6,7 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<if(state.prepared)>
+<if(state.prepared && state.field)>
     <form-list
         treeId=state.treeId
         placeholder=state.placeholder
@@ -15,5 +14,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         on-focusLost("focusLost")
         on-nodesChanged("nodesChanged")
         invalid=state.invalid
-        multiselect=true/>
+        multiselect=true
+        readonly=state.field.readonly/>
 </if>

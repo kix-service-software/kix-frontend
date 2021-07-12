@@ -8,8 +8,8 @@
  */
 
 import { FormInputComponentState } from '../../../../base-components/webapp/core/FormInputComponentState';
-import { PermissionManager } from '../../core/admin';
 import { PermissionProperty } from '../../../model/PermissionProperty';
+import { PermissionManager } from '../../core/admin/PermissionManager';
 
 export class ComponentState extends FormInputComponentState<any[]> {
 

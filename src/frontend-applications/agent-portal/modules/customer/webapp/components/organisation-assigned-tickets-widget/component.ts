@@ -91,10 +91,10 @@ class Component {
         );
 
         context.registerListener('organisation-assigned-tickets-component', {
-            explorerBarToggled: () => { return; },
+            sidebarLeftToggled: () => { return; },
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
-            sidebarToggled: () => { return; },
+            sidebarRightToggled: () => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: (organisationId: string, organisation: Organisation, type: KIXObjectType) => {
                 if (type === KIXObjectType.ORGANISATION) {

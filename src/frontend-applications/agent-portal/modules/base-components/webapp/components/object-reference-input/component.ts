@@ -15,7 +15,6 @@ import { TreeNode, TreeService, TreeHandler, TreeUtil } from '../../core/tree';
 import { ObjectReferenceOptions } from '../../../../../modules/base-components/webapp/core/ObjectReferenceOptions';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { DataType } from '../../../../../model/DataType';
-import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { AutoCompleteConfiguration } from '../../../../../model/configuration/AutoCompleteConfiguration';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
@@ -50,11 +49,13 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     }
 
     public async update(): Promise<void> {
-        const placeholderText = this.state.field.placeholder
-            ? this.state.field.placeholder
-            : this.state.field.required ? this.state.field.label : '';
+        const placeholderText = this.state.field?.placeholder
+            ? this.state.field?.placeholder
+            : this.state.field?.required ? this.state.field?.label : '';
 
         this.state.placeholder = await TranslationService.translate(placeholderText);
+
+        (this as any).setStateDirty('field');
     }
 
     public async onMount(): Promise<void> {
@@ -66,9 +67,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         this.state.searchCallback = this.search.bind(this);
 
         this.formSubscriber = {
-            eventSubscriberId: this.state.field.instanceId,
+            eventSubscriberId: this.state.field?.instanceId,
             eventPublished: (data: any, eventId: string) => {
-                if (data.formField && data.formField.instanceId === this.state.field.instanceId) {
+                if (data.formField && data.formField.instanceId === this.state.field?.instanceId) {
                     this.load(false);
                 }
             }
@@ -102,12 +103,12 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     private async loadNodes(): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
-        const objectOption = this.state.field.options.find((o) => o.option === ObjectReferenceOptions.OBJECT);
-        const configLoadingOptions = this.state.field.options.find(
+        const objectOption = this.state.field?.options.find((o) => o.option === ObjectReferenceOptions.OBJECT);
+        const configLoadingOptions = this.state.field?.options.find(
             (o) => o.option === ObjectReferenceOptions.LOADINGOPTIONS
         );
 
-        const objectIdOption = this.state.field.options.find((o) => o.option === ObjectReferenceOptions.OBJECT_IDS);
+        const objectIdOption = this.state.field?.options.find((o) => o.option === ObjectReferenceOptions.OBJECT_IDS);
         const objectIds = objectIdOption && Array.isArray(objectIdOption.value) && objectIdOption.value.length
             ? objectIdOption.value
             : null;
@@ -117,7 +118,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         this.objects = await KIXObjectService.loadObjects(
             objectOption.value, objectIds, loadingOptions
         );
-        const structureOption = this.state.field.options.find(
+        const structureOption = this.state.field?.options.find(
             (o) => o.option === ObjectReferenceOptions.USE_OBJECT_SERVICE
         );
 
@@ -126,7 +127,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
         const objectId = await UIUtil.getEditObjectId(objectOption.value);
 
-        const translatableOption = this.state.field.options.find(
+        const translatableOption = this.state.field?.options.find(
             (o) => o.option === ObjectReferenceOptions.TRANSLATABLE
         );
         const translatable = !translatableOption || Boolean(translatableOption.value);
@@ -151,7 +152,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     private async loadAdditionalNodes(): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
-        const additionalNodes = this.state.field.options.find(
+        const additionalNodes = this.state.field?.options.find(
             (o) => o.option === ObjectReferenceOptions.ADDITIONAL_NODES
         );
         if (additionalNodes) {
@@ -169,7 +170,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     private async preloadNodes(): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
-        const preloadPatternOption = this.state.field.options.find(
+        const preloadPatternOption = this.state.field?.options.find(
             (o) => o.option === ObjectReferenceOptions.AUTOCOMPLETE_PRELOAD_PATTERN
         );
 
@@ -183,7 +184,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     private createTreeHandler(nodes: TreeNode[]): void {
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
         if (treeHandler) {
-            const keepSelectionOption = this.state.field.options.find(
+            const keepSelectionOption = this.state.field?.options.find(
                 (o) => o.option === ObjectReferenceOptions.KEEP_SELECTION
             );
 
@@ -194,22 +195,23 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     }
 
     private isShowInvalidNodes(): boolean {
-        const showValidOption = this.state.field.options
-            ? this.state.field.options.find((o) => o.option === FormFieldOptions.SHOW_INVALID)
+        const showValidOption = this.state.field?.options
+            ? this.state.field?.options.find((o) => o.option === FormFieldOptions.SHOW_INVALID)
             : null;
         return showValidOption ? showValidOption.value : true;
     }
 
     private isInvalidClickable(): boolean {
-        const validClickableOption = this.state.field.options
-            ? this.state.field.options.find((o) => o.option === FormFieldOptions.INVALID_CLICKABLE)
+        const validClickableOption = this.state.field?.options
+            ? this.state.field?.options.find((o) => o.option === FormFieldOptions.INVALID_CLICKABLE)
             : null;
         return validClickableOption ? validClickableOption.value : false;
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const formValue = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formValue = formInstance?.getFormFieldValue<number>(this.state.field?.instanceId);
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
 
         if (treeHandler && formValue && typeof formValue.value !== 'undefined' && formValue.value !== null) {
@@ -230,7 +232,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     });
                 }
             } else {
-                const objectOption = this.state.field.options.find(
+                const objectOption = this.state.field?.options.find(
                     (o) => o.option === ObjectReferenceOptions.OBJECT
                 );
                 if (objectOption) {
@@ -249,7 +251,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                 }
             }
 
-            const freeTextOption = this.state.field.options.find((o) => o.option === ObjectReferenceOptions.FREETEXT);
+            const freeTextOption = this.state.field?.options.find((o) => o.option === ObjectReferenceOptions.FREETEXT);
 
             if (freeTextOption && freeTextOption.value) {
                 const freeTextNodes = objectIds
@@ -279,7 +281,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     }
 
     private setOptions(): void {
-        const autocompleteOption = this.state.field.options.find(
+        const autocompleteOption = this.state.field?.options.find(
             (o) => o.option === ObjectReferenceOptions.AUTOCOMPLETE
         );
 
@@ -290,13 +292,13 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             }
         }
 
-        const isMultiselectOption = this.state.field.options.find(
+        const isMultiselectOption = this.state.field?.options.find(
             (o) => o.option === ObjectReferenceOptions.MULTISELECT
         );
         this.state.multiselect = typeof isMultiselectOption === 'undefined'
             || isMultiselectOption === null ? false : isMultiselectOption.value;
 
-        const freeTextOption = this.state.field.options.find(
+        const freeTextOption = this.state.field?.options.find(
             (o) => o.option === ObjectReferenceOptions.FREETEXT
         );
         if (typeof freeTextOption !== 'undefined' && freeTextOption !== null) {
@@ -306,8 +308,8 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     private async search(limit: number, searchValue: string): Promise<TreeNode[]> {
         let nodes = [];
-        const objectOption = this.state.field.options.find((o) => o.option === ObjectReferenceOptions.OBJECT);
-        const objectIdOption = this.state.field.options.find((o) => o.option === ObjectReferenceOptions.OBJECT_IDS);
+        const objectOption = this.state.field?.options.find((o) => o.option === ObjectReferenceOptions.OBJECT);
+        const objectIdOption = this.state.field?.options.find((o) => o.option === ObjectReferenceOptions.OBJECT_IDS);
         const objectIds = objectIdOption && Array.isArray(objectIdOption.value) && objectIdOption.value.length
             ? objectIdOption.value
             : null;
@@ -321,7 +323,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                 if (service && searchValue) {
                     filter = await service.prepareFullTextFilter(searchValue);
                 }
-                const fieldLoadingOptions = this.state.field.options.find(
+                const fieldLoadingOptions = this.state.field?.options.find(
                     (o) => o.option === ObjectReferenceOptions.LOADINGOPTIONS
                 );
                 const loadingOptions: KIXObjectLoadingOptions = fieldLoadingOptions
@@ -356,7 +358,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                 );
 
                 if (searchValue && searchValue !== '') {
-                    const structureOption = this.state.field.options.find(
+                    const structureOption = this.state.field?.options.find(
                         (o) => o.option === ObjectReferenceOptions.USE_OBJECT_SERVICE
                     );
                     if (structureOption && structureOption.value) {
@@ -410,7 +412,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     }
 
     protected async prepareLoadingOptions(loadingOptions: KIXObjectLoadingOptions): Promise<KIXObjectLoadingOptions> {
-        const lo = new KIXObjectLoadingOptions(
+        const preparedLoadingOptions = new KIXObjectLoadingOptions(
             [],
             loadingOptions.sortOrder,
             loadingOptions.limit,
@@ -430,13 +432,13 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     const preparedCriterion = new FilterCriteria(
                         criterion.property, criterion.operator, criterion.type, criterion.filterType, value
                     );
-                    lo.filter.push(preparedCriterion);
+                    preparedLoadingOptions.filter.push(preparedCriterion);
                 } else {
-                    lo.filter.push(criterion);
+                    preparedLoadingOptions.filter.push(criterion);
                 }
             }
         }
-        return loadingOptions;
+        return preparedLoadingOptions;
     }
 }
 

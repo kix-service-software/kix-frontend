@@ -10,6 +10,7 @@
 export class LoadingShieldEventData {
 
     public constructor(
+        public shieldId: string,
         public isLoading: boolean,
         public loadingHint?: string,
         public time?: number,

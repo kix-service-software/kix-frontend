@@ -35,8 +35,12 @@ class Component {
     }
 
     public async updateValues(): Promise<void> {
-        const values = [];
         const currentValues = this.manager.getValues();
+
+        this.state.dynamicValues = this.state.dynamicValues.filter(
+            (dv) => currentValues.some((cv) => cv.id === dv.id)
+        );
+
         for (const cv of currentValues) {
             const existingValue = this.state.dynamicValues.find((bv) => bv.value.id === cv.id);
             if (existingValue) {
@@ -48,19 +52,20 @@ class Component {
                     existingValue.setCurrentValue(true);
                 }
                 existingValue.required = cv.required;
-                values.push(existingValue);
             } else {
-                const value = new DynamicFormFieldValue(this.manager, cv);
+                const value = new DynamicFormFieldValue(this.manager, cv, cv.id);
                 await value.init();
-                values.push(value);
+                this.state.dynamicValues.push(value);
             }
         }
-        await this.addEmptyValue();
+
+        this.addEmptyValue();
+
         if (this.manager.uniqueProperties) {
-            values.forEach((dv) => dv.updateProperties());
+            this.state.dynamicValues.forEach((dv) => dv.updateProperties());
         }
 
-        this.state.dynamicValues = [...values];
+        (this as any).setStateDirty('dynamicValues');
     }
 
     public async onMount(): Promise<void> {
@@ -78,7 +83,8 @@ class Component {
                     new ObjectPropertyValue(
                         v.property, v.operator, v.value, v.options, v.required, v.valid,
                         v.objectType, v.readonly, v.changeable, v.id, v.additionalOptions
-                    )
+                    ),
+                    v.id
                 );
                 initPromises.push(formFieldValue.init());
                 values.push(formFieldValue);
@@ -189,7 +195,7 @@ class Component {
             this.provideTimeout = setTimeout(async () => {
                 this.provideTimeout = null;
                 await this.updateValues();
-            }, 200);
+            }, 50);
         }
     }
 
@@ -199,7 +205,7 @@ class Component {
         await this.updateValues();
     }
 
-    private async addEmptyValue(): Promise<void> {
+    private addEmptyValue(): void {
         if (this.addEmptyValueTimeout) {
             window.clearTimeout(this.addEmptyValueTimeout);
         }
@@ -211,9 +217,11 @@ class Component {
             if (canAddEmptyValue && !hasEmptyValue) {
                 const emptyField = new DynamicFormFieldValue(this.manager);
                 await emptyField.init();
-                setTimeout(() => this.state.dynamicValues = [...this.state.dynamicValues, emptyField], 50);
+                this.state.dynamicValues.push(emptyField);
             }
-        }, 100);
+
+            (this as any).setStateDirty('dynamicValues');
+        }, 15);
     }
 
     public showValueInput(value: DynamicFormFieldValue): boolean {

@@ -37,8 +37,34 @@ export class Macro extends KIXObject {
             this.Name = macro.Name;
             this.Type = macro.Type;
             this.ExecOrder = macro.ExecOrder;
-            this.Actions = macro.Actions ? macro.Actions.map((a, i) => new MacroAction(a, i + 1)) : [];
+            this.Actions = macro.Actions ? this.getSortedActions(
+                macro.Actions, macro.ExecOrder
+            ).map((a, i) => new MacroAction(a, i + 1)) : [];
         }
+    }
+
+    private getSortedActions(actions: MacroAction[], execOrder?: number[]) {
+        let sortedActions: MacroAction[] = [];
+
+        if (Array.isArray(execOrder)) {
+            execOrder.forEach((id) => {
+                const action = actions.find((a) => a.ID === id);
+                if (action) {
+                    sortedActions.push(action);
+                }
+            });
+            if (actions.length > sortedActions.length) {
+                actions.forEach((a) => {
+                    if (!sortedActions.some((sa) => sa.ID === a.ID)) {
+                        sortedActions.push(a);
+                    }
+                });
+            }
+        } else {
+            sortedActions = actions;
+        }
+
+        return sortedActions;
     }
 
 }

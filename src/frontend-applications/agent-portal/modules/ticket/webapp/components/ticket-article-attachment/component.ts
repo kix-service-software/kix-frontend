@@ -12,8 +12,10 @@ import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
 import { Attachment } from '../../../../../model/kix/Attachment';
 import { TicketService } from '../../core';
-import { DialogService } from '../../../../base-components/webapp/core/DialogService';
 import { DisplayImageDescription } from '../../../../base-components/webapp/core/DisplayImageDescription';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { ImageViewerEvent } from '../../../../agent-portal/model/ImageViewerEvent';
+import { ImageViewerEventData } from '../../../../agent-portal/model/ImageViewerEventData';
 
 class ArticleAttachmentComponent {
 
@@ -38,7 +40,10 @@ class ArticleAttachmentComponent {
         if (this.state.article && this.state.attachment) {
 
             if (this.images && this.images.some((i) => i.imageId === this.state.attachment.ID)) {
-                DialogService.getInstance().openImageDialog(this.images, this.state.attachment.ID);
+                EventService.getInstance().publish(
+                    ImageViewerEvent.OPEN_VIEWER,
+                    new ImageViewerEventData(this.images, this.state.attachment.ID)
+                );
             } else {
                 this.state.progress = true;
                 const attachment = await this.loadArticleAttachment(this.state.attachment.ID);

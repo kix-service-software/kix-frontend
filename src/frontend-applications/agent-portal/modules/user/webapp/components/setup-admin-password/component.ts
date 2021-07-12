@@ -25,13 +25,11 @@ import { ValidationSeverity } from '../../../../base-components/webapp/core/Vali
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { Error } from '../../../../../../../server/model/Error';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { SetupStep } from '../../../../setup-assistant/webapp/core/SetupStep';
-import { SetupEvent } from '../../../../setup-assistant/webapp/core/SetupEvent';
-import { SetupStepCompletedEventData } from '../../../../setup-assistant/webapp/core/SetupStepCompletedEventData';
 import { User } from '../../../model/User';
 import { FormInstance } from '../../../../base-components/webapp/core/FormInstance';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -53,10 +51,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public onInput(input: any) {
         this.step = input.step;
         this.state.completed = this.step ? this.step.completed : false;
-    }
-
-    public onDestroy(): void {
-        FormService.getInstance().deleteFormInstance(this.state.formId);
     }
 
     private async prepareForm(): Promise<void> {
@@ -93,6 +87,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         FormService.getInstance().addForm(form);
         this.state.formId = form.id;
 
+        const context = ContextService.getInstance().getActiveContext();
+        context?.getFormManager()?.setFormId(this.state.formId);
+
         setTimeout(() => this.initFormValues(form.id), 500);
     }
 
@@ -101,7 +98,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             .catch((): User[] => []);
 
         if (users && users.length) {
-            const formInstance = await FormService.getInstance().getFormInstance(formId);
+            const context = ContextService.getInstance().getActiveContext();
+            const formInstance = await context?.getFormManager()?.getFormInstance();
 
             formInstance.provideFormFieldValuesForProperties([
                 [UserProperty.USER_LOGIN, users[0].UserLogin]
@@ -110,17 +108,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async submit(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
 
         const result = await formInstance.validateForm();
         const validationError = result.some((r) => r && r.severity === ValidationSeverity.ERROR);
         if (validationError) {
             BrowserUtil.showValidationError(result);
         } else {
-            BrowserUtil.toggleLoadingShield(true, 'Translatable#Change Admin Password');
+            BrowserUtil.toggleLoadingShield('SETUP_ADMIN_SHIELD', true, 'Translatable#Change Admin Password');
             await this.updateUser(formInstance);
-            FormService.getInstance().deleteFormInstance(this.state.formId);
-            BrowserUtil.toggleLoadingShield(false);
+            BrowserUtil.toggleLoadingShield('SETUP_ADMIN_SHIELD', false);
         }
     }
 

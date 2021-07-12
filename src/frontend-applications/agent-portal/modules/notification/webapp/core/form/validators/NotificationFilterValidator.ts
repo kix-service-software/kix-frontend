@@ -28,20 +28,20 @@ export class NotificationFilterValidator implements IFormFieldValidator {
 
     public validatorId: string = 'NotificationFilterValidator';
 
-    public isValidatorFor(formField: FormFieldConfiguration, formId: string): boolean {
+    public isValidatorFor(formField: FormFieldConfiguration): boolean {
         return formField.property === NotificationProperty.FILTER;
     }
 
-    public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
+    public async validate(formField: FormFieldConfiguration): Promise<ValidationResult> {
 
         if (formField.property === NotificationProperty.FILTER) {
-            const formInstance = await FormService.getInstance().getFormInstance(formId);
+            const context = ContextService.getInstance().getActiveContext();
+            const formInstance = await context?.getFormManager()?.getFormInstance();
             const value = formInstance.getFormFieldValue(formField.instanceId);
             if (value && value.value && Array.isArray(value.value)) {
                 let selectedEvents = [];
                 let hasArticleEvent = true;
-                const context = ContextService.getInstance().getActiveContext();
-                if (context && context.getDescriptor().contextType === ContextType.DIALOG) {
+                if (context && context.descriptor.contextType === ContextType.DIALOG) {
                     selectedEvents = context.getAdditionalInformation(NotificationProperty.DATA_EVENTS);
                     hasArticleEvent = selectedEvents
                         ? await NotificationService.getInstance().hasArticleEvent(selectedEvents)

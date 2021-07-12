@@ -229,7 +229,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(objectType, ServiceType.FORM);
-        const parameter: Array<[string, any]> = await service.getFormParameter(formId, false, createOptions);
+        const parameter: Array<[string, any]> = await service.getFormParameter(false, createOptions);
         const objectId = await KIXObjectSocketClient.getInstance().createObject(
             objectType, parameter, createOptions, cacheKeyPrefix
         );
@@ -290,11 +290,15 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             throw new Error(null, `Can not update "${objectType}". No objectId given`);
         }
         const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(objectType, ServiceType.FORM);
-        const parameter: Array<[string, any]> = await service.getFormParameter(formId, true);
+        const parameter: Array<[string, any]> = await service.getFormParameter(true);
 
-        const updatedObjectId = await KIXObjectSocketClient.getInstance().updateObject(
+        const updatedObjectId = await this.updateObject(
             objectType, parameter, objectId, cacheKeyPrefix
         );
+
+        for (const extendedService of this.extendedServices) {
+            await extendedService.postUpdateObjectByForm(updatedObjectId, objectType);
+        }
         return updatedObjectId;
     }
 
@@ -511,6 +515,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         }
         return nodes;
     }
+
     public static async search(
         objectType: KIXObjectType | string, searchValue: string, loadingOptions?: KIXObjectLoadingOptions,
         additionalFilter?: FilterCriteria[], onlyValidObjects: boolean = false

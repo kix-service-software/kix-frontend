@@ -11,10 +11,7 @@ import { IUIModule } from '../../../../model/IUIModule';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { LinkService } from './LinkService';
 import { TableFactoryService } from '../../../base-components/webapp/core/table';
-import {
-    LinkObjectTableFactory, LinkObjectLabelProvider, LinkedObjectsEditAction,
-    LinkObjectDialogContext, EditLinkedObjectsDialogContext
-} from '.';
+import { LinkObjectTableFactory, LinkObjectLabelProvider, LinkedObjectsEditAction, EditLinkedObjectsDialogContext } from '.';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
@@ -45,23 +42,14 @@ export class UIModule implements IUIModule {
 
         ActionFactory.getInstance().registerAction('linked-objects-edit-action', LinkedObjectsEditAction);
 
-        const linkObjectDialogContext = new ContextDescriptor(
-            LinkObjectDialogContext.CONTEXT_ID, [KIXObjectType.LINK],
-            ContextType.DIALOG, ContextMode.CREATE_LINK,
-            false, 'link-objects-dialog', ['links'], LinkObjectDialogContext,
-            [
-                new UIComponentPermission('links', [CRUD.CREATE])
-            ]
-        );
-        ContextService.getInstance().registerContext(linkObjectDialogContext);
-
         const editLinkObjectDialogContext = new ContextDescriptor(
             EditLinkedObjectsDialogContext.CONTEXT_ID, [KIXObjectType.LINK],
             ContextType.DIALOG, ContextMode.EDIT_LINKS,
             false, 'edit-linked-objects-dialog', ['links'], EditLinkedObjectsDialogContext,
             [
                 new UIComponentPermission('links', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Edit Links', 'kix-icon-link'
         );
         ContextService.getInstance().registerContext(editLinkObjectDialogContext);
     }

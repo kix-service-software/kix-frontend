@@ -36,7 +36,9 @@ export class UIModule implements IUIModule {
             false, 'bulk-dialog', ['bulk'], BulkDialogContext,
             [
                 new UIComponentPermission('tickets', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Bulk', 'kix-icon-gear',
+            undefined, undefined, false
         );
         ContextService.getInstance().registerContext(bulkDialogContext);
 

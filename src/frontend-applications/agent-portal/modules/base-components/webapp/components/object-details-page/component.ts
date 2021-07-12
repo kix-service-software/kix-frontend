@@ -34,8 +34,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.subscriber = {
             eventSubscriberId: 'object-details',
             eventPublished: (data: any, eventId: string) => {
-                const currentContext = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-                if (data.objectType === currentContext.getDescriptor().kixObjectTypes[0]) {
+                const currentContext = ContextService.getInstance().getActiveContext();
+                if (data.objectType === currentContext.descriptor.kixObjectTypes[0]) {
                     this.prepareWidget();
                     this.prepareActions();
                 }
@@ -43,40 +43,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         };
         EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
 
-        ContextService.getInstance().registerListener({
-            constexServiceListenerId: 'object-details-page',
-            contextChanged: async (contextId: string, context: Context, contextType: ContextType) => {
-                if (contextType === ContextType.MAIN) {
-                    this.state.loading = true;
-                    this.prepareConfigurations();
-                    await this.prepareWidget();
-                    await this.prepareActions();
-                    setTimeout(() => {
-                        this.state.loading = false;
-                    }, 20);
-                }
-            },
-            contextRegistered: () => null
-        });
-
-        await this.prepareConfigurations();
-        await this.prepareWidget();
-        await this.prepareActions();
-        this.state.loading = false;
+        this.prepareConfigurations();
+        this.prepareWidget();
+        this.prepareActions();
     }
 
     public onDestroy(): void {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
         EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
-        ContextService.getInstance().unregisterListener('object-details-page');
     }
 
     private async prepareConfigurations(): Promise<void> {
-        this.state.lanes = [];
-        this.state.contentWidgets = [];
-
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-        this.state.instanceId = context.getDescriptor().contextId;
+        const context = ContextService.getInstance().getActiveContext();
 
         const lanes = context.getLanes(true);
         if (Array.isArray(lanes)) {
@@ -85,6 +63,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.lanes.push([lane.instanceId, template]);
             }
         }
+        (this as any).setStateDirty('lanes');
 
         const contentWidgets = await context.getContent(true);
         if (Array.isArray(contentWidgets)) {
@@ -93,10 +72,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.contentWidgets.push([cw.instanceId, template]);
             }
         }
+        (this as any).setStateDirty('contentWidgets');
     }
 
     private async prepareWidget(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const context = ContextService.getInstance().getActiveContext();
         this.state.error = null;
 
         const object = await context.getObject().catch((error) => null);
@@ -111,11 +91,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async prepareActions(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const context = ContextService.getInstance().getActiveContext();
         const config = context.getConfiguration();
+
         const object = await context.getObject().catch((error) => null);
 
-        this.state.actions = [];
         if (config && object) {
 
             const objectActions = await context.getAdditionalActions();

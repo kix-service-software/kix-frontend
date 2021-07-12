@@ -8,15 +8,21 @@
  */
 
 .ci-category-explorer {
-    >.explorer-widget {
-        >.widget-content {
-            >.filter {
-                >input[type="text"] {
-                    margin: 0;
-                }
+    >.widget-content {
+        >.filter {
+            >input[type="text"] {
+                margin: 0;
             }
-            >.show-all {
-                margin-top: 1rem;
+        }
+
+        >.show-all {
+            margin: 1rem;
+            color: #0a7cb3;
+
+            &:hover,
+            &.active {
+                cursor: pointer;
+                font-weight: bold;
             }
         }
     }

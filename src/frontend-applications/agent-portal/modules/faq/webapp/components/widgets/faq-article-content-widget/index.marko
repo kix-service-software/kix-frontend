@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(state.faqArticle && state.inlineContent)>
     <widget
         instanceId=state.instanceId
@@ -16,24 +15,48 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <@content>
             <div.faq-article-content-container>
                 <div>
-                    <widget instanceId="faq-article-group" title=state.translations["Translatable#Symptom"]>
+                    <widget
+                        instanceId="faq-article-group"
+                        title=state.translations["Translatable#Symptom"]>
                         <@content>
-                            <editor readOnly=true value=state.faqArticle.Field1 inlineContent=state.inlineContent useReadonlyStyle=true/>
+                            <editor
+                                readOnly=true
+                                value=state.faqArticle.Field1
+                                inlineContent=state.inlineContent
+                                useReadonlyStyle=true/>
                         </@content>
                     </widget>
-                    <widget instanceId="faq-article-group" title=state.translations["Translatable#Cause"]>
+                    <widget
+                        instanceId="faq-article-group"
+                        title=state.translations["Translatable#Cause"]>
                         <@content>
-                            <editor readOnly=true value=state.faqArticle.Field2 inlineContent=state.inlineContent useReadonlyStyle=true/>
+                            <editor
+                                readOnly=true
+                                value=state.faqArticle.Field2
+                                inlineContent=state.inlineContent
+                                useReadonlyStyle=true/>
                         </@content>
                     </widget>
-                    <widget instanceId="faq-article-group" title=state.translations["Translatable#Solution"]>
+                    <widget
+                        instanceId="faq-article-group"
+                        title=state.translations["Translatable#Solution"]>
                         <@content>
-                            <editor readOnly=true value=state.faqArticle.Field3 inlineContent=state.inlineContent useReadonlyStyle=true/>
+                            <editor
+                                readOnly=true
+                                value=state.faqArticle.Field3
+                                inlineContent=state.inlineContent
+                                useReadonlyStyle=true/>
                         </@content>
                     </widget>
-                    <widget instanceId="faq-article-group" title=state.translations["Translatable#Comment"]>
+                    <widget
+                        instanceId="faq-article-group"
+                        title=state.translations["Translatable#Comment"]>
                         <@content>
-                            <editor readOnly=true value=state.faqArticle.Field6 inlineContent=state.inlineContent useReadonlyStyle=true/>
+                            <editor
+                                readOnly=true
+                                value=state.faqArticle.Field6
+                                inlineContent=state.inlineContent
+                                useReadonlyStyle=true/>
                         </@content>
                     </widget>
                 </div>
@@ -47,10 +70,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 <for|icon| of=component.stars>
                                     <icon icon=icon/>
                                 </for>
-                                (${component.rating})
+                                <span>(${component.rating})</span>
                             </if>
                             <else>
-                                <b><translation-string pattern="Translatable#No rating available."/></b>
+                                <span>
+                                    <b><translation-string pattern="Translatable#No rating available."/></b>
+                                </span>
                             </else>
                         </span>
                     </div>

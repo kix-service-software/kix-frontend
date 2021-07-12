@@ -33,7 +33,7 @@ export class TranslationLanguageTableContentProvider extends TableContentProvide
     public async loadData(): Promise<Array<RowObject<TranslationLanguage>>> {
         const rowObjects = [];
         if (this.contextId) {
-            const context = await ContextService.getInstance().getContext(this.contextId);
+            const context = ContextService.getInstance().getActiveContext();
             const translation = await context.getObject<TranslationPattern>();
             if (translation && translation.Languages && !!translation.Languages.length) {
                 const languages = SortUtil.sortObjects(

@@ -28,9 +28,9 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
         this.formManager = new FAQArticleSearchFormManager();
     }
 
-    public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
+    public getLoadingOptions(criteria: FilterCriteria[], limit: number): KIXObjectLoadingOptions {
         return new KIXObjectLoadingOptions(
-            criteria, null, this.limit, [KIXObjectProperty.LINKS, FAQArticleProperty.VOTES], [KIXObjectProperty.LINKS]
+            criteria, null, limit, [KIXObjectProperty.LINKS, FAQArticleProperty.VOTES], [KIXObjectProperty.LINKS]
         );
     }
 
@@ -40,7 +40,7 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
         );
     }
 
-    public async getSearchResultCategories(): Promise<SearchResultCategory> {
+    public async getSearchResultCategories(): Promise<SearchResultCategory[]> {
         const categories: SearchResultCategory[] = [];
 
         if (await this.checkReadPermissions('tickets')) {
@@ -54,11 +54,13 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
             );
         }
 
-        return new SearchResultCategory('FAQ', KIXObjectType.FAQ_ARTICLE, categories);
+        return [new SearchResultCategory('FAQ', KIXObjectType.FAQ_ARTICLE, categories)];
     }
 
-    public async prepareFormFilterCriteria(criteria: FilterCriteria[]): Promise<FilterCriteria[]> {
-        criteria = await super.prepareFormFilterCriteria(criteria);
+    public async prepareFormFilterCriteria(
+        criteria: FilterCriteria[], forSearch: boolean = true
+    ): Promise<FilterCriteria[]> {
+        criteria = await super.prepareFormFilterCriteria(criteria, forSearch);
         const fulltextCriteriaIndex = criteria.findIndex((c) => c.property === SearchProperty.FULLTEXT);
         if (fulltextCriteriaIndex !== -1) {
             const value = criteria[fulltextCriteriaIndex].value;
@@ -114,55 +116,15 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
         return criteria;
     }
 
-    public getFulltextCriteria(value: string): FilterCriteria[] {
+    private getFulltextCriteria(value: string): FilterCriteria[] {
         const criteria: FilterCriteria[] = [];
         if (value) {
-            value = `*${value}*`;
             criteria.push(new FilterCriteria(
-                FAQArticleProperty.NUMBER, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, value
-            ));
-            criteria.push(new FilterCriteria(
-                FAQArticleProperty.TITLE, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, value
-            ));
-            criteria.push(new FilterCriteria(
-                FAQArticleProperty.LANGUAGE, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, value
-            ));
-
-            criteria.push(new FilterCriteria(
-                FAQArticleProperty.KEYWORDS, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, value
-            ));
-
-            const encodedValue = BrowserUtil.encodeHTMLString(value);
-
-            criteria.push(new FilterCriteria(
-                FAQArticleProperty.FIELD_1, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, value
-            ));
-            criteria.push(new FilterCriteria(
-                FAQArticleProperty.FIELD_1, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, encodedValue
-            ));
-
-            criteria.push(new FilterCriteria(
-                FAQArticleProperty.FIELD_2, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, value
-            ));
-            criteria.push(new FilterCriteria(
-                FAQArticleProperty.FIELD_2, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, encodedValue
-            ));
-
-            criteria.push(new FilterCriteria(
-                FAQArticleProperty.FIELD_3, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, value
-            ));
-            criteria.push(new FilterCriteria(
-                FAQArticleProperty.FIELD_3, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, encodedValue
-            ));
-
-            criteria.push(new FilterCriteria(
-                FAQArticleProperty.FIELD_6, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, value
-            ));
-            criteria.push(new FilterCriteria(
-                FAQArticleProperty.FIELD_6, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, encodedValue
+                SearchProperty.FULLTEXT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
             ));
         }
         return criteria;
+
     }
 
     public getFilterCriteria(searchValue: ObjectPropertyValue): FilterCriteria {
@@ -173,5 +135,13 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
         }
 
         return criteria;
+    }
+
+    public getDefaultSearchCriteria(): string[] {
+        return [
+            SearchProperty.FULLTEXT,
+            FAQArticleProperty.TITLE, FAQArticleProperty.CATEGORY_ID,
+            KIXObjectProperty.VALID_ID
+        ];
     }
 }

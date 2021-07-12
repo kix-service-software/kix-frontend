@@ -6,18 +6,19 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <span.ticket-contact-input>
-    <form-list
-        placeholder=state.placeholder
-        searchCallback=state.searchCallback
-        autoCompleteConfiguration=state.autoCompleteConfiguration
-        on-focusLost("focusLost")
-        on-nodesChanged("nodesChanged")
-        invalid=state.invalid
-        freeText=true
-        readonly=state.field.readonly
-        actions=state.actions
-        loadNodes=state.loadNodes
-        treeId=state.treeId/>
+    <if(state.field)>
+        <form-list
+            placeholder=state.placeholder
+            searchCallback=state.searchCallback
+            autoCompleteConfiguration=state.autoCompleteConfiguration
+            on-focusLost("focusLost")
+            on-nodesChanged("nodesChanged")
+            invalid=state.invalid
+            freeText=true
+            readonly=state.field.readonly
+            actions=state.actions
+            loadNodes=state.loadNodes
+            treeId=state.treeId/>
+    </if>
 </span>

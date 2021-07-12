@@ -8,7 +8,6 @@ import { ArticleTableFactory } from '../../../src/frontend-applications/agent-po
 import { OrganisationTableFactory } from '../../../src/frontend-applications/agent-portal/modules/customer/webapp/core/table/OrganisationTableFactory';
 import { ContactTableFactory } from '../../../src/frontend-applications/agent-portal/modules/customer/webapp/core';
 import { ConfigItemTableFactory, ConfigItemClassTableFactory } from '../../../src/frontend-applications/agent-portal/modules/cmdb/webapp/core';
-import { RoleTableFactory, UserTableFactory } from '../../../src/frontend-applications/agent-portal/modules/user/webapp/core/admin';
 import { MailAccountTableFactory } from '../../../src/frontend-applications/agent-portal/modules/mail-account/webapp/core';
 import { TranslationPatternTableFactory } from '../../../src/frontend-applications/agent-portal/modules/translation/webapp/core/admin/table';
 import { TextModulesTableFactory } from '../../../src/frontend-applications/agent-portal/modules/textmodule/webapp/core';
@@ -21,7 +20,7 @@ import { MacroActionTableFactory } from '../../../src/frontend-applications/agen
 import { TableHeaderHeight } from '../../../src/frontend-applications/agent-portal/model/configuration/TableHeaderHeight';
 import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 import { ImportExportTemplateTableFactory, ImportExportTemplateRunTableFactory } from '../../../src/frontend-applications/agent-portal/modules/import-export/webapp/core';
-import { resolve } from 'path';
+import { RoleTableFactory, UserTableFactory } from '../../../src/frontend-applications/agent-portal/modules/user/webapp/core/admin/table';
 
 let table: Table;
 TableFactoryService.getInstance().registerFactory(new FAQArticleTableFactory());

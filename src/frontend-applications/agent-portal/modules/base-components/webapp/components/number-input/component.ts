@@ -11,7 +11,7 @@ import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { NumberInputOptions } from '../../../../../modules/base-components/webapp/core/NumberInputOptions';
-import { FormService } from '../../core/FormService';
+import { ContextService } from '../../core/ContextService';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -28,9 +28,9 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     private async update(): Promise<void> {
-        const placeholderText = this.state.field.placeholder
-            ? this.state.field.placeholder
-            : this.state.field.required ? this.state.field.label : '';
+        const placeholderText = this.state.field?.placeholder
+            ? this.state.field?.placeholder
+            : this.state.field?.required ? this.state.field?.label : '';
         this.state.placeholder = await TranslationService.translate(placeholderText);
         this.prepareOptions();
     }
@@ -40,18 +40,18 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     private async prepareOptions(): Promise<void> {
-        if (this.state.field && this.state.field.options) {
-            const maxOption = this.state.field.options.find(
+        if (this.state.field && this.state.field?.options) {
+            const maxOption = this.state.field?.options.find(
                 (o) => o.option === NumberInputOptions.MAX
             );
             if (maxOption) {
                 this.state.max = maxOption.value;
             }
-            const minOption = this.state.field.options.find(
+            const minOption = this.state.field?.options.find(
                 (o) => o.option === NumberInputOptions.MIN
             );
             if (minOption) {
-                const exceptsEmpty = this.state.field.options.find(
+                const exceptsEmpty = this.state.field?.options.find(
                     (o) => o.option === NumberInputOptions.EXCEPTS_EMPTY
                 );
                 this.state.min = minOption.value;
@@ -62,13 +62,13 @@ class Component extends FormInputComponent<string, ComponentState> {
                     this.state.currentValue = this.state.min.toString();
                 }
             }
-            const stepOption = this.state.field.options.find(
+            const stepOption = this.state.field?.options.find(
                 (o) => o.option === NumberInputOptions.STEP
             );
             if (stepOption) {
                 this.state.step = stepOption.value;
             }
-            const unitStringOption = this.state.field.options.find(
+            const unitStringOption = this.state.field?.options.find(
                 (o) => o.option === NumberInputOptions.UNIT_STRING
             );
             if (unitStringOption) {
@@ -79,8 +79,9 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const value = formInstance.getFormFieldValue<string>(this.state.field.instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const value = formInstance.getFormFieldValue<string>(this.state.field?.instanceId);
         if (value) {
             this.state.currentValue = value.value;
         }

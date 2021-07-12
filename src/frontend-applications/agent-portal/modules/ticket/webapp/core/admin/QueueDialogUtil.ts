@@ -7,26 +7,20 @@
  * --
  */
 
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../model/ContextMode';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { NewQueueDialogContext } from './context/ticket-queue/NewQueueDialogContext';
-import { QueueDetailsContext, EditQueueDialogContext } from './context';
+import { EditQueueDialogContext } from './context';
 import { Queue } from '../../../model/Queue';
 
 export class QueueDialogUtil {
 
     public static async create(): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            NewQueueDialogContext.CONTEXT_ID, KIXObjectType.QUEUE, ContextMode.CREATE, null, true, 'Translatable#Ticket'
-        );
+        ContextService.getInstance().setActiveContext(NewQueueDialogContext.CONTEXT_ID);
     }
 
     public static async edit(queueId?: string | number): Promise<void> {
         if (!queueId) {
-            const context = await ContextService.getInstance().getContext<QueueDetailsContext>(
-                QueueDetailsContext.CONTEXT_ID
-            );
+            const context = ContextService.getInstance().getActiveContext();
 
             if (context) {
                 queueId = context.getObjectId();
@@ -34,17 +28,12 @@ export class QueueDialogUtil {
         }
 
         if (queueId) {
-            ContextService.getInstance().setDialogContext(
-                EditQueueDialogContext.CONTEXT_ID, KIXObjectType.QUEUE, ContextMode.EDIT_ADMIN, queueId
-            );
+            ContextService.getInstance().setActiveContext(EditQueueDialogContext.CONTEXT_ID, queueId);
         }
     }
 
     public static async duplicate(queue: Queue): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            NewQueueDialogContext.CONTEXT_ID, KIXObjectType.QUEUE, ContextMode.CREATE, queue.QueueID,
-            false, 'Translatable#Ticket'
-        );
+        ContextService.getInstance().setActiveContext(NewQueueDialogContext.CONTEXT_ID, queue.QueueID);
     }
 
 }

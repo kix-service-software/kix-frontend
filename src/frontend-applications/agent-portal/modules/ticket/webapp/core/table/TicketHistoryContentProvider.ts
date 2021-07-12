@@ -29,7 +29,7 @@ export class TicketHistoryContentProvider extends TableContentProvider<TicketHis
     public async loadData(): Promise<Array<RowObject<TicketHistory>>> {
         const rowObjects = [];
         if (this.contextId) {
-            const context = await ContextService.getInstance().getContext(this.contextId);
+            const context = ContextService.getInstance().getActiveContext();
             const history = await context.getObjectList<TicketHistory>(KIXObjectType.TICKET_HISTORY);
             for (const th of history) {
                 const values: TableValue[] = [];

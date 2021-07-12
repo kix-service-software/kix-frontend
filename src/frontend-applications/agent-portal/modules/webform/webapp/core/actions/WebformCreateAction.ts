@@ -10,8 +10,6 @@
 import { NewWebformDialogContext } from '../context/NewWebformDialogContext';
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../model/ContextMode';
 
 export class WebformCreateAction extends AbstractAction {
 
@@ -23,10 +21,7 @@ export class WebformCreateAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            NewWebformDialogContext.CONTEXT_ID, KIXObjectType.WEBFORM, ContextMode.CREATE_ADMIN,
-            null, true, 'Translatable#Communication'
-        );
+        ContextService.getInstance().setActiveContext(NewWebformDialogContext.CONTEXT_ID);
     }
 
 }

@@ -29,12 +29,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
     public uiComponents: UIComponent[] = [
         new UIComponent(
             'i18n-admin-translations', '/kix-module-translation$0/webapp/components/i18n-admin-translations', []
-        ),
-        new UIComponent(
-            'new-translation-dialog', '/kix-module-translation$0/webapp/components/new-translation-dialog', []
-        ),
-        new UIComponent(
-            'edit-translation-dialog', '/kix-module-translation$0/webapp/components/edit-translation-dialog', []
         )
     ];
 

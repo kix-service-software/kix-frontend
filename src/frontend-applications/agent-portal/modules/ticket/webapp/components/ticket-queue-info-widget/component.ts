@@ -27,12 +27,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         this.state.labelProvider = new QueueLabelProvider();
-        const context = await ContextService.getInstance().getContext<QueueDetailsContext>(
-            QueueDetailsContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
         context.registerListener('ticket-queue-info-widget', {
-            sidebarToggled: () => { return; },
-            explorerBarToggled: () => { return; },
+            sidebarRightToggled: () => { return; },
+            sidebarLeftToggled: () => { return; },
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
             scrollInformationChanged: () => { return; },

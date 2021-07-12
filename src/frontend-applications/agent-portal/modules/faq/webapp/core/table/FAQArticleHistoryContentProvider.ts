@@ -29,7 +29,7 @@ export class FAQArticleHistoryContentProvider extends TableContentProvider<FAQHi
     public async loadData(): Promise<Array<RowObject<FAQHistory>>> {
         const rowObjects = [];
         if (this.contextId) {
-            const context = await ContextService.getInstance().getContext(this.contextId);
+            const context = ContextService.getInstance().getActiveContext();
             const faqArticle = await context.getObject<FAQArticle>();
             if (faqArticle) {
                 for (const fh of faqArticle.History) {

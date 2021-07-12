@@ -53,6 +53,8 @@ export class PersonalSettingsFormService extends KIXObjectFormService {
             value = value.split(',').map((v) => Number(v));
         } else if (property === PersonalSettingsProperty.NOTIFICATIONS) {
             value = await this.handleNotifications(value);
+        } else if (property === PersonalSettingsProperty.DONT_ASK_DIALOG_ON_CLOSE) {
+            value = Boolean(Number(value));
         }
 
         return value;
@@ -96,11 +98,6 @@ export class PersonalSettingsFormService extends KIXObjectFormService {
         parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
         formContext?: FormContext, formInstance?: FormInstance
     ): Promise<Array<[string, any]>> {
-
-        const queuesParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
-        if (queuesParameter) {
-            queuesParameter[1] = Array.isArray(queuesParameter[1]) ? queuesParameter[1].join(',') : '';
-        }
 
         const notificationParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.NOTIFICATIONS);
         if (notificationParameter) {

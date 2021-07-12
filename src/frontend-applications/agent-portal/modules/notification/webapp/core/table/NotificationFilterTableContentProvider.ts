@@ -36,7 +36,7 @@ export class NotificationFilterTableContentProvider extends TableContentProvider
     }
 
     public async loadData(): Promise<RowObject[]> {
-        const context = await ContextService.getInstance().getContext(NotificationDetailsContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext();
         const notification = context ? await context.getObject<Notification>() : null;
 
         const rowObjects: RowObject[] = [];

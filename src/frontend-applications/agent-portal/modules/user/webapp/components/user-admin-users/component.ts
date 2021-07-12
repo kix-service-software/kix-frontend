@@ -97,9 +97,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public search(): void {
         this.state.filterValue = this.filterValue;
-        const context = ContextService.getInstance().getActiveContext<AdminContext>();
-        context.setFilterValue(this.state.filterValue);
-        this.state.table.reload(true);
+        const context = ContextService.getInstance().getActiveContext();
+        if (context instanceof AdminContext) {
+            context.setFilterValue(this.state.filterValue);
+            this.state.table.reload(true);
+        }
     }
 
 }

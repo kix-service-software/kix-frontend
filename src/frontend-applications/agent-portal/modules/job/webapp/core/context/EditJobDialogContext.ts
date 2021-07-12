@@ -8,8 +8,6 @@
  */
 
 import { Context } from '../../../../../model/Context';
-import { ContextDescriptor } from '../../../../../model/ContextDescriptor';
-import { ContextConfiguration } from '../../../../../model/configuration/ContextConfiguration';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
@@ -18,15 +16,6 @@ import { KIXObjectService } from '../../../../../modules/base-components/webapp/
 export class EditJobDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'edit-job-dialog-context';
-    public formListenerId: string;
-
-    public constructor(
-        descriptor: ContextDescriptor,
-        objectId: string | number = null,
-        configuration: ContextConfiguration = null
-    ) {
-        super(descriptor, objectId, configuration);
-    }
 
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.JOB, reload: boolean = false, changedProperties?: string[]

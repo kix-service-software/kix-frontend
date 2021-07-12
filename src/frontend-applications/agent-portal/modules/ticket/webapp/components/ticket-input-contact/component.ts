@@ -10,17 +10,11 @@
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { FormInputAction } from '../../../../../modules/base-components/webapp/core/FormInputAction';
 import { Label } from '../../../../../modules/base-components/webapp/core/Label';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { PreviousTabData } from '../../../../../modules/base-components/webapp/core/PreviousTabData';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import { TabContainerEvent } from '../../../../../modules/base-components/webapp/core/TabContainerEvent';
-import { TabContainerEventData } from '../../../../../modules/base-components/webapp/core/TabContainerEventData';
 import { TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
-import { NewTicketDialogContext } from '../../core';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { FormValidationService } from '../../../../../modules/base-components/webapp/core/FormValidationService';
@@ -36,6 +30,7 @@ import { Contact } from '../../../../customer/model/Contact';
 import { AutoCompleteConfiguration } from '../../../../../model/configuration/AutoCompleteConfiguration';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
+import { NewContactDialogContext } from '../../../../customer/webapp/core';
 
 class Component extends FormInputComponent<number | string, ComponentState> {
 
@@ -55,11 +50,13 @@ class Component extends FormInputComponent<number | string, ComponentState> {
     }
 
     public async update(): Promise<void> {
-        const placeholderText = this.state.field.placeholder
-            ? this.state.field.placeholder
-            : this.state.field.required ? this.state.field.label : '';
+        const placeholderText = this.state.field?.placeholder
+            ? this.state.field?.placeholder
+            : this.state.field?.required ? this.state.field?.label : '';
 
         this.state.placeholder = await TranslationService.translate(placeholderText);
+
+        (this as any).setStateDirty('field');
     }
 
     public async onMount(): Promise<void> {
@@ -67,7 +64,7 @@ class Component extends FormInputComponent<number | string, ComponentState> {
         this.state.searchCallback = this.searchContacts.bind(this);
         this.state.autoCompleteConfiguration = new AutoCompleteConfiguration();
 
-        const additionalTypeOption = this.state.field.options.find((o) => o.option === 'SHOW_NEW_CONTACT');
+        const additionalTypeOption = this.state.field?.options.find((o) => o.option === 'SHOW_NEW_CONTACT');
         const actions = [];
         if (additionalTypeOption && additionalTypeOption.value) {
             actions.push(new FormInputAction(
@@ -84,25 +81,17 @@ class Component extends FormInputComponent<number | string, ComponentState> {
     }
 
     private async actionClicked(action: FormInputAction): Promise<void> {
-        const context = await ContextService.getInstance().getContext(
-            'new-contact-dialog-context'
+        ContextService.getInstance().setActiveContext(
+            NewContactDialogContext.CONTEXT_ID, null, null, [
+            ['USE_SOURCE_CONTEXT', true],
+            ['PROVIDE_CONTACT_ID_TO_SOURCE_CONTEXT', true]
+        ]
         );
-        if (context) {
-            context.setAdditionalInformation('RETURN_TO_PREVIOUS_TAB', new PreviousTabData(
-                KIXObjectType.TICKET,
-                'new-ticket-dialog'
-            ));
-            EventService.getInstance().publish(
-                TabContainerEvent.CHANGE_TAB, new TabContainerEventData('new-contact-dialog')
-            );
-        }
     }
 
     public async setCurrentValue(): Promise<void> {
         let nodes = [];
-        const newTicketDialogContext = await ContextService.getInstance().getContext<NewTicketDialogContext>(
-            NewTicketDialogContext.CONTEXT_ID
-        );
+        const newTicketDialogContext = ContextService.getInstance().getActiveContext();
 
         let contactId: number | string = null;
 
@@ -113,16 +102,17 @@ class Component extends FormInputComponent<number | string, ComponentState> {
             }
         }
 
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const contactValue = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const contactValue = formInstance.getFormFieldValue<number>(this.state.field?.instanceId);
 
         contactId = contactId
             ? contactId
-            : Array.isArray(contactValue.value) ? contactValue.value[0] : contactValue.value;
+            : Array.isArray(contactValue?.value) ? contactValue?.value[0] : contactValue?.value;
         if (contactId) {
             if (!isNaN(Number(contactId))) {
                 // check if this contact is valid, if required
-                const onlyValidOption = this.state.field.options.find((o) =>
+                const onlyValidOption = this.state.field?.options.find((o) =>
                     o.option === FormFieldOptions.SHOW_INVALID);
                 let canSelect = true;
                 if (onlyValidOption && !onlyValidOption.value) {
@@ -177,7 +167,7 @@ class Component extends FormInputComponent<number | string, ComponentState> {
         const nodes = [];
         const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.CONTACT);
         if (service) {
-            const onlyValidOption = this.state.field.options.find((o) => o.option === FormFieldOptions.SHOW_INVALID);
+            const onlyValidOption = this.state.field?.options.find((o) => o.option === FormFieldOptions.SHOW_INVALID);
             const filter = await service.prepareFullTextFilter(searchValue);
             if (onlyValidOption && !onlyValidOption.value) {
                 filter.push(

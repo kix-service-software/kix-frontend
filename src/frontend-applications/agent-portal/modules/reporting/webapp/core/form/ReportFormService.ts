@@ -42,7 +42,7 @@ export class ReportFormService extends KIXObjectFormService {
     protected async prePrepareForm(
         form: FormConfiguration, reportDefinition: Report, formInstance: FormInstance
     ): Promise<void> {
-        const context = await ContextService.getInstance().getContext(NewReportDialogContext.CONTEXT_ID);
+        const context = await ContextService.getInstance().getActiveContext<NewReportDialogContext>();
         const definition = context?.getAdditionalInformation(KIXObjectType.REPORT_DEFINITION);
         const outputFormat = context?.getAdditionalInformation(ReportDefinitionProperty.AVAILABLE_OUTPUT_FORMATS);
 
@@ -57,7 +57,7 @@ export class ReportFormService extends KIXObjectFormService {
     ): Promise<Array<[string, any]>> {
         parameter = await super.postPrepareValues(parameter, createOptions, formContext, formInstance);
 
-        const context = await ContextService.getInstance().getContext(NewReportDialogContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext();
         const definition = context?.getAdditionalInformation(KIXObjectType.REPORT_DEFINITION);
 
         const report = await ReportObjectCreator.createReportObject(formInstance, definition);

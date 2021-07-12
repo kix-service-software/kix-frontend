@@ -27,11 +27,11 @@ export class FAQArticleTableFactory extends TableFactory {
 
     public objectType: KIXObjectType | string = KIXObjectType.FAQ_ARTICLE;
 
-    public createTable(
+    public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean, objectType?: KIXObjectType | string,
         objects?: KIXObject[]
-    ): Table {
+    ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(
             tableConfiguration, defaultRouting, defaultToggle, short

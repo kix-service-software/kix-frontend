@@ -10,7 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../base-components/webapp/core/FormInputComponent';
 import { IdService } from '../../../../../model/IdService';
-import { PermissionManager } from '../../core/admin';
 import { CreatePermissionDescription } from '../../../server/CreatePermissionDescription';
 import { PermissionFormData } from '../../../../base-components/webapp/core/PermissionFormData';
 import { IDynamicFormManager } from '../../../../base-components/webapp/core/dynamic-form';
@@ -20,6 +19,8 @@ import { LabelService } from '../../../../base-components/webapp/core/LabelServi
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { FormService } from '../../../../base-components/webapp/core/FormService';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { PermissionManager } from '../../core/admin/PermissionManager';
 
 class Component extends FormInputComponent<any[], ComponentState> {
 
@@ -86,8 +87,9 @@ class Component extends FormInputComponent<any[], ComponentState> {
 
     public async setCurrentNode(permissionManager: IDynamicFormManager): Promise<void> {
         const permissionDescriptions: CreatePermissionDescription[] = [];
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const value = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const value = formInstance.getFormFieldValue<number>(this.state.field?.instanceId);
         if (value && Array.isArray(value.value)) {
             value.value.forEach((permission: Permission) => {
                 permissionManager.setValue(

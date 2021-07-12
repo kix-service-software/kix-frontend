@@ -77,19 +77,21 @@ export class UIModule implements IUIModule {
 
         const newReportDefintionContext = new ContextDescriptor(
             NewReportDefinitionDialogContext.CONTEXT_ID, [KIXObjectType.REPORT_DEFINITION], ContextType.DIALOG,
-            ContextMode.CREATE, false, 'new-report-definition-dialog', [], NewReportDefinitionDialogContext,
+            ContextMode.CREATE_ADMIN, false, 'object-dialog', [], NewReportDefinitionDialogContext,
             [
                 new UIComponentPermission('reporting/reportdefinitions', [CRUD.CREATE], true)
-            ]
+            ], 'Translatable#Report Definition', 'kix-icon-kpi',
+            undefined, undefined, false
         );
         ContextService.getInstance().registerContext(newReportDefintionContext);
 
         const editReportContext = new ContextDescriptor(
             EditReportDefinitionDialogContext.CONTEXT_ID, [KIXObjectType.REPORT_DEFINITION], ContextType.DIALOG,
-            ContextMode.EDIT, false, 'edit-report-definition-dialog', [], EditReportDefinitionDialogContext,
+            ContextMode.EDIT_ADMIN, false, 'object-dialog', [], EditReportDefinitionDialogContext,
             [
                 new UIComponentPermission('reporting/reportdefinitions', [CRUD.CREATE], true)
-            ]
+            ], 'Translatable#Edit Report Definition', 'kix-icon-kpi',
+            undefined, undefined, false
         );
         ContextService.getInstance().registerContext(editReportContext);
 
@@ -98,7 +100,8 @@ export class UIModule implements IUIModule {
 
         const newReportContext = new ContextDescriptor(
             NewReportDialogContext.CONTEXT_ID, [KIXObjectType.REPORT], ContextType.DIALOG,
-            ContextMode.CREATE_SUB, false, 'new-report-dialog', [], NewReportDialogContext, []
+            ContextMode.CREATE_SUB, false, 'object-dialog', [], NewReportDialogContext, [],
+            'Translatable#Report', 'kix-icon-kpi'
         );
         ContextService.getInstance().registerContext(newReportContext);
         ServiceRegistry.registerServiceInstance(ReportFormService.getInstance());

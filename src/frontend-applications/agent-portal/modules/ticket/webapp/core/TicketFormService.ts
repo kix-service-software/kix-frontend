@@ -39,7 +39,11 @@ import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { QueueProperty } from '../../model/QueueProperty';
-import { AgentService } from '../../../user/webapp/core';
+import { AgentService } from '../../../user/webapp/core/AgentService';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { IdService } from '../../../../model/IdService';
 
 export class TicketFormService extends KIXObjectFormService {
 
@@ -61,6 +65,65 @@ export class TicketFormService extends KIXObjectFormService {
         return kixObjectType === KIXObjectType.TICKET;
     }
 
+    protected async postPrepareForm(
+        form: FormConfiguration, formInstance: FormInstance,
+        formFieldValues: Map<string, FormFieldValue<any>>, kixObject: KIXObject
+    ): Promise<void> {
+        const value = await formInstance.getFormFieldValueByProperty<number>(ArticleProperty.CHANNEL_ID);
+        if (value && value.value) {
+            const channelFields = await ArticleFormService.getInstance().getFormFieldsForChannel(
+                formInstance, value.value, form.id, true
+            );
+
+            const field = formInstance.getFormFieldByProperty(ArticleProperty.CHANNEL_ID);
+            formInstance.addFieldChildren(field, channelFields, true);
+        }
+        const stateValue = await formInstance.getFormFieldValueByProperty<number>(TicketProperty.STATE_ID);
+        if (stateValue && stateValue.value) {
+            const isPending = stateValue.value
+                ? await TicketService.isPendingState(stateValue.value)
+                : false;
+
+            if (isPending) {
+                await this.setPendingTimeField(formInstance, kixObject as Ticket, form.formContext);
+            }
+        }
+    }
+
+    // TODO: nearly (value handling, await on provide) copied from TicketFormFieldValueHandler - can use same function?
+    private async setPendingTimeField(
+        formInstance: FormInstance, ticket: Ticket, formContext: FormContext
+    ): Promise<void> {
+        const existingField = formInstance.getFormFieldByProperty(TicketProperty.PENDING_TIME);
+
+        if (!existingField) {
+            const label = await LabelService.getInstance().getPropertyText(
+                TicketProperty.PENDING_TIME, KIXObjectType.TICKET
+            );
+            const pendingField = new FormFieldConfiguration(
+                'pending-time-field',
+                label, TicketProperty.PENDING_TIME, 'ticket-input-state-pending', true,
+                null, null, null, undefined, undefined, undefined, undefined, undefined,
+                null, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+                false
+            );
+
+            const stateField = formInstance.getFormFieldByProperty(TicketProperty.STATE_ID);
+            if (stateField) {
+                formInstance.addFieldChildren(stateField, [pendingField]);
+            } else {
+                pendingField.instanceId = IdService.generateDateBasedId();
+                formInstance.getForm().pages[0].groups[0].formFields.push(pendingField);
+            }
+
+            const date = await this.getValue(TicketProperty.PENDING_TIME, null, ticket, pendingField, formContext);
+
+            await formInstance.provideFormFieldValues(
+                [[pendingField.instanceId, date]], null, true, false
+            );
+        }
+    }
+
     protected async getValue(
         property: string, value: any, ticket: Ticket, formField: FormFieldConfiguration,
         formContext: FormContext
@@ -70,7 +133,7 @@ export class TicketFormService extends KIXObjectFormService {
                 value = ticket ? ticket.ContactID : null;
                 if (!value) {
                     const context = ContextService.getInstance().getActiveContext();
-                    const contact = await context.getObject<Contact>(KIXObjectType.CONTACT);
+                    const contact = await context?.getObject<Contact>(KIXObjectType.CONTACT);
                     value = contact ? contact.ID : null;
                 }
                 break;
@@ -78,11 +141,11 @@ export class TicketFormService extends KIXObjectFormService {
                 value = ticket ? ticket.OrganisationID : null;
                 if (!value) {
                     const context = ContextService.getInstance().getActiveContext();
-                    const organisation = await context.getObject<Organisation>(KIXObjectType.ORGANISATION);
+                    const organisation = await context?.getObject<Organisation>(KIXObjectType.ORGANISATION);
                     if (organisation) {
                         value = organisation;
                     } else {
-                        const contact = await context.getObject<Contact>(KIXObjectType.CONTACT);
+                        const contact = await context?.getObject<Contact>(KIXObjectType.CONTACT);
                         value = contact ? contact.PrimaryOrganisationID : null;
                     }
                 }
@@ -93,15 +156,44 @@ export class TicketFormService extends KIXObjectFormService {
                         ? new Date(ticket[TicketProperty.PENDING_TIME]) : null;
                 }
                 break;
+            case ArticleProperty.SUBJECT:
+                value = await ArticleFormService.getInstance().getSubjectFieldValue();
+                break;
+            case ArticleProperty.BODY:
+                value = await ArticleFormService.getInstance().getBodyFieldValue();
+                break;
+            case ArticleProperty.ATTACHMENTS:
+                value = await ArticleFormService.getInstance().getAttachmentFieldValue();
+                break;
+            case ArticleProperty.TO:
+                value = await ArticleFormService.getInstance().getToFieldValue(
+                    ContextService.getInstance().getActiveContext()
+                );
+                break;
             case ArticleProperty.CHANNEL_ID:
-                if (formContext === FormContext.NEW) {
+                // use tempalte value
+                value = formField.defaultValue ? Array.isArray(formField.defaultValue.value)
+                    ? formField.defaultValue.value[0] : formField.defaultValue.value : null;
+
+                // prepare referenced article placeholders
+                if (value && formContext === FormContext.EDIT && value.toString().match('KIX_ARTICLE')) {
+                    const dialogContext = ContextService.getInstance().getActiveContext();
+                    if (dialogContext) {
+                        const referencedArticle = await ArticleFormService.getInstance().getReferencedArticle(
+                            dialogContext, ticket
+                        );
+                        if (referencedArticle) {
+                            value = referencedArticle.ChannelID;
+                        }
+                    }
+                }
+
+                // use fallback for new ticket
+                else if (!value && formContext === FormContext.NEW) {
                     const channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL);
                     if (channels && channels.length) {
                         value = channels[0].ID;
                     }
-                } else {
-                    value = formField.defaultValue ? Array.isArray(formField.defaultValue.value)
-                        ? formField.defaultValue.value[0] : formField.defaultValue.value : null;
                 }
                 break;
             default:

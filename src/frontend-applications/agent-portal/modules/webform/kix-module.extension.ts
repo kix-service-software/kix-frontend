@@ -28,10 +28,8 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
 
     public uiComponents: UIComponent[] = [
         new UIComponent('admin-webforms', '/kix-module-webform$0/webapp/components/admin-webforms', []),
-        new UIComponent('new-webform-dialog', '/kix-module-webform$0/webapp/components/new-webform-dialog', []),
         new UIComponent('webform-code-widget', '/kix-module-webform$0/webapp/components/webform-code-widget', []),
-        new UIComponent('webform-code-content', '/kix-module-webform$0/webapp/components/webform-code-content', []),
-        new UIComponent('edit-webform-dialog', '/kix-module-webform$0/webapp/components/edit-webform-dialog', [])
+        new UIComponent('webform-code-content', '/kix-module-webform$0/webapp/components/webform-code-content', [])
     ];
 
     public webDependencies: string[] = [

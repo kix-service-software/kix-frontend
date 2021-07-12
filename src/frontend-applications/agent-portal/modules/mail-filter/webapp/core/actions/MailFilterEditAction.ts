@@ -7,13 +7,11 @@
  * --
  */
 
-import { EditMailFilterDialogContext, MailFilterDetailsContext } from '../context';
+import { EditMailFilterDialogContext } from '../context';
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../model/ContextMode';
 import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 
 export class MailFilterEditAction extends AbstractAction {
@@ -37,17 +35,12 @@ export class MailFilterEditAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<MailFilterDetailsContext>(
-            MailFilterDetailsContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         if (context) {
             const id = context.getObjectId();
             if (id) {
-                ContextService.getInstance().setDialogContext(
-                    EditMailFilterDialogContext.CONTEXT_ID, KIXObjectType.MAIL_FILTER,
-                    ContextMode.EDIT_ADMIN, id
-                );
+                ContextService.getInstance().setActiveContext(EditMailFilterDialogContext.CONTEXT_ID, id);
             }
         }
     }

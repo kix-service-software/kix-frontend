@@ -36,6 +36,8 @@ export class UIModule extends TicketReadUIModule {
 
     public name: string = 'TicketAdminUIModule';
 
+    protected doRegisterContexts: boolean = false;
+
     public async unRegister(): Promise<void> {
         throw new Error('Method not implemented.');
     }
@@ -65,10 +67,11 @@ export class UIModule extends TicketReadUIModule {
         const newTicketTypeContext = new ContextDescriptor(
             NewTicketTypeDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_TYPE],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-ticket-type-dialog', ['tickettypes'], NewTicketTypeDialogContext,
+            false, 'object-dialog', ['tickettypes'], NewTicketTypeDialogContext,
             [
                 new UIComponentPermission('system/ticket/types', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#New Type', 'kix-icon-gear', TicketTypeDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(newTicketTypeContext);
 
@@ -76,10 +79,11 @@ export class UIModule extends TicketReadUIModule {
         const editTicketTypeContext = new ContextDescriptor(
             EditTicketTypeDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_TYPE],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-ticket-type-dialog', ['tickettypes'], EditTicketTypeDialogContext,
+            false, 'object-dialog', ['tickettypes'], EditTicketTypeDialogContext,
             [
                 new UIComponentPermission('system/ticket/types', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Edit Type', 'kix-icon-gear', TicketTypeDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(editTicketTypeContext);
 
@@ -91,7 +95,8 @@ export class UIModule extends TicketReadUIModule {
             true, 'object-details-page', ['tickettypes'], TicketTypeDetailsContext,
             [
                 new UIComponentPermission('system/ticket/types', [CRUD.READ])
-            ]
+            ],
+            'Translatable#Type Details', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(ticketTypeDetailsContextDescriptor);
     }
@@ -103,10 +108,11 @@ export class UIModule extends TicketReadUIModule {
         const newTicketStateContext = new ContextDescriptor(
             NewTicketStateDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_STATE],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-ticket-state-dialog', ['ticketstates'], NewTicketStateDialogContext,
+            false, 'object-dialog', ['ticketstates'], NewTicketStateDialogContext,
             [
                 new UIComponentPermission('system/ticket/states', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#New State', 'kix-icon-gear', TicketStateDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(newTicketStateContext);
 
@@ -115,10 +121,11 @@ export class UIModule extends TicketReadUIModule {
         const editTicketStateContext = new ContextDescriptor(
             EditTicketStateDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_STATE],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-ticket-state-dialog', ['ticketstates'], EditTicketStateDialogContext,
+            false, 'object-dialog', ['ticketstates'], EditTicketStateDialogContext,
             [
                 new UIComponentPermission('system/ticket/states', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Edit State', 'kix-icon-gear', TicketStateDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(editTicketStateContext);
 
@@ -130,7 +137,8 @@ export class UIModule extends TicketReadUIModule {
             true, 'object-details-page', ['ticketstates'], TicketStateDetailsContext,
             [
                 new UIComponentPermission('system/ticket/states', [CRUD.READ])
-            ]
+            ],
+            'Translatable#State Details', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(ticketStateDetailsContextDescriptor);
     }
@@ -142,10 +150,11 @@ export class UIModule extends TicketReadUIModule {
         const newTicketPriorityContext = new ContextDescriptor(
             NewTicketPriorityDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_PRIORITY],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-ticket-priority-dialog', ['priorities'], NewTicketPriorityDialogContext,
+            false, 'object-dialog', ['priorities'], NewTicketPriorityDialogContext,
             [
                 new UIComponentPermission('system/ticket/priorities', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#New Priority', 'kix-icon-gear', TicketPriorityDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(newTicketPriorityContext);
 
@@ -154,10 +163,11 @@ export class UIModule extends TicketReadUIModule {
         const editTicketPriorityContext = new ContextDescriptor(
             EditTicketPriorityDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_PRIORITY],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-ticket-priority-dialog', ['priorities'], EditTicketPriorityDialogContext,
+            false, 'object-dialog', ['priorities'], EditTicketPriorityDialogContext,
             [
                 new UIComponentPermission('system/ticket/priorities', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Edit Priority', 'kix-icon-gear', TicketPriorityDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(editTicketPriorityContext);
 
@@ -171,7 +181,8 @@ export class UIModule extends TicketReadUIModule {
             true, 'object-details-page', ['priorities'], TicketPriorityDetailsContext,
             [
                 new UIComponentPermission('system/ticket/priorities', [CRUD.READ])
-            ]
+            ],
+            'Translatable#Priority Details', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(ticketPriorityDetailsContextDescriptor);
     }
@@ -183,10 +194,11 @@ export class UIModule extends TicketReadUIModule {
         const newQueueContext = new ContextDescriptor(
             NewQueueDialogContext.CONTEXT_ID, [KIXObjectType.QUEUE],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-ticket-queue-dialog', ['queues'], NewQueueDialogContext,
+            false, 'object-dialog', ['queues'], NewQueueDialogContext,
             [
                 new UIComponentPermission('system/ticket/queues', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#New Team', 'kix-icon-gear', QueueDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(newQueueContext);
 
@@ -195,10 +207,11 @@ export class UIModule extends TicketReadUIModule {
         const editQueueContext = new ContextDescriptor(
             EditQueueDialogContext.CONTEXT_ID, [KIXObjectType.QUEUE],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-ticket-queue-dialog', ['queues'], EditQueueDialogContext,
+            false, 'object-dialog', ['queues'], EditQueueDialogContext,
             [
                 new UIComponentPermission('system/ticket/queues', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#Edit Team', 'kix-icon-gear', QueueDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(editQueueContext);
 
@@ -210,7 +223,8 @@ export class UIModule extends TicketReadUIModule {
             true, 'object-details-page', ['queues'], QueueDetailsContext,
             [
                 new UIComponentPermission('system/ticket/queues', [CRUD.READ])
-            ]
+            ],
+            'Translatable#Team Details', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(ticketQueueDetailsContextDescriptor);
     }

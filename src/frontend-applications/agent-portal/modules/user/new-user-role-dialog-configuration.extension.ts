@@ -8,7 +8,6 @@
  */
 
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
-import { NewUserRoleDialogContext } from './webapp/core/admin';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
 import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
@@ -33,6 +32,7 @@ import { RoleUsageContextTypes } from './model/RoleUsageContextTypes';
 import { FormFieldOptions } from '../../model/configuration/FormFieldOptions';
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { NewUserRoleDialogContext } from './webapp/core/admin/context/NewUserRoleDialogContext';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -44,7 +44,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const configurations = [];
         const widget = new WidgetConfiguration(
             'user-role-new-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
-            'new-user-role-dialog', 'Translatable#New Role', [], null, null,
+            'object-dialog-form-widget', 'Translatable#New Role', [], null, null,
             false, false, 'kix-icon-new-gear'
         );
         configurations.push(widget);
@@ -52,13 +52,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), 'New User Role Dialog', ConfigurationType.Context,
-                this.getModuleId(), [], [], [], [], [], [], [], [],
+                this.getModuleId(), [], [], [],
                 [
                     new ConfiguredDialogWidget(
                         'user-role-new-dialog-widget', 'user-role-new-dialog-widget',
                         KIXObjectType.ROLE, ContextMode.CREATE_ADMIN
                     )
-                ]
+                ], [], [], [], []
             )
         );
 

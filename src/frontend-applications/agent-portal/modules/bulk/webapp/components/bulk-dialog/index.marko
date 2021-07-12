@@ -6,13 +6,14 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<widget instanceId=state.instanceId>
-    <@content>
-        <form.form autocomplete="off">
+<div.object-dialog>
+    <widget instanceId=state.instanceId title=state.title icon=state.icon>
+        <@content>
             <if(state.bulkManager)>
-                <bulk-form bulkManager=state.bulkManager/>
+                <form.form autocomplete="off">
+                    <bulk-form bulkManager=state.bulkManager/> 
+                </form>
             </if>
-        </form>
-    </@content>
-</widget>
+        </@content>
+    </widget>
+</div>

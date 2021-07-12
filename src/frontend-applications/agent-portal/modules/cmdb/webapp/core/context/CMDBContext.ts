@@ -23,6 +23,9 @@ import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { LabelService } from '../../../../base-components/webapp/core/LabelService';
+import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
+import { ContextPreference } from '../../../../../model/ContextPreference';
 
 export class CMDBContext extends Context {
 
@@ -31,24 +34,37 @@ export class CMDBContext extends Context {
     public classId: number;
     public filterValue: string;
 
+    public async initContext(urlParams?: URLSearchParams): Promise<void> {
+        super.initContext();
+
+        if (this.classId || this.filterValue) {
+            this.loadConfigItems();
+        }
+    }
+
     public getIcon(): string {
         return 'kix-icon-cmdb';
     }
 
     public async getDisplayText(): Promise<string> {
-        const title = await TranslationService.translate('Translatable#CMDB Dashboard');
-        return title;
+        let text = await TranslationService.translate('Translatable#Assets');
+        if (this.classId) {
+            const className = await LabelService.getInstance().getPropertyValueDisplayText(
+                KIXObjectType.CONFIG_ITEM, ConfigItemProperty.CLASS_ID, this.classId
+            );
+            text = await TranslationService.translate('Assets: {0}', [className]);
+        }
+        return text;
     }
 
-    public async initContext(urlParams: URLSearchParams): Promise<void> {
-        if (urlParams) {
-            if (urlParams.has('classId') && !isNaN(Number(urlParams.get('classId')))) {
-                this.classId = Number(urlParams.get('classId'));
-            }
+    public async update(urlParams: URLSearchParams): Promise<void> {
+        this.handleURLParams(urlParams);
+    }
 
-            if (urlParams.has('filter')) {
-                this.filterValue = decodeURI(urlParams.get('filter'));
-            }
+    private handleURLParams(urlParams: URLSearchParams): void {
+        if (urlParams) {
+            this.setCIClass(urlParams.has('classId') ? Number(urlParams.get('classId')) : null, false);
+            this.setFilterValue(urlParams.has('filter') ? decodeURI(urlParams.get('filter')) : null, false);
         }
     }
 
@@ -72,18 +88,36 @@ export class CMDBContext extends Context {
         return url;
     }
 
-    public setCIClass(classId: number): void {
+    public async setCIClass(classId: number, history: boolean = true): Promise<void> {
         if (!this.classId || this.classId !== classId) {
             this.classId = classId;
             this.loadConfigItems();
-            ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
+
+            EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
+            if (history) {
+                ContextService.getInstance().setDocumentHistory(true, this, this, null);
+            }
+        }
+
+        const isStored = await ContextService.getInstance().isContextStored(this.instanceId);
+        if (isStored) {
+            ContextService.getInstance().updateStorage(this.instanceId);
         }
     }
 
-    public setFilterValue(filterValue: string): void {
+    public async setFilterValue(filterValue: string, history: boolean = true): Promise<void> {
         this.filterValue = filterValue;
         this.loadConfigItems();
-        ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
+
+        EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
+        if (history) {
+            ContextService.getInstance().setDocumentHistory(true, this, this, null);
+        }
+
+        const isStored = await ContextService.getInstance().isContextStored(this.instanceId);
+        if (isStored) {
+            ContextService.getInstance().updateStorage(this.instanceId);
+        }
     }
 
     public async loadConfigItems(): Promise<void> {
@@ -149,17 +183,22 @@ export class CMDBContext extends Context {
         return await super.getObjectList(objectType);
     }
 
-    public reset(): void {
-        super.reset();
-        this.classId = null;
-        this.filterValue = null;
-        this.loadConfigItems();
-    }
-
     public reloadObjectList(objectType: KIXObjectType | string): Promise<void> {
         if (objectType === KIXObjectType.CONFIG_ITEM) {
             return this.loadConfigItems();
         }
+    }
+
+    public async addStorableAdditionalInformation(contextPreference: ContextPreference): Promise<void> {
+        super.addStorableAdditionalInformation(contextPreference);
+        contextPreference['CLASS_ID'] = this.classId;
+        contextPreference['FILTER_VALUE'] = this.filterValue;
+    }
+
+    public async loadAdditionalInformation(contextPreference: ContextPreference): Promise<void> {
+        super.loadAdditionalInformation(contextPreference);
+        this.classId = contextPreference['CLASS_ID'];
+        this.filterValue = contextPreference['FILTER_VALUE'];
     }
 
 }

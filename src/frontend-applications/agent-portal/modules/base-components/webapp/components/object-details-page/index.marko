@@ -11,37 +11,32 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 </if>
 <else>
     <div.details-container>
-        <if(!state.loading)>
-            <widget
-                instanceId=state.instanceId
-                minimizable=true
-                title=state.title
-                contentActions=state.actions>
-                <@content>
-                    <ul.lane-list no-update>
-                        <for|lane| of=state.lanes>
-                            <li.lane key=lane[0]>
-                                <${lane[1]} ...{
-                                    contextType: "MAIN",
-                                    instanceId: lane[0],
-                                    type: component.getLaneWidgetType()
-                                }/>
-                            </li>
-                        </for>
-                    </ul>
-                </@content>
-            </widget>
-            <div.object-details-content-widget key="object-details-content">
-                <for|contentWidget| of=state.contentWidgets>
-                    <${contentWidget[1]} ...{
-                        contextType: "MAIN",
-                        instanceId: contentWidget[0]
-                    }/>
-                </for>
-            </div>
-        </if>
-        <else>
-            <table-placeholder/>
-        </else>
+        <widget
+            instanceId=state.instanceId
+            minimizable=true
+            title=state.title
+            contentActions=state.actions>
+            <@content>
+                <ul.lane-list no-update>
+                    <for|lane| of=state.lanes>
+                        <li.lane key=lane[0]>
+                            <${lane[1]} ...{
+                                contextType: "MAIN",
+                                instanceId: lane[0],
+                                type: component.getLaneWidgetType()
+                            }/>
+                        </li>
+                    </for>
+                </ul>
+            </@content>
+        </widget>
+        <div.object-details-content-widget key="object-details-content">
+            <for|contentWidget| of=state.contentWidgets>
+                <${contentWidget[1]} ...{
+                    contextType: "MAIN",
+                    instanceId: contentWidget[0]
+                }/>
+            </for>
+        </div>
     </div>
 </else>

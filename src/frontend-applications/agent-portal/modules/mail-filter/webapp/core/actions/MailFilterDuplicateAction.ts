@@ -7,13 +7,11 @@
  * --
  */
 
-import { MailFilterDetailsContext } from '../context';
+import { NewMailFilterDialogContext } from '../context';
 import { AbstractAction } from '../../../../base-components/webapp/core/AbstractAction';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../model/ContextMode';
 
 export class MailFilterDuplicateAction extends AbstractAction {
 
@@ -27,17 +25,12 @@ export class MailFilterDuplicateAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<MailFilterDetailsContext>(
-            MailFilterDetailsContext.CONTEXT_ID
-        );
+        const context = await ContextService.getInstance().getActiveContext();
 
         if (context) {
             const id = context.getObjectId();
             if (id) {
-                ContextService.getInstance().setDialogContext(
-                    null, KIXObjectType.MAIL_FILTER, ContextMode.CREATE_ADMIN, id, true,
-                    'Translatable#Communication: Email'
-                );
+                ContextService.getInstance().setActiveContext(NewMailFilterDialogContext.CONTEXT_ID, id);
             }
         }
     }

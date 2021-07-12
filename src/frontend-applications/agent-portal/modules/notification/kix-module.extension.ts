@@ -29,9 +29,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
     public uiComponents: UIComponent[] = [
         new UIComponent('admin-notifications', '/kix-module-notification$0/webapp/components/admin-notifications', []),
         new UIComponent(
-            'new-notification-dialog', '/kix-module-notification$0/webapp/components/new-notification-dialog', []
-        ),
-        new UIComponent(
             'notification-input-events', '/kix-module-notification$0/webapp/components/notification-input-events', []
         ),
         new UIComponent(
@@ -54,9 +51,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent(
             'notification-filter-cell-content',
             '/kix-module-notification$0/webapp/components/notification-filter-cell-content', []
-        ),
-        new UIComponent(
-            'edit-notification-dialog', '/kix-module-notification$0/webapp/components/edit-notification-dialog', []
         ),
         new UIComponent(
             'setup-notification-template',

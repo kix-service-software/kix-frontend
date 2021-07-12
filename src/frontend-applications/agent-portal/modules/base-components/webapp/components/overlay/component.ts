@@ -139,6 +139,13 @@ class OverlayComponent {
                         }, toastTimeoutMillis);
                     }
                 }, 100);
+            } else if (this.state.hasCloseButton) {
+                this.toastTimeout = setTimeout(() => {
+                    const button = (this as any).getEl('close-button');
+                    if (button) {
+                        button.focus();
+                    }
+                }, 100);
             }
 
             if (this.currentListenerId) {

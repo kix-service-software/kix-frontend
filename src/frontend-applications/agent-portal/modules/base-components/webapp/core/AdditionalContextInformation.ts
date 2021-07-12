@@ -13,6 +13,8 @@ export enum AdditionalContextInformation {
 
     FORM_OBJECT = 'FORM_OBJECT',
 
-    DONT_SHOW_UPDATE_NOTIFICATION = 'DONT_SHOW_UPDATE_NOTIFICATION'
+    DISPLAY_TEXT = 'DISPLAY_TEXT',
+
+    ICON = 'ICON'
 
 }

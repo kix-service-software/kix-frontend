@@ -7,19 +7,20 @@
  * --
  */
 
-import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
-import { ContextType } from '../../../../../model/ContextType';
+import { AbstractComponentState } from '../../core/AbstractComponentState';
 
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
-    public sidebars: Array<[string, any]> = [];
-    public showIconBar: boolean = true;
-    public rows: string[] = [];
-    public context: string = 'dashboard';
-    public sidebarBarExpanded: boolean = false;
-    public showSidebar: boolean = false;
-    public contextType: ContextType = null;
-    public loading: boolean = false;
+    public constructor(
+        public isLeft: boolean = false,
+        public isMobile: boolean = false,
+        public isSmall: boolean = false,
+        public sidebars: Array<[string, any, string]> = [],
+        public showSidebarArea: boolean = false,
+        public showMobile: boolean = false
+    ) {
+        super();
+    }
 
 }

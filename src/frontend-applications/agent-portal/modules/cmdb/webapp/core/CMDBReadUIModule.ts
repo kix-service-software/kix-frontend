@@ -9,14 +9,7 @@
 
 import { IUIModule } from '../../../../model/IUIModule';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
-import {
-    CMDBService, ConfigItemFormService, ConfigItemTableFactory,
-    ConfigItemVersionTableFactory, CompareConfigItemVersionTableFactory, ConfigItemHistoryTableFactory,
-    ConfigItemLabelProvider, ConfigItemClassLabelProvider, ConfigItemClassDefinitionLabelProvider,
-    ConfigItemHistoryLabelProvider, ConfigItemVersionLabelProvider, ConfigItemVersionCompareLabelProvider,
-    ConfigItemSearchDefinition, CMDBContext, ConfigItemDetailsContext, ConfigItemSearchContext,
-    CompareConfigItemVersionDialogContext, ConfigItemVersionCompareAction
-} from '.';
+import { CMDBService, ConfigItemFormService, ConfigItemTableFactory, ConfigItemVersionTableFactory, CompareConfigItemVersionTableFactory, ConfigItemHistoryTableFactory, ConfigItemLabelProvider, ConfigItemClassLabelProvider, ConfigItemClassDefinitionLabelProvider, ConfigItemHistoryLabelProvider, ConfigItemVersionLabelProvider, ConfigItemVersionCompareLabelProvider, ConfigItemSearchDefinition, CMDBContext, ConfigItemDetailsContext, ConfigItemSearchContext, CompareConfigItemVersionContext, ConfigItemVersionCompareAction } from '.';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TableFactoryService, TableCSSHandlerRegistry } from '../../../base-components/webapp/core/table';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
@@ -78,28 +71,30 @@ export class UIModule implements IUIModule {
             true, 'object-details-page', ['configitems'], ConfigItemDetailsContext,
             [
                 new UIComponentPermission('cmdb/configitems', [CRUD.READ])
-            ]
+            ],
+            'Translatable#Bulk', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(configItemDetailsContext);
 
         const searchConfigItemContext = new ContextDescriptor(
-            ConfigItemSearchContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM], ContextType.DIALOG, ContextMode.SEARCH,
-            false, 'search-config-item-dialog', ['configitems'], ConfigItemSearchContext,
+            ConfigItemSearchContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM], ContextType.MAIN, ContextMode.SEARCH,
+            false, 'search', ['configitems'], ConfigItemSearchContext,
 
             [
                 new UIComponentPermission('cmdb/configitems', [CRUD.READ])
-            ]
+            ],
+            'Translatable#Asset', 'kix-icon-ci', null, 200
         );
         ContextService.getInstance().registerContext(searchConfigItemContext);
 
         const compareConfigItemContext = new ContextDescriptor(
-            CompareConfigItemVersionDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_VERSION_COMPARE],
-            ContextType.DIALOG, ContextMode.EDIT,
-            false, 'compare-config-item-version-dialog', ['configitems'], CompareConfigItemVersionDialogContext,
-
+            CompareConfigItemVersionContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_VERSION_COMPARE],
+            ContextType.MAIN, ContextMode.DETAILS,
+            false, 'compare-config-item-version-dialog', ['versioncompare'], CompareConfigItemVersionContext,
             [
                 new UIComponentPermission('cmdb/configitems', [CRUD.READ])
-            ]
+            ],
+            'Translatable#Compare Asset Versions', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(compareConfigItemContext);
     }

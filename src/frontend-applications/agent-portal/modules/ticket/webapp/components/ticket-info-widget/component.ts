@@ -43,9 +43,7 @@ class Component {
     public async onMount(): Promise<void> {
         this.state.labelProvider = new TicketLabelProvider();
 
-        const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
-            TicketDetailsContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         this.state.widgetConfiguration = context
             ? await context.getWidgetConfiguration(this.state.instanceId)
@@ -71,9 +69,7 @@ class Component {
 
     private async initWidget(): Promise<void> {
         this.state.prepared = false;
-        const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
-            TicketDetailsContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
         this.state.ticket = await context.getObject<Ticket>();
 
         let properties = [];

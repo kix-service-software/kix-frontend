@@ -16,6 +16,7 @@ import { IDynamicFormManager } from '../../../../base-components/webapp/core/dyn
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FormService } from '../../../../base-components/webapp/core/FormService';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends FormInputComponent<any[], ComponentState> {
 
@@ -68,8 +69,9 @@ class Component extends FormInputComponent<any[], ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
-        const value = (await formInstance).getFormFieldValue<string>(this.state.field.instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = context?.getFormManager()?.getFormInstance();
+        const value = (await formInstance).getFormFieldValue<string>(this.state.field?.instanceId);
         if (value && Array.isArray(value.value)) {
             value.value.forEach((set: MailFilterSet) => {
                 this.state.setManager.setValue(

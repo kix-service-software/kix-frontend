@@ -17,7 +17,6 @@ import { FormFieldOption } from '../../../../model/configuration/FormFieldOption
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
 import { InputFieldTypes } from '../../../base-components/webapp/core/InputFieldTypes';
-import { FormService } from '../../../base-components/webapp/core/FormService';
 import { UserProperty } from '../../../user/model/UserProperty';
 import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
@@ -32,16 +31,15 @@ import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { User } from '../../../user/model/User';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
-import { ContextType } from '../../../../model/ContextType';
 import { FormContext } from '../../../../model/configuration/FormContext';
 import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
-import { PersonalSettingsFormService } from '../../../user/webapp/core';
 import { ServiceType } from '../../../base-components/webapp/core/ServiceType';
 import { Contact } from '../../model/Contact';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
 import { RoleProperty } from '../../../user/model/RoleProperty';
 import { Role } from '../../../user/model/Role';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
+import { PersonalSettingsFormService } from '../../../user/webapp/core/PersonalSettingsFormService';
 import { IdService } from '../../../../model/IdService';
 
 export class ContactFormService extends KIXObjectFormService {
@@ -82,7 +80,7 @@ export class ContactFormService extends KIXObjectFormService {
         this.isAgentDialog = false;
         let contact: Contact;
 
-        const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        const context = ContextService.getInstance().getActiveContext();
         if (context) {
             this.isAgentDialog = Boolean(context.getAdditionalInformation('IS_AGENT_DIALOG'));
             if (form.formContext === FormContext.EDIT && this.isAgentDialog) {
@@ -176,7 +174,8 @@ export class ContactFormService extends KIXObjectFormService {
     public async getFormFieldsForAccess(accesses: string[], formId?: string): Promise<FormFieldConfiguration[]> {
         let fields: FormFieldConfiguration[] = [];
         if (accesses && accesses.length) {
-            const formInstance = formId ? await FormService.getInstance().getFormInstance(formId) : null;
+            const context = ContextService.getInstance().getActiveContext();
+            const formInstance = formId ? await context?.getFormManager()?.getFormInstance() : null;
             const fieldPromises = [
                 this.addLoginField(formInstance),
                 this.addPasswordField(formInstance),

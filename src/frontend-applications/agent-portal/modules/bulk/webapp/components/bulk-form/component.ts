@@ -10,13 +10,8 @@
 import { ComponentState } from './ComponentState';
 import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
-import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
-import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import {
-    TableEvent, TableFactoryService, TableEventData, ValueState
-} from '../../../../base-components/webapp/core/table';
-import { DialogService } from '../../../../../modules/base-components/webapp/core/DialogService';
+import { TableEvent, TableFactoryService, TableEventData, ValueState } from '../../../../base-components/webapp/core/table';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
@@ -47,24 +42,25 @@ class Component {
         this.state = new ComponentState();
         this.errorObjects = [];
         this.finishedObjects = [];
-        WidgetService.getInstance().setWidgetType('bulk-form-group', WidgetType.GROUP);
     }
 
     public onInput(input: any): void {
-        this.state.bulkManager = input.bulkManager;
-        this.state.bulkManager.registerListener('bulk-dialog-listener', () => {
-            this.state.bulkManager.hasDefinedValues().then((hasDefinedValues) => {
-                return this.state.canRun = hasDefinedValues && !!this.state.bulkManager.objects.length;
-            });
-        });
+        if (!this.state.bulkManager) {
+            this.state.bulkManager = input.bulkManager;
+        }
     }
 
     public async onMount(): Promise<void> {
         this.createTable();
         this.state.translations = await TranslationService.createTranslationObject([
-            'Translatable#Cancel', 'Translatable#Reset data', 'Translatable#Close Dialog',
+            'Translatable#Cancel', 'Translatable#Reset data',
             'Translatable#Execute now', 'Translatable#Attributes to be edited'
         ]);
+
+        this.state.bulkManager?.registerListener('bulk-dialog-listener', async () => {
+            const hasDefinedValues = await this.state.bulkManager.hasDefinedValues();
+            this.state.canRun = hasDefinedValues && !!this.state.bulkManager.objects.length;
+        });
     }
 
     public onDestroy(): void {
@@ -75,7 +71,7 @@ class Component {
     }
 
     public async reset(): Promise<void> {
-        this.state.bulkManager.reset();
+        this.state.bulkManager?.reset();
         const dynamicFormComponent = (this as any).getComponent('bulk-dynamic-form');
         if (dynamicFormComponent) {
             dynamicFormComponent.updateValues();
@@ -83,13 +79,7 @@ class Component {
     }
 
     public cancel(): void {
-        DialogService.getInstance().closeMainDialog();
-    }
-
-    public submit(): void {
-        if (this.state.run) {
-            DialogService.getInstance().submitMainDialog();
-        }
+        ContextService.getInstance().toggleActiveContext();
     }
 
     private async createTable(): Promise<void> {
@@ -201,7 +191,7 @@ class Component {
 
         const editText = await TranslationService.translate('Translatable#edited');
         BrowserUtil.toggleLoadingShield(
-            true, `${this.finishedObjects.length}/${objects.length} ${objectName} ${editText}`,
+            'BULK_SHIELD', true, `${this.finishedObjects.length}/${objects.length} ${objectName} ${editText}`,
             0, this.cancelBulk.bind(this)
         );
 
@@ -221,7 +211,7 @@ class Component {
                     this.errorObjects.push(object);
                     this.state.table.setRowObjectValueState([object], ValueState.HIGHLIGHT_ERROR);
                     const errorText = await TranslationService.translate('Translatable#An error occurred.');
-                    BrowserUtil.toggleLoadingShield(true, errorText);
+                    BrowserUtil.toggleLoadingShield('BULK_SHIELD', true, errorText);
                     end = Date.now();
                     await this.handleObjectEditError(
                         object, (this.finishedObjects.length + this.errorObjects.length), objects.length
@@ -246,11 +236,11 @@ class Component {
             BrowserUtil.openSuccessOverlay(toast);
         }
 
-        BrowserUtil.toggleLoadingShield(false);
+        BrowserUtil.toggleLoadingShield('BULK_SHIELD', false);
     }
 
     private async updateTable(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<BulkDialogContext>(BulkDialogContext.CONTEXT_ID);
+        const context = ContextService.getInstance().getActiveContext();
         const oldObjects = await context.getObjectList(this.state.bulkManager.objectType);
         const idsToLoad = oldObjects ? oldObjects.map((o) => o.ObjectId) : null;
 
@@ -271,7 +261,8 @@ class Component {
 
         const editText = await TranslationService.translate('Translatable#edited');
         BrowserUtil.toggleLoadingShield(
-            true, `${finishedCount}/${objectCount} ${objectName} ${editText}`, time, this.cancelBulk.bind(this)
+            'BULK_SHIELD', true, `${finishedCount}/${objectCount} ${objectName} ${editText}`, time,
+            this.cancelBulk.bind(this)
         );
     }
 
@@ -298,7 +289,8 @@ class Component {
                     this.cancelBulkProcess = true;
                     resolve();
                 },
-                [ignoreButton, cancelButton]
+                [ignoreButton, cancelButton],
+                undefined, undefined, true
             );
         });
     }

@@ -7,13 +7,11 @@
  * --
  */
 
-import { EditSystemAddressDialogContext, SystemAddressDetailsContext } from '../context';
+import { EditSystemAddressDialogContext } from '../context';
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../model/ContextMode';
 import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 
 export class SystemAddressEditAction extends AbstractAction {
@@ -39,17 +37,12 @@ export class SystemAddressEditAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        const context = await ContextService.getInstance().getContext<SystemAddressDetailsContext>(
-            SystemAddressDetailsContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         if (context) {
             const id = context.getObjectId();
             if (id) {
-                ContextService.getInstance().setDialogContext(
-                    EditSystemAddressDialogContext.CONTEXT_ID, KIXObjectType.SYSTEM_ADDRESS,
-                    ContextMode.EDIT_ADMIN, id
-                );
+                ContextService.getInstance().setActiveContext(EditSystemAddressDialogContext.CONTEXT_ID, id);
             }
         }
     }

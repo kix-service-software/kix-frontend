@@ -19,21 +19,28 @@ import { LoadingShieldEventData } from '../../core/LoadingShieldEventData';
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private subscriber: IEventSubscriber;
+    private shieldId: string;
 
     public onCreate(): void {
         this.state = new ComponentState();
+    }
+
+    public onInput(input: any): void {
+        this.shieldId = input.shieldId;
     }
 
     public async onMount(): Promise<void> {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('LoadingShield'),
             eventPublished: (data: LoadingShieldEventData, eventId: string) => {
-                this.state.show = data.isLoading;
-                this.state.hint = data.loadingHint;
-                this.state.cancelButtonText = data.cancelButtonText;
-                this.state.cancelCallback = data.cancelCallback;
-                this.state.time = data.time;
-                this.update();
+                if (data.shieldId === this.shieldId) {
+                    this.state.show = data.isLoading;
+                    this.state.hint = data.loadingHint;
+                    this.state.cancelButtonText = data.cancelButtonText;
+                    this.state.cancelCallback = data.cancelCallback;
+                    this.state.time = data.time;
+                    this.update();
+                }
             }
         };
 
@@ -53,7 +60,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public cancel(): void {
         if (this.state.cancelCallback) {
             this.state.cancelCallback();
-            this.state.cancel = true;
         }
     }
 

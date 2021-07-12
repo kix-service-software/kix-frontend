@@ -16,7 +16,6 @@ import { SysConfigOptionProperty } from '../../../sysconfig/model/SysConfigOptio
 import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
 import { SetupStepResult } from './SetupStepResult';
-import { AuthenticationSocketClient } from '../../../base-components/webapp/core/AuthenticationSocketClient';
 import { AgentService } from '../../../user/webapp/core/AgentService';
 import { Role } from '../../../user/model/Role';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
@@ -25,9 +24,9 @@ import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
-import { RoutingService } from '../../../base-components/webapp/core/RoutingService';
 import { SetupStepCompletedEventData } from './SetupStepCompletedEventData';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { AdminContext } from '../../../admin/webapp/core/AdminContext';
 
 export class SetupService {
 
@@ -83,12 +82,12 @@ export class SetupService {
         EventService.getInstance().publish(
             SetupEvent.STEP_COMPLETED, new SetupStepCompletedEventData(stepId, result)
         );
-        this.routToInitialContext();
+        this.closeSetupContext();
     }
 
-    private routToInitialContext(): void {
+    private closeSetupContext(): void {
         if (!this.setupSteps.some((ss) => !ss.completed && !ss.skipped)) {
-            RoutingService.getInstance().routeToInitialContext(false, false);
+            ContextService.getInstance().toggleActiveContext();
         }
     }
 
@@ -100,7 +99,7 @@ export class SetupService {
 
         await this.saveSetupSteps();
         EventService.getInstance().publish(SetupEvent.STEP_SKIPPED, { stepId });
-        this.routToInitialContext();
+        this.closeSetupContext();
     }
 
     private async saveSetupSteps(): Promise<void> {
@@ -113,17 +112,19 @@ export class SetupService {
     }
 
     public async setSetupAssistentIfNeeded(): Promise<boolean> {
+        let routed: boolean = false;
         const isSetupNeeded = await this.isSetupNeeded();
 
         if (isSetupNeeded) {
-            await ContextService.getInstance().setContext('admin', null, null);
+            await ContextService.getInstance().setActiveContext('admin');
             const context = ContextService.getInstance().getActiveContext();
-            if (context && typeof context['setAdminModule'] !== 'undefined') {
-                (context as any).setAdminModule('setup-assistant', '');
+            if (context instanceof AdminContext) {
+                context.setAdminModule('setup-assistant');
             }
+            routed = true;
         }
 
-        return isSetupNeeded;
+        return routed;
     }
 
     private async isSetupNeeded(): Promise<boolean> {

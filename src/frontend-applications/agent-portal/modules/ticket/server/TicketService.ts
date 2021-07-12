@@ -142,6 +142,10 @@ export class TicketAPIService extends KIXObjectAPIService {
         } else if (objectType === KIXObjectType.ARTICLE) {
             const options = createOptions as CreateTicketArticleOptions;
 
+            if (!options.ticketId) {
+                throw new Error('', 'Could not create article without ID of relevant ticket!');
+            }
+
             let queueId;
             const tickets = await super.load<Ticket>(
                 token, KIXObjectType.TICKET, this.RESOURCE_URI, null, [options.ticketId], KIXObjectType.TICKET, Ticket

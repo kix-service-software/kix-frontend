@@ -14,8 +14,10 @@ import { ContextService } from '../../../../../modules/base-components/webapp/co
 import { ConfigItem } from '../../../model/ConfigItem';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
-import { DialogService } from '../../../../../modules/base-components/webapp/core/DialogService';
 import { Context } from '../../../../../model/Context';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { ImageViewerEvent } from '../../../../agent-portal/model/ImageViewerEvent';
+import { ImageViewerEventData } from '../../../../agent-portal/model/ImageViewerEventData';
 
 class Component {
 
@@ -48,8 +50,8 @@ class Component {
                     this.initWidget(context, object);
                 }
             },
-            sidebarToggled: () => { return; },
-            explorerBarToggled: () => { return; },
+            sidebarRightToggled: () => { return; },
+            sidebarLeftToggled: () => { return; },
             objectListChanged: () => { return; },
             scrollInformationChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
@@ -79,7 +81,10 @@ class Component {
     }
 
     public openImageDialog(): void {
-        DialogService.getInstance().openImageDialog([this.state.fakeGraphLarge]);
+        EventService.getInstance().publish(
+            ImageViewerEvent.OPEN_VIEWER,
+            new ImageViewerEventData([this.state.fakeGraphLarge])
+        );
     }
 }
 

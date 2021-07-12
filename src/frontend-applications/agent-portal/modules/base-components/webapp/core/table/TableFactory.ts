@@ -7,7 +7,6 @@
  * --
  */
 
-import { ITableFactory } from './ITableFactory';
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { Table } from './Table';
@@ -20,7 +19,7 @@ import { DataType } from '../../../../../model/DataType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { ExtendedTableFactory } from './ExtendedTableFactory';
 
-export abstract class TableFactory implements ITableFactory {
+export abstract class TableFactory {
 
     public abstract objectType: KIXObjectType | string;
 
@@ -38,7 +37,7 @@ export abstract class TableFactory implements ITableFactory {
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<string | number>,
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
         objectType?: KIXObjectType | string, objects?: KIXObject[]
-    ): Table;
+    ): Promise<Table>;
 
     public getDefaultColumnConfiguration(property: string, translatable: boolean = true): IColumnConfiguration {
         let config;

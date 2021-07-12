@@ -10,7 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { ReportingContext } from '../../core/context/ReportingContext';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
@@ -32,21 +31,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<ReportingContext>(
-            ReportingContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         if (context) {
-            context.registerListener('reportdefinition-list-widget', {
-                sidebarToggled: () => { return; },
-                scrollInformationChanged: () => { return; },
-                objectListChanged: () => { return; },
-                objectChanged: () => { return; },
-                filteredObjectListChanged: () => { return; },
-                explorerBarToggled: () => { return; },
-                additionalInformationChanged: (key: string, value: any) => { return; }
-            });
-
             this.subscriber = {
                 eventSubscriberId: IdService.generateDateBasedId(this.instanceId),
                 eventPublished: (data: any, eventId: string) => {
@@ -86,13 +73,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onDestroy(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<ReportingContext>(
-            ReportingContext.CONTEXT_ID
-        );
-        if (context) {
-            context.unregisterListener('reportdefinition-list-widget');
-        }
-
         EventService.getInstance().unsubscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
         EventService.getInstance().unsubscribe(ContextUIEvent.RELOAD_OBJECTS_FINISHED, this.subscriber);
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);

@@ -18,7 +18,7 @@ export class HomeContext extends Context {
     }
 
     public async getDisplayText(): Promise<string> {
-        return 'Home Dashboard';
+        return 'Home';
     }
 
 }

@@ -7,18 +7,15 @@
  * --
  */
 
-import { ConfigItemDetailsContext, EditConfigItemDialogContext, NewConfigItemDialogContext } from './context';
+import { EditConfigItemDialogContext, NewConfigItemDialogContext } from './context';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../model/ContextMode';
 import { ConfigItem } from '../../model/ConfigItem';
+import { ConfigItemProperty } from '../../model/ConfigItemProperty';
 
 export class ConfigItemDialogUtil {
 
     public static async create(): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            NewConfigItemDialogContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM, ContextMode.CREATE
-        );
+        ContextService.getInstance().setActiveContext(NewConfigItemDialogContext.CONTEXT_ID);
     }
 
     public static async edit(configItemId?: string | number): Promise<void> {
@@ -27,54 +24,30 @@ export class ConfigItemDialogUtil {
         }
 
         if (configItemId) {
-            await this.setContextClassId();
-
-            ContextService.getInstance().setDialogContext(
-                EditConfigItemDialogContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM, ContextMode.EDIT, configItemId
-            );
+            ContextService.getInstance().setActiveContext(EditConfigItemDialogContext.CONTEXT_ID, configItemId);
         }
     }
 
     public static async duplicate(configItem: ConfigItem): Promise<void> {
-        const newContext = await ContextService.getInstance().getContext<NewConfigItemDialogContext>(
-            NewConfigItemDialogContext.CONTEXT_ID
-        );
-
-        newContext.setAdditionalInformation('CI_CLASS_ID', configItem.ClassID);
-
-        ContextService.getInstance().setDialogContext(
-            NewConfigItemDialogContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
-            ContextMode.CREATE, configItem.ConfigItemID
+        ContextService.getInstance().setActiveContext(
+            NewConfigItemDialogContext.CONTEXT_ID, configItem.ConfigItemID, null,
+            [
+                [ConfigItemProperty.CLASS_ID, configItem.ClassID],
+                ['DUPLICATE', true]
+            ]
         );
     }
 
-    private static async  getConfigItemId(): Promise<number> {
+    private static async getConfigItemId(): Promise<number> {
         let configItemId: number;
 
-        const context = await ContextService.getInstance().getContext<ConfigItemDetailsContext>(
-            ConfigItemDetailsContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         if (context) {
             configItemId = Number(context.getObjectId());
         }
 
         return configItemId;
-    }
-
-    private static async setContextClassId(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<ConfigItemDetailsContext>(
-            ConfigItemDetailsContext.CONTEXT_ID
-        );
-        const configItem = await context.getObject<ConfigItem>();
-        if (configItem) {
-            const editContext = await ContextService.getInstance().getContext<EditConfigItemDialogContext>(
-                EditConfigItemDialogContext.CONTEXT_ID
-            );
-            if (editContext) {
-                editContext.setAdditionalInformation('CI_CLASS_ID', configItem.ClassID);
-            }
-        }
     }
 
 }

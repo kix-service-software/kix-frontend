@@ -27,12 +27,12 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
     ];
 
     public uiComponents: UIComponent[] = [
-        new UIComponent(
-            'edit-linked-objects-dialog', '/kix-module-links$0/webapp/components/edit-linked-objects-dialog', []
-        ),
         new UIComponent('link-object-dialog', '/kix-module-links$0/webapp/components/link-object-dialog', []),
         new UIComponent('link-input', '/kix-module-links$0/webapp/components/link-input', []),
-        new UIComponent('linked-objects-widget', '/kix-module-links$0/webapp/components/linked-objects-widget', [])
+        new UIComponent('linked-objects-widget', '/kix-module-links$0/webapp/components/linked-objects-widget', []),
+        new UIComponent(
+            'edit-linked-objects-dialog', '/kix-module-links$0/webapp/components/edit-linked-objects-dialog', []
+        )
     ];
 
     public webDependencies: string[] = [

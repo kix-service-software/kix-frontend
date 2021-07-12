@@ -67,7 +67,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         const articleListWidget = new WidgetConfiguration(
             'faq-dashboard-article-widget', 'FAQ Article Widget', ConfigurationType.Widget,
-            'table-widget', 'Translatable#Overview FAQ', ['faq-article-create-action', 'csv-export-action'],
+            'table-widget', 'Translatable#Overview FAQ', ['csv-export-action'],
             new ConfigurationDefinition('faq-dashboard-article-table-widget', ConfigurationType.TableWidget), null,
             false, false, 'kix-icon-faq', true
         );
@@ -76,7 +76,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         const faqCategoryExplorer = new WidgetConfiguration(
             'faq-dashboard-category-explorer', 'Category Explorer', ConfigurationType.Widget,
             'faq-category-explorer', 'Translatable#FAQ Categories', [], null, null,
-            false, false, 'kix-icon-faq', false
+            false, true, 'kix-icon-faq', false
         );
         configurations.push(faqCategoryExplorer);
 

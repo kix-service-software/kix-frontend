@@ -17,8 +17,14 @@ import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { AdminModuleCategory } from '../../../model/AdminModuleCategory';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { IdService } from '../../../../../model/IdService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
+
+    private subscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -30,8 +36,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<AdminContext>(AdminContext.CONTEXT_ID);
-        if (context) {
+        const context = ContextService.getInstance().getActiveContext() as AdminContext;
+        if (context instanceof AdminContext) {
             this.state.filterValue = context.getAdditionalInformation('EXPLORER_FILTER_ADMIN');
             if (this.state.filterValue) {
                 const filter = (this as any).getComponent('admin-modules-explorer-filter');
@@ -47,14 +53,26 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 await this.prepareCategoryTreeNodes(categories);
             }
 
+            this.sortNodes();
+            this.state.prepared = true;
+
             setTimeout(() => {
-                this.setActiveNode(context.adminModuleId, true);
+                this.state.activeNode = this.getActiveNode(context?.adminModuleId);
             }, 500);
+
+            this.subscriber = {
+                eventSubscriberId: IdService.generateDateBasedId(),
+                eventPublished: (data: any, eventId: string) => {
+                    this.state.activeNode = this.getActiveNode(context?.adminModuleId);
+                }
+            };
+
+            EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
         }
     }
 
-    private setActiveNode(adminModuleId: string, force: boolean = false): void {
-        this.publishToContext(this.getActiveNode(adminModuleId), force);
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
     }
 
     private getActiveNode(adminModuleId: string, nodes: TreeNode[] = this.state.nodes): TreeNode {
@@ -74,40 +92,33 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async prepareCategoryTreeNodes(
-        modules: Array<AdminModuleCategory | AdminModule>, parent?: TreeNode
+        modules: Array<AdminModuleCategory | AdminModule> = [], parent?: TreeNode
     ): Promise<void> {
         const adminModules: TreeNode[] = [];
-        if (modules) {
-
-            for (const m of modules) {
-                if (m instanceof AdminModuleCategory) {
-                    const name = await TranslationService.translate(m.name);
-                    const categoryNode = new TreeNode(
-                        m.id, name, m.icon, null,
-                        [], null, null, null, null, false, true, true
-                    );
-                    this.prepareCategoryTreeNodes(m.children, categoryNode);
-                    this.prepareModuleTreeNodes(m.modules, categoryNode);
-                    if (parent) {
-                        parent.children.push(categoryNode);
-                    } else {
-                        this.state.nodes.push(categoryNode);
-                        this.sortNodes();
-                        (this as any).setStateDirty('nodes');
-                    }
+        for (const m of modules) {
+            if (m instanceof AdminModuleCategory) {
+                const name = await TranslationService.translate(m.name);
+                const categoryNode = new TreeNode(
+                    m.id, name, m.icon, null,
+                    [], null, null, null, null, false, true, true
+                );
+                await this.prepareCategoryTreeNodes(m.children, categoryNode);
+                await this.prepareModuleTreeNodes(m.modules, categoryNode);
+                if (parent) {
+                    parent.children.push(categoryNode);
                 } else {
-                    const allowed = await AuthenticationSocketClient.getInstance().checkPermissions(m.permissions);
-                    if (allowed) {
-                        const name = await TranslationService.translate(m.name);
-                        this.state.nodes.push(new TreeNode(
-                            m.id, name, m.icon,
-                            undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
-                            undefined, undefined, undefined,
-                            ['MODULE']
-                        ));
-                        this.sortNodes();
-                        (this as any).setStateDirty('nodes');
-                    }
+                    this.state.nodes.push(categoryNode);
+                }
+            } else {
+                const allowed = await AuthenticationSocketClient.getInstance().checkPermissions(m.permissions);
+                if (allowed) {
+                    const name = await TranslationService.translate(m.name);
+                    this.state.nodes.push(new TreeNode(
+                        m.id, name, m.icon,
+                        undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+                        undefined, undefined, undefined,
+                        ['MODULE']
+                    ));
                 }
             }
         }
@@ -128,8 +139,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     parent.children.push(node);
                 } else {
                     this.state.nodes.push(node);
-                    this.sortNodes();
-                    (this as any).setStateDirty('nodes');
                 }
             }
         }
@@ -139,30 +148,29 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.publishToContext(node);
     }
 
-    private async publishToContext(node: TreeNode, force: boolean = false): Promise<void> {
+    private async publishToContext(node: TreeNode): Promise<void> {
         this.state.activeNode = node;
         if (node) {
-            const context = await ContextService.getInstance().getContext<AdminContext>(AdminContext.CONTEXT_ID);
-            if (context) {
-                context.setAdminModule(node.id, node.parent ? node.parent.label : '', force);
+            const context = await ContextService.getInstance().getActiveContext();
+            if (context instanceof AdminContext) {
+                context.setAdminModule(node.id);
             }
         }
     }
 
     public async filter(textFilterValue?: string): Promise<void> {
         this.state.filterValue = textFilterValue;
-        const context = await ContextService.getInstance().getContext<AdminContext>(AdminContext.CONTEXT_ID);
-        if (context) {
+        const context = ContextService.getInstance().getActiveContext();
+        if (context instanceof AdminContext) {
             context.setAdditionalInformation('EXPLORER_FILTER_ADMIN', this.state.filterValue);
         }
     }
 
     private sortNodes(nodes: TreeNode[] = this.state.nodes): TreeNode[] {
-        return nodes.sort((a, b) => {
-            if (a.children) {
-                a.children = this.sortNodes(a.children);
-            }
+        nodes.filter((n) => Array.isArray(n.children) && n.children.length)
+            .forEach((n) => this.sortNodes(n.children));
 
+        return nodes.sort((a, b) => {
             if (a.flags.some((f) => f === 'MODULE') && !b.flags.some((f) => f === 'MODULE')) {
                 return -1;
             } else if (!a.flags.some((f) => f === 'MODULE') && b.flags.some((f) => f === 'MODULE')) {

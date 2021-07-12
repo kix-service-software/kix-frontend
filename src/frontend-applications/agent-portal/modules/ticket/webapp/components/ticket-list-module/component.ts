@@ -20,8 +20,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context =
-            await ContextService.getInstance().getContext(TicketListContext.CONTEXT_ID) as TicketListContext;
+        const context = ContextService.getInstance().getActiveContext() as TicketListContext;
         this.state.contentWidgets = await context.getContent();
     }
 

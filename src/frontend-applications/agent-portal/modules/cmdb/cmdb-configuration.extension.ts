@@ -245,7 +245,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const ciListWidget = new WidgetConfiguration(
             'cmdb-dashboard-ci-list-widget', 'CI List', ConfigurationType.Widget,
             'table-widget', 'Translatable#Overview Config Items',
-            ['ticket-create-action', 'config-item-create-action', 'csv-export-action'],
+            ['csv-export-action'],
             new ConfigurationDefinition('cmdb-dashboard-ci-table-widget', ConfigurationType.TableWidget),
             null, false, false, 'kix-icon-ci', true
         );

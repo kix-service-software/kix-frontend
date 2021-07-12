@@ -10,7 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { UserDetailsContext } from '../../core/admin';
 import { User } from '../../../model/User';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../../base-components/webapp/core/table';
@@ -22,6 +21,7 @@ import { TableRowHeight } from '../../../../../model/configuration/TableRowHeigh
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { IdService } from '../../../../../model/IdService';
+import { UserDetailsContext } from '../../core/admin/context/user';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -34,13 +34,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<UserDetailsContext>(
-            UserDetailsContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         context.registerListener('user-assigned-roles-widget', {
-            sidebarToggled: () => { return; },
-            explorerBarToggled: () => { return; },
+            sidebarRightToggled: () => { return; },
+            sidebarLeftToggled: () => { return; },
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
             scrollInformationChanged: () => { return; },

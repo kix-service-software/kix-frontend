@@ -41,19 +41,19 @@ export class TableFactoryService {
     private contextChanged(
         contextId: string, context: Context, type: ContextType, history: boolean, oldContext: Context
     ): void {
-        const mainContext = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        const mainContext = ContextService.getInstance().getActiveContext();
+        const dialogContext = ContextService.getInstance().getActiveContext();
         if (oldContext) {
-            if (type === oldContext.getDescriptor().contextType) {
+            if (type === oldContext.descriptor.contextType) {
                 let switchContext = false;
                 if (type === ContextType.MAIN) {
-                    switchContext = mainContext && contextId !== mainContext.getDescriptor().contextId;
+                    switchContext = mainContext && contextId !== mainContext.contextId;
                 } else if (type === ContextType.DIALOG) {
-                    switchContext = dialogContext && contextId !== dialogContext.getDescriptor().contextId;
+                    switchContext = dialogContext && contextId !== dialogContext.contextId;
                 }
 
                 if (switchContext) {
-                    const oldContextid = oldContext.getDescriptor().contextId;
+                    const oldContextid = oldContext.contextId;
 
                     if (this.contextTableInstances.has(oldContextid)) {
                         this.contextTableInstances.get(oldContextid).forEach((table) => {
@@ -103,7 +103,7 @@ export class TableFactoryService {
         const context = ContextService.getInstance().getActiveContext();
         let tableContextId: string;
         if (context) {
-            tableContextId = context.getDescriptor().contextId;
+            tableContextId = context.contextId;
             if (!recreate && this.contextTableInstances.has(tableContextId)) {
                 const tableInstances = this.contextTableInstances.get(tableContextId);
                 if (tableInstances.has(tableKey)) {
@@ -118,7 +118,7 @@ export class TableFactoryService {
         if (!table) {
             const factory = this.factories.find((f) => f.isFactoryFor(objectType));
             if (factory) {
-                table = factory.createTable(
+                table = await factory.createTable(
                     tableKey, tableConfiguration, objectIds, contextId,
                     defaultRouting, defaultToggle, short, objectType, objects
                 );

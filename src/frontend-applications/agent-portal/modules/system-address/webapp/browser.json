@@ -1,8 +1,6 @@
 {
     "dependencies": [
         "require ./components/admin-system-addresses",
-        "require ./components/edit-system-address-dialog",
-        "require ./components/new-system-address-dialog",
         "require ./components/system-address-info-widget",
         "require ./core"
     ]

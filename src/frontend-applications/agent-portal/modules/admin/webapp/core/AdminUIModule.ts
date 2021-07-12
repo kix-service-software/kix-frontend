@@ -8,14 +8,12 @@
  */
 
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
-import { AdministrationSocketClient } from './AdministrationSocketClient';
 import { AdminContext } from './AdminContext';
 import { ContextType } from '../../../../model/ContextType';
 import { IUIModule } from '../../../../model/IUIModule';
 import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { AdminModuleCategory } from '../../model/AdminModuleCategory';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 

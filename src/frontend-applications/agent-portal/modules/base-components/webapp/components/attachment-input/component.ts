@@ -10,7 +10,7 @@
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { Attachment } from '../../../../../model/kix/Attachment';
-import { FormService } from '../../core/FormService';
+import { ContextService } from '../../core/ContextService';
 
 class Component extends FormInputComponent<any, ComponentState> {
 
@@ -24,16 +24,17 @@ class Component extends FormInputComponent<any, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        if (Array.isArray(this.state.field.options)) {
-            this.state.field.options.forEach((o) => this.state.options.push([o.option, o.value]));
+        if (Array.isArray(this.state.field?.options)) {
+            this.state.field?.options.forEach((o) => this.state.options.push([o.option, o.value]));
         }
         this.state.prepared = true;
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<Array<Attachment | File> | Attachment | File>(
-            this.state.field.instanceId
+            this.state.field?.instanceId
         );
         if (value) {
             this.state.attachments = Array.isArray(value.value)

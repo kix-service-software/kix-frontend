@@ -81,13 +81,11 @@ export class TicketDetailsContext extends Context {
         return new BreadcrumbInformation(this.getIcon(), [TicketContext.CONTEXT_ID], text);
     }
 
-    private async loadTicket(changedProperties: string[] = [], cache: boolean = true): Promise<Ticket> {
+    private loadTicket(changedProperties: string[] = [], cache: boolean = true): Promise<Ticket> {
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, ['StateType', 'ObjectActions', KIXObjectProperty.DYNAMIC_FIELDS, TicketProperty.WATCHERS]
         );
-
-        const ticket: Ticket = await this.loadDetailsObject<Ticket>(KIXObjectType.TICKET, loadingOptions);
-        return ticket;
+        return this.loadDetailsObject<Ticket>(KIXObjectType.TICKET, loadingOptions);
     }
 
     public async getObjectList<T = KIXObject>(objectType: KIXObjectType | string): Promise<T[]> {

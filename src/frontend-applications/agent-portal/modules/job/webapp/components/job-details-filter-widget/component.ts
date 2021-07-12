@@ -49,7 +49,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         };
         EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
 
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const context = ContextService.getInstance().getActiveContext();
         if (context) {
             this.state.widgetConfiguration = await context.getWidgetConfiguration(this.state.instanceId);
             this.initWidget();
@@ -62,7 +62,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async initWidget(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const context = ContextService.getInstance().getActiveContext();
         const job = await context.getObject<Job>();
         const manager = JobFormService.getInstance().getJobFormManager(job.Type);
         if (manager && manager.supportFilter() && this.state.widgetConfiguration) {

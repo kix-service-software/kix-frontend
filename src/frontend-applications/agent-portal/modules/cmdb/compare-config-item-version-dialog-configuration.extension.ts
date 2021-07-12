@@ -8,7 +8,7 @@
  */
 
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
-import { CompareConfigItemVersionDialogContext } from './webapp/core/context/CompareConfigItemVersionDialogContext';
+import { CompareConfigItemVersionContext } from './webapp/core/context/CompareConfigItemVersionContext';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
 import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
@@ -19,13 +19,12 @@ import { ContextConfiguration } from '../../model/configuration/ContextConfigura
 import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
 import { ConfiguredDialogWidget } from '../../model/configuration/ConfiguredDialogWidget';
 import { ContextMode } from '../../model/ContextMode';
-
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
-        return CompareConfigItemVersionDialogContext.CONTEXT_ID;
+        return CompareConfigItemVersionContext.CONTEXT_ID;
     }
 
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
@@ -54,7 +53,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const dialogWidget = new WidgetConfiguration(
             'cmdb-ci-compare-dialog-widget', 'Widget', ConfigurationType.Widget,
             'compare-config-item-version-dialog', 'Translatable#Compare Versions', [], null, null,
-            false, false, 'kix-icon-comparison-version'
+            false, true, 'kix-icon-comparison-version'
         );
         configurations.push(dialogWidget);
 
@@ -65,16 +64,15 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 [
                     new ConfiguredWidget('cmdb-ci-compare-dialog-legend-widget', 'cmdb-ci-compare-dialog-legend-widget')
                 ],
-                [], [], [], [], [],
-                [],
-                [
-                    new ConfiguredWidget('compare-ci-version-widget', 'cmdb-ci-compare-dialog-table-widget')
-                ],
+                [], [],
                 [
                     new ConfiguredDialogWidget(
                         'cmdb-ci-compare-dialog-widget', 'cmdb-ci-compare-dialog-widget',
                         KIXObjectType.CONFIG_ITEM_VERSION_COMPARE, ContextMode.EDIT
                     )
+                ], [], [], [],
+                [
+                    new ConfiguredWidget('compare-ci-version-widget', 'cmdb-ci-compare-dialog-table-widget')
                 ]
             )
         );

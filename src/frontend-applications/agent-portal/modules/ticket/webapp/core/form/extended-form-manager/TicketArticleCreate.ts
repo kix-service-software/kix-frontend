@@ -56,56 +56,56 @@ export class TicketArticleCreate extends ExtendedJobFormManager {
                     option, actionType, actionFieldInstanceId, 'object-reference-input',
                     defaultValue
                 );
-                this.setReferencedObjectOptions(field, KIXObjectType.ORGANISATION, false, true);
+                this.setReferencedObjectOptions(field, KIXObjectType.ORGANISATION, false, true, true);
                 return field;
             } else if (option.Name === 'ContactEmailOrID') {
                 const field = this.getOptionField(
                     option, actionType, actionFieldInstanceId, 'object-reference-input',
                     defaultValue
                 );
-                this.setReferencedObjectOptions(field, KIXObjectType.CONTACT, false, true);
+                this.setReferencedObjectOptions(field, KIXObjectType.CONTACT, false, true, true);
                 return field;
             } else if (option.Name === 'OwnerLoginOrID' || option.Name === 'ResponsibleLoginOrID') {
                 const field = this.getOptionField(
                     option, actionType, actionFieldInstanceId, 'object-reference-input',
                     defaultValue
                 );
-                this.setReferencedObjectOptions(field, KIXObjectType.USER, false, true);
+                this.setReferencedObjectOptions(field, KIXObjectType.USER, false, true, true);
                 return field;
             } else if (option.Name === 'Channel') {
                 const field = this.getOptionField(
                     option, actionType, actionFieldInstanceId, 'object-reference-input',
                     defaultValue
                 );
-                this.setReferencedObjectOptions(field, KIXObjectType.CHANNEL, false, true);
+                this.setReferencedObjectOptions(field, KIXObjectType.CHANNEL, false, true, false);
                 return field;
             } else if (option.Name === 'Priority') {
                 const field = this.getOptionField(
                     option, actionType, actionFieldInstanceId, 'object-reference-input',
                     defaultValue
                 );
-                this.setReferencedObjectOptions(field, KIXObjectType.TICKET_PRIORITY, false, true);
+                this.setReferencedObjectOptions(field, KIXObjectType.TICKET_PRIORITY, false, true, false);
                 return field;
             } else if (option.Name === 'State') {
                 const field = this.getOptionField(
                     option, actionType, actionFieldInstanceId, 'object-reference-input',
                     defaultValue
                 );
-                this.setReferencedObjectOptions(field, KIXObjectType.TICKET_STATE, false, true);
+                this.setReferencedObjectOptions(field, KIXObjectType.TICKET_STATE, false, true, false);
                 return field;
             } else if (option.Name === 'Team') {
                 const field = this.getOptionField(
                     option, actionType, actionFieldInstanceId, 'object-reference-input',
                     defaultValue
                 );
-                this.setReferencedObjectOptions(field, KIXObjectType.QUEUE, false, true);
+                this.setReferencedObjectOptions(field, KIXObjectType.QUEUE, false, true, false);
                 return field;
             } else if (option.Name === 'Type') {
                 const field = this.getOptionField(
                     option, actionType, actionFieldInstanceId, 'object-reference-input',
                     defaultValue
                 );
-                this.setReferencedObjectOptions(field, KIXObjectType.TICKET_TYPE, false, true);
+                this.setReferencedObjectOptions(field, KIXObjectType.TICKET_TYPE, false, true, false);
                 return field;
             }
         }
@@ -113,10 +113,12 @@ export class TicketArticleCreate extends ExtendedJobFormManager {
     }
 
     private setReferencedObjectOptions(
-        field: FormFieldConfiguration, objectType: KIXObjectType, multiselect: boolean, freeText: boolean
+        field: FormFieldConfiguration, objectType: KIXObjectType, multiselect: boolean, freeText: boolean,
+        autocomplete: boolean
     ): void {
         field.options.push(new FormFieldOption(ObjectReferenceOptions.OBJECT, objectType));
         field.options.push(new FormFieldOption(ObjectReferenceOptions.MULTISELECT, multiselect));
+        field.options.push(new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, autocomplete));
         field.options.push(new FormFieldOption(ObjectReferenceOptions.FREETEXT, freeText));
     }
 

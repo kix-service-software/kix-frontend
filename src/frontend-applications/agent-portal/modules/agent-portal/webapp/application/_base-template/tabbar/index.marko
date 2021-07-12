@@ -1,0 +1,73 @@
+<!--
+Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<div.tabbar>
+    <div.tab-scroll.left
+        on-click("scrollTabs", true)
+        class={
+            blocked: state.blocked
+        }>
+        <span.fa.fa-caret-left/>
+    </div>
+    <div.tab-content key="tabbar-tab-content">
+        <for|tab| of=state.contextTabs>
+            <div.tab
+                draggable="true"
+                key=tab.contextInstanceId
+                active=tab.active
+                title=tab.displayText
+                on-click("tabClicked", tab)
+                on-dblclick("tabDblClicked", tab)
+                on-dragstart("drag", tab)
+                on-dragover("dragOver", tab)
+                on-drop("drop", tab)
+                data-instanceid=tab.contextInstanceId
+                data-contexttype=(
+                    tab.contextDescriptor
+                        ? tab.contextDescriptor.contextType
+                        : ""
+                )
+                data-contextmode=(
+                    tab.contextDescriptor
+                        ? tab.contextDescriptor.contextMode
+                        : ""
+                )
+                data-objectid=tab.objectid
+                data-contextid=(
+                    tab.contextDescriptor
+                        ? tab.contextDescriptor.contextId
+                        : ""
+                )
+                class={
+                    blocked: state.blocked,
+                    drag: state.dragOverInstanceId === tab.contextInstanceId
+                }>
+                <div.tab-icon-container>
+                    <if(tab.refresh)>
+                        <span.kix-icon-arrow-refresh/>
+                    </if>
+                    <if(tab.pinned)>
+                        <span.fa.fa-thumbtack/>
+                    </if>
+                    <icon icon=tab.icon/>
+                </div>
+                <span.display-text>${tab.displayText}</span>
+                <if(!state.blocked && component.canClose())>
+                    <span.fa.fa-times on-click("closeTab", tab)/>
+                </if>
+            </div>
+        </for>
+    </div>
+    <div.tab-scroll.right
+        on-click("scrollTabs", false)
+        class={
+            blocked: state.blocked
+        }>
+        <span.fa.fa-caret-right/>
+    </div>
+</div>

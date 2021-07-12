@@ -21,6 +21,7 @@ import { DynamicField } from '../../../../dynamic-fields/model/DynamicField';
 import { FilterType } from '../../../../../model/FilterType';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../../model/FilterDataType';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends FormInputComponent<[string, string], ComponentState> {
 
@@ -70,8 +71,9 @@ class Component extends FormInputComponent<[string, string], ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const value = formInstance.getFormFieldValue<string>(this.state.field.instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const value = formInstance.getFormFieldValue<string>(this.state.field?.instanceId);
         if (value && Array.isArray(value.value)) {
             if (value.value[0]) {
                 const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);

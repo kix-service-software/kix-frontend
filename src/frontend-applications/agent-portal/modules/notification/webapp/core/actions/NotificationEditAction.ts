@@ -8,13 +8,11 @@
  */
 
 
-import { EditNotificationDialogContext, NotificationDetailsContext } from '../context';
+import { EditNotificationDialogContext } from '../context';
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../model/ContextMode';
 import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 
 export class NotificationEditAction extends AbstractAction {
@@ -38,17 +36,12 @@ export class NotificationEditAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<NotificationDetailsContext>(
-            NotificationDetailsContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         if (context) {
             const id = context.getObjectId();
             if (id) {
-                ContextService.getInstance().setDialogContext(
-                    EditNotificationDialogContext.CONTEXT_ID, KIXObjectType.NOTIFICATION,
-                    ContextMode.EDIT_ADMIN, id
-                );
+                ContextService.getInstance().setActiveContext(EditNotificationDialogContext.CONTEXT_ID, id);
             }
         }
     }

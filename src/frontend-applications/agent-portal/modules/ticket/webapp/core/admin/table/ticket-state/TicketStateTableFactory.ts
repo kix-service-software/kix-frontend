@@ -29,10 +29,10 @@ export class TicketStateTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.TICKET_STATE;
 
-    public createTable(
+    public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean
-    ): Table {
+    ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
 

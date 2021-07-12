@@ -30,7 +30,7 @@ export class PermissionsTableContentProvider extends TableContentProvider<Permis
     public async loadData(): Promise<Array<RowObject<Permission>>> {
         let object: KIXObject;
         if (this.contextId) {
-            const context = await ContextService.getInstance().getContext(this.contextId);
+            const context = ContextService.getInstance().getActiveContext();
             object = await context.getObject();
         }
 

@@ -27,22 +27,15 @@ import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTyp
 import { TableFactoryService } from '../../../base-components/webapp/core/table';
 import { AbstractDynamicFormManager } from '../../../base-components/webapp/core/dynamic-form';
 import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
+import { SearchCache } from '../../model/SearchCache';
+import { SearchProperty } from '../../model/SearchProperty';
+import { TicketProperty } from '../../../ticket/model/TicketProperty';
 
 export abstract class SearchDefinition {
 
     public formManager: AbstractDynamicFormManager;
 
     protected extendedDefinitions: SearchDefinition[] = [];
-
-    protected limit: number;
-
-    public setLimit(limit: number): void {
-        this.limit = limit && limit > 0 ? limit : null;
-    }
-
-    public getLimit(): number {
-        return this.limit;
-    }
 
     public addExtendedDefinitions(definition: SearchDefinition): void {
         this.extendedDefinitions.push(definition);
@@ -60,8 +53,8 @@ export abstract class SearchDefinition {
         return await this.formManager.getProperties();
     }
 
-    public async getSearchResultCategories(): Promise<SearchResultCategory> {
-        return null;
+    public async getSearchResultCategories(): Promise<SearchResultCategory[]> {
+        return [];
     }
 
     protected readPermissions: Map<string, boolean> = new Map();
@@ -88,15 +81,17 @@ export abstract class SearchDefinition {
         return [];
     }
 
-    public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(criteria, null, this.limit);
+    public getLoadingOptions(criteria: FilterCriteria[], limit: number): KIXObjectLoadingOptions {
+        return new KIXObjectLoadingOptions(criteria, null, limit);
     }
 
     public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {
         return null;
     }
 
-    public async prepareFormFilterCriteria(criteria: FilterCriteria[]): Promise<FilterCriteria[]> {
+    public async prepareFormFilterCriteria(
+        criteria: FilterCriteria[], forSearch: boolean = true
+    ): Promise<FilterCriteria[]> {
         const filteredCriteria = criteria.filter((c) => {
             if (Array.isArray(c.value)) {
                 return c.value.length > 0;
@@ -142,6 +137,19 @@ export abstract class SearchDefinition {
         }
 
         return [new FilterCriteria(property, operator, FilterDataType.STRING, FilterType.AND, value)];
+    }
+
+    public async getTableColumnConfigurations(cache: SearchCache): Promise<IColumnConfiguration[]> {
+        const parameter: Array<[string, any]> = [];
+        for (const c of cache?.criteria) {
+            if (c.property !== SearchProperty.FULLTEXT &&
+                c.property !== TicketProperty.CLOSE_TIME &&
+                c.property !== TicketProperty.LAST_CHANGE_TIME) {
+                parameter.push([c.property, c.value]);
+            }
+        }
+        const columns = await this.getTableColumnConfiguration(parameter);
+        return columns;
     }
 
     public async getTableColumnConfiguration(searchParameter: Array<[string, any]>): Promise<IColumnConfiguration[]> {
@@ -208,6 +216,10 @@ export abstract class SearchDefinition {
         const filterDataType = operator === SearchOperator.BETWEEN ? FilterDataType.DATETIME : FilterDataType.STRING;
 
         return new FilterCriteria(property, operator as SearchOperator, filterDataType, FilterType.AND, value);
+    }
+
+    public getDefaultSearchCriteria(): string[] {
+        return [];
     }
 
 }

@@ -41,6 +41,7 @@ import { LoggingService } from '../../../../../server/services/LoggingService';
 import { Error } from '../../../../../server/model/Error';
 import { AttachmentLoadingOptions } from '../model/AttachmentLoadingOptions';
 import { Version } from '../model/Version';
+import { SearchProperty } from '../../search/model/SearchProperty';
 
 
 export class CMDBAPIService extends KIXObjectAPIService {
@@ -319,6 +320,21 @@ export class CMDBAPIService extends KIXObjectAPIService {
     }
 
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+        const fulltext = criteria.find((f) => f.property === SearchProperty.FULLTEXT);
+        if (fulltext) {
+            const fulltextSearch = [
+                new FilterCriteria(
+                    ConfigItemProperty.NUMBER, SearchOperator.LIKE,
+                    FilterDataType.STRING, FilterType.OR, `*${fulltext.value}*`
+                ),
+                new FilterCriteria(
+                    ConfigItemProperty.NAME, SearchOperator.LIKE,
+                    FilterDataType.STRING, FilterType.OR, `*${fulltext.value}*`
+                )
+            ];
+            criteria = [...criteria, ...fulltextSearch];
+        }
+
         const newCriteria = criteria.filter((c) =>
             (c.property === ConfigItemProperty.CONFIG_ITEM_ID && c.operator !== SearchOperator.NOT_EQUALS) ||
             c.property === ConfigItemProperty.NUMBER ||

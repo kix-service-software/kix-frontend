@@ -8,15 +8,14 @@
  */
 
 
-import { TicketDetailsContext, EditTicketDialogContext, NewTicketDialogContext } from './context';
+import { EditTicketDialogContext, NewTicketDialogContext, TicketDetailsContext } from './context';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../model/ContextMode';
 import { Ticket } from '../../model/Ticket';
 import { Contact } from '../../../customer/model/Contact';
-import { Context } from '../../../../model/Context';
-import { WidgetService } from '../../../base-components/webapp/core/WidgetService';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { Context } from '../../../../model/Context';
+import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
 
 
 export class TicketDialogUtil {
@@ -39,48 +38,46 @@ export class TicketDialogUtil {
             }
         }
 
-        await ContextService.getInstance().setDialogContext(
-            NewTicketDialogContext.CONTEXT_ID, KIXObjectType.TICKET, ContextMode.CREATE, ticketId,
-            undefined, undefined, undefined, undefined, undefined, undefined,
-            additionalInformation
-        );
+        ContextService.getInstance().setActiveContext(NewTicketDialogContext.CONTEXT_ID, ticketId);
     }
 
     public static async editTicket(
-        ticketId?: number, articleId?: number, formId?: string, widgetTitle?: string, icon?: ObjectIcon | string,
-        deleteForm: boolean = true
-    ): Promise<void> {
-        const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
-            TicketDetailsContext.CONTEXT_ID
-        );
+        ticketId?: number, articleId?: number, icon?: ObjectIcon | string, text?: string,
+        additionalInformation: Array<[string, any]> = [], formId?: string
+    ): Promise<Context> {
+
+        const context = ContextService.getInstance().getActiveContext();
 
         if (!ticketId && context) {
             ticketId = Number(context.getObjectId());
         }
 
-        let dialogContext: Context;
-        if (articleId && context) {
-            dialogContext = await ContextService.getInstance().getContext<EditTicketDialogContext>(
-                EditTicketDialogContext.CONTEXT_ID
-            );
-            dialogContext.setAdditionalInformation('REFERENCED_ARTICLE_ID', articleId);
-        }
-
+        let editContext: Context;
         if (ticketId) {
-            dialogContext = await ContextService.getInstance().setDialogContext(
-                EditTicketDialogContext.CONTEXT_ID, KIXObjectType.TICKET, ContextMode.EDIT, ticketId,
-                null, null, null, null, formId, deleteForm
+            if (articleId) {
+                additionalInformation.push(['REFERENCED_ARTICLE_ID', articleId]);
+            }
+
+            additionalInformation.push([AdditionalContextInformation.FORM_ID, formId]);
+
+            const existingContext = ContextService.getInstance().getContextInstances().find(
+                (c) => c.descriptor.contextId === EditTicketDialogContext.CONTEXT_ID && c.getObjectId() === ticketId
             );
+
+            if (existingContext) {
+                await ContextService.getInstance().removeContext(existingContext.instanceId, null, null, false);
+            }
+
+            editContext = await ContextService.getInstance().setActiveContext(
+                EditTicketDialogContext.CONTEXT_ID, ticketId, null, additionalInformation
+            );
+
+            editContext.setIcon(icon);
+            editContext.setDisplayText(text);
         }
 
-        if (widgetTitle) {
-            const dialogConfigurations = dialogContext.getConfiguration().dialogs;
-            if (Array.isArray(dialogConfigurations) && dialogConfigurations.length) {
-                setTimeout(() => {
-                    WidgetService.getInstance().setWidgetTitle(dialogConfigurations[0].instanceId, widgetTitle, icon);
-                }, 750);
-            }
-        }
+        return editContext;
+
     }
 
 }

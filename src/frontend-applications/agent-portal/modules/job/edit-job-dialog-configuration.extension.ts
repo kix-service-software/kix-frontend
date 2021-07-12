@@ -32,7 +32,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const configurations = [];
         const editDialogWidget = new WidgetConfiguration(
             'job-edit-dialog-widget', 'Edit Dialog Widget', ConfigurationType.Widget,
-            'edit-job-dialog', 'Translatable#Edit Job', [], null, null,
+            'object-dialog-form-widget', 'Translatable#Edit Job', [], null, null,
             false, false, 'kix-icon-edit'
         );
         configurations.push(editDialogWidget);
@@ -40,13 +40,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-                this.getModuleId(), [], [], [], [], [], [], [], [],
+                this.getModuleId(), [], [], [],
                 [
                     new ConfiguredDialogWidget(
                         'job-edit-dialog-widget', 'job-edit-dialog-widget',
                         KIXObjectType.JOB, ContextMode.EDIT_ADMIN
                     )
-                ]
+                ], [], [], [], []
             )
         );
 

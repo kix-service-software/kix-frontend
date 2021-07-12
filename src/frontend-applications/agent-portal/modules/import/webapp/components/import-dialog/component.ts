@@ -16,7 +16,6 @@ import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { ContextType } from '../../../../../model/ContextType';
 import { ImportService, ImportPropertyOperator } from '../../core';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
@@ -43,7 +42,6 @@ import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/
 import { OverlayService } from '../../../../../modules/base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
 import { ComponentContent } from '../../../../../modules/base-components/webapp/core/ComponentContent';
-import { DialogService } from '../../../../../modules/base-components/webapp/core/DialogService';
 import { Error } from '../../../../../../../server/model/Error';
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
@@ -69,8 +67,8 @@ class Component {
     private importFormTimeout;
     private formSubscriber: IEventSubscriber;
 
-    public onCreate(input: any): void {
-        this.state = new ComponentState(input.instanceId);
+    public onCreate(): void {
+        this.state = new ComponentState();
         WidgetService.getInstance().setWidgetType('dynamic-form-field-group', WidgetType.GROUP);
         this.importConfigs = new Map(
             [
@@ -102,9 +100,9 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        this.context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        this.context = ContextService.getInstance().getActiveContext();
         if (this.context) {
-            const types = this.context.getDescriptor().kixObjectTypes;
+            const types = this.context.descriptor.kixObjectTypes;
             if (types && !!types.length && typeof types[0] === 'string' && types[0].length) {
                 this.objectType = types[0];
 
@@ -148,8 +146,7 @@ class Component {
 
     public async onInput(input: any): Promise<any> {
         this.state.translations = await TranslationService.createTranslationObject([
-            'Translatable#Cancel', 'Translatable#Replace Values',
-            'Translatable#Close Dialog', 'Translatable#Start Import'
+            'Translatable#Cancel', 'Translatable#Replace Values', 'Translatable#Start Import'
         ]);
 
         return input;
@@ -160,7 +157,6 @@ class Component {
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
-        FormService.getInstance().deleteFormInstance(this.state.importConfigFormId);
         if (this.state.importManager) {
             this.state.importManager.unregisterListener(this.formListenerId);
             this.state.importManager.reset();
@@ -230,10 +226,10 @@ class Component {
             ]
         );
 
-        FormService.getInstance().deleteFormInstance(form.id);
         await FormService.getInstance().addForm(form);
-
-        this.state.importConfigFormId = form.id;
+        const context = ContextService.getInstance().getActiveContext();
+        await context?.getFormManager().setFormId(form.id);
+        this.state.prepared = true;
     }
 
     private async createTable(): Promise<void> {
@@ -245,7 +241,7 @@ class Component {
             );
             const table = await TableFactoryService.getInstance().createTable(
                 `import-dialog-list-${this.objectType}`, this.objectType,
-                configuration, null, this.context.getDescriptor().contextId,
+                configuration, null, this.context.contextId,
                 false, null, true, false, true
             );
             table.sort('CSV_LINE', SortOrder.UP);
@@ -360,7 +356,8 @@ class Component {
         this.errorObjects = [];
         this.finishedObjects = [];
         this.selectedObjects = [];
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.importConfigFormId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
         if (formInstance) {
             const source = await formInstance.getFormFieldValueByProperty('source');
             let ok = false;
@@ -509,7 +506,7 @@ class Component {
                 const newColumnConfigs = await this.getColumnConfig();
                 this.state.table.removeColumns(this.state.table.getColumns().map((c) => c.getColumnId()));
                 if (!!newColumnConfigs.length) {
-                    await this.state.table.addColumns(newColumnConfigs);
+                    await this.state.table.addAdditionalColumns(newColumnConfigs);
                 }
             }
         } else {
@@ -593,13 +590,7 @@ class Component {
     }
 
     public cancel(): void {
-        DialogService.getInstance().closeMainDialog();
-    }
-
-    public submit(): void {
-        if (this.state.run) {
-            DialogService.getInstance().closeMainDialog();
-        }
+        ContextService.getInstance().toggleActiveContext();
     }
 
     public async run(): Promise<void> {
@@ -651,7 +642,7 @@ class Component {
                 }).catch(async (error) => {
                     this.errorObjects.push(object);
                     this.state.table.setRowObjectValueState([object], ValueState.HIGHLIGHT_ERROR);
-                    BrowserUtil.toggleLoadingShield(true, 'Translatable#An error occurred.');
+                    BrowserUtil.toggleLoadingShield('APP_SHIELD', false, 'Translatable#An error occurred.');
                     end = Date.now();
                     await this.handleObjectEditError(object, error);
                 });
@@ -669,7 +660,7 @@ class Component {
             BrowserUtil.openSuccessOverlay(succesText);
         }
 
-        BrowserUtil.toggleLoadingShield(false);
+        BrowserUtil.toggleLoadingShield('APP_SHIELD', false);
     }
 
     private async setDialogLoadingInfo(times: number[] = [], objectsCount: number = 0): Promise<void> {
@@ -684,7 +675,7 @@ class Component {
             'Translatable#{0}/{1} {2} imported', [finishCount, totalCount, objectName]
         );
         BrowserUtil.toggleLoadingShield(
-            true, loadingHint, time, this.cancelImport.bind(this)
+            'APP_SHIELD', true, loadingHint, time, this.cancelImport.bind(this)
         );
     }
 
@@ -724,7 +715,8 @@ class Component {
                     this.cancelImportProcess = true;
                     resolve();
                 },
-                [ignoreText, cancelText]
+                [ignoreText, cancelText],
+                undefined, undefined, true
             );
         });
     }

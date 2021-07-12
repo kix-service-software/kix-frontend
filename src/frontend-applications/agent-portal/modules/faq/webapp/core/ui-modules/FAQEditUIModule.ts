@@ -18,6 +18,7 @@ import { ContextService } from '../../../../../modules/base-components/webapp/co
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
+import { FAQDetailsContext } from '../context/FAQDetailsContext';
 
 export class UIModule implements IUIModule {
 
@@ -37,19 +38,21 @@ export class UIModule implements IUIModule {
     private async registerContexts(): Promise<void> {
         const newFAQArticleContext = new ContextDescriptor(
             NewFAQArticleDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE], ContextType.DIALOG, ContextMode.CREATE,
-            false, 'new-faq-article-dialog', ['faqarticles'], NewFAQArticleDialogContext,
+            false, 'object-dialog', ['faqarticles'], NewFAQArticleDialogContext,
             [
                 new UIComponentPermission('faq/articles', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#FAQ', 'kix-icon-faq', FAQDetailsContext.CONTEXT_ID, 400
         );
         ContextService.getInstance().registerContext(newFAQArticleContext);
 
         const editFAQArticleContext = new ContextDescriptor(
             EditFAQArticleDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE], ContextType.DIALOG, ContextMode.EDIT,
-            false, 'edit-faq-article-dialog', ['faqarticles'], EditFAQArticleDialogContext,
+            false, 'object-dialog', ['faqarticles'], EditFAQArticleDialogContext,
             [
                 new UIComponentPermission('faq/articles', [CRUD.CREATE])
-            ]
+            ],
+            'Translatable#FAQ', 'kix-icon-gear', FAQDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(editFAQArticleContext);
     }

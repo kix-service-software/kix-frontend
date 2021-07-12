@@ -18,6 +18,8 @@ import { EventService } from '../../../../../modules/base-components/webapp/core
 import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
 import { Error } from '../../../../../../../server/model/Error';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { SearchContext } from '../SearchContext';
 
 export class DeleteSearchAction extends AbstractAction {
 
@@ -27,13 +29,15 @@ export class DeleteSearchAction extends AbstractAction {
     }
 
     public canRun(): boolean {
-        const cache = SearchService.getInstance().getSearchCache();
+        const context = ContextService.getInstance().getActiveContext<SearchContext>();
+        const cache = context?.getSearchCache();
         return typeof cache !== 'undefined' && cache !== null && cache.name !== null;
     }
 
     public async run(): Promise<void> {
         if (this.canRun()) {
-            const cache = SearchService.getInstance().getSearchCache();
+            const context = ContextService.getInstance().getActiveContext<SearchContext>();
+            const cache = context?.getSearchCache();
             const question = await TranslationService.translate(
                 'Translatable#Search {0} will be deleted. Are you sure?', [cache.name]
             );
@@ -52,7 +56,8 @@ export class DeleteSearchAction extends AbstractAction {
             loading: true, hint: 'Translatable#Delete Search'
         });
 
-        await SearchService.getInstance().deleteSearch()
+        const context = ContextService.getInstance().getActiveContext<SearchContext>();
+        await context?.deleteSearch()
             .catch((error: Error) => BrowserUtil.openErrorOverlay(error.Message));
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });

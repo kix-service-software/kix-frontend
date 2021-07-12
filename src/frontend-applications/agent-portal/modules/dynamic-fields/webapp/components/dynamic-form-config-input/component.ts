@@ -43,7 +43,7 @@ class Component extends FormInputComponent<JSON, ComponentState> {
         await super.onMount();
 
         this.formSubscriber = {
-            eventSubscriberId: this.state.field.instanceId,
+            eventSubscriberId: this.state.field?.instanceId,
             eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
                 const typeValue = data.changedValues.find(
                     (cv) => cv[0] && cv[0].property === DynamicFieldProperty.FIELD_TYPE
@@ -64,8 +64,9 @@ class Component extends FormInputComponent<JSON, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const defaultValue = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const defaultValue = formInstance.getFormFieldValue<number>(this.state.field?.instanceId);
 
         const typeValue = await formInstance.getFormFieldValueByProperty<string>(DynamicFieldProperty.FIELD_TYPE);
         if (typeValue && typeValue.value && typeValue.value) {

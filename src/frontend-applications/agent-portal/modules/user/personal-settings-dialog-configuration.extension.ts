@@ -8,7 +8,6 @@
  */
 
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
-import { PersonalSettingsDialogContext } from './webapp/core';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
 import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
@@ -19,6 +18,7 @@ import { ContextMode } from '../../model/ContextMode';
 
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { PersonalSettingsDialogContext } from './webapp/core/PersonalSettingsDialogContext';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -38,13 +38,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-                this.getModuleId(), [], [], [], [], [], [], [], [],
+                this.getModuleId(), [], [], [],
                 [
                     new ConfiguredDialogWidget(
                         'personal-settings-dialog-widget', 'personal-settings-dialog-widget',
                         KIXObjectType.PERSONAL_SETTINGS, ContextMode.PERSONAL_SETTINGS
                     )
-                ]
+                ], [], [], [], []
             )
         );
         return configurations;

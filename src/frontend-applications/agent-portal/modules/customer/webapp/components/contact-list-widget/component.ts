@@ -10,7 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { OrganisationContext } from '../../core';
 import { OrganisationAdditionalInformationKeys } from '../../core/context/OrganisationContext';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
@@ -34,18 +33,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<OrganisationContext>(
-            OrganisationContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         if (context) {
             context.registerListener('contact-list-widget', {
-                sidebarToggled: () => { return; },
+                sidebarRightToggled: () => { return; },
                 scrollInformationChanged: () => { return; },
                 objectListChanged: () => { return; },
                 objectChanged: () => { return; },
                 filteredObjectListChanged: () => { return; },
-                explorerBarToggled: () => { return; },
+                sidebarLeftToggled: () => { return; },
                 additionalInformationChanged: (key: string, value: any) => {
                     this.setWidgetDependingMode();
                 }
@@ -74,9 +71,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onDestroy(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<OrganisationContext>(
-            OrganisationContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
         if (context) {
             context.unregisterListener('contact-list-widget');
         }
@@ -86,9 +81,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async setWidgetDependingMode(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<OrganisationContext>(
-            OrganisationContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         if (context) {
             const depending = context.getAdditionalInformation(

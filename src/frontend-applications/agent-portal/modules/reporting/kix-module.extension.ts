@@ -45,10 +45,7 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         ),
         new UIComponent(
             'create-new-report-cell', '/kix-module-reporting$0/webapp/components/create-new-report-cell', []
-        ),
-        new UIComponent('new-report-definition-dialog', '/kix-module-reporting$0/webapp/components/new-report-definition-dialog', []),
-        new UIComponent('edit-report-definition-dialog', '/kix-module-reporting$0/webapp/components/edit-report-definition-dialog', []),
-        new UIComponent('new-report-dialog', '/kix-module-reporting$0/webapp/components/new-report-dialog', []),
+        )
     ];
 
     public webDependencies: string[] = [

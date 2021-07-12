@@ -16,19 +16,20 @@ import { DynamicFieldProperty } from '../../model/DynamicFieldProperty';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { IColumnConfiguration } from '../../../../model/configuration/IColumnConfiguration';
 import { DynamicFieldTableContentProvider } from './DynamicFieldTableContentProvider';
-import { DialogRoutingConfiguration } from '../../../../model/configuration/DialogRoutingConfiguration';
 import { ContextMode } from '../../../../model/ContextMode';
 import { TableConfiguration } from '../../../../model/configuration/TableConfiguration';
 import { DefaultColumnConfiguration } from '../../../../model/configuration/DefaultColumnConfiguration';
+import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
+import { EditDynamicFieldDialogContext } from './EditDynamicFieldDialogContext';
 
 export class DynamicFieldTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.DYNAMIC_FIELD;
 
-    public createTable(
+    public async createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean
-    ): Table {
+    ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
 
@@ -67,10 +68,8 @@ export class DynamicFieldTableFactory extends TableFactory {
         }
 
         if (defaultRouting) {
-            tableConfiguration.routingConfiguration = new DialogRoutingConfiguration(
-                null, KIXObjectType.DYNAMIC_FIELD, ContextMode.EDIT_ADMIN,
-                DynamicFieldProperty.ID, null, true,
-                undefined, true, 'dynamic-field-edit-form'
+            tableConfiguration.routingConfiguration = new RoutingConfiguration(
+                EditDynamicFieldDialogContext.CONTEXT_ID, null, null, DynamicFieldProperty.ID
             );
         }
 

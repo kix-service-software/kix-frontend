@@ -43,9 +43,7 @@ export class MailAccountFetchAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<MailAccountDetailsContext>(
-            MailAccountDetailsContext.CONTEXT_ID
-        );
+        const context = ContextService.getInstance().getActiveContext();
 
         if (context) {
             const id = context.getObjectId();

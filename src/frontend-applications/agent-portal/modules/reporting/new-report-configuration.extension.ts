@@ -17,6 +17,9 @@ import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { ContextMode } from '../../model/ContextMode';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { NewReportDialogContext } from './webapp/core/context/NewReportDialogContext';
+import { FormConfiguration } from '../../model/configuration/FormConfiguration';
+import { FormContext } from '../../model/configuration/FormContext';
+import { ModuleConfigurationService } from '../../server/services/configuration';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -28,7 +31,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const configurations = [];
         const newDialogWidget = new WidgetConfiguration(
             'report-new-dialog-widget', 'New Dialog Widget', ConfigurationType.Widget,
-            'new-report-dialog', 'Translatable#New Report', [], null, null,
+            'object-dialog-form-widget', 'Translatable#New Report', [], null, null,
             false, false, 'kix-icon-kpi'
         );
         configurations.push(newDialogWidget);
@@ -36,13 +39,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-                this.getModuleId(), [], [], [], [], [], [], [], [],
+                this.getModuleId(), [], [], [],
                 [
                     new ConfiguredDialogWidget(
                         'report-new-dialog-widget', 'report-new-dialog-widget',
                         KIXObjectType.REPORT, ContextMode.CREATE_SUB
                     )
-                ]
+                ], [], [], [], []
             )
         );
 
@@ -50,7 +53,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
     }
 
     public async getFormConfigurations(): Promise<IConfiguration[]> {
-        return [];
+        const configurations = [];
+        const formId = 'report-new-form';
+
+        configurations.push(new FormConfiguration(formId, 'Translatable#New Report', [], KIXObjectType.REPORT));
+        ModuleConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.REPORT, formId);
+
+        return configurations;
     }
 
 }

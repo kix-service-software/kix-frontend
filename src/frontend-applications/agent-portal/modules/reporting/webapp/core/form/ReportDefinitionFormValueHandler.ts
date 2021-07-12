@@ -17,7 +17,6 @@ import { FormInstance } from '../../../../base-components/webapp/core/FormInstan
 import { ReportDefinitionProperty } from '../../../model/ReportDefinitionProperty';
 import { ReportParameter } from '../../../model/ReportParamater';
 import { ReportParameterProperty } from '../../../model/ReportParameterProperty';
-import { ReportProperty } from '../../../model/ReportProperty';
 import { ReportDefinitionFormCreator } from './ReportDefinitionFormCreator';
 import { ReportingFormUtil } from './ReportingFormUtil';
 
@@ -98,9 +97,10 @@ export class ReportDefinitionFormValueHandler extends FormFieldValueHandler {
         field: FormFieldConfiguration, value: FormFieldValue<string>, formInstance: FormInstance
     ): Promise<void> {
 
-        const possibleValuesField = field.parent.children.find(
+        let possibleValuesField = field.parent.children.find(
             (f) => f.property === ReportParameterProperty.POSSIBLE_VALUES
         );
+        possibleValuesField = formInstance.getFormField(possibleValuesField.instanceId);
 
         const multipleField = field.parent.children.find((f) => f.property === ReportParameterProperty.MULTIPLE);
         const multipleValue = formInstance.getFormFieldValue(multipleField?.instanceId);
@@ -113,7 +113,6 @@ export class ReportDefinitionFormValueHandler extends FormFieldValueHandler {
 
         if (possibleValuesField) {
             await ReportingFormUtil.setInputComponent(possibleValuesField, parameter, false, true);
-            await formInstance.removeFormField(possibleValuesField);
         }
 
         setTimeout(async () => {
@@ -123,7 +122,6 @@ export class ReportDefinitionFormValueHandler extends FormFieldValueHandler {
             }
 
             if (possibleValuesField) {
-                await formInstance.addFieldChildren(field.parent, [possibleValuesField], false);
                 await formInstance.provideFormFieldValues([[possibleValuesField.instanceId, null]], null);
             }
 
@@ -136,7 +134,8 @@ export class ReportDefinitionFormValueHandler extends FormFieldValueHandler {
     private async prepareDefaultInput(
         field: FormFieldConfiguration, value: FormFieldValue<string>, formInstance: FormInstance, keepValue?: boolean
     ): Promise<void> {
-        const defaultField = field.parent.children.find((f) => f.property === ReportParameterProperty.DEFAULT);
+        let defaultField = field.parent.children.find((f) => f.property === ReportParameterProperty.DEFAULT);
+        defaultField = formInstance.getFormField(defaultField.instanceId);
         if (defaultField) {
             const multipleField = field.parent.children.find((f) => f.property === ReportParameterProperty.MULTIPLE);
             const multipleValue = formInstance.getFormFieldValue(multipleField?.instanceId);
@@ -167,9 +166,7 @@ export class ReportDefinitionFormValueHandler extends FormFieldValueHandler {
             const existingValue = formInstance.getFormFieldValue(defaultField.instanceId);
 
             await ReportingFormUtil.setInputComponent(defaultField, parameter);
-            await formInstance.removeFormField(defaultField);
             setTimeout(async () => {
-                await formInstance.addFieldChildren(field.parent, [defaultField], false);
                 await formInstance.provideFormFieldValues(
                     [
                         [defaultField.instanceId, existingValue ? existingValue.value : null]

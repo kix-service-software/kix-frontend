@@ -32,12 +32,12 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextMode } from '../../../../../model/ContextMode';
-import { DialogRoutingConfiguration } from '../../../../../model/configuration/DialogRoutingConfiguration';
 import { EditTranslationDialogContext } from '../../core/admin/context';
 import { SortOrder } from '../../../../../model/SortOrder';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { AdminContext } from '../../../../admin/webapp/core/AdminContext';
 import { ContextType } from '../../../../../model/ContextType';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -77,9 +77,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             'Translatable#Please enter a search term.'
         );
 
-        tableConfiguration.routingConfiguration = new DialogRoutingConfiguration(
-            EditTranslationDialogContext.CONTEXT_ID, KIXObjectType.TRANSLATION_PATTERN, ContextMode.EDIT_ADMIN,
-            TranslationPatternProperty.ID, null, true, undefined, true, 'i18n-translation-edit-form'
+        tableConfiguration.routingConfiguration = new RoutingConfiguration(
+            EditTranslationDialogContext.CONTEXT_ID, KIXObjectType.TRANSLATION_PATTERN,
+            ContextMode.EDIT_ADMIN, TranslationPatternProperty.ID
         );
 
         this.state.table = await TableFactoryService.getInstance().createTable(
@@ -120,8 +120,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public search(): void {
-        const context = ContextService.getInstance().getActiveContext<AdminContext>(ContextType.MAIN);
-        if (this.state.filterValue && this.state.filterValue?.trim() !== '') {
+        const context = ContextService.getInstance().getActiveContext();
+        if (context instanceof AdminContext) {
             context.setFilterValue(this.state.filterValue);
             this.state.table.reload(true);
         }

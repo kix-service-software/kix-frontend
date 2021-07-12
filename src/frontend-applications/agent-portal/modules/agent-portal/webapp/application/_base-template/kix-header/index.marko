@@ -6,51 +6,34 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<header>
-    <if(state.logoIcon)>
-        <img#logo src=("data:" + state.logoIcon.ContentType + ";base64," + state.logoIcon.Content)/>
-    </if>
-    <else>
-        <img#logo src="/static/img/kix_default.png"/>
-    </else>
-    <div>
-        <if(state.allowNew)>
-            <a href="?new" on-click("openDialog")>
-                <button.special-button type="button">
-                    <span.kix-icon-plus-blank/>
-                    <translation-string pattern="Translatable#New"/>
-                </button>
-            </a>
-            <div.header-separator/>
+<header#kix-header>
+    <div.left>
+        <if(state.isMobile)>
+            <main-menu-icon/>
+            <sidebar-left-icon/>
         </if>
-        <bookmarks/>
-        <div.header-separator/>
-        <quick-search/>
-        <toolbar/>
-        <div.kix-toolbar>
-            <div.toolbar-group>
-                <div>
-                    <div.action-icon>
-                        <span.kix-icon-gear.as-button
-                            title=state.translations["Translatable#Personal Settings"]
-                            on-click("showPersonalSettings")/>
-                    </div>
-                </div>
-                <link-target routingConfiguration=component.getReleaseRoutingConfig()>
-                    <@content>
-                        <div>
-                            <div.action-icon>
-                                <span.kix-icon-query.as-button title=state.translations["Translatable#Help"]/>
-                            </div>
-                        </div>
-                    </@content>
-                </link-target>
-                <div>
-                    <div.action-icon>
-                        <span.kix-icon-logout on-click("logout") title=state.translations["Translatable#Logout"]/>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <else>
+            <kix-logo/>
+        </else>
+    </div>
+    <div.center>
+        <if(state.isMobile)>
+            <create-object-dropdown/>
+        </if>
+    </div>
+    <div.right>
+        <if(state.isMobile)>
+            <sidebar-right-icon/>
+            <toolbar-icon/>
+        </if>
+        <else>
+            <create-object-dropdown/>
+            <div.header-separator/>
+            <search-object-dropdown/>
+            <div.header-separator/>
+            <personal-toolbar/>
+            <div.header-separator/>
+            <application-toolbar/>
+        </else>
     </div>
 </header>

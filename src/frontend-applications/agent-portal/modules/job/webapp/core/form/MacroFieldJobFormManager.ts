@@ -24,9 +24,19 @@ import { MacroFieldCreator } from '../MacroFieldCreator';
 
 export class MacroFieldJobFormManager extends ExtendedJobFormManager {
 
+
+    private static INSTANCE: MacroFieldJobFormManager;
+
+    public static getInstance(): MacroFieldJobFormManager {
+        if (!MacroFieldJobFormManager.INSTANCE) {
+            MacroFieldJobFormManager.INSTANCE = new MacroFieldJobFormManager();
+        }
+        return MacroFieldJobFormManager.INSTANCE;
+    }
+
     private subscriber: IEventSubscriber;
 
-    public constructor() {
+    private constructor() {
         super();
 
         this.subscriber = {
@@ -76,7 +86,7 @@ export class MacroFieldJobFormManager extends ExtendedJobFormManager {
             const type = Array.isArray(typeValue?.value) ? typeValue.value[0] : typeValue?.value;
             const manager = JobFormService.getInstance().getJobFormManager(type);
             fields = await MacroFieldCreator.createActionOptionFields(
-                actionType, actionField.instanceId, type, formInstance, manager, null
+                actionType, actionField.instanceId, type, formInstance, manager, null, actionField
             );
         }
 
