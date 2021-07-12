@@ -60,7 +60,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'faq-admin-category-create-action'
                 ],
                 [
-                    'faq-admin-category-edit-action', 'print-action'
+                    'faq-admin-category-edit-action'
                 ],
                 [],
                 [

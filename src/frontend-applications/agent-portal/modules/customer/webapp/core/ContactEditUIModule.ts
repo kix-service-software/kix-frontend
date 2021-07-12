@@ -10,10 +10,7 @@
 import { IUIModule } from '../../../../model/IUIModule';
 import { ContactImportManager } from './ContactImportManager';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
-import {
-    NewContactDialogContext, EditContactDialogContext, ContactImportDialogContext,
-    ContactCreateAction, ContactEditAction
-} from '.';
+import { NewContactDialogContext, EditContactDialogContext, ContactImportDialogContext, ContactCreateAction, ContactEditAction } from '.';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
@@ -70,7 +67,8 @@ export class UIModule implements IUIModule {
             [
                 new UIComponentPermission('contacts', [CRUD.CREATE])
             ],
-            'Translatable#Import Contacts', 'kix-icon-gear'
+            'Translatable#Import Contacts', 'kix-icon-gear',
+            undefined, undefined, false
         );
         ContextService.getInstance().registerContext(contactImportDialogContext);
     }

@@ -9,6 +9,7 @@
 
 import { Error } from '../../../../../../server/model/Error';
 import { ContextMode } from '../../../../model/ContextMode';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { BrowserUtil } from './BrowserUtil';
 import { ContextService } from './ContextService';
 import { KIXObjectService } from './KIXObjectService';
@@ -23,7 +24,7 @@ export class ObjectDialogUtil {
         ContextMode.EDIT_LINKS,
     ];
 
-    public static async submit(silent?: boolean): Promise<void> {
+    public static async submit(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         const formId = await context?.getFormManager()?.getFormId();
 
@@ -40,19 +41,36 @@ export class ObjectDialogUtil {
                 objectId = context.getObjectId();
             }
 
-            submitFunc(context.descriptor.kixObjectTypes[0], formId, objectId)
-                .then(async (newObjectId: number | string) => {
-                    await ContextService.getInstance().toggleActiveContext(
-                        context.descriptor.targetContextId, newObjectId, silent
-                    );
+            let canceled = false;
+            const hint = await TranslationService.translate('Translatable#Save');
+            BrowserUtil.toggleLoadingShield(
+                'APP_SHIELD', true, hint, undefined,
+                async () => {
+                    await ContextService.getInstance().toggleActiveContext(undefined, undefined, true);
+                    BrowserUtil.toggleLoadingShield('APP_SHIELD', false);
+                    canceled = true;
+                },
+                'Translatable#send to background'
+            );
 
-                    await BrowserUtil.openSuccessOverlay('Translatable#Success');
+            await submitFunc(context.descriptor.kixObjectTypes[0], formId, objectId)
+                .then(async (newObjectId: number | string) => {
+                    if (!canceled) {
+                        await ContextService.getInstance().toggleActiveContext(
+                            context.descriptor.targetContextId, newObjectId, true
+                        );
+
+                        await BrowserUtil.openSuccessOverlay('Translatable#Success');
+                    }
                 }).catch((error: Error) => {
                     BrowserUtil.openErrorOverlay(
                         error.Message ? `${error.Code}: ${error.Message}` : error.toString()
                     );
+                    BrowserUtil.toggleLoadingShield('APP_SHIELD', false);
                     throw error;
                 });
+
+            BrowserUtil.toggleLoadingShield('APP_SHIELD', false);
         } else {
             throw new Error('1', 'Validation Error');
         }

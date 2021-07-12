@@ -37,16 +37,6 @@ export abstract class SearchDefinition {
 
     protected extendedDefinitions: SearchDefinition[] = [];
 
-    protected limit: number;
-
-    public setLimit(limit: number): void {
-        this.limit = limit && limit > 0 ? limit : null;
-    }
-
-    public getLimit(): number {
-        return this.limit;
-    }
-
     public addExtendedDefinitions(definition: SearchDefinition): void {
         this.extendedDefinitions.push(definition);
     }
@@ -91,15 +81,17 @@ export abstract class SearchDefinition {
         return [];
     }
 
-    public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(criteria, null, this.limit);
+    public getLoadingOptions(criteria: FilterCriteria[], limit: number): KIXObjectLoadingOptions {
+        return new KIXObjectLoadingOptions(criteria, null, limit);
     }
 
     public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {
         return null;
     }
 
-    public async prepareFormFilterCriteria(criteria: FilterCriteria[]): Promise<FilterCriteria[]> {
+    public async prepareFormFilterCriteria(
+        criteria: FilterCriteria[], forSearch: boolean = true
+    ): Promise<FilterCriteria[]> {
         const filteredCriteria = criteria.filter((c) => {
             if (Array.isArray(c.value)) {
                 return c.value.length > 0;

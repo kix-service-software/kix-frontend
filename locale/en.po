@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2021-06-25 08:47+0000\n"
+"PO-Revision-Date: 2021-06-30 11:47+0000\n"
 "Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
 "Language-Team: English <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/en/>\n"
@@ -342,14 +342,14 @@ msgstr ""
 msgid "Bulk"
 msgstr ""
 
+msgid "Bulk {0}"
+msgstr ""
+
 msgid "Bulk Action"
 msgstr ""
 
 msgid "Cancel"
 msgstr "Cancel"
-
-msgid "Cancel Process"
-msgstr ""
 
 msgid "Can not create link ({0})"
 msgstr ""
@@ -445,9 +445,6 @@ msgid "Closed"
 msgstr ""
 
 msgid "Closed at"
-msgstr ""
-
-msgid "Close Dialog"
 msgstr ""
 
 msgid "Close Overlay"
@@ -786,9 +783,6 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-msgid "Edit {0}"
-msgstr ""
-
 msgid "Edit Account"
 msgstr ""
 
@@ -829,6 +823,9 @@ msgid "Edit FAQ Article"
 msgstr ""
 
 msgid "Edit FAQ Category"
+msgstr ""
+
+msgid "Edit General Catalog"
 msgstr ""
 
 msgid "Edit Job"
@@ -3463,6 +3460,9 @@ msgstr ""
 msgid "Related Tickets"
 msgstr ""
 
+msgid "Relevant Macro type"
+msgstr ""
+
 msgid "Reload Agent Portal Configurations"
 msgstr "Reload Frontend Configurations"
 
@@ -3744,9 +3744,10 @@ msgstr ""
 
 msgid "setup_assistant_add_mail_account_text"
 msgstr ""
-"Add an email account for fetching incoming emails. If you need more than one "
-"account, you can add more in the admin module \"Communication/Email/Email "
-"Account\"."
+"Add an email account for fetching incoming emails. Additional accounts can "
+"be added in admin module \"Communication/Email/Email Account\". Please note "
+"that regardless of the selected account type, emails are fetched from the "
+"mailbox and deleted!"
 
 msgid "setup_assistant_change_admin_password_text"
 msgstr ""
@@ -4245,9 +4246,6 @@ msgstr ""
 msgid "Update Email Account"
 msgstr ""
 
-msgid "Update Role"
-msgstr ""
-
 msgid "URL"
 msgstr ""
 
@@ -4474,9 +4472,6 @@ msgstr ""
 
 #~ msgid "Selected ticket functions"
 #~ msgstr "Selected ticket functions"
-
-#~ msgid "send to background"
-#~ msgstr "Continue in background"
 
 #~ msgid "Update CI Class"
 #~ msgstr "Update Asset Class"

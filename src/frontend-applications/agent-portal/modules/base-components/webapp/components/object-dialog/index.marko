@@ -10,11 +10,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <widget-container widgets=state.widgets/>
     <div.dialog-control>
         <dialog-notifiactions/>
-        <if(state.processing)>
-            <div.dialog-loading-text>
-                <loading-spinner/>
-            </div>
-        </if>
         <div.dialog-button-container>
             <button.cancel-button
                 disabled=state.processing
@@ -34,5 +29,4 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </button>
         </div>
     </div>
-    <loading-shield/>
 </div>

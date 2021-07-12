@@ -39,8 +39,8 @@ export class OrganisationSearchDefinition extends SearchDefinition {
         return [new SearchResultCategory('Translatable#Organisations', KIXObjectType.ORGANISATION, categories)];
     }
 
-    public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(criteria, null, this.limit, ['Tickets', 'Contacts']);
+    public getLoadingOptions(criteria: FilterCriteria[], limit: number): KIXObjectLoadingOptions {
+        return new KIXObjectLoadingOptions(criteria, null, limit, ['Tickets', 'Contacts']);
     }
 
     public getDefaultSearchCriteria(): string[] {

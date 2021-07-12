@@ -252,21 +252,6 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         );
     }
 
-    public async prepareFullTextFilter(searchValue): Promise<FilterCriteria[]> {
-        searchValue = `*${searchValue}*`;
-
-        return [
-            new FilterCriteria(
-                ConfigItemProperty.NUMBER, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                ConfigItemProperty.NAME, SearchOperator.LIKE,
-                FilterDataType.STRING, FilterType.OR, searchValue
-            )
-        ];
-    }
-
     public async getObjectTypeForProperty(property: string): Promise<KIXObjectType | string> {
         let objectType;
 

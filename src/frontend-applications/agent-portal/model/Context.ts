@@ -124,13 +124,15 @@ export abstract class Context {
             urlParams.forEach((value: string, key: string) => this.setAdditionalInformation(key, value));
         }
 
+        if (urlParams) {
+            await this.update(urlParams);
+        }
+    }
+
+    public async postInit(): Promise<void> {
         const formId = this.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
         if (formId) {
             this.formManager.setFormId(formId);
-        }
-
-        if (urlParams) {
-            await this.update(urlParams);
         }
     }
 

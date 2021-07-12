@@ -43,9 +43,9 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     public async update(): Promise<void> {
-        const placeholderText = this.state.field.placeholder
-            ? this.state.field.placeholder
-            : this.state.field.required ? this.state.field.label : '';
+        const placeholderText = this.state.field?.placeholder
+            ? this.state.field?.placeholder
+            : this.state.field?.required ? this.state.field?.label : '';
 
         this.state.placeholder = await TranslationService.translate(placeholderText);
     }
@@ -67,7 +67,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
     public async setCurrentValue(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
-        const value = formInstance.getFormFieldValue<number[] | number>(this.state.field.instanceId);
+        const value = formInstance.getFormFieldValue<number[] | number>(this.state.field?.instanceId);
         if (value) {
             const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
             if (treeHandler) {
@@ -95,7 +95,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     private async setFields(clear: boolean = true): Promise<void> {
-        if (!this.state.field.children || !this.state.field.children.length || clear) {
+        if (!this.state.field?.children || !this.state.field?.children.length || clear) {
             const formService = ServiceRegistry.getServiceInstance<ContactFormService>(
                 KIXObjectType.CONTACT, ServiceType.FORM
             );

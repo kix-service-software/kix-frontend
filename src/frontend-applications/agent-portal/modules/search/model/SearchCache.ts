@@ -56,7 +56,7 @@ export class SearchCache<T extends KIXObject = KIXObject> {
 
     public async setCriteria(criteria: FilterCriteria[] = []): Promise<void> {
         const searchDefinition = SearchService.getInstance().getSearchDefinition(this.objectType);
-        this.criteria = await searchDefinition?.prepareFormFilterCriteria(criteria);
+        this.criteria = await searchDefinition?.prepareFormFilterCriteria(criteria, false);
     }
 
 }

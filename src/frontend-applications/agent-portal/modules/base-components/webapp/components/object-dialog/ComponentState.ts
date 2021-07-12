@@ -17,7 +17,6 @@ export class ComponentState extends AbstractComponentState {
     public constructor(
         public widgets: ConfiguredWidget[] = [],
         public validationResult: ValidationResult[] = [],
-        public processing: boolean = false,
         public sidebars: ConfiguredWidget[] = [],
         public contextType: ContextType = null,
         public isContextCustomizable: boolean = false

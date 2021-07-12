@@ -36,6 +36,8 @@ export class UIModule extends TicketReadUIModule {
 
     public name: string = 'TicketAdminUIModule';
 
+    protected doRegisterContexts: boolean = false;
+
     public async unRegister(): Promise<void> {
         throw new Error('Method not implemented.');
     }

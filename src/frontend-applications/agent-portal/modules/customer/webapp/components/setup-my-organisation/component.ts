@@ -184,7 +184,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (validationError) {
             BrowserUtil.showValidationError(result);
         } else {
-            BrowserUtil.toggleLoadingShield(true, 'Translatable#Save Organisation');
+            BrowserUtil.toggleLoadingShield('SETUP_ORG_SHIELD', true, 'Translatable#Save Organisation');
 
             if (this.organisation && this.canOrganisationUpdate) {
                 await KIXObjectService.updateObjectByForm(
@@ -197,7 +197,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const organisationId = this.organisation?.ID || null;
             await SetupService.getInstance().stepCompleted(this.step.id, { organisationId });
 
-            BrowserUtil.toggleLoadingShield(false);
+            BrowserUtil.toggleLoadingShield('SETUP_ORG_SHIELD', false);
         }
     }
 

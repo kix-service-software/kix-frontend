@@ -19,6 +19,9 @@ import { ConfigItemImage } from '../../../model/ConfigItemImage';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ImagesLoadingOptions } from '../../../model/ImagesLoadingOptions';
 import { Context } from '../../../../../model/Context';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { ImageViewerEvent } from '../../../../agent-portal/model/ImageViewerEvent';
+import { ImageViewerEventData } from '../../../../agent-portal/model/ImageViewerEventData';
 
 class Component {
 
@@ -101,8 +104,10 @@ class Component {
     }
 
     public openImageDialog(imageId: string | number): void {
-        // TODO: Image dialog
-        // DialogService.getInstance().openImageDialog(this.images, imageId);
+        EventService.getInstance().publish(
+            ImageViewerEvent.OPEN_VIEWER,
+            new ImageViewerEventData(this.images, imageId)
+        );
     }
 }
 

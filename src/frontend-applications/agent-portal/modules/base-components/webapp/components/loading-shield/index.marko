@@ -16,12 +16,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </span>
             <if(state.time && !state.cancel)>
                 <timer time=state.time/>
-            </if>
-            <else-if(state.cancel)>
-                <span>
-                    <translation-string pattern="Translatable#Cancel Process"/>
-                </span>
-            </else-if>
+            </if>            
             <if(state.cancelCallback)>
                 <button.default-button
                     type="button"

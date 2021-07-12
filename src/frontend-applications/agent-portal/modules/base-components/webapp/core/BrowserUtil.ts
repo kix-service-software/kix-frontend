@@ -49,7 +49,7 @@ export class BrowserUtil {
         title: string = 'Sure?', confirmText: string = 'Are you sure?',
         confirmCallback: () => void = null, cancelCallback: () => void = null,
         labels: [string, string] = ['Yes', 'No'], closeButton?: boolean, decision?: [string, string],
-        focusConfirm?: boolean, silent? :boolean
+        focusConfirm?: boolean, silent?: boolean
     ): Promise<void> {
         const preference = decision ? await AgentService.getInstance().getUserPreference(decision[0]) : null;
         if ((preference && Boolean(Number(preference.Value))) || silent) {
@@ -262,11 +262,12 @@ export class BrowserUtil {
     }
 
     public static toggleLoadingShield(
-        loading: boolean, hint?: string, time?: number, cancelCallback?: () => void, cancelButtonText?: string
+        shieldId: string, loading: boolean, hint?: string, time?: number,
+        cancelCallback?: () => void, cancelButtonText?: string
     ): void {
         EventService.getInstance().publish(
             ApplicationEvent.TOGGLE_LOADING_SHIELD,
-            new LoadingShieldEventData(loading, hint, time, cancelCallback, cancelButtonText)
+            new LoadingShieldEventData(shieldId, loading, hint, time, cancelCallback, cancelButtonText)
         );
     }
 

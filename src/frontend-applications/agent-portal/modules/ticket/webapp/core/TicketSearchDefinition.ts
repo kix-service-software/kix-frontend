@@ -60,8 +60,10 @@ export class TicketSearchDefinition extends SearchDefinition {
         return [new SearchResultCategory('Translatable#Tickets', KIXObjectType.TICKET, categories)];
     }
 
-    public async prepareFormFilterCriteria(criteria: FilterCriteria[]): Promise<FilterCriteria[]> {
-        criteria = await super.prepareFormFilterCriteria(criteria);
+    public async prepareFormFilterCriteria(
+        criteria: FilterCriteria[], forSearch: boolean = true
+    ): Promise<FilterCriteria[]> {
+        criteria = await super.prepareFormFilterCriteria(criteria, forSearch);
         const fulltextCriteriaIndex = criteria.findIndex((c) => c.property === SearchProperty.FULLTEXT);
         if (fulltextCriteriaIndex !== -1) {
             const value = criteria[fulltextCriteriaIndex].value;

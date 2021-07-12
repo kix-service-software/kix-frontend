@@ -17,7 +17,6 @@ import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { FormPageConfiguration } from '../../../../model/configuration/FormPageConfiguration';
 import { Macro } from '../../model/Macro';
 import { JobService } from '.';
-import { MacroAction } from '../../model/MacroAction';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { Job } from '../../model/Job';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';

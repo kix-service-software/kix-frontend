@@ -48,6 +48,7 @@ export class ContextService {
 
     private serviceListener: Map<string, IContextServiceListener> = new Map();
     private activeContext: Context;
+    private activeContextIndex: number;
     private contextExtensions: Map<string, ContextExtension[]> = new Map();
 
     private storedContexts: ContextPreference[];
@@ -85,8 +86,8 @@ export class ContextService {
         return this.contextDescriptorList.find((d) => d.contextId === contextId);
     }
 
-    public getContext(instanceId: string): Context {
-        return this.contextInstances.find((i) => i.instanceId === instanceId);
+    public getContext<T extends Context = Context>(instanceId: string): T {
+        return this.contextInstances.find((i) => i.instanceId === instanceId) as T;
     }
 
     private async getContextInstance(
@@ -118,7 +119,7 @@ export class ContextService {
 
     private isStorableDialogContext(context: Context): boolean {
         return context?.descriptor?.contextType === ContextType.DIALOG
-            && context?.descriptor?.contextMode !== ContextMode.EDIT_BULK;
+            && context?.descriptor?.storeable;
     }
 
     public getContextInstances(type?: ContextType, mode?: ContextMode): Context[] {
@@ -165,15 +166,20 @@ export class ContextService {
     ): Promise<boolean> {
         let removed = false;
         if (this.canRemove(instanceId)) {
-            const confirmed = await this.checkDialogConfirmation(silent);
+            const confirmed = await this.checkDialogConfirmation(instanceId, silent);
 
             if (confirmed) {
                 let sourceContext: any;
+                let useSourceContext: boolean;
 
                 const index = this.contextInstances.findIndex((c) => c.instanceId === instanceId);
                 if (index !== -1) {
 
                     sourceContext = this.contextInstances[index].getAdditionalInformation('SourceContext');
+
+                    useSourceContext = this.contextInstances[index].getAdditionalInformation(
+                        'USE_SOURCE_CONTEXT'
+                    );
 
                     const isStored = await this.isContextStored(instanceId);
                     if (isStored) {
@@ -182,11 +188,16 @@ export class ContextService {
                     const context = this.contextInstances.splice(index, 1);
                     await context[0].destroy();
                     EventService.getInstance().publish(ContextEvents.CONTEXT_REMOVED, context[0]);
-                }
-                removed = true;
 
-                if (switchToTarget) {
-                    await this.switchToTargetContext(sourceContext, targetContextId, targetObjectId);
+                    this.activeContextIndex--;
+
+                    if (switchToTarget) {
+                        await this.switchToTargetContext(
+                            sourceContext, targetContextId, targetObjectId, useSourceContext
+                        );
+                    }
+
+                    removed = true;
                 }
             }
         }
@@ -195,9 +206,10 @@ export class ContextService {
     }
 
 
-    private checkDialogConfirmation(silent?: boolean): Promise<boolean> {
+    private checkDialogConfirmation(contextInstanceId: string, silent?: boolean): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
-            if (this.activeContext?.descriptor?.contextType === ContextType.DIALOG) {
+            const context = this.contextInstances.find((ci) => ci.instanceId === contextInstanceId);
+            if (context?.descriptor?.contextType === ContextType.DIALOG) {
                 BrowserUtil.openConfirmOverlay(
                     'Translatable#Cancel',
                     'Translatable#Any data you have entered will be lost. Continue?',
@@ -228,13 +240,13 @@ export class ContextService {
     }
 
     private async switchToTargetContext(
-        sourceContext: any, targetContextId?: string, targetObjectId?: string | number
+        sourceContext: any, targetContextId?: string, targetObjectId?: string | number, useSourceContext?: boolean
     ): Promise<void> {
         const context = this.contextInstances.find((c) => c.instanceId === sourceContext?.instanceId);
-        if (context) {
-            await this.setContextByInstanceId(sourceContext.instanceId);
-        } else if (targetContextId) {
+        if (!useSourceContext && targetContextId) {
             await this.setActiveContext(targetContextId, targetObjectId);
+        } else if (context) {
+            await this.setContextByInstanceId(sourceContext.instanceId);
         } else if (this.contextInstances.length > 0) {
             await this.setContextByInstanceId(
                 this.contextInstances[this.contextInstances.length - 1].instanceId
@@ -281,6 +293,9 @@ export class ContextService {
             }
 
             this.activeContext = context;
+            this.activeContextIndex = this.contextInstances.findIndex((c) => c.instanceId === instanceId);
+
+            await this.activeContext.postInit();
 
             const contextExtensions = this.getContextExtensions(context.contextId);
             for (const extension of contextExtensions) {
@@ -404,8 +419,8 @@ export class ContextService {
         this.contextCreatePromises.delete(promiseKey);
 
         if (newContext) {
-            const index = this.activeContext
-                ? this.contextInstances.findIndex((c) => c.instanceId === this.activeContext.instanceId)
+            const index = this.activeContextIndex >= 0
+                ? this.activeContextIndex
                 : this.contextInstances.length - 1;
             this.contextInstances.splice(index + 1, 0, newContext);
 
@@ -506,9 +521,14 @@ export class ContextService {
             const preference = await AgentService.getInstance().getUserPreference('AgentPortalContextList');
             if (preference) {
                 try {
-                    contextList = JSON.parse(preference.Value);
+                    const value: string | string[] = preference.Value;
+                    if (typeof value === 'string') {
+                        contextList = [JSON.parse(value)];
+                    } else if (Array.isArray(value)) {
+                        contextList = (value as string[]).map((v) => JSON.parse(v));
+                    }
                 } catch (error) {
-                    console.error('Could not load COntextList from Preferences.');
+                    console.error('Could not load ContextList from Preferences.');
                     console.error(error);
                 }
             }
@@ -564,8 +584,9 @@ export class ContextService {
                 }
             }
 
+            const value = this.storedContexts.map((p) => JSON.stringify(p));
             await AgentService.getInstance().setPreferences(
-                [['AgentPortalContextList', JSON.stringify(this.storedContexts)]]
+                [['AgentPortalContextList', value.length ? value : null]]
             );
 
             if (stored) {
@@ -601,7 +622,7 @@ export class ContextService {
                 });
 
                 await AgentService.getInstance().setPreferences(
-                    [['AgentPortalContextList', JSON.stringify(this.storedContexts)]]
+                    [['AgentPortalContextList', this.storedContexts.map((p) => JSON.stringify(p))]]
                 );
             }
         }

@@ -32,7 +32,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <div.footer-wrapper>
                 <kix-footer/>
             </div>
-            <image-dialog/>
+            <image-viewer/>
             <overlay/>
             <if(state.isMobile)>
                 <if(state.activeMobile === 4)>
@@ -52,6 +52,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </if>
         </if>
     </if>
+    <loading-shield shieldId="APP_SHIELD"/>
     <if(state.loading)>
         <div.app-loading-shield>
             <div.loading-info>

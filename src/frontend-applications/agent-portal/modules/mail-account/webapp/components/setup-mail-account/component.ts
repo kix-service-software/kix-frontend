@@ -92,7 +92,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         } else {
 
             BrowserUtil.toggleLoadingShield(
-                true, this.update ? 'Translatable#Update Email Account' : 'Translatable#Create Email Account'
+                'SETUP_MAIL_SHIELD', true, this.update ? 'Translatable#Update Email Account' : 'Translatable#Create Email Account'
             );
 
             if (this.update) {
@@ -101,7 +101,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 await this.createAccount();
             }
 
-            BrowserUtil.toggleLoadingShield(false);
+            BrowserUtil.toggleLoadingShield('SETUP_MAIL_SHIELD', false);
         }
     }
 

@@ -129,7 +129,9 @@ export class AgentService extends KIXObjectService<User> {
         const tabPreference = await this.getUserPreference('AgentPortalContextList');
         if (tabPreference) {
             try {
-                contextList = JSON.parse(tabPreference.Value);
+                contextList = Array.isArray(tabPreference.Value)
+                    ? tabPreference.Value.map((v) => JSON.parse(v))
+                    : [];
             } catch (error) {
                 console.error(error);
             }
@@ -139,7 +141,8 @@ export class AgentService extends KIXObjectService<User> {
     }
 
     public async replacePinnedContexts(contextList: Array<[string, string | number]>): Promise<void> {
-        await this.setPreferences([['AgentPortalContextList', JSON.stringify(contextList)]]);
+        const value = contextList.length ? contextList.map((c) => JSON.stringify(c)) : null;
+        await this.setPreferences([['AgentPortalContextList', value]]);
     }
 
     public async getUserPreference(id: string): Promise<UserPreference> {

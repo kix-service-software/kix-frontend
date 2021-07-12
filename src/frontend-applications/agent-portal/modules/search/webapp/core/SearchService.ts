@@ -119,7 +119,7 @@ export class SearchService {
             }
         });
 
-        const loadingOptions = searchDefinition.getLoadingOptions(criteria);
+        const loadingOptions = searchDefinition.getLoadingOptions(criteria, null);
         objects = await KIXObjectService.loadObjects(formObjectType, null, loadingOptions, null, false);
 
         return (objects as any);
@@ -141,14 +141,10 @@ export class SearchService {
 
         const searchDefinition = this.getSearchDefinition(searchCache.objectType);
 
-        if (!searchCache.limit) {
-            searchCache.limit = searchDefinition.getLimit();
-        }
-
-        let preparedCriteria = await searchDefinition.prepareFormFilterCriteria(searchCache.criteria);
+        let preparedCriteria = await searchDefinition.prepareFormFilterCriteria([...searchCache.criteria]);
         preparedCriteria = this.prepareCriteria(preparedCriteria);
 
-        const loadingOptions = searchDefinition.getLoadingOptions(preparedCriteria);
+        const loadingOptions = searchDefinition.getLoadingOptions(preparedCriteria, searchCache.limit);
         const objects = await KIXObjectService.loadObjects(
             searchCache.objectType, null, loadingOptions, null, false
         );
@@ -164,15 +160,12 @@ export class SearchService {
     public async executeFullTextSearch<T extends KIXObject>(
         objectType: KIXObjectType | string, searchValue: string
     ): Promise<T[]> {
-        const searchCache = new SearchCache<T>(
-            null, null,
-            objectType,
-            [
-                new FilterCriteria(
-                    SearchProperty.FULLTEXT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
-                )
-            ], []
-        );
+        const searchCache = new SearchCache<T>(null, null, objectType, [], []);
+        searchCache.criteria = [
+            new FilterCriteria(
+                SearchProperty.FULLTEXT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+            )
+        ];
 
         searchCache.fulltextValue = searchValue;
 

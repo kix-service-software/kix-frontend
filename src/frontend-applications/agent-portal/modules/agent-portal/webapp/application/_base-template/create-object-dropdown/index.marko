@@ -6,7 +6,7 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<if(state.prepared && state.values.length)>
+<if(state.prepared && state.selectedValue)>
     <div.new-object-dropdown-container>
         <span.selected-value on-click("valueClicked", state.selectedValue)>
             <i.fa.fa-ellipsis-v.dropdown-button/>
@@ -17,9 +17,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <for|value| of=state.values>
                 <li
                     class={
-                                        active: value[0] === state.selectedValue[0]
-                                    }
-                    on-click("valueClicked", value)>${value[1]}</li>
+                        active: value[0] === state.selectedValue[0]
+                    }
+                    on-click("valueClicked", value)>
+                    ${value[1]}
+                </li>
             </for>
         </ul>
     </div>

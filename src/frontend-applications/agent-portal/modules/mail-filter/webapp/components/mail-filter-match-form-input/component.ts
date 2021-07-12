@@ -71,7 +71,7 @@ class Component extends FormInputComponent<any[], ComponentState> {
     public async setCurrentValue(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
-        const value = formInstance.getFormFieldValue<MailFilterMatch[]>(this.state.field.instanceId);
+        const value = formInstance.getFormFieldValue<MailFilterMatch[]>(this.state.field?.instanceId);
         if (value && Array.isArray(value.value)) {
             value.value.forEach((match: MailFilterMatch) => {
                 this.state.matchManager.setValue(

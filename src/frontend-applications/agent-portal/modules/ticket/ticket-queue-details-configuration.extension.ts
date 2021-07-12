@@ -68,7 +68,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'ticket-admin-queue-create'
                 ],
                 [
-                    'ticket-admin-queue-edit', 'ticket-admin-queue-duplicate', 'print-action'
+                    'ticket-admin-queue-edit', 'ticket-admin-queue-duplicate'
                 ],
                 [],
                 [

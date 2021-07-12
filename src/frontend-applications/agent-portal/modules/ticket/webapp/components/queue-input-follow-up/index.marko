@@ -6,11 +6,12 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<form-list
-    loadNodes=state.loadNodes
-    placeholder=state.placeholder
-    on-nodesChanged("followUpChanged")
-    invalid=state.invalid
-    multiselect=false
-    readonly=state.field.readonly/>
+<if(state.field)>
+    <form-list
+        loadNodes=state.loadNodes
+        placeholder=state.placeholder
+        on-nodesChanged("followUpChanged")
+        invalid=state.invalid
+        multiselect=false
+        readonly=state.field.readonly/>
+</if>

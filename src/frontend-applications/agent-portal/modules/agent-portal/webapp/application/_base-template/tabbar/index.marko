@@ -57,7 +57,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <icon icon=tab.icon/>
                 </div>
                 <span.display-text>${tab.displayText}</span>
-                <if(!state.blocked)>
+                <if(!state.blocked && component.canClose())>
                     <span.fa.fa-times on-click("closeTab", tab)/>
                 </if>
             </div>

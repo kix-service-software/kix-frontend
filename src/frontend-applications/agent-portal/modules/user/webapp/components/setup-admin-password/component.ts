@@ -116,9 +116,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (validationError) {
             BrowserUtil.showValidationError(result);
         } else {
-            BrowserUtil.toggleLoadingShield(true, 'Translatable#Change Admin Password');
+            BrowserUtil.toggleLoadingShield('SETUP_ADMIN_SHIELD', true, 'Translatable#Change Admin Password');
             await this.updateUser(formInstance);
-            BrowserUtil.toggleLoadingShield(false);
+            BrowserUtil.toggleLoadingShield('SETUP_ADMIN_SHIELD', false);
         }
     }
 

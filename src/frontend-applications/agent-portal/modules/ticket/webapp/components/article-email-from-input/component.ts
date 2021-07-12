@@ -38,9 +38,9 @@ class Component extends FormInputComponent<number, ComponentState> {
     }
 
     public async update(): Promise<void> {
-        const placeholderText = this.state.field.placeholder
-            ? this.state.field.placeholder
-            : this.state.field.required ? this.state.field.label : '';
+        const placeholderText = this.state.field?.placeholder
+            ? this.state.field?.placeholder
+            : this.state.field?.required ? this.state.field?.label : '';
 
         this.state.placeholder = await TranslationService.translate(placeholderText);
     }
@@ -75,7 +75,7 @@ class Component extends FormInputComponent<number, ComponentState> {
         if (queueValue && queueValue.value) {
             queueId = queueValue.value;
         } else if (context) {
-            const ticket = await context.getObject<Ticket>();
+            const ticket = await context.getObject<Ticket>(KIXObjectType.TICKET);
             if (ticket) {
                 queueId = ticket.QueueID;
             }

@@ -61,7 +61,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'system-address-create'
                 ],
                 [
-                    'system-address-edit', 'print-action'
+                    'system-address-edit'
                 ],
                 [],
                 [

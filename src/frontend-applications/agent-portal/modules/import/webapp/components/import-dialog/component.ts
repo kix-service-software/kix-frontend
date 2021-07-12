@@ -642,7 +642,7 @@ class Component {
                 }).catch(async (error) => {
                     this.errorObjects.push(object);
                     this.state.table.setRowObjectValueState([object], ValueState.HIGHLIGHT_ERROR);
-                    BrowserUtil.toggleLoadingShield(true, 'Translatable#An error occurred.');
+                    BrowserUtil.toggleLoadingShield('APP_SHIELD', false, 'Translatable#An error occurred.');
                     end = Date.now();
                     await this.handleObjectEditError(object, error);
                 });
@@ -660,7 +660,7 @@ class Component {
             BrowserUtil.openSuccessOverlay(succesText);
         }
 
-        BrowserUtil.toggleLoadingShield(false);
+        BrowserUtil.toggleLoadingShield('APP_SHIELD', false);
     }
 
     private async setDialogLoadingInfo(times: number[] = [], objectsCount: number = 0): Promise<void> {
@@ -675,7 +675,7 @@ class Component {
             'Translatable#{0}/{1} {2} imported', [finishCount, totalCount, objectName]
         );
         BrowserUtil.toggleLoadingShield(
-            true, loadingHint, time, this.cancelImport.bind(this)
+            'APP_SHIELD', true, loadingHint, time, this.cancelImport.bind(this)
         );
     }
 

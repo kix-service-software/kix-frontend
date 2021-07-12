@@ -7,6 +7,13 @@
  * --
  */
 
-export class ComponentInput {
+import { DisplayImageDescription } from '../../base-components/webapp/core/DisplayImageDescription';
+
+export class ImageViewerEventData {
+
+    public constructor(
+        public imageDescriptions: DisplayImageDescription[],
+        public showImageId?: string | number
+    ) { }
 
 }

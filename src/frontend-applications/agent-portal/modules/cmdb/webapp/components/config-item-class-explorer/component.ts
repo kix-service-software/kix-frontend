@@ -81,8 +81,9 @@ export class Component {
 
     private async prepareTreeNodes(configItemClasses: ConfigItemClass[]): Promise<TreeNode[]> {
         const nodes = [];
-        if (configItemClasses) {
-            for (const c of configItemClasses) {
+        if (Array.isArray(configItemClasses)) {
+            const ciClasses = configItemClasses.filter((c) => c.ValidID === 1);
+            for (const c of ciClasses) {
                 let count = '0';
                 if (c.ConfigItemStats) {
                     count = (c.ConfigItemStats.PreProductiveCount + c.ConfigItemStats.ProductiveCount).toString();

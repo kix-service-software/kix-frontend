@@ -349,14 +349,14 @@ export class FormInstance {
     }
 
     public async provideFormFieldValuesForProperties(
-        values: Array<[string, any]>, originInstanceId: string, silent?: boolean
+        values: Array<[string, any]>, originInstanceId: string, silent?: boolean, validate: boolean = true
     ): Promise<void> {
         const instanceValues: Array<[string, any]> = values.map((v) => {
             const formField = this.getFormFieldByProperty(v[0]);
             return [formField ? formField.instanceId : v[0], v[1]];
         });
 
-        this.provideFormFieldValues(instanceValues.filter((iv) => iv[0] !== null), originInstanceId, silent);
+        this.provideFormFieldValues(instanceValues.filter((iv) => iv[0] !== null), originInstanceId, silent, validate);
     }
 
     public async provideFormFieldValues<T>(

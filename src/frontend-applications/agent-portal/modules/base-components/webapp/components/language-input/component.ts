@@ -11,7 +11,6 @@ import { CompontentState } from './CompontentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { TreeNode, TreeService, TreeHandler } from '../../core/tree';
-import { FormService } from '../../core/FormService';
 import { ContextService } from '../../core/ContextService';
 
 class Component extends FormInputComponent<string, CompontentState> {
@@ -26,9 +25,9 @@ class Component extends FormInputComponent<string, CompontentState> {
     }
 
     public async update(): Promise<void> {
-        const placeholderText = this.state.field.placeholder
-            ? this.state.field.placeholder
-            : this.state.field.required ? this.state.field.label : '';
+        const placeholderText = this.state.field?.placeholder
+            ? this.state.field?.placeholder
+            : this.state.field?.required ? this.state.field?.label : '';
 
         this.state.placeholder = await TranslationService.translate(placeholderText);
     }
@@ -62,7 +61,7 @@ class Component extends FormInputComponent<string, CompontentState> {
 
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
-        const value = formInstance.getFormFieldValue<string>(this.state.field.instanceId);
+        const value = formInstance.getFormFieldValue<string>(this.state.field?.instanceId);
         if (value) {
             lang = value.value;
         } else {

@@ -105,7 +105,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'user-admin-role-create-action'
                 ],
                 [
-                    'user-admin-role-edit-action', 'print-action'
+                    'user-admin-role-edit-action'
                 ],
                 [],
                 [

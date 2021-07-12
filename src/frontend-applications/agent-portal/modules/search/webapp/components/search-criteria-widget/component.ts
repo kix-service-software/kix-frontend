@@ -35,6 +35,8 @@ class Component {
     private keyListenerElement: any;
     private keyListener: any;
 
+    private valueChangedTimeout: any;
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -54,7 +56,7 @@ class Component {
             eventSubscriberId: IdService.generateDateBasedId('search-criteria-widget'),
             eventPublished: (data: SearchContext, eventId: string) => {
                 if (data.instanceId === this.contextInstanceId) {
-                    if (eventId === SearchEvent.SEARCH_DELETED) {
+                    if (eventId === SearchEvent.SEARCH_DELETED || eventId === SearchEvent.SEARCH_CACHE_CHANGED) {
                         this.initManager();
                     }
                     this.setTitle();
@@ -64,6 +66,7 @@ class Component {
 
         EventService.getInstance().subscribe(SearchEvent.SAVE_SEARCH_FINISHED, this.subscriber);
         EventService.getInstance().subscribe(SearchEvent.SEARCH_DELETED, this.subscriber);
+        EventService.getInstance().subscribe(SearchEvent.SEARCH_CACHE_CHANGED, this.subscriber);
 
         this.keyListenerElement = (this as any).getEl('search-criteria-container');
         if (this.keyListenerElement) {
@@ -71,7 +74,7 @@ class Component {
             this.keyListenerElement.addEventListener('keydown', this.keyListener);
         }
 
-        const context = ContextService.getInstance().getActiveContext();
+        const context = ContextService.getInstance().getActiveContext<SearchContext>();
         this.contextInstanceId = context?.instanceId;
         const searchDefinition = SearchService.getInstance().getSearchDefinition(
             context.descriptor.kixObjectTypes[0]
@@ -79,12 +82,31 @@ class Component {
         this.state.manager = searchDefinition?.formManager;
         this.setTitle();
         this.initManager();
+
+        this.managerListenerId = IdService.generateDateBasedId('search-criteria-widget');
+        this.state.manager?.registerListener(this.managerListenerId, async () => {
+            if (this.valueChangedTimeout) {
+                window.clearTimeout(this.valueChangedTimeout);
+            }
+
+            this.valueChangedTimeout = setTimeout(() => {
+                const values = this.state.manager.getValues();
+                this.state.canSearch = values.length > 0;
+
+                const criteria: FilterCriteria[] = [];
+                for (const v of values) {
+                    criteria.push(searchDefinition.getFilterCriteria(v));
+                }
+
+                context?.getSearchCache()?.setCriteria(criteria);
+            }, 100);
+        });
     }
 
     private async initManager(): Promise<void> {
         this.state.manager?.reset();
 
-        const context = ContextService.getInstance().getActiveContext<SearchContext>();
+        const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
         const cache = context.getSearchCache();
 
         this.state.limit = cache.limit;
@@ -103,22 +125,6 @@ class Component {
         if (dynamicFormComponent) {
             dynamicFormComponent.updateValues();
         }
-
-        this.managerListenerId = IdService.generateDateBasedId('search-criteria-widget');
-        this.state.manager?.registerListener(this.managerListenerId, async () => {
-            const values = this.state.manager.getValues();
-            this.state.canSearch = values.length > 0;
-
-            const searchDefinition = SearchService.getInstance().getSearchDefinition(
-                context.getSearchCache().objectType
-            );
-            const criteria: FilterCriteria[] = [];
-            for (const v of values) {
-                criteria.push(searchDefinition.getFilterCriteria(v));
-            }
-
-            context.getSearchCache().setCriteria(criteria);
-        });
     }
 
     public onDestroy(): void {
@@ -138,27 +144,25 @@ class Component {
 
     public async search(): Promise<void> {
         const hint = await TranslationService.translate('Translatable#Search');
-        BrowserUtil.toggleLoadingShield(true, hint);
-        const context = ContextService.getInstance().getActiveContext<SearchContext>();
+        BrowserUtil.toggleLoadingShield('SEARCH_CRITERIA_SHIELD', true, hint);
+        const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
         await SearchService.getInstance().searchObjects(context?.getSearchCache());
-        BrowserUtil.toggleLoadingShield(false);
+        BrowserUtil.toggleLoadingShield('SEARCH_CRITERIA_SHIELD', false);
     }
 
     public limitChanged(event: any): void {
         this.state.limit = event.target.value;
-        const context = ContextService.getInstance().getActiveContext<SearchContext>();
+        const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
         context.getSearchCache().limit = this.state.limit;
     }
 
     public resetSearch(): void {
-        this.state.manager?.unregisterListener(this.managerListenerId);
-
-        const context = ContextService.getInstance().getActiveContext<SearchContext>();
+        const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
         context.resetSearch();
     }
 
     private async setTitle(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext<SearchContext>();
+        const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
         const cache = context?.getSearchCache();
 
         const titleLabel = await TranslationService.translate('Translatable#Selected Search Criteria');
@@ -172,7 +176,7 @@ class Component {
     }
 
     private async setDefaults(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext<SearchContext>();
+        const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
         const cache = context?.getSearchCache();
         const searchDefinition = SearchService.getInstance().getSearchDefinition(cache?.objectType);
         const criteria = searchDefinition.getDefaultSearchCriteria();

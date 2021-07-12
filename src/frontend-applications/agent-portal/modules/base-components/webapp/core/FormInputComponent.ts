@@ -8,7 +8,6 @@
  */
 
 import { FormInputComponentState } from './FormInputComponentState';
-import { FormService } from './FormService';
 import { EventService } from './EventService';
 import { FormEvent } from './FormEvent';
 import { IEventSubscriber } from './IEventSubscriber';
@@ -27,7 +26,7 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
         this.state.formId = input.formId;
 
         if (!this.state.fieldId) {
-            this.state.fieldId = this.state.field ? this.state.field.property : null;
+            this.state.fieldId = this.state.field ? this.state.field?.property : null;
         }
 
         FormInputComponent.prototype.doUpdate.call(this);
@@ -39,23 +38,23 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
         this.state.formContext = formInstance.getFormContext();
-        this.state.field = formInstance.getFormField(this.state.field.instanceId);
+        this.state.field = formInstance.getFormField(this.state.field?.instanceId);
     }
 
     public async onMount(): Promise<void> {
         this.subscriber = {
-            eventSubscriberId: `${this.state.field.instanceId}_FormInputComponent`,
+            eventSubscriberId: `${this.state.field?.instanceId}_FormInputComponent`,
             eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
                 if (data?.formInstance?.getForm()?.id === this.state.formId) {
                     if (eventId === FormEvent.VALUES_CHANGED && this.state.field && data) {
-                        if (data.originInstanceId !== this.state.field.instanceId) {
+                        if (data.originInstanceId !== this.state.field?.instanceId) {
                             const ownValue = data.changedValues.find(
-                                (cv) => cv[0] && cv[0].instanceId === this.state.field.instanceId
+                                (cv) => cv[0] && cv[0].instanceId === this.state.field?.instanceId
                             );
                             if (ownValue) {
                                 this.state.prepared = false;
                                 this.setCurrentValue();
-                                this.state.field = data.formInstance.getFormField(this.state.field.instanceId);
+                                this.state.field = data.formInstance.getFormField(this.state.field?.instanceId);
                                 FormInputComponent.prototype.callSetInvalidState.call(this);
                                 setTimeout(() => this.state.prepared = true, 10);
                             }
@@ -95,7 +94,7 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
         formInstance.provideFormFieldValues<any>(
-            [[this.state.field.instanceId, value]], this.state.field.instanceId, silent
+            [[this.state.field?.instanceId, value]], this.state.field?.instanceId, silent
         );
     }
 
@@ -103,7 +102,7 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
         if (formInstance && this.state.field) {
-            const value = formInstance.getFormFieldValue(this.state.field.instanceId);
+            const value = formInstance.getFormFieldValue(this.state.field?.instanceId);
             if (value) {
                 this.state.invalid = !value.valid;
             }

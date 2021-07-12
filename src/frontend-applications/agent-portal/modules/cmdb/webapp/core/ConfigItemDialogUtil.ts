@@ -7,10 +7,8 @@
  * --
  */
 
-import { ConfigItemDetailsContext, EditConfigItemDialogContext, NewConfigItemDialogContext } from './context';
+import { EditConfigItemDialogContext, NewConfigItemDialogContext } from './context';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../model/ContextMode';
 import { ConfigItem } from '../../model/ConfigItem';
 import { ConfigItemProperty } from '../../model/ConfigItemProperty';
 
@@ -33,7 +31,10 @@ export class ConfigItemDialogUtil {
     public static async duplicate(configItem: ConfigItem): Promise<void> {
         ContextService.getInstance().setActiveContext(
             NewConfigItemDialogContext.CONTEXT_ID, configItem.ConfigItemID, null,
-            [[ConfigItemProperty.CLASS_ID, configItem.ClassID]]
+            [
+                [ConfigItemProperty.CLASS_ID, configItem.ClassID],
+                ['DUPLICATE', true]
+            ]
         );
     }
 

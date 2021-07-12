@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2021-06-25 08:47+0000\n"
+"PO-Revision-Date: 2021-07-05 15:47+0000\n"
 "Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
@@ -354,14 +354,14 @@ msgstr "Body"
 msgid "Bulk"
 msgstr "Menge"
 
+msgid "Bulk {0}"
+msgstr "Menge {0}"
+
 msgid "Bulk Action"
 msgstr "Sammelaktion"
 
 msgid "Cancel"
 msgstr "Abbrechen"
-
-msgid "Cancel Process"
-msgstr "Bearbeiten wird abgebrochen"
 
 msgid "Can not create link ({0})"
 msgstr "Verknüpfung konnte nicht angelegt werden ({0})"
@@ -459,9 +459,6 @@ msgstr "Geschlossen"
 
 msgid "Closed at"
 msgstr "Geschlossen am"
-
-msgid "Close Dialog"
-msgstr "Dialog schließen"
 
 msgid "Close Overlay"
 msgstr "Schließen"
@@ -799,9 +796,6 @@ msgstr "Dynamische Feldtypen"
 msgid "Edit"
 msgstr "Bearbeiten"
 
-msgid "Edit {0}"
-msgstr "{0} bearbeiten"
-
 msgid "Edit Account"
 msgstr "Konto bearbeiten"
 
@@ -843,6 +837,9 @@ msgstr "FAQ Artikel bearbeiten"
 
 msgid "Edit FAQ Category"
 msgstr "FAQ Kategorie bearbeiten"
+
+msgid "Edit General Catalog"
+msgstr "General Katalog bearbeiten"
 
 msgid "Edit Job"
 msgstr "Job bearbeiten"
@@ -2234,6 +2231,8 @@ msgstr ""
 
 msgid "Helptext_PersonalSettings_Always_close_dialog_tab_without_asking_Hint"
 msgstr ""
+"Bei Abbruch einer Bearbeitung (Schließen eines Dialogs) keine Bestätigung "
+"abfragen."
 
 msgid "Helptext_PersonalSettings_MyQueues_Hint"
 msgstr ""
@@ -2487,16 +2486,15 @@ msgstr ""
 
 msgid "Helptext_Tickets_TicketCreate_Contact"
 msgstr ""
-"Tragen Sie hier die Person ein, die das Ticket erstellt, oder in dessen Name "
+"Tragen Sie hier die Person ein, die das Ticket erstellt oder in deren Namen "
 "das Ticket erstellt wird. Bei der Eingabe von mindestens 3 Zeichen wird "
-"Ihnen eine Liste mit bereits im System registrierten Kontakten "
-"vorgeschlagen. Sie können bei der Eingabe die logischen Operatoren \"&\", \"+"
-"\", \"|\" und \"*\" benutzen, um die Suche zu verfeinern. Die Suche "
-"berücksichtigt alle Eigenschaften des Kontakes. Über klick auf den Button "
-"rechts im Formularfeld können Sie einen neuen Kontakt anlegen & mit dem "
-"Speichern automatisch hierher zurückkehren. Für unbekannte Kontakte ist die "
-"Eingabe einer syntaktisch korrekten E-Mail-Adresse (name@beispiel.de) "
-"ebenfalls möglich."
+"Ihnen eine Liste mit im System registrierten Kontakten vorgeschlagen. Sie "
+"können bei der Eingabe logische Operatoren \"&\", \"+\", \"|\" und \"*\" "
+"benutzen, um die Suche zu verfeinern. Die Suche berücksichtigt alle "
+"Eigenschaften des Kontakts. Über klick auf den Button rechts im Formularfeld "
+"können Sie einen neuen Kontakt anlegen & mit dem Speichern automatisch "
+"hierher zurückkehren. Für unbekannte Kontakte ist auch die Eingabe einer "
+"syntaktisch korrekten E-Mail-Adresse (name@beispiel.de) möglich."
 
 msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
 msgstr ""
@@ -3553,7 +3551,7 @@ msgstr ""
 
 msgid "QuickstartGuide_Text_Start"
 msgstr ""
-"Willkommen zu KIX18 - Danke für Ihre Interesse an KIX. Überzeugen Sie sich "
+"Willkommen zu KIX18 - Danke für Ihr Interesse an KIX. Überzeugen Sie sich "
 "von der neuen und modernen Nutzeroberfläche sowie von seiner Modularität und "
 "Anpassbarkeit auf Ihre Serviceprozesse. Möchten Sie auf eine kurze Tour "
 "durch KIX kommen?"
@@ -3601,6 +3599,9 @@ msgstr "Relevante Assets"
 
 msgid "Related Tickets"
 msgstr "Verwandte Tickets"
+
+msgid "Relevant Macro type"
+msgstr "Relevanter Makrotyp"
 
 msgid "Reload Agent Portal Configurations"
 msgstr "Frontend-Konfigurationen neu laden"
@@ -3886,8 +3887,9 @@ msgstr "Setup Assistent"
 msgid "setup_assistant_add_mail_account_text"
 msgstr ""
 "Richten Sie ein E-Mail Konto ein, von dem Sie E-Mails abrufen möchten. "
-"Benötigen Sie mehr als ein Konto, können Sie weitere im Admin-Bereich "
-"\"Kommunikation/E-Mail/E-Mail Konten\" hinzufügen."
+"Weitere Konten können im Admin-Bereich \"Kommunikation/E-Mail/E-Mail Konten"
+"\" hinzugefügt werden. Bitte beachten Sie, dass E-Mails unabhängig vom "
+"gewählten Kontentyp aus dem Postfach abgeholt und gelöscht werden!"
 
 msgid "setup_assistant_change_admin_password_text"
 msgstr ""
@@ -4395,9 +4397,6 @@ msgstr "Ticket nicht mehr beobachten"
 msgid "Update Email Account"
 msgstr "Aktualisierung wird durchgeführt"
 
-msgid "Update Role"
-msgstr "Aktualisierung wird durchgeführt"
-
 msgid "URL"
 msgstr "URL"
 
@@ -4547,6 +4546,18 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Cancel Process"
+#~ msgstr "Bearbeiten wird abgebrochen"
+
+#~ msgid "Close Dialog"
+#~ msgstr "Dialog schließen"
+
+#~ msgid "Edit {0}"
+#~ msgstr "{0} bearbeiten"
+
+#~ msgid "Update Role"
+#~ msgstr "Aktualisierung wird durchgeführt"
 
 #~ msgid "Account successfully created."
 #~ msgstr "Konto wurde erfolgreich angelegt."
@@ -4815,9 +4826,6 @@ msgstr "PLZ"
 
 #~ msgid "Send"
 #~ msgstr "Senden"
-
-#~ msgid "send to background"
-#~ msgstr "Im Hintergrund fortsetzen"
 
 #~ msgid "State successfully created."
 #~ msgstr "Status wurde erfolgreich angelegt."

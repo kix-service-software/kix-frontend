@@ -7,15 +7,8 @@
  * --
  */
 
-export class LoadingShieldEventData {
+export enum ImageViewerEvent {
 
-    public constructor(
-        public shieldId: string,
-        public isLoading: boolean,
-        public loadingHint?: string,
-        public time?: number,
-        public cancelCallback?: () => void,
-        public cancelButtonText?: string
-    ) { }
+    OPEN_VIEWER = 'OPEN_VIEWER'
 
 }
