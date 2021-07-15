@@ -35,7 +35,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </if>
             </@headerFilter>
             <@content>
-                <standard-table-NEW table=state.table key=state.table.getTableId()/>
+                <if(state.table)>
+                    <standard-table-NEW table=state.table key=state.table.getTableId()/>
+                </if>
             </@content>
         </widget>
     </if>
