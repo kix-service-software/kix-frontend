@@ -121,10 +121,10 @@ export class ContextFormManager {
         return this.formInstance;
     }
 
-    public async setFormId(formId: string): Promise<void> {
+    public async setFormId(formId: string, kixObject?: KIXObject): Promise<void> {
         if (this.formId !== formId) {
             this.formId = formId;
-            await this.getFormInstance(true);
+            await this.getFormInstance(true, undefined, kixObject);
         }
     }
 
