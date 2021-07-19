@@ -473,6 +473,15 @@ export class TicketAPIService extends KIXObjectAPIService {
             visibleCriteria.value = visibleCriteria.value[0];
         }
 
+        const lockCriteria = searchCriteria.find((sc) => sc.property === TicketProperty.LOCK_ID);
+        if (
+            lockCriteria
+            && Array.isArray(lockCriteria.value)
+            && lockCriteria.operator === SearchOperator.EQUALS
+        ) {
+            lockCriteria.value = lockCriteria.value[0];
+        }
+
         return searchCriteria;
     }
 
