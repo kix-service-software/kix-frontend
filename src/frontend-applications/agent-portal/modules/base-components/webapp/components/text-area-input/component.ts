@@ -96,16 +96,12 @@ class Component extends FormInputComponent<string, ComponentState> {
                             lineNumbers: true,
                             mode: language,
                             readOnly: this.state.field?.readonly,
+                            lineWrapping: true,
+                            foldGutter: true,
+                            gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
                             extraKeys: {
                                 'Ctrl-Space': 'autocomplete'
                             }
-                            // hint: CodeMirror.hint.sql,
-                            // hintOptions: {
-                            //     tables: {
-                            //         'ticket': ['id', 'queue_id', 'priority_id'],
-                            //         'article': ['id', 'body', 'to', 'cc']
-                            //     }
-                            // }
                         }
                     );
 
