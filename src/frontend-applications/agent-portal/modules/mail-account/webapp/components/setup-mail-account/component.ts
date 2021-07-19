@@ -50,8 +50,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.completed = this.step ? this.step.completed : false;
     }
 
-
-
     private async prepareForm(): Promise<void> {
         let account: MailAccount;
         if (this.update) {
@@ -77,7 +75,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (formId) {
             this.state.formId = formId;
             const context = ContextService.getInstance().getActiveContext();
-            context?.getFormManager()?.setFormId(formId);
+            context?.getFormManager()?.setFormId(formId, account);
         }
     }
 
