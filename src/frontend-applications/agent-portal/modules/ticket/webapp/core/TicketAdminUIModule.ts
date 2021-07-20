@@ -12,7 +12,7 @@ import {
     TicketTypeFormService, TicketPriorityFormService, TicketStateFormService, QueueFormService,
     TicketPriorityTableFactory, TicketQueueTableFactory, TicketTypeTableFactory, TicketStateTableFactory,
     TicketTypeCreateAction, NewTicketTypeDialogContext, TicketTypeEditAction,
-    EditTicketTypeDialogContext, TicketTypeTableDeleteAction, TicketTypeDetailsContext, TicketStateCreateAction,
+    EditTicketTypeDialogContext, TicketTypeTableDeleteAction, TicketStateCreateAction,
     NewTicketStateDialogContext, TicketStateEditAction, EditTicketStateDialogContext, TicketStateTableDeleteAction,
     TicketStateDetailsContext, TicketPriorityCreateAction, NewTicketPriorityDialogContext, TicketPriorityEditAction,
     EditTicketPriorityDialogContext, TicketPriorityTableDeleteAction, TicketPriorityDetailsContext,
@@ -71,7 +71,7 @@ export class UIModule extends TicketReadUIModule {
             [
                 new UIComponentPermission('system/ticket/types', [CRUD.CREATE])
             ],
-            'Translatable#New Type', 'kix-icon-gear', TicketTypeDetailsContext.CONTEXT_ID
+            'Translatable#New Type', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(newTicketTypeContext);
 
@@ -83,22 +83,11 @@ export class UIModule extends TicketReadUIModule {
             [
                 new UIComponentPermission('system/ticket/types', [CRUD.CREATE])
             ],
-            'Translatable#Edit Type', 'kix-icon-gear', TicketTypeDetailsContext.CONTEXT_ID
+            'Translatable#Edit Type', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(editTicketTypeContext);
 
         ActionFactory.getInstance().registerAction('ticket-admin-type-table-delete', TicketTypeTableDeleteAction);
-
-        const ticketTypeDetailsContextDescriptor = new ContextDescriptor(
-            TicketTypeDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET_TYPE],
-            ContextType.MAIN, ContextMode.DETAILS,
-            true, 'object-details-page', ['tickettypes'], TicketTypeDetailsContext,
-            [
-                new UIComponentPermission('system/ticket/types', [CRUD.READ])
-            ],
-            'Translatable#Type Details', 'kix-icon-gear'
-        );
-        ContextService.getInstance().registerContext(ticketTypeDetailsContextDescriptor);
     }
 
     private async registerTicketStatesAdmin(): Promise<void> {
