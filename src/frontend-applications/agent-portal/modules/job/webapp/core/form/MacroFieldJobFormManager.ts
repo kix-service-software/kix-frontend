@@ -53,8 +53,9 @@ export class MacroFieldJobFormManager extends ExtendedJobFormManager {
                 const actionValue = data.changedValues.find(
                     (cv) => cv[0] && cv[0].property === JobProperty.MACRO_ACTIONS
                 );
-                if (actionValue && actionValue[1] && Array.isArray(actionValue[1].value)) {
-                    this.handleMacroAction(data.formInstance, actionValue[1]?.value[0], actionValue[0]);
+                if (actionValue && actionValue[1]) {
+                    const actionType = Array.isArray(actionValue[1].value) ? actionValue[1]?.value[0] : null;
+                    this.handleMacroAction(data.formInstance, actionType, actionValue[0]);
                 }
             }
         };
@@ -88,6 +89,8 @@ export class MacroFieldJobFormManager extends ExtendedJobFormManager {
             fields = await MacroFieldCreator.createActionOptionFields(
                 actionType, actionField.instanceId, type, formInstance, manager, null, actionField
             );
+        } else {
+            actionField.hint = 'Translatable#Helptext_Admin_JobCreateEdit_Actions';
         }
 
         formInstance.addFieldChildren(actionField, fields, true);
