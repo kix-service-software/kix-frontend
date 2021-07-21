@@ -40,7 +40,7 @@ export class FormFactory {
         return fields ? fields : [];
     }
 
-    public static cloneField(field: FormFieldConfiguration): FormFieldConfiguration {
+    public static cloneField(field: FormFieldConfiguration, prefixForNewInstanceId?: string): FormFieldConfiguration {
         const clonedField = new FormFieldConfiguration(
             field.id,
             field.label,
@@ -71,7 +71,7 @@ export class FormFactory {
             field.type,
             field.visible
         );
-        clonedField.instanceId = field.instanceId || IdService.generateDateBasedId();
+        clonedField.instanceId = field.instanceId || IdService.generateDateBasedId(prefixForNewInstanceId);
         clonedField.parent = field.parent;
         return clonedField;
     }
