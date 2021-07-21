@@ -680,40 +680,6 @@ export class FormInstance {
         });
     }
 
-    public hasSavedValues(): boolean {
-        return this.savedValues !== null;
-    }
-
-    public saveValueState(idsToSave: string[]): void {
-        this.savedValues = new Map();
-        this.formFieldValues.forEach(
-            (value, key) => {
-                if (idsToSave.some((id) => id === key)) {
-                    const field = this.getFormField(key);
-                    this.savedValues.set(key, [{ ...field }, value.value]);
-                }
-            }
-        );
-    }
-
-    public loadValueState(): void {
-        const values = [];
-        if (this.savedValues) {
-            this.savedValues.forEach((value, key) => {
-                const field = this.getFormField(key);
-                if (field) {
-                    field.visible = value[0].visible;
-                    field.readonly = value[0].readonly;
-                    field.required = value[0].required;
-                }
-                values.push([key, value[1]]);
-            });
-        }
-        this.templateValues.clear();
-        this.savedValues = null;
-        this.provideFormFieldValues(values, null);
-    }
-
     public replaceFormField(oldField: FormFieldConfiguration, newField: FormFieldConfiguration): void {
         oldField.options = newField.options;
         oldField.property = newField.property;
