@@ -156,6 +156,8 @@ class Component {
     }
 
     public setDraggable(draggable: boolean = false, event?: any): void {
+        event.stopPropagation();
+        event.preventDefault();
 
         // do nothing if event triggert from child node
         if (event && !event.srcElement.classList.contains('drag-button')) {
@@ -166,6 +168,8 @@ class Component {
     }
 
     public async handleDragStart(event) {
+        event.stopPropagation();
+
         const root = (this as any).getEl();
         if (root) {
             root.classList.add('dragging');
@@ -175,6 +179,8 @@ class Component {
     }
 
     public async handleDragEnd(event) {
+        event.stopPropagation();
+
         const root = (this as any).getEl();
         if (root) {
             root.classList.remove('dragging');
