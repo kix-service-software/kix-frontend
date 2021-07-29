@@ -595,6 +595,7 @@ export class ArticleFormService extends KIXObjectFormService {
                         )
                     ];
                     field.label = label;
+                    break;
                 case ArticleProperty.ATTACHMENTS:
                     field.inputComponent = 'attachment-input';
                     field.label = label;

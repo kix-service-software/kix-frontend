@@ -234,6 +234,7 @@ export class CacheService {
                 cacheKeyPrefixes.push(KIXObjectType.REPORT_RESULT);
                 cacheKeyPrefixes.push(KIXObjectType.ROLE);
                 cacheKeyPrefixes.push(KIXObjectType.ROLE_PERMISSION);
+                break;
             case KIXObjectType.REPORT:
             case KIXObjectType.REPORT_RESULT:
                 cacheKeyPrefixes.push(KIXObjectType.REPORT_DEFINITION);
