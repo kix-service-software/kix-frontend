@@ -6,25 +6,34 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<div.file-upload class={
-    dragging: state.dragging,
-    invalid: input.invalid
-} on-drop("drop")>
-    <button.form-button.file-upload-button
+<div.file-upload
+    class={
+        dragging: state.dragging,
+        invalid: input.invalid
+    }
+    on-drop("drop")>
+    <button.kix-button.form-button.file-upload-button
         type="button"
         on-click("triggerFileUpload")
         title=state.translations["Translatable#Select file"]>
         <span.kix-icon-attachement/>
         <translation-string pattern="Translatable#Select file"/>
-        <input.file-upload-input type="file" multiple=state.multiple key="fileUploadInput" on-change("setAttachments")/>
+        <input.file-upload-input
+            type="file"
+            multiple=state.multiple
+            key="fileUploadInput"
+            on-change("setAttachments")/>
     </button>
-    <span.file-upload-notice on-click("minimize") class={
-        "has-text": !!state.count
-    }>
+    <span.file-upload-notice
+        on-click("minimize")
+        class={
+            "has-text": !!state.count
+        }>
         <if(!!state.count)>
             <span>
-                <translation-string pattern="Translatable#{0} File(s) added" placeholders=[state.count]/>
+                <translation-string
+                    pattern="Translatable#{0} File(s) added"
+                    placeholders=[state.count]/>
                 <span.kix-icon-check/>
             </span>
         </if>

@@ -25,6 +25,7 @@ import { CRUD } from '../../../../server/model/rest/CRUD';
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { ConfigItemProperty } from './model/ConfigItemProperty';
+import { InformationConfiguration, InformationRowConfiguration, ObjectInformationCardConfiguration } from '../base-components/webapp/components/object-information-card-widget/ObjectInformationCardConfiguration';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -38,87 +39,83 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             'config-item-details-object-info', 'Object Info', ConfigurationType.Widget,
             'object-information-card-widget', 'Translatable#Config Item Information', [],
             null,
-            {
-                avatar: [],
-                rows: [
-                    {
-                        style: '',
-                        separator: true,
-                        values: [
+            new ObjectInformationCardConfiguration(
+                [],
+                [
+                    new InformationRowConfiguration(
+                        [
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: ConfigItemProperty.CLASS_ID
                                     }
-                                }
+                                )
                             ],
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: ConfigItemProperty.NAME
                                     }
-                                }
+                                )
                             ],
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: ConfigItemProperty.CUR_DEPL_STATE_ID
                                     }
-                                }
+                                )
                             ],
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: ConfigItemProperty.CUR_INCI_STATE_ID
                                     }
-                                }
+                                )
                             ]
-                        ]
-                    },
-                    {
-                        style: '',
-                        separator: false,
-                        values: [
+                        ], null, null, true
+                    ),
+                    new InformationRowConfiguration(
+                        [
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: ConfigItemProperty.CREATE_TIME
                                     }
-                                }
+                                )
                             ],
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: ConfigItemProperty.CREATE_BY
                                     }
-                                }
+                                )
                             ],
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: ConfigItemProperty.CHANGE_TIME
                                     }
-                                }
+                                )
                             ],
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: ConfigItemProperty.CHANGE_BY
                                     }
-                                }
+                                )
                             ]
-                        ]
-                    }
+                        ], null, null, false
+                    )
                 ]
-            },
+            ),
             false, true, null, false
         );
         configurations.push(configItemInfoLaneTab);
@@ -139,9 +136,9 @@ class Extension extends KIXExtension implements IConfigurationExtension {
 
         const configItemHistoryWidget = new WidgetConfiguration(
             'config-item-details-history-widget', 'History', ConfigurationType.Widget,
-            'config-item-history-widget', 'Translatable#History', [], null,
+            'config-item-history-widget', 'Translatable#History', [],
             new ConfigurationDefinition('config-item-history-config', ConfigurationType.Table),
-            false, false, null, false
+            null, false, false, null, false
         );
         configurations.push(configItemHistoryWidget);
 

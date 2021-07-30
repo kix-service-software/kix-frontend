@@ -33,12 +33,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
         const configurations = [];
-        const reportDefinitionsTable = new TableConfiguration(
-            'reporting-dashboard-reportdefinition-table', 'Report Definition Table', ConfigurationType.Table,
-            KIXObjectType.REPORT_DEFINITION, null, null,
-            null, null, true
-        );
-        configurations.push(reportDefinitionsTable);
 
         const reportDefinitionsTableWidget = new TableWidgetConfiguration(
             'reporting-dashboard-reportdefinitions-table-widget', 'Reporting Table Widget',

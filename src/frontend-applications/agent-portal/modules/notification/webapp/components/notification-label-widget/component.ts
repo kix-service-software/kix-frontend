@@ -89,7 +89,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async setPropertiesAndLabels(notification: Notification): Promise<void> {
-        const settings: ObjectInformationWidgetConfiguration = this.state.widgetConfiguration.configuration;
+        const settings = this.state.widgetConfiguration.configuration as ObjectInformationWidgetConfiguration;
         if (settings && Array.isArray(settings.properties)) {
             this.state.properties = [...settings.properties];
         }

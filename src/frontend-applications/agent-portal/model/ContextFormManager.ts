@@ -90,7 +90,7 @@ export class ContextFormManager {
             case ContextMode.SEARCH:
                 formContext = FormContext.SEARCH;
                 break;
-            case ContextMode.EDIT_LINKS:
+            case ContextMode.EDIT_LINK:
                 formContext = FormContext.LINK;
                 break;
             default:

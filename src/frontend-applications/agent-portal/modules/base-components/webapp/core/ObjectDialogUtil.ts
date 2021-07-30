@@ -21,7 +21,7 @@ export class ObjectDialogUtil {
         ContextMode.EDIT,
         ContextMode.EDIT_ADMIN,
         ContextMode.EDIT_BULK,
-        ContextMode.EDIT_LINKS,
+        ContextMode.EDIT_LINK,
     ];
 
     public static async submit(): Promise<void> {

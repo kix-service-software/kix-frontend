@@ -11,19 +11,23 @@ import { TreeNode } from '.';
 
 export class TreeUtil {
 
-    public static linkTreeNodes(tree: TreeNode[], filterValue: string, parent?: TreeNode): void {
+    public static linkTreeNodes(
+        tree: TreeNode[], filterValue: string, parent?: TreeNode,
+        linkNodes: boolean = true, setParentFlags: boolean = true
+    ): void {
         if (tree) {
             this.setNodesVisible(tree);
             TreeUtil.removeNodeLinks(tree);
-            TreeUtil.setNodeFlags(tree);
+            TreeUtil.setNodeFlags(tree, null, setParentFlags);
             let previousNode;
             for (let i = 0; i < tree.length; i++) {
                 const node = tree[i];
 
-                if (TreeUtil.isNodeVisible(node, filterValue)) {
+                const hasChildrenToShow = TreeUtil.hasChildrenToShow(node, filterValue);
+                if (TreeUtil.isNodeVisible(node, filterValue, hasChildrenToShow)) {
                     node.visible = true;
 
-                    if (TreeUtil.isFilterValueDefined(filterValue) && TreeUtil.hasChildrenToShow(node, filterValue)) {
+                    if (TreeUtil.isFilterValueDefined(filterValue) && hasChildrenToShow) {
                         node.expanded = true;
                     }
 
@@ -46,8 +50,8 @@ export class TreeUtil {
                         node.nextNode = TreeUtil.getNextParentNode(node.parent);
                     }
 
-                    if (node.expanded && (TreeUtil.hasChildrenToShow(node, filterValue))) {
-                        TreeUtil.linkTreeNodes(node.children, filterValue, node);
+                    if (node.expanded && hasChildrenToShow) {
+                        TreeUtil.linkTreeNodes(node.children, filterValue, node, linkNodes, setParentFlags);
                         node.nextNode = TreeUtil.getFirstVisibleNode(node.children, filterValue);
                     }
 
@@ -126,24 +130,38 @@ export class TreeUtil {
         return null;
     }
 
-    public static isNodeVisible(node: TreeNode, filterValue: string): boolean {
+    public static isNodeVisible(
+        node: TreeNode, filterValue: string, hasChildrenToShow?: boolean
+    ): boolean {
         let canShow = true;
         if (TreeUtil.isFilterValueDefined(filterValue)) {
-            if (!TreeUtil.hasChildrenToShow(node, filterValue)) {
-                const flags = node.flags.map((f) => f.toLocaleUpperCase());
+            hasChildrenToShow = (typeof hasChildrenToShow !== 'undefined' && hasChildrenToShow);
+            if (!hasChildrenToShow && !TreeUtil.hasChildrenToShow(node, filterValue)) {
+                const flags = node.flags
+                    .filter((f) => f !== null && f !== undefined)
+                    .map((f) => f.toLocaleUpperCase());
                 canShow = flags.some((f) => f.toLocaleLowerCase().indexOf(filterValue.toLocaleLowerCase()) !== -1);
             }
         }
         return canShow;
     }
 
-    public static findNode(tree: TreeNode[], nodeId: string | number): TreeNode {
-        if (Array.isArray(tree) && nodeId !== null && typeof nodeId !== 'undefined') {
+    public static findNode(tree: TreeNode[], nodeId: string | number, searchValue?: string): TreeNode {
+        if (Array.isArray(tree)) {
             for (const node of tree) {
-                if (node.id.toString() === nodeId.toString()) {
+                if (nodeId && node.id.toString() === nodeId.toString()) {
+                    return node;
+                } else if (
+                    searchValue &&
+                    (
+                        node.flags.some((f) => f === searchValue) ||
+                        node.label === searchValue ||
+                        node.id === searchValue
+                    )
+                ) {
                     return node;
                 } else {
-                    const foundChild = TreeUtil.findNode(node.children, nodeId);
+                    const foundChild = TreeUtil.findNode(node.children, nodeId, searchValue);
                     if (foundChild) {
                         return foundChild;
                     }
@@ -167,7 +185,7 @@ export class TreeUtil {
         return filterValue && filterValue !== undefined && filterValue !== null && filterValue !== '';
     }
 
-    private static setNodeFlags(tree: TreeNode[], parent?: TreeNode): void {
+    private static setNodeFlags(tree: TreeNode[], parent?: TreeNode, setParentFlags: boolean = true): void {
         if (tree) {
             tree.forEach((n) => {
                 if (!n.flags) {
@@ -176,12 +194,14 @@ export class TreeUtil {
                     n.flags.push(n.label);
                 }
 
-                if (parent && parent.flags) {
-                    parent.flags.forEach((f) => n.flags.push(f));
+                if (setParentFlags && parent && parent.flags) {
+                    parent.flags
+                        .filter((f) => !n.flags.some((nf) => nf === f))
+                        .forEach((f) => n.flags.push(f));
                 }
 
                 if (n.children && n.children.length) {
-                    TreeUtil.setNodeFlags(n.children, n);
+                    TreeUtil.setNodeFlags(n.children, n, setParentFlags);
                 }
             });
         }
@@ -221,6 +241,21 @@ export class TreeUtil {
         }
 
         return nodes;
+    }
+
+    public static sortNodes(nodes: TreeNode[]): TreeNode[] {
+        nodes.filter((n) => Array.isArray(n.children) && n.children.length)
+            .forEach((n) => this.sortNodes(n.children));
+
+        return nodes.sort((a, b) => {
+            if (a.flags.some((f) => f === 'MODULE') && !b.flags.some((f) => f === 'MODULE')) {
+                return -1;
+            } else if (!a.flags.some((f) => f === 'MODULE') && b.flags.some((f) => f === 'MODULE')) {
+                return 1;
+            } else {
+                return a.label.localeCompare(b.label);
+            }
+        });
     }
 
 }

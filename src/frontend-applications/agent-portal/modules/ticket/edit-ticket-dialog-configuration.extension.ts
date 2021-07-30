@@ -45,6 +45,8 @@ import { TableConfiguration } from '../../model/configuration/TableConfiguration
 import { TableHeaderHeight } from '../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../model/configuration/TableRowHeight';
 import { FAQArticleProperty } from '../faq/model/FAQArticleProperty';
+import { InformationConfiguration, InformationRowConfiguration, ObjectInformationCardConfiguration } from '../base-components/webapp/components/object-information-card-widget/ObjectInformationCardConfiguration';
+import { RoutingConfiguration } from '../../model/configuration/RoutingConfiguration';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -57,30 +59,28 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         const contactInfoCard = new WidgetConfiguration(
             'ticket-edit-contact-card-widget', 'Contact Info Widget', ConfigurationType.Widget,
             'object-information-card-widget', 'Translatable#Contact Information', [], null,
-            {
-                avatar: new ObjectIcon(
+            new ObjectInformationCardConfiguration(
+                new ObjectIcon(
                     null, KIXObjectType.CONTACT, '<KIX_CONTACT_ID>', null, null, 'kix-icon-man-bubble'
                 ),
-                rows: [
-                    {
-                        separator: false,
-                        values: [
+                [
+                    new InformationRowConfiguration(
+                        [
                             [
-                                {
-                                    icon: null,
-                                    text: '<KIX_CONTACT_Firstname> <KIX_CONTACT_Lastname>',
-                                    linkSrc: null
-                                },
-                                {
-                                    icon: new ObjectIcon(
+                                new InformationConfiguration(
+                                    null, null, null, null, null,
+                                    '<KIX_CONTACT_Firstname> <KIX_CONTACT_Lastname>'
+                                ),
+                                new InformationConfiguration(
+                                    null, null, null,
+                                    new ObjectIcon(
                                         null, 'Organisation', '<KIX_ORG_ID>', null, null, 'kix-icon-man-house'
-                                    ),
-                                    text: '<KIX_ORG_Name>',
-                                    linkSrc: null
-                                }
+                                    ), null,
+                                    '<KIX_ORG_Name>'
+                                )
                             ]
-                        ],
-                    },
+                        ], null, null, false,
+                    ),
                     {
                         values: [
                             [
@@ -121,16 +121,18 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             ]
                         ]
                     },
-                    {
-                        values: [
+                    new InformationRowConfiguration(
+                        [
                             [
-                                {
-                                    icon: 'kix-icon-ticket',
-                                    text: 'Translatable#Open Tickets of Contact',
-                                    routingConfiguration: {
-                                        contextId: 'search',
-                                        contextMode: ContextMode.SEARCH,
-                                        params: [
+                                new InformationConfiguration(
+                                    null, null, null,
+                                    'kix-icon-ticket', null,
+                                    'Translatable#Open Tickets of Contact',
+                                    null, null, null,
+                                    new RoutingConfiguration(
+                                        'search', null,
+                                        ContextMode.SEARCH, null, null, null, null, null,
+                                        [
                                             [
                                                 'search',
                                                 {
@@ -154,15 +156,18 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                 }
                                             ]
                                         ]
-                                    }
-                                },
-                                {
-                                    icon: 'kix-icon-ticket',
-                                    text: 'Translatable#Open Tickets of Organisation',
-                                    routingConfiguration: {
-                                        contextId: 'search',
-                                        contextMode: ContextMode.SEARCH,
-                                        params: [
+                                    )
+                                ),
+                                new InformationConfiguration(
+                                    null, null, null,
+                                    'kix-icon-ticket', null,
+                                    'Translatable#Open Tickets of Organisation',
+                                    null, null, null,
+                                    new RoutingConfiguration(
+                                        'search', null,
+                                        ContextMode.SEARCH,
+                                        null, null, null, null, null,
+                                        [
                                             [
                                                 'search',
                                                 {
@@ -186,22 +191,16 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                 }
                                             ]
                                         ]
-                                    }
-                                }
+                                    )
+                                )
                             ]
                         ]
-                    }
+                    )
                 ]
-            },
+            ),
             false, true, 'kix-icon-man-house'
         );
         configurations.push(contactInfoCard);
-
-        const helpSettings = new HelpWidgetConfiguration(
-            'ticket-edit-dialog-help-widget-config', 'Help Widget Config', ConfigurationType.HelpWidget,
-            'Translatable#Helptext_Textmodules_TicketEdit', null
-        );
-        configurations.push(helpSettings);
 
         const ticketsForAssetsWidget = new WidgetConfiguration(
             'ticket-edit-affected-asset-tickets', 'Tickets for Assets', ConfigurationType.Widget,

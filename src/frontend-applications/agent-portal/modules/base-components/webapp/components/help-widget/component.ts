@@ -10,6 +10,7 @@
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { HelpWidgetConfiguration } from '../../../../../model/configuration/HelpWidgetConfiguration';
 
 export class Component {
 
@@ -29,10 +30,10 @@ export class Component {
         this.state.widgetConfiguration = context
             ? await context.getWidgetConfiguration(this.state.instanceId)
             : undefined;
-        this.state.helpText = await TranslationService.translate(
-            this.state.widgetConfiguration.configuration.helpText
-        );
-        this.state.links = this.state.widgetConfiguration.configuration.links;
+
+        const configuration = this.state.widgetConfiguration.configuration as HelpWidgetConfiguration;
+        this.state.helpText = await TranslationService.translate(configuration.helpText);
+        this.state.links = configuration.links;
     }
 
 }

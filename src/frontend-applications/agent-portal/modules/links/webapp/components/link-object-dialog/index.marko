@@ -43,7 +43,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 on-nodesChanged("linkTypeChanged")
                 placeholder="Translatable#Link Type"/>
         </div>
-        <button.submit-button disabled=!state.canSubmit on-click("submitClicked")>
+        <button.kix-button.submit-button
+            disabled=!state.canSubmit
+            on-click("submitClicked")>
             <span.kix-icon-check/>
             <translation-string pattern="Translatable#Submit"/>
         </button>

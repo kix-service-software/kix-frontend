@@ -41,7 +41,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 [
                     new ConfiguredDialogWidget(
                         'link-objects-edit-dialog-widget', 'link-objects-edit-dialog-widget',
-                        KIXObjectType.LINK, ContextMode.EDIT_LINKS
+                        KIXObjectType.LINK, ContextMode.EDIT_LINK
                     )
                 ], [], [], [], []
             )
