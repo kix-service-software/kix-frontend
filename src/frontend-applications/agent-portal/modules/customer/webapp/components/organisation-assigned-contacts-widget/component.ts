@@ -18,6 +18,7 @@ import { ActionFactory } from '../../../../../modules/base-components/webapp/cor
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { OrganisationProperty } from '../../../model/OrganisationProperty';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 class Component {
 
     private state: ComponentState;
@@ -85,7 +86,8 @@ class Component {
                 const contactIds = organisations[0].Contacts.map((c) => typeof c === 'string' ? c : c.ID);
                 this.state.table = await TableFactoryService.getInstance().createTable(
                     'organisation-assigned-contacts', KIXObjectType.CONTACT,
-                    this.state.widgetConfiguration.configuration, contactIds, null, true
+                    this.state.widgetConfiguration.configuration as TableConfiguration,
+                    contactIds, null, true
                 );
             }
 

@@ -22,6 +22,7 @@ import { FormFieldValue } from '../../model/configuration/FormFieldValue';
 import { FormGroupConfiguration } from '../../model/configuration/FormGroupConfiguration';
 import { FormPageConfiguration } from '../../model/configuration/FormPageConfiguration';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { RoutingConfiguration } from '../../model/configuration/RoutingConfiguration';
 import { TableConfiguration } from '../../model/configuration/TableConfiguration';
 import { TableHeaderHeight } from '../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../model/configuration/TableRowHeight';
@@ -37,6 +38,7 @@ import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
 import { ObjectReferenceOptions } from '../../modules/base-components/webapp/core/ObjectReferenceOptions';
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
 import { ModuleConfigurationService } from '../../server/services/configuration';
+import { ObjectInformationCardConfiguration } from '../base-components/webapp/components/object-information-card-widget/ObjectInformationCardConfiguration';
 import { AdditionalTableObjectsHandlerConfiguration } from '../base-components/webapp/core/AdditionalTableObjectsHandlerConfiguration';
 import { DynamicFormFieldOption } from '../dynamic-fields/webapp/core';
 import { FAQArticleProperty } from '../faq/model/FAQArticleProperty';
@@ -58,11 +60,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         const contactInfoCard = new WidgetConfiguration(
             'ticket-new-contact-card-widget', 'Contact Info Widget', ConfigurationType.Widget,
             'object-information-card-widget', 'Translatable#Contact Information', [], null,
-            {
-                avatar: new ObjectIcon(
+            new ObjectInformationCardConfiguration(
+                new ObjectIcon(
                     null, KIXObjectType.CONTACT, '<KIX_CONTACT_ID>', null, null, 'kix-icon-man-bubble'
                 ),
-                rows: [
+                [
                     {
                         separator: false,
                         values: [
@@ -128,10 +130,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 {
                                     icon: 'kix-icon-ticket',
                                     text: 'Translatable#Open Tickets of Contact',
-                                    routingConfiguration: {
-                                        contextId: 'search',
-                                        contextMode: ContextMode.SEARCH,
-                                        params: [
+                                    routingConfiguration: new RoutingConfiguration(
+                                        'search', null,
+                                        ContextMode.SEARCH,
+                                        null, null, null, null, null,
+                                        [
                                             [
                                                 'search',
                                                 {
@@ -155,15 +158,16 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                 }
                                             ]
                                         ]
-                                    }
+                                    )
                                 },
                                 {
                                     icon: 'kix-icon-ticket',
                                     text: 'Translatable#Open Tickets of Organisation',
-                                    routingConfiguration: {
-                                        contextId: 'search',
-                                        contextMode: ContextMode.SEARCH,
-                                        params: [
+                                    routingConfiguration: new RoutingConfiguration(
+                                        'search', null,
+                                        ContextMode.SEARCH,
+                                        null, null, null, null, null,
+                                        [
                                             [
                                                 'search',
                                                 {
@@ -187,13 +191,13 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                 }
                                             ]
                                         ]
-                                    }
+                                    )
                                 }
                             ]
                         ]
                     }
                 ]
-            },
+            ),
             false, true, 'kix-icon-man-house'
         );
         configurations.push(contactInfoCard);

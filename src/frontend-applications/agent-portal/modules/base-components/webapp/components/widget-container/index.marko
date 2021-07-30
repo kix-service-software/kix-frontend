@@ -14,7 +14,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <translation-string pattern="Translatable#Search Templates"/>
                 </span>
                 <form-list treeId=state.searchBookmarkTreeId/>
-                <button.form-button
+                <button.kix-button.form-button
                     type="button"
                     on-click("addSearchbookmarkWidget")
                     title=state.translations["Translatable#Add Widget"]>
@@ -27,7 +27,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <translation-string pattern="Translatable#Available Dashboard Widgets"/>
                 </span>
                 <form-list treeId=state.contextTreeId/>
-                <button.form-button
+                <button.kix-button.form-button
                     type="button"
                     on-click("addContextWidget")
                     title=state.translations["Translatable#Add Widget"]>
@@ -36,14 +36,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </button>
             </div>
             <div.submit-buttons>
-                <button.cancel-button
+                <button.kix-button.cancel-button
                     type="button"
                     on-click("cancel")
                     title=state.translations["Translatable#Cancel"]>
                     <span.kix-icon-check/>
                     <translation-string pattern="Translatable#Cancel"/>
                 </button>
-                <button.submit-button
+                <button.kix-button.submit-button
                     type="button"
                     on-click("saveWidgets")
                     title=state.translations["Translatable#Save"]>

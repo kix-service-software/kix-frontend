@@ -12,9 +12,7 @@ import { AbstractMarkoComponent } from '../../../../../modules/base-components/w
 import { SysConfigOptionDefinitionProperty } from '../../../model/SysConfigOptionDefinitionProperty';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import {
-    Table, RowObject, TableValue, TableFactoryService, TableEvent, TableEventData
-} from '../../../../base-components/webapp/core/table';
+import { RowObject, TableValue, TableFactoryService, TableEvent, TableEventData } from '../../../../base-components/webapp/core/table';
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
 import { SysConfigOptionDefinition } from '../../../model/SysConfigOptionDefinition';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
@@ -54,7 +52,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await this.prepareTable();
 
         const actions = await ActionFactory.getInstance().generateActions(
-            ['sysconfig-edit-action', 'sysconfig-reset-action', 'activate-configuration'], this.state.table
+            ['sysconfig-edit-action', 'sysconfig-reset-action'], this.state.table
         );
         WidgetService.getInstance().registerActions(this.state.instanceId, actions);
 

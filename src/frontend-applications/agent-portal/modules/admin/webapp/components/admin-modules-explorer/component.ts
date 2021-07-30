@@ -13,7 +13,7 @@ import { ContextService } from '../../../../../modules/base-components/webapp/co
 import { AdministrationSocketClient } from '../../core/AdministrationSocketClient';
 import { AdminContext } from '../../core/AdminContext';
 import { AdminModule } from '../../../model/AdminModule';
-import { TreeNode } from '../../../../base-components/webapp/core/tree';
+import { TreeNode, TreeUtil } from '../../../../base-components/webapp/core/tree';
 import { AdminModuleCategory } from '../../../model/AdminModuleCategory';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
@@ -53,7 +53,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 await this.prepareCategoryTreeNodes(categories);
             }
 
-            this.sortNodes();
+            TreeUtil.sortNodes(this.state.nodes);
             this.state.prepared = true;
 
             setTimeout(() => {
@@ -164,21 +164,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (context instanceof AdminContext) {
             context.setAdditionalInformation('EXPLORER_FILTER_ADMIN', this.state.filterValue);
         }
-    }
-
-    private sortNodes(nodes: TreeNode[] = this.state.nodes): TreeNode[] {
-        nodes.filter((n) => Array.isArray(n.children) && n.children.length)
-            .forEach((n) => this.sortNodes(n.children));
-
-        return nodes.sort((a, b) => {
-            if (a.flags.some((f) => f === 'MODULE') && !b.flags.some((f) => f === 'MODULE')) {
-                return -1;
-            } else if (!a.flags.some((f) => f === 'MODULE') && b.flags.some((f) => f === 'MODULE')) {
-                return 1;
-            } else {
-                return a.label.localeCompare(b.label);
-            }
-        });
     }
 
 }

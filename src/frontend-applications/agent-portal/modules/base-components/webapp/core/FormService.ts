@@ -58,7 +58,7 @@ export class FormService {
     }
 
     public async loadFormConfigurations(): Promise<void> {
-        const formConfigurations = await KIXModulesSocketClient.getInstance().loadFormConfigurations();
+        const formConfigurations = await KIXModulesSocketClient.getInstance().loadFormConfigurationsByContext();
         this.formIDsWithContext = formConfigurations;
     }
 

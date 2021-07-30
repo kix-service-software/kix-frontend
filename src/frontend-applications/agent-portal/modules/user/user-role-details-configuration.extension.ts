@@ -57,7 +57,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
 
         const assignedUserWidgetConfig = new WidgetConfiguration(
             'user-role-details-assigned-users-widget', 'User role assigned users widget', ConfigurationType.Widget,
-            'user-role-assigned-users-widget', 'Translatable#Assigned Agents', [], null, true, true,
+            'user-role-assigned-users-widget', 'Translatable#Assigned Agents', [], null, null, true, true,
         );
         configurations.push(assignedUserWidgetConfig);
 

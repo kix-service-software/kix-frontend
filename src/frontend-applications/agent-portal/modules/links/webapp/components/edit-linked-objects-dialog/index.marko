@@ -25,7 +25,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </if>
                 <div.dialog-button-container>
                     <if(state.allowDelete)>
-                        <button.form-blank-cancel-button
+                        <button.kix-button.form-blank-cancel-button
                             type="button"
                             on-click("markToDelete")
                             title=state.translations["Translatable#Delete Link"]>
@@ -53,7 +53,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 </widget>
 <div.dialog-control>
     <div.dialog-button-container>
-        <button.cancel-button
+        <button.kix-button.cancel-button
             disabled=state.processing
             type="button"
             on-click("cancel")
@@ -61,7 +61,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <span.kix-icon-close/>
             <span>${state.translations["Translatable#Cancel"]}</span>
         </button>
-        <button.submit-button
+        <button.kix-button.submit-button
             disabled=state.processing
             type="button"
             on-click("submit")

@@ -38,8 +38,10 @@ class Component {
             ? await context.getWidgetConfiguration(this.state.instanceId)
             : undefined;
 
-        const settings: ObjectInformationWidgetConfiguration = this.state.widgetConfiguration ?
-            this.state.widgetConfiguration.configuration : null;
+        const settings = this.state.widgetConfiguration
+            ? this.state.widgetConfiguration.configuration as ObjectInformationWidgetConfiguration
+            : null;
+
         if (settings) {
             this.state.properties = settings.properties;
             this.state.flat = settings.displayFlatList;

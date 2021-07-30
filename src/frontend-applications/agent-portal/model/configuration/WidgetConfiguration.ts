@@ -24,7 +24,7 @@ export class WidgetConfiguration implements IConfiguration {
         public title: string,
         public actions: string[],
         public subConfigurationDefinition?: ConfigurationDefinition,
-        public configuration?: any,
+        public configuration?: IConfiguration,
         public minimized: boolean = false,
         public minimizable: boolean = true,
         public icon: string | ObjectIcon = '',

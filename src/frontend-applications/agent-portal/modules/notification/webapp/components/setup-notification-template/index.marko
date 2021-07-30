@@ -11,7 +11,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <div.notification-template-form>
             <main-form/>
             <div.button-container>
-                <button.form-button
+                <button.kix-button.form-button
                     type="button"
                     on-click("preview")
                     title=state.translations["Translatable#Preview"]>
@@ -19,7 +19,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <translation-string pattern="Translatable#Preview"/>
                 </button>
                 <if(!state.completed)>
-                    <button.form-button
+                    <button.kix-button.form-button
                         type="button"
                         on-click("skip")
                         title=state.translations["Translatable#Skip & Continue"]>
@@ -27,7 +27,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <translation-string pattern="Translatable#Skip & Continue"/>
                     </button>
                 </if>
-                <button.submit-button
+                <button.kix-button.submit-button
                     type="button"
                     on-click("submit")
                     title=state.translations["Translatable#Save & Continue"]>
@@ -48,14 +48,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <div.notification-template-form.in-widget>
                     <main-form/>
                     <div.button-container>
-                        <button.form-button
+                        <button.kix-button.form-button
                             type="button"
                             on-click("preview")
                             title=state.translations["Translatable#Preview"]>
                             <span.kix-icon-image/>
                             <translation-string pattern="Translatable#Preview"/>
                         </button>
-                        <button.submit-button
+                        <button.kix-button.submit-button
                             type="button"
                             on-click("submit")
                             title=state.translations["Translatable#Save"]>

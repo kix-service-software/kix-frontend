@@ -17,7 +17,6 @@ export class ComponentState {
         public filterValue: string = null,
         public treeId: string = 'tree-' + IdService.generateDateBasedId(),
         public activeNode: TreeNode = null,
-        public treeParent: any = null,
         public treeStyle: string = null
     ) { }
 
