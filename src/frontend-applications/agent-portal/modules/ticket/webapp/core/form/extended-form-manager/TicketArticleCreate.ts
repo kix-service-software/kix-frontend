@@ -19,7 +19,6 @@ import { MacroActionTypeOption } from '../../../../../job/model/MacroActionTypeO
 import { ExtendedJobFormManager } from '../../../../../job/webapp/core/ExtendedJobFormManager';
 import { Channel } from '../../../../model/Channel';
 import { Queue } from '../../../../model/Queue';
-import { TicketLock } from '../../../../model/TicketLock';
 import { TicketPriority } from '../../../../model/TicketPriority';
 import { TicketState } from '../../../../model/TicketState';
 import { TicketType } from '../../../../model/TicketType';
