@@ -46,35 +46,32 @@ export class ObjectIconService extends KIXObjectAPIService {
         return kixObjectType === KIXObjectType.OBJECT_ICON;
     }
 
-    public loadObjects<T>(
+    public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, iconLoadingOptions: ObjectIconLoadingOptions
     ): Promise<T[]> {
 
-        return new Promise<T[]>((resolve, reject) => {
-            let objects = [];
-            if (objectType === KIXObjectType.OBJECT_ICON) {
-                this.getObjectIcons(token).then((objectIcons) => {
-                    if (objectIds && objectIds.length) {
-                        objects = objectIcons.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
-                    } else if (iconLoadingOptions) {
-                        if (iconLoadingOptions.object && iconLoadingOptions.objectId) {
-                            const icon = objectIcons.find(
-                                (oi) => oi.Object === iconLoadingOptions.object
-                                    && oi.ObjectID.toString() === iconLoadingOptions.objectId.toString()
-                            );
-                            if (icon) {
-                                objects = [icon];
-                            }
-                        }
-                    } else {
-                        objects = objectIcons;
+        let objects = [];
+        if (objectType === KIXObjectType.OBJECT_ICON) {
+            const objectIcons = await this.getObjectIcons(token);
+            if (objectIds && objectIds.length) {
+                objects = objectIcons.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
+            } else if (iconLoadingOptions) {
+                if (iconLoadingOptions.object && iconLoadingOptions.objectId) {
+                    const icon = objectIcons.find(
+                        (oi) => oi.Object === iconLoadingOptions.object
+                            && oi.ObjectID.toString() === iconLoadingOptions.objectId.toString()
+                    );
+                    if (icon) {
+                        objects = [icon];
                     }
-
-                    resolve(objects);
-                });
+                }
+            } else {
+                objects = objectIcons;
             }
-        });
+        }
+
+        return objects;
     }
 
     public async getObjectIcons(token: string): Promise<ObjectIcon[]> {

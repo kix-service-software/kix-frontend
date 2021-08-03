@@ -192,7 +192,7 @@ export class QueueLabelProvider extends LabelProvider<Queue> {
     }
 
     public getObjectIcon(queue?: Queue): string | ObjectIcon {
-        return new ObjectIcon(null, 'Queue', queue.QueueID);
+        return new ObjectIcon(null, KIXObjectType.QUEUE, queue.QueueID, null, null, 'far fa-folder-open');
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
@@ -215,7 +215,7 @@ export class QueueLabelProvider extends LabelProvider<Queue> {
         queue: Queue, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
         if (property === QueueProperty.QUEUE_ID || property === 'ICON') {
-            return [new ObjectIcon(null, 'Queue', queue.QueueID)];
+            return [this.getObjectIcon(queue)];
         }
         if (property === QueueProperty.FOLLOW_UP_ID) {
             return [new ObjectIcon(null, 'FollowUpType', value)];

@@ -53,6 +53,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </div>
     </span>
     <if(!state.minimized)>
-        <label-list labels=state.labels on-removeLabel("removeFile")/>
+        <label-list
+            labels=state.labels
+            showUnknownIcon=false
+            on-removeLabel("removeFile")/>
     </if>
 </div>

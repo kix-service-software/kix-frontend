@@ -78,7 +78,7 @@ export class RoleLabelProvider extends LabelProvider<Role> {
     }
 
     public getObjectIcon(role?: Role): string | ObjectIcon {
-        return new ObjectIcon(null, 'Role', role.ID);
+        return new ObjectIcon(null, 'Role', role.ID, null, null, 'far fa-user-circle');
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {

@@ -19,6 +19,7 @@ import { SortUtil } from '../../../../../model/SortUtil';
 import { ContactFormService } from '../../core';
 import { UserProperty } from '../../../../user/model/UserProperty';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 
 class Component extends FormInputComponent<string[], ComponentState> {
 
@@ -119,8 +120,11 @@ class Component extends FormInputComponent<string[], ComponentState> {
         const agentLabel = await TranslationService.translate('Translatable#Agent Portal');
         const customerLabel = await TranslationService.translate('Translatable#Customer Portal');
         return [
-            new TreeNode(UserProperty.IS_AGENT, agentLabel),
-            new TreeNode(UserProperty.IS_CUSTOMER, customerLabel)
+            new TreeNode(
+                UserProperty.IS_AGENT, agentLabel,
+                new ObjectIcon(null, 'agent-portal-icon-sw', 'agent-portal-icon-sw')
+            ),
+            new TreeNode(UserProperty.IS_CUSTOMER, customerLabel, 'fas fa-users')
         ];
     }
 }
