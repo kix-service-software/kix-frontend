@@ -254,7 +254,7 @@ export class ReportDefinitionFormCreator {
         if (value) {
             const match = value.match(/base64\((.*)\)/);
             if (match && match.length === 2) {
-                value = Buffer.from(match[1], 'base64').toString();
+                value = Buffer.from(match[1], 'base64').toString('binary');
             }
         }
 
