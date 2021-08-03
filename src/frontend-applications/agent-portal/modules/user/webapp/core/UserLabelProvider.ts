@@ -238,6 +238,10 @@ export class UserLabelProvider extends LabelProvider<User> {
         return plural ? 'Users' : 'User';
     }
 
+    public getObjectIcon(object: User): string | ObjectIcon {
+        return new ObjectIcon(null, KIXObjectType.CONTACT, object.Contact?.ID, null, null, 'fas fa-user');
+    }
+
     public async getIcons(
         user: User, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {

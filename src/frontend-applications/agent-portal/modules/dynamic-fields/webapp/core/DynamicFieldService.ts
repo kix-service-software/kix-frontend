@@ -92,11 +92,12 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
     ): Promise<TreeNode[]> {
         const nodes: TreeNode[] = [];
         if (dynamicFieldType && !!dynamicFieldType.length) {
-            for (const o of dynamicFieldType) {
-                const fieldType = o.Name;
+            for (const type of dynamicFieldType) {
+                const fieldType = type.Name;
                 if (await DynamicFieldService.getInstance().getConfigSchema(fieldType)) {
-
-                    nodes.push(new TreeNode(fieldType, await LabelService.getInstance().getObjectText(o)));
+                    const label = await LabelService.getInstance().getObjectText(type);
+                    const icon = LabelService.getInstance().getObjectIcon(type);
+                    nodes.push(new TreeNode(fieldType, label, icon));
                 }
             }
         }

@@ -231,14 +231,14 @@ class Component {
     private createLabels(): void {
         const attachmentLabels = this.attachments.map(
             (a) => new Label(
-                null, a.Filename, this.getFileIcon(a.ContentType), a.Filename,
+                null, a.Filename, null, a.Filename,
                 `(${typeof a.FilesizeRaw !== 'undefined' ? AttachmentUtil.getFileSize(a.FilesizeRaw) : a.Filesize})`,
                 a.Filename, true
             )
         );
         const fileLabels = this.files.map(
             (f) => new Label(
-                null, f.name, this.getFileIcon(f.type), f.name,
+                null, f.name, null, f.name,
                 `(${AttachmentUtil.getFileSize(f.size)})`, f.name, true
             )
         );

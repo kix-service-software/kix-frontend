@@ -23,6 +23,7 @@ import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptio
 import { JobRun } from '../../model/JobRun';
 import { JobTypes } from '../../model/JobTypes';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { LabelService } from '../../../base-components/webapp/core/LabelService';
 
 export class JobService extends KIXObjectService<Job> {
 
@@ -114,8 +115,10 @@ export class JobService extends KIXObjectService<Job> {
             if (objects[0].KIXObjectType === KIXObjectType.JOB_TYPE) {
                 for (const o of objects) {
                     const displayValue = translatable
-                        ? await TranslationService.translate(o.DisplayName) : o.DisplayName;
-                    nodes.push(new TreeNode(o.Name, displayValue));
+                        ? await TranslationService.translate(o.DisplayName)
+                        : o.DisplayName;
+                    const icon = LabelService.getInstance().getObjectIcon(o);
+                    nodes.push(new TreeNode(o.Name, displayValue, icon));
                 }
             }
         }
