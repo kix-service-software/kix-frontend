@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2021-08-04 08:47+0000\n"
+"PO-Revision-Date: 2021-08-04 13:47+0000\n"
 "Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
@@ -349,7 +349,7 @@ msgid "between"
 msgstr "zwischen"
 
 msgid "Body"
-msgstr "Body"
+msgstr "Nachrichteninhalt"
 
 msgid "Bulk"
 msgstr "Menge"
@@ -536,7 +536,7 @@ msgid "Config Item Information"
 msgstr "Asset-Informationen"
 
 msgid "Config Items"
-msgstr "Config Items"
+msgstr "Assets"
 
 msgid "Config Items Count: {0}"
 msgstr "Anzahl Assets: {0}"
@@ -2251,7 +2251,7 @@ msgstr ""
 
 msgid "Helptext_PersonalSettings_UserNewPasswordConfirm_Hint"
 msgstr ""
-"Wiederholung Ihres neuen Passwortes für die Nutzung des Self-Service-Portals."
+"Wiederholung des neuen Passwortes für die Nutzung des Self-Service-Portals."
 
 msgid "Helptext_PersonalSettings_UserNewPassword_Hint"
 msgstr "Ihr neues Passwort für die Nutzung des Self-Service-Portals"
@@ -2841,7 +2841,7 @@ msgid "Localisation"
 msgstr "Lokalisierung"
 
 msgid "Lock"
-msgstr "Sperre"
+msgstr "Sperren"
 
 msgid "Locked"
 msgstr "Gesperrt"
@@ -3502,7 +3502,7 @@ msgid "Priority Information"
 msgstr "Prioritäten-Informationen"
 
 msgid "Queue"
-msgstr "Queue"
+msgstr "Team"
 
 msgid "Queue Information"
 msgstr "Team-Informationen"
@@ -3864,7 +3864,7 @@ msgid "Send to all role members"
 msgstr "Senden an Agenten-Rollen"
 
 msgid "send to background"
-msgstr ""
+msgstr "im Hintergrund ausführen"
 
 msgid "Send to these agents"
 msgstr "Senden an Agenten"
