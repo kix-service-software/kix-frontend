@@ -24,6 +24,7 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { Context } from '../../../../../model/Context';
 import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
+import { TabWidgetConfiguration } from '../../../../../model/configuration/TabWidgetConfiguration';
 
 class TabLaneComponent implements IEventSubscriber {
 
@@ -210,15 +211,17 @@ class TabLaneComponent implements IEventSubscriber {
     }
 
     public getTitle(tab: WidgetConfiguration): string {
+        const title = tab.configuration ? (tab.configuration as WidgetConfiguration).title : '';
         return this.tabTitles.has(tab.instanceId)
             ? this.tabTitles.get(tab.instanceId)
-            : this.state.translations[tab.configuration ? tab.configuration.title : ''];
+            : this.state.translations[title];
     }
 
     public getIcon(tab: WidgetConfiguration): string | ObjectIcon {
+        const icon = tab.configuration ? (tab.configuration as WidgetConfiguration).icon : null;
         return this.tabIcons.has(tab.instanceId)
             ? this.tabIcons.get(tab.instanceId)
-            : tab.configuration ? tab.configuration.icon : null;
+            : icon;
     }
 
     public keydown(event: any): void {

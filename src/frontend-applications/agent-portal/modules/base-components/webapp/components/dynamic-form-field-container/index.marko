@@ -6,6 +6,17 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
+<if(
+    component.canDraggable() &&
+    state.dynamicValues.length > 1 &&
+    state.dragStartIndex
+)>
+    <div.dynamic-form-field-drop-zone
+        on-drop("handleDrop", 0)
+        on-dragover("allowDrop")
+        on-dragenter("handleDragEnter")
+        on-dragleave("handleDragLeave")/>
+</if>
 <if(Array.isArray(state.options) && state.options.length)>
     <div.dynamic-form-field-header>
         <for|option| of=state.options>
@@ -19,7 +30,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             "no-operation": dynamicValue.operationIsNone,
             "with-options": Array.isArray(state.options) && state.options.length
         }
-        key=dynamicValue.id>
+        key=dynamicValue.id
+        draggable=(state.draggableValueId === dynamicValue.id).toString()
+        on-dragstart("handleDragStart", dynamicValue.id, index)
+        on-dragend("handleDragEnd", dynamicValue.id)>
         <if(Array.isArray(state.options) && state.options.length)>
             <div>
                 <for|option| of=state.options>
@@ -237,12 +251,35 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             state.dynamicValues.length > 1 &&
             index !== state.dynamicValues.length - 1
         )>
-            <button.form-control-button.button-without-text
+            <button.kix-button.form-control-button.button-without-text
                 type="button"
                 title=state.translations["Translatable#Remove parameter"]
                 on-click("removeValue", dynamicValue)>
                 <span.kix-icon-minus/>
             </button>
         </if>
+        <if(component.canDraggable() && index < state.dynamicValues.length - 1)>
+            <div.form-control-button.button-without-text.drag-button
+                title=state.translations["Translatable#Sort"]
+                on-mouseenter("setDraggable", dynamicValue.id, true)
+                on-mouseleave("setDraggable", dynamicValue.id, false)>
+                <span.kix-icon-sort-up/>
+                <span.kix-icon-sort-down/>
+            </div>
+        </if>
     </div>
+    <if(
+        component.canDraggable() &&
+        state.dynamicValues.length > 1 &&
+        (state.dragStartIndex || state.dragStartIndex === 0) &&
+        state.dragStartIndex !== index &&
+        state.dragStartIndex !== index + 1 &&
+        index !== state.dynamicValues.length - 1
+    )>
+        <div.dynamic-form-field-drop-zone
+            on-drop("handleDrop", index + 1)
+            on-dragover("allowDrop")
+            on-dragenter("handleDragEnter")
+            on-dragleave("handleDragLeave")/>
+    </if>
 </for>

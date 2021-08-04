@@ -6,13 +6,15 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.button-bar key="buttonbar">
     <span on-click("selectAll")>
         <input.select-all-Checkbox type="checkbox" key="selectAllCheckbox"/>
         <translation-string pattern="Translatable#Select all"/>
     </span>
-    <button.submit-button type="button" on-click("submit") title=state.translations["Translatable#Submit"]>
+    <button.kix-button.submit-button
+        type="button"
+        on-click("submit")
+        title=state.translations["Translatable#Submit"]>
         <span.kix-icon-check/>
         <translation-string pattern="Translatable#Submit"/>
     </button>

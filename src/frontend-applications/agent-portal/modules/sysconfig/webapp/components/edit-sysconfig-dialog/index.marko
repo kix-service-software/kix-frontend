@@ -12,7 +12,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <main-form/>
             <div.dialog-control>
                 <div.dialog-button-container>
-                    <button.cancel-button
+                    <button.kix-button.cancel-button
                         type="button"
                         on-click("cancel")
                         title=state.translations["Translatable#Cancel"]>
@@ -20,7 +20,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <translation-string pattern="Translatable#Cancel"/>
                     </button>
                     <if(state.reset)>
-                        <button.form-blank-cancel-button
+                        <button.kix-button.form-blank-cancel-button
                             type="button"
                             on-click("reset")
                             title=state.translations[
@@ -30,7 +30,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             <translation-string pattern="Translatable#Reset to Default"/>
                         </button>
                     </if>
-                    <button.submit-button
+                    <button.kix-button.submit-button
                         type="button"
                         on-click("submit")
                         title=state.translations["Translatable#Save"]>

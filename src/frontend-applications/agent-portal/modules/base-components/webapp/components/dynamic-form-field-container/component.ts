@@ -249,6 +249,86 @@ class Component {
         return hasOption;
     }
 
+    public canDraggable(): boolean {
+        return this.manager.valuesAreDraggable();
+    }
+
+    public allowDrop(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.dataTransfer.dropEffect = 'move';
+        return false;
+    }
+
+    public handleDragEnter(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.target.classList.add('drag-over');
+    }
+
+    public handleDragLeave(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.target.classList.remove('drag-over');
+    }
+
+    public async handleDrop(index: number, event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        await this.manager.changeValueOrder(this.state.dragStartIndex, index);
+        this.sortLocalValues(this.state.dragStartIndex, index);
+
+        this.state.dragStartIndex = null;
+    }
+
+    private sortLocalValues(currentIndex: number, targetIndex: number): void {
+        const newIndex = targetIndex > currentIndex ? targetIndex - 1 : targetIndex;
+        const value = this.state.dynamicValues.splice(currentIndex, 1);
+        this.state.dynamicValues.splice(newIndex, 0, value[0]);
+
+        // "drop" and set dynamicValues (necessary for richtext editors to remain editable)
+        const values = this.state.dynamicValues;
+        this.state.dynamicValues = [];
+        setTimeout(() => {
+            this.state.dynamicValues = values;
+        }, 50);
+    }
+
+    // field triggered functions
+    public setDraggable(id: string, draggable: boolean, event?: any): void {
+        event.stopPropagation();
+        event.preventDefault();
+
+        // do nothing if event triggert from child node or dragging is not allowed
+        if (!this.canDraggable() || !event?.srcElement?.classList.contains('drag-button')) {
+            return;
+        }
+
+        this.state.draggableValueId = draggable ? id : null;
+    }
+
+    public async handleDragStart(id: string, index: number, event) {
+        event.stopPropagation();
+
+        const valueElement = (this as any).getEl(id);
+        if (valueElement) {
+            valueElement.classList.add('dragging');
+        }
+        event.dataTransfer.setData('Text', id);
+        this.state.dragStartIndex = index;
+    }
+
+    public async handleDragEnd(id: string, event) {
+        event.stopPropagation();
+
+        const valueElement = (this as any).getEl(id);
+        if (valueElement) {
+            valueElement.classList.remove('dragging');
+        }
+        this.state.dragStartIndex = null;
+    }
+
 }
 
 module.exports = Component;

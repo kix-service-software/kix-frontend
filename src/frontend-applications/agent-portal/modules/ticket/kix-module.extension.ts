@@ -128,11 +128,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent(
             'ticket-state-info-widget', '/kix-module-ticket$0/webapp/components/ticket-state-info-widget', []
         ),
-        new UIComponent(
-            'ticket-type-assigned-textmodules',
-            '/kix-module-ticket$0/webapp/components/ticket-type-assigned-textmodules', []
-        ),
-        new UIComponent('ticket-type-info-widget', '/kix-module-ticket$0/webapp/components/ticket-type-info-widget', [])
     ];
 
     public webDependencies: string[] = [

@@ -6,13 +6,16 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <ul.tree-list key=state.treeId style=state.treeStyle>
     <for|node| of=state.tree>
         <if(node.visible)>
-            <tree-node treeId=state.treeId node=node activeNode=state.activeNode filterValue=state.filterValue
-                treeParent=state.treeParent on-nodeToggled('nodeToggled') on-nodeClicked('nodeClicked')
-                on-nodeHovered('nodeHovered')/>
+            <tree-node
+                treeId=state.treeId
+                node=node
+                activeNode=state.activeNode
+                on-nodeToggled("nodeToggled")
+                on-nodeClicked("nodeClicked")
+                on-nodeHovered("nodeHovered")/>
         </if>
     </for>
 </ul>

@@ -42,7 +42,7 @@ export class KIXModulesSocketClient extends SocketClient {
         this.socket = this.createSocket('kixmodules', true);
     }
 
-    public async loadFormConfigurations(
+    public async loadFormConfigurationsByContext(
     ): Promise<Array<[FormContext, KIXObjectType | string, string]>> {
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<Array<[FormContext, KIXObjectType | string, string]>>((resolve, reject) => {
@@ -52,10 +52,10 @@ export class KIXModulesSocketClient extends SocketClient {
             );
 
             const timeout = window.setTimeout(() => {
-                reject('Timeout: ' + KIXModulesEvent.LOAD_FORM_CONFIGURATIONS);
+                reject('Timeout: ' + KIXModulesEvent.LOAD_FORM_CONFIGURATIONS_BY_CONTEXT);
             }, socketTimeout);
 
-            this.socket.on(KIXModulesEvent.LOAD_FORM_CONFIGURATIONS_FINISHED,
+            this.socket.on(KIXModulesEvent.LOAD_FORM_CONFIGURATIONS_BY_CONTEXT_FINISHED,
                 (result: LoadFormConfigurationsResponse) => {
                     if (requestId === result.requestId) {
                         window.clearTimeout(timeout);
@@ -72,10 +72,43 @@ export class KIXModulesSocketClient extends SocketClient {
                 }
             });
 
-            this.socket.emit(KIXModulesEvent.LOAD_FORM_CONFIGURATIONS, request);
+            this.socket.emit(KIXModulesEvent.LOAD_FORM_CONFIGURATIONS_BY_CONTEXT, request);
         });
     }
 
+    public async loadFormConfigurations(
+    ): Promise<FormConfiguration[]> {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+        return new Promise<FormConfiguration[]>((resolve, reject) => {
+            const requestId = IdService.generateDateBasedId();
+            const request = new LoadFormConfigurationsRequest(
+                requestId, ClientStorageService.getClientRequestId()
+            );
+
+            const timeout = window.setTimeout(() => {
+                reject('Timeout: ' + KIXModulesEvent.LOAD_FORM_CONFIGURATIONS);
+            }, socketTimeout);
+
+            this.socket.on(KIXModulesEvent.LOAD_FORM_CONFIGURATIONS_FINISHED,
+                (result: ISocketResponse) => {
+                    if (requestId === result.requestId) {
+                        window.clearTimeout(timeout);
+                        resolve((result as any).formConfigurations);
+                    }
+                }
+            );
+
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error(error.error);
+                    reject(error.error);
+                }
+            });
+
+            this.socket.emit(KIXModulesEvent.LOAD_FORM_CONFIGURATIONS, request);
+        });
+    }
     public async loadFormConfiguration(formId: string): Promise<FormConfiguration> {
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<FormConfiguration>((resolve, reject) => {

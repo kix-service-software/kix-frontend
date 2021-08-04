@@ -75,7 +75,7 @@ class Component {
 
         if (this.state.widgetConfiguration) {
             this.state.show = true;
-            const settings: TableWidgetConfiguration = this.state.widgetConfiguration.configuration;
+            const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
 
             this.state.showFilter = typeof settings.showFilter !== 'undefined' ? settings.showFilter : true;
 
@@ -221,7 +221,7 @@ class Component {
 
     private getRelevantHandlerConfigIds(properties: string[]): string[] {
         const relevantHandlerIds = [];
-        const settings: TableWidgetConfiguration = this.state.widgetConfiguration.configuration;
+        const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
         if (
             settings && settings.tableConfiguration
             && Array.isArray(settings.tableConfiguration.additionalTableObjectsHandler)
@@ -263,7 +263,7 @@ class Component {
     }
 
     private async prepareHeader(): Promise<void> {
-        const settings: TableWidgetConfiguration = this.state.widgetConfiguration.configuration;
+        const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
         if (settings && settings.headerComponents) {
             this.state.headerTitleComponents = settings.headerComponents;
         }
@@ -299,7 +299,7 @@ class Component {
     }
 
     private async prepareTable(): Promise<void> {
-        const settings: TableWidgetConfiguration = this.state.widgetConfiguration.configuration;
+        const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
         if (
             settings && settings.objectType || (settings.tableConfiguration && settings.tableConfiguration.objectType)
         ) {

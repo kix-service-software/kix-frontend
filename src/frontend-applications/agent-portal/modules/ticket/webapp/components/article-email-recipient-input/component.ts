@@ -109,6 +109,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
             }
 
             let mailNodes: TreeNode[] = [];
+            let unknownMailAddresses: string[] = [];
             let mailContacts: Contact[] = [];
             if (emailAddresses.length) {
                 mailContacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, null,
@@ -125,7 +126,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
 
                 mailNodes = await this.createTreeNodes(mailContacts);
 
-                const unknownMailAddresses = emailAddresses.filter((ea) => !mailContacts.some((c) => c.Email === ea));
+                unknownMailAddresses = emailAddresses.filter((ea) => !mailContacts.some((c) => c.Email === ea));
                 mailNodes = [...mailNodes, ...unknownMailAddresses.map((ma) => new TreeNode(ma, ma))];
             }
 
@@ -139,6 +140,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
                 typeof v !== 'undefined' && v !== '' && v !== null &&
                 !contacts.some((c) => c.ID === Number(v) || c.Email === v) &&
                 !mailContacts.some((c) => c.ID === v || c.Email === v) &&
+                !unknownMailAddresses.some((uMA) => uMA === v) &&
                 !systemAddresses.some((sa) => sa.Name === v)
             ).map((n) => new TreeNode(n, n));
             nodes = [...nodes, ...unknownNodes];

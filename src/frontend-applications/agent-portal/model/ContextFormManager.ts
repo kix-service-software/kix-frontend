@@ -90,7 +90,7 @@ export class ContextFormManager {
             case ContextMode.SEARCH:
                 formContext = FormContext.SEARCH;
                 break;
-            case ContextMode.EDIT_LINKS:
+            case ContextMode.EDIT_LINK:
                 formContext = FormContext.LINK;
                 break;
             default:
@@ -121,10 +121,10 @@ export class ContextFormManager {
         return this.formInstance;
     }
 
-    public async setFormId(formId: string): Promise<void> {
+    public async setFormId(formId: string, kixObject?: KIXObject): Promise<void> {
         if (this.formId !== formId) {
             this.formId = formId;
-            await this.getFormInstance(true);
+            await this.getFormInstance(true, undefined, kixObject);
         }
     }
 

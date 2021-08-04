@@ -65,7 +65,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         state.sliderList.length - 1
                     )>
                         <div.slider-content-buttons>
-                            <button.submit-button
+                            <button.kix-button.submit-button
                                 type="button"
                                 title=state.translations["Translatable#Let's go"]
                                 on-click("closeReleaseInfos")>
@@ -76,7 +76,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </if>
                     <else-if(state.activeSliderIndex === 0)>
                         <div.slider-content-buttons.start-buttons>
-                            <button
+                            <button.kix-button
                                 type="button"
                                 title=state.translations[
                                     "Translatable#No, thank you"
@@ -85,7 +85,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 <span.kix-icon-close/>
                                 <translation-string pattern="Translatable#No, thank you"/>
                             </button>
-                            <button
+                            <button.kix-button
                                 type="button"
                                 title=state.translations[
                                     "Translatable#Yes, please"

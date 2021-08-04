@@ -32,6 +32,7 @@ import { CRUD } from '../../../../server/model/rest/CRUD';
 import { UserProperty } from '../user/model/UserProperty';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { ObjectIcon } from '../icon/model/ObjectIcon';
+import { ObjectInformationCardConfiguration } from '../base-components/webapp/components/object-information-card-widget/ObjectInformationCardConfiguration';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -46,9 +47,9 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             'organisation-details-info-widget', 'Organisation Info Widget', ConfigurationType.Widget,
             'object-information-card-widget', 'Translatable#Organisation Information', [],
             null,
-            {
-                avatar: [],
-                rows: [
+            new ObjectInformationCardConfiguration(
+                [],
+                [
                     {
                         style: '',
                         separator: true,
@@ -60,7 +61,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         icon: new ObjectIcon(
                                             null, KIXObjectType.ORGANISATION, '<KIX_ORG_ID>', null, null, 'kix-icon-man-house'
                                         ),
-                                        style: 'max-width: 15rem;width: unset;height: unset'
+                                        style: 'width: 5rem;height:5rem;font-size:5rem;'
                                     }
                                 }
                             ],
@@ -195,7 +196,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         ]
                     }
                 ]
-            }, false, true, null, false
+            ), false, true, null, false
         );
         configurations.push(organisationInfoLane);
 

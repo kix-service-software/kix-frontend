@@ -17,7 +17,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <div class="dialog-header">
                     <div#kix-logo>
                         <if(input.logo)>
-                            <img alt="kix-logo" src=("data:" + input.logo.ContentType + ";base64," + input.logo.Content)/>
+                            <img
+                                alt="kix-logo"
+                                src=(
+                                    "data:" +
+                                    input.logo.ContentType +
+                                    ";base64," +
+                                    input.logo.Content
+                                )/>
                         </if>
                         <else>
                             <img alt="kix-logo" src="/static/img/kix_default.png"/>
@@ -43,7 +50,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <else-if(state.logout)>
                             <div class="message message-success">
                                 <span.kix-icon-icircle/>
-                                ${component.getString("You have successfully logged out.")}
+                                ${component.getString(
+                                "You have successfully logged out."
+                                )}
                             </div>
                         </else-if>
                     </div>
@@ -51,14 +60,22 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <div class="dialog-content" on-keydown("keyDown")>
                     <label>
                         <span>${component.getString("Login Name")}:</span>
-                        <input.input-style type="text" name="username" tabindex="1" key="login-user-name"/>
+                        <input.input-style
+                            type="text"
+                            name="username"
+                            tabindex="1"
+                            key="login-user-name"/>
                     </label>
                     <label>
                         <span>${component.getString("Password")}:</span>
-                        <input.input-style type="password" name="password" tabindex="2" key="login-user-password"/>
+                        <input.input-style
+                            type="password"
+                            name="password"
+                            tabindex="2"
+                            key="login-user-password"/>
                     </label>
                     <div class="dialog-buttons">
-                        <button.special-button type="button" on-click("login") tabindex="3">
+                        <button.kix-button.special-button type="button" on-click("login") tabindex="3">
                             <span.kix-icon-check/>
                             ${component.getString("Login")}
                         </button>
@@ -67,7 +84,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </div>
         </else>
         <if(input.releaseInfo)>
-            <login-footer releaseInfo=input.releaseInfo imprintLink=input.imprintLink unauthorized=true/>
+            <login-footer
+                releaseInfo=input.releaseInfo
+                imprintLink=input.imprintLink
+                unauthorized=true/>
         </if>
     </div>
 </div>

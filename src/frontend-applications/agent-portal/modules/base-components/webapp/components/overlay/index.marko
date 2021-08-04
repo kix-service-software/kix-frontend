@@ -6,13 +6,16 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(state.show)>
     <if(component.showShield())>
         <div.shield.overlay-shield/>
     </if>
     <div.overlay key=state.overlayId>
-        <div.overlay-content class=state.overlayClass on-click("overlayClicked") on-mousedown("overlayClicked") key="overlay">
+        <div.overlay-content
+            class=state.overlayClass
+            on-click("overlayClicked")
+            on-mousedown("overlayClicked")
+            key="overlay">
             <widget
                 instanceId=state.overlayInstanceId
                 title=state.title
@@ -24,7 +27,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <@content>
                     <if(component.isComponentContent())>
                         <div>
-                            <${component.getTemplate()} ...state.content.getComponentData() on-closeOverlay("closeOverlay")/>
+                            <${component.getTemplate()}
+                                ...state.content.getComponentData()
+                                on-closeOverlay("closeOverlay")/>
                         </div>
                     </if>
                     <else>
@@ -33,7 +38,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         </div>
                     </else>
                     <if(state.hasCloseButton)>
-                        <button.message-button key="close-button" type="button" on-click("closeOverlay") title=state.translations["Close Overlay"]>
+                        <button.kix-button.message-button
+                            key="close-button"
+                            type="button"
+                            on-click("closeOverlay")
+                            title=state.translations["Close Overlay"]>
                             <span.kix-icon-check/>
                             <translation-string pattern="Translatable#Close Overlay"/>
                         </button>

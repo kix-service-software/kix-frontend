@@ -19,7 +19,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 </if>
 <if(state.hasButtons)>
     <div.confirm-overlay-buttons>
-        <button.cancel-button
+        <button.kix-button.cancel-button
             key="confirm-cancel-button"
             type="button"
             on-click("closeOverlay", false)
@@ -27,7 +27,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <span.kix-icon-close/>
             <translation-string pattern=component.getButtonLabel()/>
         </button>
-        <button.submit-button
+        <button.kix-button.submit-button
             key="confirm-submit-button"
             type="button"
             on-click("closeOverlay", true)

@@ -6,8 +6,9 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<widget instanceId="system-admin-console" title="Translatable#Execute console command">
+<widget
+    instanceId="system-admin-console"
+    title="Translatable#Execute console command">
     <@content>
         <div.console>
             <div.console-command>
@@ -16,7 +17,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     placeholder="Translatable#Choose a command"
                     readonly=state.run
                     on-nodesChanged("commandChanged")/>
-                <button.button.button-without-text
+                <button.kix-button.button.button-without-text
                     type="button"
                     title=state.translations["Translatable#Help"]
                     disabled=state.run
@@ -29,7 +30,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     disabled=state.run
                     on-keydown("keydown")
                     onChange("parameterChanged")/>
-                <button.submit-button
+                <button.kix-button.submit-button
                     type="button"
                     title=state.translations["Translatable#Execute"]
                     disabled=(!state.canRun || state.run)

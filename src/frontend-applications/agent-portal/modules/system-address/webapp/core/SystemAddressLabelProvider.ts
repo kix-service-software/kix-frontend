@@ -79,7 +79,7 @@ export class SystemAddressLabelProvider extends LabelProvider<SystemAddress> {
     }
 
     public getObjectIcon(object: SystemAddress): string | ObjectIcon {
-        return new ObjectIcon(null, 'SystemAddress', object.ID);
+        return new ObjectIcon(null, 'SystemAddress', object.ID, null, null, 'far fa-at');
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {

@@ -3724,9 +3724,6 @@ msgstr ""
 msgid "Send to all role members"
 msgstr ""
 
-msgid "send to background"
-msgstr "Continue in background"
-
 msgid "Send to these agents"
 msgstr ""
 

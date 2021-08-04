@@ -19,6 +19,7 @@ import { MacroActionTypeOption } from '../../model/MacroActionTypeOption';
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
+import { FormFieldOption } from '../../../../model/configuration/FormFieldOption';
 // tslint:enable
 
 export class ExtendedJobFormManager {
@@ -69,12 +70,12 @@ export class ExtendedJobFormManager {
 
     protected getOptionField(
         option: MacroActionTypeOption, actionType: string, actionFieldInstanceId: string, fieldType?: string,
-        defaultValue?, countDefault?: number, countMax?: number, countMin?: number
+        defaultValue?, countDefault?: number, countMax?: number, countMin?: number, options: FormFieldOption[] = []
     ): FormFieldConfiguration {
         return new FormFieldConfiguration(
             `job-action-${actionType}-${option.Name}`, option.Label,
             `${actionFieldInstanceId}###${option.Name}`,
-            fieldType, Boolean(option.Required), option.Description, [],
+            fieldType, Boolean(option.Required), option.Description, options,
             typeof defaultValue !== 'undefined' ? new FormFieldValue(defaultValue) : undefined,
             null, null, null, countDefault, countMax, countMin,
         );

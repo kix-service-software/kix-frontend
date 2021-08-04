@@ -42,7 +42,8 @@ class Component {
         if (this.state.widgetConfiguration) {
             this.state.show = true;
             this.state.title = this.state.widgetConfiguration.title;
-            this.ticketChartConfiguration = this.state.widgetConfiguration.configuration;
+            this.ticketChartConfiguration =
+                this.state.widgetConfiguration.configuration as TicketChartWidgetConfiguration;
 
             this.initChartConfig();
 

@@ -107,9 +107,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 )
             ];
 
-            const sliderConfig: SliderWidgetConfiguration = this.state.widgetConfiguration.configuration;
-            if (sliderConfig && Array.isArray(this.state.widgetConfiguration.configuration.sliderList)) {
-                this.state.widgetConfiguration.configuration.sliderList.forEach((s) => {
+            const sliderConfig = this.state.widgetConfiguration.configuration as SliderWidgetConfiguration;
+            if (sliderConfig && Array.isArray(sliderConfig.sliderList)) {
+                sliderConfig.sliderList.forEach((s) => {
                     if (s && s.title) {
                         this.state.sliderList.push(s);
                     }

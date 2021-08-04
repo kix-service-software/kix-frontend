@@ -6,14 +6,21 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<widget instanceId=state.instanceId title=state.title icon="kix-icon-gears" minimizable=false>
+<widget
+    instanceId=state.instanceId
+    title=state.title
+    icon="kix-icon-gears"
+    minimizable=false>
     <@content>
         <if(state.prepared)>
             <div.translations-container>
                 <div.translations-search>
-                    <input.input-style type="text" on-keyup("keyUp") value=state.filterValue placeholder=state.placeholder/>
-                    <button.button.button-without-text
+                    <input.input-style
+                        type="text"
+                        on-keyup("keyUp")
+                        value=state.filterValue
+                        placeholder=state.placeholder/>
+                    <button.kix-button.button.button-without-text
                         type="button"
                         title=state.translations["Translatable#Help"]
                         on-click("showCommandHelp", false)>
@@ -22,7 +29,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             content="Translatable#Helptext_Admin_TranslationSearch"
                             title=state.translations["Translatable#Translations"]/>
                     </button>
-                    <button.submit-button type="button" on-click("search")>
+                    <button.kix-button.submit-button type="button" on-click("search")>
                         <span.kix-icon-search/>
                         <translation-string pattern="Translatable#Search"/>
                     </button>

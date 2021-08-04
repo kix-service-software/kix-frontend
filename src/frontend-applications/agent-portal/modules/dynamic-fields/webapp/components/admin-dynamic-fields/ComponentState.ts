@@ -25,7 +25,7 @@ export class ComponentState {
                 null, null, null,
                 KIXObjectType.DYNAMIC_FIELD, null, null,
                 new TableConfiguration(null, null, null,
-                    KIXObjectType.DYNAMIC_FIELD, null, null, null, [], true, null, null, null,
+                    KIXObjectType.DYNAMIC_FIELD, null, 20, null, [], true, null, null, null,
                     TableHeaderHeight.LARGE, TableRowHeight.LARGE
                 )
             ),

@@ -25,6 +25,8 @@ import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { FAQArticleProperty } from './model/FAQArticleProperty';
 import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 import { SearchOperator } from '../search/model/SearchOperator';
+import { ObjectInformationCardConfiguration } from '../base-components/webapp/components/object-information-card-widget/ObjectInformationCardConfiguration';
+import { UIFilterCriterion } from '../../model/UIFilterCriterion';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -38,9 +40,9 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             'faq-article-info-widget', 'FAQ Article Info', ConfigurationType.Widget,
             'object-information-card-widget', 'Translatable#FAQ Information',
             [], null,
-            {
-                avatar: [],
-                rows: [
+            new ObjectInformationCardConfiguration(
+                [],
+                [
                     {
                         style: '',
                         separator: true,
@@ -124,19 +126,18 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                                         name: 'RelatedAssets'
                                     },
                                     conditions: [
-                                        {
-                                            property: 'DynamicFields.RelatedAssets',
-                                            operator: SearchOperator.NOT_EQUALS,
-                                            value: null
-                                        }
+                                        new UIFilterCriterion(
+                                            'DynamicFields.RelatedAssets',
+                                            SearchOperator.NOT_EQUALS,
+                                            null
+                                        )
                                     ]
                                 }
                             ]
                         ]
                     }
                 ]
-            }
-            , false, true, null, false
+            ), false, true, null, false
         );
         configurations.push(faqInfoWidget);
 
@@ -155,8 +156,8 @@ class Extension extends KIXExtension implements IConfigurationExtension {
 
         const faqHistoryWidget = new WidgetConfiguration(
             'faq-article-history-widget', 'History Widget', ConfigurationType.Widget,
-            'faq-article-history-widget', 'Translatable#History', [], null,
-            new ConfigurationDefinition('faq-article-history-config', ConfigurationType.Table),
+            'faq-article-history-widget', 'Translatable#History', [],
+            new ConfigurationDefinition('faq-article-history-config', ConfigurationType.Table), null,
             false, false, null, false
         );
         configurations.push(faqHistoryWidget);

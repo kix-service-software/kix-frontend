@@ -349,7 +349,7 @@ msgid "between"
 msgstr "zwischen"
 
 msgid "Body"
-msgstr "Nachrichteninhalt"
+msgstr "Body"
 
 msgid "Bulk"
 msgstr "Menge"
@@ -2844,7 +2844,7 @@ msgid "Localisation"
 msgstr "Lokalisierung"
 
 msgid "Lock"
-msgstr "Sperren"
+msgstr "Sperre"
 
 msgid "Locked"
 msgstr "Gesperrt"
@@ -3865,9 +3865,6 @@ msgstr "Senden an"
 
 msgid "Send to all role members"
 msgstr "Senden an Agenten-Rollen"
-
-msgid "send to background"
-msgstr "Im Hintergrund fortsetzen"
 
 msgid "Send to these agents"
 msgstr "Senden an Agenten"

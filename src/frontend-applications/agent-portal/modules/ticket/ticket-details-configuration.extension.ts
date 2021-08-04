@@ -39,6 +39,9 @@ import { ArticleProperty } from './model/ArticleProperty';
 import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 import { ObjectInformationWidgetConfiguration } from '../../model/configuration/ObjectInformationWidgetConfiguration';
 import { FAQArticleProperty } from '../faq/model/FAQArticleProperty';
+import { ObjectInformationCardConfiguration } from '../base-components/webapp/components/object-information-card-widget/ObjectInformationCardConfiguration';
+import { RoutingConfiguration } from '../../model/configuration/RoutingConfiguration';
+import { UIFilterCriterion } from '../../model/UIFilterCriterion';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -53,9 +56,9 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         const ticketInfoCard = new WidgetConfiguration(
             'ticket-details-info-card', 'Ticket Info Widget', ConfigurationType.Widget,
             'object-information-card-widget', 'Translatable#Ticket Information', [], null,
-            {
-                avatar: [],
-                rows: [
+            new ObjectInformationCardConfiguration(
+                [],
+                [
                     {
                         title: 'Translatable#Summary',
                         style: '',
@@ -67,15 +70,14 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentData: {
                                         property: TicketProperty.ORGANISATION_ID
                                     },
-                                    routingConfiguration: {
-                                        contextId: 'organisation-details',
-                                        objectType: KIXObjectType.ORGANISATION,
-                                        contextMode: ContextMode.DETAILS,
-                                        objectIdProperty: 'ID',
-                                        history: false,
-                                        resetContext: true,
-                                        contextType: 'MAIN'
-                                    },
+                                    routingConfiguration: new RoutingConfiguration(
+                                        'organisation-details',
+                                        KIXObjectType.ORGANISATION,
+                                        ContextMode.DETAILS,
+                                        'ID',
+                                        false, null, null,
+                                        true
+                                    ),
                                     routingObjectId: '<KIX_TICKET_OrganisationID>'
                                 },
                                 {
@@ -91,15 +93,14 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentData: {
                                         property: TicketProperty.CONTACT_ID
                                     },
-                                    routingConfiguration: {
-                                        contextId: 'contact-details',
-                                        objectType: KIXObjectType.CONTACT,
-                                        contextMode: ContextMode.DETAILS,
-                                        objectIdProperty: 'ID',
-                                        history: false,
-                                        resetContext: true,
-                                        contextType: 'MAIN'
-                                    },
+                                    routingConfiguration: new RoutingConfiguration(
+                                        'contact-details',
+                                        KIXObjectType.CONTACT,
+                                        ContextMode.DETAILS,
+                                        'ID',
+                                        false, null, null,
+                                        true
+                                    ),
                                     routingObjectId: '<KIX_TICKET_ContactID>'
                                 },
                                 {
@@ -122,11 +123,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         property: 'DynamicFields.CloseCode'
                                     },
                                     conditions: [
-                                        {
-                                            property: 'DynamicFields.CloseCode',
-                                            operator: SearchOperator.NOT_EQUALS,
-                                            value: null
-                                        }
+                                        new UIFilterCriterion(
+                                            'DynamicFields.CloseCode',
+                                            SearchOperator.NOT_EQUALS,
+                                            null
+                                        )
                                     ]
                                 },
                                 {
@@ -135,11 +136,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         property: 'DynamicFields.AnonymiseTicket'
                                     },
                                     conditions: [
-                                        {
-                                            property: 'DynamicFields.AnonymiseTicket',
-                                            operator: SearchOperator.NOT_EQUALS,
-                                            value: null
-                                        }
+                                        new UIFilterCriterion(
+                                            'DynamicFields.AnonymiseTicket',
+                                            SearchOperator.NOT_EQUALS,
+                                            null
+                                        )
                                     ]
                                 }
                             ]
@@ -157,11 +158,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         name: 'WorkOrder'
                                     },
                                     conditions: [
-                                        {
-                                            property: 'DynamicFields.WorkOrder',
-                                            operator: SearchOperator.NOT_EQUALS,
-                                            value: null
-                                        }
+                                        new UIFilterCriterion(
+                                            'DynamicFields.WorkOrder',
+                                            SearchOperator.NOT_EQUALS,
+                                            null
+                                        )
                                     ]
                                 }
                             ]
@@ -195,11 +196,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         property: TicketProperty.QUEUE_ID
                                     },
                                     conditions: [
-                                        {
-                                            property: TicketProperty.OWNER_ID,
-                                            operator: SearchOperator.NOT_EQUALS,
-                                            value: 1
-                                        }
+                                        new UIFilterCriterion(
+                                            TicketProperty.OWNER_ID,
+                                            SearchOperator.NOT_EQUALS,
+                                            1
+                                        )
                                     ]
                                 }
                             ]
@@ -220,11 +221,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         name: 'MobileProcessingChecklist010'
                                     },
                                     conditions: [
-                                        {
-                                            property: 'DynamicFields.MobileProcessingChecklist010',
-                                            operator: SearchOperator.NOT_EQUALS,
-                                            value: null
-                                        }
+                                        new UIFilterCriterion(
+                                            'DynamicFields.MobileProcessingChecklist010',
+                                            SearchOperator.NOT_EQUALS,
+                                            null
+                                        )
                                     ]
                                 }
                             ],
@@ -238,11 +239,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         name: 'MobileProcessingChecklist020'
                                     },
                                     conditions: [
-                                        {
-                                            property: 'DynamicFields.MobileProcessingChecklist020',
-                                            operator: SearchOperator.NOT_EQUALS,
-                                            value: null
-                                        }
+                                        new UIFilterCriterion(
+                                            'DynamicFields.MobileProcessingChecklist020',
+                                            SearchOperator.NOT_EQUALS,
+                                            null
+                                        )
                                     ]
                                 }
                             ]
@@ -263,11 +264,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         name: 'AffectedAsset'
                                     },
                                     conditions: [
-                                        {
-                                            property: 'DynamicFields.AffectedAsset',
-                                            operator: SearchOperator.NOT_EQUALS,
-                                            value: null
-                                        }
+                                        new UIFilterCriterion(
+                                            'DynamicFields.AffectedAsset',
+                                            SearchOperator.NOT_EQUALS,
+                                            null
+                                        )
                                     ]
                                 }
                             ]
@@ -286,11 +287,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         name: 'RelatedTickets'
                                     },
                                     conditions: [
-                                        {
-                                            property: 'DynamicFields.RelatedTickets',
-                                            operator: SearchOperator.NOT_EQUALS,
-                                            value: null
-                                        }
+                                        new UIFilterCriterion(
+                                            'DynamicFields.RelatedTickets',
+                                            SearchOperator.NOT_EQUALS,
+                                            null
+                                        )
                                     ]
                                 }
                             ]
@@ -307,11 +308,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     ],
                                     icon: 'kix-icon-time',
                                     conditions: [
-                                        {
-                                            property: 'AccountedTime',
-                                            operator: SearchOperator.NOT_EQUALS,
-                                            value: null
-                                        }
+                                        new UIFilterCriterion(
+                                            'AccountedTime',
+                                            SearchOperator.NOT_EQUALS,
+                                            null
+                                        )
                                     ]
                                 }
                             ],
@@ -324,11 +325,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     ],
                                     icon: 'kix-icon-time-wait',
                                     conditions: [
-                                        {
-                                            property: TicketProperty.STATE_TYPE,
-                                            operator: SearchOperator.CONTAINS,
-                                            value: 'pending'
-                                        }
+                                        new UIFilterCriterion(
+                                            TicketProperty.STATE_TYPE,
+                                            SearchOperator.CONTAINS,
+                                            'pending'
+                                        )
                                     ]
                                 }
                             ],
@@ -341,11 +342,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     ],
                                     icon: 'kix-icon-time-back',
                                     conditions: [
-                                        {
-                                            property: 'DynamicFields.PlanBegin',
-                                            operator: SearchOperator.NOT_EQUALS,
-                                            value: null
-                                        }
+                                        new UIFilterCriterion(
+                                            'DynamicFields.PlanBegin',
+                                            SearchOperator.NOT_EQUALS,
+                                            null
+                                        )
                                     ]
                                 }
 
@@ -375,7 +376,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         ]
                     }
                 ]
-            },
+            ),
             false, false, 'kix-icon-ticket'
         );
         configurations.push(ticketInfoCard);
@@ -421,11 +422,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         const contactInfoCard = new WidgetConfiguration(
             'ticket-details-contact-card-widget', 'Contact Info Widget', ConfigurationType.Widget,
             'object-information-card-widget', 'Translatable#Contact Information', [], null,
-            {
-                avatar: new ObjectIcon(
+            new ObjectInformationCardConfiguration(
+                new ObjectIcon(
                     null, KIXObjectType.CONTACT, '<KIX_CONTACT_ID>', null, null, 'kix-icon-man-bubble'
                 ),
-                rows: [
+                [
                     {
                         separator: false,
                         values: [
@@ -490,11 +491,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 {
                                     icon: 'kix-icon-ticket',
                                     text: 'Translatable#Open Tickets of Contact',
-                                    routingConfiguration: {
-                                        contextId: 'search',
-                                        contextMode: ContextMode.SEARCH,
-                                        externalLink: false,
-                                        params: [
+                                    routingConfiguration: new RoutingConfiguration(
+                                        'search', null,
+                                        ContextMode.SEARCH, null, null,
+                                        false, null, null,
+                                        [
                                             [
                                                 'search',
                                                 {
@@ -518,16 +519,16 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                 }
                                             ]
                                         ]
-                                    }
+                                    )
                                 },
                                 {
                                     icon: 'kix-icon-ticket',
                                     text: 'Translatable#Open Tickets of Organisation',
-                                    routingConfiguration: {
-                                        contextId: 'search',
-                                        contextMode: ContextMode.SEARCH,
-                                        externalLink: false,
-                                        params: [
+                                    routingConfiguration: new RoutingConfiguration(
+                                        'search', null,
+                                        ContextMode.SEARCH, null, null,
+                                        false, null, null,
+                                        [
                                             [
                                                 'search',
                                                 {
@@ -551,13 +552,13 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                 }
                                             ]
                                         ]
-                                    }
+                                    )
                                 }
                             ]
                         ]
                     }
                 ]
-            },
+            ),
             false, true, 'kix-icon-man-house'
         );
         configurations.push(contactInfoCard);

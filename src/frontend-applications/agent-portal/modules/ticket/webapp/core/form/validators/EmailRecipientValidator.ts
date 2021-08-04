@@ -43,8 +43,10 @@ export class EmailRecipientValidator implements IFormFieldValidator {
         if (!this.isDefined(toValue)) {
             if (context && context.descriptor.contextMode === ContextMode.CREATE) {
                 const contactValue = await formInstance.getFormFieldValueByProperty<string>(TicketProperty.CONTACT_ID);
-                toValue = new FormFieldValue([contactValue.value], contactValue.valid);
-                checkToValue = false;
+                if (contactValue) {
+                    toValue = new FormFieldValue([contactValue.value], contactValue.valid);
+                    checkToValue = false;
+                }
             }
         }
 

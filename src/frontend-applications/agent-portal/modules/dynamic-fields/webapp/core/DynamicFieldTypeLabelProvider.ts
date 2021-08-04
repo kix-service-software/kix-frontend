@@ -66,7 +66,26 @@ export class DynamicFieldTypeLabelProvider extends LabelProvider<DynamicFieldTyp
     }
 
     public getObjectIcon(dynamicFieldType?: DynamicFieldType): string | ObjectIcon {
-        return;
+        switch (dynamicFieldType.Name) {
+            case 'ITSMConfigItemReference':
+                return 'fa fa-archive';
+            case 'CheckList':
+                return 'kix-icon-checklist';
+            case 'DateTime':
+                return 'far fa-clock';
+            case 'Date':
+                return 'kix-icon-calendar';
+            case 'Text':
+                return 'kix-icon-minus';
+            case 'TextArea':
+                return 'kix-icon-menue';
+            case 'Multiselect':
+                return 'fa fa-th-list';
+            case 'TicketReference':
+                return 'kix-icon-ticket';
+            default:
+                return new ObjectIcon(null, KIXObjectType.DYNAMIC_FIELD_TYPE, dynamicFieldType.Name);
+        }
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {

@@ -556,4 +556,18 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return false;
     }
 
+    public valuesAreDraggable(): boolean {
+        return false;
+    }
+
+    public async changeValueOrder(currentIndex: number, targetIndex: number): Promise<void> {
+        if (this.values?.length && !isNaN(currentIndex) && !isNaN(targetIndex) && currentIndex !== targetIndex) {
+            const newIndex = targetIndex > currentIndex ? targetIndex - 1 : targetIndex;
+            const value = this.values.splice(currentIndex, 1);
+            this.values.splice(newIndex, 0, value[0]);
+
+            this.notifyListeners();
+        }
+    }
+
 }
