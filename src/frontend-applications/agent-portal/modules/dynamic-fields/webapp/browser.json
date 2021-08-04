@@ -9,7 +9,6 @@
         "require ./components/dynamic-field-object-property",
         "require ./components/dynamic-field-checklist-cell",
         "require ./components/dynamic-field-checklist-progress",
-        "require ./components/dynamic-field-value",
-        "./static/jsoneditor.min.js"
+        "require ./components/dynamic-field-value"
     ]
 }
