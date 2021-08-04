@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2021-07-28 14:47+0000\n"
-"Last-Translator: rbo <Rene.Boehm@cape-it.de>\n"
+"PO-Revision-Date: 2021-08-04 08:47+0000\n"
+"Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
 "Language: de\n"
@@ -236,7 +236,7 @@ msgid "Article Overview"
 msgstr "Übersicht der Artikel"
 
 msgid "Article Text"
-msgstr "Artikelinhalt"
+msgstr "Artikeltext"
 
 msgid "Asset"
 msgstr "Asset"
@@ -361,7 +361,7 @@ msgid "Bulk Action"
 msgstr "Sammelaktion"
 
 msgid "Cancel"
-msgstr "Abbrechen"
+msgstr "Abbruch"
 
 msgid "Can not create link ({0})"
 msgstr "Verknüpfung konnte nicht angelegt werden ({0})"
@@ -536,7 +536,7 @@ msgid "Config Item Information"
 msgstr "Asset-Informationen"
 
 msgid "Config Items"
-msgstr "Assets"
+msgstr "Config Items"
 
 msgid "Config Items Count: {0}"
 msgstr "Anzahl Assets: {0}"
@@ -599,7 +599,7 @@ msgid "created"
 msgstr "erstellt"
 
 msgid "Created at"
-msgstr "Erstellt am"
+msgstr "Erstellt"
 
 msgid "Created by"
 msgstr "Erstellt von"
@@ -2246,16 +2246,18 @@ msgstr ""
 "Informationen zur Benachrichtigung zu erhalten."
 
 msgid "Helptext_PersonalSettings_UserLanguage_Hint"
-msgstr "Wählen Sie aus, in welcher Sprache Sie die Anwendung nutzen möchten."
+msgstr ""
+"Ändern Sie hier die Sprache in der das Self-Service-Portal dargestellt wird."
 
 msgid "Helptext_PersonalSettings_UserNewPasswordConfirm_Hint"
-msgstr "Bestätigen Sie das neue Passwort."
+msgstr ""
+"Wiederholung Ihres neuen Passwortes für die Nutzung des Self-Service-Portals."
 
 msgid "Helptext_PersonalSettings_UserNewPassword_Hint"
-msgstr "Legen Sie ein neues Passwort für Ihren Nutzeraccount fest."
+msgstr "Ihr neues Passwort für die Nutzung des Self-Service-Portals"
 
 msgid "Helptext_PersonalSettings_UserPassword_Hint"
-msgstr "Geben Sie Ihr aktuell gültiges Passwort ein."
+msgstr "Ihr Anmeldepasswort für die Nutzung des Self-Service-Portals"
 
 msgid "Helptext_Reporting_ReportCreate_Comment"
 msgstr ""
@@ -2389,6 +2391,8 @@ msgstr ""
 
 msgid "Helptext_Tickets_ArticleCreate_Attachments"
 msgstr ""
+"Wählen Sie ob die Ticketbeschreibung nur als Notiz abgelegt oder direkt als "
+"Email versendet wird."
 
 msgid "Helptext_Tickets_ArticleCreate_Channel"
 msgstr ""
@@ -2409,7 +2413,7 @@ msgstr ""
 "gesetzt und kann nicht entfernt werden."
 
 msgid "Helptext_Tickets_ArticleCreateEdit_Subject"
-msgstr "Fassen Sie das Thema des Artikels kurz zusammen."
+msgstr "Eine kurze Zusammenfassung Ihrer Nachricht"
 
 msgid "Helptext_Tickets_ArticleCreate_From"
 msgstr ""
@@ -2516,7 +2520,7 @@ msgstr ""
 "befindet."
 
 msgid "Helptext_Tickets_TicketCreate_Subject"
-msgstr "Fassen Sie das Thema des Tickets kurz zusammen."
+msgstr "Eine kurze Zusammenfassung ihrer Meldung"
 
 msgid "Helptext_Tickets_TicketCreate_Type"
 msgstr ""
@@ -3125,7 +3129,7 @@ msgid "No article available."
 msgstr "Kein Artikel verfügbar."
 
 msgid "No data available."
-msgstr "Keine Daten verfügbar."
+msgstr "Keine Angaben verfügbar."
 
 msgid "No objects available."
 msgstr "Keine Objekte verfügbar."
@@ -3311,7 +3315,7 @@ msgid "Output Handler"
 msgstr "Output Handler"
 
 msgid "Overall"
-msgstr "Gesamt"
+msgstr "Summe"
 
 msgid "Overview"
 msgstr "Übersicht"
@@ -3498,7 +3502,7 @@ msgid "Priority Information"
 msgstr "Prioritäten-Informationen"
 
 msgid "Queue"
-msgstr "Team"
+msgstr "Queue"
 
 msgid "Queue Information"
 msgstr "Team-Informationen"
@@ -4418,7 +4422,7 @@ msgid "User manual"
 msgstr "Handbuch für Anwender"
 
 msgid "User Name"
-msgstr "Nutzername"
+msgstr "Nutzerkennung"
 
 msgid "Users"
 msgstr "Nutzer"
