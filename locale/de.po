@@ -2381,13 +2381,6 @@ msgstr ""
 "ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
 "weitere Texteingabe können Sie die Auswahl weiter einschränken."
 
-msgid "Helptext_Textmodules_TicketEdit"
-msgstr ""
-"Um die in Ihrem System verfügbaren Textbausteine zu nutzen, geben Sie \"::"
-"\" (Doppelpunkt Doppelpunkt) ein. Wählen Sie anschließend im Kontextmenü den "
-"gewünschten Textbaustein aus. Sie können die Auswahl anhand der "
-"Schlüsselworte manuell einschränken, in dem sie weiteren Text eingeben."
-
 msgid "Helptext_Ticket_Dashboard_Search"
 msgstr ""
 "Durchsuchbar sind die Ticket-Eigenschaften \"Ticketnummer\", \"Titel\", "
@@ -3866,6 +3859,9 @@ msgstr "Senden an"
 msgid "Send to all role members"
 msgstr "Senden an Agenten-Rollen"
 
+msgid "send to background"
+msgstr ""
+
 msgid "Send to these agents"
 msgstr "Senden an Agenten"
 
@@ -4340,12 +4336,6 @@ msgstr "Typ"
 msgid "Type Data"
 msgstr "Typdaten"
 
-msgid "Type Details"
-msgstr "Typdetails"
-
-msgid "Type Information"
-msgstr "Typ-Informationen"
-
 msgid "Type of Job"
 msgstr "Job Typ"
 
@@ -4546,6 +4536,19 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Helptext_Textmodules_TicketEdit"
+#~ msgstr ""
+#~ "Um die in Ihrem System verfügbaren Textbausteine zu nutzen, geben Sie \"::"
+#~ "\" (Doppelpunkt Doppelpunkt) ein. Wählen Sie anschließend im Kontextmenü "
+#~ "den gewünschten Textbaustein aus. Sie können die Auswahl anhand der "
+#~ "Schlüsselworte manuell einschränken, in dem sie weiteren Text eingeben."
+
+#~ msgid "Type Details"
+#~ msgstr "Typdetails"
+
+#~ msgid "Type Information"
+#~ msgstr "Typ-Informationen"
 
 #~ msgid "Cancel Process"
 #~ msgstr "Bearbeiten wird abgebrochen"

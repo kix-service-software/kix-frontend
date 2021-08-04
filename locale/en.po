@@ -2261,12 +2261,6 @@ msgstr ""
 "Then choose the text modules you want to use in the context menu. You can "
 "narrow down the key word selection manually by entering more text."
 
-msgid "Helptext_Textmodules_TicketEdit"
-msgstr ""
-"To use the text modules available in your system, enter “::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
-
 msgid "Helptext_Ticket_Dashboard_Search"
 msgstr ""
 "Ticket properties as ticket number, title, article content, from, to, Cc "
@@ -3724,6 +3718,9 @@ msgstr ""
 msgid "Send to all role members"
 msgstr ""
 
+msgid "send to background"
+msgstr ""
+
 msgid "Send to these agents"
 msgstr ""
 
@@ -4189,12 +4186,6 @@ msgstr ""
 msgid "Type Data"
 msgstr ""
 
-msgid "Type Details"
-msgstr ""
-
-msgid "Type Information"
-msgstr ""
-
 msgid "Type of Job"
 msgstr ""
 
@@ -4395,6 +4386,12 @@ msgstr ""
 
 msgid "ZIP"
 msgstr ""
+
+#~ msgid "Helptext_Textmodules_TicketEdit"
+#~ msgstr ""
+#~ "To use the text modules available in your system, enter “::“ (colon "
+#~ "colon). Then choose the text modules you want to use in the context menu. "
+#~ "You can narrow down the key word selection manually by entering more text."
 
 #~ msgid "CI Class successfully created."
 #~ msgstr "Asset Class successfully created."
