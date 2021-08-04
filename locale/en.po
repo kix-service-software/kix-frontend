@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2021-06-30 11:47+0000\n"
+"PO-Revision-Date: 2021-08-04 13:47+0000\n"
 "Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
 "Language-Team: English <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/en/>\n"
@@ -135,7 +135,7 @@ msgid "Agent Login"
 msgstr ""
 
 msgid "Agent Portal"
-msgstr ""
+msgstr "Agent Portal"
 
 msgid "Agent Preferences Tooltip"
 msgstr ""
@@ -475,7 +475,7 @@ msgid ", (comma)"
 msgstr ""
 
 msgid "Comment"
-msgstr ""
+msgstr "Comment"
 
 msgid "Communication"
 msgstr ""
@@ -544,7 +544,7 @@ msgid "Console"
 msgstr ""
 
 msgid "Contact"
-msgstr ""
+msgstr "Contact"
 
 msgid "Contact Details"
 msgstr ""
@@ -562,7 +562,7 @@ msgid "contains"
 msgstr ""
 
 msgid "Context"
-msgstr ""
+msgstr "Context"
 
 msgid "Copy of {0}"
 msgstr ""
@@ -700,7 +700,7 @@ msgid "Define notification template"
 msgstr ""
 
 msgid "Delete"
-msgstr ""
+msgstr "Delete"
 
 msgid "Delete all selected report definitions?"
 msgstr ""
