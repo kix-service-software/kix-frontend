@@ -55,11 +55,11 @@ export class Row<T = any> {
     public initializeDisplayValues(): void {
         this.cells.forEach((c) => {
             c.initDisplayValue();
-
-            if (Array.isArray(this.children) && this.children.length) {
-                this.children.forEach((cr) => cr.initializeDisplayValues());
-            }
         });
+
+        if (Array.isArray(this.children) && this.children.length) {
+            this.children.forEach((cr) => cr.initializeDisplayValues());
+        }
     }
 
     public getTable(): Table {
