@@ -7,12 +7,5 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 <if(state.prepared && state.field)>
-    <form-list
-        placeholder=state.placeholder
-        required=state.field.required
-        on-focusLost("focusLost")
-        on-nodesChanged("nodesChanged")
-        invalid=state.invalid
-        multiselect=true
-        treeId=state.treeId/>
+    <div.json-editor-container key=("jsoneditor-" + state.field.id) no-update/>
 </if>
