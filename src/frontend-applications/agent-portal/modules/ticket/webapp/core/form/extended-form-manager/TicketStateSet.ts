@@ -39,8 +39,8 @@ export class TicketStateSet extends ExtendedJobFormManager {
                         new FormFieldOption(DefaultSelectInputFormOption.NODES,
                             [
                                 new TreeNode('NONE', '-'),
-                                new TreeNode('BOB', 'BOB'),
-                                new TreeNode('EOB', 'EOB'),
+                                new TreeNode('BOB', 'Translatable#Begin of Business Day'),
+                                new TreeNode('EOB', 'Translatable#End of Business Day'),
                             ]),
                         new FormFieldOption(DefaultSelectInputFormOption.MULTI, false)
                     ]
