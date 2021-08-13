@@ -6,21 +6,27 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.link-input>
     <if(!state.loading)>
         <if(state.allowCreate)>
-            <button.form-button type="button" title=state.translations["Assign Links"] on-click("openDialog")>
+            <button.kix-button.form-button
+                type="button"
+                title=state.translations["Assign Links"]
+                on-click("openDialog")>
                 <span.kix-icon-new-link/>
                 <translation-string pattern="Translatable#Assign Links"/>
             </button>
         </if>
-        <span.link-notice on-click("minimize") class={
-            "has-text": !!state.linkDescriptions.length
-        }>
+        <span.link-notice
+            on-click("minimize")
+            class={
+                "has-text": !!state.linkDescriptions.length
+            }>
             <if(!!state.linkDescriptions.length)>
                 <span>
-                    <translation-string pattern="Translatable#{0} Link created" placeholders=[state.linkDescriptions.length]/>
+                    <translation-string
+                        pattern="Translatable#{0} Link created"
+                        placeholders=[state.linkDescriptions.length]/>
                     <span.kix-icon-check/>
                 </span>
             </if>

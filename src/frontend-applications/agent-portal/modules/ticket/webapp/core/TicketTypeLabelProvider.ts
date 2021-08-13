@@ -73,7 +73,7 @@ export class TicketTypeLabelProvider extends LabelProvider<TicketType> {
     }
 
     public getObjectIcon(ticketType?: TicketType): string | ObjectIcon {
-        return new ObjectIcon(null, 'TicketType', ticketType.ID);
+        return new ObjectIcon(null, KIXObjectType.TICKET_TYPE, ticketType.ID, null, null, 'kix-icon-ticket');
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
@@ -96,7 +96,7 @@ export class TicketTypeLabelProvider extends LabelProvider<TicketType> {
         ticketType: TicketType, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
         if (property === TicketTypeProperty.ID || property === 'ICON') {
-            return [new ObjectIcon(null, 'TicketType', ticketType.ID)];
+            return [this.getObjectIcon(ticketType)];
         }
         return null;
     }

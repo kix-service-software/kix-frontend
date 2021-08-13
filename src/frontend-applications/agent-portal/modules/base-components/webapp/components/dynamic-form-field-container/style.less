@@ -21,11 +21,36 @@
 .dynamic-form-field-value {
     display: grid;
     grid-template-columns: @dynamic-value-columns;
+    grid-auto-columns: 1rem;
     align-items: center;
     grid-column-gap: @dynamic-value-gap;
     margin-bottom: @margin-small;
     align-items: start;
     grid-row-gap: @margin-small;
+    position: relative; // necessary for dnd
+
+    &[draggable="true"] {
+        -khtml-user-drag: element;
+    }
+
+    &.dragging {
+        .no-select();
+        background-color: @secondary-3;
+        border-radius: @border-radius;
+    }
+
+    >.drag-button {
+        grid-row: 1;
+        grid-column: -1;
+        display: grid;
+        cursor: row-resize;
+        height: 1.5rem;
+        align-content: center;
+
+        >span:last-child {
+            margin-top: -0.3rem;
+        }
+    }
 
     .addtional-options {
         grid-row: 2;
@@ -107,5 +132,20 @@
 
     >.remove-value {
         cursor: pointer;
+    }
+}
+
+// TODO: copied from field-cotainer
+.dynamic-form-field-drop-zone {
+    height: 1rem;
+    background-color: @secondary-3;
+    border: 1px dashed @secondary-2;
+    border-radius: @border-radius;
+    transition: height 0.175s, background-color 0.175s;
+    margin-bottom: @margin-small;
+
+    &.drag-over {
+        height: 3rem;
+        background-color: darken(@secondary-3, 10%);
     }
 }

@@ -34,6 +34,8 @@ import { ContextMode } from '../../model/ContextMode';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { ObjectIcon } from '../icon/model/ObjectIcon';
 import { SearchOperator } from '../search/model/SearchOperator';
+import { InformationConfiguration, InformationRowConfiguration, ObjectInformationCardConfiguration } from '../base-components/webapp/components/object-information-card-widget/ObjectInformationCardConfiguration';
+import { UIFilterCriterion } from '../../model/UIFilterCriterion';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -42,240 +44,230 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
     }
 
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
-        const configurations = [];
+        const configurations: IConfiguration[] = [];
 
         const contactInfoWidget = new WidgetConfiguration(
             'contact-details-info-widget', 'Contact Info Widget', ConfigurationType.Widget,
             'object-information-card-widget', 'Translatable#Contact Information', [], null,
-            {
-                avatar: [],
-                rows: [
-                    {
-                        style: '',
-                        separator: true,
-                        values: [
+            new ObjectInformationCardConfiguration(
+                [],
+                [
+                    new InformationRowConfiguration(
+                        [
                             [
-                                {
-                                    componentId: 'icon',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'icon',
+                                    {
                                         icon: new ObjectIcon(
                                             null, KIXObjectType.CONTACT, '<KIX_CONTACT_ID>', null, null, 'kix-icon-man-bubble'
                                         ),
                                         style: 'width: 5rem;height:5rem;font-size:5rem;'
                                     }
-                                }
+                                )
                             ],
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: ContactProperty.TITLE
                                     }
-                                }
+                                )
                             ],
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: ContactProperty.FIRSTNAME
                                     }
-                                },
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                ),
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: ContactProperty.LASTNAME
                                     }
-                                }
+                                )
                             ],
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: ContactProperty.PRIMARY_ORGANISATION_ID
                                     }
-                                },
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                ),
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: KIXObjectProperty.VALID_ID
                                     }
-                                }
+                                )
                             ]
-                        ]
-                    },
-                    {
-                        style: '',
-                        separator: true,
-                        values: [
+                        ], null, '', true
+                    ),
+                    new InformationRowConfiguration(
+                        [
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: UserProperty.USER_LOGIN
                                     }
-                                }
+                                )
                             ],
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: UserProperty.USER_ACCESS
                                     }
-                                }
+                                )
                             ],
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: UserProperty.USER_LANGUAGE
                                     }
-                                }
+                                )
                             ]
-                        ]
-                    },
-                    {
-                        style: '',
-                        separator: true,
-                        values: [
+                        ], null, null, true
+                    ),
+                    new InformationRowConfiguration(
+                        [
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: ContactProperty.PHONE
                                     }
-                                }
+                                )
                             ],
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: ContactProperty.MOBILE
                                     }
-                                }
+                                )
                             ],
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: ContactProperty.FAX
                                     }
-                                }
+                                )
                             ],
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: ContactProperty.EMAIL
                                     }
-                                }
+                                )
                             ]
-                        ]
-                    },
-                    {
-                        style: '',
-                        separator: true,
-                        values: [
+                        ], null, null, true
+                    ),
+                    new InformationRowConfiguration(
+                        [
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: ContactProperty.STREET
                                     }
-                                }
+                                )
                             ],
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: ContactProperty.ZIP
                                     }
-                                }
+                                )
                             ],
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: ContactProperty.CITY
                                     }
-                                }
+                                )
                             ],
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: ContactProperty.COUNTRY
                                     }
-                                }
+                                )
                             ]
-                        ]
-                    },
-                    {
-                        style: '',
-                        separator: true,
-                        values: [
+                        ], null, null, true
+                    ),
+                    new InformationRowConfiguration(
+                        [
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: KIXObjectProperty.CREATE_TIME
                                     }
-                                }
+                                )
                             ],
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: KIXObjectProperty.CREATE_BY
                                     }
-                                }
+                                )
                             ],
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: KIXObjectProperty.CHANGE_TIME
                                     }
-                                }
+                                )
                             ],
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: KIXObjectProperty.CHANGE_BY
                                     }
-                                }
+                                )
                             ],
-                            {
-                                componentId: 'object-avatar-label',
-                                componentData: {
-                                    property: 'DynamicFields.Source'
-                                },
-                                conditions: [
-                                    {
-                                        property: 'DynamicFields.Source',
-                                        operator: SearchOperator.NOT_EQUALS,
-                                        value: null
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        style: '',
-                        separator: false,
-                        values: [
                             [
-                                {
-                                    componentId: 'object-avatar-label',
-                                    componentData: {
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
+                                        property: 'DynamicFields.Source'
+                                    },
+                                    [
+                                        new UIFilterCriterion(
+                                            'DynamicFields.Source',
+                                            SearchOperator.NOT_EQUALS,
+                                            null
+                                        )
+                                    ]
+                                )
+                            ]
+                        ], null, null, true
+                    ),
+                    new InformationRowConfiguration(
+                        [
+                            [
+                                new InformationConfiguration(
+                                    'object-avatar-label',
+                                    {
                                         property: OrganisationProperty.COMMENT
                                     }
-                                }
+                                )
                             ]
                         ]
-                    }
+                    )
                 ]
-            }, false, true, null, false
+            ), false, true, null, false
         );
         configurations.push(contactInfoWidget);
 

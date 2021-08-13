@@ -7,7 +7,6 @@
  * --
  */
 
-// tslint:disable: max-line-length
 import { SocketNameSpace } from './SocketNameSpace';
 import { KIXModulesEvent } from '../../modules/base-components/webapp/core/KIXModulesEvent';
 import { SocketResponse } from '../../modules/base-components/webapp/core/SocketResponse';
@@ -36,7 +35,6 @@ import { SysConfigOption } from '../../modules/sysconfig/model/SysConfigOption';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { CacheService } from '../services/cache';
 import { ISocketResponse } from '../../modules/base-components/webapp/core/ISocketResponse';
-// tslint:enable
 
 export class KIXModuleNamespace extends SocketNameSpace {
 
@@ -60,17 +58,31 @@ export class KIXModuleNamespace extends SocketNameSpace {
     }
 
     protected registerEvents(client: Socket): void {
+        this.registerEventHandler(
+            client, KIXModulesEvent.LOAD_FORM_CONFIGURATIONS, this.loadFormConfigurations.bind(this)
+        );
+
+        this.registerEventHandler(
+            client, KIXModulesEvent.LOAD_FORM_CONFIGURATIONS_BY_CONTEXT,
+            this.loadFormConfigurationsByContext.bind(this)
+        );
         this.registerEventHandler(client, KIXModulesEvent.LOAD_FORM_CONFIGURATIONS,
             this.loadFormConfigurations.bind(this));
 
-        this.registerEventHandler(client, KIXModulesEvent.LOAD_FORM_CONFIGURATION,
-            this.loadFormConfiguration.bind(this));
+        this.registerEventHandler(
+            client, KIXModulesEvent.LOAD_FORM_CONFIGURATION,
+            this.loadFormConfiguration.bind(this)
+        );
 
-        this.registerEventHandler(client, KIXModulesEvent.LOAD_RELEASE_INFO,
-            this.loadReleaseInfo.bind(this));
+        this.registerEventHandler(
+            client, KIXModulesEvent.LOAD_RELEASE_INFO,
+            this.loadReleaseInfo.bind(this)
+        );
 
-        this.registerEventHandler(client, KIXModulesEvent.REBUILD_FORM_CONFIG,
-            this.rebuildConfiguration.bind(this));
+        this.registerEventHandler(
+            client, KIXModulesEvent.REBUILD_FORM_CONFIG,
+            this.rebuildConfiguration.bind(this)
+        );
     }
 
     protected initialize(): Promise<void> {
@@ -136,15 +148,25 @@ export class KIXModuleNamespace extends SocketNameSpace {
         return this.rebuildPromise;
     }
 
-    private async loadFormConfigurations(
+    private async loadFormConfigurationsByContext(
         data: LoadFormConfigurationsRequest
     ): Promise<SocketResponse> {
         const formIdsWithContext = ModuleConfigurationService.getInstance().getFormIDsWithContext();
         return new SocketResponse(
-            KIXModulesEvent.LOAD_FORM_CONFIGURATIONS_FINISHED,
+            KIXModulesEvent.LOAD_FORM_CONFIGURATIONS_BY_CONTEXT_FINISHED,
             new LoadFormConfigurationsResponse(data.requestId, formIdsWithContext)
         );
+    }
 
+    public async loadFormConfigurations(data: ISocketRequest): Promise<SocketResponse> {
+        const formConfigurations = await CacheService.getInstance().getAll('FormConfiguration');
+        return new SocketResponse(
+            KIXModulesEvent.LOAD_FORM_CONFIGURATIONS_FINISHED,
+            {
+                requestId: data.requestId,
+                formConfigurations
+            }
+        );
     }
 
     private async loadFormConfiguration(
@@ -161,7 +183,6 @@ export class KIXModuleNamespace extends SocketNameSpace {
             KIXModulesEvent.LOAD_FORM_CONFIGURATION_FINISHED,
             new LoadFormConfigurationResponse(data.requestId, form)
         );
-
     }
 
     private async loadReleaseInfo(data: ISocketRequest): Promise<SocketResponse<LoadReleaseInfoResponse>> {

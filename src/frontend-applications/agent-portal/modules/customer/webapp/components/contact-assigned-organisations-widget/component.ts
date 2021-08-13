@@ -17,6 +17,7 @@ import { ActionFactory } from '../../../../../modules/base-components/webapp/cor
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { ContactProperty } from '../../../model/ContactProperty';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 
 class Component {
 
@@ -82,8 +83,8 @@ class Component {
         if (contacts && contacts.length) {
             this.state.table = await TableFactoryService.getInstance().createTable(
                 'contact-assigned-organisation', KIXObjectType.ORGANISATION,
-                this.state.widgetConfiguration.configuration, this.state.contact.OrganisationIDs,
-                null, true
+                this.state.widgetConfiguration.configuration as TableConfiguration,
+                this.state.contact.OrganisationIDs, null, true
             );
 
             const title = await TranslationService.translate(this.state.widgetConfiguration.title);

@@ -48,9 +48,6 @@
             "search-ticket-dialog-configuration": {
                 "module": "search-ticket-dialog-configuration.extension"
             },
-            "ticket-type-details-configuration": {
-                "module": "ticket-type-details-configuration.extension"
-            },
             "new-ticket-type-dialog-configuration": {
                 "module": "new-ticket-type-dialog-configuration.extension"
             },

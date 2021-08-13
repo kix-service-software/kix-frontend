@@ -101,44 +101,37 @@ export class UIModule implements IUIModule {
 
     private registerSchemaForText(): void {
         const schema = {
-            $schema: 'http://json-schema.org/draft-03/schema#',
             type: 'object',
             properties: {
                 CountMin: {
                     title: 'Count Min',
                     description: 'The minimum number of items which are available for input if field is shown in edit mode.',
-                    type: 'integer',
-                    required: true
+                    type: 'integer'
                 },
                 CountMax: {
                     title: 'Count Max',
                     description: 'The maximum number of array or selectable items for this field. if field is shown in edit mode.',
-                    type: 'integer',
-                    required: true
+                    type: 'integer'
                 },
                 CountDefault: {
                     title: 'Count Default',
                     description: 'If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.',
-                    type: 'integer',
-                    required: true
+                    type: 'integer'
                 },
                 ItemSeparator: {
                     title: 'Item Separator',
                     description: 'If field contains multiple values, single values are concatenated by this separator symbol/s.',
-                    type: 'string',
-                    required: false
+                    type: 'string'
                 },
                 DefaultValue: {
                     title: 'Default Value',
                     description: 'The initial value of the field if shown in edit mode for the first time. Applies to first item of array only.',
-                    type: 'string',
-                    required: false
+                    type: 'string'
                 },
                 RegExList: {
                     title: 'RegEx List',
                     description: 'A list of RegEx which are applied to values entered before submitting if field is shown in edit mode. The RegExError is shown if a RegEx does NOT match the value entered.',
                     type: 'array',
-                    required: false,
                     items: {
                         type: 'object',
                         properties: {
@@ -153,7 +146,8 @@ export class UIModule implements IUIModule {
                         }
                     }
                 }
-            }
+            },
+            required: ['CountMin', 'CountMax', 'CountDefault']
         };
 
         DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.TEXT, schema);
@@ -161,44 +155,37 @@ export class UIModule implements IUIModule {
 
     private registerSchemaForTextArea(): void {
         const schema = {
-            $schema: 'http://json-schema.org/draft-03/schema#',
             type: 'object',
             properties: {
                 CountMin: {
                     title: 'Count Min',
                     description: 'The minimum number of items which are available for input if field is shown in edit mode.',
-                    type: 'integer',
-                    required: true
+                    type: 'integer'
                 },
                 CountMax: {
                     title: 'Count Max',
                     description: 'The maximum number of array or selectable items for this field. if field is shown in edit mode.',
-                    type: 'integer',
-                    required: true
+                    type: 'integer'
                 },
                 CountDefault: {
                     title: 'Count Default',
                     description: 'If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.',
-                    type: 'integer',
-                    required: true
+                    type: 'integer'
                 },
                 ItemSeparator: {
                     title: 'Item Separator',
                     description: 'If field contains multiple values, single values are concatenated by this separator symbol/s.',
-                    type: 'string',
-                    required: false
+                    type: 'string'
                 },
                 DefaultValue: {
                     title: 'Default Value',
                     description: 'The initial value of the field if shown in edit mode for the first time. Applies to first item of array only.',
-                    type: 'string',
-                    required: false
+                    type: 'string'
                 },
                 RegExList: {
                     title: 'RegEx List',
                     description: 'A list of RegEx which are applied to values entered before submitting if field is shown in edit mode. The RegExError is shown if a RegEx does NOT match the value entered.',
                     type: 'array',
-                    required: false,
                     items: {
                         type: 'object',
                         properties: {
@@ -212,7 +199,8 @@ export class UIModule implements IUIModule {
                             }
                         }
                     }
-                }
+                },
+                required: ['CountMin', 'CountMax', 'CountDefault']
             }
         };
 
@@ -221,50 +209,42 @@ export class UIModule implements IUIModule {
 
     private registerSchemaForDate(): void {
         const schema = {
-            $schema: 'http://json-schema.org/draft-03/schema#',
             type: 'object',
             properties: {
                 CountMin: {
                     title: 'Count Min',
                     description: 'The minimum number of items which are available for input if field is shown in edit mode.',
-                    type: 'integer',
-                    required: true
+                    type: 'integer'
                 },
                 CountMax: {
                     title: 'Count Max',
                     description: 'The maximum number of array or selectable items for this field. if field is shown in edit mode.',
-                    type: 'integer',
-                    required: true
+                    type: 'integer'
                 },
                 CountDefault: {
                     title: 'Count Default',
                     description: 'If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.',
-                    type: 'integer',
-                    required: true
+                    type: 'integer'
                 },
                 ItemSeparator: {
                     title: 'Item Separator',
                     description: 'If field contains multiple values, single values are concatenated by this separator symbol/s.',
-                    type: 'string',
-                    required: false
+                    type: 'string'
                 },
                 DefaultValue: {
                     title: 'Default Value',
                     description: 'This value defines the offset (in days) to the very moment in which the field is initially displayed for input. Leave empty if the field should not hold any value upon first input. Keep in mind that date-fields are normalized to time "00:00:00", hence enter 1 in order to initialize the field with "tomorrows" date.',
-                    type: 'integer',
-                    required: false
+                    type: 'integer'
                 },
                 YearsInFuture: {
                     title: 'Years in Future',
                     description: '',
-                    type: 'integer',
-                    required: false
+                    type: 'integer'
                 },
                 YearsInPast: {
                     title: 'Years in Past',
                     description: '',
-                    type: 'integer',
-                    required: false
+                    type: 'integer'
                 },
                 DateRestriction: {
                     title: 'Date Restriction',
@@ -275,58 +255,51 @@ export class UIModule implements IUIModule {
                         'DisableFutureDates',
                         'DisablePastDates'
                     ]
-                },
-            }
+                }
+            },
+            required: ['CountMin', 'CountMax', 'CountDefault']
         };
         DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.DATE, schema);
     }
 
     private registerSchemaForDateTime(): void {
         const schema = {
-            $schema: 'http://json-schema.org/draft-03/schema#',
             type: 'object',
             properties: {
                 CountMin: {
                     title: 'Count Min',
                     description: 'The minimum number of items which are available for input if field is shown in edit mode.',
-                    type: 'integer',
-                    required: true
+                    type: 'integer'
                 },
                 CountMax: {
                     title: 'Count Max',
                     description: 'The maximum number of array or selectable items for this field. if field is shown in edit mode.',
-                    type: 'integer',
-                    required: true
+                    type: 'integer'
                 },
                 CountDefault: {
                     title: 'Count Default',
                     description: 'If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.',
-                    type: 'integer',
-                    required: true
+                    type: 'integer'
                 },
                 ItemSeparator: {
                     title: 'Item Separator',
                     description: 'If field contains multiple values, single values are concatenated by this separator symbol/s.',
-                    type: 'string',
-                    required: false
+                    type: 'string'
                 },
                 DefaultValue: {
                     title: 'Default Value',
                     description: 'This value defines the offset (in seconds) to the very moment in which the field is initially displayed for input. Leave empty if the field should not hold any value upon first input. For instance, enter 3600 if the field should be initialized with "now+1h" or enter 86400 if the field should be initialized with "now+24h".',
-                    type: 'integer',
-                    required: false
+                    type: 'integer'
                 },
                 YearsInFuture: {
                     title: 'Years in Future',
                     description: '',
-                    type: 'integer',
-                    required: false
+                    type: 'integer'
                 },
                 YearsInPast: {
                     title: 'Years in Past',
                     description: '',
-                    type: 'integer',
-                    required: false
+                    type: 'integer'
                 },
                 DateRestriction: {
                     title: 'Date Restriction',
@@ -337,59 +310,52 @@ export class UIModule implements IUIModule {
                         'DisableFutureDates',
                         'DisablePastDates'
                     ]
-                },
-            }
+                }
+            },
+            required: ['CountMin', 'CountMax', 'CountDefault']
         };
         DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.DATE_TIME, schema);
     }
 
     private registerSchemaForSelection(): void {
         const schema = {
-            $schema: 'http://json-schema.org/draft-03/schema#',
             type: 'object',
             properties: {
                 CountMin: {
                     title: 'Count Min',
                     description: 'The minimum number of items which are available for input if field is shown in edit mode.',
-                    type: 'integer',
-                    required: true
+                    type: 'integer'
                 },
                 CountMax: {
                     title: 'Count Max',
                     description: 'The maximum number of array or selectable items for this field. if field is shown in edit mode.',
-                    type: 'integer',
-                    required: true
+                    type: 'integer'
                 },
                 CountDefault: {
                     title: 'Count Default',
                     description: 'If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.',
-                    type: 'integer',
-                    required: true
+                    type: 'integer'
                 },
                 ItemSeparator: {
                     title: 'Item Separator',
                     description: 'If field contains multiple values, single values are concatenated by this separator symbol/s.',
-                    type: 'string',
-                    required: false
+                    type: 'string'
                 },
                 DefaultValue: {
                     title: 'Default Value',
                     description: 'The initial value of the field if shown in edit mode for the first time. Applies to first item of array only. Use the key of the possible value.',
-                    type: 'string',
-                    required: false
+                    type: 'string'
                 },
                 TranslatableValues: {
                     title: 'Translatable Values',
                     description: '',
                     type: 'boolean',
-                    format: 'checkbox',
-                    required: false
+                    format: 'checkbox'
                 },
                 PossibleValues: {
                     title: 'Possible Values',
                     description: '',
                     type: 'array',
-                    required: false,
                     items: {
                         type: 'object',
                         properties: {
@@ -404,7 +370,8 @@ export class UIModule implements IUIModule {
                         }
                     }
                 }
-            }
+            },
+            required: ['CountMin', 'CountMax', 'CountDefault']
         };
 
         DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.SELECTION, schema);
@@ -412,7 +379,6 @@ export class UIModule implements IUIModule {
 
     private registerSchemaForCheckList(): void {
         const schema = {
-            $schema: 'http://json-schema.org/draft-03/schema#',
             type: 'object',
             definitions: {
                 CheckListItem: {
@@ -475,38 +441,32 @@ export class UIModule implements IUIModule {
         );
 
         const schema = {
-            $schema: 'http://json-schema.org/draft-03/schema#',
             type: 'object',
             properties: {
                 CountMin: {
                     title: 'Count Min',
                     description: 'The minimum number of items which are available for input if field is shown in edit mode.',
-                    type: 'integer',
-                    required: true
+                    type: 'integer'
                 },
                 CountMax: {
                     title: 'Count Max',
                     description: 'The maximum number of array or selectable items for this field. if field is shown in edit mode.',
-                    type: 'integer',
-                    required: true
+                    type: 'integer'
                 },
                 CountDefault: {
                     title: 'Count Default',
                     description: 'If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.',
-                    type: 'integer',
-                    required: true
+                    type: 'integer'
                 },
                 ItemSeparator: {
                     title: 'Item Separator',
                     description: 'If field contains multiple values, single values are concatenated by this separator symbol/s.',
-                    type: 'string',
-                    required: false
+                    type: 'string'
                 },
                 DefaultValue: {
                     title: 'Default Value',
                     description: 'The initial value of the field if shown in edit mode for the first time. Applies to first item of array only.',
-                    type: 'string',
-                    required: false
+                    type: 'string'
                 },
                 DeploymentStates: {
                     type: 'array',
@@ -538,7 +498,8 @@ export class UIModule implements IUIModule {
                         }]
                     }
                 }
-            }
+            },
+            required: ['CountMin', 'CountMax', 'CountDefault']
         };
         return schema;
     }

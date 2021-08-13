@@ -31,6 +31,7 @@ import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { DynamicFieldSet } from './extended-form-manager/DynamicFieldSet';
 import { MacroFieldJobFormManager } from './form/MacroFieldJobFormManager';
 import { AssembleObject } from './extended-form-manager/AssembleObject';
+import { JobTypeLabelProvider } from './JobTypeLabelProvider';
 
 export class UIModule implements IUIModule {
 
@@ -47,6 +48,7 @@ export class UIModule implements IUIModule {
         ServiceRegistry.registerServiceInstance(JobFormService.getInstance());
 
         LabelService.getInstance().registerLabelProvider(new JobLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new JobTypeLabelProvider());
         LabelService.getInstance().registerLabelProvider(new MacroActionLabelProvider());
         LabelService.getInstance().registerLabelProvider(new JobRunLabelProvider());
         LabelService.getInstance().registerLabelProvider(new JobRunLogLabelProvider());

@@ -33,6 +33,7 @@ import { FormFieldOptions } from '../../model/configuration/FormFieldOptions';
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { EditUserRoleDialogContext } from './webapp/core/admin/context/EditUserRoleDialogContext';
+import { ObjectIcon } from '../icon/model/ObjectIcon';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -77,8 +78,11 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             [
                 new FormFieldOption(DefaultSelectInputFormOption.NODES,
                     [
-                        new TreeNode(RoleUsageContextTypes.AGENT, 'Translatable#Agent'),
-                        new TreeNode(RoleUsageContextTypes.CUSTOMER, 'Translatable#Customer'),
+                        new TreeNode(
+                            RoleUsageContextTypes.AGENT, 'Translatable#Agent',
+                            new ObjectIcon(null, 'agent-portal-icon-sw', 'agent-portal-icon-sw')
+                        ),
+                        new TreeNode(RoleUsageContextTypes.CUSTOMER, 'Translatable#Customer', 'fas fa-users')
                     ]),
                 new FormFieldOption(DefaultSelectInputFormOption.MULTI, true)
             ]

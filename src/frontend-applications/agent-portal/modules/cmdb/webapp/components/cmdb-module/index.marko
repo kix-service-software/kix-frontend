@@ -13,7 +13,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             on-keyup("keyUp")
             value=state.filterValue
             placeholder=state.placeholder/>
-        <button.button.button-without-text
+        <button.kix-button.button.button-without-text
             type="button"
             title=state.translations["Translatable#Help"]
             on-click("showCommandHelp", false)>
@@ -22,7 +22,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 content="Translatable#Helptext_CMDB_Dashboard_Search"
                 title=state.translations["Translatable#Search"]/>
         </button>
-        <button.submit-button type="button" on-click("search")>
+        <button.kix-button.submit-button type="button" on-click("search")>
             <span.kix-icon-search/>
             <translation-string pattern="Translatable#Search"/>
         </button>

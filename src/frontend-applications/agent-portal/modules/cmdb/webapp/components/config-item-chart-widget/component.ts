@@ -39,7 +39,8 @@ class Component {
             : undefined;
 
         this.state.title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : 'CMDB';
-        this.cmdbChartConfiguration = this.state.widgetConfiguration.configuration;
+        this.cmdbChartConfiguration =
+            this.state.widgetConfiguration.configuration as ConfigItemChartWidgetConfiguration;
 
         this.initChartConfig();
 

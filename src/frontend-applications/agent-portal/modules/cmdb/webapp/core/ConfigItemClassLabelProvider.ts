@@ -83,7 +83,7 @@ export class ConfigItemClassLabelProvider extends LabelProvider<ConfigItemClass>
     }
 
     public getObjectTypeIcon(): string | ObjectIcon {
-        return 'kix-icon-ci';
+        return 'fas fa-archive';
     }
 
     public async getObjectTooltip(ciClass: ConfigItemClass, translatable: boolean = true): Promise<string> {
@@ -103,7 +103,7 @@ export class ConfigItemClassLabelProvider extends LabelProvider<ConfigItemClass>
     }
 
     public getObjectIcon(ciClass?: ConfigItemClass): string | ObjectIcon {
-        return new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, ciClass.ID);
+        return new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, ciClass.ID, null, null, 'fas fa-archive');
     }
 
     public async getIcons(

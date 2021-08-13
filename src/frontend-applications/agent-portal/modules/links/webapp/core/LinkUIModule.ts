@@ -44,7 +44,7 @@ export class UIModule implements IUIModule {
 
         const editLinkObjectDialogContext = new ContextDescriptor(
             EditLinkedObjectsDialogContext.CONTEXT_ID, [KIXObjectType.LINK],
-            ContextType.DIALOG, ContextMode.EDIT_LINKS,
+            ContextType.DIALOG, ContextMode.EDIT_LINK,
             false, 'edit-linked-objects-dialog', ['links'], EditLinkedObjectsDialogContext,
             [
                 new UIComponentPermission('links', [CRUD.CREATE])

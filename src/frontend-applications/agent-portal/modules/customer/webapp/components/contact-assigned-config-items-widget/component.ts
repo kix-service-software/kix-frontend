@@ -17,6 +17,7 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { ContactProperty } from '../../../model/ContactProperty';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 
 class Component {
 
@@ -86,8 +87,8 @@ class Component {
         if (contact && this.state.widgetConfiguration) {
             this.state.table = await TableFactoryService.getInstance().createTable(
                 'contact-assigned-config-items', KIXObjectType.CONFIG_ITEM,
-                this.state.widgetConfiguration.configuration, contact.AssignedConfigItems,
-                null, true, true, true
+                this.state.widgetConfiguration.configuration as TableConfiguration,
+                contact.AssignedConfigItems, null, true, true, true
             );
         }
     }

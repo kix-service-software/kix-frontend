@@ -105,10 +105,10 @@ class Component {
                     TranslationService.getInstance().resetTranslations();
                     setTimeout(async () => {
                         BrowserUtil.toggleLoadingShield('PERSONAL_SETTINGS_SHIELD', false);
+                        await ContextService.getInstance().toggleActiveContext(null, null, true);
                         EventService.getInstance().publish(ApplicationEvent.REFRESH);
                         const toast = await TranslationService.translate('Translatable#Changes saved.');
                         BrowserUtil.openSuccessOverlay(toast);
-                        ContextService.getInstance().toggleActiveContext();
                     }, 100);
                 }).catch((error: Error) => {
                     BrowserUtil.toggleLoadingShield('PERSONAL_SETTINGS_SHIELD', false);

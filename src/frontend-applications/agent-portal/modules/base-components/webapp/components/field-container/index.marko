@@ -32,7 +32,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <@additionalFieldControls>
                 <if(input.additionalFieldControlsNeeded)>
                     <if(component.canAdd(field))>
-                        <button.form-control-button.button-without-text
+                        <button.kix-button.form-control-button.button-without-text
                             type="button"
                             title=state.translations["Translatable#Add"]
                             on-click("addField", field)>
@@ -43,7 +43,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <span/>
                     </else>
                     <if(component.canRemove(field))>
-                        <button.form-control-button.button-without-text
+                        <button.kix-button.form-control-button.button-without-text
                             type="button"
                             title=state.translations["Translatable#Delete"]
                             on-click("removeField", field)>

@@ -53,6 +53,15 @@ export class CacheService {
         }
     }
 
+    public async getAll(cacheKeyPrefix: string): Promise<any[]> {
+        if (process.env.NODE_ENV === 'test') {
+            return undefined;
+        } else if (this.useRedisCache) {
+            return await RedisCache.getInstance().getAll(cacheKeyPrefix);
+        }
+        return null;
+    }
+
     public async get(key: string, cacheKeyPrefix?: string): Promise<any> {
         key = md5(key);
         if (process.env.NODE_ENV === 'test') {
@@ -234,6 +243,7 @@ export class CacheService {
                 cacheKeyPrefixes.push(KIXObjectType.REPORT_RESULT);
                 cacheKeyPrefixes.push(KIXObjectType.ROLE);
                 cacheKeyPrefixes.push(KIXObjectType.ROLE_PERMISSION);
+                break;
             case KIXObjectType.REPORT:
             case KIXObjectType.REPORT_RESULT:
                 cacheKeyPrefixes.push(KIXObjectType.REPORT_DEFINITION);

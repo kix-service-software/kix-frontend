@@ -9,12 +9,7 @@
 
 import { FormInputComponent } from '../../../../base-components/webapp/core/FormInputComponent';
 import { ComponentState } from './ComponentState';
-import { FormService } from '../../../../base-components/webapp/core/FormService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
-import { IdService } from '../../../../../model/IdService';
-import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
-import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { DynamicFieldProperty } from '../../../model/DynamicFieldProperty';
 import { DynamicFieldService } from '../../core/DynamicFieldService';
 import { FormContext } from '../../../../../model/configuration/FormContext';
@@ -22,8 +17,6 @@ import { IEventSubscriber } from '../../../../base-components/webapp/core/IEvent
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
-
-declare var JSONEditor: any;
 
 class Component extends FormInputComponent<JSON, ComponentState> {
 
@@ -83,7 +76,8 @@ class Component extends FormInputComponent<JSON, ComponentState> {
             setTimeout(() => {
                 const element = document.getElementById(this.state.editorId);
                 if (element) {
-                    this.editor = new JSONEditor(element, {
+                    const JSONSchemaEditor = require('@json-editor/json-editor');
+                    this.editor = new JSONSchemaEditor.JSONEditor(element, {
                         schema: this.schema,
                         disable_edit_json: true,
                         disable_properties: true,

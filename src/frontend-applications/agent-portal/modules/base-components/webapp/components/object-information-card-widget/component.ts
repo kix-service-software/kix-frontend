@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { IConfiguration, IInformationRow, IInformation } from './IConfiguration';
+import { InformationRowConfiguration, InformationConfiguration } from './ObjectInformationCardConfiguration';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { PlaceholderService } from '../../core/PlaceholderService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -17,6 +17,7 @@ import { IdService } from '../../../../../model/IdService';
 import { FilterUtil } from '../../core/FilterUtil';
 import { KIXModulesService } from '../../core/KIXModulesService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { ObjectInformationCardConfiguration } from './ObjectInformationCardConfiguration';
 
 class Component {
 
@@ -68,7 +69,7 @@ class Component {
         const object = await context.getObject();
 
         if (this.state.widgetConfiguration?.configuration) {
-            const config = this.state.widgetConfiguration.configuration as IConfiguration;
+            const config = this.state.widgetConfiguration.configuration as ObjectInformationCardConfiguration;
             if (Array.isArray(config.avatar)) {
                 this.state.avatar = config.avatar;
             } else if (config.avatar) {
@@ -82,12 +83,12 @@ class Component {
         }, 100);
     }
 
-    private async prepareInformation(rows: IInformationRow[], object: KIXObject): Promise<void> {
-        const information: IInformationRow[] = [];
+    private async prepareInformation(rows: InformationRowConfiguration[], object: KIXObject): Promise<void> {
+        const information: InformationRowConfiguration[] = [];
         if (Array.isArray(rows)) {
             for (const row of rows) {
                 if (Array.isArray(row.values)) {
-                    const infoRow: IInformationRow = {
+                    const infoRow: InformationRowConfiguration = {
                         title: row.title,
                         style: row.style,
                         separator: row.separator,
@@ -96,7 +97,7 @@ class Component {
 
                     for (const value of row.values) {
                         if (Array.isArray(value)) {
-                            const group: IInformation[] = [];
+                            const group: InformationConfiguration[] = [];
                             for (const v of value) {
                                 const infoValue = await this.createInfoValue(v, object);
                                 if (infoValue) {
@@ -124,7 +125,9 @@ class Component {
         this.state.information = information;
     }
 
-    private async createInfoValue(value: IInformation, object: KIXObject): Promise<IInformation> {
+    private async createInfoValue(
+        value: InformationConfiguration, object: KIXObject
+    ): Promise<InformationConfiguration> {
         if (Array.isArray(value.conditions)) {
             const match = await FilterUtil.checkCriteriaByPropertyValue(value.conditions, object);
             if (!match) {
@@ -132,21 +135,21 @@ class Component {
             }
         }
 
-        const infoValue: IInformation = {
-            conditions: [],
-            icon: value.icon,
-            linkSrc: value.linkSrc,
-            preparedLinkSrc: '',
-            preparedText: '',
-            routingConfiguration: value.routingConfiguration,
-            routingObjectId: value.routingObjectId,
-            text: value.text,
-            iconStyle: value.iconStyle,
-            textStyle: value.textStyle,
-            textPlaceholder: value.textPlaceholder,
-            componentId: value.componentId,
-            componentData: value.componentData ? value.componentData : {}
-        };
+        const infoValue: InformationConfiguration = new InformationConfiguration(
+            value.componentId,
+            value.componentData ? value.componentData : {},
+            [],
+            value.icon,
+            null,
+            value.text,
+            value.textPlaceholder,
+            value.textStyle,
+            value.linkSrc,
+            value.routingConfiguration,
+            value.routingObjectId,
+            '',
+            ''
+        );
 
         if (infoValue.componentId) {
             this.state.templates[infoValue.componentId] = await KIXModulesService.getComponentTemplate(
