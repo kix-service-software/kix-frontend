@@ -24,6 +24,7 @@ import { FilterType } from '../../../../../model/FilterType';
 import { FollowUpType } from '../../../model/FollowUpType';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { DataType } from '../../../../../model/DataType';
+import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 
 export class QueueService extends KIXObjectService<Queue> {
 
@@ -102,18 +103,13 @@ export class QueueService extends KIXObjectService<Queue> {
                     queue.SubQueues, showInvalid, invalidClickable, filterIds, translatable, includeTicketStats
                 );
 
-                const treeNode = new TreeNode(
-                    queue.QueueID, queue.Name,
-                    new ObjectIcon(null, KIXObjectType.QUEUE, queue.QueueID),
-                    null,
-                    subTree,
-                    null, null, null,
-                    ticketStats,
-                    null, null, null,
-                    invalidClickable ? true : queue.ValidID === 1,
-                    undefined, undefined, undefined, undefined,
-                    queue.ValidID !== 1
-                );
+                const icon = LabelService.getInstance().getObjectIcon(queue);
+
+                const treeNode = new TreeNode(queue.QueueID, queue.Name, icon);
+                treeNode.children = subTree;
+                treeNode.properties = ticketStats;
+                treeNode.selectable = invalidClickable ? true : queue.ValidID === 1;
+                treeNode.showAsInvalid = queue.ValidID !== 1;
 
                 nodes.push(treeNode);
             }

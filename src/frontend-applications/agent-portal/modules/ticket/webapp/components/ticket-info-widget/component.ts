@@ -74,8 +74,9 @@ class Component {
 
         let properties = [];
 
-        const settings: ObjectInformationWidgetConfiguration = this.state.widgetConfiguration ?
-            this.state.widgetConfiguration.configuration : null;
+        const settings = this.state.widgetConfiguration
+            ? this.state.widgetConfiguration.configuration as ObjectInformationWidgetConfiguration
+            : null;
         if (settings) {
             properties = settings.properties;
             this.routingConfigurations = settings.routingConfigurations;

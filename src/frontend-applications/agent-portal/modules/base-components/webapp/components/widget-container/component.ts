@@ -189,15 +189,18 @@ class Component {
     // Drag and Drop
 
     public allowDrop(widget: ConfiguredWidget, event: any): void {
+        event.stopPropagation();
         event.preventDefault();
         this.state.dragOverInstanceId = widget?.instanceId;
     }
 
     public drag(widget: ConfiguredWidget, event: any): void {
+        event.stopPropagation();
         event.dataTransfer.setData('text', widget.instanceId);
     }
 
     public drop(widget: ConfiguredWidget, event: any): void {
+        event.stopPropagation();
         event.preventDefault();
         this.state.dragOverInstanceId = null;
 

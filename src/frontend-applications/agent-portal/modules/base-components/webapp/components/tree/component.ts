@@ -15,21 +15,22 @@ class TreeComponent {
 
     private state: ComponentState;
 
+    private setParentFlags: boolean = true;
+
     public onCreate(input: any): void {
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
         this.state.tree = input.tree;
-        this.state.filterValue = input.filterValue;
         this.state.treeId = input.treeId ? 'tree-' + input.treeId : 'tree-' + IdService.generateDateBasedId();
-        TreeUtil.linkTreeNodes(this.state.tree, this.state.filterValue);
+        this.setParentFlags = typeof input.setParentFlags !== 'undefined' ? input.setParentFlags : true;
+        if (this.state.filterValue !== input.filterValue) {
+            this.state.filterValue = input.filterValue;
+            TreeUtil.linkTreeNodes(this.state.tree, this.state.filterValue, null, false, this.setParentFlags);
+        }
         this.state.activeNode = input.activeNode;
         this.state.treeStyle = input.treeStyle;
-    }
-
-    public onMount(): void {
-        this.state.treeParent = (this as any).getEl().parentElement;
     }
 
     public getNodes(): TreeNode[] {
@@ -37,7 +38,6 @@ class TreeComponent {
     }
 
     public nodeToggled(node: TreeNode): void {
-        TreeUtil.linkTreeNodes(this.state.tree, this.state.filterValue);
         (this as any).emit('nodeToggled', node);
     }
 

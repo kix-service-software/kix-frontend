@@ -25,14 +25,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <input.input-style type="number" value=state.limit on-input("limitChanged")/>
                 </div>
                 <div.search-button-container>
-                    <button.form-blank-cancel-button
+                    <button.kix-button.form-blank-cancel-button
                         type="button"
                         on-click("resetSearch")
                         title=state.translations["Translatable#Reset data"]>
                         <span.kix-icon-delete/>
                         <translation-string pattern="Translatable#Reset data"/>
                     </button>
-                    <button.form-blank-submit-button
+                    <button.kix-button.form-blank-submit-button
                         type="button"
                         on-click("search")
                         title=state.translations["Translatable#Start search"]

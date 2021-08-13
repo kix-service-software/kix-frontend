@@ -83,7 +83,7 @@ export class ComponentState {
             autoGrow_minHeight: 125,
             autoGrow_maxHeight: 2000,
             autoGrow_onStartup: true,
-            extraAllowedContent: 'b; h1 h2 h3 ul li; div[type]{*}; img[*]; col[width]; style[*]{*}; *[id](*)',
+            extraAllowedContent: 'b; h1 h2 h3 ul li; div[type]{*}; img[*]{*}; col[width]; style[*]{*}; *[id](*)',
             toolbarCanCollapse: this.simple ? false : true,
             readOnly: this.readOnly,
             removeButtons: '',

@@ -112,7 +112,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             typeReadonly
         );
 
-        const sendMailModuleValue = sysconfigDefinitions.find((o) => o.Name === 'SendmailModule').Default;
+        const sendMailModuleValue = sysconfigOptions.find((o) => o.Name === 'SendmailModule').Value ||
+            sysconfigDefinitions.find((o) => o.Name === 'SendmailModule').Default;
         if (sendMailModuleValue?.startsWith('Kernel::System::Email::SMTP')) {
             const smtpFields = await this.getSMTPFields();
             sendMailModuleField.children = smtpFields;
@@ -216,7 +217,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                                         'SendmailModule::Host',
                                         'SendmailModule::Port',
                                         'SendmailModule::AuthUser',
-                                        'SendmailModule::AuthPassword',
+                                        'SendmailModule::AuthPassword'
                                     ]
                                 );
                             }
@@ -236,9 +237,19 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.formId = form.id;
 
         const activeContext = ContextService.getInstance().getActiveContext();
-        activeContext?.getFormManager()?.setFormId(this.state.formId);
+        await activeContext?.getFormManager()?.setFormId(this.state.formId);
 
-        setTimeout(() => this.initFormValues(form.id), 100);
+        setTimeout(() => this.initFormValues(
+            form.id,
+            sendMailModuleValue?.startsWith('Kernel::System::Email::SMTP') ?
+                [
+                    ...this.configKeys,
+                    'SendmailModule::Host',
+                    'SendmailModule::Port',
+                    'SendmailModule::AuthUser',
+                    'SendmailModule::AuthPassword'
+                ] : undefined
+        ), 100);
     }
 
     public onDestroy(): void {

@@ -75,7 +75,7 @@ class Component {
 
         if (this.state.widgetConfiguration) {
             this.state.show = true;
-            const settings: TableWidgetConfiguration = this.state.widgetConfiguration.configuration;
+            const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
 
             this.state.showFilter = typeof settings.showFilter !== 'undefined' ? settings.showFilter : true;
 
@@ -221,7 +221,7 @@ class Component {
 
     private getRelevantHandlerConfigIds(properties: string[]): string[] {
         const relevantHandlerIds = [];
-        const settings: TableWidgetConfiguration = this.state.widgetConfiguration.configuration;
+        const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
         if (
             settings && settings.tableConfiguration
             && Array.isArray(settings.tableConfiguration.additionalTableObjectsHandler)
@@ -263,7 +263,7 @@ class Component {
     }
 
     private async prepareHeader(): Promise<void> {
-        const settings: TableWidgetConfiguration = this.state.widgetConfiguration.configuration;
+        const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
         if (settings && settings.headerComponents) {
             this.state.headerTitleComponents = settings.headerComponents;
         }
@@ -299,10 +299,8 @@ class Component {
     }
 
     private async prepareTable(): Promise<void> {
-        const settings: TableWidgetConfiguration = this.state.widgetConfiguration.configuration;
-        if (
-            settings && settings.objectType || (settings.tableConfiguration && settings.tableConfiguration.objectType)
-        ) {
+        const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
+        if (settings?.objectType || settings?.tableConfiguration?.objectType) {
             this.objectType = settings.tableConfiguration && settings.tableConfiguration.objectType
                 ? settings.tableConfiguration.objectType : settings.objectType; // table prior table widget
             const context = ContextService.getInstance().getActiveContext();
@@ -317,12 +315,10 @@ class Component {
                 settings.shortTable, false, !settings.cache
             );
 
-            if (table) {
-                if (settings.sort) {
-                    table.sort(settings.sort[0], settings.sort[1]);
-                }
-                await table.initialize();
+            if (settings.sort) {
+                table?.sort(settings.sort[0], settings.sort[1]);
             }
+            await table?.initialize();
 
             this.state.table = table;
             this.state.loading = false;

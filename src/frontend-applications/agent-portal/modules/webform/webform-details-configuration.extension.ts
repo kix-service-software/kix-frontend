@@ -97,7 +97,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new WidgetConfiguration(
                 'webform-details-code-widget', 'Code Widget', ConfigurationType.Widget,
-                'webform-code-widget', 'Translatable#Code', [], null, true)
+                'webform-code-widget', 'Translatable#Code', [], null, null, true)
         );
 
         configurations.push(

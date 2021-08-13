@@ -12,6 +12,7 @@ import { KIXModulesSocketClient } from './KIXModulesSocketClient';
 import { ContextService } from './ContextService';
 import { ActionFactory } from './ActionFactory';
 import { SetupService } from '../../../setup-assistant/webapp/core/SetupService';
+import { ContextMode } from '../../../../model/ContextMode';
 
 export class RoutingService {
 
@@ -97,10 +98,19 @@ export class RoutingService {
         const parsedUrl = new URL(window.location.href);
         const urlParams = parsedUrl.searchParams;
         const path = parsedUrl.pathname === '/' ? [] : parsedUrl.pathname.split('/');
+
+        let contextUrl: string;
+        let objectId: string;
+
         if (path.length > 1) {
-            const contextUrl = path[1];
-            const objectId = path[2];
-            if (contextUrl && contextUrl !== '') {
+            contextUrl = path[1];
+            objectId = path[2];
+        }
+
+        if (contextUrl && contextUrl !== '') {
+            routed = await this.handleURLParams(urlParams, contextUrl);
+
+            if (!routed) {
                 const context = await ContextService.getInstance().setContextByUrl(
                     contextUrl, objectId, urlParams, history
                 );
@@ -110,23 +120,37 @@ export class RoutingService {
             }
         }
 
-        this.handleURLParams(urlParams);
-
         return routed;
     }
 
-    private handleURLParams(params: URLSearchParams): void {
-        setTimeout(async () => {
+    private handleURLParams(params: URLSearchParams, contextId?: string): Promise<boolean> {
+        return new Promise<boolean>(async (resolve, reject) => {
             if (params.has('new')) {
-                // await ContextService.getInstance().setDialogContext(null, null, ContextMode.CREATE);
+
+                const contextDescriptors = ContextService.getInstance().getContextDescriptors(
+                    ContextMode.CREATE
+                );
+
+                const contextDescriptor = contextDescriptors.find(
+                    (c) => c.urlPaths.some((url) => url === contextId)
+                );
+
+                await ContextService.getInstance().setActiveContext(contextDescriptor?.contextId, null, params);
+
+                resolve(true);
             } else if (params.has('actionId')) {
+                await ContextService.getInstance().setActiveContext(contextId);
                 const actionId = params.get('actionId');
                 const data = params.get('data');
                 const actions = await ActionFactory.getInstance().generateActions([actionId], data);
                 if (actions && actions.length) {
                     actions[0].run(null);
                 }
+                resolve(true);
+            } else {
+                resolve(false);
             }
-        }, 2500);
+        });
+
     }
 }

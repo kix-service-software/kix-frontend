@@ -33,8 +33,6 @@
         "require ./components/ticket-queue-signature",
         "require ./components/ticket-state-assigned-textmodules",
         "require ./components/ticket-state-info-widget",
-        "require ./components/ticket-type-assigned-textmodules",
-        "require ./components/ticket-type-info-widget",
         "require ./core",
         "require ./core/TicketAdminUIModule",
         "require ./core/TicketCreateUIModule",

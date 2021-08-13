@@ -26,6 +26,7 @@ class Extension extends KIXExtension implements IInitialDataExtension {
 
         await this.setObjectIcon(serverConfig, 'agent-portal-logo', '/../../static/img/kix_start.png');
         await this.setObjectIcon(serverConfig, 'agent-portal-icon', '/../../static/img/kix_start_icon.png');
+        await this.setObjectIcon(serverConfig, 'agent-portal-icon-sw', '/../../static/img/kix_sw.png');
     }
 
     private async setObjectIcon(serverConfig: IServerConfiguration, name: string, path: string) {

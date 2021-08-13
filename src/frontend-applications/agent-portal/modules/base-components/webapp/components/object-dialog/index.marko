@@ -11,7 +11,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <div.dialog-control>
         <dialog-notifiactions/>
         <div.dialog-button-container>
-            <button.cancel-button
+            <button.kix-button.cancel-button
                 disabled=state.processing
                 type="button"
                 on-click("cancel")
@@ -19,7 +19,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <span.kix-icon-close/>
                 <span>${state.translations["Translatable#Cancel"]}</span>
             </button>
-            <button.submit-button
+            <button.kix-button.submit-button
                 disabled=state.processing
                 type="button"
                 on-click("submit")

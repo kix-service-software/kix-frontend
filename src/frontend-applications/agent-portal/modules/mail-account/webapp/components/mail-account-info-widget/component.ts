@@ -64,7 +64,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private initWidget(mailAccount: MailAccount): void {
         this.state.account = null;
-        const settings: ObjectInformationWidgetConfiguration = this.state.widgetConfiguration.configuration;
+        const settings = this.state.widgetConfiguration.configuration as ObjectInformationWidgetConfiguration;
         if (settings && Array.isArray(settings.properties)) {
             this.state.properties = [...settings.properties];
         }

@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.form.search-template-form>
     <div.form-field.show-object() title=state.translations["Translatable#Search"]>
         <div.field-label>
@@ -16,7 +15,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </div>
         <div.field-icon/>
         <div.field-input>
-            <form-list placeholder="Translatable#Save new search" loadNodes=state.loadNodes nodesChanged("nodesChanged")/>
+            <form-list
+                placeholder="Translatable#Save new search"
+                loadNodes=state.loadNodes
+                nodesChanged("nodesChanged")/>
         </div>
     </div>
     <div.form-field.show-object() title=state.translations["Translatable#Title"]>
@@ -29,8 +31,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <div.field-input>
             <input.input-style
                 class={
-                                invalid: state.nameInvalid
-                            }
+                    invalid: state.nameInvalid
+                }
                 type="text"
                 value=state.name
                 placeholder=state.translations["Translatable#Search Title"]
@@ -40,11 +42,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     </div>
     <translation-string pattern="Translatable#Find this saved search within the Dropdown Bookmarks, located in the header menu right besides the New-button"/>
     <div.overlay-buttons>
-        <button.cancel-button type="button" on-click("closeOverlay", false) title=state.translations["Translatable#Cancel"]>
+        <button.kix-button.cancel-button
+            type="button"
+            on-click("closeOverlay", false)
+            title=state.translations["Translatable#Cancel"]>
             <span.kix-icon-close/>
             <translation-string pattern="Translatable#Cancel"/>
         </button>
-        <button.submit-button type="button" on-click("closeOverlay", true) title=state.translations["Translatable#Save"]>
+        <button.kix-button.submit-button
+            type="button"
+            on-click("closeOverlay", true)
+            title=state.translations["Translatable#Save"]>
             <span.kix-icon-check/>
             <translation-string pattern="Translatable#Save"/>
         </button>

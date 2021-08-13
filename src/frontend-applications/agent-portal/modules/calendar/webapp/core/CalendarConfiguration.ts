@@ -7,13 +7,17 @@
  * --
  */
 
-export class CalendarConfiguration {
+import { AbstractConfiguration } from '../../../../model/configuration/AbstractConfiguration';
+
+export class CalendarConfiguration extends AbstractConfiguration {
 
     public constructor(
         public startDateProperty: string,
         public endDateProperty: string,
         public properties: string[] = [],
         public defaultView: string = 'month'
-    ) { }
+    ) {
+        super();
+    }
 
 }

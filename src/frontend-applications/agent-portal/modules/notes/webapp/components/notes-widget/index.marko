@@ -11,8 +11,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 }>
     <widget
         instanceId=input.instanceId
-        title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Translatable#Notes")
-        icon=(state.widgetConfiguration && state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "kix-icon-note")>
+        title=(
+            state.widgetConfiguration
+                ? state.widgetConfiguration.title
+                : "Translatable#Notes"
+        )
+        icon=(
+            state.widgetConfiguration && state.widgetConfiguration.icon
+                ? state.widgetConfiguration.icon
+                : "kix-icon-note"
+        )>
         <@content>
             <if(state.value || state.editorActive)>
                 <editor
@@ -29,10 +37,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </else>
             <if(state.editorActive)>
                 <div.notes-editor-buttons>
-                    <button.form-button.button-without-text title=state.translations["Translatable#Cancel"] on-click("cancelEditor")>
+                    <button.kix-button.form-button.button-without-text
+                        title=state.translations["Translatable#Cancel"]
+                        on-click("cancelEditor")>
                         <span.kix-icon-close/>
                     </button>
-                    <button.form-button title=state.translations["Translatable#Submit"] on-click("submitEditor")>
+                    <button.kix-button.form-button
+                        title=state.translations["Translatable#Submit"]
+                        on-click("submitEditor")>
                         <span.kix-icon-check/>
                         <translation-string pattern="Translatable#Submit"/>
                     </button>

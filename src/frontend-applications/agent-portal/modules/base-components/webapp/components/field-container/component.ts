@@ -108,7 +108,7 @@ class Component {
             propertyFields = this.filterDynamicFields(field, propertyFields);
         }
 
-        if (propertyFields.length === 1 && field.empty) {
+        if (propertyFields.length === 1 && field.empty && !field.asStructure) {
             return true;
         }
 

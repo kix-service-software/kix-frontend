@@ -30,7 +30,8 @@ export class TableWidgetConfiguration implements IConfiguration {
         public shortTable: boolean = false,
         public predefinedTableFilters: KIXObjectPropertyFilter[] = [],
         public cache: boolean = false,
-        public resetFilterOnReload: boolean = true
+        public resetFilterOnReload: boolean = true,
+        public configuration: IConfiguration = null
     ) { }
 
 }

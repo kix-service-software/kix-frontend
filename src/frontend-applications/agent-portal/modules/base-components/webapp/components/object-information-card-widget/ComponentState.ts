@@ -9,13 +9,13 @@
 
 import { WidgetComponentState } from '../../../../../modules/base-components/webapp/core/WidgetComponentState';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
-import { IInformationRow } from './IConfiguration';
+import { InformationRowConfiguration } from './ObjectInformationCardConfiguration';
 
 export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public avatar: Array<ObjectIcon | string> = [],
-        public information: IInformationRow[] = [],
+        public information: InformationRowConfiguration[] = [],
         public prepared: boolean = false,
         public templates: any = {}
     ) {

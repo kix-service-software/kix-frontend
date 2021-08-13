@@ -16,6 +16,7 @@ import { Organisation } from '../../../model/Organisation';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { OrganisationProperty } from '../../../model/OrganisationProperty';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 
 class Component {
 
@@ -86,8 +87,8 @@ class Component {
         if (organisation && this.state.widgetConfiguration) {
             this.state.table = await TableFactoryService.getInstance().createTable(
                 'organisation-assigned-config-items', KIXObjectType.CONFIG_ITEM,
-                this.state.widgetConfiguration.configuration, organisation.AssignedConfigItems,
-                null, true, true, true
+                this.state.widgetConfiguration.configuration as TableConfiguration,
+                organisation.AssignedConfigItems, null, true, true, true
             );
         }
     }

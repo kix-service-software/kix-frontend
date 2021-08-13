@@ -146,4 +146,11 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
         return false;
     }
 
+    public valuesAreDraggable(): boolean {
+        return false;
+    }
+
+    public async changeValueOrder(currentIndex: number, targetIndex: number): Promise<void> {
+        return;
+    }
 }
