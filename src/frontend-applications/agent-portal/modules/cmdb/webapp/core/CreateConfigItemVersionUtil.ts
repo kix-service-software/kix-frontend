@@ -7,7 +7,6 @@
  * --
  */
 
-import { FormService } from '../../../../modules/base-components/webapp/core/FormService';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { VersionProperty } from '../../model/VersionProperty';
 import { ConfigItemProperty } from '../../model/ConfigItemProperty';
@@ -62,19 +61,17 @@ export class CreateConfigItemVersionUtil {
         versionData: any, formField: FormFieldConfiguration, formInstance: FormInstance
     ): Promise<any> {
         const data = await CreateConfigItemVersionUtil.perpareFormFieldData(formField, formInstance);
-        if (data) {
-            if (!versionData) {
-                versionData = {};
-            }
-            if (formField.countMax > 1) {
-                if (!versionData[formField.property]) {
-                    versionData[formField.property] = [data];
-                } else {
-                    versionData[formField.property] = [...versionData[formField.property], data];
-                }
+        if (!versionData) {
+            versionData = {};
+        }
+        if (formField.countMax > 1) {
+            if (!versionData[formField.property]) {
+                versionData[formField.property] = [data];
             } else {
-                versionData[formField.property] = data;
+                versionData[formField.property] = [...versionData[formField.property], data];
             }
+        } else {
+            versionData[formField.property] = data;
         }
         return versionData;
     }
