@@ -12,6 +12,8 @@ import { ContextMode } from '../../../../model/ContextMode';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { BrowserUtil } from './BrowserUtil';
 import { ContextService } from './ContextService';
+import { EventService } from './EventService';
+import { FormEvent } from './FormEvent';
 import { KIXObjectService } from './KIXObjectService';
 import { ValidationSeverity } from './ValidationSeverity';
 
@@ -72,6 +74,10 @@ export class ObjectDialogUtil {
 
             BrowserUtil.toggleLoadingShield('APP_SHIELD', false);
         } else {
+            EventService.getInstance().publish(FormEvent.GO_TO_INVALID_FIELD, {
+                contextId: context.descriptor.contextId,
+                formId
+            });
             throw new Error('1', 'Validation Error');
         }
     }
