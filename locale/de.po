@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2021-07-05 15:47+0000\n"
+"PO-Revision-Date: 2021-08-11 14:47+0000\n"
 "Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
@@ -233,10 +233,10 @@ msgid "Article Id"
 msgstr "Artikel ID"
 
 msgid "Article Overview"
-msgstr "Artikelübersicht"
+msgstr "Übersicht der Artikel"
 
 msgid "Article Text"
-msgstr "Artikelinhalt"
+msgstr "Artikeltext"
 
 msgid "Asset"
 msgstr "Asset"
@@ -349,7 +349,7 @@ msgid "between"
 msgstr "zwischen"
 
 msgid "Body"
-msgstr "Body"
+msgstr "Nachrichteninhalt"
 
 msgid "Bulk"
 msgstr "Menge"
@@ -361,7 +361,7 @@ msgid "Bulk Action"
 msgstr "Sammelaktion"
 
 msgid "Cancel"
-msgstr "Abbrechen"
+msgstr "Abbruch"
 
 msgid "Can not create link ({0})"
 msgstr "Verknüpfung konnte nicht angelegt werden ({0})"
@@ -599,7 +599,7 @@ msgid "created"
 msgstr "erstellt"
 
 msgid "Created at"
-msgstr "Erstellt am"
+msgstr "Erstellt"
 
 msgid "Created by"
 msgstr "Erstellt von"
@@ -1375,8 +1375,8 @@ msgstr ""
 
 msgid "Helptext_Admin_MailAccountCreate_UserName"
 msgstr ""
-"Geben Sie den Benutzername für das Konto an, welches Sie im KIX "
-"konfigurieren möchten, um sich beim Host anzumelden."
+"Loginname des Mailkontos von dem E-Mails abgeholt werden sollen, z.B. "
+"\"yourdemo@kix.cloud\"."
 
 msgid "Helptext_Admin_MailAccountCreate_Validity"
 msgstr ""
@@ -2246,16 +2246,18 @@ msgstr ""
 "Informationen zur Benachrichtigung zu erhalten."
 
 msgid "Helptext_PersonalSettings_UserLanguage_Hint"
-msgstr "Wählen Sie aus, in welcher Sprache Sie die Anwendung nutzen möchten."
+msgstr ""
+"Ändern Sie hier die Sprache in der das Self-Service-Portal dargestellt wird."
 
 msgid "Helptext_PersonalSettings_UserNewPasswordConfirm_Hint"
-msgstr "Bestätigen Sie das neue Passwort."
+msgstr ""
+"Wiederholung des neuen Passwortes für die Nutzung des Self-Service-Portals."
 
 msgid "Helptext_PersonalSettings_UserNewPassword_Hint"
-msgstr "Legen Sie ein neues Passwort für Ihren Nutzeraccount fest."
+msgstr "Ihr neues Passwort für die Nutzung des Self-Service-Portals"
 
 msgid "Helptext_PersonalSettings_UserPassword_Hint"
-msgstr "Geben Sie Ihr aktuell gültiges Passwort ein."
+msgstr "Ihr Anmeldepasswort für die Nutzung des Self-Service-Portals"
 
 msgid "Helptext_Reporting_ReportCreate_Comment"
 msgstr ""
@@ -2381,13 +2383,6 @@ msgstr ""
 "ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
 "weitere Texteingabe können Sie die Auswahl weiter einschränken."
 
-msgid "Helptext_Textmodules_TicketEdit"
-msgstr ""
-"Um die in Ihrem System verfügbaren Textbausteine zu nutzen, geben Sie \"::"
-"\" (Doppelpunkt Doppelpunkt) ein. Wählen Sie anschließend im Kontextmenü den "
-"gewünschten Textbaustein aus. Sie können die Auswahl anhand der "
-"Schlüsselworte manuell einschränken, in dem sie weiteren Text eingeben."
-
 msgid "Helptext_Ticket_Dashboard_Search"
 msgstr ""
 "Durchsuchbar sind die Ticket-Eigenschaften \"Ticketnummer\", \"Titel\", "
@@ -2396,6 +2391,8 @@ msgstr ""
 
 msgid "Helptext_Tickets_ArticleCreate_Attachments"
 msgstr ""
+"Wählen Sie ob die Ticketbeschreibung nur als Notiz abgelegt oder direkt als "
+"Email versendet wird."
 
 msgid "Helptext_Tickets_ArticleCreate_Channel"
 msgstr ""
@@ -2416,7 +2413,7 @@ msgstr ""
 "gesetzt und kann nicht entfernt werden."
 
 msgid "Helptext_Tickets_ArticleCreateEdit_Subject"
-msgstr "Fassen Sie das Thema des Artikels kurz zusammen."
+msgstr "Eine kurze Zusammenfassung Ihrer Nachricht"
 
 msgid "Helptext_Tickets_ArticleCreate_From"
 msgstr ""
@@ -2523,7 +2520,7 @@ msgstr ""
 "befindet."
 
 msgid "Helptext_Tickets_TicketCreate_Subject"
-msgstr "Fassen Sie das Thema des Tickets kurz zusammen."
+msgstr "Eine kurze Zusammenfassung ihrer Meldung"
 
 msgid "Helptext_Tickets_TicketCreate_Type"
 msgstr ""
@@ -2844,7 +2841,7 @@ msgid "Localisation"
 msgstr "Lokalisierung"
 
 msgid "Lock"
-msgstr "Sperre"
+msgstr "Sperren"
 
 msgid "Locked"
 msgstr "Gesperrt"
@@ -3132,7 +3129,7 @@ msgid "No article available."
 msgstr "Kein Artikel verfügbar."
 
 msgid "No data available."
-msgstr "Keine Daten verfügbar."
+msgstr "Keine Angaben verfügbar."
 
 msgid "No objects available."
 msgstr "Keine Objekte verfügbar."
@@ -3216,7 +3213,7 @@ msgid "Number of Actions"
 msgstr "Anzahl Aktionen"
 
 msgid "Number of Config Items"
-msgstr "Anzahl Assets"
+msgstr "Anzahl Config Items"
 
 msgid "Number of Config Items in critical incident state"
 msgstr "Anzahl Assets mit kritischem Vorfallsstatus"
@@ -3318,7 +3315,7 @@ msgid "Output Handler"
 msgstr "Output Handler"
 
 msgid "Overall"
-msgstr "Gesamt"
+msgstr "Summe"
 
 msgid "Overview"
 msgstr "Übersicht"
@@ -3866,6 +3863,9 @@ msgstr "Senden an"
 msgid "Send to all role members"
 msgstr "Senden an Agenten-Rollen"
 
+msgid "send to background"
+msgstr "im Hintergrund ausführen"
+
 msgid "Send to these agents"
 msgstr "Senden an Agenten"
 
@@ -4064,7 +4064,7 @@ msgid "Success"
 msgstr "Erfolg"
 
 msgid "Success!"
-msgstr "Erfolgreich!"
+msgstr "Erfolg!"
 
 msgid "Successfully processed lines"
 msgstr "Erfolgreich verarbeitete Zeilen"
@@ -4178,7 +4178,7 @@ msgid "The file {0} has no valid MIME-TYPE."
 msgstr "Die Datei '{0}' hat keinen gültigen MIME-Typ."
 
 msgid "The file size of {0} is too large ({1}). Max.: {2}"
-msgstr "Die Datei ist zu groß {0} ({1}). Max.: {2}"
+msgstr "Die Datei {0} ist zu groß ({1}). Max.: {2}"
 
 msgid "The following {0} entries will be deleted. Are you sure?"
 msgstr "Die ausgewählten {0} Einträge werden gelöscht. Sind Sie sicher?"
@@ -4340,12 +4340,6 @@ msgstr "Typ"
 msgid "Type Data"
 msgstr "Typdaten"
 
-msgid "Type Details"
-msgstr "Typdetails"
-
-msgid "Type Information"
-msgstr "Typ-Informationen"
-
 msgid "Type of Job"
 msgstr "Job Typ"
 
@@ -4428,7 +4422,7 @@ msgid "User manual"
 msgstr "Handbuch für Anwender"
 
 msgid "User Name"
-msgstr "Nutzername"
+msgstr "Nutzerkennung"
 
 msgid "Users"
 msgstr "Nutzer"
@@ -4546,6 +4540,19 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Helptext_Textmodules_TicketEdit"
+#~ msgstr ""
+#~ "Um die in Ihrem System verfügbaren Textbausteine zu nutzen, geben Sie \"::"
+#~ "\" (Doppelpunkt Doppelpunkt) ein. Wählen Sie anschließend im Kontextmenü "
+#~ "den gewünschten Textbaustein aus. Sie können die Auswahl anhand der "
+#~ "Schlüsselworte manuell einschränken, in dem sie weiteren Text eingeben."
+
+#~ msgid "Type Details"
+#~ msgstr "Typdetails"
+
+#~ msgid "Type Information"
+#~ msgstr "Typ-Informationen"
 
 #~ msgid "Cancel Process"
 #~ msgstr "Bearbeiten wird abgebrochen"

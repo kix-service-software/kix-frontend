@@ -300,9 +300,7 @@ class Component {
 
     private async prepareTable(): Promise<void> {
         const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
-        if (
-            settings && settings.objectType || (settings.tableConfiguration && settings.tableConfiguration.objectType)
-        ) {
+        if (settings?.objectType || settings?.tableConfiguration?.objectType) {
             this.objectType = settings.tableConfiguration && settings.tableConfiguration.objectType
                 ? settings.tableConfiguration.objectType : settings.objectType; // table prior table widget
             const context = ContextService.getInstance().getActiveContext();
@@ -317,12 +315,10 @@ class Component {
                 settings.shortTable, false, !settings.cache
             );
 
-            if (table) {
-                if (settings.sort) {
-                    table.sort(settings.sort[0], settings.sort[1]);
-                }
-                await table.initialize();
+            if (settings.sort) {
+                table?.sort(settings.sort[0], settings.sort[1]);
             }
+            await table?.initialize();
 
             this.state.table = table;
             this.state.loading = false;

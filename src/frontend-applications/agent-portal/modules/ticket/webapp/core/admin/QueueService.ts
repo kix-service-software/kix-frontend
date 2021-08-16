@@ -105,18 +105,11 @@ export class QueueService extends KIXObjectService<Queue> {
 
                 const icon = LabelService.getInstance().getObjectIcon(queue);
 
-                const treeNode = new TreeNode(
-                    queue.QueueID, queue.Name,
-                    icon,
-                    null,
-                    subTree,
-                    null, null, null,
-                    ticketStats,
-                    null, null, null,
-                    invalidClickable ? true : queue.ValidID === 1,
-                    undefined, undefined, undefined, undefined,
-                    queue.ValidID !== 1
-                );
+                const treeNode = new TreeNode(queue.QueueID, queue.Name, icon);
+                treeNode.children = subTree;
+                treeNode.properties = ticketStats;
+                treeNode.selectable = invalidClickable ? true : queue.ValidID === 1;
+                treeNode.showAsInvalid = queue.ValidID !== 1;
 
                 nodes.push(treeNode);
             }
