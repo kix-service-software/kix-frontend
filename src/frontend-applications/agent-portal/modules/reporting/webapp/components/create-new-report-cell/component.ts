@@ -20,6 +20,7 @@ import { UIComponentPermission } from '../../../../../model/UIComponentPermissio
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { Report } from '../../../model/Report';
 import { ReportDefinitionDialogUtil } from '../../core/ReportDefinitionDialogUtil';
+import { ValidObject } from '../../../../valid/model/ValidObject';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -47,7 +48,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     `reporting/reports`, [CRUD.CREATE], true, report
                 )
             ]);
-            this.state.show = this.reportDefinition.ValidID === 1;
+            this.state.show = this.reportDefinition.ValidID === ValidObject.VALID;
         }
     }
 
