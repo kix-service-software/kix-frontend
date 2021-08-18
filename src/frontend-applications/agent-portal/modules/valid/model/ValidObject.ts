@@ -20,6 +20,10 @@ export class ValidObject extends KIXObject {
 
     public ID: number;
 
+    static readonly VALID: number = 1;
+    static readonly INVALID: number = 2;
+    static readonly INVALID_TEMPORARILY: number = 3;
+
     public constructor(validObject?: ValidObject) {
         super(validObject);
         if (validObject) {
