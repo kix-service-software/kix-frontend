@@ -124,6 +124,9 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
                     case DynamicFieldTypes.CI_REFERENCE:
                         this.prepareCIReferenceField(field, dynamicField);
                         break;
+                    case DynamicFieldTypes.TABLE:
+                        this.prepareTableField(field, dynamicField);
+                        break;
                     default:
                         for (const extendedUtil of this.extendedUtils) {
                             await extendedUtil.createDynamicFormField(field, objectType);
@@ -200,6 +203,13 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
         field.defaultValue = new FormFieldValue(
             dynamicField.Config.DefaultValue ? JSON.parse(dynamicField.Config.DefaultValue) : null
         );
+        field.countDefault = 1;
+        field.countMax = 1;
+        field.countMin = 1;
+    }
+
+    private prepareTableField(field: FormFieldConfiguration, dynamicField: DynamicField): void {
+        field.inputComponent = 'dynamic-field-table-input';
         field.countDefault = 1;
         field.countMax = 1;
         field.countMin = 1;

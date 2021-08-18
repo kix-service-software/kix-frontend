@@ -46,7 +46,9 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             []
         ),
         new UIComponent(
-            'admin-dynamic-fields', '/kix-module-dynamic-fields$0/webapp/components/admin-dynamic-fields', []
+            'admin-dynamic-fields',
+            '/kix-module-dynamic-fields$0/webapp/components/admin-dynamic-fields',
+            []
         ),
         new UIComponent(
             'dynamic-field-checklist-information',
@@ -54,7 +56,9 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             []
         ),
         new UIComponent(
-            'dynamic-form-config-input', '/kix-module-dynamic-fields$0/webapp/components/dynamic-form-config-input', []
+            'dynamic-form-config-input',
+            '/kix-module-dynamic-fields$0/webapp/components/dynamic-form-config-input',
+            []
         ),
         new UIComponent(
             'dynamic-field-checklist-input',
@@ -67,7 +71,19 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             []
         ),
         new UIComponent(
-            'dynamic-field-value', '/kix-module-dynamic-fields$0/webapp/components/dynamic-field-value', []
+            'dynamic-field-value',
+            '/kix-module-dynamic-fields$0/webapp/components/dynamic-field-value',
+            []
+        ),
+        new UIComponent(
+            'dynamic-field-table-input',
+            '/kix-module-dynamic-fields$0/webapp/components/dynamic-field-table-input',
+            []
+        ),
+        new UIComponent(
+            'dynamic-field-table-view',
+            '/kix-module-dynamic-fields$0/webapp/components/dynamic-field-table-view',
+            []
         )
     ];
 

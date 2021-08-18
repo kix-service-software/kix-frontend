@@ -35,6 +35,7 @@ export enum InputFieldTypes {
 
     NUMBER = 'NUMBER',
 
-    CHECKBOX = 'CHECKBOX'
+    CHECKBOX = 'CHECKBOX',
 
+    TABLE = 'TABLE'
 }

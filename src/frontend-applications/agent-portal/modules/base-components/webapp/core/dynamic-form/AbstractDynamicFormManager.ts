@@ -33,6 +33,7 @@ import { ServiceRegistry } from '../ServiceRegistry';
 import { IKIXObjectService } from '../IKIXObjectService';
 import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
 import { ValidationSeverity } from '../ValidationSeverity';
+import { DynamicFieldTableValidator } from '../../../../dynamic-fields/webapp/core/DynamicFieldTableValidator';
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 
@@ -105,6 +106,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
                             DynamicFieldTypes.SELECTION,
                             DynamicFieldTypes.CI_REFERENCE,
                             DynamicFieldTypes.TICKET_REFERENCE,
+                            DynamicFieldTypes.TABLE,
                             ...validTypes
                         ]
                     )

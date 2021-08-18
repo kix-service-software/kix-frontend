@@ -7,20 +7,14 @@
  * --
  */
 
-import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
-import { ContextMode } from '../../../../../model/ContextMode';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { Label } from '../../../../base-components/webapp/core/Label';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
-import { RoutingService } from '../../../../base-components/webapp/core/RoutingService';
-import { ConfigItemProperty } from '../../../../cmdb/model/ConfigItemProperty';
-import { TicketProperty } from '../../../../ticket/model/TicketProperty';
 import { DynamicField } from '../../../model/DynamicField';
 import { DynamicFieldTypes } from '../../../model/DynamicFieldTypes';
 import { DynamicFieldValue } from '../../../model/DynamicFieldValue';
@@ -30,7 +24,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private name: string;
     private object: KIXObject;
-    private field: DynamicField;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -89,7 +82,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (dfValue) {
                 if (this.state.field?.FieldType === DynamicFieldTypes.CHECK_LIST) {
                     this.setCheckListValues(dfValue);
-                } else {
+                }
+                else if (this.state.field?.FieldType === DynamicFieldTypes.TABLE) {
+                    this.setTableValues(dfValue);
+                }
+                else {
                     if (this.state.field?.FieldType === DynamicFieldTypes.CI_REFERENCE) {
                         this.state.labels = await LabelService.getInstance().createLabelsFromDFValue(
                             this.object.KIXObjectType, dfValue
@@ -116,6 +113,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private setCheckListValues(dfValue: DynamicFieldValue): void {
         if (dfValue.Value && Array.isArray(dfValue.Value) && dfValue.Value[0]) {
             this.state.checklist = JSON.parse(dfValue.Value[0]);
+        }
+    }
+
+    private setTableValues(dfValue: DynamicFieldValue): void {
+        if (dfValue.Value && Array.isArray(dfValue.Value) && dfValue.Value[0]) {
+            this.state.table = JSON.parse(dfValue.Value[0]);
         }
     }
 

@@ -40,6 +40,9 @@ export class SearchFormManager extends AbstractDynamicFormManager {
                     case DynamicFieldTypes.TEXT_AREA:
                         operations = SearchDefinition.getStringOperators();
                         break;
+                    case DynamicFieldTypes.TABLE:
+                        operations = [SearchOperator.CONTAINS, SearchOperator.LIKE];
+                        break;
                     case DynamicFieldTypes.SELECTION:
                     case DynamicFieldTypes.CI_REFERENCE:
                     case DynamicFieldTypes.TICKET_REFERENCE:
