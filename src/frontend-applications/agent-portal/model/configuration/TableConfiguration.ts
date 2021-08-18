@@ -27,7 +27,7 @@ export class TableConfiguration implements IConfiguration {
         public objectType?: KIXObjectType | string,
         public loadingOptions?: KIXObjectLoadingOptions,
         public displayLimit?: number,
-        public tableColumns?: IColumnConfiguration[],
+        public tableColumns: IColumnConfiguration[] = [],
         public tableColumnConfigurations: string[] = [],
         public enableSelection: boolean = false,
         public toggle: boolean = false,

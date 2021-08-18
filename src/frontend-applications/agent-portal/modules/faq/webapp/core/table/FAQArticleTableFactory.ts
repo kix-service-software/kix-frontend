@@ -22,6 +22,7 @@ import { DataType } from '../../../../../model/DataType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
 import { FAQVote } from '../../../model/FAQVote';
+import { SearchCache } from '../../../../search/model/SearchCache';
 
 export class FAQArticleTableFactory extends TableFactory {
 
@@ -51,28 +52,7 @@ export class FAQArticleTableFactory extends TableFactory {
     private setDefaultTableConfiguration(
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
     ): TableConfiguration {
-        let tableColumns;
-
-        if (short) {
-            tableColumns = [
-                this.getDefaultColumnConfiguration(FAQArticleProperty.NUMBER),
-                this.getDefaultColumnConfiguration(FAQArticleProperty.TITLE),
-                this.getDefaultColumnConfiguration(FAQArticleProperty.LANGUAGE),
-                this.getDefaultColumnConfiguration(FAQArticleProperty.VOTES),
-                this.getDefaultColumnConfiguration(FAQArticleProperty.CATEGORY_ID)
-            ];
-        } else {
-            tableColumns = [
-                this.getDefaultColumnConfiguration(FAQArticleProperty.NUMBER),
-                this.getDefaultColumnConfiguration(FAQArticleProperty.TITLE),
-                this.getDefaultColumnConfiguration(FAQArticleProperty.LANGUAGE),
-                this.getDefaultColumnConfiguration(FAQArticleProperty.CUSTOMER_VISIBLE),
-                this.getDefaultColumnConfiguration(FAQArticleProperty.VOTES),
-                this.getDefaultColumnConfiguration(FAQArticleProperty.CATEGORY_ID),
-                this.getDefaultColumnConfiguration(FAQArticleProperty.CHANGED),
-                this.getDefaultColumnConfiguration(FAQArticleProperty.CHANGED_BY)
-            ];
-        }
+        const tableColumns = this.getDefaultColumns(short);
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(null, null, null,
@@ -170,6 +150,41 @@ export class FAQArticleTableFactory extends TableFactory {
         }
 
         return values;
+    }
+
+    private getDefaultColumns(short: boolean = false): IColumnConfiguration[] {
+        let tableColumns = [];
+        if (short) {
+            tableColumns = [
+                this.getDefaultColumnConfiguration(FAQArticleProperty.NUMBER),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.TITLE),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.LANGUAGE),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.VOTES),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.CATEGORY_ID)
+            ];
+        } else {
+            tableColumns = [
+                this.getDefaultColumnConfiguration(FAQArticleProperty.NUMBER),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.TITLE),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.LANGUAGE),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.CUSTOMER_VISIBLE),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.VOTES),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.CATEGORY_ID),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.CHANGED),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.CHANGED_BY)
+            ];
+        }
+
+        return tableColumns;
+    }
+
+    public async getDefaultColumnConfigurations(searchCache: SearchCache): Promise<IColumnConfiguration[]> {
+        const superColumns = await super.getDefaultColumnConfigurations(searchCache);
+        const ticketColumns = this.getDefaultColumns();
+        return [
+            ...ticketColumns,
+            ...superColumns.filter((c) => !ticketColumns.some((tc) => tc.property === c.property))
+        ];
     }
 
 }

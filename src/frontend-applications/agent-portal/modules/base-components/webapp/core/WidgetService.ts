@@ -17,6 +17,9 @@ import { EventService } from './EventService';
 import { TabContainerEvent } from './TabContainerEvent';
 import { TabContainerEventData } from './TabContainerEventData';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { ConfiguredWidget } from '../../../../model/configuration/ConfiguredWidget';
+import { IConfiguration } from '../../../../model/configuration/IConfiguration';
+import { WidgetConfiguration } from '../../../../model/configuration/WidgetConfiguration';
 
 export class WidgetService {
 

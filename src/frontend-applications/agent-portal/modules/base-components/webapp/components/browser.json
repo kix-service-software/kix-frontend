@@ -70,6 +70,8 @@
         "require ./translation-string",
         "require ./tree",
         "require ./tree/tree-node",
+        "require ./ui-configuration/table-configuration",
+        "require ./ui-configuration/table-widget-configuration",
         "require ./widget",
         "require ./widget-container"
     ]

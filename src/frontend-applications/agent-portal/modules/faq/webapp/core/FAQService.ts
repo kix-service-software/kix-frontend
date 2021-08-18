@@ -243,4 +243,14 @@ export class FAQService extends KIXObjectService {
         );
     }
 
+    public async getObjectProperties(objectType: KIXObjectType): Promise<string[]> {
+        const superProperties = await super.getObjectProperties(objectType);
+        const objectProperties: string[] = [];
+        for (const property in FAQArticleProperty) {
+            if (FAQArticleProperty[property]) {
+                objectProperties.push(FAQArticleProperty[property]);
+            }
+        }
+        return [...objectProperties, ...superProperties];
+    }
 }

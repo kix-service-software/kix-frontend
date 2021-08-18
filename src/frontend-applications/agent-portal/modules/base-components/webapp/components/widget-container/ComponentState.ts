@@ -9,8 +9,6 @@
 
 import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
 import { AbstractComponentState } from '../../core/AbstractComponentState';
-import { Label } from '../../core/Label';
-
 
 export class ComponentState extends AbstractComponentState {
 

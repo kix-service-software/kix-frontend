@@ -11,11 +11,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <div.search-result-widget>
         <if(state.resultWidget)>
             <table-widget
-                key=("search-result-table-" + state.resultWidget[0])
+                key=("search-result-table-" + state.resultWidget[1])
+                instanceId=state.resultWidget[0]
                 useContext=false
-                widgetConfiguration=state.resultWidget[1]
-                title=state.resultWidget[2]
-                icon=state.resultWidget[3]/>
+                widgetConfiguration=state.resultWidget[2]
+                title=state.resultWidget[3]
+                icon=state.resultWidget[4]/>
         </if>
     </div>
 </div>

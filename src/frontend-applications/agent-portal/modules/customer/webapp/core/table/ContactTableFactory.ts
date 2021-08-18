@@ -24,6 +24,7 @@ import { DefaultColumnConfiguration } from '../../../../../model/configuration/D
 import { DataType } from '../../../../../model/DataType';
 import { UserProperty } from '../../../../user/model/UserProperty';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { SearchCache } from '../../../../search/model/SearchCache';
 
 export class ContactTableFactory extends TableFactory {
 
@@ -47,36 +48,7 @@ export class ContactTableFactory extends TableFactory {
     private setDefaultTableConfiguration(
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, short?: boolean
     ): TableConfiguration {
-        let tableColumns;
-        if (short) {
-            tableColumns = [
-                this.getDefaultColumnConfiguration(ContactProperty.FIRSTNAME),
-                this.getDefaultColumnConfiguration(ContactProperty.LASTNAME),
-                this.getDefaultColumnConfiguration(ContactProperty.EMAIL),
-                this.getDefaultColumnConfiguration(UserProperty.USER_LOGIN),
-                this.getDefaultColumnConfiguration(ContactProperty.PRIMARY_ORGANISATION_ID),
-                this.getDefaultColumnConfiguration(UserProperty.IS_CUSTOMER),
-                this.getDefaultColumnConfiguration(UserProperty.IS_AGENT),
-                this.getDefaultColumnConfiguration(ContactProperty.CITY),
-                this.getDefaultColumnConfiguration(ContactProperty.STREET),
-                this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID)
-            ];
-        } else {
-            tableColumns = [
-                this.getDefaultColumnConfiguration(ContactProperty.FIRSTNAME),
-                this.getDefaultColumnConfiguration(ContactProperty.LASTNAME),
-                this.getDefaultColumnConfiguration(ContactProperty.EMAIL),
-                this.getDefaultColumnConfiguration(UserProperty.USER_LOGIN),
-                this.getDefaultColumnConfiguration(ContactProperty.PRIMARY_ORGANISATION_ID),
-                this.getDefaultColumnConfiguration(UserProperty.IS_CUSTOMER),
-                this.getDefaultColumnConfiguration(UserProperty.IS_AGENT),
-                this.getDefaultColumnConfiguration(ContactProperty.PHONE),
-                this.getDefaultColumnConfiguration(ContactProperty.COUNTRY),
-                this.getDefaultColumnConfiguration(ContactProperty.CITY),
-                this.getDefaultColumnConfiguration(ContactProperty.STREET),
-                this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID)
-            ];
-        }
+        const tableColumns = this.getDefaultColumns();
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(null, null, null,
@@ -149,6 +121,51 @@ export class ContactTableFactory extends TableFactory {
                 config = super.getDefaultColumnConfiguration(property);
         }
         return config;
+    }
+
+    private getDefaultColumns(short: boolean = false): IColumnConfiguration[] {
+        let tableColumns = [];
+
+        if (short) {
+            tableColumns = [
+                this.getDefaultColumnConfiguration(ContactProperty.FIRSTNAME),
+                this.getDefaultColumnConfiguration(ContactProperty.LASTNAME),
+                this.getDefaultColumnConfiguration(ContactProperty.EMAIL),
+                this.getDefaultColumnConfiguration(UserProperty.USER_LOGIN),
+                this.getDefaultColumnConfiguration(ContactProperty.PRIMARY_ORGANISATION_ID),
+                this.getDefaultColumnConfiguration(UserProperty.IS_CUSTOMER),
+                this.getDefaultColumnConfiguration(UserProperty.IS_AGENT),
+                this.getDefaultColumnConfiguration(ContactProperty.CITY),
+                this.getDefaultColumnConfiguration(ContactProperty.STREET),
+                this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID)
+            ];
+        } else {
+            tableColumns = [
+                this.getDefaultColumnConfiguration(ContactProperty.FIRSTNAME),
+                this.getDefaultColumnConfiguration(ContactProperty.LASTNAME),
+                this.getDefaultColumnConfiguration(ContactProperty.EMAIL),
+                this.getDefaultColumnConfiguration(UserProperty.USER_LOGIN),
+                this.getDefaultColumnConfiguration(ContactProperty.PRIMARY_ORGANISATION_ID),
+                this.getDefaultColumnConfiguration(UserProperty.IS_CUSTOMER),
+                this.getDefaultColumnConfiguration(UserProperty.IS_AGENT),
+                this.getDefaultColumnConfiguration(ContactProperty.PHONE),
+                this.getDefaultColumnConfiguration(ContactProperty.COUNTRY),
+                this.getDefaultColumnConfiguration(ContactProperty.CITY),
+                this.getDefaultColumnConfiguration(ContactProperty.STREET),
+                this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID)
+            ];
+        }
+
+        return tableColumns;
+    }
+
+    public async getDefaultColumnConfigurations(searchCache: SearchCache): Promise<IColumnConfiguration[]> {
+        const superColumns = await super.getDefaultColumnConfigurations(searchCache);
+        const ticketColumns = this.getDefaultColumns();
+        return [
+            ...ticketColumns,
+            ...superColumns.filter((c) => !ticketColumns.some((tc) => tc.property === c.property))
+        ];
     }
 
 }

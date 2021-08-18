@@ -373,7 +373,7 @@ export abstract class Context {
         let widgets: ConfiguredWidget[] = [];
         const currentUser = await AgentService.getInstance().getCurrentUser();
         const widgetListPreference = currentUser.Preferences.find((p) => p.ID === 'ContextWidgetLists');
-        if (widgetListPreference) {
+        if (widgetListPreference && widgetListPreference.Value) {
             try {
                 const value = JSON.parse(widgetListPreference.Value);
                 const contextLists = value[this.descriptor.contextId];
@@ -456,7 +456,11 @@ export abstract class Context {
         let configuration: ConfiguredWidget;
 
         if (this.configuration) {
-            configuration = this.configuration.explorer.find((e) => e.instanceId === instanceId);
+            configuration = await this.getUserWidgetConfiguration(instanceId);
+
+            if (!configuration) {
+                configuration = this.configuration.explorer.find((e) => e.instanceId === instanceId);
+            }
 
             if (!configuration) {
                 configuration = this.configuration.sidebars.find((e) => e.instanceId === instanceId);
@@ -477,10 +481,6 @@ export abstract class Context {
             if (!configuration) {
                 configuration = this.configuration.others.find((cw) => cw.instanceId === instanceId);
             }
-
-            if (!configuration) {
-                configuration = await this.getUserWidgetConfiguration(instanceId);
-            }
         }
 
         if (configuration && Array.isArray(configuration.permissions)) {
@@ -498,7 +498,7 @@ export abstract class Context {
 
         const currentUser = await AgentService.getInstance().getCurrentUser();
         const widgetListPreference = currentUser.Preferences.find((p) => p.ID === 'ContextWidgetLists');
-        if (widgetListPreference) {
+        if (widgetListPreference && widgetListPreference.Value) {
             const value = JSON.parse(widgetListPreference.Value);
             const contextLists = value[this.descriptor.contextId];
             if (contextLists) {

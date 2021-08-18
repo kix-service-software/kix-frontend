@@ -637,35 +637,44 @@ export class ContextService {
         this.serviceListener.delete(listenerId);
     }
 
-    public async saveUserWidgetList(widgets: ConfiguredWidget[], contextWidgetList: string): Promise<void> {
+    public async saveUserWidgetList(
+        instanceIds: string[], modifiedWidgets: ConfiguredWidget[], contextWidgetList: string
+    ): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         if (context) {
-            const contextWidgets: ConfiguredWidget[] = context.getConfiguration()[contextWidgetList];
-
-            const preferences: Array<[string, string]> = [];
-
-            const widgetList: Array<ConfiguredWidget | string> = [];
-            for (const widget of widgets) {
-                if (contextWidgets?.some((w) => w.instanceId === widget.instanceId)) {
-                    widgetList.push(widget.instanceId);
-                } else {
-                    widgetList.push(widget);
-                }
-            }
-
             const contextId = context.descriptor.contextId;
 
             const currentUser = await AgentService.getInstance().getCurrentUser();
             const preference = currentUser.Preferences.find((p) => p.ID === 'ContextWidgetLists');
-            const preferenceValue = preference ? JSON.parse(preference.Value) : {};
+            const preferenceValue = preference && preference.Value ? JSON.parse(preference.Value) : {};
+            const userWidgetList: Array<string | ConfiguredWidget> = preferenceValue[contextId]
+                ? preferenceValue[contextId][contextWidgetList] || []
+                : [];
+
+            const newWidgetList = [];
+            for (const instanceId of instanceIds) {
+                const modifiedWidget = modifiedWidgets.find((w) => w.instanceId === instanceId);
+                if (modifiedWidget) {
+                    newWidgetList.push(modifiedWidget);
+                } else {
+                    const widget = userWidgetList.find((w) => typeof w !== 'string' && w.instanceId === instanceId);
+                    if (widget) {
+                        newWidgetList.push(widget);
+                    } else {
+                        newWidgetList.push(instanceId);
+                    }
+                }
+            }
 
             if (!preferenceValue[contextId]) {
                 preferenceValue[contextId] = {};
             }
 
-            preferenceValue[contextId][contextWidgetList] = widgetList;
+            preferenceValue[contextId][contextWidgetList] = newWidgetList;
 
-            preferences.push(['ContextWidgetLists', JSON.stringify(preferenceValue)]);
+            const preferences: Array<[string, string]> = [
+                ['ContextWidgetLists', JSON.stringify(preferenceValue)]
+            ];
             await AgentService.getInstance().setPreferences(preferences);
         }
     }

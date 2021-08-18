@@ -15,7 +15,7 @@ export class ComponentState {
     public constructor(
         public instanceId: string = null,
         public bulkManager: BulkManager = null,
-        public title: string = 'Translatable#Bulk',
+        public title: string = 'Translatable#Bulk Action',
         public icon: ObjectIcon | string = 'kix-icon-gear'
     ) { }
 

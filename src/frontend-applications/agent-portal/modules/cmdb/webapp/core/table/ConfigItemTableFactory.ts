@@ -19,6 +19,8 @@ import { TableRowHeight } from '../../../../../model/configuration/TableRowHeigh
 import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
 import { ConfigItemDetailsContext } from '..';
 import { ContextMode } from '../../../../../model/ContextMode';
+import { SearchCache } from '../../../../search/model/SearchCache';
+import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 
 export class ConfigItemTableFactory extends TableFactory {
 
@@ -45,29 +47,7 @@ export class ConfigItemTableFactory extends TableFactory {
     private setDefaultTableConfiguration(
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
     ): TableConfiguration {
-        const tableColumns = [
-            new DefaultColumnConfiguration(
-                null, null, null, ConfigItemProperty.NUMBER, true, false, true, false, 135, true, true),
-            new DefaultColumnConfiguration(
-                null, null, null, ConfigItemProperty.NAME, true, false, true, false, 300, true, true),
-            new DefaultColumnConfiguration(
-                null, null, null,
-                ConfigItemProperty.CUR_DEPL_STATE_ID, false, true, false, true, 55,
-                true, true, true, DataType.STRING, false
-            ),
-            new DefaultColumnConfiguration(null, null, null,
-                ConfigItemProperty.CUR_INCI_STATE_ID, false, true, false, true, 55,
-                true, true, true, DataType.STRING, false
-            ),
-            new DefaultColumnConfiguration(null, null, null,
-                ConfigItemProperty.CLASS_ID, true, false, true, false, 200, true, true, true
-            ),
-            new DefaultColumnConfiguration(null, null, null,
-                ConfigItemProperty.CHANGE_TIME, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
-            ),
-            new DefaultColumnConfiguration(
-                null, null, null, ConfigItemProperty.CHANGE_BY, true, false, true, false, 150, true, true)
-        ];
+        const tableColumns = this.getDefaultColumns();
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(null, null, null,
@@ -96,5 +76,42 @@ export class ConfigItemTableFactory extends TableFactory {
 
         tableConfiguration.objectType = KIXObjectType.CONFIG_ITEM;
         return tableConfiguration;
+    }
+
+    private getDefaultColumns(): IColumnConfiguration[] {
+        const tableColumns = [
+            new DefaultColumnConfiguration(
+                null, null, null, ConfigItemProperty.NUMBER, true, false, true, false, 135, true, true),
+            new DefaultColumnConfiguration(
+                null, null, null, ConfigItemProperty.NAME, true, false, true, false, 300, true, true),
+            new DefaultColumnConfiguration(
+                null, null, null,
+                ConfigItemProperty.CUR_DEPL_STATE_ID, false, true, false, true, 55,
+                true, true, true, DataType.STRING, false
+            ),
+            new DefaultColumnConfiguration(null, null, null,
+                ConfigItemProperty.CUR_INCI_STATE_ID, false, true, false, true, 55,
+                true, true, true, DataType.STRING, false
+            ),
+            new DefaultColumnConfiguration(null, null, null,
+                ConfigItemProperty.CLASS_ID, true, false, true, false, 200, true, true, true
+            ),
+            new DefaultColumnConfiguration(null, null, null,
+                ConfigItemProperty.CHANGE_TIME, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
+            ),
+            new DefaultColumnConfiguration(
+                null, null, null, ConfigItemProperty.CHANGE_BY, true, false, true, false, 150, true, true)
+        ];
+
+        return tableColumns;
+    }
+
+    public async getDefaultColumnConfigurations(searchCache: SearchCache): Promise<IColumnConfiguration[]> {
+        const superColumns = await super.getDefaultColumnConfigurations(searchCache);
+        const ticketColumns = this.getDefaultColumns();
+        return [
+            ...ticketColumns,
+            ...superColumns.filter((c) => !ticketColumns.some((tc) => tc.property === c.property))
+        ];
     }
 }

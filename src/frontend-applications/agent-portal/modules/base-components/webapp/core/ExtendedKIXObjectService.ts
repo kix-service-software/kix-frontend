@@ -23,6 +23,10 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export abstract class ExtendedKIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
+    public async getObjectProperties(objectType: KIXObjectType): Promise<string[]> {
+        return [];
+    }
+
     public getObjectConstructors(): Array<new (object?: KIXObject) => KIXObject> {
         return [];
     }

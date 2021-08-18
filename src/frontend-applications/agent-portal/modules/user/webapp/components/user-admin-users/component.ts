@@ -41,7 +41,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await this.prepareTable();
 
         const actions = await ActionFactory.getInstance().generateActions(
-            ['user-admin-user-create-action', 'csv-export-action'], this.state.table
+            [
+                'user-admin-user-create-action',
+                'csv-export-action',
+                'reset-user-context-widget-list'
+            ], this.state.table
         );
         WidgetService.getInstance().registerActions(this.state.instanceId, actions);
 

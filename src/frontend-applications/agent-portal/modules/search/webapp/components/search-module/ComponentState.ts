@@ -15,7 +15,7 @@ import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 
 export class ComponentState extends AbstractComponentState {
     public constructor(
-        public resultWidget: [KIXObjectType | string, WidgetConfiguration, string, string | ObjectIcon] = null,
+        public resultWidget: [string, KIXObjectType | string, WidgetConfiguration, string, string | ObjectIcon] = null,
         public componentKey: string = IdService.generateDateBasedId()
     ) {
         super();
