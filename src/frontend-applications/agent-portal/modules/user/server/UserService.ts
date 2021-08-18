@@ -188,6 +188,11 @@ export class UserService extends KIXObjectAPIService {
                 await this.setPreferences(token, clientRequestId, [notifications], userId);
             }
 
+            const contextWIdgetLists = parameter.find((p) => p[0] === PersonalSettingsProperty.CONTEXT_WIDGET_LISTS);
+            if (contextWIdgetLists) {
+                await this.setPreferences(token, clientRequestId, [contextWIdgetLists], userId);
+            }
+
             return id;
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
             let uri = this.buildUri('session', 'user', 'preferences', objectId);
@@ -273,7 +278,7 @@ export class UserService extends KIXObjectAPIService {
                         errors.push(error);
                     });
                 } else {
-                    const uri = this.buildUri('session', 'user', 'preferences', param[0]);
+                    const uri = this.buildUri('system', 'users', userId, 'preferences', param[0]);
                     await this.sendDeleteRequest<void>(token, clientRequestId, [uri], KIXObjectType.USER_PREFERENCE)
                         .catch((error: Error) => {
                             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);

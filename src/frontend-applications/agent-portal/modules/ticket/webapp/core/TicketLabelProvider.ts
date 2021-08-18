@@ -340,13 +340,11 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
 
             switch (property) {
                 case TicketProperty.CREATED_QUEUE_ID:
-                case TicketProperty.QUEUE:
                     displayValue = await this.getPropertyValueDisplayText(
                         TicketProperty.QUEUE_ID, ticket.QueueID, translatable
                     );
                     break;
                 case TicketProperty.CREATED_STATE_ID:
-                case TicketProperty.STATE:
                     displayValue = await this.getPropertyValueDisplayText(
                         TicketProperty.STATE_ID, ticket.StateID, translatable
                     );
@@ -360,47 +358,14 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                     }
                     break;
                 case TicketProperty.CREATED_PRIORITY_ID:
-                case TicketProperty.PRIORITY:
                     displayValue = await this.getPropertyValueDisplayText(
                         TicketProperty.PRIORITY_ID, ticket.PriorityID, translatable
                     );
                     break;
                 case TicketProperty.CREATED_TYPE_ID:
-                case TicketProperty.TYPE:
                     displayValue = await this.getPropertyValueDisplayText(
                         TicketProperty.TYPE_ID, ticket.TypeID, translatable
                     );
-                    break;
-                case TicketProperty.OWNER:
-                    displayValue = await this.getPropertyValueDisplayText(
-                        TicketProperty.OWNER_ID, ticket.OwnerID, translatable
-                    );
-                    break;
-                case TicketProperty.RESPONSIBLE:
-                    displayValue = await this.getPropertyValueDisplayText(
-                        TicketProperty.RESPONSIBLE_ID, ticket.ResponsibleID, translatable
-                    );
-                    break;
-                case TicketProperty.ORGANISATION:
-                    displayValue = await this.getPropertyValueDisplayText(
-                        TicketProperty.ORGANISATION_ID, ticket.OrganisationID, translatable
-                    );
-                    break;
-                case TicketProperty.CONTACT:
-                    displayValue = await this.getPropertyValueDisplayText(
-                        TicketProperty.CONTACT_ID, ticket.ContactID, translatable
-                    );
-                    break;
-                case TicketProperty.LOCK:
-                    displayValue = await this.getPropertyValueDisplayText(
-                        TicketProperty.LOCK_ID, ticket.LockID, translatable
-                    );
-                    break;
-                case TicketProperty.UNTIL_TIME:
-                    const untilTime = ticket.getUntilTime();
-                    if (untilTime) {
-                        displayValue = DateTimeUtil.calculateTimeInterval(untilTime);
-                    }
                     break;
                 default:
                     displayValue = await super.getDisplayText(ticket, property, defaultValue, translatable);
@@ -531,7 +496,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 }
                 break;
             case TicketProperty.CONTACT_ID:
-            case TicketProperty.CONTACT:
                 if (ticket && ticket.ContactID) {
                     icons.push(new ObjectIcon(
                         null, KIXObjectType.CONTACT, ticket.ContactID, null, null,
@@ -540,7 +504,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 }
                 break;
             case TicketProperty.ORGANISATION_ID:
-            case TicketProperty.ORGANISATION:
                 if (ticket && ticket.OrganisationID) {
                     icons.push(new ObjectIcon(
                         null, KIXObjectType.ORGANISATION, ticket.OrganisationID, null, null,
@@ -565,7 +528,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 }
                 break;
             case TicketProperty.OWNER_ID:
-            case TicketProperty.OWNER:
                 if (ticket && ticket.OwnerID) {
                     const users = await KIXObjectService.loadObjects<User>(
                         KIXObjectType.USER, [ticket.OwnerID],
@@ -582,7 +544,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 }
                 break;
             case TicketProperty.RESPONSIBLE_ID:
-            case TicketProperty.RESPONSIBLE:
                 if (ticket && ticket.ResponsibleID) {
                     const users = await KIXObjectService.loadObjects<User>(
                         KIXObjectType.USER, [ticket.ResponsibleID],

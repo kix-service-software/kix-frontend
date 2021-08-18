@@ -1,0 +1,95 @@
+/**
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+.widget-configuration-container {
+    padding: @margin-small;
+    box-sizing: border-box;
+    display: grid;
+    align-items: center;
+    grid-row-gap: @margin-small;
+
+    h2.configuration-title {
+        color: @secondary-0;
+        font-weight: bold;
+        border-bottom: 1px solid @secondary-0;
+        margin-bottom: 1rem;
+        padding-bottom: 0.25rem;
+    }
+
+    .widget-specific-configuration {
+        margin-top: 1rem;
+    }
+
+    .table-container {
+        overflow: unset;
+    }
+
+    .standard-table-NEW {
+        &.configuration-table {
+            thead {
+                tr {
+                    th {
+                        padding: 0.25rem @margin-small;
+
+                        &:first-child {
+                            width: 10%;
+                        }
+
+                        &.table-head-cell {
+                            top: 6rem;
+                        }
+                    }
+                }
+            }
+
+            >tbody {
+                opacity: 1;
+
+                >tr {
+                    >td.content-cell {
+                        .shorten-text();
+                        padding: 0.25rem 0.5rem;
+
+                        .form-list {
+                            .value-list {
+                                position: unset;
+                            }
+                        }
+                    }
+                }
+
+                >tr:not(.toggle-row) {
+                    >*:not(.check):not(.toggle) {
+                        padding: 0.25rem @margin-small;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.widget-frame {
+    &.small {
+        .widget-configuration-container {
+            .standard-table-NEW {
+                &.configuration-table {
+                    thead {
+                        tr {
+                            th {
+                                &:first-child {
+                                    width: 20%;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

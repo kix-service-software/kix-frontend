@@ -330,27 +330,34 @@ export class BrowserUtil {
         return newString;
     }
 
+    public static stringifyJSON(json: any): string {
+        try {
+            const replacerFunc = () => {
+                const visited = new WeakSet();
+                return (key: string, value: any) => {
+                    if (typeof value === 'object' && value !== null) {
+                        if (visited.has(value)) {
+                            return;
+                        }
+                        visited.add(value);
+                    }
+                    return value;
+                };
+            };
+            json = JSON.stringify(json, replacerFunc(), 4);
+        } catch (e) {
+            console.error(e);
+            json = '';
+        }
+
+        return json;
+    }
+
     public static formatJSON(json: any) {
         if (typeof json !== 'string') {
-            try {
-                const replacerFunc = () => {
-                    const visited = new WeakSet();
-                    return (key: string, value: any) => {
-                        if (typeof value === 'object' && value !== null) {
-                            if (visited.has(value)) {
-                                return;
-                            }
-                            visited.add(value);
-                        }
-                        return value;
-                    };
-                };
-                json = JSON.stringify(json, replacerFunc(), 4);
-            } catch (e) {
-                console.error(e);
-                json = '';
-            }
+            json = this.stringifyJSON(json);
         }
+
         json = json
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')

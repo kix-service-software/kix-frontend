@@ -63,7 +63,7 @@ class Component {
             this.state.bulkManager = bulkManager;
 
             const objectName = await LabelService.getInstance().getObjectName(objectType, true);
-            this.state.title = await TranslationService.translate('Translatable#Bulk {0}', [objectName]);
+            this.state.title = await TranslationService.translate('Translatable#Bulk Action: {0}', [objectName]);
 
             this.state.icon = LabelService.getInstance().getObjectIconForType(objectType);
         }

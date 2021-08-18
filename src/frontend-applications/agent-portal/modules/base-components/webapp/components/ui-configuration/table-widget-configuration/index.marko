@@ -1,0 +1,64 @@
+<!--
+Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<if(state.configuration)>
+    <h2.configuration-title>
+        <translation-string pattern="Translatable#Table Widget"/>
+    </h2>
+    <div.table-widget-configuration-container.table-container>
+        <if(input.advancedSettings)>
+            <table.standard-table-NEW.configuration-table>
+                <thead>
+                    <tr>
+                        <th.table-head-cell>
+                            <translation-string pattern="Translatable#Option"/>
+                        </th>
+                        <th.table-head-cell>
+                            <translation-string pattern="Translatable#Value"/>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody.show-object>
+                    <tr>
+                        <td.content-cell>
+                            <translation-string pattern="Translatable#Show Filter"/>
+                        </td>
+                        <td.content-cell on-click("showFilterChanged")>
+                            <input type="checkbox" checked=state.configuration.showFilter/>
+                        </td>
+                    </tr> 
+                    <tr>
+                        <td.content-cell>
+                            <translation-string pattern="Translatable#Sort"/>
+                        </td>
+                        <td.content-cell.table-sort>
+                            <input type="checkbox" on-click("switchSort") checked=state.isSortEnabled/>
+                            <form-list
+                                treeId=state.sortTreeId
+                                multiselect=false
+                                disabled=!state.isSortEnabled
+                                on-nodesChanged("sortColumnChanged")/>
+                            <translation-string pattern="Translatable#DESC"/>
+                            <input
+                                type="checkbox"
+                                on-click("sortOrderChanged")
+                                checked=state.isDESC
+                                disabled=!state.isSortEnabled/>
+                        </td>
+                    </tr> 
+                </tbody>
+            </table>
+        </if>
+        <if(state.tableConfigurationTemplate)>
+            <${state.tableConfigurationTemplate}
+                configuration=state.configuration.configuration
+                advancedSettings=input.advancedSettings
+                on-configurationChanged("configurationChanged")/>
+        </if>
+    </div>
+</if>

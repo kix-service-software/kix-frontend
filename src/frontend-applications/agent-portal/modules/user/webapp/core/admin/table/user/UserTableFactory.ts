@@ -73,7 +73,7 @@ export class UserTableFactory extends TableFactory {
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
-        } else if (!tableConfiguration.tableColumns) {
+        } else if (!Array.isArray(tableConfiguration.tableColumns) || !tableConfiguration.tableColumns.length) {
             tableConfiguration.tableColumns = tableColumns;
         }
 

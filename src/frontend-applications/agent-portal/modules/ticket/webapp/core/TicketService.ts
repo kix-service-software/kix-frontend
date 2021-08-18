@@ -593,4 +593,15 @@ export class TicketService extends KIXObjectService<Ticket> {
         }
         return name;
     }
+
+    public async getObjectProperties(objectType: KIXObjectType): Promise<string[]> {
+        const superProperties = await super.getObjectProperties(objectType);
+        const objectProperties: string[] = [];
+        for (const property in TicketProperty) {
+            if (TicketProperty[property]) {
+                objectProperties.push(TicketProperty[property]);
+            }
+        }
+        return [...objectProperties, ...superProperties];
+    }
 }
