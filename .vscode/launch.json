@@ -10,7 +10,9 @@
                 "https_proxy": "",
                 "NODE_TLS_REJECT_UNAUTHORIZED": "0",
                 "LASSO_TIMEOUT": "200000",
-                "SHOW_MODULE_COMPLAINS": "1"
+                "SHOW_MODULE_COMPLAINS": "1",
+                "NODE_OPTIONS": "--inspect",
+                "ENABLE_PROFILING": "true"
             },
             "name": "KIX",
             "program": "${workspaceFolder}/src/server/index.ts",

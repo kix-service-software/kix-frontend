@@ -11,6 +11,7 @@ import { ConfigurationService } from './ConfigurationService';
 import { LoggingService } from './LoggingService';
 import { IServerConfiguration } from '../model/IServerConfiguration';
 import { ServerUtil } from '../ServerUtil';
+import { IdService } from '../../frontend-applications/agent-portal/model/IdService';
 
 
 export class ProfilingService {
@@ -25,7 +26,7 @@ export class ProfilingService {
     }
 
     private active: boolean;
-    private tasks: ProfileTask[] = new Array<ProfileTask>();
+    private tasks: Map<string, ProfileTask> = new Map();
     private messageCounter: Map<string, number> = new Map<string, number>();
 
     private constructor() {
@@ -39,20 +40,18 @@ export class ProfilingService {
         }
     }
 
-    public start(category: string, message: string, inputData?: any): number {
+    public start(category: string, message: string, inputData?: any): string {
         if (!this.active) {
-            return -1;  // invalid task ID
+            return null;  // invalid task ID
         }
 
         let counter = this.messageCounter.get(message) | 0;
         const task = new ProfileTask(category, message, counter, inputData);
-        this.tasks.push(task);
+        this.tasks.set(task.id, task);
         this.messageCounter.set(message, ++counter);
 
-        const taskId = this.tasks.length - 1;
-
         LoggingService.getInstance().debug(
-            taskId
+            task.id
             + '\tStart'
             + '\t' + task.category + ''
             + '\t' + task.counter + ''
@@ -60,17 +59,18 @@ export class ProfilingService {
             + '\t' + task.message
         );
 
-        return taskId;
+        return task.id;
     }
 
-    public stop(profileTaskId: number, outputData?: any): void {
+    public stop(profileTaskId: string, outputData?: any): void {
         if (!this.active) {
             return;
         }
 
         // get given task object and stop profiling
-        const task: ProfileTask = this.tasks[profileTaskId];
+        const task: ProfileTask = this.tasks.get(profileTaskId);
         task.stop(outputData);
+        this.tasks.delete(profileTaskId);
 
         LoggingService.getInstance().debug(
             profileTaskId
@@ -84,6 +84,7 @@ export class ProfilingService {
 // tslint:disable-next-line:max-classes-per-file
 class ProfileTask {
 
+    public id: string = IdService.generateDateBasedId();
     public startTime: number;
     public endTime: number;
     public duration: number;
