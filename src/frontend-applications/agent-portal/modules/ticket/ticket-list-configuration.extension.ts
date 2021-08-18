@@ -63,7 +63,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 'bulk-action', 'ticket-create-action', 'ticket-search-action', 'csv-export-action'
             ],
             new ConfigurationDefinition('user-ticket-list-table-widget-config', ConfigurationType.TableWidget),
-            null, false, false, null, true
+            null, false, false, 'kix-icon-ticket', true
         );
         configurations.push(tableWidget);
 

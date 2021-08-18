@@ -9,11 +9,10 @@
 
 import { Context } from '../../../../../model/Context';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
-
-
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { Ticket } from '../../../model/Ticket';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 
 export class TicketListContext extends Context {
 
@@ -22,12 +21,8 @@ export class TicketListContext extends Context {
     private text: string = '';
     private ticketIds: number[];
 
-    public getIcon(): string {
-        return 'kix-icon-ticket';
-    }
-
-    public async getDisplayText(): Promise<string> {
-        return this.text;
+    public getIcon(): string | ObjectIcon {
+        return this.icon || 'kix-icon-ticket';
     }
 
     public async loadTickets(ticketIds: number[] = [], text: string = ''): Promise<void> {
