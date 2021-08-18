@@ -84,6 +84,9 @@ export class ReportDefinitionDeleteAction extends AbstractAction {
                     });
             }
 
+            // reload the table
+            context.reloadObjectList(KIXObjectType.REPORT_DEFINITION);
+
             setTimeout(() => {
                 const content = new ComponentContent(
                     'toast',
