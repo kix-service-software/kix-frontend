@@ -28,6 +28,7 @@ export class ContextFormManager {
     protected formInstance: FormInstance;
     protected formId: string;
     protected formSubscriber: IEventSubscriber;
+    protected activeFormPageIndex: number;
 
     private storageTimeout: any;
 
@@ -194,6 +195,14 @@ export class ContextFormManager {
                 (this.formInstance as any).fixedValues = map;
             }
         }
+    }
+
+    public setActiveFormPageIndex(index: number): void {
+        this.activeFormPageIndex = index;
+    }
+
+    public getActiveFormPageIndex(): number {
+        return this.activeFormPageIndex;
     }
 
 }

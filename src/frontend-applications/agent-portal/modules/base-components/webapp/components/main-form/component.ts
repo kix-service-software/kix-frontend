@@ -44,6 +44,12 @@ class FormComponent {
     public async onMount(): Promise<void> {
         await this.prepareForm();
 
+        const context = ContextService.getInstance().getActiveContext();
+        const pageIndex = context?.getFormManager()?.getActiveFormPageIndex();
+        if (pageIndex) {
+            this.state.activePageIndex = pageIndex;
+        }
+
         this.keyListenerElement = (this as any).getEl();
         if (this.keyListenerElement) {
             this.keyListenerElement.dispatchEvent(new KeyboardEvent('keypress', { key: 'Tab' }));
@@ -220,6 +226,8 @@ class FormComponent {
             const validateOk = await this.validateActivePage();
             if (validateOk) {
                 this.state.activePageIndex = index;
+                const context = ContextService.getInstance().getActiveContext();
+                context?.getFormManager()?.setActiveFormPageIndex(index);
             }
         }, 150);
     }
