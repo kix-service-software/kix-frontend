@@ -130,6 +130,7 @@ class Component {
         if (actions && actions.length) {
             const showTicketsAction = actions[0] as ShowUserTicketsAction;
             showTicketsAction.setText(action.title);
+            showTicketsAction.icon = action.icon;
             showTicketsAction.run();
         }
     }

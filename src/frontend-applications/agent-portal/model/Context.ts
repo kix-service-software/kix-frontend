@@ -52,8 +52,8 @@ export abstract class Context {
     protected filteredObjectLists: Map<KIXObjectType | string, KIXObject[]> = new Map();
 
     private scrollInormation: [KIXObjectType | string, string | number] = null;
-    private displayText: string;
-    private icon: ObjectIcon | string;
+    protected displayText: string;
+    protected icon: ObjectIcon | string;
 
     public constructor(
         public descriptor: ContextDescriptor,
