@@ -15,7 +15,8 @@ export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public placeholder: string = '',
-        public searchValue: string = null
+        public searchValue: string = null,
+        public canShow: boolean = false
     ) {
         super();
     }

@@ -6,14 +6,16 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<div.search-object-dropdown-container>
-    <input.input-style.search-object-input
-        placeholder=state.translations["Translatable#Search"]
-        type="text"
-        value=state.searchValue
-        on-change("searchValueChanged")
-        on-click("searchInputClicked")
-        on-keydown("keyDown")
-        key="searchObjectInput"/>
-    <span.kix-icon-search.search-button on-click("searchClicked")/>
-</div>
+<if(state.canShow)>
+    <div.search-object-dropdown-container>
+        <input.input-style.search-object-input
+            placeholder=state.translations["Translatable#Search"]
+            type="text"
+            value=state.searchValue
+            on-change("searchValueChanged")
+            on-click("searchInputClicked")
+            on-keydown("keyDown")
+            key="searchObjectInput"/>
+        <span.kix-icon-search.search-button on-click("searchClicked")/>
+    </div>
+</if>
