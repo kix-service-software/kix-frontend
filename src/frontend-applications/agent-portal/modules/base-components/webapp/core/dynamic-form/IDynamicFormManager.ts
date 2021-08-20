@@ -89,6 +89,8 @@ export interface IDynamicFormManager {
 
     hasAdditionalOptions(): boolean;
 
+    validateAdditionalOptions(options: string): string;
+
     changeValueOrder(currentIndex: number, targetIndex: number): Promise<void>;
 
     valuesAreDraggable(): boolean;

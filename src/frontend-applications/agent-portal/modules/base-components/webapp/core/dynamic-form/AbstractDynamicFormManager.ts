@@ -558,6 +558,10 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return false;
     }
 
+    public validateAdditionalOptions(option: string): string {
+        return;
+    }
+
     public valuesAreDraggable(): boolean {
         return false;
     }

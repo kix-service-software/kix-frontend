@@ -128,7 +128,17 @@ class Component {
     public additionalOptionsChanged(value: DynamicFormFieldValue, event: any): void {
         const additionalOptions = event.target.value;
         value.value.additionalOptions = additionalOptions;
-        this.provideValue(value);
+        const result = this.manager.validateAdditionalOptions(additionalOptions);
+        if (result) {
+            this.state.additionalOptionsValidationResult.set(value.instanceId, result);
+            (this as any).setStateDirty('additionalOptionsValidationResult');
+        } else {
+            if (this.state.additionalOptionsValidationResult.has(value.instanceId)) {
+                this.state.additionalOptionsValidationResult.delete(value.instanceId);
+                (this as any).setStateDirty('additionalOptionsValidationResult');
+            }
+            this.provideValue(value);
+        }
     }
 
     public setValue(value: DynamicFormFieldValue, event: any): void {
@@ -327,6 +337,12 @@ class Component {
             valueElement.classList.remove('dragging');
         }
         this.state.dragStartIndex = null;
+    }
+
+    public autoGrow(event: any) {
+        if (event?.target && event.target.scrollHeight > event.target.clientHeight) {
+            event.target.style.height = (event.target.scrollHeight + 2) + 'px';
+        }
     }
 
 }
