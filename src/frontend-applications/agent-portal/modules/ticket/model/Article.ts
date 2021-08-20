@@ -143,34 +143,35 @@ export class Article extends KIXObject {
     }
 
     private prepareReceiverLists(): void {
+        const splitRegex = /,\s(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/;
         let toStringList = [];
         if (!Array.isArray(this.To)) {
-            toStringList = this.To ? this.To.split(/,\s*/) : [];
+            toStringList = this.To ? this.To.split(splitRegex) : [];
         }
 
         let ccStringList = [];
         if (!Array.isArray(this.Cc)) {
-            ccStringList = this.Cc ? this.Cc.split(/,\s*/) : [];
+            ccStringList = this.Cc ? this.Cc.split(splitRegex) : [];
         }
 
         let bccStringList = [];
         if (!Array.isArray(this.Bcc)) {
-            bccStringList = this.Bcc ? this.Bcc.split(/,\s*/) : [];
+            bccStringList = this.Bcc ? this.Bcc.split(splitRegex) : [];
         }
 
         let toRealNameStringList = [];
         if (!Array.isArray(this.ToRealname)) {
-            toRealNameStringList = this.ToRealname ? this.ToRealname.split(/,\s*/) : [];
+            toRealNameStringList = this.ToRealname ? this.ToRealname.split(splitRegex) : [];
         }
 
         let ccRealNameStringList = [];
         if (!Array.isArray(this.CcRealname)) {
-            ccRealNameStringList = this.CcRealname ? this.CcRealname.split(/,\s*/) : [];
+            ccRealNameStringList = this.CcRealname ? this.CcRealname.split(splitRegex) : [];
         }
 
         let bccRealNameStringList = [];
         if (!Array.isArray(this.BccRealname)) {
-            bccRealNameStringList = this.BccRealname ? this.BccRealname.split(/,\s*/) : [];
+            bccRealNameStringList = this.BccRealname ? this.BccRealname.split(splitRegex) : [];
         }
 
         this.toList = toStringList.map((t, index) => new ArticleReceiver(t, toRealNameStringList[index]));
