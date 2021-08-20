@@ -24,6 +24,7 @@
         "require ./form-list-tree/form-list-tree-node",
         "require ./help-widget",
         "require ./image-viewer",
+        "require ./json-input",
         "require ./kix-footer",
         "require ./label-list",
         "require ./label-list/label-item",

@@ -50,6 +50,7 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent('form-list', '/kix-module-base-components$0/webapp/components/form-list', []),
         new UIComponent('form-list-tree', '/kix-module-base-components$0/webapp/components/form-list-tree', []),
         new UIComponent('help-widget', '/kix-module-base-components$0/webapp/components/help-widget', []),
+        new UIComponent('json-input', '/kix-module-base-components$0/webapp/components/json-input', []),
         new UIComponent('kix-footer', '/kix-module-base-components$0/webapp/components/kix-footer', []),
         new UIComponent('label-list', '/kix-module-base-components$0/webapp/components/label-list', []),
         new UIComponent('label-value-group', '/kix-module-base-components$0/webapp/components/label-value-group', []),
