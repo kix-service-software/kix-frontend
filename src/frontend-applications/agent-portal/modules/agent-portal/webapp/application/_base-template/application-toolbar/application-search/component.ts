@@ -8,7 +8,6 @@
  */
 
 import { ContextMode } from '../../../../../../../model/ContextMode';
-import { SortUtil } from '../../../../../../../model/SortUtil';
 import { AbstractMarkoComponent } from '../../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../../../base-components/webapp/core/ContextService';
 import { ObjectIcon } from '../../../../../../icon/model/ObjectIcon';
@@ -23,6 +22,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         const descriptors = ContextService.getInstance().getContextDescriptors(ContextMode.SEARCH);
+        this.state.canShow = Array.isArray(descriptors) && descriptors.length > 0;
         for (const cd of descriptors) {
             const displayText = await TranslationService.translate(cd.displayText);
             this.state.values.push([cd.contextId, displayText, cd.icon]);

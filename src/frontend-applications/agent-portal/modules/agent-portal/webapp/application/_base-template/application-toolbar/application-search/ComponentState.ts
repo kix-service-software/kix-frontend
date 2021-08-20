@@ -13,6 +13,7 @@ export class ComponentState {
 
     public constructor(
         public values: Array<[string, string, string | ObjectIcon]> = [],
+        public canShow: boolean = false
     ) { }
 
 }
