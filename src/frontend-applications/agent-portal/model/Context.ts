@@ -46,7 +46,7 @@ export abstract class Context {
     public contextId: string;
 
     private dialogSubscriberId: string = null;
-    private additionalInformation: Map<string, any> = new Map();
+    protected additionalInformation: Map<string, any> = new Map();
 
     protected objectLists: Map<KIXObjectType | string, KIXObject[]> = new Map();
     protected filteredObjectLists: Map<KIXObjectType | string, KIXObject[]> = new Map();
