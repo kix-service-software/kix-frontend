@@ -38,7 +38,11 @@ export class CacheService {
     }
 
     public addDependencies(key: string, dependencies: string[]): void {
-        this.dependencies.set(key, dependencies);
+        if (!this.dependencies.has(key)) {
+            this.dependencies.set(key, dependencies);
+        } else {
+            this.dependencies.set(key, [...this.dependencies.get(key), ...dependencies]);
+        }
     }
 
     public init(): void {
