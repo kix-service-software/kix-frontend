@@ -146,6 +146,10 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
         return false;
     }
 
+    public validateAdditionalOptions(): string {
+        return;
+    }
+
     public valuesAreDraggable(): boolean {
         return false;
     }

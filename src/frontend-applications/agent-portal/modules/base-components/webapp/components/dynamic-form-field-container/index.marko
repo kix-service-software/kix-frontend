@@ -175,7 +175,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             "maxLength"
                         )
                         disabled=(dynamicValue.readonly && !dynamicValue.changeable)
-                        on-input("setValue", dynamicValue)/>
+                        on-input("setValue", dynamicValue)
+                        on-keyup("autoGrow")/>
                 </else-if>
                 <else-if(dynamicValue.isCheckbox)>
                     <input
@@ -241,8 +242,19 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </span>
                 <textarea.input-style
                     value=dynamicValue.value.additionalOptions
-                    on-blur("additionalOptionsChanged", dynamicValue)
-                    on-change("additionalOptionsChanged", dynamicValue)/>
+                    on-input("additionalOptionsChanged", dynamicValue)
+                    on-keyup("autoGrow")/>
+                <if(
+                    state.additionalOptionsValidationResult.has(
+                        dynamicValue.instanceId
+                    )
+                )>
+                    <span.additional-option-validation-result>
+                        ${state.additionalOptionsValidationResult.get(
+                        dynamicValue.instanceId
+                        )}
+                    </span>
+                </if>
             </div>
         </if>
         <if(

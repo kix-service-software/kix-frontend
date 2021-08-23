@@ -58,8 +58,14 @@
 
         display: grid;
         grid-template-columns: 15rem auto;
+        gap: .5rem 0;
 
         padding: 0 0 0 @margin-small;
+
+        .additional-option-validation-result {
+            grid-column: 2;
+            color: @tertiary-0;
+        }
     }
 
     &.with-options:not(.no-operation) {
