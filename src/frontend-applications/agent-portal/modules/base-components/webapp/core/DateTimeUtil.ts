@@ -16,6 +16,10 @@ export class DateTimeUtil {
     public static async getLocalDateString(value: any, language?: string): Promise<string> {
         let string = '';
         if (value) {
+            if (typeof value === 'string') {
+                value = value.replace(/-/g, '/');
+            }
+
             const date = new Date(value);
             const options = {
                 day: '2-digit',
@@ -34,6 +38,9 @@ export class DateTimeUtil {
     public static async getLocalDateTimeString(value: any, language?: string): Promise<string> {
         let string = '';
         if (value) {
+            if (typeof value === 'string') {
+                value = value.replace(/-/g, '/');
+            }
             const date = new Date(value);
             const options = {
                 day: '2-digit',
