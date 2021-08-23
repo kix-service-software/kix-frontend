@@ -27,6 +27,8 @@ import { RoutingEvent } from './RoutingEvent';
 import { ConfiguredWidget } from '../../../../model/configuration/ConfiguredWidget';
 import { AgentService } from '../../../user/webapp/core/AgentService';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
+import { IConfiguration } from '../../../../model/configuration/IConfiguration';
+import { ContextConfiguration } from '../../../../model/configuration/ContextConfiguration';
 
 export class ContextService {
 
@@ -676,6 +678,21 @@ export class ContextService {
                 ['ContextWidgetLists', JSON.stringify(preferenceValue)]
             ];
             await AgentService.getInstance().setPreferences(preferences);
+        }
+    }
+
+    public async reloadContextConfigurations(): Promise<void> {
+        for (const context of this.contextInstances) {
+            const configuration = await ContextSocketClient.getInstance().loadContextConfiguration(
+                context.descriptor.contextId
+            ).catch((error): ContextConfiguration => {
+                console.error(error);
+                return null;
+            });
+
+            if (configuration) {
+                context.setConfiguration(configuration);
+            }
         }
     }
 
