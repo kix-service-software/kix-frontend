@@ -9,17 +9,11 @@
 
 import { SocketNameSpace } from './SocketNameSpace';
 import { ContextEvent } from '../../modules/base-components/webapp/core/ContextEvent';
-import {
-    LoadContextConfigurationRequest
-} from '../../modules/base-components/webapp/core/LoadContextConfigurationRequest';
+import { LoadContextConfigurationRequest } from '../../modules/base-components/webapp/core/LoadContextConfigurationRequest';
 import { SocketResponse } from '../../modules/base-components/webapp/core/SocketResponse';
-import {
-    LoadContextConfigurationResponse
-} from '../../modules/base-components/webapp/core/LoadContextConfigurationResponse';
+import { LoadContextConfigurationResponse } from '../../modules/base-components/webapp/core/LoadContextConfigurationResponse';
 import { SocketErrorResponse } from '../../modules/base-components/webapp/core/SocketErrorResponse';
-
 import { SocketEvent } from '../../modules/base-components/webapp/core/SocketEvent';
-import { PermissionService } from '../services/PermissionService';
 import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
 import { ContextConfigurationResolver } from '../services/configuration/ContextConfigurationResolver';
 import { SysConfigService } from '../../modules/sysconfig/server/SysConfigService';
