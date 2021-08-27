@@ -69,7 +69,8 @@ export class Server implements IServer {
     public async initServer(): Promise<void> {
         const configDir = path.join(__dirname, '..', '..', '..', '..', 'config');
         const certDir = path.join(__dirname, '..', '..', '..', '..', 'cert');
-        ConfigurationService.getInstance().init(configDir, certDir);
+        const dataDir = path.join(__dirname, '..', '..', '..', '..', 'data');
+        ConfigurationService.getInstance().init(configDir, certDir, dataDir);
 
         const serviceExtensions = await PluginService.getInstance().getExtensions<IServiceExtension>(
             AgentPortalExtensions.SERVICES
