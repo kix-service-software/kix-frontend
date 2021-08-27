@@ -322,8 +322,8 @@ class someTestFunctions {
         ticket.PriorityID = 1;
         ticket.LockID = 1;
         ticket.QueueID = 1;
-        ticket.OrganisationID = '1';
-        ticket.ContactID = '1';
+        ticket.OrganisationID = 1;
+        ticket.ContactID = 1;
         ticket.OwnerID = 1;
         ticket.TypeID = 1;
         ticket.ResponsibleID = 1;
