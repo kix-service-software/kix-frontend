@@ -66,9 +66,9 @@ export class Ticket extends KIXObject {
 
     public QueueID: number;
 
-    public OrganisationID: string;
+    public OrganisationID: number;
 
-    public ContactID: string;
+    public ContactID: number;
 
     public OwnerID: number;
 

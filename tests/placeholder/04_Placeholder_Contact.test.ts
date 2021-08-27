@@ -210,7 +210,7 @@ describe('Placeholder replacement for contact', () => {
         before(() => {
             contact.Firstname = 'Contact';
             contact.Email = 'contact@ticket.com';
-            ticket.ContactID = '2';
+            ticket.ContactID = 2;
             orgLoadFuntion = KIXObjectService.loadObjects;
             KIXObjectService.loadObjects = async (objectType, objectIds: Array<string | number>) => {
                 let objects: Contact[] = [];
