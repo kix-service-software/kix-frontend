@@ -39,6 +39,7 @@ import { KIXObjectService } from './KIXObjectService';
 import { IDynamicFieldFormUtil } from './IDynamicFieldFormUtil';
 import { ExtendedDynamicFieldFormUtil } from './ExtendedDynamicFieldFormUtil';
 import { KIXObjectFormService } from './KIXObjectFormService';
+import { ContextService } from './ContextService';
 
 export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
 
@@ -451,6 +452,38 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
             }
         }
 
+        return value;
+    }
+
+    public async handleDynamicFieldValue(formField: FormFieldConfiguration, value?: any): Promise<any> {
+        if (
+            formField?.property === KIXObjectProperty.DYNAMIC_FIELDS
+            && formField?.visible && !formField?.readonly
+        ) {
+            const fieldNameOption = formField?.options?.find(
+                (o) => o.option === DynamicFormFieldOption.FIELD_NAME
+            );
+            if (fieldNameOption && fieldNameOption.value === 'AffectedAsset') {
+                value = this.handleAffectedAssetValue(value);
+            }
+        }
+        return value;
+    }
+
+    private async handleAffectedAssetValue(value?: any): Promise<any> {
+        const context = ContextService.getInstance().getActiveContext();
+        const configItemId = await context?.getAdditionalInformation(`${KIXObjectType.CONFIG_ITEM}-ID`);
+
+        // TODO: value validation (class, deplstate) currently not necessary - it's a feature
+        if (configItemId) {
+            if (Array.isArray(value)) {
+                value.push(configItemId);
+            } else if (value) {
+                value = [value, configItemId];
+            } else {
+                value = [configItemId];
+            }
+        }
         return value;
     }
 
