@@ -66,12 +66,12 @@ export class AgentNamespace extends SocketNameSpace {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';
 
-        const user = await UserService.getInstance().getUserByToken(token)
+        const user: User = await UserService.getInstance().getUserByToken(token)
             .catch(() => null);
 
         if (user) {
             const response = await UserService.getInstance().setPreferences(
-                token, data.clientRequestId, data.parameter
+                token, data.clientRequestId, data.parameter, user.UserID
             ).then(() =>
                 new SocketResponse(AgentEvent.SET_PREFERENCES_FINISHED, new SetPreferencesResponse(data.requestId))
             ).catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
