@@ -266,7 +266,11 @@ export class UserService extends KIXObjectAPIService {
             } else if (currentPreferences.some((p) => p.ID === param[0])) {
                 const paramValue = param[1] === null ? '' : param[1];
                 if (
-                    paramValue && (typeof paramValue === 'string' || (Array.isArray(paramValue) && paramValue.length))
+                    paramValue && (
+                        typeof paramValue === 'string' ||
+                        (Array.isArray(paramValue) && paramValue.length) ||
+                        typeof paramValue === 'number'
+                    )
                 ) {
                     await this.updateObject(
                         token, clientRequestId, KIXObjectType.USER_PREFERENCE,
