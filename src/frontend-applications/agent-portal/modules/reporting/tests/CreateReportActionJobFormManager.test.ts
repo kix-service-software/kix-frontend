@@ -31,21 +31,27 @@ const optionsMock = {
         "Label": "Report Definition",
         "Name": "DefinitionID",
         "Order": 1,
-        "Required": 1
+        "Required": 1,
+        "PossibleValues": null,
+        "DefaultValue": null
     },
     OutputFormat: {
         "Description": "The requested output format.",
         "Label": "Output Format",
         "Name": "OutputFormats",
         "Order": 3,
-        "Required": 1
+        "Required": 1,
+        "PossibleValues": null,
+        "DefaultValue": null
     },
     Parameters: {
         "Description": "The parameters of the report. This is a JSON string.",
         "Label": "Parameters",
         "Name": "Parameters",
         "Order": 2,
-        "Required": 1
+        "Required": 1,
+        "PossibleValues": null,
+        "DefaultValue": null
     }
 };
 

@@ -185,7 +185,7 @@ export class CreateReportActionJobFormManager extends ExtendedJobFormManager {
             }
         }
 
-        return value;
+        return;
     }
 
     private async getReportDefinition(
