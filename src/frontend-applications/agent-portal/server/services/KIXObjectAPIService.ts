@@ -481,6 +481,60 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                             ));
                         }
                         break;
+                    case SearchOperator.WITHIN_THE_LAST:
+                        if (c.value) {
+                            prepareCriteria.push(new FilterCriteria(
+                                c.property, SearchOperator.GREATER_THAN_OR_EQUAL, c.type, c.filterType, '-' +
+                                c.value[0] + c.value[1]
+                            ));
+                            prepareCriteria.push(new FilterCriteria(
+                                c.property, SearchOperator.LESS_THAN_OR_EQUAL, c.type, c.filterType, '+0s' // now
+                            ));
+                        }
+                        break;
+                    case SearchOperator.WITHIN_THE_NEXT:
+                        if (c.value) {
+                            prepareCriteria.push(new FilterCriteria(
+                                c.property, SearchOperator.GREATER_THAN_OR_EQUAL, c.type, c.filterType, '+0s' // now
+                            ));
+                            prepareCriteria.push(new FilterCriteria(
+                                c.property, SearchOperator.LESS_THAN_OR_EQUAL, c.type, c.filterType, '+' +
+                                c.value[0] + c.value[1]
+                            ));
+                        }
+                        break;
+                    case SearchOperator.LESS_THAN_AGO:
+                        if (c.value) {
+                            prepareCriteria.push(new FilterCriteria(
+                                c.property, SearchOperator.GREATER_THAN, c.type, c.filterType, '-' +
+                                c.value[0] + c.value[1]
+                            ));
+                        }
+                        break;
+                    case SearchOperator.MORE_THAN_AGO:
+                        if (c.value) {
+                            prepareCriteria.push(new FilterCriteria(
+                                c.property, SearchOperator.LESS_THAN, c.type, c.filterType, '-' +
+                                c.value[0] + c.value[1]
+                            ));
+                        }
+                        break;
+                    case SearchOperator.IN_LESS_THAN:
+                        if (c.value) {
+                            prepareCriteria.push(new FilterCriteria(
+                                c.property, SearchOperator.LESS_THAN, c.type, c.filterType, '+' +
+                                c.value[0] + c.value[1]
+                            ));
+                        }
+                        break;
+                    case SearchOperator.IN_MORE_THAN:
+                        if (c.value) {
+                            prepareCriteria.push(new FilterCriteria(
+                                c.property, SearchOperator.GREATER_THAN, c.type, c.filterType, '+' +
+                                c.value[0] + c.value[1]
+                            ));
+                        }
+                        break;
                     default:
                         prepareCriteria.push(c);
                 }

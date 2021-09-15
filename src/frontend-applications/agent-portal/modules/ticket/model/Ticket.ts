@@ -151,7 +151,13 @@ export class Ticket extends KIXObject {
         SearchOperator.GREATER_THAN,
         SearchOperator.LESS_THAN_OR_EQUAL,
         SearchOperator.GREATER_THAN_OR_EQUAL,
-        SearchOperator.BETWEEN
+        SearchOperator.BETWEEN,
+        SearchOperator.WITHIN_THE_LAST,
+        SearchOperator.WITHIN_THE_NEXT,
+        SearchOperator.MORE_THAN_AGO,
+        SearchOperator.IN_MORE_THAN,
+        SearchOperator.LESS_THAN_AGO,
+        SearchOperator.IN_LESS_THAN
     ];
 
     private static STRING_OPERATORS = [

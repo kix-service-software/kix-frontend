@@ -456,9 +456,9 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return addEmpty;
     }
 
-    public async getInputType(property: string): Promise<InputFieldTypes | string> {
+    public async getInputType(property: string, operator?: SearchOperator): Promise<InputFieldTypes | string> {
         for (const manager of this.extendedFormManager) {
-            const extendedOperations = await manager.getInputType(property);
+            const extendedOperations = await manager.getInputType(property, operator);
             if (extendedOperations) {
                 return extendedOperations;
             }

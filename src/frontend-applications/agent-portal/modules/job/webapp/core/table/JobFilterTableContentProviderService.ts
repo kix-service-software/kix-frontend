@@ -17,6 +17,8 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { ArticleProperty } from '../../../../ticket/model/ArticleProperty';
 import { JobTypes } from '../../../model/JobTypes';
 import { ExtendedJobFilterContentProvider } from './ExtendedJobFilterContentProvider';
+import { SearchDefinition } from '../../../../search/webapp/core';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
 
 export class JobFilterTableContentProviderService {
 
@@ -82,11 +84,12 @@ export class JobFilterTableContentProviderService {
             );
             return [displayKey, dfValues[0], null, dfValues[1]];
         }
-
+        const relativeDateTimeOperators = SearchDefinition.getRelativeDateTimeOperators();
+        const isTranslatable = relativeDateTimeOperators.includes(criterion.Operator as SearchOperator) ? false : true;
         const isArticleProperty = job.Type === JobTypes.TICKET ? this.isArticleProperty(displayKey) : false;
         const displayValuesAndIcons = await this.getValue(
             displayKey, criterion.Value,
-            isArticleProperty ? KIXObjectType.ARTICLE : KIXObjectType.TICKET
+            isArticleProperty ? KIXObjectType.ARTICLE : KIXObjectType.TICKET, isTranslatable
         );
         displayKey = await LabelService.getInstance().getPropertyText(
             displayKey, isArticleProperty ? KIXObjectType.ARTICLE : KIXObjectType.TICKET
@@ -95,16 +98,19 @@ export class JobFilterTableContentProviderService {
     }
 
     private async getValue(
-        property: string, value: string | number | string[] | number[], objectType: KIXObjectType | string
+        property: string, value: string | number | string[] | number[], objectType: KIXObjectType | string,
+        translatable: boolean = true
     ): Promise<[string[], Array<string | ObjectIcon>]> {
         const displayValues: string[] = [];
         const displayIcons: Array<string | ObjectIcon> = [];
         if (Array.isArray(value)) {
             for (const v of value) {
-                const string = await LabelService.getInstance().getPropertyValueDisplayText(objectType, property, v);
+                const string = await LabelService.getInstance().getPropertyValueDisplayText(
+                    objectType, property, v, translatable);
                 if (string) {
                     displayValues.push(string);
-                    const icons = await LabelService.getInstance().getIconsForType(objectType, null, property, v);
+                    const icons = await LabelService.getInstance().getIconsForType(objectType, null, property, v,
+                        translatable);
                     if (icons && !!icons.length) {
                         displayIcons.push(icons[0]);
                     } else {
@@ -115,7 +121,7 @@ export class JobFilterTableContentProviderService {
         } else {
             displayValues.push(
                 await LabelService.getInstance().getPropertyValueDisplayText(
-                    objectType, property, isNaN(Number(value)) ? value : Number(value)
+                    objectType, property, isNaN(Number(value)) ? value : Number(value), translatable
                 )
             );
             const icons = await LabelService.getInstance().getIconsForType(objectType, null, property, value);
