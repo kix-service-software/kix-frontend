@@ -145,9 +145,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async closeTab(tab: ContextTab, event: any): Promise<void> {
-        event.preventDefault();
-        event.stopPropagation();
-
         this.state.blocked = true;
 
         const context = ContextService.getInstance().getActiveContext();
