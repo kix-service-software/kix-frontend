@@ -52,6 +52,9 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
             case MailAccountProperty.ID:
                 displayValue = 'Translatable#Id';
                 break;
+            case MailAccountProperty.OAUTH2_PROFILEID:
+                displayValue = 'Translatable#OAuth2 Profile';
+                break;
             default:
                 displayValue = await super.getPropertyText(property, short, translatable);
         }
@@ -109,6 +112,14 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
         switch (property) {
             case MailAccountProperty.TRUSTED:
                 displayValue = Boolean(value) ? 'Translatable#Yes' : 'Translatable#No';
+                break;
+            case MailAccountProperty.OAUTH2_PROFILEID:
+                if (value) {
+                    const profiles = await KIXObjectService.loadObjects(
+                        KIXObjectType.OAUTH2_PROFILE, [value], null, null, true
+                    ).catch((error) => []);
+                    displayValue = profiles && !!profiles.length ? profiles[0].Name : value;
+                }
                 break;
             default:
                 displayValue = await super.getPropertyValueDisplayText(property, value, translatable);

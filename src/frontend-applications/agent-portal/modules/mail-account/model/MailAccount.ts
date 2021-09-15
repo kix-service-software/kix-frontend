@@ -25,6 +25,8 @@ export class MailAccount extends KIXObject {
     public DispatchingBy: string;
     public QueueID: number;
     public ExecFetch: boolean;
+    // tslint:disable-next-line:variable-name
+    public OAuth2_ProfileID: number;
 
     public constructor(mailAccount?: MailAccount) {
         super(mailAccount);
@@ -39,6 +41,7 @@ export class MailAccount extends KIXObject {
             this.DispatchingBy = mailAccount.DispatchingBy;
             this.QueueID = mailAccount.QueueID;
             this.ExecFetch = mailAccount.ExecFetch;
+            this.OAuth2_ProfileID = mailAccount.OAuth2_ProfileID;
         }
     }
 

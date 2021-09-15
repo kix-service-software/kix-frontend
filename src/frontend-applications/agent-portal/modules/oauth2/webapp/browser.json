@@ -1,0 +1,7 @@
+{
+    "dependencies": [
+        "require ./components/admin-oauth2-profiles",
+        "require ./components/renew-authorization-cell",
+        "require ./core"
+    ]
+}

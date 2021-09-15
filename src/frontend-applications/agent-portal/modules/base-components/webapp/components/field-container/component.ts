@@ -16,6 +16,10 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
 import { ContextService } from '../../core/ContextService';
+import { EventService } from '../../core/EventService';
+import { FormEvent } from '../../core/FormEvent';
+import { IEventSubscriber } from '../../core/IEventSubscriber';
+import { IdService } from '../../../../../model/IdService';
 
 class Component {
 
@@ -23,6 +27,7 @@ class Component {
     private formId: string;
     private fields: FormFieldConfiguration[];
     private updateTimeout: any;
+    private formSubscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -41,6 +46,32 @@ class Component {
         ]);
 
         this.initFields(this.fields);
+
+        this.formSubscriber = {
+            eventSubscriberId: IdService.generateDateBasedId('fields-container-'),
+            eventPublished: async (data: any, eventId: string) => {
+                const isUpdateEvent = eventId === FormEvent.FIELD_REMOVED
+                    || eventId === FormEvent.FIELD_CHILDREN_ADDED;
+
+                if (
+                    isUpdateEvent &&
+                    (
+                        this.state.fields[0]?.parentInstanceId === data?.parent?.instanceId ||
+                        this.state.fields[0]?.parentInstanceId === data?.formField?.parentInstanceId
+                    )
+                ) {
+                    (this as any).setStateDirty('fields');
+                }
+            }
+        };
+
+        EventService.getInstance().subscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
+        EventService.getInstance().subscribe(FormEvent.FIELD_REMOVED, this.formSubscriber);
+    }
+
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
+        EventService.getInstance().unsubscribe(FormEvent.FIELD_REMOVED, this.formSubscriber);
     }
 
     private async initFields(fields: FormFieldConfiguration[] = []): Promise<void> {
