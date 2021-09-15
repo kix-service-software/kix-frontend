@@ -65,35 +65,55 @@ export abstract class KIXObject {
         return 'ID';
     }
 
-    protected handleBetweenValueOnLTE(preparedFilter: any[], filter: any) {
-        const propertyFilter = preparedFilter.find(
-            (f) => f.Field === filter.Field
-                && f.Operator === SearchOperator.GREATER_THAN_OR_EQUAL
-        );
-        if (propertyFilter) {
-            propertyFilter.Operator = SearchOperator.BETWEEN;
-            propertyFilter.Value = [
-                propertyFilter.Value,
-                filter.Value,
-            ];
+    protected prepareObjectFilter(preparedFilter: any[], filter: any) {
+        // prepare the filter and handle BETWEEN and relative time operators
+
+        if (filter.Operator === SearchOperator.GREATER_THAN_OR_EQUAL ||
+            filter.Operator === SearchOperator.LESS_THAN_OR_EQUAL ||
+            (typeof filter.Value === 'string' && filter.Value.match(/^[+-]\d+\w+$/))) {
+            // we have to handle this
+
+            if (!filter.Value.match(/^[+-]\d+\w+$/)) {
+                // this is a BETWEEN
+                const propertyFilter = preparedFilter.find(
+                    (f) => f.Field === filter.Field
+                        && f.Operator === (filter.Operator === SearchOperator.LESS_THAN_OR_EQUAL) ?
+                        SearchOperator.GREATER_THAN_OR_EQUAL : SearchOperator.LESS_THAN_OR_EQUAL
+                );
+                if (propertyFilter) {
+                    propertyFilter.Operator = SearchOperator.BETWEEN;
+                    propertyFilter.Value = [
+                        propertyFilter.Value,
+                        filter.Value,
+                    ];
+                }
+            }
+            else {
+                const firstChar = filter.Value.charAt(0);
+                filter.Value = filter.Value.substring(1);
+
+                if (firstChar === '+' && filter.Value === '0s' &&
+                    (filter.Operator === SearchOperator.GREATER_THAN_OR_EQUAL ||
+                        filter.Operator === SearchOperator.LESS_THAN_OR_EQUAL))
+                    return; // ignore this part
+                if (firstChar === '-' && filter.Operator === SearchOperator.GREATER_THAN_OR_EQUAL)
+                    filter.Operator = SearchOperator.WITHIN_THE_LAST;
+                if (firstChar === '+' && filter.Operator === SearchOperator.LESS_THAN_OR_EQUAL)
+                    filter.Operator = SearchOperator.WITHIN_THE_NEXT;
+                else if (firstChar === '-' && filter.Operator === SearchOperator.GREATER_THAN)
+                    filter.Operator = SearchOperator.LESS_THAN_AGO;
+                else if (firstChar === '-' && filter.Operator === SearchOperator.LESS_THAN)
+                    filter.Operator = SearchOperator.MORE_THAN_AGO;
+                else if (firstChar === '+' && filter.Operator === SearchOperator.LESS_THAN)
+                    filter.Operator = SearchOperator.IN_LESS_THAN;
+                else if (firstChar === '+' && filter.Operator === SearchOperator.GREATER_THAN)
+                    filter.Operator = SearchOperator.IN_MORE_THAN;
+
+                preparedFilter.push(filter);
+            }
         } else {
+            // just add it unhandled
             preparedFilter.push(filter);
         }
     }
-
-    protected handleBetweenValueOnGTE(preparedFilter: any[], filter: any) {
-        const propertyFilter = preparedFilter.find(
-            (f) => f.Field === filter.Field && f.Operator === SearchOperator.LESS_THAN_OR_EQUAL
-        );
-        if (propertyFilter) {
-            propertyFilter.Operator = SearchOperator.BETWEEN;
-            propertyFilter.Value = [
-                filter.Value,
-                propertyFilter.Value
-            ];
-        } else {
-            preparedFilter.push(filter);
-        }
-    }
-
 }

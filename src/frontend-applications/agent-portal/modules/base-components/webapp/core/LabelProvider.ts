@@ -217,7 +217,8 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                 break;
             case KIXObjectProperty.CREATE_TIME:
             case KIXObjectProperty.CHANGE_TIME:
-                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
+                displayValue = translatable ?
+                    await DateTimeUtil.getLocalDateTimeString(displayValue) : displayValue;
                 break;
             default:
                 const dfName = KIXObjectService.getDynamicFieldName(property);

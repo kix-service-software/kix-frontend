@@ -51,7 +51,7 @@ export interface IDynamicFormManager {
 
     showValueInput(value: ObjectPropertyValue): boolean;
 
-    getInputType(property: string): Promise<InputFieldTypes | string>;
+    getInputType(property: string, operator?: SearchOperator): Promise<InputFieldTypes | string>;
 
     getObjectReferenceObjectType(property: string): Promise<KIXObjectType | string>;
 

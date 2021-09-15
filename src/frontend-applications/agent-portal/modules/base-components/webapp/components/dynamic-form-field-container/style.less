@@ -109,6 +109,16 @@
             }
         }
 
+        >.dynamic-form-relative-time-input {
+            display: grid;
+            grid-template-columns: 1fr 0.2fr ;
+            grid-gap: @margin-small/2 @margin-small;
+
+            >div.form-list {
+                width: 100%;
+            }
+        }
+
         @media only screen and(max-width: 1600px) {
             >.dynamic-form-date-input.between {
                 grid-template-columns: 1fr;

@@ -78,6 +78,7 @@ class Component {
             const initPromises = [];
             const values = [];
             for (const v of this.manager.getValues()) {
+                console.debug(v);
                 const formFieldValue = new DynamicFormFieldValue(
                     this.manager,
                     new ObjectPropertyValue(
@@ -89,6 +90,7 @@ class Component {
                 initPromises.push(formFieldValue.init());
                 values.push(formFieldValue);
             }
+
             await Promise.all(initPromises);
             this.state.dynamicValues = values;
 
@@ -121,7 +123,10 @@ class Component {
     }
 
     public treeValueChanged(value: DynamicFormFieldValue, nodes: TreeNode[]): void {
-        value.setValue(nodes.map((n) => n.id));
+        if (value.isRelativeTime)
+            value.setRelativeTimeUnitValue(nodes.map((n) => n.id).pop() as string);
+        else
+            value.setValue(nodes.map((n) => n.id));
         this.provideValue(value);
     }
 
@@ -168,6 +173,12 @@ class Component {
     public setTimeValue(value: DynamicFormFieldValue, event: any): void {
         const newValue = event.target.value;
         value.setTimeValue(newValue);
+        this.provideValue(value);
+    }
+
+    public setRelativeTimeValue(value: DynamicFormFieldValue, event: any): void {
+        const newValue = event.target.value;
+        value.setRelativeTimeValue(newValue);
         this.provideValue(value);
     }
 
