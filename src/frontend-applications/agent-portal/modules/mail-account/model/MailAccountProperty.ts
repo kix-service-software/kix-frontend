@@ -29,6 +29,8 @@ export enum MailAccountProperty {
 
     COMMENT = 'Comment',
 
-    EXEC_FETCH = 'ExecFetch'
+    EXEC_FETCH = 'ExecFetch',
+
+    OAUTH2_PROFILEID = 'OAuth2_ProfileID'
 
 }

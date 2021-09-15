@@ -74,7 +74,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
     public async getFormConfigurations(): Promise<IConfiguration[]> {
         const configurations = [];
         const formId = 'mail-account-new-form';
-
         configurations.push(
             new FormFieldConfiguration(
                 'mail-account-new-form-field-username',
@@ -84,12 +83,9 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(
             new FormFieldConfiguration(
-                'mail-account-new-form-field-password',
-                'Translatable#Password', MailAccountProperty.PASSWORD, null, true,
-                'Translatable#Helptext_Admin_MailAccountCreate_Password',
-                [
-                    new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
-                ]
+                'mail-account-new-form-field-type',
+                'Translatable#Type', MailAccountProperty.TYPE, 'mail-account-input-types',
+                true, 'Translatable#Helptext_Admin_MailAccountCreate_Type.'
             )
         );
         configurations.push(
@@ -97,13 +93,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 'mail-account-new-form-field-host',
                 'Translatable#Host', MailAccountProperty.HOST, null, true,
                 'Translatable#Helptext_Admin_MailAccountCreate_Host'
-            )
-        );
-        configurations.push(
-            new FormFieldConfiguration(
-                'mail-account-new-form-field-type',
-                'Translatable#Type', MailAccountProperty.TYPE, 'mail-account-input-types',
-                true, 'Translatable#Helptext_Admin_MailAccountCreate_Type.'
             )
         );
         configurations.push(
@@ -168,9 +157,8 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 'mail-account-new-form-group-information', 'Translatable#Email Account',
                 [
                     'mail-account-new-form-field-username',
-                    'mail-account-new-form-field-password',
-                    'mail-account-new-form-field-host',
                     'mail-account-new-form-field-type',
+                    'mail-account-new-form-field-host',
                     'mail-account-new-form-field-accept-header',
                     'mail-account-new-form-field-dispatching',
                     'mail-account-new-form-field-comment',

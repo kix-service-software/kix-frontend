@@ -1,0 +1,33 @@
+{
+    "name": "kix-module-oauth2",
+    "extensions": {
+        "kix:admin-module": {
+            "oauth2-admin-module": {
+                "module": "admin-module.extension"
+            }
+        },
+        "kix:services": {
+            "oauth2-service": {
+                "module": "service.extension"
+            }
+        },
+        "kix:modules": {
+            "oauth2-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:router": {
+            "oauth2-profile-redirect-router": {
+                "module": "router.extension"
+            }
+        },
+        "kix:configuration": {
+            "edit-oauth2-profile-dialog-configuration": {
+                "module": "edit-oauth2-profile-dialog-configuration.extension"
+            },
+            "new-oauth2-profile-dialog-configuration": {
+                "module": "new-oauth2-profile-dialog-configuration.extension"
+            }
+        }
+    }
+}

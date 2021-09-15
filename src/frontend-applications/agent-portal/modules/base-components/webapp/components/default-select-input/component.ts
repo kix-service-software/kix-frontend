@@ -95,7 +95,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     );
                     selectedNodes.forEach((n) => n.selected = true);
                 } else {
-                    const node = nodes.find((n) => n.id === value.value);
+                    const node = nodes.find((n) => n.id.toString() === value.value.toString());
                     if (node) {
                         node.selected = true;
                         selectedNodes = [node];

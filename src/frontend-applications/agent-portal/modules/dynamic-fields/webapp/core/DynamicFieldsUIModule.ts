@@ -523,7 +523,7 @@ export class UIModule implements IUIModule {
                 },
                 RowsMin: {
                     title: 'Number of rows (min)',
-                    description: 'Specifies the minimum number of rows that the table has to display. It is not possible to delete rows below the minimum number of rows.\n alues less than 1 are not possible.',
+                    description: 'Specifies the minimum number of rows that the table has to display. It is not possible to delete rows below the minimum number of rows.\n Values less than 1 are not possible.',
                     type: 'integer',
                     default: '1',
                     minimum: '1',

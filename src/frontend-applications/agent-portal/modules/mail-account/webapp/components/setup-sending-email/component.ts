@@ -49,6 +49,7 @@ import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
 import { FormValidationService } from '../../../../base-components/webapp/core/FormValidationService';
+import { ObjectReferenceOptions } from '../../../../base-components/webapp/core/ObjectReferenceOptions';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -103,8 +104,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     [
                         new TreeNode('Kernel::System::Email::DoNotSendEmail', 'DoNotSendEmail'),
                         new TreeNode('Kernel::System::Email::SMTP', 'SMTP'),
+                        new TreeNode('Kernel::System::Email::SMTP_OAuth2', 'SMTP OAuth2'),
                         new TreeNode('Kernel::System::Email::SMTPS', 'SMTPS'),
-                        new TreeNode('Kernel::System::Email::SMTPTLS', 'SMTPTLS')
+                        new TreeNode('Kernel::System::Email::SMTPS_OAuth2', 'SMTPS OAuth2'),
+                        new TreeNode('Kernel::System::Email::SMTPTLS', 'SMTPTLS'),
+                        new TreeNode('Kernel::System::Email::SMTPTLS_OAuth2', 'SMTPTLS OAuth2')
                     ]
                 )
             ],
@@ -115,7 +119,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const sendMailModuleValue = sysconfigOptions.find((o) => o.Name === 'SendmailModule').Value ||
             sysconfigDefinitions.find((o) => o.Name === 'SendmailModule').Default;
         if (sendMailModuleValue?.startsWith('Kernel::System::Email::SMTP')) {
-            const smtpFields = await this.getSMTPFields();
+            const smtpFields = await this.getDefaultSMTPFields();
+            if (sendMailModuleValue.match(/OAuth2/)) {
+                smtpFields.unshift(await this.getProfileField());
+            } else {
+                smtpFields.push(await this.getPasswordField());
+            }
             sendMailModuleField.children = smtpFields;
         }
 
@@ -155,8 +164,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 new FormFieldConfiguration(
                     'SendmailNotificationEnvelopeFrom::FallbackToEmailFrom', 'Translatable#Notification Envelope From Fallback',
                     'SendmailNotificationEnvelopeFrom::FallbackToEmailFrom',
-                    null, false, notificationFallbackFromHint,
-                    null, null, null, null, null, null, null, null, null, null, null, null, null,
+                    'default-select-input', false, notificationFallbackFromHint,
+                    [
+                        new FormFieldOption(
+                            DefaultSelectInputFormOption.NODES,
+                            [
+                                new TreeNode(0, 'Translatable#No'),
+                                new TreeNode(1, 'Translatable#Yes')
+                            ]
+                        )
+                    ], null, null, null, null, null, null, null, null, null, null, null, null,
                     notificationFallbackFromReadonly
                 )
             ]
@@ -208,25 +225,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                             value = changedValue[1].value[0];
                         }
 
-                        if (value.startsWith('Kernel::System::Email::SMTP')) {
-                            if (!changedValue[0].children.length) {
-                                const smtpFields = await this.getSMTPFields();
-                                await formInstance.addFieldChildren(changedValue[0], smtpFields);
-                                this.initFormValues(this.state.formId,
-                                    [
-                                        'SendmailModule::Host',
-                                        'SendmailModule::Port',
-                                        'SendmailModule::AuthUser',
-                                        'SendmailModule::AuthPassword'
-                                    ]
-                                );
-                            }
-                        } else if (changedValue[0].children.length) {
-                            const children = [...changedValue[0].children];
-                            for (const c of children) {
-                                await formInstance.removeFormField(c);
-                            }
-                        }
+                        await this.prepareSMTPFields(changedValue[0], value, formInstance);
                     }
                 }
             }
@@ -247,13 +246,62 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     'SendmailModule::Host',
                     'SendmailModule::Port',
                     'SendmailModule::AuthUser',
-                    'SendmailModule::AuthPassword'
+                    'SendmailModule::AuthPassword',
+                    'SendmailModule::OAuth2_Profile'
                 ] : undefined
         ), 100);
     }
 
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.subscriber);
+    }
+
+    private async prepareSMTPFields(
+        typeField: FormFieldConfiguration, value: string, formInstance: FormInstance
+    ): Promise<void> {
+        if (value.startsWith('Kernel::System::Email::SMTP')) {
+            if (!typeField?.children?.length) {
+                const smtpFields = await this.getDefaultSMTPFields();
+                await formInstance.addFieldChildren(typeField, smtpFields);
+                await this.initFormValues(this.state.formId,
+                    [
+                        'SendmailModule::Host',
+                        'SendmailModule::Port',
+                        'SendmailModule::AuthUser'
+                    ]
+                );
+            }
+            if (value.match(/OAuth2/)) {
+                // add profile field if not already present
+                if (!typeField?.children.some((field) => field.property === 'SendmailModule::OAuth2_Profile')) {
+                    const profileField = await this.getProfileField();
+                    await formInstance.addFieldChildren(typeField, [profileField], undefined, true);
+                    await this.initFormValues(this.state.formId, ['SendmailModule::OAuth2_Profile']);
+                }
+                // remove password profile field
+                const passwordField = typeField.children.find((field) => field.property === 'SendmailModule::AuthPassword');
+                if (passwordField) {
+                    await formInstance.removeFormField(passwordField);
+                }
+            } else {
+                // add password field if not already present
+                if (!typeField?.children.some((field) => field.property === 'SendmailModule::AuthPassword')) {
+                    const passwordField = await this.getPasswordField();
+                    await formInstance.addFieldChildren(typeField, [passwordField], undefined);
+                    await this.initFormValues(this.state.formId, ['SendmailModule::AuthPassword']);
+                }
+                // remove profile field
+                const profileField = typeField.children.find((field) => field.property === 'SendmailModule::OAuth2_Profile');
+                if (profileField) {
+                    await formInstance.removeFormField(profileField);
+                }
+            }
+        } else if (typeField?.children?.length) {
+            const children = [...typeField.children];
+            for (const c of children) {
+                await formInstance.removeFormField(c);
+            }
+        }
     }
 
     private async initSystemAddress(): Promise<void> {
@@ -293,12 +341,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private async getSMTPFields(): Promise<FormFieldConfiguration[]> {
+    private async getDefaultSMTPFields(): Promise<FormFieldConfiguration[]> {
         const configKeys = [
             'SendmailModule::Host',
             'SendmailModule::Port',
-            'SendmailModule::AuthUser',
-            'SendmailModule::AuthPassword',
+            'SendmailModule::AuthUser'
         ];
         const sysconfigDefinitions = await KIXObjectService.loadObjects<SysConfigOptionDefinition>(
             KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, configKeys
@@ -306,7 +353,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const hostHint = sysconfigDefinitions.find((o) => o.Name === 'SendmailModule::Host')?.Description || '';
         const portHint = sysconfigDefinitions.find((o) => o.Name === 'SendmailModule::Port')?.Description || '';
         const userHint = sysconfigDefinitions.find((o) => o.Name === 'SendmailModule::AuthUser')?.Description || '';
-        const passwordHint = sysconfigDefinitions.find((o) => o.Name === 'SendmailModule::AuthPassword')?.Description || '';
 
         const sysconfigOptions = await KIXObjectService.loadObjects<SysConfigOption>(
             KIXObjectType.SYS_CONFIG_OPTION, configKeys
@@ -314,7 +360,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const hostReadonly = sysconfigOptions.find((o) => o.Name === 'SendmailModule::Host')?.ReadOnly;
         const portReadonly = sysconfigOptions.find((o) => o.Name === 'SendmailModule::Port')?.ReadOnly;
         const userReadonly = sysconfigOptions.find((o) => o.Name === 'SendmailModule::AuthUser')?.ReadOnly;
-        const passwordReadonly = sysconfigOptions.find((o) => o.Name === 'SendmailModule::AuthPassword')?.ReadOnly;
 
         return [
             new FormFieldConfiguration(
@@ -331,17 +376,56 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 'SendmailModule::AuthUser', 'Translatable#User', 'SendmailModule::AuthUser', null, false, userHint,
                 null, null, null, null, null, null, null, null, null, null, null, null, null,
                 userReadonly
-            ),
-            new FormFieldConfiguration(
-                'SendmailModule::AuthPassword', 'Translatable#Password', 'SendmailModule::AuthPassword',
-                null, false, passwordHint,
-                [
-                    new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
-                ],
-                null, null, null, null, null, null, null, null, null, null, null, null,
-                passwordReadonly
             )
         ];
+    }
+
+    private async getPasswordField(): Promise<FormFieldConfiguration> {
+        const sysconfigDefinitions = await KIXObjectService.loadObjects<SysConfigOptionDefinition>(
+            KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, ['SendmailModule::AuthPassword']
+        );
+        const sysconfigOptions = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, ['SendmailModule::AuthPassword']
+        );
+        const passwordHint = sysconfigDefinitions.find((o) => o.Name === 'SendmailModule::AuthPassword')?.Description || '';
+        const passwordReadonly = sysconfigOptions.find((o) => o.Name === 'SendmailModule::AuthPassword')?.ReadOnly;
+        return new FormFieldConfiguration(
+            'SendmailModule::AuthPassword', 'Translatable#Password', 'SendmailModule::AuthPassword',
+            null, false, passwordHint,
+            [
+                new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
+            ],
+            null, null, null, null, null, null, null, null, null, null, null, null,
+            passwordReadonly
+        );
+    }
+
+    private async getProfileField(): Promise<FormFieldConfiguration> {
+        const sysconfigDefinitions = await KIXObjectService.loadObjects<SysConfigOptionDefinition>(
+            KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, ['SendmailModule::OAuth2_Profile']
+        );
+        const sysconfigOptions = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, ['SendmailModule::OAuth2_Profile']
+        );
+        const profileHint = sysconfigDefinitions.find(
+            (o) => o.Name === 'SendmailModule::OAuth2_Profile'
+        )?.Description || '';
+        const profileReadonly = sysconfigOptions.find(
+            (o) => o.Name === 'SendmailModule::OAuth2_Profile'
+        )?.ReadOnly;
+        return new FormFieldConfiguration(
+            'SendmailModule::OAuth2_Profile', 'Translatable#OAuth2 Profile', 'SendmailModule::OAuth2_Profile',
+            'object-reference-input', true, profileHint,
+            [
+                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.OAUTH2_PROFILE),
+                new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, false),
+                new FormFieldOption(ObjectReferenceOptions.TRANSLATABLE, false),
+                new FormFieldOption(ObjectReferenceOptions.TEXT_AS_ID, true),
+                new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true)
+            ],
+            null, null, null, null, null, null, null, null, null, null, null, null,
+            profileReadonly
+        );
     }
 
     private async initFormValues(formId: string, configKeys: string[] = this.configKeys): Promise<void> {
@@ -353,7 +437,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         );
 
         const values: Array<[string, any]> = configKeys.map(
-            (k) => [k, sysconfigOptions.find((o) => o.Name === k).Value]
+            (k) => [k, sysconfigOptions.find((o) => o.Name === k)?.Value]
         );
 
         if (this.systemAddress) {
@@ -398,6 +482,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             BrowserUtil.toggleLoadingShield('SETUP_SENDING_MAIL_SHIELD', false);
         }
     }
+
     private async saveSysconfigValues(formInstance: FormInstance): Promise<void> {
         const values: Array<[string, any]> = [];
 
@@ -416,7 +501,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         for (const value of values) {
             await KIXObjectService.updateObject(
                 KIXObjectType.SYS_CONFIG_OPTION,
-                [[SysConfigOptionProperty.VALUE, value[1]], [KIXObjectProperty.VALID_ID, 1]],
+                [
+                    [SysConfigOptionProperty.VALUE, value[1]],
+                    [KIXObjectProperty.VALID_ID, value[1] !== '' && value[1] !== null ? 1 : 2]
+                ],
                 value[0]
             );
         }
