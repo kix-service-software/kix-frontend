@@ -78,12 +78,10 @@ class OverlayComponent {
         this.state.show = false;
 
         if (autoClose) {
-            let firstClick = true;
             this.clickListener = (event: any) => {
-                if (!firstClick && !this.keepShow && !this.showShield() && event.button === 0) {
+                if (!this.keepShow && !this.showShield() && event.button === 0) {
                     this.closeOverlay();
                 }
-                firstClick = false;
                 this.keepShow = false;
             };
             document.addEventListener('click', this.clickListener, false);
