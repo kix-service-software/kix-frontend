@@ -8,7 +8,7 @@
     "scripts": {
         "start": "node dist/server/index.js",
         "build": "./node_modules/.bin/gulp",
-        "lint": "./node_modules/.bin/eslint --ext .ts ./src/ --format gitlab .",
+        "lint": "./node_modules/.bin/eslint --quiet --ext .ts ./src/ --format gitlab .",
         "test-cucumber": "rm -Rf dist/ && tsc --project tsconfig-cucumber.json && cp -R features/ dist/ && ./node_modules/cucumber/bin/cucumber-js dist/features/ -f allure-cucumber-reporter.js",
         "test-cucumber-dev": "rm -Rf dist/ && tsc --project tsconfig-cucumber.json && cp -R features/ dist/  && ./node_modules/cucumber/bin/cucumber-js dist/features/",
         "test": "export http_proxy= && export https_proxy= && export NODE_ENV=test && sleep 1 && ./node_modules/.bin/nyc --reporter=text-summary --reporter cobertura --reporter html ./node_modules/.bin/mocha --reporter mocha-multi-reporters --reporter-options configFile=mocha.json --require ts-node/register --require source-map-support/register --full-trace --exit \"./{,!(node_modules)/**/}*.test.ts\"",
