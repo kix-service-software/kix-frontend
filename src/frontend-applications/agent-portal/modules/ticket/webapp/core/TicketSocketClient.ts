@@ -35,13 +35,13 @@ export class TicketSocketClient extends SocketClient {
     private static INSTANCE: TicketSocketClient = null;
 
     public constructor() {
-        super();
-        this.socket = this.createSocket('tickets', true);
+        super('tickets');
     }
 
     private requestPromises: Map<string, Promise<any>> = new Map();
 
     public async loadArticleAttachment(ticketId: number, articleId: number, attachmentId: number): Promise<Attachment> {
+        this.checkSocketConnection();
 
         const cacheKey = `${ticketId}-${articleId}-${attachmentId}`;
 
@@ -86,6 +86,8 @@ export class TicketSocketClient extends SocketClient {
     }
 
     public async loadArticleZipAttachment(ticketId: number, articleId: number): Promise<Attachment> {
+        this.checkSocketConnection();
+
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<Attachment>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();
@@ -115,6 +117,8 @@ export class TicketSocketClient extends SocketClient {
     }
 
     public async setArticleSeenFlag(ticketId, articleId): Promise<void> {
+        this.checkSocketConnection();
+
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<void>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();

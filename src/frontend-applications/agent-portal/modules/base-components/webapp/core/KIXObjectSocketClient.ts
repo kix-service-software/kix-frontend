@@ -48,8 +48,7 @@ export class KIXObjectSocketClient extends SocketClient {
     }
 
     private constructor() {
-        super();
-        this.socket = this.createSocket('kixobjects', true);
+        super('kixobjects');
     }
 
     public async loadObjects<T extends KIXObject>(
@@ -57,6 +56,8 @@ export class KIXObjectSocketClient extends SocketClient {
         objectIds: Array<string | number> = null, loadingOptions: KIXObjectLoadingOptions = null,
         objectLoadingOptions: KIXObjectSpecificLoadingOptions = null, cache: boolean = true, timeout?: number
     ): Promise<T[]> {
+        this.checkSocketConnection();
+
         const requestId = IdService.generateDateBasedId();
 
         const request = new LoadObjectsRequest(
@@ -132,6 +133,8 @@ export class KIXObjectSocketClient extends SocketClient {
         createOptions?: KIXObjectSpecificCreateOptions,
         cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
+        this.checkSocketConnection();
+
         const requestId = IdService.generateDateBasedId();
 
         const request = new CreateObjectRequest(
@@ -154,6 +157,8 @@ export class KIXObjectSocketClient extends SocketClient {
         objectId: number | string, updateOptions?: KIXObjectSpecificCreateOptions,
         cacheKeyPrefix: string = objectType, silent?: boolean
     ): Promise<string | number> {
+        this.checkSocketConnection();
+
         const requestId = IdService.generateDateBasedId();
 
         const request = new UpdateObjectRequest(
@@ -178,6 +183,7 @@ export class KIXObjectSocketClient extends SocketClient {
         objectType: KIXObjectType | string, objectId: string | number, deleteOptions: KIXObjectSpecificDeleteOptions,
         cacheKeyPrefix: string = objectType
     ): Promise<any> {
+        this.checkSocketConnection();
 
         const requestId = IdService.generateDateBasedId();
 
@@ -198,6 +204,7 @@ export class KIXObjectSocketClient extends SocketClient {
         requestObject: ISocketObjectRequest, event: string, finishEvent: string, errorEvent: any,
         defaultTimeout?: number
     ): Promise<T> {
+        this.checkSocketConnection();
 
         const socketTimeout = defaultTimeout ? defaultTimeout : ClientStorageService.getSocketTimeout();
 

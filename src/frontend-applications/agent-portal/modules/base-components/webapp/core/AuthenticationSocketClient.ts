@@ -24,8 +24,6 @@ import { Socket } from 'socket.io-client';
 
 export class AuthenticationSocketClient extends SocketClient {
 
-    private authenticationSocket: Socket;
-
     private static INSTANCE: AuthenticationSocketClient = null;
 
     public static getInstance(): AuthenticationSocketClient {
@@ -37,13 +35,14 @@ export class AuthenticationSocketClient extends SocketClient {
     }
 
     public constructor() {
-        super();
-        this.authenticationSocket = this.createSocket('authentication', false);
+        super('authentication');
     }
 
     public async login(
         userName: string, password: string, redirectUrl: string, fakeLogin?: boolean
     ): Promise<boolean> {
+        this.checkSocketConnection();
+
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<boolean>((resolve, reject) => {
 
@@ -53,7 +52,7 @@ export class AuthenticationSocketClient extends SocketClient {
 
             const requestId = IdService.generateDateBasedId();
 
-            this.authenticationSocket.on(AuthenticationEvent.AUTHORIZED, (result: AuthenticationResult) => {
+            this.socket.on(AuthenticationEvent.AUTHORIZED, (result: AuthenticationResult) => {
                 if (result.requestId === requestId) {
                     window.clearTimeout(timeout);
                     if (!fakeLogin) {
@@ -64,7 +63,7 @@ export class AuthenticationSocketClient extends SocketClient {
                 }
             });
 
-            this.authenticationSocket.on(AuthenticationEvent.UNAUTHORIZED, (result: AuthenticationResult) => {
+            this.socket.on(AuthenticationEvent.UNAUTHORIZED, (result: AuthenticationResult) => {
                 if (result.requestId === requestId) {
                     window.clearTimeout(timeout);
                     resolve(false);
@@ -74,11 +73,13 @@ export class AuthenticationSocketClient extends SocketClient {
             const request = new LoginRequest(
                 userName, password, redirectUrl, requestId, ClientStorageService.getClientRequestId()
             );
-            this.authenticationSocket.emit(AuthenticationEvent.LOGIN, request);
+            this.socket.emit(AuthenticationEvent.LOGIN, request);
         });
     }
 
     public async logout(): Promise<boolean> {
+        this.checkSocketConnection();
+
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<boolean>((resolve, reject) => {
             const timeout = window.setTimeout(() => {
@@ -87,7 +88,7 @@ export class AuthenticationSocketClient extends SocketClient {
 
             const requestId = IdService.generateDateBasedId();
 
-            this.authenticationSocket.on(AuthenticationEvent.UNAUTHORIZED, (result: AuthenticationResult) => {
+            this.socket.on(AuthenticationEvent.UNAUTHORIZED, (result: AuthenticationResult) => {
                 if (result.requestId === requestId) {
                     window.clearTimeout(timeout);
                     resolve(true);
@@ -98,11 +99,13 @@ export class AuthenticationSocketClient extends SocketClient {
                 requestId,
                 clientRequestId: ClientStorageService.getClientRequestId(),
             };
-            this.authenticationSocket.emit(AuthenticationEvent.LOGOUT, request);
+            this.socket.emit(AuthenticationEvent.LOGOUT, request);
         });
     }
 
     public async validateToken(): Promise<boolean> {
+        this.checkSocketConnection();
+
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<boolean>((resolve, reject) => {
 
@@ -112,14 +115,14 @@ export class AuthenticationSocketClient extends SocketClient {
                 reject('Timeout: ' + AuthenticationEvent.VALIDATE_TOKEN);
             }, socketTimeout);
 
-            this.authenticationSocket.on(AuthenticationEvent.AUTHORIZED, (result: AuthenticationResult) => {
+            this.socket.on(AuthenticationEvent.AUTHORIZED, (result: AuthenticationResult) => {
                 if (result.requestId === requestId) {
                     window.clearTimeout(timeout);
                     resolve(true);
                 }
             });
 
-            this.authenticationSocket.on(AuthenticationEvent.UNAUTHORIZED, (result: AuthenticationResult) => {
+            this.socket.on(AuthenticationEvent.UNAUTHORIZED, (result: AuthenticationResult) => {
                 if (result.requestId === requestId) {
                     window.clearTimeout(timeout);
                     resolve(false);
@@ -130,7 +133,7 @@ export class AuthenticationSocketClient extends SocketClient {
                 requestId,
                 clientRequestId: ClientStorageService.getClientRequestId()
             };
-            this.authenticationSocket.emit(AuthenticationEvent.VALIDATE_TOKEN, request);
+            this.socket.emit(AuthenticationEvent.VALIDATE_TOKEN, request);
         });
     }
 
@@ -146,6 +149,8 @@ export class AuthenticationSocketClient extends SocketClient {
     }
 
     private createPermissionRequest(permissions: UIComponentPermission[]): Promise<boolean> {
+        this.checkSocketConnection();
+
         return new Promise((resolve, reject) => {
 
             if (!permissions || !permissions.length) {
@@ -158,7 +163,7 @@ export class AuthenticationSocketClient extends SocketClient {
                 reject('Timeout: ' + AuthenticationEvent.VALIDATE_TOKEN);
             }, 30000);
 
-            this.authenticationSocket.on(
+            this.socket.on(
                 AuthenticationEvent.PERMISSION_CHECK_SUCCESS,
                 (result: ISocketResponse) => {
                     if (result.requestId === requestId) {
@@ -168,7 +173,7 @@ export class AuthenticationSocketClient extends SocketClient {
                 }
             );
 
-            this.authenticationSocket.on(
+            this.socket.on(
                 AuthenticationEvent.PERMISSION_CHECK_FAILED,
                 (result: ISocketResponse) => {
                     if (result.requestId === requestId) {
@@ -182,7 +187,7 @@ export class AuthenticationSocketClient extends SocketClient {
                 ClientStorageService.getClientRequestId(),
                 permissions
             );
-            this.authenticationSocket.emit(AuthenticationEvent.PERMISSION_CHECK, request);
+            this.socket.emit(AuthenticationEvent.PERMISSION_CHECK, request);
         });
     }
 }
