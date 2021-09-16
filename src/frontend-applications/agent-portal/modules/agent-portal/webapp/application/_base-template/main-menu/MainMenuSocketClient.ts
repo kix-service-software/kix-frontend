@@ -29,29 +29,12 @@ export class MainMenuSocketClient extends SocketClient {
     }
 
     private constructor() {
-        super();
-        this.socket = this.createSocket('main-menu');
-        this.initSocketListener();
-    }
-
-    private initSocketListener(): void {
-        this.socket.on(SocketEvent.CONNECT_ERROR, (error) => {
-            console.error(error);
-            this.socket.close();
-        });
-
-        this.socket.on(SocketEvent.CONNECT_TIMEOUT, () => {
-            console.error('Timeout');
-            this.socket.close();
-        });
-
-        this.socket.on('error', (error) => {
-            console.error(error);
-            this.socket.close();
-        });
+        super('main-menu');
     }
 
     public async loadMenuEntries(): Promise<MainMenuEntriesResponse> {
+        this.checkSocketConnection();
+
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<MainMenuEntriesResponse>((resolve, reject) => {
             const timeout = window.setTimeout(() => {

@@ -38,12 +38,13 @@ export class KIXModulesSocketClient extends SocketClient {
     private static INSTANCE: KIXModulesSocketClient = null;
 
     public constructor() {
-        super();
-        this.socket = this.createSocket('kixmodules', true);
+        super('kixmodules');
     }
 
     public async loadFormConfigurationsByContext(
     ): Promise<Array<[FormContext, KIXObjectType | string, string]>> {
+        this.checkSocketConnection();
+
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<Array<[FormContext, KIXObjectType | string, string]>>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();
@@ -78,6 +79,8 @@ export class KIXModulesSocketClient extends SocketClient {
 
     public async loadFormConfigurations(
     ): Promise<FormConfiguration[]> {
+        this.checkSocketConnection();
+
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<FormConfiguration[]>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();
@@ -110,6 +113,8 @@ export class KIXModulesSocketClient extends SocketClient {
         });
     }
     public async loadFormConfiguration(formId: string): Promise<FormConfiguration> {
+        this.checkSocketConnection();
+
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<FormConfiguration>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();
@@ -144,6 +149,8 @@ export class KIXModulesSocketClient extends SocketClient {
 
 
     public async loadReleaseConfig(): Promise<ReleaseInfo> {
+        this.checkSocketConnection();
+
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<ReleaseInfo>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();
@@ -176,6 +183,8 @@ export class KIXModulesSocketClient extends SocketClient {
     }
 
     public async rebuildConfiguration(): Promise<void> {
+        this.checkSocketConnection();
+
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<void>((resolve, reject) => {
 
