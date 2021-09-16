@@ -14,6 +14,9 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.4\n"
 
+msgid "', "
+msgstr ""
+
 msgid "{0}/{1} {2} imported"
 msgstr "{0}/{1} {2} importiert"
 
@@ -77,8 +80,14 @@ msgstr "Hinzufügen"
 msgid "Add CI Class"
 msgstr "Asset-Klasse hinzufügen"
 
+msgid "Add Column(s)"
+msgstr ""
+
 msgid "Add email account for incoming mails"
 msgstr "E-Mail Konto für eingehende E-Mails einrichten"
+
+msgid "Add initial table"
+msgstr ""
 
 msgid "Additional recipients"
 msgstr "Zusätzliche Empfänger"
@@ -112,6 +121,9 @@ msgstr "Handbuch für Administratoren"
 
 msgid "Admin Password"
 msgstr "Admin Passwort"
+
+msgid "Advanced"
+msgstr ""
 
 msgid "Affected Assets"
 msgstr "Betroffene Assets"
@@ -315,6 +327,9 @@ msgstr "Zu ändernde Attribute"
 msgid "Ausblenden"
 msgstr "Ausblenden"
 
+msgid "Authorization URL"
+msgstr ""
+
 msgid "Automatic time measurement"
 msgstr "Automatische Zeitmessung"
 
@@ -345,6 +360,9 @@ msgstr "Bcc"
 msgid "before"
 msgstr "vor/kleiner als"
 
+msgid "Begin of Business Day"
+msgstr ""
+
 msgid "between"
 msgstr "zwischen"
 
@@ -354,11 +372,11 @@ msgstr "Artikeltext"
 msgid "Bulk"
 msgstr "Sammelaktion"
 
-msgid "Bulk {0}"
-msgstr "Sammelaktion {0}"
-
 msgid "Bulk Action"
 msgstr "Sammelaktion"
+
+msgid "Bulk Action: {0}"
+msgstr ""
 
 msgid "Cancel"
 msgstr "Abbruch"
@@ -451,6 +469,12 @@ msgstr "Klassendefinition"
 msgid "Clear"
 msgstr "Leeren"
 
+msgid "Client ID"
+msgstr ""
+
+msgid "Client Secret"
+msgstr ""
+
 msgid "Close"
 msgstr "Schließen"
 
@@ -484,6 +508,12 @@ msgstr "Code"
 msgid ": (colon)"
 msgstr ": (Doppelpunkt)"
 
+msgid "Column Icon"
+msgstr ""
+
+msgid "Column Title"
+msgstr ""
+
 msgid ", (comma)"
 msgstr ", (Komma)"
 
@@ -502,6 +532,9 @@ msgstr "Kommunikation: E-Mail: E-Mail Filter"
 msgid "Communication: Email: Inbox"
 msgstr "Kommunikation: E-Mail: Posteingang"
 
+msgid "Communication: Email: OAuth2 Profiles"
+msgstr ""
+
 msgid "Communication: Email: Outbox"
 msgstr "Kommunikation: E-Mail: Postausgang"
 
@@ -519,6 +552,9 @@ msgstr "Assetversionen Vergleichen"
 
 msgid "Compare Versions"
 msgstr "Versionen vergleichen"
+
+msgid "Component ID"
+msgstr ""
 
 msgid "Config Item"
 msgstr "Asset"
@@ -742,6 +778,9 @@ msgstr "Verwendungsstatus"
 msgid "Deployment State"
 msgstr "Verwendungsstatus"
 
+msgid "DESC"
+msgstr ""
+
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -750,6 +789,9 @@ msgstr "Detaillierte Suchergebnisse"
 
 msgid "Dispatching"
 msgstr "Verteilung"
+
+msgid "Display Limit"
+msgstr ""
 
 msgid "Display Name"
 msgstr "Anzeigename"
@@ -871,6 +913,9 @@ msgstr "Persönliche Einstellungen bearbeiten"
 msgid "Edit Priority"
 msgstr "Priorität bearbeiten"
 
+msgid "Edit Profile"
+msgstr ""
+
 msgid "Edit Queue"
 msgstr "Team bearbeiten"
 
@@ -949,11 +994,17 @@ msgstr "E-Mail Header"
 msgid "Email Information"
 msgstr "E-Mail Informationen"
 
+msgid "Empty Result Hint"
+msgstr ""
+
 msgid "Enable attachments"
 msgstr "Anlagen zulassen"
 
 msgid "End date/time is not given"
 msgstr "Enddatum/-zeit fehlt"
+
+msgid "End of Business Day"
+msgstr ""
 
 msgid "ends with"
 msgstr "endet mit"
@@ -979,11 +1030,17 @@ msgstr "Fehler"
 msgid "Error!"
 msgstr "Fehler!"
 
+msgid "Error on create:"
+msgstr ""
+
 msgid "Error on form page validation:"
 msgstr "Fehler beim Validieren des Formulars:"
 
 msgid "Error on form validation:"
 msgstr "Fehler beim Validieren des Formulars:"
+
+msgid "Error on update:"
+msgstr ""
 
 msgid "Error while adding the attachement:"
 msgstr "Fehler beim Hinzufügen von Anlagen:"
@@ -1105,6 +1162,12 @@ msgstr "Jetzt abrufen"
 msgid "Field"
 msgstr "Feld"
 
+msgid "Field {0} has an empty row ({1})."
+msgstr ""
+
+msgid "Field {0} has an empty rows."
+msgstr ""
+
 msgid "Field {0} has an invalid value ({1})."
 msgstr "Feld {0} enthält einen ungültigen Wert ({1})."
 
@@ -1129,11 +1192,17 @@ msgstr "Feldtyp"
 msgid "Filter"
 msgstr "Filter"
 
+msgid "Filterable"
+msgstr ""
+
 msgid "Filter Conditions"
 msgstr "Filterbedingungen"
 
 msgid "Filter in list"
 msgstr "Filtern in Liste"
+
+msgid "Filter List"
+msgstr ""
 
 msgid "Filter successfully removed."
 msgstr "Filter wurde(n) erfolgreich gelöscht."
@@ -1150,6 +1219,9 @@ msgstr "beendet"
 
 msgid "First Name"
 msgstr "Vorname"
+
+msgid "Fixed First Column"
+msgstr ""
 
 msgid "Follow Up on Tickets"
 msgstr "Nachfrage an Tickets"
@@ -1192,6 +1264,9 @@ msgstr "General Catalog Eintrag"
 
 msgid "General Catalog Items"
 msgstr "General Catalog Einträge"
+
+msgid "Has access token"
+msgstr ""
 
 msgid "Hello"
 msgstr "Hallo"
@@ -1363,6 +1438,9 @@ msgstr ""
 "Ändern Sie diese Einstellung nur, wenn die Mails aus einem anderen Ordner "
 "als \"INBOX\" geholt werden sollen."
 
+msgid "Helptext_Admin_MailAccountCreate_OAuth2_Profile"
+msgstr ""
+
 msgid "Helptext_Admin_MailAccountCreate_Password"
 msgstr "Geben Sie das Passwort für Ihr Konto an, um sich beim Host anzumelden."
 
@@ -1381,11 +1459,6 @@ msgstr ""
 msgid "Helptext_Admin_MailAccountCreate_Validity"
 msgstr ""
 "Das E-Mail-Konto kann nur verwendet werden, wenn es „gültig“ gesetzt ist."
-
-msgid "Helptext_Admin_MailAccountEdit_IMAPFolder"
-msgstr ""
-"Ändern Sie diese Einstellung nur, wenn die Mails aus einem anderen Ordner "
-"als \"INBOX\" geholt werden sollen."
 
 msgid "Helptext_Admin_MailFilterCreate_Comment"
 msgstr ""
@@ -1636,6 +1709,30 @@ msgid "Helptext_Admin_NotificationEdit_Validity"
 msgstr ""
 "Benachrichtigungen nach den hier festgelegten Kriterien werden nur "
 "versendet, wenn die Benachrichtigung „gültig“ gesetzt ist."
+
+msgid "Helptext_Admin_OAuth2ProfileCreate_Client_ID"
+msgstr ""
+
+msgid "Helptext_Admin_OAuth2ProfileCreate_Client_Secret."
+msgstr ""
+
+msgid "Helptext_Admin_OAuth2ProfileCreate_Name"
+msgstr ""
+
+msgid "Helptext_Admin_OAuth2ProfileCreate_Scope"
+msgstr ""
+
+msgid "Helptext_Admin_OAuth2ProfileCreate_URL_Auth"
+msgstr ""
+
+msgid "Helptext_Admin_OAuth2ProfileCreate_URL_Redirect"
+msgstr ""
+
+msgid "Helptext_Admin_OAuth2ProfileCreate_URL_Token"
+msgstr ""
+
+msgid "Helptext_Admin_OAuth2ProfileCreate_Validity"
+msgstr ""
 
 msgid "Helptext_Admin_QueueCreate_FollowUpTicketLock"
 msgstr ""
@@ -2705,6 +2802,12 @@ msgstr "Fehlerhaft verarbeitete Zeilen"
 msgid "Information text"
 msgstr "Hinweistext"
 
+msgid "in less than"
+msgstr ""
+
+msgid "in more than"
+msgstr ""
+
 msgid "Inserted email address is invalid"
 msgstr "Die eingegebene E-Mail Adresse ist ungültig"
 
@@ -2788,6 +2891,9 @@ msgstr "Layer"
 
 msgid "Legend"
 msgstr "Legende"
+
+msgid "less than ago"
+msgstr ""
 
 msgid "Let's go"
 msgstr "Los geht's"
@@ -2897,6 +3003,12 @@ msgstr "Info nach Absenden"
 msgid "Metadata"
 msgstr "Metadaten"
 
+msgid "Minimizable"
+msgstr ""
+
+msgid "Minimized"
+msgstr ""
+
 msgid "Minutes"
 msgstr "Minuten"
 
@@ -2911,6 +3023,9 @@ msgstr "Montag"
 
 msgid "Month"
 msgstr "Monat"
+
+msgid "more than ago"
+msgstr ""
 
 msgid "Multiple"
 msgstr "Mehrfach"
@@ -3034,6 +3149,9 @@ msgstr "Neues Passwort"
 
 msgid "New Priority"
 msgstr "Neue Priorität"
+
+msgid "New Profile"
+msgstr ""
 
 msgid "New Queue"
 msgstr "Neues Team"
@@ -3224,6 +3342,12 @@ msgstr "Anzahl Bewertungen"
 msgid "Number of version"
 msgstr "Anzahl Versionen"
 
+msgid "OAuth2 Profile"
+msgstr ""
+
+msgid "OAuth2 Profiles"
+msgstr ""
+
 msgid "Object"
 msgstr "Objekt"
 
@@ -3280,6 +3404,9 @@ msgstr "Toolbar Öffnen"
 
 msgid "Operator"
 msgstr "Operator"
+
+msgid "Option"
+msgstr ""
 
 msgid "Organisation"
 msgstr "Organisation"
@@ -3501,6 +3628,12 @@ msgstr "Prioritätsdetails"
 msgid "Priority Information"
 msgstr "Prioritäten-Informationen"
 
+msgid "Profiles successfully removed."
+msgstr ""
+
+msgid "Property"
+msgstr ""
+
 msgid "Queue"
 msgstr "Team"
 
@@ -3585,6 +3718,9 @@ msgstr "Empfänger"
 msgid "Recipient: To"
 msgstr "Empfänger: An"
 
+msgid "Redirect URL"
+msgstr ""
+
 msgid "References"
 msgstr "Verweise"
 
@@ -3615,6 +3751,9 @@ msgstr "Frontend-Konfigurationen erneut laden?"
 msgid "Reminder Tickets"
 msgstr "Erinnerungstickets"
 
+msgid "Remove"
+msgstr ""
+
 msgid "Remove Address"
 msgstr "Adresse(n) löschen"
 
@@ -3636,8 +3775,14 @@ msgstr "Parameter löschen"
 msgid "Remove Priorities"
 msgstr "Prioritäten löschen"
 
+msgid "Remove Profiles"
+msgstr ""
+
 msgid "Remove States"
 msgstr "Status löschen"
+
+msgid "Remove table"
+msgstr ""
 
 msgid "Remove Text Modules"
 msgstr "Textbausteine Entfernen"
@@ -3650,6 +3795,9 @@ msgstr "Typen löschen"
 
 msgid "Rename Your Organisation"
 msgstr "Eigene Firma eintragen"
+
+msgid "Renew Authorization"
+msgstr ""
 
 msgid "Replace empty value"
 msgstr "Leerwert ersetzen"
@@ -3708,8 +3856,17 @@ msgstr "Zurücksetzen?"
 msgid "Reset data"
 msgstr "Daten zurücksetzen"
 
+msgid "Reset Preference"
+msgstr ""
+
 msgid "Reset to Default"
 msgstr "Auf Standard zurücksetzen"
+
+msgid "Reset User Widgets"
+msgstr ""
+
+msgid "Resizable"
+msgstr ""
 
 msgid "Responsible"
 msgstr "Verantwortlicher"
@@ -3751,6 +3908,9 @@ msgstr ""
 
 msgid "Row Number"
 msgstr "Zeilennummer"
+
+msgid "Row Selection"
+msgstr ""
 
 msgid "Rows with too less values"
 msgstr "Zeilen mit zu wenigen Werten"
@@ -3799,6 +3959,9 @@ msgstr "Einstellungen werden gespeichert."
 
 msgid "Scheduling"
 msgstr "Zeitplanung"
+
+msgid "Scope"
+msgstr ""
 
 msgid "Search"
 msgstr "Suchen"
@@ -3937,6 +4100,9 @@ msgstr "Alle anzeigen"
 msgid "Show Backlog"
 msgstr "Backlog anzeigen"
 
+msgid "Show Filter"
+msgstr ""
+
 msgid "Show in agent preferences"
 msgstr "Anzeige Agenteneinstellung"
 
@@ -3961,11 +4127,20 @@ msgstr "' (Einfaches Hochkomma)"
 msgid "Size"
 msgstr "Größe"
 
+msgid "Size (px)"
+msgstr ""
+
 msgid "Skip"
 msgstr "Überspringen"
 
 msgid "Skip & Continue"
 msgstr "Überspringen & Weiter"
+
+msgid "Small Headers"
+msgstr ""
+
+msgid "Small Rows"
+msgstr ""
 
 msgid "Small Widget"
 msgstr "Kleines Widget"
@@ -3973,8 +4148,14 @@ msgstr "Kleines Widget"
 msgid "Solution"
 msgstr "Lösung"
 
+msgid "Some Translation"
+msgstr ""
+
 msgid "Sort"
 msgstr "Sortieren"
+
+msgid "Sortable"
+msgstr ""
 
 msgid "Source"
 msgstr "Quelle"
@@ -3984,6 +4165,9 @@ msgstr "Quelltext"
 
 msgid "Split Option"
 msgstr "Trennoptionen"
+
+msgid "Standard"
+msgstr ""
 
 msgid "Start by"
 msgstr "Gestartet von"
@@ -4126,8 +4310,14 @@ msgstr "System: SysConfig ({0})"
 msgid "-> (tab)"
 msgstr "-> (Tabulator)"
 
+msgid "Table Configuration"
+msgstr ""
+
 msgid "Tables"
 msgstr "Tabellen"
+
+msgid "Table Widget"
+msgstr ""
 
 msgid "Tags"
 msgstr "Schlagworte"
@@ -4188,6 +4378,15 @@ msgstr "Der Job {0} wird jetzt ausgeführt. Sind Sie sicher?"
 
 msgid "The password is changed for Admin."
 msgstr "Das Passwort für Admin wurde geändert."
+
+msgid ""
+"The preference ContextWidgetLists will be reseted for the {0} selected user. "
+"Are you sure?"
+msgstr ""
+
+msgid ""
+"The preference ContextWidgetLists will be reseted for the user. Are you sure?"
+msgstr ""
 
 msgid ""
 "The quick and easy way to provide technical customer service while on the "
@@ -4313,11 +4512,20 @@ msgstr "zum Artikel"
 msgid "Today"
 msgstr "Heute"
 
+msgid "Token URL"
+msgstr ""
+
 msgid "to version"
 msgstr "zur Version"
 
 msgid "to Version"
 msgstr "zur Version"
+
+msgid "Translatable"
+msgstr ""
+
+msgid "Translatable Title"
+msgstr ""
 
 msgid "Translation"
 msgstr "Übersetzung"
@@ -4496,8 +4704,17 @@ msgstr "Willkommen"
 msgid "Welcome to KIX 18"
 msgstr "Willkommen bei KIX 18"
 
+msgid "Widget Configuration"
+msgstr ""
+
 msgid "Wildcard Search"
 msgstr "Wildcard-Suche"
+
+msgid "within the last"
+msgstr ""
+
+msgid "within the next"
+msgstr ""
 
 msgid "Work in Progress"
 msgstr "In Bearbeitung (WIP)"
@@ -4540,6 +4757,14 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Bulk {0}"
+#~ msgstr "Sammelaktion {0}"
+
+#~ msgid "Helptext_Admin_MailAccountEdit_IMAPFolder"
+#~ msgstr ""
+#~ "Ändern Sie diese Einstellung nur, wenn die Mails aus einem anderen Ordner "
+#~ "als \"INBOX\" geholt werden sollen."
 
 #~ msgid "Helptext_Textmodules_TicketEdit"
 #~ msgstr ""
