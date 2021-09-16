@@ -1339,8 +1339,8 @@ msgstr ""
 
 msgid "Helptext_Admin_MailAccountCreate_UserName"
 msgstr ""
-"Login name of the mail account, from which you want to retrieve e-mails, "
-"e.g. yourdemo@kix.cloud."
+"Login name of the mail account, from which you want to retrieve e-mails, e."
+"g. yourdemo@kix.cloud."
 
 msgid "Helptext_Admin_MailAccountCreate_Validity"
 msgstr "The email account can only be used within the system if set “valid”."
