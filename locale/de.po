@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2021-08-26 09:47+0000\n"
-"Last-Translator: rbo <Rene.Boehm@cape-it.de>\n"
+"PO-Revision-Date: 2021-09-16 17:01+0000\n"
+"Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
 "Language: de\n"
@@ -81,13 +81,13 @@ msgid "Add CI Class"
 msgstr "Asset-Klasse hinzufügen"
 
 msgid "Add Column(s)"
-msgstr ""
+msgstr "Spalte(n) hinzufügen"
 
 msgid "Add email account for incoming mails"
 msgstr "E-Mail Konto für eingehende E-Mails einrichten"
 
 msgid "Add initial table"
-msgstr ""
+msgstr "Tabelle hinzufügen"
 
 msgid "Additional recipients"
 msgstr "Zusätzliche Empfänger"
@@ -123,7 +123,7 @@ msgid "Admin Password"
 msgstr "Admin Passwort"
 
 msgid "Advanced"
-msgstr ""
+msgstr "Erweitert"
 
 msgid "Affected Assets"
 msgstr "Betroffene Assets"
@@ -328,7 +328,7 @@ msgid "Ausblenden"
 msgstr "Ausblenden"
 
 msgid "Authorization URL"
-msgstr ""
+msgstr "Authorisierungs-URL"
 
 msgid "Automatic time measurement"
 msgstr "Automatische Zeitmessung"
@@ -361,7 +361,7 @@ msgid "before"
 msgstr "vor/kleiner als"
 
 msgid "Begin of Business Day"
-msgstr ""
+msgstr "Beginn Servicezeit (\"Business Day\")"
 
 msgid "between"
 msgstr "zwischen"
@@ -376,7 +376,7 @@ msgid "Bulk Action"
 msgstr "Sammelaktion"
 
 msgid "Bulk Action: {0}"
-msgstr ""
+msgstr "Sammelaktion: {0}"
 
 msgid "Cancel"
 msgstr "Abbruch"
@@ -470,10 +470,10 @@ msgid "Clear"
 msgstr "Leeren"
 
 msgid "Client ID"
-msgstr ""
+msgstr "Client ID"
 
 msgid "Client Secret"
-msgstr ""
+msgstr "Client Secret"
 
 msgid "Close"
 msgstr "Schließen"
@@ -509,10 +509,10 @@ msgid ": (colon)"
 msgstr ": (Doppelpunkt)"
 
 msgid "Column Icon"
-msgstr ""
+msgstr "Spaltensymbol"
 
 msgid "Column Title"
-msgstr ""
+msgstr "Spaltentitel"
 
 msgid ", (comma)"
 msgstr ", (Komma)"
@@ -533,7 +533,7 @@ msgid "Communication: Email: Inbox"
 msgstr "Kommunikation: E-Mail: Posteingang"
 
 msgid "Communication: Email: OAuth2 Profiles"
-msgstr ""
+msgstr "Kommunikation: E-Mail: OAuth2 Profile"
 
 msgid "Communication: Email: Outbox"
 msgstr "Kommunikation: E-Mail: Postausgang"
@@ -554,7 +554,7 @@ msgid "Compare Versions"
 msgstr "Versionen vergleichen"
 
 msgid "Component ID"
-msgstr ""
+msgstr "Komponenten-ID"
 
 msgid "Config Item"
 msgstr "Asset"
@@ -779,7 +779,7 @@ msgid "Deployment State"
 msgstr "Verwendungsstatus"
 
 msgid "DESC"
-msgstr ""
+msgstr "Absteigend"
 
 msgid "Description"
 msgstr "Beschreibung"
@@ -791,7 +791,7 @@ msgid "Dispatching"
 msgstr "Verteilung"
 
 msgid "Display Limit"
-msgstr ""
+msgstr "Anzeigelimit"
 
 msgid "Display Name"
 msgstr "Anzeigename"
@@ -914,7 +914,7 @@ msgid "Edit Priority"
 msgstr "Priorität bearbeiten"
 
 msgid "Edit Profile"
-msgstr ""
+msgstr "Profil bearbeiten"
 
 msgid "Edit Queue"
 msgstr "Team bearbeiten"
@@ -995,7 +995,7 @@ msgid "Email Information"
 msgstr "E-Mail Informationen"
 
 msgid "Empty Result Hint"
-msgstr ""
+msgstr "Anzeigetext leeres Ergebnis"
 
 msgid "Enable attachments"
 msgstr "Anlagen zulassen"
@@ -1004,7 +1004,7 @@ msgid "End date/time is not given"
 msgstr "Enddatum/-zeit fehlt"
 
 msgid "End of Business Day"
-msgstr ""
+msgstr "Ende Servicezeit (\"Business Day\")"
 
 msgid "ends with"
 msgstr "endet mit"
@@ -1031,7 +1031,7 @@ msgid "Error!"
 msgstr "Fehler!"
 
 msgid "Error on create:"
-msgstr ""
+msgstr "Fehler bei Erstellen:"
 
 msgid "Error on form page validation:"
 msgstr "Fehler beim Validieren des Formulars:"
@@ -1040,7 +1040,7 @@ msgid "Error on form validation:"
 msgstr "Fehler beim Validieren des Formulars:"
 
 msgid "Error on update:"
-msgstr ""
+msgstr "Fehler bei Aktualisieren:"
 
 msgid "Error while adding the attachement:"
 msgstr "Fehler beim Hinzufügen von Anlagen:"
@@ -1163,10 +1163,10 @@ msgid "Field"
 msgstr "Feld"
 
 msgid "Field {0} has an empty row ({1})."
-msgstr ""
+msgstr "Feld {0} hat eine leere Zeile ({1})."
 
 msgid "Field {0} has an empty rows."
-msgstr ""
+msgstr "Feld {0} hat eine leere Zeile."
 
 msgid "Field {0} has an invalid value ({1})."
 msgstr "Feld {0} enthält einen ungültigen Wert ({1})."
@@ -1193,7 +1193,7 @@ msgid "Filter"
 msgstr "Filter"
 
 msgid "Filterable"
-msgstr ""
+msgstr "Filterbar"
 
 msgid "Filter Conditions"
 msgstr "Filterbedingungen"
@@ -1202,7 +1202,7 @@ msgid "Filter in list"
 msgstr "Filtern in Liste"
 
 msgid "Filter List"
-msgstr ""
+msgstr "Filterliste"
 
 msgid "Filter successfully removed."
 msgstr "Filter wurde(n) erfolgreich gelöscht."
@@ -1221,7 +1221,7 @@ msgid "First Name"
 msgstr "Vorname"
 
 msgid "Fixed First Column"
-msgstr ""
+msgstr "Erste Spalte fixieren"
 
 msgid "Follow Up on Tickets"
 msgstr "Nachfrage an Tickets"
@@ -1266,7 +1266,7 @@ msgid "General Catalog Items"
 msgstr "General Catalog Einträge"
 
 msgid "Has access token"
-msgstr ""
+msgstr "Hat Zugriffstoken"
 
 msgid "Hello"
 msgstr "Hallo"
@@ -1439,7 +1439,7 @@ msgstr ""
 "als \"INBOX\" geholt werden sollen."
 
 msgid "Helptext_Admin_MailAccountCreate_OAuth2_Profile"
-msgstr ""
+msgstr "Legen Sie das für die Anmeldung zu verwendende OAuth2-Profil fest."
 
 msgid "Helptext_Admin_MailAccountCreate_Password"
 msgstr "Geben Sie das Passwort für Ihr Konto an, um sich beim Host anzumelden."
@@ -2253,6 +2253,9 @@ msgstr "Geben sie die Sprache an, in welcher der FAQ-Artikel verfasst ist."
 
 msgid "Helptext_FAQ_ArticleCreate_RelatedAssets"
 msgstr ""
+"Die hier hinterlegten Assets schränken die autom. Anzeige des FAQ-Artikels "
+"bei Ticketbearbeitung ein. Erst wenn eines der Assets am Ticket hinterlegt "
+"wird/ist, wird der FAQ-Artikel vorgeschlagen."
 
 msgid "Helptext_FAQ_ArticleCreate_Solution"
 msgstr "Beschreiben Sie die Lösung des Problems so genau wie möglich."
@@ -2803,10 +2806,10 @@ msgid "Information text"
 msgstr "Hinweistext"
 
 msgid "in less than"
-msgstr ""
+msgstr "in weniger als"
 
 msgid "in more than"
-msgstr ""
+msgstr "in mehr als"
 
 msgid "Inserted email address is invalid"
 msgstr "Die eingegebene E-Mail Adresse ist ungültig"
@@ -2893,7 +2896,7 @@ msgid "Legend"
 msgstr "Legende"
 
 msgid "less than ago"
-msgstr ""
+msgstr "vor weniger als"
 
 msgid "Let's go"
 msgstr "Los geht's"
@@ -3004,10 +3007,10 @@ msgid "Metadata"
 msgstr "Metadaten"
 
 msgid "Minimizable"
-msgstr ""
+msgstr "Minimierbar"
 
 msgid "Minimized"
-msgstr ""
+msgstr "Minimiert"
 
 msgid "Minutes"
 msgstr "Minuten"
@@ -3025,7 +3028,7 @@ msgid "Month"
 msgstr "Monat"
 
 msgid "more than ago"
-msgstr ""
+msgstr "vor mehr als"
 
 msgid "Multiple"
 msgstr "Mehrfach"
@@ -3151,7 +3154,7 @@ msgid "New Priority"
 msgstr "Neue Priorität"
 
 msgid "New Profile"
-msgstr ""
+msgstr "Neues Profil"
 
 msgid "New Queue"
 msgstr "Neues Team"
@@ -3343,10 +3346,10 @@ msgid "Number of version"
 msgstr "Anzahl Versionen"
 
 msgid "OAuth2 Profile"
-msgstr ""
+msgstr "OAuth2 Profil"
 
 msgid "OAuth2 Profiles"
-msgstr ""
+msgstr "OAuth2 Profile"
 
 msgid "Object"
 msgstr "Objekt"
@@ -3406,7 +3409,7 @@ msgid "Operator"
 msgstr "Operator"
 
 msgid "Option"
-msgstr ""
+msgstr "Option"
 
 msgid "Organisation"
 msgstr "Organisation"
@@ -3629,10 +3632,10 @@ msgid "Priority Information"
 msgstr "Prioritäten-Informationen"
 
 msgid "Profiles successfully removed."
-msgstr ""
+msgstr "Profil(e) entfernt."
 
 msgid "Property"
-msgstr ""
+msgstr "Eigenschaft"
 
 msgid "Queue"
 msgstr "Team"
@@ -3719,7 +3722,7 @@ msgid "Recipient: To"
 msgstr "Empfänger: An"
 
 msgid "Redirect URL"
-msgstr ""
+msgstr "Redirect URL"
 
 msgid "References"
 msgstr "Verweise"
@@ -3752,7 +3755,7 @@ msgid "Reminder Tickets"
 msgstr "Erinnerungstickets"
 
 msgid "Remove"
-msgstr ""
+msgstr "Entfernen"
 
 msgid "Remove Address"
 msgstr "Adresse(n) löschen"
@@ -3776,13 +3779,13 @@ msgid "Remove Priorities"
 msgstr "Prioritäten löschen"
 
 msgid "Remove Profiles"
-msgstr ""
+msgstr "Profil(e) entfernen"
 
 msgid "Remove States"
 msgstr "Status löschen"
 
 msgid "Remove table"
-msgstr ""
+msgstr "Tabelle entfernen"
 
 msgid "Remove Text Modules"
 msgstr "Textbausteine Entfernen"
@@ -3797,7 +3800,7 @@ msgid "Rename Your Organisation"
 msgstr "Eigene Firma eintragen"
 
 msgid "Renew Authorization"
-msgstr ""
+msgstr "Autorisierung erneuern"
 
 msgid "Replace empty value"
 msgstr "Leerwert ersetzen"
@@ -3857,16 +3860,16 @@ msgid "Reset data"
 msgstr "Daten zurücksetzen"
 
 msgid "Reset Preference"
-msgstr ""
+msgstr "Einstellung zurücksetzen"
 
 msgid "Reset to Default"
 msgstr "Auf Standard zurücksetzen"
 
 msgid "Reset User Widgets"
-msgstr ""
+msgstr "Nutzer-Widgets zurücksetzen"
 
 msgid "Resizable"
-msgstr ""
+msgstr "Größe änderbar"
 
 msgid "Responsible"
 msgstr "Verantwortlicher"
@@ -3910,7 +3913,7 @@ msgid "Row Number"
 msgstr "Zeilennummer"
 
 msgid "Row Selection"
-msgstr ""
+msgstr "Spaltenauswahl"
 
 msgid "Rows with too less values"
 msgstr "Zeilen mit zu wenigen Werten"
@@ -3961,7 +3964,7 @@ msgid "Scheduling"
 msgstr "Zeitplanung"
 
 msgid "Scope"
-msgstr ""
+msgstr "Scope"
 
 msgid "Search"
 msgstr "Suchen"
@@ -4101,7 +4104,7 @@ msgid "Show Backlog"
 msgstr "Backlog anzeigen"
 
 msgid "Show Filter"
-msgstr ""
+msgstr "Filter zeigen"
 
 msgid "Show in agent preferences"
 msgstr "Anzeige Agenteneinstellung"
@@ -4128,7 +4131,7 @@ msgid "Size"
 msgstr "Größe"
 
 msgid "Size (px)"
-msgstr ""
+msgstr "Größe (Pixel)"
 
 msgid "Skip"
 msgstr "Überspringen"
@@ -4137,10 +4140,10 @@ msgid "Skip & Continue"
 msgstr "Überspringen & Weiter"
 
 msgid "Small Headers"
-msgstr ""
+msgstr "Kleine Header"
 
 msgid "Small Rows"
-msgstr ""
+msgstr "Kleine Zeilen"
 
 msgid "Small Widget"
 msgstr "Kleines Widget"
@@ -4155,7 +4158,7 @@ msgid "Sort"
 msgstr "Sortieren"
 
 msgid "Sortable"
-msgstr ""
+msgstr "Sortierbar"
 
 msgid "Source"
 msgstr "Quelle"
@@ -4167,7 +4170,7 @@ msgid "Split Option"
 msgstr "Trennoptionen"
 
 msgid "Standard"
-msgstr ""
+msgstr "Standard"
 
 msgid "Start by"
 msgstr "Gestartet von"
@@ -4311,13 +4314,13 @@ msgid "-> (tab)"
 msgstr "-> (Tabulator)"
 
 msgid "Table Configuration"
-msgstr ""
+msgstr "Tabellenkonfiguration"
 
 msgid "Tables"
 msgstr "Tabellen"
 
 msgid "Table Widget"
-msgstr ""
+msgstr "Tabellen-Widget"
 
 msgid "Tags"
 msgstr "Schlagworte"
@@ -4383,10 +4386,14 @@ msgid ""
 "The preference ContextWidgetLists will be reseted for the {0} selected user. "
 "Are you sure?"
 msgstr ""
+"Die Einstellung der angezeigten Widgets wird für die {0} gewählten Nutzer "
+"zurückgesetzt. Fortfahren?"
 
 msgid ""
 "The preference ContextWidgetLists will be reseted for the user. Are you sure?"
 msgstr ""
+"Die Einstellung der angezeigten Widgets wird für den Nutzer zurückgesetzt. "
+"Fortfahren?"
 
 msgid ""
 "The quick and easy way to provide technical customer service while on the "
@@ -4513,7 +4520,7 @@ msgid "Today"
 msgstr "Heute"
 
 msgid "Token URL"
-msgstr ""
+msgstr "Token URL"
 
 msgid "to version"
 msgstr "zur Version"
@@ -4522,10 +4529,10 @@ msgid "to Version"
 msgstr "zur Version"
 
 msgid "Translatable"
-msgstr ""
+msgstr "Übersetzbar"
 
 msgid "Translatable Title"
-msgstr ""
+msgstr "Übersetzbarer Titel"
 
 msgid "Translation"
 msgstr "Übersetzung"
@@ -4705,16 +4712,16 @@ msgid "Welcome to KIX 18"
 msgstr "Willkommen bei KIX 18"
 
 msgid "Widget Configuration"
-msgstr ""
+msgstr "Widget-Konfiguration"
 
 msgid "Wildcard Search"
 msgstr "Wildcard-Suche"
 
 msgid "within the last"
-msgstr ""
+msgstr "innerhalb der letzten"
 
 msgid "within the next"
-msgstr ""
+msgstr "innerhalb der nächsten"
 
 msgid "Work in Progress"
 msgstr "In Bearbeitung (WIP)"
