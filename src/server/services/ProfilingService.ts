@@ -7,6 +7,7 @@
  * --
  */
 
+// eslint-disable-next-line max-classes-per-file
 import { ConfigurationService } from './ConfigurationService';
 import { LoggingService } from './LoggingService';
 import { IServerConfiguration } from '../model/IServerConfiguration';
@@ -45,7 +46,7 @@ export class ProfilingService {
             return null;  // invalid task ID
         }
 
-        let counter = this.messageCounter.get(message) | 0;
+        let counter = this.messageCounter.get(message) || 0;
         const task = new ProfileTask(category, message, counter, inputData);
         this.tasks.set(task.id, task);
         this.messageCounter.set(message, ++counter);
@@ -69,25 +70,27 @@ export class ProfilingService {
 
         // get given task object and stop profiling
         const task: ProfileTask = this.tasks.get(profileTaskId);
-        task.stop(outputData);
-        this.tasks.delete(profileTaskId);
+        if (task) {
+            task.stop(outputData);
+            this.tasks.delete(profileTaskId);
 
-        LoggingService.getInstance().debug(
-            profileTaskId
-            + '\tStop'
-            + '\t' + task.duration + ' ms'
-            + '\t' + task.outputDataSize + ' bytes'
-        );
+            LoggingService.getInstance().debug(
+                profileTaskId
+                + '\tStop'
+                + '\t' + task.duration + ' ms'
+                + '\t' + task.outputDataSize + ' bytes'
+            );
+        }
     }
 }
 
-// tslint:disable-next-line:max-classes-per-file
+// eslint-disable-next-line max-classes-per-file
 class ProfileTask {
 
     public id: string = IdService.generateDateBasedId();
     public startTime: number;
-    public endTime: number;
-    public duration: number;
+    public endTime?: number;
+    public duration?: number;
     public inputDataSize: number = 0;
     public outputDataSize: number = 0;
 

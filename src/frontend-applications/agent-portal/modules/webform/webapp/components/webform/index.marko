@@ -100,12 +100,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             ? input.translations["Translatable#Cancel"]
                             : "Cancel"
                     )>
-                    <${input.webform.useKIXCSS ? "span" : ""} class="kix-form-cancel-button-icon"/>
-                    <${input.webform.useKIXCSS ? "span" : ""}>
-                        ${input.translations["Translatable#Cancel"]
-                        ? input.translations["Translatable#Cancel"]
-                        : "Cancel"}
-                    </>
+                    <if(input.webform.useKIXCSS)>
+                        <span class="kix-form-cancel-button-icon"/>
+                    </if>
+                    <if(input.webform.useKIXCSS)>
+                        <span>
+                            ${input.translations["Translatable#Cancel"]
+                            ? input.translations["Translatable#Cancel"]
+                            : "Cancel"}
+                        </span>
+                    </if>
                 </button>
                 <button.kix-button
                     id=("kix-form-submit-button-" + input.webform.ObjectId)
@@ -114,12 +118,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             ? input.translations[input.webform.saveLabel]
                             : input.webform.saveLabel
                     )>
-                    <${input.webform.useKIXCSS ? "span" : ""} class="kix-form-submit-button-icon"/>
-                    <${input.webform.useKIXCSS ? "span" : ""}>
-                        ${input.translations[input.webform.saveLabel]
-                        ? input.translations[input.webform.saveLabel]
-                        : input.webform.saveLabel}
-                    </>
+                    <if(input.webform.useKIXCSS)>
+                        <spanclass default="kix-form-submit-button-icon"/>
+                    </if>
+                    <if(input.webform.useKIXCSS)>
+                        <span>
+                            ${input.translations[input.webform.saveLabel]
+                            ? input.translations[input.webform.saveLabel]
+                            : input.webform.saveLabel}
+                        </span>
+                    </if>
                 </button>
             </div>
         </div>

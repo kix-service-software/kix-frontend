@@ -22,7 +22,7 @@ import { SearchService } from '../../../../search/webapp/core';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
-class Component extends FormInputComponent<{}, ComponentState> {
+class Component extends FormInputComponent<any, ComponentState> {
 
     private listenerId: string;
     private formTimeout: any;

@@ -13,13 +13,14 @@ import { TranslationService } from '../../../../modules/translation/webapp/core/
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { TextModule } from '../../model/TextModule';
 import { TextModuleProperty } from '../../model/TextModuleProperty';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class TextModuleLabelProvider extends LabelProvider<TextModule> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TEXT_MODULE;
 
-    public isLabelProviderFor(textModule: TextModule): boolean {
-        return textModule instanceof TextModule;
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object instanceof TextModule || object.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

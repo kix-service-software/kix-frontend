@@ -258,6 +258,7 @@ class Component {
                 if (!returnValue || typeof returnValue === 'number') {
                     returnValue = 200;
                 }
+                break;
             default:
         }
         return returnValue;

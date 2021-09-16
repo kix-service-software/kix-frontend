@@ -27,15 +27,46 @@ import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptio
 import { UserProperty } from '../../../user/model/UserProperty';
 import { StateType } from '../../model/StateType';
 import { QueueProperty } from '../../model/QueueProperty';
-import { ArticleProperty } from '../../model/ArticleProperty';
 import { AgentService } from '../../../user/webapp/core/AgentService';
+import { Article } from '../../model/Article';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class TicketLabelProvider extends LabelProvider<Ticket> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET;
 
-    public isLabelProviderFor(ticket: Ticket): boolean {
-        return ticket instanceof Ticket;
+    public isLabelProviderFor(object: Ticket | KIXObject): boolean {
+        return object instanceof Ticket || object.KIXObjectType === KIXObjectType.TICKET;
+    }
+
+    public getSupportedProperties(): string[] {
+        return [
+            TicketProperty.CREATED_QUEUE_ID,
+            TicketProperty.QUEUE_ID,
+            TicketProperty.CREATED_STATE_ID,
+            TicketProperty.STATE_ID,
+            TicketProperty.STATE_TYPE,
+            TicketProperty.STATE_TYPE_ID,
+            TicketProperty.CREATED_PRIORITY_ID,
+            TicketProperty.PRIORITY_ID,
+            TicketProperty.CREATED_TYPE_ID,
+            TicketProperty.TYPE_ID,
+            TicketProperty.ORGANISATION_ID,
+            TicketProperty.CONTACT_ID,
+            TicketProperty.CREATED,
+            TicketProperty.CHANGED,
+            TicketProperty.PENDING_TIME,
+            TicketProperty.CREATED_TIME_UNIX,
+            TicketProperty.LOCK_ID,
+            TicketProperty.CREATED_USER_ID,
+            TicketProperty.OWNER_ID,
+            TicketProperty.RESPONSIBLE_ID,
+            TicketProperty.WATCHERS,
+            TicketProperty.AGE,
+            TicketProperty.UNSEEN,
+            TicketProperty.ARCHIVE_FLAG,
+            'Queue.FollowUpID'
+        ];
     }
 
     public async getPropertyValueDisplayText(
@@ -176,7 +207,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 );
                 break;
             default:
-                if (this.isArticleProperty(property)) {
+                if (Article.isArticleProperty(property)) {
                     displayValue = await LabelService.getInstance().getPropertyValueDisplayText(
                         KIXObjectType.ARTICLE, property, value, false
                     );
@@ -300,7 +331,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 displayValue = 'Translatable#Watch User';
                 break;
             default:
-                if (this.isArticleProperty(property)) {
+                if (Article.isArticleProperty(property)) {
                     displayValue = await LabelService.getInstance().getPropertyText(
                         property, KIXObjectType.ARTICLE, null, false
                     );
@@ -318,11 +349,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    private isArticleProperty(property: string): boolean {
-        const articleProperty = Object.keys(ArticleProperty).map((p) => ArticleProperty[p]);
-        return articleProperty.some((p) => p === property);
-    }
-
     public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
         return;
     }
@@ -331,9 +357,10 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
         ticket: Ticket, property: string, defaultValue?: string, translatable: boolean = true
     ): Promise<string> {
         let displayValue = typeof defaultValue !== 'undefined' && defaultValue !== null
-            ? defaultValue : ticket[property];
+            ? defaultValue
+            : ticket[property];
 
-        const existingValue = ticket.displayValues.find((dv) => dv[0] === property);
+        const existingValue = ticket.displayValues?.find((dv) => dv[0] === property);
         if (existingValue) {
             displayValue = existingValue[1];
         } else {
@@ -605,7 +632,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.ARTICLES:
             case TicketProperty.HISTORY:
             case TicketProperty.WATCHERS:
-                return ticket.hasOwnProperty(property);
+                return Object.prototype.hasOwnProperty.call(ticket, property);
             default:
                 return true;
         }

@@ -31,7 +31,8 @@ import { ISocketResponse } from '../../modules/base-components/webapp/core/ISock
 import { ISocketRequest } from '../../modules/base-components/webapp/core/ISocketRequest';
 import { LoggingService } from '../../../../server/services/LoggingService';
 
-import cookie = require('cookie');
+import * as cookie from 'cookie';
+import { Socket } from 'socket.io';
 
 export class ContextNamespace extends SocketNameSpace {
 
@@ -54,7 +55,7 @@ export class ContextNamespace extends SocketNameSpace {
         return 'context';
     }
 
-    protected registerEvents(client: SocketIO.Socket): void {
+    protected registerEvents(client: Socket): void {
         this.registerEventHandler(
             client, ContextEvent.LOAD_CONTEXT_CONFIGURATION, this.loadContextConfiguration.bind(this)
         );
@@ -84,6 +85,7 @@ export class ContextNamespace extends SocketNameSpace {
 
     public async rebuildConfigCache(): Promise<void> {
         if (!this.rebuildPromise) {
+            // eslint-disable-next-line no-async-promise-executor
             this.rebuildPromise = new Promise<void>(async (resolve, reject) => {
                 await CacheService.getInstance().deleteKeys('ContextConfiguration', true);
 
@@ -127,7 +129,7 @@ export class ContextNamespace extends SocketNameSpace {
     }
 
     protected async loadContextConfiguration(
-        data: LoadContextConfigurationRequest, client: SocketIO.Socket)
+        data: LoadContextConfigurationRequest, client: Socket)
         : Promise<SocketResponse<LoadContextConfigurationResponse<any> | SocketErrorResponse>> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';

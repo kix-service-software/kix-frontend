@@ -61,7 +61,7 @@ class Component {
             additionalInformationChanged: () => { return; }
         });
 
-        await this.initWidget(settings);
+        this.initWidget(settings);
     }
 
     public onDestroy() {

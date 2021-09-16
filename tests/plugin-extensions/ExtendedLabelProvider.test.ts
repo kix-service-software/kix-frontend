@@ -29,8 +29,9 @@ describe('ExtendedLabelProvider', () => {
     });
 
     after(() => {
-        LabelService.getInstance()['labelProviders'] = []
-    })
+        LabelService.getInstance()['objectLabelProvider'] = []
+        LabelService.getInstance()['propertiesLabelProvider'].clear();
+    });
 
     describe('Overwrite Object Icon', () => {
         it('Should return overwritten icon for object Ticket from getObjectIcon()', async () => {

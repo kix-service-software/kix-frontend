@@ -32,14 +32,13 @@ export class GeneralCatalogTableContentProvider extends TableContentProvider<Gen
 
     public async loadData(): Promise<Array<RowObject<GeneralCatalogItem>>> {
 
-        let loadingOptions;
         const definitionFilter = [
             new FilterCriteria(
                 GeneralCatalogItemProperty.CLASS, SearchOperator.NOT_EQUALS,
                 FilterDataType.STRING, FilterType.AND, 'ITSM::ConfigItem::Class'
             ),
         ];
-        loadingOptions = new KIXObjectLoadingOptions(definitionFilter);
+        const loadingOptions = new KIXObjectLoadingOptions(definitionFilter);
 
         const sysConfigOptions = await KIXObjectService.loadObjects<GeneralCatalogItem>(
             KIXObjectType.GENERAL_CATALOG_ITEM, null, this.loadingOptions ? this.loadingOptions : loadingOptions

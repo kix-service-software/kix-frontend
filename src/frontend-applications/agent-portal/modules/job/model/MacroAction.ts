@@ -22,9 +22,9 @@ export class MacroAction extends KIXObject {
 
     public MacroID: number;
 
-    public Parameters: {};
+    public Parameters: any;
 
-    public ResultVariables: {};
+    public ResultVariables: any;
 
     public number: number;
 

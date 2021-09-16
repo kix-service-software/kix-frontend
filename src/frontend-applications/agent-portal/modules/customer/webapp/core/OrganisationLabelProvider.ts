@@ -14,13 +14,14 @@ import { OrganisationProperty } from '../../model/OrganisationProperty';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class OrganisationLabelProvider extends LabelProvider<Organisation> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.ORGANISATION;
 
-    public isLabelProviderFor(object: Organisation): boolean {
-        return object instanceof Organisation;
+    public isLabelProviderFor(object: Organisation | KIXObject): boolean {
+        return object instanceof Organisation || object.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

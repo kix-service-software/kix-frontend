@@ -54,7 +54,7 @@ export class ExtendedJobFormManager {
     }
 
     public async postPrepareOptionValue(
-        actionType: string, optionName: string, value: any, parameter: {},
+        actionType: string, optionName: string, value: any, parameter: any,
         field: FormFieldConfiguration, formInstance: FormInstance
     ): Promise<any> {
         return;
@@ -81,7 +81,7 @@ export class ExtendedJobFormManager {
         );
     }
 
-    protected valueAsArray(parameter: {}, optionName: string, value: any): any {
+    protected valueAsArray(parameter: any, optionName: string, value: any): any {
         if (!parameter[optionName]) {
             return [value];
         } else if (Array.isArray(parameter[optionName])) {

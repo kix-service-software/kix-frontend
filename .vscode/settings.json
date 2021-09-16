@@ -8,12 +8,13 @@
     "**/.DS_Store": true,
     "node_modules": true,
     ".cache": true,
-    "dist": true
+    "dist": true,
+    ".nyc_output": true,
+    "allure-results": true,
+    "coverage": true
   },
   "editor.tabSize": 4,
   "editor.formatOnSave": true,
   "less.lint.important": "warning",
-  "less.lint.float": "warning",
-  "marko.beautify.maxLen": 120,
-  "marko.beautify.indent": "    "
+  "less.lint.float": "warning"
 }

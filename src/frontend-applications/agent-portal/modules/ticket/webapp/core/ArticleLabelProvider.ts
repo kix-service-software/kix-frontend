@@ -19,6 +19,7 @@ import { KIXObjectService } from '../../../../modules/base-components/webapp/cor
 import { Channel } from '../../model/Channel';
 import { SenderType } from '../../model/SenderType';
 import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 
 export class ArticleLabelProvider extends LabelProvider<Article> {
@@ -195,7 +196,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                 }
                 break;
             case ArticleProperty.CUSTOMER_VISIBLE:
-                displayValue = Boolean(displayValue) ? 'Translatable#Yes' : 'Translatable#No';
+                displayValue = displayValue ? 'Translatable#Yes' : 'Translatable#No';
                 break;
             default:
                 displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
@@ -226,8 +227,8 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
         return classes;
     }
 
-    public isLabelProviderFor(article: Article): boolean {
-        return article instanceof Article;
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object instanceof Article || object.KIXObjectType === this.kixObjectType;
     }
 
     public async getObjectText(article: Article): Promise<string> {

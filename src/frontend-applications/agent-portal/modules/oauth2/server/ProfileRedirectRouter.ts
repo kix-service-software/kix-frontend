@@ -57,7 +57,7 @@ export class ProfileRedirectRouter extends KIXRouter {
     private async handleGetRequest(req: Request, res: Response): Promise<void> {
         if (req?.query) {
             if (req.query.state && req.query.code) {
-                const error = await this.sendAuthCode(req.query.state, req.query.code);
+                const error = await this.sendAuthCode(req?.query?.state?.toString(), req?.query?.code?.toString());
                 const template = require('../webapp/components/redirect-result');
                 if (error) {
                     const htmlString = template.renderToString({ failed: true, message: error });

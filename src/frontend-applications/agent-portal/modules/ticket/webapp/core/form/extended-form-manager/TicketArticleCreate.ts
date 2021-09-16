@@ -122,7 +122,7 @@ export class TicketArticleCreate extends ExtendedJobFormManager {
     }
 
     public async postPrepareOptionValue(
-        actionType: string, optionName: string, value: any, parameter: {}
+        actionType: string, optionName: string, value: any, parameter: any
     ): Promise<any> {
         if ((actionType === 'ArticleCreate' || actionType === 'TicketCreate')) {
             if (optionName === 'CustomerVisible') {

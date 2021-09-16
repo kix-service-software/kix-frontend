@@ -78,14 +78,8 @@ class Component extends FormInputComponent<string[], ComponentState> {
                 let node: TreeNode;
                 if (contacts && !!contacts.length) {
                     node = await this.createTreeNode(contacts[0]);
-                } else {
-                    if (
-                        !systemAddresses
-                        || !!!systemAddresses.length
-                        || !systemAddresses.map((sa) => sa.Name).some((f) => f === plainMail)
-                    ) {
-                        node = new TreeNode(plainMail, email);
-                    }
+                } else if (!systemAddresses?.map((sa) => sa.Name).some((f) => f === plainMail)) {
+                    node = new TreeNode(plainMail, email);
                 }
                 node.selected = true;
                 nodes.push(node);

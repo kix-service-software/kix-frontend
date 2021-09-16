@@ -74,7 +74,6 @@ class Component {
         }
 
         if (this.state.widgetConfiguration) {
-            this.state.show = true;
             const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
 
             this.state.showFilter = typeof settings.showFilter !== 'undefined' ? settings.showFilter : true;

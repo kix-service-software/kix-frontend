@@ -20,6 +20,7 @@ import { Macro } from '../../model/Macro';
 import { LabelValueGroup } from '../../../../model/LabelValueGroup';
 import { LabelValueGroupValue } from '../../../../model/LabelValueGroupValue';
 import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class MacroActionLabelProvider extends LabelProvider {
 
@@ -28,8 +29,8 @@ export class MacroActionLabelProvider extends LabelProvider {
         this.kixObjectType = KIXObjectType.MACRO_ACTION;
     }
 
-    public isLabelProviderFor(action: MacroAction): boolean {
-        return action instanceof MacroAction;
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object instanceof MacroAction || object.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

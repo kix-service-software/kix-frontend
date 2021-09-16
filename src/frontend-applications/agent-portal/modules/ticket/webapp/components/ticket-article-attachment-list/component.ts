@@ -44,8 +44,9 @@ class TicketArticleAttchementListComponent {
                         resolve(new DisplayImageDescription(
                             attachment.ID, content, attachment.Comment ? attachment.Comment : attachment.Filename
                         ));
+                    } else {
+                        resolve(null);
                     }
-                    resolve();
                 }));
             }
         }

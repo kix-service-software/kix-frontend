@@ -22,8 +22,9 @@ import { User } from '../model/User';
 import { GetCurrentUserResponse } from '../../../modules/base-components/webapp/core/GetCurrentUserResponse';
 import { PersonalSettingsService } from './PersonalSettingsService';
 
-import cookie = require('cookie');
+import cookie from 'cookie';
 import { AgentEvent } from '../webapp/core/AgentEvent';
+import { Socket } from 'socket.io';
 
 export class AgentNamespace extends SocketNameSpace {
 
@@ -44,13 +45,13 @@ export class AgentNamespace extends SocketNameSpace {
         return 'agent';
     }
 
-    protected registerEvents(client: SocketIO.Socket): void {
+    protected registerEvents(client: Socket): void {
         this.registerEventHandler(client, AgentEvent.GET_PERSONAL_SETTINGS, this.getPersonalSettings.bind(this));
         this.registerEventHandler(client, AgentEvent.SET_PREFERENCES, this.setPreferences.bind(this));
         this.registerEventHandler(client, AgentEvent.GET_CURRENT_USER, this.getCurrentUser.bind(this));
     }
 
-    private async getPersonalSettings(data: ISocketRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+    private async getPersonalSettings(data: ISocketRequest, client: Socket): Promise<SocketResponse> {
         const response = await PersonalSettingsService.getInstance().getPersonalSettings()
             .then((settings: PersonalSetting[]) =>
                 new SocketResponse(
@@ -62,12 +63,12 @@ export class AgentNamespace extends SocketNameSpace {
         return response;
     }
 
-    private async setPreferences(data: SetPreferencesRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+    private async setPreferences(data: SetPreferencesRequest, client: Socket): Promise<SocketResponse> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';
 
-        const user: User = await UserService.getInstance().getUserByToken(token)
-            .catch(() => null);
+        const user = await UserService.getInstance().getUserByToken(token)
+            .catch((): User => null);
 
         if (user) {
             const response = await UserService.getInstance().setPreferences(
@@ -81,7 +82,7 @@ export class AgentNamespace extends SocketNameSpace {
         return new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, 'No user available'));
     }
 
-    private async getCurrentUser(data: GetCurrentUserRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+    private async getCurrentUser(data: GetCurrentUserRequest, client: Socket): Promise<SocketResponse> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';
 

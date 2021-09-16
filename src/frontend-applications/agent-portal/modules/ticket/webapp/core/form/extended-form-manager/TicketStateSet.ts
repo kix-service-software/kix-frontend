@@ -63,7 +63,7 @@ export class TicketStateSet extends ExtendedJobFormManager {
     }
 
     public async postPrepareOptionValue(
-        actionType: string, optionName: string, value: any, parameter: {}
+        actionType: string, optionName: string, value: any, parameter: any
     ): Promise<any> {
         if (actionType === 'StateSet') {
             if (optionName === 'TargetTime') {

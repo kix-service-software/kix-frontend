@@ -40,17 +40,10 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     private async init(table: Table): Promise<void> {
-        this.state.prepared = false;
         this.eventSubscriberId = table.getTableId();
 
-        await table.initialize();
-
-        setTimeout(() => {
-            this.state.prepared = true;
-            setTimeout(async () => {
-                this.setTableHeight();
-            }, 50);
-        }, 20);
+        table.initialize();
+        this.setTableHeight();
     }
 
     public async onMount(): Promise<void> {

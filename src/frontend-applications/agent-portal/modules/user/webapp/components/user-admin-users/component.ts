@@ -7,6 +7,8 @@
  * --
  */
 
+/* eslint-disable max-classes-per-file */
+
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
@@ -110,7 +112,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
 }
 
-// tslint:disable-next-line:max-classes-per-file
 class UserContentProvider extends TableContentProvider {
 
     public constructor(private component: Component) {

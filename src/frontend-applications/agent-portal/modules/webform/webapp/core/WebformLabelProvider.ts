@@ -25,6 +25,7 @@ import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class WebformLabelProvider extends LabelProvider {
 
@@ -33,8 +34,8 @@ export class WebformLabelProvider extends LabelProvider {
         this.kixObjectType = KIXObjectType.WEBFORM;
     }
 
-    public isLabelProviderFor(object: Webform): boolean {
-        return object instanceof Webform;
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object instanceof Webform || object.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyValueDisplayText(

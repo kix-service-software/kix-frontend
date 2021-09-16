@@ -27,7 +27,7 @@ import { Error } from '../../../../../server/model/Error';
 import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
 import { TranslationAPIService } from '../../translation/server/TranslationService';
 
-import addrparser = require('address-rfc2822');
+import addrparser from 'address-rfc2822';
 import { SysConfigAccessLevel } from '../../sysconfig/model/SysConfigAccessLevel';
 
 export class WebformService {

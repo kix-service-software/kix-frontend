@@ -76,8 +76,6 @@ export class SearchService {
     public async executeSearch<T extends KIXObject = KIXObject>(
         formInstance: FormInstance, excludeObjects: KIXObject[] = []
     ): Promise<T[]> {
-        let objects;
-
         const formObjectType = formInstance.getObjectType();
         const searchDefinition = this.getSearchDefinition(formObjectType);
         const formFieldValues = formInstance.getAllFormFieldValues();
@@ -121,8 +119,7 @@ export class SearchService {
         });
 
         const loadingOptions = searchDefinition.getLoadingOptions(criteria, null);
-        objects = await KIXObjectService.loadObjects(formObjectType, null, loadingOptions, null, false);
-
+        const objects = await KIXObjectService.loadObjects(formObjectType, null, loadingOptions, null, false);
         return (objects as any);
     }
 

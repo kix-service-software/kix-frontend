@@ -58,7 +58,7 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                     case ArticleProperty.CC:
                     case ArticleProperty.BCC:
                         result = await LabelService.getInstance().getDisplayText(
-                            article, attribute, undefined, false, false
+                            article, attribute, undefined, false
                         );
                         break;
                     case KIXObjectProperty.CREATE_TIME:

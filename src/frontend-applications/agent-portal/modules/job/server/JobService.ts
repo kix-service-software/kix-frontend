@@ -202,7 +202,7 @@ export class JobAPIService extends KIXObjectAPIService {
             token, clientRequestId, parameter
         ).catch((error) => { throw new Error(error.Code, error.Message); });
 
-        if (!!execPlanIds.length) {
+        if (execPlanIds.length) {
             jobParameter.push([JobProperty.EXEC_PLAN_IDS, execPlanIds]);
         }
         if (Array.isArray(macroIds)) {
@@ -305,7 +305,7 @@ export class JobAPIService extends KIXObjectAPIService {
             token, clientRequestId,
             execPlanEvents === null ? [] : execPlanEvents,
             jobName ? jobName : job ? Job.name : '',
-            !!eventExecPlans.length ? eventExecPlans[0].ID : undefined
+            eventExecPlans.length ? eventExecPlans[0].ID : undefined
         ).then((response) => {
             if (response) { execPlanIds.push(response); }
         }).catch((error) => {
@@ -318,7 +318,7 @@ export class JobAPIService extends KIXObjectAPIService {
             execPlanWeekdays === null ? [] : execPlanWeekdays,
             execPlanTimes === null ? [] : execPlanTimes,
             jobName ? jobName : job ? Job.name : '',
-            !!timeExecPlans.length ? timeExecPlans[0].ID : undefined
+            timeExecPlans.length ? timeExecPlans[0].ID : undefined
         ).then((response) => {
             if (response) { execPlanIds.push(response); }
         }).catch((error) => {

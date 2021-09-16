@@ -61,7 +61,8 @@ describe('Placeholder replacement for queue', () => {
 
     after(() => {
         KIXObjectService.loadObjects = orgLoadFuntion;
-        LabelService.getInstance()['labelProviders'] = [];
+        LabelService.getInstance()['objectLabelProvider'] = []
+        LabelService.getInstance()['propertiesLabelProvider'].clear();;
         (TranslationService.getInstance() as any).translations = null;
     });
 

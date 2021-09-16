@@ -16,14 +16,15 @@
  * --
  */
 
-import https = require('https');
-import http = require('http');
+import https from 'https';
+import http from 'http';
 import { NotificationEvent } from '../../model/NotificationEvent';
 import { NotificationNamespace } from '../socket-namespaces/NotificationNamespace';
 import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
 import { PluginService } from '../../../../server/services/PluginService';
 import { ISocketNamespaceRegistryExtension } from '../extensions/ISocketNamespaceRegistryExtension';
 import { LoggingService } from '../../../../server/services/LoggingService';
+import { Server } from 'socket.io';
 
 export class SocketService {
 
@@ -38,7 +39,7 @@ export class SocketService {
 
     private constructor() { }
 
-    private socketIO: SocketIO.Server;
+    private socketIO: Server;
 
     public async initialize(server: https.Server | http.Server): Promise<void> {
         this.socketIO = require('socket.io')(server);

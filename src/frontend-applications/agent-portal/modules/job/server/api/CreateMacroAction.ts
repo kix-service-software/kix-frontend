@@ -14,7 +14,7 @@ import { MacroActionProperty } from '../../model/MacroActionProperty';
 export class CreateMacroAction extends RequestObject {
 
     public constructor(
-        type: string, parameters: {}, resultVariables: {},
+        type: string, parameters: any, resultVariables: any,
         validId: number, comment?: string
     ) {
         super();

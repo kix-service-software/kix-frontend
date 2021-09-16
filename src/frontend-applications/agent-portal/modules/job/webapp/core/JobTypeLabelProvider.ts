@@ -9,17 +9,16 @@
 
 import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { JobProperty } from '../../model/JobProperty';
-import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { JobType } from '../../model/JobType';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class JobTypeLabelProvider extends LabelProvider {
 
     public kixObjectType: KIXObjectType = KIXObjectType.JOB_TYPE;
 
-    public isLabelProviderFor(jobType: JobType): boolean {
-        return jobType instanceof JobType;
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object instanceof JobType || object.KIXObjectType === this.kixObjectType;
     }
 
     public async getObjectText(

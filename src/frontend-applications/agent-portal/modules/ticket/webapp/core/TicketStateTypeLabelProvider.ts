@@ -13,14 +13,15 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TicketStateProperty } from '../../model/TicketStateProperty';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 
 export class TicketStateTypeLabelProvider extends LabelProvider<TicketStateType> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET_STATE_TYPE;
 
-    public isLabelProviderFor(ticketStateType: TicketStateType): boolean {
-        return ticketStateType instanceof TicketStateType;
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object instanceof TicketStateType || object.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

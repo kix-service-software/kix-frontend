@@ -33,6 +33,7 @@ import { ExtendedKIXObjectAPIService } from './ExtendedKIXObjectAPIService';
 import { CacheService } from './cache';
 import { SearchProperty } from '../../modules/search/model/SearchProperty';
 import { SearchOperator } from '../../modules/search/model/SearchOperator';
+import { KIXObjectInitializer } from './KIXObjectInitializer';
 
 export abstract class KIXObjectAPIService implements IKIXObjectService {
 
@@ -62,10 +63,8 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     protected async load<O extends KIXObject | string | number = any>(
         token: string, objectType: KIXObjectType | string, baseUri: string, loadingOptions: KIXObjectLoadingOptions,
         objectIds: Array<number | string>, responseProperty: string,
-        // tslint:disable-next-line: ban-types
         objectConstructor?: new (object?: KIXObject) => O,
         useCache?: boolean
-        // tslint:disable-next-line: ban-types
     ): Promise<O[]> {
         const query = this.prepareQuery(loadingOptions, objectType);
         if (loadingOptions && loadingOptions.filter && loadingOptions.filter.length) {
@@ -101,10 +100,10 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             ? responseObject
             : [responseObject];
 
-        objects = objects.filter((o) => o !== null);
-
-        const result = objectConstructor ? objects.map((o) => new objectConstructor(o as KIXObject)) : objects;
-        return result as O[];
+        objects = objects.filter((o) => o !== null && typeof o !== 'undefined');
+        objects = objectConstructor ? objects.map((o) => new objectConstructor(o as KIXObject)) : objects;
+        await KIXObjectInitializer.initDisplayValuesAndIcons(token, objects as KIXObject[], this);
+        return objects;
     }
 
     protected async executeUpdateOrCreateRequest<R = number>(
@@ -382,6 +381,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         criteria = criteria.filter((c) => c?.property);
 
         const nonDynamicFieldCriteria = criteria.filter(
+            // eslint-disable-next-line no-useless-escape
             (c) => !c.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
         );
 
@@ -417,6 +417,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             }
         }
         const dynamicFieldCriteria = criteria.filter(
+            // eslint-disable-next-line no-useless-escape
             (c) => c.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
         );
 
@@ -570,5 +571,15 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
     public static isDynamicFieldProperty(property: string): boolean {
         return Boolean(property.match(/^DynamicFields?\..+/));
+    }
+
+    public async getPropertyValue(token: string, object: KIXObject, property: string): Promise<string> {
+        return null;
+    }
+
+    public async getPropertyIcons(
+        token: string, object: KIXObject, property: string
+    ): Promise<Array<ObjectIcon | string>> {
+        return null;
     }
 }

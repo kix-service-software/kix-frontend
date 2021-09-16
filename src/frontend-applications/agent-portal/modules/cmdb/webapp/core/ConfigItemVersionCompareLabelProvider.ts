@@ -11,10 +11,15 @@ import { LabelProvider } from '../../../../modules/base-components/webapp/core/L
 import { Version } from '../../model/Version';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class ConfigItemVersionCompareLabelProvider extends LabelProvider<Version> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_VERSION_COMPARE;
+
+    public isLabelProviderFor(object: Version | KIXObject): boolean {
+        return object instanceof Version || object.KIXObjectType === this.kixObjectType;
+    }
 
     public async getPropertyValueDisplayText(
         property: string, value: string | number, translatable: boolean = true
@@ -52,13 +57,6 @@ export class ConfigItemVersionCompareLabelProvider extends LabelProvider<Version
     ): Promise<string> {
         let displayValue = property.toString();
 
-        switch (property) {
-            case 'CONFIG_ITEM_ATTRIBUTE':
-                displayValue = displayValue;
-                break;
-            default:
-        }
-
         if (displayValue) {
             displayValue = await TranslationService.translate(
                 displayValue.toString(), undefined, undefined, !translatable
@@ -66,10 +64,6 @@ export class ConfigItemVersionCompareLabelProvider extends LabelProvider<Version
         }
 
         return displayValue;
-    }
-
-    public isLabelProviderFor(object: Version): boolean {
-        return object instanceof Version;
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {

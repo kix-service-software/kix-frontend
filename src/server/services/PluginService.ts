@@ -7,11 +7,11 @@
  * --
  */
 
-import Plugins = require('js-plugins');
+import Plugins from 'js-plugins';
 import { LoggingService } from './LoggingService';
 
-import fs = require('fs');
-import * as path from 'path';
+import fs from 'fs';
+import path from 'path';
 import { ReleaseInfoUtil } from '../ReleaseInfoUtil';
 import { ReleaseInfo } from '../../frontend-applications/agent-portal/model/ReleaseInfo';
 

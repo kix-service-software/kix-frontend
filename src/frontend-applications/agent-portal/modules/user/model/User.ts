@@ -23,6 +23,10 @@ export class User extends KIXObject {
     public UserLogin: string;
     public UserComment: string;
 
+    public UserFirstname: string;
+    public UserLastname: string;
+    public UserFullname: string;
+
     public Contact: Contact;
 
     public IsAgent: number;
@@ -46,6 +50,9 @@ export class User extends KIXObject {
             this.IsAgent = user.IsAgent;
             this.IsCustomer = user.IsCustomer;
             this.Contact = user.Contact ? new Contact(user.Contact) : null;
+            this.UserFirstname = user.UserFirstname;
+            this.UserLastname = user.UserLastname;
+            this.UserFullname = user.UserFullname;
 
             if (this.Tickets) {
                 this.Tickets.Owned = this.Tickets.Owned.map((t) => Number(t));

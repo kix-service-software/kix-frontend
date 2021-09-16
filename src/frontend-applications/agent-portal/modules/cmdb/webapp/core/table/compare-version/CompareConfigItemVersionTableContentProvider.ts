@@ -49,7 +49,7 @@ export class CompareConfigItemVersionTableContentProvider extends TableContentPr
         const checkVersions = [...versions].sort((a, b) => a.VersionID - b.VersionID);
 
         let attributes;
-        if (!!checkVersions.length) {
+        if (checkVersions.length) {
             attributes = checkVersions[0].Definition.Definition.map((d) => new AttributeDefinition(d));
             for (let i = 1; i < checkVersions.length; i++) {
                 const definition = checkVersions[i].Definition;

@@ -15,6 +15,7 @@ import { TranslationService } from '../../../../modules/translation/webapp/core/
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { DispatchingType } from '../../model/DispatchingType';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
 
@@ -24,8 +25,8 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
         return objectType === this.kixObjectType;
     }
 
-    public isLabelProviderFor(object: MailAccount): boolean {
-        return object instanceof MailAccount;
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object instanceof MailAccount || object.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
@@ -111,7 +112,7 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
 
         switch (property) {
             case MailAccountProperty.TRUSTED:
-                displayValue = Boolean(value) ? 'Translatable#Yes' : 'Translatable#No';
+                displayValue = value ? 'Translatable#Yes' : 'Translatable#No';
                 break;
             case MailAccountProperty.OAUTH2_PROFILEID:
                 if (value) {

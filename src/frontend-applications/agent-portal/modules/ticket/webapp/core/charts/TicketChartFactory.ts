@@ -55,10 +55,18 @@ export class TicketChartFactory {
 
         const ids = tickets.map((t) => t[property]);
 
+        const labels: Map<string, string> = new Map();
+
         for (const id of ids) {
-            const label = await LabelService.getInstance().getPropertyValueDisplayText(
-                KIXObjectType.TICKET, property, id
-            );
+            if (!labels.has(id)) {
+                const label = await LabelService.getInstance().getPropertyValueDisplayText(
+                    KIXObjectType.TICKET, property, id
+                );
+                labels.set(id, label);
+            }
+
+            const label = labels.get(id);
+
             if (!data.has(label)) {
                 data.set(label, 0);
             }

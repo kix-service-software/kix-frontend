@@ -13,13 +13,14 @@ import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/Da
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { LogFile } from '../../model/LogFile';
 import { LogFileProperty } from '../../model/LogFileProperty';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class LogFileLabelProvider extends LabelProvider {
 
     public kixObjectType: KIXObjectType | string = KIXObjectType.LOG_FILE;
 
-    public isLabelProviderFor(logFile: LogFile): boolean {
-        return logFile instanceof LogFile;
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object instanceof LogFile || object.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

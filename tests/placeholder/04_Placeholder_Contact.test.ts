@@ -43,7 +43,8 @@ describe('Placeholder replacement for contact', () => {
     });
 
     after(() => {
-        LabelService.getInstance()['labelProviders'] = [];
+        LabelService.getInstance()['objectLabelProvider'] = []
+        LabelService.getInstance()['propertiesLabelProvider'].clear();;
         (TranslationService.getInstance() as any).translations = null;
     });
 

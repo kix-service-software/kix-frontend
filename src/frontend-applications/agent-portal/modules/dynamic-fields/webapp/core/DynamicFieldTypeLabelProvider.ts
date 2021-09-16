@@ -13,13 +13,14 @@ import { TranslationService } from '../../../../modules/translation/webapp/core/
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { DynamicFieldType } from '../../model/DynamicFieldType';
 import { DynamicFieldTypeProperty } from '../../model/DynamicFieldTypeProperty';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class DynamicFieldTypeLabelProvider extends LabelProvider<DynamicFieldType> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.DYNAMIC_FIELD_TYPE;
 
-    public isLabelProviderFor(dynamicFieldType: DynamicFieldType): boolean {
-        return dynamicFieldType instanceof DynamicFieldType;
+    public isLabelProviderFor(object: DynamicFieldType | KIXObject): boolean {
+        return object instanceof DynamicFieldType || object.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

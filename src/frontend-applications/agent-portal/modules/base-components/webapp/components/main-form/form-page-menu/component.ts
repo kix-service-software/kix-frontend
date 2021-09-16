@@ -17,7 +17,9 @@ class Component {
 
     private state: ComponentState;
     private eventSubscriber: IEventSubscriber;
-    private keyUpEventFunction: () => {};
+    private keyUpEventFunction: () => {
+        // do nothing ...
+    };
 
     public onCreate(input: any): void {
         this.state = new ComponentState();

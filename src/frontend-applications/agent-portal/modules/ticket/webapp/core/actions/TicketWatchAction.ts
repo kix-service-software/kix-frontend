@@ -69,7 +69,7 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
             });
 
             const failIds = await KIXObjectService.deleteObject(KIXObjectType.WATCHER, [this.watcherId]);
-            if (!failIds || !!!failIds.length) {
+            if (!failIds || failIds.length === 0) {
                 successHint = 'Translatable#Ticket is no longer watched.';
             }
         } else {

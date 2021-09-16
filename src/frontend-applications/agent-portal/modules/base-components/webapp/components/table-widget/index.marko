@@ -6,42 +6,40 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<if(state.show)>
-    <if(!state.loading)>
-        <widget
-            instanceId=state.instanceId
-            title=state.title
-            actions=state.actions
-            icon=state.icon
-            contextType=component.contextType>
-            <@header-content>
-                <for|componentId| of=state.headerTitleComponents>
-                    <${component.getTemplate(componentId)}/>
-                </for>
-            </@header-content>
-            <@headerFilter>
-                <if(state.showFilter)>
-                    <filter
-                        filterCount=state.filterCount
-                        predefinedFilter=state.predefinedTableFilter
-                        predefinedFilterPlaceholder=state.filterPlaceholder
-                        disabled=state.isFiltering
-                        filterValue=state.filterValue
-                        on-filter("filter")
-                        key="table-widget-filter"/>
-                </if>
-                <if(input.filterActions)>
-                    <action-list list=input.filterActions displayText=false/>
-                </if>
-            </@headerFilter>
-            <@content>
-                <if(state.table)>
-                    <standard-table-NEW table=state.table key=state.table.getTableId()/>
-                </if>
-            </@content>
-        </widget>
-    </if>
-    <else>
-        <table-placeholder/>
-    </else>
+<if(!state.loading)>
+    <widget
+        instanceId=state.instanceId
+        title=state.title
+        actions=state.actions
+        icon=state.icon
+        contextType=component.contextType>
+        <@header-content>
+            <for|componentId| of=state.headerTitleComponents>
+                <${component.getTemplate(componentId)}/>
+            </for>
+        </@header-content>
+        <@headerFilter>
+            <if(state.showFilter)>
+                <filter
+                    filterCount=state.filterCount
+                    predefinedFilter=state.predefinedTableFilter
+                    predefinedFilterPlaceholder=state.filterPlaceholder
+                    disabled=state.isFiltering
+                    filterValue=state.filterValue
+                    on-filter("filter")
+                    key="table-widget-filter"/>
+            </if>
+            <if(input.filterActions)>
+                <action-list list=input.filterActions displayText=false/>
+            </if>
+        </@headerFilter>
+        <@content>
+            <if(state.table)>
+                <standard-table-NEW table=state.table key=state.table.getTableId()/>
+            </if>
+        </@content>
+    </widget>
 </if>
+<else>
+    <table-placeholder/>
+</else>

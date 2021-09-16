@@ -16,6 +16,7 @@ import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/Da
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 
 
@@ -76,8 +77,8 @@ export class FAQArticleHistoryLabelProvider extends LabelProvider<FAQHistory> {
         return displayValue;
     }
 
-    public isLabelProviderFor(history: FAQHistory): boolean {
-        return history instanceof FAQHistory;
+    public isLabelProviderFor(object: FAQHistory | KIXObject): boolean {
+        return object instanceof FAQHistory || object.KIXObjectType === this.kixObjectType;
     }
 
     public async getObjectText(history: FAQHistory): Promise<string> {
