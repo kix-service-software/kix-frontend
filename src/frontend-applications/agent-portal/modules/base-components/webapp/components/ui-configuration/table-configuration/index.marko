@@ -1,0 +1,92 @@
+<!--
+Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<if(state.configuration)>
+    <div.table-configuration-container.table-container>
+        <h2.configuration-title>
+            <translation-string pattern="Translatable#Table Configuration"/>
+        </h2>
+        <table.standard-table-NEW.configuration-table>
+            <thead>
+                <tr>
+                    <th.table-head-cell>
+                        <translation-string pattern="Translatable#Option"/>
+                    </th>
+                    <th.table-head-cell>
+                        <translation-string pattern="Translatable#Value"/>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td.content-cell>
+                        <translation-string pattern="Translatable#Display Limit"/>
+                    </td>
+                    <td.content-cell>
+                        <input.input-style
+                            type="number"
+                            value=state.configuration.displayLimit
+                            on-change("displayLimitChanged")/>
+                    </td>
+                </tr>
+                <if(input.advancedSettings)>
+                    <tr>
+                        <td.content-cell>
+                            <translation-string pattern="Translatable#Empty Result Hint"/>
+                        </td>
+                        <td.content-cell>
+                            <input.input-style
+                                type="text"
+                                value=state.configuration.emptyResultHint
+                                on-change("resultHintChanged")/>
+                        </td>
+                    </tr> 
+                    <tr>
+                        <td.content-cell>
+                            <translation-string pattern="Translatable#Fixed First Column"/>
+                        </td>
+                        <td.content-cell on-click("booleanValueChanged", "fixedFirstColumn")>
+                            <input type="checkbox" checked=state.configuration.fixedFirstColumn/>
+                        </td>
+                    </tr> 
+                    <tr>
+                        <td.content-cell>
+                            <translation-string pattern="Translatable#Row Selection"/>
+                        </td>
+                        <td.content-cell on-click("booleanValueChanged", "enableSelection")>
+                            <input type="checkbox" checked=state.configuration.enableSelection/>
+                        </td>
+                    </tr> 
+                    <tr>
+                        <td.content-cell>
+                            <translation-string pattern="Translatable#Small Rows"/>
+                        </td>
+                        <td.content-cell on-click("rowHeightChanged")>
+                            <input type="checkbox" checked=component.isSmallRows()/>
+                        </td>
+                    </tr> 
+                    <tr>
+                        <td.content-cell>
+                            <translation-string pattern="Translatable#Small Headers"/>
+                        </td>
+                        <td.content-cell on-click("headerHeightChanged")>
+                            <input type="checkbox" checked=component.isSmallHeaders()/>
+                        </td>
+                    </tr> 
+                </if>
+            </tbody>
+        </table>
+    </div>
+    <div.table-configuration-container.table-container>
+        <table-columns-configuration
+            advancedSettings=input.advancedSettings
+            columns=state.configuration.tableColumns
+            objectType=state.configuration.objectType
+            on-configurationChanged("columnCOnfigurationChanged")/>
+    </div>
+</if>

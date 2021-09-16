@@ -8,163 +8,113 @@
  */
 
 const gulp = require('gulp');
-const tsc = require('gulp-tsc');
-const runseq = require('run-sequence');
+const path = require('path');
 const clean = require('gulp-clean');
-const tslint = require("gulp-tslint");
-const less = require("gulp-less");
 const uglify = require('gulp-uglify-es').default;
 const license = require('gulp-header-license');
 const fs = require('fs');
+const { series, parallel } = require('gulp');
 
-var plugins = require('gulp-load-plugins')();
-
-const tslintConfig = require('./tslint.json');
 const orgEnv = process.env.NODE_ENV;
 
-gulp.task('default', (cb) => {
+console.log(`Node Version: ${process.version}`);
 
-    let tasks = [
-        'clean',
-        'tslint',
-        'license-header-ts',
-        'license-header-marko',
-        'license-header-less',
-        'license-header-tests',
-        'license-header-cucumber',
-        'compile-src',
-        'copy-plugins',
-        'compile-themes'
-    ];
-
-    if (process.env.NODE_ENV === "production") {
-        tasks.push('uglify');
-    }
-
-    tasks = [
-        ...tasks,
-        'copy-static',
-        'build-apps-agent'
-    ];
-
-    runseq(...tasks, cb);
-});
-
-gulp.task('clean', () => {
+function cleanUp(cb) {
     process.env.NODE_ENV = orgEnv;
     return gulp
-        .src(['dist'])
+        .src(['dist'], { allowEmpty: true })
         .pipe(clean());
-});
+}
 
-gulp.task('tslint', () => {
-    gulp.src(['src/**/*.ts'])
-        .pipe(tslint(tslintConfig))
-        .pipe(tslint.report());
-});
-
-gulp.task('license-header-ts', () => {
-    gulp.src('src/**/*.ts')
+function licenseHeaderTS() {
+    return gulp.src('src/**/*.ts')
         .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8')))
         .pipe(gulp.dest('src/'));
-});
+}
 
-gulp.task('license-header-marko', () => {
-    gulp.src('src/**/*.marko')
+function licenseHeaderMarko() {
+    return gulp.src('src/**/*.marko')
         .pipe(license(fs.readFileSync('license-html-header.txt', 'utf8')))
         .pipe(gulp.dest('src/'));
-});
+}
 
-gulp.task('license-header-less', () => {
-    gulp.src(['src/**/*.less', '!src/frontend-applications/agent-portal/static/less/default/kix_font.less'])
+function licenseHeaderLess() {
+    return gulp.src(['src/**/*.less', '!src/frontend-applications/agent-portal/static/less/default/kix_font.less'])
         .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8')))
         .pipe(gulp.dest('src/'));
-});
+}
 
-gulp.task('license-header-tests', () => {
-    gulp.src('tests/**/*.ts')
+function licenseHeaderTests() {
+    return gulp.src('tests/**/*.ts')
         .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8')))
         .pipe(gulp.dest('tests/'));
-});
+}
 
-gulp.task('license-header-cucumber', () => {
-    gulp.src('features/**/*.feature')
+function licenseHeaderCucumber() {
+    return gulp.src('features/**/*.feature')
         .pipe(license(fs.readFileSync('license-feature-header.txt', 'utf8')))
         .pipe(gulp.dest('features/'));
-});
+}
 
-gulp.task('compile-src', () => {
-    let config = {
-        target: "es6",
-        lib: ["es2015", "dom"],
-        types: ["node", "reflect-metadata"],
-        module: "commonjs",
-        moduleResolution: "node",
-        experimentalDecorators: true,
-        emitDecoratorMetadata: true,
-        sourceMap: false,
-        declaration: false,
-        strict: true
-    };
+function lint() {
+    const eslint = require('gulp-eslint');
+    return gulp.src(['src/**/*.ts'])
+        // eslint() attaches the lint output to the "eslint" property
+        // of the file object so it can be used by other modules.
+        .pipe(eslint())
+        // eslint.format() outputs the lint results to the console.
+        // Alternatively use eslint.formatEach() (see Docs).
+        .pipe(eslint.format())
+        // To have the process exit with an error code (1) on
+        // lint error, return the stream and pipe to failAfterError last.
+        .pipe(eslint.failAfterError());
+}
 
+function compileSrc() {
+    let config = {};
     if (process.env.NODE_ENV !== "production") {
         console.log("Use tsconfig for development.")
         config.sourceMap = true;
         config.declaration = true;
     }
 
-    return gulp
-        .src(['src/**/*.ts'])
-        .pipe(tsc(config))
-        .pipe(gulp.dest('dist'));
-});
+    const ts = require("gulp-typescript");
+    const sourcemaps = require('gulp-sourcemaps');
+    const tsProject = ts.createProject('tsconfig.json', config);
+    const result = tsProject
+        .src()
+        .pipe(sourcemaps.init())
+        .pipe(tsProject());
 
-gulp.task('minify-js', (cb) => {
-    return gulp.src('dist/**/*.js')
-        .pipe(babel({
-            presets: [
-                ["env", {
-                    "targets": {
-                        "node": "current"
-                    }
-                }],
-                'es2015',
-                'minify'],
-            plugins: [
-                'babel-plugin-transform-class'
-            ]
 
+    return result.js
+        .pipe(sourcemaps.write({
+            // Return relative source map root directories per file.
+            sourceRoot: function (file) {
+                var sourceFile = path.join(file.cwd, file.sourceMap.file);
+                return path.relative(path.dirname(sourceFile), file.cwd);
+            }
         }))
-        .pipe(gulp.dest('dist/'));
-});
+        .pipe(gulp.dest("dist"));
+}
 
-gulp.task('compile-themes', () => {
+function copyPlugins() {
     return gulp
-        .src(['static/less/themes/*.less'])
-        .pipe(less())
-        .pipe(gulp.dest('dist/themes'));
-});
-
-gulp.task('copy-plugins', () => {
-    return gulp
-        .src([
-            'src/plugins/readme.md',
-            'src/plugins/**/*.marko', 'src/plugins/**/*.marko',
-            'src/plugins/**/*.less',
-            'src/plugins/**/*.json',
-            'src/plugins/**/static/**/*',
-            'src/plugins/**/locale/**/*',
-            'src/plugins/**/RELEASE'])
+        .src(
+            [
+                'src/plugins/readme.md',
+                'src/plugins/**/*.marko', 'src/plugins/**/*.marko',
+                'src/plugins/**/*.less',
+                'src/plugins/**/*.json',
+                'src/plugins/**/static/**/*',
+                'src/plugins/**/locale/**/*',
+                'src/plugins/**/RELEASE'
+            ]
+        )
         .pipe(gulp.dest('dist/plugins'));
-});
+}
 
-gulp.task('copy-static', () => {
-    return gulp
-        .src(['src/static/**/*'])
-        .pipe(gulp.dest('dist/static'));
-});
-
-gulp.task("uglify", function () {
+function uglifyCode() {
     return gulp.src("dist/**/*.js")
         .pipe(uglify({
             ecma: 6,
@@ -172,7 +122,54 @@ gulp.task("uglify", function () {
             keep_fnames: false,
         }))
         .pipe(gulp.dest("dist/"));
-});
+}
 
-console.log(__dirname);
-gulp.task('build-apps-agent', require('./src/frontend-applications/agent-portal/gulpfile.js')(gulp, plugins));
+function buildAgentPortalApp(cb) {
+    gulp
+        .src(['./src/frontend-applications/agent-portal/package.json'])
+        .pipe(gulp.dest('dist/frontend-applications/agent-portal'));
+
+    gulp
+        .src(['./src/frontend-applications/agent-portal/server/**/*.json'])
+        .pipe(gulp.dest('dist/frontend-applications/agent-portal/server'));
+
+    gulp
+        .src(['./src/frontend-applications/agent-portal/server/cert/**/*'])
+        .pipe(gulp.dest('dist/frontend-applications/agent-portal/server/cert'));
+
+    gulp
+        .src(['./src/frontend-applications/agent-portal/static/**/*'])
+        .pipe(gulp.dest('dist/frontend-applications/agent-portal/static'));
+
+    gulp
+        .src(['./src/frontend-applications/agent-portal/modules/**/*.json'])
+        .pipe(gulp.dest('dist/frontend-applications/agent-portal/modules'));
+
+    gulp
+        .src(['./src/frontend-applications/agent-portal/modules/**/*.marko'])
+        .pipe(gulp.dest('dist/frontend-applications/agent-portal/modules'));
+
+    gulp
+        .src(['./src/frontend-applications/agent-portal/modules/**/*.less'])
+        .pipe(gulp.dest('dist/frontend-applications/agent-portal/modules'));
+
+    gulp
+        .src(['./src/frontend-applications/agent-portal/modules/**/static/**/*'])
+        .pipe(gulp.dest('dist/frontend-applications/agent-portal/modules'));
+
+    cb();
+}
+
+const build = series(
+    cleanUp,
+    parallel(licenseHeaderTS, licenseHeaderMarko, licenseHeaderLess, licenseHeaderTests, licenseHeaderCucumber),
+    lint,
+    compileSrc,
+    parallel(copyPlugins, buildAgentPortalApp)
+);
+
+if (process.env.NODE_ENV === "production") {
+    build.apply(uglifyCode);
+}
+
+exports.default = build;

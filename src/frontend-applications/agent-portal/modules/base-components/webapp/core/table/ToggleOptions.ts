@@ -14,7 +14,7 @@ export class ToggleOptions {
         public inputPropertyName: string,
         public actions: string[] = [],
         public toggleFirst: boolean = false,
-        public data: {} = {},
+        public data: any = {},
         public rowObjectProperty?: string,
         public toggleAll: boolean = false
     ) { }

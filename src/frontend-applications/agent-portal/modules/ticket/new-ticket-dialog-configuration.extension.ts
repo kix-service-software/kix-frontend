@@ -106,19 +106,16 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 {
                                     icon: 'kix-icon-compass',
                                     text: '<KIX_CONTACT_Street>',
-                                    // tslint:disable-next-line: max-line-length
                                     linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
                                 },
                                 {
                                     icon: null,
                                     text: '<KIX_CONTACT_Zip> <KIX_CONTACT_City>',
-                                    // tslint:disable-next-line: max-line-length
                                     linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
                                 },
                                 {
                                     icon: null,
                                     text: '<KIX_CONTACT_Country>',
-                                    // tslint:disable-next-line: max-line-length
                                     linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
                                 }
                             ]

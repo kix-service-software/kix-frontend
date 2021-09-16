@@ -25,14 +25,15 @@ import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 
 export class UserLabelProvider extends LabelProvider<User> {
 
     public kixObjectType: KIXObjectType | string = KIXObjectType.USER;
 
-    public isLabelProviderFor(object: User): boolean {
-        return object instanceof User;
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object instanceof User || object.KIXObjectType === KIXObjectType.USER;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
@@ -91,8 +92,9 @@ export class UserLabelProvider extends LabelProvider<User> {
         switch (property) {
             case UserProperty.IS_AGENT:
             case UserProperty.IS_CUSTOMER:
-                displayValue = typeof displayValue !== 'undefined' && displayValue !== null ?
-                    Boolean(displayValue) ? 'Translatable#Yes' : 'Translatable#No' : '';
+                displayValue = typeof displayValue !== 'undefined' && displayValue !== null
+                    ? displayValue ? 'Translatable#Yes' : 'Translatable#No'
+                    : '';
                 break;
             default:
                 if (this.isContactProperty(property)) {

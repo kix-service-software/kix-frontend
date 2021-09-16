@@ -33,6 +33,10 @@ class TreeNodeComponent {
         this.state.treeId = input.treeId;
         this.state.nodeId = this.state.treeId + '-node-' + this.state.node.id;
 
+        if (input.expandIfActiveChild && !this.state.node.expanded && this.hasActiveChild()) {
+            this.state.node.expanded = true;
+        }
+
         if (this.isNodeActive()) {
             setTimeout(() => {
                 const element = (this as any).getEl(this.state.nodeId);

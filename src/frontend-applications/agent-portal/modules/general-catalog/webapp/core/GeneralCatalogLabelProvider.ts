@@ -14,6 +14,7 @@ import { GeneralCatalogItemProperty } from '../../model/GeneralCatalogItemProper
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class GeneralCatalogLabelProvider extends LabelProvider<GeneralCatalogItem> {
 
@@ -43,8 +44,8 @@ export class GeneralCatalogLabelProvider extends LabelProvider<GeneralCatalogIte
         return displayValue;
     }
 
-    public isLabelProviderFor(object: GeneralCatalogItem): boolean {
-        return object instanceof GeneralCatalogItem;
+    public isLabelProviderFor(object: GeneralCatalogItem | KIXObject): boolean {
+        return object instanceof GeneralCatalogItem || object.KIXObjectType === this.kixObjectType;
     }
 
     public async getDisplayText(

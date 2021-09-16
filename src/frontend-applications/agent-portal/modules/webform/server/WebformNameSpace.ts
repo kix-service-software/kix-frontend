@@ -18,7 +18,7 @@ import { SaveWebformRequest } from '../model/SaveWebformRequest';
 import { UserService } from '../../user/server/UserService';
 import { CreateObjectResponse } from '../../../modules/base-components/webapp/core/CreateObjectResponse';
 
-import cookie = require('cookie');
+import * as cookie from 'cookie';
 
 export class WebformNameSpace extends SocketNameSpace {
 
@@ -44,7 +44,7 @@ export class WebformNameSpace extends SocketNameSpace {
         this.registerEventHandler(client, WebformEvent.SAVE_WEBFORM, this.saveWebform.bind(this));
     }
 
-    private async loadWebforms(data: ISocketRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+    private async loadWebforms(data: ISocketRequest, client: Socket): Promise<SocketResponse> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';
 
@@ -56,7 +56,7 @@ export class WebformNameSpace extends SocketNameSpace {
         );
     }
 
-    private async saveWebform(data: SaveWebformRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+    private async saveWebform(data: SaveWebformRequest, client: Socket): Promise<SocketResponse> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';
 

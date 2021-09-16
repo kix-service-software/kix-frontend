@@ -1,0 +1,110 @@
+<!--
+Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<if(state.widget)>
+    <div.header on-click("minimize")>
+        <icon icon=state.widget.configuration.icon/>
+        <input.input-style
+            type="text"
+            value=component.getTitle(state.widget.configuration.title)
+            on-keyup("titleChanged")
+            draggable="true"/>
+        <button.kix-button.form-button
+            type="button"
+            on-click("toggleAdvancedMode")
+            title=state.settingsLabel
+            draggable="true">
+            <span.kix-icon-gears/>
+            ${state.settingsLabel}
+        </button>
+        <span.fas.fa-times class="close" on-click("removeWidget") draggable="true"/>
+    </div>
+    <if(!state.minimized)>
+        <div.widget-configuration-container draggable="true">
+            <if(state.advancedSettings)>
+                <div.widget-configuration.table-container>
+                    <h2.configuration-title>
+                        <translation-string pattern="Translatable#Widget Configuration"/>
+                    </h2>
+                    <table.standard-table-NEW.configuration-table>
+                        <thead>
+                            <tr>
+                                <th.table-head-cell>
+                                    <translation-string pattern="Translatable#Option"/>
+                                </th>
+                                <th.table-head-cell>
+                                    <translation-string pattern="Translatable#Value"/>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td.content-cell>
+                                    <translation-string pattern="Translatable#Actions"/>
+                                </td>
+                                <td.content-cell>
+                                    <form-list
+                                        treeId=state.actionsTreeId
+                                        multiselect=true
+                                        freeText=true
+                                        on-nodesChanged("actionsChanged")/> 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td.content-cell>
+                                    <translation-string pattern="Translatable#Small Widget"/>
+                                </td>
+                                <td.content-cell>
+                                    <input
+                                        type="checkbox"
+                                        on-click("widgetSizeChanged")
+                                        checked=(state.widget.size === "small")/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td.content-cell>
+                                    <translation-string pattern="Translatable#Minimizable"/>
+                                </td>
+                                <td.content-cell>
+                                    <input
+                                        type="checkbox"
+                                        on-click("minimizableChanged")
+                                        checked=(
+                                            state.widget.configuration
+                                                .minimizable
+                                        )/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td.content-cell>
+                                    <translation-string pattern="Translatable#Minimized"/>
+                                </td>
+                                <td.content-cell>
+                                    <input
+                                        type="checkbox"
+                                        on-click("minimizedChanged")
+                                        checked=(
+                                            state.widget.configuration
+                                                .minimized
+                                        )
+                                        disabled=!state.isMinimizeEnabled/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table> 
+                </div>
+            </if>
+            <div.widget-specific-configuration>
+                <${component.getConfigurationComponent()}
+                    configuration=state.widget.configuration.configuration
+                    advancedSettings=state.advancedSettings
+                    on-configurationChanged("configurationChanged")/>
+            </div>
+        </div>
+    </if>
+</if>

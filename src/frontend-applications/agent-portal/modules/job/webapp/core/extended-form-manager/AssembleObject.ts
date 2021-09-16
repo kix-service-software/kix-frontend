@@ -102,7 +102,7 @@ export class AssembleObject extends ExtendedJobFormManager {
         return;
     }
 
-    public postPrepareOptionValue(actionType: string, optionName: string, value: any, parameter: {}): any {
+    public postPrepareOptionValue(actionType: string, optionName: string, value: any, parameter: any): any {
         if (actionType === 'AssembleObject' && optionName === 'Type' && Array.isArray(value)) {
             return value[0];
         }

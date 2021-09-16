@@ -41,7 +41,8 @@ describe('Placeholder replacement for organisation', () => {
     });
 
     after(() => {
-        LabelService.getInstance()['labelProviders'] = [];
+        LabelService.getInstance()['objectLabelProvider'] = []
+        LabelService.getInstance()['propertiesLabelProvider'].clear();;
         (TranslationService.getInstance() as any).translations = null;
     });
 
@@ -173,7 +174,7 @@ describe('Placeholder replacement for organisation', () => {
         before(() => {
             organisation.Name = 'Organisation';
             organisation.Number = 'organisation-number';
-            ticket.OrganisationID = '2';
+            ticket.OrganisationID = 2;
             orgLoadFuntion = KIXObjectService.loadObjects;
             KIXObjectService.loadObjects = async (objectType, objectIds: Array<string | number>) => {
                 let objects: Organisation[] = [];

@@ -156,14 +156,16 @@ class Component {
                         this.state.version.VersionID
                     )
                 ).catch(() => null);
+
                 if (imagesAttachments) {
                     const content = `data:${imagesAttachments[0].ContentType};base64,${imagesAttachments[0].Content}`;
                     resolve(new DisplayImageDescription(
                         id, content,
                         imagesAttachments[0].Comment ? imagesAttachments[0].Comment : imagesAttachments[0].Filename
                     ));
+                } else {
+                    resolve(null);
                 }
-                resolve();
             }));
         }
         return (await Promise.all(attachmentPromises)).filter((i) => i);

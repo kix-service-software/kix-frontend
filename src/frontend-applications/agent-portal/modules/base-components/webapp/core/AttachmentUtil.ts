@@ -112,8 +112,8 @@ export class AttachmentUtil {
 
     public static isAttachmentObject(object: any): boolean {
         return object
-            && object.hasOwnProperty('AttachmentID')
-            && object.hasOwnProperty('Filename')
-            && object.hasOwnProperty('ContentType');
+            && Object.prototype.hasOwnProperty.call(object, 'AttachmentID')
+            && Object.prototype.hasOwnProperty.call(object, 'Filename')
+            && Object.prototype.hasOwnProperty.call(object, 'ContentType');
     }
 }

@@ -7,7 +7,7 @@
  * --
  */
 
-import fs = require('fs');
+import fs from 'fs';
 
 import { AuthenticationService } from './AuthenticationService';
 import { IServerConfiguration } from '../../../../server/model/IServerConfiguration';
@@ -21,7 +21,7 @@ import { Error } from '../../../../server/model/Error';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { User } from '../../modules/user/model/User';
 import { PermissionError } from '../../modules/user/model/PermissionError';
-import { PermissionType } from '../../modules/user/model/PermissionType';
+import { AxiosAdapter, AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 
 export class HttpService {
@@ -35,17 +35,15 @@ export class HttpService {
         return HttpService.INSTANCE;
     }
 
-    private request: any;
+    private axios: AxiosAdapter;
     private apiURL: string;
     private backendCertificate: any;
-    private requestCounter = 0;
-
     private requestPromises: Map<string, Promise<any>> = new Map();
 
     private constructor() {
         const serverConfig: IServerConfiguration = ConfigurationService.getInstance().getServerConfiguration();
         this.apiURL = serverConfig?.BACKEND_API_URL;
-        this.request = require('request-promise');
+        this.axios = require('axios');
 
         const certPath = ConfigurationService.getInstance().certDirectory + '/backend.pem';
         try {
@@ -56,19 +54,19 @@ export class HttpService {
 
         if (serverConfig?.LOG_REQUEST_QUEUES_INTERVAL) {
             setInterval(
-                () => LoggingService.getInstance().debug(`HTTP Request Queue Length: ${this.requestCounter}`),
+                () => LoggingService.getInstance().debug(`HTTP Request Queue Length: ${this.requestPromises.size}`),
                 serverConfig?.LOG_REQUEST_QUEUES_INTERVAL
             );
         }
     }
 
     public async get<T>(
-        resource: string, queryParameters: any, token: any, clientRequestId: string,
+        resource: string, queryParameters: any, token: string, clientRequestId: string,
         cacheKeyPrefix: string = '', useCache: boolean = true
     ): Promise<T> {
         const options = {
             method: RequestMethod.GET,
-            qs: queryParameters
+            params: queryParameters
         };
 
         let cacheKey: string;
@@ -87,41 +85,37 @@ export class HttpService {
         }
 
         const requestPromise = this.executeRequest<T>(resource, token, clientRequestId, options);
-
         this.requestPromises.set(requestKey, requestPromise);
 
-        requestPromise
-            .then((response) => {
-                if (useCache) {
-                    CacheService.getInstance().set(cacheKey, response, cacheKeyPrefix);
-                }
-                this.requestPromises.delete(requestKey);
-            })
-            .catch(() => this.requestPromises.delete(requestKey));
+        const response = await requestPromise.catch((): any => this.requestPromises.delete(requestKey));
+        if (useCache) {
+            CacheService.getInstance().set(cacheKey, response, cacheKeyPrefix);
+        }
+        this.requestPromises.delete(requestKey);
 
-        return requestPromise;
+        return response;
     }
 
     public async post<T>(
-        resource: string, content: any, token: any, clientRequestId: string, cacheKeyPrefix: string = '',
+        resource: string, content: any, token: string, clientRequestId: string, cacheKeyPrefix: string = '',
         logError: boolean = true
     ): Promise<T> {
-        const options = {
+        const options: AxiosRequestConfig = {
             method: RequestMethod.POST,
-            body: content
+            data: content
         };
 
-        const response = await this.executeRequest<T>(resource, token, clientRequestId, options, undefined, logError);
+        const response = await this.executeRequest<T>(resource, token, clientRequestId, options, logError);
         await CacheService.getInstance().deleteKeys(cacheKeyPrefix).catch(() => null);
         return response;
     }
 
     public async patch<T>(
-        resource: string, content: any, token: any, clientRequestId: string, cacheKeyPrefix: string = ''
+        resource: string, content: any, token: string, clientRequestId: string, cacheKeyPrefix: string = ''
     ): Promise<T> {
-        const options = {
+        const options: AxiosRequestConfig = {
             method: RequestMethod.PATCH,
-            body: content
+            data: content
         };
 
         const response = await this.executeRequest<T>(resource, token, clientRequestId, options);
@@ -130,17 +124,17 @@ export class HttpService {
     }
 
     public async delete<T>(
-        resources: string[], token: any, clientRequestId: string, cacheKeyPrefix: string = '',
+        resources: string[], token: string, clientRequestId: string, cacheKeyPrefix: string = '',
         logError: boolean = true
     ): Promise<Error[]> {
-        const options = {
+        const options: AxiosRequestConfig = {
             method: RequestMethod.DELETE,
         };
 
         const errors = [];
         const executePromises = [];
         resources.forEach((resource) => executePromises.push(
-            this.executeRequest<T>(resource, token, clientRequestId, options, null, logError)
+            this.executeRequest<T>(resource, token, clientRequestId, options, logError)
                 .catch((error: Error) => errors.push(error))
         ));
 
@@ -150,49 +144,44 @@ export class HttpService {
     }
 
     public async options(token: string, resource: string, content: any): Promise<OptionsResponse> {
-        const options = {
+        const options: AxiosRequestConfig = {
             method: RequestMethod.OPTIONS,
-            body: content
+            data: content
         };
 
         const cacheKey = token + resource;
-        let response = await CacheService.getInstance().get(cacheKey, RequestMethod.OPTIONS);
-        if (!response) {
-            response = await this.executeRequest<Response>(resource, token, null, options, true);
-            await CacheService.getInstance().set(cacheKey, response, RequestMethod.OPTIONS);
+        let headers = await CacheService.getInstance().get(cacheKey, RequestMethod.OPTIONS);
+        if (!headers) {
+            headers = await this.executeRequest<Response>(resource, token, null, options, true);
+            await CacheService.getInstance().set(cacheKey, headers, RequestMethod.OPTIONS);
         }
 
-        return new OptionsResponse(response);
+        return new OptionsResponse(headers);
     }
 
-    private executeRequest<T>(
-        resource: string, token: string, clientRequestId: string, options: any, fullResponse: boolean = false,
+    private async executeRequest<T>(
+        resource: string, token: string, clientRequestId: string, options: AxiosRequestConfig,
         logError: boolean = true
     ): Promise<T> {
         const backendToken = AuthenticationService.getInstance().getBackendToken(token);
 
         // extend options
-        options.uri = this.buildRequestUrl(resource);
+        options.baseURL = this.apiURL;
+        options.url = this.buildRequestUrl(resource);
         options.headers = {
             'Authorization': 'Token ' + backendToken,
             'KIX-Request-ID': clientRequestId
         };
-        options.json = true;
-        options.ca = this.backendCertificate;
-
-        if (fullResponse) {
-            options.resolveWithFullResponse = true;
-        }
 
         let parameter = '';
         if (options.method === 'GET') {
-            parameter = ' ' + JSON.stringify(options.qs);
+            parameter = ' ' + JSON.stringify(options.params);
         } else if (options.method === 'POST' || options.method === 'PATCH') {
-            if (typeof options.body === 'object') {
-                const body = this.getPreparedBody(options.body);
+            if (typeof options.data === 'object') {
+                const body = this.getPreparedBody(options.data);
                 parameter = ' ' + JSON.stringify(body);
             } else {
-                parameter = ' ' + JSON.stringify(options.body);
+                parameter = ' ' + JSON.stringify(options.data);
             }
             parameter = parameter.replace('\\n', '\n');
         }
@@ -205,32 +194,27 @@ export class HttpService {
                 a: options,
                 b: parameter
             });
-        this.requestCounter++;
 
-        return new Promise((resolve, reject) => {
-            this.request(options)
-                .then((response) => {
-                    resolve(response);
-                    ProfilingService.getInstance().stop(profileTaskId, response);
-                    this.requestCounter--;
-                }).catch((error) => {
-                    if (logError) {
-                        LoggingService.getInstance().error(
-                            `Error during HTTP (${resource}) ${options.method} request.`, error
-                        );
-                    }
-                    ProfilingService.getInstance().stop(profileTaskId, 'Error');
-                    this.requestCounter--;
-                    if (error.statusCode === 403) {
-                        reject(new PermissionError(this.createError(error), resource, options.method));
-                    } else {
-                        reject(this.createError(error));
-                    }
-                });
+        const response = await this.axios(options).catch((error: AxiosError) => {
+            if (logError) {
+                LoggingService.getInstance().error(
+                    `Error during HTTP (${resource}) ${options.method} request.`, error
+                );
+            }
+            ProfilingService.getInstance().stop(profileTaskId, 'Error');
+            if (error.response.status === 403) {
+                throw new PermissionError(this.createError(error), resource, options.method);
+            } else {
+                throw this.createError(error);
+            }
         });
+
+        ProfilingService.getInstance().stop(profileTaskId, response.data);
+
+        return options.method === RequestMethod.OPTIONS ? response.headers : response.data;
     }
 
-    private getPreparedBody(body: {}): {} {
+    private getPreparedBody(body: any): any {
         const newBody = {};
         for (const param in body) {
             if (param.match(/password/i) || param.match(/^UserPw$/)) {
@@ -250,13 +234,17 @@ export class HttpService {
         return `${this.apiURL}/${encodedResource}`;
     }
 
-    private createError(error: any): Error {
-        if (error.statusCode === 500) {
-            LoggingService.getInstance().error(`(${error.statusCode}) ${error.message}`);
-            return new Error(error.statusCode, error.message, error.statusCode);
+    private createError(error: AxiosError): Error {
+        const status = error.response.status;
+        if (status === 500) {
+            LoggingService.getInstance().error(`(${status}) ${error.response.statusText}`);
+            return new Error(error.response.status?.toString(), error.response.statusText, status);
         } else {
-            LoggingService.getInstance().error(`(${error.statusCode}) ${error.error.Code}  ${error.error.Message}`);
-            return new Error(error.error.Code, error.error.Message, error.statusCode);
+            const backendError = new BackendHTTPError(error);
+            LoggingService.getInstance().error(
+                `(${status}) ${backendError.error.Code}  ${backendError.error.Message}`
+            );
+            return new Error(backendError.error.Code?.toString(), backendError.error.Message, status);
         }
     }
 
@@ -287,22 +275,20 @@ export class HttpService {
         if (user) {
             return user;
         }
-        const options: any = {
+        const options: AxiosRequestConfig = {
             method: RequestMethod.GET,
-            qs: {
+            params: {
                 'include': 'Tickets,Preferences,RoleIDs,Contact',
                 'Tickets.StateType': 'Open'
             }
         };
 
         const uri = 'session/user';
-        options.uri = this.buildRequestUrl(uri);
+        options.url = this.buildRequestUrl(uri);
         options.headers = {
             'Authorization': 'Token ' + backendToken,
             'KIX-Request-ID': ''
         };
-        options.json = true;
-        options.ca = this.backendCertificate;
 
         // start profiling
         const profileTaskId = ProfilingService.getInstance().start(
@@ -312,24 +298,39 @@ export class HttpService {
                 a: options
             });
 
-        return new Promise<User>((resolve, reject) => {
-            this.request(options)
-                .then(async (response) => {
-                    await CacheService.getInstance().set(backendToken, response['User'], KIXObjectType.CURRENT_USER);
-                    resolve(response['User']);
-                    ProfilingService.getInstance().stop(profileTaskId, response);
-                }).catch((error) => {
-                    LoggingService.getInstance().error(
-                        `Error during HTTP (${uri}) ${options.method} request.`, error
-                    );
-                    ProfilingService.getInstance().stop(profileTaskId, 'Error');
-                    if (error.statusCode === 403) {
-                        reject(new PermissionError(this.createError(error), uri, options.method));
-                    } else {
-                        reject(this.createError(error));
-                    }
-                });
+        const response = await this.axios(options).catch((error: AxiosError) => {
+            LoggingService.getInstance().error(
+                `Error during HTTP (${uri}) ${options.method} request.`, error
+            );
+            ProfilingService.getInstance().stop(profileTaskId, 'Error');
+            if (error.response.status === 403) {
+                throw new PermissionError(this.createError(error), uri, options.method);
+            } else {
+                throw this.createError(error);
+            }
         });
+
+        await CacheService.getInstance().set(backendToken, response.data['User'], KIXObjectType.CURRENT_USER);
+        ProfilingService.getInstance().stop(profileTaskId, response.data);
+
+        return response.data['User'];
+    }
+
+}
+
+class BackendHTTPError {
+
+    public status: number;
+
+    public error: {
+        Code: number,
+        Message: string
+    };
+
+    public constructor(error: AxiosError) {
+        const data = error.response?.data;
+        this.error = { Code: data?.Code, Message: data?.Message };
+        this.status = error.response?.status;
     }
 
 }

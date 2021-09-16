@@ -7,6 +7,8 @@
  * --
  */
 
+/* eslint-disable max-classes-per-file */
+
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
@@ -41,7 +43,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await this.prepareTable();
 
         const actions = await ActionFactory.getInstance().generateActions(
-            ['user-admin-user-create-action', 'csv-export-action'], this.state.table
+            [
+                'user-admin-user-create-action',
+                'csv-export-action',
+                'reset-user-context-widget-list'
+            ], this.state.table
         );
         WidgetService.getInstance().registerActions(this.state.instanceId, actions);
 
@@ -106,7 +112,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
 }
 
-// tslint:disable-next-line:max-classes-per-file
 class UserContentProvider extends TableContentProvider {
 
     public constructor(private component: Component) {

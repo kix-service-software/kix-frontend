@@ -25,14 +25,15 @@ import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { Notification } from '../../model/Notification';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 
 export class NotificationLabelProvider extends LabelProvider {
 
     public kixObjectType: KIXObjectType = KIXObjectType.NOTIFICATION;
 
-    public isLabelProviderFor(notification: Notification): boolean {
-        return notification instanceof Notification;
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object instanceof Notification || object.KIXObjectType === this.kixObjectType;
     }
 
     public async getObjectText(
@@ -142,7 +143,7 @@ export class NotificationLabelProvider extends LabelProvider {
                             displayTexts.push(text);
                         }
                     }
-                    displayValue = !!displayTexts.length ? displayTexts.join(', ') : value;
+                    displayValue = displayTexts.length ? displayTexts.join(', ') : value;
                     translatable = false;
                 }
                 break;
@@ -158,7 +159,7 @@ export class NotificationLabelProvider extends LabelProvider {
                             displayTexts.push(text);
                         }
                     }
-                    displayValue = !!displayTexts.length ? displayTexts.join(', ') : value;
+                    displayValue = displayTexts.length ? displayTexts.join(', ') : value;
                     translatable = false;
                 }
                 break;
@@ -320,7 +321,7 @@ export class NotificationLabelProvider extends LabelProvider {
                             displayTexts.push(text);
                         }
                     }
-                    values = !!displayTexts.length ? displayTexts : value;
+                    values = displayTexts.length ? displayTexts : value;
                 }
                 break;
             case NotificationProperty.DATA_RECIPIENT_ROLES:
@@ -335,7 +336,7 @@ export class NotificationLabelProvider extends LabelProvider {
                             displayTexts.push(text);
                         }
                     }
-                    values = !!displayTexts.length ? displayTexts : value;
+                    values = displayTexts.length ? displayTexts : value;
                 }
                 break;
             default:

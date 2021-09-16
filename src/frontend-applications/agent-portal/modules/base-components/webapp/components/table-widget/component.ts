@@ -11,7 +11,6 @@ import { ComponentState } from './ComponentState';
 import { UIFilterCriterion } from '../../../../../model/UIFilterCriterion';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
-import { ContextType } from '../../../../../model/ContextType';
 import { ComponentInput } from './ComponentInput';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
@@ -31,6 +30,7 @@ import { FormValuesChangedEventData } from '../../core/FormValuesChangedEventDat
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
 import { SearchService } from '../../../../search/webapp/core';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 
 class Component {
 
@@ -74,7 +74,6 @@ class Component {
         }
 
         if (this.state.widgetConfiguration) {
-            this.state.show = true;
             const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
 
             this.state.showFilter = typeof settings.showFilter !== 'undefined' ? settings.showFilter : true;
@@ -222,11 +221,9 @@ class Component {
     private getRelevantHandlerConfigIds(properties: string[]): string[] {
         const relevantHandlerIds = [];
         const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
-        if (
-            settings && settings.tableConfiguration
-            && Array.isArray(settings.tableConfiguration.additionalTableObjectsHandler)
-        ) {
-            settings.tableConfiguration.additionalTableObjectsHandler.forEach((handlerConfig) => {
+        const tableConfiguration = settings?.configuration as TableConfiguration;
+        if (Array.isArray(tableConfiguration?.additionalTableObjectsHandler)) {
+            tableConfiguration.additionalTableObjectsHandler.forEach((handlerConfig) => {
                 if (
                     !handlerConfig.dependencyProperties
                     || !handlerConfig.dependencyProperties.length
@@ -281,12 +278,7 @@ class Component {
                 count = this.state.table.getRowCount(true);
             }
 
-            const searchId = this.state.table?.getTableConfiguration()?.searchId;
-            if (searchId) {
-                const cache = await SearchService.getInstance().loadSearchCache(searchId);
-                const countString = count > 0 ? ' (' + count + ')' : '';
-                this.state.title = cache?.name + countString;
-            } else if (!this.configuredTitle) {
+            if (!this.configuredTitle) {
                 let title = WidgetService.getInstance().getWidgetTitle(this.state.instanceId);
                 if (!title) {
                     title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : '';
@@ -300,9 +292,9 @@ class Component {
 
     private async prepareTable(): Promise<void> {
         const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
-        if (settings?.objectType || settings?.tableConfiguration?.objectType) {
-            this.objectType = settings.tableConfiguration && settings.tableConfiguration.objectType
-                ? settings.tableConfiguration.objectType : settings.objectType; // table prior table widget
+        const tableConfiguration = settings?.configuration as TableConfiguration;
+        if (settings?.objectType || tableConfiguration?.objectType) {
+            this.objectType = tableConfiguration?.objectType || settings.objectType;
             const context = ContextService.getInstance().getActiveContext();
             const contextId = this.state.widgetConfiguration.contextDependent
                 ? context.contextId
@@ -310,8 +302,8 @@ class Component {
 
             const table = await TableFactoryService.getInstance().createTable(
                 `table-widget-${this.state.instanceId}`, this.objectType,
-                settings.tableConfiguration, null, contextId, true,
-                settings.tableConfiguration ? settings.tableConfiguration.toggle : true,
+                tableConfiguration, null, contextId, true,
+                tableConfiguration ? tableConfiguration.toggle : true,
                 settings.shortTable, false, !settings.cache
             );
 

@@ -16,6 +16,7 @@ import { Contact } from '../../../customer/model/Contact';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { Context } from '../../../../model/Context';
 import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
+import { ConfigItem } from '../../../cmdb/model/ConfigItem';
 
 
 export class TicketDialogUtil {
@@ -36,9 +37,16 @@ export class TicketDialogUtil {
             if (contact) {
                 additionalInformation.push([KIXObjectType.CONTACT, contact]);
             }
+
+            const configItem = await context.getObject<ConfigItem>(KIXObjectType.CONFIG_ITEM);
+            if (configItem) {
+                additionalInformation.push([`${KIXObjectType.CONFIG_ITEM}-ID`, configItem.ConfigItemID]);
+            }
         }
 
-        ContextService.getInstance().setActiveContext(NewTicketDialogContext.CONTEXT_ID, ticketId);
+        ContextService.getInstance().setActiveContext(
+            NewTicketDialogContext.CONTEXT_ID, ticketId, undefined, additionalInformation
+        );
     }
 
     public static async editTicket(

@@ -21,6 +21,8 @@ export enum PersonalSettingsProperty {
 
     NOTIFICATIONS = 'NotificationTransport',
 
-    DONT_ASK_DIALOG_ON_CLOSE = 'DONT_ASK_DIALOG_CLOSE'
+    DONT_ASK_DIALOG_ON_CLOSE = 'DONT_ASK_DIALOG_CLOSE',
+
+    CONTEXT_WIDGET_LISTS = 'ContextWidgetLists'
 
 }

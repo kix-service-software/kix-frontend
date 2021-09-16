@@ -16,6 +16,7 @@ import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { ReportingContext } from './context/ReportingContext';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { ReportDefinition } from '../../model/ReportDefinition';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class ReportLabelProvider extends LabelProvider<Report> {
 
@@ -53,8 +54,8 @@ export class ReportLabelProvider extends LabelProvider<Report> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public isLabelProviderFor(object: Report): boolean {
-        return object instanceof Report;
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object instanceof Report || object.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

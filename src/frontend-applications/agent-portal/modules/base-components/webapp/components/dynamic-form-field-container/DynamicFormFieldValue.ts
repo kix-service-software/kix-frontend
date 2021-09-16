@@ -21,6 +21,8 @@ import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ObjectReferenceOptions } from '../../core/ObjectReferenceOptions';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { SearchDefinition } from '../../../../search/webapp/core';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 
 export class DynamicFormFieldValue {
@@ -32,6 +34,7 @@ export class DynamicFormFieldValue {
     public isDateTime: boolean = false;
     public isTextarea: boolean = false;
     public isCheckbox: boolean = false;
+    public isRelativeTime: boolean = false;
     public isSpecificInput: boolean = false;
     public isNumber: boolean = false;
     public specificInputType: string = null;
@@ -57,12 +60,16 @@ export class DynamicFormFieldValue {
     private propertyTreeHandler: TreeHandler;
     private operationTreeHandler: TreeHandler;
     private valueTreeHandler: TreeHandler;
+    private relativeTimeUnitTreeHandler: TreeHandler;
 
     private date: string;
     private time: string;
 
     private betweenEndDate: string;
     private betweenEndTime: string;
+
+    private relativeTimeValue: string;
+    private relativeTimeUnit: string;
 
     private numberValue: string;
     private betweenEndNumberValue: string;
@@ -88,6 +95,9 @@ export class DynamicFormFieldValue {
 
         this.valueTreeHandler = new TreeHandler();
         TreeService.getInstance().registerTreeHandler('value-' + this.id, this.valueTreeHandler);
+
+        this.relativeTimeUnitTreeHandler = new TreeHandler([], null, null, false);
+        TreeService.getInstance().registerTreeHandler('relativeTimeUnit-' + this.id, this.relativeTimeUnitTreeHandler);
 
         this.autoCompleteCallback = this.doAutocompleteSearch.bind(this);
     }
@@ -141,6 +151,7 @@ export class DynamicFormFieldValue {
         await this.setPropertyTree();
         await this.setOperationTree();
         await this.createValueInput();
+        await this.setRelativeTimeUnitTree();
     }
 
     public async setPropertyTree(): Promise<void> {
@@ -191,7 +202,7 @@ export class DynamicFormFieldValue {
                         operationNodes.push(new TreeNode(o, label));
                     }
                     this.operationTreeHandler.setTree(operationNodes);
-                    if (!!operationNodes.length) {
+                    if (operationNodes.length) {
                         let operationNode = operationNodes[0];
                         if (this.value.operator) {
                             operationNode = operationNodes.find((n) => n.id === this.value.operator);
@@ -204,9 +215,28 @@ export class DynamicFormFieldValue {
         }
     }
 
+    private async setRelativeTimeUnitTree(): Promise<void> {
+        const timeUnitNodes = [
+            new TreeNode('Y', await TranslationService.translate('Year(s)')),
+            new TreeNode('M', await TranslationService.translate('Month(s)')),
+            new TreeNode('w', await TranslationService.translate('Week(s)')),
+            new TreeNode('d', await TranslationService.translate('Day(s)')),
+            new TreeNode('h', await TranslationService.translate('Hour(s)')),
+            new TreeNode('m', await TranslationService.translate('Minutes(s)')),
+            new TreeNode('s', await TranslationService.translate('Seconds(s)')),
+        ];
+        this.relativeTimeUnitTreeHandler.setTree(timeUnitNodes);
+        const selectedNode = timeUnitNodes.find((n) => n.id === 'm');
+        this.relativeTimeUnitTreeHandler.setSelection([selectedNode], true);
+        this.relativeTimeUnit = 'm';
+    }
+
     public async setOperator(operator: string): Promise<void> {
+        const relativeDateTimeOperators = SearchDefinition.getRelativeDateTimeOperators();
+
         this.value.operator = operator;
         this.isBetween = this.value.operator === SearchOperator.BETWEEN;
+        this.isRelativeTime = relativeDateTimeOperators.includes(operator as SearchOperator);
         if (this.manager.resetValue) {
             await this.createValueInput();
         }
@@ -215,7 +245,7 @@ export class DynamicFormFieldValue {
     private async createValueInput(): Promise<void> {
         if (this.manager.showValueInput(this.value)) {
             const property = this.value.property ? this.value.property : null;
-            const inputType = await this.manager.getInputType(property);
+            const inputType = await this.manager.getInputType(property, this.value.operator as SearchOperator);
             this.inputOptions = await this.manager.getInputTypeOptions(
                 property, this.value.operator ? this.value.operator : null
             );
@@ -365,6 +395,12 @@ export class DynamicFormFieldValue {
                 } else {
                     this.numberValue = !isNaN(this.value.value) ? this.value.value : null;
                 }
+            } else if (this.isRelativeTime) {
+                const parts = this.value.value.match(/^(\d+)(\w+)$/);
+                this.relativeTimeValue = parts[1];
+                this.relativeTimeUnit = parts[2];
+                const node = TreeUtil.findNode(this.relativeTimeUnitTreeHandler.getTree(), this.relativeTimeUnit);
+                currentValues.push(node);
             } else if (!this.isSpecificInput) {
                 this.value.value = Array.isArray(this.value.value) ? this.value.value[0] : this.value.value;
             }
@@ -372,6 +408,9 @@ export class DynamicFormFieldValue {
 
         if (this.isDropdown) {
             this.valueTreeHandler.setSelection(currentValues, true, silent, true);
+        }
+        if (this.isRelativeTime) {
+            this.relativeTimeUnitTreeHandler.setSelection(currentValues, true, silent, true);
         }
     }
 
@@ -444,6 +483,14 @@ export class DynamicFormFieldValue {
         }
     }
 
+    public setRelativeTimeUnitValue(value: string): void {
+        this.relativeTimeUnit = value;
+    }
+
+    public setRelativeTimeValue(value: string): void {
+        this.relativeTimeValue = value;
+    }
+
     public setNumberValue(value: string): void {
         this.numberValue = value;
     }
@@ -485,6 +532,9 @@ export class DynamicFormFieldValue {
                 currentValue.value = !isNaN(Number(this.betweenEndNumberValue)) && this.betweenEndNumberValue !== ''
                     ? [currentValue.value, Number(this.betweenEndNumberValue)] : null;
             }
+        }
+        if (this.isRelativeTime) {
+            currentValue.value = [this.relativeTimeValue, this.relativeTimeUnit];
         }
         return currentValue;
     }

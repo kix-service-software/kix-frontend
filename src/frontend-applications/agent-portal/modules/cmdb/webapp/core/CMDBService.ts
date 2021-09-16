@@ -280,4 +280,17 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         }
         return super.updateObject(objectType, parameter, objectId, cacheKeyPrefix, silent);
     }
+
+    public async getObjectProperties(objectType: KIXObjectType): Promise<string[]> {
+        const superProperties = await super.getObjectProperties(objectType);
+        const objectProperties: string[] = [];
+        if (objectType === KIXObjectType.CONFIG_ITEM) {
+            for (const property in ConfigItemProperty) {
+                if (ConfigItemProperty[property]) {
+                    objectProperties.push(ConfigItemProperty[property]);
+                }
+            }
+        }
+        return [...objectProperties, ...superProperties];
+    }
 }

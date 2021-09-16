@@ -11,13 +11,14 @@ import { LabelProvider } from '../../../../modules/base-components/webapp/core/L
 import { ValidObject } from '../../model/ValidObject';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class ValidObjectLabelProvider extends LabelProvider<ValidObject> {
 
     public kixObjectType: KIXObjectType | string = KIXObjectType.VALID_OBJECT;
 
-    public isLabelProviderFor(validObject: ValidObject): boolean {
-        return validObject instanceof ValidObject;
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object instanceof ValidObject || object.KIXObjectType === this.kixObjectType;
     }
 
     public async getObjectText(

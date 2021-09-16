@@ -38,6 +38,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 MailAccountProperty.LOGIN,
                 MailAccountProperty.HOST,
                 MailAccountProperty.TYPE,
+                MailAccountProperty.OAUTH2_PROFILEID,
                 MailAccountProperty.IMAP_FOLDER,
                 MailAccountProperty.TRUSTED,
                 MailAccountProperty.DISPATCHING_BY,

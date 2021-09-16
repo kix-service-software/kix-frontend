@@ -104,10 +104,10 @@ export class Component {
                 const label = await this.getCategoryLabel(category);
                 const children = await this.prepareTreeNodes(category.SubCategories);
                 const icon = LabelService.getInstance().getObjectIcon(category);
-                nodes.push(new TreeNode(
-                    category.ID, label, icon, null, children, null, null, null, null, null, null, null,
-                    category.ValidID === 1
-                ));
+                const node = new TreeNode(category.ID, label, icon);
+                node.children = children;
+                node.selectable = category.ValidID === 1;
+                nodes.push(node);
             }
         }
 

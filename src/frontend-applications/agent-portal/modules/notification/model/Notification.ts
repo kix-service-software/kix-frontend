@@ -19,11 +19,11 @@ export class Notification extends KIXObject {
 
     public KIXObjectType: KIXObjectType = KIXObjectType.NOTIFICATION;
 
-    public Data: {};
+    public Data: any;
 
     public ID: number;
 
-    public Message: {};
+    public Message: any;
 
     public Name: string;
 
@@ -112,13 +112,7 @@ export class Notification extends KIXObject {
                                 /^DynamicField_(.+)$/, `${KIXObjectProperty.DYNAMIC_FIELDS}.$1`
                             );
                         }
-                        if (filter.Operator === SearchOperator.GREATER_THAN_OR_EQUAL) {
-                            this.handleBetweenValueOnGTE(preparedFilter, filter);
-                        } else if (filter.Operator === SearchOperator.LESS_THAN_OR_EQUAL) {
-                            this.handleBetweenValueOnLTE(preparedFilter, filter);
-                        } else {
-                            preparedFilter.push(filter);
-                        }
+                        this.prepareObjectFilter(preparedFilter, filter);
                     }
                     this.Filter[key] = preparedFilter;
                 }

@@ -19,6 +19,8 @@ import { TicketDetailsContext } from '..';
 import { ContextMode } from '../../../../../model/ContextMode';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
+import { SearchCache } from '../../../../search/model/SearchCache';
 
 export class TicketTableFactory extends TableFactory {
 
@@ -49,8 +51,41 @@ export class TicketTableFactory extends TableFactory {
     private setDefaultTableConfiguration(
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
     ): TableConfiguration {
-        let tableColumns;
+        const tableColumns = this.getDefaultColumns(short);
 
+        let useDefaultColumns: boolean = false;
+        if (!tableConfiguration) {
+            tableConfiguration = new TableConfiguration(
+                null, null, null, KIXObjectType.TICKET, null, null, tableColumns, [], true);
+            defaultToggle = true;
+            useDefaultColumns = true;
+        } else if (!tableConfiguration.tableColumns || !tableConfiguration.tableColumns.length) {
+            tableConfiguration.tableColumns = tableColumns;
+            useDefaultColumns = true;
+        }
+
+        if (defaultRouting) {
+            tableConfiguration.routingConfiguration = new RoutingConfiguration(
+                TicketDetailsContext.CONTEXT_ID, KIXObjectType.TICKET,
+                ContextMode.DETAILS, TicketProperty.TICKET_ID
+            );
+        }
+        if (defaultToggle) {
+            tableConfiguration.toggle = true;
+            tableConfiguration.toggleOptions = new ToggleOptions('ticket-article-details', 'article', [], false);
+        }
+
+        tableConfiguration.objectType = KIXObjectType.TICKET;
+
+        for (const extendedFactory of this.extendedTableFactories) {
+            extendedFactory.modifiyTableConfiguation(tableConfiguration, useDefaultColumns);
+        }
+
+        return tableConfiguration;
+    }
+
+    private getDefaultColumns(short?: boolean): IColumnConfiguration[] {
+        let tableColumns: IColumnConfiguration[];
         if (short) {
             tableColumns = [
                 new DefaultColumnConfiguration(null, null, null,
@@ -69,10 +104,6 @@ export class TicketTableFactory extends TableFactory {
                 new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.QUEUE_ID, true, false, true, false, 100, true, true, true
                 ),
-                // new DefaultColumnConfiguration(null, null, null,
-                //     'DynamicFields.AffectedAsset', true, false, true, false, 200, true, true, true, undefined, true,
-                //     'label-list-cell-content'
-                // ),
                 new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.OWNER_ID, true, false, true, false, 150, true, true
                 ),
@@ -105,10 +136,6 @@ export class TicketTableFactory extends TableFactory {
                 new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.QUEUE_ID, true, false, true, false, 100, true, true, true
                 ),
-                // new DefaultColumnConfiguration(null, null, null,
-                //     'DynamicFields.AffectedAsset', true, false, true, false, 200, true, true, true, undefined, true,
-                //     'label-list-cell-content'
-                // ),
                 new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.RESPONSIBLE_ID, true, false, true, false, 150, true, true
                 ),
@@ -127,35 +154,16 @@ export class TicketTableFactory extends TableFactory {
             ];
         }
 
-        let useDefaultColumns: boolean = false;
-        if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                null, null, null, KIXObjectType.TICKET, null, null, tableColumns, [], true);
-            defaultToggle = true;
-            useDefaultColumns = true;
-        } else if (!tableConfiguration.tableColumns || !tableConfiguration.tableColumns.length) {
-            tableConfiguration.tableColumns = tableColumns;
-            useDefaultColumns = true;
-        }
+        return tableColumns;
+    }
 
-        if (defaultRouting) {
-            tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                TicketDetailsContext.CONTEXT_ID, KIXObjectType.TICKET,
-                ContextMode.DETAILS, TicketProperty.TICKET_ID
-            );
-        }
-        if (defaultToggle) {
-            tableConfiguration.toggle = true;
-            tableConfiguration.toggleOptions = new ToggleOptions('ticket-article-details', 'article', [], false);
-        }
-
-        tableConfiguration.objectType = KIXObjectType.TICKET;
-
-        for (const extendedFactory of this.extendedTableFactories) {
-            extendedFactory.modifiyTableConfiguation(tableConfiguration, useDefaultColumns);
-        }
-
-        return tableConfiguration;
+    public async getDefaultColumnConfigurations(searchCache: SearchCache): Promise<IColumnConfiguration[]> {
+        const superColumns = await super.getDefaultColumnConfigurations(searchCache);
+        const ticketColumns = this.getDefaultColumns();
+        return [
+            ...ticketColumns,
+            ...superColumns.filter((c) => !ticketColumns.some((tc) => tc.property === c.property))
+        ];
     }
 
 }

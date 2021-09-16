@@ -34,7 +34,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 TicketProperty.CONTACT_ID,
                 TicketProperty.STATE_ID,
                 TicketProperty.QUEUE_ID,
-                TicketProperty.RESPONSIBLE,
+                TicketProperty.RESPONSIBLE_ID,
                 TicketProperty.CHANGED
             ],
             [

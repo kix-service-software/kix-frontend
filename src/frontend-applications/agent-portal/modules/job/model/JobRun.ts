@@ -21,7 +21,7 @@ export class JobRun extends KIXObject {
 
     public EndTime: string;
 
-    public Filter: {};
+    public Filter: any;
 
     public JobID: number;
 

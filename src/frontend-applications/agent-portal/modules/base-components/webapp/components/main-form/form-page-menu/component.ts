@@ -17,15 +17,12 @@ class Component {
 
     private state: ComponentState;
     private eventSubscriber: IEventSubscriber;
-    private keyUpEventFunction: () => {};
+    private keyUpEventFunction: () => {
+        // do nothing ...
+    };
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
-        // FIXME: temporary disabled (KIX2018-5261), activate with other keys or requirements
-        // if (input.before) {
-        //     this.keyUpEventFunction = this.keyUp.bind(this);
-        //     document.body.addEventListener('keyup', this.keyUpEventFunction, false);
-        // }
     }
 
     public onInput(input: any): void {

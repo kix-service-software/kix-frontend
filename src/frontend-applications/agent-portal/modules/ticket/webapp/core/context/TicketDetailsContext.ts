@@ -38,16 +38,15 @@ export class TicketDetailsContext extends Context {
         objectType: KIXObjectType = KIXObjectType.TICKET, reload: boolean = false, changedProperties: string[] = []
     ): Promise<O> {
         let object: O;
-        let ticket;
 
         if (!objectType) {
             objectType = KIXObjectType.TICKET;
         }
 
-        ticket = await this.loadTicket(changedProperties);
+        const ticket = await this.loadTicket(changedProperties);
 
         if (objectType === KIXObjectType.TICKET) {
-            object = ticket;
+            object = ticket as any;
         } else if (objectType === KIXObjectType.ORGANISATION && ticket) {
             if (!isNaN(ticket.OrganisationID)) {
                 const organisations = await KIXObjectService.loadObjects(

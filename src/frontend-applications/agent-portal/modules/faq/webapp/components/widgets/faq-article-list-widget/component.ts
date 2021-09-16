@@ -57,9 +57,9 @@ class Component {
             });
         }
 
-        await this.prepareFilter();
+        this.prepareFilter();
         this.prepareActions();
-        await this.prepareTable();
+        this.prepareTable();
     }
 
     public onDestroy(): void {

@@ -675,7 +675,8 @@ describe('ContextService', () => {
     describe('Remove context', () => {
 
         let originalPermissionCheck;
-        let originalLoadCOnfiguration;
+        let originalLoadConfiguration;
+        let origianlGetStoredContextList;
 
         before(async () => {
             ContextService.getInstance().registerContext(
@@ -707,12 +708,15 @@ describe('ContextService', () => {
             );
 
             originalPermissionCheck = AuthenticationSocketClient.getInstance().checkPermissions;
-            originalLoadCOnfiguration = ContextSocketClient.getInstance().loadContextConfiguration;
+            originalLoadConfiguration = ContextSocketClient.getInstance().loadContextConfiguration;
+            origianlGetStoredContextList = ContextService.getInstance().getStoredContextList;
 
             AuthenticationSocketClient.getInstance().checkPermissions =
                 async () => true;
             ContextSocketClient.getInstance().loadContextConfiguration =
                 async (contextId: string) => new ContextConfiguration(contextId, contextId, ConfigurationType.Context, contextId);
+            ContextService.getInstance().getStoredContextList =
+                async (): Promise<ContextPreference[]> => [];
 
             await ContextService.getInstance().createContext(TestContext1.CONTEXT_ID, null);
             await ContextService.getInstance().createContext(TestContext2.CONTEXT_ID, null);
@@ -723,7 +727,8 @@ describe('ContextService', () => {
         after(() => {
             cleanupContextService()
             AuthenticationSocketClient.getInstance().checkPermissions = originalPermissionCheck;
-            ContextSocketClient.getInstance().loadContextConfiguration = originalLoadCOnfiguration;
+            ContextSocketClient.getInstance().loadContextConfiguration = originalLoadConfiguration;
+            ContextService.getInstance().getStoredContextList = origianlGetStoredContextList;
         });
 
         it('Should remove the context TestContext3', async () => {

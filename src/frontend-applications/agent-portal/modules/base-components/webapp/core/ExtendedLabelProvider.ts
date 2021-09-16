@@ -18,6 +18,10 @@ export abstract class ExtendedLabelProvider<T extends KIXObject = KIXObject> imp
 
     public kixObjectType: string = KIXObjectType.TICKET;
 
+    public getSupportedProperties(): string[] {
+        return [];
+    }
+
     public isLabelProviderFor(object: T): boolean {
         return null;
     }

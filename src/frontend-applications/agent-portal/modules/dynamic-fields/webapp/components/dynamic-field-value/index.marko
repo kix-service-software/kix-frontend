@@ -20,6 +20,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 }/>
         </div>
     </if>
+    <else-if(state.field.FieldType === "Table")>
+        <dynamic-field-table-view table=state.table dynamicField=state.field/>
+    </else-if>
     <else-if(state.field.FieldType === "TextArea")>
         <for|value| of=state.dfValue.Value>
             <div.df-textarea>

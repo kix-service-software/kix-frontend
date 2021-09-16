@@ -26,6 +26,7 @@ import { IEventSubscriber } from '../../core/IEventSubscriber';
 import { FormEvent } from '../../core/FormEvent';
 import { ContextService } from '../../core/ContextService';
 import { ContextFormManagerEvents } from '../../core/ContextFormManagerEvents';
+import { BrowserUtil } from '../../core/BrowserUtil';
 
 
 class FormComponent {
@@ -42,6 +43,12 @@ class FormComponent {
 
     public async onMount(): Promise<void> {
         await this.prepareForm();
+
+        const context = ContextService.getInstance().getActiveContext();
+        const pageIndex = context?.getFormManager()?.getActiveFormPageIndex();
+        if (pageIndex) {
+            this.state.activePageIndex = pageIndex;
+        }
 
         this.keyListenerElement = (this as any).getEl();
         if (this.keyListenerElement) {
@@ -64,6 +71,8 @@ class FormComponent {
                     this.state.formInstance = null;
                     this.state.formId = null;
                     setTimeout(() => this.prepareForm(), 20);
+                } if (eventId === FormEvent.GO_TO_INVALID_FIELD && data.formId === this.state.formId) {
+                    this.goToInvalidField();
                 } else {
                     this.setNeeded();
                     (this as any).setStateDirty('formInstance');
@@ -78,6 +87,7 @@ class FormComponent {
         EventService.getInstance().subscribe(FormEvent.FIELD_REMOVED, this.formSubscriber);
         EventService.getInstance().subscribe(FormEvent.FORM_PAGE_ADDED, this.formSubscriber);
         EventService.getInstance().subscribe(FormEvent.FORM_PAGES_REMOVED, this.formSubscriber);
+        EventService.getInstance().subscribe(FormEvent.GO_TO_INVALID_FIELD, this.formSubscriber);
 
         this.state.loading = false;
     }
@@ -89,10 +99,12 @@ class FormComponent {
 
         EventService.getInstance().unsubscribe(ContextFormManagerEvents.FORM_INSTANCE_CHANGED, this.formSubscriber);
         EventService.getInstance().unsubscribe(FormEvent.FORM_FIELD_ORDER_CHANGED, this.formSubscriber);
+        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
         EventService.getInstance().unsubscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
         EventService.getInstance().unsubscribe(FormEvent.FIELD_REMOVED, this.formSubscriber);
         EventService.getInstance().unsubscribe(FormEvent.FORM_PAGE_ADDED, this.formSubscriber);
         EventService.getInstance().unsubscribe(FormEvent.FORM_PAGES_REMOVED, this.formSubscriber);
+        EventService.getInstance().unsubscribe(FormEvent.GO_TO_INVALID_FIELD, this.formSubscriber);
     }
 
     public keyDown(event: any): void {
@@ -214,6 +226,8 @@ class FormComponent {
             const validateOk = await this.validateActivePage();
             if (validateOk) {
                 this.state.activePageIndex = index;
+                const context = ContextService.getInstance().getActiveContext();
+                context?.getFormManager()?.setActiveFormPageIndex(index);
             }
         }, 150);
     }
@@ -252,6 +266,21 @@ class FormComponent {
         OverlayService.getInstance().openOverlay(
             OverlayType.WARNING, null, content, toastTitle, null, true
         );
+    }
+
+    public goToInvalidField(): void {
+        const fields = this.state.formInstance.getAllInvalidFields();
+        if (Array.isArray(fields) && fields.length) {
+            const pageIndex = this.state.formInstance.getPageIndexforField(fields[0].instanceId);
+            if (pageIndex !== -1) {
+                this.state.activePageIndex = pageIndex;
+
+                setTimeout(() => {
+                    const element = document.getElementById(fields[0].instanceId);
+                    BrowserUtil.scrollIntoViewIfNeeded(element);
+                }, 50);
+            }
+        }
     }
 }
 

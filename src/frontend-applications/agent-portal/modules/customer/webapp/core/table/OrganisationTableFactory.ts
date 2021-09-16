@@ -21,6 +21,7 @@ import { OrganisationDetailsContext } from '..';
 import { ContextMode } from '../../../../../model/ContextMode';
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
+import { SearchCache } from '../../../../search/model/SearchCache';
 
 export class OrganisationTableFactory extends TableFactory {
 
@@ -45,14 +46,7 @@ export class OrganisationTableFactory extends TableFactory {
     private setDefaultTableConfiguration(
         tableConfiguration: TableConfiguration, defaultRouting?: boolean
     ): TableConfiguration {
-        const tableColumns = [
-            this.getDefaultColumnConfiguration(OrganisationProperty.NUMBER),
-            this.getDefaultColumnConfiguration(OrganisationProperty.NAME),
-            this.getDefaultColumnConfiguration(OrganisationProperty.COUNTRY),
-            this.getDefaultColumnConfiguration(OrganisationProperty.CITY),
-            this.getDefaultColumnConfiguration(OrganisationProperty.STREET),
-            this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID)
-        ];
+        const tableColumns = this.getDefaultColumns();
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(null, null, null,
                 KIXObjectType.ORGANISATION, null, null, tableColumns, [], true, false, null, null,
@@ -98,6 +92,28 @@ export class OrganisationTableFactory extends TableFactory {
                 );
         }
         return config;
+    }
+
+    private getDefaultColumns(): IColumnConfiguration[] {
+        const tableColumns = [
+            this.getDefaultColumnConfiguration(OrganisationProperty.NUMBER),
+            this.getDefaultColumnConfiguration(OrganisationProperty.NAME),
+            this.getDefaultColumnConfiguration(OrganisationProperty.COUNTRY),
+            this.getDefaultColumnConfiguration(OrganisationProperty.CITY),
+            this.getDefaultColumnConfiguration(OrganisationProperty.STREET),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID)
+        ];
+
+        return tableColumns;
+    }
+
+    public async getDefaultColumnConfigurations(searchCache: SearchCache): Promise<IColumnConfiguration[]> {
+        const superColumns = await super.getDefaultColumnConfigurations(searchCache);
+        const ticketColumns = this.getDefaultColumns();
+        return [
+            ...ticketColumns,
+            ...superColumns.filter((c) => !ticketColumns.some((tc) => tc.property === c.property))
+        ];
     }
 
 }

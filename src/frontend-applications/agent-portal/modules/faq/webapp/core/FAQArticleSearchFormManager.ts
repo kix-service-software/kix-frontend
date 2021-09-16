@@ -113,14 +113,24 @@ export class FAQArticleSearchFormManager extends SearchFormManager {
         return operations;
     }
 
-    public async getInputType(property: string): Promise<InputFieldTypes | string> {
+    public async getInputType(property: string, operator?: SearchOperator): Promise<InputFieldTypes | string> {
+        let inputType: InputFieldTypes | string;
+
         if (this.isDropDown(property)) {
-            return InputFieldTypes.DROPDOWN;
+            inputType = InputFieldTypes.DROPDOWN;
         } else if (this.isDateTime(property)) {
-            return InputFieldTypes.DATE_TIME;
+            inputType = InputFieldTypes.DATE_TIME;
         } else {
-            return await super.getInputType(property);
+            inputType = await super.getInputType(property);
         }
+
+        if (inputType === InputFieldTypes.DATE || inputType === InputFieldTypes.DATE_TIME) {
+            const relativeDateTimeOperators = SearchDefinition.getRelativeDateTimeOperators();
+            if (operator && relativeDateTimeOperators.includes(operator))
+                inputType = InputFieldTypes.TEXT;
+        }
+
+        return inputType;
     }
 
     private isDropDown(property: string): boolean {

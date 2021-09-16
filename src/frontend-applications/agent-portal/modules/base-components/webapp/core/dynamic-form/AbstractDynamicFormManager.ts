@@ -33,6 +33,7 @@ import { ServiceRegistry } from '../ServiceRegistry';
 import { IKIXObjectService } from '../IKIXObjectService';
 import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
 import { ValidationSeverity } from '../ValidationSeverity';
+import { DynamicFieldTableValidator } from '../../../../dynamic-fields/webapp/core/DynamicFieldTableValidator';
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 
@@ -105,6 +106,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
                             DynamicFieldTypes.SELECTION,
                             DynamicFieldTypes.CI_REFERENCE,
                             DynamicFieldTypes.TICKET_REFERENCE,
+                            DynamicFieldTypes.TABLE,
                             ...validTypes
                         ]
                     )
@@ -454,9 +456,9 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return addEmpty;
     }
 
-    public async getInputType(property: string): Promise<InputFieldTypes | string> {
+    public async getInputType(property: string, operator?: SearchOperator): Promise<InputFieldTypes | string> {
         for (const manager of this.extendedFormManager) {
-            const extendedOperations = await manager.getInputType(property);
+            const extendedOperations = await manager.getInputType(property, operator);
             if (extendedOperations) {
                 return extendedOperations;
             }
@@ -554,6 +556,10 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
     public hasAdditionalOptions(): boolean {
         return false;
+    }
+
+    public validateAdditionalOptions(option: string): string {
+        return;
     }
 
     public valuesAreDraggable(): boolean {

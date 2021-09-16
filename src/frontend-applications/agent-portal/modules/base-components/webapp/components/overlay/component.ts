@@ -78,12 +78,10 @@ class OverlayComponent {
         this.state.show = false;
 
         if (autoClose) {
-            let firstClick = true;
             this.clickListener = (event: any) => {
-                if (!firstClick && !this.keepShow && !this.showShield() && event.button === 0) {
+                if (!this.keepShow && !this.showShield() && event.button === 0) {
                     this.closeOverlay();
                 }
-                firstClick = false;
                 this.keepShow = false;
             };
             document.addEventListener('click', this.clickListener, false);
@@ -195,7 +193,7 @@ class OverlayComponent {
                 overlay.style.right = '3rem';
                 overlay.style.opacity = 1;
             } else {
-                if (!this.position || !!!this.position.length) {
+                if (!this.position || !this.position.length) {
                     this.position = [null, null];
                 }
 
@@ -229,7 +227,7 @@ class OverlayComponent {
                 clearTimeout(this.topPositionTimeout);
             }
             this.topPositionTimeout = setTimeout(() => {
-                if (!this.position || !!!this.position.length) {
+                if (!this.position || !this.position.length) {
                     this.position = [null, null];
                 }
                 if (this.position[1]) {

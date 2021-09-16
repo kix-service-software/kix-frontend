@@ -44,6 +44,7 @@ import { FormConfiguration } from '../../../../model/configuration/FormConfigura
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { IdService } from '../../../../model/IdService';
+import { DynamicFieldFormUtil } from '../../../base-components/webapp/core/DynamicFieldFormUtil';
 
 export class TicketFormService extends KIXObjectFormService {
 
@@ -201,6 +202,7 @@ export class TicketFormService extends KIXObjectFormService {
                     value = await super.getValue(property, value, ticket, formField, formContext);
                 } else {
                     value = formField.defaultValue ? formField.defaultValue.value : null;
+                    value = await DynamicFieldFormUtil.getInstance().handleDynamicFieldValue(formField, value);
                 }
         }
         return value;

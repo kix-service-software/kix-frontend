@@ -7,7 +7,7 @@
  * --
  */
 
-import md5 = require('md5');
+import md5 from 'md5';
 
 export class ClientStorageService {
 

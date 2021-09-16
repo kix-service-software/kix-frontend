@@ -78,6 +78,7 @@ class Component {
             const initPromises = [];
             const values = [];
             for (const v of this.manager.getValues()) {
+                console.debug(v);
                 const formFieldValue = new DynamicFormFieldValue(
                     this.manager,
                     new ObjectPropertyValue(
@@ -89,6 +90,7 @@ class Component {
                 initPromises.push(formFieldValue.init());
                 values.push(formFieldValue);
             }
+
             await Promise.all(initPromises);
             this.state.dynamicValues = values;
 
@@ -121,14 +123,27 @@ class Component {
     }
 
     public treeValueChanged(value: DynamicFormFieldValue, nodes: TreeNode[]): void {
-        value.setValue(nodes.map((n) => n.id));
+        if (value.isRelativeTime)
+            value.setRelativeTimeUnitValue(nodes.map((n) => n.id).pop() as string);
+        else
+            value.setValue(nodes.map((n) => n.id));
         this.provideValue(value);
     }
 
     public additionalOptionsChanged(value: DynamicFormFieldValue, event: any): void {
         const additionalOptions = event.target.value;
         value.value.additionalOptions = additionalOptions;
-        this.provideValue(value);
+        const result = this.manager.validateAdditionalOptions(additionalOptions);
+        if (result) {
+            this.state.additionalOptionsValidationResult.set(value.instanceId, result);
+            (this as any).setStateDirty('additionalOptionsValidationResult');
+        } else {
+            if (this.state.additionalOptionsValidationResult.has(value.instanceId)) {
+                this.state.additionalOptionsValidationResult.delete(value.instanceId);
+                (this as any).setStateDirty('additionalOptionsValidationResult');
+            }
+            this.provideValue(value);
+        }
     }
 
     public setValue(value: DynamicFormFieldValue, event: any): void {
@@ -158,6 +173,12 @@ class Component {
     public setTimeValue(value: DynamicFormFieldValue, event: any): void {
         const newValue = event.target.value;
         value.setTimeValue(newValue);
+        this.provideValue(value);
+    }
+
+    public setRelativeTimeValue(value: DynamicFormFieldValue, event: any): void {
+        const newValue = event.target.value;
+        value.setRelativeTimeValue(newValue);
         this.provideValue(value);
     }
 
@@ -237,6 +258,7 @@ class Component {
                 if (!returnValue || typeof returnValue === 'number') {
                     returnValue = 200;
                 }
+                break;
             default:
         }
         return returnValue;
@@ -327,6 +349,12 @@ class Component {
             valueElement.classList.remove('dragging');
         }
         this.state.dragStartIndex = null;
+    }
+
+    public autoGrow(event: any) {
+        if (event?.target && event.target.scrollHeight > event.target.clientHeight) {
+            event.target.style.height = (event.target.scrollHeight + 2) + 'px';
+        }
     }
 
 }

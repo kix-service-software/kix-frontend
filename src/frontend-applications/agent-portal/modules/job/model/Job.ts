@@ -13,7 +13,6 @@ import { Macro } from './Macro';
 import { ExecPlan } from './ExecPlan';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { JobTypes } from './JobTypes';
-import { SearchOperator } from '../../search/model/SearchOperator';
 
 export class Job extends KIXObject {
 
@@ -77,13 +76,7 @@ export class Job extends KIXObject {
                                 /^DynamicField_(.+)$/, `${KIXObjectProperty.DYNAMIC_FIELDS}.$1`
                             );
                         }
-                        if (filter.Operator === SearchOperator.GREATER_THAN_OR_EQUAL) {
-                            this.handleBetweenValueOnGTE(preparedFilter, filter);
-                        } else if (filter.Operator === SearchOperator.LESS_THAN_OR_EQUAL) {
-                            this.handleBetweenValueOnLTE(preparedFilter, filter);
-                        } else {
-                            preparedFilter.push(filter);
-                        }
+                        this.prepareObjectFilter(preparedFilter, filter);
                     }
                     this.Filter[key] = preparedFilter;
                 }

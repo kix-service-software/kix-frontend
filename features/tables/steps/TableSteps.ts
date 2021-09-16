@@ -86,11 +86,11 @@ Given('Tabelle - Schmal: {string}', async (objectType: KIXObjectType | string) =
     await table.initialize();
 });
 
-Then('Selection: {int}', function (selection: Number) {
+Then('Selection: {int}', function (selection: number) {
     expect(table.getTableConfiguration().enableSelection).equals(Boolean(selection));
 });
 
-Then('Toggle: {int}', async (toggle: Number) => {
+Then('Toggle: {int}', async (toggle: number) => {
     expect(table.getTableConfiguration().toggle).equals(Boolean(toggle));
 });
 
@@ -110,47 +110,47 @@ Then('Zeilengröße: {string}', async (type: string) => {
     }
 });
 
-Then('DisplayLimit: {int}', async (displayLimit: Number) => {
+Then('DisplayLimit: {int}', async (displayLimit: number) => {
     expect(table.getTableConfiguration().displayLimit).equals(displayLimit);
 });
 
-Then('Die Spalte {string} muss sortierbar sein: {int}', async (columnId: string, sortable: Number) => {
+Then('Die Spalte {string} muss sortierbar sein: {int}', async (columnId: string, sortable: number) => {
     const column = table.getColumn(columnId);
     expect(column, `existing columns: ${table['columns'].map((c) => c.getColumnId())}`).exist;
     expect(column.getColumnConfiguration().sortable).equals(Boolean(sortable));
 });
 
-Then('Die Spalte {string} muss filterbar sein: {int}', async (columnId: string, filterable: Number) => {
+Then('Die Spalte {string} muss filterbar sein: {int}', async (columnId: string, filterable: number) => {
     const column = table.getColumn(columnId);
     expect(column).exist;
     expect(column.getColumnConfiguration().filterable).equals(Boolean(filterable));
 });
 
-Then('Die Spalte {string} hat einen diskreten Filter: {int}', async (columnId: string, listFilter: Number) => {
+Then('Die Spalte {string} hat einen diskreten Filter: {int}', async (columnId: string, listFilter: number) => {
     const column = table.getColumn(columnId);
     expect(column).exist;
     expect(column.getColumnConfiguration().hasListFilter).equals(Boolean(listFilter));
 });
 
-Then('Die Spalte {string} muss {int} breit sein', async (columnId: string, width: Number) => {
+Then('Die Spalte {string} muss {int} breit sein', async (columnId: string, width: number) => {
     const column = table.getColumn(columnId);
     expect(column).exist;
     expect(column.getColumnConfiguration().size).equals(width);
 });
 
-Then('Die Spalte {string} hat eine flexible Breite: {int}', async (columnId: string, flexible: Number) => {
+Then('Die Spalte {string} hat eine flexible Breite: {int}', async (columnId: string, flexible: number) => {
     const column = table.getColumn(columnId);
     expect(column).exist;
     expect(column.getColumnConfiguration().resizable).equals(Boolean(flexible));
 });
 
-Then('Die Spalte {string} zeigt Text an: {int}', async (columnId: string, showText: Number) => {
+Then('Die Spalte {string} zeigt Text an: {int}', async (columnId: string, showText: number) => {
     const column = table.getColumn(columnId);
     expect(column).exist;
     expect(column.getColumnConfiguration().showText).equals(Boolean(showText));
 });
 
-Then('Die Spalte {string} zeigt Icon an: {int}', async (columnId: string, showIcon: Number) => {
+Then('Die Spalte {string} zeigt Icon an: {int}', async (columnId: string, showIcon: number) => {
     const column = table.getColumn(columnId);
     expect(column).exist;
     expect(column.getColumnConfiguration().showIcon).equals(Boolean(showIcon));
@@ -162,13 +162,13 @@ Then('Die Spalte {string} ist vom Typ: {string}', async (columnId: string, type:
     expect(column.getColumnConfiguration().dataType).equals(type);
 });
 
-Then('Die Spalte {string} zeigt Spaltenbezeichnung an: {int}', function (columnId: string, showColumnTitle: Number) {
+Then('Die Spalte {string} zeigt Spaltenbezeichnung an: {int}', function (columnId: string, showColumnTitle: number) {
     const column = table.getColumn(columnId);
     expect(column).exist;
     expect(column.getColumnConfiguration().showColumnTitle).equals(Boolean(showColumnTitle));
 });
 
-Then('Die Spalte {string} zeigt Spaltenicon an: {int}', function (columnId: string, showColumnIcon: Number) {
+Then('Die Spalte {string} zeigt Spaltenicon an: {int}', function (columnId: string, showColumnIcon: number) {
     const column = table.getColumn(columnId);
     expect(column).exist;
     expect(column.getColumnConfiguration().showColumnIcon).equals(Boolean(showColumnIcon));

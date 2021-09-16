@@ -43,6 +43,7 @@ import { Article } from '../../model/Article';
 import { ArticleLoadingOptions } from '../../model/ArticleLoadingOptions';
 import { Contact } from '../../../customer/model/Contact';
 import { Organisation } from '../../../customer/model/Organisation';
+import { UserProperty } from '../../../user/model/UserProperty';
 
 export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
 
@@ -150,7 +151,9 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                     case 'TICKETOWNER':
                         if (ticket.OwnerID && !isNaN(Number(ticket.OwnerID))) {
                             const loadingOptions = new KIXObjectLoadingOptions(
-                                null, null, null, null, ['Preferences']
+                                null, null, null,
+                                ['Preferences', UserProperty.CONTACT],
+                                ['Preferences', UserProperty.CONTACT]
                             );
                             const users = await KIXObjectService.loadObjects<User>(
                                 KIXObjectType.USER, [ticket.OwnerID], loadingOptions, null, true, true, true
@@ -354,7 +357,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         return newObject;
     }
 
-    private setObject(newObject: Ticket, oldObject: {}, fromForm: boolean = false) {
+    private setObject(newObject: Ticket, oldObject: any, fromForm: boolean = false) {
         if (oldObject) {
             Object.getOwnPropertyNames(oldObject).forEach((property) => {
                 if (

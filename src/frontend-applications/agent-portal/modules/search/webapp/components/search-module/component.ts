@@ -10,6 +10,7 @@
 import { ConfigurationType } from '../../../../../model/configuration/ConfigurationType';
 import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
+import { IdService } from '../../../../../model/IdService';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
@@ -23,7 +24,8 @@ import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private resultWidgets: Array<[KIXObjectType | string, WidgetConfiguration, string, string | ObjectIcon]> = [];
+    private resultWidgets: Array<[string, KIXObjectType | string, WidgetConfiguration, string, string | ObjectIcon]>
+        = [];
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -34,10 +36,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const context = ContextService.getInstance().getActiveContext<SearchContext>();
         context.registerListener('search-module', {
             objectListChanged: async (objectType: KIXObjectType | string, objectList: KIXObject[]) => {
-                const resultWidget = this.resultWidgets.find((rw) => rw[0] === objectType);
+                const resultWidget = this.resultWidgets.find((rw) => rw[1] === objectType);
                 if (resultWidget) {
                     const title = await this.getTitle(objectType);
-                    resultWidget[2] = `${title} (${objectList?.length})`;
+                    resultWidget[3] = `${title} (${objectList?.length})`;
                 }
 
                 this.state.resultWidget = resultWidget;
@@ -66,7 +68,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await this.createTableWidgets(categories);
 
         const category = context.getSearchResultCategory();
-        this.state.resultWidget = this.resultWidgets.find((rw) => rw[0] === category?.objectType);
+        this.state.resultWidget = this.resultWidgets.find((rw) => rw[1] === category?.objectType);
     }
 
     private async createTableWidgets(categories: SearchResultCategory[]): Promise<void> {
@@ -76,14 +78,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
             const widgetConfiguration = new WidgetConfiguration(
                 'search-result-widget-' + category.label, category.label, ConfigurationType.TableWidget,
-                'table-widget', category.label, [], null,
+                'table-widget', category.label, ['bulk-action', 'csv-export-action'], null,
                 new TableWidgetConfiguration('', '', null, category.objectType),
                 false, false, icon, true
             );
 
             const title = await this.getTitle(category.objectType);
 
-            this.resultWidgets.push([category.objectType, widgetConfiguration, title, icon]);
+            this.resultWidgets.push(
+                [IdService.generateDateBasedId(), category.objectType, widgetConfiguration, title, icon]
+            );
 
             if (Array.isArray(category.children) && category.children.length) {
                 await this.createTableWidgets(category.children);

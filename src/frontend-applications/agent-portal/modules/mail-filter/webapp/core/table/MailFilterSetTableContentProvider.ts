@@ -39,7 +39,7 @@ export class MailFilterSetTableContentProvider extends TableContentProvider<Mail
                         const values: TableValue[] = [];
 
                         for (const property in s) {
-                            if (s.hasOwnProperty(property)) {
+                            if (Object.prototype.hasOwnProperty.call(s, property)) {
                                 values.push(new TableValue(property, s[property], s[property]));
                             }
                         }

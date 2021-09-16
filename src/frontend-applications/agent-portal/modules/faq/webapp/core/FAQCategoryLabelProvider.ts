@@ -14,6 +14,7 @@ import { FAQCategoryProperty } from '../../model/FAQCategoryProperty';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class FAQCategoryLabelProvider extends LabelProvider<FAQCategory> {
 
@@ -98,8 +99,8 @@ export class FAQCategoryLabelProvider extends LabelProvider<FAQCategory> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public isLabelProviderFor(faqCategory: FAQCategory): boolean {
-        return faqCategory instanceof FAQCategory;
+    public isLabelProviderFor(object: FAQCategory | KIXObject): boolean {
+        return object instanceof FAQCategory || object.KIXObjectType === this.kixObjectType;
     }
 
     public async getObjectText(

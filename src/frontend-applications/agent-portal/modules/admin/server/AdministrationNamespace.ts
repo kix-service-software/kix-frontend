@@ -19,10 +19,9 @@ import { AdministrationEvent } from '../model/AdministrationEvent';
 import { AdminCategoriesResponse } from '../model/AdminCategoriesResponse';
 import { AdminModuleService } from './AdminModuleService';
 import { AdminModuleCategory } from '../model/AdminModuleCategory';
-
-import cookie = require('cookie');
 import { AdminModule } from '../model/AdminModule';
 import { CacheService } from '../../../server/services/cache';
+import { Socket } from 'socket.io';
 
 export class AdministrationNamespace extends SocketNameSpace {
 
@@ -43,7 +42,7 @@ export class AdministrationNamespace extends SocketNameSpace {
         return 'administration';
     }
 
-    protected registerEvents(client: SocketIO.Socket): void {
+    protected registerEvents(client: Socket): void {
         this.registerEventHandler(
             client, AdministrationEvent.LOAD_ADMIN_CATEGORIES, this.loadAdminCategories.bind(this)
         );
@@ -52,7 +51,7 @@ export class AdministrationNamespace extends SocketNameSpace {
         );
     }
 
-    private async loadAdminCategories(data: MainMenuEntriesRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+    private async loadAdminCategories(data: MainMenuEntriesRequest, client: Socket): Promise<SocketResponse> {
         let adminCategoryResponse = await CacheService.getInstance().get('KIX_ADMIN_MODULES');
         if (!adminCategoryResponse) {
             adminCategoryResponse = await AdminModuleService.getInstance().getAdminModules()

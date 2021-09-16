@@ -412,7 +412,7 @@ export class ArticleFormService extends KIXObjectFormService {
 
         if (Array.isArray(value)) {
             value = value.filter((a) => a.Disposition !== 'inline');
-            if (!!value.length) {
+            if (value.length) {
                 // TODO: not very performant (maybe some reference attachment id)
                 const referencedArticle = await this.getReferencedArticle();
                 for (const attachment of value) {
@@ -425,7 +425,7 @@ export class ArticleFormService extends KIXObjectFormService {
                 }
             }
         }
-        return !!newValue.length ? newValue : null;
+        return newValue.length ? newValue : null;
     }
 
     public async getToFieldValue(dialogContext: Context): Promise<string> {

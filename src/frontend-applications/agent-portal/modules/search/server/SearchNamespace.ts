@@ -21,11 +21,10 @@ import { LoadSearchResponse } from '../model/LoadSearchResponse';
 import { DeleteSearchRequest } from '../model/DeleteSearchRequest';
 import { ISocketResponse } from '../../../modules/base-components/webapp/core/ISocketResponse';
 
-import cookie = require('cookie');
+import * as cookie from 'cookie';
 import { IdService } from '../../../model/IdService';
 import { SearchCache } from '../model/SearchCache';
-import { CacheService } from '../../../server/services/cache';
-import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { Socket } from 'socket.io';
 
 export class SearchNamespace extends SocketNameSpace {
 
@@ -46,13 +45,13 @@ export class SearchNamespace extends SocketNameSpace {
         return 'search';
     }
 
-    protected registerEvents(client: SocketIO.Socket): void {
+    protected registerEvents(client: Socket): void {
         this.registerEventHandler(client, SearchEvent.SAVE_SEARCH, this.saveSearch.bind(this));
         this.registerEventHandler(client, SearchEvent.LOAD_SEARCH, this.loadSearch.bind(this));
         this.registerEventHandler(client, SearchEvent.DELETE_SEARCH, this.deleteSearch.bind(this));
     }
 
-    private async saveSearch(data: SaveSearchRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+    private async saveSearch(data: SaveSearchRequest, client: Socket): Promise<SocketResponse> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';
 
@@ -89,7 +88,7 @@ export class SearchNamespace extends SocketNameSpace {
         await UserService.getInstance().setPreferences(token, 'SearchNamespace', [[preferenceId, value]]);
     }
 
-    private async loadSearch(data: ISocketRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+    private async loadSearch(data: ISocketRequest, client: Socket): Promise<SocketResponse> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';
 
@@ -125,7 +124,7 @@ export class SearchNamespace extends SocketNameSpace {
         }
     }
 
-    private async deleteSearch(data: DeleteSearchRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+    private async deleteSearch(data: DeleteSearchRequest, client: Socket): Promise<SocketResponse> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';
 

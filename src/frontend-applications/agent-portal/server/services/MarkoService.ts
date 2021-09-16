@@ -7,10 +7,10 @@
  * --
  */
 
-import jsonfile = require('jsonfile');
-import path = require('path');
+import jsonfile from 'jsonfile';
+import path from 'path';
 
-import lasso = require('lasso');
+import lasso from 'lasso';
 import { ApplicationRouter } from '../routes/ApplicationRouter';
 import { PluginService } from '../../../../server/services/PluginService';
 import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
@@ -126,28 +126,13 @@ export class MarkoService {
 
             const folder = app.internal ? 'modules' : 'plugins';
             const templatePath = path.join(__dirname, '..', '..', folder, app.name, app.path);
-            try {
-                const template = require(templatePath);
-                await new Promise<void>((resolve, reject) => {
-                    template.render({}, (error, result) => {
-                        if (error) {
-                            ProfilingService.getInstance().stop(profileTaskId, `marko app build error: ${app.name}`);
-                            LoggingService.getInstance().error(error);
-                            reject(error);
-                        } else {
-                            LoggingService.getInstance().info(`marko app build finished: ${app.name}`);
-                            resolve();
-                        }
-                    });
-                });
-            } catch (error) {
-                LoggingService.getInstance().error('Error loading application template');
-                if (error.message) {
-                    LoggingService.getInstance().error(error.message);
-                }
-            }
+            const template = require(templatePath);
+            await template.render({}).catch((error) => {
+                ProfilingService.getInstance().stop(profileTaskId, `marko app build error: ${app.name}`);
+                LoggingService.getInstance().error(error);
+            });
+            LoggingService.getInstance().info(`marko app build finished: ${app.name}`);
         }
-
         this.ready = true;
         ProfilingService.getInstance().stop(profileTaskId);
     }

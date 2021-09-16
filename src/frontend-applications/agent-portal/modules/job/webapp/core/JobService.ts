@@ -28,7 +28,7 @@ import { LabelService } from '../../../base-components/webapp/core/LabelService'
 export class JobService extends KIXObjectService<Job> {
 
     private static INSTANCE: JobService = null;
-    private typeMapping: {} = {};
+    private typeMapping: any = {};
 
     public static getInstance(): JobService {
         if (!JobService.INSTANCE) {

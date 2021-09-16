@@ -33,6 +33,8 @@ export enum ObjectReferenceOptions {
 
     KEEP_SELECTION = 'KEEP_SELECTION',
 
-    TRANSLATABLE = 'TRANSLATABLE'
+    TRANSLATABLE = 'TRANSLATABLE',
+
+    TEXT_AS_ID = 'TEXT_AS_ID'
 
 }

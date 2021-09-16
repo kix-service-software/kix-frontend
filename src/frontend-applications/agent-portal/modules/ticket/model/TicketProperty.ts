@@ -93,19 +93,7 @@ export enum TicketProperty {
 
     CREATED_USER_ID = 'CreatedUserID',
 
-    // UI properties
-    STATE = 'State',
     STATE_TYPE = 'StateType',
-    PRIORITY = 'Priority',
-    LOCK = 'Lock',
-    QUEUE = 'Queue',
-    ORGANISATION = 'Organisation',
-    CONTACT = 'Contact',
-    OWNER = 'Owner',
-    TYPE = 'Type',
-    SLA = 'SLA',
-    SERVICE = 'Service',
-    RESPONSIBLE = 'Responsible',
-    UNTIL_TIME = 'UntilTime',
 
+    STATE = 'State'
 }

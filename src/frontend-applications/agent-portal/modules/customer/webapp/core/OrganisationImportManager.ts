@@ -37,7 +37,7 @@ export class OrganisationImportManager extends ImportManager {
         );
     }
 
-    protected async getSpecificObject(object: {}): Promise<Organisation> {
+    protected async getSpecificObject(object: any): Promise<Organisation> {
         return new Organisation(object as Organisation);
     }
 

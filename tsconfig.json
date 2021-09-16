@@ -1,27 +1,35 @@
 {
   "compilerOptions": {
+    "module": "commonjs",
     "target": "es6",
     "lib": [
       "es6",
-      "dom",
-      "es2015",
-      "es2016"
+      "dom"
     ],
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "types": [
+      "node",
+      "reflect-metadata",
+      "mocha"
+    ],
+    "moduleResolution": "Node",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "sourceMap": false,
     "declaration": false,
-    "outDir": "dist"
+    "strict": false,
+    "strictPropertyInitialization": false,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "outDir": "dist",
+    "rootDir": "src",
+    "esModuleInterop": true
   },
   "types": [
     "node",
     "reflect-metadata"
   ],
   "include": [
-    "src/**/*.ts",
-    "features/**/*.ts"
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules"

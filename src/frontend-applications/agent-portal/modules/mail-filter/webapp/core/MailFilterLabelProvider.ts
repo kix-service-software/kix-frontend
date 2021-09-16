@@ -17,6 +17,7 @@ import { MailFilterMatch } from '../../model/MailFilterMatch';
 import { SortUtil } from '../../../../model/SortUtil';
 import { DataType } from '../../../../model/DataType';
 import { MailFilterSet } from '../../model/MailFilterSet';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class MailFilterLabelProvider extends LabelProvider<MailFilter> {
 
@@ -26,8 +27,8 @@ export class MailFilterLabelProvider extends LabelProvider<MailFilter> {
         return objectType === this.kixObjectType;
     }
 
-    public isLabelProviderFor(object: MailFilter): boolean {
-        return object instanceof MailFilter;
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object instanceof MailFilter || object.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
@@ -89,13 +90,13 @@ export class MailFilterLabelProvider extends LabelProvider<MailFilter> {
         let displayValue = value;
         switch (property) {
             case MailFilterProperty.STOP_AFTER_MATCH:
-                displayValue = Boolean(value) ? 'Translatable#Yes' : 'Translatable#No';
+                displayValue = value ? 'Translatable#Yes' : 'Translatable#No';
                 break;
             case MailFilterProperty.MATCH:
                 if (Array.isArray(value)) {
                     const matchList: MailFilterMatch[] = SortUtil.sortObjects(value, 'Key', DataType.STRING);
                     displayValue = matchList.map(
-                        (v) => `${v.Key} ${Boolean(v.Not) ? '!~' : '=~'} ${v.Value}`
+                        (v) => `${v.Key} ${v.Not ? '!~' : '=~'} ${v.Value}`
                     ).join(', ');
                 }
                 break;
@@ -160,7 +161,7 @@ export class MailFilterLabelProvider extends LabelProvider<MailFilter> {
         const icons = [];
         switch (property) {
             case MailFilterProperty.STOP_AFTER_MATCH:
-                if (Boolean(object.StopAfterMatch)) {
+                if (object.StopAfterMatch) {
                     icons.push('kix-icon-check');
                 }
                 break;

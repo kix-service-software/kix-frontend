@@ -83,13 +83,9 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(
             new FormFieldConfiguration(
-                'mail-account-edit-form-field-password',
-                'Translatable#Password', MailAccountProperty.PASSWORD, null, false,
-                'Translatable#Helptext_Admin_MailAccountCreate_Password',
-                [
-                    new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
-                ], null, null, null, null, null, null, null, null, null, null, null, null, null,
-                'Translatable#not modified'
+                'mail-account-edit-form-field-type',
+                'Translatable#Type', MailAccountProperty.TYPE, 'mail-account-input-types',
+                true, 'Translatable#Helptext_Admin_MailAccountCreate_Type.'
             )
         );
         configurations.push(
@@ -97,13 +93,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 'mail-account-edit-form-field-host',
                 'Translatable#Host', MailAccountProperty.HOST, null, true,
                 'Translatable#Helptext_Admin_MailAccountCreate_Host'
-            )
-        );
-        configurations.push(
-            new FormFieldConfiguration(
-                'mail-account-edit-form-field-type',
-                'Translatable#Type', MailAccountProperty.TYPE, 'mail-account-input-types',
-                true, 'Translatable#Helptext_Admin_MailAccountCreate_Type.'
             )
         );
         configurations.push(
@@ -168,9 +157,8 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 'mail-account-edit-form-group-information', 'Translatable#Email Account',
                 [
                     'mail-account-edit-form-field-username',
-                    'mail-account-edit-form-field-password',
-                    'mail-account-edit-form-field-host',
                     'mail-account-edit-form-field-type',
+                    'mail-account-edit-form-field-host',
                     'mail-account-edit-form-field-accept-header',
                     'mail-account-edit-form-field-dispatching',
                     'mail-account-edit-form-field-comment',

@@ -345,7 +345,7 @@ export class Table implements Table {
                 newRows.push(r);
             }
         });
-        if (!!newRows.length) {
+        if (newRows.length) {
             this.rows.splice(index, 0, ...newRows);
         }
     }

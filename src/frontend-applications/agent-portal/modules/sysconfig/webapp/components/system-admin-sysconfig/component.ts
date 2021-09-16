@@ -52,7 +52,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await this.prepareTable();
 
         const actions = await ActionFactory.getInstance().generateActions(
-            ['sysconfig-edit-action', 'sysconfig-reset-action'], this.state.table
+            ['sysconfig-edit-action', 'sysconfig-reset-action', 'activate-configuration'], this.state.table
         );
         WidgetService.getInstance().registerActions(this.state.instanceId, actions);
 

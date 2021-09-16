@@ -43,7 +43,8 @@ describe('Placeholder replacement for article', () => {
 
     after(() => {
         (TranslationService.getInstance() as any).translations = null;
-        LabelService.getInstance()['labelProviders'] = [];
+        LabelService.getInstance()['objectLabelProvider'] = []
+        LabelService.getInstance()['propertiesLabelProvider'].clear();;
     });
 
     describe('Replace simple article attribute placeholder.', async () => {

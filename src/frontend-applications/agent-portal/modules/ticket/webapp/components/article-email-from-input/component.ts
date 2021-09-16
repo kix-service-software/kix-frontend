@@ -8,16 +8,16 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
-import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { FormInputComponent } from '../../../../base-components/webapp/core/FormInputComponent';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { Ticket } from '../../../model/Ticket';
 import { TicketProperty } from '../../../model/TicketProperty';
-import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { Queue } from '../../../model/Queue';
 import { SystemAddress } from '../../../../system-address/model/SystemAddress';
-import { TreeNode, TreeHandler } from '../../../../base-components/webapp/core/tree';
+import { TreeHandler, TreeNode } from '../../../../base-components/webapp/core/tree';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
@@ -93,7 +93,7 @@ class Component extends FormInputComponent<number, ComponentState> {
 
             const queue = queues[0];
 
-            let userName = user.Contact ? `${user.Contact.Firstname} ${user.Contact.Lastname}` : user.UserLogin;
+            let userName = user.Contact ? `${ user.Contact.Firstname } ${ user.Contact.Lastname }` : user.UserLogin;
             userName = userName
                 .replace(/ä/g, 'ae').replace(/Ä/g, 'Ae')
                 .replace(/ö/g, 'oe').replace(/Ö/g, 'Oe')
@@ -110,9 +110,9 @@ class Component extends FormInputComponent<number, ComponentState> {
                 .replace(/ü/g, 'ue').replace(/Ü/g, 'Ue');
 
             const labels = [
-                [`\"${realName}\" <${queueMail}>`, `${realName}`],
-                [`${userName} \"via\" ${realName} <${queueMail}>`, `${userName} via ${realName}`],
-                [`${userName} <${queueMail}>`, `${userName}`]
+                [`\"${ realName }\" <${ queueMail }>`, `${ realName }`],
+                [`${ userName } \"via\" ${ realName } <${ queueMail }>`, `${ userName } via ${ realName }`],
+                [`${ userName } <${ queueMail }>`, `${ userName }`]
             ];
 
             const nodes: TreeNode[] = [];
@@ -127,8 +127,13 @@ class Component extends FormInputComponent<number, ComponentState> {
             if (formList) {
                 const treeHandler: TreeHandler = formList.getTreeHandler();
                 if (treeHandler) {
+                    const context = ContextService.getInstance().getActiveContext();
+                    const formInstance = await context?.getFormManager()?.getFormInstance();
+                    const value =
+                        this.state.field ? formInstance.getFormFieldValue<number>(this.state.field?.instanceId) : null;
+                    const node = nodes.find((n) => n.id === value?.value) || nodes[0];
                     treeHandler.setTree(nodes);
-                    treeHandler.setSelection([nodes[0]], true);
+                    treeHandler.setSelection([node], true);
                 }
             }
         }

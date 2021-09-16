@@ -18,6 +18,9 @@ import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { DataType } from '../../../../../model/DataType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { ExtendedTableFactory } from './ExtendedTableFactory';
+import { SearchCache } from '../../../../search/model/SearchCache';
+import { SearchProperty } from '../../../../search/model/SearchProperty';
+import { TicketProperty } from '../../../../ticket/model/TicketProperty';
 
 export abstract class TableFactory {
 
@@ -130,6 +133,24 @@ export abstract class TableFactory {
         });
 
         return values;
+    }
+
+    public async getDefaultColumnConfigurations(searchCache: SearchCache): Promise<IColumnConfiguration[]> {
+        const columns: IColumnConfiguration[] = [];
+
+        const criteria = searchCache.criteria.filter((c) => {
+            return c.property !== SearchProperty.FULLTEXT
+                && c.property !== TicketProperty.CLOSE_TIME
+                && c.property !== TicketProperty.LAST_CHANGE_TIME;
+        });
+
+
+        for (const c of criteria) {
+            const column = await this.getDefaultColumnConfiguration(c.property);
+            columns.push(column);
+        }
+
+        return columns;
     }
 
 }
