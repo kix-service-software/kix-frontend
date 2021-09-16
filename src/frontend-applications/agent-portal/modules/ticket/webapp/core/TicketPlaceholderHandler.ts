@@ -357,7 +357,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         return newObject;
     }
 
-    private setObject(newObject: Ticket, oldObject: {}, fromForm: boolean = false) {
+    private setObject(newObject: Ticket, oldObject: any, fromForm: boolean = false) {
         if (oldObject) {
             Object.getOwnPropertyNames(oldObject).forEach((property) => {
                 if (

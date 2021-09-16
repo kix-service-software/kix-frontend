@@ -20,6 +20,7 @@ import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { IEventSubscriber } from '../../core/IEventSubscriber';
 import { Context } from '../../../../../model/Context';
+import { DateTimeUtil } from '../../core/DateTimeUtil';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -49,10 +50,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.update();
     }
 
-    private update(): void {
+    private async update(): Promise<void> {
+        const start = Date.now();
         this.prepareConfigurations();
         this.prepareWidget();
         this.prepareActions();
+        const end = Date.now();
+        const date = await DateTimeUtil.getLocalDateTimeString(new Date());
+        console.debug(`${date} - Updated Details Page: ${end - start}ms`);
     }
 
     public onDestroy(): void {

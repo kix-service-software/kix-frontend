@@ -12,7 +12,7 @@ import { IdService } from '../../../../../model/IdService';
 export class ComponentState {
 
     public id: string;
-    public config: object = {};
+    public config: any = {};
 
     /**
      * @param inline optional - boolean if toolbar is an inline element (only visible if text field is focused),

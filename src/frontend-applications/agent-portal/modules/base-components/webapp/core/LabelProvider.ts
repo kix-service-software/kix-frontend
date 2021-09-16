@@ -52,6 +52,10 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
         return objectType === this.kixObjectType;
     }
 
+    public getSupportedProperties(): string[] {
+        return [];
+    }
+
     public isLabelProviderForDFType(dfFieldType: string): boolean {
         for (const extendedLabelProvider of this.getExtendedLabelProvider()) {
             if (extendedLabelProvider.isLabelProviderForDFType(dfFieldType)) {
@@ -144,6 +148,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                     ).catch((error) => [] as ValidObject[]);
                     newValue = validObjects && !!validObjects.length ? validObjects[0].Name : value;
                 }
+                break;
             default:
         }
         return newValue;
@@ -177,7 +182,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                 }
             }
         } else {
-            displayValue = await this.getPropertyValueDisplayText(property, object[property], translatable);
+            return this.getPropertyValueDisplayText(property, object[property], translatable);
         }
 
         return displayValue;
@@ -386,7 +391,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                     const counts = DynamicFieldFormUtil.getInstance().countValues(checklist);
                     values.push(`${counts[0]}/${counts[1]}`);
                 } catch (error) {
-                    console.error(`Could not parse checklist value from dynamic field`);
+                    console.error('Could not parse checklist value from dynamic field');
                     console.error(field);
                     console.error(fieldValue);
                     console.error(error);

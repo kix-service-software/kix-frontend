@@ -303,7 +303,7 @@ export class UserService extends KIXObjectAPIService {
                 });
             }
         }
-        if (!!errors.length) {
+        if (errors.length) {
             throw new Error(errors[0].Code, errors.map((e) => e.Message).join('\n'), errors[0].StatusCode);
         }
     }

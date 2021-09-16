@@ -19,7 +19,7 @@ export class DateTimeAPIUtil {
                 day: '2-digit',
                 month: '2-digit',
                 year: 'numeric'
-            };
+            } as const;
 
             if (!language) {
                 language = await TranslationAPIService.getUserLanguage(token);
@@ -39,7 +39,7 @@ export class DateTimeAPIUtil {
                 year: 'numeric',
                 hour: '2-digit',
                 minute: '2-digit'
-            };
+            } as const;
 
             if (!language) {
                 language = await TranslationAPIService.getUserLanguage(token);

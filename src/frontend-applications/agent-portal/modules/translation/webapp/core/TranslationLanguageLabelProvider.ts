@@ -13,14 +13,15 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TranslationLanguageProperty } from '../../model/TranslationLanguageProperty';
 import { TranslationService } from './TranslationService';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 
 export class TranslationLanguageLabelProvider extends LabelProvider<TranslationLanguage> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TRANSLATION_LANGUAGE;
 
-    public isLabelProviderFor(language: TranslationLanguage): boolean {
-        return language instanceof TranslationLanguage;
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object instanceof TranslationLanguage || object.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

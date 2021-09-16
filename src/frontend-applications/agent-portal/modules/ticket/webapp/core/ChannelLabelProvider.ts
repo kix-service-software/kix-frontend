@@ -13,6 +13,7 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ChannelProperty } from '../../model/ChannelProperty';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class ChannelLabelProvider extends LabelProvider<Channel> {
 
@@ -22,8 +23,8 @@ export class ChannelLabelProvider extends LabelProvider<Channel> {
         return objectType === this.kixObjectType;
     }
 
-    public isLabelProviderFor(channel: Channel): boolean {
-        return channel instanceof Channel;
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object instanceof Channel || object.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

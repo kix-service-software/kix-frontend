@@ -6,12 +6,9 @@
  * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
  * --
  */
-
-import fs = require('fs');
-import path = require('path');
-import { filename } from 'winston-daily-rotate-file';
+import fs from 'fs';
+import path from 'path';
 import { IServerConfiguration } from '../model/IServerConfiguration';
-
 
 export class ConfigurationService {
 

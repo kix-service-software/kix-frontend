@@ -71,7 +71,7 @@ export class TicketPriorityTableDeleteAction extends AbstractAction<Table> {
 
             this.data.reload(true);
 
-            if (!failIds || !!!failIds.length) {
+            if (!failIds || failIds.length === 0) {
                 const content = new ComponentContent(
                     'toast',
                     new ToastContent('kix-icon-check', 'Translatable#Priorities successfully removed.')

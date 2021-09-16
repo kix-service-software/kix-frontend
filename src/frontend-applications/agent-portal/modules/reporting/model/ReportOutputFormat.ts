@@ -22,7 +22,7 @@ export class ReportOutputFormat extends KIXObject {
 
     public Description: string;
 
-    public Options: {};
+    public Options: any;
 
     public constructor(outputFormat?: ReportOutputFormat) {
         super(outputFormat);

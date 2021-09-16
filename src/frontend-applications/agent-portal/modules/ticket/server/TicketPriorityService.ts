@@ -48,14 +48,13 @@ export class TicketPriorityAPIService extends KIXObjectAPIService {
 
         let objects = [];
         if (objectType === KIXObjectType.TICKET_PRIORITY) {
-            const priorities = await super.load<TicketPriority>(
-                token, KIXObjectType.TICKET_PRIORITY, this.RESOURCE_URI, loadingOptions, objectIds, 'Priority',
+            objects = await super.load<TicketPriority>(
+                token, KIXObjectType.TICKET_PRIORITY, this.RESOURCE_URI, loadingOptions, null, 'Priority',
                 TicketPriority
             );
+
             if (objectIds && objectIds.length) {
-                objects = priorities.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
-            } else {
-                objects = priorities;
+                objects = objects.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
             }
         }
 

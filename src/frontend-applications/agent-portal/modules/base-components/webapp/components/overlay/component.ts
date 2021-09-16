@@ -193,7 +193,7 @@ class OverlayComponent {
                 overlay.style.right = '3rem';
                 overlay.style.opacity = 1;
             } else {
-                if (!this.position || !!!this.position.length) {
+                if (!this.position || !this.position.length) {
                     this.position = [null, null];
                 }
 
@@ -227,7 +227,7 @@ class OverlayComponent {
                 clearTimeout(this.topPositionTimeout);
             }
             this.topPositionTimeout = setTimeout(() => {
-                if (!this.position || !!!this.position.length) {
+                if (!this.position || !this.position.length) {
                     this.position = [null, null];
                 }
                 if (this.position[1]) {

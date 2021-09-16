@@ -130,6 +130,7 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
                     } else if (criteria.operator === SearchOperator.NOT_EQUALS) {
                         return !translation.Languages.some((l) => l.Language === criteria.value);
                     }
+                    break;
                 default:
             }
         }
@@ -230,7 +231,7 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
         return language;
     }
 
-    public static async createTranslationObject(patterns: string[]): Promise<{}> {
+    public static async createTranslationObject(patterns: string[]): Promise<any> {
         const translationObject = {};
         for (const pattern of patterns) {
             const text = await TranslationService.translate(pattern);

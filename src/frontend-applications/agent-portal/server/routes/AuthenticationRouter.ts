@@ -8,7 +8,7 @@
  */
 
 import { Request, Response } from 'express';
-import path = require('path');
+import path from 'path';
 
 import { KIXRouter } from './KIXRouter';
 import * as Bowser from 'bowser';
@@ -96,7 +96,7 @@ export class AuthenticationRouter extends KIXRouter {
                     const favIcon = await this.getIcon('agent-portal-icon');
                     const logo = await this.getIcon('agent-portal-logo');
 
-                    res.marko(template, {
+                    (res as any).marko(template, {
                         login: true, logout, releaseInfo, imprintLink, redirectUrl, favIcon, logo
                     });
                 } catch (error) {

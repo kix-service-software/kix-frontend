@@ -186,7 +186,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 // TODO: Publish event to show an error dialog
                 const content = new ComponentContent('list-with-title',
                     {
-                        title: `Translatable#Error on create:`,
+                        title: 'Translatable#Error on create:',
                         list: [`${error.Code}: ${error.Message}`]
                     }
                 );
@@ -248,7 +248,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                     // TODO: Publish event to show an error dialog
                     const content = new ComponentContent('list-with-title',
                         {
-                            title: `Translatable#Error on update:`,
+                            title: 'Translatable#Error on update:',
                             list: [`${error.Code}: ${error.Message}`]
                         }
                     );
@@ -317,7 +317,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                     failIds.push(objectId);
                 });
         }
-        if (!!errors.length) {
+        if (errors.length) {
             // TODO: Publish event to show an error dialog
             const content = new ComponentContent('list-with-title',
                 {

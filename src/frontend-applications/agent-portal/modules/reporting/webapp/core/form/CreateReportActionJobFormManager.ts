@@ -166,7 +166,7 @@ export class CreateReportActionJobFormManager extends ExtendedJobFormManager {
     }
 
     public async postPrepareOptionValue(
-        actionType: string, optionName: string, value: any, parameter: {},
+        actionType: string, optionName: string, value: any, parameter: any,
         field: FormFieldConfiguration, formInstance: FormInstance
     ): Promise<any> {
         if (optionName === 'DefinitionID') {

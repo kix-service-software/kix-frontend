@@ -2,7 +2,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "args": [],
             "cwd": "${workspaceFolder}",
             "env": {
                 "NODE_ENV": "development",
@@ -14,6 +13,13 @@
             },
             "name": "KIX",
             "program": "${workspaceFolder}/src/server/index.ts",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/babel-node",
+            "runtimeArgs": [
+                "-x",
+                ".ts",
+                "--presets",
+                "@babel/preset-env,@babel/preset-typescript"
+            ],
             "request": "launch",
             "sourceMaps": true,
             "stopOnEntry": false,
@@ -54,8 +60,8 @@
                 "--no-timeouts",
                 "--reporter",
                 "spec",
-                "--compilers",
-                "ts:ts-node/register",
+                "--require",
+                "ts-node/register",
                 "--require",
                 "source-map-support/register",
                 "--exit",

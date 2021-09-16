@@ -226,7 +226,7 @@ export class ConfigItemFormService extends KIXObjectFormService {
         );
         let ff = formField;
         formFields.push(ff);
-        if (!!relevantPreparedData.length) {
+        if (relevantPreparedData.length) {
             let index = 0;
             for (const pd of relevantPreparedData) {
                 if (index < ff.countMax) {

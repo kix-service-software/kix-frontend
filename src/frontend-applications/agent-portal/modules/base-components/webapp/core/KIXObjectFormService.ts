@@ -100,8 +100,6 @@ export abstract class KIXObjectFormService {
 
         const values = [];
         for (const f of formFields) {
-            let formFieldValue: FormFieldValue;
-
             if (formFieldValues.has(f.instanceId)) {
                 continue;
             }
@@ -128,7 +126,7 @@ export abstract class KIXObjectFormService {
                 }
             }
 
-            formFieldValue = kixObject && formContext === FormContext.EDIT
+            const formFieldValue = kixObject && formContext === FormContext.EDIT
                 ? new FormFieldValue(value)
                 : new FormFieldValue(value, f.defaultValue ? f.defaultValue.valid : undefined);
 
@@ -223,7 +221,7 @@ export abstract class KIXObjectFormService {
             for (const child of f.children) {
                 const existingChildren = children.filter((c) => c.property === child.property);
                 if (
-                    !!!existingChildren.length
+                    !existingChildren.length
                     || typeof child.countDefault !== 'number'
                     || child.countDefault > existingChildren.length
                 ) {

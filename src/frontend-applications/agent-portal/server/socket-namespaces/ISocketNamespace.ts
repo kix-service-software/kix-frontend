@@ -7,7 +7,9 @@
  * --
  */
 
+import { Server } from 'socket.io';
+
 export interface ISocketNamespace {
 
-    registerNamespace(socketIO: SocketIO.Server): void;
+    registerNamespace(socketIO: Server): void;
 }

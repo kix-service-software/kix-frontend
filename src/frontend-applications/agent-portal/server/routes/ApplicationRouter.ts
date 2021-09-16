@@ -12,7 +12,7 @@ import { KIXRouter } from './KIXRouter';
 
 import { AuthenticationService } from '../services/AuthenticationService';
 
-import path = require('path');
+import path from 'path';
 import { SysConfigService } from '../../modules/sysconfig/server/SysConfigService';
 import { SysConfigOption } from '../../modules/sysconfig/model/SysConfigOption';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
@@ -20,7 +20,6 @@ import { SysConfigKey } from '../../modules/sysconfig/model/SysConfigKey';
 import { PluginService } from '../../../../server/services/PluginService';
 import { IKIXModuleExtension } from '../../model/IKIXModuleExtension';
 import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
-import { KIXModuleNamespace } from '../socket-namespaces/KIXModuleNamespace';
 import { UIComponent } from '../../model/UIComponent';
 import { PermissionService } from '../services/PermissionService';
 
@@ -113,7 +112,7 @@ export class ApplicationRouter extends KIXRouter {
 
             const uiModules = await Promise.all(createPromises);
 
-            res.marko(template, {
+            (res as any).marko(template, {
                 socketTimeout: options && options.length ? options[0].Value : 30000,
                 favIcon,
                 modules: uiModules

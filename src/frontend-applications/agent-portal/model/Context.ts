@@ -155,7 +155,7 @@ export abstract class Context {
             if (this.descriptor.contextMode === ContextMode.DETAILS) {
                 url += `/${this.getObjectId()}`;
             } else if (this.descriptor.contextMode === ContextMode.CREATE) {
-                url += `?new`;
+                url += '?new';
             }
         }
         return url;

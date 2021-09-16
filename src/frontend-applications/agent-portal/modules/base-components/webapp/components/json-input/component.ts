@@ -11,7 +11,7 @@ import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../core/FormInputComponent';
 import { ContextService } from '../../core/ContextService';
 
-declare var JSONEditor: any;
+declare const JSONEditor: any;
 
 class Component extends FormInputComponent<string, ComponentState> {
 

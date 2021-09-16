@@ -36,14 +36,15 @@ export class ContextConfigurationResolver {
     public async resolve(
         token: string, configuration: ContextConfiguration, sysConfigOptions: SysConfigOption[]
     ): Promise<ContextConfiguration> {
-        if (!configuration.sidebars && configuration['sidebars']) {
-            configuration.sidebars = configuration['sidebars'];
-            delete configuration['sidebars'];
-        }
-        if (!configuration.explorer && configuration['explorer']) {
-            configuration.explorer = configuration['explorer'];
-            delete configuration['explorer'];
-        }
+        // FIXME: this code makes no sense
+        // if (!configuration.sidebars && configuration['sidebars']) {
+        //     configuration.sidebars = configuration['sidebars'];
+        //     delete configuration['sidebars'];
+        // }
+        // if (!configuration.explorer && configuration['explorer']) {
+        //     configuration.explorer = configuration['explorer'];
+        //     delete configuration['explorer'];
+        // }
 
         const configIds = [
             ...(configuration.content || []).map((c) => c.configurationId),

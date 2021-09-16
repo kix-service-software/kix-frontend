@@ -70,7 +70,7 @@ export class Row<T = any> {
         return this.id;
     }
 
-    public getRowObject(): RowObject<T> {
+    public getRowObject<T = any>(): RowObject<T> {
         return this.rowObject;
     }
 

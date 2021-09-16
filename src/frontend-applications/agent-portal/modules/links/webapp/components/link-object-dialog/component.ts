@@ -84,7 +84,7 @@ class LinkDialogComponent {
         this.state.linkDescriptions = null;
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
-        TableFactoryService.getInstance().destroyTable(`link-object-dialog-`, true);
+        TableFactoryService.getInstance().destroyTable('link-object-dialog-', true);
     }
 
     private async loadNodes(): Promise<TreeNode[]> {
@@ -214,7 +214,7 @@ class LinkDialogComponent {
             const value: [any, [string, any]] = [ld.linkableObject, ['LinkedAs', name]];
             return value;
         });
-        if (!!values.length) {
+        if (values.length) {
             table.setRowObjectValues(values);
         }
     }

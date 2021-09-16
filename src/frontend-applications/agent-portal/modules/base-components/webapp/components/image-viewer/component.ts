@@ -19,7 +19,9 @@ export class Component implements IImageDialogListener {
 
     private state: ComponentState;
     private currImageIndex: number = 0;
-    private keyDownEventFunction: () => {};
+    private keyDownEventFunction: () => {
+        // do nothing ...
+    };
 
     public onCreate(): void {
         this.state = new ComponentState();

@@ -22,7 +22,8 @@ import { SocketErrorResponse } from '../../../modules/base-components/webapp/cor
 import { MenuEntry } from '../../../model/MenuEntry';
 import { PermissionService } from '../../../server/services/PermissionService';
 
-import cookie = require('cookie');
+import cookie from 'cookie';
+import { Socket } from 'socket.io';
 
 export class MainMenuNamespace extends SocketNameSpace {
 
@@ -43,11 +44,11 @@ export class MainMenuNamespace extends SocketNameSpace {
         return 'main-menu';
     }
 
-    protected registerEvents(client: SocketIO.Socket): void {
+    protected registerEvents(client: Socket): void {
         this.registerEventHandler(client, MainMenuEvent.LOAD_MENU_ENTRIES, this.loadMenuEntries.bind(this));
     }
 
-    private async loadMenuEntries(data: MainMenuEntriesRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+    private async loadMenuEntries(data: MainMenuEntriesRequest, client: Socket): Promise<SocketResponse> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';
 

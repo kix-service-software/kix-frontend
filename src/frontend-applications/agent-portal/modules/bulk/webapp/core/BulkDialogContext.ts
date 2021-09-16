@@ -21,7 +21,7 @@ export class BulkDialogContext extends Context {
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        return await TranslationService.translate(`Translatable#Bulk Action`);
+        return await TranslationService.translate('Translatable#Bulk Action');
     }
 
     public getIcon(): string | ObjectIcon {

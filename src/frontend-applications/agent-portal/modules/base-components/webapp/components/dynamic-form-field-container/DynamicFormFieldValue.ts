@@ -202,7 +202,7 @@ export class DynamicFormFieldValue {
                         operationNodes.push(new TreeNode(o, label));
                     }
                     this.operationTreeHandler.setTree(operationNodes);
-                    if (!!operationNodes.length) {
+                    if (operationNodes.length) {
                         let operationNode = operationNodes[0];
                         if (this.value.operator) {
                             operationNode = operationNodes.find((n) => n.id === this.value.operator);

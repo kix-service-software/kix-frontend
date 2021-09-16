@@ -73,8 +73,9 @@ export class RedisCache implements ICache {
 
         try {
             value = JSON.parse(value);
-            // tslint:disable-next-line:no-empty
-        } catch (error) { }
+        } catch (error) {
+            // do nothing ...
+        }
 
         return value;
     }
@@ -100,7 +101,9 @@ export class RedisCache implements ICache {
             try {
                 value = JSON.parse(value);
                 // tslint:disable-next-line:no-empty
-            } catch (error) { }
+            } catch (error) {
+                // do nothing
+            }
 
             values.push(value);
         }

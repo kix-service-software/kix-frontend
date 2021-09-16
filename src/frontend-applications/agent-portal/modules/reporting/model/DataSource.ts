@@ -22,7 +22,7 @@ export class DataSource extends KIXObject {
 
     public Description: string;
 
-    public Options: {};
+    public Options: any;
 
     public constructor(type?: DataSource) {
         super(type);

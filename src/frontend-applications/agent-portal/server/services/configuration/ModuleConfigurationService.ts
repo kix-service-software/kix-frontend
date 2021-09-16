@@ -76,8 +76,6 @@ export class ModuleConfigurationService {
     }
 
     public async loadConfigurations<T extends IConfiguration>(token: string, ids: string[]): Promise<T[]> {
-        let configurations: T[];
-
         const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
             token, 'ModuleConfigurationService::SysConfigOption', KIXObjectType.SYS_CONFIG_OPTION, null,
             new KIXObjectLoadingOptions([
@@ -88,8 +86,7 @@ export class ModuleConfigurationService {
             ]), null
         ).catch((): SysConfigOption[] => []);
 
-        configurations = options.filter((o) => o.Value).map((o) => JSON.parse(o.Value));
-
+        const configurations = options.filter((o) => o.Value).map((o) => JSON.parse(o.Value));
         return configurations;
     }
 

@@ -106,7 +106,7 @@ class Component {
                                 table.selectAll();
                             }
                             if (eventId === TableEvent.TABLE_READY
-                                && (!!this.errorObjects.length || !!this.finishedObjects.length)
+                                && (this.errorObjects.length || !!this.finishedObjects.length)
                             ) {
                                 this.state.table.setRowObjectValueState(this.errorObjects, ValueState.HIGHLIGHT_ERROR);
                                 this.state.table.setRowObjectValueState(

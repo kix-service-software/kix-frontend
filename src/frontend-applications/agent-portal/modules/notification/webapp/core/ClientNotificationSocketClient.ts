@@ -14,10 +14,11 @@ import { ClientStorageService } from '../../../../modules/base-components/webapp
 import { NotificationHandler } from '../../../../modules/base-components/webapp/core/NotificationHandler';
 import { FormService } from '../../../../modules/base-components/webapp/core/FormService';
 import { BrowserCacheService } from '../../../../modules/base-components/webapp/core/CacheService';
+import { Socket } from 'socket.io-client';
 
 export class ClientNotificationSocketClient extends SocketClient {
 
-    private notificationsSocket: SocketIO.Server;
+    private notificationsSocket: Socket;
 
     private static INSTANCE: ClientNotificationSocketClient = null;
 

@@ -7,10 +7,9 @@
  * --
  */
 
-import { InMemoryCache } from './InMemoryCache';
 import { RedisCache } from './RedisCache';
 
-import md5 = require('md5');
+import md5 from 'md5';
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
 import { ObjectUpdatedEventData } from '../../../model/ObjectUpdatedEventData';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
@@ -29,7 +28,6 @@ export class CacheService {
     }
 
     private useRedisCache: boolean = false;
-    private useInMemoryCache: boolean = false;
     private ignorePrefixes: string[] = [];
     private dependencies: Map<string, string[]> = new Map();
 
@@ -51,10 +49,6 @@ export class CacheService {
             this.useRedisCache = true;
             RedisCache.getInstance();
         }
-
-        if (serverConfig.USE_IN_MEMORY_CACHE) {
-            this.useInMemoryCache = true;
-        }
     }
 
     public async getAll(cacheKeyPrefix: string): Promise<any[]> {
@@ -72,8 +66,6 @@ export class CacheService {
             return undefined;
         } else if (this.useRedisCache) {
             return await RedisCache.getInstance().get(key, cacheKeyPrefix);
-        } else if (this.useInMemoryCache) {
-            return await InMemoryCache.getInstance().get(key, cacheKeyPrefix);
         }
         return null;
     }
@@ -82,8 +74,6 @@ export class CacheService {
         key = md5(key);
         if (this.useRedisCache) {
             await RedisCache.getInstance().set(key, cacheKeyPrefix, value);
-        } else if (this.useInMemoryCache) {
-            await InMemoryCache.getInstance().set(key, cacheKeyPrefix, value);
         }
     }
 
@@ -103,11 +93,10 @@ export class CacheService {
         if (!force) {
             prefixes = prefixes.filter((p) => !this.ignorePrefixes.some((ip) => ip === p));
         }
-        for (const prefix of prefixes) {
-            if (this.useRedisCache) {
+
+        if (this.useRedisCache) {
+            for (const prefix of prefixes) {
                 await RedisCache.getInstance().deleteKeys(prefix);
-            } else if (this.useInMemoryCache) {
-                await InMemoryCache.getInstance().deleteKeys(prefix);
             }
         }
     }
@@ -263,8 +252,6 @@ export class CacheService {
     private async clearCache(): Promise<void> {
         if (this.useRedisCache) {
             await RedisCache.getInstance().clear(this.ignorePrefixes);
-        } else if (this.useInMemoryCache) {
-            await InMemoryCache.getInstance().clear(this.ignorePrefixes);
         }
     }
 

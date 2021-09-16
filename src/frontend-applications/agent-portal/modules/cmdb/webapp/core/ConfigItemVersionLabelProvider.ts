@@ -13,13 +13,14 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { VersionProperty } from '../../model/VersionProperty';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class ConfigItemVersionLabelProvider extends LabelProvider<Version> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_VERSION;
 
-    public isLabelProviderFor(object: Version) {
-        return object instanceof Version;
+    public isLabelProviderFor(object: Version | KIXObject): boolean {
+        return object instanceof Version || object.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyValueDisplayText(

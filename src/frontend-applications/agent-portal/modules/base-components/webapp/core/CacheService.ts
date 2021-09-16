@@ -7,7 +7,7 @@
  * --
  */
 
-import md5 = require('md5');
+import md5 from 'md5';
 import { ClientStorageService } from './ClientStorageService';
 import { ObjectUpdatedEventData } from '../../../../model/ObjectUpdatedEventData';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';

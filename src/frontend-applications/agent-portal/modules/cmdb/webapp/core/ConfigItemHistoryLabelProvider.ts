@@ -16,6 +16,7 @@ import { TranslationService } from '../../../../modules/translation/webapp/core/
 
 
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 
 
@@ -23,8 +24,8 @@ export class ConfigItemHistoryLabelProvider extends LabelProvider<ConfigItemHist
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_HISTORY;
 
-    public isLabelProviderFor(object: ConfigItemHistory): boolean {
-        return object instanceof ConfigItemHistory;
+    public isLabelProviderFor(object: ConfigItemHistory | KIXObject): boolean {
+        return object instanceof ConfigItemHistory || object.KIXObjectType === KIXObjectType.CONFIG_ITEM_HISTORY;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

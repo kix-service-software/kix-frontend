@@ -23,10 +23,11 @@ import { ISocketRequest } from '../../../../modules/base-components/webapp/core/
 import { SetPreferencesRequest } from '../../../../modules/base-components/webapp/core/SetPreferencesRequest';
 import { SetPreferencesResponse } from '../../../../modules/base-components/webapp/core/SetPreferencesResponse';
 import { BrowserCacheService } from '../../../../modules/base-components/webapp/core/CacheService';
+import { Socket } from 'socket.io-client';
 
 export class AgentSocketClient extends SocketClient {
 
-    private agentSocket: SocketIO.Server;
+    private agentSocket: Socket;
 
     private static INSTANCE: AgentSocketClient = null;
 

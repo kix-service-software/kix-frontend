@@ -52,8 +52,12 @@ export class QueueAPIService extends KIXObjectAPIService {
         if (objectType === KIXObjectType.QUEUE) {
             const uri = this.buildUri(this.RESOURCE_URI);
             objects = await super.load(
-                token, KIXObjectType.QUEUE, uri, loadingOptions, objectIds, KIXObjectType.QUEUE, Queue
+                token, KIXObjectType.QUEUE, uri, loadingOptions, null, KIXObjectType.QUEUE, Queue
             );
+
+            if (objectIds && objectIds.length) {
+                objects = objects.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
+            }
         } else if (objectType === KIXObjectType.FOLLOW_UP_TYPE) {
             const uri = this.buildUri(this.RESOURCE_URI, 'followuptypes');
             objects = await super.load(

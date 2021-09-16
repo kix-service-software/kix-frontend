@@ -7,8 +7,6 @@
  * --
  */
 
-
-import path = require('path');
 import { ConfigurationService } from './services/ConfigurationService';
 import { PluginService } from './services/PluginService';
 import { LoggingService } from './services/LoggingService';
@@ -23,6 +21,7 @@ class Startup {
     }
 
     private async initApplication(): Promise<void> {
+        const path = require('path');
         const configDir = path.join(__dirname, '..', '..', 'config');
         const certDir = path.join(__dirname, '..', '..', 'cert');
         const dataDir = path.join(__dirname, '..', '..', 'data');
@@ -39,7 +38,7 @@ class Startup {
         try {
             await Server.getInstance().initServer();
         } catch (error) {
-            LoggingService.getInstance().error(`Could not initialize server`);
+            LoggingService.getInstance().error('Could not initialize server');
             LoggingService.getInstance().error(error);
         }
 

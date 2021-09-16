@@ -8,8 +8,7 @@
  */
 
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
-
-import dateFormat = require('dateformat');
+import dateFormat from 'dateformat';
 
 export class DateTimeUtil {
 
@@ -25,7 +24,7 @@ export class DateTimeUtil {
                 day: '2-digit',
                 month: '2-digit',
                 year: 'numeric'
-            };
+            } as const;
 
             if (!language) {
                 language = await TranslationService.getUserLanguage();
@@ -48,7 +47,7 @@ export class DateTimeUtil {
                 year: 'numeric',
                 hour: '2-digit',
                 minute: '2-digit'
-            };
+            } as const;
 
             if (!language) {
                 language = await TranslationService.getUserLanguage();

@@ -13,6 +13,7 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { OAuth2ProfileProperty } from '../../model/OAuth2ProfileProperty';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class OAuth2ProfileLabelProvider extends LabelProvider<OAuth2Profile> {
 
@@ -22,8 +23,8 @@ export class OAuth2ProfileLabelProvider extends LabelProvider<OAuth2Profile> {
         return objectType === this.kixObjectType;
     }
 
-    public isLabelProviderFor(object: OAuth2Profile): boolean {
-        return object instanceof OAuth2Profile;
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object instanceof OAuth2Profile || object.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

@@ -43,8 +43,6 @@ export interface IServerConfiguration {
 
     UPDATE_TRANSLATIONS: boolean;
 
-    USE_IN_MEMORY_CACHE: boolean;
-
     USE_REDIS_CACHE: boolean;
 
     REDIS_CACHE_PORT: number;

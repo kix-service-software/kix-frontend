@@ -17,7 +17,7 @@ export class OptionsResponseHeader {
 
     public AllowPermissionValue: CRUD = 0;
 
-    public constructor(headers: Headers) {
+    public constructor(headers: any) {
         if (headers[ResponseHeader.ALLOW]) {
             this.Allow = headers[ResponseHeader.ALLOW].split(',');
 

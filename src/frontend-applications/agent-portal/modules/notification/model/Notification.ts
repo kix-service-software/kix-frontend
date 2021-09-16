@@ -19,11 +19,11 @@ export class Notification extends KIXObject {
 
     public KIXObjectType: KIXObjectType = KIXObjectType.NOTIFICATION;
 
-    public Data: {};
+    public Data: any;
 
     public ID: number;
 
-    public Message: {};
+    public Message: any;
 
     public Name: string;
 

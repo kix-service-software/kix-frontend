@@ -14,6 +14,7 @@ import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { ImportExportTemplateRun } from '../../model/ImportExportTemplateRun';
 import { ImportExportTemplateRunProperty } from '../../model/ImportExportTemplateRunProperty';
 import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class ImportExportTemplateRunLabelProvider extends LabelProvider<ImportExportTemplateRun> {
 
@@ -23,8 +24,8 @@ export class ImportExportTemplateRunLabelProvider extends LabelProvider<ImportEx
         return objectType === this.kixObjectType;
     }
 
-    public isLabelProviderFor(object: ImportExportTemplateRun): boolean {
-        return object instanceof ImportExportTemplateRun;
+    public isLabelProviderFor(object: ImportExportTemplateRun | KIXObject): boolean {
+        return object instanceof ImportExportTemplateRun || object.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

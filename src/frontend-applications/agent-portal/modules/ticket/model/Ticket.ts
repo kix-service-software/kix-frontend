@@ -21,6 +21,14 @@ import { SearchOperator } from '../../search/model/SearchOperator';
 import { InputFieldTypes } from '../../base-components/webapp/core/InputFieldTypes';
 import { TicketProperty } from './TicketProperty';
 import { FilterDataType } from '../../../model/FilterDataType';
+import { Contact } from '../../customer/model/Contact';
+import { TicketLock } from './TicketLock';
+import { Organisation } from '../../customer/model/Organisation';
+import { User } from '../../user/model/User';
+import { TicketPriority } from './TicketPriority';
+import { Queue } from './Queue';
+import { TicketState } from './TicketState';
+import { TicketType } from './TicketType';
 
 export class Ticket extends KIXObject {
 
@@ -82,6 +90,17 @@ export class Ticket extends KIXObject {
 
     public Watchers: Watcher[];
 
+    // refrenced objects
+    public Contact: Contact;
+    public TicketLock: TicketLock;
+    public Organisation: Organisation;
+    public Owner: User;
+    public Priority: TicketPriority;
+    public Queue: Queue;
+    public Responsible: User;
+    public State: TicketState;
+    public Type: TicketType;
+
     public constructor(ticket?: Ticket) {
         super(ticket);
         if (ticket) {
@@ -101,6 +120,60 @@ export class Ticket extends KIXObject {
                 : [];
 
             this.History.sort((a, b) => b.HistoryID - a.HistoryID);
+
+            if (isNaN(ticket.ContactID)) {
+                const object = ticket.ContactID as any;
+                this.Contact = new Contact(object);
+                this.ContactID = object?.ID;
+            }
+
+            if (isNaN(ticket.LockID)) {
+                const object = ticket.LockID as any;
+                this.TicketLock = new TicketLock(object);
+                this.LockID = object?.ID;
+            }
+
+            if (isNaN(ticket.OrganisationID)) {
+                const object = ticket.OrganisationID as any;
+                this.Organisation = new Organisation(object);
+                this.OrganisationID = object?.ID;
+            }
+
+            if (isNaN(ticket.OwnerID)) {
+                const object = ticket.OwnerID as any;
+                this.Owner = new User(object);
+                this.OwnerID = object?.UserID;
+            }
+
+            if (isNaN(ticket.PriorityID)) {
+                const object = ticket.PriorityID as any;
+                this.Priority = new TicketPriority(object);
+                this.PriorityID = object?.ID;
+            }
+
+            if (isNaN(ticket.QueueID)) {
+                const object = ticket.QueueID as any;
+                this.Queue = new Queue(object);
+                this.QueueID = object?.ID;
+            }
+
+            if (isNaN(ticket.ResponsibleID)) {
+                const object = ticket.ResponsibleID as any;
+                this.Responsible = new User(object);
+                this.ResponsibleID = object?.UserID;
+            }
+
+            if (isNaN(ticket.StateID)) {
+                const object = ticket.StateID as any;
+                this.State = new TicketState(object);
+                this.StateID = object?.ID;
+            }
+
+            if (isNaN(ticket.TypeID)) {
+                const object = ticket.TypeID as any;
+                this.Type = new TicketType(object);
+                this.TypeID = object?.ID;
+            }
         }
 
     }

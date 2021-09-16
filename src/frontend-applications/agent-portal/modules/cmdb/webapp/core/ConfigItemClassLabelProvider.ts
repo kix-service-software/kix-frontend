@@ -13,6 +13,7 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ConfigItemClassProperty } from '../../model/ConfigItemClassProperty';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 
 export class ConfigItemClassLabelProvider extends LabelProvider<ConfigItemClass> {
@@ -64,8 +65,8 @@ export class ConfigItemClassLabelProvider extends LabelProvider<ConfigItemClass>
         return displayValue;
     }
 
-    public isLabelProviderFor(ciClass: ConfigItemClass): boolean {
-        return ciClass instanceof ConfigItemClass;
+    public isLabelProviderFor(object: ConfigItemClass | KIXObject): boolean {
+        return object instanceof ConfigItemClass || object.KIXObjectType === KIXObjectType.CONFIG_ITEM_CLASS;
     }
 
     public async getObjectText(

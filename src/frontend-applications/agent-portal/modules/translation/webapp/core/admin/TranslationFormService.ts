@@ -32,12 +32,12 @@ export class TranslationFormService extends KIXObjectFormService {
         super();
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.TRANSLATION_PATTERN;
     }
 
     protected async prePrepareForm(form: FormConfiguration): Promise<void> {
-        if (!!form.pages.length) {
+        if (form.pages.length) {
             const languages = await TranslationService.getInstance().getLanguages();
             [...languages].sort((a, b) => SortUtil.compareString(a[1], b[1])).forEach((l) => {
                 const languageField = new FormFieldConfiguration(
@@ -51,7 +51,7 @@ export class TranslationFormService extends KIXObjectFormService {
         }
     }
 
-    protected async getValue(property: string, value: any, translation: TranslationPattern): Promise<any> {
+    protected async getValue(property: string, value: string, translation: TranslationPattern): Promise<string> {
         if (translation && property !== TranslationPatternProperty.VALUE && translation.Languages) {
             const language = translation.Languages.find((l) => l.Language === property);
             if (language) {

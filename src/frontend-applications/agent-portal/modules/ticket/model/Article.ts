@@ -224,4 +224,9 @@ export class Article extends KIXObject {
         }
         return attachments;
     }
+
+    public static isArticleProperty(property: string): boolean {
+        const articleProperty = Object.keys(ArticleProperty).map((p) => ArticleProperty[p]);
+        return articleProperty.some((p) => p === property);
+    }
 }

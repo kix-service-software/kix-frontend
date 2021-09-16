@@ -273,7 +273,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     public nodesChanged(nodes: TreeNode[]): void {
         const currentNodes = nodes && nodes.length ? nodes : [];
-        if (!!currentNodes.length) {
+        if (currentNodes.length) {
             if (this.state.multiselect) {
                 super.provideValue(currentNodes.map((n) => n.id));
             } else {

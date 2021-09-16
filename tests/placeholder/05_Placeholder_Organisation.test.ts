@@ -41,7 +41,8 @@ describe('Placeholder replacement for organisation', () => {
     });
 
     after(() => {
-        LabelService.getInstance()['labelProviders'] = [];
+        LabelService.getInstance()['objectLabelProvider'] = []
+        LabelService.getInstance()['propertiesLabelProvider'].clear();;
         (TranslationService.getInstance() as any).translations = null;
     });
 

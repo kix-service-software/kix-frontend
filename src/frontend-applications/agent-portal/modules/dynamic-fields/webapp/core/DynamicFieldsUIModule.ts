@@ -98,8 +98,10 @@ export class UIModule implements IUIModule {
         this.registerSchemaForDateTime();
         this.registerSchemaForSelection();
         this.registerSchemaForCheckList();
+        DynamicFieldService.getInstance().registerConfigSchemaHandler(
+            DynamicFieldTypes.CI_REFERENCE, this.getSchemaForCIReference.bind(this)
+        );
         this.registerSchemaForTable();
-        DynamicFieldService.getInstance().registerConfigSchemaHandler(DynamicFieldTypes.CI_REFERENCE, this.getSchemaForCIReference.bind(this));
     }
 
     private registerSchemaForText(): void {

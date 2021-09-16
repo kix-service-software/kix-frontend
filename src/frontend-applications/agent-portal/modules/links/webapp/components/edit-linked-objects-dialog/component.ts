@@ -292,7 +292,7 @@ class Component {
             }
         });
 
-        if (!!deleteNewLinks.length) {
+        if (deleteNewLinks.length) {
             const rowIds = this.state.table.getRows()
                 .filter((r) => deleteNewLinks.some((dl) => dl.equals(r.getRowObject().getObject())))
                 .map((r) => r.getRowId());
@@ -333,7 +333,7 @@ class Component {
         });
 
         let deleteLinksOK: boolean = true;
-        if (!!linkIdsToDelete.length) {
+        if (linkIdsToDelete.length) {
             deleteLinksOK = await this.deleteLinks(linkIdsToDelete);
         }
 
@@ -374,7 +374,7 @@ class Component {
     private async deleteLinks(linkIdsToDelete: number[]): Promise<boolean> {
         BrowserUtil.toggleLoadingShield('APP_SHIELD', true, 'Translatable#Links will be removed.');
         const failIds = await KIXObjectService.deleteObject(KIXObjectType.LINK_OBJECT, linkIdsToDelete);
-        return !failIds || !!!failIds.length;
+        return !failIds || failIds.length === 0;
     }
 
 }

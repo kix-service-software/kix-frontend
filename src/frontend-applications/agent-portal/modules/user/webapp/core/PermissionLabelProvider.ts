@@ -16,13 +16,14 @@ import { KIXObjectService } from '../../../../modules/base-components/webapp/cor
 import { PermissionProperty } from '../../model/PermissionProperty';
 import { PermissionType } from '../../model/PermissionType';
 import { Permission } from '../../model/Permission';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class PermissionLabelProvider extends LabelProvider<Permission> {
 
     public kixObjectType: KIXObjectType | string = KIXObjectType.PERMISSION;
 
-    public isLabelProviderFor(object: Permission): boolean {
-        return object instanceof Permission;
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object instanceof Permission || object.KIXObjectType === this.kixObjectType;
     }
 
     public isLabelProviderForType(objectType: KIXObjectType | string): boolean {
