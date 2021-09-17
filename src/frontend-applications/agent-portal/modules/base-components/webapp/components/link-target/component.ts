@@ -51,7 +51,10 @@ class Component {
         if (this.state.routingConfiguration) {
             const urlParams = this.state.routingConfiguration?.params;
             ContextService.getInstance().setActiveContext(
-                this.state.routingConfiguration.contextId, this.state.objectId, new URLSearchParams(urlParams)
+                this.state.routingConfiguration.contextId, this.state.objectId,
+                Array.isArray(urlParams) && urlParams.length
+                    ? new URLSearchParams(urlParams)
+                    : undefined
             );
         }
     }
