@@ -97,7 +97,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async getTitle(objectType: KIXObjectType | string): Promise<string> {
         const objectName = await LabelService.getInstance().getObjectName(objectType, true);
-        const title = await TranslationService.translate('Hit List: {0}', [objectName]);
+        const title = await TranslationService.translate('Translatable#Search Results: {0}', [objectName]);
         return title;
     }
 }

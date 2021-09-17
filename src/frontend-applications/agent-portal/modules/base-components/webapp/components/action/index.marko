@@ -14,6 +14,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <icon icon=state.action.icon/>
         </a>
     </if>
+    <else>
+        <icon icon=state.action.icon/>
+    </else>
     <if(state.displayText && state.action.hasLink)>
         <a
             href=("?actionId=" + state.action.id + "&data=" + state.actionData)
@@ -21,4 +24,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <span.text>${state.text}</span>
         </a>
     </if>
+    <else>
+        <span.text>${state.text}</span>
+    </else>
 </div>
