@@ -2718,9 +2718,6 @@ msgstr "Hier finden Sie die KIX 18 Handbücher für Anwender und Administratoren
 msgid "History"
 msgstr "Historie"
 
-msgid "Hit List ({0})"
-msgstr "Trefferliste ({0})"
-
 msgid "Home"
 msgstr "Home"
 
@@ -3981,6 +3978,12 @@ msgstr "Fehler bei Suche!"
 msgid "Search Results"
 msgstr "Suchergebnisse"
 
+msgid "Search Results ({0})"
+msgstr ""
+
+msgid "Search Results: {0}"
+msgstr ""
+
 msgid "Search successfully saved."
 msgstr "Suche wurde gespeichert."
 
@@ -4764,6 +4767,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Hit List ({0})"
+#~ msgstr "Trefferliste ({0})"
 
 #~ msgid "Bulk {0}"
 #~ msgstr "Sammelaktion {0}"

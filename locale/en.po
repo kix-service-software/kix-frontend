@@ -2576,9 +2576,6 @@ msgstr ""
 msgid "History"
 msgstr ""
 
-msgid "Hit List ({0})"
-msgstr ""
-
 msgid "Home"
 msgstr ""
 
@@ -3831,6 +3828,12 @@ msgid "Search error!"
 msgstr ""
 
 msgid "Search Results"
+msgstr ""
+
+msgid "Search Results ({0})"
+msgstr ""
+
+msgid "Search Results: {0}"
 msgstr ""
 
 msgid "Search successfully saved."
