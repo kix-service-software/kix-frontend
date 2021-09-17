@@ -328,47 +328,26 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
     }
 
     public async getTicket(): Promise<Ticket> {
-        let newObject = new Ticket();
-        const mainContext = ContextService.getInstance().getActiveContext();
-        if (mainContext) {
-            this.setObject(newObject, await mainContext.getObject());
-        }
+        const ticket = new Ticket();
         const dialogContext = ContextService.getInstance().getActiveContext();
         if (dialogContext) {
-            const formId = dialogContext.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
-            const form = formId ? await FormService.getInstance().getForm(formId) : null;
-            if (
-                !newObject
-                || (
-                    form
-                    && form.formContext === FormContext.NEW
-                    && form.objectType === KIXObjectType.TICKET
-                )
-            ) {
-                newObject = new Ticket();
-                this.setObject(newObject, await dialogContext.getObject());
-            }
-            if (form && form.objectType === KIXObjectType.TICKET) {
-                const formObject = dialogContext.getAdditionalInformation(AdditionalContextInformation.FORM_OBJECT);
-                this.setObject(newObject, formObject, true);
-            }
+
+            // get object from context (will possibly be the current form object)
+            const contextTicket = await dialogContext.getObject<Ticket>(KIXObjectType.TICKET);
+
+            // include in own object (do not overwrite object from context - pending time unix)
+            this.setObject(ticket, contextTicket);
+
+            this.preparePendingTimeUnix(ticket);
         }
-        this.preparePendingTimeUnix(newObject);
-        return newObject;
+        return ticket;
     }
 
-    private setObject(newObject: Ticket, oldObject: any, fromForm: boolean = false) {
-        if (oldObject) {
-            Object.getOwnPropertyNames(oldObject).forEach((property) => {
-                if (
-                    typeof oldObject[property] !== 'undefined'
-                    && !(fromForm && this.ignoreProperty(property))
-                ) {
-                    if (property === KIXObjectProperty.DYNAMIC_FIELDS) {
-                        this.setDynamicFields(newObject, oldObject as Ticket);
-                    } else {
-                        newObject[property] = oldObject[property];
-                    }
+    private setObject(ticket: Ticket, TicketToAdd: Ticket) {
+        if (TicketToAdd) {
+            Object.getOwnPropertyNames(TicketToAdd).forEach((property) => {
+                if (typeof TicketToAdd[property] !== 'undefined' && !this.ignoreProperty(property)) {
+                    ticket[property] = TicketToAdd[property];
                 }
             });
         }
@@ -410,21 +389,5 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
             subject = subjectValue && subjectValue.value ? subjectValue.value.toString() : '';
         }
         return subject;
-    }
-
-    private setDynamicFields(newObject: Ticket, oldObject: Ticket): void {
-        if (!newObject.DynamicFields) {
-            newObject.DynamicFields = [];
-        }
-        if (oldObject && Array.isArray(oldObject.DynamicFields) && oldObject.DynamicFields.length) {
-            oldObject.DynamicFields.forEach((dfValue) => {
-                const dfValueIndex = newObject.DynamicFields.findIndex((dfv) => dfv.Name === dfValue.Name);
-                if (dfValueIndex === -1) {
-                    newObject.DynamicFields.push(dfValue);
-                } else {
-                    newObject.DynamicFields[dfValueIndex] = dfValue;
-                }
-            });
-        }
     }
 }
