@@ -9,6 +9,7 @@
 
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { SysConfigOptionProperty } from './SysConfigOptionProperty';
 
 export class SysConfigOption extends KIXObject {
 
@@ -35,6 +36,11 @@ export class SysConfigOption extends KIXObject {
             this.Context = sysConfigOption.Context;
             this.ContextMetadata = sysConfigOption.ContextMetadata;
             this.ReadOnly = Boolean(sysConfigOption.ReadOnly);
+            this.displayValues = [
+                [SysConfigOptionProperty.NAME, this.Name],
+                [SysConfigOptionProperty.CONTEXT, this.Context],
+                [SysConfigOptionProperty.CONTEXT_METADATA, this.ContextMetadata],
+            ];
         }
     }
 

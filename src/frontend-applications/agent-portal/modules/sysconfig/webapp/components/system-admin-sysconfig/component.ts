@@ -219,10 +219,6 @@ class SysConfigContentProvider extends TableContentProvider {
                     value = JSON.stringify(value);
                 }
                 tableValue = new TableValue(column.property, value, value);
-            } else if (column.property === SysConfigOptionDefinitionProperty.NAME) {
-                const icons = option && option.ReadOnly ? ['kix-icon-lock-close'] : [];
-                tableValue = new TableValue(column.property, definition[column.property]);
-                tableValue.displayIcons = icons;
             } else {
                 tableValue = new TableValue(column.property, definition[column.property]);
             }
