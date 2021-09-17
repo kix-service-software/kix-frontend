@@ -46,7 +46,9 @@ export class EditTicketDialogContext extends Context {
             if (overwrite) {
                 const parameter = await service.getFormParameter(formId);
                 parameter.forEach((p) => {
-                    if (p[1] !== undefined) {
+                    if (p[0] === KIXObjectProperty.DYNAMIC_FIELDS) {
+                        this.setDynamicFields(formObject, p[1]);
+                    } else if (p[1] !== undefined) {
                         formObject[p[0]] = p[1];
                     }
                 });
@@ -56,6 +58,24 @@ export class EditTicketDialogContext extends Context {
                 );
             }
             this.setAdditionalInformation(AdditionalContextInformation.FORM_OBJECT, formObject);
+        }
+    }
+
+    private setDynamicFields(formObject: Ticket, dfList: any[]): void {
+        if (!formObject.DynamicFields) {
+            formObject.DynamicFields = [];
+        }
+        if (Array.isArray(dfList)) {
+            dfList.forEach((dfValue) => {
+                if (typeof dfValue === 'object' && dfValue.Name) {
+                    const dfValueIndex = formObject.DynamicFields.findIndex((dfv) => dfv.Name === dfValue.Name);
+                    if (dfValueIndex === -1) {
+                        formObject.DynamicFields.push(dfValue);
+                    } else {
+                        formObject.DynamicFields[dfValueIndex] = dfValue;
+                    }
+                }
+            });
         }
     }
 
