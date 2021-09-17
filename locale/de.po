@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2021-09-16 17:01+0000\n"
+"PO-Revision-Date: 2021-09-17 07:47+0000\n"
 "Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
@@ -2105,7 +2105,7 @@ msgstr ""
 "Empfehlung: Verwenden Sie ein quadratisches oder Hochkant-Format."
 
 msgid "Helptext_Customers_ContactCreate_City"
-msgstr ""
+msgstr "Anschrift Stadt des Kontakts, wenn von Organisation abweichend"
 
 msgid "Helptext_Customers_ContactCreate_Comment"
 msgstr ""
@@ -2113,7 +2113,7 @@ msgstr ""
 "Bereich angezeigt werden."
 
 msgid "Helptext_Customers_ContactCreate_Country"
-msgstr ""
+msgstr "Anschrift Land des Kontakts, wenn von Organisation abweichend"
 
 msgid "Helptext_Customers_ContactCreate_Email"
 msgstr ""
@@ -2121,7 +2121,7 @@ msgstr ""
 "systemintern als Identifikator des Kontaktes verwendet wird."
 
 msgid "Helptext_Customers_ContactCreate_Fax"
-msgstr ""
+msgstr "Fax-Nummer des Kontakts, wenn von Organisation abweichend"
 
 msgid "Helptext_Customers_ContactCreate_Firstname"
 msgstr ""
@@ -2143,7 +2143,7 @@ msgid "Helptext_Customers_ContactCreate_Phone"
 msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Street"
-msgstr ""
+msgstr "Anschrift Straße des Kontakts, wenn von Organisation abweichend"
 
 msgid "Helptext_Customers_ContactCreate_Title"
 msgstr ""
@@ -2155,7 +2155,7 @@ msgstr ""
 "und/oder Self Service Portal hat, werden diese Zugänge auch ungültig."
 
 msgid "Helptext_Customers_ContactCreate_Zip"
-msgstr ""
+msgstr "Anschrift PLZ des Kontakts, wenn von Organisation abweichend"
 
 msgid "Helptext_Customers_ContactImport"
 msgstr ""
@@ -2230,7 +2230,7 @@ msgstr ""
 "„Wert ersetzen“ automatisch gesetzt (kann geändert werden)."
 
 msgid "Helptext_FAQ_ArticleCreate_Attachments"
-msgstr ""
+msgstr "Fügen Sie hier Dateianhänge zum FAQ-Beitrag hinzu"
 
 msgid "Helptext_FAQ_ArticleCreate_Category"
 msgstr ""
@@ -3979,10 +3979,10 @@ msgid "Search Results"
 msgstr "Suchergebnisse"
 
 msgid "Search Results ({0})"
-msgstr ""
+msgstr "Suchergebnisse ({0})"
 
 msgid "Search Results: {0}"
-msgstr ""
+msgstr "Suchergebnisse: {0}"
 
 msgid "Search successfully saved."
 msgstr "Suche wurde gespeichert."

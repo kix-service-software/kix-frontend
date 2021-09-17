@@ -72,7 +72,7 @@ class Component {
 
     public async reset(): Promise<void> {
         this.state.bulkManager?.reset();
-        const dynamicFormComponent = (this as any).getComponent('bulk-dynamic-form');
+        const dynamicFormComponent = (this as any).getComponent(this.state.componentId);
         if (dynamicFormComponent) {
             dynamicFormComponent.updateValues();
         }
