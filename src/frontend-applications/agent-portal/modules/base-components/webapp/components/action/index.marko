@@ -24,7 +24,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <span.text>${state.text}</span>
         </a>
     </if>
-    <else>
+    <else-if(state.displayText)>
         <span.text>${state.text}</span>
-    </else>
+    </else-if>
 </div>
