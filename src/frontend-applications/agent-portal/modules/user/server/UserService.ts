@@ -77,8 +77,8 @@ export class UserService extends KIXObjectAPIService {
         return objects;
     }
 
-    public async getUserByToken(token: string): Promise<User> {
-        const user = await HttpService.getInstance().getUserByToken(token);
+    public async getUserByToken(token: string, useCache: boolean = true): Promise<User> {
+        const user = await HttpService.getInstance().getUserByToken(token, useCache);
         return user;
     }
 
@@ -273,16 +273,17 @@ export class UserService extends KIXObjectAPIService {
                     )
                 ) {
                     await this.updateObject(
-                        token, clientRequestId, KIXObjectType.USER_PREFERENCE,
-                        [
-                            ['Value', paramValue]
-                        ],
+                        token, clientRequestId, KIXObjectType.USER_PREFERENCE, [['Value', paramValue]],
                         param[0], options
                     ).catch((error: Error) => {
                         errors.push(error);
                     });
                 } else {
-                    const uri = this.buildUri('system', 'users', userId, 'preferences', param[0]);
+                    let uri = this.buildUri('system', 'users', userId, 'preferences', param[0]);
+                    if (!options?.userId) {
+                        uri = this.buildUri('session', 'user', 'preferences', param[0]);
+                    }
+
                     await this.sendDeleteRequest<void>(token, clientRequestId, [uri], KIXObjectType.USER_PREFERENCE)
                         .catch((error: Error) => {
                             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);

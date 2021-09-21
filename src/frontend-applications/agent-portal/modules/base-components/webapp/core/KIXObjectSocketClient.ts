@@ -88,7 +88,6 @@ export class KIXObjectSocketClient extends SocketClient {
     private async createRequestPromise<T extends KIXObject>(
         request: LoadObjectsRequest, objectConstructors: Array<new (object?: T) => T>, timeout?: number
     ): Promise<T[]> {
-        const startLoad = Date.now();
         const response = await this.sendRequest<LoadObjectsResponse<T>>(
             request,
             KIXObjectEvent.LOAD_OBJECTS, KIXObjectEvent.LOAD_OBJECTS_FINISHED, KIXObjectEvent.LOAD_OBJECTS_ERROR,
@@ -118,13 +117,9 @@ export class KIXObjectSocketClient extends SocketClient {
 
             objects = newObjects;
         }
-        const endLoad = Date.now();
         const objectIds = Array.isArray(request.objectIds)
             ? request.objectIds.join(',')
             : request.objectIds;
-        console.debug(
-            `Load Objects [${request.objectType}] (${objectIds}): ${endLoad - startLoad}ms`
-        );
         return objects;
     }
 

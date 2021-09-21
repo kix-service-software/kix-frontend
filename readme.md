@@ -45,10 +45,8 @@
     "ENABLE_PROFILING": true,
     "BACKEND_API_TOKEN": "...",
     "UPDATE_TRANSLATIONS": true,
-    "USE_REDIS_CACHE": true,
     "REDIS_CACHE_PORT": 6379,
-    "REDIS_CACHE_HOST": "localhost",
-    "USE_IN_MEMORY_CACHE": false
+    "REDIS_CACHE_HOST": "localhost"
 }
 ```
 

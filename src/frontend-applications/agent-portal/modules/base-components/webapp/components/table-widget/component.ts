@@ -29,7 +29,6 @@ import { FormEvent } from '../../core/FormEvent';
 import { FormValuesChangedEventData } from '../../core/FormValuesChangedEventData';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
-import { SearchService } from '../../../../search/webapp/core';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 
 class Component {
@@ -85,19 +84,16 @@ class Component {
             this.subscriber = {
                 eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
                 eventPublished: async (data: any, eventId: string) => {
-                    if (
-                        this.state.table &&
-                        eventId === ContextUIEvent.RELOAD_OBJECTS &&
-                        data === this.state.table.getObjectType()
+                    if (eventId === ContextUIEvent.RELOAD_OBJECTS && data === this.state.table?.getObjectType()
                     ) {
                         this.state.loading = true;
                     }
 
                     if (eventId === ApplicationEvent.OBJECT_CREATED || eventId === ApplicationEvent.OBJECT_UPDATED) {
-                        this.state.table.reload(true);
+                        this.state.table?.reload(true);
                     }
 
-                    if (data && this.state.table && data.tableId === this.state.table.getTableId()) {
+                    if (data?.tableId === this.state.table?.getTableId()) {
                         if (eventId === TableEvent.RELOAD) {
                             this.state.loading = true;
                         } else if (eventId === TableEvent.RELOADED) {

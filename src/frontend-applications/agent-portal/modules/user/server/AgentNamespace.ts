@@ -72,7 +72,7 @@ export class AgentNamespace extends SocketNameSpace {
 
         if (user) {
             const response = await UserService.getInstance().setPreferences(
-                token, data.clientRequestId, data.parameter, user.UserID
+                token, data.clientRequestId, data.parameter
             ).then(() =>
                 new SocketResponse(AgentEvent.SET_PREFERENCES_FINISHED, new SetPreferencesResponse(data.requestId))
             ).catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
@@ -86,7 +86,7 @@ export class AgentNamespace extends SocketNameSpace {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';
 
-        const response = await UserService.getInstance().getUserByToken(token)
+        const response = await UserService.getInstance().getUserByToken(token, data.useCache)
             .then((currentUser: User) =>
                 new SocketResponse(
                     AgentEvent.GET_CURRENT_USER_FINISHED, new GetCurrentUserResponse(data.requestId, currentUser)

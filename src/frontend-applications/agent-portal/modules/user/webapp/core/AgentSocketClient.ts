@@ -52,7 +52,8 @@ export class AgentSocketClient extends SocketClient {
             const requestId = IdService.generateDateBasedId();
             const currentUserRequest = new GetCurrentUserRequest(
                 requestId,
-                ClientStorageService.getClientRequestId()
+                ClientStorageService.getClientRequestId(),
+                useCache
             );
 
             const socketTimeout = ClientStorageService.getSocketTimeout();
