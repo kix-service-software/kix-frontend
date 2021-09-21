@@ -20,7 +20,7 @@ export class SystemAddressLabelProvider extends LabelProvider<SystemAddress> {
     public kixObjectType: KIXObjectType = KIXObjectType.SYSTEM_ADDRESS;
 
     public isLabelProviderFor(object: KIXObject): boolean {
-        return object instanceof SystemAddress || object.KIXObjectType === this.kixObjectType;
+        return object instanceof SystemAddress || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

@@ -35,7 +35,7 @@ export class WebformLabelProvider extends LabelProvider {
     }
 
     public isLabelProviderFor(object: KIXObject): boolean {
-        return object instanceof Webform || object.KIXObjectType === this.kixObjectType;
+        return object instanceof Webform || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyValueDisplayText(

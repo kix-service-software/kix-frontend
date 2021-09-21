@@ -48,7 +48,7 @@ export class TicketStateTableFactory extends TableFactory {
     ): TableConfiguration {
         const tableColumns = [
             this.getDefaultColumnConfiguration(TicketStateProperty.NAME),
-            this.getDefaultColumnConfiguration('ICON'),
+            this.getDefaultColumnConfiguration(TicketStateProperty.ID),
             this.getDefaultColumnConfiguration(TicketStateProperty.TYPE_NAME),
             this.getDefaultColumnConfiguration(TicketStateProperty.COMMENT),
             this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID),
@@ -92,6 +92,10 @@ export class TicketStateTableFactory extends TableFactory {
                     property, true, false, true, false, 150, true, true, true,
                     DataType.STRING, true, null, null, false
                 );
+                break;
+            case TicketStateProperty.ID:
+                config = super.getDefaultColumnConfiguration('ICON');
+                config.property = TicketStateProperty.ID;
                 break;
             default:
                 config = super.getDefaultColumnConfiguration(property);

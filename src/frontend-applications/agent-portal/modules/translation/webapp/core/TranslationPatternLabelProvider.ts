@@ -20,7 +20,7 @@ export class TranslationPatternLabelProvider extends LabelProvider<TranslationPa
     public kixObjectType: KIXObjectType = KIXObjectType.TRANSLATION_PATTERN;
 
     public isLabelProviderFor(object: KIXObject): boolean {
-        return object instanceof TranslationPattern || object.KIXObjectType === this.kixObjectType;
+        return object instanceof TranslationPattern || object?.KIXObjectType === this.kixObjectType;
     }
 
     public isLabelProviderForType(objectType: KIXObjectType): boolean {

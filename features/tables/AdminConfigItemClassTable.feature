@@ -35,7 +35,7 @@ Feature: Als Nutzer möchte ich eine korrekte Standardkonfiguration für eine Ta
         Examples:
             | column       | sortable | filterable | listFilter | width | flexible | showText | showIcon | type       | columnTitle | columnIcon | objectType |
             | 'Name'       | 1        | 1          | 0          | 200   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Class'    |
-            | 'ICON'       | 0        | 0          | 0          | 41    | 0        | 0        | 1        | 'STRING'   | 0           | 0          | 'Class'    |
+            | 'ID'         | 0        | 0          | 0          | 41    | 0        | 0        | 1        | 'STRING'   | 0           | 0          | 'Class'    |
             | 'Comment'    | 1        | 1          | 0          | 350   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Class'    |
             | 'ValidID'    | 1        | 1          | 1          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Class'    |
             | 'ChangeTime' | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'DATETIME' | 1           | 0          | 'Class'    |

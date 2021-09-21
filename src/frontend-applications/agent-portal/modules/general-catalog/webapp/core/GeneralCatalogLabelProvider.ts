@@ -45,7 +45,7 @@ export class GeneralCatalogLabelProvider extends LabelProvider<GeneralCatalogIte
     }
 
     public isLabelProviderFor(object: GeneralCatalogItem | KIXObject): boolean {
-        return object instanceof GeneralCatalogItem || object.KIXObjectType === this.kixObjectType;
+        return object instanceof GeneralCatalogItem || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getDisplayText(

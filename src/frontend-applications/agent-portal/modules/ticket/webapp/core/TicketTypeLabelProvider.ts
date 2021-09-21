@@ -20,7 +20,7 @@ export class TicketTypeLabelProvider extends LabelProvider<TicketType> {
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET_TYPE;
 
     public isLabelProviderFor(object: KIXObject): boolean {
-        return object instanceof TicketType || object.KIXObjectType === this.kixObjectType;
+        return object instanceof TicketType || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

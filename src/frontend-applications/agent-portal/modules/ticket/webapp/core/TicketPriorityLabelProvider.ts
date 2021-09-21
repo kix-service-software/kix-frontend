@@ -21,7 +21,7 @@ export class TicketPriorityLabelProvider extends LabelProvider<TicketPriority> {
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET_PRIORITY;
 
     public isLabelProviderFor(object: KIXObject): boolean {
-        return object instanceof TicketPriority || object.KIXObjectType === this.kixObjectType;
+        return object instanceof TicketPriority || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

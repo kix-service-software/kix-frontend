@@ -18,7 +18,7 @@ export class JobTypeLabelProvider extends LabelProvider {
     public kixObjectType: KIXObjectType = KIXObjectType.JOB_TYPE;
 
     public isLabelProviderFor(object: KIXObject): boolean {
-        return object instanceof JobType || object.KIXObjectType === this.kixObjectType;
+        return object instanceof JobType || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getObjectText(

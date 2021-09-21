@@ -91,7 +91,7 @@ export class LinkObjectLabelProvider extends LabelProvider<LinkObject> {
     }
 
     public isLabelProviderFor(object: KIXObject): boolean {
-        return object instanceof LinkObject || object.KIXObjectType === this.kixObjectType;
+        return object instanceof LinkObject || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getObjectText(linkObject: LinkObject): Promise<string> {

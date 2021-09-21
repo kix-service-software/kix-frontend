@@ -27,7 +27,7 @@ export class JobLabelProvider extends LabelProvider {
     public kixObjectType: KIXObjectType = KIXObjectType.JOB;
 
     public isLabelProviderFor(object: Job | KIXObject): boolean {
-        return object instanceof Job || object.KIXObjectType === this.kixObjectType;
+        return object instanceof Job || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getObjectText(
