@@ -18,7 +18,7 @@ export class ConfigItemVersionCompareLabelProvider extends LabelProvider<Version
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_VERSION_COMPARE;
 
     public isLabelProviderFor(object: Version | KIXObject): boolean {
-        return object instanceof Version || object.KIXObjectType === this.kixObjectType;
+        return object instanceof Version || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyValueDisplayText(

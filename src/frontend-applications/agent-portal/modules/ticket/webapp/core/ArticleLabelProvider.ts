@@ -228,7 +228,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
     }
 
     public isLabelProviderFor(object: KIXObject): boolean {
-        return object instanceof Article || object.KIXObjectType === this.kixObjectType;
+        return object instanceof Article || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getObjectText(article: Article): Promise<string> {

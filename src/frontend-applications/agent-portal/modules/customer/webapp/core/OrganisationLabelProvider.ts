@@ -21,7 +21,7 @@ export class OrganisationLabelProvider extends LabelProvider<Organisation> {
     public kixObjectType: KIXObjectType = KIXObjectType.ORGANISATION;
 
     public isLabelProviderFor(object: Organisation | KIXObject): boolean {
-        return object instanceof Organisation || object.KIXObjectType === this.kixObjectType;
+        return object instanceof Organisation || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

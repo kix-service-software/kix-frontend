@@ -85,7 +85,7 @@ export class TicketHistoryLabelProvider extends LabelProvider<TicketHistory> {
     }
 
     public isLabelProviderFor(object: KIXObject): boolean {
-        return object instanceof TicketHistory || object.KIXObjectType === this.kixObjectType;
+        return object instanceof TicketHistory || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getObjectText(object: TicketHistory): Promise<string> {

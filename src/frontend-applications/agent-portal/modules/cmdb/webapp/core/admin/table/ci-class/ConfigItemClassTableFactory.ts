@@ -48,7 +48,7 @@ export class ConfigItemClassTableFactory extends TableFactory {
     ): TableConfiguration {
         const tableColumns = [
             this.getDefaultColumnConfiguration(ConfigItemClassProperty.NAME),
-            this.getDefaultColumnConfiguration('ICON'),
+            this.getDefaultColumnConfiguration(ConfigItemClassProperty.ID),
             this.getDefaultColumnConfiguration(ConfigItemClassProperty.COMMENT),
             this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID),
             this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_TIME),
@@ -85,6 +85,10 @@ export class ConfigItemClassTableFactory extends TableFactory {
                     property, true, false, true, false, 200, true, true,
                     false, DataType.STRING, true, null, null, false
                 );
+                break;
+            case ConfigItemClassProperty.ID:
+                config = super.getDefaultColumnConfiguration('ICON');
+                config.property = ConfigItemClassProperty.ID;
                 break;
             default:
                 config = super.getDefaultColumnConfiguration(property);

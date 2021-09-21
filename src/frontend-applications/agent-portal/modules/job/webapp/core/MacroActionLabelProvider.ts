@@ -30,7 +30,7 @@ export class MacroActionLabelProvider extends LabelProvider {
     }
 
     public isLabelProviderFor(object: KIXObject): boolean {
-        return object instanceof MacroAction || object.KIXObjectType === this.kixObjectType;
+        return object instanceof MacroAction || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

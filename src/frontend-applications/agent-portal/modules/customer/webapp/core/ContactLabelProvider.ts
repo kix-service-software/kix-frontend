@@ -28,7 +28,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
     public kixObjectType: KIXObjectType = KIXObjectType.CONTACT;
 
     public isLabelProviderFor(object: Contact | KIXObject): boolean {
-        return object instanceof Contact || object.KIXObjectType === KIXObjectType.CONTACT;
+        return object instanceof Contact || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyValueDisplayText(

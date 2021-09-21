@@ -78,7 +78,7 @@ export class FAQArticleHistoryLabelProvider extends LabelProvider<FAQHistory> {
     }
 
     public isLabelProviderFor(object: FAQHistory | KIXObject): boolean {
-        return object instanceof FAQHistory || object.KIXObjectType === this.kixObjectType;
+        return object instanceof FAQHistory || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getObjectText(history: FAQHistory): Promise<string> {

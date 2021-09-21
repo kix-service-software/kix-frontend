@@ -20,7 +20,7 @@ export class TextModuleLabelProvider extends LabelProvider<TextModule> {
     public kixObjectType: KIXObjectType = KIXObjectType.TEXT_MODULE;
 
     public isLabelProviderFor(object: KIXObject): boolean {
-        return object instanceof TextModule || object.KIXObjectType === this.kixObjectType;
+        return object instanceof TextModule || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

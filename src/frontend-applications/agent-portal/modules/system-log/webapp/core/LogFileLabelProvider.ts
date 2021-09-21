@@ -20,7 +20,7 @@ export class LogFileLabelProvider extends LabelProvider {
     public kixObjectType: KIXObjectType | string = KIXObjectType.LOG_FILE;
 
     public isLabelProviderFor(object: KIXObject): boolean {
-        return object instanceof LogFile || object.KIXObjectType === this.kixObjectType;
+        return object instanceof LogFile || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

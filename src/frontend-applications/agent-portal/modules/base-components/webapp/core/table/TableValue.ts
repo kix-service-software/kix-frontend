@@ -37,7 +37,9 @@ export class TableValue {
         }
 
         if (!this.displayIcons && cell.getColumnConfiguration().showIcon && object) {
-            this.displayIcons = await LabelService.getInstance().getIcons(object, this.property, null, true);
+            this.displayIcons = await LabelService.getInstance().getIcons(
+                object, this.property, object[this.property], true
+            );
         }
 
         EventService.getInstance().publish(TableEvent.DISPLAY_VALUE_CHANGED, this.instanceId);

@@ -25,7 +25,7 @@ export class QueueLabelProvider extends LabelProvider<Queue> {
     public kixObjectType: KIXObjectType = KIXObjectType.QUEUE;
 
     public isLabelProviderFor(object: KIXObject): boolean {
-        return object instanceof Queue || object.KIXObjectType === this.kixObjectType;
+        return object instanceof Queue || object?.KIXObjectType === this.kixObjectType;
     }
 
     public isLabelProviderForType(objectType: KIXObjectType): boolean {

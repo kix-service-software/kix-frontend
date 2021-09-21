@@ -21,7 +21,7 @@ export class TranslationLanguageLabelProvider extends LabelProvider<TranslationL
     public kixObjectType: KIXObjectType = KIXObjectType.TRANSLATION_LANGUAGE;
 
     public isLabelProviderFor(object: KIXObject): boolean {
-        return object instanceof TranslationLanguage || object.KIXObjectType === this.kixObjectType;
+        return object instanceof TranslationLanguage || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

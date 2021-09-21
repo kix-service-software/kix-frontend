@@ -20,7 +20,7 @@ export class RoleLabelProvider extends LabelProvider<Role> {
     public kixObjectType: KIXObjectType | string = KIXObjectType.ROLE;
 
     public isLabelProviderFor(object: KIXObject): boolean {
-        return object instanceof Role || object.KIXObjectType === this.kixObjectType;
+        return object instanceof Role || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

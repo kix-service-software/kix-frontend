@@ -21,7 +21,7 @@ export class JobRunLabelProvider extends LabelProvider {
     public kixObjectType: KIXObjectType = KIXObjectType.JOB_RUN;
 
     public isLabelProviderFor(object: JobRun | KIXObject): boolean {
-        return object instanceof JobRun || object.KIXObjectType === this.kixObjectType;
+        return object instanceof JobRun || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
