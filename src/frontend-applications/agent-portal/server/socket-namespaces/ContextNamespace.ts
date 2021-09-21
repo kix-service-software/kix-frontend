@@ -131,9 +131,6 @@ export class ContextNamespace extends SocketNameSpace {
     protected async loadContextConfiguration(
         data: LoadContextConfigurationRequest, client: Socket)
         : Promise<SocketResponse<LoadContextConfigurationResponse<any> | SocketErrorResponse>> {
-        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
-        const token = parsedCookie ? parsedCookie.token : '';
-
         let configuration = await CacheService.getInstance().get(data.contextId, 'ContextConfiguration');
 
         if (!configuration) {
