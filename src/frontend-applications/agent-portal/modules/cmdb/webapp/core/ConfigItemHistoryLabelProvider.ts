@@ -25,7 +25,7 @@ export class ConfigItemHistoryLabelProvider extends LabelProvider<ConfigItemHist
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_HISTORY;
 
     public isLabelProviderFor(object: ConfigItemHistory | KIXObject): boolean {
-        return object instanceof ConfigItemHistory || object.KIXObjectType === KIXObjectType.CONFIG_ITEM_HISTORY;
+        return object instanceof ConfigItemHistory || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

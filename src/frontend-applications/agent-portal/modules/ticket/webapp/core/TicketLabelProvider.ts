@@ -36,7 +36,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET;
 
     public isLabelProviderFor(object: Ticket | KIXObject): boolean {
-        return object instanceof Ticket || object?.KIXObjectType === KIXObjectType.TICKET;
+        return object instanceof Ticket || object?.KIXObjectType === this.kixObjectType;
     }
 
     public getSupportedProperties(): string[] {

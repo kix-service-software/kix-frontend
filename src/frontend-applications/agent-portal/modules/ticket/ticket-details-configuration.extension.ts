@@ -42,6 +42,7 @@ import { FAQArticleProperty } from '../faq/model/FAQArticleProperty';
 import { ObjectInformationCardConfiguration } from '../base-components/webapp/components/object-information-card-widget/ObjectInformationCardConfiguration';
 import { RoutingConfiguration } from '../../model/configuration/RoutingConfiguration';
 import { UIFilterCriterion } from '../../model/UIFilterCriterion';
+import { TicketSearchContext } from './webapp/core';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -492,7 +493,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     icon: 'kix-icon-ticket',
                                     text: 'Translatable#Open Tickets of Contact',
                                     routingConfiguration: new RoutingConfiguration(
-                                        'search', null,
+                                        TicketSearchContext.CONTEXT_ID, null,
                                         ContextMode.SEARCH, null, null,
                                         false, null, null,
                                         [
@@ -525,7 +526,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     icon: 'kix-icon-ticket',
                                     text: 'Translatable#Open Tickets of Organisation',
                                     routingConfiguration: new RoutingConfiguration(
-                                        'search', null,
+                                        TicketSearchContext.CONTEXT_ID, null,
                                         ContextMode.SEARCH, null, null,
                                         false, null, null,
                                         [
