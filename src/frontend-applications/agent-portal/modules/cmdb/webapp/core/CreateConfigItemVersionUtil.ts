@@ -64,7 +64,7 @@ export class CreateConfigItemVersionUtil {
         if (!versionData) {
             versionData = {};
         }
-        if (formField.countMax > 1) {
+        if (formField.countMax > 1 && data) {
             if (!versionData[formField.property]) {
                 versionData[formField.property] = [data];
             } else {
