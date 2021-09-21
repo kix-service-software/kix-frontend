@@ -178,8 +178,8 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public isLabelProviderFor(configItem: ConfigItem | KIXObject): boolean {
-        return configItem instanceof ConfigItem || configItem.KIXObjectType === KIXObjectType.CONFIG_ITEM;
+    public isLabelProviderFor(object: ConfigItem | KIXObject): boolean {
+        return object instanceof ConfigItem || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getObjectText(configItem: ConfigItem, id: boolean = true, name: boolean = true): Promise<string> {

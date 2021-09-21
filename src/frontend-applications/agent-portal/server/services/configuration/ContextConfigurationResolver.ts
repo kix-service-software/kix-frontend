@@ -88,28 +88,31 @@ export class ContextConfigurationResolver {
     ): Promise<void> {
         const subconfig = config.subConfigurationDefinition;
 
-        if (subconfig && subconfig.configurationId && subconfig.configurationType) {
+        if (subconfig?.configurationId && subconfig.configurationType) {
             const option = sysConfigOptions.find((o) => o.Name === subconfig.configurationId);
 
             if (option && option.Value) {
                 config.configuration = JSON.parse(option.Value);
-                let resolver: IConfigurationResolver;
-                switch (subconfig.configurationType) {
-                    case ConfigurationType.TableWidget:
-                        resolver = TableWidgetConfigurationResolver.getInstance();
-                        break;
-                    case ConfigurationType.ChartWidget:
-                        resolver = ChartWidgetConfigurationResolver.getInstance();
-                        break;
-                    case ConfigurationType.Table:
-                        resolver = TableConfigurationResolver.getInstance();
-                        break;
-                    default:
-                }
+            }
+        }
 
-                if (resolver) {
-                    await resolver.resolve(token, config.configuration, sysConfigOptions);
-                }
+        if (config.configuration) {
+            let resolver: IConfigurationResolver;
+            switch (config.configuration.type) {
+                case ConfigurationType.TableWidget:
+                    resolver = TableWidgetConfigurationResolver.getInstance();
+                    break;
+                case ConfigurationType.ChartWidget:
+                    resolver = ChartWidgetConfigurationResolver.getInstance();
+                    break;
+                case ConfigurationType.Table:
+                    resolver = TableConfigurationResolver.getInstance();
+                    break;
+                default:
+            }
+
+            if (resolver) {
+                await resolver.resolve(token, config.configuration, sysConfigOptions);
             }
         }
     }

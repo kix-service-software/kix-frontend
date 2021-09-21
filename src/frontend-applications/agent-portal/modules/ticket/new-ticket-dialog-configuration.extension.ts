@@ -47,7 +47,7 @@ import { SearchOperator } from '../search/model/SearchOperator';
 import { ArticleProperty } from './model/ArticleProperty';
 import { QueueProperty } from './model/QueueProperty';
 import { TicketProperty } from './model/TicketProperty';
-import { NewTicketDialogContext } from './webapp/core';
+import { NewTicketDialogContext, TicketSearchContext } from './webapp/core';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -128,7 +128,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     icon: 'kix-icon-ticket',
                                     text: 'Translatable#Open Tickets of Contact',
                                     routingConfiguration: new RoutingConfiguration(
-                                        'search', null,
+                                        TicketSearchContext.CONTEXT_ID, null,
                                         ContextMode.SEARCH,
                                         null, null, null, null, null,
                                         [
@@ -161,7 +161,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     icon: 'kix-icon-ticket',
                                     text: 'Translatable#Open Tickets of Organisation',
                                     routingConfiguration: new RoutingConfiguration(
-                                        'search', null,
+                                        TicketSearchContext.CONTEXT_ID, null,
                                         ContextMode.SEARCH,
                                         null, null, null, null, null,
                                         [

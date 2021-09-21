@@ -8,7 +8,7 @@
  */
 
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
-import { EditTicketDialogContext } from './webapp/core';
+import { EditTicketDialogContext, TicketSearchContext } from './webapp/core';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
@@ -130,7 +130,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     'Translatable#Open Tickets of Contact',
                                     null, null, null,
                                     new RoutingConfiguration(
-                                        'search', null,
+                                        TicketSearchContext.CONTEXT_ID, null,
                                         ContextMode.SEARCH, null, null, null, null, null,
                                         [
                                             [
@@ -164,7 +164,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     'Translatable#Open Tickets of Organisation',
                                     null, null, null,
                                     new RoutingConfiguration(
-                                        'search', null,
+                                        TicketSearchContext.CONTEXT_ID, null,
                                         ContextMode.SEARCH,
                                         null, null, null, null, null,
                                         [
