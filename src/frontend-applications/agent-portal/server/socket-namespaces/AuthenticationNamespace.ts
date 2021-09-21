@@ -73,38 +73,59 @@ export class AuthenticationNamespace extends SocketNameSpace {
         return response;
     }
 
-    private async logout(data: ISocketRequest, client: Socket): Promise<SocketResponse> {
-        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
-        const token = parsedCookie ? parsedCookie.token : '';
+    private async logout(data: ISocketRequest, socket: Socket): Promise<SocketResponse> {
+        let response: SocketResponse;
+        if (socket?.handshake?.headers?.cookie) {
+            const parsedCookie = socket ? cookie.parse(socket.handshake.headers.cookie) : null;
+            const token = parsedCookie ? parsedCookie.token : '';
 
-        const response = await AuthenticationService.getInstance().logout(token)
-            .then(() => {
-                const tokenCookie = cookie.serialize('token', '', { expires: new Date() });
-                client.handshake.headers.cookie = tokenCookie;
-                return new SocketResponse(
-                    AuthenticationEvent.UNAUTHORIZED, new AuthenticationResult(null, data.requestId)
-                );
-            }
-            )
-            .catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
+            await AuthenticationService.getInstance().logout(token).catch(
+                (error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error))
+            );
 
+            const tokenCookie = cookie.serialize('token', '', { expires: new Date() });
+            socket.handshake.headers.cookie = tokenCookie;
+
+            return new SocketResponse(
+                AuthenticationEvent.UNAUTHORIZED, new AuthenticationResult(null, data.requestId)
+            );
+        } else {
+            response = new SocketResponse(
+                SocketEvent.ERROR,
+                new SocketErrorResponse(
+                    data.requestId,
+                    `Invalid Cookie: ${socket?.handshake?.headers?.cookie} ${JSON.stringify(socket?.handshake)}`
+                )
+            );
+        }
         return response;
     }
 
-    private async validateToken(data: ISocketRequest, client: Socket): Promise<SocketResponse> {
-        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
-        const token = parsedCookie ? parsedCookie.token : '';
+    private async validateToken(data: ISocketRequest, socket: Socket): Promise<SocketResponse> {
+        let response: SocketResponse;
+        if (socket?.handshake?.headers?.cookie) {
+            const parsedCookie = socket ? cookie.parse(socket.handshake.headers.cookie) : null;
+            const token = parsedCookie ? parsedCookie.token : '';
 
-        const response = AuthenticationService.getInstance().validateToken(token, client.handshake.address)
-            .then((valid) => {
-                let event = AuthenticationEvent.UNAUTHORIZED;
-                if (valid) {
-                    event = AuthenticationEvent.AUTHORIZED;
-                }
-                return new SocketResponse(event, new AuthenticationResult(token, data.requestId));
-            })
-            .catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
+            const valid = await AuthenticationService.getInstance().validateToken(token, socket.handshake.address)
+                .catch(
+                    (error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error))
+                );
+            let event = AuthenticationEvent.UNAUTHORIZED;
+            if (valid) {
+                event = AuthenticationEvent.AUTHORIZED;
+            }
 
+            response = new SocketResponse(event, new AuthenticationResult(token, data.requestId));
+        } else {
+            response = new SocketResponse(
+                SocketEvent.ERROR,
+                new SocketErrorResponse(
+                    data.requestId,
+                    `Invalid Cookie: ${socket?.handshake?.headers?.cookie} ${JSON.stringify(socket?.handshake)}`
+                )
+            );
+        }
         return response;
     }
 
