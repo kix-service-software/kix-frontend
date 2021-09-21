@@ -6,20 +6,22 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <th.table-head-cell title=state.title style=("width:" + state.size + "px")>
-    <if(!state.loading && state.column)>
+    <if(state.column)>
         <div.table-head-cell-content
             style={
-                        height: input.height
-                    }
+                height: input.height
+            }
             class={
-                        "with-sortable": state.column.getColumnConfiguration().sortable,
-                        "filter-is-shown": state.filterIsShown,
-                        "filter-hovered": state.filterHovered
-                    }>
+                "with-sortable": state.column.getColumnConfiguration().sortable,
+                "filter-is-shown": state.filterIsShown,
+                "filter-hovered": state.filterHovered
+            }>
             <span.icons on-click("sort")>
-                <if(state.column.getColumnConfiguration().showColumnIcon && state.icon)>
+                <if(
+                    state.column.getColumnConfiguration().showColumnIcon &&
+                    state.icon
+                )>
                     <icon icon=state.icon showUnknown=false/>
                 </if>
             </span>
@@ -30,9 +32,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <if(state.column.getColumnConfiguration().sortable)>
                     <span.sortable class={
                         sorted: state.isSorted,
-                        "with-text": state.column.getColumnConfiguration().showColumnTitle
+                        "with-text": state.column.getColumnConfiguration()
+                            .showColumnTitle
                     }>
-                        <span class=(state.sortOrderDown ? "kix-icon-sort-down" : "kix-icon-sort-up")/>
+                        <span class=(
+                            state.sortOrderDown
+                                ? "kix-icon-sort-down"
+                                : "kix-icon-sort-up"
+                        )/>
                     </span>
                 </if>
             </div>
