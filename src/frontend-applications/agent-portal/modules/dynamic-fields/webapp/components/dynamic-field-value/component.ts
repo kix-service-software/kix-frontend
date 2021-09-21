@@ -15,6 +15,8 @@ import { ContextService } from '../../../../base-components/webapp/core/ContextS
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { Label } from '../../../../base-components/webapp/core/Label';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
+import { ConfigItemDetailsContext } from '../../../../cmdb/webapp/core';
+import { TicketDetailsContext } from '../../../../ticket/webapp/core';
 import { DynamicField } from '../../../model/DynamicField';
 import { DynamicFieldTypes } from '../../../model/DynamicFieldTypes';
 import { DynamicFieldValue } from '../../../model/DynamicFieldValue';
@@ -123,14 +125,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public labelClicked(label: Label): void {
-        const contextMap = {};
-        contextMap[DynamicFieldTypes.CI_REFERENCE] = 'config-item-details';
-        contextMap[DynamicFieldTypes.TICKET_REFERENCE] = 'ticket-details';
-
-        const contextId = contextMap[label?.id];
-
-        if (contextId) {
-            ContextService.getInstance().setActiveContext(contextId, label.id);
+        switch (this.state.field.FieldType) {
+            case DynamicFieldTypes.CI_REFERENCE:
+                ContextService.getInstance().setActiveContext(ConfigItemDetailsContext.CONTEXT_ID, label?.id);
+                break;
+            case DynamicFieldTypes.TICKET_REFERENCE:
+                ContextService.getInstance().setActiveContext(TicketDetailsContext.CONTEXT_ID, label?.id);
+                break;
+            default:
         }
     }
 
