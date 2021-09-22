@@ -187,9 +187,15 @@ export class ContextService {
                     if (isStored) {
                         await this.updateStorage(instanceId, true);
                     }
-                    const context = this.contextInstances.splice(index, 1);
-                    await context[0].destroy();
-                    EventService.getInstance().publish(ContextEvents.CONTEXT_REMOVED, context[0]);
+                    const context = this.contextInstances.splice(index, 1)[0];
+
+                    const contextExtensions = this.getContextExtensions(context.contextId);
+                    for (const extension of contextExtensions) {
+                        await extension.destroy(context);
+                    }
+
+                    await context.destroy();
+                    EventService.getInstance().publish(ContextEvents.CONTEXT_REMOVED, context);
 
                     this.activeContextIndex--;
 
