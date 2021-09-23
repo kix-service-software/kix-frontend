@@ -103,6 +103,7 @@ class Component {
             await AgentService.getInstance().setPreferencesByForm()
                 .then(async () => {
                     TranslationService.getInstance().resetTranslations();
+                    EventService.getInstance().publish('USER_LANGUAGE_CHANGED');
                     setTimeout(async () => {
                         BrowserUtil.toggleLoadingShield('PERSONAL_SETTINGS_SHIELD', false);
                         await ContextService.getInstance().toggleActiveContext(null, null, true);

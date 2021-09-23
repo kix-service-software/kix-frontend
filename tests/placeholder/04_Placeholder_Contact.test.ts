@@ -34,6 +34,8 @@ describe('Placeholder replacement for contact', () => {
     let contact: Contact
     let contactPlaceholderHandler: ContactPlaceholderHandler = new ContactPlaceholderHandler();
     before(() => {
+        LabelService.getInstance()['objectLabelProvider'] = [];
+        LabelService.getInstance()['propertiesLabelProvider'].clear();
         contact = someTestFunctions.prepareUser();
 
         const contactLabelProvider = new ContactLabelProvider();
@@ -43,8 +45,8 @@ describe('Placeholder replacement for contact', () => {
     });
 
     after(() => {
-        LabelService.getInstance()['objectLabelProvider'] = []
-        LabelService.getInstance()['propertiesLabelProvider'].clear();;
+        LabelService.getInstance()['objectLabelProvider'] = [];
+        LabelService.getInstance()['propertiesLabelProvider'].clear();
         (TranslationService.getInstance() as any).translations = null;
     });
 
@@ -158,12 +160,9 @@ describe('Placeholder replacement for contact', () => {
             const date = await DateTimeUtil.getLocalDateTimeString(contact.CreateTime, 'en');
             expect(text).equal(date);
 
-            const germanText = await contactPlaceholderHandler.replace(`<TR_KIX_CONTACT_${KIXObjectProperty.CREATE_TIME}>`, contact, 'de');
+            const germanText = await contactPlaceholderHandler.replace(`<KIX_CONTACT_${KIXObjectProperty.CREATE_TIME}>`, contact, 'de');
             const germanDate = await DateTimeUtil.getLocalDateTimeString(contact.CreateTime, 'de');
             expect(germanText).equal(germanDate);
-
-            const notGermanText = await contactPlaceholderHandler.replace(`<KIX_CONTACT_${KIXObjectProperty.CREATE_TIME}>`, contact, 'de');
-            expect(notGermanText).equal(date);
         });
 
         it('Should replace contact change time placeholder', async () => {
@@ -171,12 +170,9 @@ describe('Placeholder replacement for contact', () => {
             const date = await DateTimeUtil.getLocalDateTimeString(contact.ChangeTime, 'en');
             expect(text).equal(date);
 
-            const germanText = await contactPlaceholderHandler.replace(`<TR_KIX_CONTACT_${KIXObjectProperty.CHANGE_TIME}>`, contact, 'de');
+            const germanText = await contactPlaceholderHandler.replace(`<KIX_CONTACT_${KIXObjectProperty.CHANGE_TIME}>`, contact, 'de');
             const germanDate = await DateTimeUtil.getLocalDateTimeString(contact.ChangeTime, 'de');
             expect(germanText).equal(germanDate);
-
-            const notGermanText = await contactPlaceholderHandler.replace(`<KIX_CONTACT_${KIXObjectProperty.CHANGE_TIME}>`, contact, 'de');
-            expect(notGermanText).equal(date);
         });
     });
 

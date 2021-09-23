@@ -56,6 +56,20 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         'QUEUE'
     ];
 
+    private relevantIdAttribut = {
+        'Contact': TicketProperty.CONTACT_ID,
+        'Lock': TicketProperty.LOCK_ID,
+        'Organisation': TicketProperty.ORGANISATION_ID,
+        'Owner': TicketProperty.OWNER_ID,
+        'Priority': TicketProperty.PRIORITY_ID,
+        'Queue': TicketProperty.QUEUE_ID,
+        'Responsible': TicketProperty.RESPONSIBLE_ID,
+        'State': TicketProperty.STATE_ID,
+        // StateType has special handling in label provider
+        // 'StateType': TicketProperty.STATE_TYPE_ID,
+        'Type': TicketProperty.TYPE_ID
+    };
+
     private static INSTANCE: TicketPlaceholderHandler;
 
     public static getInstance(): TicketPlaceholderHandler {
@@ -83,9 +97,6 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         }
         if (ticket && this.isHandlerFor(objectString)) {
             const attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
-            if (!PlaceholderService.getInstance().translatePlaceholder(placeholder)) {
-                language = 'en';
-            }
             if (attribute) {
                 switch (objectString) {
                     case 'TICKET':
@@ -272,7 +283,6 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                 case TicketProperty.CONTACT_ID:
                 case TicketProperty.OWNER_ID:
                 case TicketProperty.TYPE_ID:
-                case TicketProperty.SERVICE_ID:
                 case TicketProperty.RESPONSIBLE_ID:
                 case TicketProperty.TICKET_ID:
                     result = ticket[attribute] ? ticket[attribute].toString() : '';
@@ -310,6 +320,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                 case ArticleProperty.BODY:
                     break;
                 default:
+                    attribute = this.relevantIdAttribut[attribute] || attribute;
                     result = await LabelService.getInstance().getDisplayText(ticket, attribute, undefined, false);
                     result = typeof result !== 'undefined' && result !== null
                         ? await TranslationService.translate(result.toString(), undefined, language) : '';
@@ -322,7 +333,8 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         const knownProperties = [
             ...Object.keys(TicketProperty).map((p) => TicketProperty[p]),
             ...Object.keys(KIXObjectProperty).map((p) => KIXObjectProperty[p]),
-            ...Object.keys(ArticleProperty).map((p) => ArticleProperty[p])
+            ...Object.keys(ArticleProperty).map((p) => ArticleProperty[p]),
+            ...Object.keys(this.relevantIdAttribut)
         ];
         return knownProperties.some((p) => p === property);
     }

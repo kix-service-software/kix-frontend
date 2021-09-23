@@ -11,6 +11,7 @@ import { Context } from '../../../../../../model/Context';
 import { ContextType } from '../../../../../../model/ContextType';
 import { IdService } from '../../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { ApplicationEvent } from '../../../../../base-components/webapp/core/ApplicationEvent';
 import { ContextEvents } from '../../../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
@@ -145,6 +146,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async closeTab(tab: ContextTab, event: any): Promise<void> {
+        event.stopPropagation();
+        event.preventDefault();
+
+        EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
+
         this.state.blocked = true;
 
         const context = ContextService.getInstance().getActiveContext();

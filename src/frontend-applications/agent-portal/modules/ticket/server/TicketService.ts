@@ -37,6 +37,8 @@ import { TicketLock } from '../model/TicketLock';
 import { Contact } from '../../customer/model/Contact';
 import { ObjectIcon } from '../../icon/model/ObjectIcon';
 import { TicketLabelProvider } from './TicketLabelProvider';
+import { CacheService } from '../../../server/services/cache';
+import { PersonalSettingsProperty } from '../../user/model/PersonalSettingsProperty';
 
 export class TicketAPIService extends KIXObjectAPIService {
 
@@ -56,6 +58,10 @@ export class TicketAPIService extends KIXObjectAPIService {
     private constructor() {
         super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
+
+        CacheService.getInstance().addDependencies(
+            PersonalSettingsProperty.USER_LANGUAGE, [KIXObjectType.TICKET]
+        );
     }
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {

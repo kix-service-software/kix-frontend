@@ -21,7 +21,7 @@ export class OrganisationPlaceholderHandler extends AbstractPlaceholderHandler {
 
     public handlerId: string = '250-OrganisationPlaceholderHandler';
 
-    public async replace(placeholder: string, organisation?: Organisation, language: string = 'en'): Promise<string> {
+    public async replace(placeholder: string, organisation?: Organisation, language?: string): Promise<string> {
         let result = '';
         if (organisation) {
             const attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
@@ -35,9 +35,6 @@ export class OrganisationPlaceholderHandler extends AbstractPlaceholderHandler {
                     optionsString);
             }
             else if (attribute && this.isKnownProperty(attribute)) {
-                if (!PlaceholderService.getInstance().translatePlaceholder(placeholder)) {
-                    language = 'en';
-                }
                 switch (attribute) {
                     case OrganisationProperty.ID:
                     case KIXObjectProperty.VALID_ID:

@@ -230,9 +230,6 @@ export class TicketFormService extends KIXObjectFormService {
             case TicketProperty.PRIORITY_ID:
                 hasPermissions = await this.checkPermissions('system/ticket/priorities');
                 break;
-            case TicketProperty.SERVICE_ID:
-                hasPermissions = await this.checkPermissions('system/services');
-                break;
             case ArticleProperty.CHANNEL_ID:
                 hasPermissions = await this.checkPermissions('system/communication/channels');
                 break;

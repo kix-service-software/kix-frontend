@@ -41,7 +41,6 @@ export class TicketChartFactory {
             case TicketProperty.PRIORITY_ID:
             case TicketProperty.QUEUE_ID:
             case TicketProperty.TYPE_ID:
-            case TicketProperty.SERVICE_ID:
                 return await this.preparePropertyCountData(property, tickets);
             case TicketProperty.CREATED:
                 return await this.prepareCreatedData(property, tickets);
@@ -102,9 +101,6 @@ export class TicketChartFactory {
                 break;
             case TicketProperty.TYPE_ID:
                 objectType = KIXObjectType.TICKET_TYPE;
-                break;
-            case TicketProperty.SERVICE_ID:
-                objectType = KIXObjectType.SERVICE;
                 break;
 
             default:
