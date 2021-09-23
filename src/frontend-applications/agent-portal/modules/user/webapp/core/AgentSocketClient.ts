@@ -23,6 +23,7 @@ import { ISocketRequest } from '../../../../modules/base-components/webapp/core/
 import { SetPreferencesRequest } from '../../../../modules/base-components/webapp/core/SetPreferencesRequest';
 import { SetPreferencesResponse } from '../../../../modules/base-components/webapp/core/SetPreferencesResponse';
 import { BrowserCacheService } from '../../../../modules/base-components/webapp/core/CacheService';
+import { PersonalSettingsProperty } from '../../model/PersonalSettingsProperty';
 
 export class AgentSocketClient extends SocketClient {
 
@@ -155,6 +156,14 @@ export class AgentSocketClient extends SocketClient {
                     if (result.requestId === requestId) {
                         BrowserCacheService.getInstance().deleteKeys(KIXObjectType.PERSONAL_SETTINGS);
                         BrowserCacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
+
+                        if (
+                            Array.isArray(parameter) &&
+                            parameter.some((p) => p[0] === PersonalSettingsProperty.USER_LANGUAGE)
+                        ) {
+                            BrowserCacheService.getInstance().deleteKeys(PersonalSettingsProperty.USER_LANGUAGE);
+                        }
+
                         window.clearTimeout(timeout);
                         resolve(result);
                     }

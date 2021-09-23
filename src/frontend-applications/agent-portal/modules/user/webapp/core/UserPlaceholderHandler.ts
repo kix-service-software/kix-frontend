@@ -29,7 +29,7 @@ export class UserPlaceholderHandler extends AbstractPlaceholderHandler {
         'CURRENT'
     ];
 
-    public async replace(placeholder: string, user?: User, language: string = 'en'): Promise<string> {
+    public async replace(placeholder: string, user?: User, language?: string): Promise<string> {
         let result = '';
         const objectString = PlaceholderService.getInstance().getObjectString(placeholder);
         if (objectString === 'CURRENT') {
@@ -55,9 +55,6 @@ export class UserPlaceholderHandler extends AbstractPlaceholderHandler {
             }
         } else if (user) {
             if (attribute && this.isKnownProperty(attribute)) {
-                if (!PlaceholderService.getInstance().translatePlaceholder(placeholder)) {
-                    language = 'en';
-                }
                 switch (attribute) {
                     case UserProperty.USER_ID:
                     case KIXObjectProperty.VALID_ID:

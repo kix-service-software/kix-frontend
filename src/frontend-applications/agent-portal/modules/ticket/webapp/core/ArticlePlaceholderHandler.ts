@@ -26,9 +26,6 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
             const attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
             const optionsString: string = PlaceholderService.getInstance().getOptionsString(placeholder);
             if (attribute && this.isKnownProperty(attribute)) {
-                if (!PlaceholderService.getInstance().translatePlaceholder(placeholder)) {
-                    language = 'en';
-                }
                 switch (attribute) {
                     case 'ID':
                         result = article.ArticleID.toString();

@@ -321,9 +321,6 @@ export class TicketDetailsDataBuilder {
             case TicketProperty.STATE_ID:
                 displayValue = 'Translatable#State';
                 break;
-            case TicketProperty.SERVICE_ID:
-                displayValue = 'Translatable#Service';
-                break;
             case TicketProperty.OWNER_ID:
                 displayValue = 'Translatable#Owner';
                 break;
