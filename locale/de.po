@@ -4038,9 +4038,6 @@ msgstr "im Hintergrund ausführen"
 msgid "Send to these agents"
 msgstr "Senden an Agenten"
 
-msgid "Service"
-msgstr "Service"
-
 msgid "Set Email Header"
 msgstr "E-Mail Header setzen"
 
@@ -4767,6 +4764,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Service"
+#~ msgstr "Service"
 
 #~ msgid "Hit List ({0})"
 #~ msgstr "Trefferliste ({0})"

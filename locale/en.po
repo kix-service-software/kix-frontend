@@ -3890,9 +3890,6 @@ msgstr ""
 msgid "Send to these agents"
 msgstr ""
 
-msgid "Service"
-msgstr ""
-
 msgid "Set Email Header"
 msgstr ""
 
