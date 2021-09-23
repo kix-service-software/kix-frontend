@@ -13,7 +13,6 @@ import { IConfiguration } from '../../model/configuration/IConfiguration';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
-import { HelpWidgetConfiguration } from '../../model/configuration/HelpWidgetConfiguration';
 import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
 import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
 import { ConfiguredDialogWidget } from '../../model/configuration/ConfiguredDialogWidget';
@@ -563,6 +562,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
 }
 
-module.exports = (data, host, options) => {
+module.exports = (data, host, options): Extension => {
     return new Extension();
 };

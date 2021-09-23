@@ -37,17 +37,17 @@ class Component {
             : undefined;
 
         context.registerListener('organisation-assigned-config-items-component', {
-            sidebarLeftToggled: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            sidebarLeftToggled: (): void => { return; },
+            filteredObjectListChanged: (): void => { return; },
             objectListChanged: () => { return; },
-            sidebarRightToggled: () => { return; },
+            sidebarRightToggled: (): void => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: (orgId: string, organisation: Organisation, type: KIXObjectType) => {
                 if (type === KIXObjectType.ORGANISATION) {
                     this.initWidget(organisation);
                 }
             },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
 
         this.initWidget(await context.getObject<Organisation>(KIXObjectType.ORGANISATION));

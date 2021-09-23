@@ -31,7 +31,7 @@ export class TicketPriorityService extends KIXObjectService<TicketPriority> {
         this.objectConstructors.set(KIXObjectType.TICKET_PRIORITY, [TicketPriority]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.TICKET_PRIORITY;
     }
 

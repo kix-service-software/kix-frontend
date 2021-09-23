@@ -43,7 +43,7 @@ export class WebformService extends KIXObjectService<Webform> {
         this.objectConstructors.set(KIXObjectType.WEBFORM, [Webform]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.WEBFORM;
     }
 

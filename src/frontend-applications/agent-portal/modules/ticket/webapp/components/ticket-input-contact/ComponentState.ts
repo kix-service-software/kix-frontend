@@ -13,7 +13,7 @@ import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { FormInputAction } from '../../../../../modules/base-components/webapp/core/FormInputAction';
 import { IdService } from '../../../../../model/IdService';
 
-export class ComponentState extends FormInputComponentState<number> {
+export class ComponentState extends FormInputComponentState {
 
     public constructor(
         public autoCompleteConfiguration: AutoCompleteConfiguration = null,

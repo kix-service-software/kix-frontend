@@ -83,7 +83,7 @@ export class MarkoService {
         }
     }
 
-    public addMouldeDependencies(browserJSON: any, moduleExtension: IKIXModuleExtension): void {
+    public addMouldeDependencies(browserJSON: BrowserJSON, moduleExtension: IKIXModuleExtension): void {
         const folder = moduleExtension.external ? path.join('..', '..', 'plugins') : 'modules';
         const prePath = path.join('..', '..', '..', '..', folder);
         moduleExtension.webDependencies.forEach((d) => {
@@ -95,7 +95,7 @@ export class MarkoService {
         });
     }
 
-    private async saveBrowserJSON(browserJSON: any, destination: string): Promise<void> {
+    private async saveBrowserJSON(browserJSON: BrowserJSON, destination: string): Promise<void> {
         await new Promise<void>((resolve, reject) => {
             jsonfile.writeFile(path.join(__dirname, destination), browserJSON,
                 (fileError: Error) => {
@@ -110,9 +110,7 @@ export class MarkoService {
     }
 
     private async buildMarkoApplications(applications: IMarkoApplication[]): Promise<void> {
-        const profileTaskId = ProfilingService.getInstance().start(
-            'MarkoService', 'Build App'
-        );
+        const profileTaskId = ProfilingService.getInstance().start('MarkoService', 'Build App');
 
         this.ready = false;
 
@@ -128,7 +126,7 @@ export class MarkoService {
             const templatePath = path.join(__dirname, '..', '..', folder, app.name, app.path);
             const template = require(templatePath);
             await template.render({}).catch((error) => {
-                ProfilingService.getInstance().stop(profileTaskId, `marko app build error: ${app.name}`);
+                ProfilingService.getInstance().stop(profileTaskId, { data: [`marko app build error: ${app.name}`] });
                 LoggingService.getInstance().error(error);
             });
             LoggingService.getInstance().info(`marko app build finished: ${app.name}`);
@@ -148,7 +146,7 @@ export class MarkoService {
     }
 
     private async waitForReadyState(): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
+        return new Promise<void>((resolve) => {
             setTimeout(() => {
                 LoggingService.getInstance().info('App build in progress');
                 resolve();
@@ -167,4 +165,8 @@ export class MarkoService {
         }
     }
 
+}
+
+interface BrowserJSON {
+    dependencies: Array<string>;
 }

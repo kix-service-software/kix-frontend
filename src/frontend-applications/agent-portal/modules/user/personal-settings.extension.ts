@@ -131,6 +131,6 @@ class Extension extends KIXExtension implements IPersonalSettingsExtension {
 
 }
 
-module.exports = (data, host, options) => {
+module.exports = (data, host, options): Extension => {
     return new Extension();
 };

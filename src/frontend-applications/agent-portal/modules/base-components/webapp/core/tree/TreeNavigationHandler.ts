@@ -17,7 +17,7 @@ export class TreeNavigationHandler {
     private direction: string;
     private backwards: boolean = false;
 
-    public setTree(tree: TreeNode[]) {
+    public setTree(tree: TreeNode[]): void {
         this.tree = tree;
     }
 

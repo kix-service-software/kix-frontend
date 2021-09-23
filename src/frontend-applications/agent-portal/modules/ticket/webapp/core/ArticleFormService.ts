@@ -63,7 +63,7 @@ export class ArticleFormService extends KIXObjectFormService {
         super();
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.ARTICLE;
     }
 
@@ -101,7 +101,7 @@ export class ArticleFormService extends KIXObjectFormService {
 
     protected async prePrepareForm(
         form: FormConfiguration, ticket: Ticket, formInstance: FormInstance
-    ) {
+    ): Promise<void> {
         const dialogContext = ContextService.getInstance().getActiveContext();
         if (dialogContext) {
             const isForwardDialog = dialogContext.getAdditionalInformation('ARTICLE_FORWARD');

@@ -49,7 +49,7 @@ class Component {
 
         this.formSubscriber = {
             eventSubscriberId: IdService.generateDateBasedId('fields-container-'),
-            eventPublished: async (data: any, eventId: string) => {
+            eventPublished: async (data: any, eventId: string): Promise<void> => {
                 const isUpdateEvent = eventId === FormEvent.FIELD_REMOVED
                     || eventId === FormEvent.FIELD_CHILDREN_ADDED;
 
@@ -179,38 +179,38 @@ class Component {
         (this as any).setStateDirty('fields');
     }
 
-    public async dragStart(fieldInstanceId: string) {
+    public dragStart(fieldInstanceId: string): void {
         if (fieldInstanceId) {
             this.state.dragStartIndex = this.state.fields.findIndex((f) => f.instanceId === fieldInstanceId);
             this.state.dragStartInstanceId = fieldInstanceId;
         }
     }
 
-    public async dragEnd() {
+    public dragEnd(): void {
         this.state.dragStartIndex = null;
         this.state.dragStartInstanceId = null;
     }
 
-    public allowDrop(event) {
+    public allowDrop(event): boolean {
         event.preventDefault();
         event.stopPropagation();
         event.dataTransfer.dropEffect = 'move';
         return false;
     }
 
-    public handleDragEnter(event) {
+    public handleDragEnter(event): void {
         event.preventDefault();
         event.stopPropagation();
         event.target.classList.add('drag-over');
     }
 
-    public handleDragLeave(event) {
+    public handleDragLeave(event): void {
         event.preventDefault();
         event.stopPropagation();
         event.target.classList.remove('drag-over');
     }
 
-    public async handleDrop(index: number, event) {
+    public async handleDrop(index: number, event): Promise<void> {
         event.stopPropagation();
         event.preventDefault();
 

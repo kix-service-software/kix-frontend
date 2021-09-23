@@ -17,7 +17,6 @@ import { SortOrder } from '../../../../model/SortOrder';
 import { ArticlePlaceholderHandler } from './ArticlePlaceholderHandler';
 import { QueuePlaceholderHandler } from './QueuePlaceholderHandler';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
-import { ContextType } from '../../../../model/ContextType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { User } from '../../../user/model/User';
@@ -28,16 +27,9 @@ import { TicketProperty } from '../../model/TicketProperty';
 import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
-import {
-    AdditionalContextInformation
-} from '../../../../modules/base-components/webapp/core/AdditionalContextInformation';
-import { FormService } from '../../../../modules/base-components/webapp/core/FormService';
-import { FormContext } from '../../../../model/configuration/FormContext';
 import { OrganisationPlaceholderHandler } from '../../../customer/webapp/core/OrganisationPlaceholderHandler';
 import { ContactPlaceholderHandler } from '../../../customer/webapp/core/ContactPlaceholderHandler';
-import {
-    DynamicFieldValuePlaceholderHandler
-} from '../../../dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler';
+import { DynamicFieldValuePlaceholderHandler } from '../../../dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler';
 import { AbstractPlaceholderHandler } from '../../../../modules/base-components/webapp/core/AbstractPlaceholderHandler';
 import { Article } from '../../model/Article';
 import { ArticleLoadingOptions } from '../../model/ArticleLoadingOptions';
@@ -229,7 +221,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         return result;
     }
 
-    private async getArticles(ticket: Ticket, articleId?: number) {
+    private async getArticles(ticket: Ticket, articleId?: number): Promise<Article[]> {
         let articles = ticket.Articles;
         if (!Array.isArray(articles) || !articles.length) {
             articles = await KIXObjectService.loadObjects<Article>(
@@ -242,7 +234,9 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         return articles;
     }
 
-    private async getTicketValue(attribute: string, ticket?: Ticket, language?: string, placeholder?: string) {
+    private async getTicketValue(
+        attribute: string, ticket?: Ticket, language?: string, placeholder?: string
+    ): Promise<string> {
         let result = '';
         let normalTicketAttribut: boolean = true;
         const optionsString: string = PlaceholderService.getInstance().getOptionsString(placeholder);
@@ -343,7 +337,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         return ticket;
     }
 
-    private setObject(ticket: Ticket, TicketToAdd: Ticket) {
+    private setObject(ticket: Ticket, TicketToAdd: Ticket): void {
         if (TicketToAdd) {
             Object.getOwnPropertyNames(TicketToAdd).forEach((property) => {
                 if (typeof TicketToAdd[property] !== 'undefined' && !this.ignoreProperty(property)) {
@@ -353,7 +347,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         }
     }
 
-    private preparePendingTimeUnix(ticket: Ticket) {
+    private preparePendingTimeUnix(ticket: Ticket): void {
         if (ticket.PendingTime) {
             const pendingTimeUnix = Date.parse(ticket.PendingTime);
             if (!isNaN(Number(pendingTimeUnix))) {

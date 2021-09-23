@@ -8,7 +8,7 @@
  */
 
 
-import { EditMailAccountDialogContext, MailAccountDetailsContext } from '../context';
+import { EditMailAccountDialogContext } from '../context';
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';

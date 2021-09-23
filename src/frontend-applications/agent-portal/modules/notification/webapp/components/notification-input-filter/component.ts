@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
-import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { NotificationProperty } from '../../../model/NotificationProperty';
 import { NotificationService } from '../../core';
 import { ArticleProperty } from '../../../../ticket/model/ArticleProperty';
@@ -46,7 +45,7 @@ class Component extends FormInputComponent<FilterCriteria[], ComponentState> {
 
         this.formSubscriber = {
             eventSubscriberId: 'NotificationInputFilter',
-            eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
+            eventPublished: async (data: FormValuesChangedEventData, eventId: string): Promise<void> => {
                 await this.handleArticleProperties();
             }
         };
@@ -55,7 +54,7 @@ class Component extends FormInputComponent<FilterCriteria[], ComponentState> {
         this.state.prepared = true;
     }
 
-    private async handleArticleProperties() {
+    private async handleArticleProperties(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         if (context && context.descriptor.contextType === ContextType.DIALOG) {
             const selectedEvents = context.getAdditionalInformation(NotificationProperty.DATA_EVENTS);
@@ -175,7 +174,7 @@ class Component extends FormInputComponent<FilterCriteria[], ComponentState> {
         }
     }
 
-    private async setCriteria(criteria: any, fromBackend?: boolean) {
+    private async setCriteria(criteria: any, fromBackend?: boolean): Promise<void> {
         let objectType: KIXObjectType | string;
         const inputType = await this.state.manager.getInputType(fromBackend ? criteria.Field : criteria.property);
         if (inputType) {

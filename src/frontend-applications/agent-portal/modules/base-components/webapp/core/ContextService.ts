@@ -27,7 +27,6 @@ import { RoutingEvent } from './RoutingEvent';
 import { ConfiguredWidget } from '../../../../model/configuration/ConfiguredWidget';
 import { AgentService } from '../../../user/webapp/core/AgentService';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
-import { IConfiguration } from '../../../../model/configuration/IConfiguration';
 import { ContextConfiguration } from '../../../../model/configuration/ContextConfiguration';
 
 export class ContextService {

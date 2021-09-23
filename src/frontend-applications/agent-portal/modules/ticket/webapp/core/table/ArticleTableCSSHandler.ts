@@ -16,10 +16,8 @@ export class ArticleTableCSSHandler implements ITableCSSHandler<Article> {
     public async getRowCSSClasses(article: Article): Promise<string[]> {
         const classes = [];
 
-        if (article) {
-            if (article.isUnread()) {
-                classes.push('article-unread');
-            }
+        if (article?.isUnread()) {
+            classes.push('article-unread');
         }
 
         return classes;

@@ -35,7 +35,7 @@ export class ContextFormManager {
     public constructor(protected context?: Context) {
         this.formSubscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: any, eventId: string) => {
+            eventPublished: (data: any, eventId: string): void => {
                 this.handleValueChanged(data.formInstance);
             }
         };
@@ -130,9 +130,9 @@ export class ContextFormManager {
     }
 
     public async addStorableValue(contextPreference: ContextPreference): Promise<void> {
-        const replacerFunc = () => {
+        const replacerFunc = (): (key: string, value: any) => string => {
             const visited = new WeakSet();
-            return (key: string, value: any) => {
+            return (key: string, value: any): string => {
                 if (typeof value === 'object' && value !== null) {
                     if (visited.has(value)) {
                         return;

@@ -33,7 +33,7 @@ export class TicketStateService extends KIXObjectService<TicketState> {
         this.objectConstructors.set(KIXObjectType.TICKET_STATE_TYPE, [TicketStateType]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.TICKET_STATE
             || kixObjectType === KIXObjectType.TICKET_STATE_TYPE;
     }

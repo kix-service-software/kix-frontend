@@ -10,7 +10,7 @@
 import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
 import { ObjectIcon } from '../../../model/ObjectIcon';
 
-export class ComponentState extends FormInputComponentState<any> {
+export class ComponentState extends FormInputComponentState {
 
     public constructor(
         public dragging: boolean = false,

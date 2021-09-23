@@ -138,7 +138,7 @@ export class RedisCache implements ICache {
         }
     }
 
-    private checkConnection() {
+    private checkConnection(): void {
         if (this.redisClient && !this.redisClient.connected) {
             LoggingService.getInstance().info('REDIS quit');
             this.redisClient.quit();

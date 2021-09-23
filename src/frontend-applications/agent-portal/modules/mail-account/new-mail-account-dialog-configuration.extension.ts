@@ -20,7 +20,6 @@ import { FormFieldConfiguration } from '../../model/configuration/FormFieldConfi
 import { MailAccountProperty } from './model/MailAccountProperty';
 import { FormFieldOption } from '../../model/configuration/FormFieldOption';
 import { FormFieldOptions } from '../../model/configuration/FormFieldOptions';
-import { InputFieldTypes } from '../../modules/base-components/webapp/core/InputFieldTypes';
 import { FormFieldValue } from '../../model/configuration/FormFieldValue';
 import { ObjectReferenceOptions } from '../../modules/base-components/webapp/core/ObjectReferenceOptions';
 import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
@@ -36,7 +35,6 @@ import { FormPageConfiguration } from '../../model/configuration/FormPageConfigu
 import { FormConfiguration } from '../../model/configuration/FormConfiguration';
 import { FormContext } from '../../model/configuration/FormContext';
 import { ModuleConfigurationService } from '../../server/services/configuration';
-
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
@@ -187,6 +185,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
     }
 }
 
-module.exports = (data, host, options) => {
+module.exports = (data, host, options): Extension => {
     return new Extension();
 };

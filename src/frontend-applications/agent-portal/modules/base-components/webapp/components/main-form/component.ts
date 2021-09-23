@@ -8,7 +8,6 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { FormContext } from '../../../../../model/configuration/FormContext';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
@@ -66,7 +65,7 @@ class FormComponent {
 
         this.formSubscriber = {
             eventSubscriberId: this.state.formId,
-            eventPublished: (data: any, eventId: string) => {
+            eventPublished: (data: any, eventId: string): void => {
                 if (eventId === ContextFormManagerEvents.FORM_INSTANCE_CHANGED) {
                     this.state.formInstance = null;
                     this.state.formId = null;

@@ -53,7 +53,7 @@ class OverlayComponent {
 
         EventService.getInstance().subscribe(ApplicationEvent.CLOSE_OVERLAY, {
             eventSubscriberId: 'overlay',
-            eventPublished: () => {
+            eventPublished: (): void => {
                 this.closeOverlay();
             }
         });
@@ -78,7 +78,7 @@ class OverlayComponent {
         this.state.show = false;
 
         if (autoClose) {
-            this.clickListener = (event: any) => {
+            this.clickListener = (event: any): void => {
                 if (!this.keepShow && !this.showShield() && event.button === 0) {
                     this.closeOverlay();
                 }
@@ -313,7 +313,7 @@ class OverlayComponent {
         return this.state.type === OverlayType.INFO || this.state.type === OverlayType.CONTENT_OVERLAY;
     }
 
-    public startMove(event: any) {
+    public startMove(event: any): void {
         if (event && event.button === 0) {
             this.startMoveOffset = [event.pageX, event.pageY];
             document.body.classList.add('no-select');

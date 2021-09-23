@@ -7,6 +7,7 @@
  * --
  */
 
+/* eslint-disable no-console */
 import winston from 'winston';
 import path from 'path';
 import fs from 'fs';
@@ -28,7 +29,7 @@ export class LoggingService {
     }
 
     private defaultLevelNumber: number;
-    private kixLogger: any;
+    private kixLogger: winston.Logger;
     private trace: boolean;
 
     private constructor() {
@@ -113,7 +114,7 @@ export class LoggingService {
         return logFileDir;
     }
 
-    private createLogger(logDirectory?: string) {
+    private createLogger(logDirectory?: string): void {
         const winstonLevels = {
             ERROR: 'error',
             WARNING: 'warn',
@@ -182,7 +183,7 @@ export class LoggingService {
         });
     }
 
-    private getStackTrace() {
+    private getStackTrace(): string {
         // return but remove first 4 lines
         // (with "Error", this function and log function from this class and validate decorator function)
         return '\n' + new Error().stack.split('\n').slice(4).join('\n');

@@ -36,7 +36,7 @@ export class NotificationService extends KIXObjectService<SystemAddress> {
         this.objectConstructors.set(KIXObjectType.NOTIFICATION, [Notification]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.NOTIFICATION;
     }
 

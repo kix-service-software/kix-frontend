@@ -31,7 +31,7 @@ export class ReportDefinitionService extends KIXObjectService<ReportDefinition> 
         this.objectConstructors.set(KIXObjectType.REPORT_DEFINITION, [ReportDefinition]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.REPORT_DEFINITION;
     }
 

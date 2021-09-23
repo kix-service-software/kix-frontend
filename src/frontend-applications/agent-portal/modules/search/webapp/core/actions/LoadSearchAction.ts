@@ -12,8 +12,6 @@ import { TranslationService } from '../../../../translation/webapp/core/Translat
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
 import { SearchService } from '../SearchService';
-import { SearchContext } from '../SearchContext';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { SearchCache } from '../../../model/SearchCache';
 
 export class LoadSearchAction extends AbstractAction<SearchCache> {

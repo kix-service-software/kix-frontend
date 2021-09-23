@@ -29,7 +29,7 @@ export class OAuth2Service extends KIXObjectService<OAuth2Profile> {
         this.objectConstructors.set(KIXObjectType.OAUTH2_PROFILE, [OAuth2Profile]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.OAUTH2_PROFILE
             || kixObjectType === KIXObjectType.OAUTH2_PROFILE_AUTH_URL;
     }

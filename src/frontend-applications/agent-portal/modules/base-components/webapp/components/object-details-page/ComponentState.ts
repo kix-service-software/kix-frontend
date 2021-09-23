@@ -7,7 +7,6 @@
  * --
  */
 
-import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
 import { IdService } from '../../../../../model/IdService';
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 

@@ -10,7 +10,7 @@
 import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
 import { Channel } from '../../../model/Channel';
 
-export class ComponentState extends FormInputComponentState<number> {
+export class ComponentState extends FormInputComponentState {
 
     public constructor(
         public channels: Channel[] = null,

@@ -109,7 +109,7 @@ class Component extends FormInputComponent<string, ComponentState> {
                         this.handleValueChanged(instance.getValue());
                     });
 
-                    CodeMirror.commands.autocomplete = (cm) => {
+                    CodeMirror.commands.autocomplete = (cm): void => {
                         CodeMirror.showHint(cm, CodeMirror.hint.sql, {
                             tables: {
                                 'table1': ['col_A', 'col_B', 'col_C'],

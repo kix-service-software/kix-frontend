@@ -13,7 +13,6 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { QueueService } from '../../core';
 import { QueueProperty } from '../../../model/QueueProperty';
-import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';

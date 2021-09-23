@@ -64,7 +64,7 @@ export class Job extends KIXObject {
         }
     }
 
-    private prepareFilter() {
+    private prepareFilter(): void {
         if (this.Filter) {
             // key = AND or OR
             for (const key in this.Filter) {

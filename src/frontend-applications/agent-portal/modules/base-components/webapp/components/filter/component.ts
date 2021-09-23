@@ -109,7 +109,7 @@ class Component {
         this.treeHandler.setSelection(this.treeHandler.getSelectedNodes(), false);
     }
 
-    private setFilterCount(filterCount: number = null) {
+    private setFilterCount(filterCount: number = null): void {
         if (typeof filterCount === 'number') {
             this.state.filterCountString = `(${filterCount})`;
         } else {

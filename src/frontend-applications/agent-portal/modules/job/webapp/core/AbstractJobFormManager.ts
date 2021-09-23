@@ -41,7 +41,7 @@ export class AbstractJobFormManager {
     protected filterPageId: string = 'job-form-page-filters';
     protected actionPageId: string = 'job-form-page-actions';
 
-    public addExtendedJobFormManager(manager: ExtendedJobFormManager) {
+    public addExtendedJobFormManager(manager: ExtendedJobFormManager): void {
         this.extendedJobFormManager.push(manager);
     }
 

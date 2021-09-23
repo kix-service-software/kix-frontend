@@ -10,12 +10,9 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { ContextType } from '../../../../../model/ContextType';
 import { IdService } from '../../../../../model/IdService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import {
-    ObjectInformationWidgetConfiguration
-} from '../../../../../model/configuration/ObjectInformationWidgetConfiguration';
+import { ObjectInformationWidgetConfiguration } from '../../../../../model/configuration/ObjectInformationWidgetConfiguration';
 import { Label } from '../../../../../modules/base-components/webapp/core/Label';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { Notification } from '../../../model/Notification';
@@ -40,21 +37,21 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.contextListenerId = IdService.generateDateBasedId('notification-info-widget-');
         context.registerListener(this.contextListenerId, {
-            sidebarLeftToggled: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            sidebarLeftToggled: (): void => { return; },
+            filteredObjectListChanged: (): void => { return; },
             objectListChanged: () => { return; },
-            sidebarRightToggled: () => { return; },
+            sidebarRightToggled: (): void => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: async (accountId: string, notification: Notification, type: KIXObjectType) => {
                 this.initWidget(notification);
             },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
 
         this.initWidget(await context.getObject<Notification>(KIXObjectType.NOTIFICATION));
     }
 
-    public onDestroy() {
+    public onDestroy(): void {
         const context = ContextService.getInstance().getActiveContext();
         context.unregisterListener(this.contextListenerId);
     }

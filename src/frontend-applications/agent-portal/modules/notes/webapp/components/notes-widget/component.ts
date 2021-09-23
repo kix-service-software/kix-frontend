@@ -52,15 +52,15 @@ export class Component {
         this.editorValue = value;
     }
 
-    public setEditorActive() {
+    public setEditorActive(): void {
         this.state.editorActive = true;
     }
 
-    public cancelEditor() {
+    public cancelEditor(): void {
         this.state.editorActive = false;
     }
 
-    public submitEditor() {
+    public submitEditor(): void {
         setTimeout(() => {
             this.state.value = this.editorValue;
             this.state.editorActive = false;

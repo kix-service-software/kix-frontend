@@ -15,9 +15,7 @@ import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions'
 import { TicketProperty } from '../model/TicketProperty';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { ModuleConfigurationService } from '../../../server/services/configuration';
-import {
-    ObjectInformationWidgetConfiguration
-} from '../../../model/configuration/ObjectInformationWidgetConfiguration';
+import { ObjectInformationWidgetConfiguration } from '../../../model/configuration/ObjectInformationWidgetConfiguration';
 import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
 import { ArticleProperty } from '../model/ArticleProperty';
 import { QueueAPIService } from './QueueService';
@@ -63,7 +61,7 @@ export class TicketDetailsDataBuilder {
     }
 
     private static extendedDataBuilders: ExtendedTicketDetailsDataBuilder[] = [];
-    public static registerExtendedTicketDataBuilder(dataBuilder: ExtendedTicketDetailsDataBuilder) {
+    public static registerExtendedTicketDataBuilder(dataBuilder: ExtendedTicketDetailsDataBuilder): void {
         if (dataBuilder) {
             this.extendedDataBuilders.push(dataBuilder);
         }

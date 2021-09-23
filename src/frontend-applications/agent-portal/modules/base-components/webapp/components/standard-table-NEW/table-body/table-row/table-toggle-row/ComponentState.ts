@@ -9,7 +9,6 @@
 
 import { Row } from '../../../../../core/table';
 import { IAction } from '../../../../../../../../modules/base-components/webapp/core/IAction';
-import { KIXObject } from '../../../../../../../../model/kix/KIXObject';
 
 export class ComponentState {
 

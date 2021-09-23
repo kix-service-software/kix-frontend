@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { TicketPriorityLabelProvider, TicketPriorityDetailsContext } from '../../core';
+import { TicketPriorityLabelProvider } from '../../core';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TicketPriority } from '../../../model/TicketPriority';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -29,17 +29,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.labelProvider = new TicketPriorityLabelProvider();
         const context = ContextService.getInstance().getActiveContext();
         context.registerListener('ticket-priority-info-widget', {
-            sidebarRightToggled: () => { return; },
-            sidebarLeftToggled: () => { return; },
+            sidebarRightToggled: (): void => { return; },
+            sidebarLeftToggled: (): void => { return; },
             objectListChanged: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            filteredObjectListChanged: (): void => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: async (ticketId: string, ticketPriority: TicketPriority, type: KIXObjectType) => {
                 if (type === KIXObjectType.TICKET_PRIORITY) {
                     this.initWidget(ticketPriority);
                 }
             },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
         this.state.widgetConfiguration = context
             ? await context.getWidgetConfiguration(this.state.instanceId)

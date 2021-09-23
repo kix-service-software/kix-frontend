@@ -14,11 +14,7 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { AuthenticationSocketClient } from '../../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
-import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
-import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
-import { IdService } from '../../../../../model/IdService';
 import { Label } from '../../../../../modules/base-components/webapp/core/Label';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescription[], ComponentState> {
 
@@ -47,14 +43,14 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
     }
 
     public async openDialog(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
-        const objectType = formInstance.getObjectType();
+        // const context = ContextService.getInstance().getActiveContext();
+        // const formInstance = await context?.getFormManager()?.getFormInstance();
+        // const objectType = formInstance.getObjectType();
 
-        const objectName = await LabelService.getInstance().getObjectName(objectType);
-        const dialogTitle = await TranslationService.translate('Translatable#link {0}', [objectName]);
+        // const objectName = await LabelService.getInstance().getObjectName(objectType);
+        // const dialogTitle = await TranslationService.translate('Translatable#link {0}', [objectName]);
 
-        const resultListenerId = 'result-listener-link-' + objectType + IdService.generateDateBasedId();
+        // const resultListenerId = 'result-listener-link-' + objectType + IdService.generateDateBasedId();
         // TODO: Overlay
         // DialogService.getInstance().openOverlayDialog(
         //     'link-object-dialog',

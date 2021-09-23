@@ -207,7 +207,7 @@ export class WebformService {
         return isValidEmail;
     }
 
-    private async checkFiles(filesWithContent: any[], language?: string) {
+    private async checkFiles(filesWithContent: any[], language?: string): Promise<string> {
         if (filesWithContent && !!filesWithContent.length) {
             if (filesWithContent.length > 5) {
                 return await TranslationAPIService.getInstance().translate(
@@ -263,17 +263,17 @@ export class WebformService {
         return maxSize;
     }
 
-    public async getSuccessMessage(form: Webform, language?: string) {
+    public async getSuccessMessage(form: Webform, language?: string): Promise<string> {
         return await TranslationAPIService.getInstance().translate(form.successMessage, undefined, language);
     }
 
-    public async getTooManyFilesErrorMsg(language?: string) {
+    public async getTooManyFilesErrorMsg(language?: string): Promise<string> {
         return await TranslationAPIService.getInstance().translate(
             'Translatable#Not more than 5 files possible.', undefined, language
         );
     }
 
-    public async getFileTooBigErrorMsg(form: Webform, language?: string) {
+    public async getFileTooBigErrorMsg(form: Webform, language?: string): Promise<string> {
         const maxSize = await this.getMaxFileSize();
         return await TranslationAPIService.getInstance().translate(
             'Translatable#is to large (max {0}).', [this.getFileSize(maxSize)], language

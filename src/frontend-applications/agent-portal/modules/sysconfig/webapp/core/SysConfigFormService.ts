@@ -11,7 +11,6 @@ import { KIXObjectFormService } from '../../../../modules/base-components/webapp
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
-import { EditSysConfigDialogContext } from '.';
 import { SysConfigOptionDefinition } from '../../model/SysConfigOptionDefinition';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { SysConfigOptionDefinitionProperty } from '../../model/SysConfigOptionDefinitionProperty';
@@ -44,7 +43,7 @@ export class SysConfigFormService extends KIXObjectFormService {
         super();
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION
             || kixObjectType === KIXObjectType.SYS_CONFIG_OPTION;
     }

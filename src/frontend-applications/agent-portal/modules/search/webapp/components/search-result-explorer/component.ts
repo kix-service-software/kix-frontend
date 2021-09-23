@@ -9,8 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { SearchResultCategory } from '../../core/SearchResultCategory';
-import { IdService } from '../../../../../model/IdService';
-import { SearchService } from '../../core/SearchService';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';

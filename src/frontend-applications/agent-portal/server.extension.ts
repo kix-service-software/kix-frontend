@@ -22,6 +22,6 @@ class Extension extends KIXExtension implements IFrontendServerExtension {
 
 }
 
-module.exports = (data, host, options) => {
+module.exports = (data, host, options): Extension => {
     return new Extension();
 };

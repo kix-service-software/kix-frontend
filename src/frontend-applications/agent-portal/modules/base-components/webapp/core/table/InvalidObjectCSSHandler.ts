@@ -16,8 +16,8 @@ export class InvalidObjectCSSHandler implements ITableCSSHandler {
     public async getRowCSSClasses(object: KIXObject): Promise<string[]> {
         const classes = [];
 
-        if (object && object.ValidID && object.ValidID !== 1) {
-            classes.push('invlaid-object');
+        if (object?.ValidID !== 1) {
+            classes.push('invalid-object');
         }
 
         return classes;

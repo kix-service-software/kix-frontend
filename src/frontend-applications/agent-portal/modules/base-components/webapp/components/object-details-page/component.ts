@@ -35,7 +35,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.context = ContextService.getInstance().getActiveContext();
         this.subscriber = {
             eventSubscriberId: 'object-details',
-            eventPublished: (data: any, eventId: string) => {
+            eventPublished: (data: any, eventId: string): void => {
                 if (eventId === ApplicationEvent.OBJECT_UPDATED) {
                     if (data.objectType === this.context.descriptor.kixObjectTypes[0]) {
                         this.prepareWidget();

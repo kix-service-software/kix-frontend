@@ -61,7 +61,7 @@ Given('Tabelle: {string}', async (objectType: KIXObjectType | string) => {
     expect(table).exist;
 
     // to enable column checks for dynamic field properties
-    table['checkDF'] = () => {
+    table['checkDF'] = (): Promise<boolean> => {
         return new Promise((resolve, reject) => {
             resolve(true);
             reject();
@@ -76,7 +76,7 @@ Given('Tabelle - Schmal: {string}', async (objectType: KIXObjectType | string) =
     expect(table).exist;
 
     // to enable column checks for dynamic field properties
-    table['checkDF'] = () => {
+    table['checkDF'] = (): Promise<boolean> => {
         return new Promise((resolve, reject) => {
             resolve(true);
             reject();

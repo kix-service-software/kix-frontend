@@ -120,7 +120,7 @@ export abstract class KIXObject {
         }
     }
 
-    protected prepareObjectFilter(preparedFilter: any[], filter: any) {
+    protected prepareObjectFilter(preparedFilter: any[], filter: any): void {
         // prepare the filter and handle BETWEEN and relative time operators
 
         if (filter.Operator === SearchOperator.GREATER_THAN_OR_EQUAL ||

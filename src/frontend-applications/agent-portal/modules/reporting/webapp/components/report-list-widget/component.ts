@@ -10,9 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { ReportingContext } from '../../core/context/ReportingContext';
-import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
-import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
@@ -39,7 +36,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (context) {
             this.subscriber = {
                 eventSubscriberId: IdService.generateDateBasedId(this.instanceId),
-                eventPublished: (data: any, eventId: string) => {
+                eventPublished: (data: any, eventId: string): void => {
                     if (eventId === ContextUIEvent.RELOAD_OBJECTS && data === KIXObjectType.REPORT) {
                         this.state.prepared = false;
                     } else if (eventId === ContextUIEvent.RELOAD_OBJECTS_FINISHED &&

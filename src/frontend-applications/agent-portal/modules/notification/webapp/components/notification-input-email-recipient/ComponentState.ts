@@ -12,7 +12,7 @@ import { AutoCompleteConfiguration } from '../../../../../model/configuration/Au
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 
 
-export class ComponentState extends FormInputComponentState<string[]> {
+export class ComponentState extends FormInputComponentState {
 
     public constructor(
         public autoCompleteConfiguration: AutoCompleteConfiguration = null,
