@@ -15,6 +15,8 @@ export enum AdditionalContextInformation {
 
     DISPLAY_TEXT = 'DISPLAY_TEXT',
 
-    ICON = 'ICON'
+    ICON = 'ICON',
+
+    SOURCE_CONTEXT = 'SourceContext'
 
 }

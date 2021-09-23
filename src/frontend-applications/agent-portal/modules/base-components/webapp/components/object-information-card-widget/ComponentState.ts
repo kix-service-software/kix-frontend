@@ -16,7 +16,6 @@ export class ComponentState extends WidgetComponentState {
     public constructor(
         public avatar: Array<ObjectIcon | string> = [],
         public information: InformationRowConfiguration[] = [],
-        public prepared: boolean = false,
         public templates: any = {}
     ) {
         super();
