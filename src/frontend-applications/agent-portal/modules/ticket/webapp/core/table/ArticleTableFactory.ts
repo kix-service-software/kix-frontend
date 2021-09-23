@@ -10,7 +10,7 @@
 import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import { TableEvent, Table, ToggleOptions } from '../../../../base-components/webapp/core/table';
+import { TableEvent, Table } from '../../../../base-components/webapp/core/table';
 import { ArticleTableToggleSubscriber } from './ArticleTableToggleSubscriber';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { ArticleTableContentProvider } from '.';

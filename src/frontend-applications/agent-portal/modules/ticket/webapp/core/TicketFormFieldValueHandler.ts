@@ -36,7 +36,7 @@ export class TicketFormFieldValueHandler extends FormFieldValueHandler {
 
     private subscriber: IEventSubscriber = {
         eventSubscriberId: 'TicketFormFieldValueHandler',
-        eventPublished: (data: any, eventId: string) => {
+        eventPublished: (data: any, eventId: string): void => {
             if (eventId === FAQEvent.APPEND_FAQ_ARTICLE_HTML) {
                 this.handleAppendFAQArticleHTML(data);
             } else if (eventId === FAQEvent.APPEND_FAQ_ARTICLE_ATTACHMENTS) {

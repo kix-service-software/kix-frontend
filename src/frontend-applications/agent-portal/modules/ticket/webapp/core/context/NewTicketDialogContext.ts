@@ -39,7 +39,7 @@ export class NewTicketDialogContext extends Context {
 
         this.subscriber = {
             eventSubscriberId: NewTicketDialogContext.CONTEXT_ID,
-            eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
+            eventPublished: async (data: FormValuesChangedEventData, eventId: string): Promise<void> => {
                 const form = data.formInstance.getForm();
                 await this.setFormObject();
                 if (form.objectType === KIXObjectType.TICKET && form.formContext === FormContext.NEW) {

@@ -17,7 +17,6 @@ import { TranslationService } from '../../../../modules/translation/webapp/core/
 import { UserProperty } from '../../../user/model/UserProperty';
 import { AbstractPlaceholderHandler } from '../../../base-components/webapp/core/AbstractPlaceholderHandler';
 import { DynamicFieldValuePlaceholderHandler } from '../../../dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler';
-import { SortUtil } from '../../../../model/SortUtil';
 
 export class ContactPlaceholderHandler extends AbstractPlaceholderHandler {
 

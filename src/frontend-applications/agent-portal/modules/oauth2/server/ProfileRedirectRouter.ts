@@ -48,7 +48,7 @@ export class ProfileRedirectRouter extends KIXRouter {
         res.sendStatus(404);
     }
 
-    private async getCorsOptions(req, callback) {
+    private getCorsOptions(req, callback): void {
 
         // TODO: allow everything for now
         callback(null, { origin: new RegExp('.+') });

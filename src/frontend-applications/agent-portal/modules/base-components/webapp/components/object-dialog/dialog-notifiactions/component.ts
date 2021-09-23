@@ -27,7 +27,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: async (data: Context, eventId: string) => {
+            eventPublished: async (data: Context, eventId: string): Promise<void> => {
                 if (eventId === ContextEvents.CONTEXT_STORED) {
                     this.state.message = await TranslationService.translate('Translatable#draft successfully saved');
                     setTimeout(() => this.state.message = null, 3000);

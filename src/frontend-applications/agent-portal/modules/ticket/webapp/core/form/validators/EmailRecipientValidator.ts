@@ -11,9 +11,7 @@ import { IFormFieldValidator } from '../../../../../../modules/base-components/w
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
 import { ValidationResult } from '../../../../../../modules/base-components/webapp/core/ValidationResult';
-import { FormService } from '../../../../../../modules/base-components/webapp/core/FormService';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
-import { ContextType } from '../../../../../../model/ContextType';
 import { ContextMode } from '../../../../../../model/ContextMode';
 import { TicketProperty } from '../../../../model/TicketProperty';
 import { FormFieldValue } from '../../../../../../model/configuration/FormFieldValue';

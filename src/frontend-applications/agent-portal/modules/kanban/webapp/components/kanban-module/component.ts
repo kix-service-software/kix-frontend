@@ -8,7 +8,6 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { KanbanContext } from '../../core';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 

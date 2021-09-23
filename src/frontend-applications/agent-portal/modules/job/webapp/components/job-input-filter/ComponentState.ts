@@ -10,7 +10,7 @@
 import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
 import { AbstractDynamicFormManager } from '../../../../base-components/webapp/core/dynamic-form';
 
-export class ComponentState extends FormInputComponentState<Array<[string, string[] | number[]]>> {
+export class ComponentState extends FormInputComponentState {
 
     public constructor(
         public manager: AbstractDynamicFormManager = null,

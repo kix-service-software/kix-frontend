@@ -40,21 +40,21 @@ class Component {
         const context = ContextService.getInstance().getActiveContext();
         this.contextListenerId = IdService.generateDateBasedId('object-information-widget-');
         context.registerListener(this.contextListenerId, {
-            sidebarLeftToggled: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            sidebarLeftToggled: (): void => { return; },
+            filteredObjectListChanged: (): void => { return; },
             objectListChanged: () => { return; },
-            sidebarRightToggled: () => { return; },
+            sidebarRightToggled: (): void => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: async (contactId: string, object: KIXObject, type: KIXObjectType) => {
                 this.initWidget();
             },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
 
         this.initWidget();
     }
 
-    public onDestroy() {
+    public onDestroy(): void {
         const context = ContextService.getInstance().getActiveContext();
         context.unregisterListener(this.contextListenerId);
     }

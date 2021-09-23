@@ -187,7 +187,7 @@ class LinkDialogComponent {
 
         this.tableSubscriber = {
             eventSubscriberId: 'link-object-dialog',
-            eventPublished: (data: TableEventData, eventId: string) => {
+            eventPublished: (data: TableEventData, eventId: string): void => {
                 if (data && data.tableId === table.getTableId()) {
                     if (eventId === TableEvent.TABLE_READY) {
                         this.setLinkedAsValues(table, this.state.linkDescriptions);
@@ -205,7 +205,7 @@ class LinkDialogComponent {
         setTimeout(() => this.state.table = table, 50);
     }
 
-    private setLinkedAsValues(table: Table, links: CreateLinkDescription[] = []) {
+    private setLinkedAsValues(table: Table, links: CreateLinkDescription[] = []): void {
         const values = links.map((ld) => {
             const name = ld.linkTypeDescription.asSource
                 ? ld.linkTypeDescription.linkType.SourceName

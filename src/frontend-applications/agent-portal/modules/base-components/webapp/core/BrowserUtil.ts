@@ -118,7 +118,7 @@ export class BrowserUtil {
         return new Promise((resolve, reject) => {
             if (file instanceof File) {
                 const reader = new FileReader();
-                reader.onload = () => {
+                reader.onload = (): void => {
                     let content = reader.result.toString();
                     content = content.split(',')[1];
                     resolve(content);
@@ -133,7 +133,7 @@ export class BrowserUtil {
     public static readFileAsText(file: File, encoding: string = 'UTF-8'): Promise<string> {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
-            reader.onload = () => {
+            reader.onload = (): void => {
                 const content = reader.result.toString();
                 resolve(content);
             };
@@ -216,7 +216,7 @@ export class BrowserUtil {
         return blob;
     }
 
-    public static scrollIntoViewIfNeeded(element: any) {
+    public static scrollIntoViewIfNeeded(element: any): void {
         const scrollIntoView = require('scroll-into-view-if-needed');
         scrollIntoView(element, { behavior: 'smooth', scrollMode: 'if-needed' });
     }
@@ -332,9 +332,9 @@ export class BrowserUtil {
 
     public static stringifyJSON(json: any): string {
         try {
-            const replacerFunc = () => {
+            const replacerFunc = (): (key: string, value: any) => string => {
                 const visited = new WeakSet();
-                return (key: string, value: any) => {
+                return (key: string, value: any): string => {
                     if (typeof value === 'object' && value !== null) {
                         if (visited.has(value)) {
                             return;
@@ -353,7 +353,7 @@ export class BrowserUtil {
         return json;
     }
 
-    public static formatJSON(json: any) {
+    public static formatJSON(json: any): string {
         if (typeof json !== 'string') {
             json = this.stringifyJSON(json);
         }
@@ -365,6 +365,7 @@ export class BrowserUtil {
 
         const regex = /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g;
         json = json.replace(regex, (match) => {
+            // eslint-disable-next-line no-unused-vars
             let cls = 'number';
             if (/^"/.test(match)) {
                 if (/:$/.test(match)) {
@@ -375,6 +376,7 @@ export class BrowserUtil {
             } else if (/true|false/.test(match)) {
                 cls = 'boolean';
             } else if (/null/.test(match)) {
+                // eslint-disable-next-line no-unused-vars
                 cls = 'null';
             }
             return match;
@@ -383,9 +385,9 @@ export class BrowserUtil {
         return json;
     }
 
-    public static jsonStringifyreplacerFunc() {
+    public static jsonStringifyreplacerFunc(): (key: string, value: any) => string {
         const visited = new WeakSet();
-        return (key: string, value: any) => {
+        return (key: string, value: any): string => {
             if (typeof value === 'object' && value !== null) {
                 if (visited.has(value)) {
                     return;

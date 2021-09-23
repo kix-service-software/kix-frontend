@@ -24,7 +24,7 @@ export class TicketJobFormManager extends AbstractJobFormManager {
             // use own manager to extend operators
             this.filterManager = new TicketJobFilterFormManager([SearchProperty.FULLTEXT], false);
 
-            this.filterManager.init = () => {
+            this.filterManager.init = (): void => {
 
                 // get extended managers on init because they could be added after filterManager was created
                 if (searchDefinition) {

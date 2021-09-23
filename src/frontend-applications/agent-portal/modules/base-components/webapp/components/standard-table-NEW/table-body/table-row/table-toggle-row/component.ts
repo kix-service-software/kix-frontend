@@ -52,11 +52,11 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         context.registerListener((listenerId + '-toggle'), {
             sidebarRightToggled: () => { this.setWidth(); },
             sidebarLeftToggled: () => { this.setWidth(); },
-            objectChanged: () => { return; },
+            objectChanged: (): void => { return; },
             objectListChanged: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            filteredObjectListChanged: (): void => { return; },
             scrollInformationChanged: () => { return; },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
         window.addEventListener('resize', this.setWidth.bind(this), false);
         this.eventSubscriberId = listenerId;

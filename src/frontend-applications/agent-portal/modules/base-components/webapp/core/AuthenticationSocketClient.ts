@@ -20,7 +20,6 @@ import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 
 import { BrowserCacheService } from './CacheService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { Socket } from 'socket.io-client';
 
 export class AuthenticationSocketClient extends SocketClient {
 

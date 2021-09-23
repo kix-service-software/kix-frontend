@@ -365,7 +365,7 @@ export class MacroFieldCreator {
 
     private static cloneOptionField(
         optionField: FormFieldConfiguration, value: any, actionFieldInstanceId: string, optionName: string
-    ) {
+    ): FormFieldConfiguration {
         const field = FormFactory.cloneField(optionField);
         field.instanceId = IdService.generateDateBasedId(optionField.id);
         field.defaultValue = new FormFieldValue(value);

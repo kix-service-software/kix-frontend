@@ -88,7 +88,7 @@ export class Table implements Table {
         this.contentProvider = contentProvider;
     }
 
-    public setColumnConfiguration(columnConfiguration: IColumnConfiguration[]) {
+    public setColumnConfiguration(columnConfiguration: IColumnConfiguration[]): void {
         this.columnConfigurations = columnConfiguration;
     }
 
@@ -196,7 +196,9 @@ export class Table implements Table {
         }
     }
 
-    private async considerHandlerData(rowObjects: RowObject<any>[], relevantHandlerConfigIds?: string[]) {
+    private async considerHandlerData(
+        rowObjects: RowObject<any>[], relevantHandlerConfigIds?: string[]
+    ): Promise<RowObject[]> {
         for (const handlerConfig of this.tableConfiguration.additionalTableObjectsHandler) {
             if (handlerConfig && handlerConfig.handlerId) {
                 if (

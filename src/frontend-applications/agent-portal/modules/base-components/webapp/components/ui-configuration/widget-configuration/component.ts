@@ -13,7 +13,7 @@ import { TranslationService } from '../../../../../translation/webapp/core/Trans
 import { AbstractMarkoComponent } from '../../../core/AbstractMarkoComponent';
 import { ActionFactory } from '../../../core/ActionFactory';
 import { KIXModulesService } from '../../../core/KIXModulesService';
-import { TreeHandler, TreeNode, TreeService, TreeUtil } from '../../../core/tree';
+import { TreeHandler, TreeNode, TreeService } from '../../../core/tree';
 import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState> {

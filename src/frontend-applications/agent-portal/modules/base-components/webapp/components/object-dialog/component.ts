@@ -31,7 +31,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async submit(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
         await ObjectDialogUtil.submit();
     }
 

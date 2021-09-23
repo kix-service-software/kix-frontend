@@ -16,7 +16,6 @@ import { LabelService } from '../../../../../base-components/webapp/core/LabelSe
 import { TicketProperty } from '../../../../../ticket/model/TicketProperty';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { KanbanEvent } from '../../../core/KanbanEvent';
-import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { Ticket } from '../../../../../ticket/model/Ticket';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';

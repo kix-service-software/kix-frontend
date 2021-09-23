@@ -8,11 +8,10 @@
  */
 
 import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
-import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { IdService } from '../../../../../model/IdService';
 
 
-export class ComponentState extends FormInputComponentState<string[]> {
+export class ComponentState extends FormInputComponentState {
 
     public constructor(
         public placeholder: string = '',

@@ -30,11 +30,11 @@ export class Component {
         }
     }
 
-    public groupIsMinimized(groupIndex: number) {
+    public groupIsMinimized(groupIndex: number): boolean {
         return this.minimizedGroups.some((g) => g === groupIndex);
     }
 
-    public minimizeGroup(groupIndex: number) {
+    public minimizeGroup(groupIndex: number): void {
         if (this.state.groups[groupIndex]
             && this.state.groups[groupIndex].sub
             && Array.isArray(this.state.groups[groupIndex].sub)

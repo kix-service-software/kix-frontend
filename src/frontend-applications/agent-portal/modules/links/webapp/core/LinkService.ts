@@ -37,7 +37,7 @@ export class LinkService extends KIXObjectService<Link> {
         this.objectConstructors.set(KIXObjectType.LINK_TYPE, [LinkType]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.LINK
             || kixObjectType === KIXObjectType.LINK_OBJECT
             || kixObjectType === KIXObjectType.LINK_TYPE;

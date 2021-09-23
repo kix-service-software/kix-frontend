@@ -18,6 +18,6 @@ export class Extension extends SearchExtension {
 
 }
 
-module.exports = (data, host, options) => {
+module.exports = (data, host, options): Extension => {
     return new Extension();
 };

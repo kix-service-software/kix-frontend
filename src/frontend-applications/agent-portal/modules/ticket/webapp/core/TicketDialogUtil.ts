@@ -8,7 +8,7 @@
  */
 
 
-import { EditTicketDialogContext, NewTicketDialogContext, TicketDetailsContext } from './context';
+import { EditTicketDialogContext, NewTicketDialogContext } from './context';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { Ticket } from '../../model/Ticket';

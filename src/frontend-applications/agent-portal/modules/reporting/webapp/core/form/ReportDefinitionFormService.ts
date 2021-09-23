@@ -31,7 +31,6 @@ import { Role } from '../../../../user/model/Role';
 import { RoleProperty } from '../../../../user/model/RoleProperty';
 import { ReportDefinition } from '../../../model/ReportDefinition';
 import { ReportDefinitionProperty } from '../../../model/ReportDefinitionProperty';
-import { ReportOutputFormat } from '../../../model/ReportOutputFormat';
 import { ReportDefinitionFormCreator } from './ReportDefinitionFormCreator';
 import { ReportDefintionObjectCreator } from './ReportDefintionObjectCreator';
 
@@ -55,7 +54,7 @@ export class ReportDefinitionFormService extends KIXObjectFormService {
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('ReportDefinitionFormService'),
-            eventPublished: (data: any, eventId: string) => {
+            eventPublished: (data: any, eventId: string): void => {
                 if (eventId === FormEvent.FIELD_EMPTY_STATE_CHANGED) {
                     const field: FormFieldConfiguration = data.field;
                     if (field && field.property === ReportDefinitionProperty.PARAMTER) {
@@ -76,7 +75,7 @@ export class ReportDefinitionFormService extends KIXObjectFormService {
         EventService.getInstance().subscribe(FormEvent.FIELD_EMPTY_STATE_CHANGED, this.subscriber);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType | string) {
+    public isServiceFor(kixObjectType: KIXObjectType | string): boolean {
         return kixObjectType === KIXObjectType.REPORT_DEFINITION;
     }
 

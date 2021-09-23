@@ -14,7 +14,6 @@ import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadin
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
-import { ConfigItemClassDetailsContext } from '../..';
 import { ConfigItemClass } from '../../../../model/ConfigItemClass';
 import { ConfigItemClassDefinitionProperty } from '../../../../model/ConfigItemClassDefinitionProperty';
 

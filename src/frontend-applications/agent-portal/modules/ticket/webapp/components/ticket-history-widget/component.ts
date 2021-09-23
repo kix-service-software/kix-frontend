@@ -34,17 +34,17 @@ class Component {
             : undefined;
 
         context.registerListener('ticket-history-widget', {
-            sidebarLeftToggled: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            sidebarLeftToggled: (): void => { return; },
+            filteredObjectListChanged: (): void => { return; },
             objectListChanged: () => { return; },
-            sidebarRightToggled: () => { return; },
+            sidebarRightToggled: (): void => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: (ticketId: string, ticket: Ticket, type: KIXObjectType) => {
                 if (type === KIXObjectType.TICKET) {
                     this.initWidget(ticket);
                 }
             },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
 
         await this.initWidget(await context.getObject<Ticket>());

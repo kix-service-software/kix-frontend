@@ -26,7 +26,7 @@ export class OAuth2ProfileFormService extends KIXObjectFormService {
         super();
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.OAUTH2_PROFILE;
     }
 }

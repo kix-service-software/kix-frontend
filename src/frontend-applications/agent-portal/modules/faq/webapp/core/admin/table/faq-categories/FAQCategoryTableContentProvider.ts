@@ -9,7 +9,7 @@
 
 import { TableContentProvider } from '../../../../../../base-components/webapp/core/table/TableContentProvider';
 import { FAQCategory } from '../../../../../model/FAQCategory';
-import { Table, RowObject, TableValue } from '../../../../../../base-components/webapp/core/table';
+import { Table, RowObject } from '../../../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 

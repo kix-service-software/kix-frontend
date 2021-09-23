@@ -68,7 +68,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
         this.formSubscriber = {
             eventSubscriberId: this.state.field?.instanceId,
-            eventPublished: (data: any, eventId: string) => {
+            eventPublished: (data: any, eventId: string): void => {
                 if (data.formField && data.formField.instanceId === this.state.field?.instanceId) {
                     this.load(false);
                 }

@@ -11,7 +11,6 @@ import { FormFieldConfiguration } from '../../../../model/configuration/FormFiel
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { IFormFieldValidator } from '../../../base-components/webapp/core/IFormFieldValidator';
 import { ValidationResult } from '../../../base-components/webapp/core/ValidationResult';
-import { FormService } from '../../../base-components/webapp/core/FormService';
 import { ValidationSeverity } from '../../../base-components/webapp/core/ValidationSeverity';
 import { ObjectReferenceOptions } from './ObjectReferenceOptions';
 import { DynamicField } from '../../../dynamic-fields/model/DynamicField';

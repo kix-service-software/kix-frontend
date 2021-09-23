@@ -71,12 +71,12 @@ class Component {
                     this.initWidget(context, faqArticle);
                 }
             },
-            sidebarRightToggled: () => { return; },
-            sidebarLeftToggled: () => { return; },
+            sidebarRightToggled: (): void => { return; },
+            sidebarLeftToggled: (): void => { return; },
             objectListChanged: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            filteredObjectListChanged: (): void => { return; },
             scrollInformationChanged: () => { return; },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
 
         await this.initWidget(context, await context.getObject<FAQArticle>());
@@ -97,7 +97,7 @@ class Component {
         }
     }
 
-    private async prepareImages() {
+    private async prepareImages(): Promise<void> {
         const attachmentPromises: Array<Promise<DisplayImageDescription>> = [];
         const imageAttachments = this.state.attachments.filter((a) => a.ContentType.match(/^image\//));
         if (imageAttachments && imageAttachments.length) {
@@ -163,7 +163,7 @@ class Component {
         }
     }
 
-    private async loadAttachment(attachment: Attachment, silent?: boolean) {
+    private async loadAttachment(attachment: Attachment, silent?: boolean): Promise<Attachment> {
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, ['Content']);
         const faqArticleAttachmentOptions = new FAQArticleAttachmentLoadingOptions(
             this.state.faqArticle.ID, attachment.ID

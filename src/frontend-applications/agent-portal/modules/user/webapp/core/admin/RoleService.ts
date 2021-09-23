@@ -32,7 +32,7 @@ export class RoleService extends KIXObjectService<Role> {
         this.objectConstructors.set(KIXObjectType.PERMISSION_TYPE, [PermissionType]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType | string) {
+    public isServiceFor(kixObjectType: KIXObjectType | string): boolean {
         return kixObjectType === KIXObjectType.ROLE
             || kixObjectType === KIXObjectType.PERMISSION
             || kixObjectType === KIXObjectType.PERMISSION_TYPE;

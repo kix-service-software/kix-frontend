@@ -115,7 +115,7 @@ export class OrganisationContext extends Context {
         return await TranslationService.translate('Translatable#Organisations');
     }
 
-    public setFilteredObjectList(objectType: KIXObjectType, filteredObjectList: KIXObject[]) {
+    public setFilteredObjectList(objectType: KIXObjectType, filteredObjectList: KIXObject[]): void {
         super.setFilteredObjectList(objectType, filteredObjectList);
 
         if (objectType === KIXObjectType.ORGANISATION) {

@@ -33,7 +33,6 @@ import { ServiceRegistry } from '../ServiceRegistry';
 import { IKIXObjectService } from '../IKIXObjectService';
 import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
 import { ValidationSeverity } from '../ValidationSeverity';
-import { DynamicFieldTableValidator } from '../../../../dynamic-fields/webapp/core/DynamicFieldTableValidator';
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 
@@ -394,7 +393,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return fullResult;
     }
 
-    private checkDate(value: ObjectPropertyValue) {
+    private checkDate(value: ObjectPropertyValue): ValidationResult[] {
         const start: Date = new Date(value.value[0]);
         const end: Date = new Date(value.value[1]);
         if (typeof start.getTime !== 'function') {
@@ -417,7 +416,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         }
         return null;
     }
-    private checkNumber(value: ObjectPropertyValue) {
+    private checkNumber(value: ObjectPropertyValue): ValidationResult[] {
         if (isNaN(Number(value.value[0])) || value.value[0] === null) {
             value.valid = false;
             return [new ValidationResult(

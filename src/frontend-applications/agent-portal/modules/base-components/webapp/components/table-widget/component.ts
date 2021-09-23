@@ -29,7 +29,6 @@ import { FormEvent } from '../../core/FormEvent';
 import { FormValuesChangedEventData } from '../../core/FormValuesChangedEventData';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
-import { SearchService } from '../../../../search/webapp/core';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 
 class Component {
@@ -84,7 +83,7 @@ class Component {
 
             this.subscriber = {
                 eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
-                eventPublished: async (data: any, eventId: string) => {
+                eventPublished: async (data: any, eventId: string): Promise<void> => {
                     if (
                         this.state.table &&
                         eventId === ContextUIEvent.RELOAD_OBJECTS &&
@@ -147,10 +146,10 @@ class Component {
             this.state.widgetConfiguration.contextObjectDependent
         ) {
             this.contextListener = {
-                sidebarLeftToggled: () => { return; },
-                filteredObjectListChanged: () => { return; },
-                objectChanged: () => { return; },
-                objectListChanged: (objectType: KIXObjectType | string) => {
+                sidebarLeftToggled: (): void => { return; },
+                filteredObjectListChanged: (): void => { return; },
+                objectChanged: (): void => { return; },
+                objectListChanged: (objectType: KIXObjectType | string): void => {
                     if (objectType === this.objectType) {
                         if (settings && settings.resetFilterOnReload) {
                             if (this.state.table) {
@@ -167,11 +166,11 @@ class Component {
                         this.prepareTitle();
                     }
                 },
-                sidebarRightToggled: () => { return; },
-                scrollInformationChanged: (objectType: KIXObjectType | string, objectId: string | number) => {
+                sidebarRightToggled: (): void => { return; },
+                scrollInformationChanged: (objectType: KIXObjectType | string, objectId: string | number): void => {
                     this.scrollToRow(objectType, objectId);
                 },
-                additionalInformationChanged: () => { return; }
+                additionalInformationChanged: (): void => { return; }
             };
 
             const context = ContextService.getInstance().getActiveContext();
@@ -183,7 +182,7 @@ class Component {
         if (this.state.widgetConfiguration.formDependent) {
             this.formSubscriber = {
                 eventSubscriberId: IdService.generateDateBasedId('ReferencedObjectWidget'),
-                eventPublished: (data: FormValuesChangedEventData, eventId: string) => {
+                eventPublished: (data: FormValuesChangedEventData, eventId: string): void => {
                     const properties: string[] = [];
                     for (const cv of data.changedValues) {
                         if (cv[0]?.property) {

@@ -171,7 +171,7 @@ export class PluginService {
         return new Promise<T[]>((resolve, reject) => {
             const config = { multi: true };
             this.pluginManager.connect(host, extensionId, config,
-                (error, extensions: T[], names) => {
+                (error, extensions: T[]) => {
                     if (error) {
                         LoggingService.getInstance().error('Error during http GET request.', error);
                         reject(error);

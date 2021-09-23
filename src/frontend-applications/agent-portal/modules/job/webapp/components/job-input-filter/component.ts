@@ -43,7 +43,7 @@ class Component extends FormInputComponent<any, ComponentState> {
 
         this.formSubscriber = {
             eventSubscriberId: 'JobInputFilter',
-            eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
+            eventPublished: async (data: FormValuesChangedEventData, eventId: string): Promise<void> => {
                 const jobTypeValue = data.changedValues.find((cv) => cv[0] && cv[0].property === JobProperty.TYPE);
                 if (jobTypeValue) {
                     this.setManager();
@@ -118,7 +118,7 @@ class Component extends FormInputComponent<any, ComponentState> {
         }
     }
 
-    private async setCriteria(criteria: any, fromBackend?: boolean) {
+    private async setCriteria(criteria: any, fromBackend?: boolean): Promise<void> {
         let objectType: KIXObjectType | string;
         const inputType = await this.state.manager.getInputType(fromBackend ? criteria.Field : criteria.property);
         if (inputType) {

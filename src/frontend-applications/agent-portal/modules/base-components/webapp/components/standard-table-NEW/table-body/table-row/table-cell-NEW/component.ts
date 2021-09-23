@@ -8,9 +8,7 @@
  */
 
 import { ComponentState } from './ComponentState';
-import {
-    AbstractMarkoComponent
-} from '../../../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+import { AbstractMarkoComponent } from '../../../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { Column, Cell, ValueState, TableCSSHandlerRegistry, TableEvent } from '../../../../../core/table';
 import { KIXModulesService } from '../../../../../../../../modules/base-components/webapp/core/KIXModulesService';
 import { ServiceRegistry } from '../../../../../core/ServiceRegistry';
@@ -32,7 +30,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: string, eventId: string) => {
+            eventPublished: (data: string, eventId: string): void => {
                 if (this.cell && data === this.cell.getValue().instanceId) {
                     (this as any).setStateDirty();
                     setTimeout(() => this.state.loading = false, 5);

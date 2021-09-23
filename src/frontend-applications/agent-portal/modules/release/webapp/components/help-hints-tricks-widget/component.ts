@@ -14,16 +14,12 @@ import { KIXObjectService } from '../../../../../modules/base-components/webapp/
 import { SysConfigOption } from '../../../../sysconfig/model/SysConfigOption';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { SysConfigKey } from '../../../../sysconfig/model/SysConfigKey';
-import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
 import { FAQDetailsContext } from '../../../../faq/webapp/core/context/FAQDetailsContext';
-import { ContextMode } from '../../../../../model/ContextMode';
-import { RoutingService } from '../../../../../modules/base-components/webapp/core/RoutingService';
-import {
-    AuthenticationSocketClient
-} from '../../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { AuthenticationSocketClient } from '../../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     public baseFAQUri: string;

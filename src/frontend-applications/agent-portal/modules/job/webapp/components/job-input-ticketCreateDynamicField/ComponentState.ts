@@ -10,7 +10,7 @@
 import { FormInputComponentState } from '../../../../base-components/webapp/core/FormInputComponentState';
 import { IdService } from '../../../../../model/IdService';
 
-export class ComponentState extends FormInputComponentState<string> {
+export class ComponentState extends FormInputComponentState {
 
     public constructor(
         public currentDFName: string = null,

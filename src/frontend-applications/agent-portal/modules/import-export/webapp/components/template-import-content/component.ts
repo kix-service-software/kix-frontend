@@ -12,7 +12,6 @@ import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/
 import { TableFactoryService } from '../../../../base-components/webapp/core/table';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { ContextType } from '../../../../../model/ContextType';
 import { ImportExportTemplateRunTypes } from '../../../model/ImportExportTemplateRunTypes';
 import { ImportExportTemplateRun } from '../../../model/ImportExportTemplateRun';
 

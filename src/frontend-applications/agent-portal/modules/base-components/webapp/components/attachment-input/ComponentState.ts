@@ -10,7 +10,7 @@
 import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
 import { Attachment } from '../../../../../model/kix/Attachment';
 
-export class ComponentState extends FormInputComponentState<any> {
+export class ComponentState extends FormInputComponentState {
 
     public constructor(
         public attachments: Array<Attachment | File> = [],

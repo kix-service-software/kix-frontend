@@ -21,7 +21,7 @@ class Component {
         this.state = new ComponentState();
     }
 
-    public onInput(input: RefreshToastSettings) {
+    public onInput(input: RefreshToastSettings): void {
         this.state.message = input.message;
     }
 

@@ -10,7 +10,7 @@
 import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
 import { MailFilterMatchManager } from '../../core';
 
-export class ComponentState extends FormInputComponentState<any[]> {
+export class ComponentState extends FormInputComponentState {
 
     public constructor(
         public matchManager: MailFilterMatchManager = null,

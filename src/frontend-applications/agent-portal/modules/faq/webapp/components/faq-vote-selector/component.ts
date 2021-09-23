@@ -21,9 +21,6 @@ import { OverlayService } from '../../../../../modules/base-components/webapp/co
 import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
 import { StringContent } from '../../../../../modules/base-components/webapp/core/StringContent';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { FAQDetailsContext } from '../../core/context/FAQDetailsContext';
-
-
 
 export class Component {
 
@@ -37,7 +34,7 @@ export class Component {
         this.state = new ComponentState();
     }
 
-    public onInput(input: any) {
+    public onInput(input: any): void {
         this.faqArticle = input.faqArticle;
         if (this.faqArticle && this.faqArticle.Votes) {
             this.rating = BrowserUtil.calculateAverage(this.faqArticle.Votes.map((v) => v.Rating));

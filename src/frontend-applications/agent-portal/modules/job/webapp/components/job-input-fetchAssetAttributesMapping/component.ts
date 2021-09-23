@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../base-components/webapp/core/FormInputComponent';
-import { FormService } from '../../../../base-components/webapp/core/FormService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 

@@ -15,7 +15,6 @@ import { ContextService } from '../../../../base-components/webapp/core/ContextS
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { Label } from '../../../../base-components/webapp/core/Label';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
-import { DynamicField } from '../../../model/DynamicField';
 import { DynamicFieldTypes } from '../../../model/DynamicFieldTypes';
 import { DynamicFieldValue } from '../../../model/DynamicFieldValue';
 import { ComponentState } from './ComponentState';

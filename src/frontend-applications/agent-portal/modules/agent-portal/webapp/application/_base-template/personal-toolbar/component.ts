@@ -39,7 +39,7 @@ class Component {
 
             this.subscriber = {
                 eventSubscriberId: 'personal-toolbar-subscriber',
-                eventPublished: () => {
+                eventPublished: (): void => {
                     this.initActions();
                 }
             };

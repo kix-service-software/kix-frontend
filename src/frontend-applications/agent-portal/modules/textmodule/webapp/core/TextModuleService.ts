@@ -38,7 +38,7 @@ export class TextModuleService extends KIXObjectService {
         this.objectConstructors.set(KIXObjectType.TEXT_MODULE, [TextModule]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.TEXT_MODULE;
     }
 
@@ -63,7 +63,7 @@ export class TextModuleService extends KIXObjectService {
                 + '</div>'
                 + '</li>';
 
-            const matchCallback = (text: string, offset) => {
+            const matchCallback = (text: string, offset): { start: number, end: number } => {
 
                 const left = text.slice(0, offset);
                 const match = left.match(new RegExp(`${placeholder}[^\\s]*$`));
@@ -77,14 +77,14 @@ export class TextModuleService extends KIXObjectService {
             };
 
             config = {
-                textTestCallback: (range) => {
+                textTestCallback: (range): string => {
                     if (!range.collapsed) {
                         return null;
                     }
                     return textMatch.match(range, matchCallback);
                 }
                 ,
-                dataCallback: async (matchInfo, callback) => {
+                dataCallback: async (matchInfo, callback): Promise<void> => {
                     const query = matchInfo.query.substring(placeholder.length);
                     const modules = await this.getTextModules(query);
                     modules.forEach((tm) => {

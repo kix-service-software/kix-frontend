@@ -11,7 +11,6 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
 import { User } from '../../../user/model/User';
-import { AgentService } from '../../../user/webapp/core/AgentService';
 import { AbstractAction } from './AbstractAction';
 import { ApplicationEvent } from './ApplicationEvent';
 import { ComponentContent } from './ComponentContent';

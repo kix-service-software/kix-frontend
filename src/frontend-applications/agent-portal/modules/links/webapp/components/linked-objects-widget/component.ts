@@ -10,7 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { ContextType } from '../../../../../model/ContextType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../../base-components/webapp/core/table';
@@ -51,12 +50,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             objectChanged: (id: string | number, object: KIXObject, type: KIXObjectType) => {
                 this.prepareTable(context);
             },
-            sidebarRightToggled: () => { return; },
-            sidebarLeftToggled: () => { return; },
+            sidebarRightToggled: (): void => { return; },
+            sidebarLeftToggled: (): void => { return; },
             objectListChanged: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            filteredObjectListChanged: (): void => { return; },
             scrollInformationChanged: () => { return; },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
 
         this.prepareTable(context);

@@ -126,7 +126,7 @@ class Component {
 
         this.formSubscriber = {
             eventSubscriberId: 'ImportDialog',
-            eventPublished: (data: FormValuesChangedEventData, eventId: string) => {
+            eventPublished: (data: FormValuesChangedEventData, eventId: string): void => {
                 if (this.importFormTimeout) {
                     clearTimeout(this.importFormTimeout);
                 } else {
@@ -250,7 +250,7 @@ class Component {
 
             this.tableSubscriber = {
                 eventSubscriberId: 'import-table-listener',
-                eventPublished: async (data: TableEventData, eventId: string) => {
+                eventPublished: async (data: TableEventData, eventId: string): Promise<void> => {
                     if (data && this.state.table && data.tableId === this.state.table.getTableId()) {
                         if (eventId === TableEvent.TABLE_INITIALIZED || eventId === TableEvent.TABLE_READY) {
                             if (!this.selectedObjects || !this.selectedObjects.length) {
@@ -548,7 +548,7 @@ class Component {
         return !missingProperties.length;
     }
 
-    private async setContextObjects() {
+    private async setContextObjects(): Promise<void> {
         if (this.context) {
             const objects = [];
             if (this.csvObjects && !!this.csvObjects) {

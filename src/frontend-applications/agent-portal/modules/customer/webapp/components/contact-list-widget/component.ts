@@ -37,12 +37,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         if (context) {
             context.registerListener('contact-list-widget', {
-                sidebarRightToggled: () => { return; },
+                sidebarRightToggled: (): void => { return; },
                 scrollInformationChanged: () => { return; },
                 objectListChanged: () => { return; },
-                objectChanged: () => { return; },
-                filteredObjectListChanged: () => { return; },
-                sidebarLeftToggled: () => { return; },
+                objectChanged: (): void => { return; },
+                filteredObjectListChanged: (): void => { return; },
+                sidebarLeftToggled: (): void => { return; },
                 additionalInformationChanged: (key: string, value: any) => {
                     this.setWidgetDependingMode();
                 }
@@ -50,7 +50,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
             this.subscriber = {
                 eventSubscriberId: IdService.generateDateBasedId(this.instanceId),
-                eventPublished: (data: any, eventId: string) => {
+                eventPublished: (data: any, eventId: string): void => {
                     if (eventId === ContextUIEvent.RELOAD_OBJECTS && data === KIXObjectType.CONTACT) {
                         this.state.prepared = false;
                     } else if (eventId === ContextUIEvent.RELOAD_OBJECTS_FINISHED && data === KIXObjectType.CONTACT) {

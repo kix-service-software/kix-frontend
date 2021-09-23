@@ -12,7 +12,7 @@ import { AutoCompleteConfiguration } from '../../../../../model/configuration/Au
 import { TreeNode } from '../../core/tree';
 import { IdService } from '../../../../../model/IdService';
 
-export class ComponentState extends FormInputComponentState<string | number> {
+export class ComponentState extends FormInputComponentState {
 
     public constructor(
         public autoCompleteConfiguration: AutoCompleteConfiguration = null,

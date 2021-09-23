@@ -50,7 +50,7 @@ class Component extends FormInputComponent<number, ComponentState> {
 
         this.formSubscriber = {
             eventSubscriberId: 'ArticleEmailFromInput',
-            eventPublished: (data: FormValuesChangedEventData, eventId: string) => {
+            eventPublished: (data: FormValuesChangedEventData, eventId: string): void => {
                 const queueValue = data.changedValues.find(
                     (cv) => cv[0] && cv[0].property === TicketProperty.QUEUE_ID
                 );
@@ -93,7 +93,7 @@ class Component extends FormInputComponent<number, ComponentState> {
 
             const queue = queues[0];
 
-            let userName = user.Contact ? `${ user.Contact.Firstname } ${ user.Contact.Lastname }` : user.UserLogin;
+            let userName = user.Contact ? `${user.Contact.Firstname} ${user.Contact.Lastname}` : user.UserLogin;
             userName = userName
                 .replace(/ä/g, 'ae').replace(/Ä/g, 'Ae')
                 .replace(/ö/g, 'oe').replace(/Ö/g, 'Oe')
@@ -110,9 +110,9 @@ class Component extends FormInputComponent<number, ComponentState> {
                 .replace(/ü/g, 'ue').replace(/Ü/g, 'Ue');
 
             const labels = [
-                [`\"${ realName }\" <${ queueMail }>`, `${ realName }`],
-                [`${ userName } \"via\" ${ realName } <${ queueMail }>`, `${ userName } via ${ realName }`],
-                [`${ userName } <${ queueMail }>`, `${ userName }`]
+                [`\"${realName}\" <${queueMail}>`, `${realName}`],
+                [`${userName} \"via\" ${realName} <${queueMail}>`, `${userName} via ${realName}`],
+                [`${userName} <${queueMail}>`, `${userName}`]
             ];
 
             const nodes: TreeNode[] = [];

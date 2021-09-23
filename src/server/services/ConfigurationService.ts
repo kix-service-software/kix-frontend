@@ -43,13 +43,6 @@ export class ConfigurationService {
         return this.serverConfiguration;
     }
 
-    public getConfiguration<T = any>(configurationId: string): T {
-        const filePath = this.getComponentConfigurationFilePath(configurationId + '.config.json');
-
-        const moduleConfiguration = this.getJSONFileContent(filePath);
-        return moduleConfiguration;
-    }
-
     public getDataFileContent<T = any>(fileName: string, defaultContent: any = {}): T {
         const filePath = path.join(this.dataDir, fileName);
         const fileContent = this.getJSONFileContent(filePath);

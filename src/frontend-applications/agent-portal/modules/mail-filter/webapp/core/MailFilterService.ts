@@ -28,7 +28,7 @@ export class MailFilterService extends KIXObjectService<MailFilter> {
         this.objectConstructors.set(KIXObjectType.MAIL_FILTER, [MailFilter]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.MAIL_FILTER;
     }
 
