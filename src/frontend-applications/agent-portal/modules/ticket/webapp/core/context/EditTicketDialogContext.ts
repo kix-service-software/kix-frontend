@@ -44,7 +44,7 @@ export class EditTicketDialogContext extends Context {
             const ticket = await this.loadTicket();
             let formObject = ticket;
             if (overwrite) {
-                const parameter = await service.getFormParameter(formId);
+                const parameter = await service.getFormParameter(formId, null, false);
                 parameter.forEach((p) => {
                     if (p[0] === KIXObjectProperty.DYNAMIC_FIELDS) {
                         this.setDynamicFields(formObject, p[1]);

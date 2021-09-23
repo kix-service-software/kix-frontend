@@ -29,6 +29,7 @@ import { AgentService } from '../../../user/webapp/core/AgentService';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
 import { IConfiguration } from '../../../../model/configuration/IConfiguration';
 import { ContextConfiguration } from '../../../../model/configuration/ContextConfiguration';
+import { AdditionalContextInformation } from './AdditionalContextInformation';
 
 export class ContextService {
 
@@ -177,7 +178,9 @@ export class ContextService {
                 const index = this.contextInstances.findIndex((c) => c.instanceId === instanceId);
                 if (index !== -1) {
 
-                    sourceContext = this.contextInstances[index].getAdditionalInformation('SourceContext');
+                    sourceContext = this.contextInstances[index].getAdditionalInformation(
+                        AdditionalContextInformation.SOURCE_CONTEXT
+                    );
 
                     useSourceContext = this.contextInstances[index].getAdditionalInformation(
                         'USE_SOURCE_CONTEXT'
@@ -474,7 +477,7 @@ export class ContextService {
 
                         const previousContext = this.getActiveContext();
                         if (previousContext) {
-                            context.setAdditionalInformation('SourceContext', {
+                            context.setAdditionalInformation(AdditionalContextInformation.SOURCE_CONTEXT, {
                                 contextId: previousContext.contextId,
                                 objectId: previousContext.getObjectId(),
                                 instanceId: previousContext.instanceId
