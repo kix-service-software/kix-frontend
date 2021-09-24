@@ -30,6 +30,7 @@ import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsPr
 import { IConfiguration } from '../../../../model/configuration/IConfiguration';
 import { ContextConfiguration } from '../../../../model/configuration/ContextConfiguration';
 import { AdditionalContextInformation } from './AdditionalContextInformation';
+import { ApplicationEvent } from './ApplicationEvent';
 
 export class ContextService {
 
@@ -298,6 +299,9 @@ export class ContextService {
     ): Promise<void> {
         const context = this.contextInstances.find((i) => i.instanceId === instanceId);
         if (context && context.instanceId !== this.activeContext?.instanceId) {
+
+            EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
+
             const previousContext = this.getActiveContext();
             if (history) {
                 this.setDocumentHistory(true, previousContext, context, objectId);
