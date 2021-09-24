@@ -149,8 +149,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         event.stopPropagation();
         event.preventDefault();
 
-        EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
-
         this.state.blocked = true;
 
         const context = ContextService.getInstance().getActiveContext();

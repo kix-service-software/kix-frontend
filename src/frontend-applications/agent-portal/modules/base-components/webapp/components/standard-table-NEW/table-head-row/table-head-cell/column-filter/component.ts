@@ -17,6 +17,7 @@ import { EventService } from '../../../../../../../../modules/base-components/we
 import { OverlayService } from '../../../../../../../../modules/base-components/webapp/core/OverlayService';
 import { ComponentContent } from '../../../../../../../../modules/base-components/webapp/core/ComponentContent';
 import { OverlayType } from '../../../../../../../../modules/base-components/webapp/core/OverlayType';
+import { ApplicationEvent } from '../../../../../core/ApplicationEvent';
 
 class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
 
@@ -70,6 +71,9 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     public async showFilter(event: any): Promise<void> {
         if (this.column && !this.state.show) {
+
+            EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
+
             const content = new ComponentContent(
                 'table-column-filter-overlay', { column: this.column }
             );
@@ -90,6 +94,9 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                 OverlayType.TABLE_COLUMN_FILTER, null, content, '', null, false,
                 position, this.eventSubscriberId
             );
+        } else {
+            EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
+            this.state.show = false;
         }
     }
 
