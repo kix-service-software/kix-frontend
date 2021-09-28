@@ -13,7 +13,6 @@ import { Table, RowObject, TableValue } from '../../../../base-components/webapp
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { Ticket } from '../../../model/Ticket';
 
 export class TicketHistoryContentProvider extends TableContentProvider<TicketHistory> {
 

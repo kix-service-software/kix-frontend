@@ -13,7 +13,7 @@ import { AbstractDynamicFormManager } from '../../../../base-components/webapp/c
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { SearchProperty } from '../../../../search/model/SearchProperty';
 
-export class ComponentState extends FormInputComponentState<Array<[string, string[] | number[]]>> {
+export class ComponentState extends FormInputComponentState {
 
     public constructor(
         public manager: AbstractDynamicFormManager = null,

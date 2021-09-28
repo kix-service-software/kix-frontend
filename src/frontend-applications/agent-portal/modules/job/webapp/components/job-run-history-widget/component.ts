@@ -36,17 +36,17 @@ class Component {
             : undefined;
 
         context.registerListener('job-run-history-widget', {
-            sidebarLeftToggled: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            sidebarLeftToggled: (): void => { return; },
+            filteredObjectListChanged: (): void => { return; },
             objectListChanged: () => { return; },
-            sidebarRightToggled: () => { return; },
+            sidebarRightToggled: (): void => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: (jobId: string, job: Job, type: KIXObjectType) => {
                 if (type === KIXObjectType.JOB) {
                     this.initWidget(job);
                 }
             },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
 
         await this.initWidget(await context.getObject<Job>());

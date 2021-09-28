@@ -31,7 +31,7 @@ export class ReportResultService extends KIXObjectService<ReportResult> {
         this.objectConstructors.set(KIXObjectType.REPORT_RESULT, [ReportResult]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.REPORT_RESULT;
     }
 

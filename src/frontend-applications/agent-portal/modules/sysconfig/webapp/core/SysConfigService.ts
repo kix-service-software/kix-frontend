@@ -31,7 +31,7 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
         this.objectConstructors.set(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, [SysConfigOptionDefinition]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType | string) {
+    public isServiceFor(kixObjectType: KIXObjectType | string): boolean {
         return kixObjectType === KIXObjectType.SYS_CONFIG_OPTION
             || kixObjectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION;
     }

@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { ReportingContext } from '../../core/context/ReportingContext';
 
 class Component {
 

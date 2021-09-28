@@ -69,7 +69,7 @@ class Component {
 
         EventService.getInstance().subscribe(ApplicationEvent.APP_LOADING, {
             eventSubscriberId: 'BASE-TEMPLATE',
-            eventPublished: (data: any, eventId: string) => {
+            eventPublished: (data: any, eventId: string): void => {
                 if (eventId === ApplicationEvent.APP_LOADING) {
                     this.state.loading = data.loading;
                     this.state.loadingHint = data.hint;
@@ -79,7 +79,7 @@ class Component {
 
         EventService.getInstance().subscribe(ApplicationEvent.REFRESH, {
             eventSubscriberId: 'BASE-TEMPLATE-REFRESH',
-            eventPublished: (data: any, eventId: string) => {
+            eventPublished: (data: any, eventId: string): void => {
                 this.state.reload = true;
 
                 setTimeout(() => {

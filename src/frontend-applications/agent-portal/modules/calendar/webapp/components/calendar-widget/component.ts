@@ -291,7 +291,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         return isSchedule;
     }
 
-    private async scheduleChanged(event) {
+    private async scheduleChanged(event): Promise<void> {
         const schedule = event.schedule;
         const changes = event.changes;
 

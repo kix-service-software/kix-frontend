@@ -44,13 +44,13 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                 const context = ContextService.getInstance().getActiveContext();
                 if (context) {
                     context.registerListener(this.table.getTableId() + '-content-provider', {
-                        sidebarLeftToggled: () => { return; },
-                        filteredObjectListChanged: () => { return; },
+                        sidebarLeftToggled: (): void => { return; },
+                        filteredObjectListChanged: (): void => { return; },
                         objectChanged: this.objectChanged.bind(this),
                         objectListChanged: this.objectListChanged.bind(this),
-                        sidebarRightToggled: () => { return; },
+                        sidebarRightToggled: (): void => { return; },
                         scrollInformationChanged: () => { return; },
-                        additionalInformationChanged: () => { return; }
+                        additionalInformationChanged: (): void => { return; }
                     });
                 }
             }

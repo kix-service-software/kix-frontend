@@ -34,7 +34,6 @@ import { SearchCache } from '../../model/SearchCache';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { SearchContext } from './SearchContext';
 import { ContextMode } from '../../../../model/ContextMode';
-import { TicketProperty } from '../../../ticket/model/TicketProperty';
 
 export class SearchService {
 

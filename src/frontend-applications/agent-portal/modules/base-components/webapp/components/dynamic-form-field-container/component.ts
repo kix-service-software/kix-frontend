@@ -275,26 +275,26 @@ class Component {
         return this.manager.valuesAreDraggable();
     }
 
-    public allowDrop(event) {
+    public allowDrop(event): boolean {
         event.preventDefault();
         event.stopPropagation();
         event.dataTransfer.dropEffect = 'move';
         return false;
     }
 
-    public handleDragEnter(event) {
+    public handleDragEnter(event): void {
         event.preventDefault();
         event.stopPropagation();
         event.target.classList.add('drag-over');
     }
 
-    public handleDragLeave(event) {
+    public handleDragLeave(event): void {
         event.preventDefault();
         event.stopPropagation();
         event.target.classList.remove('drag-over');
     }
 
-    public async handleDrop(index: number, event) {
+    public async handleDrop(index: number, event): Promise<void> {
         event.stopPropagation();
         event.preventDefault();
 
@@ -330,7 +330,7 @@ class Component {
         this.state.draggableValueId = draggable ? id : null;
     }
 
-    public async handleDragStart(id: string, index: number, event) {
+    public handleDragStart(id: string, index: number, event): void {
         event.stopPropagation();
 
         const valueElement = (this as any).getEl(id);
@@ -341,7 +341,7 @@ class Component {
         this.state.dragStartIndex = index;
     }
 
-    public async handleDragEnd(id: string, event) {
+    public handleDragEnd(id: string, event): void {
         event.stopPropagation();
 
         const valueElement = (this as any).getEl(id);
@@ -351,7 +351,7 @@ class Component {
         this.state.dragStartIndex = null;
     }
 
-    public autoGrow(event: any) {
+    public autoGrow(event: any): void {
         if (event?.target && event.target.scrollHeight > event.target.clientHeight) {
             event.target.style.height = (event.target.scrollHeight + 2) + 'px';
         }

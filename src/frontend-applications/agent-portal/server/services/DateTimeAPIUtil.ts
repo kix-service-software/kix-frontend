@@ -175,7 +175,7 @@ export class DateTimeAPIUtil {
         return (value < 10 ? '0' + value : value).toString();
     }
 
-    public static getWeek(date: Date) {
+    public static getWeek(date: Date): number {
         const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
         const pastDaysOfYear = ((date as any) - (firstDayOfYear as any)) / 86400000;
         return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);

@@ -17,7 +17,6 @@ import { KIXObjectService } from '../../../../../modules/base-components/webapp/
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TicketProperty } from '../../../model/TicketProperty';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { TicketDetailsContext } from '..';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
 import { BrowserCacheService } from '../../../../../modules/base-components/webapp/core/CacheService';
 import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';

@@ -12,7 +12,7 @@ import { CreateLinkDescription } from '../../../server/api/CreateLinkDescription
 import { Label } from '../../../../../modules/base-components/webapp/core/Label';
 
 
-export class ComponentState extends FormInputComponentState<CreateLinkDescription[]> {
+export class ComponentState extends FormInputComponentState {
 
     public constructor(
         public linkDescriptions: CreateLinkDescription[] = [],

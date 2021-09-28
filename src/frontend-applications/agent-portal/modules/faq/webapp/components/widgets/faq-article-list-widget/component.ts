@@ -47,13 +47,13 @@ class Component {
 
         if (this.state.widgetConfiguration.contextDependent) {
             context.registerListener('faq-article-list-context-listener', {
-                sidebarLeftToggled: () => { return; },
-                sidebarRightToggled: () => { return; },
-                objectChanged: () => { return; },
+                sidebarLeftToggled: (): void => { return; },
+                sidebarRightToggled: (): void => { return; },
+                objectChanged: (): void => { return; },
                 objectListChanged: this.contextObjectListChanged.bind(this),
-                filteredObjectListChanged: () => { return; },
+                filteredObjectListChanged: (): void => { return; },
                 scrollInformationChanged: () => { return; },
-                additionalInformationChanged: () => { return; }
+                additionalInformationChanged: (): void => { return; }
             });
         }
 

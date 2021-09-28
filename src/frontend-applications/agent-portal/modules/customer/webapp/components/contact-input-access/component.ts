@@ -11,7 +11,6 @@ import { FormInputComponent } from '../../../../base-components/webapp/core/Form
 import { ComponentState } from './ComponentState';
 import { TreeNode, TreeHandler, TreeService } from '../../../../base-components/webapp/core/tree';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
-import { FormService } from '../../../../base-components/webapp/core/FormService';
 import { ServiceRegistry } from '../../../../base-components/webapp/core/ServiceRegistry';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ServiceType } from '../../../../base-components/webapp/core/ServiceType';

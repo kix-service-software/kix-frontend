@@ -49,7 +49,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public onCreate(): void {
         this.state = new ComponentState();
     }
-    public onInput(input: any) {
+    public onInput(input: any): void {
         this.step = input.step;
         this.update = this.step && this.step.result && this.step.result.contactId && this.step.result.userId;
         this.state.completed = this.step ? this.step.completed : false;

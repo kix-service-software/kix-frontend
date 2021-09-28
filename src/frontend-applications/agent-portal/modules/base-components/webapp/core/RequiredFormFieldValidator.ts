@@ -9,7 +9,6 @@
 
 import { IFormFieldValidator } from './IFormFieldValidator';
 import { ValidationResult } from './ValidationResult';
-import { FormService } from './FormService';
 import { ValidationSeverity } from './ValidationSeverity';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';

@@ -48,7 +48,7 @@ class Component extends AbstractMarkoComponent {
 
         this.eventSubscriber = {
             eventSubscriberId: 'main-menu-mobile',
-            eventPublished: (data, eventId: MobileShowEvent | string) => {
+            eventPublished: (data, eventId: MobileShowEvent | string): void => {
                 if (eventId === MobileShowEvent.SHOW_MOBILE) {
                     this.state.showMobile = data === MobileShowEventData.SHOW_MAIN_MENU;
                 }

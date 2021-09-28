@@ -15,7 +15,7 @@ export class PermissionTableCSSHandler implements ITableCSSHandler<Permission> {
 
     public async getRowCSSClasses(permission: Permission): Promise<string[]> {
         const classes = [];
-        if (permission.Value & CRUD.DENY) {
+        if (permission?.Value & CRUD.DENY) {
             classes.push('error');
         }
 

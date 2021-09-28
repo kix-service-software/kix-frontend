@@ -33,7 +33,6 @@ import { SortOrder } from '../../model/SortOrder';
 import { DefaultColumnConfiguration } from '../../model/configuration/DefaultColumnConfiguration';
 import { DataType } from '../../model/DataType';
 import { ToggleOptions } from '../base-components/webapp/core/table';
-import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
@@ -355,6 +354,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
 }
 
-module.exports = (data, host, options) => {
+module.exports = (data, host, options): Extension => {
     return new Extension();
 };

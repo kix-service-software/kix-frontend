@@ -31,7 +31,7 @@ export class AssembleObject extends ExtendedJobFormManager {
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('AssembleObject'),
-            eventPublished: (data: FormValuesChangedEventData, eventId: string) => {
+            eventPublished: (data: FormValuesChangedEventData, eventId: string): void => {
                 const definitionValue = data.changedValues.find(
                     (cv) => cv[0] && cv[0].property === 'AssembleObjectType'
                 );
@@ -94,7 +94,7 @@ export class AssembleObject extends ExtendedJobFormManager {
                 field.property = 'AssembleObjectDefinition';
 
                 const type = defaultValue === 'JSON' ? 'javascript' : 'yaml';
-                field.options.push(new FormFieldOption(FormFieldOptions.LANGUAGE, 'javascript'));
+                field.options.push(new FormFieldOption(FormFieldOptions.LANGUAGE, type));
 
                 return field;
             }

@@ -9,7 +9,7 @@
 
 import { FormInputComponentState } from '../../../../base-components/webapp/core/FormInputComponentState';
 
-export class ComponentState extends FormInputComponentState<any> {
+export class ComponentState extends FormInputComponentState {
 
     public constructor(
         public checked: boolean = false,

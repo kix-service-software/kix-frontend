@@ -275,7 +275,7 @@ export abstract class Context {
         return this.objectLists.get(objectType) as any[];
     }
 
-    public setObjectList(objectType: KIXObjectType | string, objectList: KIXObject[], silent?: boolean) {
+    public setObjectList(objectType: KIXObjectType | string, objectList: KIXObject[], silent?: boolean): void {
         this.objectLists.set(objectType, objectList);
         if (!silent) {
             this.listeners.forEach((l) => l.objectListChanged(objectType, objectList));
@@ -304,7 +304,7 @@ export abstract class Context {
 
     public setFilteredObjectList(
         objectType: KIXObjectType | string, filteredObjectList: KIXObject[], silent: boolean = false
-    ) {
+    ): void {
         this.filteredObjectLists.set(objectType, filteredObjectList);
         if (!silent) {
             this.listeners.forEach((l) => l.filteredObjectListChanged(objectType, filteredObjectList));

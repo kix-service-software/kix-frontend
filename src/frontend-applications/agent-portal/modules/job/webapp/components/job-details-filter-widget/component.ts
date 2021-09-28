@@ -9,10 +9,8 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { WidgetService } from '../../../../base-components/webapp/core/WidgetService';
-import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { JobFormService, JobDetailsContext } from '../../core';
+import { JobFormService } from '../../core';
 import { Job } from '../../../model/Job';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
@@ -21,10 +19,8 @@ import { TableConfiguration } from '../../../../../model/configuration/TableConf
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { ContextType } from '../../../../../model/ContextType';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
-import { KIXObject } from '../../../../../model/kix/KIXObject';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -41,7 +37,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         this.subscriber = {
             eventSubscriberId: 'object-details',
-            eventPublished: (data: any, eventId: string) => {
+            eventPublished: (data: any, eventId: string): void => {
                 if (data.objectType === KIXObjectType.JOB) {
                     this.initWidget();
                 }

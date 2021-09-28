@@ -15,7 +15,6 @@ import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceReg
 import { IKIXObjectService } from '../../../base-components/webapp/core/IKIXObjectService';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
-import { FormService } from '../../../base-components/webapp/core/FormService';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';

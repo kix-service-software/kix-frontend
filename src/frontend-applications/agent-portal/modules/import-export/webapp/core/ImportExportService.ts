@@ -28,7 +28,7 @@ export class ImportExportService extends KIXObjectService<ImportExportTemplate> 
         this.objectConstructors.set(KIXObjectType.IMPORT_EXPORT_TEMPLATE, [ImportExportTemplate]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.IMPORT_EXPORT_TEMPLATE;
     }
 

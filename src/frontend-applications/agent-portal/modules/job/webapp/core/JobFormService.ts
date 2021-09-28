@@ -16,7 +16,6 @@ import { ExecPlan } from '../../model/ExecPlan';
 import { JobService } from '.';
 import { ExecPlanTypes } from '../../model/ExecPlanTypes';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
-import { ContextType } from '../../../../model/ContextType';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { MacroAction } from '../../model/MacroAction';
 import { FormContext } from '../../../../model/configuration/FormContext';
@@ -47,7 +46,7 @@ export class JobFormService extends KIXObjectFormService {
 
         EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, {
             eventSubscriberId: 'JobFormService',
-            eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
+            eventPublished: async (data: FormValuesChangedEventData, eventId: string): Promise<void> => {
                 const form = data.formInstance.getForm();
                 if (form.objectType === KIXObjectType.JOB) {
                     const typeValue = data.changedValues.find((cv) => cv[0] && cv[0].property === JobProperty.TYPE);
@@ -89,7 +88,7 @@ export class JobFormService extends KIXObjectFormService {
         this.jobFormManager.set(type, manager);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.JOB;
     }
 

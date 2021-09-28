@@ -88,11 +88,11 @@ class Component {
                     }
                 }, 10);
             },
-            objectChanged: () => { return; },
+            objectChanged: (): void => { return; },
             objectListChanged: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            filteredObjectListChanged: (): void => { return; },
             scrollInformationChanged: () => { return; },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
 
         window.addEventListener('resize', this.createChart.bind(this), false);
@@ -107,7 +107,7 @@ class Component {
         }
     }
 
-    private createChart() {
+    private createChart(): void {
         const canvasElement = (this as any).getEl(this.state.chartId);
         if (canvasElement) {
             const ctx = canvasElement.getContext('2d');

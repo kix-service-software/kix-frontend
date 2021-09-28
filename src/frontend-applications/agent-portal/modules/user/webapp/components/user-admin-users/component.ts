@@ -82,7 +82,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.subscriber = {
             eventSubscriberId: 'admin-users',
-            eventPublished: (data: TableEventData, eventId: string) => {
+            eventPublished: (data: TableEventData, eventId: string): void => {
                 if (data && this.state.table && data.tableId === this.state.table.getTableId()) {
                     WidgetService.getInstance().updateActions(this.state.instanceId);
                 }

@@ -39,11 +39,11 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             this.setActiveState();
 
             const overlayIconListener = {
-                overlayOpened: () => {
+                overlayOpened: (): void => {
                     this.state.show = true;
                     (this as any).emit('changeFilterShownState', true);
                 },
-                overlayClosed: () => {
+                overlayClosed: (): void => {
                     this.state.show = false;
                     (this as any).emit('changeFilterShownState', false);
                 }

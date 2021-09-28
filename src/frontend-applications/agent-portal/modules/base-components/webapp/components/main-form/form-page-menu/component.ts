@@ -35,7 +35,7 @@ class Component {
         this.prepareTranslations();
         this.eventSubscriber = {
             eventSubscriberId: IdService.generateDateBasedId('page-subscriber-'),
-            eventPublished: () => {
+            eventPublished: (): void => {
                 this.state.pageChanged = true;
             }
         };

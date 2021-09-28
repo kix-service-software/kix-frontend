@@ -43,7 +43,7 @@ export class Macro extends KIXObject {
         }
     }
 
-    private getSortedActions(actions: MacroAction[], execOrder?: number[]) {
+    private getSortedActions(actions: MacroAction[], execOrder?: number[]): MacroAction[] {
         let sortedActions: MacroAction[] = [];
 
         if (Array.isArray(execOrder)) {

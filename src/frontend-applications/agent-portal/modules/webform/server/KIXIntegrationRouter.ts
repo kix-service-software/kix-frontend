@@ -112,7 +112,7 @@ export class KIXIntegrationRouter extends KIXRouter {
         }
     }
 
-    private async getCorsOptions(req, callback) {
+    private async getCorsOptions(req, callback): Promise<void> {
         let corsOptions;
         if (req.path.match(/^\/\d+$/)) {
             const formId = req.path.substring(1);

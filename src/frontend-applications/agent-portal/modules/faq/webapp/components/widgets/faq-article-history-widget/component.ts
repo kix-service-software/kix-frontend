@@ -34,17 +34,17 @@ class Component {
             : undefined;
 
         context.registerListener('faq-history-widget', {
-            sidebarLeftToggled: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            sidebarLeftToggled: (): void => { return; },
+            filteredObjectListChanged: (): void => { return; },
             objectListChanged: () => { return; },
-            sidebarRightToggled: () => { return; },
+            sidebarRightToggled: (): void => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: (id: string | number, faqArticle: FAQArticle, type: KIXObjectType | string) => {
                 if (type === KIXObjectType.FAQ_ARTICLE) {
                     this.initWidget(faqArticle);
                 }
             },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
 
         await this.initWidget(await context.getObject<FAQArticle>());

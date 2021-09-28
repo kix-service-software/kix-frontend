@@ -9,7 +9,7 @@
 
 import { FormInputComponentState } from '../../core/FormInputComponentState';
 
-export class ComponentState extends FormInputComponentState<string> {
+export class ComponentState extends FormInputComponentState {
 
     public constructor(
         public currentValue: string = null

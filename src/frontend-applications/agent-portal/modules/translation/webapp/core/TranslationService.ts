@@ -77,7 +77,7 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
         }
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType | string) {
+    public isServiceFor(kixObjectType: KIXObjectType | string): boolean {
         return kixObjectType === KIXObjectType.TRANSLATION_PATTERN || kixObjectType === KIXObjectType.TRANSLATION;
     }
 

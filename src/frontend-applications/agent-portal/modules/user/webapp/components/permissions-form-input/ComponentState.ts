@@ -11,7 +11,7 @@ import { FormInputComponentState } from '../../../../base-components/webapp/core
 import { PermissionProperty } from '../../../model/PermissionProperty';
 import { PermissionManager } from '../../core/admin/PermissionManager';
 
-export class ComponentState extends FormInputComponentState<any[]> {
+export class ComponentState extends FormInputComponentState {
 
     public constructor(
         public permissionManager: PermissionManager = null,

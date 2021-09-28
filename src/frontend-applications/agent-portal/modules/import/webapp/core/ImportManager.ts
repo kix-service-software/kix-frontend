@@ -7,9 +7,7 @@
  * --
  */
 
-import {
-    AbstractDynamicFormManager
-} from '../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager';
+import { AbstractDynamicFormManager } from '../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { ValidObject } from '../../../valid/model/ValidObject';
@@ -55,7 +53,7 @@ export abstract class ImportManager extends AbstractDynamicFormManager {
         }
 
         specificObject['CSV_LINE'] = object['CSV_LINE'];
-        specificObject.equals = (tableObject: KIXObject) => {
+        specificObject.equals = (tableObject: KIXObject): boolean => {
             return tableObject && tableObject['CSV_LINE'] === specificObject['CSV_LINE'];
         };
         return specificObject;

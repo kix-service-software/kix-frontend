@@ -11,10 +11,9 @@ import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { TreeNode, TreeService, TreeHandler } from '../../../../base-components/webapp/core/tree';
-import { JobFormService, JobService } from '../../core';
+import { JobFormService } from '../../core';
 import { JobProperty } from '../../../model/JobProperty';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { FormService } from '../../../../base-components/webapp/core/FormService';
 import { AbstractJobFormManager } from '../../core/AbstractJobFormManager';
 
 class Component extends FormInputComponent<string[], ComponentState> {

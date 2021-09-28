@@ -16,7 +16,6 @@ import { OverlayService } from '../../../../../modules/base-components/webapp/co
 import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
 import { ObjectIcon } from '../../../model/ObjectIcon';
-import { FormService } from '../../../../base-components/webapp/core/FormService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends FormInputComponent<any, ComponentState> {

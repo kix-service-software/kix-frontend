@@ -1055,7 +1055,7 @@ public webDependencies: string[] = [
 
 }
 
-module.exports = (data, host, options) =&gt; {
+module.exports = (data, host, options): Extension =&gt; {
 return new Extension();
 };
 </code></pre><h3 id="uicomponent">UIComponent</h3><p>The <code>UIComponent</code> describes the tag name, the path and the needed permissions for the component.</p><ul><li>The tag name is required to load the component via name for dynamic includes.</li><li>The path is needed to resolve and load the component in the browser context.</li><li>The permissions are optional. If there are permissions defined and the user has insufficient rights then this component is not available for the user.</li></ul><p>Examples:</p><pre><code class="language-typescript">new UIComponent(&#39;faq-read-module-component&#39;, &#39;/kix-module-faq$0/webapp/core/ui-modules/FAQReadUIModule&#39;, [

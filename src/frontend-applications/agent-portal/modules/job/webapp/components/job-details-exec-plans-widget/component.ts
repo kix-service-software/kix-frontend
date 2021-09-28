@@ -40,17 +40,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             this.initWidget(context);
 
             context.registerListener('jop-exec-plan-widget', {
-                sidebarLeftToggled: () => { return; },
-                filteredObjectListChanged: () => { return; },
+                sidebarLeftToggled: (): void => { return; },
+                filteredObjectListChanged: (): void => { return; },
                 objectListChanged: () => { return; },
-                sidebarRightToggled: () => { return; },
+                sidebarRightToggled: (): void => { return; },
                 scrollInformationChanged: () => { return; },
                 objectChanged: (id: string | number, job: Job, type: KIXObjectType) => {
                     if (type === KIXObjectType.JOB) {
                         this.initWidget(context);
                     }
                 },
-                additionalInformationChanged: () => { return; }
+                additionalInformationChanged: (): void => { return; }
             });
 
         }

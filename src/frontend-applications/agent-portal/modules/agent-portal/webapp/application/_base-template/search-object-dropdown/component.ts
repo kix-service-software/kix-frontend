@@ -16,8 +16,7 @@ import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEv
 import { OverlayService } from '../../../../../base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../../../base-components/webapp/core/OverlayType';
 import { StringContent } from '../../../../../base-components/webapp/core/StringContent';
-import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
-import { SearchContext, SearchService } from '../../../../../search/webapp/core';
+import { SearchService } from '../../../../../search/webapp/core';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { ComponentState } from './ComponentState';
 import { TicketSearchContext } from '../../../../../ticket/webapp/core/context/TicketSearchContext';

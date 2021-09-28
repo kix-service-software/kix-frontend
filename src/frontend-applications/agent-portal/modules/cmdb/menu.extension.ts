@@ -33,6 +33,6 @@ class Extension extends KIXExtension implements IMainMenuExtension {
     public orderRang: number = 200;
 }
 
-module.exports = (data, host, options) => {
+module.exports = (data, host, options): Extension => {
     return new Extension();
 };

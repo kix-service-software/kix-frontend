@@ -9,8 +9,9 @@
 
 import { ITableCSSHandler } from './ITableCSSHandler';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
 
-export class TableCSSHandlerRegistry {
+export class TableCSSHandlerRegistry<T = KIXObject> {
 
     private static INSTANCE: TableCSSHandlerRegistry;
 
@@ -24,13 +25,15 @@ export class TableCSSHandlerRegistry {
     private constructor() { }
 
     private commonHandler: ITableCSSHandler[] = [];
-    private objectHandler: Map<KIXObjectType | string, Array<ITableCSSHandler<any>>> = new Map();
+    private objectHandler: Map<KIXObjectType | string, Array<ITableCSSHandler<T>>> = new Map();
 
     public registerCommonCSSHandler(handler: ITableCSSHandler): void {
         this.commonHandler.push(handler);
     }
 
-    public registerObjectCSSHandler<T>(objectType: KIXObjectType | string, handler: ITableCSSHandler<T>): void {
+    public registerObjectCSSHandler(
+        objectType: KIXObjectType | string, handler: ITableCSSHandler<T>
+    ): void {
         if (!this.objectHandler.has(objectType)) {
             this.objectHandler.set(objectType, []);
         }
@@ -39,11 +42,11 @@ export class TableCSSHandlerRegistry {
     }
 
     public static getCommonCSSHandler(): ITableCSSHandler[] {
-        return TableCSSHandlerRegistry.getInstance().commonHandler;
+        return this.getInstance().commonHandler;
     }
 
-    public static getObjectCSSHandler<T>(objectType: KIXObjectType | string): Array<ITableCSSHandler<T>> {
-        return TableCSSHandlerRegistry.getInstance().objectHandler.get(objectType);
+    public static getObjectCSSHandler(objectType: KIXObjectType | string): Array<ITableCSSHandler> {
+        return this.getInstance().objectHandler.get(objectType);
     }
 
 }

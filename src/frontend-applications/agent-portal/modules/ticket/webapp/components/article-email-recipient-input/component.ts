@@ -61,7 +61,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
         if (this.state.field?.property === ArticleProperty.CC) {
             this.ccSubscriber = {
                 eventSubscriberId: 'article-email-cc-recipient-input',
-                eventPublished: (data: any, eventId: string) => {
+                eventPublished: (data: any, eventId: string): void => {
                     const newCcNodes = this.prepareMailNodes(data ? data.ccList : null, data ? data.filterList : null);
                     this.treeHandler.setSelection(newCcNodes, true, true, true);
                     this.contactChanged(newCcNodes);
@@ -249,7 +249,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
             if (!ccField) {
                 this.ccReadySubscriber = {
                     eventSubscriberId: 'article-email-to-recipient-input',
-                    eventPublished: (data: any, eventId: string) => {
+                    eventPublished: (data: any, eventId: string): void => {
                         EventService.getInstance().publish('SET_CC_RECIPIENTS', {
                             ccList: replyArticle.ccList,
                             filterList

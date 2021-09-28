@@ -28,7 +28,7 @@ export class SystemAddressService extends KIXObjectService<SystemAddress> {
         this.objectConstructors.set(KIXObjectType.SYSTEM_ADDRESS, [SystemAddress]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.SYSTEM_ADDRESS;
     }
 
