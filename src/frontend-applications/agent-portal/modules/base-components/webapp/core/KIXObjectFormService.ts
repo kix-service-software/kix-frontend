@@ -379,7 +379,7 @@ export abstract class KIXObjectFormService {
         formContext: FormContext, formInstance: FormInstance
     ): Promise<Array<[string, any]>> {
         for (const extendedService of this.extendedFormServices) {
-            parameter = await extendedService.postPrepareValues(parameter, createOptions, formContext);
+            parameter = await extendedService.postPrepareValues(parameter, createOptions, formContext, formInstance);
         }
         return parameter;
     }

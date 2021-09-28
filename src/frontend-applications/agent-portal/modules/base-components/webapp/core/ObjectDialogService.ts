@@ -13,11 +13,12 @@ import { TranslationService } from '../../../translation/webapp/core/Translation
 import { BrowserUtil } from './BrowserUtil';
 import { ContextService } from './ContextService';
 import { EventService } from './EventService';
+import { ExtendedObjectDialogService } from './ExtendedObjectDialogService';
 import { FormEvent } from './FormEvent';
 import { KIXObjectService } from './KIXObjectService';
 import { ValidationSeverity } from './ValidationSeverity';
 
-export class ObjectDialogUtil {
+export class ObjectDialogService {
 
     private static EDIT_MODES = [
         ContextMode.EDIT,
@@ -26,7 +27,22 @@ export class ObjectDialogUtil {
         ContextMode.EDIT_LINK,
     ];
 
-    public static async submit(): Promise<void> {
+    private static INSTANCE: ObjectDialogService;
+
+    private extendedDialogService: ExtendedObjectDialogService[];
+
+    public static getInstance(): ObjectDialogService {
+        if (!ObjectDialogService.INSTANCE) {
+            ObjectDialogService.INSTANCE = new ObjectDialogService
+                ();
+        }
+        return ObjectDialogService.INSTANCE;
+    }
+
+    private constructor() { }
+
+
+    public async submit(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         const formId = await context?.getFormManager()?.getFormId();
 
@@ -38,7 +54,7 @@ export class ObjectDialogUtil {
             let objectId: string | number;
 
             let submitFunc = KIXObjectService.createObjectByForm;
-            if (this.EDIT_MODES.some((em) => em === context.descriptor.contextMode)) {
+            if (ObjectDialogService.EDIT_MODES.some((em) => em === context.descriptor.contextMode)) {
                 submitFunc = KIXObjectService.updateObjectByForm;
                 objectId = context.getObjectId();
             }

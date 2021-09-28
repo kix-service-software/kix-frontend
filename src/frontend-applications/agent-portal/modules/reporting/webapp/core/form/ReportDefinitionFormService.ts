@@ -31,7 +31,6 @@ import { Role } from '../../../../user/model/Role';
 import { RoleProperty } from '../../../../user/model/RoleProperty';
 import { ReportDefinition } from '../../../model/ReportDefinition';
 import { ReportDefinitionProperty } from '../../../model/ReportDefinitionProperty';
-import { ReportOutputFormat } from '../../../model/ReportOutputFormat';
 import { ReportDefinitionFormCreator } from './ReportDefinitionFormCreator';
 import { ReportDefintionObjectCreator } from './ReportDefintionObjectCreator';
 
