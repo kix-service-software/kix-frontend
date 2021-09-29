@@ -31,7 +31,6 @@ import { Role } from '../../../../user/model/Role';
 import { RoleProperty } from '../../../../user/model/RoleProperty';
 import { ReportDefinition } from '../../../model/ReportDefinition';
 import { ReportDefinitionProperty } from '../../../model/ReportDefinitionProperty';
-import { ReportOutputFormat } from '../../../model/ReportOutputFormat';
 import { ReportDefinitionFormCreator } from './ReportDefinitionFormCreator';
 import { ReportDefintionObjectCreator } from './ReportDefintionObjectCreator';
 
@@ -145,7 +144,8 @@ export class ReportDefinitionFormService extends KIXObjectFormService {
         formInstance: FormInstance, f: FormFieldConfiguration,
         parent?: FormFieldConfiguration, withChildren: boolean = true
     ): Promise<FormFieldConfiguration> {
-        const field = await super.getNewFormField(formInstance, f, parent, false);
+        withChildren = f.property === ReportDefinitionProperty.PARAMTER;
+        const field = await super.getNewFormField(formInstance, f, parent, withChildren);
         if (f.property === ReportDefinitionProperty.AVAILABLE_OUTPUT_FORMATS) {
             const selectableOutputFormats = await ReportDefinitionFormCreator.getSelectableOutputFormats(formInstance);
             const option = field.options.find((o) => o.option === ObjectReferenceOptions.OBJECT_IDS);
