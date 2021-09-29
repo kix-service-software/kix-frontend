@@ -145,6 +145,7 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
                 break;
             case KIXObjectType.TICKET:
+                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
                 cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 cacheKeyPrefixes.push(KIXObjectType.QUEUE);
