@@ -721,6 +721,9 @@ msgstr "Self Service Login"
 msgid "Customer Portal"
 msgstr "Self Service Portal"
 
+msgid "Customize Dashboard"
+msgstr ""
+
 msgid "CW"
 msgstr "KW"
 
@@ -3880,9 +3883,6 @@ msgstr "Verantwortliche Tickets"
 msgid "Result names"
 msgstr "Ergebnisbezeichnungen"
 
-msgid "Result"
-msgstr "Ergebnis"
-
 msgid "Results"
 msgstr "Ergebnisse"
 
@@ -4318,6 +4318,9 @@ msgstr "System: SysConfig ({0})"
 
 msgid "-> (tab)"
 msgstr "-> (Tabulator)"
+
+msgid "Table Columns"
+msgstr ""
 
 msgid "Table Configuration"
 msgstr "Tabellenkonfiguration"
@@ -4770,6 +4773,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Result"
+#~ msgstr "Ergebnis"
 
 #~ msgid "Service"
 #~ msgstr "Service"

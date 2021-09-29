@@ -708,6 +708,9 @@ msgstr "Self Service Login"
 msgid "Customer Portal"
 msgstr "Self Service Portal"
 
+msgid "Customize Dashboard"
+msgstr ""
+
 msgid "CW"
 msgstr ""
 
@@ -4165,6 +4168,9 @@ msgid "System: Sysconfig ({0})"
 msgstr ""
 
 msgid "-> (tab)"
+msgstr ""
+
+msgid "Table Columns"
 msgstr ""
 
 msgid "Table Configuration"
