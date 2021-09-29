@@ -272,6 +272,24 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         )
                                     ]
                                 }
+                            ],
+                            [
+                                {
+                                    text: 'Translatable#Affected Services',
+                                    textStyle: 'font-weight:bold;margin-bottom:0.5rem',
+                                    icon: 'kix-icon-ci',
+                                    componentId: 'dynamic-field-value',
+                                    componentData: {
+                                        name: 'AffectedServices'
+                                    },
+                                    conditions: [
+                                        new UIFilterCriterion(
+                                            'DynamicFields.AffectedServices',
+                                            SearchOperator.NOT_EQUALS,
+                                            null
+                                        )
+                                    ]
+                                }
                             ]
                         ]
                     }, {
