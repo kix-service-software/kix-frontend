@@ -121,7 +121,6 @@ export class ContactFormService extends KIXObjectFormService {
 
         if (hasUserCreatePermission && hasUserUpdatePermission) {
             const accessValue: FormFieldValue = new FormFieldValue([]);
-            let accessChildren;
             if (this.assignedUserId) {
                 const user = await this.loadAssignedUser(this.assignedUserId);
                 if (user) {
@@ -135,7 +134,7 @@ export class ContactFormService extends KIXObjectFormService {
             } else if (this.isAgentDialog) {
                 accessValue.value.push(UserProperty.IS_AGENT);
             }
-            accessChildren = await this.getFormFieldsForAccess(accessValue.value, null);
+            const accessChildren = await this.getFormFieldsForAccess(accessValue.value, null);
 
             const access = new FormFieldConfiguration(
                 'contact-form-field-user-access', 'Translatable#Access',
@@ -205,7 +204,7 @@ export class ContactFormService extends KIXObjectFormService {
     private async addPasswordField(formInstance?: FormInstance): Promise<FormFieldConfiguration> {
         const passwordField = new FormFieldConfiguration(
             'contact-form-field-password',
-            'Translatable#Password', UserProperty.USER_PASSWORD, null, !Boolean(this.assignedUserId),
+            'Translatable#Password', UserProperty.USER_PASSWORD, null, !this.assignedUserId,
             'Translatable#Helptext_User_UserCreateEdit_Password',
             [
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)

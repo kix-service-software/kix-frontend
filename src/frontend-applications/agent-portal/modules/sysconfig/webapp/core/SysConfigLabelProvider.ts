@@ -14,6 +14,7 @@ import { SysConfigOptionDefinitionProperty } from '../../model/SysConfigOptionDe
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { SysConfigOptionProperty } from '../../model/SysConfigOptionProperty';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class SysConfigLabelProvider extends LabelProvider<SysConfigOptionDefinition> {
 
@@ -50,8 +51,8 @@ export class SysConfigLabelProvider extends LabelProvider<SysConfigOptionDefinit
         return displayValue ? displayValue.toString() : '';
     }
 
-    public isLabelProviderFor(object: SysConfigOptionDefinition): boolean {
-        return object instanceof SysConfigOptionDefinition;
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object instanceof SysConfigOptionDefinition || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

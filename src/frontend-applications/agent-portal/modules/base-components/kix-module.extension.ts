@@ -50,6 +50,7 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent('form-list', '/kix-module-base-components$0/webapp/components/form-list', []),
         new UIComponent('form-list-tree', '/kix-module-base-components$0/webapp/components/form-list-tree', []),
         new UIComponent('help-widget', '/kix-module-base-components$0/webapp/components/help-widget', []),
+        new UIComponent('json-input', '/kix-module-base-components$0/webapp/components/json-input', []),
         new UIComponent('kix-footer', '/kix-module-base-components$0/webapp/components/kix-footer', []),
         new UIComponent('label-list', '/kix-module-base-components$0/webapp/components/label-list', []),
         new UIComponent('label-value-group', '/kix-module-base-components$0/webapp/components/label-value-group', []),
@@ -108,7 +109,11 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent('router-outlet', '/kix-module-base-components$0/webapp/components/router-outlet', []),
         new UIComponent('sidebar', '/kix-module-base-components$0/webapp/components/sidebar', []),
         new UIComponent('standard-table-NEW', '/kix-module-base-components$0/webapp/components/standard-table-NEW', []),
-
+        new UIComponent(
+            'table-configuration',
+            '/kix-module-base-components$0/webapp/components/ui-configuration/table-configuration',
+            []
+        ),
         new UIComponent(
             'crud-cell',
             '/kix-module-base-components$0/webapp/components' +
@@ -136,6 +141,11 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent('tab-container', '/kix-module-base-components$0/webapp/components/tab-container', []),
         new UIComponent('tab-widget', '/kix-module-base-components$0/webapp/components/tab-widget', []),
         new UIComponent('table-widget', '/kix-module-base-components$0/webapp/components/table-widget', []),
+        new UIComponent(
+            'table-widget-configuration',
+            '/kix-module-base-components$0/webapp/components/ui-configuration/table-widget-configuration',
+            []
+        ),
         new UIComponent('text-area-input', '/kix-module-base-components$0/webapp/components/text-area-input', []),
         new UIComponent('timer', '/kix-module-base-components$0/webapp/components/timer', []),
         new UIComponent('translation-string', '/kix-module-base-components$0/webapp/components/translation-string', []),

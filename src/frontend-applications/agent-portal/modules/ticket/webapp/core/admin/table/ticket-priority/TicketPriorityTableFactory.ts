@@ -48,7 +48,7 @@ export class TicketPriorityTableFactory extends TableFactory {
     ): TableConfiguration {
         const tableColumns = [
             this.getDefaultColumnConfiguration(TicketPriorityProperty.NAME),
-            this.getDefaultColumnConfiguration('ICON'),
+            this.getDefaultColumnConfiguration(TicketPriorityProperty.ID),
             this.getDefaultColumnConfiguration(KIXObjectProperty.COMMENT),
             this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID),
             this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_TIME),
@@ -85,6 +85,10 @@ export class TicketPriorityTableFactory extends TableFactory {
                     property, true, false, true, false, 200, true, true,
                     false, DataType.STRING, true, null, null, false
                 );
+                break;
+            case TicketPriorityProperty.ID:
+                config = super.getDefaultColumnConfiguration('ICON');
+                config.property = TicketPriorityProperty.ID;
                 break;
             default:
                 config = super.getDefaultColumnConfiguration(property);

@@ -19,6 +19,7 @@
             }
         }
     }
+
     .widget-content {
         >.scroll-container {
             >.empty-notes {
@@ -33,6 +34,7 @@
                 align-content: center;
                 opacity: 0.7;
             }
+
             >.editor-container {
                 >.cke {
                     >.cke_inner {
@@ -45,17 +47,20 @@
                                 }
                             }
                         }
+
                         >.cke_bottom {
                             display: none;
                         }
                     }
                 }
             }
+
             >.notes-editor-buttons {
                 display: grid;
                 grid-template-columns: max-content auto;
-                grid-gap: @margin-widget-content + @margin-widget-content/2;
+                grid-gap: calc(@margin-widget-content + @margin-widget-content / 2);
                 margin-top: @margin-widget-content;
+
                 >button {
                     min-width: unset;
                 }

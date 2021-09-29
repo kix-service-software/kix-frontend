@@ -75,7 +75,6 @@ export class TicketBulkManager extends BulkManager {
             case TicketProperty.STATE_ID:
             case TicketProperty.TYPE_ID:
             case TicketProperty.PRIORITY_ID:
-            case TicketProperty.SERVICE_ID:
             case TicketProperty.LOCK_ID:
                 inputFieldType = InputFieldTypes.DROPDOWN;
                 break;

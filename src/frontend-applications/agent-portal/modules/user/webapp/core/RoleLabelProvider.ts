@@ -13,13 +13,14 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { RoleProperty } from '../../model/RoleProperty';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class RoleLabelProvider extends LabelProvider<Role> {
 
     public kixObjectType: KIXObjectType | string = KIXObjectType.ROLE;
 
-    public isLabelProviderFor(role: Role): boolean {
-        return role instanceof Role;
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object instanceof Role || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

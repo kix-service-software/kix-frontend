@@ -7,7 +7,7 @@
  * --
  */
 
-import md5 = require('md5');
+import md5 from 'md5';
 import { ClientStorageService } from './ClientStorageService';
 import { ObjectUpdatedEventData } from '../../../../model/ObjectUpdatedEventData';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
@@ -33,7 +33,11 @@ export class BrowserCacheService {
     private dependencies: Map<string, string[]> = new Map();
 
     public addDependencies(key: string, dependencies: string[]): void {
-        this.dependencies.set(key, dependencies);
+        if (!this.dependencies.has(key)) {
+            this.dependencies.set(key, dependencies);
+        } else {
+            this.dependencies.set(key, [...this.dependencies.get(key), ...dependencies]);
+        }
     }
 
     private keyIndex: Map<string, string[]> = new Map();
@@ -141,6 +145,7 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
                 break;
             case KIXObjectType.TICKET:
+                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
                 cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 cacheKeyPrefixes.push(KIXObjectType.QUEUE);

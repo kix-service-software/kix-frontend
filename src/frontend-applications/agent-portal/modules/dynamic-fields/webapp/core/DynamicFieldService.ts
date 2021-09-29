@@ -16,6 +16,12 @@ import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpec
 import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { DynamicFieldType } from '../../model/DynamicFieldType';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { DynamicFieldProperty } from '../../model/DynamicFieldProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 
 export class DynamicFieldService extends KIXObjectService<DynamicField> {
 

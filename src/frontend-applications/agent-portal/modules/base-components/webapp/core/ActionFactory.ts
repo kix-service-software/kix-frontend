@@ -10,6 +10,7 @@
 import { AbstractAction } from './AbstractAction';
 import { IAction } from './IAction';
 import { AuthenticationSocketClient } from './AuthenticationSocketClient';
+import { ConfigurationType } from '../../../../model/configuration/ConfigurationType';
 
 
 export class ActionFactory<T extends AbstractAction> {
@@ -17,6 +18,7 @@ export class ActionFactory<T extends AbstractAction> {
     private actions: Map<string, new () => T> = new Map();
     private actionInstances: Map<string, T> = new Map();
     private blacklist: string[] = [];
+    private widgetActions: Map<ConfigurationType | string, string[]> = new Map();
 
     private static INSTANCE: ActionFactory<AbstractAction> = null;
 
@@ -28,11 +30,23 @@ export class ActionFactory<T extends AbstractAction> {
         return ActionFactory.INSTANCE;
     }
 
-    public registerAction(actionId: string, action: new () => T): void {
+    public registerAction(
+        actionId: string, action: new () => T, configurationTypes?: Array<ConfigurationType | string>
+    ): void {
         if (this.actions.has(actionId)) {
             console.warn('Duplicate action registered: ' + actionId);
         }
         this.actions.set(actionId, action);
+
+        if (Array.isArray(configurationTypes) && configurationTypes.length) {
+            configurationTypes.forEach((t) => {
+                if (!this.widgetActions.has(t)) {
+                    this.widgetActions.set(t, []);
+                }
+
+                this.widgetActions.get(t).push(actionId);
+            });
+        }
     }
 
     public blacklistActions(actionsIds: string[]): void {
@@ -74,6 +88,19 @@ export class ActionFactory<T extends AbstractAction> {
 
     public registerActionInstance(actionId: string, action: T): void {
         this.actionInstances.set(actionId, action);
+    }
+
+    public async getActionsForConfigurationType(type: ConfigurationType | string): Promise<AbstractAction[]> {
+        let actions: AbstractAction[] = [];
+
+        if (type === ConfigurationType.TableWidget) {
+            const actionIds = this.widgetActions.has(type)
+                ? this.widgetActions.get(type)
+                : [];
+            actions = await this.generateActions(actionIds);
+        }
+
+        return actions;
     }
 
 }

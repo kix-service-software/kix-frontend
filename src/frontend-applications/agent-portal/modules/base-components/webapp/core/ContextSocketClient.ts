@@ -32,11 +32,12 @@ export class ContextSocketClient extends SocketClient {
     private static INSTANCE: ContextSocketClient = null;
 
     private constructor() {
-        super();
-        this.socket = this.createSocket('context', true);
+        super('context');
     }
 
     public async loadContextConfiguration(contextId: string): Promise<ContextConfiguration> {
+        this.checkSocketConnection();
+
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<ContextConfiguration>((resolve, reject) => {
 
@@ -72,6 +73,8 @@ export class ContextSocketClient extends SocketClient {
     }
 
     public async loadContextConfigurations(): Promise<ContextConfiguration[]> {
+        this.checkSocketConnection();
+
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<ContextConfiguration[]>((resolve, reject) => {
 
@@ -107,6 +110,8 @@ export class ContextSocketClient extends SocketClient {
     }
 
     public async rebuildConfiguration(): Promise<void> {
+        this.checkSocketConnection();
+
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<void>((resolve, reject) => {
 

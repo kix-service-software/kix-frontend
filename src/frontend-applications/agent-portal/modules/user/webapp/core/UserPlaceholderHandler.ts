@@ -17,6 +17,10 @@ import { TranslationService } from '../../../../modules/translation/webapp/core/
 import { ContactProperty } from '../../../customer/model/ContactProperty';
 import { AbstractPlaceholderHandler } from '../../../base-components/webapp/core/AbstractPlaceholderHandler';
 import { AgentService } from './AgentService';
+import { OrganisationPlaceholderHandler } from '../../../customer/webapp/core/OrganisationPlaceholderHandler';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
+import { Organisation } from '../../../customer/model/Organisation';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export class UserPlaceholderHandler extends AbstractPlaceholderHandler {
 
@@ -25,7 +29,7 @@ export class UserPlaceholderHandler extends AbstractPlaceholderHandler {
         'CURRENT'
     ];
 
-    public async replace(placeholder: string, user?: User, language: string = 'en'): Promise<string> {
+    public async replace(placeholder: string, user?: User, language?: string): Promise<string> {
         let result = '';
         const objectString = PlaceholderService.getInstance().getObjectString(placeholder);
         if (objectString === 'CURRENT') {
@@ -34,12 +38,23 @@ export class UserPlaceholderHandler extends AbstractPlaceholderHandler {
                 user = currentUser;
             }
         }
-        if (user) {
-            const attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
+
+        const attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
+        if (attribute === 'ORG' && user && user.Contact) {
+            const optionsString = PlaceholderService.getInstance().getOptionsString(placeholder);
+            if (optionsString) {
+                placeholder = `<KIX_ORG_${optionsString}>`;
+            }
+            const organisations = await KIXObjectService.loadObjects<Organisation>(
+                KIXObjectType.ORGANISATION, [user.Contact.PrimaryOrganisationID]
+            );
+            if (Array.isArray(organisations) && organisations.length) {
+                result = await OrganisationPlaceholderHandler.prototype.replace(
+                    placeholder, organisations[0], language
+                );
+            }
+        } else if (user) {
             if (attribute && this.isKnownProperty(attribute)) {
-                if (!PlaceholderService.getInstance().translatePlaceholder(placeholder)) {
-                    language = 'en';
-                }
                 switch (attribute) {
                     case UserProperty.USER_ID:
                     case KIXObjectProperty.VALID_ID:

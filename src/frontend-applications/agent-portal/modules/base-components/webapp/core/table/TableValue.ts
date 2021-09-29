@@ -14,6 +14,7 @@ import { Cell } from './Cell';
 import { EventService } from '../EventService';
 import { TableEvent } from './TableEvent';
 import { IdService } from '../../../../../model/IdService';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
 
 export class TableValue {
 
@@ -27,16 +28,18 @@ export class TableValue {
     ) { }
 
     public async initDisplayValue(cell: Cell): Promise<void> {
-        const object = cell.getRow().getRowObject().getObject();
+        const object = cell.getRow().getRowObject<KIXObject>().getObject();
 
-        if (object && !this.displayValue) {
+        if (!this.displayValue && cell.getColumnConfiguration().showText && object) {
             this.displayValue = await LabelService.getInstance().getDisplayText(
                 object, this.property, object[this.property], cell.getColumnConfiguration().translatable
             );
         }
 
-        if (object && !this.displayIcons) {
-            this.displayIcons = await LabelService.getInstance().getIcons(object, this.property, null, true);
+        if (!this.displayIcons && cell.getColumnConfiguration().showIcon && object) {
+            this.displayIcons = await LabelService.getInstance().getIcons(
+                object, this.property, object[this.property], true
+            );
         }
 
         EventService.getInstance().publish(TableEvent.DISPLAY_VALUE_CHANGED, this.instanceId);

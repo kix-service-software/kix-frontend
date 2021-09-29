@@ -11,6 +11,7 @@ import { IPlaceholderHandler } from './IPlaceholderHandler';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { SortUtil } from '../../../../model/SortUtil';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class PlaceholderService {
 
@@ -45,7 +46,7 @@ export class PlaceholderService {
     public extractPlaceholders(text: string): string[] {
         let placeholders: string[] = [];
         if (text && typeof text === 'string' && text !== '') {
-            const result = text.match(/(<|&lt;)(TR_)?KIX_.+?(>|&gt;)/g);
+            const result = text.match(/(<|&lt;)(TR_|NT_)?KIX_.+?(>|&gt;)/g);
             if (Array.isArray(result)) {
                 placeholders = result.filter((p) => p.match(this.getPlaceholderRegex()));
             }
@@ -62,6 +63,9 @@ export class PlaceholderService {
             if (!replacedPlaceholders.has(placeholder)) {
                 const objectString = this.getObjectString(placeholder);
                 const handler = objectString ? this.getHandler(placeholder) : null;
+                if (this.doNotTranslatePlaceholder(placeholder)) {
+                    language = await TranslationService.getSystemDefaultLanguage();
+                }
                 let replaceString = handler ? await handler.replace(placeholder, object, language) : '';
                 replaceString = typeof replaceString === 'undefined' || replaceString === null ? '' : replaceString;
                 replacedPlaceholders.set(placeholder, replaceString);
@@ -101,7 +105,7 @@ export class PlaceholderService {
         objectString: string = '(.+?)', attributeString: string = '(.+)', single: boolean = true
     ): RegExp {
         return new RegExp(
-            `${single ? '^' : ''}(?:<|&lt;)(?:TR_)?KIX_${objectString}_${attributeString}(>|&gt;)${single ? '$' : ''}`,
+            `${single ? '^' : ''}(?:<|&lt;)(?:TR_|NT_)?KIX_${objectString}_${attributeString}(>|&gt;)${single ? '$' : ''}`,
             'g'
         );
     }
@@ -127,8 +131,8 @@ export class PlaceholderService {
         return optionsString;
     }
 
-    public translatePlaceholder(placeholder): boolean {
-        return Boolean(placeholder.match(/TR_KIX_/));
+    public doNotTranslatePlaceholder(placeholder): boolean {
+        return Boolean(placeholder.match(/NT_KIX_/));
     }
 
     public isDynamicFieldAttribute(attributeString: string): boolean {

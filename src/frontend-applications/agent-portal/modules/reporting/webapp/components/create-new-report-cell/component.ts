@@ -10,16 +10,13 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { Cell } from '../../../../base-components/webapp/core/table';
-import { ContextMode } from '../../../../../model/ContextMode';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ReportDefinition } from '../../../model/ReportDefinition';
-import { NewReportDialogContext } from '../../core/context/NewReportDialogContext';
 import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { Report } from '../../../model/Report';
 import { ReportDefinitionDialogUtil } from '../../core/ReportDefinitionDialogUtil';
+import { ValidObject } from '../../../../valid/model/ValidObject';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -44,10 +41,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
             AuthenticationSocketClient.getInstance().checkPermissions([
                 new UIComponentPermission(
-                    `reporting/reports`, [CRUD.CREATE], true, report
+                    'reporting/reports', [CRUD.CREATE], true, report
                 )
             ]);
-            this.state.show = this.reportDefinition.ValidID === 1;
+            this.state.show = this.reportDefinition.ValidID === ValidObject.VALID;
         }
     }
 

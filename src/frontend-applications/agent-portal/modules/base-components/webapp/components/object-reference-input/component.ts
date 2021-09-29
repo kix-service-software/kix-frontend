@@ -138,7 +138,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             );
         } else {
             for (const o of this.objects) {
-                const node = await this.createTreeNode(o, translatable);
+                const node = await this.createTreeNode(o, translatable, objectId ? [objectId] : undefined);
                 if (node) {
                     nodes.push(node);
                 }
@@ -240,8 +240,12 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                         objectOption.value, objectIds, null, null, null, null, true
                     );
                     if (objects && !!objects.length) {
+                        const translatableOption = this.state.field?.options.find(
+                            (o) => o.option === ObjectReferenceOptions.TRANSLATABLE
+                        );
+                        const translatable = !translatableOption || Boolean(translatableOption.value);
                         for (const object of objects) {
-                            const node = await this.createTreeNode(object);
+                            const node = await this.createTreeNode(object, translatable);
                             if (node) {
                                 node.selected = true;
                                 selectedNodes.push(node);
@@ -269,7 +273,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     public nodesChanged(nodes: TreeNode[]): void {
         const currentNodes = nodes && nodes.length ? nodes : [];
-        if (!!currentNodes.length) {
+        if (currentNodes.length) {
             if (this.state.multiselect) {
                 super.provideValue(currentNodes.map((n) => n.id));
             } else {
@@ -361,11 +365,20 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     const structureOption = this.state.field?.options.find(
                         (o) => o.option === ObjectReferenceOptions.USE_OBJECT_SERVICE
                     );
+                    const translatableOption = this.state.field?.options.find(
+                        (o) => o.option === ObjectReferenceOptions.TRANSLATABLE
+                    );
+                    const translatable = !translatableOption || Boolean(translatableOption.value);
+                    const objectId = await UIUtil.getEditObjectId(objectOption.value);
                     if (structureOption && structureOption.value) {
-                        nodes = await KIXObjectService.prepareObjectTree(this.objects);
+                        const showInvalid = this.isShowInvalidNodes();
+                        const invalidClickable = this.isInvalidClickable();
+                        nodes = await KIXObjectService.prepareObjectTree(
+                            this.objects, showInvalid, invalidClickable, objectId ? [objectId] : null, translatable
+                        );
                     } else {
                         for (const o of this.objects) {
-                            const node = await this.createTreeNode(o);
+                            const node = await this.createTreeNode(o, translatable, objectId ? [objectId] : undefined);
                             if (node) {
                                 nodes.push(node);
                             }
@@ -379,21 +392,28 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         return nodes;
     }
 
-    private async createTreeNode(o: KIXObject, translatable?: boolean): Promise<TreeNode> {
+    private async createTreeNode(o: KIXObject, translatable?: boolean, filterIds: any[] = []): Promise<TreeNode> {
         if (typeof o === 'string') {
             return new TreeNode(o, o);
         } else {
             const showInvalid = this.isShowInvalidNodes();
             // typeof o.ValidID === 'undefined' - needed for objects without ValidID like ValidObject
-            if (typeof o.ValidID === 'undefined' || o.ValidID === 1 || showInvalid) {
+            if (
+                (typeof o.ValidID === 'undefined' || o.ValidID === 1 || showInvalid)
+                && !filterIds.some((id) => id === o.ObjectId)
+            ) {
                 const invalidClickable = this.isInvalidClickable();
                 const text = await LabelService.getInstance().getObjectText(o, undefined, undefined, translatable);
                 const icon = LabelService.getInstance().getObjectIcon(o);
                 let tooltip = await LabelService.getInstance().getTooltip(o, translatable);
+                let textAsId;
+                if (this.useTextAsId()) {
+                    textAsId = await LabelService.getInstance().getObjectText(o, undefined, undefined, false);
+                }
 
                 tooltip = (tooltip && tooltip !== text) ? text + ': ' + tooltip : text;
                 return new TreeNode(
-                    o.ObjectId,
+                    textAsId || o.ObjectId,
                     text ? text : o.ObjectId?.toString(),
                     icon,
                     undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
@@ -405,6 +425,13 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                 return;
             }
         }
+    }
+
+    private useTextAsId(): boolean {
+        const textAsIdOption = this.state.field?.options
+            ? this.state.field?.options.find((o) => o.option === ObjectReferenceOptions.TEXT_AS_ID)
+            : null;
+        return textAsIdOption ? Boolean(textAsIdOption.value) : false;
     }
 
     public async focusLost(event: any): Promise<void> {

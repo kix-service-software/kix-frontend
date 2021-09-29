@@ -21,10 +21,15 @@ import { LabelService } from '../../../base-components/webapp/core/LabelService'
 import { User } from '../../../user/model/User';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class ContactLabelProvider extends LabelProvider<Contact> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONTACT;
+
+    public isLabelProviderFor(object: Contact | KIXObject): boolean {
+        return object instanceof Contact || object?.KIXObjectType === this.kixObjectType;
+    }
 
     public async getPropertyValueDisplayText(
         property: string, value: any, translatable: boolean = true
@@ -79,10 +84,6 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
         }
 
         return displayValue ? displayValue.toString() : '';
-    }
-
-    public isLabelProviderFor(object: Contact): boolean {
-        return object instanceof Contact;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

@@ -77,8 +77,8 @@ export class UserService extends KIXObjectAPIService {
         return objects;
     }
 
-    public async getUserByToken(token: string): Promise<User> {
-        const user = await HttpService.getInstance().getUserByToken(token);
+    public async getUserByToken(token: string, useCache: boolean = true): Promise<User> {
+        const user = await HttpService.getInstance().getUserByToken(token, useCache);
         return user;
     }
 
@@ -188,6 +188,11 @@ export class UserService extends KIXObjectAPIService {
                 await this.setPreferences(token, clientRequestId, [notifications], userId);
             }
 
+            const contextWIdgetLists = parameter.find((p) => p[0] === PersonalSettingsProperty.CONTEXT_WIDGET_LISTS);
+            if (contextWIdgetLists) {
+                await this.setPreferences(token, clientRequestId, [contextWIdgetLists], userId);
+            }
+
             return id;
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
             let uri = this.buildUri('session', 'user', 'preferences', objectId);
@@ -261,19 +266,24 @@ export class UserService extends KIXObjectAPIService {
             } else if (currentPreferences.some((p) => p.ID === param[0])) {
                 const paramValue = param[1] === null ? '' : param[1];
                 if (
-                    paramValue && (typeof paramValue === 'string' || (Array.isArray(paramValue) && paramValue.length))
+                    paramValue && (
+                        typeof paramValue === 'string' ||
+                        (Array.isArray(paramValue) && paramValue.length) ||
+                        typeof paramValue === 'number'
+                    )
                 ) {
                     await this.updateObject(
-                        token, clientRequestId, KIXObjectType.USER_PREFERENCE,
-                        [
-                            ['Value', paramValue]
-                        ],
+                        token, clientRequestId, KIXObjectType.USER_PREFERENCE, [['Value', paramValue]],
                         param[0], options
                     ).catch((error: Error) => {
                         errors.push(error);
                     });
                 } else {
-                    const uri = this.buildUri('session', 'user', 'preferences', param[0]);
+                    let uri = this.buildUri('system', 'users', userId, 'preferences', param[0]);
+                    if (!options?.userId) {
+                        uri = this.buildUri('session', 'user', 'preferences', param[0]);
+                    }
+
                     await this.sendDeleteRequest<void>(token, clientRequestId, [uri], KIXObjectType.USER_PREFERENCE)
                         .catch((error: Error) => {
                             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
@@ -294,7 +304,7 @@ export class UserService extends KIXObjectAPIService {
                 });
             }
         }
-        if (!!errors.length) {
+        if (errors.length) {
             throw new Error(errors[0].Code, errors.map((e) => e.Message).join('\n'), errors[0].StatusCode);
         }
     }

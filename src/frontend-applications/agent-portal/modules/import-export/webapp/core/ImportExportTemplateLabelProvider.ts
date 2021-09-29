@@ -14,6 +14,7 @@ import { ImportExportTemplateProperty } from '../../model/ImportExportTemplatePr
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { ImportExportTemplateRunTypes } from '../../model/ImportExportTemplateRunTypes';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class ImportExportTemplateLabelProvider extends LabelProvider<ImportExportTemplate> {
 
@@ -23,8 +24,8 @@ export class ImportExportTemplateLabelProvider extends LabelProvider<ImportExpor
         return objectType === this.kixObjectType;
     }
 
-    public isLabelProviderFor(object: ImportExportTemplate): boolean {
-        return object instanceof ImportExportTemplate;
+    public isLabelProviderFor(object: ImportExportTemplate | KIXObject): boolean {
+        return object instanceof ImportExportTemplate || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

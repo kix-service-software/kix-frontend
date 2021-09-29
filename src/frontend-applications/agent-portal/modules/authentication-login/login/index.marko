@@ -18,10 +18,19 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 rel="shortcut icon"
                 type=input.favIcon.ContentType
                 sizes="32x32"
-                href=("data:" + input.favIcon.ContentType + ";base64," + input.favIcon.Content)/>
+                href=(
+                    "data:" +
+                    input.favIcon.ContentType +
+                    ";base64," +
+                    input.favIcon.Content
+                )/>
         </if>
         <else>
-            <link rel="shortcut icon" type="image/png" sizes="32x32" href="/static/img/kix_default.png"/>
+            <link
+                rel="shortcut icon"
+                type="image/png"
+                sizes="32x32"
+                href="/static/img/kix_default.png"/>
         </else>
         <!-- Muss aus der kix-font.less entfernt und hier eingefügt werden. -->
         <style>

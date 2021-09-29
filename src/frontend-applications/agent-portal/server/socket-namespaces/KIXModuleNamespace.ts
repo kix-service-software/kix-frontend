@@ -103,6 +103,7 @@ export class KIXModuleNamespace extends SocketNameSpace {
 
     public async rebuildConfigCache(): Promise<void> {
         if (!this.rebuildPromise) {
+            // eslint-disable-next-line no-async-promise-executor
             this.rebuildPromise = new Promise<void>(async (resolve, reject) => {
                 await CacheService.getInstance().deleteKeys('FormConfiguration', true);
 

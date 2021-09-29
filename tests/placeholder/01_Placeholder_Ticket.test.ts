@@ -29,6 +29,8 @@ describe('Placeholder replacement for ticket', () => {
     let ticket: Ticket;
     let ticketPlaceholderHandler: TicketPlaceholderHandler = new TicketPlaceholderHandler();
     before(() => {
+        LabelService.getInstance()['objectLabelProvider'] = [];
+        LabelService.getInstance()['propertiesLabelProvider'].clear();
         ticket = someTestFunctions.prepareTicket();
 
         const ticketLabelProvider = new TicketLabelProvider();
@@ -38,7 +40,8 @@ describe('Placeholder replacement for ticket', () => {
     });
 
     after(() => {
-        LabelService.getInstance()['labelProviders'] = [];
+        LabelService.getInstance()['objectLabelProvider'] = [];
+        LabelService.getInstance()['propertiesLabelProvider'].clear();
         (TranslationService.getInstance() as any).translations = null;
     });
 
@@ -69,123 +72,100 @@ describe('Placeholder replacement for ticket', () => {
             expect(text).equal(ticket.StateID.toString());
         });
 
-        // FIXME: Solve Test @Ricky Kaiser
-        // it('Should replace ticket state placeholder', async () => {
-        //     const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.STATE}>`, ticket);
-        //     expect(text).equal(`${TicketProperty.STATE}_Name`);
-        // });
+        it('Should replace ticket state placeholder', async () => {
+            const text = await ticketPlaceholderHandler.replace('<KIX_TICKET_State>', ticket);
+            expect(text).equal(`${TicketProperty.STATE_ID}_Name`);
+        });
 
-        // FIXME: Solve Test @Ricky Kaiser
-        // it('Should replace ticket state type placeholder', async () => {
-        //     const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.STATE_TYPE}>`, ticket);
-        //     expect(text).equal(`${TicketProperty.STATE_TYPE}_Name`);
-        // });
+        it('Should replace ticket state type placeholder', async () => {
+            const text = await ticketPlaceholderHandler.replace('<KIX_TICKET_StateType>', ticket);
+            expect(text).equal('StateType_Name');
+        });
 
         it('Should replace ticket priority ID placeholder', async () => {
             const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.PRIORITY_ID}>`, ticket);
             expect(text).equal(ticket.PriorityID.toString());
         });
 
-        // FIXME: Solve Test @Ricky Kaiser
-        // it('Should replace ticket priority placeholder', async () => {
-        //     const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.PRIORITY}>`, ticket);
-        //     expect(text).equal(`${TicketProperty.PRIORITY}_Name`);
-        // });
+        it('Should replace ticket priority placeholder', async () => {
+            const text = await ticketPlaceholderHandler.replace('<KIX_TICKET_Priority>', ticket);
+            expect(text).equal(`${TicketProperty.PRIORITY_ID}_Name`);
+        });
 
         it('Should replace ticket lock ID placeholder', async () => {
             const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.LOCK_ID}>`, ticket);
             expect(text).equal(ticket.LockID.toString());
         });
 
-        // FIXME: Solve Test @Ricky Kaiser
-        // it('Should replace ticket lock placeholder', async () => {
-        //     const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.LOCK}>`, ticket);
-        //     expect(text).equal(`${TicketProperty.LOCK}_Name`);
-        // });
+        it('Should replace ticket lock placeholder', async () => {
+            const text = await ticketPlaceholderHandler.replace('<KIX_TICKET_Lock>', ticket);
+            expect(text).equal(`${TicketProperty.LOCK_ID}_Name`);
+        });
 
         it('Should replace ticket queue ID placeholder', async () => {
             const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.QUEUE_ID}>`, ticket);
             expect(text).equal(ticket.QueueID.toString());
         });
 
-        // FIXME: Solve Test @Ricky Kaiser
-        // it('Should replace ticket queue placeholder', async () => {
-        //     const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.QUEUE}>`, ticket);
-        //     expect(text).equal(`${TicketProperty.QUEUE}_Name`);
-        // });
+        it('Should replace ticket queue placeholder', async () => {
+            const text = await ticketPlaceholderHandler.replace('<KIX_TICKET_Queue>', ticket);
+            expect(text).equal(`${TicketProperty.QUEUE_ID}_Name`);
+        });
 
         it('Should replace ticket organisation ID placeholder', async () => {
             const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.ORGANISATION_ID}>`, ticket);
             expect(text).equal(ticket.OrganisationID.toString());
         });
 
-        // FIXME: Solve Test @Ricky Kaiser
-        // it('Should replace ticket organisation placeholder', async () => {
-        //     const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.ORGANISATION}>`, ticket);
-        //     expect(text).equal(`${TicketProperty.ORGANISATION}_Name`);
-        // });
+        it('Should replace ticket organisation placeholder', async () => {
+            const text = await ticketPlaceholderHandler.replace('<KIX_TICKET_Organisation>', ticket);
+            expect(text).equal(`${TicketProperty.ORGANISATION_ID}_Name`);
+        });
 
         it('Should replace ticket contact ID placeholder', async () => {
             const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.CONTACT_ID}>`, ticket);
             expect(text).equal(ticket.ContactID.toString());
         });
 
-        // FIXME: Solve Test @Ricky Kaiser
-        // it('Should replace ticket contact placeholder', async () => {
-        //     const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.CONTACT}>`, ticket);
-        //     expect(text).equal(`${TicketProperty.CONTACT}_Name`);
-        // });
+        it('Should replace ticket contact placeholder', async () => {
+            const text = await ticketPlaceholderHandler.replace('<KIX_TICKET_Contact>', ticket);
+            expect(text).equal(`${TicketProperty.CONTACT_ID}_Name`);
+        });
 
         it('Should replace ticket owner ID placeholder', async () => {
             const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.OWNER_ID}>`, ticket);
             expect(text).equal(ticket.OwnerID.toString());
         });
 
-        // FIXME: Solve Test @Ricky Kaiser
-        // it('Should replace ticket owner placeholder', async () => {
-        //     const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.OWNER}>`, ticket);
-        //     expect(text).equal(`${TicketProperty.OWNER}_Name`);
-        // });
+        it('Should replace ticket owner placeholder', async () => {
+            const text = await ticketPlaceholderHandler.replace('<KIX_TICKET_Owner>', ticket);
+            expect(text).equal(`${TicketProperty.OWNER_ID}_Name`);
+        });
 
         it('Should replace ticket type ID placeholder', async () => {
             const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.TYPE_ID}>`, ticket);
             expect(text).equal(ticket.TypeID.toString());
         });
 
-        // FIXME: Solve Test @Ricky Kaiser
-        // it('Should replace ticket type placeholder', async () => {
-        //     const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.TYPE}>`, ticket);
-        //     expect(text).equal(`${TicketProperty.TYPE}_Name`);
-        // });
-
-        // FIXME: Solve Test @Ricky Kaiser
-        // it('Should replace ticket sla placeholder', async () => {
-        //     const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.SLA}>`, ticket);
-        //     expect(text).equal(`${TicketProperty.SLA}_Name`);
-        // });
-
-        // FIXME: Solve Test @Ricky Kaiser
-        // it('Should replace ticket service placeholder', async () => {
-        //     const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.SERVICE}>`, ticket);
-        //     expect(text).equal(`${TicketProperty.SERVICE}_Name`);
-        // });
+        it('Should replace ticket type placeholder', async () => {
+            const text = await ticketPlaceholderHandler.replace('<KIX_TICKET_Type>', ticket);
+            expect(text).equal(`${TicketProperty.TYPE_ID}_Name`);
+        });
 
         it('Should replace ticket responsible ID placeholder', async () => {
             const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.RESPONSIBLE_ID}>`, ticket);
             expect(text).equal(ticket.ResponsibleID.toString());
         });
 
-        // FIXME: Solve Test @Ricky Kaiser
-        // it('Should replace ticket responsible placeholder', async () => {
-        //     const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.RESPONSIBLE}>`, ticket);
-        //     expect(text).equal(`${TicketProperty.RESPONSIBLE}_Name`);
-        // });
+        it('Should replace ticket responsible placeholder', async () => {
+            const text = await ticketPlaceholderHandler.replace('<KIX_TICKET_Responsible>', ticket);
+            expect(text).equal(`${TicketProperty.RESPONSIBLE_ID}_Name`);
+        });
 
-        // FIXME: Solve Test @Ricky Kaiser
-        // it('Should replace ticket archive flag placeholder', async () => {
-        //     const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.ARCHIVE_FLAG}>`, ticket);
-        //     expect(text).equal(ticket.ArchiveFlag);
-        // });
+        it('Should replace ticket archive flag placeholder', async () => {
+            const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.ARCHIVE_FLAG}>`, ticket);
+            expect(text).equal(ticket.ArchiveFlag);
+        });
 
         it('Should replace ticket age placeholder', async () => {
             const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.AGE}>`, ticket);
@@ -193,17 +173,15 @@ describe('Placeholder replacement for ticket', () => {
             expect(text).equal(age);
         });
 
-        // FIXME: Solve Test @Ricky Kaiser
-        // it('Should replace ticket created by placeholder', async () => {
-        //     const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${KIXObjectProperty.CREATE_BY}>`, ticket);
-        //     expect(text).equal(`${KIXObjectProperty.CREATE_BY}_Name`);
-        // });
+        it('Should replace ticket created by placeholder', async () => {
+            const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${KIXObjectProperty.CREATE_BY}>`, ticket);
+            expect(text).equal(`${KIXObjectProperty.CREATE_BY}_Name`);
+        });
 
-        // FIXME: Solve Test @Ricky Kaiser
-        // it('Should replace ticket changed by placeholder', async () => {
-        //     const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${KIXObjectProperty.CHANGE_BY}>`, ticket);
-        //     expect(text).equal(`${KIXObjectProperty.CHANGE_BY}_Name`);
-        // });
+        it('Should replace ticket changed by placeholder', async () => {
+            const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${KIXObjectProperty.CHANGE_BY}>`, ticket);
+            expect(text).equal(`${KIXObjectProperty.CHANGE_BY}_Name`);
+        });
     });
 
     describe('Replace complex ticket attribute placeholder (translatable)', async () => {
@@ -211,27 +189,21 @@ describe('Placeholder replacement for ticket', () => {
         it('Should replace ticket pending time by placeholder', async () => {
             const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.PENDING_TIME}>`, ticket);
             const date = await DateTimeUtil.getLocalDateTimeString(ticket.PendingTime, 'en');
-            expect(text, 'date is not localized correctly').equal(date);
+            expect(text, 'date should has en-us format').equal(date);
 
-            const germanText = await ticketPlaceholderHandler.replace(`<TR_KIX_TICKET_${TicketProperty.PENDING_TIME}>`, ticket, 'de');
+            const germanText = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.PENDING_TIME}>`, ticket, 'de');
             const germanDate = await DateTimeUtil.getLocalDateTimeString(ticket.PendingTime, 'de');
-            expect(germanText, 'date is not localized correctly (german)').equal(germanDate);
-
-            const notGermanText = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.PENDING_TIME}>`, ticket, 'de');
-            expect(notGermanText, 'date should not localized to german').equal(date);
+            expect(germanText, 'date should has german format)').equal(germanDate);
         });
 
         it('Should replace ticket create time placeholder', async () => {
-            const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.CREATED}>`, ticket);
+            const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.CREATED}>`, ticket, 'en');
             const date = await DateTimeUtil.getLocalDateTimeString(ticket.Created, 'en');
             expect(text).equal(date);
 
-            const germanText = await ticketPlaceholderHandler.replace(`<TR_KIX_TICKET_${TicketProperty.CREATED}>`, ticket, 'de');
+            const germanText = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.CREATED}>`, ticket, 'de');
             const germanDate = await DateTimeUtil.getLocalDateTimeString(ticket.Created, 'de');
             expect(germanText).equal(germanDate);
-
-            const notGermanText = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.CREATED}>`, ticket, 'de');
-            expect(notGermanText).equal(date);
         });
 
         it('Should replace ticket create time unix placeholder', async () => {
@@ -239,12 +211,9 @@ describe('Placeholder replacement for ticket', () => {
             const date = await DateTimeUtil.getLocalDateTimeString(ticket.CreateTimeUnix * 1000, 'en');
             expect(text).equal(date);
 
-            const germanText = await ticketPlaceholderHandler.replace(`<TR_KIX_TICKET_${TicketProperty.CREATED_TIME_UNIX}>`, ticket, 'de');
+            const germanText = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.CREATED_TIME_UNIX}>`, ticket, 'de');
             const germanDate = await DateTimeUtil.getLocalDateTimeString(ticket.CreateTimeUnix * 1000, 'de');
             expect(germanText).equal(germanDate);
-
-            const notGermanText = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.CREATED_TIME_UNIX}>`, ticket, 'de');
-            expect(notGermanText).equal(date);
         });
 
         it('Should replace ticket change time placeholder', async () => {
@@ -252,12 +221,9 @@ describe('Placeholder replacement for ticket', () => {
             const date = await DateTimeUtil.getLocalDateTimeString(ticket.Changed, 'en');
             expect(text).equal(date);
 
-            const germanText = await ticketPlaceholderHandler.replace(`<TR_KIX_TICKET_${TicketProperty.CHANGED}>`, ticket, 'de');
+            const germanText = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.CHANGED}>`, ticket, 'de');
             const germanDate = await DateTimeUtil.getLocalDateTimeString(ticket.Changed, 'de');
             expect(germanText).equal(germanDate);
-
-            const notGermanText = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.CHANGED}>`, ticket, 'de');
-            expect(notGermanText).equal(date);
         });
     });
 
@@ -298,20 +264,18 @@ class someTestFunctions {
     public static async changedGetDisplayTextMethod(ticket: Ticket, property: string): Promise<string> {
         let displayValue = ticket[property];
         switch (property) {
-            case TicketProperty.STATE:
             case TicketProperty.STATE_TYPE:
-            case TicketProperty.PRIORITY:
-            case TicketProperty.LOCK:
-            case TicketProperty.QUEUE:
-            case TicketProperty.ORGANISATION:
-            case TicketProperty.CONTACT:
-            case TicketProperty.OWNER:
-            case TicketProperty.TYPE:
-            case TicketProperty.SLA:
-            case TicketProperty.SERVICE:
-            case TicketProperty.RESPONSIBLE:
             case KIXObjectProperty.CHANGE_BY:
             case KIXObjectProperty.CREATE_BY:
+            case TicketProperty.STATE_ID:
+            case TicketProperty.QUEUE_ID:
+            case TicketProperty.PRIORITY_ID:
+            case TicketProperty.LOCK_ID:
+            case TicketProperty.ORGANISATION_ID:
+            case TicketProperty.CONTACT_ID:
+            case TicketProperty.OWNER_ID:
+            case TicketProperty.TYPE_ID:
+            case TicketProperty.RESPONSIBLE_ID:
                 displayValue = `${property}_Name`;
                 break;
             case TicketProperty.AGE:
@@ -332,8 +296,8 @@ class someTestFunctions {
         ticket.PriorityID = 1;
         ticket.LockID = 1;
         ticket.QueueID = 1;
-        ticket.OrganisationID = '1';
-        ticket.ContactID = '1';
+        ticket.OrganisationID = 1;
+        ticket.ContactID = 1;
         ticket.OwnerID = 1;
         ticket.TypeID = 1;
         ticket.ResponsibleID = 1;

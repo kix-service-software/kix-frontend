@@ -9,7 +9,7 @@
 
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { Table } from '../../../base-components/webapp/core/table';
+import { Table, TableFactoryService } from '../../../base-components/webapp/core/table';
 import { SearchDefinition } from './SearchDefinition';
 import { SearchResultCategory } from './SearchResultCategory';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
@@ -34,6 +34,7 @@ import { SearchCache } from '../../model/SearchCache';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { SearchContext } from './SearchContext';
 import { ContextMode } from '../../../../model/ContextMode';
+import { TicketProperty } from '../../../ticket/model/TicketProperty';
 
 export class SearchService {
 
@@ -75,8 +76,6 @@ export class SearchService {
     public async executeSearch<T extends KIXObject = KIXObject>(
         formInstance: FormInstance, excludeObjects: KIXObject[] = []
     ): Promise<T[]> {
-        let objects;
-
         const formObjectType = formInstance.getObjectType();
         const searchDefinition = this.getSearchDefinition(formObjectType);
         const formFieldValues = formInstance.getAllFormFieldValues();
@@ -120,8 +119,7 @@ export class SearchService {
         });
 
         const loadingOptions = searchDefinition.getLoadingOptions(criteria, null);
-        objects = await KIXObjectService.loadObjects(formObjectType, null, loadingOptions, null, false);
-
+        const objects = await KIXObjectService.loadObjects(formObjectType, null, loadingOptions, null, false);
         return (objects as any);
     }
 
@@ -296,13 +294,19 @@ export class SearchService {
 
             const tableConfiguration = new TableConfiguration(IdService.generateDateBasedId(), name);
             tableConfiguration.searchId = searchCache.id;
+            tableConfiguration.objectType = searchCache.objectType;
 
-            tableWidgetConfiguration.tableConfiguration = tableConfiguration;
+            const tableFactory = TableFactoryService.getInstance().getTableFactory(searchCache.objectType);
+            const columns = await tableFactory.getDefaultColumnConfigurations(searchCache);
+
+            tableConfiguration.tableColumns = columns;
+            tableWidgetConfiguration.configuration = tableConfiguration;
 
             const widgetConfiguration = new WidgetConfiguration(
                 IdService.generateDateBasedId(), name, ConfigurationType.Widget, 'table-widget', name, [], null,
                 tableWidgetConfiguration, false, true, icon
             );
+            widgetConfiguration.title = searchCache.name;
 
             widget = new ConfiguredWidget(IdService.generateDateBasedId(name), null, widgetConfiguration);
 

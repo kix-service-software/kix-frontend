@@ -11,7 +11,7 @@ import { ComponentState } from './ComponentState';
 import { ChartConfiguration } from 'chart.js';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 
-declare var Chart: any;
+declare let Chart: any;
 
 class Component {
 

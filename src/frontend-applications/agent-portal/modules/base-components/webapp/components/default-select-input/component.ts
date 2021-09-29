@@ -84,18 +84,20 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         const value = formInstance.getFormFieldValue<string | number | string[] | number[]>(
             this.state.field?.instanceId
         );
-        if (value && value.value !== null) {
+        if (value && value.value !== null && typeof value.value !== 'undefined') {
             const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
-            let selectedNodes = [];
             if (treeHandler) {
+                let selectedNodes = [];
                 const nodes = treeHandler.getTree();
                 if (Array.isArray(value.value)) {
                     selectedNodes = nodes.filter(
-                        (n) => (value.value as Array<string | number>).some((dv) => dv === n.id)
+                        (n) => (value.value as Array<string | number>).some(
+                            (dv) => dv?.toString() === n.id.toString()
+                        )
                     );
                     selectedNodes.forEach((n) => n.selected = true);
                 } else {
-                    const node = nodes.find((n) => n.id === value.value);
+                    const node = nodes.find((n) => n.id.toString() === value.value.toString());
                     if (node) {
                         node.selected = true;
                         selectedNodes = [node];

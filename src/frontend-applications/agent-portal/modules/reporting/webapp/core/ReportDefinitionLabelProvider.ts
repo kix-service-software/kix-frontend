@@ -13,6 +13,7 @@ import { ReportDefinitionProperty } from '../../model/ReportDefinitionProperty';
 import { ReportDefinition } from '../../model/ReportDefinition';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class ReportDefinitionLabelProvider extends LabelProvider<ReportDefinition> {
 
@@ -41,8 +42,8 @@ export class ReportDefinitionLabelProvider extends LabelProvider<ReportDefinitio
         return displayValue ? displayValue.toString() : '';
     }
 
-    public isLabelProviderFor(object: ReportDefinition): boolean {
-        return object instanceof ReportDefinition;
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object instanceof ReportDefinition || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

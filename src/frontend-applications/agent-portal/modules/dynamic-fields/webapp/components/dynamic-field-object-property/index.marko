@@ -21,9 +21,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         icon="kix-icon-checklist"
                         content="dynamic-field-checklist-information"
                         data={
-                                                checklist: state.checklist,
-                                                field: state.field
-                                            }/>
+                            checklist: state.checklist,
+                            field: state.field
+                        }/>
                 </@info>
             </if>
             <@propertyValue>
@@ -33,6 +33,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <if(state.field.FieldType === "CheckList")>
                     <dynamic-field-checklist-progress checklist=state.checklist/>
                 </if>
+                <else-if(state.field.FieldType === "Table")>
+                    <dynamic-field-table-view table=state.table/>
+                </else-if>
                 <else>
                     <label-list labels=state.labels removeLabels=false on-labelClicked("labelClicked")/>
                 </else>

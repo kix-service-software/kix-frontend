@@ -12,7 +12,6 @@ import { Table, RowObject, TableValue } from '../../../../base-components/webapp
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { JobDetailsContext } from '..';
 import { Job } from '../../../model/Job';
 import { MacroAction } from '../../../model/MacroAction';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
@@ -63,7 +62,7 @@ export class MacroActionTableContentProvider extends TableContentProvider<any> {
     }
 
     private async getPreparedParameters(o: MacroAction, macroType: string) {
-        let preparedParameters: {} = {};
+        let preparedParameters = {};
         const actionTypes = await KIXObjectService.loadObjects<MacroActionType>(
             KIXObjectType.MACRO_ACTION_TYPE, [o.Type], undefined, { id: macroType }, true
         ).catch(() => [] as MacroActionType[]);

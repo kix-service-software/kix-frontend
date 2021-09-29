@@ -35,11 +35,12 @@ export class WebformSocketClient extends SocketClient {
     private static INSTANCE: WebformSocketClient = null;
 
     public constructor() {
-        super();
-        this.socket = this.createSocket('webform', true);
+        super('webform');
     }
 
     public async loadWebforms(): Promise<Webform[]> {
+        this.checkSocketConnection();
+
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<Webform[]>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();
@@ -77,6 +78,8 @@ export class WebformSocketClient extends SocketClient {
     }
 
     public async createUpdateWebform(webform: Webform, formId?: number): Promise<number> {
+        this.checkSocketConnection();
+
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<number>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();

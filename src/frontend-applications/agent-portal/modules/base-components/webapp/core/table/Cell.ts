@@ -63,7 +63,7 @@ export class Cell {
 
             if (object) {
                 value = await LabelService.getInstance().getDisplayText(
-                    object, this.tableValue.property, null, translatable
+                    object, this.tableValue.property, this.tableValue.objectValue, translatable
                 );
             } else {
                 const objectType = this.getRow().getTable().getObjectType();

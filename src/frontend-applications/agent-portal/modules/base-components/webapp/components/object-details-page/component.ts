@@ -11,7 +11,6 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { ContextType } from '../../../../../model/ContextType';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
@@ -21,42 +20,55 @@ import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { IEventSubscriber } from '../../core/IEventSubscriber';
 import { Context } from '../../../../../model/Context';
+import { DateTimeUtil } from '../../core/DateTimeUtil';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private subscriber: IEventSubscriber;
+    private context: Context;
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        this.context = ContextService.getInstance().getActiveContext();
         this.subscriber = {
             eventSubscriberId: 'object-details',
             eventPublished: (data: any, eventId: string) => {
-                const currentContext = ContextService.getInstance().getActiveContext();
-                if (data.objectType === currentContext.descriptor.kixObjectTypes[0]) {
-                    this.prepareWidget();
-                    this.prepareActions();
+                if (eventId === ApplicationEvent.OBJECT_UPDATED) {
+                    if (data.objectType === this.context.descriptor.kixObjectTypes[0]) {
+                        this.prepareWidget();
+                        this.prepareActions();
+                    }
                 }
             }
         };
         EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
+        EventService.getInstance().subscribe(ApplicationEvent.CONFIGURATIONS_RELOADED, this.subscriber);
 
+        this.update();
+    }
+
+    private async update(): Promise<void> {
+        const start = Date.now();
         this.prepareConfigurations();
         this.prepareWidget();
         this.prepareActions();
+        const end = Date.now();
+        const date = await DateTimeUtil.getLocalDateTimeString(new Date());
+        console.debug(`${date} - Updated Details Page: ${end - start}ms`);
     }
 
     public onDestroy(): void {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
         EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
+        EventService.getInstance().unsubscribe(ApplicationEvent.CONFIGURATIONS_RELOADED, this.subscriber);
     }
 
     private async prepareConfigurations(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
 
-        const lanes = context.getLanes(true);
+        const lanes = this.context?.getLanes(true);
         if (Array.isArray(lanes)) {
             for (const lane of lanes) {
                 const template = await this.getWidgetTemplate(lane.instanceId);
@@ -65,7 +77,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
         (this as any).setStateDirty('lanes');
 
-        const contentWidgets = await context.getContent(true);
+        const contentWidgets = await this.context?.getContent(true);
         if (Array.isArray(contentWidgets)) {
             for (const cw of contentWidgets) {
                 const template = await this.getWidgetTemplate(cw.instanceId);
@@ -76,29 +88,27 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async prepareWidget(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
         this.state.error = null;
 
-        const object = await context.getObject().catch((error) => null);
+        const object = await this.context?.getObject().catch((error) => null);
 
         if (!object) {
             this.state.error = await TranslationService.translate(
-                'Translatable#No object with ID {0} available.', [context.getObjectId()]
+                'Translatable#No object with ID {0} available.', [this.context.getObjectId()]
             );
         } else {
-            this.state.title = await context.getDisplayText();
+            this.state.title = await this.context.getDisplayText();
         }
     }
 
     private async prepareActions(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const config = context.getConfiguration();
+        const config = this.context?.getConfiguration();
 
-        const object = await context.getObject().catch((error) => null);
+        const object = await this.context?.getObject().catch((error) => null);
 
         if (config && object) {
 
-            const objectActions = await context.getAdditionalActions();
+            const objectActions = await this.context?.getAdditionalActions();
             const configuredActions = await ActionFactory.getInstance().generateActions(config.actions, object);
             this.state.actions = [...objectActions, ...configuredActions];
 
@@ -111,8 +121,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async getWidgetTemplate(instanceId: string): Promise<any> {
-        const context = ContextService.getInstance().getActiveContext();
-        const config = context ? await context.getWidgetConfiguration(instanceId) : undefined;
+        const config = await this.context?.getWidgetConfiguration(instanceId);
         return config ? KIXModulesService.getComponentTemplate(config.widgetId) : undefined;
     }
 

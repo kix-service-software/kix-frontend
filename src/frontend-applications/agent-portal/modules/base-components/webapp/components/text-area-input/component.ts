@@ -13,7 +13,7 @@ import { FormInputComponent } from '../../../../../modules/base-components/webap
 import { ContextService } from '../../core/ContextService';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 
-declare var CodeMirror: any;
+declare let CodeMirror: any;
 
 class Component extends FormInputComponent<string, ComponentState> {
 

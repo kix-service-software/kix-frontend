@@ -6,18 +6,25 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.action on-click("doAction") title=state.text>
-    <${state.action.hasLink ? "a" : ""}
-        href=("?actionId=" + state.action.id + "&data=" + state.actionData)
-        on-click("linkClicked")>
+    <if(state.action.hasLink)>
+        <a
+            href=("?actionId=" + state.action.id + "&data=" + state.actionData)
+            on-click("linkClicked")>
+            <icon icon=state.action.icon/>
+        </a>
+    </if>
+    <else>
         <icon icon=state.action.icon/>
-    </>
-    <if(state.displayText)>
-        <${state.action.hasLink ? "a" : ""}
+    </else>
+    <if(state.displayText && state.action.hasLink)>
+        <a
             href=("?actionId=" + state.action.id + "&data=" + state.actionData)
             on-click("linkClicked")>
             <span.text>${state.text}</span>
-        </>
+        </a>
     </if>
+    <else-if(state.displayText)>
+        <span.text>${state.text}</span>
+    </else-if>
 </div>

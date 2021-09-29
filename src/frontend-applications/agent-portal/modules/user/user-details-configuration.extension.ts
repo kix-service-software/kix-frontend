@@ -115,7 +115,8 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'user-admin-user-create-action'
                 ],
                 [
-                    'user-admin-user-edit-action'
+                    'user-admin-user-edit-action',
+                    'reset-user-context-widget-list'
                 ],
                 [],
                 [

@@ -33,6 +33,8 @@ describe('Placeholder replacement for article', () => {
     let article: Article
     let articlePlaceholderHandler: ArticlePlaceholderHandler = new ArticlePlaceholderHandler();
     before(() => {
+        LabelService.getInstance()['objectLabelProvider'] = [];
+        LabelService.getInstance()['propertiesLabelProvider'].clear();
         article = someTestFunctions.prepareArticle();
 
         const articleLabelProvider = new ArticleLabelProvider();
@@ -43,7 +45,8 @@ describe('Placeholder replacement for article', () => {
 
     after(() => {
         (TranslationService.getInstance() as any).translations = null;
-        LabelService.getInstance()['labelProviders'] = [];
+        LabelService.getInstance()['objectLabelProvider'] = [];
+        LabelService.getInstance()['propertiesLabelProvider'].clear();
     });
 
     describe('Replace simple article attribute placeholder.', async () => {
@@ -140,12 +143,9 @@ describe('Placeholder replacement for article', () => {
             const date = await DateTimeUtil.getLocalDateTimeString(article.CreateTime, 'en');
             expect(text).equal(date);
 
-            const germanText = await articlePlaceholderHandler.replace(`<TR_KIX_ARTICLE_${KIXObjectProperty.CREATE_TIME}>`, article, 'de');
+            const germanText = await articlePlaceholderHandler.replace(`<KIX_ARTICLE_${KIXObjectProperty.CREATE_TIME}>`, article, 'de');
             const germanDate = await DateTimeUtil.getLocalDateTimeString(article.CreateTime, 'de');
             expect(germanText).equal(germanDate);
-
-            const notGermanText = await articlePlaceholderHandler.replace(`<KIX_ARTICLE_${KIXObjectProperty.CREATE_TIME}>`, article, 'de');
-            expect(notGermanText).equal(date);
         });
 
         it('Should replace article change time placeholder', async () => {
@@ -153,12 +153,9 @@ describe('Placeholder replacement for article', () => {
             const date = await DateTimeUtil.getLocalDateTimeString(article.ChangeTime, 'en');
             expect(text).equal(date);
 
-            const germanText = await articlePlaceholderHandler.replace(`<TR_KIX_ARTICLE_${KIXObjectProperty.CHANGE_TIME}>`, article, 'de');
+            const germanText = await articlePlaceholderHandler.replace(`<KIX_ARTICLE_${KIXObjectProperty.CHANGE_TIME}>`, article, 'de');
             const germanDate = await DateTimeUtil.getLocalDateTimeString(article.ChangeTime, 'de');
             expect(germanText).equal(germanDate);
-
-            const notGermanText = await articlePlaceholderHandler.replace(`<KIX_ARTICLE_${KIXObjectProperty.CHANGE_TIME}>`, article, 'de');
-            expect(notGermanText).equal(date);
         });
     });
 

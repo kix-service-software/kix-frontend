@@ -7,23 +7,21 @@
  * --
  */
 
-import * as bodyParser from 'body-parser';
-import * as path from 'path';
+import path from 'path';
 
+import express from 'express';
 import nodeRequire = require('marko/node-require');
 nodeRequire.install(); // Allow Node.js to require and load `.marko` files
 
 import markoExpress = require('marko/express');
-import compression = require('compression');
+import { serveStatic } from 'lasso/middleware';
 
-import lassoMiddleware = require('lasso/middleware');
-
-import express = require('express');
-import cookieParser = require('cookie-parser');
-import fs = require('fs');
-import http = require('http');
-import https = require('https');
-import forceSSl = require('express-force-ssl');
+import compression from 'compression';
+import cookieParser from 'cookie-parser';
+import fs from 'fs';
+import http from 'http';
+import https from 'https';
+import forceSSl from 'express-force-ssl';
 import { LoggingService } from '../../../server/services/LoggingService';
 import { IServerConfiguration } from '../../../server/model/IServerConfiguration';
 import { ConfigurationService } from '../../../server/services/ConfigurationService';
@@ -37,20 +35,20 @@ import { IConfigurationExtension } from './extensions/IConfigurationExtension';
 import { IConfiguration } from '../model/configuration/IConfiguration';
 import { Error } from '../../../server/model/Error';
 import { SysConfigOptionDefinition } from '../modules/sysconfig/model/SysConfigOptionDefinition';
-import { ClientRegistrationService } from './services/ClientRegistrationService';
 import { IServer } from '../../../server/model/IServer';
 import { SocketService } from './services/SocketService';
 import { IServiceExtension } from './extensions/IServiceExtension';
 import { TranslationAPIService } from '../modules/translation/server/TranslationService';
 import { SysConfigAccessLevel } from '../modules/sysconfig/model/SysConfigAccessLevel';
-import { ReleaseInfoUtil } from '../../../server/ReleaseInfoUtil';
-import { SystemInfo } from '../model/SystemInfo';
 import { SysConfigKey } from '../modules/sysconfig/model/SysConfigKey';
 import { IInitialDataExtension } from '../model/IInitialDataExtension';
 import { IFormConfigurationExtension } from './extensions/IFormConfigurationExtension';
 import { FormGroupConfiguration } from '../model/configuration/FormGroupConfiguration';
 import { IModifyConfigurationExtension } from './extensions/IModifyConfigurationExtension';
 import { MigrationService } from '../migrations/MigrationService';
+import { ReleaseInfoUtil } from '../../../server/ReleaseInfoUtil';
+import { ClientRegistrationService } from './services/ClientRegistrationService';
+import { SystemInfo } from '../model/SystemInfo';
 
 export class Server implements IServer {
 
@@ -69,7 +67,8 @@ export class Server implements IServer {
     public async initServer(): Promise<void> {
         const configDir = path.join(__dirname, '..', '..', '..', '..', 'config');
         const certDir = path.join(__dirname, '..', '..', '..', '..', 'cert');
-        ConfigurationService.getInstance().init(configDir, certDir);
+        const dataDir = path.join(__dirname, '..', '..', '..', '..', 'data');
+        ConfigurationService.getInstance().init(configDir, certDir, dataDir);
 
         const serviceExtensions = await PluginService.getInstance().getExtensions<IServiceExtension>(
             AgentPortalExtensions.SERVICES
@@ -106,8 +105,8 @@ export class Server implements IServer {
         this.application = express();
 
         this.application.use(compression());
-        this.application.use(bodyParser.json({ limit: '50mb', extended: true }));
-        this.application.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+        this.application.use(express.json({ limit: '50mb' }));
+        this.application.use(express.urlencoded({ limit: '50mb', extended: true }));
         this.application.use(cookieParser());
 
         const httpsPort = this.serverConfig.HTTPS_PORT || 3001;
@@ -157,7 +156,7 @@ export class Server implements IServer {
 
     private async registerStaticContent(): Promise<void> {
         this.application.use(markoExpress());
-        this.application.use(lassoMiddleware.serveStatic());
+        this.application.use(serveStatic());
 
         this.application.use(express.static('../static/'));
     }
@@ -245,7 +244,7 @@ export class Server implements IServer {
             await this.extendFormConfigurations(configurations);
             configurations = await this.handleConfigurationExtensions(configurations);
 
-            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+            ConfigurationService.getInstance().getServerConfiguration();
 
             const sysconfigOptionDefinitions = configurations.map((c) => {
                 const name = c.name ? c.name : c.id;

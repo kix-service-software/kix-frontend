@@ -9,6 +9,8 @@
 
 import { Context } from '../../../../model/Context';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class BulkDialogContext extends Context {
 
@@ -16,6 +18,14 @@ export class BulkDialogContext extends Context {
 
     public deleteObjectList(objectType: KIXObjectType | string): void {
         return;
+    }
+
+    public async getDisplayText(short: boolean = false): Promise<string> {
+        return await TranslationService.translate('Translatable#Bulk Action');
+    }
+
+    public getIcon(): string | ObjectIcon {
+        return 'kix-icon-arrow-collect';
     }
 
 }

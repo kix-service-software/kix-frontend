@@ -21,8 +21,9 @@ import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { Notification } from '../../../model/Notification';
 import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
-import { SearchOperatorUtil } from '../../../../search/webapp/core';
+import { SearchDefinition, SearchOperatorUtil } from '../../../../search/webapp/core';
 import { ArticleProperty } from '../../../../ticket/model/ArticleProperty';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
 
 export class NotificationFilterTableContentProvider extends TableContentProvider<any> {
 
@@ -38,6 +39,7 @@ export class NotificationFilterTableContentProvider extends TableContentProvider
     public async loadData(): Promise<RowObject[]> {
         const context = ContextService.getInstance().getActiveContext();
         const notification = context ? await context.getObject<Notification>() : null;
+        const relativeDateTimeOperators = SearchDefinition.getRelativeDateTimeOperators();
 
         const rowObjects: RowObject[] = [];
         if (notification && notification.Filter) {
@@ -54,10 +56,12 @@ export class NotificationFilterTableContentProvider extends TableContentProvider
                                 displayKey, KIXObjectType.TICKET
                             );
                         } else {
+                            const isTranslatable = relativeDateTimeOperators.includes(
+                                criterion.Operator as SearchOperator) ? false : true;
                             const isArticleProperty = this.isArticleProperty(displayKey);
                             displayValuesAndIcons = await this.getValue(
                                 displayKey, criterion.Value,
-                                isArticleProperty ? KIXObjectType.ARTICLE : KIXObjectType.TICKET
+                                isArticleProperty ? KIXObjectType.ARTICLE : KIXObjectType.TICKET, isTranslatable
                             );
                             displayKey = await LabelService.getInstance().getPropertyText(
                                 displayKey, isArticleProperty ? KIXObjectType.ARTICLE : KIXObjectType.TICKET
@@ -90,13 +94,15 @@ export class NotificationFilterTableContentProvider extends TableContentProvider
     }
 
     private async getValue(
-        property: string, value: string | number | string[] | number[], objectType: KIXObjectType | string
+        property: string, value: string | number | string[] | number[], objectType: KIXObjectType | string,
+        translatable: boolean = true
     ): Promise<[string[], Array<string | ObjectIcon>]> {
         const displayValues: string[] = [];
         const displayIcons: Array<string | ObjectIcon> = [];
         if (Array.isArray(value)) {
             for (const v of value) {
-                const string = await LabelService.getInstance().getPropertyValueDisplayText(objectType, property, v);
+                const string = await LabelService.getInstance().getPropertyValueDisplayText(objectType, property, v,
+                    translatable);
                 if (string) {
                     displayValues.push(string);
                     const icons = await LabelService.getInstance().getIconsForType(objectType, null, property, v);
@@ -110,7 +116,7 @@ export class NotificationFilterTableContentProvider extends TableContentProvider
         } else {
             displayValues.push(
                 await LabelService.getInstance().getPropertyValueDisplayText(
-                    objectType, property, isNaN(Number(value)) ? value : Number(value)
+                    objectType, property, isNaN(Number(value)) ? value : Number(value), translatable
                 )
             );
             const icons = await LabelService.getInstance().getIconsForType(objectType, null, property, value);

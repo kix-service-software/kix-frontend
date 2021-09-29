@@ -1,0 +1,96 @@
+<!--
+Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<if(state.prepared)>
+    <if(!state.field.required)>
+        <div.df-table-buttons>
+            <if(state.tableValues)>
+                <button.kix-button.cancel-button
+                    type="button"
+                    on-click("removeTable")
+                    title=state.translations["Translatable#Remove table"]>
+                    <span.kix-icon-close/>
+                    <translation-string pattern="Translatable#Remove table"/>
+                </button>
+            </if>
+            <else>
+                <button.kix-button.submit-button
+                    type="button"
+                    on-click("addInitialTable")
+                    title=state.translations["Translatable#Add initial table"]>
+                    <span.kix-icon-check/>
+                    <translation-string pattern="Translatable#Add initial table"/>
+                </button>
+            </else>
+        </div>
+    </if>
+    <div.df-table-input-container.table-container>
+        <table.standard-table-NEW>
+            <thead>
+                <tr>
+                    <for|col| of=state.columns>
+                        <th.table-head-cell>
+                            <div>
+                                <span.column-tilte-text>${col}</span>
+                            </div>
+                        </th>
+                    </for>
+                    <if(state.hasAction)>
+                        <th.table-head-cell>
+                            <translation-string pattern="Translatable#Action"/>
+                        </th>
+                    </if>
+                </tr>
+            </thead>
+            <tbody.show-object>
+                <if(state.tableValues)>
+                    <for|row, rowIndex| of=state.tableValues>
+                        <tr>
+                            <for|value, colIndex| of=row>
+                                <td.content-cell>
+                                    <input.input-style
+                                        type="text"
+                                        value=value
+                                        on-change(
+                                            "tableValueChanged",
+                                            rowIndex,
+                                            colIndex
+                                        )/>
+                                </td>
+                            </for>
+                            <if(state.hasAction)>
+                                <td.content-cell>
+                                    <if(component.canRemove(rowIndex))>
+                                        <button.form-control-button.button-without-text
+                                            type="button"
+                                            title=state.translations[
+                                                "Translatable#Remove"
+                                            ]
+                                            on-click("tableRowRemoved", rowIndex)>
+                                            <span.kix-icon-minus/>
+                                        </button>
+                                    </if>
+                                    <if(component.canAdd(rowIndex))>
+                                        <button.form-control-button.button-without-text
+                                            type="button"
+                                            title=state.translations[
+                                                "Translatable#Add"
+                                            ]
+                                            on-click("tableRowAdded")>
+                                            <span.kix-icon-plus-blank/>
+                                        </button>
+                                    </if>
+                                </td>
+                            </if>
+                        </tr>
+                    </for>
+                </if>
+            </tbody>
+        </table>
+    </div>
+</if>

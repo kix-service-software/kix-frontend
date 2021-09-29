@@ -504,6 +504,59 @@ describe('DynamicFieldFormUtil', () => {
 
     });
 
+    describe('Add dynamic field of type Table to form', () => {
+
+        let form: FormConfiguration;
+        const dfConfig = {};
+        const field = new FormFieldConfiguration(
+            'test-field', null, KIXObjectProperty.DYNAMIC_FIELDS, null, true, null,
+            [
+                new FormFieldOption(DynamicFormFieldOption.FIELD_NAME, 'Table')
+            ]
+        );
+
+        before(async () => {
+            KIXObjectService.loadDynamicField = async (name: string): Promise<DynamicField> => {
+                let df: DynamicField;
+                if (name === 'Table') {
+                    df = new DynamicField();
+                    df.FieldType = 'Table';
+                    df.Name = 'Table';
+                    df.Label = 'Table';
+                    df.Config = dfConfig;
+                    df.ValidID = 1;
+                    df.ObjectType = KIXObjectType.TICKET;
+                }
+                return df;
+            };
+
+            form = createForm([field]);
+            await DynamicFieldFormUtil.getInstance().configureDynamicFields(form);
+        });
+
+        it('the form should contain the field', () => {
+            expect(form.pages[0].groups[0].formFields).exist;
+            expect(form.pages[0].groups[0].formFields.length).equals(1);
+            expect(form.pages[0].groups[0].formFields[0].id).equals('test-field');
+        });
+
+        it('the CountMin should have the value of the dynamic field config', () => {
+            expect(form.pages[0].groups[0].formFields[0].countMin).equals(1);
+        });
+
+        it('the CountMax should have the value of the dynamic field config', () => {
+            expect(form.pages[0].groups[0].formFields[0].countMax).equals(1);
+        });
+
+        it('the CountDefault should have the value of the dynamic field config', () => {
+            expect(form.pages[0].groups[0].formFields[0].countDefault).equals(1);
+        });
+
+        it('the field has to be required', () => {
+            expect(form.pages[0].groups[0].formFields[0].required).true;
+        });
+    });
+
 });
 
 function createForm(fields: FormFieldConfiguration[]): FormConfiguration {

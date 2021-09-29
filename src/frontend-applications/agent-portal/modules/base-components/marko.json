@@ -14,6 +14,8 @@
         "./webapp/components/tree",
         "./webapp/components/overlay",
         "./webapp/components/placeholder",
-        "./webapp/components/object-dialog"
+        "./webapp/components/object-dialog",
+        "./webapp/components/ui-configuration",
+        "./webapp/components/widget-container"
     ]
 }

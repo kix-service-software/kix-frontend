@@ -24,6 +24,7 @@ import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptio
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { Label } from '../../../base-components/webapp/core/Label';
 import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
@@ -177,8 +178,8 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public isLabelProviderFor(configItem: ConfigItem): boolean {
-        return configItem instanceof ConfigItem;
+    public isLabelProviderFor(object: ConfigItem | KIXObject): boolean {
+        return object instanceof ConfigItem || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getObjectText(configItem: ConfigItem, id: boolean = true, name: boolean = true): Promise<string> {

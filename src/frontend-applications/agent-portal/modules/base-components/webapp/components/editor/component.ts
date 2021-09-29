@@ -17,7 +17,7 @@ import { PlaceholderService } from '../../../../../modules/base-components/webap
 import { TextModule } from '../../../../textmodule/model/TextModule';
 import { BrowserUtil } from '../../core/BrowserUtil';
 
-declare var CKEDITOR: any;
+declare let CKEDITOR: any;
 
 class EditorComponent {
 
@@ -70,7 +70,7 @@ class EditorComponent {
                     /<(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))>/ig);
                 if (matches) {
                     for (const m in matches) {
-                        if (matches.hasOwnProperty(m)) {
+                        if (Object.prototype.hasOwnProperty.call(matches, m)) {
                             let replacedString = matches[m].replace(/>/g, '&gt;');
                             replacedString = replacedString.replace(/</g, '&lt;');
                             contentString = contentString.replace(matches[m], replacedString);

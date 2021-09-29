@@ -14,13 +14,14 @@ import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil'
 import { JobRun } from '../../model/JobRun';
 import { JobRunProperty } from '../../model/JobRunProperty';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class JobRunLabelProvider extends LabelProvider {
 
     public kixObjectType: KIXObjectType = KIXObjectType.JOB_RUN;
 
-    public isLabelProviderFor(jobRun: JobRun): boolean {
-        return jobRun instanceof JobRun;
+    public isLabelProviderFor(object: JobRun | KIXObject): boolean {
+        return object instanceof JobRun || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

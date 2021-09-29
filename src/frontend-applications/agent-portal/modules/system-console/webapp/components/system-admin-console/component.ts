@@ -112,13 +112,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         } else if (this.command) {
             let helpText = `Command:\t\t ${this.command.Command}\n\n`;
             helpText += `Description:\t\t ${this.command.Description}\n\n`;
-            helpText += `Arguments:\n\n`;
+            helpText += 'Arguments:\n\n';
             for (const argument of this.command.Arguments) {
                 helpText += `\tName:\t\t${argument.Name}\n`;
                 helpText += `\tDescription:\t${argument.Description}\n`;
                 helpText += `\tRequired:\t${argument.Required || 0}\n\n`;
             }
-            helpText += `Parameters:\n\n`;
+            helpText += 'Parameters:\n\n';
             for (const parameter of this.command.Parameters) {
                 helpText += `\tName:\t\t${parameter.Name}\n`;
                 helpText += `\tDescription:\t${parameter.Description}\n`;
@@ -126,11 +126,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 helpText += `\tRequired:\t${parameter.Required || 0}\n\n`;
             }
             if (this.command.AdditionalHelp) {
-                helpText += `Additional help:\n\n\t`;
+                helpText += 'Additional help:\n\n\t';
                 helpText += this.command.AdditionalHelp.replace(/\n/g, '\n\t')
                     .replace(/<\/?yellow>/g, '"')
                     .replace(/<green>/g, '>>').replace(/<\/green>/g, '<<');
-                helpText += `\n\n`;
+                helpText += '\n\n';
             }
 
             this.state.output = helpText;

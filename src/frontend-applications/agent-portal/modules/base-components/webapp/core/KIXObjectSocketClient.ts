@@ -48,8 +48,7 @@ export class KIXObjectSocketClient extends SocketClient {
     }
 
     private constructor() {
-        super();
-        this.socket = this.createSocket('kixobjects', true);
+        super('kixobjects');
     }
 
     public async loadObjects<T extends KIXObject>(
@@ -57,6 +56,8 @@ export class KIXObjectSocketClient extends SocketClient {
         objectIds: Array<string | number> = null, loadingOptions: KIXObjectLoadingOptions = null,
         objectLoadingOptions: KIXObjectSpecificLoadingOptions = null, cache: boolean = true, timeout?: number
     ): Promise<T[]> {
+        this.checkSocketConnection();
+
         const requestId = IdService.generateDateBasedId();
 
         const request = new LoadObjectsRequest(
@@ -84,33 +85,42 @@ export class KIXObjectSocketClient extends SocketClient {
         return requestPromise;
     }
 
-    private createRequestPromise<T extends KIXObject>(
+    private async createRequestPromise<T extends KIXObject>(
         request: LoadObjectsRequest, objectConstructors: Array<new (object?: T) => T>, timeout?: number
     ): Promise<T[]> {
-        return new Promise<T[]>(async (resolve, reject) => {
-            this.sendRequest<LoadObjectsResponse<T>>(
-                request,
-                KIXObjectEvent.LOAD_OBJECTS, KIXObjectEvent.LOAD_OBJECTS_FINISHED, KIXObjectEvent.LOAD_OBJECTS_ERROR,
-                timeout
-            ).then(async (response) => {
-                let objects = response.objects;
-                if (objectConstructors && objectConstructors.length) {
-                    objects = objects.map((o) => {
-                        let object = o;
-                        objectConstructors.forEach((c) => object = new c(object));
-                        return object;
-                    });
-                }
-
-                resolve(objects);
-            }).catch(async (error) => {
-                if (error instanceof PermissionError) {
-                    resolve([]);
-                } else {
-                    reject(error);
-                }
-            });
+        const response = await this.sendRequest<LoadObjectsResponse<T>>(
+            request,
+            KIXObjectEvent.LOAD_OBJECTS, KIXObjectEvent.LOAD_OBJECTS_FINISHED, KIXObjectEvent.LOAD_OBJECTS_ERROR,
+            timeout
+        ).catch((error): LoadObjectsResponse<T> => {
+            if (error instanceof PermissionError) {
+                return new LoadObjectsResponse(request.clientRequestId, []);
+            } else {
+                throw error;
+            }
         });
+
+        let objects = response.objects;
+        if (objectConstructors && objectConstructors.length) {
+            const newObjects = [];
+            for (const obj of objects) {
+                let object = obj;
+                for (const objectConstructor of objectConstructors) {
+                    try {
+                        object = new objectConstructor(object);
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
+                newObjects.push(object);
+            }
+
+            objects = newObjects;
+        }
+        const objectIds = Array.isArray(request.objectIds)
+            ? request.objectIds.join(',')
+            : request.objectIds;
+        return objects;
     }
 
     public async createObject(
@@ -118,6 +128,8 @@ export class KIXObjectSocketClient extends SocketClient {
         createOptions?: KIXObjectSpecificCreateOptions,
         cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
+        this.checkSocketConnection();
+
         const requestId = IdService.generateDateBasedId();
 
         const request = new CreateObjectRequest(
@@ -140,6 +152,8 @@ export class KIXObjectSocketClient extends SocketClient {
         objectId: number | string, updateOptions?: KIXObjectSpecificCreateOptions,
         cacheKeyPrefix: string = objectType, silent?: boolean
     ): Promise<string | number> {
+        this.checkSocketConnection();
+
         const requestId = IdService.generateDateBasedId();
 
         const request = new UpdateObjectRequest(
@@ -164,6 +178,7 @@ export class KIXObjectSocketClient extends SocketClient {
         objectType: KIXObjectType | string, objectId: string | number, deleteOptions: KIXObjectSpecificDeleteOptions,
         cacheKeyPrefix: string = objectType
     ): Promise<any> {
+        this.checkSocketConnection();
 
         const requestId = IdService.generateDateBasedId();
 
@@ -184,6 +199,7 @@ export class KIXObjectSocketClient extends SocketClient {
         requestObject: ISocketObjectRequest, event: string, finishEvent: string, errorEvent: any,
         defaultTimeout?: number
     ): Promise<T> {
+        this.checkSocketConnection();
 
         const socketTimeout = defaultTimeout ? defaultTimeout : ClientStorageService.getSocketTimeout();
 

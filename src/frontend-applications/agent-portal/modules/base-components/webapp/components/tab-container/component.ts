@@ -39,7 +39,9 @@ class TabLaneComponent implements IEventSubscriber {
     private tabTitles: Map<string, string>;
     private hideSidebar: boolean;
 
-    private keyDownEventFunction: () => {};
+    private keyDownEventFunction: () => {
+        // do nothing ...
+    };
 
     public onCreate(input: any): void {
         this.state = new ComponentState(input.tabWidgets);

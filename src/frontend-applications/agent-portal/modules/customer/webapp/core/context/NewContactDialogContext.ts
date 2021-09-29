@@ -15,6 +15,7 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { TicketProperty } from '../../../../ticket/model/TicketProperty';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 
 export class NewContactDialogContext extends Context {
 
@@ -42,7 +43,7 @@ export class NewContactDialogContext extends Context {
         await super.destroy();
 
         if (this.getAdditionalInformation('PROVIDE_CONTACT_ID_TO_SOURCE_CONTEXT')) {
-            const sourceContext = this.getAdditionalInformation('SourceContext');
+            const sourceContext = this.getAdditionalInformation(AdditionalContextInformation.SOURCE_CONTEXT);
             const context = ContextService.getInstance().getContextInstances().find(
                 (c) => c.instanceId === sourceContext?.instanceId
             );

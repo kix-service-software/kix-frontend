@@ -6,96 +6,99 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<div.form-field
-    class={
-        additionalFieldControlsNeeded: input.additionalFieldControlsNeeded,
-        "show-object": state.show
-    }
-    draggable=state.draggable
-    on-dragstart("handleDragStart")
-    on-dragend("handleDragEnd")>
-    <div.field-label class={
-        "no-label": !state.label || !state.field.showLabel
-    }>
-        <span.label-text title=state.label>
-            <if(state.field.required && state.field.showLabel)>
-                <span.required-field>*</span>
-            </if>
-            <if(state.field.showLabel)>${state.label}</if>
-        </span>
-    </div>
-    <div.field-icon>
-        <if(state.hint)>
-            <overlay-icon isHint=true content=state.hint title=state.label/>
-        </if>
-    </div>
-    <div.field-input style={
-        "padding-right": component.getPaddingRight()
-    }>
-        <if(!state.field.empty && !state.field.asStructure)>
-            <${component.getInputComponent()} ...{
-                field: state.field,
-                fieldId: state.field.property,
-                formId: state.formId
-            }/>
-        </if>
-        <else>
-            <div.form-separator-container>
-                <div.form-separator/>
-            </div>
-        </else>
-    </div>
-    <if(state.errorMessages && state.errorMessages.length)>
-        <div.validation-errors>
-            <for|error, index| of=state.errorMessages>
-                <span>${error}${index < state.errorMessages.length - 1 ? " " : ""}</span>
-            </for>
+<if(state.field)>
+    <div.form-field
+        class={
+            additionalFieldControlsNeeded: input.additionalFieldControlsNeeded,
+            "show-object": state.show
+        }
+        draggable=state.draggable
+        on-dragstart("handleDragStart")
+        on-dragend("handleDragEnd")
+        id=state.field.instanceId>
+        <div.field-label class={
+            "no-label": !state.label || !state.field.showLabel
+        }>
+            <span.label-text title=state.label>
+                <if(state.field.required && state.field.showLabel)>
+                    <span.required-field>*</span>
+                </if>
+                <if(state.field.showLabel)>${state.label}</if>
+            </span>
         </div>
-    </if>
-    <if(
-        component.hasChildren() &&
-        (!state.field.empty || state.field.asStructure)
-    )>
-        <span.minimize-icon-container>
-            <if(state.minimized)>
-                <span.kix-icon-sort-down on-click("minimize")/>
+        <div.field-icon>
+            <if(state.hint)>
+                <overlay-icon isHint=true content=state.hint title=state.label/>
+            </if>
+        </div>
+        <div.field-input style={
+            "padding-right": component.getPaddingRight()
+        }>
+            <if(!state.field.empty && !state.field.asStructure)>
+                <${component.getInputComponent()} ...{
+                    field: state.field,
+                    fieldId: state.field.property,
+                    formId: state.formId
+                }/>
             </if>
             <else>
-                <span.kix-icon-triangle-up on-click("minimize")>
-                    <span.path1/>
-                    <span.path2/>
-                </span>
-            </else>
-        </span>
-    </if>
-    <if(input.additionalFieldControls || state.canDraggable)>
-        <div.additionalFieldControls>
-            <if(input.additionalFieldControls)>
-                <${input.additionalFieldControls}/>
-            </if>
-            <if(state.canDraggable)>
-                <div.form-control-button.button-without-text.drag-button
-                    title=state.translations["Translatable#Sort"]
-                    on-mouseenter("setDraggable", true)
-                    on-mouseleave("setDraggable", false)>
-                    <span.kix-icon-sort-up/>
-                    <span.kix-icon-sort-down/>
+                <div.form-separator-container>
+                    <div.form-separator/>
                 </div>
-            </if>
+            </else>
+        </div>
+        <if(state.errorMessages && state.errorMessages.length)>
+            <div.validation-errors>
+                <for|error, index| of=state.errorMessages>
+                    <span>${error}${index < state.errorMessages.length - 1 ? " " : ""}</span>
+                </for>
+            </div>
+        </if>
+        <if(
+            component.hasChildren() &&
+            (!state.field.empty || state.field.asStructure)
+        )>
+            <span.minimize-icon-container>
+                <if(state.minimized)>
+                    <span.kix-icon-sort-down on-click("minimize")/>
+                </if>
+                <else>
+                    <span.kix-icon-triangle-up on-click("minimize")>
+                        <span.path1/>
+                        <span.path2/>
+                    </span>
+                </else>
+            </span>
+        </if>
+        <if(input.additionalFieldControls || state.canDraggable)>
+            <div.additionalFieldControls>
+                <if(input.additionalFieldControls)>
+                    <${input.additionalFieldControls}/>
+                </if>
+                <if(state.canDraggable)>
+                    <div.form-control-button.button-without-text.drag-button
+                        title=state.translations["Translatable#Sort"]
+                        on-mouseenter("setDraggable", true)
+                        on-mouseleave("setDraggable", false)>
+                        <span.kix-icon-sort-up/>
+                        <span.kix-icon-sort-down/>
+                    </div>
+                </if>
+            </div>
+        </if>
+    </div>
+    <if(
+        !state.minimized &&
+        (!state.field.empty || state.field.asStructure) &&
+        component.hasChildren()
+    )>
+        <div.sub-field-container>
+            <field-container
+                level=(state.level + 1)
+                fields=state.field.children
+                formId=state.formId
+                additionalFieldControlsNeeded=input.additionalFieldControlsNeeded
+                draggable=state.field.draggableFields/>
         </div>
     </if>
-</div>
-<if(
-    !state.minimized &&
-    (!state.field.empty || state.field.asStructure) &&
-    component.hasChildren()
-)>
-    <div.sub-field-container>
-        <field-container
-            level=(state.level + 1)
-            fields=state.field.children
-            formId=state.formId
-            additionalFieldControlsNeeded=input.additionalFieldControlsNeeded
-            draggable=state.field.draggableFields/>
-    </div>
 </if>

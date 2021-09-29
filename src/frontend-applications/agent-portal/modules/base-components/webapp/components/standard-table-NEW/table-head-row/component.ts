@@ -39,6 +39,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         EventService.getInstance().subscribe(TableEvent.REFRESH, this);
         EventService.getInstance().subscribe(TableEvent.ROW_TOGGLED, this);
         EventService.getInstance().subscribe(TableEvent.RERENDER_TABLE, this);
+        EventService.getInstance().subscribe(TableEvent.COLUMN_CREATED, this);
         this.setCheckState();
     }
 
@@ -47,6 +48,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         EventService.getInstance().unsubscribe(TableEvent.REFRESH, this);
         EventService.getInstance().unsubscribe(TableEvent.ROW_TOGGLED, this);
         EventService.getInstance().unsubscribe(TableEvent.RERENDER_TABLE, this);
+        EventService.getInstance().unsubscribe(TableEvent.COLUMN_CREATED, this);
     }
 
     public eventPublished(data: TableEventData, eventId: string, subscriberId?: string): void {
@@ -55,6 +57,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                 || eventId === TableEvent.REFRESH
                 || eventId === TableEvent.ROW_TOGGLED
                 || eventId === TableEvent.RERENDER_TABLE
+                || eventId === TableEvent.COLUMN_CREATED
             ) {
                 this.state.columns = this.table.getColumns();
                 this.setCheckState();

@@ -18,6 +18,7 @@
 
 import { SocketNameSpace } from './SocketNameSpace';
 import { NotificationEvent } from '../../model/NotificationEvent';
+import { Socket } from 'socket.io';
 
 export class NotificationNamespace extends SocketNameSpace {
 
@@ -38,7 +39,7 @@ export class NotificationNamespace extends SocketNameSpace {
         return 'notifications';
     }
 
-    protected registerEvents(client: SocketIO.Socket): void {
+    protected registerEvents(client: Socket): void {
         return;
     }
 

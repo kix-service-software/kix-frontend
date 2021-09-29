@@ -35,6 +35,8 @@ export class OrganisationContext extends Context {
     public async initContext(urlParams: URLSearchParams): Promise<void> {
         super.initContext(urlParams);
 
+        this.additionalInformation.set(OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING, false);
+
         if (this.filterValue) {
             this.loadOrganisations();
         }
@@ -47,17 +49,15 @@ export class OrganisationContext extends Context {
     private handleURLParams(urlParams: URLSearchParams): void {
         if (urlParams) {
             if (urlParams.has('dependent')) {
-                this.setAdditionalInformation(
+                this.additionalInformation.set(
                     OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING,
-                    Boolean(urlParams.get('dependent'))
+                    urlParams.get('dependent') === 'true'
                 );
             }
 
             if (urlParams.has('filter')) {
                 this.filterValue = decodeURI(urlParams.get('filter'));
             }
-        } else {
-            this.setAdditionalInformation(OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING, false);
         }
     }
 

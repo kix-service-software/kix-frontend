@@ -20,13 +20,14 @@ import { ExecPlan } from '../../model/ExecPlan';
 import { JobService } from '.';
 import { JobType } from '../../model/JobType';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class JobLabelProvider extends LabelProvider {
 
     public kixObjectType: KIXObjectType = KIXObjectType.JOB;
 
-    public isLabelProviderFor(job: Job): boolean {
-        return job instanceof Job;
+    public isLabelProviderFor(object: Job | KIXObject): boolean {
+        return object instanceof Job || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getObjectText(

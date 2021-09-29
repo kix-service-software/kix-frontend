@@ -15,14 +15,15 @@ import { TranslationService } from '../../../../translation/webapp/core/Translat
 class Component {
 
     public state: ComponentState;
+    private context: OrganisationContext;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext() as OrganisationContext;
-        this.state.contentWidgets = await context.getContent();
+        this.context = ContextService.getInstance().getActiveContext() as OrganisationContext;
+        this.state.contentWidgets = await this.context.getContent();
 
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Search',
@@ -32,8 +33,7 @@ class Component {
         this.state.placeholder = await TranslationService.translate(
             'Translatable#Please enter a search term for a organisation.'
         );
-        this.state.filterValue = context.filterValue;
-        this.search();
+        this.state.filterValue = this.context.filterValue;
     }
 
     public keyUp(event: any): void {
@@ -44,10 +44,7 @@ class Component {
     }
 
     public async search(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        if (context instanceof OrganisationContext) {
-            context.setFilterValue(this.state.filterValue);
-        }
+        this.context.setFilterValue(this.state.filterValue);
     }
 
 }

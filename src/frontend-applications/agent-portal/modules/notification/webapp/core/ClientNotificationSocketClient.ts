@@ -14,10 +14,9 @@ import { ClientStorageService } from '../../../../modules/base-components/webapp
 import { NotificationHandler } from '../../../../modules/base-components/webapp/core/NotificationHandler';
 import { FormService } from '../../../../modules/base-components/webapp/core/FormService';
 import { BrowserCacheService } from '../../../../modules/base-components/webapp/core/CacheService';
+import { Socket } from 'socket.io-client';
 
 export class ClientNotificationSocketClient extends SocketClient {
-
-    private notificationsSocket: SocketIO.Server;
 
     private static INSTANCE: ClientNotificationSocketClient = null;
 
@@ -30,10 +29,9 @@ export class ClientNotificationSocketClient extends SocketClient {
     }
 
     public constructor() {
-        super();
-        this.notificationsSocket = this.createSocket('notifications');
+        super('notifications');
 
-        this.notificationsSocket.on(
+        this.socket.on(
             NotificationEvent.UPDATE_EVENTS, (events: ObjectUpdatedEventData[]) => {
                 BrowserCacheService.getInstance().updateCaches(events);
                 events = events
@@ -44,7 +42,7 @@ export class ClientNotificationSocketClient extends SocketClient {
                 NotificationHandler.handleUpdateNotifications(events);
             });
 
-        this.notificationsSocket.on(
+        this.socket.on(
             NotificationEvent.UPDATE_FORMS, (clientRequestId: string) => {
                 if (clientRequestId !== ClientStorageService.getClientRequestId()) {
                     FormService.getInstance().loadFormConfigurations();

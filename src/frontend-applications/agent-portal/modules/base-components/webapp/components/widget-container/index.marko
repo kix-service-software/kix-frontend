@@ -18,7 +18,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     type="button"
                     on-click("addSearchbookmarkWidget")
                     title=state.translations["Translatable#Add Widget"]>
-                    <span.kix-icon-check/>
+                    <span.kix-icon-plus-blank/>
                     <translation-string pattern="Translatable#Add Widget"/>
                 </button>
             </div>
@@ -31,24 +31,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     type="button"
                     on-click("addContextWidget")
                     title=state.translations["Translatable#Add Widget"]>
-                    <span.kix-icon-check/>
+                    <span.kix-icon-plus-blank/>
                     <translation-string pattern="Translatable#Add Widget"/>
-                </button>
-            </div>
-            <div.submit-buttons>
-                <button.kix-button.cancel-button
-                    type="button"
-                    on-click("cancel")
-                    title=state.translations["Translatable#Cancel"]>
-                    <span.kix-icon-check/>
-                    <translation-string pattern="Translatable#Cancel"/>
-                </button>
-                <button.kix-button.submit-button
-                    type="button"
-                    on-click("saveWidgets")
-                    title=state.translations["Translatable#Save"]>
-                    <span.kix-icon-check/>
-                    <translation-string pattern="Translatable#Save"/>
                 </button>
             </div>
         </div>
@@ -66,25 +50,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         small: !component.isLarge(kixWidget),
                         drag: state.dragOverInstanceId === kixWidget.instanceId
                     }
+                    id=("widget-frame-" + kixWidget.instanceId)
                     draggable=(state.configurationMode ? "true" : "false")
                     on-dragstart("drag", kixWidget)
                     on-drop("drop", kixWidget)
                     on-dragover("allowDrop", kixWidget)>
                     <if(state.configurationMode)>
-                        <div.header>
-                            <icon icon=kixWidget.configuration.icon/>
-                            <span>
-                                <translation-string pattern=kixWidget.configuration.title/>
-                            </span>
-                            <span.kix-icon-close class="close" on-click("removeWidget", kixWidget)/>
-                        </div>
-                        <div.widget-size>
-                            <input
-                                type="checkbox"
-                                on-click("widgetSizeChanged", kixWidget)
-                                checked=(kixWidget.size === "small")/>
-                            <translation-string pattern="Translatable#Small Widget"/>
-                        </div>
+                        <widget-configuration
+                            widget=component.copyWidget(kixWidget)
+                            on-removeWidget("removeWidget")
+                            on-configurationChanged("configurationChanged")/>
                     </if>
                     <else>
                         <${component.getTemplate(kixWidget)} ...{
@@ -96,10 +71,32 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </for>
         </if>
     </div>
+    <if(state.configurationMode)>
+        <div.dialog-control>
+            <div.dialog-button-container>
+                <button.kix-button.cancel-button
+                    type="button"
+                    on-click("cancel")
+                    title=state.translations["Translatable#Cancel"]>
+                    <span.kix-icon-close/>
+                    <translation-string pattern="Translatable#Cancel"/>
+                </button>
+                <button.kix-button.submit-button
+                    type="button"
+                    on-click("saveWidgets")
+                    title=state.translations["Translatable#Save"]>
+                    <span.kix-icon-plus-blank/>
+                    <translation-string pattern="Translatable#Save"/>
+                </button>
+            </div>
+        </div>
+    </if>
     <if(!state.configurationMode && state.customizable)>
         <div.customize-section on-click("toggleConfigurationMode")>
             <span.kix-icon-gear/>
-            <span>Customize Dashboard</span>
+            <span>
+                <translation-string pattern="Translatable#Customize Dashboard"/>
+            </span>
         </div>
     </if>
 </div>

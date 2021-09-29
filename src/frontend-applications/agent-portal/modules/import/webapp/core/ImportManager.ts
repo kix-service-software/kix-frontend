@@ -34,14 +34,14 @@ export abstract class ImportManager extends AbstractDynamicFormManager {
 
     private importRun: boolean = false;
 
-    protected abstract async getSpecificObject(object: {}): Promise<KIXObject>;
+    protected abstract getSpecificObject(object: any): Promise<KIXObject>;
 
     public init(): void {
         super.init();
         this.importRun = false;
     }
 
-    public async getObject(object: {}): Promise<KIXObject> {
+    public async getObject(object: any): Promise<KIXObject> {
         if (!object[KIXObjectProperty.VALID_ID] && object[KIXObjectProperty.VALIDITY]) {
             const validObject = await this.getValidObjectbyName(object[KIXObjectProperty.VALIDITY]);
             if (validObject) {

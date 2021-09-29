@@ -300,17 +300,23 @@ export class BrowserUtil {
     public static async prepareUrlParameter(params: Array<[string, any]>): Promise<string[]> {
         const urlParams = [];
         if (Array.isArray(params)) {
-            const context = ContextService.getInstance().getActiveContext();
-            const contextObject = await context.getObject();
-
             for (const param of params) {
-                let paramValue = JSON.stringify(param[1]);
-                paramValue = await PlaceholderService.getInstance().replacePlaceholders(paramValue, contextObject);
-                paramValue = encodeURI(paramValue);
+                const paramValue = await this.prepareUrlParameterValue(param[1]);
                 urlParams.push(`${param[0]}=${paramValue}`);
             }
         }
         return urlParams;
+    }
+
+    public static async prepareUrlParameterValue(value: any): Promise<string> {
+        const context = ContextService.getInstance().getActiveContext();
+        const contextObject = await context.getObject();
+
+        let paramValue = JSON.stringify(value);
+        paramValue = await PlaceholderService.getInstance().replacePlaceholders(paramValue, contextObject);
+        paramValue = encodeURI(paramValue);
+
+        return paramValue;
     }
 
     public static replaceInlineContent(value: string, inlineContent: InlineContent[]): string {
@@ -330,27 +336,34 @@ export class BrowserUtil {
         return newString;
     }
 
+    public static stringifyJSON(json: any): string {
+        try {
+            const replacerFunc = () => {
+                const visited = new WeakSet();
+                return (key: string, value: any) => {
+                    if (typeof value === 'object' && value !== null) {
+                        if (visited.has(value)) {
+                            return;
+                        }
+                        visited.add(value);
+                    }
+                    return value;
+                };
+            };
+            json = JSON.stringify(json, replacerFunc(), 4);
+        } catch (e) {
+            console.error(e);
+            json = '';
+        }
+
+        return json;
+    }
+
     public static formatJSON(json: any) {
         if (typeof json !== 'string') {
-            try {
-                const replacerFunc = () => {
-                    const visited = new WeakSet();
-                    return (key: string, value: any) => {
-                        if (typeof value === 'object' && value !== null) {
-                            if (visited.has(value)) {
-                                return;
-                            }
-                            visited.add(value);
-                        }
-                        return value;
-                    };
-                };
-                json = JSON.stringify(json, replacerFunc(), 4);
-            } catch (e) {
-                console.error(e);
-                json = '';
-            }
+            json = this.stringifyJSON(json);
         }
+
         json = json
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')

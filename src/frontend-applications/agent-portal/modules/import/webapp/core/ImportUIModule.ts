@@ -7,6 +7,7 @@
  * --
  */
 
+import { ConfigurationType } from '../../../../model/configuration/ConfigurationType';
 import { IUIModule } from '../../../../model/IUIModule';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
 import { CSVExportAction, ImportAction } from './actions';
@@ -23,7 +24,9 @@ export class UIModule implements IUIModule {
 
     public async register(): Promise<void> {
         ActionFactory.getInstance().registerAction('import-action', ImportAction);
-        ActionFactory.getInstance().registerAction('csv-export-action', CSVExportAction);
+        ActionFactory.getInstance().registerAction(
+            'csv-export-action', CSVExportAction, [ConfigurationType.TableWidget]
+        );
     }
 
 }

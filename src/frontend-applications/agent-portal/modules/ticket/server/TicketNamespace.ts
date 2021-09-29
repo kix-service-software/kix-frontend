@@ -20,7 +20,8 @@ import { TicketAPIService } from './TicketService';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { CacheService } from '../../../server/services/cache';
 
-import cookie = require('cookie');
+import cookie from 'cookie';
+import { Socket } from 'socket.io';
 
 export class TicketNamespace extends SocketNameSpace {
 
@@ -41,7 +42,7 @@ export class TicketNamespace extends SocketNameSpace {
         return 'tickets';
     }
 
-    protected registerEvents(client: SocketIO.Socket): void {
+    protected registerEvents(client: Socket): void {
         this.registerEventHandler(client, TicketEvent.LOAD_ARTICLE_ATTACHMENT, this.loadArticleAttachment.bind(this));
         this.registerEventHandler(
             client, TicketEvent.LOAD_ARTICLE_ZIP_ATTACHMENT, this.loadArticleZipAttachment.bind(this)
@@ -50,7 +51,7 @@ export class TicketNamespace extends SocketNameSpace {
     }
 
     private async loadArticleAttachment(
-        data: LoadArticleAttachmentRequest, client: SocketIO.Socket
+        data: LoadArticleAttachmentRequest, client: Socket
     ): Promise<SocketResponse> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';
@@ -68,7 +69,7 @@ export class TicketNamespace extends SocketNameSpace {
     }
 
     private async loadArticleZipAttachment(
-        data: LoadArticleZipAttachmentRequest, client: SocketIO.Socket
+        data: LoadArticleZipAttachmentRequest, client: Socket
     ): Promise<SocketResponse> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';
@@ -86,7 +87,7 @@ export class TicketNamespace extends SocketNameSpace {
     }
 
     private async removeArticleSeenFlag(
-        data: SetArticleSeenFlagRequest, client: SocketIO.Socket
+        data: SetArticleSeenFlagRequest, client: Socket
     ): Promise<SocketResponse> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';

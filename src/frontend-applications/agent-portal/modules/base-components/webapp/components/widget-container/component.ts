@@ -19,6 +19,8 @@ import { SearchService } from '../../../../search/webapp/core';
 import { EventService } from '../../core/EventService';
 import { ApplicationEvent } from '../../core/ApplicationEvent';
 import { IEventSubscriber } from '../../core/IEventSubscriber';
+import { ContextEvents } from '../../core/ContextEvents';
+import { BrowserUtil } from '../../core/BrowserUtil';
 
 class Component {
 
@@ -27,6 +29,8 @@ class Component {
     private contextWidgetList: string = null;
 
     private originalWidgets: ConfiguredWidget[];
+
+    private modifiedWidgets: ConfiguredWidget[] = [];
 
     private searchBookmarksTreeHandler: TreeHandler;
     private contextTreeHandler: TreeHandler;
@@ -38,7 +42,12 @@ class Component {
     }
 
     public onInput(input: any): void {
-        this.state.widgets = input.widgets ? input.widgets.filter((w) => Boolean(w.configuration)) : [];
+        this.state.widgets = [
+            ...input.widgets
+                ? input.widgets.filter((w) => w?.configuration)
+                : []
+        ];
+
         this.state.configurationMode = typeof input.configurationMode !== 'undefined'
             ? input.configurationMode
             : false;
@@ -56,6 +65,8 @@ class Component {
                 'Translatable#Submit', 'Translatable#Save', 'Translatable#Cancel', 'Translatable#Add Table Widget'
             ]
         );
+
+        this.modifiedWidgets = [];
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('widget-container'),
@@ -94,9 +105,13 @@ class Component {
         TreeService.getInstance().registerTreeHandler(this.state.contextTreeId, contextTreeHandler);
         await this.loadContextWidgets();
 
-        this.originalWidgets = [...this.state.widgets];
+        this.originalWidgets = [...this.state.widgets.map((w) => this.copyWidget(w))];
 
         this.state.configurationMode = true;
+    }
+
+    private copyWidget(widget: ConfiguredWidget): ConfiguredWidget {
+        return JSON.parse(BrowserUtil.stringifyJSON(widget));
     }
 
     private async loadSearchTemplates(): Promise<void> {
@@ -131,8 +146,20 @@ class Component {
         }
     }
 
+    public configurationChanged(modifiedWidget: ConfiguredWidget): void {
+        const index = this.modifiedWidgets.findIndex((w) => w.instanceId === modifiedWidget.instanceId);
+        if (index !== -1) {
+            this.modifiedWidgets.splice(index, 1);
+        }
+        this.modifiedWidgets.push(modifiedWidget);
+    }
+
     public async saveWidgets(): Promise<void> {
-        await ContextService.getInstance().saveUserWidgetList(this.state.widgets, this.contextWidgetList);
+        await ContextService.getInstance().saveUserWidgetList(
+            this.state.widgets.map((w) => w.instanceId), this.modifiedWidgets, this.contextWidgetList
+        );
+
+        EventService.getInstance().publish(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED);
         EventService.getInstance().publish(ApplicationEvent.TOGGLE_CONFIGURATION_MODE, { cancel: false });
     }
 
@@ -146,14 +173,13 @@ class Component {
 
         if (cancel) {
             this.state.widgets = this.originalWidgets;
+            this.state.widgets.forEach((widget) => {
+                const originalWidget = this.originalWidgets.find((w) => w.instanceId === widget.instanceId);
+                widget.configuration = originalWidget.configuration;
+            });
         }
 
         this.state.configurationMode = false;
-    }
-
-    public widgetSizeChanged(widget: ConfiguredWidget): void {
-        widget.size = widget.size === WidgetSize.SMALL ? WidgetSize.LARGE : WidgetSize.SMALL;
-        (this as any).setStateDirty('widgets');
     }
 
     public async addSearchbookmarkWidget(): Promise<void> {
@@ -163,6 +189,7 @@ class Component {
                 const widget = await SearchService.getInstance().createTableWidget(nodes[0].id, nodes[0].label);
                 if (widget) {
                     this.state.widgets.push(widget);
+                    this.modifiedWidgets.push(widget);
                     this.searchBookmarksTreeHandler.selectNone();
                     (this as any).setStateDirty('widgets');
                 }
@@ -178,6 +205,7 @@ class Component {
                 const widget = await context.getConfiguredWidget(nodes[0].id);
                 if (widget) {
                     this.state.widgets.push(widget);
+                    this.modifiedWidgets.push(widget);
                     this.contextTreeHandler.selectNone();
                     await this.loadContextWidgets();
                     (this as any).setStateDirty('widgets');
@@ -195,8 +223,12 @@ class Component {
     }
 
     public drag(widget: ConfiguredWidget, event: any): void {
-        event.stopPropagation();
-        event.dataTransfer.setData('text', widget.instanceId);
+        if (event.srcElement?.id === `widget-frame-${widget.instanceId}`) {
+            event.dataTransfer.setData('text', widget.instanceId);
+        } else {
+            event.stopPropagation();
+            event.preventDefault();
+        }
     }
 
     public drop(widget: ConfiguredWidget, event: any): void {
@@ -218,9 +250,14 @@ class Component {
     }
 
     public async removeWidget(widget: ConfiguredWidget): Promise<void> {
-        const index = this.state.widgets.findIndex((w) => w.instanceId === widget.instanceId);
+        let index = this.state.widgets.findIndex((w) => w.instanceId === widget.instanceId);
         if (index !== -1) {
             this.state.widgets.splice(index, 1);
+        }
+
+        index = this.modifiedWidgets.findIndex((w) => w.instanceId === widget.instanceId);
+        if (index !== -1) {
+            this.modifiedWidgets.splice(index, 1);
         }
 
         await this.loadContextWidgets();

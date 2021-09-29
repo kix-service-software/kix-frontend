@@ -15,7 +15,7 @@ import { ObjectIcon } from '../../../model/ObjectIcon';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { PlaceholderService } from '../../../../base-components/webapp/core/PlaceholderService';
 
-class IconComponent {
+class Component {
 
     private state: ComponentState;
 
@@ -41,7 +41,7 @@ class IconComponent {
         } else if (icon) {
 
             const context = ContextService.getInstance().getActiveContext();
-            const contextObject = await context.getObject();
+            const contextObject = await context?.getObject();
 
             if (icon.tooltip) {
                 this.state.tooltip = await PlaceholderService.getInstance().replacePlaceholders(
@@ -86,4 +86,4 @@ class IconComponent {
 
 }
 
-module.exports = IconComponent;
+module.exports = Component;

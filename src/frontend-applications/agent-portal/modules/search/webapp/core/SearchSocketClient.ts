@@ -35,11 +35,12 @@ export class SearchSocketClient extends SocketClient {
     private static INSTANCE: SearchSocketClient = null;
 
     private constructor() {
-        super();
-        this.socket = this.createSocket('search', true);
+        super('search');
     }
 
     public async saveSearch(search: SearchCache): Promise<void> {
+        this.checkSocketConnection();
+
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<void>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();
@@ -73,6 +74,8 @@ export class SearchSocketClient extends SocketClient {
     }
 
     public async loadSearch(): Promise<SearchCache[]> {
+        this.checkSocketConnection();
+
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<SearchCache[]>((resolve, reject) => {
 
@@ -112,6 +115,8 @@ export class SearchSocketClient extends SocketClient {
     }
 
     public async deleteSearch(id: string): Promise<void> {
+        this.checkSocketConnection();
+
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<void>((resolve, reject) => {
 

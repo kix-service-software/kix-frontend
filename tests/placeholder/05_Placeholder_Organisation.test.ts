@@ -32,6 +32,8 @@ describe('Placeholder replacement for organisation', () => {
     let organisation: Organisation
     let organisationPlaceholderHandler: OrganisationPlaceholderHandler = new OrganisationPlaceholderHandler();
     before(() => {
+        LabelService.getInstance()['objectLabelProvider'] = [];
+        LabelService.getInstance()['propertiesLabelProvider'].clear();
         organisation = someTestFunctions.prepareUser();
 
         const organisationLabelProvider = new OrganisationLabelProvider();
@@ -41,7 +43,8 @@ describe('Placeholder replacement for organisation', () => {
     });
 
     after(() => {
-        LabelService.getInstance()['labelProviders'] = [];
+        LabelService.getInstance()['objectLabelProvider'] = [];
+        LabelService.getInstance()['propertiesLabelProvider'].clear();
         (TranslationService.getInstance() as any).translations = null;
     });
 
@@ -120,12 +123,9 @@ describe('Placeholder replacement for organisation', () => {
             const date = await DateTimeUtil.getLocalDateTimeString(organisation.CreateTime, 'en');
             expect(text).equal(date);
 
-            const germanText = await organisationPlaceholderHandler.replace(`<TR_KIX_ORG_${KIXObjectProperty.CREATE_TIME}>`, organisation, 'de');
+            const germanText = await organisationPlaceholderHandler.replace(`<KIX_ORG_${KIXObjectProperty.CREATE_TIME}>`, organisation, 'de');
             const germanDate = await DateTimeUtil.getLocalDateTimeString(organisation.CreateTime, 'de');
             expect(germanText).equal(germanDate);
-
-            const notGermanText = await organisationPlaceholderHandler.replace(`<KIX_ORG_${KIXObjectProperty.CREATE_TIME}>`, organisation, 'de');
-            expect(notGermanText).equal(date);
         });
 
         it('Should replace organisation change time placeholder', async () => {
@@ -133,12 +133,9 @@ describe('Placeholder replacement for organisation', () => {
             const date = await DateTimeUtil.getLocalDateTimeString(organisation.ChangeTime, 'en');
             expect(text).equal(date);
 
-            const germanText = await organisationPlaceholderHandler.replace(`<TR_KIX_ORG_${KIXObjectProperty.CHANGE_TIME}>`, organisation, 'de');
+            const germanText = await organisationPlaceholderHandler.replace(`<KIX_ORG_${KIXObjectProperty.CHANGE_TIME}>`, organisation, 'de');
             const germanDate = await DateTimeUtil.getLocalDateTimeString(organisation.ChangeTime, 'de');
             expect(germanText).equal(germanDate);
-
-            const notGermanText = await organisationPlaceholderHandler.replace(`<KIX_ORG_${KIXObjectProperty.CHANGE_TIME}>`, organisation, 'de');
-            expect(notGermanText).equal(date);
         });
     });
 
@@ -173,7 +170,7 @@ describe('Placeholder replacement for organisation', () => {
         before(() => {
             organisation.Name = 'Organisation';
             organisation.Number = 'organisation-number';
-            ticket.OrganisationID = '2';
+            ticket.OrganisationID = 2;
             orgLoadFuntion = KIXObjectService.loadObjects;
             KIXObjectService.loadObjects = async (objectType, objectIds: Array<string | number>) => {
                 let objects: Organisation[] = [];

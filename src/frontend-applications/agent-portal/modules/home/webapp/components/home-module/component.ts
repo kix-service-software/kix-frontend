@@ -10,18 +10,39 @@
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { HomeContext } from '../../core/HomeContext';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { IdService } from '../../../../../model/IdService';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 
 class HomeComponent {
 
     public state: ComponentState;
+    private subscriber: IEventSubscriber;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(),
+            eventPublished: () => {
+                this.prepareWidgets();
+            }
+        };
+        this.prepareWidgets();
+
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, this.subscriber);
+    }
+
+    private async prepareWidgets(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         this.state.contentWidgets = await context.getContent();
+    }
+
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_USER_WIDGETS_CHANGED, this.subscriber);
     }
 
 }
