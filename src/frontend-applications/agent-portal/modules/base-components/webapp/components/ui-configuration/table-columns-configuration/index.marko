@@ -6,7 +6,9 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<h2.configuration-title>Table Columns</h2>
+<h2.configuration-title>
+    <translation-string pattern="Translatable#Table Columns"/>
+</h2>
 <div.property-chooser>
     <form-list treeId=state.propertyTreeId multiselect=true/>
     <button.kix-button.submit-button
@@ -23,7 +25,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <if(!state.loading)>
                 <th.table-head-cell title=state.translations["Translatable#Property"]>
                     ${state.translations["Translatable#Property"]}
-                </th> 
+                </th>
             </if>
             <th.table-head-cell.boolean-value title=state.translations["Translatable#Text"]>
                 ${state.translations["Translatable#Text"]}
@@ -37,7 +39,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </th>
                 <th.table-head-cell.boolean-value title=state.translations["Translatable#Column Icon"]>
                     ${state.translations["Translatable#Column Icon"]}
-                </th> 
+                </th>
                 <th.table-head-cell.boolean-value title=state.translations["Translatable#Sortable"]>
                     ${state.translations["Translatable#Sortable"]}
                 </th>
@@ -93,7 +95,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </td>
                     <td.content-cell.boolean-value on-click("booleanValueChanged", "showColumnIcon", column)>
                         <input type="checkbox" checked=column.showColumnIcon/>
-                    </td> 
+                    </td>
                     <td.content-cell.boolean-value on-click("booleanValueChanged", "sortable", column)>
                         <input type="checkbox" checked=column.sortable/>
                     </td>
@@ -139,7 +141,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <span.kix-icon-minus/>
                     </button>
                 </td>
-            </tr> 
+            </tr>
         </for>
     </tbody>
 </table>
