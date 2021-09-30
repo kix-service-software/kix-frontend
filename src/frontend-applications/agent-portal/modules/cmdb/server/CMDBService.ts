@@ -137,7 +137,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
         let configItems: ConfigItem[] = [];
 
         if (configItemIds) {
-            if (!!configItemIds.length) {
+            if (configItemIds.length) {
                 configItemIds = configItemIds.filter(
                     (id) => typeof id !== 'undefined' && id.toString() !== '' && id !== null
                 );

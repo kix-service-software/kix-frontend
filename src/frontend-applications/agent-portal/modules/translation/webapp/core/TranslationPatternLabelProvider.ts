@@ -13,13 +13,14 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TranslationPatternProperty } from '../../model/TranslationPatternProperty';
 import { TranslationService } from './TranslationService';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class TranslationPatternLabelProvider extends LabelProvider<TranslationPattern> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TRANSLATION_PATTERN;
 
-    public isLabelProviderFor(translation: TranslationPattern): boolean {
-        return translation instanceof TranslationPattern;
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object instanceof TranslationPattern || object?.KIXObjectType === this.kixObjectType;
     }
 
     public isLabelProviderForType(objectType: KIXObjectType): boolean {

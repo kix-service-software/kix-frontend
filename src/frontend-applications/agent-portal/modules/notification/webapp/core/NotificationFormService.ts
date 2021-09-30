@@ -11,7 +11,6 @@ import { KIXObjectFormService } from '../../../../modules/base-components/webapp
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
-import { ContextType } from '../../../../model/ContextType';
 import { NotificationProperty } from '../../model/NotificationProperty';
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
@@ -41,7 +40,7 @@ export class NotificationFormService extends KIXObjectFormService {
         super();
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.NOTIFICATION;
     }
 
@@ -79,7 +78,7 @@ export class NotificationFormService extends KIXObjectFormService {
                     }
                 });
             }
-            if (!!languageFields.length) {
+            if (languageFields.length) {
                 form.pages[form.pages.length - 1].groups.push(
                     new FormGroupConfiguration(
                         'notification-form-text', 'Translatable#Notification Text', [], null, languageFields

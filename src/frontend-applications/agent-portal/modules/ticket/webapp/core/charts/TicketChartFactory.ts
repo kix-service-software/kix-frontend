@@ -41,7 +41,6 @@ export class TicketChartFactory {
             case TicketProperty.PRIORITY_ID:
             case TicketProperty.QUEUE_ID:
             case TicketProperty.TYPE_ID:
-            case TicketProperty.SERVICE_ID:
                 return await this.preparePropertyCountData(property, tickets);
             case TicketProperty.CREATED:
                 return await this.prepareCreatedData(property, tickets);
@@ -55,10 +54,18 @@ export class TicketChartFactory {
 
         const ids = tickets.map((t) => t[property]);
 
+        const labels: Map<string, string> = new Map();
+
         for (const id of ids) {
-            const label = await LabelService.getInstance().getPropertyValueDisplayText(
-                KIXObjectType.TICKET, property, id
-            );
+            if (!labels.has(id)) {
+                const label = await LabelService.getInstance().getPropertyValueDisplayText(
+                    KIXObjectType.TICKET, property, id
+                );
+                labels.set(id, label);
+            }
+
+            const label = labels.get(id);
+
             if (!data.has(label)) {
                 data.set(label, 0);
             }
@@ -94,9 +101,6 @@ export class TicketChartFactory {
                 break;
             case TicketProperty.TYPE_ID:
                 objectType = KIXObjectType.TICKET_TYPE;
-                break;
-            case TicketProperty.SERVICE_ID:
-                objectType = KIXObjectType.SERVICE;
                 break;
 
             default:

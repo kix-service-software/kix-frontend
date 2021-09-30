@@ -19,6 +19,10 @@ export class MacroActionTypeOption {
 
     public Order: number;
 
+    public PossibleValues: any[];
+
+    public DefaultValue: any;
+
     public constructor(macroActionType?: MacroActionTypeOption) {
         if (macroActionType) {
             this.Name = macroActionType.Name;
@@ -26,6 +30,8 @@ export class MacroActionTypeOption {
             this.Required = macroActionType.Required;
             this.Label = macroActionType.Label;
             this.Order = macroActionType.Order;
+            this.PossibleValues = macroActionType.PossibleValues;
+            this.DefaultValue = macroActionType.DefaultValue;
         }
     }
 

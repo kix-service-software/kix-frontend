@@ -35,7 +35,7 @@ Feature: Als Nutzer möchte ich eine korrekte Standardkonfiguration für eine Ta
         Examples:
             | column       | sortable | filterable | listFilter | width | flexible | showText | showIcon | type       | columnTitle | columnIcon | objectType   |
             | 'Name'       | 1        | 1          | 0          | 200   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'TicketType' |
-            | 'ICON'       | 0        | 0          | 0          | 41    | 0        | 0        | 1        | 'STRING'   | 0           | 0          | 'TicketType' |
+            | 'ID'         | 0        | 0          | 0          | 41    | 0        | 0        | 1        | 'STRING'   | 0           | 0          | 'TicketType' |
             | 'ValidID'    | 1        | 1          | 1          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'TicketType' |
             | 'CreateTime' | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'DATETIME' | 1           | 0          | 'TicketType' |
             | 'CreateBy'   | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'TicketType' |

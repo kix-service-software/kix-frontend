@@ -7,9 +7,9 @@
  * --
  */
 
-import winston = require('winston');
-import path = require('path');
-import fs = require('fs');
+import winston from 'winston';
+import path from 'path';
+import fs from 'fs';
 import { ServerUtil } from '../ServerUtil';
 import { ConfigurationService } from './ConfigurationService';
 import { LogLevel } from '../model/LogLevel';

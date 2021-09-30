@@ -1,12 +1,13 @@
 # KIX Frontend
 
 ## Node Version
-* Node 8 is required
-* npm 6.4.1 is required
+* Node 16 is required
+
+## Install 
+`npm install --all`
 
 ## Build
 * `npm run-script build`
-* for the build `gulp` is required
 * the build artefacts are deployed to `/dist`
 
 ## Start
@@ -15,16 +16,10 @@
 ## Tests
 
 ### Cucumber Feature Tests
-* `npm run-script test-cucumber`
+* `npm test`
   * reports generated to `/allure-results`
 * `npm run-script test-cucumber-dev`
-  * Console Output
-
-### Unit Tests
-* `npm run-script test`
-  * reports generated to `/allure-results`
-* `npm run-script test-dev`
-  * Console Output
+  * for Console Output
 
 ---
 
@@ -33,6 +28,7 @@
 ### Server Config
 
 * `/config/server.config.json`
+* each value can be overwritten by your environment
 ```json
 {
     "HTTP_PORT": 3000,
@@ -49,10 +45,8 @@
     "ENABLE_PROFILING": true,
     "BACKEND_API_TOKEN": "...",
     "UPDATE_TRANSLATIONS": true,
-    "USE_REDIS_CACHE": true,
     "REDIS_CACHE_PORT": 6379,
-    "REDIS_CACHE_HOST": "localhost",
-    "USE_IN_MEMORY_CACHE": false
+    "REDIS_CACHE_HOST": "localhost"
 }
 ```
 
@@ -63,5 +57,3 @@
 
 ## More Detailed Documentation
 * see `/doc/index.html`
-* generate the doc: `npm run-script build-doc`
-  * `raml2html` is required

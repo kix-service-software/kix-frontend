@@ -21,6 +21,7 @@ import { FilterType } from '../../../../model/FilterType';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
 import { NewContactDialogContext } from './context';
+import { ContactProperty } from '../../model/ContactProperty';
 
 export class ContactService extends KIXObjectService<Contact> {
 
@@ -121,5 +122,16 @@ export class ContactService extends KIXObjectService<Contact> {
         context?.setAdditionalInformation('NEW_CONTACT_ID', contactId);
 
         return contactId;
+    }
+
+    public async getObjectProperties(objectType: KIXObjectType): Promise<string[]> {
+        const superProperties = await super.getObjectProperties(objectType);
+        const objectProperties: string[] = [];
+        for (const property in ContactProperty) {
+            if (ContactProperty[property]) {
+                objectProperties.push(ContactProperty[property]);
+            }
+        }
+        return [...objectProperties, ...superProperties];
     }
 }

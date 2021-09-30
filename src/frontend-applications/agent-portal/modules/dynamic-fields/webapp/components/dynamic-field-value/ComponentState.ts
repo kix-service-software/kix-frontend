@@ -16,6 +16,7 @@ export class ComponentState {
     public constructor(
         public labels: Label[] = [],
         public checklist: any = null,
+        public table: Array<string[]> = [],
         public prepared: boolean = false,
         public field: DynamicField = null,
         public dfValue: DynamicFieldValue = null

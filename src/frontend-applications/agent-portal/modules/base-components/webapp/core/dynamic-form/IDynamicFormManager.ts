@@ -51,7 +51,7 @@ export interface IDynamicFormManager {
 
     showValueInput(value: ObjectPropertyValue): boolean;
 
-    getInputType(property: string): Promise<InputFieldTypes | string>;
+    getInputType(property: string, operator?: SearchOperator): Promise<InputFieldTypes | string>;
 
     getObjectReferenceObjectType(property: string): Promise<KIXObjectType | string>;
 
@@ -88,6 +88,8 @@ export interface IDynamicFormManager {
     hasOption(option: ObjectPropertyValueOption, property: string, operator: string): boolean;
 
     hasAdditionalOptions(): boolean;
+
+    validateAdditionalOptions(options: string): string;
 
     changeValueOrder(currentIndex: number, targetIndex: number): Promise<void>;
 

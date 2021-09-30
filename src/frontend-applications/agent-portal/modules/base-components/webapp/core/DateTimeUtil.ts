@@ -8,20 +8,23 @@
  */
 
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
-
-import dateFormat = require('dateformat');
+import dateFormat from 'dateformat';
 
 export class DateTimeUtil {
 
     public static async getLocalDateString(value: any, language?: string): Promise<string> {
         let string = '';
         if (value) {
+            if (typeof value === 'string') {
+                value = value.replace(/-/g, '/');
+            }
+
             const date = new Date(value);
             const options = {
                 day: '2-digit',
                 month: '2-digit',
                 year: 'numeric'
-            };
+            } as const;
 
             if (!language) {
                 language = await TranslationService.getUserLanguage();
@@ -34,6 +37,9 @@ export class DateTimeUtil {
     public static async getLocalDateTimeString(value: any, language?: string): Promise<string> {
         let string = '';
         if (value) {
+            if (typeof value === 'string') {
+                value = value.replace(/-/g, '/');
+            }
             const date = new Date(value);
             const options = {
                 day: '2-digit',
@@ -41,7 +47,7 @@ export class DateTimeUtil {
                 year: 'numeric',
                 hour: '2-digit',
                 minute: '2-digit'
-            };
+            } as const;
 
             if (!language) {
                 language = await TranslationService.getUserLanguage();

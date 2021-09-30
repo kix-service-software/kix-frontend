@@ -10,10 +10,12 @@
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { LabelProvider } from './LabelProvider';
 import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldValue';
 import { Label } from './Label';
 import { KIXObjectService } from './KIXObjectService';
+import { ILabelProvider } from './ILabelProvider';
+import { LabelProvider } from './LabelProvider';
+import { EventService } from './EventService';
 
 export class LabelService {
 
@@ -26,22 +28,216 @@ export class LabelService {
         return LabelService.INSTANCE;
     }
 
-    private constructor() { }
+    private constructor() {
+        EventService.getInstance().subscribe('USER_LANGUAGE_CHANGED', {
+            eventSubscriberId: 'LabelService',
+            eventPublished: async (data: any) => {
+                this.displayValueCache.clear();
+                this.requestDisplayValuePromises.clear();
+            }
+        });
+    }
 
-    private labelProviders: Array<LabelProvider<any>> = [];
+    // eslint-disable-next-line max-len
+    private propertiesLabelProvider: Map<KIXObjectType | string, Map<string, ILabelProvider<any>>> = new Map();
+    private objectLabelProvider: Array<ILabelProvider<any>> = [];
 
-    public registerLabelProvider<T>(labelProvider: LabelProvider<T>): void {
-        if (!this.labelProviders.some((lp) => lp.isLabelProviderForType(labelProvider.kixObjectType))) {
-            this.labelProviders.push(labelProvider);
+    private requestDisplayValuePromises: Map<string, Promise<string>> = new Map();
+    private requestIconPromises: Map<string, Promise<Array<ObjectIcon | string>>> = new Map();
+
+    private displayValueCache: Map<KIXObjectType | string, Map<string, Map<any, string>>> = new Map();
+    // eslint-disable-next-line max-len
+    private displayIconCache: Map<KIXObjectType | string, Map<string, Map<any, Array<ObjectIcon | string>>>> = new Map();
+
+
+    public registerLabelProvider<T>(labelProvider: ILabelProvider<T>): void {
+        if (!this.objectLabelProvider.some((lp) => lp.isLabelProviderForType(labelProvider.kixObjectType))) {
+            this.objectLabelProvider.push(labelProvider);
+        }
+
+        const objectType = labelProvider.kixObjectType;
+        if (!this.propertiesLabelProvider.has(objectType)) {
+            this.propertiesLabelProvider.set(objectType, new Map());
+        }
+
+        for (const property of labelProvider.getSupportedProperties()) {
+            this.propertiesLabelProvider.get(objectType).set(property, labelProvider);
         }
     }
 
-    public getLabelProvider<T extends KIXObject>(object: T): LabelProvider<T> {
-        return this.labelProviders.find((lp) => lp.isLabelProviderFor(object));
+    public registerExtendedLabelProvider(labelProvider: ILabelProvider): void {
+        const objectType = labelProvider.kixObjectType;
+        if (!this.propertiesLabelProvider.has(objectType)) {
+            this.propertiesLabelProvider.set(objectType, new Map());
+        }
+
+        for (const property of labelProvider.getSupportedProperties()) {
+            this.propertiesLabelProvider.get(objectType).set(property, labelProvider);
+        }
     }
 
-    public getLabelProviderForType<T extends LabelProvider>(objectType: KIXObjectType | string): T {
-        return this.labelProviders.find((lp) => lp.isLabelProviderForType(objectType)) as any;
+    public getLabelProvider<T extends KIXObject>(object: T): ILabelProvider<T> {
+        return this.objectLabelProvider.find((lp) => lp.isLabelProviderFor(object));
+    }
+
+    public getLabelProviderForProperty<T extends KIXObject>(object: T, property: string): ILabelProvider<T> {
+        let labelProvider: ILabelProvider<T>;
+        const propertiesMap = this.propertiesLabelProvider.get(object.KIXObjectType);
+        if (propertiesMap) {
+            labelProvider = propertiesMap.get(property);
+        }
+        return labelProvider;
+    }
+
+    public getLabelProviderForType<T extends ILabelProvider>(objectType: KIXObjectType | string): T {
+        return this.objectLabelProvider.find((lp) => lp.isLabelProviderForType(objectType)) as any;
+    }
+
+    public async getDisplayText<T extends KIXObject>(
+        object: T, property: string, defaultValue?: string, translatable: boolean = true
+    ): Promise<string> {
+
+        let displayValue;
+        const labelProvider = this.getLabelProvider(object);
+        if (labelProvider) {
+            for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
+                const result = await extendedLabelProvider.getDisplayText(
+                    object, property, defaultValue, translatable
+                );
+                if (result) {
+                    displayValue = result;
+                    break;
+                }
+            }
+        }
+
+        if (Object.prototype.hasOwnProperty.call(object, 'getDisplayValue')) {
+            displayValue = object.getDisplayValue(property);
+        }
+
+        if (displayValue) {
+            return displayValue;
+        }
+
+        // check local cache
+
+        if (!this.displayValueCache.has(object.KIXObjectType)) {
+            this.displayValueCache.set(object.KIXObjectType, new Map());
+        }
+
+        const propertiesMap = this.displayValueCache.get(object.KIXObjectType);
+        if (!propertiesMap.has(property)) {
+            propertiesMap.set(property, new Map());
+        }
+
+        const objectValue = object[property];
+        // if we have already a display value for this property then return directly
+        // FIXME: check against ObjectProperty or something similar if property is supported (KIX2018-6164)?
+        if (typeof objectValue !== 'undefined' && propertiesMap.get(property).has(objectValue)) {
+            return propertiesMap.get(property).get(objectValue);
+        }
+
+        const key = `${object.KIXObjectType}-${property}-`
+            + `${objectValue ? objectValue : defaultValue}-${translatable ? '1' : '0'}`;
+        // FIXME: check against ObjectProperty or something similar if property is supported (KIX2018-6164)?
+        if (typeof objectValue !== 'undefined' && this.requestDisplayValuePromises.has(key)) {
+            return this.requestDisplayValuePromises.get(key);
+        }
+
+        const requestPromise = this.createRequestDisplayValuePromise(
+            object, property, key, defaultValue, translatable
+        );
+        this.requestDisplayValuePromises.set(key, requestPromise);
+        return requestPromise;
+    }
+
+    private createRequestDisplayValuePromise<T extends KIXObject>(
+        object: T, property: string, key: string, defaultValue?: string, translatable: boolean = true
+    ): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            let displayValue;
+            let labelProvider = this.getLabelProviderForProperty(object, property);
+
+            if (!labelProvider) {
+                labelProvider = this.getLabelProvider(object);
+            }
+
+            if (!displayValue) {
+                displayValue = await labelProvider?.getDisplayText(object, property, defaultValue, translatable);
+            }
+            this.displayValueCache.get(object.KIXObjectType).get(property).set(object[property], displayValue);
+            this.requestDisplayValuePromises.delete(key);
+            resolve(displayValue);
+        });
+    }
+
+    public async getIcons<T extends KIXObject>(
+        object: T, property: string, value?: string | number, forTable?: boolean
+    ): Promise<Array<string | ObjectIcon>> {
+        let displayIcons;
+
+        if (Object.prototype.hasOwnProperty.call(object, 'getDisplayIcons')) {
+            displayIcons = object.getDisplayIcons(property);
+        }
+
+        if (displayIcons) {
+            return displayIcons;
+        }
+
+        // check local cache
+        if (!this.displayIconCache.has(object.KIXObjectType)) {
+            this.displayIconCache.set(object.KIXObjectType, new Map());
+        }
+
+        const propertiesMap = this.displayIconCache.get(object.KIXObjectType);
+        if (!propertiesMap.has(property)) {
+            propertiesMap.set(property, new Map());
+        }
+
+        const objectValue = object[property];
+        // if we have already a display value for this property then return directly
+        // FIXME: check against ObjectProperty or something similar if property is supported (KIX2018-6164)?
+        if (typeof objectValue !== 'undefined' && propertiesMap.get(property).has(objectValue)) {
+            return propertiesMap.get(property).get(objectValue);
+        }
+
+        const key = `${object.KIXObjectType}-${property}-`
+            + `${objectValue ? objectValue : value}-${forTable ? '1' : '0'}`;
+        // FIXME: check against ObjectProperty or something similar if property is supported (KIX2018-6164)?
+        if (typeof objectValue !== 'undefined' && this.requestIconPromises.has(key)) {
+            return this.requestIconPromises.get(key);
+        }
+
+        const requestPromise = this.createRequestIconPromise(object, property, key, value, forTable);
+        this.requestIconPromises.set(key, requestPromise);
+        return requestPromise;
+    }
+
+    private createRequestIconPromise(
+        object: KIXObject, property: string, key: string, value?: string | number, forTable?: boolean
+    ): Promise<Array<ObjectIcon | string>> {
+        return new Promise(async (resolve, reject) => {
+            let displayIcons;
+
+            const labelProvider = this.getLabelProvider(object);
+
+            if (labelProvider) {
+                for (const extendedLabelProvider of (labelProvider as LabelProvider)?.getExtendedLabelProvider()) {
+                    const result = await extendedLabelProvider.getIcons(object, property, value, forTable);
+                    if (result) {
+                        displayIcons = result;
+                        break;
+                    }
+                }
+
+                if (!displayIcons) {
+                    displayIcons = await labelProvider.getIcons(object, property, value, forTable);
+                }
+                this.displayIconCache.get(object.KIXObjectType).get(property).set(object[property], displayIcons);
+            }
+            this.requestIconPromises.delete(key);
+            resolve(displayIcons);
+        });
     }
 
     public async getDFDisplayValues(
@@ -50,7 +246,7 @@ export class LabelService {
         const labelProvider = this.getLabelProviderForType(objectType);
 
         if (labelProvider) {
-            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+            for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
                 const result = await extendedLabelProvider.getDFDisplayValues(fieldValue);
                 if (result) {
                     return result;
@@ -66,7 +262,7 @@ export class LabelService {
         const labelProvider = object ? this.getLabelProvider(object) : null;
 
         if (labelProvider) {
-            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+            for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
                 const result = extendedLabelProvider.getObjectIcon(object);
                 if (result) {
                     return result;
@@ -82,7 +278,7 @@ export class LabelService {
         const labelProvider = this.getLabelProviderForType(objectType);
 
         if (labelProvider) {
-            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+            for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
                 const result = extendedLabelProvider.getObjectIcon();
                 if (result) {
                     return result;
@@ -98,7 +294,7 @@ export class LabelService {
         const labelProvider = this.getLabelProviderForType(objectType);
 
         if (labelProvider) {
-            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+            for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
                 const result = extendedLabelProvider.getObjectTypeIcon();
                 if (result) {
                     return result;
@@ -116,7 +312,7 @@ export class LabelService {
         const labelProvider = this.getLabelProvider(object);
 
         if (labelProvider) {
-            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+            for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
                 const result = await extendedLabelProvider.getObjectText(object, id, title, translatable);
                 if (result) {
                     return result;
@@ -132,7 +328,7 @@ export class LabelService {
         const labelProvider = this.getLabelProvider(object);
 
         if (labelProvider) {
-            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+            for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
                 const result = extendedLabelProvider.getObjectAdditionalText(object, translatable);
                 if (result) {
                     return result;
@@ -150,7 +346,7 @@ export class LabelService {
         const labelProvider = this.getLabelProviderForType(objectType);
 
         if (labelProvider) {
-            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+            for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
                 const result = await extendedLabelProvider.getObjectName(plural, translatable);
                 if (result) {
                     return result;
@@ -166,7 +362,7 @@ export class LabelService {
         const labelProvider = this.getLabelProvider(object);
 
         if (labelProvider) {
-            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+            for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
                 const result = await extendedLabelProvider.getObjectTooltip(object, translatable);
                 if (result) {
                     return result;
@@ -184,7 +380,7 @@ export class LabelService {
         const labelProvider = this.getLabelProviderForType(objectType);
 
         if (labelProvider) {
-            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+            for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
                 const result = await extendedLabelProvider.getPropertyText(property, short, translatable);
                 if (result) {
                     return result;
@@ -202,7 +398,7 @@ export class LabelService {
         const labelProvider = this.getLabelProviderForType(objectType);
 
         if (labelProvider) {
-            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+            for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
                 const result = await extendedLabelProvider.getExportPropertyText(property, useDisplayText);
                 if (result) {
                     return result;
@@ -220,7 +416,7 @@ export class LabelService {
         const labelProvider = this.getLabelProviderForType(objectType);
 
         if (labelProvider) {
-            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+            for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
                 const result = await extendedLabelProvider.getExportPropertyValue(property, value);
                 if (result) {
                     return result;
@@ -236,7 +432,7 @@ export class LabelService {
         const labelProvider = this.getLabelProviderForType(objectType);
 
         if (labelProvider) {
-            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+            for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
                 const result = await extendedLabelProvider.getPropertyIcon(property);
                 if (result) {
                     return result;
@@ -248,60 +444,12 @@ export class LabelService {
         return null;
     }
 
-    public async getDisplayText<T extends KIXObject>(
-        object: T, property: string, defaultValue?: string, translatable: boolean = true, short?: boolean
-    ): Promise<string> {
-        const labelProvider = this.getLabelProvider(object);
-
-        if (labelProvider) {
-            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
-                const result = await extendedLabelProvider.getDisplayText(object, property, defaultValue, translatable);
-                if (result) {
-                    return result;
-                }
-            }
-
-            return await labelProvider.getDisplayText(object, property, defaultValue, translatable);
-        }
-        return null;
-    }
-
     public async getPropertyValueDisplayText(
         objectType: KIXObjectType | string, property: string, value: string | number, translatable?: boolean
     ): Promise<string> {
-        const labelProvider = this.getLabelProviderForType(objectType);
-
-        if (labelProvider) {
-            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
-                const result = await extendedLabelProvider.getPropertyValueDisplayText(
-                    property, value, translatable
-                );
-                if (result) {
-                    return result;
-                }
-            }
-
-            return await labelProvider.getPropertyValueDisplayText(property, value, translatable);
-        }
-        return null;
-    }
-
-    public async getIcons<T extends KIXObject>(
-        object: T, property: string, value?: string | number, forTable?: boolean
-    ): Promise<Array<string | ObjectIcon>> {
-        const labelProvider = this.getLabelProvider(object);
-
-        if (labelProvider) {
-            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
-                const result = await extendedLabelProvider.getIcons(object, property, value, forTable);
-                if (result) {
-                    return result;
-                }
-            }
-
-            return await labelProvider.getIcons(object, property, value, forTable);
-        }
-        return [];
+        const object = { KIXObjectType: objectType };
+        object[property] = value;
+        return this.getDisplayText(object as any, property, value?.toString(), translatable);
     }
 
     public async getIconsForType<T extends KIXObject>(
@@ -310,7 +458,7 @@ export class LabelService {
         const labelProvider = this.getLabelProviderForType(objectType);
 
         if (labelProvider) {
-            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+            for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
                 const result = await extendedLabelProvider.getIcons(object, property, value, forTable);
                 if (result) {
                     return result;
@@ -326,7 +474,7 @@ export class LabelService {
         const labelProvider = this.getLabelProvider(object);
 
         if (labelProvider) {
-            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+            for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
                 const result = extendedLabelProvider.getDisplayTextClasses(object, property);
                 if (result) {
                     return result;
@@ -344,7 +492,7 @@ export class LabelService {
         const labelProvider = await this.getLabelProviderForDFValue(fieldValue);
 
         if (labelProvider) {
-            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+            for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
                 const result = extendedLabelProvider.createLabelsFromDFValue(fieldValue);
                 if (result) {
                     return result;
@@ -364,7 +512,9 @@ export class LabelService {
             fieldValue.ID ? Number(fieldValue.ID) : null
         ) : null;
         if (dynamicField) {
-            return this.labelProviders.find((lp) => lp.isLabelProviderForDFType(dynamicField.FieldType));
+            return (this.objectLabelProvider.find(
+                (lp) => lp.isLabelProviderForDFType(dynamicField.FieldType)
+            ) as LabelProvider);
         }
         return;
     }

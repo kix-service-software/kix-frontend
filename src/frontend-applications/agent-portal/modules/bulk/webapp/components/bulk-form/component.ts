@@ -72,7 +72,7 @@ class Component {
 
     public async reset(): Promise<void> {
         this.state.bulkManager?.reset();
-        const dynamicFormComponent = (this as any).getComponent('bulk-dynamic-form');
+        const dynamicFormComponent = (this as any).getComponent(this.state.componentId);
         if (dynamicFormComponent) {
             dynamicFormComponent.updateValues();
         }
@@ -106,7 +106,7 @@ class Component {
                                 table.selectAll();
                             }
                             if (eventId === TableEvent.TABLE_READY
-                                && (!!this.errorObjects.length || !!this.finishedObjects.length)
+                                && (this.errorObjects.length || !!this.finishedObjects.length)
                             ) {
                                 this.state.table.setRowObjectValueState(this.errorObjects, ValueState.HIGHLIGHT_ERROR);
                                 this.state.table.setRowObjectValueState(

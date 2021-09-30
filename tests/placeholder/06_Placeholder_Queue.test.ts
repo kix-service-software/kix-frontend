@@ -36,6 +36,8 @@ describe('Placeholder replacement for queue', () => {
     let queuePlaceholderHandler: QueuePlaceholderHandler = new QueuePlaceholderHandler();
     let orgLoadFuntion
     before(() => {
+        LabelService.getInstance()['objectLabelProvider'] = [];
+        LabelService.getInstance()['propertiesLabelProvider'].clear();
         queue = someTestFunctions.prepareQueue();
         ticket = new Ticket();
         ticket.Title = 'ticket title';
@@ -61,7 +63,8 @@ describe('Placeholder replacement for queue', () => {
 
     after(() => {
         KIXObjectService.loadObjects = orgLoadFuntion;
-        LabelService.getInstance()['labelProviders'] = [];
+        LabelService.getInstance()['objectLabelProvider'] = [];
+        LabelService.getInstance()['propertiesLabelProvider'].clear();
         (TranslationService.getInstance() as any).translations = null;
     });
 
@@ -150,12 +153,9 @@ describe('Placeholder replacement for queue', () => {
             const date = await DateTimeUtil.getLocalDateTimeString(queue.CreateTime, 'en');
             expect(text).equal(date);
 
-            const germanText = await queuePlaceholderHandler.replace(`<TR_KIX_QUEUE_${KIXObjectProperty.CREATE_TIME}>`, ticket, 'de');
+            const germanText = await queuePlaceholderHandler.replace(`<KIX_QUEUE_${KIXObjectProperty.CREATE_TIME}>`, ticket, 'de');
             const germanDate = await DateTimeUtil.getLocalDateTimeString(queue.CreateTime, 'de');
             expect(germanText).equal(germanDate);
-
-            const notGermanText = await queuePlaceholderHandler.replace(`<KIX_QUEUE_${KIXObjectProperty.CREATE_TIME}>`, ticket, 'de');
-            expect(notGermanText).equal(date);
         });
 
         it('Should replace queue change time placeholder', async () => {
@@ -163,12 +163,9 @@ describe('Placeholder replacement for queue', () => {
             const date = await DateTimeUtil.getLocalDateTimeString(queue.ChangeTime, 'en');
             expect(text).equal(date);
 
-            const germanText = await queuePlaceholderHandler.replace(`<TR_KIX_QUEUE_${KIXObjectProperty.CHANGE_TIME}>`, ticket, 'de');
+            const germanText = await queuePlaceholderHandler.replace(`<KIX_QUEUE_${KIXObjectProperty.CHANGE_TIME}>`, ticket, 'de');
             const germanDate = await DateTimeUtil.getLocalDateTimeString(queue.ChangeTime, 'de');
             expect(germanText).equal(germanDate);
-
-            const notGermanText = await queuePlaceholderHandler.replace(`<KIX_QUEUE_${KIXObjectProperty.CHANGE_TIME}>`, ticket, 'de');
-            expect(notGermanText).equal(date);
         });
     });
 

@@ -21,6 +21,7 @@ import { FilterType } from '../../../../model/FilterType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 import { SearchProperty } from '../../../search/model/SearchProperty';
+import { OrganisationProperty } from '../../model/OrganisationProperty';
 
 export class OrganisationService extends KIXObjectService<Organisation> {
 
@@ -139,6 +140,17 @@ export class OrganisationService extends KIXObjectService<Organisation> {
                 SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
             )
         ];
+    }
+
+    public async getObjectProperties(objectType: KIXObjectType): Promise<string[]> {
+        const superProperties = await super.getObjectProperties(objectType);
+        const objectProperties: string[] = [];
+        for (const property in OrganisationProperty) {
+            if (OrganisationProperty[property]) {
+                objectProperties.push(OrganisationProperty[property]);
+            }
+        }
+        return [...objectProperties, ...superProperties];
     }
 
 }

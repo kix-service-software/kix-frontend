@@ -7,6 +7,7 @@
  * --
  */
 
+import { ConfigurationType } from '../../../../model/configuration/ConfigurationType';
 import { IKIXModuleExtension } from '../../../../model/IKIXModuleExtension';
 
 export class KIXModulesService {
@@ -25,6 +26,8 @@ export class KIXModulesService {
     private modules: IKIXModuleExtension[] = [];
 
     private tags: Map<string, string>;
+
+    private configurationComponents: Map<ConfigurationType | string, string> = new Map();
 
     public init(modules: IKIXModuleExtension[]): void {
         this.tags = new Map();
@@ -45,6 +48,15 @@ export class KIXModulesService {
             console.warn(`No template found for component: ${componentId}`);
         }
         return template;
+    }
+
+    public registerConfigurationComponent(type: ConfigurationType | string, componentId: string): void {
+        this.configurationComponents.set(type, componentId);
+    }
+
+    public static getConfigurationComponentTemplate(type: ConfigurationType | string): any {
+        const componentId = this.getInstance().configurationComponents.get(type);
+        return this.getComponentTemplate(componentId);
     }
 
 }

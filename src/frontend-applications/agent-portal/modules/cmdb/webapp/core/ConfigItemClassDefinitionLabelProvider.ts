@@ -16,6 +16,7 @@ import { TranslationService } from '../../../../modules/translation/webapp/core/
 
 
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 
 
@@ -67,8 +68,8 @@ export class ConfigItemClassDefinitionLabelProvider extends LabelProvider<Config
         return displayValue;
     }
 
-    public isLabelProviderFor(ciClassDefinition: ConfigItemClassDefinition): boolean {
-        return ciClassDefinition instanceof ConfigItemClassDefinition;
+    public isLabelProviderFor(object: ConfigItemClassDefinition | KIXObject): boolean {
+        return object instanceof ConfigItemClassDefinition || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getObjectText(

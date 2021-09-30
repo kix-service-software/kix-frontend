@@ -20,6 +20,7 @@ import { FAQVote } from '../../model/FAQVote';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class FAQLabelProvider extends LabelProvider<FAQArticle> {
 
@@ -39,7 +40,7 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 displayValue = value.toString();
                 break;
             case FAQArticleProperty.CUSTOMER_VISIBLE:
-                displayValue = Boolean(value) ? 'Translatable#Yes' : 'Translatable#No';
+                displayValue = value ? 'Translatable#Yes' : 'Translatable#No';
                 break;
             default:
                 displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
@@ -160,8 +161,8 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public isLabelProviderFor(faqArticle: FAQArticle): boolean {
-        return faqArticle instanceof FAQArticle;
+    public isLabelProviderFor(object: FAQArticle | KIXObject): boolean {
+        return object instanceof FAQArticle || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getObjectText(faqArticle: FAQArticle, id: boolean = true, title: boolean = true): Promise<string> {
@@ -239,7 +240,7 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 }
                 break;
             case FAQArticleProperty.CUSTOMER_VISIBLE:
-                if (Boolean(value)) {
+                if (value) {
                     icons.push('kix-icon-check');
                 } else if (!forTable) {
                     icons.push('kix-icon-close');

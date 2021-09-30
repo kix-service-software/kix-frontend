@@ -10,6 +10,7 @@
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { BrowserUtil } from '../../core/BrowserUtil';
 
 class Component {
 
@@ -50,8 +51,18 @@ class Component {
 
         if (this.state.routingConfiguration) {
             const urlParams = this.state.routingConfiguration?.params;
+            let urlSearchParams;
+            if (Array.isArray(urlParams) && urlParams.length) {
+                const encodedParams = [];
+                for (const p of urlParams) {
+                    const value = await BrowserUtil.prepareUrlParameterValue(p[1]);
+                    encodedParams.push([p[0], value]);
+                }
+                urlSearchParams = new URLSearchParams(encodedParams);
+            }
+
             ContextService.getInstance().setActiveContext(
-                this.state.routingConfiguration.contextId, this.state.objectId, new URLSearchParams(urlParams)
+                this.state.routingConfiguration.contextId, this.state.objectId, urlSearchParams
             );
         }
     }

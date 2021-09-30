@@ -37,7 +37,7 @@ export class TicketCreateDynamicFields extends ExtendedJobFormManager {
         return;
     }
 
-    public postPrepareOptionValue(actionType: string, optionName: string, value: any, parameter: {}): any {
+    public postPrepareOptionValue(actionType: string, optionName: string, value: any, parameter: any): any {
         if (actionType === 'TicketCreate' && optionName === 'DynamicFieldList') {
             if (Array.isArray(value) && value[0] && value[1] !== '') {
                 return this.valueAsArray(parameter, optionName, value);

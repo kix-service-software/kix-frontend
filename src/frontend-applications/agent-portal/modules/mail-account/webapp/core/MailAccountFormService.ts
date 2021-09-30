@@ -19,6 +19,10 @@ import { LabelService } from '../../../../modules/base-components/webapp/core/La
 import { DispatchingType } from '../../model/DispatchingType';
 import { IdService } from '../../../../model/IdService';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
+import { FormFieldOption } from '../../../../model/configuration/FormFieldOption';
+import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
+import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
+import { InputFieldTypes } from '../../../base-components/webapp/core/InputFieldTypes';
 
 export class MailAccountFormService extends KIXObjectFormService {
 
@@ -51,7 +55,12 @@ export class MailAccountFormService extends KIXObjectFormService {
                     for (const f of g.formFields) {
                         if (f.property === MailAccountProperty.TYPE) {
                             const type = formFieldValues.get(f.instanceId).value;
-                            if (type && type.match(/^IMAP/)) {
+                            if (type?.match(/OAuth2/)) {
+                                await this.setProfileField(f, formFieldValues, mailAccount);
+                            } else if (type) {
+                                await this.setPasswordField(f, formFieldValues, mailAccount);
+                            }
+                            if (type?.match(/^IMAP/)) {
                                 await this.setIMAPFolderField(f, formFieldValues, mailAccount);
                             }
                             break PAGES;
@@ -62,23 +71,78 @@ export class MailAccountFormService extends KIXObjectFormService {
         }
     }
 
+    private async setPasswordField(
+        typeField: FormFieldConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, mailAccount?: MailAccount
+    ): Promise<void> {
+        const value = mailAccount ? 'not modified' : undefined;
+        const passwordField = await this.getPasswordField();
+        typeField.children.push(passwordField);
+        formFieldValues.set(passwordField.instanceId, new FormFieldValue(value));
+    }
+
+    public async getPasswordField(): Promise<FormFieldConfiguration> {
+        const passwordField = new FormFieldConfiguration(
+            'password-field',
+            'Translatable#Password', MailAccountProperty.PASSWORD, null, true,
+            'Translatable#Helptext_Admin_MailAccountCreate_Password',
+            [
+                new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
+            ]
+        );
+        passwordField.instanceId = IdService.generateDateBasedId(passwordField.property);
+        return passwordField;
+    }
+
     private async setIMAPFolderField(
         typeField: FormFieldConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, mailAccount?: MailAccount
     ): Promise<void> {
+        const value = typeof mailAccount?.IMAPFolder !== 'undefined' && mailAccount?.IMAPFolder !== null ?
+            mailAccount.IMAPFolder : 'INBOX';
+        const folderField = await this.getFolderField();
+        typeField.children.push(folderField);
+        formFieldValues.set(folderField.instanceId, new FormFieldValue(value));
+    }
+
+    public async getFolderField(): Promise<FormFieldConfiguration> {
         const label = await LabelService.getInstance().getPropertyText(
             MailAccountProperty.IMAP_FOLDER, KIXObjectType.MAIL_ACCOUNT
         );
-        const value = typeof mailAccount.IMAPFolder !== 'undefined' && mailAccount.IMAPFolder !== null ?
-            mailAccount.IMAPFolder : 'INBOX';
         const folderField = new FormFieldConfiguration(
             'imap-field',
             label, MailAccountProperty.IMAP_FOLDER, null, false,
-            'Translatable#Helptext_Admin_MailAccountEdit_IMAPFolder', undefined,
-            new FormFieldValue(value)
+            'Translatable#Helptext_Admin_MailAccountCreate_IMAPFolder', undefined
         );
         folderField.instanceId = IdService.generateDateBasedId(folderField.property);
-        typeField.children.push(folderField);
-        formFieldValues.set(folderField.instanceId, new FormFieldValue(value));
+        return folderField;
+    }
+
+    private async setProfileField(
+        typeField: FormFieldConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, mailAccount?: MailAccount
+    ): Promise<void> {
+        const value = typeof mailAccount?.OAuth2_ProfileID !== 'undefined' && mailAccount?.OAuth2_ProfileID !== null ?
+            mailAccount.OAuth2_ProfileID : undefined;
+        const profileField = await this.getProfileField();
+        typeField.children.push(profileField);
+        formFieldValues.set(profileField.instanceId, new FormFieldValue(value));
+    }
+
+    public async getProfileField(): Promise<FormFieldConfiguration> {
+        const label = await LabelService.getInstance().getPropertyText(
+            MailAccountProperty.OAUTH2_PROFILEID, KIXObjectType.MAIL_ACCOUNT
+        );
+        const profileField = new FormFieldConfiguration(
+            'oauth2-profile-field',
+            label, MailAccountProperty.OAUTH2_PROFILEID, 'object-reference-input',
+            true, 'Translatable#Helptext_Admin_MailAccountCreate_OAuth2_Profile',
+            [
+                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.OAUTH2_PROFILE),
+                new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, false),
+                new FormFieldOption(ObjectReferenceOptions.TRANSLATABLE, false),
+                new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true)
+            ]
+        );
+        profileField.instanceId = IdService.generateDateBasedId(profileField.property);
+        return profileField;
     }
 
     protected async getValue(property: string, value: any, mailAccount: MailAccount): Promise<any> {

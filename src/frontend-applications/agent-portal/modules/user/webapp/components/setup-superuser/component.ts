@@ -49,6 +49,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public onCreate(): void {
         this.state = new ComponentState();
     }
+    public onInput(input: any) {
+        this.step = input.step;
+        this.update = this.step && this.step.result && this.step.result.contactId && this.step.result.userId;
+        this.state.completed = this.step ? this.step.completed : false;
+    }
 
     public async onMount(): Promise<void> {
         this.state.translations = await TranslationService.createTranslationObject([
@@ -57,12 +62,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         await this.prepareForm();
         this.state.prepared = true;
-    }
-
-    public onInput(input: any) {
-        this.step = input.step;
-        this.update = this.step && this.step.result && this.step.result.contactId && this.step.result.userId;
-        this.state.completed = this.step ? this.step.completed : false;
     }
 
     private async prepareForm(): Promise<void> {
@@ -97,11 +96,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             ),
             new FormFieldConfiguration(
                 'create-superuser-password',
-                'Translatable#Password', UserProperty.USER_PASSWORD, null, true,
+                'Translatable#Password', UserProperty.USER_PASSWORD, null, !this.update,
                 'Translatable#Helptext_User_UserCreateEdit_Password',
                 [
                     new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
-                ]
+                ], undefined, undefined, undefined, undefined, undefined, undefined,
+                undefined, undefined, undefined, undefined, undefined, undefined,
+                undefined, this.update ? 'Translatable#not modified' : undefined
             )
         ];
 
@@ -165,6 +166,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         formInstance.provideFixedValue(UserProperty.IS_AGENT, new FormFieldValue(true));
+
+        // set inital organisation as primary if necessary
+        if (!this.update) {
+            formInstance.provideFixedValue(ContactProperty.PRIMARY_ORGANISATION_ID, new FormFieldValue(1));
+        }
 
         const result = await formInstance.validateForm();
         const validationError = result.some((r) => r && r.severity === ValidationSeverity.ERROR);

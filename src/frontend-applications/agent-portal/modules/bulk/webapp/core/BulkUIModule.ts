@@ -18,6 +18,7 @@ import { ActionFactory } from '../../../../modules/base-components/webapp/core/A
 import { BulkAction } from './BulkAction';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { ConfigurationType } from '../../../../model/configuration/ConfigurationType';
 
 export class UIModule implements IUIModule {
 
@@ -42,7 +43,7 @@ export class UIModule implements IUIModule {
         );
         ContextService.getInstance().registerContext(bulkDialogContext);
 
-        ActionFactory.getInstance().registerAction('bulk-action', BulkAction);
+        ActionFactory.getInstance().registerAction('bulk-action', BulkAction, [ConfigurationType.TableWidget]);
     }
 
 }

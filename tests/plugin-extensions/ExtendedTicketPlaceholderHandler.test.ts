@@ -39,7 +39,8 @@ describe('Placeholder replacement for ticket extended attributes', () => {
     });
 
     after(() => {
-        LabelService.getInstance()['labelProviders'] = [];
+        LabelService.getInstance()['objectLabelProvider'] = []
+        LabelService.getInstance()['propertiesLabelProvider'].clear();;
         (TranslationService.getInstance() as any).translations = null;
     });
 

@@ -35,6 +35,9 @@ class Component {
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Create', 'Translatable#Search'
         ]);
+
+        const descriptors = ContextService.getInstance().getContextDescriptors(ContextMode.SEARCH);
+        this.state.canShow = Array.isArray(descriptors) && descriptors.length > 0;
     }
 
     public onDestroy(): void {

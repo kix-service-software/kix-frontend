@@ -12,13 +12,14 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { JobRunLog } from '../../model/JobRunLog';
 import { JobRunLogProperty } from '../../model/JobRunLogProperty';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class JobRunLogLabelProvider extends LabelProvider {
 
     public kixObjectType: KIXObjectType = KIXObjectType.JOB_RUN_LOG;
 
-    public isLabelProviderFor(jobRunLog: JobRunLog): boolean {
-        return jobRunLog instanceof JobRunLog;
+    public isLabelProviderFor(object: JobRunLog | KIXObject): boolean {
+        return object instanceof JobRunLog || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

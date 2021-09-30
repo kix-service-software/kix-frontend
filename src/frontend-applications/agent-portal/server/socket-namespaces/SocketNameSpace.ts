@@ -15,23 +15,24 @@ import { ProfilingService } from '../../../../server/services/ProfilingService';
 import { SocketResponse } from '../../modules/base-components/webapp/core/SocketResponse';
 import { ConfigurationService } from '../../../../server/services/ConfigurationService';
 import { LoggingService } from '../../../../server/services/LoggingService';
+import { Namespace, Server, Socket } from 'socket.io';
 
 export abstract class SocketNameSpace implements ISocketNamespace {
 
     protected abstract getNamespace(): string;
 
-    protected abstract registerEvents(client: SocketIO.Socket): void;
+    protected abstract registerEvents(client: Socket): void;
 
-    protected namespace: SocketIO.Namespace;
+    protected namespace: Namespace;
 
     private requestCounter: number = 0;
 
-    public registerNamespace(server: SocketIO.Server): void {
+    public registerNamespace(server: Server): void {
         this.initialize();
         this.namespace = server.of('/' + this.getNamespace());
         this.namespace
             .use(AuthenticationService.getInstance().isSocketAuthenticated.bind(AuthenticationService.getInstance()))
-            .on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
+            .on(SocketEvent.CONNECTION, (client: Socket) => {
                 this.registerEvents(client);
             });
     }
@@ -49,8 +50,8 @@ export abstract class SocketNameSpace implements ISocketNamespace {
     }
 
     protected registerEventHandler<RQ extends ISocketRequest, RS>(
-        client: SocketIO.Socket, event: string,
-        handler: (data: RQ, client: SocketIO.Socket) => Promise<SocketResponse<RS>>
+        client: Socket, event: string,
+        handler: (data: RQ, client: Socket) => Promise<SocketResponse<RS>>
     ): void {
         client.on(event, (data: RQ) => {
 

@@ -23,6 +23,8 @@ export enum DynamicFieldTypes {
 
     CI_REFERENCE = 'ITSMConfigItemReference',
 
-    TICKET_REFERENCE = 'TicketReference'
+    TICKET_REFERENCE = 'TicketReference',
+
+    TABLE = 'Table'
 
 }

@@ -72,4 +72,6 @@ export interface IKIXObjectService<T extends KIXObject = KIXObject> extends IKIX
 
     getObjectTypeForProperty(property: string): Promise<KIXObjectType | string>;
 
+    getObjectProperties(objectType: KIXObjectType): Promise<string[]>;
+
 }

@@ -14,6 +14,7 @@ import { LinkObjectProperty } from '../../model/LinkObjectProperty';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 
 export class LinkObjectLabelProvider extends LabelProvider<LinkObject> {
@@ -89,8 +90,8 @@ export class LinkObjectLabelProvider extends LabelProvider<LinkObject> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public isLabelProviderFor(linkObject: LinkObject): boolean {
-        return linkObject instanceof LinkObject;
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object instanceof LinkObject || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getObjectText(linkObject: LinkObject): Promise<string> {

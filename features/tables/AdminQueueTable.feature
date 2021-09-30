@@ -35,7 +35,7 @@ Feature: Als Nutzer möchte ich eine korrekte Standardkonfiguration für eine Ta
         Examples:
             | column            | sortable | filterable | listFilter | width | flexible | showText | showIcon | type       | columnTitle | columnIcon | objectType |
             | 'Name'            | 1        | 1          | 0          | 200   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Queue'    |
-            | 'ICON'            | 0        | 0          | 0          | 41    | 0        | 0        | 1        | 'STRING'   | 0           | 0          | 'Queue'    |
+            | 'QueueID'         | 0        | 0          | 0          | 41    | 0        | 0        | 1        | 'STRING'   | 0           | 0          | 'Queue'    |
             | 'FollowUpID'      | 1        | 1          | 1          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Queue'    |
             | 'UnlockTimeout'   | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'NUMBER'   | 1           | 0          | 'Queue'    |
             | 'SystemAddressID' | 1        | 1          | 0          | 200   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Queue'    |

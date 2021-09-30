@@ -17,13 +17,14 @@ import { KIXObjectService } from '../../../base-components/webapp/core/KIXObject
 import { DynamicFieldType } from '../../model/DynamicFieldType';
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
 import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class DynamicFieldLabelProvider extends LabelProvider<DynamicField> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.DYNAMIC_FIELD;
 
-    public isLabelProviderFor(dynamicField: DynamicField): boolean {
-        return dynamicField instanceof DynamicField;
+    public isLabelProviderFor(object: DynamicField | KIXObject): boolean {
+        return object instanceof DynamicField || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

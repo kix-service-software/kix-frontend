@@ -35,6 +35,7 @@ import { IKIXObjectService } from '../../../../../modules/base-components/webapp
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { Context } from '../../../../../model/Context';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 
 class Component {
 
@@ -72,7 +73,7 @@ class Component {
         const context = ContextService.getInstance().getActiveContext();
         let sourceContext: Context;
 
-        const sourceContextInformation = context?.getAdditionalInformation('SourceContext');
+        const sourceContextInformation = context?.getAdditionalInformation(AdditionalContextInformation.SOURCE_CONTEXT);
         if (sourceContextInformation) {
             sourceContext = ContextService.getInstance().getContext(sourceContextInformation?.instanceId);
         }
@@ -292,7 +293,7 @@ class Component {
             }
         });
 
-        if (!!deleteNewLinks.length) {
+        if (deleteNewLinks.length) {
             const rowIds = this.state.table.getRows()
                 .filter((r) => deleteNewLinks.some((dl) => dl.equals(r.getRowObject().getObject())))
                 .map((r) => r.getRowId());
@@ -333,7 +334,7 @@ class Component {
         });
 
         let deleteLinksOK: boolean = true;
-        if (!!linkIdsToDelete.length) {
+        if (linkIdsToDelete.length) {
             deleteLinksOK = await this.deleteLinks(linkIdsToDelete);
         }
 
@@ -374,7 +375,7 @@ class Component {
     private async deleteLinks(linkIdsToDelete: number[]): Promise<boolean> {
         BrowserUtil.toggleLoadingShield('APP_SHIELD', true, 'Translatable#Links will be removed.');
         const failIds = await KIXObjectService.deleteObject(KIXObjectType.LINK_OBJECT, linkIdsToDelete);
-        return !failIds || !!!failIds.length;
+        return !failIds || failIds.length === 0;
     }
 
 }

@@ -18,13 +18,14 @@ import { KIXObjectService } from '../../../../modules/base-components/webapp/cor
 import { SystemAddress } from '../../../system-address/model/SystemAddress';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { FollowUpType } from '../../model/FollowUpType';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class QueueLabelProvider extends LabelProvider<Queue> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.QUEUE;
 
-    public isLabelProviderFor(queue: Queue): boolean {
-        return queue instanceof Queue;
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object instanceof Queue || object?.KIXObjectType === this.kixObjectType;
     }
 
     public isLabelProviderForType(objectType: KIXObjectType): boolean {

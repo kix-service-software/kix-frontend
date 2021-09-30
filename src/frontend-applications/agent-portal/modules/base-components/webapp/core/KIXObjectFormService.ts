@@ -100,8 +100,6 @@ export abstract class KIXObjectFormService {
 
         const values = [];
         for (const f of formFields) {
-            let formFieldValue: FormFieldValue;
-
             if (formFieldValues.has(f.instanceId)) {
                 continue;
             }
@@ -128,7 +126,7 @@ export abstract class KIXObjectFormService {
                 }
             }
 
-            formFieldValue = kixObject && formContext === FormContext.EDIT
+            const formFieldValue = kixObject && formContext === FormContext.EDIT
                 ? new FormFieldValue(value)
                 : new FormFieldValue(value, f.defaultValue ? f.defaultValue.valid : undefined);
 
@@ -223,7 +221,7 @@ export abstract class KIXObjectFormService {
             for (const child of f.children) {
                 const existingChildren = children.filter((c) => c.property === child.property);
                 if (
-                    !!!existingChildren.length
+                    !existingChildren.length
                     || typeof child.countDefault !== 'number'
                     || child.countDefault > existingChildren.length
                 ) {
@@ -263,7 +261,7 @@ export abstract class KIXObjectFormService {
     }
 
     public async getFormParameter(
-        forUpdate: boolean = false, createOptions?: KIXObjectSpecificCreateOptions
+        forUpdate: boolean = false, createOptions?: KIXObjectSpecificCreateOptions, postPrepareValues: boolean = true
     ): Promise<Array<[string, any]>> {
         let parameter: Array<[string, any]> = [];
 
@@ -333,7 +331,7 @@ export abstract class KIXObjectFormService {
             templateKey = templateIterator.next();
         }
 
-        if (formInstance) {
+        if (formInstance && postPrepareValues) {
             parameter = await this.postPrepareValues(
                 parameter, createOptions, formInstance?.getForm().formContext, formInstance
             );

@@ -39,8 +39,8 @@ export class TicketStateSet extends ExtendedJobFormManager {
                         new FormFieldOption(DefaultSelectInputFormOption.NODES,
                             [
                                 new TreeNode('NONE', '-'),
-                                new TreeNode('BOB', 'BOB'),
-                                new TreeNode('EOB', 'EOB'),
+                                new TreeNode('BOB', 'Translatable#Begin of Business Day'),
+                                new TreeNode('EOB', 'Translatable#End of Business Day'),
                             ]),
                         new FormFieldOption(DefaultSelectInputFormOption.MULTI, false)
                     ]
@@ -63,7 +63,7 @@ export class TicketStateSet extends ExtendedJobFormManager {
     }
 
     public async postPrepareOptionValue(
-        actionType: string, optionName: string, value: any, parameter: {}
+        actionType: string, optionName: string, value: any, parameter: any
     ): Promise<any> {
         if (actionType === 'StateSet') {
             if (optionName === 'TargetTime') {

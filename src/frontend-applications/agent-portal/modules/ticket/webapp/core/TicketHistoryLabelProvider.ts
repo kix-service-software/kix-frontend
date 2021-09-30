@@ -14,6 +14,7 @@ import { TicketHistoryProperty } from '../../model/TicketHistoryProperty';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class TicketHistoryLabelProvider extends LabelProvider<TicketHistory> {
 
@@ -83,8 +84,8 @@ export class TicketHistoryLabelProvider extends LabelProvider<TicketHistory> {
         return [];
     }
 
-    public isLabelProviderFor(object: TicketHistory): boolean {
-        return object instanceof TicketHistory;
+    public isLabelProviderFor(object: KIXObject): boolean {
+        return object instanceof TicketHistory || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getObjectText(object: TicketHistory): Promise<string> {

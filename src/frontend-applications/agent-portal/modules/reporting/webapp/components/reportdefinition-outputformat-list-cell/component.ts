@@ -32,6 +32,7 @@ import { ReportService } from '../../core/ReportService';
 import { NewReportDialogContext } from '../../core/context/NewReportDialogContext';
 import { ContextMode } from '../../../../../model/ContextMode';
 import { ReportDefinitionDialogUtil } from '../../core/ReportDefinitionDialogUtil';
+import { ValidObject } from '../../../../valid/model/ValidObject';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -72,6 +73,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async labelClicked(label: Label, event: any): Promise<void> {
 
         const dialogNeeded = await ReportService.getInstance().hasRequiredParamatersWithoutDefaults(this.definition);
+
+        // do nothing if definition is invalid
+        if (this.definition.ValidID !== ValidObject.VALID) {
+            return;
+        }
 
         if (dialogNeeded) {
             ReportDefinitionDialogUtil.openCreateReportDialog(this.definition, label?.id?.toString());

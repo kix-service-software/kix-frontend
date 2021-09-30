@@ -7,6 +7,8 @@
  * --
  */
 
+/* eslint-disable max-classes-per-file */
+
 import { Request, Response } from 'express';
 import { ConfigurationService } from '../../../../server/services/ConfigurationService';
 import { AuthenticationRouter } from '../routes/AuthenticationRouter';
@@ -17,8 +19,10 @@ import { SocketAuthenticationError } from '../../modules/base-components/webapp/
 import { UserLogin } from '../../modules/user/model/UserLogin';
 import { UserType } from '../../modules/user/model/UserType';
 
-import jwt = require('jsonwebtoken');
-import cookie = require('cookie');
+import jwt from 'jsonwebtoken';
+import cookie from 'cookie';
+import { Socket } from 'socket.io';
+import { LoggingService } from '../../../../server/services/LoggingService';
 
 export class AuthenticationService {
 
@@ -92,11 +96,13 @@ export class AuthenticationService {
         const token: string = req.cookies.token;
         if (token) {
             const remoteAddress = req.headers['x-forwarded-for'] ||
-                req.connection.remoteAddress ||
                 req.socket.remoteAddress ||
-                (req.connection.socket ? req.connection.socket.remoteAddress : null);
+                (req.socket ? req.socket.remoteAddress : null);
 
-            this.validateToken(token, remoteAddress).then((valid) => {
+            this.validateToken(
+                token,
+                Array.isArray(remoteAddress) ? remoteAddress[0] : remoteAddress
+            ).then((valid) => {
                 if (valid) {
                     res.cookie('token', token, { httpOnly: true });
                     next();
@@ -129,16 +135,27 @@ export class AuthenticationService {
         }
     }
 
-    public async isSocketAuthenticated(socket: SocketIO.Socket, next: (err?: any) => void): Promise<void> {
-        const parsedCookie = cookie.parse(socket.handshake.headers.cookie);
-        const token = parsedCookie.token;
-        if (token) {
-            this.validateToken(token, socket.handshake.address)
-                .then((valid) => valid ? next() : next(new SocketAuthenticationError('Invalid Token!')))
-                .catch(() => next(new SocketAuthenticationError('Error validating token!')));
+    public async isSocketAuthenticated(socket: Socket, next: (err?: any) => void): Promise<void> {
+        if (socket?.handshake?.headers?.cookie) {
+            const parsedCookie = cookie.parse(socket.handshake.headers.cookie);
+            const token = parsedCookie.token;
+            if (token) {
+                const valid = await this.validateToken(token, socket.handshake.address)
+                    .catch(() => next(new SocketAuthenticationError('Error validating token!')));
 
+                if (valid) {
+                    next();
+                } else {
+                    next(new SocketAuthenticationError('Invalid Token!'));
+                }
+            } else {
+                next(new SocketAuthenticationError('Invalid Token!'));
+            }
         } else {
-            next(new SocketAuthenticationError('Invalid Token!'));
+            LoggingService.getInstance().error('Invalid Cookie!');
+            LoggingService.getInstance().error(socket?.handshake?.headers?.cookie);
+            LoggingService.getInstance().error(JSON.stringify(socket?.handshake));
+            next(new SocketAuthenticationError(`Invalid Cookie! ${JSON.stringify(socket?.handshake)}`));
         }
     }
 
@@ -159,7 +176,6 @@ export class AuthenticationService {
     }
 }
 
-// tslint:disable-next-line: max-classes-per-file
 class FrontendToken {
     public userLogin: string;
     public remoteAddress: string;

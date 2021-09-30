@@ -17,6 +17,7 @@ export class ComponentState extends AbstractComponentState {
         public dynamicValues: DynamicFormFieldValue[] = [],
         public options: ObjectPropertyValueOption[] = [],
         public hasAdditionalOptions: boolean = false,
+        public additionalOptionsValidationResult: Map<string, string> = new Map(),
         public draggableValueId: string = null,
         public dragStartIndex: number = null
     ) {

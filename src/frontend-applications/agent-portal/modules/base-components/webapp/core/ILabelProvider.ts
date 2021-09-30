@@ -16,6 +16,8 @@ export interface ILabelProvider<T = any> {
 
     kixObjectType: KIXObjectType | string;
 
+    getSupportedProperties(): string[];
+
     isLabelProviderFor(object: T): boolean;
 
     isLabelProviderForType(objectType: KIXObjectType | string): boolean;

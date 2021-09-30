@@ -39,7 +39,7 @@ export class ContactImportManager extends ImportManager {
         );
     }
 
-    protected async getSpecificObject(object: {}): Promise<Contact> {
+    protected async getSpecificObject(object: any): Promise<Contact> {
         if (object[ContactProperty.PRIMARY_ORGANISATION_ID]) {
             object[ContactProperty.PRIMARY_ORGANISATION_ID] = Number(object[ContactProperty.PRIMARY_ORGANISATION_ID]);
         } else if (object[ContactProperty.PRIMARY_ORGANISATION_NUMBER]) {

@@ -50,7 +50,7 @@ export class FAQCategoryTableFactory extends TableFactory {
     ): TableConfiguration {
         const tableColumns = [
             this.getDefaultColumnConfiguration(FAQCategoryProperty.NAME),
-            this.getDefaultColumnConfiguration(FAQCategoryProperty.ICON),
+            this.getDefaultColumnConfiguration(FAQCategoryProperty.ID),
             this.getDefaultColumnConfiguration(FAQCategoryProperty.COMMENT),
             this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID),
             this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_TIME),
@@ -93,6 +93,10 @@ export class FAQCategoryTableFactory extends TableFactory {
                     property, true, false, true, false, 275, true, true, false,
                     DataType.STRING, true, undefined, null, false
                 );
+                break;
+            case FAQCategoryProperty.ID:
+                config = super.getDefaultColumnConfiguration('ICON');
+                config.property = FAQCategoryProperty.ID;
                 break;
             default:
                 config = super.getDefaultColumnConfiguration(property);

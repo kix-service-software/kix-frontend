@@ -25,7 +25,8 @@ import { DeleteObjectResponse } from '../../modules/base-components/webapp/core/
 import { PermissionError } from '../../modules/user/model/PermissionError';
 import { Error } from '../../../../server/model/Error';
 
-import cookie = require('cookie');
+import cookie from 'cookie';
+import { Socket } from 'socket.io';
 
 export class KIXObjectNamespace extends SocketNameSpace {
 
@@ -46,14 +47,14 @@ export class KIXObjectNamespace extends SocketNameSpace {
         return 'kixobjects';
     }
 
-    protected registerEvents(client: SocketIO.Socket): void {
+    protected registerEvents(client: Socket): void {
         this.registerEventHandler(client, KIXObjectEvent.LOAD_OBJECTS, this.loadObjects.bind(this));
         this.registerEventHandler(client, KIXObjectEvent.CREATE_OBJECT, this.createObject.bind(this));
         this.registerEventHandler(client, KIXObjectEvent.UPDATE_OBJECT, this.updateObject.bind(this));
         this.registerEventHandler(client, KIXObjectEvent.DELETE_OBJECT, this.deleteObject.bind(this));
     }
 
-    private loadObjects(data: LoadObjectsRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+    private loadObjects(data: LoadObjectsRequest, client: Socket): Promise<SocketResponse> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';
 
@@ -95,7 +96,7 @@ export class KIXObjectNamespace extends SocketNameSpace {
     }
 
     private async createObject(
-        data: CreateObjectRequest, client: SocketIO.Socket
+        data: CreateObjectRequest, client: Socket
     ): Promise<SocketResponse<CreateObjectResponse>> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';
@@ -129,7 +130,7 @@ export class KIXObjectNamespace extends SocketNameSpace {
     }
 
     private async updateObject(
-        data: UpdateObjectRequest, client: SocketIO.Socket
+        data: UpdateObjectRequest, client: Socket
     ): Promise<SocketResponse<UpdateObjectResponse>> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';
@@ -163,7 +164,7 @@ export class KIXObjectNamespace extends SocketNameSpace {
     }
 
     private async deleteObject(
-        data: DeleteObjectRequest, client: SocketIO.Socket
+        data: DeleteObjectRequest, client: Socket
     ): Promise<SocketResponse<DeleteObjectResponse>> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';

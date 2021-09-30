@@ -20,7 +20,7 @@ export abstract class WidgetComponentState extends AbstractComponentState {
         public showConfiguration: boolean = false,
         public error: string = null,
         public instanceId: string = null,
-        public minimized: boolean = false,
+        public minimized: boolean = true,
         public minimizable: boolean = true,
         public closable: boolean = false,
         public icon: string | ObjectIcon = null

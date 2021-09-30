@@ -168,16 +168,18 @@ export class FormInstance {
 
         if (Array.isArray(fields)) {
             const index = fields.findIndex((c) => c.instanceId === formField.instanceId);
-            fields.splice(index, 1);
-            this.deleteFieldValues(formField);
-            const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
-                this.form.objectType, ServiceType.FORM
-            );
-            if (service) {
-                await service.updateFields(fields, this);
-            }
+            if (index !== -1) {
+                fields.splice(index, 1);
+                this.deleteFieldValues(formField);
+                const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
+                    this.form.objectType, ServiceType.FORM
+                );
+                if (service) {
+                    await service.updateFields(fields, this);
+                }
 
-            EventService.getInstance().publish(FormEvent.FIELD_REMOVED, { formInstance: this, formField });
+                EventService.getInstance().publish(FormEvent.FIELD_REMOVED, { formInstance: this, formField });
+            }
         }
     }
 
@@ -305,7 +307,8 @@ export class FormInstance {
     }
 
     public async addFieldChildren(
-        parent: FormFieldConfiguration, children: FormFieldConfiguration[], clearChildren: boolean = false
+        parent: FormFieldConfiguration, children: FormFieldConfiguration[], clearChildren: boolean = false,
+        asFirst?: boolean
     ): Promise<void> {
         if (parent) {
             if (!parent.children) {
@@ -317,7 +320,12 @@ export class FormInstance {
                 parent.children = [];
             }
 
-            children.forEach((f) => parent.children.push(f));
+            if (asFirst) {
+                // keep first new child as first child
+                children.reverse().forEach((f) => parent.children.unshift(f));
+            } else {
+                children.forEach((f) => parent.children.push(f));
+            }
             this.setDefaultValueAndParent(children, parent);
 
             EventService.getInstance().publish(FormEvent.FIELD_CHILDREN_ADDED, { formInstance: this, parent });
@@ -697,6 +705,48 @@ export class FormInstance {
         oldField.readonly = newField.readonly;
         oldField.asStructure = newField.asStructure;
         oldField.showLabel = newField.showLabel;
+    }
+
+    public getAllInvalidFields(): FormFieldConfiguration[] {
+        let fields: FormFieldConfiguration[] = [];
+        for (const page of this.form.pages) {
+            for (const group of page.groups) {
+                const invalidFields = this.getInvalidFields(group.formFields);
+                fields = [...fields, ...invalidFields];
+            }
+        }
+
+        return fields;
+    }
+
+    public getInvalidFields(fields: FormFieldConfiguration[]): FormFieldConfiguration[] {
+        let invalidFields: FormFieldConfiguration[] = [];
+        for (const field of fields) {
+            const value = this.getFormFieldValue(field.instanceId);
+            if (!value.valid) {
+                invalidFields.push(field);
+            }
+
+            if (Array.isArray(field.children) && field.children.length) {
+                const invalidChilds = this.getInvalidFields(field.children);
+                invalidFields = [...invalidFields, ...invalidChilds];
+            }
+        }
+
+        return invalidFields;
+    }
+
+    public getPageIndexforField(instanceId: string): number {
+        for (let i = 0; i < this.form.pages.length; i++) {
+            for (const group of this.form.pages[i].groups) {
+                const field = this.findFormField(group.formFields, instanceId);
+                if (field) {
+                    return i;
+                }
+            }
+        }
+
+        return -1;
     }
 
 }

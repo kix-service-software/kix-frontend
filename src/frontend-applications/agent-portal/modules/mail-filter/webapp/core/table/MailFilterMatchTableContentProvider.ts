@@ -39,12 +39,12 @@ export class MailFilterMatchTableContentProvider extends TableContentProvider<Ma
                         const values: TableValue[] = [];
 
                         for (const property in m) {
-                            if (m.hasOwnProperty(property)) {
+                            if (Object.prototype.hasOwnProperty.call(m, property)) {
                                 if (property === 'Not') {
                                     values.push(
                                         new TableValue(
                                             property, m[property], null, undefined,
-                                            Boolean(m[property]) ? ['kix-icon-check'] : null
+                                            m[property] ? ['kix-icon-check'] : null
                                         )
                                     );
                                 } else {

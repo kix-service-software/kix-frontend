@@ -10,16 +10,13 @@
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { TreeNode, TreeService, TreeHandler } from '../../../../base-components/webapp/core/tree';
-import { MailAccountService } from '../../core';
+import { MailAccountFormService, MailAccountService } from '../../core';
 import { MailAccountProperty } from '../../../model/MailAccountProperty';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
-import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
-import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 import { IdService } from '../../../../../model/IdService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { ServiceRegistry } from '../../../../base-components/webapp/core/ServiceRegistry';
+import { ServiceType } from '../../../../base-components/webapp/core/ServiceType';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -58,6 +55,7 @@ class Component extends FormInputComponent<string, ComponentState> {
         TreeService.getInstance().registerTreeHandler(this.treeId, treeHandler);
         await this.load();
         await super.onMount();
+
         this.state.prepared = true;
     }
 
@@ -84,10 +82,30 @@ class Component extends FormInputComponent<string, ComponentState> {
         return;
     }
 
-    public typeChanged(nodes: TreeNode[]): void {
+    public async typeChanged(nodes: TreeNode[]): Promise<void> {
         this.typeID = nodes && nodes.length ? nodes[0].id : null;
         super.provideValue(this.typeID);
+        await this.handlePasswordField();
+        await this.handleOAuth2ProfileField();
         this.handleIMAPFolderField();
+    }
+
+    private async handlePasswordField(): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        let field = this.state.field?.children.find((f) => f.property === MailAccountProperty.PASSWORD);
+        const showPasswordField = !this.isOAuth2Type();
+        if (field && !showPasswordField) {
+            formInstance.removeFormField(field);
+        } else if (!field && showPasswordField) {
+            const formService = ServiceRegistry.getServiceInstance<MailAccountFormService>(
+                formInstance.getObjectType(), ServiceType.FORM
+            );
+            field = await formService?.getPasswordField();
+            if (field) {
+                formInstance.addFieldChildren(this.state.field, [field], undefined, true);
+            }
+        }
     }
 
     private async handleIMAPFolderField(): Promise<void> {
@@ -98,21 +116,40 @@ class Component extends FormInputComponent<string, ComponentState> {
         if (field && !showFolderField) {
             formInstance.removeFormField(field);
         } else if (!field && showFolderField) {
-            const label = await LabelService.getInstance().getPropertyText(
-                MailAccountProperty.IMAP_FOLDER, KIXObjectType.MAIL_ACCOUNT
+            const formService = ServiceRegistry.getServiceInstance<MailAccountFormService>(
+                formInstance.getObjectType(), ServiceType.FORM
             );
-            field = new FormFieldConfiguration(
-                'imap-field',
-                label, MailAccountProperty.IMAP_FOLDER, null, false,
-                'Translatable#Helptext_Admin_MailAccountCreate_IMAPFolder', undefined,
-                new FormFieldValue('INBOX')
-            );
-            formInstance.addFieldChildren(this.state.field, [field]);
+            field = await formService?.getFolderField();
+            if (field) {
+                formInstance.addFieldChildren(this.state.field, [field]);
+            }
         }
     }
 
     private showIMAPFolderField(): boolean {
         return this.typeID && this.typeID.match(/^IMAP/) !== null;
+    }
+
+    private async handleOAuth2ProfileField(): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        let field = this.state.field?.children.find((f) => f.property === MailAccountProperty.OAUTH2_PROFILEID);
+        const showProfileField = this.isOAuth2Type();
+        if (field && !showProfileField) {
+            formInstance.removeFormField(field);
+        } else if (!field && showProfileField) {
+            const formService = ServiceRegistry.getServiceInstance<MailAccountFormService>(
+                formInstance.getObjectType(), ServiceType.FORM
+            );
+            field = await formService?.getProfileField();
+            if (field) {
+                formInstance.addFieldChildren(this.state.field, [field], undefined, true);
+            }
+        }
+    }
+
+    private isOAuth2Type(): boolean {
+        return this.typeID && this.typeID.match(/OAuth2/) !== null;
     }
 
     public async focusLost(event: any): Promise<void> {

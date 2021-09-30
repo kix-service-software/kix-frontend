@@ -13,7 +13,7 @@ import { MaxLengthFormFieldValidator } from './MaxLengthFormFieldValidator';
 import { JSONFormFieldValidator } from './JSONFormFieldValidator';
 import { IFormFieldValidator } from './IFormFieldValidator';
 import { ValidationResult } from './ValidationResult';
-import addrparser = require('address-rfc2822');
+import addrparser from 'address-rfc2822';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
 

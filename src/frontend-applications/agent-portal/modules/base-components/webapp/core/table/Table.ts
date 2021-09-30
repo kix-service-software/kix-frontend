@@ -88,7 +88,7 @@ export class Table implements Table {
         this.contentProvider = contentProvider;
     }
 
-    public setColumnConfiguration(columnConfiguration: IColumnConfiguration[]) {
+    public setColumnConfiguration(columnConfiguration: IColumnConfiguration[]): void {
         this.columnConfigurations = columnConfiguration;
     }
 
@@ -260,6 +260,7 @@ export class Table implements Table {
         if (canCreate) {
             column = new Column(this, columnConfiguration);
             this.columns.push(column);
+            EventService.getInstance().publish(TableEvent.COLUMN_CREATED, { tableId: this.getTableId() });
         }
 
         return column;
@@ -345,7 +346,7 @@ export class Table implements Table {
                 newRows.push(r);
             }
         });
-        if (!!newRows.length) {
+        if (newRows.length) {
             this.rows.splice(index, 0, ...newRows);
         }
     }

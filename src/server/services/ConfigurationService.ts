@@ -6,11 +6,9 @@
  * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
  * --
  */
-
-import fs = require('fs');
-import path = require('path');
+import fs from 'fs';
+import path from 'path';
 import { IServerConfiguration } from '../model/IServerConfiguration';
-
 
 export class ConfigurationService {
 
@@ -27,12 +25,14 @@ export class ConfigurationService {
 
     public configurationDirectory: string;
     public certDirectory: string;
+    public dataDir: string;
 
     private serverConfiguration: IServerConfiguration;
 
-    public init(configurationDirectory: string, certDirectory: string): void {
+    public init(configurationDirectory: string, certDirectory: string, dataDir: string): void {
         this.configurationDirectory = configurationDirectory;
         this.certDirectory = certDirectory;
+        this.dataDir = dataDir;
 
         const serverConfig = this.getConfigurationFilePath('server.config.json');
 
@@ -46,8 +46,22 @@ export class ConfigurationService {
     public getConfiguration<T = any>(configurationId: string): T {
         const filePath = this.getComponentConfigurationFilePath(configurationId + '.config.json');
 
-        const moduleConfiguration = this.getConfigurationFile(filePath);
+        const moduleConfiguration = this.getJSONFileContent(filePath);
         return moduleConfiguration;
+    }
+
+    public getDataFileContent<T = any>(fileName: string, defaultContent: any = {}): T {
+        const filePath = path.join(this.dataDir, fileName);
+        const fileContent = this.getJSONFileContent(filePath);
+        if (!fileContent && defaultContent) {
+            this.saveDataFileContent(fileName, defaultContent);
+        }
+        return fileContent;
+    }
+
+    public saveDataFileContent(fileName: string, content: any): void {
+        const filePath = path.join(this.dataDir, fileName);
+        fs.writeFileSync(filePath, JSON.stringify(content));
     }
 
     private getComponentConfigurationFilePath(fileName: string): string {
@@ -89,7 +103,7 @@ export class ConfigurationService {
         return path.join(this.configurationDirectory, fileName);
     }
 
-    private getConfigurationFile(filePath: string): any {
+    private getJSONFileContent(filePath: string): any {
         let configurationFile = null;
         if (fs.existsSync(filePath)) {
             this.clearRequireCache(filePath);

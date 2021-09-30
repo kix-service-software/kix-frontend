@@ -36,6 +36,7 @@ import { ConfigItemClass } from '../../../cmdb/model/ConfigItemClass';
 import { DynamicFieldTypeLabelProvider } from './DynamicFieldTypeLabelProvider';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { DynamicFieldTableValidator } from './DynamicFieldTableValidator';
 
 export class UIModule implements IUIModule {
 
@@ -84,6 +85,7 @@ export class UIModule implements IUIModule {
 
         FormValidationService.getInstance().registerValidator(new DynamicFieldTextValidator());
         FormValidationService.getInstance().registerValidator(new DynamicFieldDateTimeValidator());
+        FormValidationService.getInstance().registerValidator(new DynamicFieldTableValidator());
 
         this.registerSchemas();
     }
@@ -96,7 +98,10 @@ export class UIModule implements IUIModule {
         this.registerSchemaForDateTime();
         this.registerSchemaForSelection();
         this.registerSchemaForCheckList();
-        DynamicFieldService.getInstance().registerConfigSchemaHandler(DynamicFieldTypes.CI_REFERENCE, this.getSchemaForCIReference.bind(this));
+        DynamicFieldService.getInstance().registerConfigSchemaHandler(
+            DynamicFieldTypes.CI_REFERENCE, this.getSchemaForCIReference.bind(this)
+        );
+        this.registerSchemaForTable();
     }
 
     private registerSchemaForText(): void {
@@ -502,5 +507,56 @@ export class UIModule implements IUIModule {
             required: ['CountMin', 'CountMax', 'CountDefault']
         };
         return schema;
+    }
+
+    private registerSchemaForTable(): void {
+        const schema = {
+            $schema: 'http://json-schema.org/draft-03/schema#',
+            type: 'object',
+            properties: {
+                Columns: {
+                    title: 'Columns',
+                    description: '',
+                    type: 'array',
+                    required: true,
+                    items: {
+                        type: 'string'
+                    }
+                },
+                RowsMin: {
+                    title: 'Number of rows (min)',
+                    description: 'Specifies the minimum number of rows that the table has to display. It is not possible to delete rows below the minimum number of rows.\n Values less than 1 are not possible.',
+                    type: 'integer',
+                    default: '1',
+                    minimum: '1',
+                    required: true
+                },
+                RowsInit: {
+                    title: 'Number of rows (init)',
+                    description: 'Specifies the initial number of rows that the table should display if there are no entries.\n The initial must not be smaller than the minimum and larger than the maximum of the number of rows.\n Values less than 1 are not possible.',
+                    type: 'integer',
+                    default: '1',
+                    minimum: '1',
+                    required: true
+                },
+                RowsMax: {
+                    title: 'Number of rows (max)',
+                    description: 'Specifies the maximum number of rows in the table that can be displayed/added. Values less than 1 are not possible.',
+                    type: 'integer',
+                    default: '1',
+                    minimum: '1',
+                    required: true
+                },
+                TranslatableColumn: {
+                    title: 'Translatable Columns',
+                    description: '',
+                    type: 'boolean',
+                    format: 'checkbox',
+                    required: false
+                },
+            }
+        };
+
+        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.TABLE, schema);
     }
 }

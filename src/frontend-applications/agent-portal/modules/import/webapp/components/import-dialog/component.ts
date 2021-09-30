@@ -253,7 +253,7 @@ class Component {
                 eventPublished: async (data: TableEventData, eventId: string) => {
                     if (data && this.state.table && data.tableId === this.state.table.getTableId()) {
                         if (eventId === TableEvent.TABLE_INITIALIZED || eventId === TableEvent.TABLE_READY) {
-                            if (!this.selectedObjects || !!!this.selectedObjects.length) {
+                            if (!this.selectedObjects || !this.selectedObjects.length) {
                                 this.state.table.selectAll();
                             } else {
                                 const selectedObjects = [...this.selectedObjects];
@@ -380,7 +380,7 @@ class Component {
                     && valueSeparator && valueSeparator.valid
                     && textSeparator && textSeparator.valid;
 
-                if (!ok && !!!importString.length) {
+                if (!ok && !importString.length) {
                     BrowserUtil.openErrorOverlay('Translatable#Can not use file (file is empty).');
                 }
 
@@ -422,7 +422,7 @@ class Component {
 
             const lineErrors: number[] = [];
             list.forEach((r, rowIndex) => {
-                if (!!r.length && (r.length > 1 || r[0] !== '')) {
+                if (r.length && (r.length > 1 || r[0] !== '')) {
                     const object = {};
                     if (r.length < this.csvProperties.length) {
                         lineErrors.push(rowIndex + 2);
@@ -435,7 +435,7 @@ class Component {
                 }
             });
 
-            if (!!lineErrors.length) {
+            if (lineErrors.length) {
                 const title = await TranslationService.translate('Translatable#Rows with too less values');
                 const rowLabel = await TranslationService.translate('Translatable#Row');
                 OverlayService.getInstance().openOverlay(
@@ -477,12 +477,12 @@ class Component {
             }
         });
         let ok: boolean = true;
-        if (!properties || !!!properties.length || !!!confirmedProperties.length) {
+        if (!properties || !properties.length || !confirmedProperties.length) {
             BrowserUtil.openErrorOverlay(
                 'Translatable#Can not use file (no known properties found).'
             );
             ok = false;
-        } else if (!!unknownProperties.length) {
+        } else if (unknownProperties.length) {
             OverlayService.getInstance().openOverlay(
                 OverlayType.WARNING, null, new ComponentContent('list-with-title',
                     {
@@ -505,7 +505,7 @@ class Component {
             if (this.state.table) {
                 const newColumnConfigs = await this.getColumnConfig();
                 this.state.table.removeColumns(this.state.table.getColumns().map((c) => c.getColumnId()));
-                if (!!newColumnConfigs.length) {
+                if (newColumnConfigs.length) {
                     await this.state.table.addAdditionalColumns(newColumnConfigs);
                 }
             }
@@ -522,7 +522,7 @@ class Component {
         requiredProperties.filter((rp) => !adjustableProperties.some((ap) => ap[0] === rp)).forEach((rP) => {
             const alternative = this.state.importManager.getAlternativeProperty(rP);
             let missing = false;
-            if (!this.csvProperties || !!!this.csvProperties.length) {
+            if (!this.csvProperties || !this.csvProperties.length) {
                 missing = true;
             } else if (!this.csvProperties.some((a) => rP === a)) {
                 missing = true;
@@ -534,7 +534,7 @@ class Component {
                 missingProperties.push(`${rP}${alternative && alternative !== rP ? ' / ' + alternative : ''}`);
             }
         });
-        if (!!missingProperties.length) {
+        if (missingProperties.length) {
             OverlayService.getInstance().openOverlay(
                 OverlayType.WARNING, null, new ComponentContent('list-with-title',
                     {
@@ -545,7 +545,7 @@ class Component {
                 ), 'Translatable#Error!', null, true
             );
         }
-        return !!!missingProperties.length;
+        return !missingProperties.length;
     }
 
     private async setContextObjects() {
@@ -557,7 +557,7 @@ class Component {
                     objects.push(object);
                 }
             }
-            if (!!objects.length) {
+            if (objects.length) {
                 if (await this.state.importManager.hasDefinedValues()) {
                     const values = await this.state.importManager.getEditableValues();
                     values.forEach((v) => {

@@ -25,9 +25,6 @@ class Component {
         const context = ContextService.getInstance().getActiveContext() as FAQContext;
         const widgets = await context.getContent();
         this.state.contentWidgets = widgets ? widgets.filter((w) => Boolean(w.configuration)) : [];
-        if (!context.categoryId) {
-            context.setFAQCategoryId(null);
-        }
     }
 
     public getTemplate(widget: ConfiguredWidget): any {

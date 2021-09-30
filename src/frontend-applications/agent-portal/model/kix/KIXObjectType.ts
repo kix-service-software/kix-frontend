@@ -113,6 +113,12 @@ export enum KIXObjectType {
 
     OBJECT_ICON = 'OBJECT_ICON',
 
+    OAUTH2_PROFILE = 'OAuth2Profile',
+
+    OAUTH2_PROFILE_AUTH = 'OAuth2ProfileAuth',
+
+    OAUTH2_PROFILE_AUTH_URL = 'OAUTH2_PROFILE_AUTH_URL',
+
     QUEUE = 'Queue',
 
     REPORT = 'Report',
@@ -126,8 +132,6 @@ export enum KIXObjectType {
     REPORT_DATA_SOURCE = 'DataSource',
 
     ROLE = 'Role',
-
-    SERVICE = 'Service',
 
     SYS_CONFIG_OPTION = 'SysConfigOption',
 

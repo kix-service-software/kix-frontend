@@ -26,7 +26,6 @@ import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { UserPreference } from '../../model/UserPreference';
-import { ContextService } from '../../../base-components/webapp/core/ContextService';
 
 export class AgentService extends KIXObjectService<User> {
 
@@ -105,7 +104,7 @@ export class AgentService extends KIXObjectService<User> {
     public async setPreferences(preferences: Array<[string, any]>): Promise<void> {
         const parameter: Array<[string, any]> = Array.isArray(preferences) ? preferences : [];
 
-        if (!!parameter.length) {
+        if (parameter.length) {
             await AgentSocketClient.getInstance().setPreferences(parameter);
         }
     }

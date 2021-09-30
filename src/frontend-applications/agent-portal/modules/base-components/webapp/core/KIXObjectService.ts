@@ -186,7 +186,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 // TODO: Publish event to show an error dialog
                 const content = new ComponentContent('list-with-title',
                     {
-                        title: `Translatable#Error on create:`,
+                        title: 'Translatable#Error on create:',
                         list: [`${error.Code}: ${error.Message}`]
                     }
                 );
@@ -248,7 +248,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                     // TODO: Publish event to show an error dialog
                     const content = new ComponentContent('list-with-title',
                         {
-                            title: `Translatable#Error on update:`,
+                            title: 'Translatable#Error on update:',
                             list: [`${error.Code}: ${error.Message}`]
                         }
                     );
@@ -317,7 +317,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                     failIds.push(objectId);
                 });
         }
-        if (!!errors.length) {
+        if (errors.length) {
             // TODO: Publish event to show an error dialog
             const content = new ComponentContent('list-with-title',
                 {
@@ -584,6 +584,24 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return dynamicField;
     }
 
+    public static async loadDynamicFields(objectType): Promise<DynamicField[]> {
+        const loadingOptions = new KIXObjectLoadingOptions([
+            new FilterCriteria(
+                DynamicFieldProperty.OBJECT_TYPE, SearchOperator.EQUALS,
+                FilterDataType.STRING, FilterType.AND, objectType
+            ),
+            new FilterCriteria(
+                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS,
+                FilterDataType.NUMERIC, FilterType.AND, 1
+            )
+        ]);
+        const dynamicFields = KIXObjectService.loadObjects<DynamicField>(
+            KIXObjectType.DYNAMIC_FIELD, null, loadingOptions
+        ).catch(() => []);
+
+        return dynamicFields;
+    }
+
     public static getDynamicFieldName(property: string): string {
         let name: string;
         if (property && KIXObjectService.isDynamicFieldProperty(property)) {
@@ -700,6 +718,25 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             }
         }
         return objectType;
+    }
+
+    public static async getObjectProperties(objectType: KIXObjectType): Promise<string[]> {
+        let properties: string[] = [];
+        const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(objectType);
+        if (service) {
+            properties = await service.getObjectProperties(objectType);
+        }
+
+        return properties;
+    }
+
+    public async getObjectProperties(objectType: KIXObjectType): Promise<string[]> {
+        let properties: string[] = [];
+        const dynamicFields: DynamicField[] = await KIXObjectService.loadDynamicFields(objectType);
+        if (Array.isArray(dynamicFields) && dynamicFields.length) {
+            properties = dynamicFields.map((df) => df.Name);
+        }
+        return properties;
     }
 
 }

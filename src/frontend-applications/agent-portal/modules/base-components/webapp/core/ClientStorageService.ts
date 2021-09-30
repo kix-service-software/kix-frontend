@@ -7,7 +7,7 @@
  * --
  */
 
-import md5 = require('md5');
+import md5 from 'md5';
 
 export class ClientStorageService {
 
@@ -34,7 +34,12 @@ export class ClientStorageService {
 
             if (!socketUrl || socketUrl === '') {
                 // use current location as socket URL
-                socketUrl = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port;
+                socketUrl = window.location.protocol + '//' + window.location.hostname;
+
+                const port = window.location.port;
+                if (port) {
+                    socketUrl = socketUrl + ':' + port;
+                }
             }
         }
 

@@ -8,7 +8,7 @@
  */
 
 import { Request, Response } from 'express';
-import cors = require('cors');
+import cors from 'cors';
 
 import { KIXRouter } from '../../../server/routes/KIXRouter';
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
@@ -54,7 +54,7 @@ export class KIXIntegrationRouter extends KIXRouter {
 
     private async handleGetRequest(req: Request, res: Response): Promise<void> {
         if (req.path.match(/^\/\d+$/)) {
-            const formId = req.path.substring(1);
+            const formId = Number(req.path.substring(1));
 
             const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
             const form = await WebformService.getInstance().getWebform(serverConfig.BACKEND_API_TOKEN, formId);
@@ -88,7 +88,7 @@ export class KIXIntegrationRouter extends KIXRouter {
 
     private async handlePostRequest(req: Request, res: Response): Promise<void> {
         if (req.path.match(/^\/\d+$/)) {
-            const formId = req.path.substring(1);
+            const formId = Number(req.path.substring(1));
 
             const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
             const form = await WebformService.getInstance().getWebform(serverConfig.BACKEND_API_TOKEN, formId);

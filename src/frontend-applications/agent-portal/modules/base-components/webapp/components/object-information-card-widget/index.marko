@@ -6,80 +6,84 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <widget
     instanceId=state.instanceId
     title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
     contentActions=state.actions
     icon=(state.widgetConfiguration ? state.widgetConfiguration.icon : null)>
     <@content>
-        <if(state.prepared)>
-            <div.info-container>
-                <div.info-avatar class={
-                    "no-avatar": !Array.isArray(state.avatar) || !state.avatar.length
-                }>
-                    <if(Array.isArray(state.avatar) && state.avatar.length)>
-                        <for|avatar| of=state.avatar>
-                            <icon icon=avatar/>
-                        </for>
-                    </if>
-                </div>
-                <div.info-rows>
-                    <for|row| of=state.information>
-                        <if(row.title)>
-                            <div.info-row-title class={
-                                separator: row.separator
-                            }>
-                                <translation-string pattern=row.title/>
-                            </div>
-                        </if>
-                        <div.info-row-content class={
-                            "no-title": !row.title,
+        <div.info-container>
+            <div.info-avatar class={
+                "no-avatar":
+                    !Array.isArray(state.avatar) || !state.avatar.length
+            }>
+                <if(Array.isArray(state.avatar) && state.avatar.length)>
+                    <for|avatar| of=state.avatar>
+                        <icon icon=avatar/>
+                    </for>
+                </if>
+            </div>
+            <div.info-rows>
+                <for|row| of=state.information>
+                    <if(row.title)>
+                        <div.info-row-title class={
                             separator: row.separator
                         }>
-                            <for|group| of=row.values>
-                                <div.info-group>
-                                    <for|info| of=group>
-                                        <if(info.componentId)>
-                                            <div>
-                                                <div style=info.textStyle>${info.preparedText}</div>
-                                                <div.component-value>
-                                                    <link-target routingConfiguration=info.routingConfiguration objectId=info.routingObjectId>
-                                                        <@content>
-                                                            <${state.templates[info.componentId]} ...info.componentData/>
-                                                        </@content>
-                                                    </link-target>
-                                                </div>
-                                            </div>
-                                        </if>
-                                        <else-if(info.preparedText)>
-                                            <div.info-value>
-                                                <div style=info.iconStyle title=info.preparedText>
-                                                    <icon icon=info.icon/>
-                                                </div>
-                                                <span style=info.textStyle title=info.preparedText>
-                                                    <if(info.routingConfiguration)>
-                                                        <link-target routingConfiguration=info.routingConfiguration objectId=info.routingObjectId>
-                                                            <@content>${info.preparedText}</@content>
-                                                        </link-target>
-                                                    </if>
-                                                    <else-if(info.linkSrc && info.preparedLinkSrc)>
-                                                        <a href=info.preparedLinkSrc target="_blank">${info.preparedText}</a>
-                                                    </else-if>
-                                                    <else>${info.preparedText}</else>
-                                                </span>
-                                            </div>
-                                        </else-if>
-                                    </for>
-                                </div>
-                            </for>
+                            <translation-string pattern=row.title/>
                         </div>
-                    </for>
-                </div>
+                    </if>
+                    <div.info-row-content class={
+                        "no-title": !row.title,
+                        separator: row.separator
+                    }>
+                        <for|group| of=row.values>
+                            <div.info-group>
+                                <for|info| of=group>
+                                    <if(info.componentId)>
+                                        <div>
+                                            <div style=info.textStyle>${info.preparedText}</div>
+                                            <div.component-value>
+                                                <link-target
+                                                    routingConfiguration=info.routingConfiguration
+                                                    objectId=info.routingObjectId>
+                                                    <@content>
+                                                        <${state.templates[
+                                                            info.componentId
+                                                        ]} ...info.componentData/>
+                                                    </@content>
+                                                </link-target>
+                                            </div>
+                                        </div>
+                                    </if>
+                                    <else-if(info.preparedText)>
+                                        <div.info-value>
+                                            <div style=info.iconStyle title=info.preparedText>
+                                                <icon icon=info.icon/>
+                                            </div>
+                                            <span style=info.textStyle title=info.preparedText>
+                                                <if(info.routingConfiguration)>
+                                                    <link-target
+                                                        routingConfiguration=info.routingConfiguration
+                                                        objectId=info.routingObjectId>
+                                                        <@content>${info.preparedText}</@content>
+                                                    </link-target>
+                                                </if>
+                                                <else-if(
+                                                    info.linkSrc &&
+                                                    info.preparedLinkSrc
+                                                )>
+                                                    <a href=info.preparedLinkSrc target="_blank">${info.preparedText}</a>
+                                                </else-if>
+                                                <else>${info.preparedText}</else>
+                                            </span>
+                                        </div>
+                                    </else-if>
+                                </for>
+                            </div>
+                        </for>
+                    </div>
+                </for>
             </div>
-        </if>
-        <else>
-            <loading-spinner/>
-        </else>
+        </div>
     </@content>
 </widget>

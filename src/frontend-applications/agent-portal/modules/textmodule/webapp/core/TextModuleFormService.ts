@@ -62,7 +62,7 @@ export class TextModuleFormService extends KIXObjectFormService {
     ): Promise<Array<[string, any]>> {
         switch (property) {
             case TextModuleProperty.KEYWORDS:
-                value = value ? value.split(/[,;\s]\s?/) : undefined;
+                value = value ? value.split(/[,;\s]\s?/) : [];
                 break;
             default:
         }

@@ -7,11 +7,9 @@
  * --
  */
 
-import { InMemoryCache } from './InMemoryCache';
 import { RedisCache } from './RedisCache';
 
-import md5 = require('md5');
-import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
+import md5 from 'md5';
 import { ObjectUpdatedEventData } from '../../../model/ObjectUpdatedEventData';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { LoggingService } from '../../../../../server/services/LoggingService';
@@ -28,8 +26,6 @@ export class CacheService {
         return CacheService.INSTANCE;
     }
 
-    private useRedisCache: boolean = false;
-    private useInMemoryCache: boolean = false;
     private ignorePrefixes: string[] = [];
     private dependencies: Map<string, string[]> = new Map();
 
@@ -38,49 +34,29 @@ export class CacheService {
     }
 
     public addDependencies(key: string, dependencies: string[]): void {
-        this.dependencies.set(key, dependencies);
+        if (!this.dependencies.has(key)) {
+            this.dependencies.set(key, dependencies);
+        } else {
+            this.dependencies.set(key, [...this.dependencies.get(key), ...dependencies]);
+        }
     }
 
     public init(): void {
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        if (serverConfig.USE_REDIS_CACHE) {
-            this.useRedisCache = true;
-            RedisCache.getInstance();
-        }
-
-        if (serverConfig.USE_IN_MEMORY_CACHE) {
-            this.useInMemoryCache = true;
-        }
+        RedisCache.getInstance();
     }
 
     public async getAll(cacheKeyPrefix: string): Promise<any[]> {
-        if (process.env.NODE_ENV === 'test') {
-            return undefined;
-        } else if (this.useRedisCache) {
-            return await RedisCache.getInstance().getAll(cacheKeyPrefix);
-        }
-        return null;
+        return await RedisCache.getInstance().getAll(cacheKeyPrefix);
     }
 
     public async get(key: string, cacheKeyPrefix?: string): Promise<any> {
         key = md5(key);
-        if (process.env.NODE_ENV === 'test') {
-            return undefined;
-        } else if (this.useRedisCache) {
-            return await RedisCache.getInstance().get(key, cacheKeyPrefix);
-        } else if (this.useInMemoryCache) {
-            return await InMemoryCache.getInstance().get(key, cacheKeyPrefix);
-        }
-        return null;
+        return await RedisCache.getInstance().get(key, cacheKeyPrefix);
     }
 
     public async set(key: string, value: any, cacheKeyPrefix?: string): Promise<void> {
         key = md5(key);
-        if (this.useRedisCache) {
-            await RedisCache.getInstance().set(key, cacheKeyPrefix, value);
-        } else if (this.useInMemoryCache) {
-            await InMemoryCache.getInstance().set(key, cacheKeyPrefix, value);
-        }
+        await RedisCache.getInstance().set(key, cacheKeyPrefix, value);
     }
 
     public async updateCaches(events: ObjectUpdatedEventData[]): Promise<void> {
@@ -99,12 +75,9 @@ export class CacheService {
         if (!force) {
             prefixes = prefixes.filter((p) => !this.ignorePrefixes.some((ip) => ip === p));
         }
+
         for (const prefix of prefixes) {
-            if (this.useRedisCache) {
-                await RedisCache.getInstance().deleteKeys(prefix);
-            } else if (this.useInMemoryCache) {
-                await InMemoryCache.getInstance().deleteKeys(prefix);
-            }
+            await RedisCache.getInstance().deleteKeys(prefix);
         }
     }
 
@@ -144,6 +117,7 @@ export class CacheService {
                 cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
                 break;
             case KIXObjectType.TICKET:
+                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
                 cacheKeyPrefixes.push(KIXObjectType.ARTICLE);
                 cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
@@ -257,11 +231,7 @@ export class CacheService {
     }
 
     private async clearCache(): Promise<void> {
-        if (this.useRedisCache) {
-            await RedisCache.getInstance().clear(this.ignorePrefixes);
-        } else if (this.useInMemoryCache) {
-            await InMemoryCache.getInstance().clear(this.ignorePrefixes);
-        }
+        await RedisCache.getInstance().clear(this.ignorePrefixes);
     }
 
     public adddIgnorePrefixes(ignoreList: string[]): void {

@@ -16,7 +16,8 @@ export class ComponentState {
     public constructor(
         public field: DynamicField = null,
         public labels: Label[] = [],
-        public checklist: CheckListItem[] = []
+        public checklist: CheckListItem[] = [],
+        public table: Array<string[]> = []
     ) { }
 
 }

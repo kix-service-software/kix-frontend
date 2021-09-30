@@ -20,7 +20,7 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { Report } from '../../../model/Report';
 import { ReportDefinition } from '../../../model/ReportDefinition';
 
-import mimeTypes = require('mime-types');
+import mimeTypes from 'mime-types';
 import { DateTimeUtil } from '../../../../base-components/webapp/core/DateTimeUtil';
 import { AttachmentUtil } from '../../../../base-components/webapp/core/AttachmentUtil';
 

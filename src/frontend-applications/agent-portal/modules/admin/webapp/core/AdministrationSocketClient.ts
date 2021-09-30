@@ -31,13 +31,13 @@ export class AdministrationSocketClient extends SocketClient {
     }
 
     private constructor() {
-        super();
-        this.socket = this.createSocket('administration', true);
+        super('administration');
     }
 
     private categories: AdminModuleCategory[];
 
     public async getAdminModule(id: string): Promise<AdminModuleCategory | AdminModule> {
+        this.checkSocketConnection();
         const categories = await this.loadAdminCategories();
         const module = this.findModule(id, categories);
         return module;
@@ -72,6 +72,8 @@ export class AdministrationSocketClient extends SocketClient {
         if (this.categories) {
             return this.categories;
         }
+
+        this.checkSocketConnection();
 
         return new Promise<AdminModuleCategory[]>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();

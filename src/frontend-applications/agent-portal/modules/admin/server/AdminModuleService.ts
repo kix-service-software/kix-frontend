@@ -93,7 +93,7 @@ export class AdminModuleService {
                     module.children = await this.checkPermissions(token, module.children);
                 }
 
-                if (!!module.modules.length || (module.children && !!module.children.length)) {
+                if (module.modules.length || (module.children && !!module.children.length)) {
                     result.push(module);
                 }
             } else {

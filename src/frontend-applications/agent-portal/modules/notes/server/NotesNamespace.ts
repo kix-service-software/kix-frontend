@@ -19,7 +19,8 @@ import { SaveNotesRequest } from '../model/SaveNotesRequest';
 import { SocketEvent } from '../../../modules/base-components/webapp/core/SocketEvent';
 import { SocketErrorResponse } from '../../../modules/base-components/webapp/core/SocketErrorResponse';
 
-import cookie = require('cookie');
+import cookie from 'cookie';
+import { Socket } from 'socket.io';
 
 export class NotesNamespace extends SocketNameSpace {
 
@@ -40,13 +41,13 @@ export class NotesNamespace extends SocketNameSpace {
         return 'notes';
     }
 
-    protected registerEvents(client: SocketIO.Socket): void {
+    protected registerEvents(client: Socket): void {
         this.registerEventHandler(client, NotesEvent.LOAD_NOTES, this.loadNotes.bind(this));
         this.registerEventHandler(client, NotesEvent.SAVE_NOTES, this.saveNotes.bind(this));
     }
 
     private async loadNotes(
-        data: ISocketRequest, client: SocketIO.Socket
+        data: ISocketRequest, client: Socket
     ): Promise<SocketResponse<LoadNotesResponse>> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';
@@ -69,7 +70,7 @@ export class NotesNamespace extends SocketNameSpace {
         return new SocketResponse(NotesEvent.NOTES_LOADED, response);
     }
 
-    private async saveNotes(data: SaveNotesRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+    private async saveNotes(data: SaveNotesRequest, client: Socket): Promise<SocketResponse> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';
 

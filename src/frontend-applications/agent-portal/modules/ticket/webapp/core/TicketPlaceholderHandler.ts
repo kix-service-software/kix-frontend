@@ -43,6 +43,7 @@ import { Article } from '../../model/Article';
 import { ArticleLoadingOptions } from '../../model/ArticleLoadingOptions';
 import { Contact } from '../../../customer/model/Contact';
 import { Organisation } from '../../../customer/model/Organisation';
+import { UserProperty } from '../../../user/model/UserProperty';
 
 export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
 
@@ -54,6 +55,20 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         'CONTACT', 'ORG',
         'QUEUE'
     ];
+
+    private relevantIdAttribut = {
+        'Contact': TicketProperty.CONTACT_ID,
+        'Lock': TicketProperty.LOCK_ID,
+        'Organisation': TicketProperty.ORGANISATION_ID,
+        'Owner': TicketProperty.OWNER_ID,
+        'Priority': TicketProperty.PRIORITY_ID,
+        'Queue': TicketProperty.QUEUE_ID,
+        'Responsible': TicketProperty.RESPONSIBLE_ID,
+        'State': TicketProperty.STATE_ID,
+        // StateType has special handling in label provider
+        // 'StateType': TicketProperty.STATE_TYPE_ID,
+        'Type': TicketProperty.TYPE_ID
+    };
 
     private static INSTANCE: TicketPlaceholderHandler;
 
@@ -82,9 +97,6 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         }
         if (ticket && this.isHandlerFor(objectString)) {
             const attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
-            if (!PlaceholderService.getInstance().translatePlaceholder(placeholder)) {
-                language = 'en';
-            }
             if (attribute) {
                 switch (objectString) {
                     case 'TICKET':
@@ -150,7 +162,9 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                     case 'TICKETOWNER':
                         if (ticket.OwnerID && !isNaN(Number(ticket.OwnerID))) {
                             const loadingOptions = new KIXObjectLoadingOptions(
-                                null, null, null, null, ['Preferences']
+                                null, null, null,
+                                ['Preferences', UserProperty.CONTACT],
+                                ['Preferences', UserProperty.CONTACT]
                             );
                             const users = await KIXObjectService.loadObjects<User>(
                                 KIXObjectType.USER, [ticket.OwnerID], loadingOptions, null, true, true, true
@@ -269,7 +283,6 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                 case TicketProperty.CONTACT_ID:
                 case TicketProperty.OWNER_ID:
                 case TicketProperty.TYPE_ID:
-                case TicketProperty.SERVICE_ID:
                 case TicketProperty.RESPONSIBLE_ID:
                 case TicketProperty.TICKET_ID:
                     result = ticket[attribute] ? ticket[attribute].toString() : '';
@@ -307,6 +320,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                 case ArticleProperty.BODY:
                     break;
                 default:
+                    attribute = this.relevantIdAttribut[attribute] || attribute;
                     result = await LabelService.getInstance().getDisplayText(ticket, attribute, undefined, false);
                     result = typeof result !== 'undefined' && result !== null
                         ? await TranslationService.translate(result.toString(), undefined, language) : '';
@@ -319,53 +333,33 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         const knownProperties = [
             ...Object.keys(TicketProperty).map((p) => TicketProperty[p]),
             ...Object.keys(KIXObjectProperty).map((p) => KIXObjectProperty[p]),
-            ...Object.keys(ArticleProperty).map((p) => ArticleProperty[p])
+            ...Object.keys(ArticleProperty).map((p) => ArticleProperty[p]),
+            ...Object.keys(this.relevantIdAttribut)
         ];
         return knownProperties.some((p) => p === property);
     }
 
     public async getTicket(): Promise<Ticket> {
-        let newObject = new Ticket();
-        const mainContext = ContextService.getInstance().getActiveContext();
-        if (mainContext) {
-            this.setObject(newObject, await mainContext.getObject());
-        }
+        const ticket = new Ticket();
         const dialogContext = ContextService.getInstance().getActiveContext();
         if (dialogContext) {
-            const formId = dialogContext.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
-            const form = formId ? await FormService.getInstance().getForm(formId) : null;
-            if (
-                !newObject
-                || (
-                    form
-                    && form.formContext === FormContext.NEW
-                    && form.objectType === KIXObjectType.TICKET
-                )
-            ) {
-                newObject = new Ticket();
-                this.setObject(newObject, await dialogContext.getObject());
-            }
-            if (form && form.objectType === KIXObjectType.TICKET) {
-                const formObject = dialogContext.getAdditionalInformation(AdditionalContextInformation.FORM_OBJECT);
-                this.setObject(newObject, formObject, true);
-            }
+
+            // get object from context (will possibly be the current form object)
+            const contextTicket = await dialogContext.getObject<Ticket>(KIXObjectType.TICKET);
+
+            // include in own object (do not overwrite object from context - pending time unix)
+            this.setObject(ticket, contextTicket);
+
+            this.preparePendingTimeUnix(ticket);
         }
-        this.preparePendingTimeUnix(newObject);
-        return newObject;
+        return ticket;
     }
 
-    private setObject(newObject: Ticket, oldObject: {}, fromForm: boolean = false) {
-        if (oldObject) {
-            Object.getOwnPropertyNames(oldObject).forEach((property) => {
-                if (
-                    typeof oldObject[property] !== 'undefined'
-                    && !(fromForm && this.ignoreProperty(property))
-                ) {
-                    if (property === KIXObjectProperty.DYNAMIC_FIELDS) {
-                        this.setDynamicFields(newObject, oldObject as Ticket);
-                    } else {
-                        newObject[property] = oldObject[property];
-                    }
+    private setObject(ticket: Ticket, TicketToAdd: Ticket) {
+        if (TicketToAdd) {
+            Object.getOwnPropertyNames(TicketToAdd).forEach((property) => {
+                if (typeof TicketToAdd[property] !== 'undefined' && !this.ignoreProperty(property)) {
+                    ticket[property] = TicketToAdd[property];
                 }
             });
         }
@@ -407,21 +401,5 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
             subject = subjectValue && subjectValue.value ? subjectValue.value.toString() : '';
         }
         return subject;
-    }
-
-    private setDynamicFields(newObject: Ticket, oldObject: Ticket): void {
-        if (!newObject.DynamicFields) {
-            newObject.DynamicFields = [];
-        }
-        if (oldObject && Array.isArray(oldObject.DynamicFields) && oldObject.DynamicFields.length) {
-            oldObject.DynamicFields.forEach((dfValue) => {
-                const dfValueIndex = newObject.DynamicFields.findIndex((dfv) => dfv.Name === dfValue.Name);
-                if (dfValueIndex === -1) {
-                    newObject.DynamicFields.push(dfValue);
-                } else {
-                    newObject.DynamicFields[dfValueIndex] = dfValue;
-                }
-            });
-        }
     }
 }

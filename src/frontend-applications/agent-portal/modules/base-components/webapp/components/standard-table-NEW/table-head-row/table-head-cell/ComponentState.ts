@@ -12,7 +12,6 @@ import { ObjectIcon } from '../../../../../../icon/model/ObjectIcon';
 
 export class ComponentState {
 
-    public loading: boolean = true;
     public column: Column = null;
     public icon: string | ObjectIcon = null;
     public title: string = '';

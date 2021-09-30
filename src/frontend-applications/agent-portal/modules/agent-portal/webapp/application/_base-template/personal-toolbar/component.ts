@@ -121,7 +121,7 @@ class Component {
                 user.Tickets.OwnedAndLocked.map((id) => Number(id))
             ));
 
-            setTimeout(() => this.state.toolbarGroups = [group1, group2, group3], 50);
+            this.state.toolbarGroups = [group1, group2, group3];
         }
     }
 
@@ -130,6 +130,7 @@ class Component {
         if (actions && actions.length) {
             const showTicketsAction = actions[0] as ShowUserTicketsAction;
             showTicketsAction.setText(action.title);
+            showTicketsAction.icon = action.icon;
             showTicketsAction.run();
         }
     }

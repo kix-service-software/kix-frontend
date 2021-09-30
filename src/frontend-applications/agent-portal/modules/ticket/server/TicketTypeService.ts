@@ -49,8 +49,12 @@ export class TicketTypeAPIService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.TICKET_TYPE) {
             objects = await super.load<TicketType>(
-                token, KIXObjectType.TICKET_TYPE, this.RESOURCE_URI, loadingOptions, objectIds, 'TicketType', TicketType
+                token, KIXObjectType.TICKET_TYPE, this.RESOURCE_URI, loadingOptions, null, 'TicketType', TicketType
             );
+
+            if (objectIds && objectIds.length) {
+                objects = objects.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
+            }
         }
 
         return objects;

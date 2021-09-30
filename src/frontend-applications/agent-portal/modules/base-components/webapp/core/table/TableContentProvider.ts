@@ -148,9 +148,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     protected async prepareSpecificValues(values: TableValue[], object: any): Promise<void> {
         if (Array.isArray(object[KIXObjectProperty.DYNAMIC_FIELDS])) {
             for (const dfv of object[KIXObjectProperty.DYNAMIC_FIELDS] as DynamicFieldValue[]) {
-                let dfValue: [string[], string, string[]];
-
-                dfValue = await LabelService.getInstance().getDFDisplayValues(object.KIXObjectType, dfv);
+                const dfValue = await LabelService.getInstance().getDFDisplayValues(object.KIXObjectType, dfv);
 
                 values.push(new TableValue(
                     `${KIXObjectProperty.DYNAMIC_FIELDS}.${dfv.Name}`,

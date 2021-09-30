@@ -8,57 +8,63 @@
  */
 
 import { ClientStorageService } from './ClientStorageService';
-
-declare var io: any;
+import { io, Socket } from 'socket.io-client';
 
 export abstract class SocketClient {
 
-    protected socket: SocketIO.Server;
+    protected socket: Socket;
 
-    protected createSocket(namespace: string, authenticated: boolean = true): SocketIO.Server {
+    public constructor(protected namespace: string) {
+        this.createSocket();
+    }
+
+    protected checkSocketConnection(): void {
+        if (!this.socket) {
+            this.createSocket();
+        }
+    }
+
+    protected createSocket(): void {
         const socketUrl = ClientStorageService.getFrontendSocketUrl();
 
         const options = {
-            // transports: ['websocket']
+            transports: ['websocket'],
+            withCredentials: true
         };
 
-        let socket;
-        if (typeof io !== 'undefined') {
-            socket = io.connect(socketUrl + '/' + namespace, options);
-            socket.on('error', (error) => {
-                console.error(namespace);
-                console.error(error);
-            });
+        this.socket = io(socketUrl + '/' + this.namespace, options);
 
-            socket.on('disconnect', () => {
-                console.error(namespace);
-                console.warn('Disconnected from frontend server. Reconnect');
-                socket.open();
-            });
+        this.socket.on('error', (error) => {
+            console.error(this.namespace);
+            console.error(error);
+        });
 
-            socket.on('reconnect', (number: number) => {
-                console.error(namespace);
-                console.warn('Reconnect attempt: ' + number);
-            });
+        this.socket.on('disconnect', () => {
+            console.error(this.namespace);
+            console.warn('Disconnected from frontend server. Reconnect');
+            this.createSocket();
+        });
 
-            socket.on('reconnect_attempt', () => {
-                console.error(namespace);
-                console.warn('Reconnect attempt');
-            });
+        this.socket.on('reconnect', (number: number) => {
+            console.error(this.namespace);
+            console.warn('Reconnect attempt: ' + number);
+        });
 
-            socket.on('reconnect_error', (error) => {
-                console.error(namespace);
-                console.error('reconnect_error');
-                console.error(error);
-            });
+        this.socket.on('reconnect_attempt', () => {
+            console.error(this.namespace);
+            console.warn('Reconnect attempt');
+        });
 
-            socket.on('reconnect_failed', (attempts) => {
-                console.error(namespace);
-                console.error('reconnect_failed: ' + attempts);
-            });
-        }
+        this.socket.on('reconnect_error', (error) => {
+            console.error(this.namespace);
+            console.error('reconnect_error');
+            console.error(error);
+        });
 
-        return socket;
+        this.socket.on('reconnect_failed', (attempts) => {
+            console.error(this.namespace);
+            console.error('reconnect_failed: ' + attempts);
+        });
     }
 
 }

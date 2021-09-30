@@ -167,11 +167,13 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
         return operations;
     }
 
-    public async getInputType(property: string): Promise<InputFieldTypes | string> {
+    public async getInputType(property: string, operator?: SearchOperator): Promise<InputFieldTypes | string> {
+        let inputType: InputFieldTypes | string;
+
         if (this.isDropDown(property)) {
-            return InputFieldTypes.DROPDOWN;
+            inputType = InputFieldTypes.DROPDOWN;
         } else if (this.isDateTime(property)) {
-            return InputFieldTypes.DATE_TIME;
+            inputType = InputFieldTypes.DATE_TIME;
         } else {
             const classParameter = this.values.find((p) => p.property === ConfigItemProperty.CLASS_ID);
             const type = await ConfigItemClassAttributeUtil.getAttributeType(
@@ -179,25 +181,33 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
             );
 
             if (type === 'Date') {
-                return InputFieldTypes.DATE;
+                inputType = InputFieldTypes.DATE;
             } else if (type === 'DateTime') {
-                return InputFieldTypes.DATE_TIME;
+                inputType = InputFieldTypes.DATE_TIME;
             } else if (type === 'Text') {
-                return InputFieldTypes.TEXT;
+                inputType = InputFieldTypes.TEXT;
             } else if (type === 'TextArea') {
-                return InputFieldTypes.TEXT_AREA;
+                inputType = InputFieldTypes.TEXT_AREA;
             } else if (type === 'GeneralCatalog') {
-                return InputFieldTypes.DROPDOWN;
+                inputType = InputFieldTypes.DROPDOWN;
             } else if (type === 'CIClassReference') {
-                return InputFieldTypes.OBJECT_REFERENCE;
+                inputType = InputFieldTypes.OBJECT_REFERENCE;
             } else if (type === 'Organisation' || type === 'Contact') {
-                return InputFieldTypes.OBJECT_REFERENCE;
+                inputType = InputFieldTypes.OBJECT_REFERENCE;
             } else {
 
                 // use type rather than property
-                return super.getInputType(type);
+                inputType = await super.getInputType(type);
             }
         }
+
+        if (inputType === InputFieldTypes.DATE || inputType === InputFieldTypes.DATE_TIME) {
+            const relativeDateTimeOperators = SearchDefinition.getRelativeDateTimeOperators();
+            if (operator && relativeDateTimeOperators.includes(operator))
+                inputType = InputFieldTypes.TEXT;
+        }
+
+        return inputType;
     }
 
     private isDropDown(property: string): boolean {

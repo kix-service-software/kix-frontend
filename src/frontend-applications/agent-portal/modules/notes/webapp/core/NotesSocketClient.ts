@@ -31,11 +31,12 @@ export class NotesSocketClient extends SocketClient {
     private static INSTANCE: NotesSocketClient = null;
 
     private constructor() {
-        super();
-        this.socket = this.createSocket('notes', true);
+        super('notes');
     }
 
     public async loadNotes(): Promise<any> {
+        this.checkSocketConnection();
+
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<string>((resolve, reject) => {
 
@@ -70,6 +71,8 @@ export class NotesSocketClient extends SocketClient {
     }
 
     public async saveNotes(contextId: string, notes: string): Promise<void> {
+        this.checkSocketConnection();
+
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<void>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();

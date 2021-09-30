@@ -1,7 +1,1 @@
-{
-    "dependencies": [
-        "./style.less",
-        "./static/hamburger.min.css",
-        "../../../../static/thirdparty/socket.io.js"
-    ]
-}
+{"dependencies":["./style.less","./static/hamburger.min.css","../../../../modules/admin/webapp","../../../../modules/base-components/webapp","../../../../modules/bulk/webapp","../../../../modules/calendar/webapp","../../../../modules/cmdb/webapp","../../../../modules/customer/webapp","../../../../modules/dynamic-fields/webapp","../../../../modules/faq/webapp","../../../../modules/general-catalog/webapp","../../../../modules/home/webapp","../../../../modules/icon/webapp","../../../../modules/import/webapp","../../../../modules/import-export/webapp","../../../../modules/job/webapp","../../../../modules/kanban/webapp","../../../../modules/links/webapp","../../../../modules/mail-account/webapp","../../../../modules/mail-filter/webapp","../../../../modules/notes/webapp","../../../../modules/notification/webapp","../../../../modules/release/webapp","../../../../modules/reporting/webapp","../../../../modules/search/webapp","../../../../modules/setup-assistant/webapp","../../../../modules/sysconfig/webapp","../../../../modules/system-address/webapp","../../../../modules/system-console/webapp","../../../../modules/system-log/webapp","../../../../modules/textmodule/webapp","../../../../modules/ticket/webapp","../../../../modules/translation/webapp","../../../../modules/user/webapp","../../../../modules/valid/webapp","../../../../modules/webform/webapp"]}

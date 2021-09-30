@@ -44,6 +44,9 @@ import { FormConfiguration } from '../../../../model/configuration/FormConfigura
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { IdService } from '../../../../model/IdService';
+import { DynamicFieldFormUtil } from '../../../base-components/webapp/core/DynamicFieldFormUtil';
+import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
+import { Context } from '../../../../model/Context';
 
 export class TicketFormService extends KIXObjectFormService {
 
@@ -128,24 +131,29 @@ export class TicketFormService extends KIXObjectFormService {
         property: string, value: any, ticket: Ticket, formField: FormFieldConfiguration,
         formContext: FormContext
     ): Promise<any> {
+        const context = ContextService.getInstance().getActiveContext();
+        const sourceContextDescription = context.getAdditionalInformation(AdditionalContextInformation.SOURCE_CONTEXT);
+        let sourceContext: Context;
+        if (sourceContextDescription?.instanceId) {
+            sourceContext = ContextService.getInstance().getContext(sourceContextDescription.instanceId);
+        }
+
         switch (property) {
             case TicketProperty.CONTACT_ID:
                 value = ticket ? ticket.ContactID : null;
                 if (!value) {
-                    const context = ContextService.getInstance().getActiveContext();
-                    const contact = await context?.getObject<Contact>(KIXObjectType.CONTACT);
+                    const contact = await sourceContext?.getObject<Contact>(KIXObjectType.CONTACT);
                     value = contact ? contact.ID : null;
                 }
                 break;
             case TicketProperty.ORGANISATION_ID:
                 value = ticket ? ticket.OrganisationID : null;
                 if (!value) {
-                    const context = ContextService.getInstance().getActiveContext();
-                    const organisation = await context?.getObject<Organisation>(KIXObjectType.ORGANISATION);
+                    const organisation = await sourceContext?.getObject<Organisation>(KIXObjectType.ORGANISATION);
                     if (organisation) {
-                        value = organisation;
+                        value = organisation ? organisation.ID : null;
                     } else {
-                        const contact = await context?.getObject<Contact>(KIXObjectType.CONTACT);
+                        const contact = await sourceContext?.getObject<Contact>(KIXObjectType.CONTACT);
                         value = contact ? contact.PrimaryOrganisationID : null;
                     }
                 }
@@ -166,9 +174,7 @@ export class TicketFormService extends KIXObjectFormService {
                 value = await ArticleFormService.getInstance().getAttachmentFieldValue();
                 break;
             case ArticleProperty.TO:
-                value = await ArticleFormService.getInstance().getToFieldValue(
-                    ContextService.getInstance().getActiveContext()
-                );
+                value = await ArticleFormService.getInstance().getToFieldValue(context);
                 break;
             case ArticleProperty.CHANNEL_ID:
                 // use tempalte value
@@ -201,6 +207,7 @@ export class TicketFormService extends KIXObjectFormService {
                     value = await super.getValue(property, value, ticket, formField, formContext);
                 } else {
                     value = formField.defaultValue ? formField.defaultValue.value : null;
+                    value = await DynamicFieldFormUtil.getInstance().handleDynamicFieldValue(formField, value);
                 }
         }
         return value;
@@ -222,9 +229,6 @@ export class TicketFormService extends KIXObjectFormService {
                 break;
             case TicketProperty.PRIORITY_ID:
                 hasPermissions = await this.checkPermissions('system/ticket/priorities');
-                break;
-            case TicketProperty.SERVICE_ID:
-                hasPermissions = await this.checkPermissions('system/services');
                 break;
             case ArticleProperty.CHANNEL_ID:
                 hasPermissions = await this.checkPermissions('system/communication/channels');

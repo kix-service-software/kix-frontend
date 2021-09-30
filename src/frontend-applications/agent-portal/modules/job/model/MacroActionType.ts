@@ -24,9 +24,9 @@ export class MacroActionType extends KIXObject {
 
     public MacroType: string;
 
-    public Options: {};
+    public Options: any;
 
-    public Results: {};
+    public Results: any;
 
     public constructor(macroActionType?: MacroActionType) {
         super(macroActionType);

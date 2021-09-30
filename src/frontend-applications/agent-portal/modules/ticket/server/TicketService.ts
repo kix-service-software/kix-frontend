@@ -35,6 +35,10 @@ import { RequestObject } from '../../../../../server/model/rest/RequestObject';
 import { SenderType } from '../model/SenderType';
 import { TicketLock } from '../model/TicketLock';
 import { Contact } from '../../customer/model/Contact';
+import { ObjectIcon } from '../../icon/model/ObjectIcon';
+import { TicketLabelProvider } from './TicketLabelProvider';
+import { CacheService } from '../../../server/services/cache';
+import { PersonalSettingsProperty } from '../../user/model/PersonalSettingsProperty';
 
 export class TicketAPIService extends KIXObjectAPIService {
 
@@ -54,6 +58,10 @@ export class TicketAPIService extends KIXObjectAPIService {
     private constructor() {
         super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
+
+        CacheService.getInstance().addDependencies(
+            PersonalSettingsProperty.USER_LANGUAGE, [KIXObjectType.TICKET]
+        );
     }
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
@@ -71,12 +79,35 @@ export class TicketAPIService extends KIXObjectAPIService {
 
         let objects = [];
         if (objectType === KIXObjectType.TICKET) {
+
+            const includes = [TicketProperty.STATE_TYPE, KIXObjectType.CONTACT];
+            const expands = [
+                // TicketProperty.RESPONSIBLE_ID,
+                // TicketProperty.STATE_ID,
+                // TicketProperty.PRIORITY_ID,
+                // TicketProperty.TYPE_ID,
+                // TicketProperty.QUEUE_ID,
+                // TicketProperty.OWNER_ID,
+                // TicketProperty.PRIORITY_ID,
+                // TicketProperty.LOCK_ID,
+                // TicketProperty.CONTACT_ID
+            ];
+
             if (!loadingOptions) {
-                loadingOptions = new KIXObjectLoadingOptions(null, null, null, [TicketProperty.STATE_TYPE]);
-            } else if (loadingOptions.includes) {
-                loadingOptions.includes.push(TicketProperty.STATE_TYPE);
+                loadingOptions = new KIXObjectLoadingOptions(null, null, null, includes, expands);
             } else {
-                loadingOptions.includes = [TicketProperty.STATE_TYPE];
+                if (loadingOptions.includes) {
+                    loadingOptions.includes = [...loadingOptions.includes, ...includes];
+                }
+                else {
+                    loadingOptions.includes = includes;
+                }
+
+                if (loadingOptions.expands) {
+                    loadingOptions.expands = [...loadingOptions.expands, ...expands];
+                } else {
+                    loadingOptions.expands = expands;
+                }
             }
 
             objects = await super.load(
@@ -536,4 +567,15 @@ export class TicketAPIService extends KIXObjectAPIService {
             )
         ];
     }
+
+    public async getPropertyValue(token: string, object: Ticket | Article, property: string): Promise<string> {
+        return TicketLabelProvider.getPropertyValue(token, object, property);
+    }
+
+    public getPropertyIcons(
+        token: string, object: Ticket | Article, property: string
+    ): Promise<Array<ObjectIcon | string>> {
+        return TicketLabelProvider.getPropertyIcons(token, object, property);
+    }
+
 }
