@@ -295,11 +295,8 @@ export class HttpService {
 
                 // start profiling
                 const profileTaskId = ProfilingService.getInstance().start(
-                    'HttpService',
-                    options.method + ' ' + uri,
-                    {
-                        a: options
-                    });
+                    'HttpService', options.method + ' ' + uri, { data: [options] }
+                );
 
                 const response = await this.axios(options).catch((error: AxiosError) => {
                     LoggingService.getInstance().error(
