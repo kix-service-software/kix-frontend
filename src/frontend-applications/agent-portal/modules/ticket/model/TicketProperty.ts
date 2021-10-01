@@ -31,8 +31,6 @@ export enum TicketProperty {
 
     TYPE_ID = 'TypeID',
 
-    SERVICE_ID = 'ServiceID',
-
     RESPONSIBLE_ID = 'ResponsibleID',
 
     AGE = 'Age',
@@ -95,5 +93,7 @@ export enum TicketProperty {
 
     STATE_TYPE = 'StateType',
 
-    STATE = 'State'
+    STATE = 'State',
+
+    UNTIL_TIME = 'UntilTime'
 }

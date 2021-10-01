@@ -15,6 +15,7 @@ import { Label } from './Label';
 import { KIXObjectService } from './KIXObjectService';
 import { ILabelProvider } from './ILabelProvider';
 import { LabelProvider } from './LabelProvider';
+import { EventService } from './EventService';
 
 export class LabelService {
 
@@ -27,7 +28,15 @@ export class LabelService {
         return LabelService.INSTANCE;
     }
 
-    private constructor() { }
+    private constructor() {
+        EventService.getInstance().subscribe('USER_LANGUAGE_CHANGED', {
+            eventSubscriberId: 'LabelService',
+            eventPublished: async (data: any) => {
+                this.displayValueCache.clear();
+                this.requestDisplayValuePromises.clear();
+            }
+        });
+    }
 
     // eslint-disable-next-line max-len
     private propertiesLabelProvider: Map<KIXObjectType | string, Map<string, ILabelProvider<any>>> = new Map();
@@ -90,13 +99,15 @@ export class LabelService {
 
         let displayValue;
         const labelProvider = this.getLabelProvider(object);
-        for (const extendedLabelProvider of (labelProvider as LabelProvider)?.getExtendedLabelProvider()) {
-            const result = await extendedLabelProvider.getDisplayText(
-                object, property, defaultValue, translatable
-            );
-            if (result) {
-                displayValue = result;
-                break;
+        if (labelProvider) {
+            for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
+                const result = await extendedLabelProvider.getDisplayText(
+                    object, property, defaultValue, translatable
+                );
+                if (result) {
+                    displayValue = result;
+                    break;
+                }
             }
         }
 
@@ -114,30 +125,34 @@ export class LabelService {
             this.displayValueCache.set(object.KIXObjectType, new Map());
         }
 
-        const objectValue = object[property];
-
         const propertiesMap = this.displayValueCache.get(object.KIXObjectType);
-        // if we have allready a display value for this property then return directly
         if (!propertiesMap.has(property)) {
             propertiesMap.set(property, new Map());
         }
 
-        if (propertiesMap.get(property).has(objectValue)) {
+        const objectValue = object[property];
+        // if we have already a display value for this property then return directly
+        // FIXME: check against ObjectProperty or something similar if property is supported (KIX2018-6164)?
+        if (typeof objectValue !== 'undefined' && propertiesMap.get(property).has(objectValue)) {
             return propertiesMap.get(property).get(objectValue);
         }
 
-        const key = `${object.KIXObjectType}-${property}-${defaultValue}`;
-        if (this.requestDisplayValuePromises.has(key)) {
+        const key = `${object.KIXObjectType}-${property}-`
+            + `${objectValue ? objectValue : defaultValue}-${translatable ? '1' : '0'}`;
+        // FIXME: check against ObjectProperty or something similar if property is supported (KIX2018-6164)?
+        if (typeof objectValue !== 'undefined' && this.requestDisplayValuePromises.has(key)) {
             return this.requestDisplayValuePromises.get(key);
         }
 
-        const requestPromise = this.createRequestDisplayValuePromise(object, property, defaultValue, translatable);
+        const requestPromise = this.createRequestDisplayValuePromise(
+            object, property, key, defaultValue, translatable
+        );
         this.requestDisplayValuePromises.set(key, requestPromise);
         return requestPromise;
     }
 
     private createRequestDisplayValuePromise<T extends KIXObject>(
-        object: T, property: string, defaultValue?: string, translatable: boolean = true
+        object: T, property: string, key: string, defaultValue?: string, translatable: boolean = true
     ): Promise<string> {
         return new Promise(async (resolve, reject) => {
             let displayValue;
@@ -151,7 +166,7 @@ export class LabelService {
                 displayValue = await labelProvider?.getDisplayText(object, property, defaultValue, translatable);
             }
             this.displayValueCache.get(object.KIXObjectType).get(property).set(object[property], displayValue);
-            this.requestDisplayValuePromises.delete(`${object.KIXObjectType}-${property}-${defaultValue}`);
+            this.requestDisplayValuePromises.delete(key);
             resolve(displayValue);
         });
     }
@@ -179,24 +194,27 @@ export class LabelService {
             propertiesMap.set(property, new Map());
         }
 
-        // if we have allready a display value for this property then return directly
         const objectValue = object[property];
-        if (propertiesMap.get(property).has(objectValue)) {
+        // if we have already a display value for this property then return directly
+        // FIXME: check against ObjectProperty or something similar if property is supported (KIX2018-6164)?
+        if (typeof objectValue !== 'undefined' && propertiesMap.get(property).has(objectValue)) {
             return propertiesMap.get(property).get(objectValue);
         }
 
-        const key = `${object.KIXObjectType}-${property}-${objectValue}`;
-        if (this.requestIconPromises.has(key)) {
+        const key = `${object.KIXObjectType}-${property}-`
+            + `${objectValue ? objectValue : value}-${forTable ? '1' : '0'}`;
+        // FIXME: check against ObjectProperty or something similar if property is supported (KIX2018-6164)?
+        if (typeof objectValue !== 'undefined' && this.requestIconPromises.has(key)) {
             return this.requestIconPromises.get(key);
         }
 
-        const requestPromise = this.createRequestIconPromise(object, property, value, forTable);
+        const requestPromise = this.createRequestIconPromise(object, property, key, value, forTable);
         this.requestIconPromises.set(key, requestPromise);
         return requestPromise;
     }
 
     private createRequestIconPromise(
-        object: KIXObject, property: string, value?: string | number, forTable?: boolean
+        object: KIXObject, property: string, key: string, value?: string | number, forTable?: boolean
     ): Promise<Array<ObjectIcon | string>> {
         return new Promise(async (resolve, reject) => {
             let displayIcons;
@@ -217,7 +235,7 @@ export class LabelService {
                 }
                 this.displayIconCache.get(object.KIXObjectType).get(property).set(object[property], displayIcons);
             }
-            this.requestIconPromises.delete(`${object.KIXObjectType}-${property}-${object[property]}`);
+            this.requestIconPromises.delete(key);
             resolve(displayIcons);
         });
     }

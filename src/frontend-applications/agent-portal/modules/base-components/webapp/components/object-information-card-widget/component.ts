@@ -18,12 +18,15 @@ import { FilterUtil } from '../../core/FilterUtil';
 import { KIXModulesService } from '../../core/KIXModulesService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ObjectInformationCardConfiguration } from './ObjectInformationCardConfiguration';
+import { Context } from '../../../../../model/Context';
 
 class Component {
 
     private state: ComponentState;
 
     private contextListenerId: string;
+
+    private context: Context;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -32,16 +35,15 @@ class Component {
     public onInput(input: any): void {
         if (this.state.instanceId !== input.instanceId) {
             this.state.instanceId = input.instanceId;
-            this.initWidget();
         }
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
+        this.context = ContextService.getInstance().getActiveContext();
         this.contextListenerId = IdService.generateDateBasedId('object-information-widget-');
-        context.registerListener(this.contextListenerId, {
-            sidebarLeftToggled: (): void => { return; },
-            filteredObjectListChanged: (): void => { return; },
+        this.context.registerListener(this.contextListenerId, {
+            sidebarLeftToggled: () => { return; },
+            filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
             sidebarRightToggled: (): void => { return; },
             scrollInformationChanged: () => { return; },
@@ -55,18 +57,15 @@ class Component {
     }
 
     public onDestroy(): void {
-        const context = ContextService.getInstance().getActiveContext();
-        context.unregisterListener(this.contextListenerId);
+        this.context.unregisterListener(this.contextListenerId);
     }
 
     private async initWidget(): Promise<void> {
-        this.state.prepared = false;
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
+        this.state.widgetConfiguration = this.context
+            ? await this.context.getWidgetConfiguration(this.state.instanceId)
             : undefined;
 
-        const object = await context.getObject();
+        const object = await this.context.getObject();
 
         if (this.state.widgetConfiguration?.configuration) {
             const config = this.state.widgetConfiguration.configuration as ObjectInformationCardConfiguration;
@@ -77,10 +76,6 @@ class Component {
             }
             await this.prepareInformation(config.rows, object);
         }
-
-        setTimeout(() => {
-            this.state.prepared = true;
-        }, 100);
     }
 
     private async prepareInformation(rows: InformationRowConfiguration[], object: KIXObject): Promise<void> {

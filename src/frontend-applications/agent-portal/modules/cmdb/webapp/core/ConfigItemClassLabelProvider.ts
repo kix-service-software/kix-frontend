@@ -66,7 +66,7 @@ export class ConfigItemClassLabelProvider extends LabelProvider<ConfigItemClass>
     }
 
     public isLabelProviderFor(object: ConfigItemClass | KIXObject): boolean {
-        return object instanceof ConfigItemClass || object.KIXObjectType === KIXObjectType.CONFIG_ITEM_CLASS;
+        return object instanceof ConfigItemClass || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getObjectText(

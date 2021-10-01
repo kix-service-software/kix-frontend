@@ -128,6 +128,9 @@ msgstr "Erweitert"
 msgid "Affected Assets"
 msgstr "Betroffene Assets"
 
+msgid "Affected Services"
+msgstr ""
+
 msgid "after"
 msgstr "nach/größer als"
 
@@ -717,6 +720,9 @@ msgstr "Self Service Login"
 
 msgid "Customer Portal"
 msgstr "Self Service Portal"
+
+msgid "Customize Dashboard"
+msgstr ""
 
 msgid "CW"
 msgstr "KW"
@@ -4038,9 +4044,6 @@ msgstr "im Hintergrund ausführen"
 msgid "Send to these agents"
 msgstr "Senden an Agenten"
 
-msgid "Service"
-msgstr "Service"
-
 msgid "Set Email Header"
 msgstr "E-Mail Header setzen"
 
@@ -4315,6 +4318,9 @@ msgstr "System: SysConfig ({0})"
 
 msgid "-> (tab)"
 msgstr "-> (Tabulator)"
+
+msgid "Table Columns"
+msgstr ""
 
 msgid "Table Configuration"
 msgstr "Tabellenkonfiguration"
@@ -4767,6 +4773,12 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Result"
+#~ msgstr "Ergebnis"
+
+#~ msgid "Service"
+#~ msgstr "Service"
 
 #~ msgid "Hit List ({0})"
 #~ msgstr "Trefferliste ({0})"

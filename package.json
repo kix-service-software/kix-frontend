@@ -54,6 +54,7 @@
         "express": "^4.17.1",
         "express-force-ssl": "0.3.2",
         "file-saver": "^2.0.5",
+        "https-proxy-agent": "^5.0.0",
         "js-plugins": "1.0.0",
         "jsonfile": "^6.1.0",
         "jsonwebtoken": "^8.5.1",

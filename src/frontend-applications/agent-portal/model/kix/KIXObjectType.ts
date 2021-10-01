@@ -133,8 +133,6 @@ export enum KIXObjectType {
 
     ROLE = 'Role',
 
-    SERVICE = 'Service',
-
     SYS_CONFIG_OPTION = 'SysConfigOption',
 
     SYS_CONFIG_OPTION_DEFINITION = 'SysConfigOptionDefinition',

@@ -261,7 +261,7 @@ export abstract class KIXObjectFormService {
     }
 
     public async getFormParameter(
-        forUpdate: boolean = false, createOptions?: KIXObjectSpecificCreateOptions
+        forUpdate: boolean = false, createOptions?: KIXObjectSpecificCreateOptions, postPrepareValues: boolean = true
     ): Promise<Array<[string, any]>> {
         let parameter: Array<[string, any]> = [];
 
@@ -331,7 +331,7 @@ export abstract class KIXObjectFormService {
             templateKey = templateIterator.next();
         }
 
-        if (formInstance) {
+        if (formInstance && postPrepareValues) {
             parameter = await this.postPrepareValues(
                 parameter, createOptions, formInstance?.getForm().formContext, formInstance
             );

@@ -300,17 +300,23 @@ export class BrowserUtil {
     public static async prepareUrlParameter(params: Array<[string, any]>): Promise<string[]> {
         const urlParams = [];
         if (Array.isArray(params)) {
-            const context = ContextService.getInstance().getActiveContext();
-            const contextObject = await context.getObject();
-
             for (const param of params) {
-                let paramValue = JSON.stringify(param[1]);
-                paramValue = await PlaceholderService.getInstance().replacePlaceholders(paramValue, contextObject);
-                paramValue = encodeURI(paramValue);
+                const paramValue = await this.prepareUrlParameterValue(param[1]);
                 urlParams.push(`${param[0]}=${paramValue}`);
             }
         }
         return urlParams;
+    }
+
+    public static async prepareUrlParameterValue(value: any): Promise<string> {
+        const context = ContextService.getInstance().getActiveContext();
+        const contextObject = await context.getObject();
+
+        let paramValue = JSON.stringify(value);
+        paramValue = await PlaceholderService.getInstance().replacePlaceholders(paramValue, contextObject);
+        paramValue = encodeURI(paramValue);
+
+        return paramValue;
     }
 
     public static replaceInlineContent(value: string, inlineContent: InlineContent[]): string {

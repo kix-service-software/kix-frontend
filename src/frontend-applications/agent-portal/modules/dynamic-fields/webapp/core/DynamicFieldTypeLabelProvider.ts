@@ -20,7 +20,7 @@ export class DynamicFieldTypeLabelProvider extends LabelProvider<DynamicFieldTyp
     public kixObjectType: KIXObjectType = KIXObjectType.DYNAMIC_FIELD_TYPE;
 
     public isLabelProviderFor(object: DynamicFieldType | KIXObject): boolean {
-        return object instanceof DynamicFieldType || object.KIXObjectType === this.kixObjectType;
+        return object instanceof DynamicFieldType || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

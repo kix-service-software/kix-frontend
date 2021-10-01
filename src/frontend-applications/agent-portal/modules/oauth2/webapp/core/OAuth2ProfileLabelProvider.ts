@@ -24,7 +24,7 @@ export class OAuth2ProfileLabelProvider extends LabelProvider<OAuth2Profile> {
     }
 
     public isLabelProviderFor(object: KIXObject): boolean {
-        return object instanceof OAuth2Profile || object.KIXObjectType === this.kixObjectType;
+        return object instanceof OAuth2Profile || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

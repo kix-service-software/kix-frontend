@@ -162,7 +162,7 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
     }
 
     public isLabelProviderFor(object: FAQArticle | KIXObject): boolean {
-        return object instanceof FAQArticle || object.KIXObjectType === this.kixObjectType;
+        return object instanceof FAQArticle || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getObjectText(faqArticle: FAQArticle, id: boolean = true, title: boolean = true): Promise<string> {

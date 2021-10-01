@@ -22,7 +22,7 @@ export class ContactPlaceholderHandler extends AbstractPlaceholderHandler {
 
     public handlerId: string = '200-ContactPlaceholderHandler';
 
-    public async replace(placeholder: string, contact?: Contact, language: string = 'en'): Promise<string> {
+    public async replace(placeholder: string, contact?: Contact, language?: string): Promise<string> {
         let result = '';
         if (contact) {
             const attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
@@ -35,9 +35,6 @@ export class ContactPlaceholderHandler extends AbstractPlaceholderHandler {
                 result = await DynamicFieldValuePlaceholderHandler.getInstance().replaceDFValue(contact, optionsString);
             }
             else if (attribute && this.isKnownProperty(attribute)) {
-                if (!PlaceholderService.getInstance().translatePlaceholder(placeholder)) {
-                    language = 'en';
-                }
                 switch (attribute) {
                     case ContactProperty.ID:
                     case KIXObjectProperty.VALID_ID:

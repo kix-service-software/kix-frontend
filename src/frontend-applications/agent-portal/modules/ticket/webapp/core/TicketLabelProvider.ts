@@ -36,7 +36,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET;
 
     public isLabelProviderFor(object: Ticket | KIXObject): boolean {
-        return object instanceof Ticket || object.KIXObjectType === KIXObjectType.TICKET;
+        return object instanceof Ticket || object?.KIXObjectType === this.kixObjectType;
     }
 
     public getSupportedProperties(): string[] {
@@ -257,9 +257,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.STATE_TYPE_ID:
                 displayValue = 'Translatable#State Type';
                 break;
-            case TicketProperty.SERVICE_ID:
-                displayValue = 'Translatable#Service';
-                break;
             case TicketProperty.OWNER_ID:
                 displayValue = 'Translatable#Owner';
                 break;
@@ -393,6 +390,12 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                     displayValue = await this.getPropertyValueDisplayText(
                         TicketProperty.TYPE_ID, ticket.TypeID, translatable
                     );
+                    break;
+                case TicketProperty.UNTIL_TIME:
+                    if (ticket) {
+                        displayValue = DateTimeUtil.calculateTimeInterval(ticket.getUntilTime() || 0);
+                        translatable = false;
+                    }
                     break;
                 default:
                     displayValue = await super.getDisplayText(ticket, property, defaultValue, translatable);
@@ -628,7 +631,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.RESPONSIBLE_ID:
             case TicketProperty.OWNER_ID:
             case TicketProperty.TYPE_ID:
-            case TicketProperty.SERVICE_ID:
             case TicketProperty.ARTICLES:
             case TicketProperty.HISTORY:
             case TicketProperty.WATCHERS:

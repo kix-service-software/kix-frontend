@@ -144,7 +144,8 @@ export class ReportDefinitionFormService extends KIXObjectFormService {
         formInstance: FormInstance, f: FormFieldConfiguration,
         parent?: FormFieldConfiguration, withChildren: boolean = true
     ): Promise<FormFieldConfiguration> {
-        const field = await super.getNewFormField(formInstance, f, parent, false);
+        withChildren = f.property === ReportDefinitionProperty.PARAMTER;
+        const field = await super.getNewFormField(formInstance, f, parent, withChildren);
         if (f.property === ReportDefinitionProperty.AVAILABLE_OUTPUT_FORMATS) {
             const selectableOutputFormats = await ReportDefinitionFormCreator.getSelectableOutputFormats(formInstance);
             const option = field.options.find((o) => o.option === ObjectReferenceOptions.OBJECT_IDS);

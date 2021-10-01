@@ -33,7 +33,7 @@ export class UserLabelProvider extends LabelProvider<User> {
     public kixObjectType: KIXObjectType | string = KIXObjectType.USER;
 
     public isLabelProviderFor(object: KIXObject): boolean {
-        return object instanceof User || object.KIXObjectType === KIXObjectType.USER;
+        return object instanceof User || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

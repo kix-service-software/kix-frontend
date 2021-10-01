@@ -22,6 +22,7 @@ import { UserType } from '../../modules/user/model/UserType';
 import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 import { Socket } from 'socket.io';
+import { LoggingService } from '../../../../server/services/LoggingService';
 
 export class AuthenticationService {
 
@@ -135,15 +136,26 @@ export class AuthenticationService {
     }
 
     public async isSocketAuthenticated(socket: Socket, next: (err?: any) => void): Promise<void> {
-        const parsedCookie = cookie.parse(socket.handshake.headers.cookie);
-        const token = parsedCookie.token;
-        if (token) {
-            this.validateToken(token, socket.handshake.address)
-                .then((valid) => valid ? next() : next(new SocketAuthenticationError('Invalid Token!')))
-                .catch(() => next(new SocketAuthenticationError('Error validating token!')));
+        if (socket?.handshake?.headers?.cookie) {
+            const parsedCookie = cookie.parse(socket.handshake.headers.cookie);
+            const token = parsedCookie.token;
+            if (token) {
+                const valid = await this.validateToken(token, socket.handshake.address)
+                    .catch(() => next(new SocketAuthenticationError('Error validating token!')));
 
+                if (valid) {
+                    next();
+                } else {
+                    next(new SocketAuthenticationError('Invalid Token!'));
+                }
+            } else {
+                next(new SocketAuthenticationError('Invalid Token!'));
+            }
         } else {
-            next(new SocketAuthenticationError('Invalid Token!'));
+            LoggingService.getInstance().error('Invalid Cookie!');
+            LoggingService.getInstance().error(socket?.handshake?.headers?.cookie);
+            LoggingService.getInstance().error(JSON.stringify(socket?.handshake));
+            next(new SocketAuthenticationError(`Invalid Cookie! ${JSON.stringify(socket?.handshake)}`));
         }
     }
 

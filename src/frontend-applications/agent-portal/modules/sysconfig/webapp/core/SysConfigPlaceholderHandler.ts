@@ -23,7 +23,7 @@ export class SysConfigPlaceholderHandler extends AbstractPlaceholderHandler {
         'CONFIG'
     ];
 
-    public async replace(placeholder: string, object?: KIXObject, language: string = 'en'): Promise<string> {
+    public async replace(placeholder: string, object?: KIXObject, language?: string): Promise<string> {
         let result = '';
         let sysConfigOptionDef: SysConfigOptionDefinition = null;
         const sysConfigName: string = PlaceholderService.getInstance().getAttributeString(placeholder);
@@ -36,9 +36,6 @@ export class SysConfigPlaceholderHandler extends AbstractPlaceholderHandler {
                 ? sysConfigOptionDefs[0] : null;
         }
         if (sysConfigOptionDef) {
-            if (!PlaceholderService.getInstance().translatePlaceholder(placeholder)) {
-                language = 'en';
-            }
             const value = typeof sysConfigOptionDef.Value !== 'undefined'
                 && sysConfigOptionDef.Value !== null && sysConfigOptionDef.Value !== ''
                 ? sysConfigOptionDef.Value : sysConfigOptionDef.Default;

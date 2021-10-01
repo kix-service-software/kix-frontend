@@ -28,6 +28,8 @@ import { ConfiguredWidget } from '../../../../model/configuration/ConfiguredWidg
 import { AgentService } from '../../../user/webapp/core/AgentService';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
 import { ContextConfiguration } from '../../../../model/configuration/ContextConfiguration';
+import { AdditionalContextInformation } from './AdditionalContextInformation';
+import { ApplicationEvent } from './ApplicationEvent';
 
 export class ContextService {
 
@@ -176,7 +178,9 @@ export class ContextService {
                 const index = this.contextInstances.findIndex((c) => c.instanceId === instanceId);
                 if (index !== -1) {
 
-                    sourceContext = this.contextInstances[index].getAdditionalInformation('SourceContext');
+                    sourceContext = this.contextInstances[index].getAdditionalInformation(
+                        AdditionalContextInformation.SOURCE_CONTEXT
+                    );
 
                     useSourceContext = this.contextInstances[index].getAdditionalInformation(
                         'USE_SOURCE_CONTEXT'
@@ -186,9 +190,15 @@ export class ContextService {
                     if (isStored) {
                         await this.updateStorage(instanceId, true);
                     }
-                    const context = this.contextInstances.splice(index, 1);
-                    await context[0].destroy();
-                    EventService.getInstance().publish(ContextEvents.CONTEXT_REMOVED, context[0]);
+                    const context = this.contextInstances.splice(index, 1)[0];
+
+                    const contextExtensions = this.getContextExtensions(context.contextId);
+                    for (const extension of contextExtensions) {
+                        await extension.destroy(context);
+                    }
+
+                    await context.destroy();
+                    EventService.getInstance().publish(ContextEvents.CONTEXT_REMOVED, context);
 
                     this.activeContextIndex--;
 
@@ -288,6 +298,9 @@ export class ContextService {
     ): Promise<void> {
         const context = this.contextInstances.find((i) => i.instanceId === instanceId);
         if (context && context.instanceId !== this.activeContext?.instanceId) {
+
+            EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
+
             const previousContext = this.getActiveContext();
             if (history) {
                 this.setDocumentHistory(true, previousContext, context, objectId);
@@ -467,7 +480,7 @@ export class ContextService {
 
                         const previousContext = this.getActiveContext();
                         if (previousContext) {
-                            context.setAdditionalInformation('SourceContext', {
+                            context.setAdditionalInformation(AdditionalContextInformation.SOURCE_CONTEXT, {
                                 contextId: previousContext.contextId,
                                 objectId: previousContext.getObjectId(),
                                 instanceId: previousContext.instanceId

@@ -490,6 +490,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         formFieldValues.forEach((value: FormFieldValue, key: string) => {
             const field = formInstance.getFormField(key);
             if (
+                field &&
                 field.property !== SystemAddressProperty.NAME &&
                 field.property !== SystemAddressProperty.REALNAME
             ) {

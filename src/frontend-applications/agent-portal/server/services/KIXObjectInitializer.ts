@@ -21,6 +21,11 @@ export class KIXObjectInitializer {
         const propertyIconsMap: Map<string, Map<any, Array<ObjectIcon | string>>> = new Map();
 
         for (const object of objects) {
+
+            if (typeof object !== 'object') {
+                continue;
+            }
+
             object.displayValues = [];
             object.displayIcons = [];
 

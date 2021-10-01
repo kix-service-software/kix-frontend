@@ -53,7 +53,7 @@ export class TicketQueueTableFactory extends TableFactory {
     ): TableConfiguration {
         const tableColumns = [
             this.getDefaultColumnConfiguration(QueueProperty.NAME),
-            this.getDefaultColumnConfiguration('ICON'),
+            this.getDefaultColumnConfiguration(QueueProperty.QUEUE_ID),
             this.getDefaultColumnConfiguration(QueueProperty.FOLLOW_UP_ID),
             this.getDefaultColumnConfiguration(QueueProperty.UNLOCK_TIMEOUT),
             this.getDefaultColumnConfiguration(QueueProperty.SYSTEM_ADDRESS_ID),
@@ -103,6 +103,10 @@ export class TicketQueueTableFactory extends TableFactory {
                 config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 150, true, true, false, DataType.NUMBER
                 );
+                break;
+            case QueueProperty.QUEUE_ID:
+                config = super.getDefaultColumnConfiguration('ICON');
+                config.property = QueueProperty.QUEUE_ID;
                 break;
             default:
                 config = super.getDefaultColumnConfiguration(property);

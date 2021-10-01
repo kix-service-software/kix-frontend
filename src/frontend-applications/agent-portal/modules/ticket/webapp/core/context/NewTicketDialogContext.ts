@@ -62,6 +62,18 @@ export class NewTicketDialogContext extends Context {
         EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.subscriber);
     }
 
+    public async postInit(): Promise<void> {
+        await super.postInit();
+
+        await this.setFormObject();
+
+        const formInstance = await this.getFormManager().getFormInstance();
+        const contactValue = await formInstance?.getFormFieldValueByProperty<number>(TicketProperty.CONTACT_ID);
+        if (contactValue && contactValue.value) {
+            await this.handleContactValue(contactValue.value);
+        }
+    }
+
     public async destroy(): Promise<void> {
         await super.destroy();
         EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.subscriber);
@@ -78,7 +90,7 @@ export class NewTicketDialogContext extends Context {
         if (service) {
             const formId = this.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
             const newObject = {};
-            const parameter = await service.getFormParameter(formId);
+            const parameter = await service.getFormParameter(formId, null, false);
             parameter.forEach((p) => {
                 if (p[1] !== undefined) {
                     newObject[p[0]] = p[1];

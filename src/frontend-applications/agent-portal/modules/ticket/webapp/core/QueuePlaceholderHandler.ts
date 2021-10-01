@@ -23,15 +23,12 @@ export class QueuePlaceholderHandler extends AbstractPlaceholderHandler {
 
     public handlerId: string = '300-QueuePlaceholderHandler';
 
-    public async replace(placeholder: string, ticket?: Ticket, language: string = 'en'): Promise<string> {
+    public async replace(placeholder: string, ticket?: Ticket, language?: string): Promise<string> {
         let result = '';
         const queue = await this.getQueue(ticket);
         if (queue) {
             const attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
             if (attribute && this.isKnownProperty(attribute)) {
-                if (!PlaceholderService.getInstance().translatePlaceholder(placeholder)) {
-                    language = 'en';
-                }
                 switch (attribute) {
                     case QueueProperty.QUEUE_ID:
                     case KIXObjectProperty.VALID_ID:

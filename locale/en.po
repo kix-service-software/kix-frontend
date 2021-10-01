@@ -128,6 +128,9 @@ msgstr ""
 msgid "Affected Assets"
 msgstr ""
 
+msgid "Affected Services"
+msgstr ""
+
 msgid "after"
 msgstr "after/greater than"
 
@@ -704,6 +707,9 @@ msgstr "Self Service Login"
 
 msgid "Customer Portal"
 msgstr "Self Service Portal"
+
+msgid "Customize Dashboard"
+msgstr ""
 
 msgid "CW"
 msgstr ""
@@ -3890,9 +3896,6 @@ msgstr ""
 msgid "Send to these agents"
 msgstr ""
 
-msgid "Service"
-msgstr ""
-
 msgid "Set Email Header"
 msgstr ""
 
@@ -4165,6 +4168,9 @@ msgid "System: Sysconfig ({0})"
 msgstr ""
 
 msgid "-> (tab)"
+msgstr ""
+
+msgid "Table Columns"
 msgstr ""
 
 msgid "Table Configuration"

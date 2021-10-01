@@ -51,6 +51,8 @@ import { TicketCreateDynamicFields } from './form/extended-form-manager/TicketCr
 import { TicketJobFormManager } from './TicketJobFormManager';
 import { ArticleFormFieldValueHandler } from './ArticleFormFieldValueHandler';
 import { TicketStateSet } from './form/extended-form-manager/TicketStateSet';
+import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
+import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
 
 export class UIModule implements IUIModule {
 
@@ -66,6 +68,10 @@ export class UIModule implements IUIModule {
 
     public async register(): Promise<void> {
         PlaceholderService.getInstance().registerPlaceholderHandler(TicketPlaceholderHandler.getInstance());
+
+        BrowserCacheService.getInstance().addDependencies(
+            PersonalSettingsProperty.USER_LANGUAGE, [KIXObjectType.TICKET]
+        );
 
         ServiceRegistry.registerServiceInstance(TicketService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketTypeService.getInstance());

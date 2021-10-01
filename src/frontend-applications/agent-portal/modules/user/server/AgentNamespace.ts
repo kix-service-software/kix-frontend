@@ -25,6 +25,8 @@ import { PersonalSettingsService } from './PersonalSettingsService';
 import cookie from 'cookie';
 import { AgentEvent } from '../webapp/core/AgentEvent';
 import { Socket } from 'socket.io';
+import { CacheService } from '../../../server/services/cache';
+import { PersonalSettingsProperty } from '../model/PersonalSettingsProperty';
 
 export class AgentNamespace extends SocketNameSpace {
 
@@ -72,10 +74,18 @@ export class AgentNamespace extends SocketNameSpace {
 
         if (user) {
             const response = await UserService.getInstance().setPreferences(
-                token, data.clientRequestId, data.parameter, user.UserID
-            ).then(() =>
-                new SocketResponse(AgentEvent.SET_PREFERENCES_FINISHED, new SetPreferencesResponse(data.requestId))
-            ).catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
+                token, data.clientRequestId, data.parameter
+            ).then(() => {
+                if (
+                    Array.isArray(data?.parameter) &&
+                    data.parameter.some((p) => p[0] === PersonalSettingsProperty.USER_LANGUAGE)
+                ) {
+                    CacheService.getInstance().deleteKeys(PersonalSettingsProperty.USER_LANGUAGE);
+                }
+                return new SocketResponse(
+                    AgentEvent.SET_PREFERENCES_FINISHED, new SetPreferencesResponse(data.requestId)
+                );
+            }).catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
             return response;
         }
 
@@ -86,7 +96,7 @@ export class AgentNamespace extends SocketNameSpace {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';
 
-        const response = await UserService.getInstance().getUserByToken(token)
+        const response = await UserService.getInstance().getUserByToken(token, data.useCache)
             .then((currentUser: User) =>
                 new SocketResponse(
                     AgentEvent.GET_CURRENT_USER_FINISHED, new GetCurrentUserResponse(data.requestId, currentUser)

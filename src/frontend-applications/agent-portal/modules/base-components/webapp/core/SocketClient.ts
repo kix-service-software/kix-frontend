@@ -28,7 +28,8 @@ export abstract class SocketClient {
         const socketUrl = ClientStorageService.getFrontendSocketUrl();
 
         const options = {
-            transports: ['websocket']
+            transports: ['websocket'],
+            withCredentials: true
         };
 
         this.socket = io(socketUrl + '/' + this.namespace, options);

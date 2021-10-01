@@ -86,19 +86,16 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
             }
         }
 
-        EventService.getInstance().publish(ApplicationEvent.OBJECT_UPDATED, { objectType: KIXObjectType.TICKET });
-
         setTimeout(async () => {
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
+
             if (successHint) {
                 const context = ContextService.getInstance().getActiveContext();
                 await context.getObject(KIXObjectType.TICKET, true);
                 BrowserUtil.openSuccessOverlay(successHint);
             }
 
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
-
-            BrowserCacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
-
+            EventService.getInstance().publish(ApplicationEvent.OBJECT_UPDATED, { objectType: KIXObjectType.TICKET });
         }, 1000);
     }
 

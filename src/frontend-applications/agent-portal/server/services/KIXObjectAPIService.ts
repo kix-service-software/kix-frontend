@@ -102,7 +102,10 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
         objects = objects.filter((o) => o !== null && typeof o !== 'undefined');
         objects = objectConstructor ? objects.map((o) => new objectConstructor(o as KIXObject)) : objects;
-        await KIXObjectInitializer.initDisplayValuesAndIcons(token, objects as KIXObject[], this);
+
+        await KIXObjectInitializer.initDisplayValuesAndIcons(token, objects as KIXObject[], this)
+            .catch((err) => LoggingService.getInstance().error('Could not initialize display values', err));
+
         return objects;
     }
 

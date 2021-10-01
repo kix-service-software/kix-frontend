@@ -100,7 +100,7 @@ export class FAQCategoryLabelProvider extends LabelProvider<FAQCategory> {
     }
 
     public isLabelProviderFor(object: FAQCategory | KIXObject): boolean {
-        return object instanceof FAQCategory || object.KIXObjectType === this.kixObjectType;
+        return object instanceof FAQCategory || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getObjectText(

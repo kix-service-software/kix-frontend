@@ -18,7 +18,7 @@ export class ValidObjectLabelProvider extends LabelProvider<ValidObject> {
     public kixObjectType: KIXObjectType | string = KIXObjectType.VALID_OBJECT;
 
     public isLabelProviderFor(object: KIXObject): boolean {
-        return object instanceof ValidObject || object.KIXObjectType === this.kixObjectType;
+        return object instanceof ValidObject || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getObjectText(

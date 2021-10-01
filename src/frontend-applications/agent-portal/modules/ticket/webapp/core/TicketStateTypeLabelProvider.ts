@@ -21,7 +21,7 @@ export class TicketStateTypeLabelProvider extends LabelProvider<TicketStateType>
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET_STATE_TYPE;
 
     public isLabelProviderFor(object: KIXObject): boolean {
-        return object instanceof TicketStateType || object.KIXObjectType === this.kixObjectType;
+        return object instanceof TicketStateType || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

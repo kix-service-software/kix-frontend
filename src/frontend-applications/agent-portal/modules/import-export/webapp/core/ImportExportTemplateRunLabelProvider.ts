@@ -25,7 +25,7 @@ export class ImportExportTemplateRunLabelProvider extends LabelProvider<ImportEx
     }
 
     public isLabelProviderFor(object: ImportExportTemplateRun | KIXObject): boolean {
-        return object instanceof ImportExportTemplateRun || object.KIXObjectType === this.kixObjectType;
+        return object instanceof ImportExportTemplateRun || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

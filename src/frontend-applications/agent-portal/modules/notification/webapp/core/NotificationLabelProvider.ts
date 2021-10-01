@@ -33,7 +33,7 @@ export class NotificationLabelProvider extends LabelProvider {
     public kixObjectType: KIXObjectType = KIXObjectType.NOTIFICATION;
 
     public isLabelProviderFor(object: KIXObject): boolean {
-        return object instanceof Notification || object.KIXObjectType === this.kixObjectType;
+        return object instanceof Notification || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getObjectText(

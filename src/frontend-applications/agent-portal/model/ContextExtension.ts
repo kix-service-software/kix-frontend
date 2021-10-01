@@ -36,4 +36,8 @@ export class ContextExtension {
         return;
     }
 
+    public async destroy(context: Context): Promise<void> {
+        return;
+    }
+
 }
