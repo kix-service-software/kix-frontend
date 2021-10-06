@@ -568,14 +568,4 @@ export class TicketAPIService extends KIXObjectAPIService {
         ];
     }
 
-    public async getPropertyValue(token: string, object: Ticket | Article, property: string): Promise<string> {
-        return TicketLabelProvider.getPropertyValue(token, object, property);
-    }
-
-    public getPropertyIcons(
-        token: string, object: Ticket | Article, property: string
-    ): Promise<Array<ObjectIcon | string>> {
-        return TicketLabelProvider.getPropertyIcons(token, object, property);
-    }
-
 }
