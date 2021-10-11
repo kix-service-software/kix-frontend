@@ -134,31 +134,34 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     public setTableHeight(): void {
         this.state.tableHeight = 'unset';
-        if (this.state.table && this.state.table.getTableConfiguration().displayLimit) {
+        const tableConfiguration = this.state.table?.getTableConfiguration();
+
+        if (tableConfiguration?.displayLimit) {
+
             const rows = this.state.table.getRows(false);
-            const displayLimit = this.state.table.getTableConfiguration().displayLimit;
+            const displayLimit = tableConfiguration.displayLimit;
+
             if (rows && rows.length > displayLimit) {
-                const headerRowHeight = this.browserFontSize
-                    * Number(this.state.table.getTableConfiguration().headerHeight);
-                const rowHeight = this.browserFontSize * Number(this.state.table.getTableConfiguration().rowHeight);
 
-                let height = ((displayLimit * rowHeight) + headerRowHeight)
-                    + (this.hScrollWillBeVisible() ? rowHeight : rowHeight / 2);
+                const headerRowHeight = this.browserFontSize * Number(tableConfiguration.headerHeight);
 
-                rows.forEach((r) => {
-                    if (r.isExpanded()) {
-                        height += (31.5 + 10) / 2 * this.browserFontSize;
-                    }
-                });
+                let rowHeight = this.browserFontSize * Number(tableConfiguration.rowHeight);
+                rowHeight = this.hScrollWillBeVisible() ? rowHeight : rowHeight / 2;
+
+                let height = ((displayLimit * rowHeight) + headerRowHeight) + rowHeight;
+
+                const expandedRowHeight = (31.5 + 10) / 2 * this.browserFontSize;
+                const expandedRowCount = rows.filter((r) => r.isExpanded()).length;
+                height = height + (expandedRowCount * expandedRowHeight);
 
                 this.state.tableHeight = height + 'px';
             }
         }
     }
 
-    private countRows(rows: Row[]): number {
+    private getRowCount(rows: Row[]): number {
         let count = rows.length;
-        rows.forEach((r) => count += this.countRows(r.getChildren()));
+        rows.forEach((r) => count += this.getRowCount(r.getChildren()));
         return count;
     }
 
@@ -183,16 +186,17 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     private getColumnSize(column: Column): number {
         let minWidth: number = (2.5 * this.browserFontSize);
+        const iconSize = this.browserFontSize * 1.125;
         const config = column.getColumnConfiguration();
         if (config.showColumnIcon || config.showColumnTitle) {
             if (config.filterable) {
-                minWidth += this.browserFontSize * 1.125;
+                minWidth += iconSize;
             }
             if (config.sortable) {
-                minWidth += this.browserFontSize * 1.125;
+                minWidth += iconSize;
             }
         } else if (config.filterable && config.sortable) {
-            minWidth += this.browserFontSize * 1.125;
+            minWidth += iconSize;
         }
         return config.size < minWidth ? minWidth : config.size;
     }

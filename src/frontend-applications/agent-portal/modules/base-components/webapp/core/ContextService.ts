@@ -112,7 +112,7 @@ export class ContextService {
             );
 
             if (this.isStorableDialogContext(context)) {
-                await this.updateStorage(context?.instanceId);
+                this.updateStorage(context?.instanceId);
             }
         } else if (urlParams) {
             await context.update(urlParams);
@@ -188,7 +188,7 @@ export class ContextService {
 
                     const isStored = await this.isContextStored(instanceId);
                     if (isStored) {
-                        await this.updateStorage(instanceId, true);
+                        this.updateStorage(instanceId, true);
                     }
                     const context = this.contextInstances.splice(index, 1)[0];
 
@@ -203,7 +203,7 @@ export class ContextService {
                     this.activeContextIndex--;
 
                     if (switchToTarget) {
-                        await this.switchToTargetContext(
+                        this.switchToTargetContext(
                             sourceContext, targetContextId, targetObjectId, useSourceContext
                         );
                     }
@@ -250,20 +250,20 @@ export class ContextService {
         return canRemove;
     }
 
-    private async switchToTargetContext(
+    private switchToTargetContext(
         sourceContext: any, targetContextId?: string, targetObjectId?: string | number, useSourceContext?: boolean
-    ): Promise<void> {
+    ): void {
         const context = this.contextInstances.find((c) => c.instanceId === sourceContext?.instanceId);
         if (!useSourceContext && targetContextId) {
-            await this.setActiveContext(targetContextId, targetObjectId);
+            this.setActiveContext(targetContextId, targetObjectId);
         } else if (context) {
-            await this.setContextByInstanceId(sourceContext.instanceId);
+            this.setContextByInstanceId(sourceContext.instanceId);
         } else if (this.contextInstances.length > 0) {
-            await this.setContextByInstanceId(
+            this.setContextByInstanceId(
                 this.contextInstances[this.contextInstances.length - 1].instanceId
             );
         } else {
-            await this.setActiveContext('home');
+            this.setActiveContext('home');
         }
     }
 
@@ -309,6 +309,8 @@ export class ContextService {
             this.activeContext = context;
             this.activeContextIndex = this.contextInstances.findIndex((c) => c.instanceId === instanceId);
 
+            EventService.getInstance().publish(ContextEvents.CONTEXT_CHANGED, context);
+
             await this.activeContext.postInit();
 
             const contextExtensions = this.getContextExtensions(context.contextId);
@@ -324,8 +326,6 @@ export class ContextService {
                 }
             );
 
-            EventService.getInstance().publish(ContextEvents.CONTEXT_CHANGED, context);
-
             // TODO: Use Event
             this.serviceListener.forEach(
                 (sl) => sl.contextChanged(
@@ -339,12 +339,26 @@ export class ContextService {
         contextId: string, objectId?: string | number, urlParams?: URLSearchParams,
         additionalInformation: Array<[string, any]> = [], history: boolean = true
     ): Promise<Context> {
+        const timeout = setTimeout(() => {
+            EventService.getInstance().publish(
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Loading ...' }
+            );
+        }, 150);
+
         const context = await this.getContextInstance(
             contextId, objectId, additionalInformation, urlParams
         );
         if (context) {
-            await this.setContextByInstanceId(context.instanceId, objectId, history);
+            this.setContextByInstanceId(context.instanceId, objectId, history);
         }
+
+        if (typeof window !== 'undefined') {
+            window.clearTimeout(timeout);
+        }
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING,
+            { loading: false, hint: '' }
+        );
+
         return context;
     }
 

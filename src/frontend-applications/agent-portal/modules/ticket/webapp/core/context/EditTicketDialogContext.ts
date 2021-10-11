@@ -32,7 +32,7 @@ export class EditTicketDialogContext extends Context {
 
     public async initContext(): Promise<void> {
         await super.initContext();
-        await this.setFormObject(false);
+        this.setFormObject(false);
     }
 
     public async setFormObject(overwrite: boolean = true): Promise<void> {
