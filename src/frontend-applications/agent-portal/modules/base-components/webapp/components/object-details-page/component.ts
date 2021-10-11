@@ -51,13 +51,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async update(): Promise<void> {
-        const start = Date.now();
         this.prepareConfigurations();
         this.prepareWidget();
         this.prepareActions();
-        const end = Date.now();
-        const date = await DateTimeUtil.getLocalDateTimeString(new Date());
-        console.debug(`${date} - Updated Details Page: ${end - start}ms`);
     }
 
     public onDestroy(): void {
