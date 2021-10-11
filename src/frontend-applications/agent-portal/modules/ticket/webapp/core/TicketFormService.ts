@@ -370,7 +370,7 @@ export class TicketFormService extends KIXObjectFormService {
                     field.inputComponent = 'object-reference-input';
                     field.options = [
                         ...field.options,
-                        ...this.getObjectReferenceOptions(KIXObjectType.ORGANISATION)
+                        ...this.getObjectReferenceOptions(KIXObjectType.ORGANISATION, true)
                     ];
                     field.label = label;
                     break;
