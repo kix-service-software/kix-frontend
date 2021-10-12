@@ -50,9 +50,13 @@ class Component {
             }
 
             if (icon.Content) {
-                this.state.base64 = true;
+                if (icon.ContentType !== 'text') {
+                    this.state.base64 = true;
+                    this.state.contentType = icon.ContentType;
+                } else {
+                    this.state.base64 = false;
+                }
                 this.state.content = icon.Content;
-                this.state.contentType = icon.ContentType;
             } else {
                 const object = await PlaceholderService.getInstance().replacePlaceholders(
                     icon.Object, contextObject

@@ -53,6 +53,7 @@ import { ArticleFormFieldValueHandler } from './ArticleFormFieldValueHandler';
 import { TicketStateSet } from './form/extended-form-manager/TicketStateSet';
 import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
+import { ArticlePlaceholderHandler } from './ArticlePlaceholderHandler';
 
 export class UIModule implements IUIModule {
 
@@ -68,6 +69,7 @@ export class UIModule implements IUIModule {
 
     public async register(): Promise<void> {
         PlaceholderService.getInstance().registerPlaceholderHandler(TicketPlaceholderHandler.getInstance());
+        PlaceholderService.getInstance().registerPlaceholderHandler(ArticlePlaceholderHandler.getInstance());
 
         BrowserCacheService.getInstance().addDependencies(
             PersonalSettingsProperty.USER_LANGUAGE, [KIXObjectType.TICKET]

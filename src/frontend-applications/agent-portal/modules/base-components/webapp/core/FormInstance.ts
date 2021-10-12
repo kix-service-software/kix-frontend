@@ -225,7 +225,7 @@ export class FormInstance {
         }
     }
 
-    public async removePages(pageIds: string[], protectedPages?: string[]): Promise<void> {
+    public async removePages(pageIds: string[], protectedPages: string[] = []): Promise<void> {
         if (!pageIds) {
             pageIds = this.form.pages.map((p) => p.id);
         }
@@ -235,7 +235,7 @@ export class FormInstance {
                 this.form.objectType, ServiceType.FORM
             );
             for (const pageId of pageIds) {
-                if (protectedPages.some((id) => id === pageId)) {
+                if (protectedPages?.some((id) => id === pageId)) {
                     continue;
                 }
 

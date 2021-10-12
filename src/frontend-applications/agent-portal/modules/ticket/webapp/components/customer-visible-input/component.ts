@@ -48,7 +48,8 @@ class Component extends FormInputComponent<any, ComponentState> {
             if (Array.isArray(value.value)) {
                 this.state.checked = Boolean(value.value[0]);
             } else {
-                this.state.checked = Boolean(value.value);
+                // handle also '0' as false
+                this.state.checked = !isNaN(Number(value.value)) ? Boolean(Number(value.value)) : Boolean(value.value);
             }
         }
     }

@@ -310,7 +310,10 @@ export class DynamicFormFieldValue {
                 }
             } else if (this.isDropdown && this.isAutocomplete) {
                 const selectValues = Array.isArray(this.value.value) ? this.value.value : [this.value.value];
-                currentValues = await this.manager.getTreeNodes(this.value.property, selectValues);
+                currentValues = await this.manager.getTreeNodes(
+                    // filter placeholder values
+                    this.value.property, selectValues.filter((v) => typeof v !== 'string' || !v.match(/<KIX_.+>/))
+                );
                 this.valueTreeHandler.setTree(currentValues);
                 if (this.isFreeText) {
                     this.valueTreeHandler.setSelection(

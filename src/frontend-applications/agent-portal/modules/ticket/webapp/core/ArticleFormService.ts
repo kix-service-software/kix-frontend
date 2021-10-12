@@ -381,19 +381,29 @@ export class ArticleFormService extends KIXObjectFormService {
         let value: string;
         const referencedArticle = await this.getReferencedArticle();
         if (referencedArticle) {
-            const fromString = referencedArticle.From.replace(/>/g, '&gt;').replace(/</g, '&lt;');
-            const wroteString = await TranslationService.translate('{0} wrote', [fromString]);
-            const dateTime = await DateTimeUtil.getLocalDateTimeString(referencedArticle.ChangeTime);
-            let articleString = referencedArticle.Body;
 
-            const prepareContent = await TicketService.getInstance().getPreparedArticleBodyContent(referencedArticle);
-            if (prepareContent) {
-                articleString = BrowserUtil.replaceInlineContent(prepareContent[0], prepareContent[1]);
+            // if "KIX-Start mode" // TODO: find better way to distinquich between start and pro
+            const dialogContext = ContextService.getInstance().getActiveContext();
+            if (dialogContext) {
+                const referencedTicketId = dialogContext.getAdditionalInformation('REFERENCED_TICKET_ID');
+                if (referencedTicketId) {
+                    const fromString = referencedArticle.From.replace(/>/g, '&gt;').replace(/</g, '&lt;');
+                    const wroteString = await TranslationService.translate('{0} wrote', [fromString]);
+                    const dateTime = await DateTimeUtil.getLocalDateTimeString(referencedArticle.ChangeTime);
+                    let articleString = referencedArticle.Body;
+
+                    const prepareContent = await TicketService.getInstance().getPreparedArticleBodyContent(
+                        referencedArticle
+                    );
+                    if (prepareContent) {
+                        articleString = BrowserUtil.replaceInlineContent(prepareContent[0], prepareContent[1]);
+                    }
+                    value = `<p></p>${wroteString} ${dateTime}:`
+                        + '<div type="cite" style="border-left:2px solid #0a7cb3;padding:10px;">'
+                        + articleString
+                        + '</div>';
+                }
             }
-            value = `<p></p>${wroteString} ${dateTime}:`
-                + '<div type="cite" style="border-left:2px solid #0a7cb3;padding:10px;">'
-                + articleString
-                + '</div>';
         }
         return value;
     }
@@ -469,7 +479,7 @@ export class ArticleFormService extends KIXObjectFormService {
                 let articles: Article[] = ticket ? ticket.Articles : [];
                 if (!Array.isArray(articles) || !articles.length) {
 
-                    // "KIX-Start mode"
+                    // "KIX-Start mode" - // TODO: find better way to distinquich between start and pro
                     const referencedTicketId = dialogContext.getAdditionalInformation('REFERENCED_TICKET_ID');
                     if (referencedTicketId) {
                         let loadingOptions;
@@ -493,7 +503,7 @@ export class ArticleFormService extends KIXObjectFormService {
                         }
                     }
                 }
-                article = articles.find((a) => a.ArticleID === referencedArticleId);
+                article = articles?.find((a) => a.ArticleID === referencedArticleId);
             }
         }
         return article;

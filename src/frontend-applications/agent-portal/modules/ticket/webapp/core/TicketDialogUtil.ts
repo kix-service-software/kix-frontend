@@ -21,15 +21,15 @@ import { ConfigItem } from '../../../cmdb/model/ConfigItem';
 
 export class TicketDialogUtil {
 
-    public static async createTicket(): Promise<void> {
+    public static async createTicket(
+        ticketId?: number, articleId?: number, icon?: ObjectIcon | string, text?: string,
+        additionalInformation: Array<[string, any]> = [],
+    ): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
-
-        let ticketId: number;
-        const additionalInformation = [];
 
         if (context) {
             const ticket = await context.getObject<Ticket>(KIXObjectType.TICKET);
-            if (ticket) {
+            if (!ticketId && ticket) {
                 ticketId = ticket.TicketID;
             }
 
@@ -44,9 +44,15 @@ export class TicketDialogUtil {
             }
         }
 
-        ContextService.getInstance().setActiveContext(
+        if (articleId) {
+            additionalInformation.push(['REFERENCED_ARTICLE_ID', articleId]);
+        }
+
+        const newContext = await ContextService.getInstance().setActiveContext(
             NewTicketDialogContext.CONTEXT_ID, ticketId, undefined, additionalInformation
         );
+        newContext.setIcon(icon);
+        newContext.setDisplayText(text);
     }
 
     public static async editTicket(
