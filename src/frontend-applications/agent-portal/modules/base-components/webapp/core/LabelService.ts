@@ -77,7 +77,7 @@ export class LabelService {
     }
 
     public getLabelProvider<T extends KIXObject>(object: T): ILabelProvider<T> {
-        return this.objectLabelProvider.find((lp) => lp.isLabelProviderFor(object));
+        return this.objectLabelProvider.find((lp) => object && lp.isLabelProviderFor(object));
     }
 
     public getLabelProviderForProperty<T extends KIXObject>(object: T, property: string): ILabelProvider<T> {
