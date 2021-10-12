@@ -15,17 +15,51 @@ import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { AbstractPlaceholderHandler } from '../../../base-components/webapp/core/AbstractPlaceholderHandler';
+import { IPlaceholderHandler } from '../../../base-components/webapp/core/IPlaceholderHandler';
+import { SortUtil } from '../../../../model/SortUtil';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
 
     public handlerId: string = '350-ArticlePlaceholderHandler';
+
+    private static INSTANCE: ArticlePlaceholderHandler;
+
+    public static getInstance(): ArticlePlaceholderHandler {
+        if (!ArticlePlaceholderHandler.INSTANCE) {
+            ArticlePlaceholderHandler.INSTANCE = new ArticlePlaceholderHandler();
+        }
+        return ArticlePlaceholderHandler.INSTANCE;
+    }
+
+    private extendedPlaceholderHandler: IPlaceholderHandler[] = [];
+
+    public isHandlerForObjectType(objectType: KIXObjectType | string): boolean {
+        return objectType === KIXObjectType.ARTICLE;
+    }
+
+    public addExtendedPlaceholderHandler(handler: IPlaceholderHandler): void {
+        this.extendedPlaceholderHandler.push(handler);
+    }
 
     public async replace(placeholder: string, article: Article, language?: string): Promise<string> {
         let result = '';
         if (article) {
             const attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
             const optionsString: string = PlaceholderService.getInstance().getOptionsString(placeholder);
-            if (attribute && this.isKnownProperty(attribute)) {
+            let normalArticleAttribut: boolean = true;
+
+            if (this.extendedPlaceholderHandler?.length && placeholder) {
+                const handler = SortUtil.sortObjects(this.extendedPlaceholderHandler, 'handlerId').find(
+                    (ph) => ph.isHandlerFor(placeholder)
+                );
+                if (handler) {
+                    result = await handler.replace(placeholder, article, language);
+                    normalArticleAttribut = false;
+                }
+            }
+
+            if (normalArticleAttribut && attribute && this.isKnownProperty(attribute)) {
                 switch (attribute) {
                     case 'ID':
                         result = article.ArticleID.toString();
@@ -63,6 +97,9 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                         result = await DateTimeUtil.getLocalDateTimeString(article[attribute], language);
                         break;
                     default:
+                        if (attribute === ArticleProperty.CUSTOMER_VISIBLE && optionsString && optionsString === 'ObjectValue') {
+                            return article.CustomerVisible ? '1' : '0';
+                        }
                         result = await LabelService.getInstance().getDisplayText(article, attribute, undefined, false);
                         result = typeof result !== 'undefined' && result !== null
                             ? await TranslationService.translate(result.toString(), undefined, language) : '';

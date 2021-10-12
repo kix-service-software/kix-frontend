@@ -122,6 +122,10 @@ export class TicketAPIService extends KIXObjectAPIService {
             objects = await super.load(token, KIXObjectType.TICKET_LOCK, uri, null, null, 'Lock', TicketLock);
         } else if (objectType === KIXObjectType.ARTICLE) {
             if (objectLoadingOptions) {
+                if (!(objectLoadingOptions as ArticleLoadingOptions).ticketId) {
+                    LoggingService.getInstance().error('Need ticketId to load articles');
+                    throw new Error('', 'Need ticketId to load articles');
+                }
                 const uri = this.buildUri(
                     this.RESOURCE_URI, (objectLoadingOptions as ArticleLoadingOptions).ticketId, 'articles'
                 );
@@ -336,20 +340,22 @@ export class TicketAPIService extends KIXObjectAPIService {
                 ...attachments.filter((a) => a.Content)
             ];
 
-            const referencedAttachments = attachments.filter(
-                (a) => (!a.Content || a.Content === '') && a['ReferencedArticleId']
-            );
-            for (const a of referencedAttachments) {
-                const uri = this.buildUri(
-                    'tickets', ticketId, 'articles', a['ReferencedArticleId'], 'attachments', a.ID
+            if (ticketId) {
+                const referencedAttachments = attachments.filter(
+                    (a) => (!a.Content || a.Content === '') && a['ReferencedArticleId']
                 );
+                for (const a of referencedAttachments) {
+                    const uri = this.buildUri(
+                        'tickets', ticketId, 'articles', a['ReferencedArticleId'], 'attachments', a.ID
+                    );
 
-                const referedAttachments = await super.load<Attachment>(
-                    token, KIXObjectType.ATTACHMENT, uri,
-                    new KIXObjectLoadingOptions(null, null, null, ['Content']), null, 'Attachment'
-                );
+                    const referedAttachments = await super.load<Attachment>(
+                        token, KIXObjectType.ATTACHMENT, uri,
+                        new KIXObjectLoadingOptions(null, null, null, ['Content']), null, 'Attachment'
+                    );
 
-                newAttachments.push(referedAttachments[0]);
+                    newAttachments.push(referedAttachments[0]);
+                }
             }
 
             newAttachments.forEach(

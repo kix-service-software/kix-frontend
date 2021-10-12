@@ -103,7 +103,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                                 objectString === 'FIRST' ? SortOrder.UP : SortOrder.DOWN
                             )[0];
                             if (article) {
-                                result = await ArticlePlaceholderHandler.prototype.replace(
+                                result = await ArticlePlaceholderHandler.getInstance().replace(
                                     placeholder, article, language
                                 );
                             }
@@ -120,7 +120,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                                 relevantArticles, ArticleProperty.ARTICLE_ID, DataType.NUMBER, SortOrder.DOWN
                             )[0];
                             if (lastArticle) {
-                                result = await ArticlePlaceholderHandler.prototype.replace(
+                                result = await ArticlePlaceholderHandler.getInstance().replace(
                                     placeholder, lastArticle, language
                                 );
                             }
@@ -143,7 +143,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                                     }
                                 }
                                 if (referencedArticle) {
-                                    result = await ArticlePlaceholderHandler.prototype.replace(
+                                    result = await ArticlePlaceholderHandler.getInstance().replace(
                                         placeholder, referencedArticle, language
                                     );
                                 }

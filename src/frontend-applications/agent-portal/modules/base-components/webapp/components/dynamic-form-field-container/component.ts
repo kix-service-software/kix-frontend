@@ -78,7 +78,6 @@ class Component {
             const initPromises = [];
             const values = [];
             for (const v of this.manager.getValues()) {
-                console.debug(v);
                 const formFieldValue = new DynamicFormFieldValue(
                     this.manager,
                     new ObjectPropertyValue(

@@ -79,10 +79,6 @@ export class NewTicketDialogContext extends Context {
         EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.subscriber);
     }
 
-    public async getDisplayText(short: boolean = false): Promise<string> {
-        return await TranslationService.translate('Translatable#New Ticket');
-    }
-
     public async setFormObject(overwrite: boolean = true): Promise<void> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
             KIXObjectType.TICKET, ServiceType.FORM

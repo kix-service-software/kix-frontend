@@ -217,12 +217,12 @@ export class Article extends KIXObject {
 
     public getAttachments(inline?: boolean): Attachment[] {
         let attachments = this.Attachments;
-        if (inline) {
+        if (inline && Array.isArray(this.Attachments)) {
             attachments = this.Attachments.filter((a) => a.Disposition === 'inline');
-        } else {
+        } else if (Array.isArray(this.Attachments)) {
             attachments = this.Attachments.filter((a) => a.Disposition !== 'inline');
         }
-        return attachments;
+        return attachments || [];
     }
 
     public static isArticleProperty(property: string): boolean {
