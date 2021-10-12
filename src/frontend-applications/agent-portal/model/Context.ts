@@ -161,6 +161,13 @@ export abstract class Context {
         return url;
     }
 
+    public async addExtendedUrlParams(url: string): Promise<string> {
+        for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {
+            url = await extension.addExtendedUrlParams(url);
+        }
+        return url;
+    }
+
     public async getAdditionalActions(object?: KIXObject): Promise<AbstractAction[]> {
         let actions: AbstractAction[] = [];
         for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {

@@ -132,7 +132,7 @@ export class TicketFormService extends KIXObjectFormService {
         formContext: FormContext
     ): Promise<any> {
         const context = ContextService.getInstance().getActiveContext();
-        const sourceContextDescription = context.getAdditionalInformation(AdditionalContextInformation.SOURCE_CONTEXT);
+        const sourceContextDescription = context?.getAdditionalInformation(AdditionalContextInformation.SOURCE_CONTEXT);
         let sourceContext: Context;
         if (sourceContextDescription?.instanceId) {
             sourceContext = ContextService.getInstance().getContext(sourceContextDescription.instanceId);

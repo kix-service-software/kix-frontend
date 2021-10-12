@@ -36,6 +36,10 @@ export class ContextExtension {
         return;
     }
 
+    public async addExtendedUrlParams(url: string): Promise<string> {
+        return url;
+    }
+
     public async destroy(context: Context): Promise<void> {
         return;
     }
