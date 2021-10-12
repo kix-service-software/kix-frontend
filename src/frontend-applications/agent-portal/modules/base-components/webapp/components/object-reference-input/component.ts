@@ -236,19 +236,23 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     (o) => o.option === ObjectReferenceOptions.OBJECT
                 );
                 if (objectOption) {
-                    const objects = await KIXObjectService.loadObjects(
-                        objectOption.value, objectIds, null, null, null, null, true
-                    );
-                    if (objects && !!objects.length) {
-                        const translatableOption = this.state.field?.options.find(
-                            (o) => o.option === ObjectReferenceOptions.TRANSLATABLE
+                    // filter placeholder values
+                    const loadIds = objectIds.filter((id) => typeof id !== 'string' || !id.match(/<KIX_.+>/));
+                    if (loadIds.length) {
+                        const objects = await KIXObjectService.loadObjects(
+                            objectOption.value, loadIds, null, null, null, null, true
                         );
-                        const translatable = !translatableOption || Boolean(translatableOption.value);
-                        for (const object of objects) {
-                            const node = await this.createTreeNode(object, translatable);
-                            if (node) {
-                                node.selected = true;
-                                selectedNodes.push(node);
+                        if (objects && !!objects.length) {
+                            const translatableOption = this.state.field?.options.find(
+                                (o) => o.option === ObjectReferenceOptions.TRANSLATABLE
+                            );
+                            const translatable = !translatableOption || Boolean(translatableOption.value);
+                            for (const object of objects) {
+                                const node = await this.createTreeNode(object, translatable);
+                                if (node) {
+                                    node.selected = true;
+                                    selectedNodes.push(node);
+                                }
                             }
                         }
                     }
