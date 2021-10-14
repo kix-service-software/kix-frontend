@@ -11,6 +11,7 @@
         "require ./components/permission-input",
         "require ./components/setup-superuser",
         "require ./components/setup-admin-password",
+        "require ./components/user-token-input",
         "require ./core/UserUIModule"
     ]
 }

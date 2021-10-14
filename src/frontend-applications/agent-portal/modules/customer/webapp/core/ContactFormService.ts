@@ -41,6 +41,7 @@ import { Role } from '../../../user/model/Role';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 import { PersonalSettingsFormService } from '../../../user/webapp/core/PersonalSettingsFormService';
 import { IdService } from '../../../../model/IdService';
+import { AgentService } from '../../../user/webapp/core/AgentService';
 
 export class ContactFormService extends KIXObjectFormService {
 
@@ -108,13 +109,13 @@ export class ContactFormService extends KIXObjectFormService {
             }
         }
 
-        const accessGroup = await this.getAccessGroup();
+        const accessGroup = await this.getAccessGroup(formInstance);
         if (accessGroup && form.pages.length) {
             form.pages[0].groups.push(accessGroup);
         }
     }
 
-    private async getAccessGroup(): Promise<FormGroupConfiguration> {
+    private async getAccessGroup(formInstance: FormInstance): Promise<FormGroupConfiguration> {
         let accessGroup: FormGroupConfiguration;
         const hasUserCreatePermission = await this.checkPermissions('system/users', [CRUD.CREATE]);
         const hasUserUpdatePermission = await this.checkPermissions('system/users', [CRUD.CREATE]);
@@ -134,7 +135,7 @@ export class ContactFormService extends KIXObjectFormService {
             } else if (this.isAgentDialog) {
                 accessValue.value.push(UserProperty.IS_AGENT);
             }
-            const accessChildren = await this.getFormFieldsForAccess(accessValue.value, null);
+            const accessChildren = await this.getFormFieldsForAccess(accessValue.value, formInstance);
 
             const access = new FormFieldConfiguration(
                 'contact-form-field-user-access', 'Translatable#Access',
@@ -170,11 +171,11 @@ export class ContactFormService extends KIXObjectFormService {
         return contact;
     }
 
-    public async getFormFieldsForAccess(accesses: string[], formId?: string): Promise<FormFieldConfiguration[]> {
+    public async getFormFieldsForAccess(
+        accesses: string[], formInstance: FormInstance
+    ): Promise<FormFieldConfiguration[]> {
         let fields: FormFieldConfiguration[] = [];
         if (accesses && accesses.length) {
-            const context = ContextService.getInstance().getActiveContext();
-            const formInstance = formId ? await context?.getFormManager()?.getFormInstance() : null;
             const fieldPromises = [
                 this.addLoginField(formInstance),
                 this.addPasswordField(formInstance),
@@ -289,9 +290,28 @@ export class ContactFormService extends KIXObjectFormService {
 
             const notificationField = await this.getNotifiactionField(formInstance);
             preferencesField.children.push(notificationField);
+
+            if (formInstance?.getFormContext() === FormContext.EDIT) {
+                const userTokenField = await this.createUserTokenField(formInstance);
+                preferencesField.children.push(userTokenField);
+            }
         }
         preferencesField.instanceId = IdService.generateDateBasedId();
         return preferencesField;
+    }
+
+    private async createUserTokenField(formInstance: FormInstance): Promise<FormFieldConfiguration> {
+        const value = formInstance
+            ? await formInstance.getFormFieldValueByProperty(PersonalSettingsProperty.USER_TOKEN)
+            : null;
+
+        const tokenField = new FormFieldConfiguration(
+            'contact-form-field-user-token', 'Translatable#User Token', PersonalSettingsProperty.USER_TOKEN,
+            'user-token-input', false, 'Translatable#Helptext_User_UserCreateEdit_Preferences_UserToken',
+            [new FormFieldOption(UserProperty.USER_ID, this.assignedUserId),], value
+        );
+        tokenField.instanceId = IdService.generateDateBasedId();
+        return tokenField;
     }
 
     private async getLanguageField(formInstance?: FormInstance): Promise<FormFieldConfiguration> {
@@ -489,6 +509,14 @@ export class ContactFormService extends KIXObjectFormService {
                 if (formContext === FormContext.EDIT) {
                     const notificationValue = await this.getNotificationValue(this.assignedUserId);
                     value = notificationValue;
+                }
+                break;
+            case PersonalSettingsProperty.USER_TOKEN:
+                if (formContext === FormContext.EDIT) {
+                    const tokenValue = user.Preferences.find(
+                        (p) => p.ID === PersonalSettingsProperty.USER_TOKEN
+                    );
+                    value = tokenValue?.Value;
                 }
                 break;
             default:
