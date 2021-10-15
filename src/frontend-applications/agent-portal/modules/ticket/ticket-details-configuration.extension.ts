@@ -337,7 +337,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             ],
                             [
                                 {
-                                    text: 'Pending until: {0} ({1})',
+                                    text: 'Translatable#Pending until: {0} ({1})',
                                     textPlaceholder: [
                                         '<KIX_TICKET_PendingTime>',
                                         '<KIX_TICKET_UntilTime>'
