@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { ImportConfigValue } from './ImportConfigValue';
-import { Context } from 'vm';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
@@ -45,6 +44,7 @@ import { ComponentContent } from '../../../../../modules/base-components/webapp/
 import { Error } from '../../../../../../../server/model/Error';
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
+import { Context } from '../../../../../model/Context';
 
 class Component {
 
@@ -102,6 +102,7 @@ class Component {
     public async onMount(): Promise<void> {
         this.context = ContextService.getInstance().getActiveContext();
         if (this.context) {
+            this.state.title = await this.context.getDisplayText();
             const types = this.context.descriptor.kixObjectTypes;
             if (types && !!types.length && typeof types[0] === 'string' && types[0].length) {
                 this.objectType = types[0];
