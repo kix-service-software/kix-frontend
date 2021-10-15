@@ -7,14 +7,18 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<widget instanceId=state.instanceId title=state.title contentActions=state.actions>
+<widget
+    instanceId=state.instanceId
+    title=state.title
+    contentActions=state.actions
+>
     <@content>
         <div.state-assigned-textmodules-container>
             <div.textmodules-filter>
                 <filter filterCount=state.filterCount on-filter("filter")/>
             </div>
             <if(state.table)>
-                <standard-table-NEW table=state.table/>
+                <kix-table table=state.table/>
             </if>
         </div>
     </@content>

@@ -8,15 +8,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.table)>
-    <widget instanceId=state.instanceId title=state.title contentActions=state.actions>
+    <widget
+        instanceId=state.instanceId
+        title=state.title
+        contentActions=state.actions
+    >
         <@content>
             <div.organisation-filter>
                 <filter filterCount=state.filterCount on-filter("filter")/>
             </div>
-            <standard-table-NEW table=state.table/>
+            <kix-table table=state.table/>
         </@content>
     </widget>
 </if>
-<else>
-    <table-placeholder/>
-</else>
+<else><table-placeholder/></else>

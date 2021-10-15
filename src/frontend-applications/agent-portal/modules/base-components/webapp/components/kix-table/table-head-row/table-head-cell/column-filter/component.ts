@@ -9,14 +9,14 @@
 
 import {
     AbstractMarkoComponent
-} from '../../../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+} from '../../../../../core/AbstractMarkoComponent';
 import { ComponentState } from './ComponentState';
-import { IEventSubscriber } from '../../../../../../../../modules/base-components/webapp/core/IEventSubscriber';
+import { IEventSubscriber } from '../../../../../core/IEventSubscriber';
 import { Column, TableEvent, TableEventData } from '../../../../../core/table';
-import { EventService } from '../../../../../../../../modules/base-components/webapp/core/EventService';
-import { OverlayService } from '../../../../../../../../modules/base-components/webapp/core/OverlayService';
-import { ComponentContent } from '../../../../../../../../modules/base-components/webapp/core/ComponentContent';
-import { OverlayType } from '../../../../../../../../modules/base-components/webapp/core/OverlayType';
+import { EventService } from '../../../../../core/EventService';
+import { OverlayService } from '../../../../../core/OverlayService';
+import { ComponentContent } from '../../../../../core/ComponentContent';
+import { OverlayType } from '../../../../../core/OverlayType';
 import { ApplicationEvent } from '../../../../../core/ApplicationEvent';
 
 class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {

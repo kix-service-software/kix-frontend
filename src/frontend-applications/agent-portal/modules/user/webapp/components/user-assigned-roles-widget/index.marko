@@ -7,13 +7,15 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<widget instanceId=state.instanceId title=state.title contentActions=state.actions>
+<widget
+    instanceId=state.instanceId
+    title=state.title
+    contentActions=state.actions
+>
     <@content>
         <if(state.table)>
-            <standard-table-NEW table=state.table/>
+            <kix-table table=state.table/>
         </if>
-        <else>
-            <table-placeholder/>
-        </else>
+        <else><table-placeholder/></else>
     </@content>
 </widget>

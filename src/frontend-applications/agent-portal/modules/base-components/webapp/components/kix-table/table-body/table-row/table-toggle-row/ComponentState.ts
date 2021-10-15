@@ -7,9 +7,16 @@
  * --
  */
 
-import { Label } from '../../../../../../../../../modules/base-components/webapp/core/Label';
+import { Row } from '../../../../../core/table';
+import { IAction } from '../../../../../core/IAction';
 
 export class ComponentState {
 
-    public cellLabels: Label[] = [];
+    public constructor(
+        public row: Row = null,
+        public width: string = '100%',
+        public actions: IAction[] = null,
+        public loading = true
+    ) { }
+
 }

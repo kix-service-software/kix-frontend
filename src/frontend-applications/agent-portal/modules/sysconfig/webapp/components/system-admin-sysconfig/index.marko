@@ -10,7 +10,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     instanceId=state.instanceId
     title=state.title
     icon="kix-icon-gears"
-    minimizable=false>
+    minimizable=false
+>
     <@content>
         <if(state.prepared)>
             <div.sysconfig-container>
@@ -19,22 +20,28 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         type="text"
                         on-keyup("keyUp")
                         value=state.filterValue
-                        placeholder=state.placeholder/>
+                        placeholder=state.placeholder
+                    >
                     <button.kix-button.button.button-without-text
                         type="button"
-                        title=state.translations["Translatable#Help"]
-                        on-click("showCommandHelp", false)>
+                        title=(state.translations["Translatable#Help"])
+                        on-click("showCommandHelp", false)
+                    >
                         <overlay-icon
-                            isHint=true
+                            isHint
                             content="Translatable#Helptext_Admin_SysConfigSearch"
-                            title=state.translations["Translatable#SysConfig"]/>
+                            title=(state.translations["Translatable#SysConfig"])
+                        />
                     </button>
-                    <button.kix-button.submit-button type="button" on-click("search")>
+                    <button.kix-button.submit-button
+                        type="button"
+                        on-click("search")
+                    >
                         <span.kix-icon-search/>
                         <translation-string pattern="Translatable#Search"/>
                     </button>
                 </div>
-                <standard-table-NEW table=state.table/>
+                <kix-table table=state.table/>
             </div>
         </if>
     </@content>

@@ -12,13 +12,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         title=state.title
         actions=state.actions
         icon=state.icon
-        contextType=component.contextType>
+        contextType=component.contextType
+    >
         <@header-content>
             <for|componentId| of=state.headerTitleComponents>
                 <${component.getTemplate(componentId)}/>
             </for>
         </@header-content>
-        <@headerFilter>
+        <@headerfilter>
             <if(state.showFilter)>
                 <filter
                     filterCount=state.filterCount
@@ -27,19 +28,18 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     disabled=state.isFiltering
                     filterValue=state.filterValue
                     on-filter("filter")
-                    key="table-widget-filter"/>
+                    key="table-widget-filter"
+                />
             </if>
             <if(input.filterActions)>
                 <action-list list=input.filterActions displayText=false/>
             </if>
-        </@headerFilter>
+        </@headerfilter>
         <@content>
             <if(state.table)>
-                <standard-table-NEW table=state.table key=state.table.getTableId()/>
+                <kix-table table=state.table key=state.table.getTableId()/>
             </if>
         </@content>
     </widget>
 </if>
-<else>
-    <table-placeholder/>
-</else>
+<else><table-placeholder/></else>

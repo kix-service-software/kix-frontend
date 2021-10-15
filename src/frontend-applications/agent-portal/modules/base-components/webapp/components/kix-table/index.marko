@@ -8,13 +8,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 <div.table-container
     style=("height:" + state.tableHeight)
-    key=(state.table ? state.table.getTableId() + "table-container" : "no-table")>
+    key=(
+        state.table ? state.table.getTableId() + "table-container" : "no-table"
+    )
+>
     <if(state.table)>
-        <table.standard-table-NEW>
-            <thead>
-                <table-head-row table=state.table/>
-            </thead>
-            <table-body table=state.table key=(state.table.getTableId() + "table-body")/>
+        <table.kix-table>
+            <thead><table-head-row table=state.table/></thead>
+            <table-body
+                table=state.table
+                key=(state.table.getTableId() + "table-body")
+            />
         </table>
     </if>
 </div>

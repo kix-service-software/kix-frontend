@@ -8,7 +8,7 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { AbstractMarkoComponent } from '../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+import { AbstractMarkoComponent } from '../../../core/AbstractMarkoComponent';
 import { Table, TableEvent, TableEventData } from '../../../core/table';
 import { EventService } from '../../../core/EventService';
 import { IEventSubscriber } from '../../../core/IEventSubscriber';

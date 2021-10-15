@@ -8,10 +8,10 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { AbstractMarkoComponent } from '../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { IEventSubscriber } from '../../../../../../modules/base-components/webapp/core/IEventSubscriber';
+import { AbstractMarkoComponent } from '../../../core/AbstractMarkoComponent';
+import { IEventSubscriber } from '../../../core/IEventSubscriber';
 import { Table, TableEvent, TableEventData, SelectionState } from '../../../core/table';
-import { EventService } from '../../../../../../modules/base-components/webapp/core/EventService';
+import { EventService } from '../../../core/EventService';
 
 class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
 

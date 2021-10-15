@@ -10,10 +10,10 @@
 import { ComponentState } from './ComponentState';
 import {
     AbstractMarkoComponent
-} from '../../../../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+} from '../../../../../../core/AbstractMarkoComponent';
 import { Cell } from '../../../../../../core/table';
 import { SortUtil } from '../../../../../../../../../model/SortUtil';
-import { Label } from '../../../../../../../../../modules/base-components/webapp/core/Label';
+import { Label } from '../../../../../../core/Label';
 import { DataType } from '../../../../../../../../../model/DataType';
 import { ObjectIcon } from '../../../../../../../../icon/model/ObjectIcon';
 

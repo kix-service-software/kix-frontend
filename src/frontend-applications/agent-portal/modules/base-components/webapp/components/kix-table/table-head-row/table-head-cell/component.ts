@@ -10,14 +10,14 @@
 import { ComponentState } from './ComponentState';
 import {
     AbstractMarkoComponent
-} from '../../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { IEventSubscriber } from '../../../../../../../modules/base-components/webapp/core/IEventSubscriber';
-import { EventService } from '../../../../../../../modules/base-components/webapp/core/EventService';
+} from '../../../../core/AbstractMarkoComponent';
+import { IEventSubscriber } from '../../../../core/IEventSubscriber';
+import { EventService } from '../../../../core/EventService';
 import { TableEvent, TableEventData } from '../../../../core/table';
-import { LabelService } from '../../../../../../../modules/base-components/webapp/core/LabelService';
+import { LabelService } from '../../../../core/LabelService';
 import { SortOrder } from '../../../../../../../model/SortOrder';
-import { BrowserUtil } from '../../../../../../../modules/base-components/webapp/core/BrowserUtil';
-import { TranslationService } from '../../../../../../../modules/translation/webapp/core/TranslationService';
+import { BrowserUtil } from '../../../../core/BrowserUtil';
+import { TranslationService } from '../../../../../../translation/webapp/core/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
 

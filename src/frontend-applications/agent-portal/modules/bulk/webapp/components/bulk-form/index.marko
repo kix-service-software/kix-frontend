@@ -8,22 +8,24 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 <div.bulk-form>
     <if(state.bulkManager)>
-        <dynamic-form-field-container manager=state.bulkManager key=state.componentId/>
+        <dynamic-form-field-container
+            manager=state.bulkManager
+            key=state.componentId
+        />
         <div.dialog-button-container>
             <button.kix-button.form-blank-cancel-button
                 type="button"
                 on-click("reset")
-                title=state.translations["Translatable#Reset data"]>
+                title=(state.translations["Translatable#Reset data"])
+            >
                 <span.kix-icon-delete/>
                 <translation-string pattern="Translatable#Reset data"/>
             </button>
         </div>
         <if(state.table)>
             <div.object-table>
-                <div.object-table-head>
-                    <span>${state.tableTitle}</span>
-                </div>
-                <standard-table-NEW table=state.table/>
+                <div.object-table-head><span>${state.tableTitle}</span></div>
+                <kix-table table=state.table/>
             </div>
         </if>
         <div.dialog-control>
@@ -31,15 +33,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <button.kix-button.cancel-button
                     type="button"
                     on-click("cancel")
-                    title=state.translations["Translatable#Cancel"]>
+                    title=(state.translations["Translatable#Cancel"])
+                >
                     <span.kix-icon-close/>
                     <translation-string pattern="Translatable#Cancel"/>
                 </button>
                 <button.kix-button.submit-button
                     type="button"
                     on-click("run")
-                    title=state.translations["Translatable#Execute now"]
-                    disabled=!state.canRun>
+                    title=(state.translations["Translatable#Execute now"])
+                    disabled=!state.canRun
+                >
                     <span.kix-icon-edit/>
                     <translation-string pattern="Translatable#Execute now"/>
                 </button>

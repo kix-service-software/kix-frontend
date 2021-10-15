@@ -8,14 +8,14 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { AbstractMarkoComponent } from '../../../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { IEventSubscriber } from '../../../../../../../../modules/base-components/webapp/core/IEventSubscriber';
+import { AbstractMarkoComponent } from '../../../../../core/AbstractMarkoComponent';
+import { IEventSubscriber } from '../../../../../core/IEventSubscriber';
 import { ToggleOptions, TableEvent, TableEventData } from '../../../../../core/table';
-import { ContextService } from '../../../../../../../../modules/base-components/webapp/core/ContextService';
-import { EventService } from '../../../../../../../../modules/base-components/webapp/core/EventService';
-import { BrowserUtil } from '../../../../../../../../modules/base-components/webapp/core/BrowserUtil';
-import { ActionFactory } from '../../../../../../../../modules/base-components/webapp/core/ActionFactory';
-import { KIXModulesService } from '../../../../../../../../modules/base-components/webapp/core/KIXModulesService';
+import { ContextService } from '../../../../../core/ContextService';
+import { EventService } from '../../../../../core/EventService';
+import { BrowserUtil } from '../../../../../core/BrowserUtil';
+import { ActionFactory } from '../../../../../core/ActionFactory';
+import { KIXModulesService } from '../../../../../core/KIXModulesService';
 import { IdService } from '../../../../../../../../model/IdService';
 
 class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {

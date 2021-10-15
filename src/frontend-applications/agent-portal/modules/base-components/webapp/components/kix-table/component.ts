@@ -7,13 +7,13 @@
  * --
  */
 
-import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+import { AbstractMarkoComponent } from '../../core/AbstractMarkoComponent';
 import { ComponentState } from './ComponentState';
-import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
-import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
+import { IEventSubscriber } from '../../core/IEventSubscriber';
+import { BrowserUtil } from '../../core/BrowserUtil';
 import { Table, TableEvent, TableEventData, Row, Column } from '../../core/table';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { EventService } from '../../core/EventService';
+import { ContextService } from '../../core/ContextService';
 
 class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
 

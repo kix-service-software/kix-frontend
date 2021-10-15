@@ -10,10 +10,10 @@
 import { ComponentState } from './ComponentState';
 import {
     AbstractMarkoComponent
-} from '../../../../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+} from '../../../../../../core/AbstractMarkoComponent';
 import { Cell } from '../../../../../../core/table';
 import { CRUD } from '../../../../../../../../../../../server/model/rest/CRUD';
-import { LabelService } from '../../../../../../../../../modules/base-components/webapp/core/LabelService';
+import { LabelService } from '../../../../../../core/LabelService';
 import { KIXObjectType } from '../../../../../../../../../model/kix/KIXObjectType';
 import { PermissionProperty } from '../../../../../../../../user/model/PermissionProperty';
 import { Permission } from '../../../../../../../../user/model/Permission';

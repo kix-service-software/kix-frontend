@@ -108,7 +108,7 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent('rich-text-input', '/kix-module-base-components$0/webapp/components/rich-text-input', []),
         new UIComponent('router-outlet', '/kix-module-base-components$0/webapp/components/router-outlet', []),
         new UIComponent('sidebar', '/kix-module-base-components$0/webapp/components/sidebar', []),
-        new UIComponent('standard-table-NEW', '/kix-module-base-components$0/webapp/components/standard-table-NEW', []),
+        new UIComponent('kix-table', '/kix-module-base-components$0/webapp/components/kix-table', []),
         new UIComponent(
             'table-configuration',
             '/kix-module-base-components$0/webapp/components/ui-configuration/table-configuration',
@@ -117,25 +117,25 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent(
             'crud-cell',
             '/kix-module-base-components$0/webapp/components' +
-            '/standard-table-NEW/table-body/table-row/table-cell-NEW/crud-cell',
+            '/kix-table/table-body/table-row/table-cell/crud-cell',
             []
         ),
         new UIComponent(
             'default-cell-content',
             '/kix-module-base-components$0/webapp/components' +
-            '/standard-table-NEW/table-body/table-row/table-cell-NEW/default-cell-content',
+            '/kix-table/table-body/table-row/table-cell/default-cell-content',
             []
         ),
         new UIComponent(
             'label-list-cell-content',
             '/kix-module-base-components$0/webapp/components' +
-            '/standard-table-NEW/table-body/table-row/table-cell-NEW/label-list-cell-content',
+            '/kix-table/table-body/table-row/table-cell/label-list-cell-content',
             []
         ),
         new UIComponent(
             'multiline-cell',
             '/kix-module-base-components$0/webapp/components' +
-            '/standard-table-NEW/table-body/table-row/table-cell-NEW/multiline-cell',
+            '/kix-table/table-body/table-row/table-cell/multiline-cell',
             []
         ),
         new UIComponent('tab-container', '/kix-module-base-components$0/webapp/components/tab-container', []),

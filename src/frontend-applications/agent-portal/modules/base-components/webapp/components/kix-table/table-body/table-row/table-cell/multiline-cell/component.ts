@@ -10,7 +10,7 @@
 import { ComponentState } from './ComponentState';
 import {
     AbstractMarkoComponent
-} from '../../../../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+} from '../../../../../../core/AbstractMarkoComponent';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

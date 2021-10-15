@@ -8,9 +8,9 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { AbstractMarkoComponent } from '../../../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+import { AbstractMarkoComponent } from '../../../../../core/AbstractMarkoComponent';
 import { Column, Cell, ValueState, TableCSSHandlerRegistry, TableEvent } from '../../../../../core/table';
-import { KIXModulesService } from '../../../../../../../../modules/base-components/webapp/core/KIXModulesService';
+import { KIXModulesService } from '../../../../../core/KIXModulesService';
 import { ServiceRegistry } from '../../../../../core/ServiceRegistry';
 import { IKIXObjectService } from '../../../../../core/IKIXObjectService';
 import { EventService } from '../../../../../core/EventService';
