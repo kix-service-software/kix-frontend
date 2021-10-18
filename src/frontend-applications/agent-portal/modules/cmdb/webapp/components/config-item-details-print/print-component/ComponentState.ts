@@ -7,13 +7,12 @@
  * --
  */
 
-import { LabelValueGroup } from '../../../../../model/LabelValueGroup';
-
 export class ComponentState {
 
     public constructor(
-        public groups: LabelValueGroup[] = [],
-        public level: number = 0,
-        public toggleButtonVisible = true
+        public prepared = false,
+        public leftProperties: Array<[string, string]> = [],
+        public rightProperties: Array<[string, string]> = []
     ) { }
+
 }

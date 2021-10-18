@@ -1,0 +1,66 @@
+/**
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+body {
+    background-color: #fff;
+}
+
+.config-item-print-container {
+
+    .config-item-print-information {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-column-gap: @margin-small;
+        margin: 1rem 0 1rem 0.5rem;
+    }
+
+    .config-item-print-versions {
+        .config-item-print-version {
+            border: 1px solid @secondary-1;
+            padding: @margin-small;
+            margin-bottom: 1rem;
+
+            h2 {
+                font-weight: bold;
+                margin-bottom: 1rem;
+            }
+
+            page-break-after: avoid;
+        }
+
+    }
+
+    div.property-label {
+        display: grid;
+        grid-template-columns: 10rem auto;
+        grid-column-gap: @margin-small;
+
+        .label {
+            .shorten-text;
+            font-weight: bold;
+
+            &::after {
+                content: ":";
+            }
+        }
+
+        .value {
+            .shorten-text;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    div.prepared-data {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+}
