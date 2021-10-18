@@ -22,6 +22,7 @@ export class Component {
     public onInput(input: any): void {
         this.state.groups = input.groups ? input.groups : [];
         this.state.level = input.level ? input.level : 0;
+        this.state.toggleButtonVisible = input.toggleButtonVisible !== false;
     }
 
     public onMount(): void {

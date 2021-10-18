@@ -7,25 +7,30 @@
  * --
  */
 
-import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
-import { ConfigItemDetailsContext } from './webapp/core/context/ConfigItemDetailsContext';
-import { IConfiguration } from '../../model/configuration/IConfiguration';
-import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
-import { ConfigurationType } from '../../model/configuration/ConfigurationType';
-import { TabWidgetConfiguration } from '../../model/configuration/TabWidgetConfiguration';
-import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
-import { LinkedObjectsWidgetConfiguration } from '../../model/configuration/LinkedObjectsWidgetConfiguration';
-import { KIXObjectType } from '../../model/kix/KIXObjectType';
-import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
-import { WidgetSize } from '../../model/configuration/WidgetSize';
-import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
-import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
-import { UIComponentPermission } from '../../model/UIComponentPermission';
-import { CRUD } from '../../../../server/model/rest/CRUD';
-
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { CRUD } from '../../../../server/model/rest/CRUD';
+import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { LinkedObjectsWidgetConfiguration } from '../../model/configuration/LinkedObjectsWidgetConfiguration';
+import { ObjectInformationWidgetConfiguration } from '../../model/configuration/ObjectInformationWidgetConfiguration';
+import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
+import { TabWidgetConfiguration } from '../../model/configuration/TabWidgetConfiguration';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { WidgetSize } from '../../model/configuration/WidgetSize';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import {
+    InformationConfiguration,
+    InformationRowConfiguration,
+    ObjectInformationCardConfiguration
+} from '../base-components/webapp/components/object-information-card-widget/ObjectInformationCardConfiguration';
 import { ConfigItemProperty } from './model/ConfigItemProperty';
-import { InformationConfiguration, InformationRowConfiguration, ObjectInformationCardConfiguration } from '../base-components/webapp/components/object-information-card-widget/ObjectInformationCardConfiguration';
+import { VersionProperty } from './model/VersionProperty';
+import { ConfigItemDetailsContext } from './webapp/core/context/ConfigItemDetailsContext';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -168,7 +173,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const configItemVersionLane = new WidgetConfiguration(
             'config-item-details-version-widget', 'Version Widget', ConfigurationType.Widget,
             'table-widget', 'Translatable#Overview Versions',
-            ['config-item-version-compare-action'],
+            ['config-item-version-compare-action', 'config-item-print-selection-action'],
             new ConfigurationDefinition('config-item-details-version-list-table-widget', ConfigurationType.TableWidget),
             null, false, true, WidgetSize.BOTH, true
         );
@@ -195,7 +200,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 ],
                 [
                     'config-item-edit-action', 'config-item-duplicate-action',
-                    'ticket-create-action', 'linked-objects-edit-action'
+                    'ticket-create-action', 'linked-objects-edit-action', 'config-item-print-action'
                 ],
                 [],
                 [
@@ -210,6 +215,47 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 ]
             )
         );
+
+        configurations.push(
+            new ObjectInformationWidgetConfiguration(
+                'config-item-details-print-config',
+                'Asset Print Configuration',
+                ConfigurationType.ObjectInformation,
+                KIXObjectType.CONFIG_ITEM,
+                [
+                    ConfigItemProperty.CHANGE_BY,
+                    ConfigItemProperty.CHANGE_TIME,
+                    ConfigItemProperty.CLASS,
+                    ConfigItemProperty.CONFIG_ITEM_ID,
+                    ConfigItemProperty.CREATE_BY,
+                    ConfigItemProperty.CREATE_TIME,
+                    ConfigItemProperty.CUR_DEPL_STATE_ID,
+                    ConfigItemProperty.CUR_INCI_STATE_ID,
+                    ConfigItemProperty.NUMBER
+                ]
+            )
+        );
+
+        configurations.push(
+            new ObjectInformationWidgetConfiguration(
+                'config-item-version-details-print-config',
+                'Asset Version Print Configuration',
+                ConfigurationType.ObjectInformation,
+                KIXObjectType.CONFIG_ITEM_VERSION,
+                [
+                    VersionProperty.CLASS,
+                    VersionProperty.CONFIG_ITEM_ID,
+                    VersionProperty.COUNT_NUMBER,
+                    VersionProperty.CREATE_BY,
+                    VersionProperty.CREATE_TIME,
+                    VersionProperty.CUR_DEPL_STATE_ID,
+                    VersionProperty.CUR_INCI_STATE_ID,
+                    VersionProperty.NUMBER,
+                    VersionProperty.VERSION_ID,
+                ]
+            )
+        );
+
         return configurations;
     }
 

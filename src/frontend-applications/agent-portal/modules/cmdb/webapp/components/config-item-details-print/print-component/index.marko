@@ -1,0 +1,85 @@
+<!--
+Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<div.config-item-print-container>
+    <if(state.prepared)>
+        <h1>${input.name}</h1>
+        <div.config-item-print-information>
+            <div>
+                <for|property| of=state.leftProperties>
+                    <div.property-label>
+                        <div.label>${property[0]}</div>
+                        <div.value>${property[1]}</div>
+                    </div>
+                </for>
+            </div>
+            <div>
+                <for|property| of=state.rightProperties>
+                    <div.property-label>
+                        <div.label>${property[0]}</div>
+                        <div.value>${property[1]}</div>
+                    </div>
+                </for>
+            </div>
+        </div>
+        <div.config-item-print-versions>
+            <if(Array.isArray(input.currentVersion) && input.currentVersion.length > 0)>
+                <div.config-item-print-version>
+                    <h2>
+                        <translation-string pattern='Translatable#Current Version'/>
+                    </h2>
+                    <div.config-item-print-information>
+                        <for|property| of=input.currentVersion>
+                            <div.property-label>
+                                <div.label>${property[0]}</div>
+                                <div.value>${property[1]}</div>
+                            </div>
+                        </for>
+                    </div>
+                    <div.prepared-data>
+                        <if(
+                            Array.isArray(input.currentVersionPreparedData) &&
+                            input.currentVersionPreparedData.length > 0
+                        )>
+                            <label-value-group toggleButtonVisible=false groups=input.currentVersionPreparedData/>
+                        </if>
+                    </div>
+                </div>
+            </if>
+            <if(Array.isArray(input.nonCurrentVersions) && input.nonCurrentVersions.length > 0)>
+                <for|version, index| of=input.nonCurrentVersions>
+                    <div.config-item-print-version>
+                        <for|property| of=version>
+                            <if(property[0] === 'Version')>
+                                <h2>${property[0]} ${property[1]}</h2>
+                            </if>
+                        </for>
+                        <div.config-item-print-information>
+                            <for|property| of=version>
+                                <if(property[0] !== 'Version')>
+                                    <div.property-label>
+                                        <div.label>${property[0]}</div>
+                                        <div.value>${property[1]}</div>
+                                    </div>
+                                </if>
+                            </for>
+                        </div>
+                        <div.prepared-data>
+                            <if(
+                                Array.isArray(input.nonCurrentVersionsPreparedData[index]) &&
+                                input.nonCurrentVersionsPreparedData[index].length > 0
+                            )>
+                                <label-value-group toggleButtonVisible=false groups=input.nonCurrentVersionsPreparedData[index]/>
+                            </if>
+                        </div>
+                    </div>
+                </for>
+            </if>
+        </div>
+    </if>
+</div>

@@ -1,0 +1,68 @@
+<!--
+Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<!doctype html>
+<html lang='de'>
+    <head>
+        <title/>
+        <meta charset='UTF-8'/>
+        <meta name='viewport' content='width=device-width, initial-scale=1'/>
+        <if(input.favIcon)>
+            <link
+                rel='shortcut icon'
+                type=input.favIcon.ContentType
+                sizes='32x32'
+                href=('data:' + input.favIcon.ContentType + ';base64,' + input.favIcon.Content)/>
+        </if>
+        <else>
+            <link rel='shortcut icon' type='image/png' sizes='32x32' href='/static/img/kix_default.png'/>
+        </else>
+        <style>
+            @font-face {
+                font-family: 'kix_font';
+                src: url('/static/font/kix_font.woff?i8olzm') format('woff');
+                font-weight: normal;
+                font-style: normal;
+            }
+
+            @font-face {
+                font-family: Carlito;
+                src: url('/static/font/carlito-regular.woff') format('woff'),
+                url('/static/font/carlito-regular.ttf') format('truetype');
+            }
+
+            @font-face {
+                font-family: Carlito;
+                src: url('/static/font/carlito-bold.woff') format('woff'),
+                url('/static/font/carlito-bold.ttf') format('truetype');
+                font-weight: bold;
+            }
+
+            @font-face {
+                font-family: Carlito;
+                src: url('/static/font/carlito-italic.woff') format('woff'),
+                url(/static/font/carlito-italic.ttf) format('truetype');
+                font-style: italic;
+            }
+
+            @font-face {
+                font-family: Carlito;
+                src: url('/static/font/carlito-bold-italic.woff') format('woff'),
+                url('/static/font/carlito-bold-italic.ttf') format('truetype');
+                font-weight: bold;
+                font-style: italic;
+            }
+        </style>
+        <lasso-head/>
+    </head>
+    <body>
+        <print-component ...input/>
+        <script src='/static/thirdparty/ckeditor-4.11.4/ckeditor.js'/>
+        <lasso-body/>
+    </body>
+</html>

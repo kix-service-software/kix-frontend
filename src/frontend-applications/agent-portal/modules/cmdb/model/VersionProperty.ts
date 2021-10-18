@@ -32,7 +32,7 @@ export enum VersionProperty {
     BASED_ON_CLASS_VERSION = 'BASED_ON_CLASS_VERSION',
     DATA = 'Data',
     PREPARED_DATA = 'PreparedData',
-    COUNT_NUMBER = 'COUNT_NUMBER',
+    COUNT_NUMBER = 'countNumber',
     DEFINITION = 'Definition'
 
 }
