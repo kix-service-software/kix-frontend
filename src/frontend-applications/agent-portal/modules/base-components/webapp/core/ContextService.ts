@@ -371,6 +371,8 @@ export class ContextService {
         if (typeof window !== 'undefined' && window.history) {
             let url = await context.getUrl();
             url = encodeURI(url);
+            // extended params should already be encoded
+            url = await context.addExtendedUrlParams(url);
             const state = new BrowserHistoryState(context.contextId, objectId);
             if (oldContext) {
                 window.history.pushState(state, displayText, '/' + url);
