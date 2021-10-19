@@ -105,7 +105,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
             if (formService && formInstance) {
                 if (this.currentAccesses) {
                     const childFields = await formService.getFormFieldsForAccess(
-                        this.currentAccesses.map((n) => n.id), this.state.formId
+                        this.currentAccesses.map((n) => n.id), formInstance
                     );
                     formInstance.addFieldChildren(this.state.field, childFields, true);
                 } else {
@@ -115,7 +115,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
         }
     }
 
-    private async getNodes(unique: boolean = false): Promise<TreeNode[]> {
+    private async getNodes(): Promise<TreeNode[]> {
         const agentLabel = await TranslationService.translate('Translatable#Agent Portal');
         const customerLabel = await TranslationService.translate('Translatable#Customer Portal');
         return [

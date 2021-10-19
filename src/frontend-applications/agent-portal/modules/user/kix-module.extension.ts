@@ -64,7 +64,8 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             'setup-admin-password',
             '/kix-module-user$0/webapp/components/setup-admin-password',
             []
-        )
+        ),
+        new UIComponent('user-token-input', '/kix-module-user$0/webapp/components/user-token-input', [])
     ];
 
     public webDependencies: string[] = [

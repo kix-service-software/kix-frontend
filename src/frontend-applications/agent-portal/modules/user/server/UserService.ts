@@ -48,7 +48,8 @@ export class UserService extends KIXObjectAPIService {
 
     public isServiceFor(kixObjectType: KIXObjectType | string): boolean {
         return kixObjectType === KIXObjectType.USER
-            || kixObjectType === KIXObjectType.USER_PREFERENCE;
+            || kixObjectType === KIXObjectType.USER_PREFERENCE
+            || kixObjectType === KIXObjectType.CURRENT_USER;
     }
 
     public async loadObjects<T>(
@@ -205,6 +206,15 @@ export class UserService extends KIXObjectAPIService {
             const id = await super.executeUpdateOrCreateRequest(
                 token, clientRequestId, parameter, uri, objectType, 'UserPreferenceID'
             );
+            return id;
+        } else if (objectType === KIXObjectType.CURRENT_USER) {
+            const uri = this.buildUri('session', 'user');
+            const id = await super.executeUpdateOrCreateRequest(
+                token, clientRequestId, parameter, uri, this.objectType, 'UserID'
+            ).catch((error: Error) => {
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                throw new Error(error.Code, error.Message);
+            });
             return id;
         }
     }

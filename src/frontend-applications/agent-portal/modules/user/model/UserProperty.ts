@@ -40,6 +40,8 @@ export enum UserProperty {
 
     NOTIFICATIONS = 'NotificationTransport',
 
-    USER_ACCESS = 'USER_ACCESS'
+    USER_ACCESS = 'USER_ACCESS',
+
+    EXEC_GENRATE_TOKEN = 'ExecGenerateToken'
 
 }
