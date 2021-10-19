@@ -269,7 +269,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     private prepareMailNodes(receiverList: ArticleReceiver[], filterList: string[] = []): TreeNode[] {
-        const nodes: TreeNode[] = this.treeHandler.getVisibleNodes();
+        const nodes: TreeNode[] = this.treeHandler.getSelectedNodes();
         if (Array.isArray(receiverList)) {
             for (const receiver of receiverList) {
                 const email = receiver.email.replace(/.+ <(.+)>/, '$1');
