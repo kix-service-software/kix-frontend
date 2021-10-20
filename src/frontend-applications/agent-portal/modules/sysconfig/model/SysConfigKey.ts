@@ -41,6 +41,8 @@ export enum SysConfigKey {
 
     TICKET_VIEWABLE_STATE_TYPE = 'Ticket::ViewableStateType',
 
+    SELF_SERVICE_MANUAL = 'KIX::SelfServiceManual',
+
     USER_MANUAL = 'KIX::UserManual',
 
     ADMIN_MANUAL = 'KIX::AdminManual',
