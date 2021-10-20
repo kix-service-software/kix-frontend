@@ -7,7 +7,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<if(state.freeText || state.tree.length > 7 || state.autocompleteConfiguration)>
+<if(state.freeText || component.hasManyNodes() || state.autocompleteConfiguration)>
     <input.input-style
         type="text"
         placeholder=state.placeholder

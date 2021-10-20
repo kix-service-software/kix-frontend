@@ -186,6 +186,19 @@ export class TreeHandler {
         return this.tree || [];
     }
 
+    public getTreeLength(tree: TreeNode[] = this.tree): number {
+        let length = 0;
+        if (Array.isArray(tree)) {
+            tree.forEach((tn) => {
+                length++;
+                if (tn.children) {
+                    length += this.getTreeLength(tn.children);
+                }
+            });
+        }
+        return length;
+    }
+
     public setSelection(
         nodes: TreeNode[], selected: boolean = true, silent: boolean = false, force: boolean = false,
         filterSelection?: boolean

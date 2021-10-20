@@ -126,6 +126,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+    public hasManyNodes(): boolean {
+        return this.handler && this.handler.getTreeLength() > 7;
+    }
+
     private navigationKeyPressed(key: string): boolean {
         return key === 'ArrowLeft'
             || key === 'ArrowRight'
