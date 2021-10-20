@@ -789,7 +789,7 @@ msgstr ""
 msgid "Display Name"
 msgstr ""
 
-msgid "Do not forget to replace <YOUR_FRONTEND_HOST> placeholder."
+msgid "Do not forget to replace the <YOUR_FRONTEND_HOST> placeholder (if it is not already)."
 msgstr ""
 
 msgid ". (dot)"
