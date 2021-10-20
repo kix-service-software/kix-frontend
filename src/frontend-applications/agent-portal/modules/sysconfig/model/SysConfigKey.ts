@@ -65,6 +65,8 @@ export enum SysConfigKey {
 
     SETUP_ASSISTANT_STATE = 'SetupAssistantState',
 
-    DYNAMIC_FIELD_OBJECT_TYPE = 'DynamicFields::ObjectType'
+    DYNAMIC_FIELD_OBJECT_TYPE = 'DynamicFields::ObjectType',
+
+    FQDN = 'FQDN'
 
 }
