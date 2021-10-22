@@ -28,7 +28,10 @@ export class ComponentState {
         public instanceId: string = IdService.generateDateBasedId('faq-admin-categories'),
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Knowledge Database: FAQ Categories',
-            ['faq-admin-category-create-action', 'faq-category-csv-export-action'], null,
+            [
+                'faq-admin-category-create-action', 'faq-admin-category-delete-action',
+                'faq-category-csv-export-action'
+            ], null,
             new TableWidgetConfiguration(
                 null, null, null,
                 KIXObjectType.FAQ_CATEGORY, [FAQCategoryProperty.NAME, SortOrder.UP], null,
