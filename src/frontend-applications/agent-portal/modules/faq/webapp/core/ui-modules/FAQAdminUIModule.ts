@@ -12,7 +12,7 @@ import { ServiceRegistry } from '../../../../../modules/base-components/webapp/c
 import {
     FAQService, FAQCategoryTableFactory, FAQCategoryLabelProvider, FAQCategoryFormService, FAQCategoryCSVExportAction,
     FAQCategoryCreateAction, NewFAQCategoryDialogContext, FAQCategoryEditAction, EditFAQCategoryDialogContext,
-    FAQCategoryDetailsContext
+    FAQCategoryDetailsContext, FAQCategoryDeleteAction
 } from '..';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../../base-components/webapp/core/table';
@@ -45,6 +45,7 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('faq-category-csv-export-action', FAQCategoryCSVExportAction);
 
         ActionFactory.getInstance().registerAction('faq-admin-category-create-action', FAQCategoryCreateAction);
+        ActionFactory.getInstance().registerAction('faq-admin-category-delete-action', FAQCategoryDeleteAction);
 
         const newFAQCategoryContext = new ContextDescriptor(
             NewFAQCategoryDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_CATEGORY], ContextType.DIALOG,

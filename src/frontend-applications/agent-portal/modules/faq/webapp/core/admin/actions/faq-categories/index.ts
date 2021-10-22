@@ -9,3 +9,4 @@
 
 export { FAQCategoryCreateAction } from './FAQCategoryCreateAction';
 export { FAQCategoryEditAction } from './FAQCategoryEditAction';
+export { FAQCategoryDeleteAction } from './FAQCategoryDeleteAction';

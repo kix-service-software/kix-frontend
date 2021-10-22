@@ -26,6 +26,7 @@ import { SearchOperator } from '../../search/model/SearchOperator';
 import { FilterDataType } from '../../../model/FilterDataType';
 import { FilterType } from '../../../model/FilterType';
 import { SearchProperty } from '../../search/model/SearchProperty';
+import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
 
 
 export class FAQService extends KIXObjectAPIService {
@@ -261,6 +262,19 @@ export class FAQService extends KIXObjectAPIService {
             const error = 'No FAQArticleAttachmentLoadingOptions given.';
             throw error;
         }
+    }
+
+    public async deleteObject(
+        token: string, clientRequestId: string, objectType: KIXObjectType | string, objectId: string | number,
+        deleteOptions: KIXObjectSpecificDeleteOptions, cacheKeyPrefix: string, ressourceUri: string = this.RESOURCE_URI
+    ): Promise<Error[]> {
+        if (objectType === KIXObjectType.FAQ_CATEGORY) {
+            ressourceUri = 'system/faq/categories';
+        }
+
+        return super.deleteObject(
+            token, clientRequestId, objectType, objectId, deleteOptions, cacheKeyPrefix, ressourceUri
+        );
     }
 
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
