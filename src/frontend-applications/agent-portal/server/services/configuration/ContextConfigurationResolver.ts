@@ -36,13 +36,14 @@ export class ContextConfigurationResolver {
     public async resolve(
         token: string, configuration: ContextConfiguration, sysConfigOptions: SysConfigOption[]
     ): Promise<ContextConfiguration> {
-        // FIXME: this code makes no sense
-        // if (!configuration.sidebars && configuration['sidebars']) {
-        //     configuration.sidebars = configuration['sidebars'];
+        // TODO: rename "explorer" to "leftSidebars" and "sidebars" to "rightSidebars" in ContextConfiguration
+        // - use the following to consider/handle then "old" configurations
+        // if (!configuration.rightSidebars && configuration['sidebars']) {
+        //     configuration.rightSidebars = configuration['sidebars'];
         //     delete configuration['sidebars'];
         // }
-        // if (!configuration.explorer && configuration['explorer']) {
-        //     configuration.explorer = configuration['explorer'];
+        // if (!configuration.leftSidebars && configuration['explorer']) {
+        //     configuration.leftSidebars = configuration['explorer'];
         //     delete configuration['explorer'];
         // }
 
@@ -72,12 +73,17 @@ export class ContextConfigurationResolver {
         sysConfigOptions: SysConfigOption[]
     ): Promise<void> {
         for (const w of widgets) {
-            const config = configurations.find((wc) => wc.id === w.configurationId);
 
+            // get referenced config from loaded widget configs
+            const config = configurations.find((wc) => wc.id === w.configurationId);
             if (config) {
                 w.configuration = config;
                 w.configuration.instanceId = w.instanceId;
+            }
+            // else let already configurated configs 8no sysconfig reference) untouched, but resolve sub configs also
+            // (e.g. TableWidgetConfig: map of depricated tableConfiguration property to configuration)
 
+            if (w.configuration) {
                 await this.resolveSubConfig(token, w.configuration, sysConfigOptions);
             }
         }
