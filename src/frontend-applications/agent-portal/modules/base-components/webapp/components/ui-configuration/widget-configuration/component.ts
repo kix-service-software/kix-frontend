@@ -59,7 +59,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.actionsTreeHandler = new TreeHandler([], null);
         TreeService.getInstance().registerTreeHandler(this.state.actionsTreeId, this.actionsTreeHandler);
 
-        if (this.actionsTreeHandler) {
+        if (this.actionsTreeHandler && configuredActions) {
             this.actionsTreeHandler.setTree(nodes, null, true);
             const selectedNodes: TreeNode[] = [];
             for (const a of configuredActions) {
