@@ -65,6 +65,11 @@ export abstract class SocketClient {
             console.error(this.namespace);
             console.error('reconnect_failed: ' + attempts);
         });
+
+        this.socket.on('connect_error', () => {
+            // revert to classic upgrade
+            this.socket.io.opts.transports = ['polling', 'websocket'];
+        });
     }
 
 }
