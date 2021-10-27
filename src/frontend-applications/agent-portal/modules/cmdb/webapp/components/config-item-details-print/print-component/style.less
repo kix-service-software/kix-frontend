@@ -51,7 +51,6 @@ body {
         }
 
         .value {
-            .shorten-text;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -61,6 +60,17 @@ body {
     div.prepared-data {
         display: grid;
         grid-template-columns: 1fr;
+    }
+
+    .label-value-groups-container {
+        >.group {
+            >.value {
+                border: none;
+                overflow: unset;
+                text-overflow: unset;
+                white-space: unset;
+            }
+        }
     }
 
 }

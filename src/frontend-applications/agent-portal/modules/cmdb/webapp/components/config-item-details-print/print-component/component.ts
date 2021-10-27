@@ -19,6 +19,7 @@ class Component {
 
     public onInput(input: any): void {
         if (Array.isArray(input.properties)) {
+            input.properties = input.properties.sort((a, b) => a[0].localeCompare(b[0]));
             const count = Math.round(input.properties.length / 2);
             this.state.leftProperties = input.properties.slice(0, count);
             this.state.rightProperties = input.properties.slice(count, input.properties.length);
