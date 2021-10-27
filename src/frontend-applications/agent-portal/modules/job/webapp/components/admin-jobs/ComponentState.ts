@@ -23,7 +23,7 @@ export class ComponentState {
         public instanceId: string = IdService.generateDateBasedId('admin-jobs-list'),
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
             null, null, null,
-            'table-widget', 'Translatable#Automation: Jobs', ['job-create-action', 'csv-export-action'], null,
+            'table-widget', 'Translatable#Automation: Jobs', ['job-create-action', 'job-table-delete', 'csv-export-action'], null,
             new TableWidgetConfiguration(
                 null, null, null,
                 KIXObjectType.JOB, [JobProperty.NAME, SortOrder.UP], null,

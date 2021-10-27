@@ -10,3 +10,4 @@
 export { JobCreateAction } from './JobCreateAction';
 export { JobEditAction } from './JobEditAction';
 export { JobExecuteAction } from './JobExecuteAction';
+export { JobTableDeleteAction } from './JobTableDeleteAction';
