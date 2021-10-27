@@ -321,7 +321,9 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                         values = LabelProvider.getDFChecklistFieldShortValues(dynamicField, fieldValue);
                         break;
                     default:
-                        values = Array.isArray(fieldValue.Value) ? fieldValue.Value : [fieldValue.Value];
+                        values = Array.isArray(fieldValue.PreparedValue)
+                            ? fieldValue.PreparedValue
+                            : [fieldValue.PreparedValue];
                 }
             }
         }

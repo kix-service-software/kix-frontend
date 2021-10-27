@@ -9,6 +9,7 @@
 
 import { Error } from '../../../../../../server/model/Error';
 import { ContextMode } from '../../../../model/ContextMode';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { BrowserUtil } from './BrowserUtil';
 import { ContextService } from './ContextService';
@@ -29,8 +30,6 @@ export class ObjectDialogService {
 
     private static INSTANCE: ObjectDialogService;
 
-    private extendedDialogService: ExtendedObjectDialogService[];
-
     public static getInstance(): ObjectDialogService {
         if (!ObjectDialogService.INSTANCE) {
             ObjectDialogService.INSTANCE = new ObjectDialogService
@@ -41,6 +40,16 @@ export class ObjectDialogService {
 
     private constructor() { }
 
+    private extendedDialogService: Map<KIXObjectType | string, ExtendedObjectDialogService[]> = new Map();
+
+    public addExtendedObjectDialogService(
+        objectType: KIXObjectType | string, extendedService: ExtendedObjectDialogService
+    ): void {
+        if (!this.extendedDialogService.has(objectType)) {
+            this.extendedDialogService.set(objectType, []);
+        }
+        this.extendedDialogService.get(objectType).push(extendedService);
+    }
 
     public async submit(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
@@ -71,9 +80,21 @@ export class ObjectDialogService {
                 'Translatable#send to background'
             );
 
-            await submitFunc(context.descriptor.kixObjectTypes[0], formId, objectId)
+            const objectType = context.descriptor.kixObjectTypes[0];
+            await submitFunc(objectType, formId, objectId)
                 .then(async (newObjectId: number | string) => {
-                    if (!canceled) {
+
+                    let shouldContinue: boolean = true;
+
+                    if (this.extendedDialogService.has(objectType)) {
+                        for (const extendedService of this.extendedDialogService.get(objectType)) {
+                            shouldContinue = shouldContinue && await extendedService.postSubmit(
+                                context, formId, newObjectId
+                            );
+                        }
+                    }
+
+                    if (!canceled && shouldContinue) {
                         await ContextService.getInstance().toggleActiveContext(
                             context.descriptor.targetContextId, newObjectId, true
                         );

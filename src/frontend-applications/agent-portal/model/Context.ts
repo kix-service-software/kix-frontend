@@ -529,9 +529,9 @@ export abstract class Context {
         return widget;
     }
 
-    public async getWidgetConfiguration(instanceId: string): Promise<WidgetConfiguration> {
+    public async getWidgetConfiguration<T = WidgetConfiguration>(instanceId: string): Promise<T> {
         const configuredWidget = await this.getConfiguredWidget(instanceId);
-        return configuredWidget ? configuredWidget.configuration : null;
+        return configuredWidget ? configuredWidget.configuration as any : null;
     }
 
     public getContextSpecificWidgetType(instanceId: string): WidgetType {

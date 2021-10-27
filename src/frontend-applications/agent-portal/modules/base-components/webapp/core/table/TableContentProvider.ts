@@ -22,6 +22,7 @@ import { LabelService } from '../LabelService';
 import { PlaceholderService } from '../PlaceholderService';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { SearchService } from '../../../../search/webapp/core';
+import { KIXObjectSpecificLoadingOptions } from '../../../../../model/KIXObjectSpecificLoadingOptions';
 
 export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
@@ -35,7 +36,8 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         protected objectIds: Array<number | string>,
         protected loadingOptions: KIXObjectLoadingOptions,
         protected contextId?: string,
-        protected objects?: KIXObject[]
+        protected objects?: KIXObject[],
+        protected specificLoadingOptions?: KIXObjectSpecificLoadingOptions
     ) { }
 
     public async initialize(): Promise<void> {
@@ -102,7 +104,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             const forceIds = (this.objectIds && this.objectIds.length > 0) ? true : false;
             const loadingOptions = await this.prepareLoadingOptions();
             objects = await KIXObjectService.loadObjects<KIXObject>(
-                this.objectType, this.objectIds, loadingOptions, null, forceIds, this.useCache
+                this.objectType, this.objectIds, loadingOptions, this.specificLoadingOptions, forceIds, this.useCache
             );
         }
 
@@ -177,9 +179,9 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             this.loadingOptions ? this.loadingOptions.query : null
         );
 
+        const context = ContextService.getInstance().getActiveContext();
+        const contextObject = await context?.getObject();
         if (this.loadingOptions && Array.isArray(this.loadingOptions.filter)) {
-            const context = ContextService.getInstance().getActiveContext();
-            const contextObject = await context.getObject();
             for (const criterion of this.loadingOptions.filter) {
                 if (typeof criterion.value === 'string') {
                     const value = await PlaceholderService.getInstance().replacePlaceholders(
@@ -193,6 +195,16 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                     loadingOptions.filter.push(criterion);
                 }
             }
+        }
+
+        if (Array.isArray(loadingOptions.query)) {
+            const preparedQuery: Array<[string, string]> = [];
+            for (const q of loadingOptions.query) {
+                const newQuery: [string, string] = [q[0], ''];
+                newQuery[1] = await PlaceholderService.getInstance().replacePlaceholders(q[1], contextObject);
+                preparedQuery.push(newQuery);
+            }
+            loadingOptions.query = preparedQuery;
         }
         return loadingOptions;
     }

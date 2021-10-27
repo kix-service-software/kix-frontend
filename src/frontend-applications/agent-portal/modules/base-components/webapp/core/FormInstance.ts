@@ -239,21 +239,21 @@ export class FormInstance {
                     continue;
                 }
 
-                const index = this.form.pages.findIndex((p) => p.id === pageId);
-                if (index !== -1) {
+                pageIds = pageIds
+                    .filter((pageId) => !protectedPages.some((id) => id === pageId))
+                    .filter((pageId) => this.form.pages.some((p) => p.id === pageId));
+
+                for (const pageId of pageIds) {
+                    const index = this.form.pages.findIndex((p) => p.id === pageId);
                     const deletedPage = this.form.pages.splice(index, 1);
-                    if (deletedPage[0].groups.length) {
-                        for (const group of deletedPage[0].groups) {
-                            group.formFields.forEach((f) => this.deleteFieldValues(f));
-                            if (service) {
-                                await service.updateFields(group.formFields, this);
-                            }
-                        }
+                    for (const group of deletedPage[0].groups) {
+                        group.formFields?.forEach((f) => this.deleteFieldValues(f));
+                        await service?.updateFields(group.formFields, this);
                     }
                 }
-            }
 
-            EventService.getInstance().publish(FormEvent.FORM_PAGES_REMOVED, { formInstance: this, pageIds });
+                EventService.getInstance().publish(FormEvent.FORM_PAGES_REMOVED, { formInstance: this, pageIds });
+            }
         }
     }
 
@@ -364,7 +364,9 @@ export class FormInstance {
             return [formField ? formField.instanceId : v[0], v[1]];
         });
 
-        this.provideFormFieldValues(instanceValues.filter((iv) => iv[0] !== null), originInstanceId, silent, validate);
+        await this.provideFormFieldValues(
+            instanceValues.filter((iv) => iv[0] !== null), originInstanceId, silent, validate
+        );
     }
 
     public async provideFormFieldValues<T>(
@@ -411,7 +413,7 @@ export class FormInstance {
             const valueHandler = FormService.getInstance().getFormFieldValueHandler(this.form.objectType);
             if (valueHandler) {
                 for (const handler of valueHandler) {
-                    handler.handleFormFieldValues(this, changedFieldValues);
+                    await handler.handleFormFieldValues(this, changedFieldValues);
                 }
             }
         }

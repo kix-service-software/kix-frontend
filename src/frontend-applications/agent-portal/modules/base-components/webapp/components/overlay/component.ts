@@ -161,8 +161,8 @@ class OverlayComponent {
                     widgetConfiguration.actions, this.state.content.getActionObject()
                 );
                 WidgetService.getInstance().registerActions(this.state.overlayInstanceId, this.state.actions, false);
-                this.state.title = widgetConfiguration.title;
-                this.state.icon = widgetConfiguration.icon;
+                this.state.title = widgetConfiguration.title || this.state.title;
+                this.state.icon = widgetConfiguration.icon || this.state.icon;
             }
         }
     }

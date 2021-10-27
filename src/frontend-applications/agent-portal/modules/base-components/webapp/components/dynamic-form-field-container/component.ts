@@ -15,12 +15,18 @@ import { TreeNode } from '../../core/tree';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
 
+declare const JSONEditor: any;
+
 class Component {
 
     private state: ComponentState;
     private manager: IDynamicFormManager;
     private provideTimeout: any;
     private addEmptyValueTimeout: any;
+
+    private advancedOptionsMap: Map<string, boolean> = new Map();
+    private optionEditor: Map<string, any> = new Map();
+    private additionalOptionsTimeout: any;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -59,6 +65,12 @@ class Component {
             }
         }
 
+        this.state.dynamicValues.forEach((v) => {
+            if (!this.advancedOptionsMap.has(v.instanceId)) {
+                this.advancedOptionsMap.set(v.instanceId, false);
+            }
+        });
+
         this.addEmptyValue();
 
         if (this.manager.uniqueProperties) {
@@ -69,6 +81,9 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        this.advancedOptionsMap = new Map();
+        this.optionEditor = new Map();
+
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Remove parameter'
         ]);
@@ -76,7 +91,7 @@ class Component {
             this.manager.init();
 
             const initPromises = [];
-            const values = [];
+            const values: DynamicFormFieldValue[] = [];
             for (const v of this.manager.getValues()) {
                 const formFieldValue = new DynamicFormFieldValue(
                     this.manager,
@@ -91,6 +106,9 @@ class Component {
             }
 
             await Promise.all(initPromises);
+
+            values.forEach((v) => this.advancedOptionsMap.set(v.instanceId, false));
+
             this.state.dynamicValues = values;
 
             this.state.options = await this.manager.getFieldOptions();
@@ -127,22 +145,6 @@ class Component {
         else
             value.setValue(nodes.map((n) => n.id));
         this.provideValue(value);
-    }
-
-    public additionalOptionsChanged(value: DynamicFormFieldValue, event: any): void {
-        const additionalOptions = event.target.value;
-        value.value.additionalOptions = additionalOptions;
-        const result = this.manager.validateAdditionalOptions(additionalOptions);
-        if (result) {
-            this.state.additionalOptionsValidationResult.set(value.instanceId, result);
-            (this as any).setStateDirty('additionalOptionsValidationResult');
-        } else {
-            if (this.state.additionalOptionsValidationResult.has(value.instanceId)) {
-                this.state.additionalOptionsValidationResult.delete(value.instanceId);
-                (this as any).setStateDirty('additionalOptionsValidationResult');
-            }
-            this.provideValue(value);
-        }
     }
 
     public setValue(value: DynamicFormFieldValue, event: any): void {
@@ -353,6 +355,51 @@ class Component {
     public autoGrow(event: any): void {
         if (event?.target && event.target.scrollHeight > event.target.clientHeight) {
             event.target.style.height = (event.target.scrollHeight + 2) + 'px';
+        }
+    }
+
+    public showAdditionalOptions(value: DynamicFormFieldValue): boolean {
+        return this.advancedOptionsMap.get(value.instanceId);
+    }
+
+    public toggleAdvancedOptions(value: DynamicFormFieldValue): void {
+        if (this.advancedOptionsMap.has(value.instanceId)) {
+            const show = !this.advancedOptionsMap.get(value.instanceId);
+            this.advancedOptionsMap.set(value.instanceId, show);
+
+            if (show) {
+                setTimeout(() => {
+                    const container = document.getElementById('jsoneditor' + value.instanceId);
+                    const options = {
+                        search: false,
+                        history: false,
+                        mode: 'code',
+                        onChange: (): void => {
+                            if (this.additionalOptionsTimeout) {
+                                window.clearTimeout(this.additionalOptionsTimeout);
+                            }
+
+                            this.additionalOptionsTimeout = setTimeout(() => {
+                                try {
+                                    value.value.additionalOptions = this.optionEditor.get(value.instanceId)?.get();
+                                } catch (e) {
+                                    value.value.additionalOptions = [];
+                                }
+
+                                this.provideValue(value);
+                            }, 200);
+                        }
+                    };
+
+                    const editor = new JSONEditor(container, options);
+                    this.optionEditor.set(value.instanceId, editor);
+                    editor?.set(value.value.additionalOptions);
+                }, 100);
+            } else {
+                this.optionEditor.get(value.instanceId).destroy();
+            }
+
+            (this as any).setStateDirty('dynamicValues');
         }
     }
 

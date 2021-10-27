@@ -16,6 +16,7 @@ import { DynamicFieldTypes } from '../../../../dynamic-fields/model/DynamicField
 import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
 
 export abstract class ExtendedDynamicFormManager implements IDynamicFormManager {
 
@@ -144,6 +145,10 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
 
     public hasAdditionalOptions(): boolean {
         return false;
+    }
+
+    public async getAdditionalOptions(property: string): Promise<FormFieldOption[]> {
+        return null;
     }
 
     public validateAdditionalOptions(): string {
