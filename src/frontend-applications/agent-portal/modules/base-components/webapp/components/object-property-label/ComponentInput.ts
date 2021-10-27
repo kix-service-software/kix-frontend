@@ -9,10 +9,17 @@
 
 import { ILabelProvider } from '../../../../../modules/base-components/webapp/core/ILabelProvider';
 import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 
 export class ComponentInput {
 
     public object: any;
+
+    public displayIcon: ObjectIcon | string;
+
+    public propertyText: string;
+
+    public displayText: string;
 
     public property: string;
 

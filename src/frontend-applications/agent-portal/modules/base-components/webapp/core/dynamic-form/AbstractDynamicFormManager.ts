@@ -33,6 +33,7 @@ import { ServiceRegistry } from '../ServiceRegistry';
 import { IKIXObjectService } from '../IKIXObjectService';
 import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
 import { ValidationSeverity } from '../ValidationSeverity';
+import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 
@@ -551,6 +552,24 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
     public hasOption(option: ObjectPropertyValueOption, property: string, operator: string): boolean {
         return false;
+    }
+
+    public async getAdditionalOptions(property: string): Promise<FormFieldOption[]> {
+        let options: FormFieldOption[] = [];
+
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
+            options.push({ option: 'FIELD_NAME', value: dfName });
+        }
+
+        for (const extendedManager of this.extendedFormManager) {
+            const result = await extendedManager.getAdditionalOptions(property);
+            if (result) {
+                options = [...options, ...result];
+            }
+        }
+
+        return options;
     }
 
     public hasAdditionalOptions(): boolean {

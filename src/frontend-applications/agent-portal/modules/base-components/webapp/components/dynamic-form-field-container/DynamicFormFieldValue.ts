@@ -23,6 +23,7 @@ import { ObjectReferenceOptions } from '../../core/ObjectReferenceOptions';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { SearchDefinition } from '../../../../search/webapp/core';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { BrowserUtil } from '../../core/BrowserUtil';
 
 
 export class DynamicFormFieldValue {
@@ -137,7 +138,7 @@ export class DynamicFormFieldValue {
                 this.valueTreeHandler.setTree([]);
             }
 
-            this.value.additionalOptions = null;
+            this.value.additionalOptions = await this.manager.getAdditionalOptions(property);
         }
 
         // get label (needed if field is required)

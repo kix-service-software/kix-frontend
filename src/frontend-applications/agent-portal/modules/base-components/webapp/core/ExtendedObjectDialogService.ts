@@ -7,6 +7,23 @@
  * --
  */
 
+import { Context } from '../../../../model/Context';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+
 export abstract class ExtendedObjectDialogService {
+
+    public abstract objectType: KIXObject | string;
+
+    /**
+     *
+     * @param context
+     * @param formId
+     * @param objectId
+     *
+     * @returns true if the standard behavoir should interrupt, false - the standard behavoir should continue
+     */
+    public async postSubmit(context: Context, formId: string, objectId: string | number): Promise<boolean> {
+        return true;
+    }
 
 }

@@ -131,6 +131,10 @@ export class PlaceholderService {
         return optionsString;
     }
 
+    public translatePlaceholder(placeholder): boolean {
+        return Boolean(placeholder.match(/TR_KIX_/));
+    }
+
     public doNotTranslatePlaceholder(placeholder): boolean {
         return Boolean(placeholder.match(/NT_KIX_/));
     }

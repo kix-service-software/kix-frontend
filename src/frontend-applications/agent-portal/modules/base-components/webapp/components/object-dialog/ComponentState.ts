@@ -19,7 +19,8 @@ export class ComponentState extends AbstractComponentState {
         public validationResult: ValidationResult[] = [],
         public sidebars: ConfiguredWidget[] = [],
         public contextType: ContextType = null,
-        public isContextCustomizable: boolean = false
+        public isContextCustomizable: boolean = false,
+        public submitButtonText: string = null
     ) {
         super();
     }
