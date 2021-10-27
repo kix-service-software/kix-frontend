@@ -28,7 +28,6 @@ export abstract class SocketClient {
         const socketUrl = ClientStorageService.getFrontendSocketUrl();
 
         const options = {
-            transports: ['websocket', 'polling'],
             withCredentials: true
         };
 
