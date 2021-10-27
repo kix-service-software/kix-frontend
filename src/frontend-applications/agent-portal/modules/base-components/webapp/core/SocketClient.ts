@@ -28,7 +28,6 @@ export abstract class SocketClient {
         const socketUrl = ClientStorageService.getFrontendSocketUrl();
 
         const options = {
-            transports: ['websocket'],
             withCredentials: true
         };
 
@@ -64,6 +63,11 @@ export abstract class SocketClient {
         this.socket.on('reconnect_failed', (attempts) => {
             console.error(this.namespace);
             console.error('reconnect_failed: ' + attempts);
+        });
+
+        this.socket.on('connect_error', () => {
+            // revert to classic upgrade
+            this.socket.io.opts.transports = ['polling', 'websocket'];
         });
     }
 
