@@ -33,6 +33,7 @@ import { FormConfiguration } from '../../model/configuration/FormConfiguration';
 import { FormContext } from '../../model/configuration/FormContext';
 import { ModuleConfigurationService } from '../../server/services/configuration';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { ConfigItemProperty } from './model/ConfigItemProperty';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -112,7 +113,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'cmdb-config-item-edit-form-field-incidentstate',
-                'Translatable#Incident state', VersionProperty.INCI_STATE_ID, 'object-reference-input',
+                'Translatable#Incident state', ConfigItemProperty.CUR_INCI_STATE_ID, 'object-reference-input',
                 true, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_IncidentState',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.GENERAL_CATALOG_ITEM),
