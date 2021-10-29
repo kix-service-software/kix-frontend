@@ -178,7 +178,7 @@ class Component {
     private prepareFormDependency(): void {
         if (this.state.widgetConfiguration.formDependent) {
             this.formSubscriber = {
-                eventSubscriberId: IdService.generateDateBasedId('ReferencedObjectWidget'),
+                eventSubscriberId: IdService.generateDateBasedId('table-widget-' + this.state.instanceId),
                 eventPublished: (data: FormValuesChangedEventData, eventId: string): void => {
                     const properties: string[] = [];
                     for (const cv of data.changedValues) {
