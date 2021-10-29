@@ -77,16 +77,6 @@ class Component {
     private async addStateData(version: Version): Promise<PreparedData[]> {
         const preparedDataArray: PreparedData[] = [];
 
-        const inciStateHash = new PreparedData();
-        inciStateHash.Key = version.InciState;
-        inciStateHash.Label = version.isCurrentVersion
-            ? 'Translatable#Current Incident state'
-            : 'Translatable#Incident state';
-        inciStateHash.DisplayValue = version.isCurrentVersion
-            ? version.CurInciState
-            : version.InciState;
-        preparedDataArray.push(inciStateHash);
-
         const deplStateHash = new PreparedData();
         deplStateHash.Key = version.DeplState;
         deplStateHash.Label = version.isCurrentVersion

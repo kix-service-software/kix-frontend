@@ -111,7 +111,7 @@ export class ConfigItemFormFactory {
 
         const inciStateField = new FormFieldConfiguration(
             'cmdb-config-item-new-form-field-incidentstate',
-            'Translatable#Incident state', VersionProperty.INCI_STATE_ID, 'object-reference-input',
+            'Translatable#Incident state', ConfigItemProperty.CUR_INCI_STATE_ID, 'object-reference-input',
             true, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_IncidentState',
             [
                 new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.GENERAL_CATALOG_ITEM),
