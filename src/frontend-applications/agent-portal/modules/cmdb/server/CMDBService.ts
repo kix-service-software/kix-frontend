@@ -315,7 +315,8 @@ export class CMDBAPIService extends KIXObjectAPIService {
                 c.property !== 'DeplStateIDs' &&
                 c.property !== 'ClassIDs' &&
                 !c.property.startsWith('Data') &&
-                !c.property.startsWith('CurrentVersion');
+                !c.property.startsWith('CurrentVersion') &&
+                c.property !== ConfigItemProperty.ASSIGNED_CONTACT;
         });
     }
 
@@ -343,7 +344,8 @@ export class CMDBAPIService extends KIXObjectAPIService {
             c.property === 'DeplStateIDs' ||
             c.property === 'ClassIDs' ||
             c.property.startsWith('Data') ||
-            c.property.startsWith('CurrentVersion')
+            c.property.startsWith('CurrentVersion') ||
+            c.property === ConfigItemProperty.ASSIGNED_CONTACT
         );
 
         for (const searchCriteria of newCriteria) {

@@ -43,6 +43,8 @@ import { ObjectInformationCardConfiguration } from '../base-components/webapp/co
 import { RoutingConfiguration } from '../../model/configuration/RoutingConfiguration';
 import { UIFilterCriterion } from '../../model/UIFilterCriterion';
 import { TicketSearchContext } from './webapp/core';
+import { ConfigItemProperty } from '../cmdb/model/ConfigItemProperty';
+import { SortOrder } from '../../model/SortOrder';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -766,6 +768,46 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(ticketsForContactWidget);
 
+        const assignedAssets = new WidgetConfiguration(
+            'ticket-details-assigned-assets', 'Assigned Assets', ConfigurationType.Widget,
+            'table-widget', 'Translatable#Assigned Assets', [], null,
+            new TableWidgetConfiguration(
+                'ticket-details-assigned-assets-table-widget', 'Assigned Assets',
+                ConfigurationType.TableWidget, KIXObjectType.CONFIG_ITEM, [ConfigItemProperty.NUMBER, SortOrder.UP],
+                null,
+                null, null, false, false, null, undefined,
+                undefined,
+                new TableConfiguration(
+                    'ticket-details-assigned-assets-table-config', 'Assigned Assets', ConfigurationType.Table,
+                    KIXObjectType.CONFIG_ITEM,
+                    new KIXObjectLoadingOptions(
+                        [
+                            new FilterCriteria(
+                                ConfigItemProperty.ASSIGNED_CONTACT, SearchOperator.EQUALS,
+                                FilterDataType.NUMERIC, FilterType.AND, '<KIX_TICKET_ContactID>'
+                            )
+                        ], null, 100
+                    ), 10,
+                    [
+                        new DefaultColumnConfiguration(
+                            null, null, null, '', false, false, false, false, 30,
+                            false, false, false, null, false, 'add-to-affected-assets-cell',
+                            'Translatable#Contained in Affected Assets'
+                        ),
+                        new DefaultColumnConfiguration(
+                            null, null, null, ConfigItemProperty.NUMBER, true, false, true, false, 120, true, true),
+                        new DefaultColumnConfiguration(
+                            null, null, null, ConfigItemProperty.NAME, true, false, true, false, 120, true, true),
+                        new DefaultColumnConfiguration(null, null, null,
+                            ConfigItemProperty.CLASS_ID, true, false, true, false, 120, true, true, true
+                        ),
+                    ], null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                )
+            ),
+            false, true, 'kix-icon-cmdb'
+        );
+        configurations.push(assignedAssets);
+
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), 'Ticket Details', ConfigurationType.Context,
@@ -775,12 +817,19 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         'ticket-details-contact-card-widget', 'ticket-details-contact-card-widget'
                     ),
                     new ConfiguredWidget(
-                        'ticket-details-suggested-faq-widget', 'ticket-details-suggested-faq-widget'
+                        'ticket-details-assigned-assets', 'ticket-details-assigned-assets', undefined,
+                        [
+                            new UIComponentPermission('/cmdb/configitems', [CRUD.READ]),
+                            new UIComponentPermission('/tickets', [CRUD.READ])
+                        ]
                     ),
                     new ConfiguredWidget(
                         'ticket-details-affected-asset-tickets', 'ticket-details-affected-asset-tickets'
                     ),
-                    new ConfiguredWidget('ticket-details-contact-tickets', 'ticket-details-contact-tickets')
+                    new ConfiguredWidget('ticket-details-contact-tickets', 'ticket-details-contact-tickets'),
+                    new ConfiguredWidget(
+                        'ticket-details-suggested-faq-widget', 'ticket-details-suggested-faq-widget'
+                    )
                 ],
                 [],
                 [
