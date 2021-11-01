@@ -264,6 +264,13 @@ export class FAQService extends KIXObjectAPIService {
         }
     }
 
+    public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+        const filterCriteria = criteria.filter(
+            (f) => f.property !== SearchProperty.PRIMARY
+        );
+        return filterCriteria;
+    }
+
     public async deleteObject(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectId: string | number,
         deleteOptions: KIXObjectSpecificDeleteOptions, cacheKeyPrefix: string, ressourceUri: string = this.RESOURCE_URI
@@ -278,6 +285,17 @@ export class FAQService extends KIXObjectAPIService {
     }
 
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+        const primary = criteria.find((f) => f.property === SearchProperty.PRIMARY);
+        if (primary) {
+            const primarySearch = [
+                new FilterCriteria(
+                    FAQArticleProperty.NUMBER, SearchOperator.LIKE,
+                    FilterDataType.STRING, FilterType.OR, `${primary.value}`
+                ),
+            ];
+            criteria = [...criteria, ...primarySearch];
+        }
+
         const fulltext = criteria.find((f) => f.property === SearchProperty.FULLTEXT);
         if (fulltext) {
             const fulltextSearch = this.getFulltextSearch(fulltext);
