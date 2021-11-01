@@ -485,6 +485,18 @@ export class TicketAPIService extends KIXObjectAPIService {
 
         await this.setUserID(searchCriteria, token);
 
+        const primary = criteria.find((f) => f.property === SearchProperty.PRIMARY);
+        if (primary) {
+            const primarySearch = [
+                new FilterCriteria(
+                    TicketProperty.TICKET_NUMBER, SearchOperator.LIKE,
+                    FilterDataType.STRING, FilterType.OR, `${primary.value}`
+                ),
+            ];
+            console.table(primarySearch);
+            searchCriteria = [...searchCriteria, ...primarySearch];
+        }
+
         const fulltext = criteria.find((f) => f.property === SearchProperty.FULLTEXT);
         if (fulltext) {
             const fulltextSearch = this.getFulltextSearch(fulltext);

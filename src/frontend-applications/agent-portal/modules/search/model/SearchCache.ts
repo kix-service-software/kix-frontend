@@ -17,6 +17,7 @@ export class SearchCache<T extends KIXObject = KIXObject> {
 
     private originalCriteria: FilterCriteria[];
     private originalFulltextValue: string;
+    private originalPrimaryValue: string;
     private originalLimit: number;
 
     public constructor(
@@ -26,6 +27,7 @@ export class SearchCache<T extends KIXObject = KIXObject> {
         public criteria: FilterCriteria[],
         public result: T[],
         public fulltextValue: string = null,
+        public primaryValue: string = null,
         public name: string = '',
         public limit: number = 50
     ) {
@@ -35,6 +37,7 @@ export class SearchCache<T extends KIXObject = KIXObject> {
 
         this.originalCriteria = [...this.criteria];
         this.originalFulltextValue = this.fulltextValue;
+        this.originalPrimaryValue = this.primaryValue;
         this.originalLimit = this.limit;
     }
 
@@ -42,6 +45,7 @@ export class SearchCache<T extends KIXObject = KIXObject> {
         this.criteria = [...this.originalCriteria];
         this.result = [];
         this.fulltextValue = this.originalFulltextValue;
+        this.primaryValue = this.originalPrimaryValue;
         this.limit = this.originalLimit;
         this.name = '';
     }
@@ -49,7 +53,7 @@ export class SearchCache<T extends KIXObject = KIXObject> {
     public static create(searchCache: SearchCache): SearchCache {
         return new SearchCache(
             searchCache.id, searchCache.contextId,
-            searchCache.objectType, searchCache.criteria, [], searchCache.fulltextValue,
+            searchCache.objectType, searchCache.criteria, [], searchCache.fulltextValue, searchCache.primaryValue,
             searchCache.name, searchCache.limit
         );
     }

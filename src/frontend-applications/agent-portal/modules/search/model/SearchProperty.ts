@@ -9,6 +9,8 @@
 
 export enum SearchProperty {
 
+    PRIMARY = 'PRIMARY',
+
     FULLTEXT = 'FULLTEXT',
 
     SEARCH_VALUE = '<SEARCH_VALUE>'

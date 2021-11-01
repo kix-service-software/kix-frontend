@@ -321,6 +321,17 @@ export class CMDBAPIService extends KIXObjectAPIService {
     }
 
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+        const primary = criteria.find((f) => f.property === SearchProperty.PRIMARY);
+        if (primary) {
+            const primarySearch = [
+                new FilterCriteria(
+                    ConfigItemProperty.NUMBER, SearchOperator.LIKE,
+                    FilterDataType.STRING, FilterType.OR, `${primary.value}`
+                ),
+            ];
+            criteria = [...criteria, ...primarySearch];
+        }
+
         const fulltext = criteria.find((f) => f.property === SearchProperty.FULLTEXT);
         if (fulltext) {
             const fulltextSearch = [

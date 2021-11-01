@@ -396,10 +396,10 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             }
         }
 
-        // ignore fulltext property
+        // ignore fulltext and primary property
         filterCriteria = filterCriteria
             ? filterCriteria.filter((c) => {
-                if (c.property === SearchProperty.FULLTEXT) {
+                if (c.property === SearchProperty.FULLTEXT || c.property === SearchProperty.PRIMARY) {
                     return false;
                 }
                 return true;
