@@ -68,14 +68,18 @@ export class ObjectReferenceUtil {
                 (o) => o.option === ObjectReferenceOptions.OBJECT_SPECIFIC_LOADINGOPTIONS
             );
 
-            // if no filter is configured then use the default fulltext search criterias
-            if (!loadingOptions.filter) {
-                const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(objectType);
-                const filter = service && searchValue
-                    ? await service.prepareFullTextFilter(searchValue)
-                    : null;
+
+            const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(objectType);
+            const filter = service && searchValue
+                ? await service.prepareFullTextFilter(searchValue)
+                : null;
+
+            if (Array.isArray(loadingOptions.filter)) {
+                loadingOptions.filter = [...loadingOptions.filter, ...filter];
+            } else {
                 loadingOptions.filter = filter;
             }
+
             loadingOptions.limit = autoCompleteConfiguration.limit;
 
             const preparedOptions = await this.prepareLoadingOptions(loadingOptions, searchValue);
