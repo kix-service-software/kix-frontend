@@ -113,9 +113,9 @@ class Component {
 
     private async hasInvalidChildren(field: FormFieldConfiguration = this.state.field): Promise<boolean> {
         const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await context?.getFormManager()?.getFormInstance(false);
         let hasInvalidChildren = false;
-        if (Array.isArray(field.children)) {
+        if (formInstance && Array.isArray(field.children)) {
             for (const child of field.children) {
                 const value = formInstance.getFormFieldValue(child.instanceId);
                 if (value && !value.valid) {

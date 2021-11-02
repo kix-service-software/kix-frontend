@@ -41,6 +41,8 @@ export class FormService {
     private forms: FormConfiguration[] = [];
     private formIDsWithContext: Array<[FormContext, KIXObjectType | string, string]> = null;
 
+    private createFormInstanceCache: Map<string, Promise<FormInstance>> = new Map();
+
     private constructor() { }
 
     public addFormFieldValueHandler(handler: FormFieldValueHandler): void {
@@ -80,11 +82,22 @@ export class FormService {
             throw new Error('1', 'Missing required parameter formId.');
         }
 
-        const formInstance = new FormInstance(context);
-        await formInstance.initFormInstance(formId, kixObject);
-        EventService.getInstance().publish(FormEvent.FORM_INITIALIZED, formInstance);
+        const key = `${formId}-${context.instanceId}`;
+        let promise = this.createFormInstanceCache.get(key);
 
-        return formInstance;
+        if (!promise) {
+            promise = new Promise<FormInstance>(async (resolve, reject) => {
+                const formInstance = new FormInstance(context);
+                await formInstance.initFormInstance(formId, kixObject).catch((e) => reject(e));
+                EventService.getInstance().publish(FormEvent.FORM_INITIALIZED, formInstance);
+
+                this.createFormInstanceCache.delete(key);
+                resolve(formInstance);
+            });
+            this.createFormInstanceCache.set(key, promise);
+        }
+
+        return promise;
     }
 
     public async getForm(formId: string): Promise<FormConfiguration> {
