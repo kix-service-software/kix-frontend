@@ -19,6 +19,8 @@ export class ReportDefinition extends KIXObject {
 
     public ID: number;
 
+    public Token: string;
+
     public Name: string;
 
     public Comment: string;
@@ -29,6 +31,8 @@ export class ReportDefinition extends KIXObject {
 
     public DataSource: string;
 
+    public BaseURL: string;
+
     public constructor(reportDefinition?: ReportDefinition) {
         super(reportDefinition);
 
@@ -37,6 +41,8 @@ export class ReportDefinition extends KIXObject {
             this.ObjectId = this.ID;
             this.DataSource = reportDefinition.DataSource;
             this.Name = reportDefinition.Name;
+            this.Token = reportDefinition.Token;
+            this.BaseURL = reportDefinition.BaseURL;
             this.Config = reportDefinition.Config;
             this.Comment = reportDefinition.Comment;
             this.Reports = reportDefinition.Reports
@@ -44,5 +50,4 @@ export class ReportDefinition extends KIXObject {
                 : [];
         }
     }
-
 }
