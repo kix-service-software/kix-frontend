@@ -6,6 +6,7 @@
         "require ./components/reportresult-list-cell",
         "require ./components/reportdefinition-outputformat-list-cell",
         "require ./components/create-new-report-cell",
+        "require ./components/output-format-info",
         "require ./core/ReportingUIModule"
     ]
 }

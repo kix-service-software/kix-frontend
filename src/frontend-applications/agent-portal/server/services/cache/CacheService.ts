@@ -150,6 +150,7 @@ export class CacheService {
             case KIXObjectType.USER:
                 cacheKeyPrefixes.push(KIXObjectType.ROLE);
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
+                cacheKeyPrefixes.push(KIXObjectType.REPORT_DEFINITION);
                 break;
             case KIXObjectType.LINK:
             case KIXObjectType.LINK_OBJECT:
@@ -191,9 +192,13 @@ export class CacheService {
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 break;
             case KIXObjectType.SYS_CONFIG_OPTION_DEFINITION:
+                cacheKeyPrefixes.push(KIXObjectType.SYS_CONFIG_OPTION);
+                cacheKeyPrefixes.push(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION);
+                break;
             case KIXObjectType.SYS_CONFIG_OPTION:
                 cacheKeyPrefixes.push(KIXObjectType.SYS_CONFIG_OPTION);
                 cacheKeyPrefixes.push(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION);
+                cacheKeyPrefixes.push(KIXObjectType.REPORT_DEFINITION);
                 break;
             case KIXObjectType.QUEUE:
             case KIXObjectType.TICKET_STATE:
