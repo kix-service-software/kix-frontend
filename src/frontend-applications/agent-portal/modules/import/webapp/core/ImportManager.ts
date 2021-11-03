@@ -30,7 +30,7 @@ export abstract class ImportManager extends AbstractDynamicFormManager {
 
     public objects: KIXObject[] = [];
 
-    private importRun: boolean = false;
+    protected importRun: boolean = false;
 
     protected abstract getSpecificObject(object: any): Promise<KIXObject>;
 
