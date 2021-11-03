@@ -29,7 +29,7 @@ export class GeneralCatalogService extends KIXObjectService<GeneralCatalogItem> 
         this.objectConstructors.set(KIXObjectType.GENERAL_CATALOG_ITEM, [GeneralCatalogItem]);
     }
 
-    public isServiceFor(type: KIXObjectType) {
+    public isServiceFor(type: KIXObjectType): boolean {
         return type === KIXObjectType.GENERAL_CATALOG_ITEM
             || type === KIXObjectType.GENERAL_CATALOG_CLASS;
     }

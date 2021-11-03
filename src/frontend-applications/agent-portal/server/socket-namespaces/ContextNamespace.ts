@@ -30,8 +30,6 @@ import { CacheService } from '../services/cache';
 import { ISocketResponse } from '../../modules/base-components/webapp/core/ISocketResponse';
 import { ISocketRequest } from '../../modules/base-components/webapp/core/ISocketRequest';
 import { LoggingService } from '../../../../server/services/LoggingService';
-
-import * as cookie from 'cookie';
 import { Socket } from 'socket.io';
 
 export class ContextNamespace extends SocketNameSpace {

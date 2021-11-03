@@ -10,15 +10,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <widget
     instanceId=state.instanceId
     title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
-    contentActions=state.actions>
+    contentActions=state.actions
+>
     <@content>
         <div.ticket-history-content>
             <div.history-filter>
                 <filter filterCount=state.filterCount on-filter("filter")/>
             </div>
-            <div.history-container>
-                <standard-table-NEW table=state.table/>
-            </div>
+            <div.history-container><kix-table table=state.table/></div>
         </div>
     </@content>
 </widget>

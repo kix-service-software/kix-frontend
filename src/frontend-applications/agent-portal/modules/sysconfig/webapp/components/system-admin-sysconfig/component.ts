@@ -35,7 +35,6 @@ import { SysConfigOptionProperty } from '../../../model/SysConfigOptionProperty'
 import { SortOrder } from '../../../../../model/SortOrder';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { AdminContext } from '../../../../admin/webapp/core/AdminContext';
-import { ContextType } from '../../../../../model/ContextType';
 import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
 import { EditSysConfigDialogContext } from '../../core';
 
@@ -88,7 +87,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.subscriber = {
             eventSubscriberId: 'admin-sysconfig',
-            eventPublished: (data: TableEventData, eventId: string) => {
+            eventPublished: (data: TableEventData, eventId: string): void => {
                 if (data && this.state.table && data.tableId === this.state.table.getTableId()) {
                     WidgetService.getInstance().updateActions(this.state.instanceId);
                 }

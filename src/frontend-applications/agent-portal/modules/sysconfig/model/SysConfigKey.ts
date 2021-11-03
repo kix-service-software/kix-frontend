@@ -41,6 +41,8 @@ export enum SysConfigKey {
 
     TICKET_VIEWABLE_STATE_TYPE = 'Ticket::ViewableStateType',
 
+    SELF_SERVICE_MANUAL = 'KIX::SelfServiceManual',
+
     USER_MANUAL = 'KIX::UserManual',
 
     ADMIN_MANUAL = 'KIX::AdminManual',
@@ -65,6 +67,8 @@ export enum SysConfigKey {
 
     SETUP_ASSISTANT_STATE = 'SetupAssistantState',
 
-    DYNAMIC_FIELD_OBJECT_TYPE = 'DynamicFields::ObjectType'
+    DYNAMIC_FIELD_OBJECT_TYPE = 'DynamicFields::ObjectType',
+
+    FQDN = 'FQDN'
 
 }

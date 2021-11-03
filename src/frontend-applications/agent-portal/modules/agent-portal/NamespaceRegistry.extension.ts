@@ -22,6 +22,6 @@ export class Extension extends KIXExtension implements ISocketNamespaceRegistryE
 
 }
 
-module.exports = (data, host, options) => {
+module.exports = (data, host, options): Extension => {
     return new Extension();
 };

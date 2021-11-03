@@ -31,7 +31,7 @@ export class UserRoleFormService extends KIXObjectFormService {
         super();
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType | string) {
+    public isServiceFor(kixObjectType: KIXObjectType | string): boolean {
         return kixObjectType === KIXObjectType.ROLE;
     }
 

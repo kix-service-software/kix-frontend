@@ -13,7 +13,7 @@ import { TranslationService } from '../../../../../translation/webapp/core/Trans
 import { AbstractMarkoComponent } from '../../../core/AbstractMarkoComponent';
 import { ActionFactory } from '../../../core/ActionFactory';
 import { KIXModulesService } from '../../../core/KIXModulesService';
-import { TreeHandler, TreeNode, TreeService, TreeUtil } from '../../../core/tree';
+import { TreeHandler, TreeNode, TreeService } from '../../../core/tree';
 import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -59,7 +59,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.actionsTreeHandler = new TreeHandler([], null);
         TreeService.getInstance().registerTreeHandler(this.state.actionsTreeId, this.actionsTreeHandler);
 
-        if (this.actionsTreeHandler) {
+        if (this.actionsTreeHandler && configuredActions) {
             this.actionsTreeHandler.setTree(nodes, null, true);
             const selectedNodes: TreeNode[] = [];
             for (const a of configuredActions) {

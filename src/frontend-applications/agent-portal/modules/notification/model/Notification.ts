@@ -10,7 +10,6 @@
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
-import { SearchOperator } from '../../search/model/SearchOperator';
 import { NotificationProperty } from './NotificationProperty';
 
 export class Notification extends KIXObject {
@@ -100,7 +99,7 @@ export class Notification extends KIXObject {
         }
     }
 
-    private prepareFilter() {
+    private prepareFilter(): void {
         if (this.Filter) {
             // key = AND or OR
             for (const key in this.Filter) {

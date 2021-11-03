@@ -21,7 +21,7 @@ import { Error } from '../../../../server/model/Error';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { User } from '../../modules/user/model/User';
 import { PermissionError } from '../../modules/user/model/PermissionError';
-import { AxiosAdapter, AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosAdapter, AxiosError, AxiosRequestConfig } from 'axios';
 
 
 export class HttpService {
@@ -192,8 +192,7 @@ export class HttpService {
             'HttpService',
             options.method + ' ' + resource + parameter,
             {
-                a: options,
-                b: parameter
+                data: [options, parameter]
             });
 
         const response = await this.axios(options).catch((error: AxiosError) => {
@@ -202,7 +201,7 @@ export class HttpService {
                     `Error during HTTP (${resource}) ${options.method} request.`, error
                 );
             }
-            ProfilingService.getInstance().stop(profileTaskId, 'Error');
+            ProfilingService.getInstance().stop(profileTaskId, { data: ['Error'] });
             if (error.response.status === 403) {
                 throw new PermissionError(this.createError(error), resource, options.method);
             } else {
@@ -210,7 +209,7 @@ export class HttpService {
             }
         });
 
-        ProfilingService.getInstance().stop(profileTaskId, response.data);
+        ProfilingService.getInstance().stop(profileTaskId, { data: [response.data] });
 
         return options.method === RequestMethod.OPTIONS ? response.headers : response.data;
     }
@@ -296,17 +295,14 @@ export class HttpService {
 
                 // start profiling
                 const profileTaskId = ProfilingService.getInstance().start(
-                    'HttpService',
-                    options.method + ' ' + uri,
-                    {
-                        a: options
-                    });
+                    'HttpService', options.method + ' ' + uri, { data: [options] }
+                );
 
                 const response = await this.axios(options).catch((error: AxiosError) => {
                     LoggingService.getInstance().error(
                         `Error during HTTP (${uri}) ${options.method} request.`, error
                     );
-                    ProfilingService.getInstance().stop(profileTaskId, 'Error');
+                    ProfilingService.getInstance().stop(profileTaskId, { data: ['Error'] });
                     if (error.response.status === 403) {
                         throw new PermissionError(this.createError(error), uri, options.method);
                     } else {
@@ -315,7 +311,7 @@ export class HttpService {
                 });
 
                 await CacheService.getInstance().set(backendToken, response.data['User'], KIXObjectType.CURRENT_USER);
-                ProfilingService.getInstance().stop(profileTaskId, response.data);
+                ProfilingService.getInstance().stop(profileTaskId, { data: [response.data] });
 
                 this.currentUserRequestPromises.delete(token);
                 resolve(response.data['User']);

@@ -13,6 +13,7 @@ export class ComponentState {
 
     public constructor(
         public groups: LabelValueGroup[] = [],
-        public level: number = 0
+        public level: number = 0,
+        public toggleButtonVisible = true
     ) { }
 }

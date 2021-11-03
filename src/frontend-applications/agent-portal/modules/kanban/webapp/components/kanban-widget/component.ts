@@ -28,10 +28,7 @@ import { KanbanEvent } from '../../core/KanbanEvent';
 import { TicketState } from '../../../../ticket/model/TicketState';
 import { TicketStateProperty } from '../../../../ticket/model/TicketStateProperty';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
-import { ContextType } from '../../../../../model/ContextType';
 import { Ticket } from '../../../../ticket/model/Ticket';
-import { LabelService } from '../../../../base-components/webapp/core/LabelService';
-import { SortUtil } from '../../../../../model/SortUtil';
 
 declare const jKanban: any;
 

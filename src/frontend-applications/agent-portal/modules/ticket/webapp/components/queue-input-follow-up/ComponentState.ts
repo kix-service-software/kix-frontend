@@ -11,7 +11,7 @@ import { FormInputComponentState } from '../../../../../modules/base-components/
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 
 
-export class ComponentState extends FormInputComponentState<number> {
+export class ComponentState extends FormInputComponentState {
 
     public constructor(
         public loadNodes: () => Promise<TreeNode[]> = null,

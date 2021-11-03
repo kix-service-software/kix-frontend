@@ -10,7 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { ReleaseContext } from '../../core/ReleaseContext';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

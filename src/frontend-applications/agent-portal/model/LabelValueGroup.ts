@@ -7,7 +7,6 @@
  * --
  */
 
-import { Attachment } from './kix/Attachment';
 import { ObjectIcon } from '../modules/icon/model/ObjectIcon';
 import { LabelValueGroupValue } from './LabelValueGroupValue';
 

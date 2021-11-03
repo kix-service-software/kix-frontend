@@ -52,13 +52,13 @@ class Component {
                 this.ticketChartConfiguration.configuration.chartConfiguration.data.datasets[0].data = [];
 
                 currentContext.registerListener('TicketChartComponent' + IdService.generateDateBasedId(), {
-                    sidebarLeftToggled: () => { return; },
-                    sidebarRightToggled: () => { return; },
-                    objectChanged: () => { return; },
+                    sidebarLeftToggled: (): void => { return; },
+                    sidebarRightToggled: (): void => { return; },
+                    objectChanged: (): void => { return; },
                     objectListChanged: () => { return; },
                     scrollInformationChanged: () => { return; },
                     filteredObjectListChanged: this.contextFilteredObjectListChanged.bind(this),
-                    additionalInformationChanged: () => { return; }
+                    additionalInformationChanged: (): void => { return; }
                 });
 
                 this.contextFilteredObjectListChanged(
@@ -67,7 +67,7 @@ class Component {
 
                 this.subscriber = {
                     eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
-                    eventPublished: (data: any, eventId: string) => {
+                    eventPublished: (data: any, eventId: string): void => {
                         if (eventId === ContextUIEvent.RELOAD_OBJECTS && data === KIXObjectType.TICKET) {
                             this.state.loading = true;
                         }

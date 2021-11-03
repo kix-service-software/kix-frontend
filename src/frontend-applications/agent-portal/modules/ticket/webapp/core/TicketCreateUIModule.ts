@@ -41,7 +41,7 @@ export class UIModule implements IUIModule {
             [
                 new UIComponentPermission('tickets', [CRUD.CREATE])
             ],
-            'Translatable#Ticket', 'kix-icon-ticket', TicketDetailsContext.CONTEXT_ID, 100
+            'Translatable#New Ticket', 'kix-icon-ticket', TicketDetailsContext.CONTEXT_ID, 100
         );
         ContextService.getInstance().registerContext(newTicketContext);
     }

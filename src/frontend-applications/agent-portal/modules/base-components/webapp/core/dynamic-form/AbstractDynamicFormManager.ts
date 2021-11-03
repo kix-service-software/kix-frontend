@@ -33,7 +33,7 @@ import { ServiceRegistry } from '../ServiceRegistry';
 import { IKIXObjectService } from '../IKIXObjectService';
 import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
 import { ValidationSeverity } from '../ValidationSeverity';
-import { DynamicFieldTableValidator } from '../../../../dynamic-fields/webapp/core/DynamicFieldTableValidator';
+import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 
@@ -394,7 +394,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return fullResult;
     }
 
-    private checkDate(value: ObjectPropertyValue) {
+    private checkDate(value: ObjectPropertyValue): ValidationResult[] {
         const start: Date = new Date(value.value[0]);
         const end: Date = new Date(value.value[1]);
         if (typeof start.getTime !== 'function') {
@@ -417,7 +417,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         }
         return null;
     }
-    private checkNumber(value: ObjectPropertyValue) {
+    private checkNumber(value: ObjectPropertyValue): ValidationResult[] {
         if (isNaN(Number(value.value[0])) || value.value[0] === null) {
             value.valid = false;
             return [new ValidationResult(
@@ -552,6 +552,24 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
     public hasOption(option: ObjectPropertyValueOption, property: string, operator: string): boolean {
         return false;
+    }
+
+    public async getAdditionalOptions(property: string): Promise<FormFieldOption[]> {
+        let options: FormFieldOption[] = [];
+
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
+            options.push({ option: 'FIELD_NAME', value: dfName });
+        }
+
+        for (const extendedManager of this.extendedFormManager) {
+            const result = await extendedManager.getAdditionalOptions(property);
+            if (result) {
+                options = [...options, ...result];
+            }
+        }
+
+        return options;
     }
 
     public hasAdditionalOptions(): boolean {

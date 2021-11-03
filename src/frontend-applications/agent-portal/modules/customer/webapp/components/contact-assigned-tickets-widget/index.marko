@@ -7,52 +7,79 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<widget key=state.instanceId instanceId=state.instanceId title=component.getTitle() contentActions=state.actions>
+<widget
+    key=state.instanceId
+    instanceId=state.instanceId
+    title=component.getTitle()
+    contentActions=state.actions
+>
     <@content>
         <div.assigned-tickets-container>
             <widget
                 key="contact-reminder-tickets-group"
                 instanceId="contact-reminder-tickets-group"
-                title=component.getReminderTicketsTitle()>
+                title=component.getReminderTicketsTitle()
+            >
                 <@content>
                     <if(state.reminderTicketsTable)>
                         <div.ticket-filter>
-                            <filter filterCount=state.reminderTicketsFilterCount on-filter("filterReminder")/>
+                            <filter
+                                filterCount=state.reminderTicketsFilterCount
+                                on-filter("filterReminder")
+                            />
                         </div>
-                        <standard-table-NEW table=state.reminderTicketsTable/>
+                        <kix-table table=state.reminderTicketsTable/>
                     </if>
                 </@content>
             </widget>
-            <widget key="contact-new-tickets-group" instanceId="contact-new-tickets-group" title=component.getNewTicketsTitle()>
+            <widget
+                key="contact-new-tickets-group"
+                instanceId="contact-new-tickets-group"
+                title=component.getNewTicketsTitle()
+            >
                 <@content>
                     <if(state.newTicketsTable)>
                         <div.ticket-filter>
-                            <filter filterCount=state.newTicketsFilterCount on-filter("filterNew")/>
+                            <filter
+                                filterCount=state.newTicketsFilterCount
+                                on-filter("filterNew")
+                            />
                         </div>
-                        <standard-table-NEW table=state.newTicketsTable/>
+                        <kix-table table=state.newTicketsTable/>
                     </if>
                 </@content>
             </widget>
-            <widget key="contact-open-tickets-group" instanceId="contact-open-tickets-group" title=component.getOpenTicketsTitle()>
+            <widget
+                key="contact-open-tickets-group"
+                instanceId="contact-open-tickets-group"
+                title=component.getOpenTicketsTitle()
+            >
                 <@content>
                     <if(state.openTicketsTable)>
                         <div.ticket-filter>
-                            <filter filterCount=state.openTicketsFilterCount on-filter("filterOpen")/>
+                            <filter
+                                filterCount=state.openTicketsFilterCount
+                                on-filter("filterOpen")
+                            />
                         </div>
-                        <standard-table-NEW table=state.openTicketsTable/>
+                        <kix-table table=state.openTicketsTable/>
                     </if>
                 </@content>
             </widget>
             <widget
                 key="contact-pending-tickets-group"
                 instanceId="contact-pending-tickets-group"
-                title=component.getPendingTicketsTitle()>
+                title=component.getPendingTicketsTitle()
+            >
                 <@content>
                     <if(state.pendingTicketsTable)>
                         <div.ticket-filter>
-                            <filter filterCount=state.pendingTicketsFilterCount on-filter("filterPending")/>
+                            <filter
+                                filterCount=state.pendingTicketsFilterCount
+                                on-filter("filterPending")
+                            />
                         </div>
-                        <standard-table-NEW table=state.pendingTicketsTable/>
+                        <kix-table table=state.pendingTicketsTable/>
                     </if>
                 </@content>
             </widget>

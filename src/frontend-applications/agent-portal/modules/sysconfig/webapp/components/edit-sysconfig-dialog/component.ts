@@ -18,7 +18,7 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { ValidationSeverity } from '../../../../base-components/webapp/core/ValidationSeverity';
 import { SysConfigOptionProperty } from '../../../model/SysConfigOptionProperty';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { ObjectDialogUtil } from '../../../../base-components/webapp/core/ObjectDialogUtil';
+import { ObjectDialogService } from '../../../../base-components/webapp/core/ObjectDialogService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -41,7 +41,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const context = ContextService.getInstance().getActiveContext();
         if (context) {
             if (context.getObjectId()) {
-                ObjectDialogUtil.submit();
+                ObjectDialogService.getInstance().submit();
             } else {
                 const formInstance = await context.getFormManager().getFormInstance();
                 const result = await formInstance.validateForm();

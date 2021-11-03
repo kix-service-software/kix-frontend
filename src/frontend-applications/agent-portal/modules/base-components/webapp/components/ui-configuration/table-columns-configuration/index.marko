@@ -10,74 +10,39 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <translation-string pattern="Translatable#Table Columns"/>
 </h2>
 <div.property-chooser>
-    <form-list treeId=state.propertyTreeId multiselect=true/>
-    <button.kix-button.submit-button
-        type="button"
-        on-click("addColumn")
-        title=state.translations["Translatable#Add Column(s)"]>
+    <form-list treeId=state.propertyTreeId multiselect=true freeText=true/>
+    <button.kix-button.submit-button type="button" on-click("addColumn") title=state.translations["Translatable#Add Column(s)"]>
         <span.kix-icon-plus-blank/>
         <translation-string pattern="Translatable#Add Column(s)"/>
     </button>
 </div>
-<table.standard-table-NEW.configuration-table>
+<table.kix-table.configuration-table>
     <thead>
         <tr>
             <if(!state.loading)>
-                <th.table-head-cell title=state.translations["Translatable#Property"]>
-                    ${state.translations["Translatable#Property"]}
-                </th>
+                <th.table-head-cell title=state.translations["Translatable#Property"]>${state.translations["Translatable#Property"]}</th>
             </if>
-            <th.table-head-cell.boolean-value title=state.translations["Translatable#Text"]>
-                ${state.translations["Translatable#Text"]}
-            </th>
-            <th.table-head-cell.boolean-value title=state.translations["Translatable#Icon"]>
-                ${state.translations["Translatable#Icon"]}
-            </th>
+            <th.table-head-cell.boolean-value title=state.translations["Translatable#Text"]>${state.translations["Translatable#Text"]}</th>
+            <th.table-head-cell.boolean-value title=state.translations["Translatable#Icon"]>${state.translations["Translatable#Icon"]}</th>
             <if(input.advancedSettings)>
-                <th.table-head-cell.boolean-value title=state.translations["Translatable#Column Title"]>
-                    ${state.translations["Translatable#Column Title"]}
-                </th>
-                <th.table-head-cell.boolean-value title=state.translations["Translatable#Column Icon"]>
-                    ${state.translations["Translatable#Column Icon"]}
-                </th>
-                <th.table-head-cell.boolean-value title=state.translations["Translatable#Sortable"]>
-                    ${state.translations["Translatable#Sortable"]}
-                </th>
-                <th.table-head-cell.boolean-value title=state.translations["Translatable#Filterable"]>
-                    ${state.translations["Translatable#Filterable"]}
-                </th>
-                <th.table-head-cell.boolean-value title=state.translations["Translatable#Filter List"]>
-                    ${state.translations["Translatable#Filter List"]}
-                </th>
-                <th.table-head-cell.boolean-value title=state.translations["Translatable#Resizable"]>
-                    ${state.translations["Translatable#Resizable"]}
-                </th>
-                <th.table-head-cell.boolean-value title=state.translations["Translatable#Translatable"]>
-                    ${state.translations["Translatable#Translatable"]}
-                </th>
-                <th.table-head-cell.boolean-value title=state.translations["Translatable#Translatable Title"]>
-                    ${state.translations["Translatable#Translatable Title"]}
-                </th>
-                <th.table-head-cell title=state.translations["Translatable#Size (px)"]>
-                    ${state.translations["Translatable#Size (px)"]}
-                </th>
-                <th.table-head-cell title=state.translations["Translatable#Component ID"]>
-                    ${state.translations["Translatable#Component ID"]}
-                </th>
-                <th.table-head-cell title=state.translations["Translatable#Column Title"]>
-                    ${state.translations["Translatable#Column Title"]}
-                </th>
+                <th.table-head-cell.boolean-value title=state.translations["Translatable#Column Title"]>${state.translations["Translatable#Column Title"]}</th>
+                <th.table-head-cell.boolean-value title=state.translations["Translatable#Column Icon"]>${state.translations["Translatable#Column Icon"]}</th>
+                <th.table-head-cell.boolean-value title=state.translations["Translatable#Sortable"]>${state.translations["Translatable#Sortable"]}</th>
+                <th.table-head-cell.boolean-value title=state.translations["Translatable#Filterable"]>${state.translations["Translatable#Filterable"]}</th>
+                <th.table-head-cell.boolean-value title=state.translations["Translatable#Filter List"]>${state.translations["Translatable#Filter List"]}</th>
+                <th.table-head-cell.boolean-value title=state.translations["Translatable#Resizable"]>${state.translations["Translatable#Resizable"]}</th>
+                <th.table-head-cell.boolean-value title=state.translations["Translatable#Translatable"]>${state.translations["Translatable#Translatable"]}</th>
+                <th.table-head-cell.boolean-value title=state.translations["Translatable#Translatable Title"]>${state.translations["Translatable#Translatable Title"]}</th>
+                <th.table-head-cell title=state.translations["Translatable#Size (px)"]>${state.translations["Translatable#Size (px)"]}</th>
+                <th.table-head-cell title=state.translations["Translatable#Component ID"]>${state.translations["Translatable#Component ID"]}</th>
+                <th.table-head-cell title=state.translations["Translatable#Column Title"]>${state.translations["Translatable#Column Title"]}</th>
             </if>
             <th/>
         </tr>
     </thead>
     <tbody>
         <for|column| of=state.columns>
-            <tr
-                draggable="true"
-                on-dragstart("rowDragstart", column)
-                on-dragover("rowDragover", column)
-                on-drop("rowDroped", column)>
+            <tr draggable="true" on-dragstart("rowDragstart", column) on-dragover("rowDragover", column) on-drop("rowDroped", column)>
                 <if(!state.loading)>
                     <td.content-cell title=state.columnNames[column.property]>
                         <span>${state.columnNames[column.property]}</span>
@@ -115,29 +80,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <input type="checkbox" checked=column.titleTranslatable/>
                     </td>
                     <td.content-cell>
-                        <input.input-style
-                            type="numeric"
-                            value=column.size
-                            on-change("columnSizeChanged", column)/>
+                        <input.input-style type="numeric" value=column.size on-change("columnSizeChanged", column)/>
                     </td>
                     <td.content-cell>
-                        <input.input-style
-                            type="text"
-                            value=column.componentId
-                            on-change("stringValueChanged", "componentId", column)/>
+                        <input.input-style type="text" value=column.componentId on-change("stringValueChanged", "componentId", column)/>
                     </td>
                     <td.content-cell>
-                        <input.input-style
-                            type="text"
-                            value=column.defaultText
-                            on-change("stringValueChanged", "defaultText", column)/>
+                        <input.input-style type="text" value=column.defaultText on-change("stringValueChanged", "defaultText", column)/>
                     </td>
                 </if>
                 <td>
-                    <button.form-control-button.button-without-text
-                        type="button"
-                        title=state.translations["Translatable#Remove"]
-                        on-click("removeColumn", column)>
+                    <button.form-control-button.button-without-text type="button" title=state.translations["Translatable#Remove"] on-click("removeColumn", column)>
                         <span.kix-icon-minus/>
                     </button>
                 </td>

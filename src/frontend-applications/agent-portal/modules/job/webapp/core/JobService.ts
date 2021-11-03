@@ -59,7 +59,7 @@ export class JobService extends KIXObjectService<Job> {
         return this.typeMapping[jobType] || KIXObjectType.TICKET;
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.JOB
             || kixObjectType === KIXObjectType.JOB_TYPE
             || kixObjectType === KIXObjectType.JOB_RUN

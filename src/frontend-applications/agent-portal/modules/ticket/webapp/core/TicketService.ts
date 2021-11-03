@@ -79,7 +79,7 @@ export class TicketService extends KIXObjectService<Ticket> {
         this.objectConstructors.set(KIXObjectType.WATCHER, [Watcher]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.TICKET
             || kixObjectType === KIXObjectType.ARTICLE
             || kixObjectType === KIXObjectType.SENDER_TYPE

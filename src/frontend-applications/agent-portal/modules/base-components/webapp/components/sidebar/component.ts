@@ -54,7 +54,7 @@ class Component {
 
         this.eventSubscriber = {
             eventSubscriberId: `sidebar-mobile-${this.state.isLeft ? 'left' : 'right'}`,
-            eventPublished: (data, eventId: MobileShowEvent | string) => {
+            eventPublished: (data, eventId: MobileShowEvent | string): void => {
                 if (eventId === MobileShowEvent.SHOW_MOBILE) {
                     this.state.showMobile
                         = (this.state.isLeft && data === MobileShowEventData.SHOW_LEFT_SIDEBAR)
@@ -73,7 +73,7 @@ class Component {
         this.handleShowSidebarAreaState();
     }
 
-    private handleShowSidebarAreaState(context: Context = ContextService.getInstance().getActiveContext()) {
+    private handleShowSidebarAreaState(context: Context = ContextService.getInstance().getActiveContext()): void {
         if (this.state.isSmall) {
             if (this.state.showSidebarArea) {
                 this.toggleSidebarArea();

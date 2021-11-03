@@ -64,7 +64,7 @@ export class TicketFormService extends KIXObjectFormService {
         super();
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.TICKET;
     }
 
@@ -132,7 +132,7 @@ export class TicketFormService extends KIXObjectFormService {
         formContext: FormContext
     ): Promise<any> {
         const context = ContextService.getInstance().getActiveContext();
-        const sourceContextDescription = context.getAdditionalInformation(AdditionalContextInformation.SOURCE_CONTEXT);
+        const sourceContextDescription = context?.getAdditionalInformation(AdditionalContextInformation.SOURCE_CONTEXT);
         let sourceContext: Context;
         if (sourceContextDescription?.instanceId) {
             sourceContext = ContextService.getInstance().getContext(sourceContextDescription.instanceId);
@@ -370,7 +370,7 @@ export class TicketFormService extends KIXObjectFormService {
                     field.inputComponent = 'object-reference-input';
                     field.options = [
                         ...field.options,
-                        ...this.getObjectReferenceOptions(KIXObjectType.ORGANISATION)
+                        ...this.getObjectReferenceOptions(KIXObjectType.ORGANISATION, true)
                     ];
                     field.label = label;
                     break;

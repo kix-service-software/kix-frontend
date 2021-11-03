@@ -24,6 +24,9 @@ import { ObjectIcon } from '../../icon/model/ObjectIcon';
 import { FilterCriteria } from '../../../model/FilterCriteria';
 import { OrganisationProperty } from '../model/OrganisationProperty';
 import { SearchProperty } from '../../search/model/SearchProperty';
+import { SearchOperator } from '../../search/model/SearchOperator';
+import { FilterType } from '../../../model/FilterType';
+import { FilterDataType } from '../../../model/FilterDataType';
 
 export class OrganisationAPIService extends KIXObjectAPIService {
 
@@ -122,11 +125,24 @@ export class OrganisationAPIService extends KIXObjectAPIService {
     }
 
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        return criteria.filter(
+        let searchCriteria = criteria.filter(
             (c) => c.property === OrganisationProperty.NAME
                 || c.property === OrganisationProperty.NUMBER
                 || c.property === SearchProperty.FULLTEXT
+                || c.property !== SearchProperty.PRIMARY
         );
-    }
 
+        const primary = criteria.find((f) => f.property === SearchProperty.PRIMARY);
+        if (primary) {
+            const primarySearch = [
+                new FilterCriteria(
+                    OrganisationProperty.NUMBER, SearchOperator.LIKE,
+                    FilterDataType.STRING, FilterType.OR, `${primary.value}`
+                ),
+            ];
+            searchCriteria = [...searchCriteria, ...primarySearch];
+        }
+
+        return searchCriteria;
+    }
 }

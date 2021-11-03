@@ -9,9 +9,8 @@
 
 import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
 import { IdService } from '../../../../../model/IdService';
-import { TreeNode } from '../../core/tree';
 
-export class CompontentState extends FormInputComponentState<string> {
+export class CompontentState extends FormInputComponentState {
 
     public constructor(
         public placeholder: string = '',

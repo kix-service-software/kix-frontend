@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { OrganisationDetailsContext } from '../../core';
 import { Organisation } from '../../../model/Organisation';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../../base-components/webapp/core/table';
@@ -38,17 +37,17 @@ class Component {
             : undefined;
 
         context.registerListener('organisation-assigned-contacts-component', {
-            sidebarLeftToggled: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            sidebarLeftToggled: (): void => { return; },
+            filteredObjectListChanged: (): void => { return; },
             objectListChanged: () => { return; },
-            sidebarRightToggled: () => { return; },
+            sidebarRightToggled: (): void => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: (contactId: string, organisation: Organisation, type: KIXObjectType) => {
                 if (type === KIXObjectType.ORGANISATION) {
                     this.initWidget(organisation);
                 }
             },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
 
         await this.initWidget(await context.getObject<Organisation>());

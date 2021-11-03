@@ -10,7 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { TicketDetailsContext } from '../../core';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { Ticket } from '../../../model/Ticket';
@@ -45,17 +44,17 @@ class Component {
         WidgetService.getInstance().setWidgetType('ticket-description-notes', WidgetType.GROUP);
 
         context.registerListener('ticket-description-widget', {
-            sidebarLeftToggled: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            sidebarLeftToggled: (): void => { return; },
+            filteredObjectListChanged: (): void => { return; },
             objectListChanged: () => { return; },
-            sidebarRightToggled: () => { return; },
+            sidebarRightToggled: (): void => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: (ticketId: string, ticket: Ticket, type: KIXObjectType) => {
                 if (type === KIXObjectType.TICKET) {
                     this.initWidget(ticket);
                 }
             },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
 
         this.setWidgetContentHeight();

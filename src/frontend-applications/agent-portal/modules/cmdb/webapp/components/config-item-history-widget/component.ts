@@ -35,17 +35,17 @@ class Component {
             : undefined;
 
         context.registerListener('config-item-history-widget', {
-            sidebarLeftToggled: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            sidebarLeftToggled: (): void => { return; },
+            filteredObjectListChanged: (): void => { return; },
             objectListChanged: () => { return; },
-            sidebarRightToggled: () => { return; },
+            sidebarRightToggled: (): void => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: (configItemId: string, configItem: ConfigItem, type: KIXObjectType) => {
                 if (type === KIXObjectType.CONFIG_ITEM) {
                     this.initWidget(configItem);
                 }
             },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
 
         await this.initWidget(await context.getObject<ConfigItem>());

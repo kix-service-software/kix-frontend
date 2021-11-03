@@ -36,7 +36,7 @@ export class CreateReportActionJobFormManager extends ExtendedJobFormManager {
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('CreateReportActionJobFormManager'),
-            eventPublished: (data: FormValuesChangedEventData, eventId: string) => {
+            eventPublished: (data: FormValuesChangedEventData, eventId: string): void => {
                 const definitionValue = data.changedValues.find(
                     (cv) => cv[0] && cv[0].property === KIXObjectType.REPORT_DEFINITION
                 );

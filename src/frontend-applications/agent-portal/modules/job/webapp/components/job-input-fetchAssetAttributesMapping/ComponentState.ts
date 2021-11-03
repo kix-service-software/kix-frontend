@@ -9,7 +9,7 @@
 
 import { FormInputComponentState } from '../../../../base-components/webapp/core/FormInputComponentState';
 
-export class ComponentState extends FormInputComponentState<string> {
+export class ComponentState extends FormInputComponentState {
 
     public constructor(
         public currentAssetValue: string = null,

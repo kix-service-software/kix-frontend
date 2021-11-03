@@ -8,8 +8,6 @@
  */
 
 import { AbstractComponentState } from '../../../../../base-components/webapp/core/AbstractComponentState';
-import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
-
 
 export class ComponentState extends AbstractComponentState {
 

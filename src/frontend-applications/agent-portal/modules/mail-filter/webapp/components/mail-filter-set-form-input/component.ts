@@ -12,10 +12,8 @@ import { FormInputComponent } from '../../../../../modules/base-components/webap
 import { IdService } from '../../../../../model/IdService';
 import { MailFilterSetManager } from '../../core';
 import { MailFilterSet } from '../../../model/MailFilterSet';
-import { IDynamicFormManager } from '../../../../base-components/webapp/core/dynamic-form/IDynamicFormManager';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { FormService } from '../../../../base-components/webapp/core/FormService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends FormInputComponent<any[], ComponentState> {

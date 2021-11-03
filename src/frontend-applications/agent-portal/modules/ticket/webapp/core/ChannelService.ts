@@ -47,7 +47,7 @@ export class ChannelService extends KIXObjectService<Channel> {
         }
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.CHANNEL;
     }
 

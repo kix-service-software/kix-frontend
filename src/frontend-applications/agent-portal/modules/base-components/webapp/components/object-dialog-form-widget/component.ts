@@ -36,7 +36,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
-            eventPublished: async (data: Context, eventId: string) => {
+            eventPublished: async (data: Context, eventId: string): Promise<void> => {
                 if (eventId === ContextEvents.CONTEXT_DISPLAY_TEXT_CHANGED) {
                     await this.setTitle();
                 } else if (eventId === ContextEvents.CONTEXT_ICON_CHANGED) {

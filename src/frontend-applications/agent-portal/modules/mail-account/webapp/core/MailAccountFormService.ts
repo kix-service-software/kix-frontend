@@ -40,7 +40,7 @@ export class MailAccountFormService extends KIXObjectFormService {
         super();
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.MAIL_ACCOUNT;
     }
 

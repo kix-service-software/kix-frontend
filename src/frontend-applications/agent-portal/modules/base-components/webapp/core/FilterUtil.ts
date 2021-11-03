@@ -131,8 +131,8 @@ export class FilterUtil {
                         } else if (typeof objectValue === 'boolean') {
                             return Boolean(cv) === objectValue;
                         } else {
-                            return objectValue
-                                ? objectValue?.toString().split(',').some((v) => v === cv?.toString())
+                            return objectValue !== null && typeof objectValue !== 'undefined'
+                                ? objectValue.toString().split(',').some((v) => v === cv?.toString())
                                 : false;
                         }
                     }

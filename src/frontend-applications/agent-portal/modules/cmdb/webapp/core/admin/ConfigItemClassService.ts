@@ -29,7 +29,7 @@ export class ConfigItemClassService extends KIXObjectService<ConfigItemClass> {
         this.objectConstructors.set(KIXObjectType.CONFIG_ITEM_CLASS, [ConfigItemClass]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.CONFIG_ITEM_CLASS;
     }
 

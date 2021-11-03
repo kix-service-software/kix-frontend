@@ -144,7 +144,7 @@ class EditorComponent {
                                 );
                                 if (valid) {
                                     const reader = new FileReader();
-                                    reader.onload = (evt: any) => {
+                                    reader.onload = (evt: any): void => {
                                         const element = this.editor.document.createElement('img', {
                                             attributes: {
                                                 src: evt.target.result
@@ -162,7 +162,7 @@ class EditorComponent {
                     }
                 });
 
-                const changeListener = () => {
+                const changeListener = (): void => {
                     if (this.changeTimeout) {
                         window.clearTimeout(this.changeTimeout);
                         this.changeTimeout = null;
@@ -219,7 +219,7 @@ class EditorComponent {
                     if (config) {
                         const plugin = new CKEDITOR.plugins.autocomplete(this.editor, config);
                         // overwrite plugin commit function
-                        plugin.commit = async function (itemId) {
+                        plugin.commit = async function (itemId): Promise<void> {
                             if (!this.model.isActive) {
                                 return;
                             }

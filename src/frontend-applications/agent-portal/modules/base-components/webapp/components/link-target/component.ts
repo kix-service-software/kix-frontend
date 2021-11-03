@@ -62,7 +62,8 @@ class Component {
             }
 
             ContextService.getInstance().setActiveContext(
-                this.state.routingConfiguration.contextId, this.state.objectId, urlSearchParams
+                this.state.routingConfiguration.contextId, this.state.objectId, urlSearchParams,
+                this.state.routingConfiguration.additionalInformation
             );
         }
     }

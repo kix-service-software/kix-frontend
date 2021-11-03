@@ -53,7 +53,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         this.objectConstructors.set(KIXObjectType.CONFIG_ITEM_ATTACHMENT, [ConfigItemAttachment]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.CONFIG_ITEM
             || kixObjectType === KIXObjectType.CONFIG_ITEM_VERSION
             || kixObjectType === KIXObjectType.CONFIG_ITEM_IMAGE

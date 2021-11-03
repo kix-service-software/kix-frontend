@@ -11,7 +11,7 @@ import { FormInputComponentState } from '../../core/FormInputComponentState';
 import { IDynamicFormManager } from '../../core/dynamic-form';
 import { IdService } from '../../../../../model/IdService';
 
-export class ComponentState extends FormInputComponentState<any> {
+export class ComponentState extends FormInputComponentState {
 
     public constructor(
         public manager: IDynamicFormManager = null,

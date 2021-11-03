@@ -17,9 +17,7 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
-import {
-    TableFactoryService, Table, RowObject, TableValue, TableEvent
-} from '../../../../base-components/webapp/core/table';
+import { TableFactoryService, Table, RowObject, TableValue, TableEvent } from '../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { TranslationPatternProperty } from '../../../model/TranslationPatternProperty';
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
@@ -36,7 +34,6 @@ import { EditTranslationDialogContext } from '../../core/admin/context';
 import { SortOrder } from '../../../../../model/SortOrder';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { AdminContext } from '../../../../admin/webapp/core/AdminContext';
-import { ContextType } from '../../../../../model/ContextType';
 import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -92,7 +89,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.subscriber = {
             eventSubscriberId: 'admin-translations',
-            eventPublished: (data: any, eventId: string) => {
+            eventPublished: (data: any, eventId: string): void => {
                 if (data && this.state.table && data.tableId === this.state.table.getTableId()) {
                     WidgetService.getInstance().updateActions(this.state.instanceId);
                 }

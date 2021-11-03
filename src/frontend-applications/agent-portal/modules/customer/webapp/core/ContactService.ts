@@ -13,7 +13,6 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
-import { ContactDetailsContext } from '.';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
@@ -40,7 +39,7 @@ export class ContactService extends KIXObjectService<Contact> {
         this.objectConstructors.set(KIXObjectType.CONTACT, [Contact]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.CONTACT;
     }
 

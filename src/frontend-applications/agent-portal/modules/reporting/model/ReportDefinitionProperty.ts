@@ -19,6 +19,10 @@ export enum ReportDefinitionProperty {
 
     NAME = 'Name',
 
+    TOKEN = 'Token',
+
+    BASE_URL = 'BaseURL',
+
     DATASOURCE = 'DataSource',
 
     REPORTS = 'Reports',

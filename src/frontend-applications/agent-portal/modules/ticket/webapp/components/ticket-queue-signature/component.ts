@@ -11,7 +11,6 @@ import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { QueueDetailsContext } from '../../core';
 import { Queue } from '../../../model/Queue';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
@@ -34,17 +33,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         context.registerListener('queue-signature-widget', {
-            sidebarRightToggled: () => { return; },
-            sidebarLeftToggled: () => { return; },
+            sidebarRightToggled: (): void => { return; },
+            sidebarLeftToggled: (): void => { return; },
             objectListChanged: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            filteredObjectListChanged: (): void => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: async (queueId: string, queue: Queue, type: KIXObjectType) => {
                 if (type === KIXObjectType.QUEUE) {
                     this.initWidget(queue);
                 }
             },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
         this.state.widgetConfiguration = context
             ? await context.getWidgetConfiguration(this.state.instanceId)

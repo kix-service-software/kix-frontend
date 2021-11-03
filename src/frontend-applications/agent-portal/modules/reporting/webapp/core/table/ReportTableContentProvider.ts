@@ -9,10 +9,9 @@
 
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
 import { Report } from '../../../model/Report';
-import { Table, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ReportProperty } from '../../../model/ReportProperty';
 
 export class ReportTableContentProvider extends TableContentProvider<Report> {
 

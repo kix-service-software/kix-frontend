@@ -100,7 +100,7 @@ class Component {
 
                 this.tableSubscriber = {
                     eventSubscriberId: 'bulk-table-listener',
-                    eventPublished: async (data: TableEventData, eventId: string) => {
+                    eventPublished: async (data: TableEventData, eventId: string): Promise<void> => {
                         if (data && data.tableId === table.getTableId()) {
                             if (eventId === TableEvent.TABLE_INITIALIZED) {
                                 table.selectAll();

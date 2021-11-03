@@ -10,8 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
-import { RoutingConfiguration } from '../../../../../../model/configuration/RoutingConfiguration';
-import { ContextMode } from '../../../../../../model/ContextMode';
 import { ContextHistory } from '../../../../../base-components/webapp/core/ContextHistory';
 
 class Component {

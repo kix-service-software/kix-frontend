@@ -34,7 +34,6 @@ import { SearchCache } from '../../model/SearchCache';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { SearchContext } from './SearchContext';
 import { ContextMode } from '../../../../model/ContextMode';
-import { TicketProperty } from '../../../ticket/model/TicketProperty';
 
 export class SearchService {
 
@@ -153,6 +152,23 @@ export class SearchService {
         }
 
         return objects;
+    }
+
+    public async executePrimarySearch<T extends KIXObject>(
+        objectType: KIXObjectType | string, searchValue: string
+    ): Promise<T[]> {
+        const searchCache = new SearchCache<T>(null, null, objectType, [], []);
+        searchCache.criteria = [
+            new FilterCriteria(
+                SearchProperty.PRIMARY, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
+            )
+        ];
+
+        searchCache.primaryValue = searchValue;
+
+        await this.setSearchContext(searchCache?.objectType);
+        const objects = await this.searchObjects(searchCache);
+        return (objects as any);
     }
 
     public async executeFullTextSearch<T extends KIXObject>(

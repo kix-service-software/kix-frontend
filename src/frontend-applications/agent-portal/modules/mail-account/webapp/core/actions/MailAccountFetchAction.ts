@@ -11,7 +11,6 @@ import { AbstractAction } from '../../../../../modules/base-components/webapp/co
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { MailAccountDetailsContext } from '..';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';

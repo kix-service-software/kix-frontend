@@ -13,7 +13,6 @@ import { IConfiguration } from '../../model/configuration/IConfiguration';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
-import { HelpWidgetConfiguration } from '../../model/configuration/HelpWidgetConfiguration';
 import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
 import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
 import { ConfiguredDialogWidget } from '../../model/configuration/ConfiguredDialogWidget';
@@ -47,6 +46,10 @@ import { TableRowHeight } from '../../model/configuration/TableRowHeight';
 import { FAQArticleProperty } from '../faq/model/FAQArticleProperty';
 import { InformationConfiguration, InformationRowConfiguration, ObjectInformationCardConfiguration } from '../base-components/webapp/components/object-information-card-widget/ObjectInformationCardConfiguration';
 import { RoutingConfiguration } from '../../model/configuration/RoutingConfiguration';
+import { ConfigItemProperty } from '../cmdb/model/ConfigItemProperty';
+import { SortOrder } from '../../model/SortOrder';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { CRUD } from '../../../../server/model/rest/CRUD';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -299,6 +302,46 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(suggestedFAQWidget);
 
+        const assignedAssets = new WidgetConfiguration(
+            'ticket-edit-assigned-assets', 'Assigned Assets', ConfigurationType.Widget,
+            'table-widget', 'Translatable#Assigned Assets', [], null,
+            new TableWidgetConfiguration(
+                'ticket-edit-assigned-assets-table-widget', 'Assigned Assets',
+                ConfigurationType.TableWidget, KIXObjectType.CONFIG_ITEM, [ConfigItemProperty.NUMBER, SortOrder.UP],
+                null,
+                null, null, false, false, null, undefined,
+                undefined,
+                new TableConfiguration(
+                    'ticket-edit-assigned-assets-table-config', 'Assigned Assets', ConfigurationType.Table,
+                    KIXObjectType.CONFIG_ITEM,
+                    new KIXObjectLoadingOptions(
+                        [
+                            new FilterCriteria(
+                                ConfigItemProperty.ASSIGNED_CONTACT, SearchOperator.EQUALS,
+                                FilterDataType.NUMERIC, FilterType.AND, '<KIX_TICKET_ContactID>'
+                            )
+                        ], null, 100
+                    ), 10,
+                    [
+                        new DefaultColumnConfiguration(
+                            null, null, null, '', false, false, false, false, 30,
+                            false, false, false, null, false, 'add-to-affected-assets-cell',
+                            'Translatable#Contained in Affected Assets'
+                        ),
+                        new DefaultColumnConfiguration(
+                            null, null, null, ConfigItemProperty.NUMBER, true, false, true, false, 120, true, true),
+                        new DefaultColumnConfiguration(
+                            null, null, null, ConfigItemProperty.NAME, true, false, true, false, 120, true, true),
+                        new DefaultColumnConfiguration(null, null, null,
+                            ConfigItemProperty.CLASS_ID, true, false, true, false, 120, true, true, true
+                        ),
+                    ], null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                )
+            ),
+            false, true, 'kix-icon-cmdb', false, false, true, [TicketProperty.CONTACT_ID]
+        );
+        configurations.push(assignedAssets);
+
         const widget = new WidgetConfiguration(
             'ticket-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'object-dialog-form-widget', 'Translatable#Edit Ticket', [], null, null, false, false, 'kix-icon-edit'
@@ -311,6 +354,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 this.getModuleId(),
                 [
                     new ConfiguredWidget('ticket-edit-contact-card-widget', 'ticket-edit-contact-card-widget'),
+                    new ConfiguredWidget('ticket-edit-assigned-assets', 'ticket-edit-assigned-assets', undefined,
+                        [
+                            new UIComponentPermission('/cmdb/configitems', [CRUD.READ]),
+                            new UIComponentPermission('/tickets', [CRUD.READ])
+                        ]),
                     new ConfiguredWidget(
                         'ticket-edit-affected-asset-tickets', 'ticket-edit-affected-asset-tickets'
                     ),
@@ -563,6 +611,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
 }
 
-module.exports = (data, host, options) => {
+module.exports = (data, host, options): Extension => {
     return new Extension();
 };

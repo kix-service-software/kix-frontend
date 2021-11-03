@@ -196,7 +196,9 @@ export class Table implements Table {
         }
     }
 
-    private async considerHandlerData(rowObjects: RowObject<any>[], relevantHandlerConfigIds?: string[]) {
+    private async considerHandlerData(
+        rowObjects: RowObject<any>[], relevantHandlerConfigIds?: string[]
+    ): Promise<RowObject[]> {
         for (const handlerConfig of this.tableConfiguration.additionalTableObjectsHandler) {
             if (handlerConfig && handlerConfig.handlerId) {
                 if (

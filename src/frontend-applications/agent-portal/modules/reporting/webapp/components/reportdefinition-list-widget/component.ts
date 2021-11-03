@@ -36,7 +36,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (context) {
             this.subscriber = {
                 eventSubscriberId: IdService.generateDateBasedId(this.instanceId),
-                eventPublished: (data: any, eventId: string) => {
+                eventPublished: (data: any, eventId: string): void => {
                     if (eventId === ContextUIEvent.RELOAD_OBJECTS && data === KIXObjectType.REPORT_DEFINITION) {
                         this.state.prepared = false;
                     } else if (

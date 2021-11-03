@@ -51,4 +51,6 @@ export interface IServerConfiguration {
 
     LOG_REQUEST_QUEUES_INTERVAL: number;
 
+    SOCKET_MAX_HTTP_BUFFER_SIZE: number;
+
 }

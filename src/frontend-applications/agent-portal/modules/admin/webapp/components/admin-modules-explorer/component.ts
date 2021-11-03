@@ -62,7 +62,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
             this.subscriber = {
                 eventSubscriberId: IdService.generateDateBasedId(),
-                eventPublished: (data: any, eventId: string) => {
+                eventPublished: (data: any, eventId: string): void => {
                     this.state.activeNode = this.getActiveNode(context?.adminModuleId);
                 }
             };
@@ -94,7 +94,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareCategoryTreeNodes(
         modules: Array<AdminModuleCategory | AdminModule> = [], parent?: TreeNode
     ): Promise<void> {
-        const adminModules: TreeNode[] = [];
         for (const m of modules) {
             if (m instanceof AdminModuleCategory) {
                 const name = await TranslationService.translate(m.name);

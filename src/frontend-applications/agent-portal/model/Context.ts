@@ -161,6 +161,13 @@ export abstract class Context {
         return url;
     }
 
+    public async addExtendedUrlParams(url: string): Promise<string> {
+        for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {
+            url = await extension.addExtendedUrlParams(url);
+        }
+        return url;
+    }
+
     public async getAdditionalActions(object?: KIXObject): Promise<AbstractAction[]> {
         let actions: AbstractAction[] = [];
         for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {
@@ -275,7 +282,7 @@ export abstract class Context {
         return this.objectLists.get(objectType) as any[];
     }
 
-    public setObjectList(objectType: KIXObjectType | string, objectList: KIXObject[], silent?: boolean) {
+    public setObjectList(objectType: KIXObjectType | string, objectList: KIXObject[], silent?: boolean): void {
         this.objectLists.set(objectType, objectList);
         if (!silent) {
             this.listeners.forEach((l) => l.objectListChanged(objectType, objectList));
@@ -304,7 +311,7 @@ export abstract class Context {
 
     public setFilteredObjectList(
         objectType: KIXObjectType | string, filteredObjectList: KIXObject[], silent: boolean = false
-    ) {
+    ): void {
         this.filteredObjectLists.set(objectType, filteredObjectList);
         if (!silent) {
             this.listeners.forEach((l) => l.filteredObjectListChanged(objectType, filteredObjectList));
@@ -522,9 +529,9 @@ export abstract class Context {
         return widget;
     }
 
-    public async getWidgetConfiguration(instanceId: string): Promise<WidgetConfiguration> {
+    public async getWidgetConfiguration<T = WidgetConfiguration>(instanceId: string): Promise<T> {
         const configuredWidget = await this.getConfiguredWidget(instanceId);
-        return configuredWidget ? configuredWidget.configuration : null;
+        return configuredWidget ? configuredWidget.configuration as any : null;
     }
 
     public getContextSpecificWidgetType(instanceId: string): WidgetType {

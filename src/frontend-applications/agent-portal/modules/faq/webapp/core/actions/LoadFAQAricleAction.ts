@@ -10,8 +10,6 @@
 import { FAQDetailsContext } from '../context/FAQDetailsContext';
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../model/ContextMode';
 
 export class LoadFAQAricleAction extends AbstractAction {
 
