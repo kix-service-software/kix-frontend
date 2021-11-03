@@ -45,7 +45,8 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         ),
         new UIComponent(
             'create-new-report-cell', '/kix-module-reporting$0/webapp/components/create-new-report-cell', []
-        )
+        ),
+        new UIComponent('output-format-info', '/kix-module-reporting$0/webapp/components/output-format-info', [])
     ];
 
     public webDependencies: string[] = [

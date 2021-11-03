@@ -59,7 +59,7 @@ function licenseHeaderCucumber() {
 function lint() {
     const eslint = require('gulp-eslint');
 
-    const quiet = process.env.NODE_ENV !== "production" ? false : true;
+    const quiet = true; //process.env.NODE_ENV !== "production" ? false : true;
 
     return gulp.src(['src/**/*.ts'])
         // eslint() attaches the lint output to the "eslint" property
