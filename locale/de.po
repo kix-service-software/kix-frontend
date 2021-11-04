@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2021-09-29 15:47+0000\n"
-"Last-Translator: fwichmann <Felix.Wichmann@cape-it.de>\n"
+"PO-Revision-Date: 2021-11-04 11:48+0000\n"
+"Last-Translator: fkrahl <Frank.Krahl@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
 "Language: de\n"
@@ -105,7 +105,7 @@ msgid "Add Table Widget"
 msgstr "Tabellenwidget hinzufügen"
 
 msgid "Add to Affected Assets"
-msgstr ""
+msgstr "zu betroffenen Assets hinzufügen"
 
 msgid "Add Widget"
 msgstr "Widget hinzufügen"
@@ -120,7 +120,7 @@ msgid "Administration"
 msgstr "Administration"
 
 msgid "Admin Manual"
-msgstr ""
+msgstr "Adminhandbuch"
 
 msgid "Admin Password"
 msgstr "Admin Passwort"
@@ -129,13 +129,13 @@ msgid "Advanced"
 msgstr "Erweitert"
 
 msgid ">> Advanced Options"
-msgstr ""
+msgstr ">> Erweiterte Optionen"
 
 msgid "Affected Assets"
 msgstr "Betroffene Assets"
 
 msgid "Affected Services"
-msgstr ""
+msgstr "Betroffene Services"
 
 msgid "after"
 msgstr "nach/größer als"
@@ -581,7 +581,7 @@ msgid "Config Item History"
 msgstr "Asset-Historie"
 
 msgid "Config Item ID"
-msgstr ""
+msgstr "Asset ID"
 
 msgid "Config Item Information"
 msgstr "Asset-Informationen"
@@ -620,7 +620,7 @@ msgid "contained in"
 msgstr "enthalten in"
 
 msgid "Contained in Affected Assets"
-msgstr ""
+msgstr "enthalten in betroffenen Assets"
 
 msgid "contains"
 msgstr "enthält"
@@ -632,7 +632,7 @@ msgid "Copy of {0}"
 msgstr "Kopie von {0}"
 
 msgid "Copy URL To Clipboard And Close"
-msgstr ""
+msgstr "URL in Zwischenablage kopieren und schließen"
 
 msgid "Could not handle request."
 msgstr "Anfrage konnte nicht bearbeitet werden."
@@ -728,13 +728,13 @@ msgid "Current version"
 msgstr "Aktuelle Version"
 
 msgid "Current Version"
-msgstr ""
+msgstr "Aktuelle Version"
 
 msgid "Customer"
 msgstr "Kunde"
 
 msgid "Customer Frontend"
-msgstr ""
+msgstr "Kundenfrontend"
 
 msgid "Customer Login"
 msgstr "Self Service Login"
@@ -1152,7 +1152,7 @@ msgid "FAQ Categories"
 msgstr "FAQ Kategorien"
 
 msgid "FAQ categories successfully removed."
-msgstr ""
+msgstr "FAQ Kategorien erfolgreich entfernt."
 
 msgid "FAQ Category"
 msgstr "FAQ Kategorie"
@@ -1215,7 +1215,7 @@ msgid "Field Information"
 msgstr "Feld Informationen"
 
 msgid "<< Field Options:"
-msgstr ""
+msgstr "<< Feld Optionen:"
 
 msgid "Field Type"
 msgstr "Feldtyp"
@@ -1264,6 +1264,8 @@ msgid ""
 "For a more intensive introduction to the use and administration of KIX, you "
 "will find the latest manuals in the online documentation."
 msgstr ""
+"Für weitere Informationen zur Verwendung und Administration von KIX finden "
+"Sie die aktuellen Handbücher in der Onlinedokumentation."
 
 msgid "Force"
 msgstr "Erzwingen"
@@ -1311,10 +1313,10 @@ msgid "General Catalog Items"
 msgstr "General Catalog Einträge"
 
 msgid "Generate New Token"
-msgstr ""
+msgstr "Neuen Benutzertoken generieren"
 
 msgid "Generate new user token"
-msgstr ""
+msgstr "Erstelle neuen Benutzertoken"
 
 msgid "Has access token"
 msgstr "Hat Zugriffstoken"
@@ -2998,7 +3000,7 @@ msgid "Link Type"
 msgstr "Art der Verknüpfung"
 
 msgid "Loading ..."
-msgstr ""
+msgstr "Lade ..."
 
 msgid "Localisation"
 msgstr "Lokalisierung"
@@ -3046,7 +3048,7 @@ msgid "Mail Filter Details"
 msgstr "Mailfilter Details"
 
 msgid "Manuals"
-msgstr ""
+msgstr "Handbücher"
 
 msgid "Menu"
 msgstr "Modulmenü"
@@ -3577,7 +3579,7 @@ msgid "Pending until"
 msgstr "Warten bis"
 
 msgid "Pending until: {0} ({1})"
-msgstr ""
+msgstr "warten bis: {0} ({1})"
 
 msgid "Permission"
 msgstr "Berechtigung"
@@ -4033,7 +4035,7 @@ msgid "Save Settings"
 msgstr "Einstellungen werden gespeichert."
 
 msgid "Save System Settings"
-msgstr ""
+msgstr "Systemeinstellungen speichern"
 
 msgid "Scheduling"
 msgstr "Zeitplanung"
@@ -4392,7 +4394,7 @@ msgid "System: Logs"
 msgstr "System: Logs"
 
 msgid "System Settings"
-msgstr ""
+msgstr "Systemeinstellungen"
 
 msgid "System: Sysconfig ({0})"
 msgstr "System: SysConfig ({0})"
@@ -4443,6 +4445,8 @@ msgid ""
 "Technical Customer Service mit KIX - work order documentation, checklists, "
 "scheduling, offline information for maintenance and repairs."
 msgstr ""
+"Technischer Kundenservice mit KIX - Arbeitsablaufdokumentation, Checklisten, "
+"Zeitplanung, Offline-Informationen für Wartung und Instandhaltung."
 
 msgid "Template"
 msgstr "Vorlage"
@@ -4472,6 +4476,8 @@ msgid ""
 "The following {0} entries and existing sub categories will be deleted. Are "
 "you sure?"
 msgstr ""
+"Die folgenden {0} Einträge und Unterkategorien werden gelöscht. Sind Sie "
+"sicher?"
 
 msgid "The following {0} entries will be deleted. Are you sure?"
 msgstr "Die ausgewählten {0} Einträge werden gelöscht. Sind Sie sicher?"
@@ -4602,6 +4608,9 @@ msgid ""
 "Tips for getting started quickly with KIX can be found on the KIX YouTube "
 "channel. In the forum you can also exchange ideas with other KIX users."
 msgstr ""
+"Tipps um schnell mit KIX starten zu können, finden Sie auf dem KIX YouTube "
+"Kanal. Nutzen Sie für einen Austausch mit anderen KIX Anwendern gern unser "
+"Forum."
 
 msgid "Title"
 msgstr "Titel"
@@ -4721,7 +4730,7 @@ msgid "User Information"
 msgstr "Nutzer Informationen"
 
 msgid "User is already assigned"
-msgstr ""
+msgstr "Nutzer ist bereits zugewiesen"
 
 msgid "User Management"
 msgstr "Nutzerverwaltung"
@@ -4733,7 +4742,7 @@ msgid "User Management: Users ({0})"
 msgstr "Nutzerverwaltung: Nutzer ({0})"
 
 msgid "User Manual"
-msgstr ""
+msgstr "Handbuch"
 
 msgid "User Name"
 msgstr "Nutzerkennung"
@@ -4742,7 +4751,7 @@ msgid "Users"
 msgstr "Nutzer"
 
 msgid "User Token"
-msgstr ""
+msgstr "Benutzertoken"
 
 msgid "Validation error"
 msgstr "Validierungsfehler"
