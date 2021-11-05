@@ -321,7 +321,6 @@ export class ArticleFormService extends KIXObjectFormService {
         let actions = [ArticleProperty.BCC];
         let referencedValue;
         const dialogContext = ContextService.getInstance().getActiveContext();
-        const referencedArticle = dialogContext ? await this.getReferencedArticle(dialogContext) : null;
         if (dialogContext && dialogContext.descriptor.contextMode !== ContextMode.CREATE) {
             property = ArticleProperty.TO;
             label = 'Translatable#To';
@@ -332,7 +331,7 @@ export class ArticleFormService extends KIXObjectFormService {
 
         let field = new FormFieldConfiguration(
             'recipient-input',
-            label, property, 'article-email-recipient-input', !!referencedArticle || property === ArticleProperty.TO,
+            label, property, 'article-email-recipient-input', property === ArticleProperty.TO,
             property === ArticleProperty.TO
                 ? 'Translatable#Helptext_Tickets_ArticleCreate_ReceiverTo'
                 : 'Translatable#Helptext_Tickets_ArticleCreate_ReceiverCc',
