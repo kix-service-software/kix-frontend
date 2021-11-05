@@ -4011,7 +4011,7 @@ msgstr ""
 "want to use team mail addresses as sender only, leave envelope inputs empty."
 
 msgid "setup_assistant_system_settings_text"
-msgstr ""
+msgstr "Change some system relevant settings."
 
 msgid "setup_assistant_welcome_text"
 msgstr ""
