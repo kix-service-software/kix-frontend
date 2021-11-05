@@ -116,7 +116,7 @@ export class ConfigItemChartFactory {
             for (const c of configItems) {
                 if (c[property]) {
                     const label = await LabelService.getInstance().getPropertyValueDisplayText(
-                        KIXObjectType.CONFIG_ITEM, property, c[property]
+                        KIXObjectType.CONFIG_ITEM, property, c[property], undefined, c
                     );
 
                     if (!result[0].some((l) => l === label)) {
