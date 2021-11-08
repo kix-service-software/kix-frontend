@@ -4181,7 +4181,7 @@ msgstr ""
 "Richten Sie den E-Mail Server ein, über den E-Mails versendet werden sollen."
 
 msgid "setup_assistant_system_settings_text"
-msgstr ""
+msgstr "Ändern Sie einige system-relevante Einstellungen."
 
 msgid "setup_assistant_welcome_text"
 msgstr ""
