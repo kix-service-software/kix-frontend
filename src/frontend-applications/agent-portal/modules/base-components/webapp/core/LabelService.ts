@@ -445,10 +445,13 @@ export class LabelService {
     }
 
     public async getPropertyValueDisplayText(
-        objectType: KIXObjectType | string, property: string, value: string | number, translatable?: boolean
+        objectType: KIXObjectType | string, property: string, value: string | number, translatable?: boolean,
+        object?: KIXObject
     ): Promise<string> {
-        const object = { KIXObjectType: objectType };
-        object[property] = value;
+        if (!object) {
+            object ||= { KIXObjectType: objectType } as KIXObject;
+            object[property] = value;
+        }
         return this.getDisplayText(object as any, property, value?.toString(), translatable);
     }
 
