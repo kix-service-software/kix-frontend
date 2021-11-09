@@ -77,10 +77,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             'FQDN-backend', 'Translatable#Backend', 'Backend', undefined, true, fqdnHint,
         );
         fqdnBackendField.readonly = fqdnReadonly;
-        const fqdnCustomerFrontendField = new FormFieldConfiguration(
-            'FQDN-customer-frontend', 'Translatable#Customer Frontend', 'CustomerFrontend', undefined, true, fqdnHint,
+        const fqdnSSPField = new FormFieldConfiguration(
+            'FQDN-ssp', 'Translatable#SSP', 'SSP', undefined, true, fqdnHint,
         );
-        fqdnCustomerFrontendField.readonly = fqdnReadonly;
+        fqdnSSPField.readonly = fqdnReadonly;
 
         const fqdnValue = sysconfigOptions.find((o) => o.Name === 'FQDN').Value ||
             sysconfigDefinitions.find((o) => o.Name === 'FQDN').Default;
@@ -89,14 +89,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (typeof objectValue === 'object') {
                 fqdnFrontendField.defaultValue = new FormFieldValue(objectValue['Frontend']);
                 fqdnBackendField.defaultValue = new FormFieldValue(objectValue['Backend']);
-                fqdnCustomerFrontendField.defaultValue = new FormFieldValue(objectValue['CustomerFrontend']);
+                fqdnSSPField.defaultValue = new FormFieldValue(objectValue['SSP']);
             }
         }
 
         const fqdnGroup = new FormGroupConfiguration(
             'setup-system-settings-fqdn-group', 'Translatable#FQDN', null, null,
             [
-                fqdnFrontendField, fqdnBackendField, fqdnCustomerFrontendField
+                fqdnFrontendField, fqdnBackendField, fqdnSSPField
             ]
         );
 
