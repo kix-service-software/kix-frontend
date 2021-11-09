@@ -733,9 +733,6 @@ msgstr "Aktuelle Version"
 msgid "Customer"
 msgstr "Kunde"
 
-msgid "Customer Frontend"
-msgstr "Kundenfrontend"
-
 msgid "Customer Login"
 msgstr "Self Service Login"
 
@@ -4283,6 +4280,9 @@ msgstr "Quelltext"
 msgid "Split Option"
 msgstr "Trennoptionen"
 
+msgid "SSP"
+msgstr ""
+
 msgid "Standard"
 msgstr "Standard"
 
@@ -4909,6 +4909,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Customer Frontend"
+#~ msgstr "Kundenfrontend"
 
 #~ msgid "Administrator's Guide"
 #~ msgstr "Handbuch für Administratoren"

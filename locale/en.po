@@ -720,9 +720,6 @@ msgstr ""
 msgid "Customer"
 msgstr "Customer"
 
-msgid "Customer Frontend"
-msgstr ""
-
 msgid "Customer Login"
 msgstr "Self Service Login"
 
@@ -4109,6 +4106,9 @@ msgid "Source Message"
 msgstr ""
 
 msgid "Split Option"
+msgstr ""
+
+msgid "SSP"
 msgstr ""
 
 msgid "Standard"
