@@ -40,6 +40,7 @@ import { Contact } from '../../../../customer/model/Contact';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { WindowListener } from '../../../../base-components/webapp/core/WindowListener';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -192,7 +193,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             BrowserUtil.toggleLoadingShield('SETUP_SUPERUSER_SHIELD', false);
 
             if (logout) {
-                BrowserUtil.logout();
+                WindowListener.getInstance().logout();
             }
         }
     }

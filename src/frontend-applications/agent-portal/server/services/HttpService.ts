@@ -22,6 +22,7 @@ import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { User } from '../../modules/user/model/User';
 import { PermissionError } from '../../modules/user/model/PermissionError';
 import { AxiosAdapter, AxiosError, AxiosRequestConfig } from 'axios';
+import { SocketAuthenticationError } from '../../modules/base-components/webapp/core/SocketAuthenticationError';
 
 
 export class HttpService {
@@ -88,7 +89,10 @@ export class HttpService {
         const requestPromise = this.executeRequest<T>(resource, token, clientRequestId, options);
         this.requestPromises.set(requestKey, requestPromise);
 
-        const response = await requestPromise.catch((): any => this.requestPromises.delete(requestKey));
+        const response = await requestPromise.catch((error): any => {
+            this.requestPromises.delete(requestKey);
+            throw error;
+        });
         if (useCache) {
             CacheService.getInstance().set(cacheKey, response, cacheKeyPrefix);
         }
@@ -166,6 +170,10 @@ export class HttpService {
     ): Promise<T> {
         const backendToken = AuthenticationService.getInstance().getBackendToken(token);
 
+        if (token && !backendToken) {
+            throw new SocketAuthenticationError('Invalid Token!');
+        }
+
         // extend options
         options.baseURL = this.apiURL;
         options.url = this.buildRequestUrl(resource);
@@ -202,8 +210,10 @@ export class HttpService {
                 );
             }
             ProfilingService.getInstance().stop(profileTaskId, { data: ['Error'] });
-            if (error.response.status === 403) {
+            if (error?.response?.status === 403) {
                 throw new PermissionError(this.createError(error), resource, options.method);
+            } else if (error?.response?.status === 401) {
+                throw new SocketAuthenticationError('Invalid Token!');
             } else {
                 throw this.createError(error);
             }

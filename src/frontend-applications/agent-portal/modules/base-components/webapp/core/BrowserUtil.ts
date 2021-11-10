@@ -271,11 +271,6 @@ export class BrowserUtil {
         );
     }
 
-    public static logout(): void {
-        ContextHistory.getInstance().removeBrowserListener();
-        window.location.replace('/auth/logout');
-    }
-
     public static getRandomColor(): string {
         const letters = '0123456789ABCDEF';
         let color = '#';

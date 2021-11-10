@@ -163,7 +163,7 @@ export class ContextNamespace extends SocketNameSpace {
         const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
             serverConfig.BACKEND_API_TOKEN, 'ContextConfiguration', KIXObjectType.SYS_CONFIG_OPTION, null,
             loadingOptions, null
-        ).catch((): SysConfigOption[] => []);
+        );
 
         const contextOptions = options.filter((c) => c.ContextMetadata === 'Context');
 

@@ -9,6 +9,10 @@
 
 import { ClientStorageService } from './ClientStorageService';
 import { io, Socket } from 'socket.io-client';
+import { SocketEvent } from './SocketEvent';
+import { WindowListener } from './WindowListener';
+import { SocketAuthenticationError } from './SocketAuthenticationError';
+import { BrowserUtil } from './BrowserUtil';
 
 export abstract class SocketClient {
 
@@ -33,15 +37,24 @@ export abstract class SocketClient {
 
         this.socket = io(socketUrl + '/' + this.namespace, options);
 
+        this.socket.on(SocketEvent.INVALID_TOKEN, () => {
+            console.error('Invalid Token! New login required.');
+            this.socket.close();
+            WindowListener.getInstance().logout();
+        });
+
         this.socket.on('error', (error) => {
             console.error(this.namespace);
             console.error(error);
+
+            if (error.name === 'SocketAuthenticationError') {
+                WindowListener.getInstance().logout();
+            }
         });
 
         this.socket.on('disconnect', () => {
             console.error(this.namespace);
-            console.warn('Disconnected from frontend server. Reconnect');
-            this.createSocket();
+            console.warn('Disconnected from frontend server.');
         });
 
         this.socket.on('reconnect', (number: number) => {

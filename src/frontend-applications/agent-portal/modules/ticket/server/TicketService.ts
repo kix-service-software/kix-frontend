@@ -35,8 +35,6 @@ import { RequestObject } from '../../../../../server/model/rest/RequestObject';
 import { SenderType } from '../model/SenderType';
 import { TicketLock } from '../model/TicketLock';
 import { Contact } from '../../customer/model/Contact';
-import { ObjectIcon } from '../../icon/model/ObjectIcon';
-import { TicketLabelProvider } from './TicketLabelProvider';
 import { CacheService } from '../../../server/services/cache';
 import { PersonalSettingsProperty } from '../../user/model/PersonalSettingsProperty';
 
