@@ -119,7 +119,7 @@ export class KIXModuleNamespace extends SocketNameSpace {
                 const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
                     serverConfig.BACKEND_API_TOKEN, 'FormConfiguration', KIXObjectType.SYS_CONFIG_OPTION, null,
                     loadingOptions, null
-                ).catch((): SysConfigOption[] => []);
+                );
 
                 const formOptions = options.filter((c) => c.ContextMetadata === 'Form');
 

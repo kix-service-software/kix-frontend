@@ -90,8 +90,7 @@ export class KIXObjectSocketClient extends SocketClient {
     ): Promise<T[]> {
         const response = await this.sendRequest<LoadObjectsResponse<T>>(
             request,
-            KIXObjectEvent.LOAD_OBJECTS, KIXObjectEvent.LOAD_OBJECTS_FINISHED, KIXObjectEvent.LOAD_OBJECTS_ERROR,
-            timeout
+            KIXObjectEvent.LOAD_OBJECTS, KIXObjectEvent.LOAD_OBJECTS_FINISHED, timeout
         ).catch((error): LoadObjectsResponse<T> => {
             if (error instanceof PermissionError) {
                 return new LoadObjectsResponse(request.clientRequestId, []);
@@ -138,7 +137,7 @@ export class KIXObjectSocketClient extends SocketClient {
 
         const response = await this.sendRequest<CreateObjectResponse>(
             request,
-            KIXObjectEvent.CREATE_OBJECT, KIXObjectEvent.CREATE_OBJECT_FINISHED, KIXObjectEvent.CREATE_OBJECT_ERROR, -1
+            KIXObjectEvent.CREATE_OBJECT, KIXObjectEvent.CREATE_OBJECT_FINISHED, -1
         );
 
         BrowserCacheService.getInstance().deleteKeys(cacheKeyPrefix);
@@ -162,7 +161,7 @@ export class KIXObjectSocketClient extends SocketClient {
 
         const response = await this.sendRequest<UpdateObjectResponse>(
             request,
-            KIXObjectEvent.UPDATE_OBJECT, KIXObjectEvent.UPDATE_OBJECT_FINISHED, KIXObjectEvent.UPDATE_OBJECT_ERROR, -1
+            KIXObjectEvent.UPDATE_OBJECT, KIXObjectEvent.UPDATE_OBJECT_FINISHED, -1
         );
 
         BrowserCacheService.getInstance().deleteKeys(cacheKeyPrefix);
@@ -188,7 +187,7 @@ export class KIXObjectSocketClient extends SocketClient {
 
         await this.sendRequest<DeleteObjectResponse>(
             request,
-            KIXObjectEvent.DELETE_OBJECT, KIXObjectEvent.DELETE_OBJECT_FINISHED, KIXObjectEvent.DELETE_OBJECT_ERROR, -1
+            KIXObjectEvent.DELETE_OBJECT, KIXObjectEvent.DELETE_OBJECT_FINISHED, -1
         );
 
         BrowserCacheService.getInstance().deleteKeys(cacheKeyPrefix);
@@ -196,8 +195,7 @@ export class KIXObjectSocketClient extends SocketClient {
     }
 
     private async sendRequest<T extends ISocketResponse>(
-        requestObject: ISocketObjectRequest, event: string, finishEvent: string, errorEvent: any,
-        defaultTimeout?: number
+        requestObject: ISocketObjectRequest, event: string, finishEvent: string, defaultTimeout?: number
     ): Promise<T> {
         this.checkSocketConnection();
 
@@ -223,7 +221,7 @@ export class KIXObjectSocketClient extends SocketClient {
                 }
             });
 
-            this.socket.on(errorEvent, (error: SocketErrorResponse) => {
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestObject.requestId) {
                     window.clearTimeout(timeout);
                     const errorMessage = `Socket Error: Event - ${event}, Object - ${requestObject.objectType}`;
