@@ -245,6 +245,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
             if (isPending) {
                 const pendingSchedule = { ...schedule };
+                pendingSchedule.id = 'pending-' + pendingSchedule.id;
 
                 const pendingDate = new Date(ticket.PendingTime);
                 pendingSchedule.start = pendingDate;
@@ -300,7 +301,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
             const today = new Date();
 
-            if (schedule.raw.StateType === 'pending reminder' && schedule.calendarId === 'pending') {
+            if (schedule.raw.StateType === 'pending reminder' && isNaN(Number(schedule.id))) {
                 if (changes.start) {
                     if (today > changes.start.toDate()) {
                         BrowserUtil.openErrorOverlay('Translatable#Pending date is not in the future.');
@@ -336,7 +337,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
 
             if (parameter.length) {
-                KIXObjectService.updateObject(KIXObjectType.TICKET, parameter, schedule.id)
+                const id = isNaN(Number(schedule.id)) ? schedule.id.replace(/^pending-/, '') : schedule.id;
+                KIXObjectService.updateObject(KIXObjectType.TICKET, parameter, id)
                     .then(() => {
                         this.calendar.updateSchedule(schedule.id, schedule.calendarId, changes);
                         if (this.widgetConfiguration.contextDependent) {
@@ -390,7 +392,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             );
 
             if (tickets && tickets.length) {
-                const content = template.renderSync({ ticket: tickets[0], calendarConfig: this.calendarConfig });
+                const content = template.renderSync({
+                    ticket: tickets[0], calendarConfig: this.calendarConfig,
+                    isPending: isNaN(Number(schedule.id))
+                });
 
                 setTimeout(() => {
                     const items = document.getElementsByClassName('tui-full-calendar-popup-container');
