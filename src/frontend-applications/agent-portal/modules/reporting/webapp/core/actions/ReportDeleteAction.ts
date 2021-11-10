@@ -63,7 +63,7 @@ export class ReportDeleteAction extends AbstractAction {
     }
 
     private async deleteReport(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext() as ReportingContext;
+        const context = ContextService.getInstance().getActiveContext<ReportingContext>();
         if (context) {
             EventService.getInstance().publish(
                 ApplicationEvent.APP_LOADING, { loading: true, hint: 'Deleting Reports' }
@@ -84,6 +84,7 @@ export class ReportDeleteAction extends AbstractAction {
             }
 
             setTimeout(() => {
+                context.loadReportDefinitions();
                 const content = new ComponentContent(
                     'toast',
                     new ToastContent('kix-icon-check', 'Translatable#Report(s) deleted.')
