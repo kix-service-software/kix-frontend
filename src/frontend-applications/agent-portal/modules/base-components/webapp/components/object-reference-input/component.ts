@@ -212,7 +212,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                 : [formValue.value];
 
             let selectedNodes = [];
-
+            let success = false;
             if (this.autocomplete) {
                 const idsToLoad = objectIds.filter((id) => typeof id !== 'string' || !id.match(/<KIX_.+>/));
                 if (idsToLoad.length) {
@@ -229,14 +229,15 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                             node.selected = true;
                             selectedNodes.push(node);
                         }
-
                     }
+                    success = true;
                 }
             } else {
                 const objectOption = this.state.field?.options.find(
                     (o) => o.option === ObjectReferenceOptions.OBJECT
                 );
                 if (objectOption) {
+                    success = true;
                     // filter placeholder values
                     const loadIds = objectIds.filter((id) => typeof id !== 'string' || !id.match(/<KIX_.+>/));
                     if (loadIds.length) {
@@ -262,7 +263,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                 }
             }
 
-            if (this.state.freeText) {
+            if (this.state.freeText || !success) {
                 const freeTextNodes = objectIds
                     .filter((oid) => !selectedNodes.some((sn) => sn.id.toString() === oid.toString()))
                     .map((v) => new TreeNode(v, v?.toString()));
