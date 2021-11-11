@@ -7,21 +7,43 @@
  * --
  */
 
-import { IUIModule } from '../../../../model/IUIModule';
-import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
-import { CMDBService, ConfigItemFormService, ConfigItemTableFactory, ConfigItemVersionTableFactory, CompareConfigItemVersionTableFactory, ConfigItemHistoryTableFactory, ConfigItemLabelProvider, ConfigItemClassLabelProvider, ConfigItemClassDefinitionLabelProvider, ConfigItemHistoryLabelProvider, ConfigItemVersionLabelProvider, ConfigItemVersionCompareLabelProvider, ConfigItemSearchDefinition, CMDBContext, ConfigItemDetailsContext, ConfigItemSearchContext, CompareConfigItemVersionContext, ConfigItemVersionCompareAction } from '.';
-import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { TableFactoryService, TableCSSHandlerRegistry } from '../../../base-components/webapp/core/table';
-import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
-import { SearchService } from '../../../search/webapp/core';
-import { PostproductivCSSHandler } from './table/PostproductivCSSHandler';
-import { ContextDescriptor } from '../../../../model/ContextDescriptor';
-import { ContextType } from '../../../../model/ContextType';
-import { ContextMode } from '../../../../model/ContextMode';
-import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
-import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
-import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import {
+    CMDBContext,
+    CMDBService,
+    CompareConfigItemVersionContext,
+    CompareConfigItemVersionTableFactory,
+    ConfigItemClassDefinitionLabelProvider,
+    ConfigItemClassLabelProvider,
+    ConfigItemDetailsContext,
+    ConfigItemFormService,
+    ConfigItemHistoryLabelProvider,
+    ConfigItemHistoryTableFactory,
+    ConfigItemLabelProvider,
+    ConfigItemSearchContext,
+    ConfigItemSearchDefinition,
+    ConfigItemTableFactory,
+    ConfigItemVersionCompareAction,
+    ConfigItemVersionCompareLabelProvider,
+    ConfigItemVersionLabelProvider,
+    ConfigItemVersionTableFactory
+} from '.';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ContextType } from '../../../../model/ContextType';
+import { IUIModule } from '../../../../model/IUIModule';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { ActionFactory } from '../../../base-components/webapp/core/ActionFactory';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { LabelService } from '../../../base-components/webapp/core/LabelService';
+import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
+import { TableCSSHandlerRegistry, TableFactoryService } from '../../../base-components/webapp/core/table';
+import { SearchService } from '../../../search/webapp/core';
+import { SysConfigService } from '../../../sysconfig/webapp/core';
+import ConfigItemPrintAction from './actions/ConfigItemPrintAction';
+import ConfigItemPrintSelectionAction from './actions/ConfigItemPrintSelectionAction';
+import { PostproductivCSSHandler } from './table/PostproductivCSSHandler';
 
 export class UIModule implements IUIModule {
 
@@ -103,6 +125,8 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction(
             'config-item-version-compare-action', ConfigItemVersionCompareAction
         );
+        ActionFactory.getInstance().registerAction('config-item-print-action', ConfigItemPrintAction);
+        ActionFactory.getInstance().registerAction('config-item-print-selection-action', ConfigItemPrintSelectionAction);
     }
 
 }

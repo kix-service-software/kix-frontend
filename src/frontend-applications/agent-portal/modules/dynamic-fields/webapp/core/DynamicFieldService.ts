@@ -16,12 +16,6 @@ import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpec
 import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { DynamicFieldType } from '../../model/DynamicFieldType';
-import { FilterCriteria } from '../../../../model/FilterCriteria';
-import { DynamicFieldProperty } from '../../model/DynamicFieldProperty';
-import { SearchOperator } from '../../../search/model/SearchOperator';
-import { FilterDataType } from '../../../../model/FilterDataType';
-import { FilterType } from '../../../../model/FilterType';
-import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 
 export class DynamicFieldService extends KIXObjectService<DynamicField> {
 
@@ -44,7 +38,7 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
         this.objectConstructors.set(KIXObjectType.DYNAMIC_FIELD_TYPE, [DynamicFieldType]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.DYNAMIC_FIELD
             || kixObjectType === KIXObjectType.DYNAMIC_FIELD_TYPE;
     }

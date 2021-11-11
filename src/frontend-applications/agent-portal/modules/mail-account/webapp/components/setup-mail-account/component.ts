@@ -44,7 +44,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.prepared = true;
     }
 
-    public onInput(input: any) {
+    public onInput(input: any): void {
         this.step = input.step;
         this.update = this.step && this.step.result && this.step.result.accountId;
         this.state.completed = this.step ? this.step.completed : false;

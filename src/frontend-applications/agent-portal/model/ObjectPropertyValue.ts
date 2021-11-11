@@ -12,6 +12,7 @@ import { KIXObject } from './kix/KIXObject';
 import { KIXObjectType } from './kix/KIXObjectType';
 import { IdService } from './IdService';
 import { ObjectPropertyValueOption } from './ObjectPropertyValueOption';
+import { FormFieldOption } from './configuration/FormFieldOption';
 
 export class ObjectPropertyValue {
 
@@ -26,7 +27,7 @@ export class ObjectPropertyValue {
         public readonly: boolean = false,
         public changeable: boolean = true,
         public id: string = IdService.generateDateBasedId('value-'),
-        public additionalOptions: any = null
+        public additionalOptions: FormFieldOption[] = null
     ) { }
 
 }

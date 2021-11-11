@@ -44,7 +44,7 @@ export class ArticleGetPlainAction extends AbstractAction {
         return show;
     }
 
-    private async getArticle(objectId: string | number) {
+    private async getArticle(objectId: string | number): Promise<Article> {
         const articles = await KIXObjectService.loadObjects<Article>(
             KIXObjectType.ARTICLE, [this.articleId],
             new KIXObjectLoadingOptions(

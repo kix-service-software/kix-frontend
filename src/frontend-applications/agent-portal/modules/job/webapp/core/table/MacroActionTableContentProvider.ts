@@ -61,7 +61,7 @@ export class MacroActionTableContentProvider extends TableContentProvider<any> {
         return rowObjects;
     }
 
-    private async getPreparedParameters(o: MacroAction, macroType: string) {
+    private async getPreparedParameters(o: MacroAction, macroType: string): Promise<any> {
         let preparedParameters = {};
         const actionTypes = await KIXObjectService.loadObjects<MacroActionType>(
             KIXObjectType.MACRO_ACTION_TYPE, [o.Type], undefined, { id: macroType }, true

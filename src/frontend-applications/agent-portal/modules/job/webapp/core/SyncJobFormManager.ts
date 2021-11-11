@@ -10,7 +10,6 @@
 import { AbstractJobFormManager } from './AbstractJobFormManager';
 import { FormPageConfiguration } from '../../../../model/configuration/FormPageConfiguration';
 import { ExecPlanTypes } from '../../model/ExecPlanTypes';
-import { FormContext } from '../../../../model/configuration/FormContext';
 import { Job } from '../../model/Job';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 

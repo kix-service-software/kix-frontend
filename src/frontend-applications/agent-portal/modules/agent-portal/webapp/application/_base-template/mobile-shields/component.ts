@@ -31,7 +31,7 @@ class Component {
 
         ContextService.getInstance().registerListener({
             constexServiceListenerId: 'mobile-shields',
-            contextChanged: (contextId: string, context: Context, type: ContextType) => {
+            contextChanged: (contextId: string, context: Context, type: ContextType): void => {
                 this.closeMobile();
             },
             contextRegistered: () => { return; }
@@ -39,7 +39,7 @@ class Component {
 
         this.eventSubscriber = {
             eventSubscriberId: 'mobile-shields',
-            eventPublished: (data, eventId: MobileShowEvent | string) => {
+            eventPublished: (data, eventId: MobileShowEvent | string): void => {
                 this.state.activeMobile =
                     (data === MobileShowEventData.SHOW_TOOLBAR || data === MobileShowEventData.SHOW_RIGHT_SIDEBAR) ?
                         2 : data ? 1 : null;

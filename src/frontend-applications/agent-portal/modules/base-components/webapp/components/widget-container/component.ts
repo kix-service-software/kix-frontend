@@ -70,7 +70,7 @@ class Component {
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('widget-container'),
-            eventPublished: (data: any) => {
+            eventPublished: (data: any): void => {
                 if (this.state.configurationMode) {
                     this.disableConfigurationMode(data.cancel);
                 } else {

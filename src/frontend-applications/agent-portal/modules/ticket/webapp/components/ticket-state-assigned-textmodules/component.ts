@@ -11,7 +11,6 @@ import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { TicketStateDetailsContext } from '../../core';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { TableEvent, TableFactoryService, TableEventData } from '../../../../base-components/webapp/core/table';
@@ -72,7 +71,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.tableSubscriber = {
             eventSubscriberId: 'ticket-admin-priorities-table-listener',
-            eventPublished: (data: TableEventData, eventId: string) => {
+            eventPublished: (data: TableEventData, eventId: string): void => {
                 if (data && data.tableId === table.getTableId()) {
                     if (eventId === TableEvent.TABLE_READY || eventId === TableEvent.TABLE_INITIALIZED) {
                         this.state.filterCount = this.state.table.isFiltered()

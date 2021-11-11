@@ -59,7 +59,7 @@ class Component {
         }
     }
 
-    public showOverlay(event: any) {
+    public showOverlay(event: any): void {
         if (event) {
             event.stopPropagation();
             event.preventDefault();

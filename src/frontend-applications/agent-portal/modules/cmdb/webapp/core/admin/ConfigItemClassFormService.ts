@@ -28,7 +28,7 @@ export class ConfigItemClassFormService extends KIXObjectFormService {
         super();
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.CONFIG_ITEM_CLASS;
     }
 

@@ -47,6 +47,16 @@ export class SysConfigPlaceholderHandler extends AbstractPlaceholderHandler {
                 case SysConfigOptionType.TEXTAREA:
                     result = value;
                     break;
+                case SysConfigOptionType.HASH:
+                    const optionString: string = PlaceholderService.getInstance().getOptionsString(placeholder);
+                    if (optionString && typeof value[optionString] === 'string') {
+                        result = value[optionString];
+                    }
+                    // special handling for <KIX_CONFIG_FQDN> (without optionString)
+                    else if (sysConfigName === 'FQDN') {
+                        result = value['Frontend'] || null;
+                    }
+                    break;
                 default:
             }
             if (typeof result !== 'undefined' && result !== null && result !== '' && language !== 'en') {

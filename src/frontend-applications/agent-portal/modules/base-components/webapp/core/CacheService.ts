@@ -177,6 +177,7 @@ export class BrowserCacheService {
             case KIXObjectType.USER:
                 cacheKeyPrefixes.push(KIXObjectType.ROLE);
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
+                cacheKeyPrefixes.push(KIXObjectType.REPORT_DEFINITION);
                 break;
             case KIXObjectType.LINK:
             case KIXObjectType.LINK_OBJECT:
@@ -232,9 +233,13 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.GENERAL_CATALOG_CLASS);
                 break;
             case KIXObjectType.SYS_CONFIG_OPTION_DEFINITION:
+                cacheKeyPrefixes.push(KIXObjectType.SYS_CONFIG_OPTION);
+                cacheKeyPrefixes.push(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION);
+                break;
             case KIXObjectType.SYS_CONFIG_OPTION:
                 cacheKeyPrefixes.push(KIXObjectType.SYS_CONFIG_OPTION);
                 cacheKeyPrefixes.push(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION);
+                cacheKeyPrefixes.push(KIXObjectType.REPORT_DEFINITION);
                 break;
             case KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN:
                 cacheKeyPrefixes.push(KIXObjectType.IMPORT_EXPORT_TEMPLATE);

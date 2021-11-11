@@ -41,7 +41,7 @@ export class ProfilingService {
         }
     }
 
-    public start(category: string, message: string, inputData?: any): string {
+    public start(category: string, message: string, inputData?: ProfilingData): string {
         if (!this.active) {
             return null;  // invalid task ID
         }
@@ -63,7 +63,7 @@ export class ProfilingService {
         return task.id;
     }
 
-    public stop(profileTaskId: string, outputData?: any): void {
+    public stop(profileTaskId: string, outputData?: ProfilingData): void {
         if (!this.active) {
             return;
         }
@@ -94,19 +94,28 @@ class ProfileTask {
     public inputDataSize: number = 0;
     public outputDataSize: number = 0;
 
-    public constructor(public category: string, public message: string, public counter: number, inputData: any) {
+    public constructor(
+        public category: string, public message: string, public counter: number, inputData: ProfilingData
+    ) {
         this.startTime = new Date().getTime();
         this.message = this.message.replace(new RegExp('"Content":".*="'), '"Content":"..."');
         if (inputData) {
-            this.inputDataSize = JSON.stringify(inputData).length;
+            this.inputDataSize = JSON.stringify(inputData.data).length;
         }
     }
 
-    public stop(outputData?: any): void {
+    public stop(outputData?: ProfilingData): void {
         this.endTime = new Date().getTime();
         this.duration = this.endTime - this.startTime;
         if (outputData) {
-            this.outputDataSize = JSON.stringify(outputData).length;
+            this.outputDataSize = JSON.stringify(outputData.data).length;
         }
     }
+}
+
+
+interface ProfilingData {
+
+    data: Array<unknown>;
+
 }

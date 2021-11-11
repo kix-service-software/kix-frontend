@@ -35,7 +35,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.context = ContextService.getInstance().getActiveContext();
         this.subscriber = {
             eventSubscriberId: 'object-details',
-            eventPublished: (data: any, eventId: string) => {
+            eventPublished: (data: any, eventId: string): void => {
                 if (eventId === ApplicationEvent.OBJECT_UPDATED) {
                     if (data.objectType === this.context.descriptor.kixObjectTypes[0]) {
                         this.prepareWidget();
@@ -51,13 +51,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async update(): Promise<void> {
-        const start = Date.now();
         this.prepareConfigurations();
         this.prepareWidget();
         this.prepareActions();
-        const end = Date.now();
-        const date = await DateTimeUtil.getLocalDateTimeString(new Date());
-        console.debug(`${date} - Updated Details Page: ${end - start}ms`);
     }
 
     public onDestroy(): void {

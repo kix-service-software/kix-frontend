@@ -48,7 +48,8 @@ export class UserService extends KIXObjectAPIService {
 
     public isServiceFor(kixObjectType: KIXObjectType | string): boolean {
         return kixObjectType === KIXObjectType.USER
-            || kixObjectType === KIXObjectType.USER_PREFERENCE;
+            || kixObjectType === KIXObjectType.USER_PREFERENCE
+            || kixObjectType === KIXObjectType.CURRENT_USER;
     }
 
     public async loadObjects<T>(
@@ -206,6 +207,15 @@ export class UserService extends KIXObjectAPIService {
                 token, clientRequestId, parameter, uri, objectType, 'UserPreferenceID'
             );
             return id;
+        } else if (objectType === KIXObjectType.CURRENT_USER) {
+            const uri = this.buildUri('session', 'user');
+            const id = await super.executeUpdateOrCreateRequest(
+                token, clientRequestId, parameter, uri, this.objectType, 'UserID'
+            ).catch((error: Error) => {
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                throw new Error(error.Code, error.Message);
+            });
+            return id;
         }
     }
 
@@ -251,7 +261,8 @@ export class UserService extends KIXObjectAPIService {
 
         parameter = parameter.filter((p) =>
             p[0] !== PersonalSettingsProperty.CURRENT_PASSWORD &&
-            p[0] !== PersonalSettingsProperty.USER_PASSWORD_CONFIRM
+            p[0] !== PersonalSettingsProperty.USER_PASSWORD_CONFIRM &&
+            p[0] !== PersonalSettingsProperty.USER_TOKEN
         );
 
         for (const param of parameter) {
@@ -264,16 +275,12 @@ export class UserService extends KIXObjectAPIService {
                     );
                 }
             } else if (currentPreferences.some((p) => p.ID === param[0])) {
-                const paramValue = param[1] === null ? '' : param[1];
                 if (
-                    paramValue && (
-                        typeof paramValue === 'string' ||
-                        (Array.isArray(paramValue) && paramValue.length) ||
-                        typeof paramValue === 'number'
-                    )
+                    typeof param[1] !== 'undefined' &&
+                    param[1] !== null
                 ) {
                     await this.updateObject(
-                        token, clientRequestId, KIXObjectType.USER_PREFERENCE, [['Value', paramValue]],
+                        token, clientRequestId, KIXObjectType.USER_PREFERENCE, [['Value', param[1]]],
                         param[0], options
                     ).catch((error: Error) => {
                         errors.push(error);

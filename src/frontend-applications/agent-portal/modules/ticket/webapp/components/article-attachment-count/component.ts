@@ -10,8 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { TicketDetailsContext } from '../../core';
-import { Ticket } from '../../../model/Ticket';
 import { Article } from '../../../model/Article';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 

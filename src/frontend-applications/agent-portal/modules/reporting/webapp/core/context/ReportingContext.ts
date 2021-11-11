@@ -39,7 +39,7 @@ export class ReportingContext extends Context {
         return await TranslationService.translate('Translatable#Reporting');
     }
 
-    public setFilteredObjectList(objectType: KIXObjectType, filteredObjectList: KIXObject[]) {
+    public setFilteredObjectList(objectType: KIXObjectType, filteredObjectList: KIXObject[]): void {
         super.setFilteredObjectList(objectType, filteredObjectList);
 
         if (objectType === KIXObjectType.REPORT_DEFINITION) {

@@ -28,6 +28,9 @@ import { PersonalSettingsProperty } from '../../user/model/PersonalSettingsPrope
 import { Contact } from '../model/Contact';
 import { SearchOperator } from '../../search/model/SearchOperator';
 import { ObjectIcon } from '../../icon/model/ObjectIcon';
+import { FilterDataType } from '../../../model/FilterDataType';
+import { FilterType } from '../../../model/FilterType';
+import { SearchProperty } from '../../search/model/SearchProperty';
 
 export class ContactAPIService extends KIXObjectAPIService {
 
@@ -249,11 +252,23 @@ export class ContactAPIService extends KIXObjectAPIService {
     }
 
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        const searchCriteria = criteria.filter(
+        let searchCriteria = criteria.filter(
             (f) => f.property !== ContactProperty.PRIMARY_ORGANISATION_ID
                 && f.property !== KIXObjectProperty.VALID_ID
+                && f.property !== SearchProperty.PRIMARY
                 && (f.operator !== SearchOperator.IN || f.property === ContactProperty.EMAIL)
         );
+
+        const primary = criteria.find((f) => f.property === SearchProperty.PRIMARY);
+        if (primary) {
+            const primarySearch = [
+                new FilterCriteria(
+                    ContactProperty.EMAIL, SearchOperator.LIKE,
+                    FilterDataType.STRING, FilterType.OR, `${primary.value}`
+                ),
+            ];
+            searchCriteria = [...searchCriteria, ...primarySearch];
+        }
 
         const loginProperty = searchCriteria.find((sc) => sc.property === UserProperty.USER_LOGIN);
         if (loginProperty) {

@@ -11,27 +11,35 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <if(!state.loading)>
         <widget
             instanceId="web-form-code-group"
-            title=state.translations["Translatable#Include this code into the <head> area of your webpage."]>
+            title=(
+                state.translations[
+                    "Translatable#Include this code into the <head> area of your webpage."
+                ]
+            )
+        >
             <@content>
                 <if(state.headCode)>
                     <p>
-                        <translation-string pattern="Translatable#Do not forget to replace <YOUR_FRONTEND_HOST> placeholder."/>
+                        <translation-string pattern="Translatable#Do not forget to replace the <YOUR_FRONTEND_HOST> placeholder (if it is not already)."/>
                     </p>
-                    <editor readOnly=true value=state.headCode useReadonlyStyle=true/>
+                    <editor readOnly value=state.headCode useReadonlyStyle/>
                 </if>
             </@content>
         </widget>
         <widget
             instanceId="web-form-code-group"
-            title=state.translations["Translatable#Place this code wherever you want to open the webform dialog."]>
+            title=(
+                state.translations[
+                    "Translatable#Place this code wherever you want to open the webform dialog."
+                ]
+            )
+        >
             <@content>
                 <if(state.buttonCode)>
-                    <editor readOnly=true value=state.buttonCode useReadonlyStyle=true/>
+                    <editor readOnly value=state.buttonCode useReadonlyStyle/>
                 </if>
             </@content>
         </widget>
     </if>
-    <else>
-        <table-placeholder/>
-    </else>
+    <else><table-placeholder/></else>
 </div>

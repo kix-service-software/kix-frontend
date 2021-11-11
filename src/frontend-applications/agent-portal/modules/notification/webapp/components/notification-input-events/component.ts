@@ -14,7 +14,6 @@ import { TreeNode, TreeService } from '../../../../base-components/webapp/core/t
 import { NotificationService } from '../../core';
 import { NotificationProperty } from '../../../model/NotificationProperty';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { FormService } from '../../../../base-components/webapp/core/FormService';
 
 class Component extends FormInputComponent<string[], ComponentState> {
 

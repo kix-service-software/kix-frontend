@@ -9,10 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { FAQCategoryLabelProvider } from '../../../../core';
-import { FAQCategoryDetailsContext } from '../../../../core/admin';
-import {
-    AbstractMarkoComponent
-} from '../../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+import { AbstractMarkoComponent } from '../../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../../../../modules/base-components/webapp/core/ContextService';
 import { FAQCategory } from '../../../../../model/FAQCategory';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
@@ -32,17 +29,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.labelProvider = new FAQCategoryLabelProvider();
         const context = ContextService.getInstance().getActiveContext();
         context.registerListener('faq-category-info-widget', {
-            sidebarRightToggled: () => { return; },
-            sidebarLeftToggled: () => { return; },
+            sidebarRightToggled: (): void => { return; },
+            sidebarLeftToggled: (): void => { return; },
             objectListChanged: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            filteredObjectListChanged: (): void => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: async (categoryId: string, faqCategory: FAQCategory, type: KIXObjectType | string) => {
                 if (type === KIXObjectType.FAQ_CATEGORY) {
                     this.initWidget(faqCategory);
                 }
             },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
         this.state.widgetConfiguration = context
             ? await context.getWidgetConfiguration(this.state.instanceId)

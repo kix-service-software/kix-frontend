@@ -19,6 +19,8 @@ export enum SocketEvent {
 
     PERMISSION_ERROR = 'PERMISSION_ERROR',
 
-    ERROR = 'ERROR'
+    ERROR = 'ERROR',
+
+    INVALID_TOKEN = 'INVALID_TOKEN'
 
 }

@@ -7,16 +7,13 @@
  * --
  */
 
-import {
-    Table, TableHeaderHeight, TableRowHeight
-} from '../../../base-components/webapp/core/table';
+import { Table, TableHeaderHeight, TableRowHeight } from '../../../base-components/webapp/core/table';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TableFactory } from '../../../base-components/webapp/core/table/TableFactory';
 import { DynamicFieldProperty } from '../../model/DynamicFieldProperty';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { IColumnConfiguration } from '../../../../model/configuration/IColumnConfiguration';
 import { DynamicFieldTableContentProvider } from './DynamicFieldTableContentProvider';
-import { ContextMode } from '../../../../model/ContextMode';
 import { TableConfiguration } from '../../../../model/configuration/TableConfiguration';
 import { DefaultColumnConfiguration } from '../../../../model/configuration/DefaultColumnConfiguration';
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';

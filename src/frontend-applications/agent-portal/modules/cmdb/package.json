@@ -1,6 +1,11 @@
 {
     "name": "kix-module-cmdb",
     "extensions": {
+        "kix:router": {
+            "config-item-print-router": {
+                "module": "router.extension"
+            }
+        },
         "kix:services": {
             "cmdb-service": {
                 "module": "service.extension"
@@ -23,7 +28,7 @@
         },
         "kix:configuration": {
             "new-config-item-dialog-configuration": {
-                "module": " new-config-item-dialog-configuration.extension"
+                "module": "new-config-item-dialog-configuration.extension"
             },
             "config-item-details-configuration": {
                 "module": "config-item-details-configuration.extension"

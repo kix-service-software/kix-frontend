@@ -23,6 +23,7 @@ import { ObjectReferenceOptions } from '../../core/ObjectReferenceOptions';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { SearchDefinition } from '../../../../search/webapp/core';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { BrowserUtil } from '../../core/BrowserUtil';
 
 
 export class DynamicFormFieldValue {
@@ -137,7 +138,7 @@ export class DynamicFormFieldValue {
                 this.valueTreeHandler.setTree([]);
             }
 
-            this.value.additionalOptions = null;
+            this.value.additionalOptions = await this.manager.getAdditionalOptions(property);
         }
 
         // get label (needed if field is required)
@@ -310,7 +311,10 @@ export class DynamicFormFieldValue {
                 }
             } else if (this.isDropdown && this.isAutocomplete) {
                 const selectValues = Array.isArray(this.value.value) ? this.value.value : [this.value.value];
-                currentValues = await this.manager.getTreeNodes(this.value.property, selectValues);
+                currentValues = await this.manager.getTreeNodes(
+                    // filter placeholder values
+                    this.value.property, selectValues.filter((v) => typeof v !== 'string' || !v.match(/<KIX_.+>/))
+                );
                 this.valueTreeHandler.setTree(currentValues);
                 if (this.isFreeText) {
                     this.valueTreeHandler.setSelection(
@@ -395,10 +399,9 @@ export class DynamicFormFieldValue {
                 } else {
                     this.numberValue = !isNaN(this.value.value) ? this.value.value : null;
                 }
-            } else if (this.isRelativeTime) {
-                const parts = this.value.value.match(/^(\d+)(\w+)$/);
-                this.relativeTimeValue = parts[1];
-                this.relativeTimeUnit = parts[2];
+            } else if (this.isRelativeTime && Array.isArray(this.value.value)) {
+                this.relativeTimeValue = this.value.value[0];
+                this.relativeTimeUnit = this.value.value[1];
                 const node = TreeUtil.findNode(this.relativeTimeUnitTreeHandler.getTree(), this.relativeTimeUnit);
                 currentValues.push(node);
             } else if (!this.isSpecificInput) {

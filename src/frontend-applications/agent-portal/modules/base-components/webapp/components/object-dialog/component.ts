@@ -11,7 +11,8 @@ import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
-import { ObjectDialogUtil } from '../../core/ObjectDialogUtil';
+import { ObjectDialogService } from '../../core/ObjectDialogService';
+import { AdditionalContextInformation } from '../../core/AdditionalContextInformation';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -24,15 +25,22 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             'Translatable#Cancel', 'Translatable#Save'
         ]);
 
+        this.state.submitButtonText = this.state.translations['Translatable#Save'];
+
         const context = ContextService.getInstance().getActiveContext();
         if (context) {
+            const submitButtonText = context.getAdditionalInformation(
+                AdditionalContextInformation.DIALOG_SUBMIT_BUTTON_TEXT
+            );
+            if (submitButtonText) {
+                this.state.submitButtonText = await TranslationService.translate(submitButtonText);
+            }
             this.state.widgets = await context.getContent();
         }
     }
 
     public async submit(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        await ObjectDialogUtil.submit();
+        await ObjectDialogService.getInstance().submit();
     }
 
     public async cancel(): Promise<void> {

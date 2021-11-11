@@ -10,13 +10,10 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { ContextType } from '../../../../../model/ContextType';
 import { IdService } from '../../../../../model/IdService';
 import { MailAccount } from '../../../model/MailAccount';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import {
-    ObjectInformationWidgetConfiguration
-} from '../../../../../model/configuration/ObjectInformationWidgetConfiguration';
+import { ObjectInformationWidgetConfiguration } from '../../../../../model/configuration/ObjectInformationWidgetConfiguration';
 import { MailAccountProperty } from '../../../model/MailAccountProperty';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { DispatchingType } from '../../../model/DispatchingType';
@@ -43,21 +40,21 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.contextListenerId = IdService.generateDateBasedId('mail-account-info-widget-');
         context.registerListener(this.contextListenerId, {
-            sidebarLeftToggled: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            sidebarLeftToggled: (): void => { return; },
+            filteredObjectListChanged: (): void => { return; },
             objectListChanged: () => { return; },
-            sidebarRightToggled: () => { return; },
+            sidebarRightToggled: (): void => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: async (accountId: string, mailAccount: MailAccount, type: KIXObjectType) => {
                 this.initWidget(mailAccount);
             },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
 
         this.initWidget(await context.getObject<MailAccount>(KIXObjectType.MAIL_ACCOUNT));
     }
 
-    public onDestroy() {
+    public onDestroy(): void {
         const context = ContextService.getInstance().getActiveContext();
         context.unregisterListener(this.contextListenerId);
     }

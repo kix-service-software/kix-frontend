@@ -77,7 +77,7 @@ export class LabelService {
     }
 
     public getLabelProvider<T extends KIXObject>(object: T): ILabelProvider<T> {
-        return this.objectLabelProvider.find((lp) => lp.isLabelProviderFor(object));
+        return this.objectLabelProvider.find((lp) => object && lp.isLabelProviderFor(object));
     }
 
     public getLabelProviderForProperty<T extends KIXObject>(object: T, property: string): ILabelProvider<T> {
@@ -445,10 +445,13 @@ export class LabelService {
     }
 
     public async getPropertyValueDisplayText(
-        objectType: KIXObjectType | string, property: string, value: string | number, translatable?: boolean
+        objectType: KIXObjectType | string, property: string, value: string | number, translatable?: boolean,
+        object?: KIXObject
     ): Promise<string> {
-        const object = { KIXObjectType: objectType };
-        object[property] = value;
+        if (!object) {
+            object ||= { KIXObjectType: objectType } as KIXObject;
+            object[property] = value;
+        }
         return this.getDisplayText(object as any, property, value?.toString(), translatable);
     }
 

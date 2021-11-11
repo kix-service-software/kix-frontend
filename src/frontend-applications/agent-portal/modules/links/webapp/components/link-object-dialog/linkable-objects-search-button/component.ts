@@ -27,7 +27,7 @@ class Component {
         this.state.translations = await TranslationService.createTranslationObject(['Translatable#Start search']);
         this.formSubscriber = {
             eventSubscriberId: 'LinkableObjectSearchButton',
-            eventPublished: (data: FormValuesChangedEventData, eventId: string) => {
+            eventPublished: (data: FormValuesChangedEventData, eventId: string): void => {
                 this.state.canSearch = data.formInstance.hasValues();
             }
         };

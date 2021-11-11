@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { SystemAddressLabelProvider, SystemAddressDetailsContext } from '../../core';
+import { SystemAddressLabelProvider } from '../../core';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { SystemAddress } from '../../../model/SystemAddress';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -29,17 +29,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.labelProvider = new SystemAddressLabelProvider();
         const context = ContextService.getInstance().getActiveContext();
         context.registerListener('system-address-info-widget', {
-            sidebarRightToggled: () => { return; },
-            sidebarLeftToggled: () => { return; },
+            sidebarRightToggled: (): void => { return; },
+            sidebarLeftToggled: (): void => { return; },
             objectListChanged: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            filteredObjectListChanged: (): void => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: async (ticketId: string, systemAddress: SystemAddress, type: KIXObjectType) => {
                 if (type === KIXObjectType.SYSTEM_ADDRESS) {
                     this.initWidget(systemAddress);
                 }
             },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
         this.state.widgetConfiguration = context
             ? await context.getWidgetConfiguration(this.state.instanceId)

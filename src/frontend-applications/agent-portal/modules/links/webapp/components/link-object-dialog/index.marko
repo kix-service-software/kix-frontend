@@ -7,13 +7,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 <div.linkable-objects-dialog>
-    <div.linkable-objects-selection title=state.translations["Translatable#Link to"]>
+    <div.linkable-objects-selection title=(
+        state.translations["Translatable#Link to"]
+    )>
         <div.linkable-objects-selection-label>
-            <span>
-                <translation-string pattern="Translatable#Link to"/>
-            </span>
+            <span><translation-string pattern="Translatable#Link to"/></span>
         </div>
-        <form-list loadNodes=state.loadNodes on-nodesChanged("linkableObjectChanged")/>
+        <form-list
+            loadNodes=state.loadNodes
+            on-nodesChanged("linkableObjectChanged")
+        />
     </div>
     <div.linkable-objects-form on-keydown("keyPressed")>
         <main-form/>
@@ -24,11 +27,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <span>
                 <translation-string
                     pattern="Translatable#Search Results ({0})"
-                    placeholders=[state.resultCount]/>
+                    placeholders=[state.resultCount]
+                />
             </span>
         </div>
         <if(state.table)>
-            <standard-table-NEW table=state.table key=state.tableId/>
+            <kix-table table=state.table key=state.tableId/>
         </if>
     </div>
     <div.linkable-objects-submit>
@@ -41,11 +45,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <form-list
                 treeId=state.linkTypeTreeId
                 on-nodesChanged("linkTypeChanged")
-                placeholder="Translatable#Link Type"/>
+                placeholder="Translatable#Link Type"
+            />
         </div>
         <button.kix-button.submit-button
             disabled=!state.canSubmit
-            on-click("submitClicked")>
+            on-click("submitClicked")
+        >
             <span.kix-icon-check/>
             <translation-string pattern="Translatable#Submit"/>
         </button>

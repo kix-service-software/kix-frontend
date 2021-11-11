@@ -38,17 +38,17 @@ class Component {
             : undefined;
 
         context.registerListener('contact-assigned-config-items-component', {
-            sidebarLeftToggled: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            sidebarLeftToggled: (): void => { return; },
+            filteredObjectListChanged: (): void => { return; },
             objectListChanged: () => { return; },
-            sidebarRightToggled: () => { return; },
+            sidebarRightToggled: (): void => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: (contactId: string, contact: Contact, type: KIXObjectType) => {
                 if (type === KIXObjectType.CONTACT) {
                     this.initWidget(contact);
                 }
             },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
 
         this.initWidget(await context.getObject<Contact>(KIXObjectType.CONTACT));

@@ -82,7 +82,7 @@ export class UIModule implements IUIModule {
             [
                 new UIComponentPermission('organisations', [CRUD.CREATE])
             ],
-            'Translatable#Organisations', 'kix-icon-gear',
+            'Translatable#Import Organisations', 'kix-icon-gear',
             undefined, undefined, false
         );
         ContextService.getInstance().registerContext(organisationImportDialogContext);

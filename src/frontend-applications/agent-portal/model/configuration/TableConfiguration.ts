@@ -17,6 +17,7 @@ import { KIXObjectLoadingOptions } from '../KIXObjectLoadingOptions';
 import { RoutingConfiguration } from './RoutingConfiguration';
 import { ToggleOptions } from '../../modules/base-components/webapp/core/table';
 import { AdditionalTableObjectsHandlerConfiguration } from '../../modules/base-components/webapp/core/AdditionalTableObjectsHandlerConfiguration';
+import { KIXObjectSpecificLoadingOptions } from '../KIXObjectSpecificLoadingOptions';
 
 export class TableConfiguration implements IConfiguration {
 
@@ -40,7 +41,8 @@ export class TableConfiguration implements IConfiguration {
         public fixedFirstColumn: boolean = false,
         public additionalTableObjectsHandler: AdditionalTableObjectsHandlerConfiguration[] = [],
         public intersection: boolean = true,
-        public searchId: string = null
+        public searchId: string = null,
+        public specificLoadingOptions?: KIXObjectSpecificLoadingOptions
     ) {
 
         if (!headerHeight) {

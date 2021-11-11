@@ -7,12 +7,9 @@
  * --
  */
 
-import { ConfigurationType } from '../../../../../../model/configuration/ConfigurationType';
 import { IColumnConfiguration } from '../../../../../../model/configuration/IColumnConfiguration';
-import { TableConfiguration } from '../../../../../../model/configuration/TableConfiguration';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { AbstractMarkoComponent } from '../../../core/AbstractMarkoComponent';
-import { KIXModulesService } from '../../../core/KIXModulesService';
 import { TableHeaderHeight, TableRowHeight } from '../../../core/table';
 import { ComponentState } from './ComponentState';
 

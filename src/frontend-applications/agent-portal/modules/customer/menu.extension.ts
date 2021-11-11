@@ -37,6 +37,6 @@ class Extension extends KIXExtension implements IMainMenuExtension {
 
 }
 
-module.exports = (data, host, options) => {
+module.exports = (data, host, options): Extension => {
     return new Extension();
 };

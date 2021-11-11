@@ -31,6 +31,8 @@ import { ConfigItemAttachment } from '../../model/ConfigItemAttachment';
 import { Version } from '../../model/Version';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { CreateConfigItemVersionOptions } from '../../model/CreateConfigItemVersionOptions';
+import { EventService } from '../../../base-components/webapp/core/EventService';
+import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
 
 export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> {
 
@@ -53,7 +55,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         this.objectConstructors.set(KIXObjectType.CONFIG_ITEM_ATTACHMENT, [ConfigItemAttachment]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.CONFIG_ITEM
             || kixObjectType === KIXObjectType.CONFIG_ITEM_VERSION
             || kixObjectType === KIXObjectType.CONFIG_ITEM_IMAGE
@@ -276,6 +278,11 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 KIXObjectType.CONFIG_ITEM_VERSION, parameter,
                 new CreateConfigItemVersionOptions(Number(objectId)), false
             );
+
+            // trigger update because, config item is not really updated (SocketClient did not trigger event)
+            if (!silent) {
+                EventService.getInstance().publish(ApplicationEvent.OBJECT_UPDATED, { objectType, objectId });
+            }
             return objectId;
         }
         return super.updateObject(objectType, parameter, objectId, cacheKeyPrefix, silent);

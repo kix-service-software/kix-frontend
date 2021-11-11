@@ -16,7 +16,6 @@ import { FormEvent } from '../../../core/FormEvent';
 import { IEventSubscriber } from '../../../core/IEventSubscriber';
 import { LabelService } from '../../../core/LabelService';
 import { ContextService } from '../../../core/ContextService';
-import { Context } from 'mocha';
 import { KIXModulesService } from '../../../core/KIXModulesService';
 
 class Component {
@@ -80,7 +79,7 @@ class Component {
     public async onMount(): Promise<void> {
         this.formSubscriber = {
             eventSubscriberId: this.state.field?.instanceId,
-            eventPublished: async (data: any, eventId: string) => {
+            eventPublished: async (data: any, eventId: string): Promise<void> => {
                 if (this.hasChildren()) {
                     this.state.minimized = this.state.minimized && !(await this.hasInvalidChildren());
                 }
@@ -114,9 +113,9 @@ class Component {
 
     private async hasInvalidChildren(field: FormFieldConfiguration = this.state.field): Promise<boolean> {
         const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await context?.getFormManager()?.getFormInstance(false);
         let hasInvalidChildren = false;
-        if (Array.isArray(field.children)) {
+        if (formInstance && Array.isArray(field.children)) {
             for (const child of field.children) {
                 const value = formInstance.getFormFieldValue(child.instanceId);
                 if (value && !value.valid) {
@@ -167,7 +166,7 @@ class Component {
         this.state.draggable = Boolean(draggable).toString();
     }
 
-    public async handleDragStart(event) {
+    public handleDragStart(event): void {
         event.stopPropagation();
 
         const root = (this as any).getEl();
@@ -178,7 +177,7 @@ class Component {
         (this as any).emit('dragStart', this.state.field?.instanceId);
     }
 
-    public async handleDragEnd(event) {
+    public handleDragEnd(event): void {
         event.stopPropagation();
 
         const root = (this as any).getEl();

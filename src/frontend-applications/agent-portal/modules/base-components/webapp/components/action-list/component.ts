@@ -93,7 +93,7 @@ export class Component implements IActionListener {
         context.registerListener(this.contextListernerId, this.contextListener);
     }
 
-    private windowResizeThrottler() {
+    private windowResizeThrottler(): void {
         if (!this.resizeTimeout) {
             this.resizeTimeout = setTimeout(() => {
                 this.resizeTimeout = null;
@@ -102,7 +102,7 @@ export class Component implements IActionListener {
         }
     }
 
-    public prepareActionLists() {
+    public prepareActionLists(): void {
         const actionListElement = (this as any).getEl('action-list');
         const listWidth = actionListElement ? actionListElement.scrollWidth : 0;
         if (this.state.actionList) {

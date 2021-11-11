@@ -11,7 +11,6 @@ import { MailFilterProperty } from '../../model/MailFilterProperty';
 import { IFormFieldValidator } from '../../../base-components/webapp/core/IFormFieldValidator';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { ValidationResult } from '../../../base-components/webapp/core/ValidationResult';
-import { FormService } from '../../../base-components/webapp/core/FormService';
 import { ValidationSeverity } from '../../../base-components/webapp/core/ValidationSeverity';
 import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
 import { MailFilterMatch } from '../../model/MailFilterMatch';
@@ -35,7 +34,7 @@ export class MailFilterMatchValidator implements IFormFieldValidator {
                 for (const matchValue of value.value) {
                     if (matchValue.Value) {
                         try {
-                            const regex = new RegExp(matchValue.Value);
+                            new RegExp(matchValue.Value);
                         } catch (error) {
                             return new ValidationResult(ValidationSeverity.ERROR, error.message);
                         }

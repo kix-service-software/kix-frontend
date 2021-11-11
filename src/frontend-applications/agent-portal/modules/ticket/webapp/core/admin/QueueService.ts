@@ -15,7 +15,6 @@ import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOp
 import { KIXObjectSpecificLoadingOptions } from '../../../../../model/KIXObjectSpecificLoadingOptions';
 import { QueueProperty } from '../../../model/QueueProperty';
 import { TreeNode, TreeNodeProperty } from '../../../../base-components/webapp/core/tree';
-import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
@@ -44,7 +43,7 @@ export class QueueService extends KIXObjectService<Queue> {
         this.objectConstructors.set(KIXObjectType.FOLLOW_UP_TYPE, [FollowUpType]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.QUEUE
             || kixObjectType === KIXObjectType.FOLLOW_UP_TYPE;
     }

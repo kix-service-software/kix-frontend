@@ -43,7 +43,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private initContextEventListener(): void {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('tabbar-menu-context-event'),
-            eventPublished: async (data: Context, eventId: string) => {
+            eventPublished: async (data: Context, eventId: string): Promise<void> => {
                 if (eventId === ContextEvents.CONTEXT_CHANGED) {
                     await this.addEntry(data, true);
                 } else if (eventId === ContextEvents.CONTEXT_REMOVED) {

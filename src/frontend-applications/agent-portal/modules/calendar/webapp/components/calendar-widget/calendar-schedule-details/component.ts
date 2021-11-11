@@ -35,9 +35,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public onInput(input: any): void {
         this.state.ticket = input.ticket;
         const config = input.calendarConfig;
-        this.state.properties = config && config.properties && Array.isArray(config.properties)
-            ? this.state.properties = config.properties
+        this.state.properties = Array.isArray(config?.properties)
+            ? [...config.properties]
             : [];
+        if (
+            input.isPending && this.state.properties.length &&
+            !this.state.properties.some((p) => p === TicketProperty.PENDING_TIME)
+        ) {
+            this.state.properties.push(TicketProperty.PENDING_TIME);
+        }
     }
 
     public async onMount(): Promise<void> {

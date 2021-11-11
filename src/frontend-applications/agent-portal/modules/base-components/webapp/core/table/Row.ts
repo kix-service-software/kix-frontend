@@ -23,7 +23,7 @@ import { EventService } from '../EventService';
 import { SortOrder } from '../../../../../model/SortOrder';
 import { DataType } from '../../../../../model/DataType';
 
-export class Row<T = any> {
+export class Row {
 
     private id: string;
     private cells: Cell[] = [];

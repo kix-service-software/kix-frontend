@@ -8,7 +8,6 @@
  */
 
 import { Context } from '../../../../../../../model/Context';
-import { ContextConfiguration } from '../../../../../../../model/configuration/ContextConfiguration';
 
 export class NewTranslationDialogContext extends Context {
 

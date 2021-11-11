@@ -21,7 +21,8 @@ import { Error } from '../../../../server/model/Error';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { User } from '../../modules/user/model/User';
 import { PermissionError } from '../../modules/user/model/PermissionError';
-import { AxiosAdapter, AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosAdapter, AxiosError, AxiosRequestConfig } from 'axios';
+import { SocketAuthenticationError } from '../../modules/base-components/webapp/core/SocketAuthenticationError';
 
 
 export class HttpService {
@@ -88,7 +89,10 @@ export class HttpService {
         const requestPromise = this.executeRequest<T>(resource, token, clientRequestId, options);
         this.requestPromises.set(requestKey, requestPromise);
 
-        const response = await requestPromise.catch((): any => this.requestPromises.delete(requestKey));
+        const response = await requestPromise.catch((error): any => {
+            this.requestPromises.delete(requestKey);
+            throw error;
+        });
         if (useCache) {
             CacheService.getInstance().set(cacheKey, response, cacheKeyPrefix);
         }
@@ -166,6 +170,10 @@ export class HttpService {
     ): Promise<T> {
         const backendToken = AuthenticationService.getInstance().getBackendToken(token);
 
+        if (token && !backendToken) {
+            throw new SocketAuthenticationError('Invalid Token!');
+        }
+
         // extend options
         options.baseURL = this.apiURL;
         options.url = this.buildRequestUrl(resource);
@@ -192,8 +200,7 @@ export class HttpService {
             'HttpService',
             options.method + ' ' + resource + parameter,
             {
-                a: options,
-                b: parameter
+                data: [options, parameter]
             });
 
         const response = await this.axios(options).catch((error: AxiosError) => {
@@ -202,15 +209,17 @@ export class HttpService {
                     `Error during HTTP (${resource}) ${options.method} request.`, error
                 );
             }
-            ProfilingService.getInstance().stop(profileTaskId, 'Error');
-            if (error.response.status === 403) {
+            ProfilingService.getInstance().stop(profileTaskId, { data: ['Error'] });
+            if (error?.response?.status === 403) {
                 throw new PermissionError(this.createError(error), resource, options.method);
+            } else if (error?.response?.status === 401) {
+                throw new SocketAuthenticationError('Invalid Token!');
             } else {
                 throw this.createError(error);
             }
         });
 
-        ProfilingService.getInstance().stop(profileTaskId, response.data);
+        ProfilingService.getInstance().stop(profileTaskId, { data: [response.data] });
 
         return options.method === RequestMethod.OPTIONS ? response.headers : response.data;
     }
@@ -296,17 +305,14 @@ export class HttpService {
 
                 // start profiling
                 const profileTaskId = ProfilingService.getInstance().start(
-                    'HttpService',
-                    options.method + ' ' + uri,
-                    {
-                        a: options
-                    });
+                    'HttpService', options.method + ' ' + uri, { data: [options] }
+                );
 
                 const response = await this.axios(options).catch((error: AxiosError) => {
                     LoggingService.getInstance().error(
                         `Error during HTTP (${uri}) ${options.method} request.`, error
                     );
-                    ProfilingService.getInstance().stop(profileTaskId, 'Error');
+                    ProfilingService.getInstance().stop(profileTaskId, { data: ['Error'] });
                     if (error.response.status === 403) {
                         throw new PermissionError(this.createError(error), uri, options.method);
                     } else {
@@ -315,7 +321,7 @@ export class HttpService {
                 });
 
                 await CacheService.getInstance().set(backendToken, response.data['User'], KIXObjectType.CURRENT_USER);
-                ProfilingService.getInstance().stop(profileTaskId, response.data);
+                ProfilingService.getInstance().stop(profileTaskId, { data: [response.data] });
 
                 this.currentUserRequestPromises.delete(token);
                 resolve(response.data['User']);

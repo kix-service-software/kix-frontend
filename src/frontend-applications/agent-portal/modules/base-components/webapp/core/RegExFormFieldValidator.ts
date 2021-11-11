@@ -8,7 +8,6 @@
  */
 
 import { IFormFieldValidator } from './IFormFieldValidator';
-import { FormService } from './FormService';
 import { ValidationResult } from './ValidationResult';
 import { ValidationSeverity } from './ValidationSeverity';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';

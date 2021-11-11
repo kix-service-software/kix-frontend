@@ -14,13 +14,13 @@ import { IEventSubscriber } from './IEventSubscriber';
 import { FormValuesChangedEventData } from './FormValuesChangedEventData';
 import { ContextService } from './ContextService';
 
-export abstract class FormInputComponent<T, C extends FormInputComponentState<T>> {
+export abstract class FormInputComponent<T, C extends FormInputComponentState> {
 
     protected state: C;
 
     private subscriber: IEventSubscriber;
 
-    public onInput(input: FormInputComponentState<T>): any {
+    public onInput(input: FormInputComponentState): any {
         this.state.field = input.field;
         this.state.fieldId = input.fieldId;
         this.state.formId = input.formId;
@@ -44,7 +44,7 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
     public async onMount(): Promise<void> {
         this.subscriber = {
             eventSubscriberId: `${this.state.field?.instanceId}_FormInputComponent`,
-            eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
+            eventPublished: async (data: FormValuesChangedEventData, eventId: string): Promise<void> => {
                 if (data?.formInstance?.getForm()?.id === this.state.formId) {
                     if (eventId === FormEvent.VALUES_CHANGED && this.state.field && data) {
                         if (data.originInstanceId !== this.state.field?.instanceId) {

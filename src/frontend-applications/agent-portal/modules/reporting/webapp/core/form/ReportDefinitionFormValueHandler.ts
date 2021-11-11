@@ -33,7 +33,7 @@ export class ReportDefinitionFormValueHandler extends FormFieldValueHandler {
 
         EventService.getInstance().subscribe(FormEvent.FIELD_DUPLICATED, {
             eventSubscriberId: 'ReportDefinitionFormValueHandler',
-            eventPublished: async (data: any, eventId: string) => {
+            eventPublished: async (data: any, eventId: string): Promise<void> => {
                 const field: FormFieldConfiguration = data ? data.field : null;
                 if (field && field.property === ReportDefinitionProperty.PARAMTER) {
                     const formInstance: FormInstance = data.formInstance;

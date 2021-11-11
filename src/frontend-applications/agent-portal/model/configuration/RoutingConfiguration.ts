@@ -24,7 +24,8 @@ export class RoutingConfiguration {
         public externalLink?: boolean,
         public replaceObjectId?: string | number,
         public resetContext: boolean = true,
-        public params: Array<[string, any]> = null
+        public params: Array<[string, any]> = null,
+        public additionalInformation: Array<[string, any]> = []
     ) { }
 
 }

@@ -7,7 +7,6 @@
  * --
  */
 
-import { ReportResult } from '../../../model/ReportResult';
 import { Label } from '../../../../base-components/webapp/core/Label';
 
 export class ComponentState {

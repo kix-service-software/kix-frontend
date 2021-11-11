@@ -21,12 +21,19 @@ export class ObjectPropertyLabelComponent {
     private object: any;
     private property: string;
 
+    private displayIcon: ObjectIcon | string;
+    private propertyText: string;
+    private displayText: string;
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
     public onInput(input: ComponentInput): void {
         this.property = input.property;
+        this.displayIcon = input.displayIcon;
+        this.propertyText = input.propertyText;
+        this.displayText = input.displayText;
         this.state.hasText = typeof input.showText !== 'undefined' ? input.showText : true;
         this.state.showLabel = typeof input.showLabel !== 'undefined' ? input.showLabel : true;
         if (this.object !== input.object) {
@@ -46,7 +53,9 @@ export class ObjectPropertyLabelComponent {
     }
 
     private async preparePropertyName(): Promise<void> {
-        if (this.property) {
+        if (this.propertyText) {
+            this.state.propertyName = this.propertyText;
+        } else if (this.property) {
             if (!this.object) {
                 const context = ContextService.getInstance().getActiveContext();
                 this.object = await context.getObject();
@@ -62,7 +71,9 @@ export class ObjectPropertyLabelComponent {
 
     private async getIcon(): Promise<string | ObjectIcon> {
         let icon: string | ObjectIcon;
-        if (this.property) {
+        if (this.displayIcon) {
+            icon = this.displayIcon;
+        } else if (this.property) {
             if (!this.object) {
                 const context = ContextService.getInstance().getActiveContext();
                 this.object = await context.getObject();
@@ -77,6 +88,10 @@ export class ObjectPropertyLabelComponent {
     }
 
     private async getPropertyDisplayText(): Promise<string> {
+        if (this.displayText) {
+            return this.displayText;
+        }
+
         if (!this.object) {
             const context = ContextService.getInstance().getActiveContext();
             this.object = await context.getObject();

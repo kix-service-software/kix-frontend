@@ -38,7 +38,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.subscriber = {
             eventSubscriberId: 'SetupOverviewSteps',
-            eventPublished: (data: any, eventId: string) => {
+            eventPublished: (data: any, eventId: string): void => {
                 if (data.stepId) {
                     const index = this.state.setupSteps.findIndex((s) => s.id === data.stepId);
                     if (index !== -1 && index < this.state.setupSteps.length - 1) {

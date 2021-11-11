@@ -16,7 +16,7 @@ export class SysConfigTableCSSHandler implements ITableCSSHandler<SysConfigOptio
     public async getRowCSSClasses(definition: SysConfigOptionDefinition): Promise<string[]> {
         const classes = [];
 
-        if (definition && definition.AccessLevel === SysConfigAccessLevel.CONFIDENTIAL) {
+        if (definition?.AccessLevel === SysConfigAccessLevel.CONFIDENTIAL) {
             classes.push('confidential');
         }
 

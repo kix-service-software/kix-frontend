@@ -15,7 +15,7 @@ import { IdService } from '../../../../model/IdService';
 
 export class FormFactory {
 
-    public static initForm(form: FormConfiguration) {
+    public static initForm(form: FormConfiguration): void {
         if (form.pages) {
             form.pages = form.pages.map((p) => {
                 let groups;

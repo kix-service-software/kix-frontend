@@ -80,7 +80,10 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             'config-item-version-compare-legend',
             '/kix-module-cmdb$0/webapp/components/config-item-version-compare-legend', []
         ),
-        new UIComponent('go-to-version-cell', '/kix-module-cmdb$0/webapp/components/go-to-version-cell', [])
+        new UIComponent('go-to-version-cell', '/kix-module-cmdb$0/webapp/components/go-to-version-cell', []),
+        new UIComponent(
+            'add-to-affected-assets-cell', '/kix-module-cmdb$0/webapp/components/add-to-affected-assets-cell', []
+        )
     ];
 
     public webDependencies: string[] = [
@@ -89,6 +92,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
 
 }
 
-module.exports = (data, host, options) => {
+module.exports = (data, host, options): Extension => {
     return new Extension();
 };

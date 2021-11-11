@@ -11,7 +11,6 @@ import { FormInputComponent } from '../../../../base-components/webapp/core/Form
 import { ComponentState } from './ComponentState';
 import { TreeNode, TreeHandler, TreeService } from '../../../../base-components/webapp/core/tree';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
-import { FormService } from '../../../../base-components/webapp/core/FormService';
 import { ServiceRegistry } from '../../../../base-components/webapp/core/ServiceRegistry';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ServiceType } from '../../../../base-components/webapp/core/ServiceType';
@@ -106,7 +105,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
             if (formService && formInstance) {
                 if (this.currentAccesses) {
                     const childFields = await formService.getFormFieldsForAccess(
-                        this.currentAccesses.map((n) => n.id), this.state.formId
+                        this.currentAccesses.map((n) => n.id), formInstance
                     );
                     formInstance.addFieldChildren(this.state.field, childFields, true);
                 } else {
@@ -116,7 +115,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
         }
     }
 
-    private async getNodes(unique: boolean = false): Promise<TreeNode[]> {
+    private async getNodes(): Promise<TreeNode[]> {
         const agentLabel = await TranslationService.translate('Translatable#Agent Portal');
         const customerLabel = await TranslationService.translate('Translatable#Customer Portal');
         return [

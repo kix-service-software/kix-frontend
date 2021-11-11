@@ -39,7 +39,7 @@ export class NewTicketDialogContext extends Context {
 
         this.subscriber = {
             eventSubscriberId: NewTicketDialogContext.CONTEXT_ID,
-            eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
+            eventPublished: async (data: FormValuesChangedEventData, eventId: string): Promise<void> => {
                 const form = data.formInstance.getForm();
                 await this.setFormObject();
                 if (form.objectType === KIXObjectType.TICKET && form.formContext === FormContext.NEW) {
@@ -77,10 +77,6 @@ export class NewTicketDialogContext extends Context {
     public async destroy(): Promise<void> {
         await super.destroy();
         EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.subscriber);
-    }
-
-    public async getDisplayText(short: boolean = false): Promise<string> {
-        return await TranslationService.translate('Translatable#New Ticket');
     }
 
     public async setFormObject(overwrite: boolean = true): Promise<void> {

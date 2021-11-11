@@ -7,7 +7,6 @@
  * --
  */
 
-import { report } from 'process';
 import { DefaultSelectInputFormOption } from '../../../../../model/configuration/DefaultSelectInputFormOption';
 import { FormConfiguration } from '../../../../../model/configuration/FormConfiguration';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';

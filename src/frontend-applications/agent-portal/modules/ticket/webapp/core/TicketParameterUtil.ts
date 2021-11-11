@@ -21,7 +21,6 @@ import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { SenderType } from '../../model/SenderType';
-import { ContextType } from '../../../../model/ContextType';
 import { Attachment } from '../../../../model/kix/Attachment';
 import { BrowserUtil } from '../../../../modules/base-components/webapp/core/BrowserUtil';
 import { Article } from '../../model/Article';

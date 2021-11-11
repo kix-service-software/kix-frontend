@@ -37,17 +37,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const context = ContextService.getInstance().getActiveContext();
 
         context.registerListener('user-assigned-roles-widget', {
-            sidebarRightToggled: () => { return; },
-            sidebarLeftToggled: () => { return; },
+            sidebarRightToggled: (): void => { return; },
+            sidebarLeftToggled: (): void => { return; },
             objectListChanged: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            filteredObjectListChanged: (): void => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: async (userId: string, user: User, type: KIXObjectType | string) => {
                 if (type === KIXObjectType.USER) {
                     this.initWidget(user);
                 }
             },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
         this.state.widgetConfiguration = context
             ? await context.getWidgetConfiguration(this.state.instanceId)

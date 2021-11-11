@@ -10,7 +10,6 @@
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
 import { OrganisationDetailsContext } from './webapp/core';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
-import { ObjectInformationWidgetConfiguration } from '../../model/configuration/ObjectInformationWidgetConfiguration';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { OrganisationProperty } from './model/OrganisationProperty';
@@ -347,6 +346,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
 }
 
-module.exports = (data, host, options) => {
+module.exports = (data, host, options): Extension => {
     return new Extension();
 };

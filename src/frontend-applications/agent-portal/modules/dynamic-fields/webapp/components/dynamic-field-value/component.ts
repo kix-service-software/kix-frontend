@@ -17,7 +17,6 @@ import { Label } from '../../../../base-components/webapp/core/Label';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { ConfigItemDetailsContext } from '../../../../cmdb/webapp/core';
 import { TicketDetailsContext } from '../../../../ticket/webapp/core';
-import { DynamicField } from '../../../model/DynamicField';
 import { DynamicFieldTypes } from '../../../model/DynamicFieldTypes';
 import { DynamicFieldValue } from '../../../model/DynamicFieldValue';
 import { ComponentState } from './ComponentState';

@@ -11,7 +11,6 @@ import { KIXObjectFormService } from '../../../../modules/base-components/webapp
 import { FAQArticle } from '../../model/FAQArticle';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { FAQArticleProperty } from '../../model/FAQArticleProperty';
-import { FAQService } from '.';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { Attachment } from '../../../../model/kix/Attachment';

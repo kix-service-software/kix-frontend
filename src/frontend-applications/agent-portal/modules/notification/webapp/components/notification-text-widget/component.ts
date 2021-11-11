@@ -9,12 +9,10 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { NotificationLabelProvider } from '../../core';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { ContextType } from '../../../../../model/ContextType';
 import { IdService } from '../../../../../model/IdService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
@@ -43,17 +41,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.contextListenerId = IdService.generateDateBasedId('notification-text-widget');
 
         context.registerListener(this.contextListenerId, {
-            sidebarRightToggled: () => { return; },
-            sidebarLeftToggled: () => { return; },
+            sidebarRightToggled: (): void => { return; },
+            sidebarLeftToggled: (): void => { return; },
             objectListChanged: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            filteredObjectListChanged: (): void => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: async (ticketId: string, notification: Notification, type: KIXObjectType) => {
                 if (type === KIXObjectType.NOTIFICATION) {
                     this.initWidget(notification);
                 }
             },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
         this.state.widgetConfiguration = context
             ? await context.getWidgetConfiguration(this.state.instanceId)
@@ -62,7 +60,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await this.initWidget(await context.getObject<Notification>());
     }
 
-    public onDestroy() {
+    public onDestroy(): void {
         const context = ContextService.getInstance().getActiveContext();
         context.unregisterListener(this.contextListenerId);
     }

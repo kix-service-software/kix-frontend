@@ -42,7 +42,7 @@ export abstract class ExtendedTableFactory {
     }
 
     public getColumnFilterValues<T extends KIXObject = any>(
-        rows: Array<Row<any>>, column: Column<any>
+        rows: Array<Row>, column: Column<any>
     ): Array<[T, number]> {
         return null;
     }

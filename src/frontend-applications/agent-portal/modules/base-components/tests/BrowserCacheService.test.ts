@@ -345,10 +345,11 @@ describe('BrowserCacheService', () => {
                 const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.SYS_CONFIG_OPTION);
                 expect(prefixes).exist;
                 expect(prefixes).an('array');
-                expect(prefixes.length).equals(3);
+                expect(prefixes.length).equals(4);
 
                 expect(prefixes.find((p) => p === KIXObjectType.SYS_CONFIG_OPTION)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION)).exist;
+                expect(prefixes.find((p) => p === KIXObjectType.REPORT_DEFINITION)).exist;
             });
 
             it('should resolve the namespace for SysconfigOptionDefinition', () => {
@@ -386,11 +387,12 @@ describe('BrowserCacheService', () => {
                 const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.USER);
                 expect(prefixes).exist;
                 expect(prefixes).an('array');
-                expect(prefixes.length).equals(3);
+                expect(prefixes.length).equals(4);
 
                 expect(prefixes.find((p) => p === KIXObjectType.USER)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.ROLE)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.CONTACT)).exist;
+                expect(prefixes.find((p) => p === KIXObjectType.REPORT_DEFINITION)).exist;
             });
 
         });

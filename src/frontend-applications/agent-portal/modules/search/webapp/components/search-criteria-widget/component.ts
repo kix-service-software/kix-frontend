@@ -54,7 +54,7 @@ class Component {
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('search-criteria-widget'),
-            eventPublished: (data: SearchContext, eventId: string) => {
+            eventPublished: (data: SearchContext, eventId: string): void => {
                 if (data.instanceId === this.contextInstanceId) {
                     if (eventId === SearchEvent.SEARCH_DELETED || eventId === SearchEvent.SEARCH_CACHE_CHANGED) {
                         this.initManager();
