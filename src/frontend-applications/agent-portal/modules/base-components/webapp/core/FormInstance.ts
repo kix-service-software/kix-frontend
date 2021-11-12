@@ -186,7 +186,12 @@ export class FormInstance {
     public setFieldEmptyState(formField: FormFieldConfiguration, empty: boolean = true): void {
         formField.empty = empty;
         if (empty) {
-            this.deleteFieldValues(formField);
+            // set empty value for DF to delete its values in backend
+            if (formField.property === KIXObjectProperty.DYNAMIC_FIELDS) {
+                this.formFieldValues.set(formField.instanceId, new FormFieldValue([]));
+            } else {
+                this.deleteFieldValues(formField);
+            }
             this.setFieldChildrenEmpty(formField);
         }
 
