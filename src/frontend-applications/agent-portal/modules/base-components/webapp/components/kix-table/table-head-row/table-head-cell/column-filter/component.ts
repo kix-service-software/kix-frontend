@@ -70,6 +70,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public async showFilter(event: any): Promise<void> {
+        event.stopPropagation();
         if (this.column && !this.state.show) {
 
             EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
