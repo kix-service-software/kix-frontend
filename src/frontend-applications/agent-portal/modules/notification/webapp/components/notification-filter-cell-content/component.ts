@@ -26,7 +26,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const searchDefinition = SearchService.getInstance().getSearchDefinition(KIXObjectType.TICKET);
             const manager = searchDefinition.createFormManager();
             const propertyCell = (input.cell as Cell).getRow().getCell(NotificationFilterTableProperty.FIELD);
-            const operatorCell = (input.cell as Cell).getRow().getCell(NotificationFilterTableProperty.OPERATOR);
             const inputType = propertyCell && manager
                 ? await manager.getInputType(propertyCell.getValue().objectValue, propertyCell.getValue().objectValue)
                 : null;

@@ -8,9 +8,7 @@
  */
 
 import { ConfigurationType } from '../../../../../../model/configuration/ConfigurationType';
-import { ConfiguredWidget } from '../../../../../../model/configuration/ConfiguredWidget';
 import { TableConfiguration } from '../../../../../../model/configuration/TableConfiguration';
-import { TableWidgetConfiguration } from '../../../../../../model/configuration/TableWidgetConfiguration';
 import { SortOrder } from '../../../../../../model/SortOrder';
 import { AbstractMarkoComponent } from '../../../core/AbstractMarkoComponent';
 import { KIXModulesService } from '../../../core/KIXModulesService';

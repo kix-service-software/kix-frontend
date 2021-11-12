@@ -18,7 +18,6 @@ import { DataType } from '../../../../../model/DataType';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
-import { ContextMode } from '../../../../../model/ContextMode';
 import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
 import { EditSysConfigDialogContext } from '../context';
 

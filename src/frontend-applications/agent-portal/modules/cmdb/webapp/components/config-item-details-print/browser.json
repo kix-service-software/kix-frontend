@@ -1,0 +1,7 @@
+{
+    "dependencies": [
+        "./style.less",
+        "require ./print-component",
+        "require ../../../../base-components/webapp/components/editor"
+    ]
+}

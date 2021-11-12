@@ -45,18 +45,18 @@ class Component {
             sidebarLeftToggled: () => { return; },
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
-            sidebarRightToggled: () => { return; },
+            sidebarRightToggled: (): void => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: async (contactId: string, object: KIXObject, type: KIXObjectType) => {
                 this.initWidget();
             },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
 
         this.initWidget();
     }
 
-    public onDestroy() {
+    public onDestroy(): void {
         this.context.unregisterListener(this.contextListenerId);
     }
 

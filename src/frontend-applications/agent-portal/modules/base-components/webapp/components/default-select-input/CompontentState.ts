@@ -10,7 +10,7 @@
 import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
 import { IdService } from '../../../../../model/IdService';
 
-export class CompontentState extends FormInputComponentState<string | number | string[] | number[]> {
+export class CompontentState extends FormInputComponentState {
 
     public constructor(
         public treeId: string = IdService.generateDateBasedId('default-select-input-'),

@@ -27,7 +27,7 @@ export class AbstractPlaceholderHandler implements IPlaceholderHandler {
         return this.objectStrings.some((os) => os === objectString);
     }
 
-    public isHandlerForObjectType(objectType: KIXObjectType | string) {
+    public isHandlerForObjectType(objectType: KIXObjectType | string): boolean {
         return false;
     }
 

@@ -13,7 +13,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <button.kix-button.cancel-button
                     type="button"
                     on-click("removeTable")
-                    title=state.translations["Translatable#Remove table"]>
+                    title=(state.translations["Translatable#Remove table"])
+                >
                     <span.kix-icon-close/>
                     <translation-string pattern="Translatable#Remove table"/>
                 </button>
@@ -22,7 +23,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <button.kix-button.submit-button
                     type="button"
                     on-click("addInitialTable")
-                    title=state.translations["Translatable#Add initial table"]>
+                    title=(state.translations["Translatable#Add initial table"])
+                >
                     <span.kix-icon-check/>
                     <translation-string pattern="Translatable#Add initial table"/>
                 </button>
@@ -30,14 +32,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </div>
     </if>
     <div.df-table-input-container.table-container>
-        <table.standard-table-NEW>
+        <table.kix-table>
             <thead>
                 <tr>
                     <for|col| of=state.columns>
                         <th.table-head-cell>
-                            <div>
-                                <span.column-tilte-text>${col}</span>
-                            </div>
+                            <div><span.column-tilte-text>${col}</span></div>
                         </th>
                     </for>
                     <if(state.hasAction)>
@@ -59,8 +59,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                         on-change(
                                             "tableValueChanged",
                                             rowIndex,
-                                            colIndex
-                                        )/>
+                                            colIndex,
+                                        )
+                                    >
                                 </td>
                             </for>
                             <if(state.hasAction)>
@@ -68,20 +69,29 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                     <if(component.canRemove(rowIndex))>
                                         <button.form-control-button.button-without-text
                                             type="button"
-                                            title=state.translations[
-                                                "Translatable#Remove"
-                                            ]
-                                            on-click("tableRowRemoved", rowIndex)>
+                                            title=(
+                                                state.translations[
+                                                    "Translatable#Remove"
+                                                ]
+                                            )
+                                            on-click(
+                                                "tableRowRemoved",
+                                                rowIndex,
+                                            )
+                                        >
                                             <span.kix-icon-minus/>
                                         </button>
                                     </if>
                                     <if(component.canAdd(rowIndex))>
                                         <button.form-control-button.button-without-text
                                             type="button"
-                                            title=state.translations[
-                                                "Translatable#Add"
-                                            ]
-                                            on-click("tableRowAdded")>
+                                            title=(
+                                                state.translations[
+                                                    "Translatable#Add"
+                                                ]
+                                            )
+                                            on-click("tableRowAdded")
+                                        >
                                             <span.kix-icon-plus-blank/>
                                         </button>
                                     </if>

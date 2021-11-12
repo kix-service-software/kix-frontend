@@ -18,12 +18,8 @@ import { WidgetConfiguration } from '../../model/configuration/WidgetConfigurati
 import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
 import { TabWidgetConfiguration } from '../../model/configuration/TabWidgetConfiguration';
 import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
-
 import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
 import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
-import { UIComponentPermission } from '../../model/UIComponentPermission';
-import { CRUD } from '../../../../server/model/rest/CRUD';
-
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
@@ -150,6 +146,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
 
 }
 
-module.exports = (data, host, options) => {
+module.exports = (data, host, options): Extension => {
     return new Extension();
 };

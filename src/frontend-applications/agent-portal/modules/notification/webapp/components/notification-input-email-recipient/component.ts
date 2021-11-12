@@ -23,7 +23,6 @@ import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { ContactService } from '../../../../customer/webapp/core';
-import { FormService } from '../../../../base-components/webapp/core/FormService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 class Component extends FormInputComponent<string[], ComponentState> {

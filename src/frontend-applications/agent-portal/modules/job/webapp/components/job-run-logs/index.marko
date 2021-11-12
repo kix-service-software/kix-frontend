@@ -8,10 +8,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.table)>
-    <div.job-run-logs-container>
-        <standard-table-NEW table=state.table/>
-    </div>
+    <div.job-run-logs-container><kix-table table=state.table/></div>
 </if>
-<else>
-    <table-placeholder/>
-</else>
+<else><table-placeholder/></else>

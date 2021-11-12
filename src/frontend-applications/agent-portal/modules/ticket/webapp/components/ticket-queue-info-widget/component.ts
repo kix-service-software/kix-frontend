@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { QueueLabelProvider, QueueDetailsContext } from '../../core';
+import { QueueLabelProvider } from '../../core';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { Queue } from '../../../model/Queue';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -29,17 +29,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.labelProvider = new QueueLabelProvider();
         const context = ContextService.getInstance().getActiveContext();
         context.registerListener('ticket-queue-info-widget', {
-            sidebarRightToggled: () => { return; },
-            sidebarLeftToggled: () => { return; },
+            sidebarRightToggled: (): void => { return; },
+            sidebarLeftToggled: (): void => { return; },
             objectListChanged: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            filteredObjectListChanged: (): void => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: async (queueId: string, queue: Queue, type: KIXObjectType) => {
                 if (type === KIXObjectType.QUEUE) {
                     this.initWidget(queue);
                 }
             },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
         this.state.widgetConfiguration = context
             ? await context.getWidgetConfiguration(this.state.instanceId)

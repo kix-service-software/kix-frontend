@@ -42,7 +42,7 @@ export class Component {
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (data: any, eventId: string) => {
+            eventPublished: (data: any, eventId: string): void => {
                 this.state.activeNode = this.getActiveNode(context?.queueId);
             }
         };

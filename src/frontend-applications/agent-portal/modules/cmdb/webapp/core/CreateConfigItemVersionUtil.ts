@@ -40,7 +40,8 @@ export class CreateConfigItemVersionUtil {
                     parameter.push([property, value]);
                     break;
                 case VersionProperty.INCI_STATE_ID:
-                    parameter.push([property, value]);
+                case ConfigItemProperty.CUR_INCI_STATE_ID:
+                    parameter.push([VersionProperty.INCI_STATE_ID, value]);
                     break;
                 case ConfigItemProperty.LINKS:
                 case ConfigItemProperty.CLASS_ID:

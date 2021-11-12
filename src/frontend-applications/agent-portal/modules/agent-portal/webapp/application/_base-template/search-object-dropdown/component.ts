@@ -16,11 +16,11 @@ import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEv
 import { OverlayService } from '../../../../../base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../../../base-components/webapp/core/OverlayType';
 import { StringContent } from '../../../../../base-components/webapp/core/StringContent';
-import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
-import { SearchContext, SearchService } from '../../../../../search/webapp/core';
+import { SearchService } from '../../../../../search/webapp/core';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { ComponentState } from './ComponentState';
 import { TicketSearchContext } from '../../../../../ticket/webapp/core/context/TicketSearchContext';
+import { KIXObject } from '../../../../../../model/kix/KIXObject';
 
 class Component {
 
@@ -90,6 +90,27 @@ class Component {
                     contextId
                 );
                 if (descriptor && element) {
+                    const objectList: void | KIXObject[] = await SearchService.getInstance().executePrimarySearch(
+                        descriptor.kixObjectTypes[0], element.value
+                    ).catch((error) => {
+                        OverlayService.getInstance().openOverlay(
+                            OverlayType.WARNING, null, new StringContent(error), 'Translatable#Search error!',
+                            null, true
+                        );
+                    });
+                    if (Array.isArray(objectList) && objectList.length === 1) {
+                        const contextService = ContextService.getInstance();
+                        const contextDescriptors = contextService.getContextDescriptors(ContextMode.DETAILS);
+                        const detailContextId = contextDescriptors.find(
+                            (cd) => cd.kixObjectTypes.some((ot) =>
+                                ot === context.descriptor.kixObjectTypes[0])
+                        );
+                        if (detailContextId) {
+                            contextService.setActiveContext(detailContextId.contextId, objectList[0].ObjectId);
+                            return;
+                        }
+                    }
+
                     await SearchService.getInstance().executeFullTextSearch(
                         descriptor.kixObjectTypes[0], element.value
                     ).catch((error) => {

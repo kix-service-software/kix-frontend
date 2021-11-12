@@ -29,7 +29,7 @@ class Extension extends KIXExtension implements IInitialDataExtension {
         await this.setObjectIcon(serverConfig, 'agent-portal-icon-sw', '/../../static/img/kix_sw.png');
     }
 
-    private async setObjectIcon(serverConfig: IServerConfiguration, name: string, path: string) {
+    private async setObjectIcon(serverConfig: IServerConfiguration, name: string, path: string): Promise<void> {
         const iconLoadingOptions = new ObjectIconLoadingOptions(name, name);
         const icons = await ObjectIconService.getInstance().loadObjects(
             serverConfig.BACKEND_API_TOKEN, '', KIXObjectType.OBJECT_ICON, null, null, iconLoadingOptions
@@ -52,6 +52,6 @@ class Extension extends KIXExtension implements IInitialDataExtension {
     }
 }
 
-module.exports = (data, host, options) => {
+module.exports = (data, host, options): Extension => {
     return new Extension();
 };

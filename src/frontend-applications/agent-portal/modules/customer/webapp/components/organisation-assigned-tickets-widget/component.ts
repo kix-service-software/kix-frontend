@@ -34,7 +34,7 @@ import { TableRowHeight } from '../../../../../model/configuration/TableRowHeigh
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { StateType } from '../../../../ticket/model/StateType';
 import { TicketState } from '../../../../ticket/model/TicketState';
-import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+
 class Component {
 
     private state: ComponentState;
@@ -91,17 +91,17 @@ class Component {
         );
 
         context.registerListener('organisation-assigned-tickets-component', {
-            sidebarLeftToggled: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            sidebarLeftToggled: (): void => { return; },
+            filteredObjectListChanged: (): void => { return; },
             objectListChanged: () => { return; },
-            sidebarRightToggled: () => { return; },
+            sidebarRightToggled: (): void => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: (organisationId: string, organisation: Organisation, type: KIXObjectType) => {
                 if (type === KIXObjectType.ORGANISATION) {
                     this.initWidget(organisation);
                 }
             },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
 
         this.initWidget(await context.getObject<Organisation>());
@@ -149,7 +149,7 @@ class Component {
         if (this.reminderTicketsConfig) {
             this.tableReminderTicketsSubscriber = {
                 eventSubscriberId: 'organisation-reminder-tickets-table',
-                eventPublished: (data: TableEventData, eventId: string) => {
+                eventPublished: (data: TableEventData, eventId: string): void => {
                     if (
                         eventId === TableEvent.TABLE_READY && data
                         && data.tableId === this.state.reminderTicketsTable.getTableId()
@@ -229,7 +229,7 @@ class Component {
         if (this.newTicketsConfig) {
             this.tableNewTicketsSubscriber = {
                 eventSubscriberId: 'organisation-new-tickets-group',
-                eventPublished: (data: TableEventData, eventId: string) => {
+                eventPublished: (data: TableEventData, eventId: string): void => {
                     if (
                         eventId === TableEvent.TABLE_READY && data
                         && data.tableId === this.state.newTicketsTable.getTableId()
@@ -316,7 +316,7 @@ class Component {
         if (this.openTicketsConfig) {
             this.tableOpenTicketsSubscriber = {
                 eventSubscriberId: 'organisation-open-tickets-group',
-                eventPublished: (data: TableEventData, eventId: string) => {
+                eventPublished: (data: TableEventData, eventId: string): void => {
                     if (
                         eventId === TableEvent.TABLE_READY && data
                         && data.tableId === this.state.openTicketsTable.getTableId()
@@ -402,7 +402,7 @@ class Component {
         if (this.pendingTicketsConfig) {
             this.tablePendingTicketsSubscriber = {
                 eventSubscriberId: 'organisation-pending-tickets-group',
-                eventPublished: (data: TableEventData, eventId: string) => {
+                eventPublished: (data: TableEventData, eventId: string): void => {
                     if (
                         eventId === TableEvent.TABLE_READY && data
                         && data.tableId === this.state.pendingTicketsTable.getTableId()
@@ -593,7 +593,7 @@ class Component {
         this.filter(this.state.pendingTicketsTable, filterValue);
     }
 
-    private filter(table: Table, filterValue: string) {
+    private filter(table: Table, filterValue: string): void {
         table.setFilter(filterValue);
         table.filter();
     }

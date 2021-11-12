@@ -32,11 +32,14 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
 
     public uiComponents: UIComponent[] = [
         new UIComponent('admin', '/kix-module-admin$0/webapp/components/admin-module', []),
-        new UIComponent('admin-modules-explorer', '/kix-module-admin$0/webapp/components/admin-modules-explorer', [])
+        new UIComponent('admin-modules-explorer', '/kix-module-admin$0/webapp/components/admin-modules-explorer', []),
+        new UIComponent(
+            'setup-system-settings', '/kix-module-admin$0/webapp/components/setup-system-settings', []
+        )
     ];
 
 }
 
-module.exports = (data, host, options) => {
+module.exports = (data, host, options): Extension => {
     return new Extension();
 };

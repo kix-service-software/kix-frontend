@@ -25,8 +25,6 @@ import { FAQArticle } from '../../model/FAQArticle';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { FAQDetailsContext } from './context/FAQDetailsContext';
-import { InlineContent } from '../../../../modules/base-components/webapp/core/InlineContent';
-import { FAQArticleAttachmentLoadingOptions } from '../../model/FAQArticleAttachmentLoadingOptions';
 import { UIFilterCriterion } from '../../../../model/UIFilterCriterion';
 import { FAQVote } from '../../model/FAQVote';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
@@ -58,7 +56,7 @@ export class FAQService extends KIXObjectService {
         this.objectConstructors.set(KIXObjectType.FAQ_VOTE, [FAQVote]);
     }
 
-    public isServiceFor(type: KIXObjectType | string) {
+    public isServiceFor(type: KIXObjectType | string): boolean {
         return type === KIXObjectType.FAQ_ARTICLE
             || type === KIXObjectType.FAQ_ARTICLE_ATTACHMENT
             || type === KIXObjectType.FAQ_ARTICLE_HISTORY

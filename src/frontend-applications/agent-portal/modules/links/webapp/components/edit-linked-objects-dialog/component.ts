@@ -211,7 +211,7 @@ class Component {
 
         this.tableSubscriber = {
             eventSubscriberId: 'edit-link-object-dialog',
-            eventPublished: (data: TableEventData, eventId: string) => {
+            eventPublished: (data: TableEventData, eventId: string): void => {
                 if (data && data.tableId === table.getTableId()) {
                     if (eventId === TableEvent.ROW_SELECTION_CHANGED) {
                         this.objectSelectionChanged(table.getSelectedRows().map((r) => r.getRowObject().getObject()));

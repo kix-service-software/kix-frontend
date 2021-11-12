@@ -44,7 +44,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
         this.state.prepared = true;
     }
 
-    public async addInitialTable() {
+    public async addInitialTable(): Promise<void> {
         await this.loadDynamicField();
         const tableValues: Array<string[]> = [];
         const config = this.dynamicField?.Config;

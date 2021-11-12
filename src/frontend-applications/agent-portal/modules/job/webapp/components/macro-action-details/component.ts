@@ -8,10 +8,7 @@
  */
 
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { LabelValueGroup } from '../../../../../model/LabelValueGroup';
-import { LabelValueGroupValue } from '../../../../../model/LabelValueGroupValue';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { MacroAction } from '../../../model/MacroAction';
 import { MacroActionLabelProvider } from '../../core';

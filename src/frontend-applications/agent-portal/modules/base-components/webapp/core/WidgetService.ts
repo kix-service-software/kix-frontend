@@ -17,9 +17,6 @@ import { EventService } from './EventService';
 import { TabContainerEvent } from './TabContainerEvent';
 import { TabContainerEventData } from './TabContainerEventData';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
-import { ConfiguredWidget } from '../../../../model/configuration/ConfiguredWidget';
-import { IConfiguration } from '../../../../model/configuration/IConfiguration';
-import { WidgetConfiguration } from '../../../../model/configuration/WidgetConfiguration';
 
 export class WidgetService {
 
@@ -95,7 +92,7 @@ export class WidgetService {
         return this.widgetActions.get(instanceId);
     }
 
-    public registerActionListener(listener: IActionListener) {
+    public registerActionListener(listener: IActionListener): void {
         const existingListenerIndex = this.actionListenerListeners.findIndex(
             (l) => l.listenerInstanceId === listener.listenerInstanceId
         );
@@ -106,7 +103,7 @@ export class WidgetService {
         }
     }
 
-    public setActionData(instanceId: string, data: KIXObject[] | Table) {
+    public setActionData(instanceId: string, data: KIXObject[] | Table): void {
         if (this.widgetActions.has(instanceId)) {
             this.widgetActions.get(instanceId)[0].forEach((a) => a.setData(data));
             const listener = this.actionListenerListeners.find((l) => l.listenerInstanceId === instanceId);
@@ -116,7 +113,7 @@ export class WidgetService {
         }
     }
 
-    public updateActions(instanceId: string) {
+    public updateActions(instanceId: string): void {
         const listener = this.actionListenerListeners.find((l) => l.listenerInstanceId === instanceId);
         if (listener) {
             listener.actionDataChanged();

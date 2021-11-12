@@ -9,6 +9,13 @@
 
 import { KIXObjectFormService } from '../../../base-components/webapp/core/KIXObjectFormService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { OAuth2Profile } from '../../model/OAuth2Profile';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { OAuth2ProfileProperty } from '../../model/OAuth2ProfileProperty';
+import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
+import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
 
 export class OAuth2ProfileFormService extends KIXObjectFormService {
 
@@ -26,7 +33,22 @@ export class OAuth2ProfileFormService extends KIXObjectFormService {
         super();
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.OAUTH2_PROFILE;
+    }
+
+    protected async getValue(
+        property: string, value: any, object: OAuth2Profile, formField: FormFieldConfiguration, formContext: FormContext
+    ): Promise<any> {
+        if (formContext === FormContext.NEW && property === OAuth2ProfileProperty.URL_REDIRECT) {
+
+            const fqdnConfig: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
+                KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.FQDN], null, null, true
+            ).catch((error): SysConfigOption[] => []);
+            if (fqdnConfig?.length && typeof fqdnConfig[0].Value === 'object' && fqdnConfig[0].Value['Frontend']) {
+                return `https://${fqdnConfig[0].Value['Frontend']}/oauth2redirect`;
+            }
+        }
+        return super.getValue(property, value, object, formField, formContext);
     }
 }

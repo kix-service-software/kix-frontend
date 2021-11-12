@@ -164,7 +164,7 @@ export class RoleService extends KIXObjectAPIService {
 
     private async createUserIds(
         token: string, clientRequestId: string, baseUri: string, existingUserIds: number[], userIds: number[]
-    ) {
+    ): Promise<void> {
         const userIdsToAdd = userIds.filter((uid) => !existingUserIds.some((euid) => euid === uid));
         const createPromises = [];
         userIdsToAdd.forEach((UserID) => createPromises.push(

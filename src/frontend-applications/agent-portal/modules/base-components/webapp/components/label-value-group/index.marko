@@ -13,10 +13,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 key="label-value-group[]"
                 style=component.getGroupStyle(index)
                 class={
-                    minimizable:
-                        group.sub &&
-                        Array.isArray(group.sub) &&
-                        !!group.sub.length
+                    minimizable: group.sub && Array.isArray(group.sub) && !!group.sub.length
                 }
                 on-click("minimizeGroup", index)>
                 <div.label title=group.label>
@@ -26,24 +23,18 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </div>
                 <if(group.value && group.value.value)>
                     <if(group.value.attachment)>
-                        <file-entry
-                            attachment=group.value.attachment
-                            on-fileClicked("fileClicked", index)/>
+                        <file-entry attachment=group.value.attachment on-fileClicked("fileClicked", index)/>
                     </if>
                     <else>
                         <div.value title=group.value.value>
                             <if(group.value.multiline)>
-                                <textarea>${group.value.value}</textarea>
+                                <pre>${group.value.value}</pre>
                             </if>
                             <else>${group.value.value}</else>
                         </div>
                     </else>
                 </if>
-                <if(
-                    group.sub &&
-                    Array.isArray(group.sub) &&
-                    !!group.sub.length
-                )>
+                <if(group.sub && Array.isArray(group.sub) && !!group.sub.length && state.toggleButtonVisible)>
                     <div.toggle>
                         <div.line class={
                             minimized: component.groupIsMinimized(index)
@@ -60,14 +51,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </div>
                 </if>
             </div>
-            <if(
-                group.sub &&
-                Array.isArray(group.sub) &&
-                !!group.sub.length &&
-                !component.groupIsMinimized(index)
-            )>
+            <if(group.sub && Array.isArray(group.sub) && !!group.sub.length && !component.groupIsMinimized(index))>
                 <div.sub>
                     <label-value-group
+                        toggleButtonVisible=state.toggleButtonVisible
                         groups=group.sub
                         level=(state.level + 1)
                         on-fileClicked("fileClicked", null)/>

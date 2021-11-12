@@ -16,6 +16,9 @@ import { SocketResponse } from '../../modules/base-components/webapp/core/Socket
 import { ConfigurationService } from '../../../../server/services/ConfigurationService';
 import { LoggingService } from '../../../../server/services/LoggingService';
 import { Namespace, Server, Socket } from 'socket.io';
+import { SocketAuthenticationError } from '../../modules/base-components/webapp/core/SocketAuthenticationError';
+import { PermissionError } from '../../modules/user/model/PermissionError';
+import { SocketErrorResponse } from '../../modules/base-components/webapp/core/SocketErrorResponse';
 
 export abstract class SocketNameSpace implements ISocketNamespace {
 
@@ -74,16 +77,24 @@ export abstract class SocketNameSpace implements ISocketNamespace {
             }
 
             const message = `${this.getNamespace()} / ${event} ${JSON.stringify(logData)}`;
-            const profileTaskId = ProfilingService.getInstance().start('SocketIO', message, data);
+            const profileTaskId = ProfilingService.getInstance().start('SocketIO', message, { data: [data] });
             this.requestCounter++;
 
             handler(data, client).then((response) => {
                 client.emit(response.event, response.data);
 
                 // stop profiling
-                ProfilingService.getInstance().stop(profileTaskId, response.data);
+                ProfilingService.getInstance().stop(profileTaskId, { data: [response.data] });
 
                 this.requestCounter--;
+            }).catch((error) => {
+                if (error instanceof SocketAuthenticationError) {
+                    client.emit(SocketEvent.INVALID_TOKEN, new SocketErrorResponse(data.requestId, error));
+                } else if (error instanceof PermissionError) {
+                    client.emit(SocketEvent.PERMISSION_ERROR, new SocketErrorResponse(data.requestId, error));
+                } else {
+                    client.emit(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error));
+                }
             });
 
         });

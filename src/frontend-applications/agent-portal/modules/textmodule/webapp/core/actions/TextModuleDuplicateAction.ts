@@ -35,7 +35,7 @@ export class TextModuleDuplicateAction extends AbstractAction {
 
     public async run(event: any): Promise<void> {
         if (this.canRun()) {
-            const selectedRows: Row = this.data.getSelectedRows();
+            const selectedRows: Row[] = this.data.getSelectedRows();
             TextModuleDialogUtil.duplicate(selectedRows[0].getRowObject().getObject());
         }
     }

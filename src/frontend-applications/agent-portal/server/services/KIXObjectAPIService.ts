@@ -220,14 +220,14 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         return this.getObjectByUri(token, uri, query);
     }
 
-    protected async getObjectByUri<R>(
+    protected getObjectByUri<R>(
         token: string, uri: string, query?: any, cacheKeyPrefix: string = this.objectType, useCache?: boolean
     ): Promise<R> {
         if (!query) {
             query = {};
         }
 
-        return await this.httpService.get<R>(uri, query, token, null, cacheKeyPrefix, useCache);
+        return this.httpService.get<R>(uri, query, token, null, cacheKeyPrefix, useCache);
     }
 
     protected async sendRequest(
@@ -396,10 +396,10 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             }
         }
 
-        // ignore fulltext property
+        // ignore fulltext and primary property
         filterCriteria = filterCriteria
             ? filterCriteria.filter((c) => {
-                if (c.property === SearchProperty.FULLTEXT) {
+                if (c.property === SearchProperty.FULLTEXT || c.property === SearchProperty.PRIMARY) {
                     return false;
                 }
                 return true;

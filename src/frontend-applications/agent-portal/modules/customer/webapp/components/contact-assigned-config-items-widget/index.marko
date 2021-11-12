@@ -12,12 +12,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         key="contact-assigned-config-items-widget"
         instanceId=state.instanceId
         title=state.title
-        minimzed=state.minimized>
-        <@content>
-            <standard-table-NEW table=state.table/>
-        </@content>
+        minimzed=state.minimized
+    >
+        <@content><kix-table table=state.table/></@content>
     </widget>
 </if>
-<else>
-    <table-placeholder/>
-</else>
+<else><table-placeholder/></else>

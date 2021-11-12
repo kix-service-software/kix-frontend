@@ -9,9 +9,6 @@
 
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { KIXObject } from '../../../../model/kix/KIXObject';
-import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
-import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 import { Report } from '../../model/Report';
 import { ReportDefinition } from '../../model/ReportDefinition';
 import { ReportParameter } from '../../model/ReportParamater';
@@ -33,7 +30,7 @@ export class ReportService extends KIXObjectService<Report> {
         this.objectConstructors.set(KIXObjectType.REPORT, [Report]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.REPORT
             || kixObjectType === KIXObjectType.REPORT_DEFINITION
             || kixObjectType === KIXObjectType.REPORT_OUTPUT_FORMAT

@@ -2,6 +2,7 @@
     "dependencies": [
         "require ./core/AdminUIModule",
         "require ./components/admin-module",
-        "require ./components/admin-modules-explorer"
+        "require ./components/admin-modules-explorer",
+        "require ./components/setup-system-settings"
     ]
 }

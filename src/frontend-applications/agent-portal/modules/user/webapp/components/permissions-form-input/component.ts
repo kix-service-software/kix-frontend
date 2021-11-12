@@ -18,7 +18,6 @@ import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
-import { FormService } from '../../../../base-components/webapp/core/FormService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { PermissionManager } from '../../core/admin/PermissionManager';
 

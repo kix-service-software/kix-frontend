@@ -74,7 +74,7 @@ export class JobAPIService extends KIXObjectAPIService {
         } else if (objectType === KIXObjectType.JOB_TYPE) {
             objects = await super.load<JobType>(
                 token, KIXObjectType.JOB_TYPE, this.RESOURCE_URI_JOB_TYPE, loadingOptions,
-                objectIds, 'JobType', JobType
+                null, 'JobType', JobType
             );
         } else if (objectType === KIXObjectType.JOB_RUN) {
             const uri = this.buildUri(

@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { TicketStateLabelProvider, TicketStateDetailsContext } from '../../core';
+import { TicketStateLabelProvider } from '../../core';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TicketState } from '../../../model/TicketState';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -29,17 +29,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.labelProvider = new TicketStateLabelProvider();
         const context = ContextService.getInstance().getActiveContext();
         context.registerListener('ticket-state-info-widget', {
-            sidebarRightToggled: () => { return; },
-            sidebarLeftToggled: () => { return; },
+            sidebarRightToggled: (): void => { return; },
+            sidebarLeftToggled: (): void => { return; },
             objectListChanged: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            filteredObjectListChanged: (): void => { return; },
             scrollInformationChanged: () => { return; },
             objectChanged: async (ticketId: string, ticketState: TicketState, type: KIXObjectType) => {
                 if (type === KIXObjectType.TICKET_STATE) {
                     this.initWidget(ticketState);
                 }
             },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
         this.state.widgetConfiguration = context
             ? await context.getWidgetConfiguration(this.state.instanceId)

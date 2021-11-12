@@ -9,16 +9,14 @@
 
 import { ComponentState } from './ComponentState';
 import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
-import { TicketLabelProvider, TicketDetailsContext, TicketService } from '../../core';
+import { TicketLabelProvider, TicketService } from '../../core';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { Ticket } from '../../../model/Ticket';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
-import {
-    ObjectInformationWidgetConfiguration
-} from '../../../../../model/configuration/ObjectInformationWidgetConfiguration';
+import { ObjectInformationWidgetConfiguration } from '../../../../../model/configuration/ObjectInformationWidgetConfiguration';
 import { TicketProperty } from '../../../model/TicketProperty';
 import { Context } from '../../../../../model/Context';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
@@ -51,7 +49,7 @@ class Component {
 
         this.subscriber = {
             eventSubscriberId: 'ticket-info-widget',
-            eventPublished: (data, eventId: string) => {
+            eventPublished: (data, eventId: string): void => {
                 if (data.objectType === KIXObjectType.TICKET) {
                     this.initWidget();
                 }

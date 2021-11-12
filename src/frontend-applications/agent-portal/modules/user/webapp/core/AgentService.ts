@@ -44,9 +44,10 @@ export class AgentService extends KIXObjectService<User> {
         this.objectConstructors.set(KIXObjectType.USER, [User]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType | string) {
-        return kixObjectType === KIXObjectType.USER ||
-            kixObjectType === KIXObjectType.PERSONAL_SETTINGS;
+    public isServiceFor(kixObjectType: KIXObjectType | string): boolean {
+        return kixObjectType === KIXObjectType.USER
+            || kixObjectType === KIXObjectType.PERSONAL_SETTINGS
+            || kixObjectType === KIXObjectType.CURRENT_USER;
     }
 
     public async loadObjects<O extends KIXObject>(

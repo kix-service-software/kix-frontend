@@ -21,7 +21,8 @@ export class ComponentState extends AbstractComponentState {
         public tableTitle: string = null,
         public canRun: boolean = false,
         public run: boolean = false,
-        public prepared: boolean = false
+        public prepared: boolean = false,
+        public title: string = null
     ) {
         super();
     }

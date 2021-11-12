@@ -35,7 +35,7 @@ export class TicketPrintAction extends AbstractAction {
                 ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Prepare Ticket for print' }
             );
 
-            printFrame.onload = () => {
+            printFrame.onload = (): void => {
                 setTimeout(() => {
                     window.frames[window.frames.length - 1].focus();
                     window.frames[window.frames.length - 1].print();

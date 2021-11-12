@@ -24,6 +24,7 @@ import { JobRun } from '../../model/JobRun';
 import { JobTypes } from '../../model/JobTypes';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class JobService extends KIXObjectService<Job> {
 
@@ -59,7 +60,7 @@ export class JobService extends KIXObjectService<Job> {
         return this.typeMapping[jobType] || KIXObjectType.TICKET;
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.JOB
             || kixObjectType === KIXObjectType.JOB_TYPE
             || kixObjectType === KIXObjectType.JOB_RUN
@@ -70,6 +71,25 @@ export class JobService extends KIXObjectService<Job> {
 
     public getLinkObjectName(): string {
         return 'Job';
+    }
+
+    public async loadObjects<O extends KIXObject>(
+        objectType: KIXObjectType, objectIds: Array<string | number>,
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
+    ): Promise<O[]> {
+        let objects: O[];
+        if (objectType === KIXObjectType.JOB_TYPE) {
+            objects = await super.loadObjects<O>(objectType, null, loadingOptions, objectLoadingOptions);
+            if (objectIds) {
+                objects = objects.filter(
+                    (c) => objectIds.map((id) => isNaN(Number(id)) ? id : Number(id)).some((oid) => c.ObjectId === oid)
+                );
+            }
+        } else {
+            objects = await super.loadObjects(objectType, objectIds, loadingOptions, objectLoadingOptions);
+        }
+
+        return objects as any[];
     }
 
     public async getTreeNodes(

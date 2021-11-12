@@ -16,6 +16,8 @@ import { ContextService } from '../../../../modules/base-components/webapp/core/
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { SetupService } from '../../../setup-assistant/webapp/core/SetupService';
+import { SetupStep } from '../../../setup-assistant/webapp/core/SetupStep';
 
 export class UIModule implements IUIModule {
 
@@ -60,6 +62,16 @@ export class UIModule implements IUIModule {
             ]
         );
         ContextService.getInstance().registerContext(contextDescriptor);
+
+        SetupService.getInstance().registerSetupStep(
+            new SetupStep('setup-system-settings', 'Translatable#System', 'setup-system-settings',
+                [
+                    new UIComponentPermission('system/config', [CRUD.READ])
+                ],
+                'Translatable#System Settings', 'Translatable#setup_assistant_system_settings_text',
+                'kix-icon-gears', 5
+            )
+        );
     }
 
 }

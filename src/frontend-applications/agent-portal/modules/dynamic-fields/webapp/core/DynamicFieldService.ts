@@ -16,12 +16,6 @@ import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpec
 import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { DynamicFieldType } from '../../model/DynamicFieldType';
-import { FilterCriteria } from '../../../../model/FilterCriteria';
-import { DynamicFieldProperty } from '../../model/DynamicFieldProperty';
-import { SearchOperator } from '../../../search/model/SearchOperator';
-import { FilterDataType } from '../../../../model/FilterDataType';
-import { FilterType } from '../../../../model/FilterType';
-import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 
 export class DynamicFieldService extends KIXObjectService<DynamicField> {
 
@@ -44,7 +38,7 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
         this.objectConstructors.set(KIXObjectType.DYNAMIC_FIELD_TYPE, [DynamicFieldType]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.DYNAMIC_FIELD
             || kixObjectType === KIXObjectType.DYNAMIC_FIELD_TYPE;
     }
@@ -57,17 +51,11 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
         objectType: KIXObjectType, objectIds: Array<string | number>,
         loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
     ): Promise<O[]> {
-        let objects: O[];
-        let superLoad = false;
-        if (objectType === KIXObjectType.DYNAMIC_FIELD) {
-            objects = await super.loadObjects<O>(KIXObjectType.DYNAMIC_FIELD, null, loadingOptions);
-        } else {
-            superLoad = true;
-            objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
-        }
-
-        if (objectIds && !superLoad) {
-            objects = objects.filter((c) => objectIds.map((id) => Number(id)).some((oid) => c.ObjectId === oid));
+        let objects: O[] = await super.loadObjects<O>(objectType, null, loadingOptions, objectLoadingOptions);
+        if (objectIds) {
+            objects = objects.filter(
+                (c) => objectIds.map((id) => isNaN(Number(id)) ? id : Number(id)).some((oid) => c.ObjectId === oid)
+            );
         }
 
         return objects as any[];

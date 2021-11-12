@@ -14,7 +14,6 @@ import { Table, RowObject, TableValue } from '../../../../base-components/webapp
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { NotificationDetailsContext } from '..';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';

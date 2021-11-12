@@ -56,7 +56,7 @@ export class CompareConfigItemVersionTableFactory extends TableFactory {
         const versions = await context.getObjectList<Version>(KIXObjectType.CONFIG_ITEM_VERSION);
         versions?.sort((a, b) => a.VersionID - b.VersionID);
 
-        const allVersions = await context.getObjectList<Version>('ALL_VERIONS');
+        const allVersions = await context.getObjectList<Version>('ALL_VERSIONS');
         allVersions?.sort((a, b) => a.VersionID - b.VersionID);
 
         if (Array.isArray(versions)) {

@@ -33,7 +33,7 @@ export class CompareConfigItemVersionContext extends Context {
         if (configItem && Array.isArray(versionIds)) {
             const versions = configItem.Versions.filter((v) => versionIds.some((vid) => vid === v.VersionID));
             this.setObjectList(KIXObjectType.CONFIG_ITEM_VERSION, versions);
-            this.setObjectList('ALL_VERIONS', configItem.Versions);
+            this.setObjectList('ALL_VERSIONS', configItem.Versions);
         }
     }
 

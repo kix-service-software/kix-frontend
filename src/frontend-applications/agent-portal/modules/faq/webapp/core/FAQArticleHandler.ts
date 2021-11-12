@@ -10,7 +10,6 @@
 import { Attachment } from '../../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
-import { SortUtil } from '../../../../model/SortUtil';
 import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { InlineContent } from '../../../base-components/webapp/core/InlineContent';

@@ -24,7 +24,6 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { Context } from '../../../../../model/Context';
 import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
-import { TabWidgetConfiguration } from '../../../../../model/configuration/TabWidgetConfiguration';
 
 class TabLaneComponent implements IEventSubscriber {
 
@@ -94,8 +93,6 @@ class TabLaneComponent implements IEventSubscriber {
                 contextRegistered: () => { return; }
             });
             this.prepareContext();
-            this.hideSidebarIfNeeded();
-            window.addEventListener('resize', this.hideSidebarIfNeeded.bind(this), false);
         }
 
         if (this.state.tabWidgets.length && this.state.activeTab && this.state.tabId) {
@@ -122,7 +119,6 @@ class TabLaneComponent implements IEventSubscriber {
             context.unregisterListener(this.contextListenerId);
         }
         ContextService.getInstance().unregisterListener(this.contextServiceListenerId);
-        window.removeEventListener('resize', this.hideSidebarIfNeeded.bind(this), false);
 
         if (this.state.contextType === ContextType.DIALOG && this.keyDownEventFunction) {
             document.body.removeEventListener('keydown', this.keyDownEventFunction, false);
@@ -162,18 +158,14 @@ class TabLaneComponent implements IEventSubscriber {
             sidebarRightToggled: () => {
                 // this.state.showSidebar = context.areSidebarsRightShown();
             },
-            sidebarLeftToggled: () => { return; },
-            objectChanged: () => { return; },
+            sidebarLeftToggled: (): void => { return; },
+            objectChanged: (): void => { return; },
             objectListChanged: () => { return; },
-            filteredObjectListChanged: () => { return; },
+            filteredObjectListChanged: (): void => { return; },
             scrollInformationChanged: () => { return; },
-            additionalInformationChanged: () => { return; }
+            additionalInformationChanged: (): void => { return; }
         });
         this.setSidebars();
-    }
-
-    public hideSidebarIfNeeded(): void {
-        const context: Context = ContextService.getInstance().getActiveContext();
     }
 
     private setSidebars(): void {

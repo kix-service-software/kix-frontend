@@ -24,13 +24,10 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { ReportProperty } from '../../../model/ReportProperty';
 import { StringContent } from '../../../../base-components/webapp/core/StringContent';
 import { ReportOutputFormat } from '../../../model/ReportOutputFormat';
 import { ReportObjectCreator } from '../../core/form/ReportObjectCreator';
 import { ReportService } from '../../core/ReportService';
-import { NewReportDialogContext } from '../../core/context/NewReportDialogContext';
-import { ContextMode } from '../../../../../model/ContextMode';
 import { ReportDefinitionDialogUtil } from '../../core/ReportDefinitionDialogUtil';
 import { ValidObject } from '../../../../valid/model/ValidObject';
 
@@ -56,14 +53,55 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     continue;
                 }
 
-                labels.push(new Label(null, of, null, of));
+                if (this.definition.BaseURL) {
+                    const url = this.definition.BaseURL + of;
+
+                    labels.push(new Label(null, of, null, of, null, url, false, null,
+                        {
+                            title: of,
+                            content: 'output-format-info',
+                            instanceId: 'output-format-info',
+                            data: {
+                                data: {
+                                    Name: of,
+                                    URL: url
+                                }
+                            },
+                            large: true
+                        }
+                    ));
+                }
+                else {
+                    labels.push(new Label(null, of, null, of, null));
+                }
             }
         }
 
         if (!labels.length) {
             const formats = await KIXObjectService.loadObjects<ReportOutputFormat>(KIXObjectType.REPORT_OUTPUT_FORMAT);
             if (Array.isArray(formats) && formats.length) {
-                formats.forEach((f) => labels.push(new Label(null, f.Name, null, f.DisplayName)));
+                formats.forEach((f) => {
+                    if (this.definition.BaseURL) {
+                        const url = this.definition.BaseURL + f.Name;
+                        labels.push(new Label(null, f.Name, null, f.DisplayName, null, url, false, null,
+                            {
+                                title: f.Name,
+                                content: 'output-format-info',
+                                instanceId: 'output-format-info',
+                                data: {
+                                    data: {
+                                        Name: f.Name,
+                                        URL: url
+                                    }
+                                },
+                                large: true
+                            }
+                        ));
+                    }
+                    else {
+                        labels.push(new Label(null, f.Name, null, f.DisplayName));
+                    }
+                });
             }
         }
 

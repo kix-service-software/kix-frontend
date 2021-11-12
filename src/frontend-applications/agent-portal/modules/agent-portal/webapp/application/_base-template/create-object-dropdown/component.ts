@@ -50,7 +50,7 @@ class Component {
 
         this.subscriber = {
             eventSubscriberId: 'new-object-dropdown',
-            eventPublished: (data: Context, eventId: string) => {
+            eventPublished: (data: Context, eventId: string): void => {
                 if (eventId === ContextEvents.CONTEXT_CHANGED) {
                     this.setValues(descriptors, data.descriptor);
                 }
@@ -70,7 +70,7 @@ class Component {
         ContextService.getInstance().setActiveContext(value[0]);
     }
 
-    private setValues(descriptors: ContextDescriptor[], currentDescriptor?: ContextDescriptor) {
+    private setValues(descriptors: ContextDescriptor[], currentDescriptor?: ContextDescriptor): void {
         let createDescriptor = descriptors.find((d) => d.kixObjectTypes[0] === currentDescriptor?.kixObjectTypes[0]);
         if (!createDescriptor) {
             createDescriptor = descriptors.find((d) => d.kixObjectTypes[0] === KIXObjectType.TICKET);

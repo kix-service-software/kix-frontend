@@ -20,13 +20,14 @@
     }
 
     &:focus {
-        background-color: tint(@button-icon-bg-color, 80%);
-        border-color: shade(@border-color, 25%);
+        // focus style like input fields
+        border-color: darken(@secondary-3, 20%);
+        background-color: @secondary-4;
+        color: @secondary-7;
 
         >[class^="kix-icon-"],
         >[class*=" kix-icon-"] {
-            background-color: shade(@button-icon-bg-color, 25%);
-            border-color: shade(@border-color, 25%);
+            border-color: darken(@secondary-3, 20%);
         }
     }
 
@@ -100,7 +101,7 @@ button.kix-button {
     }
 
     &:active {
-        transform: scale(0.85);
+        transform: scale(0.92);
         box-shadow: 1px 1px 4px 0px inset @secondary-1;
     }
 

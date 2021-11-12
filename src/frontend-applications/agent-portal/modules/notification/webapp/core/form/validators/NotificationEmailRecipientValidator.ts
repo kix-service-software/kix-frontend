@@ -11,7 +11,6 @@ import { IFormFieldValidator } from '../../../../../../modules/base-components/w
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { NotificationProperty } from '../../../../model/NotificationProperty';
 import { ValidationResult } from '../../../../../../modules/base-components/webapp/core/ValidationResult';
-import { FormService } from '../../../../../../modules/base-components/webapp/core/FormService';
 import { ValidationSeverity } from '../../../../../../modules/base-components/webapp/core/ValidationSeverity';
 import { FormFieldValue } from '../../../../../../model/configuration/FormFieldValue';
 import { FormValidationService } from '../../../../../../modules/base-components/webapp/core/FormValidationService';

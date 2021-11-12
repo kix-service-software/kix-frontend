@@ -45,7 +45,7 @@ class Component extends FormInputComponent<string, ComponentState> {
                 search: false,
                 history: false,
                 mode: 'code',
-                onChange: () => {
+                onChange: (): void => {
                     this.handleValueChanged(this.editor.getText());
                 }
             };

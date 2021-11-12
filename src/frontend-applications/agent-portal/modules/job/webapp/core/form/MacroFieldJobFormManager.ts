@@ -41,7 +41,7 @@ export class MacroFieldJobFormManager extends ExtendedJobFormManager {
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('MacroFieldJobFormManager'),
-            eventPublished: (data: FormValuesChangedEventData, eventId: string) => {
+            eventPublished: (data: FormValuesChangedEventData, eventId: string): void => {
                 const macroValue = data.changedValues.find(
                     (cv) => cv[0] && cv[0].property === JobProperty.MACROS
                 );

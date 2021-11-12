@@ -24,6 +24,16 @@
 
     min-width: @sidebar-toggled-width;
 
+    overflow: auto;
+
+    // hide scrollbar for webkit browser
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    // hide scrollbar for Firefox
+    scrollbar-width: none;
+
     &#sidebar-left {
         border-top-right-radius: @border-radius;
         border-bottom-right-radius: @border-radius;
@@ -31,7 +41,6 @@
 
     >.sidebar-widgets-container {
         transition: width 0.5s, opacity 0.5s;
-        overflow: auto;
 
         .sidebar-widget-container {
             margin-bottom: 0.25rem;
@@ -46,7 +55,6 @@
 // "mobile"
 @media only screen and (max-width: @mobile-breakpoint) {
     .sidebar {
-        overflow: hidden;
         max-width: @sidebar-width;
         width: 100%;
 
@@ -107,8 +115,6 @@
             grid-column-gap: 0.5rem;
             color: #5b5b5b;
             padding: 0.5rem;
-            background-color: #ededed;
-
 
             &:hover {
                 background-color: darken(@secondary-3, 5%);
@@ -133,10 +139,23 @@
 
         &.sidebars-shown {
             background-color: fade(@secondary-3, 90%);
+
+            .sidebar-toggle:not(:hover) {
+                background-color: fade(@secondary-3, 90%);
+            }
         }
 
         &:not(.sidebars-shown) {
             width: 2rem;
+        }
+    }
+}
+
+// no overflow left
+@media only screen and (min-width: @sidebar-left-breakpoint + 1px) {
+    #sidebar-left {
+        .sidebar-toggle:not(:hover) {
+            background-color: #ededed;
         }
     }
 }
@@ -152,10 +171,24 @@
 
         &.sidebars-shown {
             background-color: fade(@secondary-3, 90%);
+
+
+            .sidebar-toggle:not(:hover) {
+                background-color: fade(@secondary-3, 90%);
+            }
         }
 
         &:not(.sidebars-shown) {
             width: 2rem;
+        }
+    }
+}
+
+// no overflow right
+@media only screen and (min-width: @sidebar-right-breakpoint + 1px) {
+    #sidebar-right {
+        .sidebar-toggle:not(:hover) {
+            background-color: #ededed;
         }
     }
 }

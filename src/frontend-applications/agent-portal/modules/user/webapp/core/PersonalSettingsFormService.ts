@@ -114,6 +114,11 @@ export class PersonalSettingsFormService extends KIXObjectFormService {
             notificationParameter[1] = JSON.stringify(notificationPreference);
         }
 
+        const dontAskValue = parameter.find((p) => p[0] === PersonalSettingsProperty.DONT_ASK_DIALOG_ON_CLOSE);
+        if (dontAskValue) {
+            dontAskValue[1] = Number(dontAskValue[1]);
+        }
+
         return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
     }
 }

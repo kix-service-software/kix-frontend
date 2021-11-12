@@ -50,12 +50,12 @@ class Component {
                     this.initWidget(context, object);
                 }
             },
-            sidebarRightToggled: () => { return; },
-            sidebarLeftToggled: () => { return; },
+            sidebarRightToggled: (): void => { return; },
+            sidebarLeftToggled: (): void => { return; },
             objectListChanged: () => { return; },
             scrollInformationChanged: () => { return; },
-            filteredObjectListChanged: () => { return; },
-            additionalInformationChanged: () => { return; }
+            filteredObjectListChanged: (): void => { return; },
+            additionalInformationChanged: (): void => { return; }
         });
 
         await this.initWidget(context, await context.getObject<ConfigItem>());

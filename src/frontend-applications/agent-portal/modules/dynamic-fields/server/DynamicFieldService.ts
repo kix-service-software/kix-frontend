@@ -63,7 +63,7 @@ export class DynamicFieldAPIService extends KIXObjectAPIService {
         } else if (objectType === KIXObjectType.DYNAMIC_FIELD_TYPE) {
             const uri = this.buildUri(this.RESOURCE_URI, 'types');
             objects = await super.load(
-                token, objectType, uri, loadingOptions, objectIds, 'DynamicFieldType', DynamicFieldType
+                token, objectType, uri, loadingOptions, null, 'DynamicFieldType', DynamicFieldType
             );
         }
 

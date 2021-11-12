@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { HomeContext } from '../../core/HomeContext';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { IdService } from '../../../../../model/IdService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
@@ -27,7 +26,7 @@ class HomeComponent {
     public async onMount(): Promise<void> {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: () => {
+            eventPublished: (): void => {
                 this.prepareWidgets();
             }
         };

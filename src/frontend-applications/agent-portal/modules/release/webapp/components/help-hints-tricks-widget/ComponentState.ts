@@ -15,6 +15,9 @@ export class ComponentState extends WidgetComponentState {
     public constructor(
         public hasFAQAccess: boolean = false,
         public hasConfigAccess: boolean = false,
+        public appleImg: string = 'app-store.png',
+        public googleImg: string = 'google-play.png',
+        public selfServiceManualLink: string = null,
         public userManualLink: string = null,
         public adminManualLink: string = null,
         public faqIds: number[] = []

@@ -32,7 +32,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('LoadingShield'),
-            eventPublished: (data: LoadingShieldEventData, eventId: string) => {
+            eventPublished: (data: LoadingShieldEventData, eventId: string): void => {
                 if (data.shieldId === this.shieldId) {
                     this.state.show = data.isLoading;
                     this.state.hint = data.loadingHint;

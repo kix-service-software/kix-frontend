@@ -13,7 +13,6 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
-import { OrganisationDetailsContext } from '.';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
@@ -40,7 +39,7 @@ export class OrganisationService extends KIXObjectService<Organisation> {
         this.objectConstructors.set(KIXObjectType.ORGANISATION, [Organisation]);
     }
 
-    public isServiceFor(kixObjectType: KIXObjectType) {
+    public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.ORGANISATION;
     }
 

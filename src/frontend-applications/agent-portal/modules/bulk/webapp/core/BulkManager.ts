@@ -7,9 +7,7 @@
  * --
  */
 
-import {
-    AbstractDynamicFormManager
-} from '../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager';
+import { AbstractDynamicFormManager } from '../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { PropertyOperator } from '../../../../modules/base-components/webapp/core/PropertyOperator';
@@ -34,7 +32,7 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
         this.bulkRun = false;
     }
 
-    public getBulkRunState() {
+    public getBulkRunState(): boolean {
         return this.bulkRun;
     }
 

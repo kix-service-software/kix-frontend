@@ -6,77 +6,171 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<widget title=state.translations["Translatable#Help, hints & tricks"]>
+<widget title=(state.translations["Translatable#Help, hints & tricks"])>
     <@content>
         <div.help-and-info-widget>
             <div>
                 <div.header>
-                    <img.app-logo alt=state.translations["Translatable#Field Agent App"] src="/static/img/release/kix_field_agent_app.png"/>
+                    <img.app-logo
+                        alt=(state.translations["Translatable#Field Agent App"])
+                        src="/static/img/release/kix_field_agent_app.png"
+                    >
                     <h2>
                         <translation-string pattern="Translatable#Field Agent App"/>
                     </h2>
                 </div>
                 <p>
-                    <translation-string pattern="Translatable#The quick and easy way to provide technical customer service while on the go. Whether you're dealing with a technical problem or maintenance work: Switch over to paperless documentation and save both time and money."/>
+                    <translation-string pattern="Translatable#Technical Customer Service mit KIX - work order documentation, checklists, scheduling, offline information for maintenance and repairs."/>
                 </p>
-                <h3 style="margin-top: 0.5rem">
-                    <translation-string pattern="Translatable#Features"/>:
-                </h3>
-                <ul>
-                    <li>
-                        <translation-string pattern="Translatable#Online and offline processing of service jobs"/>
-                    </li>
-                    <li>
-                        <translation-string pattern="Translatable#Management using clear checklists"/>
-                    </li>
-                    <li>
-                        <translation-string pattern="Translatable#Automatic time measurement"/>
-                    </li>
-                    <li>
-                        <translation-string pattern="Translatable#Save photos and work notes"/>
-                    </li>
-                    <li>
-                        <translation-string pattern="Translatable#Confirmation through customer signature"/>
-                    </li>
-                </ul>
                 <div.app-links>
-                    <a href="https://apps.apple.com/de/app/kix-field-agent/id1489588005" target="_blank">
-                        <img alt=state.translations["Translatable#Field Agent App (iOS)"] src="/static/img/release/app-store.png"/>
-                        <translation-string pattern="Translatable#Field Agent App (iOS)"/>
+                    <a
+                        href="https://apps.apple.com/de/app/kix-field-agent/id1489588005"
+                        target="_blank"
+                    >
+                        <img
+                            alt=(
+                                state.translations[
+                                    "Translatable#Field Agent App (iOS)"
+                                ]
+                            )
+                            src=("/static/img/release/" + state.appleImg)
+                        >
                     </a>
-                    <a href="https://play.google.com/store/apps/details?id=com.compl3te.fieldservices" target="_blank">
-                        <img alt=state.translations["Translatable#Field Agent App (Android)"] src="/static/img/release/google-play.png"/>
-                        <translation-string pattern="Translatable#Field Agent App (Android)"/>
+                    <a
+                        href="https://play.google.com/store/apps/details?id=com.compl3te.fieldservices"
+                        target="_blank"
+                    >
+                        <img
+                            alt=(
+                                state.translations[
+                                    "Translatable#Field Agent App (Android)"
+                                ]
+                            )
+                            src=("/static/img/release/" + state.googleImg)
+                        >
                     </a>
                 </div>
             </div>
-            <if(state.hasConfigAccess && (state.userManualLink || state.adminManualLink))>
+            <div>
+                <div.header>
+                    <img.app-logo
+                        alt=(state.translations["Translatable#Field Agent App"])
+                        src="/static/img/release/community.svg"
+                    >
+                    <h2>
+                        <translation-string pattern="Translatable#Community"/>
+                    </h2>
+                </div>
+                <p>
+                    <translation-string pattern="Translatable#Tips for getting started quickly with KIX can be found on the KIX YouTube channel. In the forum you can also exchange ideas with other KIX users."/>
+                </p>
+                <div.link-list>
+                    <a.link-entry
+                        href="https://www.youtube.com/watch?v=CqCNIvdhayo&list=PLyKz2PdXNlw3b13FZEPP9CcFMTFRvFQh-"
+                        target="_blank"
+                    >
+                        <img
+                            alt=(state.translations["Translatable#Youtube"])
+                            src="/static/img/release/youtube.svg"
+                        >
+                        <span>
+                            ${state.translations[
+                                "Translatable#Quick Start Guide"
+                            ]}
+                        </span>
+                    </a>
+                    <a.link-entry
+                        href="https://forum.kixdesk.com/"
+                        target="_blank"
+                    >
+                        <img
+                            alt=(state.translations["Translatable#Forum"])
+                            src="/static/img/release/forum.svg"
+                        >
+                        <span>
+                            ${state.translations["Translatable#KIX Forum"]}
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+            <if(state.hasConfigAccess)>
                 <div>
                     <div.header>
-                        <icon icon="kix-icon-book"/>
+                        <img.app-logo
+                            alt=(state.translations["Translatable#Manuals"])
+                            src="/static/img/release/manual.svg"
+                        >
                         <h2>
-                            <translation-string pattern="Translatable#Links to manuals"/>
+                            <translation-string pattern="Translatable#Manuals"/>
                         </h2>
                     </div>
                     <p>
-                        <translation-string pattern="Translatable#Here you will find the KIX 18 manuals for users and administrators"/>:
+                        <translation-string pattern="Translatable#For a more intensive introduction to the use and administration of KIX, you will find the latest manuals in the online documentation."/>
                     </p>
-                    <ul.link-list>
+                    <div.link-list>
                         <if(state.userManualLink)>
-                            <li>
-                                <a href=state.userManualLink target="_blank">
-                                    <translation-string pattern="Translatable#User manual"/>
-                                </a>
-                            </li>
+                            <a.link-entry
+                                href=state.userManualLink
+                                target="_blank"
+                            >
+                                <img
+                                    alt=(
+                                        state.translations[
+                                            "Translatable#User Manual"
+                                        ]
+                                    )
+                                    src="/static/img/release/manual-user.svg"
+                                >
+                                <span>
+                                    ${state.translations[
+                                        "Translatable#User Manual"
+                                    ]}
+                                </span>
+                            </a>
                         </if>
                         <if(state.adminManualLink)>
-                            <li>
-                                <a href=state.adminManualLink target="_blank">
-                                    <translation-string pattern="Translatable#Administrator's Guide"/>
-                                </a>
-                            </li>
+                            <a.link-entry
+                                href=state.adminManualLink
+                                target="_blank"
+                            >
+                                <img
+                                    alt=(
+                                        state.translations[
+                                            "Translatable#Admin Manual"
+                                        ]
+                                    )
+                                    src="/static/img/release/manual-admin.svg"
+                                >
+                                <span>
+                                    ${state.translations[
+                                        "Translatable#Admin Manual"
+                                    ]}
+                                </span>
+                            </a>
                         </if>
-                    </ul>
+
+                        <if(state.selfServiceManualLink)>
+                            <a.link-entry
+                                href=state.selfServiceManualLink
+                                target="_blank"
+                            >
+                                <img
+                                    alt=(
+                                        state.translations[
+                                            "Translatable#Self Service Manual"
+                                        ]
+                                    )
+                                    src="/static/img/release/selfserviceportal.svg"
+                                >
+                                <span>
+                                    ${state.translations[
+                                        "Translatable#Self Service Manual"
+                                    ]}
+                                </span>
+                            </a>
+                        </if>
+                    </div>
                 </div>
             </if>
         </div>

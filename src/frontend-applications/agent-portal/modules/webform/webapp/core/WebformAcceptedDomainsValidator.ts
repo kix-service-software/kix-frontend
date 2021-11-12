@@ -31,7 +31,7 @@ export class WebformAcceptedDomainsValidator implements IFormFieldValidator {
             const value = formInstance.getFormFieldValue<string>(formField.instanceId);
             if (value && value.value && !value.value.match(/^\*$/)) {
                 try {
-                    const regex = new RegExp(value.value);
+                    new RegExp(value.value);
                 } catch (error) {
                     return new ValidationResult(ValidationSeverity.ERROR, error.message);
                 }

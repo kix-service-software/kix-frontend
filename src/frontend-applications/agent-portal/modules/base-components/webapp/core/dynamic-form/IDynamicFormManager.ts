@@ -16,6 +16,7 @@ import { ValidationResult } from '../ValidationResult';
 import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
 
 export interface IDynamicFormManager {
 
@@ -88,6 +89,8 @@ export interface IDynamicFormManager {
     hasOption(option: ObjectPropertyValueOption, property: string, operator: string): boolean;
 
     hasAdditionalOptions(): boolean;
+
+    getAdditionalOptions(property: string): Promise<FormFieldOption[]>;
 
     validateAdditionalOptions(options: string): string;
 

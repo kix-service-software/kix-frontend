@@ -51,7 +51,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await this.setText();
         EventService.getInstance().subscribe(ApplicationEvent.REFRESH, {
             eventSubscriberId: '',
-            eventPublished: () => {
+            eventPublished: (): void => {
                 this.setText();
             }
         });

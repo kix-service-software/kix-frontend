@@ -9,9 +9,9 @@
 
 import { ComponentState } from './ComponentState';
 import { RefreshToastSettings } from '../../../../../../modules/base-components/webapp/core/RefreshToastSettings';
-import { ContextHistory } from '../../../../../../modules/base-components/webapp/core/ContextHistory';
 import { ApplicationEvent } from '../../../../../../modules/base-components/webapp/core/ApplicationEvent';
 import { EventService } from '../../../../../../modules/base-components/webapp/core/EventService';
+import { WindowListener } from '../../../core/WindowListener';
 
 class Component {
 
@@ -21,14 +21,14 @@ class Component {
         this.state = new ComponentState();
     }
 
-    public onInput(input: RefreshToastSettings) {
+    public onInput(input: RefreshToastSettings): void {
         this.state.message = input.message;
     }
 
     public refreshClicked(event: any): void {
         event.stopPropagation();
         event.preventDefault();
-        ContextHistory.getInstance().removeBrowserListener();
+        WindowListener.getInstance().removeBrowserListener();
         location.reload();
     }
 

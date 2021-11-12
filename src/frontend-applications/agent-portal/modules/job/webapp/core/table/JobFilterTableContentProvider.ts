@@ -7,7 +7,6 @@
  * --
  */
 
-import { JobDetailsContext } from '../context';
 import { JobFilterTableProperty } from './JobFilterTableProperty';
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
 import { Table, RowObject, TableValue } from '../../../../base-components/webapp/core/table';

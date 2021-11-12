@@ -15,8 +15,8 @@ export class PostproductivCSSHandler implements ITableCSSHandler {
     public async getRowCSSClasses(configItem: ConfigItem): Promise<string[]> {
         const classes = [];
 
-        if (configItem && configItem.CurDeplStateType && configItem.CurDeplStateType === 'postproductive') {
-            classes.push('invlaid-object');
+        if (configItem?.CurDeplStateType === 'postproductive') {
+            classes.push('invalid-object');
         }
 
         return classes;

@@ -37,7 +37,7 @@ class Component extends FormInputComponent<JSON, ComponentState> {
 
         this.formSubscriber = {
             eventSubscriberId: this.state.field?.instanceId,
-            eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
+            eventPublished: async (data: FormValuesChangedEventData, eventId: string): Promise<void> => {
                 const typeValue = data.changedValues.find(
                     (cv) => cv[0] && cv[0].property === DynamicFieldProperty.FIELD_TYPE
                 );
