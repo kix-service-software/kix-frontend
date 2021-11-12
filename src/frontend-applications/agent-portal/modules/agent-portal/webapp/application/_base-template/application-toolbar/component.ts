@@ -10,7 +10,7 @@
 import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
-import { ContextHistory } from '../../../../../base-components/webapp/core/ContextHistory';
+import { WindowListener } from '../../../../../base-components/webapp/core/WindowListener';
 
 class Component {
 
@@ -48,8 +48,7 @@ class Component {
     }
 
     public async logout(): Promise<void> {
-        ContextHistory.getInstance().removeBrowserListener();
-        window.location.replace('/auth/logout');
+        WindowListener.getInstance().logout();
     }
 
 }

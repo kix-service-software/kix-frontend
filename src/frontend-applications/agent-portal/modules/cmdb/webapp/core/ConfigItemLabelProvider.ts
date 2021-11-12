@@ -140,10 +140,20 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
         switch (property) {
             case ConfigItemProperty.CUR_DEPL_STATE_ID:
-                displayValue = configItem.CurDeplState;
+                if (configItem.CurDeplState) {
+                    displayValue = configItem.CurDeplState;
+                } else if (displayValue) {
+                    displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
+                    translatable = false;
+                }
                 break;
             case ConfigItemProperty.CUR_INCI_STATE_ID:
-                displayValue = configItem.CurInciState;
+                if (configItem.CurInciState) {
+                    displayValue = configItem.CurInciState;
+                } else if (displayValue) {
+                    displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
+                    translatable = false;
+                }
                 break;
             case ConfigItemProperty.NAME:
                 displayValue = configItem.Name;
@@ -155,6 +165,7 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
             case ConfigItemProperty.CLASS_ID:
             case ConfigItemProperty.CLASS:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
+                translatable = false;
                 break;
             default:
                 const attributes = configItem.getPreparedData(property);

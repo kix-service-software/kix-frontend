@@ -12,6 +12,7 @@ import { RoutingService } from './RoutingService';
 import { Context } from '../../../../model/Context';
 import { EventService } from './EventService';
 import { ContextUIEvent } from './ContextUIEvent';
+import { WindowListener } from './WindowListener';
 
 export class ContextHistory {
 
@@ -32,16 +33,7 @@ export class ContextHistory {
             this.navigateBack(event);
         });
 
-        window.addEventListener('beforeunload', this.beforeunload.bind(this));
-    }
-
-    public removeBrowserListener(): void {
-        window.removeEventListener('beforeunload', this.beforeunload.bind(this));
-    }
-
-    private beforeunload(event: any): any {
-        event.returnValue = false;
-        return false;
+        WindowListener.getInstance();
     }
 
     private navigateBack(event: any): void {

@@ -261,7 +261,8 @@ export class UserService extends KIXObjectAPIService {
 
         parameter = parameter.filter((p) =>
             p[0] !== PersonalSettingsProperty.CURRENT_PASSWORD &&
-            p[0] !== PersonalSettingsProperty.USER_PASSWORD_CONFIRM
+            p[0] !== PersonalSettingsProperty.USER_PASSWORD_CONFIRM &&
+            p[0] !== PersonalSettingsProperty.USER_TOKEN
         );
 
         for (const param of parameter) {
@@ -274,16 +275,12 @@ export class UserService extends KIXObjectAPIService {
                     );
                 }
             } else if (currentPreferences.some((p) => p.ID === param[0])) {
-                const paramValue = param[1] === null ? '' : param[1];
                 if (
-                    paramValue && (
-                        typeof paramValue === 'string' ||
-                        (Array.isArray(paramValue) && paramValue.length) ||
-                        typeof paramValue === 'number'
-                    )
+                    typeof param[1] !== 'undefined' &&
+                    param[1] !== null
                 ) {
                     await this.updateObject(
-                        token, clientRequestId, KIXObjectType.USER_PREFERENCE, [['Value', paramValue]],
+                        token, clientRequestId, KIXObjectType.USER_PREFERENCE, [['Value', param[1]]],
                         param[0], options
                     ).catch((error: Error) => {
                         errors.push(error);

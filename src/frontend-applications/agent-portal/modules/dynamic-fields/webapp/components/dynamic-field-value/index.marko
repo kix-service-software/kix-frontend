@@ -11,29 +11,31 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <div.df-checklist>
             <dynamic-field-checklist-progress checklist=state.checklist/>
             <overlay-icon
-                title=state.field.Label
+                title=(state.field.Label)
                 icon="kix-icon-checklist"
                 content="dynamic-field-checklist-information"
                 data={
                     checklist: state.checklist,
-                    field: state.field
-                }/>
+                    field: state.field,
+                }
+            />
         </div>
     </if>
     <else-if(state.field.FieldType === "Table")>
         <dynamic-field-table-view table=state.table dynamicField=state.field/>
     </else-if>
     <else-if(state.field.FieldType === "TextArea")>
-        <for|value| of=state.dfValue.Value>
-            <div.df-textarea>
-                <textarea value=value readonly/>
-            </div>
+        <for|value| of=(state.dfValue.Value)>
+            <pre.df-textarea>
+           ${" "}${value}
+         ${" "}</pre>
         </for>
     </else-if>
     <else>
         <label-list
             labels=state.labels
             removeLabels=false
-            on-labelClicked("labelClicked")/>
+            on-labelClicked("labelClicked")
+        />
     </else>
 </if>

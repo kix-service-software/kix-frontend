@@ -23,7 +23,7 @@ export class DynamicFieldType extends KIXObject {
     public constructor(dynamicFieldType?: DynamicFieldType) {
         super(dynamicFieldType);
         if (dynamicFieldType) {
-            this.ObjectId = dynamicFieldType.ObjectId;
+            this.ObjectId = dynamicFieldType.Name;
             this.DisplayName = dynamicFieldType.DisplayName;
             this.Name = dynamicFieldType.Name;
         }

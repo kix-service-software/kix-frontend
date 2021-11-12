@@ -74,6 +74,14 @@ export class Server implements IServer {
             AgentPortalExtensions.SERVICES
         );
 
+        process.on('unhandledRejection', (reason, promise) => {
+            LoggingService.getInstance().error('An unhandledRejection occured:', reason);
+            LoggingService.getInstance().error(reason.toString(), reason);
+            console.error('Unhandled Rejection at: Promise', promise, 'reason:', reason);
+            console.error(reason);
+            throw reason;
+        });
+
         LoggingService.getInstance().info(`Initialize ${serviceExtensions.length} service extensions`);
         for (const extension of serviceExtensions) {
             await extension.initServices();

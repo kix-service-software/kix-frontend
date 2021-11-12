@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2021-09-16 17:01+0000\n"
+"PO-Revision-Date: 2021-11-09 13:48+0000\n"
 "Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
 "Language-Team: English <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/en/>\n"
@@ -104,6 +104,9 @@ msgstr "Email Address(es) successfully removed."
 msgid "Add Table Widget"
 msgstr ""
 
+msgid "Add to Affected Assets"
+msgstr ""
+
 msgid "Add Widget"
 msgstr ""
 
@@ -116,13 +119,16 @@ msgstr ""
 msgid "Administration"
 msgstr ""
 
-msgid "Administrator's Guide"
+msgid "Admin Manual"
 msgstr ""
 
 msgid "Admin Password"
 msgstr ""
 
 msgid "Advanced"
+msgstr ""
+
+msgid ">> Advanced Options"
 msgstr ""
 
 msgid "Affected Assets"
@@ -321,9 +327,6 @@ msgstr ""
 msgid "Authorization URL"
 msgstr ""
 
-msgid "Automatic time measurement"
-msgstr ""
-
 msgid "Automation"
 msgstr ""
 
@@ -340,6 +343,9 @@ msgid "Available Output Formats"
 msgstr ""
 
 msgid "Avatar"
+msgstr ""
+
+msgid "Backend"
 msgstr ""
 
 msgid "Based on class definition"
@@ -531,6 +537,9 @@ msgstr ""
 msgid "Communication: Webform"
 msgstr ""
 
+msgid "Community"
+msgstr ""
+
 msgid "Compare"
 msgstr ""
 
@@ -558,6 +567,9 @@ msgstr "Asset Data"
 msgid "Config Item History"
 msgstr "Asset History"
 
+msgid "Config Item ID"
+msgstr ""
+
 msgid "Config Item Information"
 msgstr "Asset Information"
 
@@ -571,9 +583,6 @@ msgid "Config Item Version Compare"
 msgstr "Asset Version Compare"
 
 msgid "Configuration"
-msgstr ""
-
-msgid "Confirmation through customer signature"
 msgstr ""
 
 msgid "Confirm New Password"
@@ -597,6 +606,9 @@ msgstr ""
 msgid "contained in"
 msgstr ""
 
+msgid "Contained in Affected Assets"
+msgstr ""
+
 msgid "contains"
 msgstr ""
 
@@ -604,6 +616,9 @@ msgid "Context"
 msgstr "Context"
 
 msgid "Copy of {0}"
+msgstr ""
+
+msgid "Copy URL To Clipboard And Close"
 msgstr ""
 
 msgid "Could not handle request."
@@ -690,13 +705,16 @@ msgstr ""
 msgid "Current incident state"
 msgstr ""
 
-msgid "Current Incident state"
-msgstr ""
-
 msgid "Current Password"
 msgstr ""
 
 msgid "(Current version)"
+msgstr ""
+
+msgid "Current version"
+msgstr ""
+
+msgid "Current Version"
 msgstr ""
 
 msgid "Customer"
@@ -789,7 +807,9 @@ msgstr ""
 msgid "Display Name"
 msgstr ""
 
-msgid "Do not forget to replace the <YOUR_FRONTEND_HOST> placeholder (if it is not already)."
+msgid ""
+"Do not forget to replace the <YOUR_FRONTEND_HOST> placeholder (if it is not "
+"already)."
 msgstr ""
 
 msgid ". (dot)"
@@ -1113,6 +1133,9 @@ msgstr ""
 msgid "FAQ Categories"
 msgstr ""
 
+msgid "FAQ categories successfully removed."
+msgstr ""
+
 msgid "FAQ Category"
 msgstr ""
 
@@ -1138,9 +1161,6 @@ msgid "Favorites"
 msgstr ""
 
 msgid "Fax"
-msgstr ""
-
-msgid "Features"
 msgstr ""
 
 msgid "Feedback"
@@ -1176,7 +1196,7 @@ msgstr ""
 msgid "Field Information"
 msgstr ""
 
-msgid "Field Options:"
+msgid "<< Field Options:"
 msgstr ""
 
 msgid "Field Type"
@@ -1220,6 +1240,11 @@ msgstr ""
 msgid "Follow Up Ticket Lock"
 msgstr ""
 
+msgid ""
+"For a more intensive introduction to the use and administration of KIX, you "
+"will find the latest manuals in the online documentation."
+msgstr ""
+
 msgid "Force"
 msgstr ""
 
@@ -1232,13 +1257,22 @@ msgstr ""
 msgid "For Tickets"
 msgstr ""
 
+msgid "Forum"
+msgstr ""
+
 msgid "Forward"
+msgstr ""
+
+msgid "FQDN"
 msgstr ""
 
 msgid "Friday"
 msgstr ""
 
 msgid "From"
+msgstr ""
+
+msgid "Frontend"
 msgstr ""
 
 msgid "Fullname"
@@ -1254,6 +1288,12 @@ msgid "General Catalog Item"
 msgstr ""
 
 msgid "General Catalog Items"
+msgstr ""
+
+msgid "Generate New Token"
+msgstr ""
+
+msgid "Generate new user token"
 msgstr ""
 
 msgid "Has access token"
@@ -2245,6 +2285,9 @@ msgstr "Set a new password for your user account."
 msgid "Helptext_PersonalSettings_UserPassword_Hint"
 msgstr "Insert your current password."
 
+msgid "Helptext_PersonalSettings_user_token_Hint"
+msgstr ""
+
 msgid "Helptext_Reporting_ReportCreate_Comment"
 msgstr ""
 "Insert additional information (only displayed within the report definition "
@@ -2576,7 +2619,7 @@ msgstr ""
 "Set the user's default language, for when they log in KIX for the first "
 "time. A user can change their language settings in their preferences."
 
-msgid "Here you will find the KIX 18 manuals for users and administrators"
+msgid "Helptext_User_UserCreateEdit_Preferences_UserToken"
 msgstr ""
 
 msgid "History"
@@ -2717,6 +2760,9 @@ msgstr ""
 msgid "Keywords"
 msgstr ""
 
+msgid "KIX Forum"
+msgstr ""
+
 msgid "Knowledge Database"
 msgstr ""
 
@@ -2789,9 +2835,6 @@ msgstr ""
 msgid "Links"
 msgstr ""
 
-msgid "Links to manuals"
-msgstr ""
-
 msgid "Links updated."
 msgstr ""
 
@@ -2805,6 +2848,9 @@ msgid "Link to ticket"
 msgstr ""
 
 msgid "Link Type"
+msgstr ""
+
+msgid "Loading ..."
 msgstr ""
 
 msgid "Localisation"
@@ -2852,7 +2898,7 @@ msgstr ""
 msgid "Mail Filter Details"
 msgstr ""
 
-msgid "Management using clear checklists"
+msgid "Manuals"
 msgstr ""
 
 msgid "Menu"
@@ -3236,9 +3282,6 @@ msgstr ""
 msgid "Once per day"
 msgstr ""
 
-msgid "Online and offline processing of service jobs"
-msgstr ""
-
 msgid "Open"
 msgstr ""
 
@@ -3386,6 +3429,9 @@ msgstr ""
 msgid "Pending until"
 msgstr ""
 
+msgid "Pending until: {0} ({1})"
+msgstr ""
+
 msgid "Permission"
 msgstr ""
 
@@ -3446,6 +3492,12 @@ msgstr ""
 msgid "Preferences"
 msgstr ""
 
+msgid "Prepare asset for print"
+msgstr ""
+
+msgid "Prepare selection for print"
+msgstr ""
+
 msgid "Prepare Ticket for print"
 msgstr ""
 
@@ -3462,6 +3514,12 @@ msgid "Previous Image"
 msgstr ""
 
 msgid "Print"
+msgstr ""
+
+msgid "Print asset"
+msgstr ""
+
+msgid "Print selection"
 msgstr ""
 
 msgid "Prio"
@@ -3505,6 +3563,9 @@ msgstr "Team Information"
 
 msgid "Queues"
 msgstr "Teams"
+
+msgid "Quick Start Guide"
+msgstr ""
 
 msgid "QuickstartGuide_Text_End"
 msgstr "Now you are ready to start with KIX 18. Have fun!"
@@ -3620,7 +3681,13 @@ msgstr "Remove Adress(es)"
 msgid "Remove dependency to organisation"
 msgstr ""
 
+msgid "Remove FAQ Categories"
+msgstr ""
+
 msgid "Remove Filter"
+msgstr ""
+
+msgid "Remove from Affected Assets"
 msgstr ""
 
 msgid "Remove Mail Accounts"
@@ -3806,13 +3873,13 @@ msgstr ""
 msgid "Save Outbox Settings"
 msgstr ""
 
-msgid "Save photos and work notes"
-msgstr ""
-
 msgid "Save Search"
 msgstr ""
 
 msgid "Save Settings"
+msgstr ""
+
+msgid "Save System Settings"
 msgstr ""
 
 msgid "Scheduling"
@@ -3870,6 +3937,9 @@ msgid "Select file"
 msgstr ""
 
 msgid "Select image file"
+msgstr ""
+
+msgid "Self Service Manual"
 msgstr ""
 
 msgid "; (semicolon)"
@@ -3936,6 +4006,16 @@ msgid "setup_assistant_sending_email_text"
 msgstr ""
 "Please enter connection information for your outgoing email server. If you "
 "want to use team mail addresses as sender only, leave envelope inputs empty."
+
+msgid "setup_assistant_system_settings_text"
+msgstr ""
+"Please add basic system settings according to your system setup. For kix."
+"cloud users please check your notification email.  For on-premise-"
+"installations: frontend refers to FQDN+port where the agent portal may be "
+"reached (e.g. \"your.docker.host:20001\"). Backend refers to FQDN+port where "
+"the KIX REST-API can be reached (e.g. \"your.docker.host:20000\"). Customer "
+"Frontend should be set accordingly, if you intend to use the KIX Self "
+"Service Portal (e.g. \"your.docker.host:20002\")."
 
 msgid "setup_assistant_welcome_text"
 msgstr ""
@@ -4024,6 +4104,9 @@ msgid "Source Message"
 msgstr ""
 
 msgid "Split Option"
+msgstr ""
+
+msgid "SSP"
 msgstr ""
 
 msgid "Standard"
@@ -4164,6 +4247,9 @@ msgstr ""
 msgid "System: Logs"
 msgstr ""
 
+msgid "System Settings"
+msgstr ""
+
 msgid "System: Sysconfig ({0})"
 msgstr ""
 
@@ -4209,6 +4295,11 @@ msgstr ""
 msgid "Team Details"
 msgstr ""
 
+msgid ""
+"Technical Customer Service mit KIX - work order documentation, checklists, "
+"scheduling, offline information for maintenance and repairs."
+msgstr ""
+
 msgid "Template"
 msgstr ""
 
@@ -4233,6 +4324,11 @@ msgstr ""
 msgid "The file size of {0} is too large ({1}). Max.: {2}"
 msgstr ""
 
+msgid ""
+"The following {0} entries and existing sub categories will be deleted. Are "
+"you sure?"
+msgstr ""
+
 msgid "The following {0} entries will be deleted. Are you sure?"
 msgstr ""
 
@@ -4249,12 +4345,6 @@ msgstr ""
 
 msgid ""
 "The preference ContextWidgetLists will be reseted for the user. Are you sure?"
-msgstr ""
-
-msgid ""
-"The quick and easy way to provide technical customer service while on the "
-"go. Whether you're dealing with a technical problem or maintenance work: "
-"Switch over to paperless documentation and save both time and money."
 msgstr ""
 
 msgid ""
@@ -4353,6 +4443,11 @@ msgid "Time Based"
 msgstr ""
 
 msgid "Time Based Execution"
+msgstr ""
+
+msgid ""
+"Tips for getting started quickly with KIX can be found on the KIX YouTube "
+"channel. In the forum you can also exchange ideas with other KIX users."
 msgstr ""
 
 msgid "Title"
@@ -4472,6 +4567,9 @@ msgstr ""
 msgid "User Information"
 msgstr ""
 
+msgid "User is already assigned"
+msgstr ""
+
 msgid "User Management"
 msgstr ""
 
@@ -4481,13 +4579,16 @@ msgstr ""
 msgid "User Management: Users ({0})"
 msgstr ""
 
-msgid "User manual"
+msgid "User Manual"
 msgstr ""
 
 msgid "User Name"
 msgstr ""
 
 msgid "Users"
+msgstr ""
+
+msgid "User Token"
 msgstr ""
 
 msgid "Validation error"
@@ -4503,6 +4604,9 @@ msgid "Value of field {0} is too long (max: {1})."
 msgstr ""
 
 msgid "Version"
+msgstr ""
+
+msgid "Version ID"
 msgstr ""
 
 msgid "Viewable States"
@@ -4599,6 +4703,9 @@ msgid "Your Permissions have been updated."
 msgstr ""
 
 msgid "Your rating"
+msgstr ""
+
+msgid "Youtube"
 msgstr ""
 
 msgid "You will edit {0} attributes for {1} {2}. Execute now?"
