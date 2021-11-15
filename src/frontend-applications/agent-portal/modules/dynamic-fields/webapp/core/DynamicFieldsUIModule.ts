@@ -37,12 +37,25 @@ import { DynamicFieldTypeLabelProvider } from './DynamicFieldTypeLabelProvider';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { DynamicFieldTableValidator } from './DynamicFieldTableValidator';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class UIModule implements IUIModule {
 
     public priority: number = 400;
 
     public name: string = 'DynamicFieldsUIModule';
+
+
+    private countMinTitle: string;
+    private countMinDescription: string;
+    private countMaxTitle: string;
+    private countMaxDescription: string;
+    private countDefaultTitle: string;
+    private countDefaultDescription: string;
+    private itemSeparatorTitle: string;
+    private itemSeparatorDescription: string;
+    private defaultValueTitle: string;
+    private defaultValueDescription: string;
 
     public async unRegister(): Promise<void> {
         throw new Error('Method not implemented.');
@@ -87,65 +100,86 @@ export class UIModule implements IUIModule {
         FormValidationService.getInstance().registerValidator(new DynamicFieldDateTimeValidator());
         FormValidationService.getInstance().registerValidator(new DynamicFieldTableValidator());
 
-        this.registerSchemas();
+        await this.registerSchemas();
     }
 
     // tslint:disable:max-line-length
-    private registerSchemas(): void {
-        this.registerSchemaForText();
-        this.registerSchemaForTextArea();
-        this.registerSchemaForDate();
-        this.registerSchemaForDateTime();
-        this.registerSchemaForSelection();
-        this.registerSchemaForCheckList();
+    private async registerSchemas(): Promise<void> {
+        this.countMinTitle = await TranslationService.translate('Translatable#Count Min');
+        this.countMinDescription = await TranslationService.translate('Translatable#The minimum number of items which are available for input if field is shown in edit mode.');
+
+        this.countMaxTitle = await TranslationService.translate('Translatable#Count Max');
+        this.countMaxDescription = await TranslationService.translate('Translatable#The maximum number of array or selectable items for this field. if field is shown in edit mode.');
+
+        this.countDefaultTitle = await TranslationService.translate('Translatable#Count Default');
+        this.countDefaultDescription = await TranslationService.translate('Translatable#If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.');
+
+        this.itemSeparatorTitle = await TranslationService.translate('Translatable#Item Separator');
+        this.itemSeparatorDescription = await TranslationService.translate('Translatable#If field contains multiple values, single values are concatenated by this separator symbol/s.');
+
+        this.defaultValueTitle = await TranslationService.translate('Translatable#Default Value');
+        this.defaultValueDescription = await TranslationService.translate('Translatable#The initial value of the field if shown in edit mode for the first time. Applies to first item of array only.');
+
+        await this.registerSchemaForText();
+        await this.registerSchemaForTextArea();
+        await this.registerSchemaForDate();
+        await this.registerSchemaForDateTime();
+        await this.registerSchemaForSelection();
+        await this.registerSchemaForCheckList();
         DynamicFieldService.getInstance().registerConfigSchemaHandler(
             DynamicFieldTypes.CI_REFERENCE, this.getSchemaForCIReference.bind(this)
         );
         this.registerSchemaForTable();
     }
 
-    private registerSchemaForText(): void {
+    private async registerSchemaForText(): Promise<void> {
+
+        const regExListTitle: string = await TranslationService.translate('Translatable#RegEx List');
+        const regExListDescription: string = await TranslationService.translate('Translatable#A list of RegEx which are applied to values entered before submitting if field is shown in edit mode. The RegExError is shown if a RegEx does NOT match the value entered.');
+        const regEx: string = await TranslationService.translate('Translatable#RegEx');
+        const regExError: string = await TranslationService.translate('Translatable#RegExErrorMessage');
+
         const schema = {
             type: 'object',
             properties: {
                 CountMin: {
-                    title: 'Count Min',
-                    description: 'The minimum number of items which are available for input if field is shown in edit mode.',
+                    title: this.countMinTitle,
+                    description: this.countMinDescription,
                     type: 'integer'
                 },
                 CountMax: {
-                    title: 'Count Max',
-                    description: 'The maximum number of array or selectable items for this field. if field is shown in edit mode.',
+                    title: this.countMaxTitle,
+                    description: this.countMaxDescription,
                     type: 'integer'
                 },
                 CountDefault: {
-                    title: 'Count Default',
-                    description: 'If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.',
+                    title: this.countDefaultTitle,
+                    description: this.countDefaultDescription,
                     type: 'integer'
                 },
                 ItemSeparator: {
-                    title: 'Item Separator',
-                    description: 'If field contains multiple values, single values are concatenated by this separator symbol/s.',
+                    title: this.itemSeparatorTitle,
+                    description: this.itemSeparatorDescription,
                     type: 'string'
                 },
                 DefaultValue: {
-                    title: 'Default Value',
-                    description: 'The initial value of the field if shown in edit mode for the first time. Applies to first item of array only.',
+                    title: this.defaultValueTitle,
+                    description: this.defaultValueDescription,
                     type: 'string'
                 },
                 RegExList: {
-                    title: 'RegEx List',
-                    description: 'A list of RegEx which are applied to values entered before submitting if field is shown in edit mode. The RegExError is shown if a RegEx does NOT match the value entered.',
+                    title: regExListTitle,
+                    description: regExListDescription,
                     type: 'array',
                     items: {
                         type: 'object',
                         properties: {
                             Value: {
-                                title: 'RegEx',
+                                title: regEx,
                                 type: 'string'
                             },
                             ErrorMessage: {
-                                title: 'RegExErrorMessage',
+                                title: regExError,
                                 type: 'string'
                             }
                         }
@@ -158,48 +192,54 @@ export class UIModule implements IUIModule {
         DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.TEXT, schema);
     }
 
-    private registerSchemaForTextArea(): void {
+    private async registerSchemaForTextArea(): Promise<void> {
+
+        const regExListTitle: string = await TranslationService.translate('Translatable#RegEx List');
+        const regExListDescription: string = await TranslationService.translate('Translatable#A list of RegEx which are applied to values entered before submitting if field is shown in edit mode. The RegExError is shown if a RegEx does NOT match the value entered.');
+        const regEx: string = await TranslationService.translate('Translatable#RegEx');
+        const regExError: string = await TranslationService.translate('Translatable#RegExErrorMessage');
+
         const schema = {
             type: 'object',
             properties: {
                 CountMin: {
-                    title: 'Count Min',
-                    description: 'The minimum number of items which are available for input if field is shown in edit mode.',
+                    title: this.countMinTitle,
+                    description: this.countMinDescription,
                     type: 'integer'
                 },
                 CountMax: {
-                    title: 'Count Max',
-                    description: 'The maximum number of array or selectable items for this field. if field is shown in edit mode.',
+                    title: this.countMaxTitle,
+                    description: this.countMaxDescription,
                     type: 'integer'
                 },
                 CountDefault: {
-                    title: 'Count Default',
-                    description: 'If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.',
+                    title: this.countDefaultTitle,
+                    description: this.countDefaultDescription,
                     type: 'integer'
                 },
                 ItemSeparator: {
-                    title: 'Item Separator',
-                    description: 'If field contains multiple values, single values are concatenated by this separator symbol/s.',
+                    title: this.itemSeparatorTitle,
+                    description: this.itemSeparatorDescription,
                     type: 'string'
                 },
                 DefaultValue: {
-                    title: 'Default Value',
-                    description: 'The initial value of the field if shown in edit mode for the first time. Applies to first item of array only.',
+                    title: this.defaultValueTitle,
+                    description: this.defaultValueDescription,
                     type: 'string'
                 },
                 RegExList: {
-                    title: 'RegEx List',
-                    description: 'A list of RegEx which are applied to values entered before submitting if field is shown in edit mode. The RegExError is shown if a RegEx does NOT match the value entered.',
+                    title: regExListTitle,
+                    description: regExListDescription,
                     type: 'array',
                     items: {
                         type: 'object',
                         properties: {
                             Value: {
-                                title: 'RegEx',
+                                title: regEx,
                                 type: 'string'
                             },
                             ErrorMessage: {
-                                title: 'RegExErrorMessage',
+                                title: regExError,
                                 type: 'string'
                             }
                         }
@@ -212,47 +252,52 @@ export class UIModule implements IUIModule {
         DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.TEXT_AREA, schema);
     }
 
-    private registerSchemaForDate(): void {
+    private async registerSchemaForDate(): Promise<void> {
+
+        const yearsInFuture = await TranslationService.translate('Translatable#Years in Future');
+        const yearsInPast = await TranslationService.translate('Translatable#Years in Past');
+        const dateRestriction = await TranslationService.translate('Translatable#Date Restriction');
+
         const schema = {
             type: 'object',
             properties: {
                 CountMin: {
-                    title: 'Count Min',
-                    description: 'The minimum number of items which are available for input if field is shown in edit mode.',
+                    title: this.countMinTitle,
+                    description: this.countMinDescription,
                     type: 'integer'
                 },
                 CountMax: {
-                    title: 'Count Max',
-                    description: 'The maximum number of array or selectable items for this field. if field is shown in edit mode.',
+                    title: this.countMaxTitle,
+                    description: this.countMaxDescription,
                     type: 'integer'
                 },
                 CountDefault: {
-                    title: 'Count Default',
-                    description: 'If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.',
+                    title: this.countDefaultTitle,
+                    description: this.countDefaultDescription,
                     type: 'integer'
                 },
                 ItemSeparator: {
-                    title: 'Item Separator',
-                    description: 'If field contains multiple values, single values are concatenated by this separator symbol/s.',
+                    title: this.itemSeparatorTitle,
+                    description: this.itemSeparatorDescription,
                     type: 'string'
                 },
                 DefaultValue: {
-                    title: 'Default Value',
-                    description: 'This value defines the offset (in days) to the very moment in which the field is initially displayed for input. Leave empty if the field should not hold any value upon first input. Keep in mind that date-fields are normalized to time "00:00:00", hence enter 1 in order to initialize the field with "tomorrows" date.',
-                    type: 'integer'
+                    title: this.defaultValueTitle,
+                    description: this.defaultValueDescription,
+                    type: 'string'
                 },
                 YearsInFuture: {
-                    title: 'Years in Future',
+                    title: yearsInFuture,
                     description: '',
                     type: 'integer'
                 },
                 YearsInPast: {
-                    title: 'Years in Past',
+                    title: yearsInPast,
                     description: '',
                     type: 'integer'
                 },
                 DateRestriction: {
-                    title: 'Date Restriction',
+                    title: dateRestriction,
                     type: 'string',
                     default: 'none',
                     enum: [
@@ -267,47 +312,53 @@ export class UIModule implements IUIModule {
         DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.DATE, schema);
     }
 
-    private registerSchemaForDateTime(): void {
+    private async registerSchemaForDateTime(): Promise<void> {
+
+        const defaultValueDescription = await TranslationService.translate('Translatable#This value defines the offset (in seconds) to the very moment in which the field is initially displayed for input. Leave empty if the field should not hold any value upon first input. For instance, enter 3600 if the field should be initialized with "now+1h" or enter 86400 if the field should be initialized with "now+24h".');
+        const yearsInFuture = await TranslationService.translate('Translatable#Years in Future');
+        const yearsInPast = await TranslationService.translate('Translatable#Years in Past');
+        const dateRestriction = await TranslationService.translate('Translatable#Date Restriction');
+
         const schema = {
             type: 'object',
             properties: {
                 CountMin: {
-                    title: 'Count Min',
-                    description: 'The minimum number of items which are available for input if field is shown in edit mode.',
+                    title: this.countMinTitle,
+                    description: this.countMinDescription,
                     type: 'integer'
                 },
                 CountMax: {
-                    title: 'Count Max',
-                    description: 'The maximum number of array or selectable items for this field. if field is shown in edit mode.',
+                    title: this.countMaxTitle,
+                    description: this.countMaxDescription,
                     type: 'integer'
                 },
                 CountDefault: {
-                    title: 'Count Default',
-                    description: 'If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.',
+                    title: this.countDefaultTitle,
+                    description: this.countDefaultDescription,
                     type: 'integer'
                 },
                 ItemSeparator: {
-                    title: 'Item Separator',
-                    description: 'If field contains multiple values, single values are concatenated by this separator symbol/s.',
+                    title: this.itemSeparatorTitle,
+                    description: this.itemSeparatorDescription,
                     type: 'string'
                 },
                 DefaultValue: {
-                    title: 'Default Value',
-                    description: 'This value defines the offset (in seconds) to the very moment in which the field is initially displayed for input. Leave empty if the field should not hold any value upon first input. For instance, enter 3600 if the field should be initialized with "now+1h" or enter 86400 if the field should be initialized with "now+24h".',
-                    type: 'integer'
+                    title: this.defaultValueTitle,
+                    description: defaultValueDescription,
+                    type: 'string'
                 },
                 YearsInFuture: {
-                    title: 'Years in Future',
+                    title: yearsInFuture,
                     description: '',
                     type: 'integer'
                 },
                 YearsInPast: {
-                    title: 'Years in Past',
+                    title: yearsInPast,
                     description: '',
                     type: 'integer'
                 },
                 DateRestriction: {
-                    title: 'Date Restriction',
+                    title: dateRestriction,
                     type: 'string',
                     default: 'none',
                     enum: [
@@ -322,43 +373,47 @@ export class UIModule implements IUIModule {
         DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.DATE_TIME, schema);
     }
 
-    private registerSchemaForSelection(): void {
+    private async registerSchemaForSelection(): Promise<void> {
+
+        const translatableValues = await TranslationService.translate('Translatable#Translatable Values');
+        const possibleValues = await TranslationService.translate('Translatable#Possible Values');
+
         const schema = {
             type: 'object',
             properties: {
                 CountMin: {
-                    title: 'Count Min',
-                    description: 'The minimum number of items which are available for input if field is shown in edit mode.',
+                    title: this.countMinTitle,
+                    description: this.countMinDescription,
                     type: 'integer'
                 },
                 CountMax: {
-                    title: 'Count Max',
-                    description: 'The maximum number of array or selectable items for this field. if field is shown in edit mode.',
+                    title: this.countMaxTitle,
+                    description: this.countMaxDescription,
                     type: 'integer'
                 },
                 CountDefault: {
-                    title: 'Count Default',
-                    description: 'If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.',
+                    title: this.countDefaultTitle,
+                    description: this.countDefaultDescription,
                     type: 'integer'
                 },
                 ItemSeparator: {
-                    title: 'Item Separator',
-                    description: 'If field contains multiple values, single values are concatenated by this separator symbol/s.',
+                    title: this.itemSeparatorTitle,
+                    description: this.itemSeparatorDescription,
                     type: 'string'
                 },
                 DefaultValue: {
-                    title: 'Default Value',
-                    description: 'The initial value of the field if shown in edit mode for the first time. Applies to first item of array only. Use the key of the possible value.',
+                    title: this.defaultValueTitle,
+                    description: this.defaultValueDescription,
                     type: 'string'
                 },
                 TranslatableValues: {
-                    title: 'Translatable Values',
+                    title: translatableValues,
                     description: '',
                     type: 'boolean',
                     format: 'checkbox'
                 },
                 PossibleValues: {
-                    title: 'Possible Values',
+                    title: possibleValues,
                     description: '',
                     type: 'array',
                     items: {
@@ -382,12 +437,21 @@ export class UIModule implements IUIModule {
         DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.SELECTION, schema);
     }
 
-    private registerSchemaForCheckList(): void {
+    private async registerSchemaForCheckList(): Promise<void> {
+
+        const checkListItemTitle = await TranslationService.translate('Translatable#Checklist Item');
+        const itemId = await TranslationService.translate('Translatable#Id');
+        const itemTitle = await TranslationService.translate('Translatable#Title');
+        const itemDescription = await TranslationService.translate('Translatable#Description');
+        const itemInput = await TranslationService.translate('Translatable#Input');
+        const itemValue = await TranslationService.translate('Translatable#Value');
+        const itemSub = await TranslationService.translate('Translatable#Sub');
+
         const schema = {
             type: 'object',
             definitions: {
                 CheckListItem: {
-                    title: 'Checklist Item',
+                    title: checkListItemTitle,
                     description: '',
                     type: 'array',
                     required: false,
@@ -395,19 +459,19 @@ export class UIModule implements IUIModule {
                         type: 'object',
                         properties: {
                             id: {
-                                title: 'Id',
+                                title: itemId,
                                 type: 'string'
                             },
                             title: {
-                                title: 'Title',
+                                title: itemTitle,
                                 type: 'string'
                             },
                             description: {
-                                title: 'Description',
+                                title: itemDescription,
                                 type: 'string'
                             },
                             input: {
-                                title: 'Input',
+                                title: itemInput,
                                 type: 'string',
                                 default: 'ChecklistState',
                                 enum: [
@@ -416,11 +480,11 @@ export class UIModule implements IUIModule {
                                 ]
                             },
                             value: {
-                                title: 'Value',
+                                title: itemValue,
                                 type: 'string'
                             },
                             sub: {
-                                title: 'Sub',
+                                title: itemSub,
                                 $ref: '#/definitions/CheckListItem'
                             }
                         }
@@ -429,7 +493,7 @@ export class UIModule implements IUIModule {
             },
             properties: {
                 DefaultValue: {
-                    title: 'Default Value',
+                    title: this.defaultValueTitle,
                     $ref: '#/definitions/CheckListItem'
                 }
             }
@@ -445,39 +509,45 @@ export class UIModule implements IUIModule {
             KIXObjectType.CONFIG_ITEM_CLASS
         );
 
+        const deploymentStatesTitle = await TranslationService.translate('Translatable#Deployment States');
+        const deploymentStatesDescription = await TranslationService.translate('Translatable#This configuration defines which Deployment States are subject to this selection. Please enter DeploymentStates.');
+        const incidentStatesTitle = await TranslationService.translate('Translatable#Incident States');
+        const incidentStatesDescription = await TranslationService.translate('Translatable#This configuration defines which Asset Classes are subject to this selection. Please enter Classes.');
+
         const schema = {
             type: 'object',
             properties: {
                 CountMin: {
-                    title: 'Count Min',
-                    description: 'The minimum number of items which are available for input if field is shown in edit mode.',
+                    title: this.countMinTitle,
+                    description: this.countMinDescription,
                     type: 'integer'
                 },
                 CountMax: {
-                    title: 'Count Max',
-                    description: 'The maximum number of array or selectable items for this field. if field is shown in edit mode.',
+                    title: this.countMaxTitle,
+                    description: this.countMaxDescription,
                     type: 'integer'
                 },
                 CountDefault: {
-                    title: 'Count Default',
-                    description: 'If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.',
+                    title: this.countDefaultTitle,
+                    description: this.countDefaultDescription,
                     type: 'integer'
                 },
                 ItemSeparator: {
-                    title: 'Item Separator',
-                    description: 'If field contains multiple values, single values are concatenated by this separator symbol/s.',
+                    title: this.itemSeparatorTitle,
+                    description: this.itemSeparatorDescription,
                     type: 'string'
                 },
                 DefaultValue: {
-                    title: 'Default Value',
-                    description: 'The initial value of the field if shown in edit mode for the first time. Applies to first item of array only.',
+                    title: this.defaultValueTitle,
+                    description: this.defaultValueDescription,
                     type: 'string'
                 },
                 DeploymentStates: {
                     type: 'array',
                     format: 'select',
                     uniqueItems: true,
-                    description: 'This configuration defines which Deployment States are subject to this selection. Please enter DeploymentStates.',
+                    title: deploymentStatesTitle,
+                    description: deploymentStatesDescription,
                     items: {
                         enumSource: [{
                             source: states.map((s) => {
@@ -492,7 +562,8 @@ export class UIModule implements IUIModule {
                     type: 'array',
                     format: 'select',
                     uniqueItems: true,
-                    description: 'This configuration defines which Asset Classes are subject to this selection. Please enter Classes.',
+                    title: incidentStatesTitle,
+                    description: incidentStatesDescription,
                     items: {
                         enumSource: [{
                             source: classes.map((s) => {
@@ -509,13 +580,23 @@ export class UIModule implements IUIModule {
         return schema;
     }
 
-    private registerSchemaForTable(): void {
+    private async registerSchemaForTable(): Promise<void> {
+
+        const columns = await TranslationService.translate('Translatable#Columns');
+        const rowsMinTitle = await TranslationService.translate('Translatable#Number of rows (min)');
+        const rowsMinDescription = await TranslationService.translate('Translatable#Specifies the minimum number of rows that the table has to display. It is not possible to delete rows below the minimum number of rows.\n Values less than 1 are not possible.');
+        const rowsinitTitle = await TranslationService.translate('Translatable#Number of rows (init)');
+        const rowsinitDescription = await TranslationService.translate('Translatable#Specifies the initial number of rows that the table should display if there are no entries.\n The initial must not be smaller than the minimum and larger than the maximum of the number of rows.\n Values less than 1 are not possible.');
+        const rowsMaxTitle = await TranslationService.translate('Translatable#Number of rows (max)');
+        const rowsMaxDescription = await TranslationService.translate('Translatable#Specifies the maximum number of rows in the table that can be displayed/added. Values less than 1 are not possible.');
+        const translatableColumns = await TranslationService.translate('Translatable#Translatable Columns');
+
         const schema = {
             $schema: 'http://json-schema.org/draft-03/schema#',
             type: 'object',
             properties: {
                 Columns: {
-                    title: 'Columns',
+                    title: columns,
                     description: '',
                     type: 'array',
                     required: true,
@@ -524,31 +605,31 @@ export class UIModule implements IUIModule {
                     }
                 },
                 RowsMin: {
-                    title: 'Number of rows (min)',
-                    description: 'Specifies the minimum number of rows that the table has to display. It is not possible to delete rows below the minimum number of rows.\n Values less than 1 are not possible.',
+                    title: rowsMinTitle,
+                    description: rowsMinDescription,
                     type: 'integer',
                     default: '1',
                     minimum: '1',
                     required: true
                 },
                 RowsInit: {
-                    title: 'Number of rows (init)',
-                    description: 'Specifies the initial number of rows that the table should display if there are no entries.\n The initial must not be smaller than the minimum and larger than the maximum of the number of rows.\n Values less than 1 are not possible.',
+                    title: rowsinitTitle,
+                    description: rowsinitDescription,
                     type: 'integer',
                     default: '1',
                     minimum: '1',
                     required: true
                 },
                 RowsMax: {
-                    title: 'Number of rows (max)',
-                    description: 'Specifies the maximum number of rows in the table that can be displayed/added. Values less than 1 are not possible.',
+                    title: rowsMaxTitle,
+                    description: rowsMaxDescription,
                     type: 'integer',
                     default: '1',
                     minimum: '1',
                     required: true
                 },
                 TranslatableColumn: {
-                    title: 'Translatable Columns',
+                    title: translatableColumns,
                     description: '',
                     type: 'boolean',
                     format: 'checkbox',
