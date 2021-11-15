@@ -35,7 +35,7 @@ export class UIModule implements IUIModule {
         throw new Error('Method not implemented.');
     }
 
-    public priority: number = 9999;
+    public priority: number = 75;
 
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(TranslationService.getInstance());
