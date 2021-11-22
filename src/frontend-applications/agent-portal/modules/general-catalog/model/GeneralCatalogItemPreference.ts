@@ -7,14 +7,8 @@
  * --
  */
 
-export enum GeneralCatalogItemProperty {
+export class GeneralCatalogItemPreference {
 
-    ID = 'ItemID',
-
-    NAME = 'Name',
-
-    CLASS = 'Class',
-
-    PREFERENCES = 'Preferences',
+    public constructor(public Name: string, public Value: any) { }
 
 }
