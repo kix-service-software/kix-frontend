@@ -129,7 +129,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    public tabClicked(tab: ContextTab): void {
+    public tabClicked(tab: ContextTab, event: any): void {
         if (!tab.active) {
             tab.refresh = false;
             ContextService.getInstance().setContextByInstanceId(tab.contextInstanceId);
@@ -177,6 +177,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 e.refresh = true;
             }
         });
+        (this as any).setStateDirty('contextTabs');
+    }
+
+    public refreshTab(tab: ContextTab): void {
+        tab.refresh = false;
+        EventService.getInstance().publish(ApplicationEvent.REFRESH_CONTENT);
         (this as any).setStateDirty('contextTabs');
     }
 

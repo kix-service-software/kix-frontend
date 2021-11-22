@@ -49,7 +49,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 }>
                 <div.tab-icon-container>
                     <if(tab.refresh)>
-                        <span.kix-icon-arrow-refresh/>
+                        <span.kix-icon-arrow-refresh on-click('refreshTab', tab)/>
                     </if>
                     <if(tab.pinned)>
                         <span.fa.fa-thumbtack/>
