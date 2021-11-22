@@ -27,7 +27,9 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
     ];
 
     public uiComponents: UIComponent[] = [
-        new UIComponent('system-admin-logs', '/kix-module-system-log$0/webapp/components/system-admin-logs', [])
+        new UIComponent('system-admin-logs', '/kix-module-system-log$0/webapp/components/system-admin-logs', []),
+        new UIComponent('system-admin-logfile-view', '/kix-module-system-log$0/webapp/components/system-admin-logfile-view', []),
+        new UIComponent('system-logfile-view-cell', '/kix-module-system-log$0/webapp/components/system-logfile-view-cell', [])
     ];
 
     public webDependencies: string[] = [
