@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
-import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { TableEvent, TableFactoryService, TableEventData, ValueState } from '../../../../base-components/webapp/core/table';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
@@ -26,22 +25,17 @@ import { ComponentContent } from '../../../../base-components/webapp/core/Compon
 import { OverlayService } from '../../../../base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../../base-components/webapp/core/OverlayType';
 import { ValidationSeverity } from '../../../../base-components/webapp/core/ValidationSeverity';
+import { LinkManager } from '../../../../links/webapp/core/LinkManager';
+import { BulkRunner } from '../../core/BulkRunner';
 
 class Component {
 
     private state: ComponentState;
 
-    private cancelBulkProcess: boolean = false;
-
     private tableSubscriber: IEventSubscriber;
-
-    private errorObjects: KIXObject[];
-    private finishedObjects: KIXObject[];
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
-        this.errorObjects = [];
-        this.finishedObjects = [];
     }
 
     public onInput(input: any): void {
@@ -58,8 +52,13 @@ class Component {
         ]);
 
         this.state.bulkManager?.registerListener('bulk-dialog-listener', async () => {
-            const hasDefinedValues = await this.state.bulkManager.hasDefinedValues();
-            this.state.canRun = hasDefinedValues && !!this.state.bulkManager.objects.length;
+            this.setCanRun();
+        });
+
+        this.state.linkManager = new LinkManager(this.state.bulkManager?.objectType);
+
+        this.state.linkManager?.registerListener('bulk-dialog--link-listener', async () => {
+            this.setCanRun();
         });
     }
 
@@ -67,7 +66,13 @@ class Component {
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
-        TableFactoryService.getInstance().destroyTable(`bulk-form-list-${this.state.bulkManager.objectType}`);
+        TableFactoryService.getInstance().destroyTable(`bulk-form-list-${this.state.bulkManager?.objectType}`);
+    }
+
+    private async setCanRun(): Promise<void> {
+        const hasDefinedValues = await this.state.bulkManager?.hasDefinedValues();
+        const hasDefinedLinks = await this.state.linkManager?.hasDefinedValues();
+        this.state.canRun = (hasDefinedValues || hasDefinedLinks) && !!this.state.bulkManager?.objects.length;
     }
 
     public async reset(): Promise<void> {
@@ -75,6 +80,12 @@ class Component {
         const dynamicFormComponent = (this as any).getComponent(this.state.componentId);
         if (dynamicFormComponent) {
             dynamicFormComponent.updateValues();
+        }
+
+        this.state.linkManager?.reset();
+        const linkFormComponent = (this as any).getComponent(this.state.componentId + 'LinkManager');
+        if (linkFormComponent) {
+            linkFormComponent.updateValues();
         }
     }
 
@@ -85,14 +96,14 @@ class Component {
     private async createTable(): Promise<void> {
         if (this.state.bulkManager && !this.state.table) {
 
-            if (this.state.bulkManager.objects) {
+            if (this.state.bulkManager?.objects) {
 
                 const configuration = new TableConfiguration(null, null, null,
                     null, null, null, null, [], true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 );
 
                 const table = await TableFactoryService.getInstance().createTable(
-                    `bulk-form-list-${this.state.bulkManager.objectType}`, this.state.bulkManager.objectType,
+                    `bulk-form-list-${this.state.bulkManager?.objectType}`, this.state.bulkManager?.objectType,
                     configuration, null, BulkDialogContext.CONTEXT_ID, true, null, true
                 );
 
@@ -105,18 +116,13 @@ class Component {
                             if (eventId === TableEvent.TABLE_INITIALIZED) {
                                 table.selectAll();
                             }
-                            if (eventId === TableEvent.TABLE_READY
-                                && (this.errorObjects.length || !!this.finishedObjects.length)
-                            ) {
-                                this.state.table.setRowObjectValueState(this.errorObjects, ValueState.HIGHLIGHT_ERROR);
-                                this.state.table.setRowObjectValueState(
-                                    this.finishedObjects, ValueState.HIGHLIGHT_SUCCESS
-                                );
-                            }
+
                             const rows = this.state.table.getSelectedRows();
                             const objects = rows.map((r) => r.getRowObject().getObject());
-                            this.state.bulkManager.objects = objects;
-                            this.state.canRun = await this.state.bulkManager.hasDefinedValues() && !!objects.length;
+                            if (this.state.bulkManager) {
+                                this.state.bulkManager.objects = objects;
+                                this.setCanRun();
+                            }
                             await this.prepareTitle();
                         }
                     }
@@ -133,7 +139,7 @@ class Component {
 
     private async prepareTitle(): Promise<void> {
         if (this.state.table) {
-            const objectName = await LabelService.getInstance().getObjectName(this.state.bulkManager.objectType, true);
+            const objectName = await LabelService.getInstance().getObjectName(this.state.bulkManager?.objectType, true);
             const objectCount = this.state.table.getRows().length;
             this.state.tableTitle = await TranslationService.translate(
                 'Translatable#Selected {0} ({1})', [objectName, objectCount]
@@ -142,16 +148,17 @@ class Component {
     }
 
     public async run(): Promise<void> {
-        this.cancelBulkProcess = false;
-        const objectName = await LabelService.getInstance().getObjectName(this.state.bulkManager.objectType, true);
+        const objectName = await LabelService.getInstance().getObjectName(this.state.bulkManager?.objectType, true);
 
-        const validationResult = await this.state.bulkManager.validate();
+        let validationResult = await this.state.bulkManager?.validate();
+        const linkValidationResult = await this.state.linkManager?.validate();
+        validationResult = [...validationResult, ...linkValidationResult];
+
         if (validationResult.some((r) => r.severity === ValidationSeverity.ERROR)) {
             this.showValidationError(validationResult.filter((r) => r.severity === ValidationSeverity.ERROR));
         } else {
-
-            const objects = this.state.bulkManager.objects;
-            const editableValues = await this.state.bulkManager.getEditableValues();
+            const objects = this.state.bulkManager?.objects;
+            const editableValues = await this.state.bulkManager?.getEditableValues();
 
             const title = await TranslationService.translate('Translatable#Execute now?');
             const question = await TranslationService.translate(
@@ -183,55 +190,27 @@ class Component {
     private async runBulkManager(): Promise<void> {
         this.state.run = true;
 
-        const objectName = await LabelService.getInstance().getObjectName(this.state.bulkManager.objectType, true);
-        const objects = this.state.bulkManager.objects;
         this.state.table.getRows().forEach((r) => r.setValueState(ValueState.NONE));
-        this.finishedObjects = [];
-        this.errorObjects = [];
 
-        const editText = await TranslationService.translate('Translatable#edited');
-        BrowserUtil.toggleLoadingShield(
-            'BULK_SHIELD', true, `${this.finishedObjects.length}/${objects.length} ${objectName} ${editText}`,
-            0, this.cancelBulk.bind(this)
+        const parameter = await this.state.bulkManager?.prepareParameter();
+        const linkDescriptions = await this.state.linkManager?.prepareLinkDesriptions();
+
+        const result = await BulkRunner.run(
+            this.state.bulkManager.objects, this.state.bulkManager.objectType, parameter, linkDescriptions
         );
 
-        const objectTimes: number[] = [];
+        if (result.length === 2) {
+            result[0].forEach((o) => {
+                this.state.table.selectRowByObject(o, false);
+                this.state.table.setRowObjectValueState([o], ValueState.HIGHLIGHT_SUCCESS);
+            });
 
-        for (const object of objects) {
-
-            const start = Date.now();
-            let end: number;
-            await this.state.bulkManager.execute(object)
-                .then(() => {
-                    this.finishedObjects.push(object);
-                    this.state.table.selectRowByObject(object, false);
-                    this.state.table.setRowObjectValueState([object], ValueState.HIGHLIGHT_SUCCESS);
-                })
-                .catch(async (error) => {
-                    this.errorObjects.push(object);
-                    this.state.table.setRowObjectValueState([object], ValueState.HIGHLIGHT_ERROR);
-                    const errorText = await TranslationService.translate('Translatable#An error occurred.');
-                    BrowserUtil.toggleLoadingShield('BULK_SHIELD', true, errorText);
-                    end = Date.now();
-                    await this.handleObjectEditError(
-                        object, (this.finishedObjects.length + this.errorObjects.length), objects.length
-                    );
-                });
-
-            if (this.cancelBulkProcess) {
-                break;
-            }
-
-            if (!end) {
-                end = Date.now();
-            }
-
-            await this.setLoadingInformation(objectTimes, start, end, this.finishedObjects.length, objects.length);
+            result[1].forEach((o) => this.state.table.setRowObjectValueState([o], ValueState.HIGHLIGHT_ERROR));
         }
 
         await this.updateTable();
 
-        if (!this.errorObjects.length) {
+        if (!result[1].length) {
             const toast = await TranslationService.translate('Translatable#Changes saved.');
             BrowserUtil.openSuccessOverlay(toast);
         }
@@ -241,58 +220,14 @@ class Component {
 
     private async updateTable(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
-        const oldObjects = await context.getObjectList(this.state.bulkManager.objectType);
+        const oldObjects = await context.getObjectList(this.state.bulkManager?.objectType);
         const idsToLoad = oldObjects ? oldObjects.map((o) => o.ObjectId) : null;
 
         const newObjects = await KIXObjectService.loadObjects(
-            this.state.bulkManager.objectType, idsToLoad, null, null, false
+            this.state.bulkManager?.objectType, idsToLoad, null, null, false
         );
-        context.setObjectList(this.state.bulkManager.objectType, newObjects);
+        context.setObjectList(this.state.bulkManager?.objectType, newObjects);
         this.prepareTitle();
-    }
-
-    private async setLoadingInformation(
-        objectTimes: number[], start: number, end: number, finishedCount: number, objectCount: number
-    ): Promise<void> {
-        const objectName = await LabelService.getInstance().getObjectName(this.state.bulkManager.objectType, true);
-        objectTimes.push(end - start);
-        const average = BrowserUtil.calculateAverage(objectTimes);
-        const time = average * (objectCount - finishedCount);
-
-        const editText = await TranslationService.translate('Translatable#edited');
-        BrowserUtil.toggleLoadingShield(
-            'BULK_SHIELD', true, `${finishedCount}/${objectCount} ${objectName} ${editText}`, time,
-            this.cancelBulk.bind(this)
-        );
-    }
-
-    private cancelBulk(): void {
-        this.cancelBulkProcess = true;
-    }
-
-    private handleObjectEditError(object: KIXObject, finishedCount: number, objectCount: number): Promise<void> {
-        return new Promise(async (resolve, reject) => {
-            const oName = await LabelService.getInstance().getObjectName(this.state.bulkManager.objectType);
-            const identifier = await LabelService.getInstance().getObjectText(object);
-
-            const confirmText = await TranslationService.translate(
-                'Translatable#Changes cannot be saved. How do you want to proceed?'
-            );
-
-            const cancelButton = await TranslationService.translate('Translatable#Cancel');
-            const ignoreButton = await TranslationService.translate('Translatable#Ignore');
-            BrowserUtil.openConfirmOverlay(
-                `${finishedCount}/${objectCount}`,
-                `${oName} ${identifier}: ` + confirmText,
-                () => resolve(),
-                () => {
-                    this.cancelBulkProcess = true;
-                    resolve();
-                },
-                [ignoreButton, cancelButton],
-                undefined, undefined, true
-            );
-        });
     }
 }
 

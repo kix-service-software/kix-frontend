@@ -86,7 +86,26 @@ export class ConfigItemFormFactory {
             null, null, null, false, false
         );
 
-        const deplStateField = new FormFieldConfiguration(
+        const deplStateField = ConfigItemFormFactory.createDeploymentStateField();
+        const inciStateField = ConfigItemFormFactory.createIncidentStateField();
+
+        const group = new FormGroupConfiguration(
+            'cmdb-config-item-new-form-group-main', 'Translatable#Config Item Data', [], null,
+            [nameField, deplStateField, inciStateField]
+        );
+
+        const page = new FormPageConfiguration(
+            'cmdb-config-item-new-form-page', 'Translatable#New Config Item', [], true, false, [group]
+        );
+
+        const formId = `new-asset-form-${classId}`;
+        return new FormConfiguration(
+            formId, 'Translatable#New Config Item', [], KIXObjectType.CONFIG_ITEM, true, formContext, null, [page]
+        );
+    }
+
+    public static createDeploymentStateField(): FormFieldConfiguration {
+        return new FormFieldConfiguration(
             'cmdb-config-item-new-form-field-deploymentstate',
             'Translatable#Deployment State', VersionProperty.DEPL_STATE_ID, 'object-reference-input',
             true, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_DeploymentState',
@@ -108,8 +127,10 @@ export class ConfigItemFormFactory {
             ],
             null, null, null, null, 1, 1, 1, null, null, null, false, false
         );
+    }
 
-        const inciStateField = new FormFieldConfiguration(
+    public static createIncidentStateField(): FormFieldConfiguration {
+        return new FormFieldConfiguration(
             'cmdb-config-item-new-form-field-incidentstate',
             'Translatable#Incident state', ConfigItemProperty.CUR_INCI_STATE_ID, 'object-reference-input',
             true, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_IncidentState',
@@ -130,20 +151,6 @@ export class ConfigItemFormFactory {
                 new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false)
             ],
             null, null, null, null, 1, 1, 1, null, null, null, false, false
-        );
-
-        const group = new FormGroupConfiguration(
-            'cmdb-config-item-new-form-group-main', 'Translatable#Config Item Data', [], null,
-            [nameField, deplStateField, inciStateField]
-        );
-
-        const page = new FormPageConfiguration(
-            'cmdb-config-item-new-form-page', 'Translatable#New Config Item', [], true, false, [group]
-        );
-
-        const formId = `new-asset-form-${classId}`;
-        return new FormConfiguration(
-            formId, 'Translatable#New Config Item', [], KIXObjectType.CONFIG_ITEM, true, formContext, null, [page]
         );
     }
 
