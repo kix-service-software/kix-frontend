@@ -476,6 +476,7 @@ export class UIModule implements IUIModule {
                                 default: 'ChecklistState',
                                 enum: [
                                     'Text',
+                                    'TextArea',
                                     'ChecklistState'
                                 ]
                             },

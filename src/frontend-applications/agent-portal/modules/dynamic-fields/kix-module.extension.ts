@@ -46,6 +46,11 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             []
         ),
         new UIComponent(
+            'dynamic-field-checklist-text-cell',
+            '/kix-module-dynamic-fields$0/webapp/components/dynamic-field-checklist-text-cell',
+            []
+        ),
+        new UIComponent(
             'admin-dynamic-fields',
             '/kix-module-dynamic-fields$0/webapp/components/admin-dynamic-fields',
             []
