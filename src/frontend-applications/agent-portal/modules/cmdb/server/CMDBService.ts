@@ -42,6 +42,7 @@ import { Error } from '../../../../../server/model/Error';
 import { AttachmentLoadingOptions } from '../model/AttachmentLoadingOptions';
 import { Version } from '../model/Version';
 import { SearchProperty } from '../../search/model/SearchProperty';
+import { GeneralCatalogItemProperty } from '../../general-catalog/model/GeneralCatalogItemProperty';
 
 
 export class CMDBAPIService extends KIXObjectAPIService {
@@ -75,9 +76,11 @@ export class CMDBAPIService extends KIXObjectAPIService {
         const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria('Class', SearchOperator.EQUALS, FilterDataType.STRING,
                 FilterType.AND, 'ITSM::ConfigItem::DeploymentState'),
-            new FilterCriteria('Functionality', SearchOperator.NOT_EQUALS, FilterDataType.STRING,
+            new FilterCriteria(`${GeneralCatalogItemProperty.PREFERENCES}.Name`, SearchOperator.EQUALS, FilterDataType.STRING,
+                FilterType.AND, 'Functionality'),
+            new FilterCriteria(`${GeneralCatalogItemProperty.PREFERENCES}.Value`, SearchOperator.NOT_EQUALS, FilterDataType.STRING,
                 FilterType.AND, 'postproductive')
-        ]);
+        ], undefined, undefined, [GeneralCatalogItemProperty.PREFERENCES]);
 
         const catalogItems = await this.loadObjects<GeneralCatalogItem>(
             token, null, KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions, null

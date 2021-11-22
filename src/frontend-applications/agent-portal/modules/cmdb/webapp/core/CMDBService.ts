@@ -31,6 +31,7 @@ import { ConfigItemAttachment } from '../../model/ConfigItemAttachment';
 import { Version } from '../../model/Version';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { CreateConfigItemVersionOptions } from '../../model/CreateConfigItemVersionOptions';
+import { GeneralCatalogItemProperty } from '../../../general-catalog/model/GeneralCatalogItemProperty';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
 
@@ -127,9 +128,11 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria('Class', SearchOperator.EQUALS, FilterDataType.STRING,
                 FilterType.AND, 'ITSM::ConfigItem::DeploymentState'),
-            new FilterCriteria('Functionality', SearchOperator.NOT_EQUALS, FilterDataType.STRING,
+            new FilterCriteria(`${GeneralCatalogItemProperty.PREFERENCES}.Name`, SearchOperator.EQUALS, FilterDataType.STRING,
+                FilterType.AND, 'Functionality'),
+            new FilterCriteria(`${GeneralCatalogItemProperty.PREFERENCES}.Value`, SearchOperator.NOT_EQUALS, FilterDataType.STRING,
                 FilterType.AND, 'postproductive')
-        ]);
+        ], undefined, undefined, [GeneralCatalogItemProperty.PREFERENCES]);
 
         const catalogItems = await KIXObjectService.loadObjects<GeneralCatalogItem>(
             KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions
@@ -142,9 +145,11 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria('Class', SearchOperator.EQUALS, FilterDataType.STRING,
                 FilterType.AND, 'ITSM::Core::IncidentState'),
-            new FilterCriteria('Functionality', SearchOperator.IN, FilterDataType.STRING,
+            new FilterCriteria(`${GeneralCatalogItemProperty.PREFERENCES}.Name`, SearchOperator.EQUALS, FilterDataType.STRING,
+                FilterType.AND, 'Functionality'),
+            new FilterCriteria(`${GeneralCatalogItemProperty.PREFERENCES}.Value`, SearchOperator.IN, FilterDataType.STRING,
                 FilterType.AND, ['warning', 'incident'])
-        ]);
+        ], undefined, undefined, [GeneralCatalogItemProperty.PREFERENCES]);
 
         const catalogItems = await KIXObjectService.loadObjects<GeneralCatalogItem>(
             KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions

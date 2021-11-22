@@ -7,14 +7,12 @@
  * --
  */
 
-export enum GeneralCatalogItemProperty {
+export class GeneralCatalogItemPreferenceConfig {
 
-    ID = 'ItemID',
-
-    NAME = 'Name',
-
-    CLASS = 'Class',
-
-    PREFERENCES = 'Preferences',
+    public Class: string;
+    public Data: any;
+    public Desc: string;
+    public Label: string;
+    public PrefKey: string;
 
 }
