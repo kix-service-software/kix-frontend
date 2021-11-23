@@ -7,6 +7,7 @@
  * --
  */
 
+import { ReleaseInfo } from '../../../../../model/ReleaseInfo';
 import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
 export class ComponentState extends AbstractComponentState {
@@ -14,6 +15,7 @@ export class ComponentState extends AbstractComponentState {
     public constructor(
         public prepared: boolean = false,
         public instanceId: string = 'admin-system-settings',
+        public releaseInfo: ReleaseInfo = null,
         public completed: boolean = false
     ) {
         super();
