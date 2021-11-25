@@ -102,11 +102,22 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                     ));
                     break;
                 case ConfigItemProperty.CLASS_ID:
+                    searchCriteria.property = 'ClassIDs';
+                    searchCriteria.type = FilterDataType.NUMERIC;
+                    newCriteria.push(searchCriteria);
+                    break;
                 case ConfigItemProperty.CUR_DEPL_STATE_ID:
+                    searchCriteria.property = 'DeplStateIDs';
+                    searchCriteria.type = FilterDataType.NUMERIC;
+                    break;
                 case ConfigItemProperty.CUR_INCI_STATE_ID:
+                    searchCriteria.property = 'InciStateIDs';
+                    searchCriteria.type = FilterDataType.NUMERIC;
+                    break;
                 case VersionProperty.NUMBER:
                 case KIXObjectProperty.CHANGE_BY:
                 case KIXObjectProperty.CREATE_BY:
+                    searchCriteria.type = FilterDataType.NUMERIC;
                     newCriteria.push(searchCriteria);
                     break;
                 case KIXObjectProperty.CREATE_TIME:

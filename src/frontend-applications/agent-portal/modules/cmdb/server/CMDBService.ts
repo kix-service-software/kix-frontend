@@ -320,8 +320,11 @@ export class CMDBAPIService extends KIXObjectAPIService {
 
             return c.property !== ConfigItemProperty.NUMBER &&
                 c.property !== ConfigItemProperty.NAME &&
+                c.property !== ConfigItemProperty.CLASS_ID &&
                 c.property !== 'InciStateIDs' &&
                 c.property !== 'DeplStateIDs' &&
+                c.property !== ConfigItemProperty.CUR_DEPL_STATE_ID &&
+                c.property !== ConfigItemProperty.CUR_INCI_STATE_ID &&
                 c.property !== 'ClassIDs' &&
                 !c.property.startsWith('Data') &&
                 !c.property.startsWith('CurrentVersion') &&
@@ -362,6 +365,9 @@ export class CMDBAPIService extends KIXObjectAPIService {
             c.property === ConfigItemProperty.NAME ||
             c.property === 'InciStateIDs' ||
             c.property === 'DeplStateIDs' ||
+            c.property === ConfigItemProperty.CUR_DEPL_STATE_ID ||
+            c.property === ConfigItemProperty.CUR_INCI_STATE_ID ||
+            c.property === ConfigItemProperty.CLASS_ID ||
             c.property === 'ClassIDs' ||
             c.property.startsWith('Data') ||
             c.property.startsWith('CurrentVersion') ||

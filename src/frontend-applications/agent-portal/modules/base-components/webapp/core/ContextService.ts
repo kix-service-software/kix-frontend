@@ -284,7 +284,7 @@ export class ContextService {
         }
 
         const descriptor = this.contextDescriptorList.find(
-            (cd) => cd.urlPaths.some((p) => p === contextUrl) && cd.contextMode === contextMode
+            (cd) => cd.urlPaths?.some((p) => p === contextUrl) && cd.contextMode === contextMode
         );
         if (descriptor) {
             context = await this.setActiveContext(descriptor.contextId, objectId, urlParams, [], history);
