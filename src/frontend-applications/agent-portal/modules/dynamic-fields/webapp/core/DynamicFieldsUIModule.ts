@@ -512,8 +512,8 @@ export class UIModule implements IUIModule {
 
         const deploymentStatesTitle = await TranslationService.translate('Translatable#Deployment States');
         const deploymentStatesDescription = await TranslationService.translate('Translatable#This configuration defines which Deployment States are subject to this selection. Please enter DeploymentStates.');
-        const incidentStatesTitle = await TranslationService.translate('Translatable#Incident States');
-        const incidentStatesDescription = await TranslationService.translate('Translatable#This configuration defines which Asset Classes are subject to this selection. Please enter Classes.');
+        const classesTitle = await TranslationService.translate('Translatable#Asset Classes');
+        const classesDescription = await TranslationService.translate('Translatable#This configuration defines which Asset Classes are subject to this selection. Please enter Classes.');
 
         const schema = {
             type: 'object',
@@ -563,8 +563,8 @@ export class UIModule implements IUIModule {
                     type: 'array',
                     format: 'select',
                     uniqueItems: true,
-                    title: incidentStatesTitle,
-                    description: incidentStatesDescription,
+                    title: classesTitle,
+                    description: classesDescription,
                     items: {
                         enumSource: [{
                             source: classes.map((s) => {
