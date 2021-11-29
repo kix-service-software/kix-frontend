@@ -73,11 +73,11 @@ export class TicketContext extends Context {
             url = this.descriptor.urlPaths[0];
             const params = [];
             if (this.queueId) {
-                params.push(`queueId=${this.queueId}`);
+                params.push(`queueId=${encodeURIComponent(this.queueId)}`);
             }
 
             if (this.filterValue) {
-                params.push(`filter=${this.filterValue}`);
+                params.push(`filter=${encodeURIComponent(this.filterValue)}`);
             }
 
             if (params.length) {

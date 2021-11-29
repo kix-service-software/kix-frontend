@@ -17,11 +17,11 @@ import { IKIXObjectService } from '../../../../modules/base-components/webapp/co
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
 import { LinkObjectProperty } from '../../model/LinkObjectProperty';
 import { LinkType } from '../../model/LinkType';
-import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
-import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
 
 export class LinkService extends KIXObjectService<Link> {
@@ -78,20 +78,21 @@ export class LinkService extends KIXObjectService<Link> {
     }
 
     public static async getLinkTypes(
-        sourceType: KIXObjectType | string, targetType: KIXObjectType | string
+        sourceType: KIXObjectType | string, targetType: KIXObjectType | string = sourceType
     ): Promise<LinkType[]> {
+        const filterType = !targetType ? FilterType.OR : FilterType.AND;
         const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria(
-                'Source', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, sourceType
+                'Source', SearchOperator.EQUALS, FilterDataType.STRING, filterType, sourceType
             ),
             new FilterCriteria(
-                'Target', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, targetType
+                'Target', SearchOperator.EQUALS, FilterDataType.STRING, filterType, targetType
             )
         ]);
 
         const linkTypes = await KIXObjectService.loadObjects<LinkType>(
             KIXObjectType.LINK_TYPE, null, loadingOptions, null, false
-        );
+        ).catch(() => []);
 
         return linkTypes;
     }

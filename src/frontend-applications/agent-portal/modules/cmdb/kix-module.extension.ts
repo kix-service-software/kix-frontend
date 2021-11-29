@@ -58,9 +58,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             'config-item-history-widget', '/kix-module-cmdb$0/webapp/components/config-item-history-widget', []
         ),
         new UIComponent(
-            'config-item-graph-widget', '/kix-module-cmdb$0/webapp/components/config-item-graph-widget', []
-        ),
-        new UIComponent(
             'config-item-class-explorer', '/kix-module-cmdb$0/webapp/components/config-item-class-explorer', []
         ),
         new UIComponent(

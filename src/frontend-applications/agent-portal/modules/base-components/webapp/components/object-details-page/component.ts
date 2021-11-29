@@ -20,7 +20,6 @@ import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { IEventSubscriber } from '../../core/IEventSubscriber';
 import { Context } from '../../../../../model/Context';
-import { DateTimeUtil } from '../../core/DateTimeUtil';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

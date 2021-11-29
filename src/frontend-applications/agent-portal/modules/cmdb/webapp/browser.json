@@ -8,7 +8,6 @@
         "require ./components/config-item-class-definition",
         "require ./components/config-item-class-explorer",
         "require ./components/config-item-class-info-widget",
-        "require ./components/config-item-graph-widget",
         "require ./components/config-item-history-widget",
         "require ./components/config-item-images-widget",
         "require ./components/config-item-info",
