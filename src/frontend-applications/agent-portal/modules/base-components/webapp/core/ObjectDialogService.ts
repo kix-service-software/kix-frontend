@@ -101,11 +101,24 @@ export class ObjectDialogService {
 
                         await BrowserUtil.openSuccessOverlay('Translatable#Success');
                     }
-                }).catch((error: Error) => {
-                    BrowserUtil.openErrorOverlay(
-                        error.Message ? `${error.Code}: ${error.Message}` : error.toString()
-                    );
-                    BrowserUtil.toggleLoadingShield('APP_SHIELD', false);
+                }).catch(async (error: Error) => {
+
+                    let shouldContinue: boolean = true;
+
+                    if (this.extendedDialogService.has(objectType)) {
+                        for (const extendedService of this.extendedDialogService.get(objectType)) {
+                            shouldContinue = shouldContinue && await extendedService.postCatch(
+                                context, formId, error
+                            );
+                        }
+                    }
+
+                    if (shouldContinue) {
+                        BrowserUtil.openErrorOverlay(
+                            error.Message ? `${error.Code}: ${error.Message}` : error.toString()
+                        );
+                        BrowserUtil.toggleLoadingShield('APP_SHIELD', false);
+                    }
                     throw error;
                 });
 
