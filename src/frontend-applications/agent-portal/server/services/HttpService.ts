@@ -40,7 +40,6 @@ export class HttpService {
     private apiURL: string;
     private backendCertificate: any;
     private requestPromises: Map<string, Promise<any>> = new Map();
-    private currentUserRequestPromises: Map<string, Promise<any>> = new Map();
 
     private constructor() {
         const serverConfig: IServerConfiguration = ConfigurationService.getInstance().getServerConfiguration();
@@ -286,50 +285,43 @@ export class HttpService {
             return user;
         }
 
-        if (!this.currentUserRequestPromises.has(token)) {
-            const promise = new Promise<User>(async (resolve, reject) => {
-                const options: AxiosRequestConfig = {
-                    method: RequestMethod.GET,
-                    params: {
-                        'include': 'Tickets,Preferences,RoleIDs,Contact',
-                        'Tickets.StateType': 'Open'
-                    }
-                };
+        const options: AxiosRequestConfig = {
+            method: RequestMethod.GET,
+            params: {
+                'include': 'Tickets,Preferences,RoleIDs,Contact',
+                'Tickets.StateType': 'Open'
+            }
+        };
 
-                const uri = 'session/user';
-                options.url = this.buildRequestUrl(uri);
-                options.headers = {
-                    'Authorization': 'Token ' + backendToken,
-                    'KIX-Request-ID': ''
-                };
+        const uri = 'session/user';
+        options.url = this.buildRequestUrl(uri);
+        options.headers = {
+            'Authorization': 'Token ' + backendToken,
+            'KIX-Request-ID': ''
+        };
 
-                // start profiling
-                const profileTaskId = ProfilingService.getInstance().start(
-                    'HttpService', options.method + ' ' + uri, { data: [options] }
+        // start profiling
+        const profileTaskId = ProfilingService.getInstance().start(
+            'HttpService', options.method + ' ' + uri, { data: [options] }
+        );
+
+        const response = await this.axios(options)
+            .catch((error: AxiosError) => {
+                LoggingService.getInstance().error(
+                    `Error during HTTP (${uri}) ${options.method} request.`, error
                 );
-
-                const response = await this.axios(options).catch((error: AxiosError) => {
-                    LoggingService.getInstance().error(
-                        `Error during HTTP (${uri}) ${options.method} request.`, error
-                    );
-                    ProfilingService.getInstance().stop(profileTaskId, { data: ['Error'] });
-                    if (error.response.status === 403) {
-                        throw new PermissionError(this.createError(error), uri, options.method);
-                    } else {
-                        throw this.createError(error);
-                    }
-                });
-
-                await CacheService.getInstance().set(backendToken, response.data['User'], KIXObjectType.CURRENT_USER);
-                ProfilingService.getInstance().stop(profileTaskId, { data: [response.data] });
-
-                this.currentUserRequestPromises.delete(token);
-                resolve(response.data['User']);
+                ProfilingService.getInstance().stop(profileTaskId, { data: ['Error'] });
+                if (error.response.status === 403) {
+                    throw new PermissionError(this.createError(error), uri, options.method);
+                } else {
+                    throw this.createError(error);
+                }
             });
-            this.currentUserRequestPromises.set(token, promise);
-        }
 
-        return this.currentUserRequestPromises.get(token);
+        await CacheService.getInstance().set(backendToken, response.data['User'], KIXObjectType.CURRENT_USER);
+        ProfilingService.getInstance().stop(profileTaskId, { data: [response.data] });
+
+        return response.data['User'];
     }
 
 }
