@@ -223,7 +223,9 @@ export class AbstractJobFormManager {
         }
 
         if (!hasMacro) {
-            const macroField = await MacroFieldCreator.createMacroField(null, formInstance, this);
+            const macroField = await MacroFieldCreator.createMacroField(
+                null, formInstance, this, undefined, undefined, job?.Type
+            );
             groups.push(
                 new FormGroupConfiguration(
                     'job-form-group-macro', 'Translatable#Macro', undefined, undefined, [macroField]
