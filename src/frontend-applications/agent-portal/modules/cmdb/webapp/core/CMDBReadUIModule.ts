@@ -39,10 +39,11 @@ import { ContextService } from '../../../base-components/webapp/core/ContextServ
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
 import { TableCSSHandlerRegistry, TableFactoryService } from '../../../base-components/webapp/core/table';
+import { GraphService } from '../../../graph/webapp/core/GraphService';
 import { SearchService } from '../../../search/webapp/core';
-import { SysConfigService } from '../../../sysconfig/webapp/core';
 import ConfigItemPrintAction from './actions/ConfigItemPrintAction';
 import ConfigItemPrintSelectionAction from './actions/ConfigItemPrintSelectionAction';
+import { CMDBGraphInstance } from './CMDBGraphInstance';
 import { PostproductivCSSHandler } from './table/PostproductivCSSHandler';
 
 export class UIModule implements IUIModule {
@@ -76,6 +77,8 @@ export class UIModule implements IUIModule {
         TableCSSHandlerRegistry.getInstance().registerObjectCSSHandler(
             KIXObjectType.CONFIG_ITEM, new PostproductivCSSHandler()
         );
+
+        GraphService.registerGraphInstance('ConfigItemLinkGraph', CMDBGraphInstance);
 
         await this.registerContexts();
         this.registerActions();

@@ -31,6 +31,7 @@ import { ConfigItemAttachment } from '../../model/ConfigItemAttachment';
 import { Version } from '../../model/Version';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { CreateConfigItemVersionOptions } from '../../model/CreateConfigItemVersionOptions';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { VersionProperty } from '../../model/VersionProperty';
 import { GeneralCatalogItemProperty } from '../../../general-catalog/model/GeneralCatalogItemProperty';
 import { EventService } from '../../../base-components/webapp/core/EventService';
@@ -376,6 +377,20 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
             }
         }
         return [...objectProperties, ...superProperties];
+    }
+
+    public async getClasses(valid: boolean = true): Promise<ConfigItemClass[]> {
+        let loadingOptions: KIXObjectLoadingOptions;
+        if (valid) {
+            loadingOptions = new KIXObjectLoadingOptions([
+                new FilterCriteria(
+                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
+                )
+            ]);
+        }
+        const classes = await this.loadObjects<ConfigItemClass>(KIXObjectType.CONFIG_ITEM_CLASS, null, loadingOptions)
+            .catch(() => []);
+        return classes;
     }
 
     public static async getGeneralCatalogItems(

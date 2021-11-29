@@ -1,0 +1,38 @@
+<!--
+Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<widget instanceId=state.instanceId title="Translatable#Graph Options">
+    <@content>
+        <div.graph-explorer-container>
+            <div.graph-options>
+                <for|option| of=state.options>
+                    <h3><translation-string pattern=option.displayValue/></h3>
+                    <form-list
+                        treeId=option.key
+                        freeText=option.freeText
+                        multiselect=option.multiselect
+                    />
+                </for>
+            </div>
+
+            <div.dialog-control>
+                <div.dialog-button-container>
+                    <button.kix-button.submit-button
+                        type="button"
+                        on-click("apply")
+                        title=(state.translations["Translatable#Apply"])
+                    >
+                        <span.kix-icon-check/>
+                        <translation-string pattern="Translatable#Apply"/>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </@content>
+</widget>
