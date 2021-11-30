@@ -12,14 +12,19 @@ import { Table } from '.';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 import { ContextService } from '../ContextService';
-import { ContextType } from '../../../../../model/ContextType';
-import { Context } from '../../../../../model/Context';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { EventService } from '../EventService';
+import { ContextEvents } from '../ContextEvents';
+import { IEventSubscriber } from '../IEventSubscriber';
+import { IdService } from '../../../../../model/IdService';
+import { Context } from '../../../../../model/Context';
 
 export class TableFactoryService {
 
     private static INSTANCE: TableFactoryService;
+
+    private subscriber: IEventSubscriber;
 
     public static getInstance(): TableFactoryService {
         if (!TableFactoryService.INSTANCE) {
@@ -30,48 +35,22 @@ export class TableFactoryService {
     }
 
     private constructor() {
-        ContextService.getInstance().registerListener({
-            constexServiceListenerId: 'table-factory-service-listener',
-            contextChanged: this.contextChanged.bind(this),
-            contextRegistered: () => { return; }
-        });
-    }
-
-
-    private contextChanged(
-        contextId: string, context: Context, type: ContextType, history: boolean, oldContext: Context
-    ): void {
-        const mainContext = ContextService.getInstance().getActiveContext();
-        const dialogContext = ContextService.getInstance().getActiveContext();
-        if (oldContext) {
-            if (type === oldContext.descriptor.contextType) {
-                let switchContext = false;
-                if (type === ContextType.MAIN) {
-                    switchContext = mainContext && contextId !== mainContext.contextId;
-                } else if (type === ContextType.DIALOG) {
-                    switchContext = dialogContext && contextId !== dialogContext.contextId;
-                }
-
-                if (switchContext) {
-                    const oldContextid = oldContext.contextId;
-
-                    if (this.contextTableInstances.has(oldContextid)) {
-                        this.contextTableInstances.get(oldContextid).forEach((table) => {
-                            table.destroy();
-                        });
-                        this.contextTableInstances.delete(oldContextid);
-                    }
-                }
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(),
+            eventPublished: (context: Context): void => {
+                this.deleteContextTables(context?.contextId);
             }
-        }
+        };
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_REMOVED, this.subscriber);
     }
 
-    public deleteDialogTables(dialogContextId: string): void {
-        if (this.contextTableInstances.has(dialogContextId)) {
-            this.contextTableInstances.get(dialogContextId).forEach((table) => {
+    public deleteContextTables(contextId: string): void {
+        if (this.contextTableInstances.has(contextId)) {
+            this.contextTableInstances.get(contextId).forEach((table) => {
                 table.destroy();
+                table.deleteTableState();
             });
-            this.contextTableInstances.delete(dialogContextId);
+            this.contextTableInstances.delete(contextId);
         }
     }
 

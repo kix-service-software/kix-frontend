@@ -112,6 +112,7 @@ export abstract class Context {
             eventSubscriberId: this.descriptor.contextId + '-update-listener',
             eventPublished: null
         });
+
         return;
     }
 

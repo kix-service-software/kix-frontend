@@ -66,7 +66,6 @@ class Component {
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
-        TableFactoryService.getInstance().destroyTable(`bulk-form-list-${this.state.bulkManager?.objectType}`);
     }
 
     private async setCanRun(): Promise<void> {

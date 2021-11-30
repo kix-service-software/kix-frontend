@@ -11,6 +11,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     key=(
         state.table ? state.table.getTableId() + "table-container" : "no-table"
     )
+    on-scroll("onScroll")
 >
     <if(state.table)>
         <table.kix-table>

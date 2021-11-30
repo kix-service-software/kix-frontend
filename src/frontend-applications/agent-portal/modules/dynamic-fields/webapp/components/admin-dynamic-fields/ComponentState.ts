@@ -9,7 +9,6 @@
 
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableHeaderHeight, TableRowHeight } from '../../../../base-components/webapp/core/table';
-import { IdService } from '../../../../../model/IdService';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
 import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
@@ -17,7 +16,7 @@ import { TableConfiguration } from '../../../../../model/configuration/TableConf
 export class ComponentState {
 
     public constructor(
-        public instanceId: string = IdService.generateDateBasedId('admin-dynamic-fields'),
+        public instanceId: string = 'admin-dynamic-fields',
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#System: Dynamic Fields',
             ['dynamic-field-create-action', 'csv-export-action'], null,

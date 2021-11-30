@@ -7,7 +7,6 @@
  * --
  */
 
-import { IdService } from '../../../../../model/IdService';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
 import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -18,7 +17,7 @@ import { TextModuleProperty } from '../../../model/TextModuleProperty';
 export class ComponentState {
 
     public constructor(
-        public instanceId: string = IdService.generateDateBasedId('ticket-text-modules-list'),
+        public instanceId: string = 'admin-ticket-text-modules-list',
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Ticket: Text Modules',
             [

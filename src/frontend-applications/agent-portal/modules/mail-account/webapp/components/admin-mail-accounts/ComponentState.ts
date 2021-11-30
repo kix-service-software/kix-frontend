@@ -7,7 +7,6 @@
  * --
  */
 
-import { IdService } from '../../../../../model/IdService';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
 import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -16,7 +15,7 @@ import { SortOrder } from '../../../../../model/SortOrder';
 
 export class ComponentState {
     public constructor(
-        public instanceId: string = IdService.generateDateBasedId('communication-mail-accounts-list'),
+        public instanceId: string = 'admin-communication-mail-accounts-list',
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Communication: Email: Inbox',
             ['mail-account-create', 'mail-account-table-delete', 'csv-export-action'], null,
