@@ -115,10 +115,6 @@ class Component {
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableNewTicketsSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableOpenTicketsSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tablePendingTicketsSubscriber);
-        TableFactoryService.getInstance().destroyTable('contact-assigned-tickets-reminder');
-        TableFactoryService.getInstance().destroyTable('contact-assigned-tickets-new');
-        TableFactoryService.getInstance().destroyTable('contact-assigned-tickets-open');
-        TableFactoryService.getInstance().destroyTable('contact-assigned-tickets-pending');
     }
 
     private async initWidget(contact?: Contact): Promise<void> {

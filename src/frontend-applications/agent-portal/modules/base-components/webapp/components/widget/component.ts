@@ -15,6 +15,7 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
+import { ClientStorageService } from '../../core/ClientStorageService';
 
 class WidgetComponent implements IEventSubscriber {
 
@@ -66,6 +67,11 @@ class WidgetComponent implements IEventSubscriber {
             this.state.minimized = this.state.widgetConfiguration?.minimized;
         }
 
+        const storedMinimized = ClientStorageService.getOption(`${this.state.instanceId}-minimized`);
+        if (typeof storedMinimized !== 'undefined') {
+            this.state.minimized = storedMinimized === 'true';
+        }
+
         EventService.getInstance().subscribe(this.eventSubscriberId + 'SetMinimizedToFalse', this);
     }
 
@@ -100,6 +106,12 @@ class WidgetComponent implements IEventSubscriber {
                     }
                 }
             }
+
+            if (this.state.minimized) {
+                ClientStorageService.setOption(`${this.state.instanceId}-minimized`, this.state.minimized.toString());
+            } else {
+                ClientStorageService.deleteState(`${this.state.instanceId}-minimized`);
+            }
         }
     }
 
@@ -107,14 +119,6 @@ class WidgetComponent implements IEventSubscriber {
         if (this.state.minimized !== state) {
             this.minimizeWidget(true, null);
         }
-    }
-
-    public hasHeaderContent(headerContent: any): boolean {
-        return this.isInputDefined(headerContent);
-    }
-
-    private isInputDefined(input: any): boolean {
-        return input && Boolean(Object.keys(input).length);
     }
 
     public getWidgetClasses(): string[] {

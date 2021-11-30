@@ -7,7 +7,6 @@
  * --
  */
 
-import { IdService } from '../../../../../model/IdService';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
 import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -17,7 +16,7 @@ import { SortOrder } from '../../../../../model/SortOrder';
 
 export class ComponentState {
     public constructor(
-        public instanceId: string = IdService.generateDateBasedId('communication-webforms-list'),
+        public instanceId: string = 'admin-communication-webforms-list',
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Communication: Webform', ['webform-create-action'], null,
             new TableWidgetConfiguration(null, null, null,

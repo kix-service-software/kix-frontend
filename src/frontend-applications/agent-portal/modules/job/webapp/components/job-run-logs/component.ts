@@ -31,12 +31,6 @@ class Component {
         await this.prepareTable();
     }
 
-    public onDestroy(): void {
-        if (this.jobRun) {
-            TableFactoryService.getInstance().destroyTable('job-run-logs-' + this.jobRun.ID);
-        }
-    }
-
     private async prepareTable(): Promise<void> {
         if (this.jobRun) {
             const table = await TableFactoryService.getInstance().createTable(

@@ -33,7 +33,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onDestroy(): void {
         if (this.state.template) {
-            TableFactoryService.getInstance().destroyTable('import-export-template-' + this.state.template.ID);
             const context = ContextService.getInstance().getActiveContext();
             if (context) {
                 context.deleteObjectList('RUNS_OF_TEMPLATE_' + this.state.template.ID);
