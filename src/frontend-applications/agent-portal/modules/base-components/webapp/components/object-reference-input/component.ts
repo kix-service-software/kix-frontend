@@ -212,10 +212,11 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                 : [formValue.value];
 
             let selectedNodes = [];
-            let success = false;
-            if (this.autocomplete) {
-                const idsToLoad = objectIds.filter((id) => typeof id !== 'string' || !id.match(/<KIX_.+>/));
-                if (idsToLoad.length) {
+
+            // ignore placeholder and "useTextAsId" values (handle them like freetext)
+            const idsToLoad = !this.useTextAsId ? objectIds.filter((id) => typeof id !== 'string' || !id.match(/<KIX_.+>/)) : [];
+            if (idsToLoad) {
+                if (this.autocomplete) {
                     const objects = await KIXObjectService.loadObjects(
                         this.objectType, idsToLoad, this.loadingOptions, this.specificLoadingOptions, null, null, true
                     ).catch(() => []);
@@ -230,40 +231,29 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                             selectedNodes.push(node);
                         }
                     }
-                    success = true;
-                }
-            } else {
-                const objectOption = this.state.field?.options.find(
-                    (o) => o.option === ObjectReferenceOptions.OBJECT
-                );
-                if (objectOption) {
-                    success = true;
-                    // filter placeholder values
-                    const loadIds = objectIds.filter((id) => typeof id !== 'string' || !id.match(/<KIX_.+>/));
-                    if (loadIds.length) {
-                        const objects = await KIXObjectService.loadObjects(
-                            objectOption.value, loadIds, null, null, null, null, true
+                } else {
+                    const objects = await KIXObjectService.loadObjects(
+                        this.objectType, idsToLoad, null, null, null, null, true
+                    );
+                    if (objects && !!objects.length) {
+                        const translatableOption = this.state.field?.options.find(
+                            (o) => o.option === ObjectReferenceOptions.TRANSLATABLE
                         );
-                        if (objects && !!objects.length) {
-                            const translatableOption = this.state.field?.options.find(
-                                (o) => o.option === ObjectReferenceOptions.TRANSLATABLE
+                        const translatable = !translatableOption || Boolean(translatableOption.value);
+                        for (const object of objects) {
+                            const node = await ObjectReferenceUtil.createTreeNode(
+                                object, translatable, this.isInvalidClickable, this.useTextAsId, this.translatable
                             );
-                            const translatable = !translatableOption || Boolean(translatableOption.value);
-                            for (const object of objects) {
-                                const node = await ObjectReferenceUtil.createTreeNode(
-                                    object, translatable, this.isInvalidClickable, this.useTextAsId, this.translatable
-                                );
-                                if (node) {
-                                    node.selected = true;
-                                    selectedNodes.push(node);
-                                }
+                            if (node) {
+                                node.selected = true;
+                                selectedNodes.push(node);
                             }
                         }
                     }
                 }
             }
 
-            if (this.state.freeText || !success) {
+            if (this.state.freeText || idsToLoad.length !== objectIds.length) {
                 const freeTextNodes = objectIds
                     .filter((oid) => !selectedNodes.some((sn) => sn.id.toString() === oid.toString()))
                     .map((v) => new TreeNode(v, v?.toString()));
