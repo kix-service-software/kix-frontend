@@ -59,7 +59,7 @@ export class TableConfiguration implements IConfiguration {
             } else if (this.rowHeight <= TableRowHeight.SMALL) {
                 this.displayLimit = 10;
             } else {
-                this.displayLimit = 25;
+                this.displayLimit = 20;
             }
         }
 

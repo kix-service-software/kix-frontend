@@ -18,7 +18,7 @@ Feature: Als Nutzer möchte ich eine korrekte Standardkonfiguration für eine Ta
         Then DisplayLimit: <displayLimit>
         Examples:
             | selection | toggle | objectType | headerHeight | rowHeight | displayLimit |
-            | 1         | 0      | 'Queue'    | 'l'          | 'l'       | 25           |
+            | 1         | 0      | 'Queue'    | 'l'          | 'l'       | 20           |
 
     Scenario Outline: Tabelle mit korrekter Spalte <column>
         Given Tabelle: <objectType>

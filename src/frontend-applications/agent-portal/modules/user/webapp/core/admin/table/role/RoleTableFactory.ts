@@ -68,7 +68,7 @@ export class RoleTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(null, null, null,
-                KIXObjectType.ROLE, null, null, tableColumns, [], true, false, null, null,
+                KIXObjectType.ROLE, null, 20, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
