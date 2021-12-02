@@ -69,7 +69,7 @@ export class JobTableFactory extends TableFactory {
                 new KIXObjectLoadingOptions(
                     undefined, undefined, undefined, [JobProperty.MACROS, JobProperty.EXEC_PLANS]
                 ),
-                null, tableColumns, [], true, false, null, null,
+                20, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;

@@ -59,7 +59,7 @@ export class TicketPriorityTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(null, null, null,
-                KIXObjectType.TICKET_PRIORITY, null, null, tableColumns, [], true, false, null, null,
+                KIXObjectType.TICKET_PRIORITY, null, 20, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
