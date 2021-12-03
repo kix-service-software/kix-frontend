@@ -53,15 +53,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.description = await LabelService.getInstance().getPropertyText(
                     this.property, contextObject.KIXObjectType
                 );
-            }
-        } else {
-            this.state.displayText = await PlaceholderService.getInstance().replacePlaceholders(
-                this.text, contextObject
-            );
+            } else {
+                this.state.displayText = await PlaceholderService.getInstance().replacePlaceholders(
+                    this.text, contextObject
+                );
 
-            this.state.description = await PlaceholderService.getInstance().replacePlaceholders(
-                this.description, contextObject
-            );
+                this.state.description = await PlaceholderService.getInstance().replacePlaceholders(
+                    this.description, contextObject
+                );
+            }
         }
     }
 }
