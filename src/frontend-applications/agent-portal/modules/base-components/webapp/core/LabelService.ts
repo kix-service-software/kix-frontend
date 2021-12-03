@@ -131,28 +131,36 @@ export class LabelService {
         }
 
         const objectValue = object[property];
+        // handle complex value for "cache"
+        let valueString: string = (Array.isArray(objectValue) || typeof objectValue === 'object') ?
+            JSON.stringify(objectValue) : objectValue;
+        if (!valueString && typeof defaultValue !== 'undefined') {
+            valueString = (Array.isArray(defaultValue) || typeof defaultValue === 'object') ?
+                JSON.stringify(defaultValue) : defaultValue;
+        }
         // if we have already a display value for this property then return directly
         // FIXME: check against ObjectProperty or something similar if property is supported (KIX2018-6164)?
-        if (typeof objectValue !== 'undefined' && propertiesMap.get(property).has(objectValue)) {
-            return propertiesMap.get(property).get(objectValue);
+        if (typeof objectValue !== 'undefined' && propertiesMap.get(property).has(valueString)) {
+            return propertiesMap.get(property).get(valueString);
         }
 
         const key = `${object.KIXObjectType}-${property}-`
-            + `${objectValue ? objectValue : defaultValue}-${translatable ? '1' : '0'}`;
+            + `${valueString}-${translatable ? '1' : '0'}`;
         // FIXME: check against ObjectProperty or something similar if property is supported (KIX2018-6164)?
         if (typeof objectValue !== 'undefined' && this.requestDisplayValuePromises.has(key)) {
             return this.requestDisplayValuePromises.get(key);
         }
 
         const requestPromise = this.createRequestDisplayValuePromise(
-            object, property, key, defaultValue, translatable
+            object, property, key, valueString, defaultValue, translatable
         );
         this.requestDisplayValuePromises.set(key, requestPromise);
         return requestPromise;
     }
 
     private createRequestDisplayValuePromise<T extends KIXObject>(
-        object: T, property: string, key: string, defaultValue?: string, translatable: boolean = true
+        object: T, property: string, key: string, valueString: string, defaultValue?: string,
+        translatable: boolean = true
     ): Promise<string> {
         return new Promise(async (resolve, reject) => {
             let displayValue;
@@ -165,7 +173,7 @@ export class LabelService {
             if (!displayValue) {
                 displayValue = await labelProvider?.getDisplayText(object, property, defaultValue, translatable);
             }
-            this.displayValueCache.get(object.KIXObjectType).get(property).set(object[property], displayValue);
+            this.displayValueCache.get(object.KIXObjectType).get(property).set(valueString, displayValue);
             this.requestDisplayValuePromises.delete(key);
             resolve(displayValue);
         });
@@ -195,26 +203,34 @@ export class LabelService {
         }
 
         const objectValue = object[property];
+        // handle complex value for "cache"
+        let valueString: string | number = (Array.isArray(objectValue) || typeof objectValue === 'object') ?
+            JSON.stringify(objectValue) : objectValue;
+        if (!valueString && typeof value !== 'undefined') {
+            valueString = (Array.isArray(value) || typeof value === 'object') ?
+                JSON.stringify(value) : value;
+        }
         // if we have already a display value for this property then return directly
         // FIXME: check against ObjectProperty or something similar if property is supported (KIX2018-6164)?
-        if (typeof objectValue !== 'undefined' && propertiesMap.get(property).has(objectValue)) {
-            return propertiesMap.get(property).get(objectValue);
+        if (typeof objectValue !== 'undefined' && propertiesMap.get(property).has(valueString)) {
+            return propertiesMap.get(property).get(valueString);
         }
 
         const key = `${object.KIXObjectType}-${property}-`
-            + `${objectValue ? objectValue : value}-${forTable ? '1' : '0'}`;
+            + `${valueString}-${forTable ? '1' : '0'}`;
         // FIXME: check against ObjectProperty or something similar if property is supported (KIX2018-6164)?
         if (typeof objectValue !== 'undefined' && this.requestIconPromises.has(key)) {
             return this.requestIconPromises.get(key);
         }
 
-        const requestPromise = this.createRequestIconPromise(object, property, key, value, forTable);
+        const requestPromise = this.createRequestIconPromise(object, property, key, valueString, value, forTable);
         this.requestIconPromises.set(key, requestPromise);
         return requestPromise;
     }
 
     private createRequestIconPromise(
-        object: KIXObject, property: string, key: string, value?: string | number, forTable?: boolean
+        object: KIXObject, property: string, key: string, valueString: string | number, value?: string | number,
+        forTable?: boolean
     ): Promise<Array<ObjectIcon | string>> {
         return new Promise(async (resolve, reject) => {
             let displayIcons;
@@ -233,7 +249,7 @@ export class LabelService {
                 if (!displayIcons) {
                     displayIcons = await labelProvider.getIcons(object, property, value, forTable);
                 }
-                this.displayIconCache.get(object.KIXObjectType).get(property).set(object[property], displayIcons);
+                this.displayIconCache.get(object.KIXObjectType).get(property).set(valueString, displayIcons);
             }
             this.requestIconPromises.delete(key);
             resolve(displayIcons);
