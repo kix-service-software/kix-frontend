@@ -37,7 +37,7 @@ export abstract class ExtendedTableFactory {
         return null;
     }
 
-    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
+    public getDefaultColumnConfiguration(property: string, translatable?: boolean): IColumnConfiguration {
         return null;
     }
 
