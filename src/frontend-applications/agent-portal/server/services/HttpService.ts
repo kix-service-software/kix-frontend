@@ -244,10 +244,10 @@ export class HttpService {
     }
 
     private createError(error: AxiosError): Error {
-        const status = error.response.status;
+        const status = error.response?.status;
         if (status === 500) {
-            LoggingService.getInstance().error(`(${status}) ${error.response.statusText}`);
-            return new Error(error.response.status?.toString(), error.response.statusText, status);
+            LoggingService.getInstance().error(`(${status}) ${error.response?.statusText}`);
+            return new Error(error.response.status?.toString(), error.response?.statusText, status);
         } else {
             const backendError = new BackendHTTPError(error);
             LoggingService.getInstance().error(
@@ -311,7 +311,7 @@ export class HttpService {
                     `Error during HTTP (${uri}) ${options.method} request.`, error
                 );
                 ProfilingService.getInstance().stop(profileTaskId, { data: ['Error'] });
-                if (error.response.status === 403) {
+                if (error.response?.status === 403) {
                     throw new PermissionError(this.createError(error), uri, options.method);
                 } else {
                     throw this.createError(error);
@@ -336,9 +336,9 @@ class BackendHTTPError {
     };
 
     public constructor(error: AxiosError) {
-        const data = error.response?.data;
+        const data = error?.response?.data;
         this.error = { Code: data?.Code, Message: data?.Message };
-        this.status = error.response?.status;
+        this.status = error?.response?.status;
     }
 
 }
