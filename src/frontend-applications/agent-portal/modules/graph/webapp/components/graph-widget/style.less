@@ -23,3 +23,74 @@ div#graphdiv {
         user-select: none;
     }
 }
+
+.simulation-active {
+    border: 1px solid @primary-2;
+    border-radius: 5px;
+
+    >.widget-header {
+        background-color: @primary-2;
+        color: @secondary-6;
+
+        >.header-left {
+            .widget-filter {
+                .action-list-wrapper {
+                    .action-list {
+                        .action {
+                            a {
+                                color: @secondary-6;
+                            }
+                        }
+                    }
+
+                    .action-list-expansion-container {
+                        background-color: @primary-2;
+
+                        .action-list-expansion {
+                            color: @secondary-6;
+                        }
+                    }
+                }
+            }
+        }
+
+        >.header-right {
+
+            >.action-list-wrapper {
+                >.action-list {
+                    >li {
+                        color: @secondary-6;
+
+                        a {
+                            color: @secondary-6
+                        }
+
+                        &.inactive {
+                            color: @secondary-2;
+
+                            a {
+                                color: @secondary-2
+                            }
+                        }
+
+                        &:hover:not(.list-button):not(.inactive) {
+                            color: @primary-5;
+
+                            a {
+                                color: @primary-5
+                            }
+                        }
+                    }
+                }
+
+                .action-list-expansion-container {
+                    background-color: @primary-2;
+
+                    .action-list-expansion {
+                        color: @secondary-6;
+                    }
+                }
+            }
+        }
+    }
+}

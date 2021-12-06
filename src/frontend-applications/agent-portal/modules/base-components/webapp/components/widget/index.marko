@@ -19,24 +19,22 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         on-click("minimizeWidget", false)
         on-mousedown("headerMousedown", false)>
         <span.header-left>
-            <if(input.title)>
-                <div.widget-title class={
-                    "with-icon": input.icon
-                }>
-                    <if(input.icon)>
-                        <icon
-                            icon=input.icon
-                            on-click("minimizeWidget", true)
-                            on-mousedown("headerMousedown", true)/>
-                    </if>
-                    <h2
-                        title=state.translations[input.title]
+            <div.widget-title class={
+                "with-icon": input.icon
+            }>
+                <if(input.icon)>
+                    <icon
+                        icon=input.icon
                         on-click("minimizeWidget", true)
-                        on-mousedown("headerMousedown", true)>
-                        <translation-string pattern=input.title/>
-                    </h2>
-                </div>
-            </if>
+                        on-mousedown("headerMousedown", true)/>
+                </if>
+                <h2
+                    title=state.title
+                    on-click("minimizeWidget", true)
+                    on-mousedown("headerMousedown", true)>
+                    <translation-string pattern=state.title/>
+                </h2>
+            </div>
             <if(input.headercontent)>
                 <${input.headercontent}/>
             </if>

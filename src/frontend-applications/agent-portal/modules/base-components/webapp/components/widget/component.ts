@@ -16,6 +16,8 @@ import { ContextService } from '../../../../../modules/base-components/webapp/co
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { ClientStorageService } from '../../core/ClientStorageService';
+import { TabContainerEvent } from '../../core/TabContainerEvent';
+import { TabContainerEventData } from '../../core/TabContainerEventData';
 
 class WidgetComponent implements IEventSubscriber {
 
@@ -40,11 +42,13 @@ class WidgetComponent implements IEventSubscriber {
         this.eventSubscriberId = typeof input.eventSubscriberPrefix !== 'undefined'
             ? input.eventSubscriberPrefix
             : 'GeneralWidget';
-        this.setTranslations([input.title]);
+        if (input.title) {
+            this.setTitle(input.title);
+        }
     }
 
-    private async setTranslations(patterns: string[]): Promise<void> {
-        this.state.translations = await TranslationService.createTranslationObject(patterns);
+    private async setTitle(title: string): Promise<void> {
+        this.state.title = await TranslationService.translate(title);
     }
 
     public async onMount(): Promise<void> {
@@ -73,10 +77,12 @@ class WidgetComponent implements IEventSubscriber {
         }
 
         EventService.getInstance().subscribe(this.eventSubscriberId + 'SetMinimizedToFalse', this);
+        EventService.getInstance().subscribe(TabContainerEvent.CHANGE_TITLE, this);
     }
 
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(this.eventSubscriberId + 'SetMinimizedToFalse', this);
+        EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_TITLE, this);
     }
 
     public minimizeWidget(force: boolean = false, event: any): void {
@@ -173,9 +179,14 @@ class WidgetComponent implements IEventSubscriber {
         (this as any).emit('closeWidget');
     }
 
-    public eventPublished(data: any, eventId: string): void {
+    public async eventPublished(data: any, eventId: string): Promise<void> {
         if (eventId === (this.eventSubscriberId + 'SetMinimizedToFalse')) {
             this.state.minimized = false;
+        } else if (eventId === TabContainerEvent.CHANGE_TITLE) {
+            const changeData: TabContainerEventData = data;
+            if (changeData.tabId === this.state.instanceId) {
+                this.setTitle(changeData.title);
+            }
         }
     }
 

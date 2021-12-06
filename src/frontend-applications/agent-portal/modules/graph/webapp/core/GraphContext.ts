@@ -23,6 +23,7 @@ import { TranslationService } from '../../../translation/webapp/core/Translation
 import { Graph } from '../../model/Graph';
 import { GraphContextOption } from '../../model/GraphContextOption';
 import { GraphContextOptions } from '../../model/GraphContextOptions';
+import { GraphEvents } from '../../model/GraphEvents';
 import { GraphLoadingOptions } from '../../model/GraphLoadingOptions';
 import { GraphService } from './GraphService';
 
@@ -95,6 +96,7 @@ export class GraphContext extends Context {
             }
             return graph as any;
         } else if (objectType === KIXObjectType.GRAPH_INSTANCE) {
+            EventService.getInstance().publish(GraphEvents.GRAPH_LOADING);
             const graph = await this.getObject<Graph>(KIXObjectType.GRAPH);
             let graphInstance = BrowserCacheService.getInstance().get(
                 graph.Type + this.getObjectId()?.toString(), KIXObjectType.GRAPH_INSTANCE

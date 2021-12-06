@@ -7,14 +7,8 @@
  * --
  */
 
-import { WidgetComponentState } from '../../../../base-components/webapp/core/WidgetComponentState';
+export enum GraphEvents {
 
-export class ComponentState extends WidgetComponentState {
-
-    public constructor(
-        public prepared: boolean = false
-    ) {
-        super();
-    }
+    GRAPH_LOADING = 'GRAPH_LOADING'
 
 }
