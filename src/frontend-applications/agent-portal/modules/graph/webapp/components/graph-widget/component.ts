@@ -11,10 +11,16 @@ import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { GraphContext } from '../../core/GraphContext';
 import { ComponentState } from './ComponentState';
-import { Graph } from '../../../model/Graph';
 import { GraphInstance } from '../../core/GraphInstance';
-import { GraphService } from '../../core/GraphService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { GraphEvents } from '../../../model/GraphEvents';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { IdService } from '../../../../../model/IdService';
+import { GraphContextOptions } from '../../../model/GraphContextOptions';
+import { GraphOption } from '../../../model/GraphOption';
+import { WidgetService } from '../../../../base-components/webapp/core/WidgetService';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 declare let d3;
 
@@ -22,6 +28,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private context: GraphContext;
     private d3Graph: GraphInstance;
+    private subscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -51,7 +58,20 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             sidebarRightToggled: () => null,
         });
 
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(),
+            eventPublished: (): void => {
+                this.state.prepared = false;
+            }
+        };
+        EventService.getInstance().subscribe(GraphEvents.GRAPH_LOADING, this.subscriber);
+
         this.createD3Graph();
+    }
+
+    public onDestroy(): void {
+        this.removeD3Graph();
+        this.context.unregisterListener('graph-widget');
     }
 
     private async loadGraph(): Promise<void> {
@@ -60,6 +80,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async createD3Graph(): Promise<void> {
         this.state.prepared = false;
+
+        await this.setSimulationMode();
+
         this.removeD3Graph();
         if (this.d3Graph) {
             setTimeout(() => {
@@ -69,9 +92,20 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    public onDestroy(): void {
-        this.removeD3Graph();
-        this.context.unregisterListener('graph-widget');
+    private async setSimulationMode(): Promise<void> {
+        const graphOptions: Array<GraphOption> = this.context.getAdditionalInformation(
+            GraphContextOptions.GRAPH_OPTIONS
+        );
+
+        let title = await TranslationService.translate('Translatable#Graph');
+        const widgetClasses = [];
+        if (graphOptions.some((go) => go.key === 'Simulate')) {
+            title = await TranslationService.translate('Translatable#Graph (simulation active)');
+            widgetClasses.push('simulation-active');
+        }
+
+        WidgetService.getInstance().setWidgetClasses(this.state.instanceId, widgetClasses);
+        WidgetService.getInstance().setWidgetTitle(this.state.instanceId, title);
     }
 
     private removeD3Graph(): void {

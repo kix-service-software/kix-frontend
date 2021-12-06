@@ -13,7 +13,8 @@ import { WidgetType } from '../../../../../model/configuration/WidgetType';
 export class ComponentState extends WidgetComponentState {
 
     public constructor(
-        public widgetType: WidgetType = null
+        public widgetType: WidgetType = null,
+        public title: string = null
     ) {
         super();
     }
