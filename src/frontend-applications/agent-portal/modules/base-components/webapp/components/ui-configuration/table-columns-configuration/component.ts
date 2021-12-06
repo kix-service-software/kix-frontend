@@ -14,6 +14,7 @@ import { TranslationService } from '../../../../../translation/webapp/core/Trans
 import { AbstractMarkoComponent } from '../../../core/AbstractMarkoComponent';
 import { KIXObjectService } from '../../../core/KIXObjectService';
 import { LabelService } from '../../../core/LabelService';
+import { TableFactoryService } from '../../../core/table';
 import { TreeHandler, TreeNode, TreeService } from '../../../core/tree';
 import { ComponentState } from './ComponentState';
 
@@ -98,9 +99,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 if (dynamicField) {
                     property = `DynamicFields.${property}`;
                 }
-                const column = new DefaultColumnConfiguration(null, null, null, property);
-                column.filterable = true;
-                column.size = 200;
+                let column = TableFactoryService.getInstance().getDefaultColumnConfiguration(
+                    this.objectType, property
+                );
+                if (!column) {
+                    column = new DefaultColumnConfiguration(null, null, null, property);
+                    column.filterable = true;
+                    column.size = 200;
+                }
                 this.state.columns.push(column);
             }
 
