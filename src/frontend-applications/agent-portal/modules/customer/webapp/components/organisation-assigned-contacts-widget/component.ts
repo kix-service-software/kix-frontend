@@ -53,10 +53,6 @@ class Component {
         await this.initWidget(await context.getObject<Organisation>());
     }
 
-    public onDestroy(): void {
-        TableFactoryService.getInstance().destroyTable('organisation-assigned-contacts');
-    }
-
     private async initWidget(organisation: Organisation): Promise<void> {
         this.state.organisation = organisation;
         this.prepareTable();

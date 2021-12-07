@@ -27,12 +27,7 @@ import { KIXObjectService } from '../../../../modules/base-components/webapp/cor
 import { Organisation } from '../../../customer/model/Organisation';
 import { Contact } from '../../../customer/model/Contact';
 import { ConfigItem } from '../../model/ConfigItem';
-import { InputDefinition } from '../../model/InputDefinition';
-import { GeneralCatalogItem } from '../../../general-catalog/model/GeneralCatalogItem';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
-import { FilterCriteria } from '../../../../model/FilterCriteria';
-import { FilterDataType } from '../../../../model/FilterDataType';
-import { FilterType } from '../../../../model/FilterType';
 import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
@@ -238,7 +233,7 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
 
                 if (input) {
                     if (input.Type === 'GeneralCatalog') {
-                        const items = await this.getGeneralCatalogItems(input, objectIds);
+                        const items = await CMDBService.getGeneralCatalogItems(input['Class'], objectIds);
                         return items.map((item) => new TreeNode(
                             item.ItemID, item.Name,
                             new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, item.ObjectId)
@@ -286,7 +281,9 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
         );
 
         if (input.Type === 'CIClassReference') {
-            const configItems = await this.loadConfigItems(input, searchValue, loadingOptions);
+            const configItems = await CMDBService.loadConfigItemsByClassReference(
+                input['ReferencedCIClassName'], searchValue, loadingOptions
+            );
             tree = configItems.map(
                 (ci) => new TreeNode(ci.ConfigItemID, ci.Name, new ObjectIcon(null, ci.KIXObjectType, ci.ConfigItemID))
             );
@@ -301,34 +298,6 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
         }
 
         return tree;
-    }
-
-    private async getGeneralCatalogItems(
-        input: InputDefinition, objectIds?: Array<string | number>
-    ): Promise<GeneralCatalogItem[]> {
-        const loadingOptions = new KIXObjectLoadingOptions([
-            new FilterCriteria(
-                'Class', SearchOperator.EQUALS, FilterDataType.STRING,
-                FilterType.AND, input['Class']
-            )
-        ]);
-
-        const items = await KIXObjectService.loadObjects<GeneralCatalogItem>(
-            KIXObjectType.GENERAL_CATALOG_ITEM, objectIds, loadingOptions, null, false
-        );
-        return items;
-    }
-
-    private async loadConfigItems(
-        input: InputDefinition, searchValue: string, loadingOptions: KIXObjectLoadingOptions
-    ): Promise<ConfigItem[]> {
-        const classReference = input['ReferencedCIClassName'];
-        const ciClassNames = Array.isArray(classReference) ? classReference : [classReference];
-
-        const configItems = await CMDBService.getInstance().searchConfigItemsByClass(
-            ciClassNames, searchValue, loadingOptions
-        );
-        return configItems;
     }
 
 }

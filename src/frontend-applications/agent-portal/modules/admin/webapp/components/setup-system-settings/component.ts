@@ -29,6 +29,7 @@ import { FormFieldValue } from '../../../../../model/configuration/FormFieldValu
 import { SetupStep } from '../../../../setup-assistant/webapp/core/SetupStep';
 import { SetupService } from '../../../../setup-assistant/webapp/core/SetupService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { KIXModulesSocketClient } from '../../../../base-components/webapp/core/KIXModulesSocketClient';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -81,6 +82,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             'FQDN-ssp', 'Translatable#SSP', 'SSP', undefined, true, fqdnHint,
         );
         fqdnSSPField.readonly = fqdnReadonly;
+
+        // show SSP option only if KIXPro plugin is available
+        const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+        fqdnSSPField.visible = releaseInfo?.plugins?.some((p) => p.product === 'KIXPro');
 
         const fqdnValue = sysconfigOptions.find((o) => o.Name === 'FQDN').Value ||
             sysconfigDefinitions.find((o) => o.Name === 'FQDN').Default;

@@ -10,7 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { SysConfigOptionDefinitionProperty } from '../../../model/SysConfigOptionDefinitionProperty';
-import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { RowObject, TableValue, TableFactoryService, TableEvent, TableEventData } from '../../../../base-components/webapp/core/table';
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
@@ -21,8 +20,6 @@ import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
-import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
-import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
 import { WidgetService } from '../../../../base-components/webapp/core/WidgetService';
 import { ActionFactory } from '../../../../base-components/webapp/core/ActionFactory';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
@@ -35,8 +32,6 @@ import { SysConfigOptionProperty } from '../../../model/SysConfigOptionProperty'
 import { SortOrder } from '../../../../../model/SortOrder';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { AdminContext } from '../../../../admin/webapp/core/AdminContext';
-import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
-import { EditSysConfigDialogContext } from '../../core';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -67,19 +62,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async prepareTable(): Promise<void> {
 
-        const tableConfiguration = new TableConfiguration(
-            null, null, null,
-            KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, null, null, null, null, true, false,
-            null, null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
-        );
-
         this.state.table = await TableFactoryService.getInstance().createTable(
-            this.state.instanceId, KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, tableConfiguration, [],
+            this.state.instanceId, KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, null, [],
             null, null, null, false, false
-        );
-
-        tableConfiguration.routingConfiguration = new RoutingConfiguration(
-            EditSysConfigDialogContext.CONTEXT_ID, null, null, SysConfigOptionDefinitionProperty.NAME
         );
 
         this.state.table.setContentProvider(new SysConfigContentProvider(this));

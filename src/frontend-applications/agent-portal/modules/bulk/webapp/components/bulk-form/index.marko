@@ -8,10 +8,18 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 <div.bulk-form>
     <if(state.bulkManager)>
+        <h3><translation-string pattern="Translatable#Properties"/></h3>
         <dynamic-form-field-container
             manager=state.bulkManager
             key=state.componentId
         />
+        <if(state.linkManager)>
+            <h3><translation-string pattern="Translatable#Links"/></h3>
+            <dynamic-form-field-container
+                manager=state.linkManager
+                key=(state.componentId + "LinkManager")
+            />
+        </if>
         <div.dialog-button-container>
             <button.kix-button.form-blank-cancel-button
                 type="button"

@@ -64,6 +64,10 @@ export class LogFileTableFactory extends TableFactory {
             this.getDefaultColumnConfiguration(LogFileProperty.DISPLAY_NAME),
             this.getDefaultColumnConfiguration(LogFileProperty.FILE_SIZE),
             this.getDefaultColumnConfiguration(LogFileProperty.MODIFIY_TIME),
+            new DefaultColumnConfiguration(
+                null, null, null, LogFileProperty.CONTENT, false, true, true, false, undefined,
+                false, false, false, DataType.STRING, false, 'system-logfile-view-cell', 'Translatable#View'
+            )
         ];
 
         if (!tableConfiguration) {

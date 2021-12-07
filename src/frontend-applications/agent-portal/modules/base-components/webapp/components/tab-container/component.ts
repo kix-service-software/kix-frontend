@@ -24,6 +24,7 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { Context } from '../../../../../model/Context';
 import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
+import { ClientStorageService } from '../../core/ClientStorageService';
 
 class TabLaneComponent implements IEventSubscriber {
 
@@ -37,6 +38,10 @@ class TabLaneComponent implements IEventSubscriber {
     private tabIcons: Map<string, string | ObjectIcon>;
     private tabTitles: Map<string, string>;
     private hideSidebar: boolean;
+
+    private id: string;
+    private context: Context;
+    private tabContainerPrefId: string;
 
     private keyDownEventFunction: () => {
         // do nothing ...
@@ -55,6 +60,7 @@ class TabLaneComponent implements IEventSubscriber {
         this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
         this.state.contextType = input.contextType;
         this.hideSidebar = typeof input.hideSidebar !== 'undefined' ? input.hideSidebar : false;
+        this.id = input.id;
 
         WidgetService.getInstance().setWidgetType('tab-widget', WidgetType.LANE);
 
@@ -64,12 +70,18 @@ class TabLaneComponent implements IEventSubscriber {
     }
 
     public async onMount(): Promise<void> {
+        this.context = ContextService.getInstance().getActiveContext();
+        this.tabContainerPrefId = `${this.context?.descriptor?.contextId}-${this.context?.getObjectId()}-${this.id}-activetab`;
+        const tabId = ClientStorageService.getOption(this.tabContainerPrefId);
         if (this.state.tabWidgets.length) {
             this.state.translations = await TranslationService.createTranslationObject(
                 this.state.tabWidgets.map((t) => t.configuration ? t.configuration.title : '')
             );
 
-            if (this.initialTabId) {
+            if (tabId) {
+                await this.tabClicked(this.state.tabWidgets.find((tw) => tw.instanceId === tabId), true);
+            }
+            if (!this.state.activeTab && this.initialTabId) {
                 await this.tabClicked(this.state.tabWidgets.find((tw) => tw.instanceId === this.initialTabId), true);
             }
             if (!this.state.activeTab) {
@@ -140,6 +152,9 @@ class TabLaneComponent implements IEventSubscriber {
                 );
             }
         }
+
+        ClientStorageService.setOption(this.tabContainerPrefId, this.state.activeTab?.instanceId);
+
         if (!silent) {
             (this as any).emit('tabChanged', tab);
         }

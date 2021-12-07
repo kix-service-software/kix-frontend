@@ -167,6 +167,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.state.calendars = calendars;
 
+        const dayNameTranslations = await TranslationService.createTranslationObject([
+            'Translatable#Sunday', 'Translatable#Monday', 'Translatable#Tuesday', 'Translatable#Wednesday', 'Translatable#Thursday', 'Translatable#Friday', 'Translatable#Saturday'
+        ]);
+        const dayNames = [];
+        for (const key in dayNameTranslations) {
+            if (dayNameTranslations[key]) {
+                dayNames.push(dayNameTranslations[key]);
+            }
+        }
+
         this.calendar = new tui.Calendar('#calendar', {
             defaultView: 'month',
             useDetailPopup: true,
@@ -179,6 +189,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 narrowWeekend: true,
                 startDayOfWeek: 1, // monday
                 visibleScheduleCount: 10,
+                daynames: dayNames,
             },
             week: {
                 moreLayerSize: {
@@ -188,7 +199,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 startDayOfWeek: 1, // monday
                 visibleScheduleCount: 10,
                 hourStart: 7,
-                hourEnd: 18
+                hourEnd: 18,
+                daynames: dayNames,
             }
         });
 

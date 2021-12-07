@@ -52,10 +52,6 @@ class Component {
         await this.initWidget(await context.getObject<Job>());
     }
 
-    public onDestroy(): void {
-        TableFactoryService.getInstance().destroyTable('job-run-history');
-    }
-
     private async initWidget(job: Job): Promise<void> {
         if (job) {
             this.prepareActions(job);

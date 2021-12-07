@@ -16,11 +16,12 @@ import { TranslationPatternProperty } from '../../../../../model/TranslationPatt
 import { TableHeaderHeight } from '../../../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../../../model/configuration/TableRowHeight';
 import { IColumnConfiguration } from '../../../../../../../model/configuration/IColumnConfiguration';
-import {
-    DefaultColumnConfiguration
-} from '../../../../../../../model/configuration/DefaultColumnConfiguration';
+import { DefaultColumnConfiguration } from '../../../../../../../model/configuration/DefaultColumnConfiguration';
 import { DataType } from '../../../../../../../model/DataType';
 import { KIXObjectProperty } from '../../../../../../../model/kix/KIXObjectProperty';
+import { RoutingConfiguration } from '../../../../../../../model/configuration/RoutingConfiguration';
+import { EditTranslationDialogContext } from '../../context';
+import { ContextMode } from '../../../../../../../model/ContextMode';
 
 
 export class TranslationPatternTableFactory extends TableFactory {
@@ -55,8 +56,14 @@ export class TranslationPatternTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(null, null, null,
-                KIXObjectType.TRANSLATION_PATTERN, null, null, tableColumns, [], true, false, null, null,
-                TableHeaderHeight.LARGE, TableRowHeight.LARGE
+                KIXObjectType.TRANSLATION_PATTERN,
+                null, 17, tableColumns, [], true, false, null, null, TableHeaderHeight.LARGE, TableRowHeight.LARGE,
+                'Translatable#Please enter a search term.'
+            );
+
+            tableConfiguration.routingConfiguration = new RoutingConfiguration(
+                EditTranslationDialogContext.CONTEXT_ID, KIXObjectType.TRANSLATION_PATTERN,
+                ContextMode.EDIT_ADMIN, TranslationPatternProperty.ID
             );
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;

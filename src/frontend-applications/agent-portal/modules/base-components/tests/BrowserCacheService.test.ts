@@ -99,20 +99,24 @@ describe('BrowserCacheService', () => {
                 const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('CMDB.ConfigItem');
                 expect(prefixes).exist;
                 expect(prefixes).an('array');
-                expect(prefixes.length).equals(2);
+                expect(prefixes.length).equals(4);
 
                 expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM_CLASS)).exist;
+                expect(prefixes.find((p) => p === KIXObjectType.GRAPH)).exist;
+                expect(prefixes.find((p) => p === KIXObjectType.GRAPH_INSTANCE)).exist;
             });
 
             it('should resolve the namespace for CMDB.ConfigItemVersion', () => {
                 const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('CMDB.ConfigItemVersion');
                 expect(prefixes).exist;
                 expect(prefixes).an('array');
-                expect(prefixes.length).equals(4);
+                expect(prefixes.length).equals(6);
 
                 expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM_VERSION)).exist;
+                expect(prefixes.find((p) => p === KIXObjectType.GRAPH)).exist;
+                expect(prefixes.find((p) => p === KIXObjectType.GRAPH_INSTANCE)).exist;
             });
 
             it('should resolve the namespace for CMDB.Class', () => {
@@ -129,10 +133,12 @@ describe('BrowserCacheService', () => {
                 const prefixes: Array<KIXObjectType | string> = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('CMDB.Definition');
                 expect(prefixes).exist;
                 expect(prefixes).an('array');
-                expect(prefixes.length).equals(2);
+                expect(prefixes.length).equals(4);
 
                 expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM_CLASS)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION)).exist;
+                expect(prefixes.find((p) => p === KIXObjectType.GRAPH)).exist;
+                expect(prefixes.find((p) => p === KIXObjectType.GRAPH_INSTANCE)).exist;
             });
 
         });
@@ -264,26 +270,30 @@ describe('BrowserCacheService', () => {
                 const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.LINK);
                 expect(prefixes).exist;
                 expect(prefixes).an('array');
-                expect(prefixes.length).equals(6);
+                expect(prefixes.length).equals(8);
 
                 expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.FAQ_ARTICLE)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.LINK)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.LINK_OBJECT)).exist;
+                expect(prefixes.find((p) => p === KIXObjectType.GRAPH)).exist;
+                expect(prefixes.find((p) => p === KIXObjectType.GRAPH_INSTANCE)).exist;
             });
 
             it('should resolve the namespace for LINK_OBJECT', () => {
                 const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.LINK_OBJECT);
                 expect(prefixes).exist;
                 expect(prefixes).an('array');
-                expect(prefixes.length).equals(6);
+                expect(prefixes.length).equals(8);
 
                 expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.FAQ_ARTICLE)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.LINK)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.LINK_OBJECT)).exist;
+                expect(prefixes.find((p) => p === KIXObjectType.GRAPH)).exist;
+                expect(prefixes.find((p) => p === KIXObjectType.GRAPH_INSTANCE)).exist;
             });
         });
 

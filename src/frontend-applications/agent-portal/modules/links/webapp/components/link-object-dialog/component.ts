@@ -20,7 +20,7 @@ import { EventService } from '../../../../../modules/base-components/webapp/core
 import { TableEvent, TableFactoryService, TableEventData, Table, ValueState } from '../../../../base-components/webapp/core/table';
 import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
-import { EditLinkedObjectsDialogContext, LinkUtil } from '../../core';
+import { EditLinkedObjectsDialogContext, LinkService, LinkUtil } from '../../core';
 import { FormContext } from '../../../../../model/configuration/FormContext';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
@@ -29,12 +29,6 @@ import { TableConfiguration } from '../../../../../model/configuration/TableConf
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
-import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
-import { FilterCriteria } from '../../../../../model/FilterCriteria';
-import { SearchOperator } from '../../../../search/model/SearchOperator';
-import { FilterDataType } from '../../../../../model/FilterDataType';
-import { FilterType } from '../../../../../model/FilterType';
-import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { LinkType } from '../../../model/LinkType';
 
 class LinkDialogComponent {
@@ -84,11 +78,10 @@ class LinkDialogComponent {
         this.state.linkDescriptions = null;
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
-        TableFactoryService.getInstance().destroyTable('link-object-dialog-', true);
     }
 
     private async loadNodes(): Promise<TreeNode[]> {
-        this.linkPartners = await LinkUtil.getPossibleLinkPartners(this.objectType);
+        this.linkPartners = await LinkService.getPossibleLinkPartners(this.objectType);
 
         const nodes: TreeNode[] = [];
         for (const lp of this.linkPartners) {
@@ -267,18 +260,8 @@ class LinkDialogComponent {
             const linkPartner = this.linkPartners.find(
                 (lp) => lp[0] === this.linkLabel
             );
-            const loadingOptions = new KIXObjectLoadingOptions([
-                new FilterCriteria(
-                    'Source', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, this.objectType
-                ),
-                new FilterCriteria(
-                    'Target', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, linkPartner[1]
-                )
-            ]);
 
-            const linkTypes = await KIXObjectService.loadObjects<LinkType>(
-                KIXObjectType.LINK_TYPE, null, loadingOptions, null, false
-            );
+            const linkTypes = await LinkService.getLinkTypes(this.objectType, linkPartner[1]);
 
             for (const lt of linkTypes) {
                 const id = this.linkTypeDescriptions.length;

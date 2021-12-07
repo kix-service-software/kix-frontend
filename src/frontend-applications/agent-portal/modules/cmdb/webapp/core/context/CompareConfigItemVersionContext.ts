@@ -54,7 +54,7 @@ export class CompareConfigItemVersionContext extends Context {
 
             const versionIds = this.getAdditionalInformation('VERSION_IDS');
             if (Array.isArray(versionIds)) {
-                params.push(`versionIds=${versionIds.join(',')}`);
+                params.push(`versionIds=${encodeURIComponent(versionIds.join(','))}`);
             }
 
             if (params.length) {

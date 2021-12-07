@@ -230,21 +230,21 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         return this.httpService.get<R>(uri, query, token, null, cacheKeyPrefix, useCache);
     }
 
-    protected async sendRequest(
+    protected sendRequest(
         token: string, clientRequestId: string, uri: string, content: any,
         cacheKeyPrefix: string, create: boolean = false
     ): Promise<any> {
         if (create) {
-            return await this.httpService.post(uri, content, token, clientRequestId, cacheKeyPrefix);
+            return this.httpService.post(uri, content, token, clientRequestId, cacheKeyPrefix);
         } else {
-            return await this.httpService.patch(uri, content, token, clientRequestId, cacheKeyPrefix);
+            return this.httpService.patch(uri, content, token, clientRequestId, cacheKeyPrefix);
         }
     }
 
-    protected async sendCreateRequest<R, C>(
+    protected sendCreateRequest<R, C>(
         token: string, clientRequestId: string, uri: string, content: C, cacheKeyPrefix: string
     ): Promise<R> {
-        return await this.httpService.post<R>(uri, content, token, clientRequestId, cacheKeyPrefix);
+        return this.httpService.post<R>(uri, content, token, clientRequestId, cacheKeyPrefix);
     }
 
     protected sendUpdateRequest<R, C>(

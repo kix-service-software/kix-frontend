@@ -38,7 +38,7 @@ describe('Table Tests', () => {
 
         it('Should create a row which contains the TableObject.', () => {
             const tableObject = new RowObject([]);
-            const row = table.createRow(tableObject);
+            const row = table.createRow(table.getRows(true).length + 1, tableObject);
             expect(row).exist;
             expect(row.getRowObject()).exist;
         });
@@ -51,7 +51,7 @@ describe('Table Tests', () => {
         before(() => table = new Table('test'));
 
         it('Should create a new row in the table.', () => {
-            const row: Row = table.createRow();
+            const row: Row = table.createRow(table.getRows(true).length + 1);
             expect(row).exist;
             expect(row.getRowId()).exist;
         });
@@ -64,9 +64,9 @@ describe('Table Tests', () => {
 
         before(() => {
             table = new Table('test');
-            row1 = table.createRow();
-            row2 = table.createRow();
-            row3 = table.createRow();
+            row1 = table.createRow(table.getRows(true).length + 1);
+            row2 = table.createRow(table.getRows(true).length + 1);
+            row3 = table.createRow(table.getRows(true).length + 1);
         });
 
         it('Should return all rows.', () => {
@@ -89,9 +89,9 @@ describe('Table Tests', () => {
 
         before(() => {
             table = new Table('test');
-            table.createRow();
-            row = table.createRow();
-            table.createRow();
+            table.createRow(table.getRows(true).length + 1);
+            row = table.createRow(table.getRows(true).length + 1);
+            table.createRow(table.getRows(true).length + 1);
         })
         it('Should return requested row.', () => {
             const resultRow = table.getRow(row.getRowId());
@@ -107,10 +107,10 @@ describe('Table Tests', () => {
 
         before(() => {
             table = new Table('test');
-            table.createRow();
-            row = table.createRow();
-            table.createRow();
-            table.createRow();
+            table.createRow(table.getRows(true).length + 1);
+            row = table.createRow(table.getRows(true).length + 1);
+            table.createRow(table.getRows(true).length + 1);
+            table.createRow(table.getRows(true).length + 1);
         });
 
         it('Should remove a row from the table.', () => {
@@ -135,15 +135,15 @@ describe('Table Tests', () => {
 
         before(() => {
             table = new Table('test');
-            table.createRow();
-            table.createRow();
-            table.createRow();
-            table.createRow();
+            table.createRow(table.getRows(true).length + 1);
+            table.createRow(table.getRows(true).length + 1);
+            table.createRow(table.getRows(true).length + 1);
+            table.createRow(table.getRows(true).length + 1);
         });
 
         it('Should return 12 rows.', () => {
-            const row1 = new Row(table);
-            const row2 = new Row(table);
+            const row1 = new Row(table, 5);
+            const row2 = new Row(table, 6);
             table.addRows([row1, row2]);
 
             const rows = table.getRows();
@@ -164,15 +164,15 @@ describe('Table Tests', () => {
 
         before(() => {
             table = new Table('test');
-            table.createRow();
-            table.createRow();
-            table.createRow();
-            table.createRow();
-            table.createRow();
+            table.createRow(table.getRows(true).length + 1);
+            table.createRow(table.getRows(true).length + 1);
+            table.createRow(table.getRows(true).length + 1);
+            table.createRow(table.getRows(true).length + 1);
+            table.createRow(table.getRows(true).length + 1);
         });
 
         it('Should return the rows with the new row on position two.', () => {
-            const row = new Row(table);
+            const row = new Row(table, 6);
             table.addRows([row], 1);
 
             const rows = table.getRows();
@@ -189,12 +189,12 @@ describe('Table Tests', () => {
 
         before(() => {
             table = new Table('test');
-            table.createRow();
-            table.createRow();
+            table.createRow(table.getRows(true).length + 1);
+            table.createRow(table.getRows(true).length + 1);
         });
 
         it('Should add only one row.', () => {
-            const row = new Row(table);
+            const row = new Row(table, 4);
             table.addRows([row, row]);
 
             const rows = table.getRows();
@@ -213,13 +213,13 @@ describe('Table Tests', () => {
 
         before(() => {
             table = new Table('test');
-            oldRow1 = table.createRow();
-            oldRow2 = table.createRow();;
+            oldRow1 = table.createRow(table.getRows(true).length + 1);
+            oldRow2 = table.createRow(table.getRows(true).length + 1);;
         });
 
         it('Should return 10 rows.', () => {
-            const row1 = new Row(table);
-            const row2 = new Row(table);
+            const row1 = new Row(table, 3);
+            const row2 = new Row(table, 4);
 
             const replacedRows = table.replaceRows([
                 [oldRow1.getRowId(), row1],
@@ -254,12 +254,12 @@ describe('Table Tests', () => {
 
         before(() => {
             table = new Table('test');
-            oldRow1 = table.createRow();
-            oldRow2 = table.createRow();
-            existingRow = table.createRow();
+            oldRow1 = table.createRow(table.getRows(true).length + 1);
+            oldRow2 = table.createRow(table.getRows(true).length + 1);
+            existingRow = table.createRow(table.getRows(true).length + 1);
         });
         it('Should replace the rows and add one new row', () => {
-            const newRow = new Row(table);
+            const newRow = new Row(table, 7);
             const replacedRows = table.replaceRows([
                 [oldRow1.getRowId(), existingRow],
                 [oldRow2.getRowId(), newRow]
@@ -290,11 +290,11 @@ describe('Table Tests', () => {
 
         before(() => {
             table = new Table('test');
-            table.createRow();
+            table.createRow(table.getRows(true).length + 1);
         });
 
         it('Should return unmodified rows (no replace should be done).', () => {
-            const newRow = new Row(table);
+            const newRow = new Row(table, 8);
             const notExistingRowId = 'does-not-exists';
             const replacedRows = table.replaceRows([
                 [notExistingRowId, newRow]

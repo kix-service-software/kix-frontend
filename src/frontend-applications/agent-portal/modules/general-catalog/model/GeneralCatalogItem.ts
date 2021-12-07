@@ -9,6 +9,7 @@
 
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { GeneralCatalogItemPreference } from './GeneralCatalogItemPreference';
 
 export class GeneralCatalogItem extends KIXObject {
     public ObjectId: string | number;
@@ -20,6 +21,8 @@ export class GeneralCatalogItem extends KIXObject {
     public Name: string;
 
     public Class: string;
+
+    public Preferences: GeneralCatalogItemPreference[];
 
     public constructor(item?: GeneralCatalogItem) {
         super(item);

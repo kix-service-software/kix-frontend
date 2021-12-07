@@ -53,10 +53,6 @@ class Component {
         this.initWidget(await context.getObject<Organisation>(KIXObjectType.ORGANISATION));
     }
 
-    public onDestroy(): void {
-        TableFactoryService.getInstance().destroyTable('organisation-assigned-config-items');
-    }
-
     private async initWidget(organisation: Organisation): Promise<void> {
 
         const loadingOptions = new KIXObjectLoadingOptions(

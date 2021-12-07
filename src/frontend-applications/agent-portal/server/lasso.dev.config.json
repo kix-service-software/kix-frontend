@@ -1,5 +1,5 @@
 {
-    "bundlingEnabled": true,
+    "bundlingEnabled": false,
     "fingerprintsEnabled": false,
     "includeSlotNames": false,
     "minifyJS": false,

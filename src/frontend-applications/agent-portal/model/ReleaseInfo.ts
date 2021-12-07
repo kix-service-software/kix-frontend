@@ -19,7 +19,8 @@ export class ReleaseInfo {
         public buildNumber?: number,
         public dependencies?: Array<[string, string, string]>,
         public backendSystemInfo?: SystemInfo,
-        public requires?: string
+        public requires?: string,
+        public plugins?: Array<ReleaseInfo>,
     ) {
 
     }

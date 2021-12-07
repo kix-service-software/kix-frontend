@@ -89,6 +89,17 @@ class Component {
             }
         });
 
+        EventService.getInstance().subscribe(ApplicationEvent.REFRESH_CONTENT, {
+            eventSubscriberId: 'BASE-TEMPLATE-REFRESH',
+            eventPublished: (data: any, eventId: string): void => {
+                this.state.reloadContent = true;
+
+                setTimeout(() => {
+                    this.state.reloadContent = false;
+                }, 100);
+            }
+        });
+
         EventService.getInstance().subscribe(MobileShowEvent.SHOW_MOBILE, {
             eventSubscriberId: 'BASE-TEMPLATE-MOBILE',
             eventPublished: (data, eventId: MobileShowEvent | string) => {

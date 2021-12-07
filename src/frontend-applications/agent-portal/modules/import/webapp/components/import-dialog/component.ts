@@ -162,8 +162,7 @@ class Component {
             this.state.importManager.unregisterListener(this.formListenerId);
             this.state.importManager.reset();
         }
-        TableFactoryService.getInstance().destroyTable(`import-dialog-list-${this.objectType}`);
-    }
+            }
 
     private async prepareImportConfigForm(): Promise<void> {
         const formGroup = new FormGroupConfiguration(

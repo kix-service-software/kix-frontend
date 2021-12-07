@@ -17,6 +17,12 @@ import { IKIXObjectService } from '../../../../modules/base-components/webapp/co
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
 import { LinkObjectProperty } from '../../model/LinkObjectProperty';
 import { LinkType } from '../../model/LinkType';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { LabelService } from '../../../base-components/webapp/core/LabelService';
 
 export class LinkService extends KIXObjectService<Link> {
 
@@ -69,6 +75,57 @@ export class LinkService extends KIXObjectService<Link> {
         }
 
         return routingConfig;
+    }
+
+    public static async getLinkTypes(
+        sourceType: KIXObjectType | string, targetType: KIXObjectType | string = sourceType
+    ): Promise<LinkType[]> {
+        const filterType = !targetType ? FilterType.OR : FilterType.AND;
+        const loadingOptions = new KIXObjectLoadingOptions([
+            new FilterCriteria(
+                'Source', SearchOperator.EQUALS, FilterDataType.STRING, filterType, sourceType
+            ),
+            new FilterCriteria(
+                'Target', SearchOperator.EQUALS, FilterDataType.STRING, filterType, targetType
+            )
+        ]);
+
+        const linkTypes = await KIXObjectService.loadObjects<LinkType>(
+            KIXObjectType.LINK_TYPE, null, loadingOptions, null, false
+        ).catch(() => []);
+
+        return linkTypes;
+    }
+
+    public static async getPossibleLinkPartners(
+        rootType: KIXObjectType | string
+    ): Promise<Array<[string, KIXObjectType]>> {
+        const partners: Array<[string, KIXObjectType]> = [];
+        const linkTypes = await KIXObjectService.loadObjects<LinkType>(KIXObjectType.LINK_TYPE, null, null, null, false)
+            .catch(() => [] as LinkType[]);
+
+        for (const lt of linkTypes) {
+            let linkableObjectType = null;
+
+            if (lt.Source === rootType) {
+                linkableObjectType = lt.Target;
+            } else if (lt.Target === rootType) {
+                linkableObjectType = lt.Source;
+            }
+
+            if (linkableObjectType && !partners.some((p) => p[1] === linkableObjectType)) {
+                const objectName = await LabelService.getInstance().getObjectName(linkableObjectType);
+
+                const service = ServiceRegistry.getServiceInstance(linkableObjectType);
+                if (service) {
+                    if (await service.hasReadPermissionFor(linkableObjectType)) {
+                        partners.push([objectName, linkableObjectType]);
+                    }
+                }
+            }
+        }
+
+        return partners;
     }
 
 }

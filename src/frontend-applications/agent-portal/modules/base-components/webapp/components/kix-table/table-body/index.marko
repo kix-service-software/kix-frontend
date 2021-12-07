@@ -9,13 +9,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <tbody class={
     "with-toggle": component.toggleEnabled,
-    "show-object": state.ready
+    "show-object": state.ready,
 }>
     <if(state.loading)>
         <tr.empty-row style=("height: " + component.getRowHeight())>
-            <td colspan=component.getFullColumnLength()>
-                <loading-spinner/>
-            </td>
+            <td colspan=component.getFullColumnLength()><loading-spinner/></td>
         </tr>
     </if>
     <else-if(state.rows && state.ready)>
@@ -27,7 +25,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     height=component.getRowHeight()
                     selectionEnabled=component.selectionEnabled
                     toggleEnabled=component.toggleEnabled
-                    level=0/>
+                    level=0
+                />
             </for>
         </if>
         <else>

@@ -54,10 +54,6 @@ class Component {
         this.initWidget(await context.getObject<Contact>(KIXObjectType.CONTACT));
     }
 
-    public onDestroy(): void {
-        TableFactoryService.getInstance().destroyTable('contact-assigned-config-items');
-    }
-
     private async initWidget(contact: Contact): Promise<void> {
 
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, [

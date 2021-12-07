@@ -38,6 +38,8 @@ import { IAdditionalTableObjectsHandler } from '../IAdditionalTableObjectsHandle
 import { SearchService } from '../../../../search/webapp/core';
 import { SearchProperty } from '../../../../search/model/SearchProperty';
 import { TicketProperty } from '../../../../ticket/model/TicketProperty';
+import { ClientStorageService } from '../ClientStorageService';
+import { IEventSubscriber } from '../IEventSubscriber';
 
 
 export class Table implements Table {
@@ -60,11 +62,62 @@ export class Table implements Table {
     private reloadPromise: Promise<void>;
     private handlerRowObjects = {};
 
+    private tableState: TableState;
+
+    private subscriber: IEventSubscriber;
+
     public constructor(
         private tableKey: string,
         private tableConfiguration?: TableConfiguration,
         private contextId?: string
     ) { }
+
+    public destroy(): void {
+        this.contentProvider.destroy();
+        EventService.getInstance().unsubscribe(TableEvent.ROW_TOGGLED, this.subscriber);
+        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
+        EventService.getInstance().unsubscribe(TableEvent.SORTED, this.subscriber);
+        EventService.getInstance().unsubscribe(TableEvent.COLUMN_RESIZED, this.subscriber);
+    }
+
+    private saveTableState(): void {
+        const toggledRows = this.rows.filter((r) => r.isExpanded()).map((r) => r.getRowId());
+        const selectedRows = this.rows.filter((r) => r.isSelected()).map((r) => r.getRowId());
+
+        const columnsizes: Array<[string, number]> = this.columns.map(
+            (c) => [c.getColumnId(), c.getColumnConfiguration().size]
+        );
+
+        this.tableState = new TableState(
+            this.filterValue, this.filterCriteria, toggledRows, selectedRows, columnsizes,
+            this.sortColumnId, this.sortOrder
+        );
+        const tableStateString = JSON.stringify(this.tableState);
+
+        ClientStorageService.setOption(this.getTableId(), tableStateString);
+    }
+
+    private loadTableState(): void {
+        const tableStateString = ClientStorageService.getOption(this.getTableId());
+        try {
+            this.tableState = JSON.parse(tableStateString);
+            this.filterValue = this.tableState?.filterValue || this.filterValue;
+            this.filterCriteria = this.tableState?.filterCriteria || this.filterCriteria;
+            this.tableState?.toggledRows?.forEach((tr) => this.getRow(tr)?.expand(true));
+            this.sortColumnId = this.tableState?.sortColumnId || this.sortColumnId;
+            this.sortOrder = this.tableState?.sortOrder || this.sortOrder;
+
+            this.setRowSelection(this.tableState?.selectedRows || []);
+            this.tableState?.columnsizes?.forEach((cs) => this.getColumn(cs[0])?.setSize(cs[1]));
+        } catch (error) {
+            console.error('Error loading table state: ' + this.getTableId());
+            console.error(error);
+        }
+    }
+
+    public deleteTableState(): void {
+        ClientStorageService.deleteState(this.getTableId());
+    }
 
     public getTableId(): string {
         return this.tableKey;
@@ -124,8 +177,20 @@ export class Table implements Table {
                 r.initializeDisplayValues();
             });
 
+            const sortColumn = this.columns.find((c) => c.getSortOrder());
+            if (sortColumn) {
+                this.sortColumnId = sortColumn.getColumnConfiguration().property;
+                this.sortOrder = sortColumn.getSortOrder();
+            }
+
+            this.loadTableState();
+
             if (this.sortColumnId && this.sortOrder) {
                 await this.sort(this.sortColumnId, this.sortOrder);
+            }
+
+            if (this.filterValue || this.filterCriteria?.length || this.columns.some((c) => c.isFiltered())) {
+                await this.filter();
             }
 
             this.toggleFirstRow();
@@ -141,6 +206,19 @@ export class Table implements Table {
                     );
                 }, 50);
             }, 20);
+
+            this.subscriber = {
+                eventSubscriberId: this.getTableId(),
+                eventPublished: (data: TableEventData, eventId: string): void => {
+                    if (data.tableId === this.getTableId()) {
+                        this.saveTableState();
+                    }
+                }
+            };
+            EventService.getInstance().subscribe(TableEvent.ROW_TOGGLED, this.subscriber);
+            EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
+            EventService.getInstance().subscribe(TableEvent.SORTED, this.subscriber);
+            EventService.getInstance().subscribe(TableEvent.COLUMN_RESIZED, this.subscriber);
         }
     }
 
@@ -191,7 +269,7 @@ export class Table implements Table {
                 rowObjects = await this.considerHandlerData(rowObjects, relevantHandlerConfigIds);
             }
 
-            rowObjects.forEach((d) => rows.push(this.createRow(d, false)));
+            rowObjects.forEach((d, i) => rows.push(this.createRow(i, d, false)));
             this.rows = rows;
         }
     }
@@ -240,8 +318,8 @@ export class Table implements Table {
         this.handlerRowObjects[handlerConfig.id] = handlerRowObjects;
     }
 
-    public createRow(tableObject?: RowObject, addRow: boolean = true): Row {
-        const row = new Row(this, tableObject);
+    public createRow(index: number, tableObject?: RowObject, addRow: boolean = true): Row {
+        const row = new Row(this, index, tableObject);
         if (addRow) {
             this.rows.push(row);
         }
@@ -441,9 +519,14 @@ export class Table implements Table {
         return this.filterValue;
     }
 
-    public setFilter(filterValue?: string, criteria?: UIFilterCriterion[]): void {
+    public getFilterCriteria(): UIFilterCriterion[] {
+        return this.filterCriteria;
+    }
+
+    public setFilter(filterValue?: string, filterCriteria?: UIFilterCriterion[]): void {
         this.filterValue = filterValue;
-        this.filterCriteria = criteria;
+        this.filterCriteria = filterCriteria;
+        this.saveTableState();
     }
 
     public async filter(): Promise<void> {
@@ -714,14 +797,24 @@ export class Table implements Table {
         return row;
     }
 
-    public destroy(): void {
-        this.contentProvider.destroy();
-    }
-
     public getRowCount(all?: boolean): number {
         let count = 0;
         this.getRows(all).forEach((r) => count += r.getRowCount());
         return count;
     }
+
+}
+
+class TableState {
+
+    public constructor(
+        public filterValue: string,
+        public filterCriteria: UIFilterCriterion[],
+        public toggledRows: string[],
+        public selectedRows: string[],
+        public columnsizes: Array<[string, number]>,
+        public sortColumnId: string,
+        public sortOrder: SortOrder
+    ) { }
 
 }

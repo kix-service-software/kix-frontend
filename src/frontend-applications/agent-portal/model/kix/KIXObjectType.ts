@@ -69,6 +69,10 @@ export enum KIXObjectType {
 
     GENERAL_CATALOG_CLASS = 'GeneralCatalogClass',
 
+    GRAPH = 'Graph',
+
+    GRAPH_INSTANCE = 'GraphInstance',
+
     IMPORT_EXPORT_TEMPLATE = 'ImportExportTemplate',
 
     IMPORT_EXPORT_TEMPLATE_RUN = 'ImportExportTemplateRun',

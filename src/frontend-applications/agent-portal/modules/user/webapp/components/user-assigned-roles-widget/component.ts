@@ -56,10 +56,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await this.initWidget(await context.getObject<User>());
     }
 
-    public onDestroy(): void {
-        TableFactoryService.getInstance().destroyTable('user-assigned-roles');
-    }
-
     private async initWidget(user: User): Promise<void> {
         const columns = [
             new DefaultColumnConfiguration(null, null, null,

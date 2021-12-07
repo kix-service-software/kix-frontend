@@ -737,6 +737,12 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         if (Array.isArray(dynamicFields) && dynamicFields.length) {
             properties = dynamicFields.map((df) => df.Name);
         }
+        for (const extendedService of this.extendedServices) {
+            const extendedNodes = await extendedService.getObjectProperties(objectType);
+            if (extendedNodes?.length) {
+                properties.push(...extendedNodes);
+            }
+        }
         return properties;
     }
 

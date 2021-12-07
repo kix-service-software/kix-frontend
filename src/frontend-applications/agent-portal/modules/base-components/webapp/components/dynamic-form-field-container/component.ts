@@ -253,15 +253,7 @@ class Component {
 
     public getInputOptionValue(value: DynamicFormFieldValue, option: string): string | number {
         const inputOption = value.inputOptions.find((io) => io[0] === option);
-        let returnValue: string | number = inputOption && inputOption[1] ? inputOption[1] : null;
-        switch (option) {
-            case 'maxLength':
-                if (!returnValue || typeof returnValue === 'number') {
-                    returnValue = 200;
-                }
-                break;
-            default:
-        }
+        const returnValue: string | number = inputOption && inputOption[1] ? inputOption[1] : null;
         return returnValue;
     }
 

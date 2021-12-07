@@ -51,10 +51,6 @@ class Component {
         await this.initWidget(await context.getObject<ConfigItem>());
     }
 
-    public onDestroy(): void {
-        TableFactoryService.getInstance().destroyTable('config-item-history');
-    }
-
     private async initWidget(configItem: ConfigItem): Promise<void> {
         if (configItem) {
             this.prepareActions(configItem);

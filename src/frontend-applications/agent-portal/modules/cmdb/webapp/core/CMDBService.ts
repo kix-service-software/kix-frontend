@@ -24,13 +24,16 @@ import { LabelService } from '../../../../modules/base-components/webapp/core/La
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
-import { ConfigItemDetailsContext } from '.';
+import { ConfigItemClassAttributeUtil, ConfigItemDetailsContext } from '.';
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
 import { ContextMode } from '../../../../model/ContextMode';
 import { ConfigItemAttachment } from '../../model/ConfigItemAttachment';
 import { Version } from '../../model/Version';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { CreateConfigItemVersionOptions } from '../../model/CreateConfigItemVersionOptions';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { VersionProperty } from '../../model/VersionProperty';
+import { GeneralCatalogItemProperty } from '../../../general-catalog/model/GeneralCatalogItemProperty';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
 
@@ -127,9 +130,11 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria('Class', SearchOperator.EQUALS, FilterDataType.STRING,
                 FilterType.AND, 'ITSM::ConfigItem::DeploymentState'),
-            new FilterCriteria('Functionality', SearchOperator.NOT_EQUALS, FilterDataType.STRING,
+            new FilterCriteria(`${GeneralCatalogItemProperty.PREFERENCES}.Name`, SearchOperator.EQUALS, FilterDataType.STRING,
+                FilterType.AND, 'Functionality'),
+            new FilterCriteria(`${GeneralCatalogItemProperty.PREFERENCES}.Value`, SearchOperator.NOT_EQUALS, FilterDataType.STRING,
                 FilterType.AND, 'postproductive')
-        ]);
+        ], undefined, undefined, [GeneralCatalogItemProperty.PREFERENCES]);
 
         const catalogItems = await KIXObjectService.loadObjects<GeneralCatalogItem>(
             KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions
@@ -142,9 +147,11 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria('Class', SearchOperator.EQUALS, FilterDataType.STRING,
                 FilterType.AND, 'ITSM::Core::IncidentState'),
-            new FilterCriteria('Functionality', SearchOperator.IN, FilterDataType.STRING,
+            new FilterCriteria(`${GeneralCatalogItemProperty.PREFERENCES}.Name`, SearchOperator.EQUALS, FilterDataType.STRING,
+                FilterType.AND, 'Functionality'),
+            new FilterCriteria(`${GeneralCatalogItemProperty.PREFERENCES}.Value`, SearchOperator.IN, FilterDataType.STRING,
                 FilterType.AND, ['warning', 'incident'])
-        ]);
+        ], undefined, undefined, [GeneralCatalogItemProperty.PREFERENCES]);
 
         const catalogItems = await KIXObjectService.loadObjects<GeneralCatalogItem>(
             KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions
@@ -181,10 +188,13 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 }
                 break;
             case ConfigItemProperty.CUR_INCI_STATE_ID:
+            case VersionProperty.INCI_STATE_ID:
             case ConfigItemProperty.CUR_DEPL_STATE_ID:
-                const classId = property === ConfigItemProperty.CUR_DEPL_STATE_ID
-                    ? 'ITSM::ConfigItem::DeploymentState'
-                    : 'ITSM::Core::IncidentState';
+            case VersionProperty.DEPL_STATE_ID:
+                const classId =
+                    property === ConfigItemProperty.CUR_DEPL_STATE_ID || property === VersionProperty.DEPL_STATE_ID
+                        ? 'ITSM::ConfigItem::DeploymentState'
+                        : 'ITSM::Core::IncidentState';
                 const loadingOptions = new KIXObjectLoadingOptions([
                     new FilterCriteria(
                         'Class', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, classId
@@ -265,6 +275,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 objectType = KIXObjectType.ORGANISATION;
                 break;
             default:
+                objectType = KIXObjectType.CONFIG_ITEM;
         }
         return objectType;
     }
@@ -274,6 +285,57 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         cacheKeyPrefix: string = objectType, silent?: boolean
     ): Promise<string | number> {
         if (objectType === KIXObjectType.CONFIG_ITEM) {
+
+            const context = ContextService.getInstance().getActiveContext();
+            if (context.descriptor.contextMode === ContextMode.EDIT_BULK) {
+                const loadingOptions = new KIXObjectLoadingOptions();
+                loadingOptions.includes = [ConfigItemProperty.CURRENT_VERSION, VersionProperty.DATA];
+                const cis = await KIXObjectService.loadObjects<ConfigItem>(
+                    KIXObjectType.CONFIG_ITEM, [objectId], loadingOptions
+                ).catch((): ConfigItem[] => []);
+
+                let configItem: ConfigItem;
+                let versionData: any;
+
+                if (Array.isArray(cis) && cis.length) {
+                    configItem = cis[0];
+                    versionData = configItem?.CurrentVersion?.Data;
+                }
+
+                const newParameter: Array<[string, any]> = [];
+                for (const p of parameter) {
+                    if (
+                        p[0] === VersionProperty.DEPL_STATE_ID ||
+                        p[0] === VersionProperty.INCI_STATE_ID ||
+                        p[0] === ConfigItemProperty.NAME ||
+                        p[0] === ConfigItemProperty.LINKS
+                    ) {
+                        newParameter.push(p);
+                    } else {
+                        // determine attribute path and set value to version data
+                        const path = await ConfigItemClassAttributeUtil.getAttributePath(p[0], configItem?.ClassID);
+                        this.setVersionData(versionData, path, p[1]);
+                    }
+                }
+
+                newParameter.push([VersionProperty.DATA, versionData]);
+
+                // Add default values from latest version if not defined in bulk form
+                if (!newParameter.some((p) => p[0] === VersionProperty.DEPL_STATE_ID)) {
+                    newParameter.push([VersionProperty.DEPL_STATE_ID, configItem?.CurrentVersion?.DeplStateID]);
+                }
+
+                if (!newParameter.some((p) => p[0] === VersionProperty.INCI_STATE_ID)) {
+                    newParameter.push([VersionProperty.INCI_STATE_ID, configItem?.CurrentVersion?.InciStateID]);
+                }
+
+                if (!newParameter.some((p) => p[0] === VersionProperty.NAME)) {
+                    newParameter.push([VersionProperty.NAME, configItem?.CurrentVersion?.Name]);
+                }
+
+                parameter = newParameter;
+            }
+
             await KIXObjectService.createObject(
                 KIXObjectType.CONFIG_ITEM_VERSION, parameter,
                 new CreateConfigItemVersionOptions(Number(objectId)), false
@@ -288,6 +350,22 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         return super.updateObject(objectType, parameter, objectId, cacheKeyPrefix, silent);
     }
 
+    private setVersionData(data: any, path: string, value: any): void {
+        if (data && path) {
+            const pathArray = path?.split('.');
+            let obj = data;
+            const propertyIndex = pathArray.length - 1;
+            for (let i = 0; i < propertyIndex; ++i) {
+                const key = pathArray[i];
+                if (!(key in obj)) {
+                    obj[key] = {};
+                }
+                obj = obj[key];
+            }
+            obj[pathArray[propertyIndex]] = value;
+        }
+    }
+
     public async getObjectProperties(objectType: KIXObjectType): Promise<string[]> {
         const superProperties = await super.getObjectProperties(objectType);
         const objectProperties: string[] = [];
@@ -299,5 +377,46 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
             }
         }
         return [...objectProperties, ...superProperties];
+    }
+
+    public async getClasses(valid: boolean = true): Promise<ConfigItemClass[]> {
+        let loadingOptions: KIXObjectLoadingOptions;
+        if (valid) {
+            loadingOptions = new KIXObjectLoadingOptions([
+                new FilterCriteria(
+                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
+                )
+            ]);
+        }
+        const classes = await this.loadObjects<ConfigItemClass>(KIXObjectType.CONFIG_ITEM_CLASS, null, loadingOptions)
+            .catch(() => []);
+        return classes;
+    }
+
+    public static async getGeneralCatalogItems(
+        classId: number, objectIds?: Array<string | number>
+    ): Promise<GeneralCatalogItem[]> {
+        const loadingOptions = new KIXObjectLoadingOptions([
+            new FilterCriteria(
+                'Class', SearchOperator.EQUALS, FilterDataType.STRING,
+                FilterType.AND, classId
+            )
+        ]);
+
+        const items = await KIXObjectService.loadObjects<GeneralCatalogItem>(
+            KIXObjectType.GENERAL_CATALOG_ITEM, objectIds, loadingOptions, null, false
+        );
+        return items;
+    }
+
+    public static async loadConfigItemsByClassReference(
+        classReference: string[] | string, searchValue: string, loadingOptions: KIXObjectLoadingOptions
+    ): Promise<ConfigItem[]> {
+        const ciClassNames = Array.isArray(classReference) ? classReference : [classReference];
+
+        const configItems = await CMDBService.getInstance().searchConfigItemsByClass(
+            ciClassNames, searchValue, loadingOptions
+        );
+        return configItems;
     }
 }

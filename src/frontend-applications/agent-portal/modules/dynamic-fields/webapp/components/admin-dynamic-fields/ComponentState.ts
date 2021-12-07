@@ -8,27 +8,17 @@
  */
 
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { TableHeaderHeight, TableRowHeight } from '../../../../base-components/webapp/core/table';
-import { IdService } from '../../../../../model/IdService';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
 import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
-import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 
 export class ComponentState {
 
     public constructor(
-        public instanceId: string = IdService.generateDateBasedId('admin-dynamic-fields'),
+        public instanceId: string = 'admin-dynamic-fields',
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#System: Dynamic Fields',
             ['dynamic-field-create-action', 'csv-export-action'], null,
-            new TableWidgetConfiguration(
-                null, null, null,
-                KIXObjectType.DYNAMIC_FIELD, null, null,
-                new TableConfiguration(null, null, null,
-                    KIXObjectType.DYNAMIC_FIELD, null, 20, null, [], true, null, null, null,
-                    TableHeaderHeight.LARGE, TableRowHeight.LARGE
-                )
-            ),
+            new TableWidgetConfiguration(null, null, null, KIXObjectType.DYNAMIC_FIELD, null, null),
             false, false, 'kix-icon-gears'
         )
     ) { }

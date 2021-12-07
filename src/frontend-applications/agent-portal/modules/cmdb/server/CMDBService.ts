@@ -42,6 +42,7 @@ import { Error } from '../../../../../server/model/Error';
 import { AttachmentLoadingOptions } from '../model/AttachmentLoadingOptions';
 import { Version } from '../model/Version';
 import { SearchProperty } from '../../search/model/SearchProperty';
+import { GeneralCatalogItemProperty } from '../../general-catalog/model/GeneralCatalogItemProperty';
 
 
 export class CMDBAPIService extends KIXObjectAPIService {
@@ -75,9 +76,11 @@ export class CMDBAPIService extends KIXObjectAPIService {
         const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria('Class', SearchOperator.EQUALS, FilterDataType.STRING,
                 FilterType.AND, 'ITSM::ConfigItem::DeploymentState'),
-            new FilterCriteria('Functionality', SearchOperator.NOT_EQUALS, FilterDataType.STRING,
+            new FilterCriteria(`${GeneralCatalogItemProperty.PREFERENCES}.Name`, SearchOperator.EQUALS, FilterDataType.STRING,
+                FilterType.AND, 'Functionality'),
+            new FilterCriteria(`${GeneralCatalogItemProperty.PREFERENCES}.Value`, SearchOperator.NOT_EQUALS, FilterDataType.STRING,
                 FilterType.AND, 'postproductive')
-        ]);
+        ], undefined, undefined, [GeneralCatalogItemProperty.PREFERENCES]);
 
         const catalogItems = await this.loadObjects<GeneralCatalogItem>(
             token, null, KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions, null
@@ -274,6 +277,12 @@ export class CMDBAPIService extends KIXObjectAPIService {
                     token, clientRequestId, uri, new CreateConfigItemVersionRequest(createConfigItemVersion),
                     this.objectType
                 );
+
+            const links = this.getParameterValue(parameter, ConfigItemProperty.LINKS);
+            if (links && links.length) {
+                await this.createLinks(token, clientRequestId, Number(options.configItemId), links);
+            }
+
             return response.VersionID;
         } else {
             const createConfigItem = new CreateConfigItem(parameter.filter((p) => p[0] !== ConfigItemProperty.LINKS));
@@ -311,8 +320,11 @@ export class CMDBAPIService extends KIXObjectAPIService {
 
             return c.property !== ConfigItemProperty.NUMBER &&
                 c.property !== ConfigItemProperty.NAME &&
+                c.property !== ConfigItemProperty.CLASS_ID &&
                 c.property !== 'InciStateIDs' &&
                 c.property !== 'DeplStateIDs' &&
+                c.property !== ConfigItemProperty.CUR_DEPL_STATE_ID &&
+                c.property !== ConfigItemProperty.CUR_INCI_STATE_ID &&
                 c.property !== 'ClassIDs' &&
                 !c.property.startsWith('Data') &&
                 !c.property.startsWith('CurrentVersion') &&
@@ -353,6 +365,9 @@ export class CMDBAPIService extends KIXObjectAPIService {
             c.property === ConfigItemProperty.NAME ||
             c.property === 'InciStateIDs' ||
             c.property === 'DeplStateIDs' ||
+            c.property === ConfigItemProperty.CUR_DEPL_STATE_ID ||
+            c.property === ConfigItemProperty.CUR_INCI_STATE_ID ||
+            c.property === ConfigItemProperty.CLASS_ID ||
             c.property === 'ClassIDs' ||
             c.property.startsWith('Data') ||
             c.property.startsWith('CurrentVersion') ||

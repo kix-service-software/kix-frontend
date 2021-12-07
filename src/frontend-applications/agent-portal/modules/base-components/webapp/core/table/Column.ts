@@ -34,9 +34,26 @@ export class Column<T extends KIXObject = any> {
         private columnConfiguration: IColumnConfiguration
     ) {
         this.id = columnConfiguration.property;
-        const size = ClientStorageService.getOption(this.getSizeConfigurationKey());
+        const size = ClientStorageService.getOption(this.getConfigurationKey('size'));
         if (size && Number(size)) {
             this.columnConfiguration.size = Number(size);
+        }
+
+        const sort = ClientStorageService.getOption(this.getConfigurationKey('sort'));
+        if (sort) {
+            this.sortOrder = sort as any;
+        }
+
+        const filterDefinitionString = ClientStorageService.getOption(this.getConfigurationKey('filter'));
+        if (filterDefinitionString) {
+            try {
+                const filterDefinition = JSON.parse(filterDefinitionString);
+                this.filterValue = filterDefinition.filterValue;
+                this.filterCriteria = filterDefinition.filterCriteria;
+            } catch (e) {
+                console.error('Could not load filter definition for column.');
+                console.error(e);
+            }
         }
     }
 
@@ -83,6 +100,15 @@ export class Column<T extends KIXObject = any> {
         this.filterValue = textValue;
         this.filterCriteria = criteria;
 
+
+        const filterDefinition = { filterValue: this.filterValue, filterCriteria: this.filterCriteria };
+        try {
+            ClientStorageService.setOption(this.getConfigurationKey('filter'), JSON.stringify(filterDefinition));
+        } catch (e) {
+            console.error('Could not save filter definition for column.');
+            console.error(e);
+        }
+
         await this.getTable().filter();
 
         EventService.getInstance().publish(
@@ -97,7 +123,10 @@ export class Column<T extends KIXObject = any> {
 
     public setSize(size: number): void {
         this.columnConfiguration.size = size;
-        ClientStorageService.setOption(this.getSizeConfigurationKey(), size.toString());
+        EventService.getInstance().publish(
+            TableEvent.COLUMN_RESIZED,
+            new TableEventData(this.getTable().getTableId(), null, this.getColumnId())
+        );
     }
 
     public isFiltered(): boolean {
@@ -106,8 +135,8 @@ export class Column<T extends KIXObject = any> {
             (filter[1] !== null && filter[1] !== undefined && !!filter[1].length);
     }
 
-    private getSizeConfigurationKey(): string {
-        return this.getTable().getTableId() + '-' + this.columnConfiguration.property + '-size';
+    private getConfigurationKey(name: string): string {
+        return `${this.getTable().getTableId()}-${this.columnConfiguration.property}-${name}`;
     }
 
 }

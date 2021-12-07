@@ -68,7 +68,7 @@ export abstract class SearchContext extends Context {
             const params = [];
             if (this.searchCache) {
                 const cache = JSON.stringify({ ...this.searchCache, result: [] });
-                params.push(`search=${cache}`);
+                params.push(`search=${encodeURIComponent(cache)}`);
             }
 
             if (params.length) {

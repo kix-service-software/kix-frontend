@@ -23,60 +23,80 @@ class Component {
 
     private currentFilterId: string;
 
+    private updateTimeout: any;
+
     public onCreate(): void {
         this.state = new ComponentState();
-        this.treeHandler = new TreeHandler([]);
+        this.treeHandler = new TreeHandler([], null, null, false);
         TreeService.getInstance().registerTreeHandler(this.state.treeId, this.treeHandler);
     }
 
-    public async onInput(input: ComponentInput): Promise<void> {
-        if (input.predefinedFilter) {
-            this.predefinedFilter = input.predefinedFilter;
-            const selectedNodes = this.treeHandler.getSelectedNodes();
-            const names = await TranslationService.createTranslationObject(this.predefinedFilter.map((pf) => pf.name));
-            const nodes = this.predefinedFilter.map(
-                (pf: KIXObjectPropertyFilter, index) => new TreeNode(
-                    index,
-                    names[pf.name] ? names[pf.name] : pf.name,
-                    pf.icon ? pf.icon : null, undefined, undefined, undefined, undefined, undefined,
-                    undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
-                    selectedNodes.some((n) => n.id === index)
-                )
-            );
-            this.treeHandler.setTree(nodes);
-        } else {
-            this.predefinedFilter = [];
-        }
-
-        this.state.hasFilterList = this.predefinedFilter && this.predefinedFilter.length > 0;
-
-        this.state.disabled = typeof input.disabled !== 'undefined' ? input.disabled : false;
-
-        this.state.icon = typeof input.icon !== 'undefined' ? input.icon : 'kix-icon-filter';
-        this.state.showFilterCount = typeof input.showFilterCount !== 'undefined' ? input.showFilterCount : true;
-        this.setFilterCount(input.filterCount);
-
-        const nds = this.treeHandler.getTree();
-        nds.forEach(async (n) => {
-            n.tooltip = await TranslationService.translate(n.tooltip);
-        });
-        this.treeHandler.setTree(nds);
-
-        if (input.filterValue && input.filterValue !== this.state.textFilterValue) {
-            this.state.textFilterValue = input.filterValue;
-        }
-
+    public onInput(input: ComponentInput): void {
         this.update(input);
     }
 
-    private async update(input: any): Promise<void> {
-        this.state.predefinedFilterPlaceholder = typeof input.predefinedFilterPlaceholder !== 'undefined'
-            ? await TranslationService.translate(input.predefinedFilterPlaceholder)
-            : await TranslationService.translate('Translatable#All Objects');
+    private update(input: any): void {
+        if (this.updateTimeout) {
+            window.clearTimeout(this.updateTimeout);
+        }
 
-        this.state.placeholder = typeof input.placeholder !== 'undefined'
-            ? await TranslationService.translate(input.placeholder)
-            : await TranslationService.translate('Translatable#Filter in list');
+        this.updateTimeout = setTimeout(async () => {
+            if (input.predefinedFilter) {
+                this.predefinedFilter = input.predefinedFilter;
+                const selectedNodes = this.treeHandler.getSelectedNodes();
+                const names = await TranslationService.createTranslationObject(
+                    this.predefinedFilter.map((pf) => pf.name)
+                );
+                const nodes = this.predefinedFilter.map(
+                    (pf: KIXObjectPropertyFilter, index) => new TreeNode(
+                        index,
+                        names[pf.name] ? names[pf.name] : pf.name,
+                        pf.icon ? pf.icon : null, undefined, undefined, undefined, undefined, undefined,
+                        undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+                        selectedNodes.some((n) => n.id === index)
+                    )
+                );
+                this.treeHandler.setTree(nodes);
+
+                if (input.predefinedFilterName) {
+                    const filterName = await TranslationService.translate(input.predefinedFilterName);
+                    const node = nodes.find((n) => n.label === filterName);
+                    if (node) {
+                        this.treeHandler.setSelection([node], true, true);
+                    }
+                }
+
+
+            } else {
+                this.predefinedFilter = [];
+            }
+
+            this.state.hasFilterList = this.predefinedFilter && this.predefinedFilter.length > 0;
+
+            this.state.disabled = typeof input.disabled !== 'undefined' ? input.disabled : false;
+
+            this.state.icon = typeof input.icon !== 'undefined' ? input.icon : 'kix-icon-filter';
+            this.state.showFilterCount = typeof input.showFilterCount !== 'undefined' ? input.showFilterCount : true;
+            this.setFilterCount(input.filterCount);
+
+            const nds = this.treeHandler.getTree();
+            nds.forEach(async (n) => {
+                n.tooltip = await TranslationService.translate(n.tooltip);
+            });
+            this.treeHandler.setTree(nds);
+
+            if (input.filterValue && input.filterValue !== this.state.textFilterValue) {
+                this.state.textFilterValue = input.filterValue;
+            }
+
+            this.state.predefinedFilterPlaceholder = typeof input.predefinedFilterPlaceholder !== 'undefined'
+                ? await TranslationService.translate(input.predefinedFilterPlaceholder)
+                : await TranslationService.translate('Translatable#All Objects');
+
+            this.state.placeholder = typeof input.placeholder !== 'undefined'
+                ? await TranslationService.translate(input.placeholder)
+                : await TranslationService.translate('Translatable#Filter in list');
+        }, 35);
     }
 
     public textFilterValueChanged(event: any, externalFilterText?: string): void {
