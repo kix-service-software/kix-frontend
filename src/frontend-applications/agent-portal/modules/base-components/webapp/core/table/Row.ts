@@ -21,7 +21,7 @@ import { KIXObjectService } from '../KIXObjectService';
 import { EventService } from '../EventService';
 import { SortOrder } from '../../../../../model/SortOrder';
 import { DataType } from '../../../../../model/DataType';
-import { ClientStorageService } from '../ClientStorageService';
+import { IdService } from '../../../../../model/IdService';
 
 export class Row {
 
@@ -35,20 +35,18 @@ export class Row {
 
     public filterMatch: boolean = true;
 
-    public constructor(private table: Table, index: number, private rowObject?: RowObject) {
-        this.id = table.getTableId() + '-row-' + index;
+    public constructor(private table: Table, private rowObject?: RowObject) {
+        const objectId = rowObject?.getObject()?.ObjectId || IdService.generateDateBasedId();
+        this.id = `${table.getTableId()}-row-${objectId}`;
 
         if (rowObject) {
             rowObject.getValues().forEach((v) => this.cells.push(new Cell(this, v)));
             this.createChildren(rowObject.getChildren());
         }
-
-        const storedExpanded = ClientStorageService.getOption(`${this.id}-expanded`);
-        this.expanded = storedExpanded === 'true';
     }
 
     private createChildren(children: RowObject[]): void {
-        children.forEach((c, i) => this.children.push(new Row(this.table, i, c)));
+        children?.forEach((c) => this.children.push(new Row(this.table, c)));
     }
 
     public initializeDisplayValues(): void {
