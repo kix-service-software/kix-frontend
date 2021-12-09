@@ -26,8 +26,9 @@ class Component {
     public async onMount(): Promise<void> {
         ContextService.getInstance().registerListener({
             constexServiceListenerId: 'sidebar-right-icon',
-            contextChanged: (contextId: string, changedContext: Context) => {
-                this.state.hasSidebarsRight = Boolean(changedContext?.getSidebarsRight()?.length);
+            contextChanged: async (contextId: string, changedContext: Context) => {
+                const sidebars = await changedContext?.getSidebarsRight();
+                this.state.hasSidebarsRight = Boolean(sidebars?.length);
             },
             contextRegistered: () => { return; }
         });
@@ -37,7 +38,8 @@ class Component {
         ]);
 
         const context: Context = ContextService.getInstance().getActiveContext();
-        this.state.hasSidebarsRight = Boolean(context?.getSidebarsRight()?.length);
+        const sidebars = await context?.getSidebarsRight();
+        this.state.hasSidebarsRight = Boolean(sidebars?.length);
     }
 
     public showMobileRightSidebar(): void {

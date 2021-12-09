@@ -20,6 +20,7 @@ import { ClientStorageService } from '../../../../modules/base-components/webapp
 import { AgentService } from '../../../user/webapp/core/AgentService';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
+import { User } from '../../../user/model/User';
 
 export class TranslationService extends KIXObjectService<TranslationPattern> {
 
@@ -155,7 +156,7 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
 
             if (!getOnlyPattern) {
 
-                const translation = await this.getTranslationObject(translationValue);
+                const translation = await this.getInstance().getTranslationObject(translationValue);
 
                 if (translation) {
                     language = language ? language : this.getInstance().userLanguage;
@@ -181,31 +182,35 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
         return translationValue;
     }
 
-    public static async getTranslationObject(translationValue: string): Promise<Translation> {
-        if (!this.getInstance().translations) {
-            if (!this.getInstance().loadTranslationPromise) {
-                this.getInstance().loadTranslationPromise =
-                    new Promise<void>(async (resolve, reject) => {
-                        this.getInstance().userLanguage = await TranslationService.getUserLanguage();
-                        const translations = await KIXObjectService.loadObjects<Translation>(
-                            KIXObjectType.TRANSLATION
-                        );
-                        if (translations && translations.length) {
-                            this.getInstance().translations = {};
-                            translations.forEach(
-                                (t) => this.getInstance().translations[t.ObjectId] = t
-                            );
+    public async getTranslationObject(translationValue: string): Promise<Translation> {
+        if (!this.translations) {
+            if (!this.loadTranslationPromise) {
+                this.loadTranslationPromise = new Promise<void>(async (resolve, reject) => {
+                    this.userLanguage = await TranslationService.getUserLanguage();
+
+                    const translations = await KIXObjectService.loadObjects<Translation>(
+                        KIXObjectType.TRANSLATION
+                    );
+
+                    if (translations && translations.length) {
+                        this.translations = {};
+                        // eslint-disable-next-line @typescript-eslint/prefer-for-of
+                        for (let i = 0; i < translations.length; i++) {
+                            this.translations[translations[i].ObjectId] = translations[i];
                         }
-                        this.getInstance().loadTranslationPromise = null;
-                        resolve();
-                    });
+                    }
+                    this.loadTranslationPromise = null;
+
+                    resolve();
+                });
             }
 
-            await this.getInstance().loadTranslationPromise;
+            await this.loadTranslationPromise;
         }
 
-        return this.getInstance().translations && translationValue
-            ? this.getInstance().translations[translationValue] : null;
+        return this.translations && translationValue
+            ? this.translations[translationValue]
+            : null;
     }
 
     private static format(format: string, args: string[]): string {
@@ -218,7 +223,8 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
 
     public static async getUserLanguage(systemDefaultFallback: boolean = true): Promise<string> {
         let language: string;
-        const currentUser = await AgentService.getInstance().getCurrentUser();
+        const currentUser = await AgentService.getInstance().getCurrentUser().catch((): User => null);
+
         if (currentUser) {
             const preference = currentUser.Preferences.find((p) => p.ID === 'UserLanguage');
             language = preference ? preference.Value : null;
