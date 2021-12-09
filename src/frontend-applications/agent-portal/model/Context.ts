@@ -331,7 +331,7 @@ export abstract class Context {
         }
     }
 
-    public getLanes(show: boolean = false): ConfiguredWidget[] {
+    public async getLanes(show: boolean = false): Promise<ConfiguredWidget[]> {
         let lanes = this.configuration.lanes;
 
         if (show) {
@@ -340,7 +340,8 @@ export abstract class Context {
             );
         }
 
-        return lanes;
+        const allowedWidgets = await this.filterAllowedWidgets(lanes);
+        return allowedWidgets;
     }
 
     public async getContent(show: boolean = false): Promise<ConfiguredWidget[]> {
@@ -354,27 +355,44 @@ export abstract class Context {
 
         const userWidgets = await this.getUserWidgetList('content');
         const widgets = this.mergeWidgetLists(content, userWidgets);
-        return widgets;
+
+        const allowedWidgets = await this.filterAllowedWidgets(widgets);
+        return allowedWidgets;
     }
 
-    public getSidebarsLeft(show: boolean = false): ConfiguredWidget[] {
+    public async getSidebarsLeft(show: boolean = false): Promise<ConfiguredWidget[]> {
         let sidebarsLeft = this.configuration.explorer;
 
         if (show && sidebarsLeft) {
             sidebarsLeft = sidebarsLeft.filter((sb) => this.openSidebarWidgets.some((s) => sb.instanceId === s));
         }
 
-        return sidebarsLeft;
+        const allowedWidgets = await this.filterAllowedWidgets(sidebarsLeft);
+        return allowedWidgets;
     }
 
-    public getSidebarsRight(show: boolean = false): ConfiguredWidget[] {
+    public async getSidebarsRight(show: boolean = false): Promise<ConfiguredWidget[]> {
         let sidebarsRight = this.configuration.sidebars;
 
         if (show && sidebarsRight) {
             sidebarsRight = sidebarsRight.filter((sb) => this.openSidebarWidgets.some((s) => sb.instanceId === s));
         }
 
-        return sidebarsRight;
+        const allowedWidgets = await this.filterAllowedWidgets(sidebarsRight);
+        return allowedWidgets;
+    }
+
+    private async filterAllowedWidgets(widgets: ConfiguredWidget[]): Promise<ConfiguredWidget[]> {
+        const allowedWidgets: ConfiguredWidget[] = [];
+        for (const widget of widgets) {
+            if (Array.isArray(widget.permissions)) {
+                const allowed = await AuthenticationSocketClient.getInstance().checkPermissions(widget.permissions);
+                if (allowed) {
+                    allowedWidgets.push(widget);
+                }
+            }
+        }
+        return allowedWidgets;
     }
 
     private async getUserWidgetList(contextWidgetList: string): Promise<Array<string | ConfiguredWidget>> {

@@ -48,7 +48,9 @@ export class TranslationCSVExportAction extends AbstractAction<Table> {
                 for (const l of languages) {
                     let translationString = '';
                     if (translation.AvailableLanguages.some((al) => al === l[0])) {
-                        const translated = await TranslationService.getTranslationObject(translation.Value);
+                        const translated = await TranslationService.getInstance().getTranslationObject(
+                            translation.Value
+                        );
                         if (translated && translated.Languages && translated.Languages[l[0]]) {
                             translationString = `"${this.escapeText(translated.Languages[l[0]])}"`;
                         }

@@ -183,9 +183,10 @@ class TabLaneComponent implements IEventSubscriber {
         this.setSidebars();
     }
 
-    private setSidebars(): void {
+    private async setSidebars(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
-        this.state.hasSidebars = context ? context.getSidebarsRight().length > 0 : false;
+        const sidebars = await context?.getSidebarsRight() || [];
+        this.state.hasSidebars = sidebars.length > 0;
     }
 
     public isActiveTab(tabId: string): boolean {

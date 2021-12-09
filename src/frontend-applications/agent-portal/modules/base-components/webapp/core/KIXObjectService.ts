@@ -142,17 +142,15 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         let objects = [];
         if (objectIds) {
             if (objectIds.length) {
-                const loadedObjects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
+                objects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
                     objectType, objectConstructors, objectIds, loadingOptions, objectLoadingOptions, cache
                 );
-                objects = loadedObjects;
             }
         } else {
             objects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
                 objectType, objectConstructors, objectIds, loadingOptions, objectLoadingOptions, cache
             );
         }
-
         return objects;
     }
 
