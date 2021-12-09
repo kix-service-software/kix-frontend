@@ -115,8 +115,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     user.UserID
                 ),
                 new FilterCriteria(
-                    TicketProperty.STATE_TYPE, SearchOperator.NOT_EQUALS, FilterDataType.STRING, FilterType.AND,
-                    ['closed']
+                    TicketProperty.STATE_TYPE, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND,
+                    ['Open']
                 )
             ];
 
@@ -233,13 +233,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async createSchedules(tickets: Ticket[]): Promise<any[]> {
         const schedules = [];
 
-        const ticketsWithDF = await KIXObjectService.loadObjects<Ticket>(
-            KIXObjectType.TICKET, tickets.map((t) => t.TicketID),
-            new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS])
-        );
+        if (this.widgetConfiguration.contextDependent) {
+            const ticketsWithDF = await KIXObjectService.loadObjects<Ticket>(
+                KIXObjectType.TICKET, tickets.map((t) => t.TicketID),
+                new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS])
+            );
 
-        if (Array.isArray(ticketsWithDF) && ticketsWithDF.length) {
-            tickets = ticketsWithDF;
+            if (Array.isArray(ticketsWithDF) && ticketsWithDF.length) {
+                tickets = ticketsWithDF;
+            }
         }
 
         for (const ticket of tickets) {
