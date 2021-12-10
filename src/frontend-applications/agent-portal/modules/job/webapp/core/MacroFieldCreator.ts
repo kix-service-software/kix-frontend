@@ -69,7 +69,7 @@ export class MacroFieldCreator {
         macroField.instanceId = `${parentInstanceId}###MACRO###${IdService.generateDateBasedId()}`;
         macroField.draggableFields = true;
 
-        if (macro && formInstance && formInstance.getFormContext() === FormContext.EDIT) {
+        if (macro && formInstance?.getFormContext() === FormContext.EDIT) {
             macroField.options.push(new FormFieldOption('MacroId', macro.ID));
 
             if (macro.ExecOrder && macro.ExecOrder.length) {

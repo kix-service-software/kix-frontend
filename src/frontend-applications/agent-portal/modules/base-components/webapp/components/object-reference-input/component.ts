@@ -205,7 +205,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         const formValue = formInstance?.getFormFieldValue<number>(this.state.field?.instanceId);
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
 
-        const valueDefined = typeof formValue.value !== 'undefined' && formValue.value !== null;
+        const valueDefined = typeof formValue?.value !== 'undefined' && formValue?.value !== null;
         if (treeHandler && formValue && valueDefined) {
             const objectIds: Array<string | number> = Array.isArray(formValue.value)
                 ? formValue.value
