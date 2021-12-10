@@ -34,6 +34,7 @@ import { ContextStorageManager } from './ContextStorageManager';
 import { ContextEvents } from '../modules/base-components/webapp/core/ContextEvents';
 import { ContextPreference } from './ContextPreference';
 import { AgentService } from '../modules/user/webapp/core/AgentService';
+import { IEventSubscriber } from '../modules/base-components/webapp/core/IEventSubscriber';
 
 export abstract class Context {
 
@@ -54,6 +55,8 @@ export abstract class Context {
     private scrollInormation: [KIXObjectType | string, string | number] = null;
     protected displayText: string;
     protected icon: ObjectIcon | string;
+
+    private eventSubsriber: IEventSubscriber;
 
     public constructor(
         public descriptor: ContextDescriptor,
@@ -87,10 +90,10 @@ export abstract class Context {
 
             this.contextId = descriptor.contextId;
 
-            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, {
-                eventSubscriberId: this.descriptor.contextId + '-update-listener',
-                eventPublished: async (data: any) => {
-                    if (data && data.objectType) {
+            this.eventSubsriber = {
+                eventSubscriberId: this.instanceId,
+                eventPublished: async (data: any, eventId: string): Promise<void> => {
+                    if (eventId === ApplicationEvent.OBJECT_UPDATED && data?.objectType) {
                         if (this.objectLists.has(data.objectType)) {
                             this.deleteObjectList(data.objectType);
                         }
@@ -101,17 +104,23 @@ export abstract class Context {
                         ) {
                             await this.getObject(data.objectType, true);
                         }
+                    } else if (
+                        eventId === ContextEvents.CONTEXT_UPDATE_REQUIRED &&
+                        data?.instanceId === this.instanceId
+                    ) {
+                        this.deleteObjectLists();
                     }
                 }
-            });
+            };
+
+            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.eventSubsriber);
+            EventService.getInstance().subscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.eventSubsriber);
         }
     }
 
     public async destroy(): Promise<void> {
-        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, {
-            eventSubscriberId: this.descriptor.contextId + '-update-listener',
-            eventPublished: null
-        });
+        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.eventSubsriber);
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.eventSubsriber);
 
         return;
     }
@@ -295,6 +304,11 @@ export abstract class Context {
             this.objectLists.delete(objectType);
             this.listeners.forEach((l) => l.objectListChanged(objectType, []));
         }
+    }
+
+    public deleteObjectLists(): void {
+        this.objectLists.clear();
+        this.listeners.forEach((l) => l.objectListChanged(null, []));
     }
 
     public async setObjectId(objectId: string | number, objectType: KIXObjectType | string): Promise<void> {
