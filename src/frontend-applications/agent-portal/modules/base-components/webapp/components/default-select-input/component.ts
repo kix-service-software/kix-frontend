@@ -39,8 +39,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             const asMultiselectOption = this.state.field?.options.find(
                 (o) => o.option === DefaultSelectInputFormOption.MULTI
             );
-            this.state.asMultiselect = asMultiselectOption && typeof asMultiselectOption.value === 'boolean'
-                ? asMultiselectOption.value : false;
+            this.state.asMultiselect = typeof asMultiselectOption?.value === 'boolean'
+                ? asMultiselectOption.value
+                : false;
         }
         const treeHandler = new TreeHandler([], null, null, this.state.asMultiselect);
         TreeService.getInstance().registerTreeHandler(this.state.treeId, treeHandler);
@@ -110,7 +111,11 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     public valueChanged(nodes: TreeNode[]): void {
         const selectedNodes = nodes && nodes.length ? nodes : null;
-        super.provideValue(selectedNodes && !!selectedNodes.length ? selectedNodes.map((sn) => sn.id) : null);
+        if (this.state.asMultiselect) {
+            super.provideValue(selectedNodes?.map((sn) => sn.id));
+        } else {
+            super.provideValue(selectedNodes[0].id);
+        }
     }
 
     public async focusLost(event: any): Promise<void> {
