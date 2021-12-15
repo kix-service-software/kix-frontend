@@ -54,7 +54,9 @@ export class MacroFieldJobFormManager extends ExtendedJobFormManager {
                     (cv) => cv[0] && cv[0].property === JobProperty.MACRO_ACTIONS
                 );
                 if (actionValue && actionValue[1]) {
-                    const actionType = Array.isArray(actionValue[1].value) ? actionValue[1]?.value[0] : null;
+                    const actionType = Array.isArray(actionValue[1].value)
+                        ? actionValue[1]?.value[0]
+                        : actionValue[1]?.value;
                     this.handleMacroAction(data.formInstance, actionType, actionValue[0]);
                 }
             }
