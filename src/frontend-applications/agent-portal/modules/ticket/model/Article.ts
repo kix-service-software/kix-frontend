@@ -142,7 +142,6 @@ export class Article extends KIXObject {
 
                 if (attachmentIndex > -1) {
                     this.bodyAttachment = article.Attachments[attachmentIndex];
-                    this.Attachments.splice(attachmentIndex, 1);
                 }
             }
 
