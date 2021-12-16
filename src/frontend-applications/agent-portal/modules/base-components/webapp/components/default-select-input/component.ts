@@ -110,8 +110,11 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     }
 
     public valueChanged(nodes: TreeNode[]): void {
-        const selectedNodes = nodes && nodes.length ? nodes : null;
-        super.provideValue(selectedNodes?.map((sn) => sn.id));
+        if (this.state.asMultiselect) {
+            super.provideValue(nodes?.map((n) => n.id));
+        } else {
+            super.provideValue(nodes[0].id);
+        }
     }
 
     public async focusLost(event: any): Promise<void> {
