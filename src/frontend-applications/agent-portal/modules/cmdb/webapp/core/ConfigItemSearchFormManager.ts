@@ -30,6 +30,7 @@ import { ConfigItem } from '../../model/ConfigItem';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
 
 export class ConfigItemSearchFormManager extends SearchFormManager {
 
@@ -275,7 +276,10 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
     ): Promise<TreeNode[]> {
         let tree = [];
 
-        const classParameter = this.values.find((p) => p.property === ConfigItemProperty.CLASS_ID);
+        const classParameter = this.values.find(
+            (p) => p.property === ConfigItemProperty.CLASS_ID || p.property === 'ClassIDs'
+        );
+
         const input = await ConfigItemClassAttributeUtil.getAttributeInput(
             property, classParameter ? classParameter.value : null
         );
@@ -298,6 +302,18 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
         }
 
         return tree;
+    }
+
+    public async setValue(newValue: ObjectPropertyValue, silent?: boolean): Promise<void> {
+        if (newValue.property === 'ClassIDs') {
+            newValue.property = ConfigItemProperty.CLASS_ID;
+        } else if (newValue.property === 'DeplStateIDs') {
+            newValue.property = ConfigItemProperty.CUR_DEPL_STATE_ID;
+        } else if (newValue.property === 'InciStateIDs') {
+            newValue.property = ConfigItemProperty.CUR_INCI_STATE_ID;
+        }
+
+        super.setValue(newValue, silent);
     }
 
 }
