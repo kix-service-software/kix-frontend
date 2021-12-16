@@ -39,12 +39,13 @@ class Component extends FormInputComponent<any, ComponentState> {
         if (value) {
             this.state.attachments = Array.isArray(value.value)
                 ? value.value
-                : this.state.attachments = [value.value];
+                : [value.value];
         }
     }
 
     public valueChanged(value: Array<Attachment | File>): void {
         super.provideValue(value);
+        this.state.attachments = value;
     }
 
 }
