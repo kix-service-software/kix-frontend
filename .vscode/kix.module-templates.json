@@ -1,0 +1,219 @@
+{
+    "ui-module": {
+        "displayName": "UI Module",
+        "defaultPath": "src/",
+        "folder": "{{name}}",
+        "questions": {
+            "name": "UI Module Name",
+            "classNamePrefix": "Common Class Prefix"
+        },
+        "files": [
+            {
+                "name": "package.json",
+                "content": [
+                    "{",
+                    "   \"name\": \"kix-module-{{name}}\",",
+                    "   \"extensions\": {",
+                    "       \"kix:modules\": {",
+                    "           \"admin-module\": {",
+                    "               \"module\": \"kix-module.extension\"",
+                    "           }",
+                    "       }",
+                    "   }",
+                    "}"
+                ]
+            },
+            {
+                "name": "kix-module.extension.ts",
+                "content": [
+                    "import { IKIXModuleExtension } from '../../model/IKIXModuleExtension';",
+                    "import { UIComponent } from '../../model/UIComponent';",
+                    "import { KIXExtension } from '../../../../server/model/KIXExtension';",
+                    "",
+                    "class Extension extends KIXExtension implements IKIXModuleExtension {",
+                    "",
+                    "   public id = '{{name}}-module';",
+                    "",
+                    "   public applications: string[] = ['agent-portal'];",
+                    "",
+                    "   public external: boolean = false; // true if it is a plugin module",
+                    "",
+                    "   // if plugin",
+                    "   // public pluginId: string = '<PLUGIN_NAME>';",
+                    "",
+                    "   public webDependencies: string[] = [",
+                    "       './{{name}}/webapp'",
+                    "       // if plugin",
+                    "       // './<PLUGIN_NAME>/{{name}}/webapp'",
+                    "   ];",
+                    "",
+                    "   public initComponents: UIComponent[] = [",
+                    "       new UIComponent('UIModule', '/{{name}}-module$0/webapp/core/{{pascal classNamePrefix}}UIModule', [])",
+                    "   ];",
+                    "",
+                    "   public uiComponents: UIComponent[] = [",
+                    "       // new UIComponent('your-component', '/{{kebab-name}}-module$0/webapp/components/your-component', []),",
+                    "   ];",
+                    "",
+                    "}",
+                    "",
+                    "module.exports = (data, host, options): Extension => {",
+                    "   return new Extension();",
+                    "};"
+                ]
+            },
+            {
+                "name": "webapp/core/{{pascal classNamePrefix}}UIModule.ts",
+                "content": [
+                    "import { IUIModule } from '../../../../model/IUIModule';",
+                    "",
+                    "export class UIModule implements IUIModule {",
+                    "",
+                    "   public name: string = '{{pascal classNamePrefix}}UIModule';",
+                    "",
+                    "   public priority: number = 5000;",
+                    "",
+                    "   public async register(): Promise<void> {",
+                    "       // register some module stuff, e.g. Context, LabelProvider, TableFactory, Actions, ...",
+                    "   }",
+                    "",
+                    "   public async unRegister(): Promise<void> {",
+                    "       throw new Error('Method not implemented.');",
+                    "   }",
+                    "",
+                    "}"
+                ]
+            },
+            {
+                "name": "webapp/browser.json",
+                "content": [
+                    "{",
+                    "   \"dependencies\": [",
+                    "       \"require ./core/{{pascal classNamePrefix}}UIModule\"",
+                    "   ]",
+                    "}"
+                ]
+            },
+            {
+                "name": "webapp/marko.json",
+                "content": [
+                    "{",
+                    "   \"taglibImports\": [",
+                    "       \"../../base-components/marko.json\"",
+                    "   ]",
+                    "}"
+                ]
+            },
+            {
+                "name": "webapp/components/readme.md",
+                "content": [
+                    "# UI Components",
+                    "Add your ui components in this folder."
+                ]
+            },
+            {
+                "name": "server/readme.md",
+                "content": [
+                    "# Server Code",
+                    "Add your server side code here."
+                ]
+            },
+            {
+                "name": "model/readme.md",
+                "content": [
+                    "# Model Code",
+                    "Add your data model here."
+                ]
+            }
+        ]
+    },
+    "ui-component": {
+        "displayName": "UI Component",
+        "defaultPath": "src/",
+        "folder": "{{name}}",
+        "questions": {
+            "name": "UI Component Name"
+        },
+        "files": [
+            {
+                "name": "component.ts",
+                "content": [
+                    "import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';",
+                    "import { ComponentState } from './ComponentState';",
+                    "import { Context } from '../../../../../model/Context';",
+                    "import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';",
+                    "import { EventService } from '../../../../base-components/webapp/core/EventService';",
+                    "import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';",
+                    "import { IdService } from '../../../../../model/IdService';",
+                    "",
+                    "export class Component extends AbstractMarkoComponent<ComponentState> {",
+                    "",
+                    "   private context: Context;",
+                    "   private subscriber: IEventSubscriber;",
+                    "",
+                    "   public onCreate(): void {",
+                    "       this.state = new ComponentState();",
+                    "   }",
+                    "",
+                    "   public onInput(input: any): void {",
+                    "       return;",
+                    "   }",
+                    "",
+                    "   public async onMount(): Promise<void> {",
+                    "       this.context = ContextService.getInstance().getActiveContext();",
+                    "",
+                    "       /**",
+                    "       this.subscriber = {",
+                    "           eventSubscriberId: IdService.generateDateBasedId(),",
+                    "           eventPublished: (data: any, eventId: string): void => {",
+                    "               // ... event handling",
+                    "           }",
+                    "       };",
+                    "",
+                    "       EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);",
+                    "       */",
+                    "",
+                    "   }",
+                    "",
+                    "   public onDestroy(): void {",
+                    "       // EventService.getInstance().unsubscribe('SOME_EVENT', this.subscriber);",
+                    "   }",
+                    "",
+                    "}"
+                ]
+            },
+            {
+                "name": "ComponentState.ts",
+                "content": [
+                    "import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';",
+                    "",
+                    "export class ComponentState extends AbstractComponentState {",
+                    "",
+                    "   public constructor(",
+                    "       public title: string = '{{name}} Component'",
+                    "   ) {",
+                    "       super();",
+                    "   }",
+                    "",
+                    "}"
+                ]
+            },
+            {
+                "name": "index.marko",
+                "content": [
+                    "<div.{{name}}-container>",
+                    "   <h1>${state.title}</h1>",
+                    "</div>"
+                ]
+            },
+            {
+                "name": "style.less",
+                "content": [
+                    ".{{name}}-container {",
+                    "   margin: 1rem;",
+                    "}"
+                ]
+            }
+        ]
+    }
+}
