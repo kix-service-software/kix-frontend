@@ -153,7 +153,11 @@ class Component {
     public limitChanged(event: any): void {
         this.state.limit = event.target.value;
         const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
-        context.getSearchCache().limit = this.state.limit;
+
+        const searchCache = context?.getSearchCache();
+        if (searchCache) {
+            searchCache.limit = this.state.limit;
+        }
     }
 
     public resetSearch(): void {
