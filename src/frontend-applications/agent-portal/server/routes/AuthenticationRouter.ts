@@ -78,7 +78,7 @@ export class AuthenticationRouter extends KIXRouter {
                     const folder = app.internal ? 'modules' : 'plugins';
                     const templatePath = path.join(__dirname, '..', '..', folder, app.name, app.path);
 
-                    const template = require(templatePath);
+                    const template = require(templatePath).default;
                     this.setFrontendSocketUrl(res);
 
                     const logout = req.query.logout !== undefined;

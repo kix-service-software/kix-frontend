@@ -43,10 +43,10 @@ export class ConfigItemDetailsPrintRouter extends KIXRouter {
     private async getPrintComponent(req: Request, res: Response): Promise<void> {
         const token: string = req.cookies.token;
         const favIcon = await this.getIcon('agent-portal-icon');
-        const versionIdS = req.query.versionIds?.toString().split(',').map((id)=> Number(id)) || [];
+        const versionIdS = req.query.versionIds?.toString().split(',').map((id) => Number(id)) || [];
         const data = await ConfigItemDetailsDataBuilder.buildCIData(token, Number(req.params.objectId), versionIdS);
-        const template = require('../webapp/components/config-item-details-print');
-        (res as any).marko(template, {favIcon, ...data});
+        const template = require('../webapp/components/config-item-details-print').default;
+        (res as any).marko(template, { favIcon, ...data });
     }
 
 }

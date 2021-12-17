@@ -124,7 +124,7 @@ export class MarkoService {
 
             const folder = app.internal ? 'modules' : 'plugins';
             const templatePath = path.join(__dirname, '..', '..', folder, app.name, app.path);
-            const template = require(templatePath);
+            const template = require(templatePath).default;
             await template.render({}).catch((error) => {
                 ProfilingService.getInstance().stop(profileTaskId, { data: [`marko app build error: ${app.name}`] });
                 LoggingService.getInstance().error(error);

@@ -10,10 +10,10 @@
 import path from 'path';
 
 import express from 'express';
-import nodeRequire = require('marko/node-require');
-nodeRequire.install(); // Allow Node.js to require and load `.marko` files
 
-import markoExpress = require('marko/express');
+require('@marko/compiler/register')({ meta: true });
+import markoExpress from '@marko/express';
+
 import { serveStatic } from 'lasso/middleware';
 
 import compression from 'compression';
