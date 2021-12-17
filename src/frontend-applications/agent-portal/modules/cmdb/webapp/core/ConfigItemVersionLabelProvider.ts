@@ -54,6 +54,12 @@ export class ConfigItemVersionLabelProvider extends LabelProvider<Version> {
             case VersionProperty.BASED_ON_CLASS_VERSION:
                 displayValue = 'Translatable#Based on class definition';
                 break;
+            case VersionProperty.DEPL_STATE_ID:
+                displayValue = 'Translatable#Deployment State';
+                break;
+            case VersionProperty.INCI_STATE_ID:
+                displayValue = 'Translatable#Incident State';
+                break;
             default:
                 displayValue = await super.getPropertyText(property, short, translatable);
         }

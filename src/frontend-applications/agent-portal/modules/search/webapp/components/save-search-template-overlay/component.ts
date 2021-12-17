@@ -32,7 +32,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const nodes = bookmarks.map((b) => new TreeNode(b.actionData.id, b.title, b.icon));
 
         const context = ContextService.getInstance().getActiveContext<SearchContext>();
-        const cache = context.getSearchCache();
+        const cache = context?.getSearchCache();
         const currentNode = nodes.find((n) => n.id === cache?.id);
         if (currentNode) {
             currentNode.selected = true;

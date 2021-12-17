@@ -83,7 +83,7 @@ export class AbstractJobFormManager {
                                 new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.JOB_TYPE),
                                 new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true)
                             ], null, null, null, null, null, null, null, null, null, null, null, null,
-                            formInstance.getFormContext() === FormContext.EDIT
+                            formInstance?.getFormContext() === FormContext.EDIT
                         ),
                         new FormFieldConfiguration(
                             'job-new-form-field-name',
@@ -111,8 +111,8 @@ export class AbstractJobFormManager {
     }
 
     protected async getExecPlanPage(forminstance: FormInstance): Promise<FormPageConfiguration> {
-        const timeGroup = await this.getTimeGroup(forminstance.getFormContext());
-        const eventGroup = await this.getEventGroup(forminstance.getFormContext());
+        const timeGroup = await this.getTimeGroup(forminstance?.getFormContext());
+        const eventGroup = await this.getEventGroup(forminstance?.getFormContext());
         return new FormPageConfiguration(
             this.execPageId, 'Translatable#Execution Plan',
             undefined, undefined, undefined, [timeGroup, eventGroup]
@@ -181,7 +181,7 @@ export class AbstractJobFormManager {
 
     protected async getFilterPage(formInstance: FormInstance): Promise<FormPageConfiguration> {
         const filtersValue = await this.getValue(
-            JobProperty.FILTER, null, null, this.job, formInstance.getFormContext()
+            JobProperty.FILTER, null, null, this.job, formInstance?.getFormContext()
         );
 
         const filters = new FormFieldConfiguration(
@@ -223,7 +223,9 @@ export class AbstractJobFormManager {
         }
 
         if (!hasMacro) {
-            const macroField = await MacroFieldCreator.createMacroField(null, formInstance, this);
+            const macroField = await MacroFieldCreator.createMacroField(
+                null, formInstance, this, undefined, undefined, job?.Type
+            );
             groups.push(
                 new FormGroupConfiguration(
                     'job-form-group-macro', 'Translatable#Macro', undefined, undefined, [macroField]

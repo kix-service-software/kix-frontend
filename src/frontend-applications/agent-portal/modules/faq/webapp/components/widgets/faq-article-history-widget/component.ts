@@ -51,10 +51,6 @@ class Component {
 
     }
 
-    public onDestroy(): void {
-        TableFactoryService.getInstance().destroyTable('faq-article-history');
-    }
-
     private async initWidget(faqArticle: FAQArticle): Promise<void> {
         if (faqArticle) {
             this.prepareActions(faqArticle);

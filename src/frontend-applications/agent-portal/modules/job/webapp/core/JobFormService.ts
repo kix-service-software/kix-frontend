@@ -139,18 +139,26 @@ export class JobFormService extends KIXObjectFormService {
     }
 
     public async prepareCreateValue(
-        property: string, formfield: FormFieldConfiguration, value: any, formInstance: FormInstance
+        property: string, formField: FormFieldConfiguration, value: any, formInstance: FormInstance
     ): Promise<Array<[string, any]>> {
 
+        let result = [[property, value]];
+
         if (property === JobProperty.MACROS) {
-            if (!formfield.parentInstanceId) {
-                value = await MacroObjectCreator.createMacro(formfield, formInstance);
+            if (!formField.parentInstanceId) {
+                value = await MacroObjectCreator.createMacro(formField, formInstance);
             } else {
                 value = null;
             }
+
+            result = [[property, value]];
+        } else {
+            const formValue = await formInstance?.getFormFieldValueByProperty<string>(JobProperty.TYPE);
+            const manager = this.getJobFormManager(formValue?.value);
+            result = await manager.prepareCreateValue(property, formField, value);
         }
 
-        return [[property, value]];
+        return result as any;
     }
 
     public async postPrepareValues(

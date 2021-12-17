@@ -196,7 +196,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     )
                 ],
                 [
-                    'config-item-create-action'
+                    'config-item-create-action', 'config-item-create-graph-action'
                 ],
                 [
                     'config-item-edit-action', 'config-item-duplicate-action',

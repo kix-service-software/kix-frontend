@@ -43,9 +43,15 @@ export class KIXModulesService {
 
     public static getComponentTemplate(componentId: string): any {
         const component = this.getInstance().tags.get(componentId);
-        const template = component ? require(component) : undefined;
-        if (!template) {
+        let template;
+        try {
+            template = component ? require(component) : undefined;
+            if (!template) {
+                console.warn(`No template found for component: ${componentId}`);
+            }
+        } catch (e) {
             console.warn(`No template found for component: ${componentId}`);
+            console.error(e);
         }
         return template;
     }

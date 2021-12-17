@@ -1,0 +1,20 @@
+{
+    "name": "kix-module-graph",
+    "extensions": {
+        "kix:modules": {
+            "graph-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:configuration": {
+            "graph-context-configuration": {
+                "module": "graph-details-context-configuration.extension"
+            }
+        },
+        "kix:services": {
+            "graph-service": {
+                "module": "service.extension"
+            }
+        }
+    }
+}

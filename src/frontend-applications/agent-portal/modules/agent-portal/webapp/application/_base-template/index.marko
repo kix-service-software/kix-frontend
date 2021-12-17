@@ -20,15 +20,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <div.main-menu-wrapper active=(state.activeMobile === 1)>
                 <main-menu no-update/>
             </div>
-            <div.sidebar-left-wrapper active=(state.activeMobile === 2)>
-                <sidebar isLeft=true no-update/>
-            </div>
-            <div.content-wrapper no-update>
-                <router-outlet id="base-router"/>
-            </div>
-            <div.sidebar-right-wrapper active=(state.activeMobile === 3)>
-                <sidebar no-update/>
-            </div>
+            <if(!state.reloadContent)>
+                <div.sidebar-left-wrapper active=(state.activeMobile === 2)>
+                    <sidebar isLeft=true no-update/>
+                </div>
+                <div.content-wrapper no-update>
+                    <router-outlet id="base-router"/>                
+                </div>
+                <div.sidebar-right-wrapper active=(state.activeMobile === 3)>
+                    <sidebar no-update/>
+                </div>
+            </if>
             <div.footer-wrapper>
                 <kix-footer/>
             </div>

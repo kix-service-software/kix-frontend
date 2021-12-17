@@ -15,6 +15,7 @@ export class ComponentState extends AbstractComponentState {
         public loading: boolean = true,
         public loadingHint: string = '',
         public reload: boolean = false,
+        public reloadContent: boolean = false,
         public initialized: boolean = false,
         public isMobile: boolean = false,
         public activeMobile: number = null

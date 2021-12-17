@@ -19,30 +19,28 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         on-click("minimizeWidget", false)
         on-mousedown("headerMousedown", false)>
         <span.header-left>
-            <if(input.title)>
-                <div.widget-title class={
-                    "with-icon": component.isInputDefined(input.icon)
-                }>
-                    <if(component.isInputDefined(input.icon))>
-                        <icon
-                            icon=input.icon
-                            on-click("minimizeWidget", true)
-                            on-mousedown("headerMousedown", true)/>
-                    </if>
-                    <h2
-                        title=state.translations[input.title]
+            <div.widget-title class={
+                "with-icon": input.icon
+            }>
+                <if(input.icon)>
+                    <icon
+                        icon=input.icon
                         on-click("minimizeWidget", true)
-                        on-mousedown("headerMousedown", true)>
-                        <translation-string pattern=input.title/>
-                    </h2>
-                </div>
+                        on-mousedown("headerMousedown", true)/>
+                </if>
+                <h2
+                    title=state.title
+                    on-click("minimizeWidget", true)
+                    on-mousedown("headerMousedown", true)>
+                    <translation-string pattern=state.title/>
+                </h2>
+            </div>
+            <if(input.headercontent)>
+                <${input.headercontent}/>
             </if>
-            <if(component.hasHeaderContent(input.headerContent))>
-                <${input.headerContent}/>
-            </if>
-            <if(component.hasHeaderContent(input.headerFilter))>
+            <if(input.headerfilter)>
                 <div.widget-filter>
-                    <${input.headerFilter}/>
+                    <${input.headerfilter}/>
                 </div>
             </if>
         </span>
@@ -82,7 +80,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     </if>
     <if(!state.minimized)>
         <div.widget-content>
-            <if(component.isInputDefined(input.contentActions))>
+            <if(Array.isArray(input.contentActions))>
                 <!-- TODO: ContentAction analog der "header" Actions umsetzen (über WidgetService) -->
                 <if(component.isContentWidget())>
                     <div.content-actions key=("content-actions" + Math.random())>
@@ -90,7 +88,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </div>
                 </if>
             </if>
-            <if(component.isInputDefined(input.content))>
+            <if(input.content)>
                 <${component.isSidebarWidget() ? "div" : null} class="scroll-container">
                     <${input.content} key=state.instanceId/>
                 </>

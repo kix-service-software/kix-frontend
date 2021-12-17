@@ -260,9 +260,10 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
                     + '<tbody>';
 
                 checkListItems.forEach((cl) => {
+                    const value = cl[1].replace(/\n/g, '<br/>');
                     result += '<tr>'
                         + '<td style="padding:10px 15px;">' + cl[0] + '</td>'
-                        + '<td style="padding:10px 15px;">' + cl[1] + '</td>'
+                        + '<td style="padding:10px 15px;">' + value + '</td>'
                         + '</tr>';
                 });
 

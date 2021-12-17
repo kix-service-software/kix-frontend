@@ -30,6 +30,7 @@ import { FormValuesChangedEventData } from '../../core/FormValuesChangedEventDat
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { ClientStorageService } from '../../core/ClientStorageService';
 
 class Component {
 
@@ -109,9 +110,10 @@ class Component {
                             setTimeout(() => this.state.loading = false, 100);
                         } else {
                             if (eventId === TableEvent.TABLE_READY) {
-                                this.state.filterCount = this.state.table.isFiltered()
-                                    ? this.state.table.getRowCount()
-                                    : null;
+                                if (this.state.table.isFiltered()) {
+                                    this.state.filterCount = this.state.table.getRowCount();
+                                    this.state.filterValue = this.state.table.getFilterValue();
+                                }
                                 this.prepareTitle();
                                 this.prepareActions();
                             }
@@ -252,7 +254,6 @@ class Component {
             EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
         }
 
-        TableFactoryService.getInstance().destroyTable(`table-widget-${this.state.instanceId}`);
     }
 
     private async prepareHeader(): Promise<void> {
@@ -308,6 +309,12 @@ class Component {
             }
             await table?.initialize();
 
+            if (table.getFilterCriteria()) {
+                this.state.predefinedFilterName = ClientStorageService.getOption(`${table?.getTableId()}-predefinedfilter`);
+            } else {
+                ClientStorageService.deleteState(`${table.getTableId()}-predefinedfilter`);
+            }
+
             this.state.table = table;
             this.state.loading = false;
         }
@@ -331,6 +338,14 @@ class Component {
             this.state.table.setFilter(textFilterValue, newFilter);
             await this.state.table.filter();
             this.state.isFiltering = false;
+
+            if (filter) {
+                this.state.predefinedFilterName = filter.name;
+                ClientStorageService.setOption(`${this.state.table.getTableId()}-predefinedfilter`, filter.name);
+            } else {
+                this.state.predefinedFilterName = null;
+                ClientStorageService.deleteState(`${this.state.table.getTableId()}-predefinedfilter`);
+            }
         }
     }
 

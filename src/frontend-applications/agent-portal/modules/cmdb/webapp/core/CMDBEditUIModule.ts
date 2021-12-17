@@ -19,6 +19,9 @@ import { ConfigItemDuplicateAction } from './actions';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { ConfigItemDetailsContext } from './context';
+import { ConfigItemCreateGraphAction } from './actions/ConfigItemCreateGraphAction';
+import { BulkService } from '../../../bulk/webapp/core';
+import { ConfigItemBulkManager } from './ConfigItemBulkManager';
 
 export class UIModule implements IUIModule {
 
@@ -33,6 +36,8 @@ export class UIModule implements IUIModule {
     public async register(): Promise<void> {
         await this.registerContexts();
         this.registerActions();
+
+        BulkService.getInstance().registerBulkManager(new ConfigItemBulkManager());
     }
 
     private async registerContexts(): Promise<void> {
@@ -61,5 +66,6 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('config-item-create-action', ConfigItemCreateAction);
         ActionFactory.getInstance().registerAction('config-item-edit-action', ConfigItemEditAction);
         ActionFactory.getInstance().registerAction('config-item-duplicate-action', ConfigItemDuplicateAction);
+        ActionFactory.getInstance().registerAction('config-item-create-graph-action', ConfigItemCreateGraphAction);
     }
 }

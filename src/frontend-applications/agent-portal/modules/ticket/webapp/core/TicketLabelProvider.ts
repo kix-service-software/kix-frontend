@@ -441,7 +441,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
         ticket: Ticket, id: boolean = true, title: boolean = true, translatable: boolean = true
     ): Promise<string> {
         let returnString = '';
-        if (ticket && ticket.Title) {
+        if (ticket) {
             if (id) {
                 let ticketHook: string = '';
                 let ticketHookDivider: string = '';
@@ -466,9 +466,8 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 }
             }
             if (title) {
-                returnString += (id ? ' - ' : '') + ticket.Title;
+                returnString += (id && ticket.Title ? ' - ' : '') + (ticket.Title ? ticket.Title : '');
             }
-
         }
 
         return returnString;

@@ -7,7 +7,6 @@
  * --
  */
 
-import { IdService } from '../../../../../../model/IdService';
 import { WidgetConfiguration } from '../../../../../../model/configuration/WidgetConfiguration';
 import { TableWidgetConfiguration } from '../../../../../../model/configuration/TableWidgetConfiguration';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
@@ -25,7 +24,7 @@ import { TableRowHeight } from '../../../../../../model/configuration/TableRowHe
 export class ComponentState {
 
     public constructor(
-        public instanceId: string = IdService.generateDateBasedId('faq-admin-categories'),
+        public instanceId: string = 'admin-faq-admin-categories',
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Knowledge Database: FAQ Categories',
             [

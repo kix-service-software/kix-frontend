@@ -78,7 +78,7 @@ export class CMDBContext extends Context {
             }
 
             if (this.filterValue) {
-                params.push(`filter=${this.filterValue}`);
+                params.push(`filter=${encodeURIComponent(this.filterValue)}`);
             }
 
             if (params.length) {

@@ -15,4 +15,6 @@ export enum GeneralCatalogItemProperty {
 
     CLASS = 'Class',
 
+    PREFERENCES = 'Preferences',
+
 }

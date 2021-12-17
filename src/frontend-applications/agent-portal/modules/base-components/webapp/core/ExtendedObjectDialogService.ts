@@ -7,6 +7,7 @@
  * --
  */
 
+import { Error } from '../../../../../../server/model/Error';
 import { Context } from '../../../../model/Context';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 
@@ -20,9 +21,21 @@ export abstract class ExtendedObjectDialogService {
      * @param formId
      * @param objectId
      *
-     * @returns true if the standard behavoir should interrupt, false - the standard behavoir should continue
+     * @returns true - the standard behavior should continue / false - the standard behavior should interrupt
      */
     public async postSubmit(context: Context, formId: string, objectId: string | number): Promise<boolean> {
+        return true;
+    }
+
+    /**
+     *
+     * @param context
+     * @param formId
+     * @param error
+     *
+     * @returns true - the standard behavior should continue / false - the standard behavior should interrupt
+     */
+    public async postCatch(context: Context, formId: string, error: Error): Promise<boolean> {
         return true;
     }
 

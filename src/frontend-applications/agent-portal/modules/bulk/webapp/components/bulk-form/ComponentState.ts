@@ -10,6 +10,7 @@
 import { IdService } from '../../../../../model/IdService';
 import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
 import { Table } from '../../../../base-components/webapp/core/table';
+import { LinkManager } from '../../../../links/webapp/core/LinkManager';
 import { BulkManager } from '../../core/BulkManager';
 
 export class ComponentState extends AbstractComponentState {
@@ -18,6 +19,7 @@ export class ComponentState extends AbstractComponentState {
         public objectCount: number = 0,
         public table: Table = null,
         public bulkManager: BulkManager = null,
+        public linkManager: LinkManager = null,
         public tableTitle: string = '',
         public canRun: boolean = false,
         public run: boolean = false,

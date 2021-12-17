@@ -30,7 +30,7 @@ export class ReportingJobFormManager extends AbstractJobFormManager {
     }
 
     protected async getExecPlanPage(formInstance: FormInstance): Promise<FormPageConfiguration> {
-        const timeGroup = await this.getTimeGroup(formInstance.getFormContext());
+        const timeGroup = await this.getTimeGroup(formInstance?.getFormContext());
         return new FormPageConfiguration(
             this.execPageId, 'Translatable#Execution Plan', undefined, undefined, undefined, [timeGroup]
         );

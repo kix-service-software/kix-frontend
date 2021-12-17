@@ -14,11 +14,14 @@ import { BrowserUtil } from '../../core/BrowserUtil';
 import { Table, TableEvent, TableEventData, Row, Column } from '../../core/table';
 import { EventService } from '../../core/EventService';
 import { ContextService } from '../../core/ContextService';
+import { ClientStorageService } from '../../core/ClientStorageService';
+import { IdService } from '../../../../../model/IdService';
 
-class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public eventSubscriberId: string;
     private browserFontSize: number;
+    private subscriber: IEventSubscriber;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -47,12 +50,82 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public async onMount(): Promise<void> {
-        EventService.getInstance().subscribe(TableEvent.REFRESH, this);
-        EventService.getInstance().subscribe(TableEvent.RERENDER_TABLE, this);
-        EventService.getInstance().subscribe(TableEvent.ROW_TOGGLED, this);
-        EventService.getInstance().subscribe(TableEvent.SORTED, this);
-        EventService.getInstance().subscribe(TableEvent.TABLE_FILTERED, this);
-        EventService.getInstance().subscribe(TableEvent.SCROLL_TO_AND_TOGGLE_ROW, this);
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(),
+            eventPublished: async (data: TableEventData, eventId: string): Promise<void> => {
+                if (this.state.table && data && data.tableId === this.state.table.getTableId()) {
+                    if (eventId === TableEvent.REFRESH) {
+                        await this.provideContextContent();
+                        this.setTableHeight();
+
+                        EventService.getInstance().publish(
+                            TableEvent.TABLE_READY,
+                            new TableEventData(this.state.table.getTableId())
+                        );
+                    }
+
+                    if (eventId === TableEvent.RERENDER_TABLE) {
+                        this.setTableHeight();
+                    }
+
+                    if (eventId === TableEvent.ROW_TOGGLED) {
+                        this.setTableHeight();
+                    }
+
+                    if (eventId === TableEvent.SORTED || eventId === TableEvent.TABLE_FILTERED) {
+                        const container = (this as any).getEl(this.state.table.getTableId() + 'table-container');
+                        if (container) {
+                            container.scrollTop = 0;
+                        }
+                    }
+                }
+
+                if (eventId === TableEvent.SCROLL_TO_AND_TOGGLE_ROW) {
+                    if (data && data.tableId && data.tableId === this.state.table.getTableId() && data.rowId) {
+                        const row: Row = this.state.table.getRow(data.rowId);
+                        if (row) {
+                            row.expand(true);
+                            EventService.getInstance().publish(TableEvent.REFRESH, this.state.table.getTableId());
+                            let element: any = document.getElementById(row.getRowId());
+                            if (element) {
+                                let top = 0;
+                                if (element.offsetParent) {
+                                    do {
+                                        top += element.offsetTop;
+                                        element = element.offsetParent;
+                                    } while (element !== null);
+                                }
+
+                                window.scroll(0, top);
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        EventService.getInstance().subscribe(TableEvent.REFRESH, this.subscriber);
+        EventService.getInstance().subscribe(TableEvent.RERENDER_TABLE, this.subscriber);
+        EventService.getInstance().subscribe(TableEvent.ROW_TOGGLED, this.subscriber);
+        EventService.getInstance().subscribe(TableEvent.SORTED, this.subscriber);
+        EventService.getInstance().subscribe(TableEvent.TABLE_FILTERED, this.subscriber);
+        EventService.getInstance().subscribe(TableEvent.SCROLL_TO_AND_TOGGLE_ROW, this.subscriber);
+
+        setTimeout(() => {
+            const scrollPosString = ClientStorageService.getOption(`${this.state.table.getTableId()}-scrollpos`);
+            const element: HTMLElement = (this as any).getEl(this.state.table?.getTableId() + 'table-container');
+            if (scrollPosString && element) {
+                try {
+                    const scrollPos = JSON.parse(scrollPosString);
+                    element.scrollLeft = scrollPos[0];
+                    element.scrollTop = scrollPos[1];
+                } catch (e) {
+                    console.error('Error loading scroll position of table');
+                    console.error(e);
+                }
+            }
+        }, 500);
     }
 
     public onUpdate(): void {
@@ -60,63 +133,12 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(TableEvent.REFRESH, this);
-        EventService.getInstance().unsubscribe(TableEvent.RERENDER_TABLE, this);
-        EventService.getInstance().unsubscribe(TableEvent.ROW_TOGGLED, this);
-        EventService.getInstance().unsubscribe(TableEvent.SORTED, this);
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_FILTERED, this);
-        EventService.getInstance().unsubscribe(TableEvent.SCROLL_TO_AND_TOGGLE_ROW, this);
-    }
-
-    public async eventPublished(data: TableEventData, eventId: string, subscriberId?: string): Promise<void> {
-        if (this.state.table && data && data.tableId === this.state.table.getTableId()) {
-            if (eventId === TableEvent.REFRESH) {
-                await this.provideContextContent();
-                this.setTableHeight();
-
-                EventService.getInstance().publish(
-                    TableEvent.TABLE_READY,
-                    new TableEventData(this.state.table.getTableId())
-                );
-            }
-
-            if (eventId === TableEvent.RERENDER_TABLE) {
-                this.setTableHeight();
-            }
-
-            if (eventId === TableEvent.ROW_TOGGLED) {
-                this.setTableHeight();
-            }
-
-            if (eventId === TableEvent.SORTED || eventId === TableEvent.TABLE_FILTERED) {
-                const container = (this as any).getEl(this.state.table.getTableId() + 'table-container');
-                if (container) {
-                    container.scrollTop = 0;
-                }
-            }
-        }
-
-        if (eventId === TableEvent.SCROLL_TO_AND_TOGGLE_ROW) {
-            if (data && data.tableId && data.tableId === this.state.table.getTableId() && data.rowId) {
-                const row: Row = this.state.table.getRow(data.rowId);
-                if (row) {
-                    row.expand(true);
-                    EventService.getInstance().publish(TableEvent.REFRESH, this.state.table.getTableId());
-                    let element: any = document.getElementById(row.getRowId());
-                    if (element) {
-                        let top = 0;
-                        if (element.offsetParent) {
-                            do {
-                                top += element.offsetTop;
-                                element = element.offsetParent;
-                            } while (element !== null);
-                        }
-
-                        window.scroll(0, top);
-                    }
-                }
-            }
-        }
+        EventService.getInstance().unsubscribe(TableEvent.REFRESH, this.subscriber);
+        EventService.getInstance().unsubscribe(TableEvent.RERENDER_TABLE, this.subscriber);
+        EventService.getInstance().unsubscribe(TableEvent.ROW_TOGGLED, this.subscriber);
+        EventService.getInstance().unsubscribe(TableEvent.SORTED, this.subscriber);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_FILTERED, this.subscriber);
+        EventService.getInstance().unsubscribe(TableEvent.SCROLL_TO_AND_TOGGLE_ROW, this.subscriber);
     }
 
     private async provideContextContent(): Promise<void> {
@@ -145,10 +167,9 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
                 const headerRowHeight = this.browserFontSize * Number(tableConfiguration.headerHeight);
 
-                let rowHeight = this.browserFontSize * Number(tableConfiguration.rowHeight);
-                rowHeight = this.hScrollWillBeVisible() ? rowHeight : rowHeight / 2;
-
-                let height = ((displayLimit * rowHeight) + headerRowHeight) + rowHeight;
+                const rowHeight = this.browserFontSize * Number(tableConfiguration.rowHeight);
+                const lastRowHeight = this.hScrollWillBeVisible() ? rowHeight : rowHeight / 2;
+                let height = ((displayLimit * rowHeight) + headerRowHeight) + lastRowHeight;
 
                 const expandedRowHeight = (31.5 + 10) / 2 * this.browserFontSize;
                 const expandedRowCount = rows.filter((r) => r.isExpanded()).length;
@@ -201,8 +222,12 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         return config.size < minWidth ? minWidth : config.size;
     }
 
-    public onScroll(): void {
-        // load rows
+    public onScroll(event: any): void {
+        const element = (this as any).getEl(this.state.table?.getTableId() + 'table-container');
+        if (element) {
+            const scrollInfo = [element?.scrollLeft, element?.scrollTop];
+            ClientStorageService.setOption(`${this.state.table.getTableId()}-scrollpos`, JSON.stringify(scrollInfo));
+        }
     }
 }
 

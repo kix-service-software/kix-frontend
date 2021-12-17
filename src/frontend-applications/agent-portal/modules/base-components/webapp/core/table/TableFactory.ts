@@ -44,6 +44,14 @@ export abstract class TableFactory {
 
     public getDefaultColumnConfiguration(property: string, translatable: boolean = true): IColumnConfiguration {
         let config;
+
+        for (const extendedFactory of this.extendedTableFactories) {
+            config = extendedFactory.getDefaultColumnConfiguration(property, translatable);
+            if (config) {
+                return config;
+            }
+        }
+
         switch (property) {
             case KIXObjectProperty.COMMENT:
                 config = new DefaultColumnConfiguration(

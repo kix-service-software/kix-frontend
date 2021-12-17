@@ -8,9 +8,7 @@
  */
 
 import { ComponentState } from './ComponentState';
-import {
-    AbstractMarkoComponent
-} from '../../../../core/AbstractMarkoComponent';
+import { AbstractMarkoComponent } from '../../../../core/AbstractMarkoComponent';
 import { IEventSubscriber } from '../../../../core/IEventSubscriber';
 import { EventService } from '../../../../core/EventService';
 import { TableEvent, TableEventData } from '../../../../core/table';
@@ -153,10 +151,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             this.state.resizeActive = false;
             this.state.column.setSize(this.size);
             this.state.size = this.size;
-            EventService.getInstance().publish(
-                TableEvent.COLUMN_RESIZED,
-                new TableEventData(this.state.column.getTable().getTableId(), null, this.state.column.getColumnId())
-            );
         }
     }
 

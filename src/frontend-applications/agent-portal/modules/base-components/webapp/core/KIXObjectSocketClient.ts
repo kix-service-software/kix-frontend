@@ -65,10 +65,10 @@ export class KIXObjectSocketClient extends SocketClient {
             kixObjectType, objectIds, loadingOptions, objectLoadingOptions
         );
 
-        const cacheKey = JSON.stringify({ kixObjectType, objectIds, loadingOptions, objectLoadingOptions });
-
         let requestPromise: Promise<T[]>;
         if (cache) {
+            const cacheKey = JSON.stringify({ kixObjectType, objectIds, loadingOptions, objectLoadingOptions });
+
             requestPromise = BrowserCacheService.getInstance().get(cacheKey, kixObjectType);
             if (!requestPromise) {
                 requestPromise = this.createRequestPromise<T>(request, objectConstructors, timeout);
@@ -116,9 +116,6 @@ export class KIXObjectSocketClient extends SocketClient {
 
             objects = newObjects;
         }
-        const objectIds = Array.isArray(request.objectIds)
-            ? request.objectIds.join(',')
-            : request.objectIds;
         return objects;
     }
 

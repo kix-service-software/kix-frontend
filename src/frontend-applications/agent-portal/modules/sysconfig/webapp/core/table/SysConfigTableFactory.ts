@@ -80,7 +80,7 @@ export class SysConfigTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(null, null, null,
-                KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, null, null, tableColumns, [], true, false, null, null,
+                KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, null, 17, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;

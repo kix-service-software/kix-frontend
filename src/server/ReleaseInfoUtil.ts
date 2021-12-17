@@ -7,8 +7,10 @@
  * --
  */
 
+import { release } from 'os';
 import { ReleaseInfo } from '../frontend-applications/agent-portal/model/ReleaseInfo';
 import { SystemInfo } from '../frontend-applications/agent-portal/model/SystemInfo';
+import { PluginService } from './services/PluginService';
 
 export class ReleaseInfoUtil {
 
@@ -36,6 +38,10 @@ export class ReleaseInfoUtil {
             });
 
             const releaseInfo = new ReleaseInfo();
+
+            // add plugins
+            releaseInfo.plugins = PluginService.getInstance().availablePlugins?.map((p) => p[1]);
+
             reader.on('line', (line: string) => {
                 const releaseValue = line.split(' = ');
                 if (releaseValue && releaseValue.length === 2) {

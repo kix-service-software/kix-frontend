@@ -8,16 +8,36 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.configItem)>
+
     <div.ci-label-container>
-        <object-property-label object=state.configItem property="Name" labelProvider=state.labelProvider/>
-        <object-property-label object=state.configItem property="Number" labelProvider=state.labelProvider/>
-        <object-property-label object=state.configItem property="CurDeplStateID" labelProvider=state.labelProvider showIcon=true/>
-        <object-property-label object=state.configItem property="CurInciStateID" labelProvider=state.labelProvider showIcon=true/>
+        <div.ci-link on-click("gotToAsset")>
+            <translation-string pattern="Translatable#Go to Asset"/>
+        </div>
+        <object-property-label
+            object=state.configItem
+            property="Name"
+            labelProvider=state.labelProvider
+        />
+        <object-property-label
+            object=state.configItem
+            property="Number"
+            labelProvider=state.labelProvider
+        />
+        <object-property-label
+            object=state.configItem
+            property="CurDeplStateID"
+            labelProvider=state.labelProvider
+            showIcon
+        />
+        <object-property-label
+            object=state.configItem
+            property="CurInciStateID"
+            labelProvider=state.labelProvider
+            showIcon
+        />
         <div.version-details>
             <${component.getVersionTemplate()} configItem=state.configItem/>
         </div>
     </div>
 </if>
-<else>
-    <span.error>Kein Config Item verfügbar.</span>
-</else>
+<else><span.error>Kein Config Item verfügbar.</span></else>
