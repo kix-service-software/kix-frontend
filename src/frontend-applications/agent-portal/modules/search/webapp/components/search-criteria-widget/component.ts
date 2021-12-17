@@ -107,9 +107,9 @@ class Component {
         this.state.manager?.reset();
 
         const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
-        const cache = context.getSearchCache();
+        const cache = context?.getSearchCache();
 
-        this.state.limit = cache.limit;
+        this.state.limit = cache?.limit;
 
         if (this.state.manager && Array.isArray(cache?.criteria) && cache?.criteria.length) {
             for (const criteria of cache.criteria) {
@@ -153,7 +153,6 @@ class Component {
     public limitChanged(event: any): void {
         this.state.limit = event.target.value;
         const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
-
         const searchCache = context?.getSearchCache();
         if (searchCache) {
             searchCache.limit = this.state.limit;
