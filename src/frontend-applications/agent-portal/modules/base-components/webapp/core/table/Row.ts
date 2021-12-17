@@ -15,13 +15,13 @@ import { TableValue } from './TableValue';
 import { ValueState } from './ValueState';
 import { TableEventData } from './TableEventData';
 import { TableSortUtil } from './TableSortUtil';
-import { IdService } from '../../../../../model/IdService';
 import { UIFilterCriterion } from '../../../../../model/UIFilterCriterion';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectService } from '../KIXObjectService';
 import { EventService } from '../EventService';
 import { SortOrder } from '../../../../../model/SortOrder';
 import { DataType } from '../../../../../model/DataType';
+import { IdService } from '../../../../../model/IdService';
 
 export class Row {
 
@@ -36,7 +36,8 @@ export class Row {
     public filterMatch: boolean = true;
 
     public constructor(private table: Table, private rowObject?: RowObject) {
-        this.id = IdService.generateDateBasedId(table.getTableId() + '-row-');
+        const objectId = rowObject?.getObject()?.ObjectId || IdService.generateDateBasedId();
+        this.id = `${table.getTableId()}-row-${objectId}`;
 
         if (rowObject) {
             rowObject.getValues().forEach((v) => this.cells.push(new Cell(this, v)));
@@ -45,11 +46,7 @@ export class Row {
     }
 
     private createChildren(children: RowObject[]): void {
-        children.forEach((c) => {
-            this.children.push(new Row(this.table, c));
-        }
-
-        );
+        children?.forEach((c) => this.children.push(new Row(this.table, c)));
     }
 
     public initializeDisplayValues(): void {

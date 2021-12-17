@@ -53,7 +53,7 @@ export class Component {
             filteredObjectListChanged: () => null,
             objectChanged: () => null,
             objectListChanged: async (objectType: KIXObjectType | string, objects: KIXObject[]) => {
-                if (objectType === context.getSearchCache()?.objectType) {
+                if (objectType === context?.getSearchCache()?.objectType) {
                     this.prepareTree();
                 }
             },
@@ -73,7 +73,7 @@ export class Component {
         const nodes: TreeNode[] = [];
 
         const context = ContextService.getInstance().getActiveContext<SearchContext>();
-        const searchCache = context.getSearchCache();
+        const searchCache = context?.getSearchCache();
         if (searchCache && categories) {
             const objectService = ServiceRegistry.getServiceInstance<IKIXObjectService>(searchCache.objectType);
             if (objectService) {

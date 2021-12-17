@@ -18,7 +18,7 @@ Feature: As a user I want to get a correct default configuration of a table
         Then DisplayLimit: <displayLimit>
         Examples:
             | selection | toggle | objectType | headerHeight | rowHeight | displayLimit |
-            | 1         | 1      | 'WEBFORM'  | 'l'          | 'l'       | 25           |
+            | 1         | 1      | 'WEBFORM'  | 'l'          | 'l'       | 20           |
 
     Scenario Outline: Table column <column>
         Given Tabelle: <objectType>

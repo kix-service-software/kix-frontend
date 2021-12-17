@@ -50,12 +50,14 @@ export class MacroFieldCreator {
         macroField.options.push(new FormFieldOption(DefaultSelectInputFormOption.NODES, typeNodes));
         macroField.options.push(new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false));
 
-        type = type || macro?.Type;
+        type ||= macro?.Type;
 
         if (parentInstanceId === '') {
             macroField.readonly = true;
-            const typeValue = await formInstance?.getFormFieldValueByProperty<string>(JobProperty.TYPE);
-            type = type || macro ? type : typeValue?.value;
+            if (!type) {
+                const typeValue = await formInstance?.getFormFieldValueByProperty<string>(JobProperty.TYPE);
+                type = typeValue?.value;
+            }
         }
 
         macroField.defaultValue = new FormFieldValue<string>(type);
@@ -67,7 +69,7 @@ export class MacroFieldCreator {
         macroField.instanceId = `${parentInstanceId}###MACRO###${IdService.generateDateBasedId()}`;
         macroField.draggableFields = true;
 
-        if (macro && formInstance && formInstance.getFormContext() === FormContext.EDIT) {
+        if (macro && formInstance?.getFormContext() === FormContext.EDIT) {
             macroField.options.push(new FormFieldOption('MacroId', macro.ID));
 
             if (macro.ExecOrder && macro.ExecOrder.length) {

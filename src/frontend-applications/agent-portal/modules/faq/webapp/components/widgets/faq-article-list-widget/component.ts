@@ -64,7 +64,6 @@ class Component {
 
     public onDestroy(): void {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
-        TableFactoryService.getInstance().destroyTable('faq-articles');
     }
 
     private async contextObjectListChanged(objectList: KIXObject[]): Promise<void> {

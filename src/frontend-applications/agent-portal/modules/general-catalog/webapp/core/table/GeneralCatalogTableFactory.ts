@@ -56,7 +56,7 @@ export class GeneralCatalogTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(null, null, null,
-                KIXObjectType.GENERAL_CATALOG_ITEM, null, null, tableColumns, [], true, false, null, null,
+                KIXObjectType.GENERAL_CATALOG_ITEM, null, 20, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;

@@ -217,14 +217,24 @@ export class DynamicFormFieldValue {
     }
 
     private async setRelativeTimeUnitTree(): Promise<void> {
+        const translations = await TranslationService.createTranslationObject([
+            'Translatable#Year(s)',
+            'Translatable#Month(s)',
+            'Translatable#Week(s)',
+            'Translatable#Day(s)',
+            'Translatable#Hour(s)',
+            'Translatable#Minutes(s)',
+            'Translatable#Seconds(s)'
+        ]);
+
         const timeUnitNodes = [
-            new TreeNode('Y', await TranslationService.translate('Year(s)')),
-            new TreeNode('M', await TranslationService.translate('Month(s)')),
-            new TreeNode('w', await TranslationService.translate('Week(s)')),
-            new TreeNode('d', await TranslationService.translate('Day(s)')),
-            new TreeNode('h', await TranslationService.translate('Hour(s)')),
-            new TreeNode('m', await TranslationService.translate('Minutes(s)')),
-            new TreeNode('s', await TranslationService.translate('Seconds(s)')),
+            new TreeNode('Y', translations['Translatable#Year(s)']),
+            new TreeNode('M', translations['Translatable#Month(s)']),
+            new TreeNode('w', translations['Translatable#Week(s)']),
+            new TreeNode('d', translations['Translatable#Day(s)']),
+            new TreeNode('h', translations['Translatable#Hour(s)']),
+            new TreeNode('m', translations['Translatable#Minutes(s)']),
+            new TreeNode('s', translations['Translatable#Seconds(s)']),
         ];
         this.relativeTimeUnitTreeHandler.setTree(timeUnitNodes);
         const selectedNode = timeUnitNodes.find((n) => n.id === 'm');

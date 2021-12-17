@@ -14,19 +14,41 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <div>${state.item.title}</div>
                 <div.checklist-item-description>${state.item.description}</div>
             </div>
-            <input.input-style.checklist-item-text type="text" value=state.item.value on-change("valueChanged")/>
+            <input.input-style.checklist-item-text
+                type="text"
+                value=(state.item.value)
+                on-change("valueChanged")
+            >
         </if>
+        <else-if(state.item.input === "TextArea")>
+            <div.checklist-item-title>
+                <div>${state.item.title}</div>
+                <div.checklist-item-description>${state.item.description}</div>
+            </div>
+            <textarea.input-style.checklist-item-text
+                value=(state.item.value)
+                on-change("valueChanged")
+            />
+        </else-if>
         <else>
             <div.checklist-item-title>
                 <div>${state.item.title}</div>
                 <div.checklist-item-description>${state.item.description}</div>
             </div>
-            <form-list treeId=state.treeId placeholder=state.placeholder on-nodesChanged("nodesChanged") canRemoveNode=false/>
+            <form-list
+                treeId=state.treeId
+                placeholder=state.placeholder
+                on-nodesChanged("nodesChanged")
+                canRemoveNode=false
+            />
         </else>
         <if(state.item.sub)>
             <div.checklist-sub-item-container>
-                <for|subItem| of=state.item.sub>
-                    <checklist-item item=subItem on-itemValueChanged("itemValueChanged")/>
+                <for|subItem| of=(state.item.sub)>
+                    <checklist-item
+                        item=subItem
+                        on-itemValueChanged("itemValueChanged")
+                    />
                 </for>
             </div>
         </if>

@@ -12,7 +12,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         minimizable=state.minimizable
         contentActions=state.contentActions
         title=state.activeTabTitle>
-        <@headerContent>
+        <@headercontent>
             <if(state.prepared)>
                 <ul.tab-list class={
                     "show-object": state.tabWidgets
@@ -34,7 +34,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </for>
                 </ul>
             </if>
-        </@headerContent>
+        </@headercontent>
         <@content>
             <div.tab-sidebar-grid class={
                 "has-sidebar": state.hasSidebars,

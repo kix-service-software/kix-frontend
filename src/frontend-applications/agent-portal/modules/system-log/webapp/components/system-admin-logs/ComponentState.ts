@@ -7,7 +7,6 @@
  * --
  */
 
-import { IdService } from '../../../../../model/IdService';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
 import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -16,7 +15,7 @@ import { LogFileProperty } from '../../../model/LogFileProperty';
 
 export class ComponentState {
     public constructor(
-        public instanceId: string = IdService.generateDateBasedId('system-admin-logs-list'),
+        public instanceId: string = 'system-admin-logs-list',
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#System: Logs', [], null,
             new TableWidgetConfiguration(null, null, null,

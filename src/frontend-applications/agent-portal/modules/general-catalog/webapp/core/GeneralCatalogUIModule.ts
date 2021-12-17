@@ -24,6 +24,8 @@ import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { FormService } from '../../../base-components/webapp/core/FormService';
+import { GeneralCatalogItemFormFieldValueHandler } from './GeneralCatalogItemFormFieldValueHandler';
 
 export class UIModule implements IUIModule {
 
@@ -42,6 +44,8 @@ export class UIModule implements IUIModule {
         LabelService.getInstance().registerLabelProvider(new GeneralCatalogLabelProvider());
 
         ActionFactory.getInstance().registerAction('admin-general-catalog-create', GeneralCatalogCreateAction);
+
+        FormService.getInstance().addFormFieldValueHandler(new GeneralCatalogItemFormFieldValueHandler());
 
         const newGeneralCatalogDialogContext = new ContextDescriptor(
             NewGeneralCatalogDialogContext.CONTEXT_ID, [KIXObjectType.GENERAL_CATALOG_ITEM],

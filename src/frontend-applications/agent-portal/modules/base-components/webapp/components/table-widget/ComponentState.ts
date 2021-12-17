@@ -18,6 +18,7 @@ export class ComponentState extends WidgetComponentState {
     public constructor(
         public table: Table = null,
         public predefinedTableFilter: KIXObjectPropertyFilter[] = [],
+        public predefinedFilterName: string = null,
         public actions: IAction[] = [],
         public title: string = null,
         public icon: string | ObjectIcon = null,

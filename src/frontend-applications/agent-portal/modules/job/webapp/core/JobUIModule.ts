@@ -25,6 +25,7 @@ import { SyncJobFormManager } from './SyncJobFormManager';
 import { JobRunHistoryTableFactory } from './table/JobRunHistoryTableFactory';
 import { JobRunLabelProvider } from './JobRunLabelProvider';
 import { JobRunLogLabelProvider } from './JobRunLogLabelProvider';
+import { JobTableDeleteAction } from './actions/JobTableDeleteAction';
 import { JobRunLogTableFactory } from './table/JobRunLogTableFactory';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
@@ -84,6 +85,8 @@ export class UIModule implements IUIModule {
             undefined, false
         );
         ContextService.getInstance().registerContext(newJobDialogContext);
+
+        ActionFactory.getInstance().registerAction('job-table-delete', JobTableDeleteAction);
 
         ActionFactory.getInstance().registerAction('job-edit-action', JobEditAction);
         const editJobDialogContext = new ContextDescriptor(

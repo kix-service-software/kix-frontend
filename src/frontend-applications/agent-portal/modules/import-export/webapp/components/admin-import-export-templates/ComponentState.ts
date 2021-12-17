@@ -7,7 +7,6 @@
  * --
  */
 
-import { IdService } from '../../../../../model/IdService';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
 import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -23,7 +22,7 @@ import { FilterDataType } from '../../../../../model/FilterDataType';
 
 export class ComponentState {
     public constructor(
-        public instanceId: string = IdService.generateDateBasedId('assets-import-export-templates-list'),
+        public instanceId: string = 'admin-assets-import-export-templates-list',
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Assets: Import/Export',
             ['template-import-action', 'template-export-action'], null,

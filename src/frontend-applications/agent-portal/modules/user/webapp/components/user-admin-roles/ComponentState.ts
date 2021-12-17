@@ -20,14 +20,15 @@ export class ComponentState {
     public constructor(
         public instanceId: string = IdService.generateDateBasedId('user-admin-users'),
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
-            'table-widget', 'Translatable#User Management: Roles', [
-            'user-admin-role-create-action', 'user-admin-role-table-delete-action',
-            'import-action', 'csv-export-action'
-        ], null,
+            'table-widget', 'Translatable#User Management: Roles',
+            [
+                'user-admin-role-create-action', 'user-admin-role-table-delete-action',
+                'import-action', 'csv-export-action'
+            ],
+            null,
             new TableWidgetConfiguration(
                 null, null, null, KIXObjectType.ROLE, [RoleProperty.NAME, SortOrder.UP]
-            ), false, false,
-            'kix-icon-gears'
+            ), false, false, 'kix-icon-gears'
         )
     ) { }
 

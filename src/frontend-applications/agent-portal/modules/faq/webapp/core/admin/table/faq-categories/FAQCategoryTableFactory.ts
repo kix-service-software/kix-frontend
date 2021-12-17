@@ -61,7 +61,7 @@ export class FAQCategoryTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(null, null, null,
-                KIXObjectType.FAQ_CATEGORY, null, null, tableColumns, [], true, false, null, null,
+                KIXObjectType.FAQ_CATEGORY, null, 20, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;

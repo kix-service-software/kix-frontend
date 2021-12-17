@@ -58,7 +58,7 @@ export class NotificationTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(null, null, null,
-                KIXObjectType.NOTIFICATION, null, null, tableColumns, [], true, false, null, null,
+                KIXObjectType.NOTIFICATION, null, 20, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;

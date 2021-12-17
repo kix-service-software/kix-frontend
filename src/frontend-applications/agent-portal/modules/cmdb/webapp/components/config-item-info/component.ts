@@ -10,6 +10,8 @@
 import { ComponentState } from './ComponentState';
 
 import { KIXModulesService } from '../../../../base-components/webapp/core/KIXModulesService';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { ConfigItemDetailsContext } from '../../core';
 
 class Component {
 
@@ -29,6 +31,12 @@ class Component {
 
     public getVersionTemplate(): any {
         return KIXModulesService.getComponentTemplate('config-item-version-details');
+    }
+
+    public gotToAsset(): void {
+        ContextService.getInstance().setActiveContext(
+            ConfigItemDetailsContext.CONTEXT_ID, this.state.configItem?.ConfigItemID
+        );
     }
 
 }

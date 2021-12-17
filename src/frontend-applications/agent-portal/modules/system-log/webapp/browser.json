@@ -1,6 +1,8 @@
 {
     "dependencies": [
         "require ./components/system-admin-logs",
+        "require ./components/system-admin-logfile-view",
+        "require ./components/system-logfile-view-cell",
         "require ./core"
     ]
 }

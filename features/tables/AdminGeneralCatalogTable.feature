@@ -17,8 +17,8 @@ Feature: Als Nutzer möchte ich eine korrekte Standardkonfiguration für eine Ta
         Then Zeilengröße: <rowHeight>
         Then DisplayLimit: <displayLimit>
         Examples:
-            | selection | toggle | objectType | headerHeight | rowHeight | displayLimit |
-            | 1         | 0      | 'GeneralCatalogItem'    | 'l'          | 'l'       | 25           |
+            | selection | toggle | objectType           | headerHeight | rowHeight | displayLimit |
+            | 1         | 0      | 'GeneralCatalogItem' | 'l'          | 'l'       | 20           |
 
     Scenario Outline: Tabelle mit korrekter Spalte <column>
         Given Tabelle: <objectType>
@@ -33,10 +33,10 @@ Feature: Als Nutzer möchte ich eine korrekte Standardkonfiguration für eine Ta
         Then Die Spalte <column> zeigt Spaltenbezeichnung an: <columnTitle>
         Then Die Spalte <column> zeigt Spaltenicon an: <columnIcon>
         Examples:
-            | column       | sortable | filterable | listFilter | width | flexible | showText | showIcon | type       | columnTitle | columnIcon | objectType              |
-            | 'Class'      | 1        | 1          | 0          | 300   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'GeneralCatalogItem'    |
-            | 'Name'       | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'GeneralCatalogItem'    |
-            | 'Comment'    | 1        | 1          | 0          | 350   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'GeneralCatalogItem'    |
-            | 'ValidID'    | 1        | 1          | 1          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'GeneralCatalogItem'    |
-            | 'ChangeTime' | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'DATETIME' | 1           | 0          | 'GeneralCatalogItem'    |
-            | 'ChangeBy'   | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'GeneralCatalogItem'    |
+            | column       | sortable | filterable | listFilter | width | flexible | showText | showIcon | type       | columnTitle | columnIcon | objectType           |
+            | 'Class'      | 1        | 1          | 0          | 300   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'GeneralCatalogItem' |
+            | 'Name'       | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'GeneralCatalogItem' |
+            | 'Comment'    | 1        | 1          | 0          | 350   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'GeneralCatalogItem' |
+            | 'ValidID'    | 1        | 1          | 1          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'GeneralCatalogItem' |
+            | 'ChangeTime' | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'DATETIME' | 1           | 0          | 'GeneralCatalogItem' |
+            | 'ChangeBy'   | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'GeneralCatalogItem' |

@@ -142,17 +142,15 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         let objects = [];
         if (objectIds) {
             if (objectIds.length) {
-                const loadedObjects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
+                objects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
                     objectType, objectConstructors, objectIds, loadingOptions, objectLoadingOptions, cache
                 );
-                objects = loadedObjects;
             }
         } else {
             objects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
                 objectType, objectConstructors, objectIds, loadingOptions, objectLoadingOptions, cache
             );
         }
-
         return objects;
     }
 
@@ -736,6 +734,12 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         const dynamicFields: DynamicField[] = await KIXObjectService.loadDynamicFields(objectType);
         if (Array.isArray(dynamicFields) && dynamicFields.length) {
             properties = dynamicFields.map((df) => df.Name);
+        }
+        for (const extendedService of this.extendedServices) {
+            const extendedNodes = await extendedService.getObjectProperties(objectType);
+            if (extendedNodes?.length) {
+                properties.push(...extendedNodes);
+            }
         }
         return properties;
     }

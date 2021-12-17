@@ -1,0 +1,8 @@
+{
+    "dependencies": [
+        "require ./components/graph-explorer",
+        "require ./components/graph-module",
+        "require ./components/graph-widget",
+        "require ./core/GraphUIModule"
+    ]
+}

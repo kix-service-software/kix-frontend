@@ -96,7 +96,10 @@ class Component {
     private async updateSidebars(context: Context): Promise<void> {
         this.state.sidebars = [];
         if (context) {
-            const sidebars = this.state.isLeft ? context.getSidebarsLeft() : context.getSidebarsRight();
+            const sidebars = this.state.isLeft
+                ? await context.getSidebarsLeft()
+                : await context.getSidebarsRight();
+
             if (Array.isArray(sidebars)) {
                 for (const cw of sidebars) {
                     const template = await this.getSidebarTemplate(cw.instanceId);

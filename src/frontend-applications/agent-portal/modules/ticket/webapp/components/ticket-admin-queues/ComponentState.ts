@@ -7,7 +7,6 @@
  * --
  */
 
-import { IdService } from '../../../../../model/IdService';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
 import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -26,7 +25,7 @@ import { TableRowHeight } from '../../../../../model/configuration/TableRowHeigh
 export class ComponentState {
 
     public constructor(
-        public instanceId: string = IdService.generateDateBasedId('ticket-queues-list'),
+        public instanceId: string = 'admin-ticket-queues-list',
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Ticket: Queues',
             [

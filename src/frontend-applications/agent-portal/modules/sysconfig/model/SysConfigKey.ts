@@ -69,6 +69,8 @@ export enum SysConfigKey {
 
     DYNAMIC_FIELD_OBJECT_TYPE = 'DynamicFields::ObjectType',
 
-    FQDN = 'FQDN'
+    FQDN = 'FQDN',
+
+    GENERAL_CATALOG_PREFERENCES = 'GeneralCatalogPreferences'
 
 }

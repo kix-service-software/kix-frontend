@@ -37,8 +37,8 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState> {
     private async doUpdate(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
-        this.state.formContext = formInstance.getFormContext();
-        this.state.field = formInstance.getFormField(this.state.field?.instanceId);
+        this.state.formContext = formInstance?.getFormContext();
+        this.state.field = formInstance?.getFormField(this.state.field?.instanceId);
     }
 
     public async onMount(): Promise<void> {

@@ -14,15 +14,15 @@ import { PropertyOperator } from '../../../../modules/base-components/webapp/cor
 import { PropertyOperatorUtil } from '../../../../modules/base-components/webapp/core/PropertyOperatorUtil';
 import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
-import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { DynamicFieldFormUtil } from '../../../base-components/webapp/core/DynamicFieldFormUtil';
 import { ValidationSeverity } from '../../../base-components/webapp/core/ValidationSeverity';
 import { ValidationResult } from '../../../base-components/webapp/core/ValidationResult';
 import { SearchOperator } from '../../../search/model/SearchOperator';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 
 export abstract class BulkManager extends AbstractDynamicFormManager {
 
-    public abstract objectType: KIXObjectType | string = KIXObjectType.ANY;
+    public abstract objectType: KIXObjectType | string;
     public objects: KIXObject[] = [];
 
     private bulkRun: boolean = false;
@@ -49,59 +49,6 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
 
     public showValueInput(value: ObjectPropertyValue): boolean {
         return Boolean(value.property && value.operator && value.operator !== PropertyOperator.CLEAR);
-    }
-
-    public async execute(object: KIXObject): Promise<void> {
-        const edTableValues = await this.getEditableValues();
-        if (edTableValues.some((v) => !v.valid)) {
-            return;
-        }
-
-        this.bulkRun = true;
-        const parameter: Array<[string, any]> = [];
-
-        const values = edTableValues.filter(
-            (v) => !v.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
-        );
-
-        for (const v of values) {
-            const isMultiSelect = await this.isMultiselect(v.property, v.operator);
-            parameter.push([
-                v.property,
-                v.operator === PropertyOperator.CLEAR
-                    ? null
-                    : !isMultiSelect && Array.isArray(v.value) ? v.value[0] : v.value
-            ]);
-        }
-
-        const dfObjectValues = [];
-        const dynamicFieldValues = edTableValues.filter(
-            (v) => v.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
-        );
-        for (const dfValue of dynamicFieldValues) {
-            const dfName = KIXObjectService.getDynamicFieldName(dfValue.property);
-            let value = dfObjectValues.find((v) => v.Name === dfName);
-            if (!value) {
-                value = {
-                    Name: dfName,
-                    Value: []
-                };
-                dfObjectValues.push(value);
-            }
-            if (dfValue.operator === PropertyOperator.CLEAR) {
-                value.Value = null;
-            } else if (Array.isArray(dfValue.value)) {
-                value.Value = dfValue.value;
-            } else if (!value.Value.some((v) => v === dfValue.value)) {
-                value.Value.push(dfValue.value);
-            }
-        }
-
-        if (dfObjectValues.length) {
-            parameter.push([KIXObjectProperty.DYNAMIC_FIELDS, dfObjectValues]);
-        }
-
-        await KIXObjectService.updateObject(this.objectType, parameter, object.ObjectId, false);
     }
 
     public async getEditableValues(): Promise<ObjectPropertyValue[]> {
@@ -131,5 +78,55 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
             return result;
         }
         return false;
+    }
+
+    public async prepareParameter(): Promise<Array<[string, any]>> {
+        const edTableValues = await this.getEditableValues();
+        if (edTableValues.some((v) => !v.valid)) {
+            return;
+        }
+
+        const parameter: Array<[string, any]> = [];
+
+        const values = edTableValues.filter(
+            (v) => !v.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
+        );
+
+        for (const v of values) {
+            const isMultiSelect = await this.isMultiselect(v.property, v.operator);
+            const value = v.operator === PropertyOperator.CLEAR
+                ? null
+                : !isMultiSelect && Array.isArray(v.value) ? v.value[0] : v.value;
+            parameter.push([v.property, value]);
+        }
+
+        const dfObjectValues = [];
+        const dynamicFieldValues = edTableValues.filter(
+            (v) => v.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
+        );
+        for (const dfValue of dynamicFieldValues) {
+            const dfName = KIXObjectService.getDynamicFieldName(dfValue.property);
+            let value = dfObjectValues.find((v) => v.Name === dfName);
+            if (!value) {
+                value = {
+                    Name: dfName,
+                    Value: []
+                };
+                dfObjectValues.push(value);
+            }
+            if (dfValue.operator === PropertyOperator.CLEAR) {
+                value.Value = null;
+            } else if (Array.isArray(dfValue.value)) {
+                value.Value = dfValue.value;
+            } else if (!value.Value.some((v) => v === dfValue.value)) {
+                value.Value.push(dfValue.value);
+            }
+        }
+
+        if (dfObjectValues.length) {
+            parameter.push([KIXObjectProperty.DYNAMIC_FIELDS, dfObjectValues]);
+        }
+
+        return parameter;
     }
 }

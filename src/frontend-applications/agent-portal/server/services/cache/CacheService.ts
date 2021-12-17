@@ -140,6 +140,7 @@ export class CacheService {
                 cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM_CLASS);
                 cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
+                cacheKeyPrefixes.push(KIXObjectType.GRAPH);
                 break;
             case KIXObjectType.PERSONAL_SETTINGS:
             case KIXObjectType.USER_PREFERENCE:
@@ -159,6 +160,7 @@ export class CacheService {
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
                 cacheKeyPrefixes.push(KIXObjectType.LINK);
                 cacheKeyPrefixes.push(KIXObjectType.LINK_OBJECT);
+                cacheKeyPrefixes.push(KIXObjectType.GRAPH);
                 break;
             case KIXObjectType.ORGANISATION:
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
@@ -190,6 +192,7 @@ export class CacheService {
                 cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
                 cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
+                cacheKeyPrefixes.push(KIXObjectType.GRAPH);
                 break;
             case KIXObjectType.SYS_CONFIG_OPTION_DEFINITION:
                 cacheKeyPrefixes.push(KIXObjectType.SYS_CONFIG_OPTION);

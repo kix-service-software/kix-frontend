@@ -16,8 +16,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 "with-sortable": state.column.getColumnConfiguration().sortable,
                 "filter-is-shown": state.filterIsShown,
                 "filter-hovered": state.filterHovered
-            }>
-            <span.icons on-click("sort")>
+            }
+            on-click("sort")>
+            <span.icons>
                 <if(
                     state.column.getColumnConfiguration().showColumnIcon &&
                     state.icon
@@ -25,7 +26,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <icon icon=state.icon showUnknown=false/>
                 </if>
             </span>
-            <div on-click("sort")>
+            <div>
                 <span.column-tilte-text>
                     <if(state.column.getColumnConfiguration().showColumnTitle)>${state.title}</if>
                 </span>

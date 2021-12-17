@@ -49,7 +49,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 ),
                 new DefaultColumnConfiguration(
                     null, null, null, 'value', true, true, true, false,
-                    100, false, false, false, DataType.STRING, true, null, stateTitle
+                    100, false, false, false, DataType.STRING, true, 'dynamic-field-checklist-text-cell',
+                    stateTitle
                 )
             ];
 

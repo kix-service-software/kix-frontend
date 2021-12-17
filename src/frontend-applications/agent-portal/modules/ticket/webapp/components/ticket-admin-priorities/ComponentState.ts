@@ -7,7 +7,6 @@
  * --
  */
 
-import { IdService } from '../../../../../model/IdService';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
 import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -18,7 +17,7 @@ import { SortOrder } from '../../../../../model/SortOrder';
 export class ComponentState {
 
     public constructor(
-        public instanceId: string = IdService.generateDateBasedId('ticket-priorities-list'),
+        public instanceId: string = 'admin-ticket-priorities-list',
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Ticket: Priorities',
             [

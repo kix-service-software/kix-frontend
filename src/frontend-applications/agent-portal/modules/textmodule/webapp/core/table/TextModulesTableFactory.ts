@@ -68,7 +68,7 @@ export class TextModulesTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(null, null, null,
-                KIXObjectType.TEXT_MODULE, null, null, tableColumns, [], true, false, null, null,
+                KIXObjectType.TEXT_MODULE, null, 17, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
         } else if (!tableConfiguration.tableColumns) {

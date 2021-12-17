@@ -23,6 +23,10 @@ import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 import { Socket } from 'socket.io';
 import { LoggingService } from '../../../../server/services/LoggingService';
+import { UserService } from '../../modules/user/server/UserService';
+import { TranslationAPIService } from '../../modules/translation/server/TranslationService';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { ObjectIconService } from '../../modules/icon/server/ObjectIconService';
 
 export class AuthenticationService {
 
@@ -167,6 +171,9 @@ export class AuthenticationService {
             'auth', userLogin, null, clientRequestId, undefined, false
         );
         const token = fakeLogin ? response.Token : this.createToken(user, response.Token, remoteAddress);
+        await UserService.getInstance().getUserByToken(token, true).catch(() => null);
+        await TranslationAPIService.getInstance().loadObjects(token, 'login', KIXObjectType.TRANSLATION, null, null, null);
+        await ObjectIconService.getInstance().getObjectIcons(token);
         return token;
     }
 

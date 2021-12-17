@@ -22,6 +22,8 @@ export class ComponentInput {
 
     public predefinedFilter: KIXObjectPropertyFilter[];
 
+    public predefinedFilterName: string;
+
     public filterValue: string;
 
 }

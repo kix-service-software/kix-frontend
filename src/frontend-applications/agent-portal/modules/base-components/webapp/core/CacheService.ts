@@ -167,6 +167,8 @@ export class BrowserCacheService {
             case KIXObjectType.CONFIG_ITEM:
             case KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION:
                 cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM_CLASS);
+                cacheKeyPrefixes.push(KIXObjectType.GRAPH);
+                cacheKeyPrefixes.push(KIXObjectType.GRAPH_INSTANCE);
                 break;
             case KIXObjectType.PERSONAL_SETTINGS:
             case KIXObjectType.USER_PREFERENCE:
@@ -186,6 +188,8 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
                 cacheKeyPrefixes.push(KIXObjectType.LINK);
                 cacheKeyPrefixes.push(KIXObjectType.LINK_OBJECT);
+                cacheKeyPrefixes.push(KIXObjectType.GRAPH);
+                cacheKeyPrefixes.push(KIXObjectType.GRAPH_INSTANCE);
                 break;
             case KIXObjectType.ORGANISATION:
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
@@ -227,6 +231,8 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
                 cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
+                cacheKeyPrefixes.push(KIXObjectType.GRAPH);
+                cacheKeyPrefixes.push(KIXObjectType.GRAPH_INSTANCE);
                 break;
             case KIXObjectType.GENERAL_CATALOG_ITEM:
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);

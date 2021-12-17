@@ -52,11 +52,11 @@ export class AdminContext extends Context {
             url = this.descriptor.urlPaths[0];
             const params = [];
             if (this.adminModuleId) {
-                params.push(`moduleId=${this.adminModuleId}`);
+                params.push(`moduleId=${encodeURIComponent(this.adminModuleId)}`);
             }
 
             if (this.filterValue) {
-                params.push(`filter=${this.filterValue}`);
+                params.push(`filter=${encodeURIComponent(this.filterValue)}`);
             }
 
             if (params.length) {

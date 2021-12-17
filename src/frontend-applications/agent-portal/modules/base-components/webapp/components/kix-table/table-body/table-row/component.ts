@@ -12,6 +12,7 @@ import { AbstractMarkoComponent } from '../../../../core/AbstractMarkoComponent'
 import { IEventSubscriber } from '../../../../core/IEventSubscriber';
 import { EventService } from '../../../../core/EventService';
 import { TableEvent, TableEventData, Column, Cell, TableCSSHandlerRegistry } from '../../../../core/table';
+import { ClientStorageService } from '../../../../core/ClientStorageService';
 
 class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
 
