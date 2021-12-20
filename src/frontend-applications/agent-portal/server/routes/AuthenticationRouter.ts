@@ -19,7 +19,6 @@ import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { SysConfigKey } from '../../modules/sysconfig/model/SysConfigKey';
 import { SysConfigOption } from '../../modules/sysconfig/model/SysConfigOption';
 import { PluginService } from '../../../../server/services/PluginService';
-
 import { IMarkoApplication } from '../extensions/IMarkoApplication';
 import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
 import { LoggingService } from '../../../../server/services/LoggingService';

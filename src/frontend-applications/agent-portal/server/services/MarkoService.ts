@@ -33,6 +33,7 @@ export class MarkoService {
     }
 
     private ready: boolean = false;
+    private appNames: string[] = [];
 
     private constructor() {
         let configName = 'lasso.dev.config.json';
@@ -119,19 +120,39 @@ export class MarkoService {
 
         LoggingService.getInstance().info(`Build ${applications.length} marko applications`);
 
+        const buildPromises = [];
+        this.appNames = applications.map((a) => a.name);
         for (const app of applications) {
-            LoggingService.getInstance().info(`Build marko app ${app.name}`);
+            LoggingService.getInstance().info(`[MARKO] Start - App Build ${app.name}`);
 
             const folder = app.internal ? 'modules' : 'plugins';
             const templatePath = path.join(__dirname, '..', '..', folder, app.name, app.path);
             const template = require(templatePath).default;
-            await template.render({}).catch((error) => {
-                ProfilingService.getInstance().stop(profileTaskId, { data: [`marko app build error: ${app.name}`] });
-                LoggingService.getInstance().error(error);
-            });
-            LoggingService.getInstance().info(`marko app build finished: ${app.name}`);
+            buildPromises.push(this.buildApplication(template, app));
         }
+
+        await Promise.all(buildPromises);
+
         this.ready = true;
+        ProfilingService.getInstance().stop(profileTaskId);
+    }
+
+    private async buildApplication(template: any, app: IMarkoApplication): Promise<void> {
+        const profileTaskId = ProfilingService.getInstance().start('MarkoService', `Build App ${app.name}`);
+
+        const startBuild = Date.now();
+        await template.render({}).catch((error) => {
+            ProfilingService.getInstance().stop(profileTaskId, { data: [`[MARKO] ERROR - App Build for ${app.name}`] });
+            LoggingService.getInstance().error(error);
+        });
+        const endBuild = Date.now();
+
+        const index = this.appNames.findIndex((a) => a === app.name);
+        if (index !== -1) {
+            this.appNames.splice(index, 1);
+        }
+
+        LoggingService.getInstance().info(`[MARKO] Finished - App Build for ${app.name} in ${(endBuild - startBuild) / 1000}s.`);
         ProfilingService.getInstance().stop(profileTaskId);
     }
 
@@ -148,7 +169,9 @@ export class MarkoService {
     private async waitForReadyState(): Promise<void> {
         return new Promise<void>((resolve) => {
             setTimeout(() => {
-                LoggingService.getInstance().info('App build in progress');
+                if (!this.ready) {
+                    LoggingService.getInstance().info(`[MARKO] In Progress - App Build ${this.appNames.join(', ')}`);
+                }
                 resolve();
             }, 6000);
         });

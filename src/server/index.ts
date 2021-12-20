@@ -27,21 +27,23 @@ class Startup {
         const dataDir = path.join(__dirname, '..', '..', 'data');
         ConfigurationService.getInstance().init(configDir, certDir, dataDir);
 
+        LoggingService.getInstance().info('[SERVER] Start');
+
         const pluginDirs = [
             'frontend-applications',
             'frontend-applications/agent-portal/modules'
         ];
         await PluginService.getInstance().init(pluginDirs.map((pd) => path.join('..', pd)));
 
-        await Server.createClientRegistration();
-
         try {
+            const startUpBegin = Date.now();
             await Server.getInstance().initServer();
+            const startUpEnd = Date.now();
+            LoggingService.getInstance().info(`[SERVER] Ready - Startup in ${(startUpEnd - startUpBegin) / 1000}s`);
         } catch (error) {
             LoggingService.getInstance().error('Could not initialize server');
             LoggingService.getInstance().error(error);
         }
-
     }
 }
 
