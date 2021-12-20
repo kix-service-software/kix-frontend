@@ -17,10 +17,9 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import { TableEvent, TableFactoryService, TableEventData, Table, ValueState } from '../../../../base-components/webapp/core/table';
 import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
-import { EditLinkedObjectsDialogContext, LinkService, LinkUtil } from '../../core';
+import { EditLinkedObjectsDialogContext, LinkService } from '../../core';
 import { FormContext } from '../../../../../model/configuration/FormContext';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
@@ -30,6 +29,11 @@ import { TableHeaderHeight } from '../../../../../model/configuration/TableHeade
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
 import { LinkType } from '../../../model/LinkType';
+import { Table } from '../../../../table/model/Table';
+import { TableEvent } from '../../../../table/model/TableEvent';
+import { TableEventData } from '../../../../table/model/TableEventData';
+import { ValueState } from '../../../../table/model/ValueState';
+import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 
 class LinkDialogComponent {
 

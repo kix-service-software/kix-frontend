@@ -7,15 +7,17 @@
  * --
  */
 
-import { TableContentProvider } from '../../../../../base-components/webapp/core/table/TableContentProvider';
+import { TableContentProvider } from '../../../../../table/webapp/core/TableContentProvider';
 import { Version } from '../../../../model/Version';
-import { Table, RowObject, TableValue } from '../../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
 import { DateTimeUtil } from '../../../../../../modules/base-components/webapp/core/DateTimeUtil';
 import { VersionProperty } from '../../../../model/VersionProperty';
+import { RowObject } from '../../../../../table/model/RowObject';
+import { Table } from '../../../../../table/model/Table';
+import { TableValue } from '../../../../../table/model/TableValue';
 
 export class ConfigItemVersionContentProvider extends TableContentProvider<Version> {
 

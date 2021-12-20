@@ -7,9 +7,8 @@
  * --
  */
 
-import { TableContentProvider } from '../../../../../../base-components/webapp/core/table/TableContentProvider';
+import { TableContentProvider } from '../../../../../../table/webapp/core/TableContentProvider';
 import { TranslationLanguage } from '../../../../../model/TranslationLanguage';
-import { Table, RowObject, TableValue } from '../../../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../../../../modules/base-components/webapp/core/ContextService';
@@ -18,6 +17,9 @@ import { SortUtil } from '../../../../../../../model/SortUtil';
 import { TranslationLanguageProperty } from '../../../../../model/TranslationLanguageProperty';
 import { DataType } from '../../../../../../../model/DataType';
 import { SortOrder } from '../../../../../../../model/SortOrder';
+import { RowObject } from '../../../../../../table/model/RowObject';
+import { Table } from '../../../../../../table/model/Table';
+import { TableValue } from '../../../../../../table/model/TableValue';
 
 export class TranslationLanguageTableContentProvider extends TableContentProvider<TranslationLanguage> {
 

@@ -24,7 +24,7 @@ import { DefaultColumnConfiguration } from '../../../../model/configuration/Defa
 import { IColumnConfiguration } from '../../../../model/configuration/IColumnConfiguration';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
-import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { AbstractDynamicFormManager } from '../../../base-components/webapp/core/dynamic-form';
 import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
 import { SearchCache } from '../../model/SearchCache';

@@ -7,10 +7,9 @@
  * --
  */
 
-import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
+import { TableFactory } from '../../../../table/webapp/core/factory/TableFactory';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
-import { Table, TableEvent, TableEventData } from '../../../../base-components/webapp/core/table';
 import { LogFileTableContentProvider } from './LogFileTableContentProvider';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
@@ -23,6 +22,9 @@ import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { LogFileProperty } from '../../../model/LogFileProperty';
 import { LogFile } from '../../../model/LogFile';
+import { Table } from '../../../../table/model/Table';
+import { TableEvent } from '../../../../table/model/TableEvent';
+import { TableEventData } from '../../../../table/model/TableEventData';
 
 export class LogFileTableFactory extends TableFactory {
 

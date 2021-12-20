@@ -11,7 +11,7 @@ import { AbstractAction } from '../../../../base-components/webapp/core/Abstract
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { Row } from '../../../../base-components/webapp/core/table';
+import { Row } from '../../../../table/model/Row';
 import { OverlayService } from '../../../../base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../../base-components/webapp/core/OverlayType';
 import { StringContent } from '../../../../base-components/webapp/core/StringContent';

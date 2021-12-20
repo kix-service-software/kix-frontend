@@ -7,10 +7,9 @@
  * --
  */
 
-import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
+import { TableFactory } from '../../../../table/webapp/core/factory/TableFactory';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
-import { Table, Row, Column } from '../../../../base-components/webapp/core/table';
 import { FAQArticleTableContentProvider } from '.';
 import { FAQArticleProperty } from '../../../model/FAQArticleProperty';
 import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
@@ -23,6 +22,9 @@ import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
 import { FAQVote } from '../../../model/FAQVote';
 import { SearchCache } from '../../../../search/model/SearchCache';
+import { Column } from '../../../../table/model/Column';
+import { Row } from '../../../../table/model/Row';
+import { Table } from '../../../../table/model/Table';
 
 export class FAQArticleTableFactory extends TableFactory {
 

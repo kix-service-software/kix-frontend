@@ -7,17 +7,15 @@
  * --
  */
 
-import { TableFactory } from '../../../../../../base-components/webapp/core/table/TableFactory';
+import { TableFactory } from '../../../../../../table/webapp/core/factory/TableFactory';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../../../model/configuration/TableConfiguration';
-import { Table } from '../../../../../../base-components/webapp/core/table';
 import { TranslationLanguageTableContentProvider } from '.';
-import {
-    DefaultColumnConfiguration
-} from '../../../../../../../model/configuration/DefaultColumnConfiguration';
+import { DefaultColumnConfiguration } from '../../../../../../../model/configuration/DefaultColumnConfiguration';
 import { TranslationLanguageProperty } from '../../../../../model/TranslationLanguageProperty';
 import { TableHeaderHeight } from '../../../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../../../model/configuration/TableRowHeight';
+import { Table } from '../../../../../../table/model/Table';
 
 export class TranslationLanguageTableFactory extends TableFactory {
 

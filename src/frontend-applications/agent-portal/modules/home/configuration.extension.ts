@@ -32,7 +32,7 @@ import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetC
 import { SortOrder } from '../../model/SortOrder';
 import { DefaultColumnConfiguration } from '../../model/configuration/DefaultColumnConfiguration';
 import { DataType } from '../../model/DataType';
-import { ToggleOptions } from '../base-components/webapp/core/table';
+import { ToggleOptions } from '../table/model/ToggleOptions';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {

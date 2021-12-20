@@ -15,7 +15,7 @@ import {
     MailAccountTableDeleteAction, EditMailAccountDialogContext, MailAccountDetailsContext
 } from '.';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
@@ -59,7 +59,7 @@ export class UIModule implements IUIModule {
 
         ActionFactory.getInstance().registerAction('mail-account-edit', MailAccountEditAction);
         ActionFactory.getInstance().registerAction('mail-account-fetch', MailAccountFetchAction);
-        ActionFactory.getInstance().registerAction('mail-account-table-delete', MailAccountTableDeleteAction );
+        ActionFactory.getInstance().registerAction('mail-account-table-delete', MailAccountTableDeleteAction);
 
         const editMailAccountDialogContext = new ContextDescriptor(
             EditMailAccountDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_ACCOUNT],

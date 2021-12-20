@@ -13,7 +13,7 @@ import { KIXObjectPropertyFilter } from '../../../../../../model/KIXObjectProper
 import { UIFilterCriterion } from '../../../../../../model/UIFilterCriterion';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
 import { WidgetService } from '../../../../../../modules/base-components/webapp/core/WidgetService';
-import { TableFactoryService } from '../../../../../base-components/webapp/core/table';
+import { TableFactoryService } from '../../../../../table/webapp/core/factory/TableFactoryService';
 import { KIXObject } from '../../../../../../model/kix/KIXObject';
 import { ServiceRegistry } from '../../../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';

@@ -9,7 +9,7 @@
 
 import { IUIModule } from '../../../../model/IUIModule';
 import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
-import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { ImportExportService } from './ImportExportService';
 import { ImportExportTemplateLabelProvider } from './ImportExportTemplateLabelProvider';

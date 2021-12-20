@@ -17,7 +17,6 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { Contact } from '../../../model/Contact';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import { TableEvent, TableFactoryService, TableEventData, Table } from '../../../../base-components/webapp/core/table';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { TicketProperty } from '../../../../ticket/model/TicketProperty';
@@ -34,6 +33,10 @@ import { TableRowHeight } from '../../../../../model/configuration/TableRowHeigh
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { StateType } from '../../../../ticket/model/StateType';
 import { TicketState } from '../../../../ticket/model/TicketState';
+import { Table } from '../../../../table/model/Table';
+import { TableEvent } from '../../../../table/model/TableEvent';
+import { TableEventData } from '../../../../table/model/TableEventData';
+import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 
 class Component {
 

@@ -11,14 +11,11 @@
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 
-import {
-    FAQAdminUIModule, NewFAQCategoryDialogContext, EditFAQCategoryDialogContext,
-    FAQCategoryDetailsContext, FAQCategoryLabelProvider, FAQCategoryTableFactory, FAQCategoryFormService
-} from '../webapp/core';
+import { FAQAdminUIModule, FAQCategoryLabelProvider, FAQCategoryTableFactory, FAQCategoryFormService } from '../webapp/core';
 import { ActionFactory } from '../../base-components/webapp/core/ActionFactory';
 import { LabelService } from '../../base-components/webapp/core/LabelService';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
-import { TableFactoryService } from '../../base-components/webapp/core/table';
+import { TableFactoryService } from '../../table/webapp/core/factory/TableFactoryService';
 import { ServiceType } from '../../base-components/webapp/core/ServiceType';
 import { ServiceRegistry } from '../../base-components/webapp/core/ServiceRegistry';
 import { CRUD } from '../../../../../server/model/rest/CRUD';

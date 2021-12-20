@@ -8,7 +8,7 @@
  */
 
 import { FormInputComponentState } from '../../../../base-components/webapp/core/FormInputComponentState';
-import { Table } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../table/model/Table';
 
 export class ComponentState extends FormInputComponentState {
 

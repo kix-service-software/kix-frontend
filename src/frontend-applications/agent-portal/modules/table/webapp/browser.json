@@ -1,0 +1,6 @@
+{
+    "dependencies": [
+        "./components",
+        "require ./core/TableUIModule"
+    ]
+}

@@ -8,7 +8,7 @@
  */
 
 import { AbstractAction } from '../../../../base-components/webapp/core/AbstractAction';
-import { Table } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../table/model/Table';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ComponentContent } from '../../../../base-components/webapp/core/ComponentContent';
 import { ConfirmOverlayContent } from '../../../../base-components/webapp/core/ConfirmOverlayContent';

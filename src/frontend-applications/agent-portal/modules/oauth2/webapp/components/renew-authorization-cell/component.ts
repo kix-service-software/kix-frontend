@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { Cell } from '../../../../base-components/webapp/core/table';
+import { Cell } from '../../../../table/model/Cell';
 import { OAuth2Profile } from '../../../model/OAuth2Profile';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';

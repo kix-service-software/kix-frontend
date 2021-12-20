@@ -15,11 +15,7 @@ import { IEventSubscriber } from '../../../../base-components/webapp/core/IEvent
 import { ActionFactory } from '../../../../base-components/webapp/core/ActionFactory';
 import { WidgetService } from '../../../../base-components/webapp/core/WidgetService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
-import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
-import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
-import { TableFactoryService, TableEventData, TableEvent, TableContentProvider, TableValue, RowObject } from '../../../../base-components/webapp/core/table';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { UserProperty } from '../../../model/UserProperty';
@@ -29,6 +25,12 @@ import { SortOrder } from '../../../../../model/SortOrder';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { AdminContext } from '../../../../admin/webapp/core/AdminContext';
 import { AgentService } from '../../core/AgentService';
+import { RowObject } from '../../../../table/model/RowObject';
+import { TableEvent } from '../../../../table/model/TableEvent';
+import { TableEventData } from '../../../../table/model/TableEventData';
+import { TableValue } from '../../../../table/model/TableValue';
+import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
+import { TableContentProvider } from '../../../../table/webapp/core/TableContentProvider';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

@@ -8,7 +8,7 @@
  */
 
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
-import { Table } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../table/model/Table';
 import { Version } from '../../../model/Version';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { CompareConfigItemVersionContext } from '../context';

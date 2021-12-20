@@ -11,7 +11,7 @@ import { LogFileTableFactory } from './table/LogFileTableFactory';
 import { LogFileLabelProvider } from './LogFileLabelProvider';
 import { LogFileService } from './LogFileService';
 import { IUIModule } from '../../../../model/IUIModule';
-import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';

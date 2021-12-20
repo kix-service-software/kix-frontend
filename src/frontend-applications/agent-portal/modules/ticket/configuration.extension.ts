@@ -44,7 +44,7 @@ import { FormPageConfiguration } from '../../model/configuration/FormPageConfigu
 import { FormConfiguration } from '../../model/configuration/FormConfiguration';
 import { FormContext } from '../../model/configuration/FormContext';
 import { ModuleConfigurationService } from '../../server/services/configuration';
-import { ToggleOptions } from '../base-components/webapp/core/table';
+import { ToggleOptions } from '../table/model/ToggleOptions';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {

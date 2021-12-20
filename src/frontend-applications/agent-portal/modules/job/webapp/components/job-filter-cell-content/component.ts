@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { Cell } from '../../../../base-components/webapp/core/table';
+import { Cell } from '../../../../table/model/Cell';
 import { JobFilterTableProperty } from '../../../../job/webapp/core/table/JobFilterTableProperty';
 import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFieldTypes';
 import { SearchService } from '../../../../search/webapp/core';

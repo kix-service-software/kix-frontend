@@ -1,0 +1,10 @@
+{
+    "taglibImports": [
+        "../../icon/webapp/marko.json",
+        "./components/kix-table/marko.json"
+    ],
+    "tags-dir": [
+        "./components/",
+        "./components/kix-table"
+    ]
+}

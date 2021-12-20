@@ -22,7 +22,7 @@ import { ConfigItemClassDefinitionProperty } from './model/ConfigItemClassDefini
 import { SortOrder } from '../../model/SortOrder';
 import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
 import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
-import { ToggleOptions } from '../base-components/webapp/core/table';
+import { ToggleOptions } from '../table/model/ToggleOptions';
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 

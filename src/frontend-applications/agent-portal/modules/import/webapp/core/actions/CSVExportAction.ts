@@ -8,8 +8,9 @@
  */
 
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
-import { Table, TableExportUtil } from '../../../../base-components/webapp/core/table';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { Table } from '../../../../table/model/Table';
+import { TableExportUtil } from '../../../../table/webapp/core/TableExportUtil';
 
 export class CSVExportAction extends AbstractAction<Table> {
 

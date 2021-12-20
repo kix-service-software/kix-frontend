@@ -7,9 +7,10 @@
  * --
  */
 
-import { ITableCSSHandler, TableValue } from '../../../../base-components/webapp/core/table';
 import { SysConfigOptionDefinition } from '../../../model/SysConfigOptionDefinition';
 import { SysConfigAccessLevel } from '../../../model/SysConfigAccessLevel';
+import { TableValue } from '../../../../table/model/TableValue';
+import { ITableCSSHandler } from '../../../../table/webapp/core/css-handler/ITableCSSHandler';
 
 export class SysConfigTableCSSHandler implements ITableCSSHandler<SysConfigOptionDefinition> {
 

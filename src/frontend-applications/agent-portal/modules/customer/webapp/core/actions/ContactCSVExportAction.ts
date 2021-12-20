@@ -7,7 +7,7 @@
  * --
  */
 
-import { TableExportUtil } from '../../../../base-components/webapp/core/table';
+import { TableExportUtil } from '../../../../table/webapp/core/TableExportUtil';
 import { ContactProperty } from '../../../model/ContactProperty';
 import { CSVExportAction } from '../../../../import/webapp/core/actions';
 

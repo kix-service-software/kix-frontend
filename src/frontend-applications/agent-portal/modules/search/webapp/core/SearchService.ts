@@ -9,7 +9,6 @@
 
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { Table, TableFactoryService } from '../../../base-components/webapp/core/table';
 import { SearchDefinition } from './SearchDefinition';
 import { SearchResultCategory } from './SearchResultCategory';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
@@ -34,6 +33,8 @@ import { SearchCache } from '../../model/SearchCache';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { SearchContext } from './SearchContext';
 import { ContextMode } from '../../../../model/ContextMode';
+import { Table } from '../../../table/model/Table';
+import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 
 export class SearchService {
 

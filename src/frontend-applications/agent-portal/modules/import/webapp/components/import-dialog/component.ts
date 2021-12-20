@@ -18,7 +18,6 @@ import { ContextService } from '../../../../../modules/base-components/webapp/co
 import { ImportService, ImportPropertyOperator } from '../../core';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import { TableEvent, TableFactoryService, TableEventData, ValueState } from '../../../../base-components/webapp/core/table';
 import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { FormGroupConfiguration } from '../../../../../model/configuration/FormGroupConfiguration';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
@@ -45,6 +44,10 @@ import { Error } from '../../../../../../../server/model/Error';
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
 import { Context } from '../../../../../model/Context';
+import { TableEvent } from '../../../../table/model/TableEvent';
+import { TableEventData } from '../../../../table/model/TableEventData';
+import { ValueState } from '../../../../table/model/ValueState';
+import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 
 class Component {
 
@@ -162,7 +165,7 @@ class Component {
             this.state.importManager.unregisterListener(this.formListenerId);
             this.state.importManager.reset();
         }
-            }
+    }
 
     private async prepareImportConfigForm(): Promise<void> {
         const formGroup = new FormGroupConfiguration(

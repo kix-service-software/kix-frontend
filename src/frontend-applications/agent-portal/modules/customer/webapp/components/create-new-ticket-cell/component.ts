@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { Cell } from '../../../../base-components/webapp/core/table';
+import { Cell } from '../../../../table/model/Cell';
 import { Contact } from '../../../model/Contact';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { NewTicketDialogContext } from '../../../../ticket/webapp/core';

@@ -16,7 +16,7 @@ import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
-import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { ReportDefinitionTableFactory, ReportTableFactory } from './table';
 import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
 import { ReportService } from './ReportService';

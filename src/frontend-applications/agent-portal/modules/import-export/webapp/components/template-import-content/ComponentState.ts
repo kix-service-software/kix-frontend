@@ -8,7 +8,7 @@
  */
 
 import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
-import { Table } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../table/model/Table';
 import { ImportExportTemplate } from '../../../model/ImportExportTemplate';
 
 export class ComponentState extends AbstractComponentState {

@@ -8,16 +8,17 @@
  */
 
 import { MacroActionTableContentProvider } from './MacroActionTableContentProvider';
-import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
+import { TableFactory } from '../../../../table/webapp/core/factory/TableFactory';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
-import { Table, ToggleOptions } from '../../../../base-components/webapp/core/table';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
 import { MacroActionProperty } from '../../../model/MacroActionProperty';
 import { DataType } from '../../../../../model/DataType';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
+import { Table } from '../../../../table/model/Table';
+import { ToggleOptions } from '../../../../table/model/ToggleOptions';
 
 export class MacroActionTableFactory extends TableFactory {
 

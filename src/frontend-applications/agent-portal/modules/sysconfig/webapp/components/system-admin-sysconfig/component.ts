@@ -11,8 +11,7 @@ import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { SysConfigOptionDefinitionProperty } from '../../../model/SysConfigOptionDefinitionProperty';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { RowObject, TableValue, TableFactoryService, TableEvent, TableEventData } from '../../../../base-components/webapp/core/table';
-import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
+import { TableContentProvider } from '../../../../table/webapp/core/TableContentProvider';
 import { SysConfigOptionDefinition } from '../../../model/SysConfigOptionDefinition';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
@@ -32,6 +31,11 @@ import { SysConfigOptionProperty } from '../../../model/SysConfigOptionProperty'
 import { SortOrder } from '../../../../../model/SortOrder';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { AdminContext } from '../../../../admin/webapp/core/AdminContext';
+import { RowObject } from '../../../../table/model/RowObject';
+import { TableEvent } from '../../../../table/model/TableEvent';
+import { TableEventData } from '../../../../table/model/TableEventData';
+import { TableValue } from '../../../../table/model/TableValue';
+import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

@@ -11,7 +11,7 @@ import { AbstractAction } from '../../../../base-components/webapp/core/Abstract
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { Table } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../table/model/Table';
 
 
 export default class ConfigItemPrintAction extends AbstractAction<Table> {
@@ -30,11 +30,11 @@ export default class ConfigItemPrintAction extends AbstractAction<Table> {
         if (context) {
             const assetId = context.getObjectId();
             const printFrame: any = document.createElement('iframe');
-            printFrame.src = `/cmdb/configitems/${ assetId }/print`;
+            printFrame.src = `/cmdb/configitems/${assetId}/print`;
             document.body.appendChild(printFrame);
 
             EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, {loading: true, hint: 'Translatable#Prepare asset for print'}
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Prepare asset for print' }
             );
 
             printFrame.onload = (): void => {
@@ -43,7 +43,7 @@ export default class ConfigItemPrintAction extends AbstractAction<Table> {
                     window.frames[window.frames.length - 1].print();
                     document.body.removeChild(printFrame);
                     EventService.getInstance().publish(
-                        ApplicationEvent.APP_LOADING, {loading: false}
+                        ApplicationEvent.APP_LOADING, { loading: false }
                     );
                 }, 5000);
             };

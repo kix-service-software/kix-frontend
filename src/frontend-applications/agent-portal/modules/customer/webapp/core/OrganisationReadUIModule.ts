@@ -15,7 +15,7 @@ import {
     OrganisationSearchAction
 } from '.';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
-import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { OrganisationTableFactory } from './table/OrganisationTableFactory';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';

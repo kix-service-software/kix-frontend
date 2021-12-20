@@ -10,11 +10,11 @@
 import { DefaultColumnConfiguration } from '../../../../../../model/configuration/DefaultColumnConfiguration';
 import { IColumnConfiguration } from '../../../../../../model/configuration/IColumnConfiguration';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { TableFactoryService } from '../../../../../table/webapp/core/factory/TableFactoryService';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { AbstractMarkoComponent } from '../../../core/AbstractMarkoComponent';
 import { KIXObjectService } from '../../../core/KIXObjectService';
 import { LabelService } from '../../../core/LabelService';
-import { TableFactoryService } from '../../../core/table';
 import { TreeHandler, TreeNode, TreeService } from '../../../core/tree';
 import { ComponentState } from './ComponentState';
 

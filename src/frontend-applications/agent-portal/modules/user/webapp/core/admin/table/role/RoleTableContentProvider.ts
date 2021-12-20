@@ -7,11 +7,11 @@
  * --
  */
 
-import { TableContentProvider } from '../../../../../../base-components/webapp/core/table/TableContentProvider';
 import { Role } from '../../../../../model/Role';
-import { Table } from '../../../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
+import { TableContentProvider } from '../../../../../../table/webapp/core/TableContentProvider';
+import { Table } from '../../../../../../table/model/Table';
 
 export class RoleTableContentProvider extends TableContentProvider<Role> {
 

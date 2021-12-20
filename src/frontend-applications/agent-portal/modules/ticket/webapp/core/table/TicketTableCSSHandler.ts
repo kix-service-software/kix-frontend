@@ -7,10 +7,11 @@
  * --
  */
 
-import { ITableCSSHandler, TableValue } from '../../../../base-components/webapp/core/table';
 import { Ticket } from '../../../model/Ticket';
 import { TicketProperty } from '../../../model/TicketProperty';
 import { SysConfigService } from '../../../../sysconfig/webapp/core';
+import { TableValue } from '../../../../table/model/TableValue';
+import { ITableCSSHandler } from '../../../../table/webapp/core/css-handler/ITableCSSHandler';
 
 export class TicketTableCSSHandler implements ITableCSSHandler<Ticket> {
 

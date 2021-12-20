@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { Cell, TableFactoryService, TableExportUtil } from '../../../../base-components/webapp/core/table';
 import { JobRun } from '../../../model/JobRun';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -18,6 +17,9 @@ import { SortOrder } from '../../../../../model/SortOrder';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { Job } from '../../../model/Job';
 import { DateTimeUtil } from '../../../../base-components/webapp/core/DateTimeUtil';
+import { Cell } from '../../../../table/model/Cell';
+import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
+import { TableExportUtil } from '../../../../table/webapp/core/TableExportUtil';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

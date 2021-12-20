@@ -16,7 +16,6 @@ import {
     TextModuleTableDeleteAction
 } from '.';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { TableFactoryService } from '../../../base-components/webapp/core/table';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
 import { TextModuleCSVExportAction } from './actions/TextModuleCSVExportAction';
@@ -27,6 +26,7 @@ import { ContextService } from '../../../../modules/base-components/webapp/core/
 import { TextModuleDuplicateAction } from './actions';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 
 export class UIModule implements IUIModule {
 

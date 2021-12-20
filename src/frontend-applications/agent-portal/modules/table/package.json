@@ -1,0 +1,10 @@
+{
+    "name": "kix-module-table",
+    "extensions": {
+        "kix:modules": {
+            "table-module": {
+                "module": "kix-module.extension"
+            }
+        }
+    }
+}

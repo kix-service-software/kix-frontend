@@ -7,9 +7,8 @@
  * --
  */
 
-import { Table, TableHeaderHeight, TableRowHeight } from '../../../base-components/webapp/core/table';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { TableFactory } from '../../../base-components/webapp/core/table/TableFactory';
+import { TableFactory } from '../../../table/webapp/core/factory/TableFactory';
 import { DynamicFieldProperty } from '../../model/DynamicFieldProperty';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { IColumnConfiguration } from '../../../../model/configuration/IColumnConfiguration';
@@ -18,6 +17,9 @@ import { TableConfiguration } from '../../../../model/configuration/TableConfigu
 import { DefaultColumnConfiguration } from '../../../../model/configuration/DefaultColumnConfiguration';
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
 import { EditDynamicFieldDialogContext } from './EditDynamicFieldDialogContext';
+import { Table } from '../../../table/model/Table';
+import { TableHeaderHeight } from '../../../table/model/TableHeaderHeight';
+import { TableRowHeight } from '../../../table/model/TableRowHeight';
 
 export class DynamicFieldTableFactory extends TableFactory {
 

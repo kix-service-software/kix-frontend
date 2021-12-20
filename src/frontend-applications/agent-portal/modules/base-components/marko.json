@@ -1,7 +1,7 @@
 {
     "taglibImports": [
         "../icon/webapp/marko.json",
-        "./webapp/components/kix-table/marko.json"
+        "../table/webapp/marko.json"
     ],
     "tags-dir": [
         "./webapp/components/",
@@ -10,7 +10,6 @@
         "./webapp/components/form-list-tree",
         "./webapp/components/label-list",
         "./webapp/components/main-form",
-        "./webapp/components/kix-table",
         "./webapp/components/tree",
         "./webapp/components/overlay",
         "./webapp/components/placeholder",

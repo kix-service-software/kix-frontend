@@ -22,9 +22,9 @@ import { ImportPropertyOperator } from './ImportPropertyOperator';
 import { ImportPropertyOperatorUtil } from './ImportPropertyOperatorUtil';
 import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
 import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
-import { Column } from '../../../base-components/webapp/core/table';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { Error } from '../../../../../../server/model/Error';
+import { Column } from '../../../table/model/Column';
 
 export abstract class ImportManager extends AbstractDynamicFormManager {
 

@@ -10,8 +10,10 @@
 // tslint:disable
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
+import { Row } from '../../table/model/Row';
+import { RowObject } from '../../table/model/RowObject';
+import { Table } from '../../table/model/Table';
 import { ConfigItemVersionCompareAction } from '../webapp/core';
-import { Table, Row, RowObject } from '../../base-components/webapp/core/table';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

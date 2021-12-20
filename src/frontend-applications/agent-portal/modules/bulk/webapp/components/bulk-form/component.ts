@@ -10,7 +10,6 @@
 import { ComponentState } from './ComponentState';
 import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import { TableEvent, TableFactoryService, TableEventData, ValueState } from '../../../../base-components/webapp/core/table';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
@@ -27,6 +26,10 @@ import { OverlayType } from '../../../../base-components/webapp/core/OverlayType
 import { ValidationSeverity } from '../../../../base-components/webapp/core/ValidationSeverity';
 import { LinkManager } from '../../../../links/webapp/core/LinkManager';
 import { BulkRunner } from '../../core/BulkRunner';
+import { TableEvent } from '../../../../table/model/TableEvent';
+import { TableEventData } from '../../../../table/model/TableEventData';
+import { ValueState } from '../../../../table/model/ValueState';
+import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 
 class Component {
 

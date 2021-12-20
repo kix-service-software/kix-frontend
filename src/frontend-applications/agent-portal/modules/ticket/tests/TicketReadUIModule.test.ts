@@ -19,13 +19,14 @@ import { ActionFactory } from '../../base-components/webapp/core/ActionFactory';
 import { PlaceholderService } from '../../base-components/webapp/core/PlaceholderService';
 import { SearchService } from '../../search/webapp/core';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
-import { TableFactoryService, TableCSSHandlerRegistry } from '../../base-components/webapp/core/table';
 import { ArticleTableFactory } from '../webapp/core/table/ArticleTableFactory';
 import { LabelService } from '../../base-components/webapp/core/LabelService';
 import { ChannelLabelProvider } from '../webapp/core/ChannelLabelProvider';
 import { ServiceRegistry } from '../../base-components/webapp/core/ServiceRegistry';
 import { ChannelService } from '../webapp/core/ChannelService';
 import { ServiceType } from '../../base-components/webapp/core/ServiceType';
+import { TableCSSHandlerRegistry } from '../../table/webapp/core/css-handler/TableCSSHandlerRegistry';
+import { TableFactoryService } from '../../table/webapp/core/factory/TableFactoryService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

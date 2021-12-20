@@ -8,8 +8,8 @@
  */
 
 import { IdService } from '../../../../../model/IdService';
-import { Table } from '../../../../base-components/webapp/core/table';
 import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
+import { Table } from '../../../../table/model/Table';
 
 export class ComponentState extends AbstractComponentState {
 

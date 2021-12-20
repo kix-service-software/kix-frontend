@@ -15,7 +15,7 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
 import { IdService } from '../../../../../model/IdService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { TableEvent } from '../../../../base-components/webapp/core/table';
+import { TableEvent } from '../../../../table/model/TableEvent';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
