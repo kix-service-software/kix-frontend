@@ -21,6 +21,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private instanceId: string;
     private subscriber: IEventSubscriber;
+    private selectionTimeout;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -54,13 +55,19 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                                 );
                             }
                         }, 150);
-                    } else if (eventId === TableEvent.ROW_SELECTION_CHANGED &&
-                        data.table.getObjectType() === KIXObjectType.REPORT_DEFINITION) {
-                        context.setFilteredObjectList(
-                            KIXObjectType.REPORT_DEFINITION,
-                            data.table.getSelectedRows().map((r) => r.getRowObject().getObject())
-                        );
-                        this.state.prepared = true;
+                    } else if (
+                        eventId === TableEvent.ROW_SELECTION_CHANGED &&
+                        data.table.getObjectType() === KIXObjectType.REPORT_DEFINITION &&
+                        !this.selectionTimeout // wait for possible further selection changes (select ALL)
+                    ) {
+                        this.selectionTimeout = setTimeout(() => {
+                            context.setFilteredObjectList(
+                                KIXObjectType.REPORT_DEFINITION,
+                                data.table.getSelectedRows().map((r) => r.getRowObject().getObject())
+                            );
+                            this.state.prepared = true;
+                            this.selectionTimeout = null;
+                        }, 200);
                     }
                 }
             };
