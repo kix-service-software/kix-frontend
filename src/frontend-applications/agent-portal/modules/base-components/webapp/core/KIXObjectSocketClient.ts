@@ -116,9 +116,6 @@ export class KIXObjectSocketClient extends SocketClient {
 
             objects = newObjects;
         }
-        const objectIds = Array.isArray(request.objectIds)
-            ? request.objectIds.join(',')
-            : request.objectIds;
         return objects;
     }
 

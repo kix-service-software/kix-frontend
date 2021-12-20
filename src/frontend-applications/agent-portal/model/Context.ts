@@ -34,6 +34,7 @@ import { ContextStorageManager } from './ContextStorageManager';
 import { ContextEvents } from '../modules/base-components/webapp/core/ContextEvents';
 import { ContextPreference } from './ContextPreference';
 import { AgentService } from '../modules/user/webapp/core/AgentService';
+import { IEventSubscriber } from '../modules/base-components/webapp/core/IEventSubscriber';
 
 export abstract class Context {
 
@@ -54,6 +55,8 @@ export abstract class Context {
     private scrollInormation: [KIXObjectType | string, string | number] = null;
     protected displayText: string;
     protected icon: ObjectIcon | string;
+
+    private eventSubsriber: IEventSubscriber;
 
     public constructor(
         public descriptor: ContextDescriptor,
@@ -87,10 +90,10 @@ export abstract class Context {
 
             this.contextId = descriptor.contextId;
 
-            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, {
-                eventSubscriberId: this.descriptor.contextId + '-update-listener',
-                eventPublished: async (data: any) => {
-                    if (data && data.objectType) {
+            this.eventSubsriber = {
+                eventSubscriberId: this.instanceId,
+                eventPublished: async (data: any, eventId: string): Promise<void> => {
+                    if (eventId === ApplicationEvent.OBJECT_UPDATED && data?.objectType) {
                         if (this.objectLists.has(data.objectType)) {
                             this.deleteObjectList(data.objectType);
                         }
@@ -101,17 +104,23 @@ export abstract class Context {
                         ) {
                             await this.getObject(data.objectType, true);
                         }
+                    } else if (
+                        eventId === ContextEvents.CONTEXT_UPDATE_REQUIRED &&
+                        data?.instanceId === this.instanceId
+                    ) {
+                        this.deleteObjectLists();
                     }
                 }
-            });
+            };
+
+            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.eventSubsriber);
+            EventService.getInstance().subscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.eventSubsriber);
         }
     }
 
     public async destroy(): Promise<void> {
-        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, {
-            eventSubscriberId: this.descriptor.contextId + '-update-listener',
-            eventPublished: null
-        });
+        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.eventSubsriber);
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.eventSubsriber);
 
         return;
     }
@@ -297,6 +306,11 @@ export abstract class Context {
         }
     }
 
+    public deleteObjectLists(): void {
+        this.objectLists.clear();
+        this.listeners.forEach((l) => l.objectListChanged(null, []));
+    }
+
     public async setObjectId(objectId: string | number, objectType: KIXObjectType | string): Promise<void> {
         this.objectId = objectId;
         this.getObject(objectType, true);
@@ -331,7 +345,7 @@ export abstract class Context {
         }
     }
 
-    public getLanes(show: boolean = false): ConfiguredWidget[] {
+    public async getLanes(show: boolean = false): Promise<ConfiguredWidget[]> {
         let lanes = this.configuration.lanes;
 
         if (show) {
@@ -340,7 +354,8 @@ export abstract class Context {
             );
         }
 
-        return lanes;
+        const allowedWidgets = await this.filterAllowedWidgets(lanes);
+        return allowedWidgets;
     }
 
     public async getContent(show: boolean = false): Promise<ConfiguredWidget[]> {
@@ -354,27 +369,44 @@ export abstract class Context {
 
         const userWidgets = await this.getUserWidgetList('content');
         const widgets = this.mergeWidgetLists(content, userWidgets);
-        return widgets;
+
+        const allowedWidgets = await this.filterAllowedWidgets(widgets);
+        return allowedWidgets;
     }
 
-    public getSidebarsLeft(show: boolean = false): ConfiguredWidget[] {
+    public async getSidebarsLeft(show: boolean = false): Promise<ConfiguredWidget[]> {
         let sidebarsLeft = this.configuration.explorer;
 
         if (show && sidebarsLeft) {
             sidebarsLeft = sidebarsLeft.filter((sb) => this.openSidebarWidgets.some((s) => sb.instanceId === s));
         }
 
-        return sidebarsLeft;
+        const allowedWidgets = await this.filterAllowedWidgets(sidebarsLeft);
+        return allowedWidgets;
     }
 
-    public getSidebarsRight(show: boolean = false): ConfiguredWidget[] {
+    public async getSidebarsRight(show: boolean = false): Promise<ConfiguredWidget[]> {
         let sidebarsRight = this.configuration.sidebars;
 
         if (show && sidebarsRight) {
             sidebarsRight = sidebarsRight.filter((sb) => this.openSidebarWidgets.some((s) => sb.instanceId === s));
         }
 
-        return sidebarsRight;
+        const allowedWidgets = await this.filterAllowedWidgets(sidebarsRight);
+        return allowedWidgets;
+    }
+
+    private async filterAllowedWidgets(widgets: ConfiguredWidget[]): Promise<ConfiguredWidget[]> {
+        const allowedWidgets: ConfiguredWidget[] = [];
+        for (const widget of widgets) {
+            if (Array.isArray(widget.permissions)) {
+                const allowed = await AuthenticationSocketClient.getInstance().checkPermissions(widget.permissions);
+                if (allowed) {
+                    allowedWidgets.push(widget);
+                }
+            }
+        }
+        return allowedWidgets;
     }
 
     private async getUserWidgetList(contextWidgetList: string): Promise<Array<string | ConfiguredWidget>> {

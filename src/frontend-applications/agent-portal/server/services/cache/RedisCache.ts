@@ -31,7 +31,7 @@ export class RedisCache implements ICache {
     private getAsync: (key: string) => Promise<string>;
     private setAsync: (key: string, value: string) => Promise<void>;
     private delAsync: (key: string) => Promise<void>;
-    private keysAsync: (pattern: string) => Promise<string[]>;
+    private scanAsync: (cursor: any, match: string, pattern: string) => Promise<string[]>;
 
     private constructor() {
 
@@ -56,7 +56,7 @@ export class RedisCache implements ICache {
 
     public async clear(ignoreKeyPrefixes: string[] = []): Promise<void> {
         LoggingService.getInstance().info('Clear Cache: (ignore) ' + ignoreKeyPrefixes.join(', '));
-        let keys = await this.keysAsync(`${this.KIX_CACHE_PREFIX}::*`);
+        let keys = await this.scan(`${this.KIX_CACHE_PREFIX}::*`);
         keys = keys.filter((k) => !ignoreKeyPrefixes.some((p) => k.startsWith(`${this.KIX_CACHE_PREFIX}::${p}`)));
         for (const key of keys) {
             await this.delete(key);
@@ -81,7 +81,7 @@ export class RedisCache implements ICache {
     }
 
     public async getAll(cacheKeyPrefix: string): Promise<any[]> {
-        const keys = await this.keysAsync(`${this.KIX_CACHE_PREFIX}::${cacheKeyPrefix}::*`)
+        const keys = await this.scan(`${this.KIX_CACHE_PREFIX}::${cacheKeyPrefix}::*`)
             .catch((error) => {
                 LoggingService.getInstance().error(error);
                 this.checkConnection();
@@ -125,7 +125,7 @@ export class RedisCache implements ICache {
     }
 
     public async deleteKeys(cacheKeyPrefix: string): Promise<void> {
-        const keys = await this.keysAsync(`${this.KIX_CACHE_PREFIX}::${cacheKeyPrefix}::*`)
+        const keys = await this.scan(`${this.KIX_CACHE_PREFIX}::${cacheKeyPrefix}::*`)
             .catch(() => {
                 this.checkConnection();
                 return null;
@@ -184,7 +184,21 @@ export class RedisCache implements ICache {
         this.getAsync = promisify(this.redisClient.get).bind(this.redisClient);
         this.setAsync = promisify(this.redisClient.set).bind(this.redisClient);
         this.delAsync = promisify(this.redisClient.del).bind(this.redisClient);
-        this.keysAsync = promisify(this.redisClient.keys).bind(this.redisClient);
+        this.scanAsync = promisify(this.redisClient.scan).bind(this.redisClient);
+    }
+
+    private async scan(pattern: string): Promise<string[]> {
+        const found = [];
+        let cursor = '0';
+
+        do {
+            const reply = await this.scanAsync(cursor, 'MATCH', pattern);
+
+            cursor = reply[0];
+            found.push(...reply[1]);
+        } while (cursor !== '0');
+
+        return found;
     }
 
 }

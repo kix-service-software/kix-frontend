@@ -82,7 +82,10 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
     ): Promise<FilterCriteria[]> {
         criteria = await super.prepareFormFilterCriteria(criteria, forSearch);
 
-        const classIdCriteria = criteria.find((c) => c.property === ConfigItemProperty.CLASS_ID);
+        const classIdCriteria = criteria.find(
+            (c) => c.property === ConfigItemProperty.CLASS_ID || c.property === 'ClassIDs'
+        );
+
         let classIds;
         if (classIdCriteria) {
             classIds = Array.isArray(classIdCriteria.value) ? classIdCriteria.value : [classIdCriteria.value];
@@ -109,10 +112,12 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 case ConfigItemProperty.CUR_DEPL_STATE_ID:
                     searchCriteria.property = 'DeplStateIDs';
                     searchCriteria.type = FilterDataType.NUMERIC;
+                    newCriteria.push(searchCriteria);
                     break;
                 case ConfigItemProperty.CUR_INCI_STATE_ID:
                     searchCriteria.property = 'InciStateIDs';
                     searchCriteria.type = FilterDataType.NUMERIC;
+                    newCriteria.push(searchCriteria);
                     break;
                 case VersionProperty.NUMBER:
                 case KIXObjectProperty.CHANGE_BY:

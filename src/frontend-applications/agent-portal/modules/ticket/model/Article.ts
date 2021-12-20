@@ -129,12 +129,19 @@ export class Article extends KIXObject {
             this.bodyAttachment = article.bodyAttachment;
 
             if (this.Attachments) {
-                const bodyAttachmentIndex = article.Attachments.findIndex(
+                let attachmentIndex = article.Attachments.findIndex(
                     (a) => a.Disposition === 'inline' && a.Filename === 'file-2'
                 );
-                if (bodyAttachmentIndex > -1) {
-                    this.bodyAttachment = article.Attachments[bodyAttachmentIndex];
-                    this.Attachments.splice(bodyAttachmentIndex, 1);
+
+                if (attachmentIndex === -1) {
+                    const attachmentNames = ['file-1', 'file-1.html'];
+                    attachmentIndex = article.Attachments.findIndex(
+                        (a) => a.Disposition === 'inline' && attachmentNames.some((an) => an === a.Filename)
+                    );
+                }
+
+                if (attachmentIndex > -1) {
+                    this.bodyAttachment = article.Attachments[attachmentIndex];
                 }
             }
 

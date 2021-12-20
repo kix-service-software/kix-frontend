@@ -30,6 +30,7 @@ import { FormFieldValue } from '../../model/configuration/FormFieldValue';
 import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { DefaultSelectInputFormOption } from '../../model/configuration/DefaultSelectInputFormOption';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -96,10 +97,10 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'dynamic-field-new-form-field-object-type',
-                'Translatable#Object Type', DynamicFieldProperty.OBJECT_TYPE, 'object-reference-input', true,
+                'Translatable#Object Type', DynamicFieldProperty.OBJECT_TYPE, 'default-select-input', true,
                 'Translatable#Helptext_Admin_DynamicFieldCreate_ObjectType',
                 [
-                    new FormFieldOption(ObjectReferenceOptions.ADDITIONAL_NODES, [
+                    new FormFieldOption(DefaultSelectInputFormOption.NODES, [
                         new TreeNode(KIXObjectType.CONTACT, 'Contact', 'kix-icon-man-bubble'),
                         new TreeNode(KIXObjectType.FAQ_ARTICLE, 'FAQ', 'kix-icon-faq'),
                         new TreeNode(KIXObjectType.ORGANISATION, 'Organisation', 'kix-icon-organisation'),

@@ -100,7 +100,7 @@ export class UIModule implements IUIModule {
         FormValidationService.getInstance().registerValidator(new DynamicFieldDateTimeValidator());
         FormValidationService.getInstance().registerValidator(new DynamicFieldTableValidator());
 
-        await this.registerSchemas();
+        this.registerSchemas();
     }
 
     // tslint:disable:max-line-length
@@ -120,12 +120,12 @@ export class UIModule implements IUIModule {
         this.defaultValueTitle = await TranslationService.translate('Translatable#Default Value');
         this.defaultValueDescription = await TranslationService.translate('Translatable#The initial value of the field if shown in edit mode for the first time. Applies to first item of array only.');
 
-        await this.registerSchemaForText();
-        await this.registerSchemaForTextArea();
-        await this.registerSchemaForDate();
-        await this.registerSchemaForDateTime();
-        await this.registerSchemaForSelection();
-        await this.registerSchemaForCheckList();
+        this.registerSchemaForText();
+        this.registerSchemaForTextArea();
+        this.registerSchemaForDate();
+        this.registerSchemaForDateTime();
+        this.registerSchemaForSelection();
+        this.registerSchemaForCheckList();
         DynamicFieldService.getInstance().registerConfigSchemaHandler(
             DynamicFieldTypes.CI_REFERENCE, this.getSchemaForCIReference.bind(this)
         );

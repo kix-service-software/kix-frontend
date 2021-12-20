@@ -76,9 +76,9 @@ class Testtable extends Table {
     public constructor(private rowsSelected: boolean) {
         super(null, null, null);
         this.testRows = [
-            new Row(this, 1, new RowObject([], {})),
-            new Row(this, 2, new RowObject([], {})),
-            new Row(this, 3, new RowObject([], {}))
+            new Row(this, new RowObject([], {})),
+            new Row(this, new RowObject([], {})),
+            new Row(this, new RowObject([], {}))
         ]
     }
 

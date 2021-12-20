@@ -44,7 +44,7 @@ export abstract class GraphInstance<N extends GraphD3Node = GraphD3Node, L exten
     }
 
     public async createGraph(
-        containerId: string, width: string = '100%', height: string = '600'
+        containerId: string, width: string = '100%', height: string = '1200'
     ): Promise<void> {
         this.nodes = await this.createD3Nodes(this.graph);
         this.links = await this.createD3Links(this.graph, this.nodes);

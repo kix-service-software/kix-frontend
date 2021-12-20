@@ -63,7 +63,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async prepareConfigurations(): Promise<void> {
 
-        const lanes = this.context?.getLanes(true);
+        const lanes = await this.context?.getLanes(true);
         if (Array.isArray(lanes)) {
             for (const lane of lanes) {
                 const template = await this.getWidgetTemplate(lane.instanceId);

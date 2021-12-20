@@ -162,7 +162,7 @@ export class QueueService extends KIXObjectService<Queue> {
                 )
             ],
             null, null,
-            withData ? [QueueProperty.SUB_QUEUES, 'TicketStats', 'Tickets'] : [QueueProperty.SUB_QUEUES],
+            withData ? [QueueProperty.SUB_QUEUES, 'TicketStats'] : [QueueProperty.SUB_QUEUES],
             [QueueProperty.SUB_QUEUES],
             withData ? [['TicketStats.StateType', 'Open']] : undefined
         );
