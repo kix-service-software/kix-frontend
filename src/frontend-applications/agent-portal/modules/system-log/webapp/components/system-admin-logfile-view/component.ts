@@ -9,26 +9,34 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { TreeHandler, TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { LogFile } from '../../../model/LogFile';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { LogFileProperty } from '../../../model/LogFileProperty';
-import { ContextNamespace } from '../../../../../server/socket-namespaces/ContextNamespace';
+import { Context } from '../../../../../model/Context';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { LogTier } from '../../../model/LogTier';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
+    private context: Context;
+    private logFile: LogFile;
+    private logLevel: string[];
+    private intervalId: number;
+
     public onCreate(): void {
         this.state = new ComponentState();
-        this.state.logFileId = ContextService.getInstance().getActiveContext().getObjectId() as string;
-        this.state.loadLogLevelNodes = this.loadLogLevelNodes.bind(this);
-        this.state.loadWrapLinesNodes = this.loadWrapLinesNodes.bind(this);
     }
 
     public async onMount(): Promise<void> {
+        this.logLevel = [];
+        this.context = ContextService.getInstance().getActiveContext();
+        this.state.loadLogLevelNodes = this.loadLogLevelNodes.bind(this);
+        this.state.loadWrapLinesNodes = this.loadWrapLinesNodes.bind(this);
+
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#View Log File',
             'Translatable#Tail Lines',
@@ -39,27 +47,38 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             'Translatable#no',
         ]);
 
-        const logLevelTreeHandler = new TreeHandler([], null, null, true);
-        TreeService.getInstance().registerTreeHandler(this.state.logLevelTreeId, logLevelTreeHandler);
-
-        const wrapLinesTreeHandler = new TreeHandler([], null, null, false);
-        TreeService.getInstance().registerTreeHandler(this.state.wrapLinesTreeId, wrapLinesTreeHandler);
-
         await this.loadLogFile();
 
         this.state.title = this.state.translations['Translatable#View Log File']
-            + ': ' + this.state.logFile.DisplayName;
+            + ': ' + this.logFile.DisplayName;
 
         this.setRefreshInterval();
     }
 
+    public onDestroy(): void {
+        if (this.intervalId) {
+            window.clearInterval(this.intervalId);
+        }
+    }
+
     public async loadLogLevelNodes(): Promise<TreeNode[]> {
-        const nodes: TreeNode[] = [
-            new TreeNode('Info', 'Info'),
-            new TreeNode('Notice', 'Notice'),
-            new TreeNode('Error', 'Error'),
-            new TreeNode('Debug', 'Debug')
-        ];
+        let nodes: TreeNode[] = [];
+        const tier = this.context?.getAdditionalInformation('TIER');
+        if (tier === LogTier.FRONTEND) {
+            nodes = [
+                new TreeNode(' - info: ', 'Info'),
+                new TreeNode(' - warning: ', 'Warning'),
+                new TreeNode(' - error: ', 'Error'),
+                new TreeNode(' - debug: ', 'Debug')
+            ];
+        } else {
+            nodes = [
+                new TreeNode('Info', 'Info'),
+                new TreeNode('Notice', 'Notice'),
+                new TreeNode('Error', 'Error'),
+                new TreeNode('Debug', 'Debug')
+            ];
+        }
         nodes.forEach((n) => { n.selected = true; });
         return nodes;
     }
@@ -74,15 +93,19 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public logLevelFilterChanged(nodes: TreeNode[]): void {
-        this.state.logLevel = [];
-        nodes.forEach((n) => {
-            this.state.logLevel.push(n.id);
-        });
+        const tier = this.context.getAdditionalInformation('TIER');
+
+        this.logLevel = tier === LogTier.FRONTEND && nodes.length === this.logLevel.length
+            ? []
+            : nodes.map((n) => n.id);
+
+        this.context.setAdditionalInformation('LOG_LEVEL', this.logLevel);
         this.loadLogFile();
     }
 
     public tailCountChanged(event: any): void {
         this.state.tailCount = event.target.value;
+        this.context.setAdditionalInformation('TAIL_COUNT', this.logLevel);
         this.loadLogFile();
     }
 
@@ -99,7 +122,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public filterChanged(event: any): void {
         this.state.filter = event.target.value;
-        this.state.content = this.filterContent(this.state.logFile.Content);
+        this.filterContent();
     }
 
     public keydown(event: any): void {
@@ -108,32 +131,40 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    public filterContent(content: string): string {
-        if (content && content.length > 0 && this.state.filter && this.state.filter.length > 0) {
+    public filterContent(): void {
+        let content = this.getContent();
+        if (content && this.state.filter) {
             const lines = content.split('\n');
             const matchingLines = lines.filter((l) => {
                 const matches = l.toLowerCase().match(new RegExp(this.state.filter.toLowerCase()));
                 return matches && matches.length > 0;
             });
-            return matchingLines.join('\n');
+            content = matchingLines.join('\n');
         }
-        return content;
+
+        this.state.content = content;
+    }
+
+    private getContent(): string {
+        return Buffer.from(this.logFile?.Content, 'base64').toString('utf8');
     }
 
     public async loadLogFile(): Promise<void> {
-        if (this.state.logFileId) {
+        const logFileId = this.context.getObjectId();
+        if (logFileId) {
+            const tier = this.context.getAdditionalInformation('TIER') || LogTier.BACKEND;
             const files = await KIXObjectService.loadObjects<LogFile>(
-                KIXObjectType.LOG_FILE, [this.state.logFileId],
+                KIXObjectType.LOG_FILE, [logFileId],
                 new KIXObjectLoadingOptions(null, null, null, [LogFileProperty.CONTENT], null, [
                     ['Tail', String(this.state.tailCount)],
-                    ['Categories', this.state.logLevel.join(',')]
+                    ['Categories', this.logLevel.join(',')],
+                    ['tier', tier]
                 ]), null, false, false
             );
 
             if (files && files.length) {
-                this.state.logFile = files[0];
-                this.state.logFile.Content = Buffer.from(this.state.logFile.Content, 'base64').toString('utf8');
-                this.state.content = this.filterContent(this.state.logFile.Content);
+                this.logFile = files[0];
+                this.filterContent();
             }
         }
     }
@@ -144,11 +175,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     protected setRefreshInterval(): void {
-        if (this.state.intervalId) {
-            window.clearInterval(this.state.intervalId);
+        if (this.intervalId) {
+            window.clearInterval(this.intervalId);
         }
         if (this.state.refreshInterval > 0) {
-            this.state.intervalId = window.setInterval(() => {
+            this.intervalId = window.setInterval(() => {
                 this.loadLogFile();
             }, this.state.refreshInterval * 1000);
         }

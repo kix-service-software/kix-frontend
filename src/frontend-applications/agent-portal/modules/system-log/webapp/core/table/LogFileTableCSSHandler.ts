@@ -9,11 +9,16 @@
 
 import { ITableCSSHandler, TableValue } from '../../../../base-components/webapp/core/table';
 import { LogFile } from '../../../model/LogFile';
+import { LogFolder } from '../../../model/LogFolder';
 
 export class LogFileTableCSSHandler implements ITableCSSHandler<LogFile> {
 
     public async getRowCSSClasses(logFile: LogFile): Promise<string[]> {
-        return ['log-download'];
+        const classes = ['log-download'];
+        if (logFile instanceof LogFolder) {
+            classes.push('log-folder-row');
+        }
+        return classes;
     }
 
     public async getValueCSSClasses(logFile: LogFile, value: TableValue): Promise<string[]> {

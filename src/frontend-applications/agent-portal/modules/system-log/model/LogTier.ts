@@ -7,10 +7,9 @@
  * --
  */
 
-export class ComponentState {
+export enum LogTier {
 
-    public constructor(
-        public title = '',
-        public canShow: boolean = false
-    ) { }
+    FRONTEND = 'FRONTEND',
+
+    BACKEND = 'BACKEND'
 }

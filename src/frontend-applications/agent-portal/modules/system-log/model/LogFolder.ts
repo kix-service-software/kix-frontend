@@ -7,10 +7,11 @@
  * --
  */
 
-export class ComponentState {
+export class LogFolder {
 
     public constructor(
-        public title = '',
-        public canShow: boolean = false
+        public DisplayName: string,
+        public objectId: string = DisplayName
     ) { }
+
 }

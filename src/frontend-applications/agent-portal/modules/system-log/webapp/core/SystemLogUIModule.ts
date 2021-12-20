@@ -11,7 +11,7 @@ import { LogFileTableFactory } from './table/LogFileTableFactory';
 import { LogFileLabelProvider } from './LogFileLabelProvider';
 import { LogFileService } from './LogFileService';
 import { IUIModule } from '../../../../model/IUIModule';
-import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { TableCSSHandlerRegistry, TableFactoryService } from '../../../base-components/webapp/core/table';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
@@ -22,6 +22,7 @@ import { ContextMode } from '../../../../model/ContextMode';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { LogFileTableCSSHandler } from './table/LogFileTableCSSHandler';
 
 export class UIModule implements IUIModule {
 
@@ -49,6 +50,10 @@ export class UIModule implements IUIModule {
             undefined, undefined, false
         );
         ContextService.getInstance().registerContext(logFileViewContext);
+
+        TableCSSHandlerRegistry.getInstance().registerObjectCSSHandler(
+            KIXObjectType.LOG_FILE, new LogFileTableCSSHandler()
+        );
     }
 
 }

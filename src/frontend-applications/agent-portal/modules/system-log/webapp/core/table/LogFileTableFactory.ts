@@ -61,7 +61,7 @@ export class LogFileTableFactory extends TableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            this.getDefaultColumnConfiguration(LogFileProperty.DISPLAY_NAME),
+            this.getDefaultColumnConfiguration(LogFileProperty.FILE_NAME),
             this.getDefaultColumnConfiguration(LogFileProperty.FILE_SIZE),
             this.getDefaultColumnConfiguration(LogFileProperty.MODIFIY_TIME),
             new DefaultColumnConfiguration(
@@ -85,7 +85,7 @@ export class LogFileTableFactory extends TableFactory {
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
         let config;
         switch (property) {
-            case LogFileProperty.DISPLAY_NAME:
+            case LogFileProperty.FILE_NAME:
                 config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 350, true, false,
                     false, DataType.STRING, true, null, null, false
