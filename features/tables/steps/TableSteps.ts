@@ -1,7 +1,6 @@
 // tslint:disable
 import { expect } from 'chai';
 import { Given, Then } from 'cucumber';
-import { Table, TableFactoryService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
 import { FAQArticleTableFactory, FAQCategoryTableFactory } from '../../../src/frontend-applications/agent-portal/modules/faq/webapp/core';
 import { TicketTableFactory, TicketTypeTableFactory, TicketStateTableFactory, TicketPriorityTableFactory, TicketQueueTableFactory } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core';
 import { ArticleTableFactory } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/table/ArticleTableFactory';
@@ -21,6 +20,8 @@ import { TableHeaderHeight } from '../../../src/frontend-applications/agent-port
 import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 import { ImportExportTemplateTableFactory, ImportExportTemplateRunTableFactory } from '../../../src/frontend-applications/agent-portal/modules/import-export/webapp/core';
 import { RoleTableFactory, UserTableFactory } from '../../../src/frontend-applications/agent-portal/modules/user/webapp/core/admin/table';
+import { Table } from '../../../src/frontend-applications/agent-portal/modules/table/model/Table';
+import { TableFactoryService } from '../../../src/frontend-applications/agent-portal/modules/table/webapp/core/factory/TableFactoryService';
 
 let table: Table;
 TableFactoryService.getInstance().registerFactory(new FAQArticleTableFactory());
