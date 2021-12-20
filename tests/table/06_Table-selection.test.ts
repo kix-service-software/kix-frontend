@@ -14,7 +14,11 @@ import chaiAsPromised = require('chai-as-promised');
 import { KIXObjectType } from '../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 import { KIXObject } from '../../src/frontend-applications/agent-portal/model/kix/KIXObject';
 import { DefaultColumnConfiguration } from '../../src/frontend-applications/agent-portal/model/configuration/DefaultColumnConfiguration';
-import { Table, SelectionState, TableContentProvider, RowObject, TableValue } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
+import { Table } from '../../src/frontend-applications/agent-portal/modules/table/model/Table';
+import { RowObject } from '../../src/frontend-applications/agent-portal/modules/table/model/RowObject';
+import { TableValue } from '../../src/frontend-applications/agent-portal/modules/table/model/TableValue';
+import { SelectionState } from '../../src/frontend-applications/agent-portal/modules/table/model/SelectionState';
+import { TableContentProvider } from '../../src/frontend-applications/agent-portal/modules/table/webapp/core/TableContentProvider';
 
 
 chai.use(chaiAsPromised);

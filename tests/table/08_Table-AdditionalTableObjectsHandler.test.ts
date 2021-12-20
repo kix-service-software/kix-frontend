@@ -11,7 +11,10 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { Table, RowObject, Row, TableContentProvider } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
+import { Table } from '../../src/frontend-applications/agent-portal/modules/table/model/Table';
+import { RowObject } from '../../src/frontend-applications/agent-portal/modules/table/model/RowObject';
+import { Row } from '../../src/frontend-applications/agent-portal/modules/table/model/Row';
+import { TableContentProvider } from '../../src/frontend-applications/agent-portal/modules/table/webapp/core/TableContentProvider';
 import { IAdditionalTableObjectsHandler } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/IAdditionalTableObjectsHandler';
 import { KIXObjectType } from '../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 import { AdditionalTableObjectsHandlerConfiguration } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/AdditionalTableObjectsHandlerConfiguration';
