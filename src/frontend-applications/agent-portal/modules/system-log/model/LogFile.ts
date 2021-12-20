@@ -9,6 +9,7 @@
 
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { LogTier } from './LogTier';
 
 export class LogFile extends KIXObject {
 
@@ -39,6 +40,8 @@ export class LogFile extends KIXObject {
     public ModifyTimeUnix: number;
 
     public Content: string;
+
+    public tier: LogTier;
 
     public constructor(logFile?: LogFile) {
         super(logFile);

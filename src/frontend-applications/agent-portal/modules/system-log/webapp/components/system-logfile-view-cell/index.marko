@@ -6,4 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<span.kix-icon-eye title=state.title on-click("showLogViewer")/>
+<if(state.canShow)>
+    <span.kix-icon-eye title=state.title on-click("showLogViewer")/>
+</if>

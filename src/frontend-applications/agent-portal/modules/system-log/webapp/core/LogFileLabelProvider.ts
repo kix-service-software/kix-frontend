@@ -14,18 +14,21 @@ import { TranslationService } from '../../../../modules/translation/webapp/core/
 import { LogFile } from '../../model/LogFile';
 import { LogFileProperty } from '../../model/LogFileProperty';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { LogFolder } from '../../model/LogFolder';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 export class LogFileLabelProvider extends LabelProvider {
 
     public kixObjectType: KIXObjectType | string = KIXObjectType.LOG_FILE;
 
     public isLabelProviderFor(object: KIXObject): boolean {
-        return object instanceof LogFile || object?.KIXObjectType === this.kixObjectType;
+        return object instanceof LogFile || object instanceof LogFolder || object?.KIXObjectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
+            case LogFileProperty.FILE_NAME:
             case LogFileProperty.DISPLAY_NAME:
                 displayValue = 'Translatable#Name';
                 break;
@@ -66,6 +69,20 @@ export class LogFileLabelProvider extends LabelProvider {
         }
 
         return displayValue ? displayValue.toString() : '';
+    }
+
+    public async getIcons(
+        object: LogFile | LogFolder, property: string, value?: string | number, forTable?: boolean
+    ): Promise<Array<(string | ObjectIcon)>> {
+        const icons = [];
+        if (property === LogFileProperty.FILE_NAME) {
+            if (object instanceof LogFile) {
+                icons.push('kix-icon-folder');
+            } else {
+                icons.push('kix-icon-listview');
+            }
+        }
+        return icons;
     }
 
 }

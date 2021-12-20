@@ -7,29 +7,20 @@
  * --
  */
 
-import { IdService } from '../../../../../model/IdService';
 import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
-import { LogFile } from '../../../model/LogFile';
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public loadLogLevelNodes: () => Promise<TreeNode[]> = null,
         public loadWrapLinesNodes: () => Promise<TreeNode[]> = null,
-        public logLevelTreeId: string = IdService.generateDateBasedId('default-select-input-'),
-        public wrapLinesTreeId: string = IdService.generateDateBasedId('default-select-input-'),
-        public logFileId: string = '',
-        public logFile: LogFile = null,
         public content: string = '',
         public title: string = 'Translatable#View Log File',
         public filter: string = '',
         public tailCount: number = 100,
         public refreshInterval: number = 10,
-        public logLevel: string[] = [],
-        public intervalId: number = 0,
         public wrapLines: boolean = true,
-        public canRun: boolean = false,
         public run: boolean = false
     ) {
         super();
