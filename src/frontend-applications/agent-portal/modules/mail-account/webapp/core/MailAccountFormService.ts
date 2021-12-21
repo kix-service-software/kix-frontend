@@ -23,6 +23,7 @@ import { FormFieldOption } from '../../../../model/configuration/FormFieldOption
 import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
 import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
 import { InputFieldTypes } from '../../../base-components/webapp/core/InputFieldTypes';
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
 
 export class MailAccountFormService extends KIXObjectFormService {
 
@@ -180,6 +181,30 @@ export class MailAccountFormService extends KIXObjectFormService {
             default:
         }
         return [[property, value]];
+    }
+
+
+    public async postPrepareValues(
+        parameter: Array<[string, any]>, createOptions: KIXObjectSpecificCreateOptions,
+        formContext: FormContext, formInstance: FormInstance
+    ): Promise<Array<[string, any]>> {
+        parameter = await super.postPrepareValues(parameter, createOptions, formContext, formInstance);
+
+        let index = -1;
+        const passwordParameter = parameter.find((p, i) => {
+            if (p[0] === MailAccountProperty.PASSWORD) {
+                index = i;
+                return true;
+            }
+
+            return false;
+        });
+
+        if (passwordParameter && passwordParameter[1] === 'not modified' && index !== -1) {
+            parameter.splice(index, 1);
+        }
+
+        return parameter;
     }
 
 }
