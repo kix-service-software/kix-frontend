@@ -13,6 +13,8 @@ import { LoggingService } from './LoggingService';
 import { IServerConfiguration } from '../model/IServerConfiguration';
 import { ServerUtil } from '../ServerUtil';
 import { IdService } from '../../frontend-applications/agent-portal/model/IdService';
+import { SocketService } from '../../frontend-applications/agent-portal/server/services/SocketService';
+import { HttpService } from '../../frontend-applications/agent-portal/server/services/HttpService';
 
 
 export class ProfilingService {
@@ -52,9 +54,13 @@ export class ProfilingService {
         this.messageCounter.set(message, ++counter);
 
         LoggingService.getInstance().debug(
-            task.id
+            '[Profiling]'
+            + '\t' + task.requestId
+            + '\t' + task.id
             + '\tStart'
             + '\t' + task.category + ''
+            + '\t' + SocketService.getInstance().getPendingRequestCount() + ''
+            + '\t' + HttpService.getInstance().getPendingRequestCount() + ''
             + '\t' + task.counter + ''
             + '\t' + task.inputDataSize + ' bytes'
             + '\t' + task.message
@@ -75,10 +81,16 @@ export class ProfilingService {
             this.tasks.delete(profileTaskId);
 
             LoggingService.getInstance().debug(
-                profileTaskId
+                '[Profiling]'
+                + '\t' + task.requestId
+                + '\t' + profileTaskId
                 + '\tStop'
+                + '\t' + task.category + ''
+                + '\t' + SocketService.getInstance().getPendingRequestCount() + ''
+                + '\t' + HttpService.getInstance().getPendingRequestCount() + ''
                 + '\t' + task.duration + ' ms'
                 + '\t' + task.outputDataSize + ' bytes'
+                + '\t' + task.message
             );
         }
     }
@@ -88,6 +100,7 @@ export class ProfilingService {
 class ProfileTask {
 
     public id: string = IdService.generateDateBasedId();
+    public requestId: string;
     public startTime: number;
     public endTime?: number;
     public duration?: number;
@@ -99,7 +112,9 @@ class ProfileTask {
     ) {
         this.startTime = new Date().getTime();
         this.message = this.message.replace(new RegExp('"Content":".*="'), '"Content":"..."');
+        this.requestId = '<none>';
         if (inputData) {
+            this.requestId = inputData.requestId ? inputData.requestId : this.requestId;
             this.inputDataSize = JSON.stringify(inputData.data).length;
         }
     }
@@ -116,6 +131,7 @@ class ProfileTask {
 
 interface ProfilingData {
 
+    requestId?: string;
     data: Array<unknown>;
 
 }

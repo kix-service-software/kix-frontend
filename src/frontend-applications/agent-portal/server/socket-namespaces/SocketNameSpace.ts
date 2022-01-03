@@ -77,16 +77,15 @@ export abstract class SocketNameSpace implements ISocketNamespace {
             }
 
             const message = `${this.getNamespace()} / ${event} ${JSON.stringify(logData)}`;
-            const profileTaskId = ProfilingService.getInstance().start('SocketIO', message, { data: [data] });
+            const profileTaskId = ProfilingService.getInstance().start('SocketIO', message, { requestId: data.clientRequestId, data: [data] });
             this.requestCounter++;
 
             handler(data, client).then((response) => {
                 client.emit(response.event, response.data);
+                this.requestCounter--;
 
                 // stop profiling
                 ProfilingService.getInstance().stop(profileTaskId, { data: [response.data] });
-
-                this.requestCounter--;
             }).catch((error) => {
                 if (error instanceof SocketAuthenticationError) {
                     client.emit(SocketEvent.INVALID_TOKEN, new SocketErrorResponse(data.requestId, error));
@@ -115,5 +114,9 @@ export abstract class SocketNameSpace implements ISocketNamespace {
             }
         }
         return newParameter;
+    }
+
+    public getRequestCounter(): number {
+        return this.requestCounter;
     }
 }

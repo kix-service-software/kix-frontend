@@ -26,10 +26,12 @@ import { ISocketNamespaceRegistryExtension } from '../extensions/ISocketNamespac
 import { LoggingService } from '../../../../server/services/LoggingService';
 import { Server } from 'socket.io';
 import { ConfigurationService } from '../../../../server/services/ConfigurationService';
+import { SocketNameSpace } from '../socket-namespaces/SocketNameSpace';
 
 export class SocketService {
 
     private static INSTANCE: SocketService;
+    private namespaces: SocketNameSpace[] = [];
 
     public static getInstance(): SocketService {
         if (!SocketService.INSTANCE) {
@@ -61,6 +63,7 @@ export class SocketService {
         for (const namespace of namespaces) {
             for (const c of namespace.getNamespaceClasses()) {
                 LoggingService.getInstance().info(`Register socket namespace: ${c.constructor.name}`);
+                this.namespaces.push(c);
                 await c.registerNamespace(this.socketIO);
             }
         }
@@ -68,5 +71,15 @@ export class SocketService {
 
     public broadcast(event: NotificationEvent, data: any): void {
         NotificationNamespace.getInstance().broadcast(event, data);
+    }
+
+    public getPendingRequestCount(): number {
+        let totalCount: number = 0;
+        if (this.namespaces && this.namespaces.length) {
+            this.namespaces.forEach((n) => {
+                totalCount += n.getRequestCounter();
+            });
+        }
+        return totalCount;
     }
 }

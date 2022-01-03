@@ -199,6 +199,7 @@ export class HttpService {
             'HttpService',
             options.method + ' ' + resource + parameter,
             {
+                requestId: clientRequestId,
                 data: [options, parameter]
             });
 
@@ -324,6 +325,9 @@ export class HttpService {
         return response.data['User'];
     }
 
+    public getPendingRequestCount(): number {
+        return this.requestPromises.size;
+    }
 }
 
 class BackendHTTPError {
