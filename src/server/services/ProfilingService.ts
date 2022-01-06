@@ -13,9 +13,6 @@ import { LoggingService } from './LoggingService';
 import { IServerConfiguration } from '../model/IServerConfiguration';
 import { ServerUtil } from '../ServerUtil';
 import { IdService } from '../../frontend-applications/agent-portal/model/IdService';
-import { SocketService } from '../../frontend-applications/agent-portal/server/services/SocketService';
-import { HttpService } from '../../frontend-applications/agent-portal/server/services/HttpService';
-
 
 export class ProfilingService {
 
@@ -59,8 +56,9 @@ export class ProfilingService {
             + '\t' + task.id
             + '\tStart'
             + '\t' + task.category + ''
-            + '\t' + SocketService.getInstance().getPendingRequestCount() + ''
-            + '\t' + HttpService.getInstance().getPendingRequestCount() + ''
+            // TODO: currently disabled, replace with fixed version
+            // + '\t' + SocketService.getInstance().getPendingRequestCount() + ''
+            // + '\t' + HttpService.getInstance().getPendingRequestCount() + ''
             + '\t' + task.counter + ''
             + '\t' + task.inputDataSize + ' bytes'
             + '\t' + task.message
@@ -86,8 +84,9 @@ export class ProfilingService {
                 + '\t' + profileTaskId
                 + '\tStop'
                 + '\t' + task.category + ''
-                + '\t' + SocketService.getInstance().getPendingRequestCount() + ''
-                + '\t' + HttpService.getInstance().getPendingRequestCount() + ''
+                // TODO: currently disabled, replace with fixed version
+                // + '\t' + SocketService.getInstance().getPendingRequestCount() + ''
+                // + '\t' + HttpService.getInstance().getPendingRequestCount() + ''
                 + '\t' + task.duration + ' ms'
                 + '\t' + task.outputDataSize + ' bytes'
                 + '\t' + task.message
