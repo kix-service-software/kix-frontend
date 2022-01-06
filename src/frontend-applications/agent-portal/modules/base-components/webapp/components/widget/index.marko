@@ -71,11 +71,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     </div>
     <if(component.isLaneWidget() && !state.minimized)>
         <ul.lane-content-actions key=("content-actions" + Math.random())>
-            <for|action| of=input.contentActions>
-                <li key=action.id>
-                    <action action=action displayText=false/>
-                </li>
-            </for>
+            <if(Array.isArray(input.contentActions))>
+                <for|action| of=input.contentActions>
+                    <li key=action.id>
+                        <action action=action displayText=false/>
+                    </li>
+                </for>
+            </if>
         </ul>
     </if>
     <if(!state.minimized)>

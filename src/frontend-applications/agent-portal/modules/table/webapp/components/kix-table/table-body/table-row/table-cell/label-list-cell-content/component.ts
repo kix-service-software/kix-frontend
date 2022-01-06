@@ -33,9 +33,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         let icons: Array<string | ObjectIcon> = [];
         const value = cell.getValue();
         if (value) {
-            if (Array.isArray(value.objectValue)) {
+            if (Array.isArray(value.displayValue)) {
+                values = value.displayValue.split(',').map((v) => v.trim());
+            } else if (Array.isArray(value.objectValue)) {
                 if (typeof value.objectValue[0] === 'object') {
-                    const stringValue = cell.getValue().displayValue;
+                    const stringValue = value.displayValue;
                     values = stringValue.split(',').map((v) => v.trim());
                 } else {
                     values = value.objectValue;

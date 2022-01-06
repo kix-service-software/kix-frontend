@@ -404,6 +404,8 @@ export abstract class Context {
                 if (allowed) {
                     allowedWidgets.push(widget);
                 }
+            } else {
+                allowedWidgets.push(widget);
             }
         }
         return allowedWidgets;
