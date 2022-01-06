@@ -80,7 +80,7 @@ export class TicketLockAction extends AbstractAction<Ticket> {
             BrowserUtil.openSuccessOverlay(successHint);
 
             BrowserCacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
-        }, 500);
+        }, 1500);
     }
 
 }

@@ -96,7 +96,7 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
             }
 
             EventService.getInstance().publish(ApplicationEvent.OBJECT_UPDATED, { objectType: KIXObjectType.TICKET });
-        }, 1000);
+        }, 1500);
     }
 
 }
