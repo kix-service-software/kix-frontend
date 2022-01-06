@@ -183,7 +183,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             }
 
             if (loadingOptions.query) {
-                loadingOptions.query.forEach((q) => query[q[0]] = q[1]);
+                loadingOptions.query.forEach((q) => query[q[0]] = Array.isArray(q[1]) ? JSON.stringify(q[1]) : q[1]);
             }
         }
 
