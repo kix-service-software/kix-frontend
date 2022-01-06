@@ -179,7 +179,9 @@
                     "       // EventService.getInstance().unsubscribe('SOME_EVENT', this.subscriber);",
                     "   }",
                     "",
-                    "}"
+                    "}",
+                    "",
+                    "module.exports = Component;"
                 ]
             },
             {
