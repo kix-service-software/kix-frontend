@@ -218,7 +218,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             if (idsToLoad) {
                 if (this.autocomplete) {
                     const objects = await KIXObjectService.loadObjects(
-                        this.objectType, idsToLoad, this.loadingOptions, this.specificLoadingOptions, null, null, true
+                        this.objectType, idsToLoad, this.loadingOptions, this.specificLoadingOptions, true, null, true
                     ).catch(() => []);
 
                     for (const object of objects) {
