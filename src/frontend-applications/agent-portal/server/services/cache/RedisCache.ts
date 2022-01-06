@@ -139,9 +139,9 @@ export class RedisCache implements ICache {
     }
 
     private checkConnection(): void {
-        if (this.redisClient && !this.redisClient.connected) {
+        if (!this.redisClient || !this.redisClient?.connected) {
             LoggingService.getInstance().info('REDIS quit');
-            this.redisClient.quit();
+            this.redisClient?.quit();
             this.connect();
         }
     }
@@ -156,35 +156,22 @@ export class RedisCache implements ICache {
 
         const redis = require('redis');
 
-        this.redisClient = redis.createClient({
-            port,
-            host,
-            retry_strategy: (options) => {
-                if (options.error) {
-                    LoggingService.getInstance().error(options.error);
-                }
+        try {
+            this.redisClient = redis.createClient({
+                port, host, retry_strategy: (options) => 2000
+            });
 
-                if (options.error && options.error.code === 'ECONNREFUSED') {
-                    LoggingService.getInstance().error('The server refused the connection');
-                    return new Error('REDIS: The server refused the connection');
-                }
-                if (options.total_retry_time > 1000 * 60 * 60) {
-                    LoggingService.getInstance().error('Retry time exhausted');
-                    return new Error('REDIS: Retry time exhausted');
-                }
-                if (options.attempt > 10) {
-                    LoggingService.getInstance().error('REDIS: Attempts > 10');
-                    return undefined;
-                }
+            this.redisClient.on('error', (error) => {
+                LoggingService.getInstance().error(error);
+            });
 
-                return Math.min(options.attempt * 100, 3000);
-            }
-        });
-
-        this.getAsync = promisify(this.redisClient.get).bind(this.redisClient);
-        this.setAsync = promisify(this.redisClient.set).bind(this.redisClient);
-        this.delAsync = promisify(this.redisClient.del).bind(this.redisClient);
-        this.scanAsync = promisify(this.redisClient.scan).bind(this.redisClient);
+            this.getAsync = promisify(this.redisClient.get).bind(this.redisClient);
+            this.setAsync = promisify(this.redisClient.set).bind(this.redisClient);
+            this.delAsync = promisify(this.redisClient.del).bind(this.redisClient);
+            this.scanAsync = promisify(this.redisClient.scan).bind(this.redisClient);
+        } catch (error) {
+            LoggingService.getInstance().error(error);
+        }
     }
 
     private async scan(pattern: string): Promise<string[]> {
