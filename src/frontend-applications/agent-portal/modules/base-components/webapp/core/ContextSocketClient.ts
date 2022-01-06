@@ -18,6 +18,7 @@ import { ContextConfiguration } from '../../../../model/configuration/ContextCon
 import { IdService } from '../../../../model/IdService';
 import { ISocketRequest } from './ISocketRequest';
 import { ISocketResponse } from './ISocketResponse';
+import { ContextPreference } from '../../../../model/ContextPreference';
 
 export class ContextSocketClient extends SocketClient {
 
@@ -144,6 +145,122 @@ export class ContextSocketClient extends SocketClient {
             };
 
             this.socket.emit(ContextEvent.REBUILD_CONFIG, request);
+        });
+    }
+
+    public async loadStoredContexts(): Promise<ContextPreference[]> {
+        this.checkSocketConnection();
+
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+        return new Promise<ContextPreference[]>((resolve, reject) => {
+
+            const requestId = IdService.generateDateBasedId();
+
+            const timeout = window.setTimeout(() => {
+                reject('Timeout: ' + ContextEvent.LOAD_STORED_CONTEXTS);
+            }, socketTimeout);
+
+            this.socket.on(ContextEvent.LOAD_STORED_CONTEXTS_FINISCHED,
+                (result: any) => {
+                    if (result.requestId === requestId) {
+                        window.clearTimeout(timeout);
+                        resolve(result.contextPreferences);
+                    }
+                }
+            );
+
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error(error.error);
+                    reject(error.error);
+                }
+            });
+
+            const request = {
+                requestId,
+                clientRequestId: ClientStorageService.getClientRequestId()
+            };
+
+            this.socket.emit(ContextEvent.LOAD_STORED_CONTEXTS, request);
+        });
+    }
+
+    public async storeContext(contextPreference: ContextPreference): Promise<void> {
+        this.checkSocketConnection();
+
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+        return new Promise<void>((resolve, reject) => {
+
+            const requestId = IdService.generateDateBasedId();
+
+            const timeout = window.setTimeout(() => {
+                reject('Timeout: ' + ContextEvent.STORE_CONTEXT);
+            }, socketTimeout);
+
+            this.socket.on(ContextEvent.STORE_CONTEXT_FINISCHED,
+                (result: ISocketResponse) => {
+                    if (result.requestId === requestId) {
+                        window.clearTimeout(timeout);
+                        resolve();
+                    }
+                }
+            );
+
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error(error.error);
+                    reject(error.error);
+                }
+            });
+
+            const request = {
+                requestId,
+                clientRequestId: ClientStorageService.getClientRequestId(),
+                contextPreference
+            };
+
+            this.socket.emit(ContextEvent.STORE_CONTEXT, request);
+        });
+    }
+
+    public async removeStoredContext(instanceId: string): Promise<void> {
+        this.checkSocketConnection();
+
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+        return new Promise<void>((resolve, reject) => {
+
+            const requestId = IdService.generateDateBasedId();
+
+            const timeout = window.setTimeout(() => {
+                reject('Timeout: ' + ContextEvent.REMOVE_STORED_CONTEXT);
+            }, socketTimeout);
+
+            this.socket.on(ContextEvent.REMOVE_STORED_CONTEXT_FINISHED,
+                (result: ISocketResponse) => {
+                    if (result.requestId === requestId) {
+                        window.clearTimeout(timeout);
+                        resolve();
+                    }
+                }
+            );
+
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error(error.error);
+                    reject(error.error);
+                }
+            });
+
+            const request = {
+                requestId,
+                clientRequestId: ClientStorageService.getClientRequestId(),
+                instanceId
+            };
+
+            this.socket.emit(ContextEvent.REMOVE_STORED_CONTEXT, request);
         });
     }
 }

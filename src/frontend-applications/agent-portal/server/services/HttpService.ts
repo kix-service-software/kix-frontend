@@ -23,7 +23,7 @@ import { User } from '../../modules/user/model/User';
 import { PermissionError } from '../../modules/user/model/PermissionError';
 import { AxiosAdapter, AxiosError, AxiosRequestConfig } from 'axios';
 import { SocketAuthenticationError } from '../../modules/base-components/webapp/core/SocketAuthenticationError';
-
+import { RequestCounter } from '../../../../server/services/RequestCounter';
 
 export class HttpService {
 
@@ -55,7 +55,7 @@ export class HttpService {
 
         if (serverConfig?.LOG_REQUEST_QUEUES_INTERVAL) {
             setInterval(
-                () => LoggingService.getInstance().debug(`HTTP Request Queue Length: ${this.requestPromises.size}`),
+                () => LoggingService.getInstance().debug(`HTTP Request Queue Length: ${RequestCounter.getInstance().getPendingHTTPRequestCount()}`),
                 serverConfig?.LOG_REQUEST_QUEUES_INTERVAL
             );
         }
@@ -88,14 +88,18 @@ export class HttpService {
         const requestPromise = this.executeRequest<T>(resource, token, clientRequestId, options);
         this.requestPromises.set(requestKey, requestPromise);
 
+        RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size, true);
+
         const response = await requestPromise.catch((error): any => {
             this.requestPromises.delete(requestKey);
+            RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size);
             throw error;
         });
         if (useCache) {
             CacheService.getInstance().set(cacheKey, response, cacheKeyPrefix);
         }
         this.requestPromises.delete(requestKey);
+        RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size);
 
         return response;
     }
@@ -199,6 +203,7 @@ export class HttpService {
             'HttpService',
             options.method + ' ' + resource + parameter,
             {
+                requestId: clientRequestId,
                 data: [options, parameter]
             });
 

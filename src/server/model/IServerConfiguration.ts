@@ -43,6 +43,10 @@ export interface IServerConfiguration {
 
     UPDATE_TRANSLATIONS: boolean;
 
+    CACHE_BACKEND: string;
+
+    FILE_CACHE_DIR: string;
+
     REDIS_CACHE_PORT: number;
 
     REDIS_CACHE_HOST: string;

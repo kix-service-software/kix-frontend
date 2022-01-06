@@ -14,7 +14,7 @@ export class ContextPreference {
     public constructor(
         public instanceId: string,
         public objectId: string | number,
-        public contextDescriptor: ContextDescriptor,
+        public contextId: string,
         public formValue?: any
     ) { }
 
