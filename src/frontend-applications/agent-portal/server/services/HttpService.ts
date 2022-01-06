@@ -24,7 +24,6 @@ import { PermissionError } from '../../modules/user/model/PermissionError';
 import { AxiosAdapter, AxiosError, AxiosRequestConfig } from 'axios';
 import { SocketAuthenticationError } from '../../modules/base-components/webapp/core/SocketAuthenticationError';
 
-
 export class HttpService {
 
     private static INSTANCE: HttpService;
@@ -252,7 +251,7 @@ export class HttpService {
         } else {
             const backendError = new BackendHTTPError(error);
             LoggingService.getInstance().error(
-                `(${status}) ${backendError.error.Code}  ${backendError.error.Message}`
+                `(${status}) ${backendError.error.Code} ${backendError.error.Message}`
             );
             return new Error(backendError.error.Code?.toString(), backendError.error.Message, status);
         }

@@ -77,7 +77,9 @@ export abstract class SocketNameSpace implements ISocketNamespace {
             }
 
             const message = `${this.getNamespace()} / ${event} ${JSON.stringify(logData)}`;
-            const profileTaskId = ProfilingService.getInstance().start('SocketIO', message, { requestId: data.clientRequestId, data: [data] });
+            const profileTaskId = ProfilingService.getInstance().start('SocketIO', message, {
+                requestId: data.clientRequestId, data: [data]
+            });
             this.requestCounter++;
 
             handler(data, client).then((response) => {
@@ -119,4 +121,5 @@ export abstract class SocketNameSpace implements ISocketNamespace {
     public getRequestCounter(): number {
         return this.requestCounter;
     }
+
 }

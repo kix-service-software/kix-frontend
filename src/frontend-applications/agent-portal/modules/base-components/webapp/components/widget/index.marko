@@ -80,7 +80,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     </if>
     <if(!state.minimized)>
         <div.widget-content>
-            <if(Array.isArray(input.contentActions))>
+            <if(Array.isArray(input.contentActions) && input.contentActions.length)>
                 <!-- TODO: ContentAction analog der "header" Actions umsetzen (über WidgetService) -->
                 <if(component.isContentWidget())>
                     <div.content-actions key=("content-actions" + Math.random())>
