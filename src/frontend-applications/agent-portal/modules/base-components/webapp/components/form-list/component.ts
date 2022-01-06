@@ -189,9 +189,9 @@ class Component {
                 ? container.getBoundingClientRect().top + container.getBoundingClientRect().height
                 : dropdownListEnd;
 
-            const input = (this as any).getEl('form-list-input-' + this.state.listId);
-            const list = (this as any).getEl(this.state.treeId);
-            const buttons = (this as any).getEl('buttonbar' + this.state.listId);
+            const input = (this as any).getComponent('form-list-input-' + this.state.listId)?.el;
+            const list = (this as any).getComponent(this.state.treeId)?.el;
+            const buttons = (this as any).getComponent('buttonbar' + this.state.listId)?.el;
 
             if (containerEnd < dropdownListEnd) {
                 transformValue

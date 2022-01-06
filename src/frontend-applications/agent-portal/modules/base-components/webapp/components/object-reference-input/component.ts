@@ -27,6 +27,7 @@ import { ObjectReferenceUtil } from './ObjectReferenceUtil';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../../model/KIXObjectSpecificLoadingOptions';
+import { FormValuesChangedEventData } from '../../core/FormValuesChangedEventData';
 
 class Component extends FormInputComponent<string | number | string[] | number[], ComponentState> {
 
@@ -43,6 +44,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     private objectIds: Array<string | number>;
     private autocomplete: boolean = false;
     private translatable: boolean;
+
+    // TODO: move to FormInstance/ValueHandler as universal solution for unique handling (possible values)
+    private uniqueNodes: boolean;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -76,10 +80,23 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             eventPublished: (data: any, eventId: string): void => {
                 if (data.formField && data.formField.instanceId === this.state.field?.instanceId) {
                     this.load(false);
+                } else if (
+                    this.uniqueNodes && eventId === FormEvent.VALUES_CHANGED &&
+                    data && (data as FormValuesChangedEventData).changedValues?.length
+                ) {
+                    const samePropertyFieldChanged = (data as FormValuesChangedEventData).changedValues.some(
+                        (cV) => cV[0].property === this.state.field?.property
+                    );
+                    if (samePropertyFieldChanged) {
+                        this.load(false);
+                    }
                 }
             }
         };
         EventService.getInstance().subscribe(FormEvent.RELOAD_INPUT_VALUES, this.formSubscriber);
+        if (this.uniqueNodes) {
+            EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
+        }
 
         this.state.prepared = true;
     }
@@ -87,6 +104,10 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     public async onDestroy(): Promise<void> {
         super.onDestroy();
         TreeService.getInstance().removeTreeHandler(this.state.treeId);
+        EventService.getInstance().unsubscribe(FormEvent.RELOAD_INPUT_VALUES, this.formSubscriber);
+        if (this.uniqueNodes) {
+            EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
+        }
     }
 
     public async focusLost(event: any): Promise<void> {
@@ -116,7 +137,11 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             nodes = [...preloadedNodes, ...nodes];
         }
 
-        this.createTreeHandler(nodes);
+        if (this.uniqueNodes) {
+            nodes = await this.handleUnique(nodes);
+        }
+
+        this.fillTreeHandler(nodes);
     }
 
     private async loadNodes(): Promise<TreeNode[]> {
@@ -186,7 +211,31 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         return nodes;
     }
 
-    private createTreeHandler(nodes: TreeNode[]): void {
+    // TODO: move to FormInstance/ValueHandler as universal solution for unique handling (possible values)
+    private async handleUnique(nodes: TreeNode[]): Promise<TreeNode[]> {
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        if (formInstance) {
+            const fieldList = await formInstance.getFields(this.state.field);
+            let usedValues = [];
+            fieldList.forEach((f) => {
+                if (f.property === this.state.field?.property && f.instanceId !== this.state.field?.instanceId) {
+                    const fieldValue = formInstance.getFormFieldValue(f.instanceId);
+                    if (fieldValue && fieldValue.value !== null) {
+                        if (Array.isArray(fieldValue.value)) {
+                            usedValues = [...usedValues, ...fieldValue.value];
+                        } else {
+                            usedValues.push(fieldValue.value);
+                        }
+                    }
+                }
+            });
+            nodes = nodes.filter((n) => !usedValues.some((v) => v === n.id));
+        }
+        return nodes;
+    }
+
+    private fillTreeHandler(nodes: TreeNode[]): void {
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
         if (treeHandler) {
             const keepSelectionOption = this.state.field?.options.find(
@@ -298,6 +347,13 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         this.objectIds = objectIdOption && Array.isArray(objectIdOption.value) && objectIdOption.value.length
             ? objectIdOption.value
             : null;
+
+        if (this.state.field?.countMax && this.state.field?.countMax > 1) {
+            const uniqueOption = this.state.field?.options.find((o) => o.option === ObjectReferenceOptions.UNIQUE);
+            this.uniqueNodes = uniqueOption
+                ? uniqueOption.value
+                : true;
+        }
 
         const showValidOption = this.state.field?.options
             ? this.state.field?.options.find((o) => o.option === FormFieldOptions.SHOW_INVALID)
