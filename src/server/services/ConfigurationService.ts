@@ -45,9 +45,10 @@ export class ConfigurationService {
 
     public getDataFileContent<T = any>(fileName: string, defaultContent: any = {}): T {
         const filePath = path.join(this.dataDir, fileName);
-        const fileContent = this.getJSONFileContent(filePath);
+        let fileContent = this.getJSONFileContent(filePath);
         if (!fileContent && defaultContent) {
             this.saveDataFileContent(fileName, defaultContent);
+            fileContent = defaultContent;
         }
         return fileContent;
     }

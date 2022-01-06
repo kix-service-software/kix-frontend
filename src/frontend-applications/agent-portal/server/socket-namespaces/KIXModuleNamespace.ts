@@ -35,6 +35,7 @@ import { SysConfigOption } from '../../modules/sysconfig/model/SysConfigOption';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { CacheService } from '../services/cache';
 import { ISocketResponse } from '../../modules/base-components/webapp/core/ISocketResponse';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
 
 export class KIXModuleNamespace extends SocketNameSpace {
 
@@ -52,6 +53,7 @@ export class KIXModuleNamespace extends SocketNameSpace {
     }
 
     private rebuildPromise: Promise<void>;
+    private configCache: Map<string, FormConfiguration> = new Map();
 
     protected getNamespace(): string {
         return 'kixmodules';
@@ -105,7 +107,11 @@ export class KIXModuleNamespace extends SocketNameSpace {
         if (!this.rebuildPromise) {
             // eslint-disable-next-line no-async-promise-executor
             this.rebuildPromise = new Promise<void>(async (resolve, reject) => {
-                await CacheService.getInstance().deleteKeys('FormConfiguration', true);
+                if (CacheService.getInstance().hasCacheBackend()) {
+                    await CacheService.getInstance().deleteKeys('FormConfiguration', true);
+                } else {
+                    this.configCache.clear();
+                }
 
                 const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
 
@@ -138,7 +144,11 @@ export class KIXModuleNamespace extends SocketNameSpace {
                             return null;
                         });
 
-                        await CacheService.getInstance().set(formOption.Name, newConfig, 'FormConfiguration');
+                        if (CacheService.getInstance().hasCacheBackend()) {
+                            await CacheService.getInstance().set(formOption.Name, newConfig, 'FormConfiguration');
+                        } else {
+                            this.configCache.set(formOption.Name, newConfig);
+                        }
                     }
                 }
 
@@ -160,7 +170,15 @@ export class KIXModuleNamespace extends SocketNameSpace {
     }
 
     public async loadFormConfigurations(data: ISocketRequest): Promise<SocketResponse> {
-        const formConfigurations = await CacheService.getInstance().getAll('FormConfiguration');
+        let formConfigurations: FormConfiguration[] = [];
+        if (CacheService.getInstance().hasCacheBackend()) {
+            formConfigurations = await CacheService.getInstance().getAll('FormConfiguration');
+        } else {
+            for (const key of this.configCache) {
+                formConfigurations.push(key[1]);
+            }
+        }
+
         return new SocketResponse(
             KIXModulesEvent.LOAD_FORM_CONFIGURATIONS_FINISHED,
             {
@@ -173,11 +191,15 @@ export class KIXModuleNamespace extends SocketNameSpace {
     private async loadFormConfiguration(
         data: LoadFormConfigurationRequest
     ): Promise<SocketResponse> {
-        let form = await CacheService.getInstance().get(data.formId, 'FormConfiguration');
+        let form = CacheService.getInstance().hasCacheBackend()
+            ? await CacheService.getInstance().get(data.formId, 'FormConfiguration')
+            : this.configCache.get(data.formId);
 
         if (!form) {
             await this.rebuildConfigCache();
-            form = await CacheService.getInstance().get(data.formId, 'FormConfiguration');
+            form = CacheService.getInstance().hasCacheBackend()
+                ? await CacheService.getInstance().get(data.formId, 'FormConfiguration')
+                : this.configCache.get(data.formId);
         }
 
         return new SocketResponse(

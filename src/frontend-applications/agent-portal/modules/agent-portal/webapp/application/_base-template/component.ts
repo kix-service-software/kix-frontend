@@ -170,7 +170,7 @@ class Component {
                 const start = Date.now();
                 await uiModules[i].register();
                 const end = Date.now();
-                console.debug(`regsiter module: ${uiModules[i].priority} - ${uiModules[i].name} - ${end - start}ms`);
+                console.debug(`register module: ${uiModules[i].priority} - ${uiModules[i].name} - ${end - start}ms`);
             } else {
                 console.warn(`module with prioritiy ${uiModules[i].priority} did not implement register() method.`);
             }

@@ -19,6 +19,8 @@ import { Namespace, Server, Socket } from 'socket.io';
 import { SocketAuthenticationError } from '../../modules/base-components/webapp/core/SocketAuthenticationError';
 import { PermissionError } from '../../modules/user/model/PermissionError';
 import { SocketErrorResponse } from '../../modules/base-components/webapp/core/SocketErrorResponse';
+import { RequestCounter } from '../../../../server/services/RequestCounter';
+import { RequestQueue } from './RequestQueue';
 
 export abstract class SocketNameSpace implements ISocketNamespace {
 
@@ -27,8 +29,6 @@ export abstract class SocketNameSpace implements ISocketNamespace {
     protected abstract registerEvents(client: Socket): void;
 
     protected namespace: Namespace;
-
-    private requestCounter: number = 0;
 
     public registerNamespace(server: Server): void {
         this.initialize();
@@ -45,7 +45,7 @@ export abstract class SocketNameSpace implements ISocketNamespace {
         if (serverConfig && serverConfig.LOG_REQUEST_QUEUES_INTERVAL) {
             setInterval(
                 () => LoggingService.getInstance().debug(
-                    `Socket Request Queue Length (${this.getNamespace()}): ${this.requestCounter}`
+                    `Socket Request Queue Length (${this.getNamespace()}): ${RequestCounter.getInstance().getPendingSocketRequestCount()}`
                 ),
                 serverConfig.LOG_REQUEST_QUEUES_INTERVAL
             );
@@ -56,7 +56,7 @@ export abstract class SocketNameSpace implements ISocketNamespace {
         client: Socket, event: string,
         handler: (data: RQ, client: Socket) => Promise<SocketResponse<RS>>
     ): void {
-        client.on(event, (data: RQ) => {
+        client.on(event, async (data: RQ) => {
 
             // start profiling
 
@@ -77,17 +77,13 @@ export abstract class SocketNameSpace implements ISocketNamespace {
             }
 
             const message = `${this.getNamespace()} / ${event} ${JSON.stringify(logData)}`;
-            const profileTaskId = ProfilingService.getInstance().start('SocketIO', message, { data: [data] });
-            this.requestCounter++;
+            const profileTaskId = ProfilingService.getInstance().start(
+                'SocketIO', message, { data: [data], requestId: data.clientRequestId }, false
+            );
+            RequestCounter.getInstance().countSocketRequestCounter();
+            ProfilingService.getInstance().logStart(profileTaskId);
 
-            handler(data, client).then((response) => {
-                client.emit(response.event, response.data);
-
-                // stop profiling
-                ProfilingService.getInstance().stop(profileTaskId, { data: [response.data] });
-
-                this.requestCounter--;
-            }).catch((error) => {
+            const response = await handler(data, client).catch((error) => {
                 if (error instanceof SocketAuthenticationError) {
                     client.emit(SocketEvent.INVALID_TOKEN, new SocketErrorResponse(data.requestId, error));
                 } else if (error instanceof PermissionError) {
@@ -95,8 +91,43 @@ export abstract class SocketNameSpace implements ISocketNamespace {
                 } else {
                     client.emit(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error));
                 }
+
+                return null;
             });
 
+            // Queue socket requests
+            // try {
+            //     response = await RequestQueue.getInstance().enqueue(handler(data, client), profileTaskId)
+            //         .catch((error) => {
+            //             if (error instanceof SocketAuthenticationError) {
+            //                 client.emit(SocketEvent.INVALID_TOKEN, new SocketErrorResponse(data.requestId, error));
+            //             } else if (error instanceof PermissionError) {
+            //                 client.emit(
+            // SocketEvent.PERMISSION_ERROR, new SocketErrorResponse(data.requestId, error));
+            //             } else {
+            //                 client.emit(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error));
+            //             }
+
+            //             return null;
+            //         });
+            // } catch (error) {
+            //     if (error instanceof SocketAuthenticationError) {
+            //         client.emit(SocketEvent.INVALID_TOKEN, new SocketErrorResponse(data.requestId, error));
+            //     } else if (error instanceof PermissionError) {
+            //         client.emit(SocketEvent.PERMISSION_ERROR, new SocketErrorResponse(data.requestId, error));
+            //     } else {
+            //         client.emit(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error));
+            //     }
+            // }
+
+            let responseData = [];
+            if (response) {
+                client.emit(response.event, response.data);
+                responseData = response.data;
+            }
+
+            RequestCounter.getInstance().countSocketRequestCounter(false);
+            ProfilingService.getInstance().stop(profileTaskId, { data: [responseData] });
         });
     }
 
@@ -117,3 +148,4 @@ export abstract class SocketNameSpace implements ISocketNamespace {
         return newParameter;
     }
 }
+

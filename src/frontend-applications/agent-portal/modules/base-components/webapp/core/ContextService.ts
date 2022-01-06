@@ -73,7 +73,7 @@ export class ContextService {
 
     private async createStoredContext(contextPreference: ContextPreference): Promise<void> {
         const context = await this.createContext(
-            contextPreference.contextDescriptor.contextId, contextPreference.objectId, contextPreference.instanceId,
+            contextPreference.contextId, contextPreference.objectId, contextPreference.instanceId,
             contextPreference
         );
         EventService.getInstance().publish(ContextEvents.CONTEXT_CHANGED, context);
@@ -547,23 +547,7 @@ export class ContextService {
 
     public async getStoredContextList(): Promise<ContextPreference[]> {
         if (!this.storedContexts) {
-            let contextList: ContextPreference[] = [];
-            const preference = await AgentService.getInstance().getUserPreference('AgentPortalContextList');
-            if (preference) {
-                try {
-                    const value: string | string[] = preference.Value;
-                    if (typeof value === 'string') {
-                        contextList = [JSON.parse(value)];
-                    } else if (Array.isArray(value)) {
-                        contextList = (value as string[]).map((v) => JSON.parse(v));
-                    }
-                } catch (error) {
-                    console.error('Could not load ContextList from Preferences.');
-                    console.error(error);
-                }
-            }
-
-            this.storedContexts = Array.isArray(contextList) ? contextList : [];
+            this.storedContexts = await ContextSocketClient.getInstance().loadStoredContexts().catch(() => []);
         }
 
         return [...this.storedContexts];
@@ -600,7 +584,9 @@ export class ContextService {
             }
 
             let stored = false;
-            if (!remove) {
+            if (remove) {
+                ContextSocketClient.getInstance().removeStoredContext(context.instanceId);
+            } else {
                 const preference = await context?.getStorageManager()?.getStorableContextPreference()
                     .catch((error) => {
                         console.error('Could not store context');
@@ -612,12 +598,8 @@ export class ContextService {
                     this.storedContexts.push(preference);
                     stored = true;
                 }
+                ContextSocketClient.getInstance().storeContext(preference);
             }
-
-            const value = this.storedContexts.map((p) => JSON.stringify(p));
-            await AgentService.getInstance().setPreferences(
-                [['AgentPortalContextList', value.length ? value : null]]
-            );
 
             if (stored) {
                 EventService.getInstance().publish(ContextEvents.CONTEXT_STORED, context);
