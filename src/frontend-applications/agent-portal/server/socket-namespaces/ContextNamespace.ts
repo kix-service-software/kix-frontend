@@ -31,6 +31,11 @@ import { ISocketResponse } from '../../modules/base-components/webapp/core/ISock
 import { ISocketRequest } from '../../modules/base-components/webapp/core/ISocketRequest';
 import { LoggingService } from '../../../../server/services/LoggingService';
 import { Socket } from 'socket.io';
+import { UserService } from '../../modules/user/server/UserService';
+import cookie from 'cookie';
+import { User } from '../../modules/user/model/User';
+import { ContextPreference } from '../../model/ContextPreference';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
 
 export class ContextNamespace extends SocketNameSpace {
 
@@ -48,6 +53,7 @@ export class ContextNamespace extends SocketNameSpace {
     }
 
     private rebuildPromise: Promise<void>;
+    private configCache: Map<string, IConfiguration> = new Map();
 
     protected getNamespace(): string {
         return 'context';
@@ -62,6 +68,15 @@ export class ContextNamespace extends SocketNameSpace {
         );
         this.registerEventHandler(
             client, ContextEvent.REBUILD_CONFIG, this.rebuildConfiguration.bind(this)
+        );
+        this.registerEventHandler(
+            client, ContextEvent.LOAD_STORED_CONTEXTS, this.loadStoreContexts.bind(this)
+        );
+        this.registerEventHandler(
+            client, ContextEvent.STORE_CONTEXT, this.storeContext.bind(this)
+        );
+        this.registerEventHandler(
+            client, ContextEvent.REMOVE_STORED_CONTEXT, this.removeStoredContext.bind(this)
         );
     }
 
@@ -85,7 +100,11 @@ export class ContextNamespace extends SocketNameSpace {
         if (!this.rebuildPromise) {
             // eslint-disable-next-line no-async-promise-executor
             this.rebuildPromise = new Promise<void>(async (resolve, reject) => {
-                await CacheService.getInstance().deleteKeys('ContextConfiguration', true);
+                if (CacheService.getInstance().hasCacheBackend()) {
+                    await CacheService.getInstance().deleteKeys('ContextConfiguration', true);
+                } else {
+                    this.configCache.clear();
+                }
 
                 const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
 
@@ -114,7 +133,11 @@ export class ContextNamespace extends SocketNameSpace {
                             options
                         );
 
-                        await CacheService.getInstance().set(newConfig.contextId, newConfig, 'ContextConfiguration');
+                        if (CacheService.getInstance().hasCacheBackend()) {
+                            await CacheService.getInstance().set(newConfig.contextId, newConfig, 'ContextConfiguration');
+                        } else {
+                            this.configCache.set(newConfig.contextId, newConfig);
+                        }
                     }
                 }
 
@@ -129,11 +152,15 @@ export class ContextNamespace extends SocketNameSpace {
     protected async loadContextConfiguration(
         data: LoadContextConfigurationRequest, client: Socket)
         : Promise<SocketResponse<LoadContextConfigurationResponse<any> | SocketErrorResponse>> {
-        let configuration = await CacheService.getInstance().get(data.contextId, 'ContextConfiguration');
+        let configuration = CacheService.getInstance().hasCacheBackend()
+            ? await CacheService.getInstance().get(data.contextId, 'ContextConfiguration')
+            : this.configCache.get(data.contextId);
 
         if (!configuration) {
             await this.rebuildConfigCache();
-            configuration = await CacheService.getInstance().get(data.contextId, 'ContextConfiguration');
+            configuration = CacheService.getInstance().hasCacheBackend()
+                ? await CacheService.getInstance().get(data.contextId, 'ContextConfiguration')
+                : this.configCache.get(data.contextId);
         }
 
         if (!configuration) {
@@ -180,6 +207,73 @@ export class ContextNamespace extends SocketNameSpace {
             configurations
         };
         return new SocketResponse(ContextEvent.CONTEXT_CONFIGURATIONS_LOADED, response);
+    }
+
+    protected async loadStoreContexts(data: any, client: Socket): Promise<SocketResponse<any | SocketErrorResponse>> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
+        let contextList: ContextPreference[] = [];
+        const user = await UserService.getInstance().getUserByToken(token).catch((): User => null);
+        if (user) {
+            const fileName = this.getContextListFileName(user);
+            contextList = ConfigurationService.getInstance().getDataFileContent(fileName, []);
+        }
+
+        const response = {
+            requestId: data.requestId,
+            contextPreferences: contextList
+        };
+        return new SocketResponse(ContextEvent.LOAD_STORED_CONTEXTS_FINISCHED, response);
+    }
+
+    protected async storeContext(data: any, client: Socket): Promise<SocketResponse<any | SocketErrorResponse>> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
+        const user = await UserService.getInstance().getUserByToken(token).catch((): User => null);
+        if (user) {
+            const fileName = this.getContextListFileName(user);
+            const contextList: ContextPreference[] = ConfigurationService.getInstance().getDataFileContent(
+                fileName, []
+            );
+
+            const index = contextList.findIndex((cp) => cp.instanceId === data?.contextPreference?.instanceId);
+            if (index !== -1) {
+                contextList.splice(index, 1);
+            }
+            contextList.push(data.contextPreference);
+            ConfigurationService.getInstance().saveDataFileContent(fileName, contextList);
+        }
+
+        const response = { requestId: data.requestId };
+        return new SocketResponse(ContextEvent.STORE_CONTEXT_FINISCHED, response);
+    }
+
+    protected async removeStoredContext(data: any, client: Socket): Promise<SocketResponse<any | SocketErrorResponse>> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
+        const user = await UserService.getInstance().getUserByToken(token).catch((): User => null);
+        if (user) {
+            const fileName = this.getContextListFileName(user);
+            const contextList: ContextPreference[] = ConfigurationService.getInstance().getDataFileContent(
+                fileName, []
+            );
+
+            const index = contextList.findIndex((cp) => cp.instanceId === data?.instanceId);
+            if (index !== -1) {
+                contextList.splice(index, 1);
+            }
+            ConfigurationService.getInstance().saveDataFileContent(fileName, contextList);
+        }
+
+        const response = { requestId: data.requestId };
+        return new SocketResponse(ContextEvent.REMOVE_STORED_CONTEXT_FINISHED, response);
+    }
+
+    private getContextListFileName(user: User): string {
+        return `${user.UserID}_ContextList.json`;
     }
 
 }

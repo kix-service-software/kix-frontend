@@ -8,12 +8,16 @@
  */
 
 import { RedisCache } from './RedisCache';
+import { FileCache } from './FileCache';
 
 import md5 from 'md5';
 import { ObjectUpdatedEventData } from '../../../model/ObjectUpdatedEventData';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { RequestMethod } from '../../../../../server/model/rest/RequestMethod';
+import { ProfilingService } from '../../../../../server/services/ProfilingService';
+import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
+import { ICache } from './ICache';
 
 export class CacheService {
 
@@ -28,6 +32,7 @@ export class CacheService {
 
     private ignorePrefixes: string[] = [];
     private dependencies: Map<string, string[]> = new Map();
+    private backendType: string;
 
     private constructor() {
         this.init();
@@ -42,21 +47,32 @@ export class CacheService {
     }
 
     public init(): void {
-        RedisCache.getInstance();
+        this.backendType = ConfigurationService.getInstance().getServerConfiguration().CACHE_BACKEND || 'Redis';
+
+        LoggingService.getInstance().info(`Initialize ${this.backendType} cache backend`);
+
+        const cacheInstance = this.getCacheBackendInstance();
+        if (!cacheInstance) {
+            LoggingService.getInstance().error(`Unknown cache backend "${this.backendType}" - No Cache in use`);
+        }
     }
 
-    public async getAll(cacheKeyPrefix: string): Promise<any[]> {
-        return await RedisCache.getInstance().getAll(cacheKeyPrefix);
+    public hasCacheBackend(): boolean {
+        return this.getCacheBackendInstance() !== null;
     }
 
-    public async get(key: string, cacheKeyPrefix?: string): Promise<any> {
+    public async getAll(type: string): Promise<any[]> {
+        return await this.getCacheBackendInstance()?.getAll(type);
+    }
+
+    public async get(key: string, type: string = ''): Promise<any> {
         key = md5(key);
-        return await RedisCache.getInstance().get(key, cacheKeyPrefix);
+        return await this.getCacheBackendInstance()?.get(type, key);
     }
 
-    public async set(key: string, value: any, cacheKeyPrefix?: string): Promise<void> {
+    public async set(key: string, value: any, type: string = ''): Promise<void> {
         key = md5(key);
-        await RedisCache.getInstance().set(key, cacheKeyPrefix, value);
+        await this.getCacheBackendInstance()?.set(type, key, value);
     }
 
     public async updateCaches(events: ObjectUpdatedEventData[]): Promise<void> {
@@ -70,180 +86,203 @@ export class CacheService {
         }
     }
 
-    public async deleteKeys(cacheKeyPrefix: string, force: boolean = false): Promise<void> {
-        let prefixes = await this.getCacheKeyPrefixes(cacheKeyPrefix);
+    public async deleteKeys(type: string, force: boolean = false): Promise<void> {
+        if (!type || type.length === 0)
+            return;
+
+        // start profiling
+        const profileTaskId = ProfilingService.getInstance().start(
+            'CacheService',
+            'deleteKeys',
+            {
+                data: [type]
+            }
+        );
+
+        let prefixes = await this.getCacheKeyPrefixes(type);
         if (!force) {
             prefixes = prefixes.filter((p) => !this.ignorePrefixes.some((ip) => ip === p));
         }
 
         for (const prefix of prefixes) {
-            await RedisCache.getInstance().deleteKeys(prefix);
+            await this.getCacheBackendInstance()?.deleteAll(prefix);
         }
+        ProfilingService.getInstance().stop(profileTaskId);
     }
 
     private async getCacheKeyPrefixes(objectNamespace: string): Promise<string[]> {
-        let cacheKeyPrefixes: string[] = [];
+        let types: string[] = [];
         if (objectNamespace && objectNamespace.indexOf('.') !== -1) {
             const namespace = objectNamespace.split('.');
             if (namespace[0] === 'CMDB') {
-                cacheKeyPrefixes.push(namespace[1]);
+                types.push(namespace[1]);
             } else if (namespace[0] === 'FAQ') {
-                cacheKeyPrefixes.push(KIXObjectType.FAQ_CATEGORY);
-                cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
-                cacheKeyPrefixes.push(KIXObjectType.FAQ_VOTE);
+                types.push(KIXObjectType.FAQ_CATEGORY);
+                types.push(KIXObjectType.FAQ_ARTICLE);
+                types.push(KIXObjectType.FAQ_VOTE);
             } else {
-                cacheKeyPrefixes.push(namespace[0]);
+                types.push(namespace[0]);
             }
         } else if (objectNamespace === 'State') {
-            cacheKeyPrefixes.push(KIXObjectType.TICKET_STATE);
+            types.push(KIXObjectType.TICKET_STATE);
         } else if (objectNamespace === 'Type') {
-            cacheKeyPrefixes.push(KIXObjectType.TICKET_TYPE);
+            types.push(KIXObjectType.TICKET_TYPE);
         } else {
-            cacheKeyPrefixes.push(objectNamespace);
+            types.push(objectNamespace);
         }
 
-        if (this.dependencies.has(cacheKeyPrefixes[0])) {
-            cacheKeyPrefixes = [
-                ...cacheKeyPrefixes,
-                ...this.dependencies.get(cacheKeyPrefixes[0])
+        if (this.dependencies.has(types[0])) {
+            types = [
+                ...types,
+                ...this.dependencies.get(types[0])
             ];
         }
 
-        switch (cacheKeyPrefixes[0]) {
+        switch (types[0]) {
             case KIXObjectType.WATCHER:
             case KIXObjectType.ARTICLE:
             case KIXObjectType.DYNAMIC_FIELD:
-                cacheKeyPrefixes.push(KIXObjectType.TICKET);
-                cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
+                types.push(KIXObjectType.TICKET);
+                types.push(KIXObjectType.CURRENT_USER);
                 break;
             case KIXObjectType.TICKET:
-                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
-                cacheKeyPrefixes.push(KIXObjectType.ARTICLE);
-                cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
-                cacheKeyPrefixes.push(KIXObjectType.CONTACT);
-                cacheKeyPrefixes.push(KIXObjectType.QUEUE);
-                cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
+                types.push(KIXObjectType.CONFIG_ITEM);
+                types.push(KIXObjectType.ARTICLE);
+                types.push(KIXObjectType.ORGANISATION);
+                types.push(KIXObjectType.CONTACT);
+                types.push(KIXObjectType.QUEUE);
+                types.push(KIXObjectType.CURRENT_USER);
                 // needed for permission checks of objectactions (HttpService) - check new after ticket update
-                cacheKeyPrefixes.push(RequestMethod.OPTIONS);
+                types.push(RequestMethod.OPTIONS);
                 break;
             case KIXObjectType.FAQ_VOTE:
-                cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
+                types.push(KIXObjectType.FAQ_ARTICLE);
                 break;
             case KIXObjectType.FAQ_ARTICLE:
-                cacheKeyPrefixes.push(KIXObjectType.FAQ_CATEGORY);
+                types.push(KIXObjectType.FAQ_CATEGORY);
                 break;
             case KIXObjectType.FAQ_CATEGORY:
-                cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
+                types.push(KIXObjectType.OBJECT_ICON);
                 break;
             case KIXObjectType.CONFIG_ITEM:
             case KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION:
-                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM_CLASS);
-                cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
-                cacheKeyPrefixes.push(KIXObjectType.CONTACT);
-                cacheKeyPrefixes.push(KIXObjectType.GRAPH);
+                types.push(KIXObjectType.CONFIG_ITEM_CLASS);
+                types.push(KIXObjectType.ORGANISATION);
+                types.push(KIXObjectType.CONTACT);
+                types.push(KIXObjectType.GRAPH);
                 break;
             case KIXObjectType.PERSONAL_SETTINGS:
             case KIXObjectType.USER_PREFERENCE:
-                cacheKeyPrefixes.push(KIXObjectType.USER);
-                cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
-                cacheKeyPrefixes.push(KIXObjectType.CONTACT);
+                types.push(KIXObjectType.USER);
+                types.push(KIXObjectType.CURRENT_USER);
+                types.push(KIXObjectType.CONTACT);
                 break;
             case KIXObjectType.USER:
-                cacheKeyPrefixes.push(KIXObjectType.ROLE);
-                cacheKeyPrefixes.push(KIXObjectType.CONTACT);
-                cacheKeyPrefixes.push(KIXObjectType.REPORT_DEFINITION);
+                types.push(KIXObjectType.ROLE);
+                types.push(KIXObjectType.CONTACT);
+                types.push(KIXObjectType.REPORT_DEFINITION);
                 break;
             case KIXObjectType.LINK:
             case KIXObjectType.LINK_OBJECT:
-                cacheKeyPrefixes.push(KIXObjectType.TICKET);
-                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
-                cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
-                cacheKeyPrefixes.push(KIXObjectType.LINK);
-                cacheKeyPrefixes.push(KIXObjectType.LINK_OBJECT);
-                cacheKeyPrefixes.push(KIXObjectType.GRAPH);
+                types.push(KIXObjectType.TICKET);
+                types.push(KIXObjectType.CONFIG_ITEM);
+                types.push(KIXObjectType.FAQ_ARTICLE);
+                types.push(KIXObjectType.LINK);
+                types.push(KIXObjectType.LINK_OBJECT);
+                types.push(KIXObjectType.GRAPH);
                 break;
             case KIXObjectType.ORGANISATION:
-                cacheKeyPrefixes.push(KIXObjectType.CONTACT);
-                cacheKeyPrefixes.push(KIXObjectType.TICKET);
-                cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
-                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
+                types.push(KIXObjectType.CONTACT);
+                types.push(KIXObjectType.TICKET);
+                types.push(KIXObjectType.OBJECT_ICON);
+                types.push(KIXObjectType.CONFIG_ITEM);
                 break;
             case KIXObjectType.CONTACT:
-                cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
-                cacheKeyPrefixes.push(KIXObjectType.TICKET);
-                cacheKeyPrefixes.push(KIXObjectType.USER);
-                cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
-                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
+                types.push(KIXObjectType.ORGANISATION);
+                types.push(KIXObjectType.TICKET);
+                types.push(KIXObjectType.USER);
+                types.push(KIXObjectType.OBJECT_ICON);
+                types.push(KIXObjectType.CONFIG_ITEM);
                 break;
             case KIXObjectType.PERMISSION:
             case KIXObjectType.ROLE:
             case 'Migration':
                 await this.clearCache();
-                cacheKeyPrefixes = [];
+                types = [];
                 break;
             case KIXObjectType.TRANSLATION_PATTERN:
             case KIXObjectType.TRANSLATION:
             case KIXObjectType.TRANSLATION_LANGUAGE:
-                cacheKeyPrefixes.push(KIXObjectType.TRANSLATION_PATTERN);
-                cacheKeyPrefixes.push(KIXObjectType.TRANSLATION);
-                cacheKeyPrefixes.push(KIXObjectType.TRANSLATION_LANGUAGE);
+                types.push(KIXObjectType.TRANSLATION_PATTERN);
+                types.push(KIXObjectType.TRANSLATION);
+                types.push(KIXObjectType.TRANSLATION_LANGUAGE);
                 break;
             case KIXObjectType.CONFIG_ITEM_VERSION:
-                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
-                cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
-                cacheKeyPrefixes.push(KIXObjectType.CONTACT);
-                cacheKeyPrefixes.push(KIXObjectType.GRAPH);
+                types.push(KIXObjectType.CONFIG_ITEM);
+                types.push(KIXObjectType.ORGANISATION);
+                types.push(KIXObjectType.CONTACT);
+                types.push(KIXObjectType.GRAPH);
                 break;
             case KIXObjectType.SYS_CONFIG_OPTION_DEFINITION:
-                cacheKeyPrefixes.push(KIXObjectType.SYS_CONFIG_OPTION);
-                cacheKeyPrefixes.push(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION);
+                types.push(KIXObjectType.SYS_CONFIG_OPTION);
+                types.push(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION);
                 break;
             case KIXObjectType.SYS_CONFIG_OPTION:
-                cacheKeyPrefixes.push(KIXObjectType.SYS_CONFIG_OPTION);
-                cacheKeyPrefixes.push(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION);
-                cacheKeyPrefixes.push(KIXObjectType.REPORT_DEFINITION);
+                types.push(KIXObjectType.SYS_CONFIG_OPTION);
+                types.push(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION);
+                types.push(KIXObjectType.REPORT_DEFINITION);
                 break;
             case KIXObjectType.QUEUE:
             case KIXObjectType.TICKET_STATE:
             case KIXObjectType.TICKET_TYPE:
             case KIXObjectType.TICKET_PRIORITY:
-                cacheKeyPrefixes.push(KIXObjectType.TICKET);
+                types.push(KIXObjectType.TICKET);
                 break;
             case KIXObjectType.GENERAL_CATALOG_ITEM:
-                cacheKeyPrefixes.push(KIXObjectType.GENERAL_CATALOG_CLASS);
+                types.push(KIXObjectType.GENERAL_CATALOG_CLASS);
                 break;
             case KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN:
-                cacheKeyPrefixes.push(KIXObjectType.IMPORT_EXPORT_TEMPLATE);
+                types.push(KIXObjectType.IMPORT_EXPORT_TEMPLATE);
                 break;
             case KIXObjectType.JOB:
-                cacheKeyPrefixes.push(KIXObjectType.JOB_RUN);
-                cacheKeyPrefixes.push(KIXObjectType.JOB_RUN_LOG);
+                types.push(KIXObjectType.JOB_RUN);
+                types.push(KIXObjectType.JOB_RUN_LOG);
                 break;
             case KIXObjectType.REPORT_DEFINITION:
-                cacheKeyPrefixes.push(KIXObjectType.REPORT_DEFINITION);
-                cacheKeyPrefixes.push(KIXObjectType.REPORT);
-                cacheKeyPrefixes.push(KIXObjectType.REPORT_RESULT);
-                cacheKeyPrefixes.push(KIXObjectType.ROLE);
-                cacheKeyPrefixes.push(KIXObjectType.ROLE_PERMISSION);
+                types.push(KIXObjectType.REPORT_DEFINITION);
+                types.push(KIXObjectType.REPORT);
+                types.push(KIXObjectType.REPORT_RESULT);
+                types.push(KIXObjectType.ROLE);
+                types.push(KIXObjectType.ROLE_PERMISSION);
                 break;
             case KIXObjectType.REPORT:
             case KIXObjectType.REPORT_RESULT:
-                cacheKeyPrefixes.push(KIXObjectType.REPORT_DEFINITION);
-                cacheKeyPrefixes.push(KIXObjectType.REPORT);
-                cacheKeyPrefixes.push(KIXObjectType.REPORT_RESULT);
+                types.push(KIXObjectType.REPORT_DEFINITION);
+                types.push(KIXObjectType.REPORT);
+                types.push(KIXObjectType.REPORT_RESULT);
                 break;
             default:
         }
 
-        return cacheKeyPrefixes;
+        return types;
     }
 
     private async clearCache(): Promise<void> {
-        await RedisCache.getInstance().clear(this.ignorePrefixes);
+        const taskId = ProfilingService.getInstance().start('CacheService', 'Clear Cache');
+        await this.getCacheBackendInstance()?.clear(this.ignorePrefixes);
+        ProfilingService.getInstance().stop(taskId);
     }
 
     public adddIgnorePrefixes(ignoreList: string[]): void {
         this.ignorePrefixes = [...this.ignorePrefixes, ...ignoreList];
+    }
+
+    private getCacheBackendInstance(): ICache {
+        if (this.backendType === 'Redis')
+            return RedisCache.getInstance();
+        if (this.backendType === 'File')
+            return FileCache.getInstance();
+        return null;
     }
 
 }
