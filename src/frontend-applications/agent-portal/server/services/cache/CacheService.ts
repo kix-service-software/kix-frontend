@@ -238,7 +238,7 @@ export class CacheService {
         return cacheKeyPrefixes;
     }
 
-    private async clearCache(): Promise<void> {
+    public async clearCache(): Promise<void> {
         await RedisCache.getInstance().clear(this.ignorePrefixes);
     }
 

@@ -33,9 +33,13 @@ export class NotificationFilterValidator implements IFormFieldValidator {
 
     public async validate(formField: FormFieldConfiguration): Promise<ValidationResult> {
 
-        if (formField.property === NotificationProperty.FILTER) {
-            const context = ContextService.getInstance().getActiveContext();
-            const formInstance = await context?.getFormManager()?.getFormInstance();
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context.getFormManager().getFormInstance();
+
+        if (
+            formInstance.getForm().objectType === KIXObjectType.NOTIFICATION_FILTER
+            && formField.property === NotificationProperty.FILTER
+        ) {
             const value = formInstance.getFormFieldValue(formField.instanceId);
             if (value && value.value && Array.isArray(value.value)) {
                 let selectedEvents = [];

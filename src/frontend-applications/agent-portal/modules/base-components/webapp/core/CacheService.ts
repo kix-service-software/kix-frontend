@@ -275,7 +275,7 @@ export class BrowserCacheService {
         return cacheKeyPrefixes;
     }
 
-    private clear(): void {
+    public clear(): void {
         const iterator = this.keyIndex.keys();
 
         let prefix = iterator.next();
