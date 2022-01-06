@@ -267,7 +267,7 @@ export class CacheService {
         return types;
     }
 
-    private async clearCache(): Promise<void> {
+    public async clearCache(): Promise<void> {
         const taskId = ProfilingService.getInstance().start('CacheService', 'Clear Cache');
         await this.getCacheBackendInstance()?.clear(this.ignorePrefixes);
         ProfilingService.getInstance().stop(taskId);
