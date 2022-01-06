@@ -33,6 +33,9 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
             if (typeOption) {
                 this.state.inputType = typeOption.value.toString();
             }
+            else {
+                this.state.inputType = InputFieldTypes.DATE_TIME;
+            }
 
             const minDateOption = this.state.field?.options.find((o) => o.option === FormFieldOptions.MIN_DATE);
             this.state.minDate = minDateOption ? minDateOption.value : null;

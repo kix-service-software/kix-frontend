@@ -30,13 +30,13 @@ export class TableValue {
     public async initDisplayValue(cell: Cell): Promise<void> {
         const object = cell.getRow().getRowObject<KIXObject>().getObject();
 
-        if (!this.displayValue && cell.getColumnConfiguration().showText && object) {
+        if (!this.displayValue && cell?.getColumnConfiguration()?.showText && object) {
             this.displayValue = await LabelService.getInstance().getDisplayText(
                 object, this.property, object[this.property], cell.getColumnConfiguration().translatable
             );
         }
 
-        if (!this.displayIcons && cell.getColumnConfiguration().showIcon && object) {
+        if (!this.displayIcons && cell?.getColumnConfiguration()?.showIcon && object) {
             this.displayIcons = await LabelService.getInstance().getIcons(
                 object, this.property, object[this.property], true
             );
