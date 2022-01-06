@@ -66,7 +66,7 @@ export class Server implements IServer {
             LoggingService.getInstance().error(reason.toString(), reason);
             console.error('Unhandled Rejection at: Promise', promise, 'reason:', reason);
             console.error(reason);
-            throw reason;
+            // throw reason;
         });
 
         LoggingService.getInstance().info(`Initialize ${serviceExtensions.length} service extensions`);

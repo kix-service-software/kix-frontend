@@ -312,10 +312,10 @@ class Component {
             }
             await table?.initialize();
 
-            if (table.getFilterCriteria()) {
+            if (table?.getFilterCriteria()) {
                 this.state.predefinedFilterName = ClientStorageService.getOption(`${table?.getTableId()}-predefinedfilter`);
             } else {
-                ClientStorageService.deleteState(`${table.getTableId()}-predefinedfilter`);
+                ClientStorageService.deleteState(`${table?.getTableId()}-predefinedfilter`);
             }
 
             this.state.table = table;

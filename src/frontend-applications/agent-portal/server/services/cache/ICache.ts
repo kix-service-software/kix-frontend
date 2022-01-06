@@ -9,14 +9,16 @@
 
 export interface ICache {
 
-    clear(ignoreKeyPrefixes?: string[]): Promise<void>;
+    clear(ignoreTypes?: string[]): Promise<void>;
 
-    get(key: string, cacheKeyPrefix: string): Promise<any>;
+    get(type: string, key: string): Promise<any>;
 
-    set(key: string, cacheKeyPrefix: string, value: any): Promise<void>;
+    getAll(type: string): Promise<any[]>;
 
-    delete(key: string, cacheKeyPrefix: string): Promise<void>;
+    set(type: string, key: string, value: any): Promise<void>;
 
-    deleteKeys(cacheKeyPrefix: string): Promise<void>;
+    delete(type: string, key: string): Promise<void>;
+
+    deleteAll(type: string): Promise<void>;
 
 }

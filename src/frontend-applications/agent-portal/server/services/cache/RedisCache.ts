@@ -28,10 +28,12 @@ export class RedisCache implements ICache {
 
     private redisClient: RedisClient;
 
-    private getAsync: (key: string) => Promise<string>;
-    private setAsync: (key: string, value: string) => Promise<void>;
-    private delAsync: (key: string) => Promise<void>;
+    private delAsync: (type: string) => Promise<void>;
     private scanAsync: (cursor: any, match: string, pattern: string) => Promise<string[]>;
+    private hgetAsync: (type: string, key: string) => Promise<string>;
+    private hsetAsync: (type: string, key: string, value: string) => Promise<void>;
+    private hdelAsync: (type: string, key: string) => Promise<void>;
+    private hvalsAsync: (type: string) => Promise<any[]>;
 
     private constructor() {
 
@@ -58,13 +60,15 @@ export class RedisCache implements ICache {
         LoggingService.getInstance().info('Clear Cache: (ignore) ' + ignoreKeyPrefixes.join(', '));
         let keys = await this.scan(`${this.KIX_CACHE_PREFIX}::*`);
         keys = keys.filter((k) => !ignoreKeyPrefixes.some((p) => k.startsWith(`${this.KIX_CACHE_PREFIX}::${p}`)));
-        for (const key of keys) {
-            await this.delete(key);
-        }
+
+        const deletePromises = [];
+        keys.forEach((key) => deletePromises.push(this.delete(null, key)));
+
+        await Promise.all(deletePromises);
     }
 
-    public async get(key: string, cacheKeyPrefix?: string): Promise<any> {
-        let value = await this.getAsync(`${this.KIX_CACHE_PREFIX}::${cacheKeyPrefix}::${key}`)
+    public async get(type: string, key: string): Promise<any> {
+        let value = await this.hgetAsync(`${this.KIX_CACHE_PREFIX}::${type}`, key)
             .catch((error) => {
                 LoggingService.getInstance().error(error);
                 this.checkConnection();
@@ -81,61 +85,44 @@ export class RedisCache implements ICache {
     }
 
     public async getAll(cacheKeyPrefix: string): Promise<any[]> {
-        const keys = await this.scan(`${this.KIX_CACHE_PREFIX}::${cacheKeyPrefix}::*`)
-            .catch((error) => {
-                LoggingService.getInstance().error(error);
-                this.checkConnection();
-                return null;
-            });
+        let values;
+        try {
+            values = await this.hvalsAsync(cacheKeyPrefix);
+        }
+        catch (error) {
+            LoggingService.getInstance().error(error);
+            this.checkConnection();
+            return null;
+        }
 
-        const values: any[] = [];
-
-        for (const key of keys) {
-            let value = await this.getAsync(key)
-                .catch((error) => {
-                    LoggingService.getInstance().error(error);
-                    this.checkConnection();
-                    return null;
-                });
-
-            try {
-                value = JSON.parse(value);
-                // tslint:disable-next-line:no-empty
-            } catch (error) {
-                // do nothing
-            }
-
-            values.push(value);
+        try {
+            values = JSON.parse(values);
+            // tslint:disable-next-line:no-empty
+        } catch (error) {
+            // do nothing
         }
 
         return values;
     }
 
-    public async set(key: string, cacheKeyPrefix: string, value: any): Promise<void> {
+    public async set(type: string, key: string, value: any): Promise<void> {
         if (typeof value === 'object') {
             value = JSON.stringify(value);
         }
 
-        await this.setAsync(`${this.KIX_CACHE_PREFIX}::${cacheKeyPrefix}::${key}`, value)
+        await this.hsetAsync(`${this.KIX_CACHE_PREFIX}::${type}`, key, value)
             .catch(() => this.checkConnection());
     }
 
-    public async delete(key: string, cacheKeyPrefix?: string): Promise<void> {
-        await this.delAsync(key).catch(() => this.checkConnection());
+    public async delete(type: string, key: string): Promise<void> {
+        await this.hdelAsync(`${this.KIX_CACHE_PREFIX}::${type}`, key).catch(() => this.checkConnection());
     }
 
-    public async deleteKeys(cacheKeyPrefix: string): Promise<void> {
-        const keys = await this.scan(`${this.KIX_CACHE_PREFIX}::${cacheKeyPrefix}::*`)
-            .catch(() => {
-                this.checkConnection();
-                return null;
-            });
-        if (keys) {
-            LoggingService.getInstance().debug(
-                `Redis Cache: delete cacheKeyPrefix ${cacheKeyPrefix} - key count: ${keys.length}`
-            );
-            keys.forEach((k) => this.delAsync(k).catch(() => this.checkConnection()));
-        }
+    public async deleteAll(type: string): Promise<void> {
+        LoggingService.getInstance().debug(
+            `Redis Cache: delete cacheKeyPrefix ${type}`
+        );
+        await this.delAsync(`${this.KIX_CACHE_PREFIX}::${type}`).catch(() => this.checkConnection());
     }
 
     private checkConnection(): void {
@@ -165,13 +152,16 @@ export class RedisCache implements ICache {
                 LoggingService.getInstance().error(error);
             });
 
-            this.getAsync = promisify(this.redisClient.get).bind(this.redisClient);
-            this.setAsync = promisify(this.redisClient.set).bind(this.redisClient);
             this.delAsync = promisify(this.redisClient.del).bind(this.redisClient);
             this.scanAsync = promisify(this.redisClient.scan).bind(this.redisClient);
+            this.hgetAsync = promisify(this.redisClient.hget).bind(this.redisClient);
+            this.hsetAsync = promisify(this.redisClient.hset).bind(this.redisClient);
+            this.hdelAsync = promisify(this.redisClient.hdel).bind(this.redisClient);
+            this.hvalsAsync = promisify(this.redisClient.hvals).bind(this.redisClient);
         } catch (error) {
             LoggingService.getInstance().error(error);
         }
+
     }
 
     private async scan(pattern: string): Promise<string[]> {
@@ -187,5 +177,4 @@ export class RedisCache implements ICache {
 
         return found;
     }
-
 }
