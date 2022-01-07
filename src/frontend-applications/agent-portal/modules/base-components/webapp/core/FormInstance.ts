@@ -39,7 +39,6 @@ export class FormInstance {
     private fixedValues: Map<string, [FormFieldConfiguration, FormFieldValue<any>]> = new Map();
 
     private templateValues: Map<string, [FormFieldConfiguration, FormFieldValue<any>]> = new Map();
-    private savedValues: Map<string, [FormFieldConfiguration, FormFieldValue<any>]> = null;
 
     private form: FormConfiguration;
 
