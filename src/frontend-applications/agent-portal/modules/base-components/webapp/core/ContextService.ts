@@ -539,8 +539,11 @@ export class ContextService {
 
     public async isContextStored(instanceId: string): Promise<boolean> {
         let isStored = false;
-        const contextList = await this.getStoredContextList();
-        isStored = Array.isArray(contextList) ? contextList.some((c) => c.instanceId === instanceId) : false;
+        const contextList = await this.getStoredContextList() || [];
+
+        isStored = contextList
+            .filter((c) => c !== null && typeof c !== 'undefined')
+            .some((c) => c.instanceId === instanceId);
 
         return isStored;
     }
