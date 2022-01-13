@@ -222,6 +222,7 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
     public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
         switch (property) {
             case ConfigItemProperty.CLASS_ID:
+                return await CMDBService.getInstance().getTreeNodes(property);
             case ConfigItemProperty.CUR_DEPL_STATE_ID:
             case ConfigItemProperty.CUR_INCI_STATE_ID:
             case ConfigItemProperty.CHANGE_BY:
