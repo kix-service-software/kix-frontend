@@ -11,6 +11,8 @@ import { ComponentState } from './ComponentState';
 import * as Bowser from 'bowser';
 import { AgentService } from '../../../user/webapp/core/AgentService';
 
+declare const window: Window;
+
 class Component {
 
     public state: ComponentState;
@@ -45,7 +47,6 @@ class Component {
             ['Welcome to KIX', 'Willkommen bei KIX'],
             [
                 'Note: For optimal use of KIX, we recommend alternative browsers such as Chromium or Firefox.',
-                // tslint:disable-next-line:max-line-length
                 'Hinweis: Für die optimale Nutzung von KIX  empfehlen wir alternative Browser wie Chromium oder Firefox.'
             ]
             ,
@@ -67,26 +68,30 @@ class Component {
         });
     }
 
+    public userNameChanged(event: any): void {
+        this.state.userName = event?.target?.value;
+    }
+
     private async login(event: any): Promise<void> {
         this.state.logout = false;
 
-        let userName: string;
         let password: string;
-
-        const userElement = (this as any).getEl('login-user-name');
-        if (userElement) {
-            userName = userElement.value;
-        }
 
         const passwordElement = (this as any).getEl('login-user-password');
         if (passwordElement) {
             password = passwordElement.value;
         }
 
-        if (userName && userName !== '' && password && password !== '') {
+        if (this.state.userName && this.state.userName !== '' && password && password !== '') {
+            this.state.loginProcess = true;
             this.state.error = false;
-            const login = await AgentService.getInstance().login(userName, password, this.redirectUrl);
+
+            const login = await AgentService.getInstance().login(
+                this.state.userName, password, this.redirectUrl
+            );
+
             if (!login) {
+                this.state.loginProcess = false;
                 this.state.error = true;
             }
         } else {
@@ -102,7 +107,7 @@ class Component {
     }
 
     public getString(pattern: string): string {
-        if (window.navigator) {
+        if (typeof window !== 'undefined' && window?.navigator) {
             const userLang = window.navigator.language;
             if (userLang.indexOf('de') >= 0 && this.translations.some((t) => t[0] === pattern)) {
                 const translation = this.translations.find((t) => t[0] === pattern);
