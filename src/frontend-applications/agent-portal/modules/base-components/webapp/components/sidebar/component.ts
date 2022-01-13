@@ -18,6 +18,7 @@ import { IEventSubscriber } from '../../core/IEventSubscriber';
 import { MobileShowEvent } from '../../../../agent-portal/model/MobileShowEvent';
 import { EventService } from '../../core/EventService';
 import { MobileShowEventData } from '../../../../agent-portal/model/MobileShowEventData';
+import { KIXStyle } from '../../../model/KIXStyle';
 
 class Component {
 
@@ -67,7 +68,7 @@ class Component {
     }
 
     private resizeHandling(): void {
-        this.state.isMobile = Boolean(window.innerWidth <= 1024);
+        this.state.isMobile = Boolean(window.innerWidth <= KIXStyle.MOBILE_BREAKPOINT);
         this.state.isSmall = this.state.isLeft
             ? Boolean(window.innerWidth <= 1300) : Boolean(window.innerWidth <= 1600);
         this.handleShowSidebarAreaState();
