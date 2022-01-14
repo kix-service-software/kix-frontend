@@ -43,12 +43,10 @@ export class UserEditAction extends AbstractAction {
             if (userId) {
                 const contactId = await this.getContactId(userId);
                 const additionalInformation: Array<[string, any]> = [
-                    ['IS_AGENT_DIALOG', true],
-                    ['USER_ID', userId],
                     ['CONTACT_ID', contactId]
                 ];
                 await ContextService.getInstance().setActiveContext(
-                    EditContactDialogContext.CONTEXT_ID, null, null, additionalInformation
+                    EditContactDialogContext.CONTEXT_ID, contactId, null, additionalInformation
                 );
             }
         }
