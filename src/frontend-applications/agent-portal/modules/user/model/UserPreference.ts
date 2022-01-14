@@ -26,7 +26,9 @@ export class UserPreference extends KIXObject {
             this.UserID = Number(userPreference.UserID);
             this.ID = userPreference.ID;
             this.ObjectId = this.ID;
-            this.Value = userPreference.Value;
+            this.Value = userPreference.Value === ''
+                ? null
+                : userPreference.Value;
         }
     }
 
