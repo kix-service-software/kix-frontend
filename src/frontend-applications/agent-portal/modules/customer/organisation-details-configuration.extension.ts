@@ -32,6 +32,12 @@ import { UserProperty } from '../user/model/UserProperty';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { ObjectIcon } from '../icon/model/ObjectIcon';
 import { ObjectInformationCardConfiguration } from '../base-components/webapp/components/object-information-card-widget/ObjectInformationCardConfiguration';
+import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
+import { FilterCriteria } from '../../model/FilterCriteria';
+import { TicketProperty } from '../ticket/model/TicketProperty';
+import { SearchOperator } from '../search/model/SearchOperator';
+import { FilterDataType } from '../../model/FilterDataType';
+import { FilterType } from '../../model/FilterType';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -294,13 +300,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(assignedConfigItemsLane);
 
-        const assignedTicketsLane = new WidgetConfiguration(
-            'organisation-details-assigned-tickets-widget', 'Assigned Tickets', ConfigurationType.Widget,
-            'organisation-assigned-tickets-widget', 'Translatable#Overview Tickets',
-            ['organisation-create-ticket-action'], null, null, false, true, null, false
-        );
-        configurations.push(assignedTicketsLane);
-
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), 'Organisation Details', ConfigurationType.Context,
@@ -318,8 +317,68 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         null, [new UIComponentPermission('cmdb/configitems', [CRUD.READ])]
                     ),
                     new ConfiguredWidget(
-                        'organisation-details-assigned-tickets-widget', 'organisation-details-assigned-tickets-widget',
-                        null, [new UIComponentPermission('tickets', [CRUD.READ])]
+                        'organisation-details-assigned-tickets-widget', null,
+                        new WidgetConfiguration(
+                            'organisation-assigned-tickets-widget', 'Organisation Tickets Widget', ConfigurationType.Widget,
+                            'table-widget', 'Translatable#Assigned Tickets', [], null,
+                            new TableWidgetConfiguration(
+                                'organisation-assigned-tickets-table-widget', 'Organisation Assigned Tickets Table Widget',
+                                ConfigurationType.TableWidget, KIXObjectType.TICKET, null, null,
+                                new TableConfiguration(
+                                    'organisation-assigned-tickets-table', 'Organisation Assigned Ticket Table',
+                                    ConfigurationType.Table, KIXObjectType.TICKET,
+                                    new KIXObjectLoadingOptions(
+                                        [
+                                            new FilterCriteria(
+                                                TicketProperty.STATE_TYPE, SearchOperator.EQUALS,
+                                                FilterDataType.STRING, FilterType.AND, 'Open'
+                                            ),
+                                            new FilterCriteria(
+                                                TicketProperty.ORGANISATION_ID, SearchOperator.EQUALS,
+                                                FilterDataType.NUMERIC, FilterType.AND, '<KIX_ORGANISATION_ID>'
+                                            )
+                                        ],
+                                        'Ticket.-ChangeTime',
+                                        100,
+                                        [KIXObjectProperty.DYNAMIC_FIELDS]
+                                    ), 15,
+                                    [
+                                        new DefaultColumnConfiguration(null, null, null,
+                                            TicketProperty.PRIORITY_ID, false, true, true, false, 65,
+                                            true, true, true, DataType.STRING, false
+                                        ),
+                                        new DefaultColumnConfiguration(
+                                            null, null, null, TicketProperty.TICKET_NUMBER, true,
+                                            false, true, false, 135, true, true, false, undefined, true,
+                                            undefined, undefined, false
+                                        ),
+                                        new DefaultColumnConfiguration(
+                                            null, null, null, TicketProperty.TITLE, true, false, true,
+                                            false, 160, true, true, false, undefined, true, undefined, undefined, false
+                                        ),
+                                        new DefaultColumnConfiguration(
+                                            null, null, null, TicketProperty.STATE_ID, true, true, true,
+                                            false, 150, true, true, true
+                                        ),
+                                        new DefaultColumnConfiguration(null, null, null,
+                                            TicketProperty.QUEUE_ID, true, false, true, false, 100, true, true, true
+                                        ),
+                                        new DefaultColumnConfiguration(null, null, null,
+                                            TicketProperty.OWNER_ID, true, false, true, false, 150, true, true
+                                        ),
+                                        new DefaultColumnConfiguration(null, null, null,
+                                            TicketProperty.CHANGED, true, false, true, false,
+                                            125, true, true, false, DataType.DATE_TIME
+                                        ),
+                                        new DefaultColumnConfiguration(null, null, null,
+                                            'DynamicFields.AffectedAsset', true, false, true, false, 200, true, true,
+                                            true, undefined, true, 'label-list-cell-content'
+                                        )
+                                    ]
+                                ), null, false
+                            )
+                        ),
+                        [new UIComponentPermission('tickets', [CRUD.READ])]
                     )
                 ],
                 [],
