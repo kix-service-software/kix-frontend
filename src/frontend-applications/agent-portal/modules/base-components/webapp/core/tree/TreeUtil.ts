@@ -149,7 +149,7 @@ export class TreeUtil {
     public static findNode(tree: TreeNode[], nodeId: string | number, searchValue?: string): TreeNode {
         if (Array.isArray(tree)) {
             for (const node of tree) {
-                if (nodeId && node.id?.toString() === nodeId.toString()) {
+                if (typeof nodeId !== 'undefined' && nodeId !== null && node.id?.toString() === nodeId.toString()) {
                     return node;
                 } else if (
                     searchValue &&

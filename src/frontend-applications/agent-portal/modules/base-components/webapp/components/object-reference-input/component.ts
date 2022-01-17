@@ -263,8 +263,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             let selectedNodes = [];
 
             // ignore placeholder and "useTextAsId" values (handle them like freetext)
-            const idsToLoad = !this.useTextAsId ? objectIds.filter((id) => typeof id !== 'string' || !id.match(/<KIX_.+>/)) : [];
-            if (idsToLoad) {
+            // and collect ids only if objectType is given (relevant if "additional node" is selected/current value)
+            const idsToLoad = !this.useTextAsId && this.objectType ? objectIds.filter((id) => typeof id !== 'string' || !id.match(/<KIX_.+>/)) : [];
+            if (idsToLoad.length) {
                 if (this.autocomplete) {
                     const objects = await KIXObjectService.loadObjects(
                         this.objectType, idsToLoad, this.loadingOptions, this.specificLoadingOptions, true, null, true

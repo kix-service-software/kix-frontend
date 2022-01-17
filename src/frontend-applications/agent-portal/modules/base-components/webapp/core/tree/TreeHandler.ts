@@ -231,7 +231,9 @@ export class TreeHandler {
 
                 if (selectionChanged) {
                     nodes.forEach((n) => {
-                        const nodeIndex = this.selectedNodes.findIndex((ftn) => ftn.id === n.id);
+                        const nodeIndex = this.selectedNodes.findIndex(
+                            (ftn) => ftn?.id?.toString() === n?.id?.toString()
+                        );
                         if (nodeIndex === -1 && selected) {
                             this.selectedNodes.push(n);
                         } else if (nodeIndex !== -1 && !selected) {
