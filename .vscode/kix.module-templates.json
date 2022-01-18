@@ -15,7 +15,7 @@
                     "   \"name\": \"kix-module-{{name}}\",",
                     "   \"extensions\": {",
                     "       \"kix:modules\": {",
-                    "           \"admin-module\": {",
+                    "           \"kix-module-{{name}}-module\": {",
                     "               \"module\": \"kix-module.extension\"",
                     "           }",
                     "       }",

@@ -467,7 +467,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     public prepareObjectFilter(filterCriteria: FilterCriteria[]): any {
         let objectFilter = {};
 
-        const prepareCriteria = [];
+        const prepareCriteria: FilterCriteria[] = [];
         filterCriteria.forEach((c) => {
             if (c?.property) {
                 c.property = c.property.replace(KIXObjectProperty.DYNAMIC_FIELDS + '.', 'DynamicField_');
