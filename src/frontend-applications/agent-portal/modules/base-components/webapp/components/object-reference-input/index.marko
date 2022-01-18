@@ -11,15 +11,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <form-list
         placeholder=state.placeholder
         searchCallback=state.searchCallback
-        autoCompleteConfiguration=state.autoCompleteConfiguration
+        autoCompleteConfiguration=(
+            state.possibleValuesOnly ? null : state.autoCompleteConfiguration
+        )
         on-focusLost("focusLost")
         on-nodesChanged("nodesChanged")
         invalid=state.invalid
-        readonly=state.field.readonly
+        readonly=(state.field.readonly)
         multiselect=state.multiselect
         treeId=state.treeId
-        freeText=state.freeText/>
+        freeText=!state.possibleValuesOnly && state.freeText
+    />
 </if>
-<else>
-    <loading-spinner/>
-</else>
+<else><loading-spinner/></else>

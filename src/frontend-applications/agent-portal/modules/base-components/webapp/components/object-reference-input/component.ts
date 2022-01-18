@@ -28,6 +28,9 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../../model/KIXObjectSpecificLoadingOptions';
 import { FormValuesChangedEventData } from '../../core/FormValuesChangedEventData';
+import { Context } from '../../../../../model/Context';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
 
 class Component extends FormInputComponent<string | number | string[] | number[], ComponentState> {
 
@@ -47,6 +50,8 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     // TODO: move to FormInstance/ValueHandler as universal solution for unique handling (possible values)
     private uniqueNodes: boolean;
+
+    private context: Context;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -68,6 +73,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     }
 
     public async onMount(): Promise<void> {
+        this.context = ContextService.getInstance().getActiveContext();
         this.setOptions();
         const treeHandler = new TreeHandler([], null, null, this.state.multiselect);
         TreeService.getInstance().registerTreeHandler(this.state.treeId, treeHandler);
@@ -161,18 +167,19 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
         if (structureOption && structureOption.value) {
             nodes = await KIXObjectService.prepareObjectTree(
-                this.objects, this.showInvalidNodes, this.isInvalidClickable, objectId ? [objectId] : null, translatable
+                this.objectType, this.objects, this.showInvalidNodes,
+                this.isInvalidClickable, objectId ? [objectId] : null, translatable
             );
         } else {
+            const promises = [];
             for (const o of this.objects) {
-                const node = await ObjectReferenceUtil.createTreeNode(
+                promises.push(ObjectReferenceUtil.createTreeNode(
                     o, this.showInvalidNodes, this.isInvalidClickable, this.useTextAsId,
                     translatable, objectId ? [objectId] : undefined
-                );
-                if (node) {
-                    nodes.push(node);
-                }
+                ));
             }
+
+            nodes = await Promise.all<TreeNode>(promises);
         }
 
         SortUtil.sortObjects(nodes, 'label', DataType.STRING);
@@ -213,8 +220,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     // TODO: move to FormInstance/ValueHandler as universal solution for unique handling (possible values)
     private async handleUnique(nodes: TreeNode[]): Promise<TreeNode[]> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         if (formInstance) {
             const fieldList = await formInstance.getFields(this.state.field);
             let usedValues = [];
@@ -249,8 +255,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const formValue = formInstance?.getFormFieldValue<number>(this.state.field?.instanceId);
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
 
@@ -315,6 +320,8 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         } else if (treeHandler) {
             treeHandler.selectNone();
         }
+
+        this.setPossibleValue();
     }
 
     public nodesChanged(nodes: TreeNode[]): void {
@@ -408,6 +415,26 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             (o) => o.option === ObjectReferenceOptions.TRANSLATABLE
         );
         this.translatable = !translatableOption || Boolean(translatableOption.value);
+    }
+
+    public async setPossibleValue(): Promise<void> {
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
+
+        const dfName = this.state.field?.options?.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME)?.value;
+        const property = this.state.field?.property === KIXObjectProperty.DYNAMIC_FIELDS
+            ? `${KIXObjectProperty.DYNAMIC_FIELDS}.${dfName}`
+            : this.state.field?.property;
+
+        const possibleValue = formInstance.getPossibleValue(property);
+        if (possibleValue && possibleValue.value) {
+            const values = Array.isArray(possibleValue.value) ? possibleValue.value : [possibleValue.value];
+            this.objectIds = values;
+            this.state.possibleValuesOnly = true;
+            const nodes = await this.loadNodes();
+            this.fillTreeHandler(nodes);
+        } else {
+            this.state.possibleValuesOnly = false;
+        }
     }
 }
 
