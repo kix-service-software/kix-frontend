@@ -336,6 +336,7 @@ class Component {
     public async filter(textFilterValue?: string, filter?: KIXObjectPropertyFilter): Promise<void> {
         if (this.state.table && !this.state.isFiltering) {
             this.state.isFiltering = true;
+            this.state.filterValue = textFilterValue;
             const predefinedCriteria = filter ? filter.criteria : [];
             const newFilter = [...predefinedCriteria, ...this.additionalFilterCriteria];
             this.state.table.setFilter(textFilterValue, newFilter);
