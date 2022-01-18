@@ -519,10 +519,11 @@ export class ContextService {
             this.contextInstances.forEach((context) => {
                 if (context.descriptor.kixObjectTypes.some((ot) => ot === objectUpdate[0])) {
                     let publishEvent = true;
-                    if (
-                        context.descriptor.contextMode === ContextMode.DETAILS &&
-                        context.getObjectId()?.toString() !== objectUpdate[1]?.toString()
-                    ) {
+
+                    const detailsUpdate = context.descriptor.contextMode === ContextMode.DETAILS &&
+                        context.getObjectId()?.toString() !== objectUpdate[1]?.toString();
+
+                    if (detailsUpdate) {
                         publishEvent = false;
                     }
 
