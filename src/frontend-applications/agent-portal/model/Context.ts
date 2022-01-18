@@ -35,6 +35,7 @@ import { ContextEvents } from '../modules/base-components/webapp/core/ContextEve
 import { ContextPreference } from './ContextPreference';
 import { AgentService } from '../modules/user/webapp/core/AgentService';
 import { IEventSubscriber } from '../modules/base-components/webapp/core/IEventSubscriber';
+import { ContextType } from './ContextType';
 
 export abstract class Context {
 
@@ -93,21 +94,24 @@ export abstract class Context {
             this.eventSubsriber = {
                 eventSubscriberId: this.instanceId,
                 eventPublished: async (data: any, eventId: string): Promise<void> => {
-                    if (eventId === ApplicationEvent.OBJECT_UPDATED && data?.objectType) {
+                    const contextUpdateRequired = eventId === ContextEvents.CONTEXT_UPDATE_REQUIRED &&
+                        data?.instanceId === this.instanceId;
+
+                    const objectUpdate = eventId === ApplicationEvent.OBJECT_UPDATED && data?.objectType;
+
+                    if (objectUpdate) {
                         if (this.objectLists.has(data.objectType)) {
                             this.deleteObjectList(data.objectType);
                         }
-                        if (
-                            this.descriptor.contextMode === ContextMode.DETAILS
-                            && Array.isArray(this.descriptor.kixObjectTypes)
-                            && this.descriptor.kixObjectTypes.some((t) => t === data.objectType)
-                        ) {
+
+                        const objectReloadRequired = this.descriptor.contextMode === ContextMode.DETAILS
+                            && this.descriptor.kixObjectTypes?.some((t) => t === data.objectType);
+
+                        if (objectReloadRequired) {
                             await this.getObject(data.objectType, true);
                         }
-                    } else if (
-                        eventId === ContextEvents.CONTEXT_UPDATE_REQUIRED &&
-                        data?.instanceId === this.instanceId
-                    ) {
+
+                    } else if (contextUpdateRequired && this.descriptor.contextMode !== ContextMode.SEARCH) {
                         this.deleteObjectLists();
                     }
                 }
