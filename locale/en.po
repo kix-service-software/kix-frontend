@@ -164,6 +164,12 @@ msgstr ""
 msgid "Agents"
 msgstr ""
 
+msgid ""
+"A list of RegEx which are applied to values entered before submitting if "
+"field is shown in edit mode. The RegExError is shown if a RegEx does NOT "
+"match the value entered."
+msgstr ""
+
 msgid "All"
 msgstr ""
 
@@ -222,6 +228,9 @@ msgstr ""
 msgid "Any data you have entered will be lost. Continue?"
 msgstr ""
 
+msgid "Apply"
+msgstr ""
+
 msgid "Approved"
 msgstr ""
 
@@ -256,6 +265,9 @@ msgid "Asset Class Details"
 msgstr ""
 
 msgid "Asset Classes"
+msgstr ""
+
+msgid "Asset Graph"
 msgstr ""
 
 msgid "Assets"
@@ -432,6 +444,9 @@ msgstr ""
 msgid "Charset"
 msgstr ""
 
+msgid "Checklist Item"
+msgstr ""
+
 msgid "Checklists"
 msgstr ""
 
@@ -460,6 +475,9 @@ msgid "Class"
 msgstr ""
 
 msgid "Class Definition"
+msgstr ""
+
+msgid "Classes"
 msgstr ""
 
 msgid "Clear"
@@ -505,6 +523,9 @@ msgid ": (colon)"
 msgstr ""
 
 msgid "Column Icon"
+msgstr ""
+
+msgid "Columns"
 msgstr ""
 
 msgid "Column Title"
@@ -627,6 +648,15 @@ msgstr ""
 msgid "Could not load file {0}."
 msgstr ""
 
+msgid "Count Default"
+msgstr ""
+
+msgid "Count Max"
+msgstr ""
+
+msgid "Count Min"
+msgstr ""
+
 msgid "Country"
 msgstr ""
 
@@ -741,6 +771,9 @@ msgstr ""
 msgid "Data Type"
 msgstr ""
 
+msgid "Date Restriction"
+msgstr ""
+
 msgid "Day(s)"
 msgstr ""
 
@@ -787,6 +820,9 @@ msgid "Deployment state"
 msgstr ""
 
 msgid "Deployment State"
+msgstr ""
+
+msgid "Deployment States"
 msgstr ""
 
 msgid "DESC"
@@ -1217,6 +1253,9 @@ msgstr ""
 msgid "Filter List"
 msgstr ""
 
+msgid "Filter Log Level"
+msgstr ""
+
 msgid "Filter successfully removed."
 msgstr "Filter(s) successfully removed."
 
@@ -1294,6 +1333,18 @@ msgid "Generate New Token"
 msgstr ""
 
 msgid "Generate new user token"
+msgstr ""
+
+msgid "Go to Asset"
+msgstr ""
+
+msgid "Graph"
+msgstr ""
+
+msgid "Graph Options"
+msgstr ""
+
+msgid "Graph (simulation active)"
 msgstr ""
 
 msgid "Has access token"
@@ -2631,6 +2682,9 @@ msgstr ""
 msgid "Host"
 msgstr ""
 
+msgid "Hour(s)"
+msgstr ""
+
 msgid "Icon"
 msgstr ""
 
@@ -2638,6 +2692,16 @@ msgid "Id"
 msgstr ""
 
 msgid "ID"
+msgstr ""
+
+msgid ""
+"If field contains multiple values, single values are concatenated by this "
+"separator symbol/s."
+msgstr ""
+
+msgid ""
+"If field is shown for display and no value is set, CountDefault numbers of "
+"inputs are displayed."
 msgstr ""
 
 msgid "Ignore"
@@ -2715,6 +2779,9 @@ msgstr ""
 msgid "in more than"
 msgstr ""
 
+msgid "Input"
+msgstr ""
+
 msgid "Inserted email address is invalid"
 msgstr ""
 
@@ -2742,6 +2809,9 @@ msgstr ""
 msgid "is to large (max {0})."
 msgstr ""
 
+msgid "Item Separator"
+msgstr ""
+
 msgid "Job"
 msgstr ""
 
@@ -2752,6 +2822,9 @@ msgid "Job Information"
 msgstr ""
 
 msgid "Jobs"
+msgstr ""
+
+msgid "Jobs successfully removed."
 msgstr ""
 
 msgid "Job successfully ran."
@@ -2850,6 +2923,9 @@ msgstr ""
 msgid "Link Type"
 msgstr ""
 
+msgid "Link Types"
+msgstr ""
+
 msgid "Loading ..."
 msgstr ""
 
@@ -2877,6 +2953,9 @@ msgstr ""
 msgid "Login Name"
 msgstr ""
 
+msgid "Log Level"
+msgstr ""
+
 msgid "Logout"
 msgstr ""
 
@@ -2901,6 +2980,9 @@ msgstr ""
 msgid "Manuals"
 msgstr ""
 
+msgid "Max Depth"
+msgstr ""
+
 msgid "Menu"
 msgstr ""
 
@@ -2922,6 +3004,9 @@ msgstr ""
 msgid "Minutes"
 msgstr ""
 
+msgid "Minutes(s)"
+msgstr ""
+
 msgid "Mobile"
 msgstr ""
 
@@ -2932,6 +3017,9 @@ msgid "Monday"
 msgstr ""
 
 msgid "Month"
+msgstr ""
+
+msgid "Month(s)"
 msgstr ""
 
 msgid "more than ago"
@@ -3141,6 +3229,9 @@ msgstr ""
 msgid "Next Image"
 msgstr ""
 
+msgid "no"
+msgstr ""
+
 msgid "No"
 msgstr "No"
 
@@ -3247,6 +3338,15 @@ msgid "Number of Config Items in critical incident state"
 msgstr "Number of Assets in critical incident state"
 
 msgid "Number of ratings"
+msgstr ""
+
+msgid "Number of rows (init)"
+msgstr ""
+
+msgid "Number of rows (max)"
+msgstr ""
+
+msgid "Number of rows (min)"
 msgstr ""
 
 msgid "Number of version"
@@ -3552,6 +3652,9 @@ msgstr ""
 msgid "Profiles successfully removed."
 msgstr ""
 
+msgid "Properties"
+msgstr ""
+
 msgid "Property"
 msgstr "Property"
 
@@ -3645,7 +3748,19 @@ msgstr ""
 msgid "References"
 msgstr ""
 
+msgid "Refresh Interval(sec)"
+msgstr ""
+
 msgid "Refresh Page"
+msgstr ""
+
+msgid "RegEx"
+msgstr ""
+
+msgid "RegExErrorMessage"
+msgstr ""
+
+msgid "RegEx List"
 msgstr ""
 
 msgid "Related Assets"
@@ -3688,6 +3803,9 @@ msgid "Remove Filter"
 msgstr ""
 
 msgid "Remove from Affected Assets"
+msgstr ""
+
+msgid "Remove Jobs"
 msgstr ""
 
 msgid "Remove Mail Accounts"
@@ -3921,6 +4039,9 @@ msgstr "Search template(s) successfully removed."
 msgid "Search Title"
 msgstr ""
 
+msgid "Seconds(s)"
+msgstr ""
+
 msgid "Select all"
 msgstr ""
 
@@ -4043,6 +4164,9 @@ msgstr ""
 msgid "Show Filter"
 msgstr ""
 
+msgid "Show Graph"
+msgstr ""
+
 msgid "Show in agent preferences"
 msgstr ""
 
@@ -4101,6 +4225,25 @@ msgid "Source"
 msgstr ""
 
 msgid "Source Message"
+msgstr ""
+
+msgid ""
+"Specifies the initial number of rows that the table should display if there "
+"are no entries.\n"
+" The initial must not be smaller than the minimum and larger than the "
+"maximum of the number of rows.\n"
+" Values less than 1 are not possible."
+msgstr ""
+
+msgid ""
+"Specifies the maximum number of rows in the table that can be displayed/"
+"added. Values less than 1 are not possible."
+msgstr ""
+
+msgid ""
+"Specifies the minimum number of rows that the table has to display. It is "
+"not possible to delete rows below the minimum number of rows.\n"
+" Values less than 1 are not possible."
 msgstr ""
 
 msgid "Split Option"
@@ -4176,6 +4319,9 @@ msgid "Stop after match"
 msgstr ""
 
 msgid "Street"
+msgstr ""
+
+msgid "Sub"
 msgstr ""
 
 msgid "Subject"
@@ -4271,6 +4417,9 @@ msgstr ""
 msgid "Tags"
 msgstr ""
 
+msgid "Tail Lines"
+msgstr ""
+
 msgid "Target"
 msgstr ""
 
@@ -4332,7 +4481,22 @@ msgstr ""
 msgid "The following {0} entries will be deleted. Are you sure?"
 msgstr ""
 
+msgid ""
+"The initial value of the field if shown in edit mode for the first time. "
+"Applies to first item of array only."
+msgstr ""
+
 msgid "The Job {0} will be ran now. Are you sure?"
+msgstr ""
+
+msgid ""
+"The maximum number of array or selectable items for this field. if field is "
+"shown in edit mode."
+msgstr ""
+
+msgid ""
+"The minimum number of items which are available for input if field is shown "
+"in edit mode."
 msgstr ""
 
 msgid "The password is changed for Admin."
@@ -4358,7 +4522,25 @@ msgid "The year can be a maximum of {0} years in the past"
 msgstr ""
 
 msgid ""
+"This configuration defines which Asset Classes are subject to this "
+"selection. Please enter Classes."
+msgstr ""
+
+msgid ""
+"This configuration defines which Deployment States are subject to this "
+"selection. Please enter DeploymentStates."
+msgstr ""
+
+msgid ""
 "This is the administration panel. Please select a module from the explorer."
+msgstr ""
+
+msgid ""
+"This value defines the offset (in seconds) to the very moment in which the "
+"field is initially displayed for input. Leave empty if the field should not "
+"hold any value upon first input. For instance, enter 3600 if the field "
+"should be initialized with \"now+1h\" or enter 86400 if the field should be "
+"initialized with \"now+24h\"."
 msgstr ""
 
 msgid "Thursday"
@@ -4474,7 +4656,13 @@ msgstr ""
 msgid "Translatable"
 msgstr ""
 
+msgid "Translatable Columns"
+msgstr ""
+
 msgid "Translatable Title"
+msgstr ""
+
+msgid "Translatable Values"
 msgstr ""
 
 msgid "Translation"
@@ -4609,7 +4797,13 @@ msgstr ""
 msgid "Version ID"
 msgstr ""
 
+msgid "View"
+msgstr ""
+
 msgid "Viewable States"
+msgstr ""
+
+msgid "View Log File"
 msgstr ""
 
 msgid "Votes"
@@ -4657,6 +4851,9 @@ msgstr ""
 msgid "Weekday(s)"
 msgstr ""
 
+msgid "Week(s)"
+msgstr ""
+
 msgid "Welcome"
 msgstr ""
 
@@ -4676,6 +4873,18 @@ msgid "within the next"
 msgstr ""
 
 msgid "Work in Progress"
+msgstr ""
+
+msgid "Wrap Lines"
+msgstr ""
+
+msgid "Year(s)"
+msgstr ""
+
+msgid "Years in Future"
+msgstr ""
+
+msgid "Years in Past"
 msgstr ""
 
 msgid "yes"
