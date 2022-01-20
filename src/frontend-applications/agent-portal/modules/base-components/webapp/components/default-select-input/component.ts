@@ -153,7 +153,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         if (this.state.asMultiselect) {
             super.provideValue(nodes?.map((n) => n.id));
         } else {
-            super.provideValue(nodes[0].id);
+            super.provideValue(nodes[0]?.id);
         }
     }
 
