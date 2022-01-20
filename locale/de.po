@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2022-01-19 19:20+0000\n"
-"Last-Translator: rbo <Rene.Boehm@cape-it.de>\n"
+"PO-Revision-Date: 2022-01-20 10:44+0000\n"
+"Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
 "Language: de\n"
@@ -169,6 +169,9 @@ msgid ""
 "field is shown in edit mode. The RegExError is shown if a RegEx does NOT "
 "match the value entered."
 msgstr ""
+"Eine Liste von regulären Ausdrücken die auf die Eingabe angewandt werden "
+"bevor eine Übermittlung erfolgt. Tie Fehlermeldung wird angezeigt, wenn die "
+"Eingabe NICHT allen regulären Ausdrücken entspricht."
 
 msgid "All"
 msgstr "Alle"
@@ -239,7 +242,7 @@ msgid "Any data you have entered will be lost. Continue?"
 msgstr "Alle eingegebenen Daten werden verworfen. Fortfahren?"
 
 msgid "Apply"
-msgstr ""
+msgstr "Anwenden"
 
 msgid "Approved"
 msgstr "Genehmigt"
@@ -278,7 +281,7 @@ msgid "Asset Classes"
 msgstr "Assetklassen"
 
 msgid "Asset Graph"
-msgstr ""
+msgstr "Asset-Graph"
 
 msgid "Assets"
 msgstr "Assets"
@@ -458,7 +461,7 @@ msgid "Charset"
 msgstr "Zeichensatz"
 
 msgid "Checklist Item"
-msgstr ""
+msgstr "Checklisteneintrag"
 
 msgid "Checklists"
 msgstr "Checklisten"
@@ -491,7 +494,7 @@ msgid "Class Definition"
 msgstr "Klassendefinition"
 
 msgid "Classes"
-msgstr ""
+msgstr "Klassen"
 
 msgid "Clear"
 msgstr "Leeren"
@@ -539,7 +542,7 @@ msgid "Column Icon"
 msgstr "Spaltensymbol"
 
 msgid "Columns"
-msgstr ""
+msgstr "Spalten"
 
 msgid "Column Title"
 msgstr "Spaltentitel"
@@ -662,13 +665,13 @@ msgid "Could not load file {0}."
 msgstr "Konnte Datei nicht laden {0}."
 
 msgid "Count Default"
-msgstr ""
+msgstr "Anzahl (Standard)"
 
 msgid "Count Max"
-msgstr ""
+msgstr "Anzahl (max.)"
 
 msgid "Count Min"
-msgstr ""
+msgstr "Anzahl (min.)"
 
 msgid "Country"
 msgstr "Land"
@@ -785,7 +788,7 @@ msgid "Data Type"
 msgstr "Datentyp"
 
 msgid "Date Restriction"
-msgstr ""
+msgstr "Datumsbeschränkung"
 
 msgid "Day(s)"
 msgstr "Tag(e)"
@@ -836,7 +839,7 @@ msgid "Deployment State"
 msgstr "Verwendungsstatus"
 
 msgid "Deployment States"
-msgstr ""
+msgstr "Verwendungsstatus"
 
 msgid "DESC"
 msgstr "Absteigend"
@@ -1269,7 +1272,7 @@ msgid "Filter List"
 msgstr "Filterliste"
 
 msgid "Filter Log Level"
-msgstr ""
+msgstr "Log Level einschränken"
 
 msgid "Filter successfully removed."
 msgstr "Filter wurde(n) erfolgreich gelöscht."
@@ -1355,16 +1358,16 @@ msgid "Generate new user token"
 msgstr "Erstelle neuen Benutzertoken"
 
 msgid "Go to Asset"
-msgstr ""
+msgstr "Zu Asset springen"
 
 msgid "Graph"
 msgstr ""
 
 msgid "Graph Options"
-msgstr ""
+msgstr "Graph Optionen"
 
 msgid "Graph (simulation active)"
-msgstr ""
+msgstr "Graph (Simulation aktiv)"
 
 msgid "Has access token"
 msgstr "Hat Zugriffstoken"
@@ -1573,6 +1576,8 @@ msgstr ""
 
 msgid "Helptext_Admin_MailFilterCreate_Name"
 msgstr ""
+"Der Name des Mailfilters. Bei Eingang einer Email werden alle Filter in "
+"Reihenfolge ihrer alphanumerischen Sortierung abgearbeitet."
 
 msgid "Helptext_Admin_MailFilterCreate_SetEmailHeaders"
 msgstr ""
@@ -2847,7 +2852,7 @@ msgid "Host"
 msgstr "Host"
 
 msgid "Hour(s)"
-msgstr ""
+msgstr "Stunden"
 
 msgid "Icon"
 msgstr "Icon"
@@ -2862,11 +2867,15 @@ msgid ""
 "If field contains multiple values, single values are concatenated by this "
 "separator symbol/s."
 msgstr ""
+"Wenn das Feld mehrere Werte beinhaltet, werden diese mit dem Separator-"
+"Symbol konkateniert."
 
 msgid ""
 "If field is shown for display and no value is set, CountDefault numbers of "
 "inputs are displayed."
 msgstr ""
+"Wenn das Feld zur Eingabe steht, aber noch kein Wert gesetzt ist, wird die "
+"Standardanzahl an Eingabefeldern dargestellt."
 
 msgid "Ignore"
 msgstr "Ignorieren"
@@ -2944,7 +2953,7 @@ msgid "in more than"
 msgstr "in mehr als"
 
 msgid "Input"
-msgstr ""
+msgstr "Eingabe"
 
 msgid "Inserted email address is invalid"
 msgstr "Die eingegebene E-Mail Adresse ist ungültig"
@@ -2974,7 +2983,7 @@ msgid "is to large (max {0})."
 msgstr "ist zu lang (max {0})."
 
 msgid "Item Separator"
-msgstr ""
+msgstr "Einzeleintrag-Separator"
 
 msgid "Job"
 msgstr "Job"
@@ -2989,7 +2998,7 @@ msgid "Jobs"
 msgstr "Jobs"
 
 msgid "Jobs successfully removed."
-msgstr ""
+msgstr "Jobs wurden gelöscht."
 
 msgid "Job successfully ran."
 msgstr "Job erfolgreich ausgeführt."
@@ -3085,10 +3094,10 @@ msgid "Link to ticket"
 msgstr "Verknüpfen mit Ticket"
 
 msgid "Link Type"
-msgstr "Art der Verknüpfung"
+msgstr "Verknüpfungstyp"
 
 msgid "Link Types"
-msgstr ""
+msgstr "Verknüpfungstypen"
 
 msgid "Loading ..."
 msgstr "Lade ..."
@@ -3145,7 +3154,7 @@ msgid "Manuals"
 msgstr "Handbücher"
 
 msgid "Max Depth"
-msgstr ""
+msgstr "Max. Tiefe"
 
 msgid "Menu"
 msgstr "Modulmenü"
@@ -3169,7 +3178,7 @@ msgid "Minutes"
 msgstr "Minuten"
 
 msgid "Minutes(s)"
-msgstr ""
+msgstr "Minute(n)"
 
 msgid "Mobile"
 msgstr "Mobil"
@@ -3184,7 +3193,7 @@ msgid "Month"
 msgstr "Monat"
 
 msgid "Month(s)"
-msgstr ""
+msgstr "Monat(e)"
 
 msgid "more than ago"
 msgstr "vor mehr als"
@@ -3505,13 +3514,13 @@ msgid "Number of ratings"
 msgstr "Anzahl Bewertungen"
 
 msgid "Number of rows (init)"
-msgstr ""
+msgstr "Anzahl Zeilen (initial)"
 
 msgid "Number of rows (max)"
-msgstr ""
+msgstr "Anzahl Zeilen (max.)"
 
 msgid "Number of rows (min)"
-msgstr ""
+msgstr "Anzahl Zeilen (min.)"
 
 msgid "Number of version"
 msgstr "Anzahl Versionen"
@@ -3818,7 +3827,7 @@ msgid "Profiles successfully removed."
 msgstr "Profil(e) entfernt."
 
 msgid "Properties"
-msgstr ""
+msgstr "Eigenschaften"
 
 msgid "Property"
 msgstr "Eigenschaft"
@@ -3917,19 +3926,19 @@ msgid "References"
 msgstr "Verweise"
 
 msgid "Refresh Interval(sec)"
-msgstr ""
+msgstr "Refresh-Intervall (sec)"
 
 msgid "Refresh Page"
 msgstr "Seite neu laden"
 
 msgid "RegEx"
-msgstr ""
+msgstr "RegEx"
 
 msgid "RegExErrorMessage"
-msgstr ""
+msgstr "RegEx Fehlernachricht"
 
 msgid "RegEx List"
-msgstr ""
+msgstr "RegEx Liste"
 
 msgid "Related Assets"
 msgstr "Relevante Assets"
@@ -3974,7 +3983,7 @@ msgid "Remove from Affected Assets"
 msgstr "Aus betroffenen Assets entfernen"
 
 msgid "Remove Jobs"
-msgstr ""
+msgstr "Jobs Entfernen"
 
 msgid "Remove Mail Accounts"
 msgstr "E-Mail Konten löschen"
@@ -4210,7 +4219,7 @@ msgid "Search Title"
 msgstr "Name der Suche"
 
 msgid "Seconds(s)"
-msgstr ""
+msgstr "Sekunde(n)"
 
 msgid "Select all"
 msgstr "Alle auswählen"
@@ -4337,7 +4346,7 @@ msgid "Show Filter"
 msgstr "Filter zeigen"
 
 msgid "Show Graph"
-msgstr ""
+msgstr "Graph Anzeigen"
 
 msgid "Show in agent preferences"
 msgstr "Anzeige Agenteneinstellung"
@@ -4385,7 +4394,7 @@ msgid "Solution"
 msgstr "Lösung"
 
 msgid "Some Translation"
-msgstr ""
+msgstr "Übersetzung"
 
 msgid "Sort"
 msgstr "Sortieren"
@@ -4406,17 +4415,26 @@ msgid ""
 "maximum of the number of rows.\n"
 " Values less than 1 are not possible."
 msgstr ""
+"Gibt die initiale Anzahl von Zeilen an, die die Tabelle anzeigen soll, wenn "
+"keine Einträge vorhanden sind. Der Initialwert darf nicht kleiner als das "
+"Minimum und größer als das Maximum der Zeilenanzahl sein. Werte kleiner als "
+"1 sind nicht möglich."
 
 msgid ""
 "Specifies the maximum number of rows in the table that can be displayed/"
 "added. Values less than 1 are not possible."
 msgstr ""
+"Definiert die max. Anzahl von Zeilen die die Tabelle zur Eingabe zulässt. "
+"Werte kleiner als 1 sind nicht zulässig."
 
 msgid ""
 "Specifies the minimum number of rows that the table has to display. It is "
 "not possible to delete rows below the minimum number of rows.\n"
 " Values less than 1 are not possible."
 msgstr ""
+"Definiert die minimale Anzahl an Zeilen die bei Eingabe von Daten "
+"erforderlich ist. Es ist nicht möglich mehr als die min. Anzahl von Zeilen "
+"zu entfernen. Werte kleiner als 1 sind nicht zulässig."
 
 msgid "Split Option"
 msgstr "Trennoptionen"
@@ -4590,7 +4608,7 @@ msgid "Tags"
 msgstr "Schlagworte"
 
 msgid "Tail Lines"
-msgstr ""
+msgstr "End-Zeilen"
 
 msgid "Target"
 msgstr "Ziel"
@@ -4661,6 +4679,8 @@ msgid ""
 "The initial value of the field if shown in edit mode for the first time. "
 "Applies to first item of array only."
 msgstr ""
+"Der initiale Wert des Feldes bei erstmaliger Eingabe. Wird nur auf den "
+"ersten Eintrag eines Arrays angewandt."
 
 msgid "The Job {0} will be ran now. Are you sure?"
 msgstr "Der Job {0} wird jetzt ausgeführt. Sind Sie sicher?"
@@ -4669,11 +4689,15 @@ msgid ""
 "The maximum number of array or selectable items for this field. if field is "
 "shown in edit mode."
 msgstr ""
+"Die maximale Anzahl von auswählbaren Einträgen, wenn das Feld zur Eingabe "
+"angezeigt wird."
 
 msgid ""
 "The minimum number of items which are available for input if field is shown "
 "in edit mode."
 msgstr ""
+"Die minimale Anzahl von Einträgen die ausgewählt werden müssen, wenn das "
+"Feld zur Eingabe angezeigt wird."
 
 msgid "The password is changed for Admin."
 msgstr "Das Passwort für Admin wurde geändert."
@@ -4708,11 +4732,14 @@ msgid ""
 "This configuration defines which Asset Classes are subject to this "
 "selection. Please enter Classes."
 msgstr ""
+"Legt fest, welche Asset-Klassen für zulässige Auswahlwerte betrachtet werden."
 
 msgid ""
 "This configuration defines which Deployment States are subject to this "
 "selection. Please enter DeploymentStates."
 msgstr ""
+"Legt fest welche Verwendungsstatus für zulässige Auswahlwerte betrachtet "
+"werden."
 
 msgid ""
 "This is the administration panel. Please select a module from the explorer."
@@ -4727,6 +4754,11 @@ msgid ""
 "should be initialized with \"now+1h\" or enter 86400 if the field should be "
 "initialized with \"now+24h\"."
 msgstr ""
+"Dieser Wert definiert den Versatz (in Sekunden) zu dem Moment, in dem das "
+"Feld erstmalig zur Eingabe angezeigt wird. Leer lassen, wenn das Feld bei "
+"der ersten Eingabe keinen Wert enthalten soll. Geben Sie bspw. 3600 ein, "
+"wenn das Feld mit jetzt+1h initialisiert werden soll, oder geben Sie 86400 "
+"ein, wenn das Feld mit jetzt+24h initialisiert werden soll."
 
 msgid "Thursday"
 msgstr "Donnerstag"
@@ -4845,13 +4877,13 @@ msgid "Translatable"
 msgstr "Übersetzbar"
 
 msgid "Translatable Columns"
-msgstr ""
+msgstr "Zu übersetzende Spalten"
 
 msgid "Translatable Title"
 msgstr "Übersetzbarer Titel"
 
 msgid "Translatable Values"
-msgstr ""
+msgstr "Zu übersetzende Werte"
 
 msgid "Translation"
 msgstr "Übersetzung"
@@ -4986,13 +5018,13 @@ msgid "Version ID"
 msgstr "Versions-ID"
 
 msgid "View"
-msgstr ""
+msgstr "Ansicht"
 
 msgid "Viewable States"
 msgstr "Sichtbare Status"
 
 msgid "View Log File"
-msgstr ""
+msgstr "Log File Anzeigen"
 
 msgid "Votes"
 msgstr "Bewertungen"
@@ -5040,7 +5072,7 @@ msgid "Weekday(s)"
 msgstr "Wochentag(e)"
 
 msgid "Week(s)"
-msgstr ""
+msgstr "Woche(n)"
 
 msgid "Welcome"
 msgstr "Willkommen"
@@ -5064,16 +5096,16 @@ msgid "Work in Progress"
 msgstr "In Bearbeitung (WIP)"
 
 msgid "Wrap Lines"
-msgstr ""
+msgstr "Zeilen umbrechen"
 
 msgid "Year(s)"
-msgstr ""
+msgstr "Jahr(e)"
 
 msgid "Years in Future"
-msgstr ""
+msgstr "Jahre in Zukunft"
 
 msgid "Years in Past"
-msgstr ""
+msgstr "Jahre in Vergangenheit"
 
 msgid "yes"
 msgstr "ja"
