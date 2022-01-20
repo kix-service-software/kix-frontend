@@ -28,17 +28,7 @@ class Component extends FormInputComponent<string, ComponentState> {
     public onInput(input: any): void {
         super.onInput(input);
 
-        let language: string;
-        const languageOption = this.state.field?.options?.find(
-            (o) => o.option === FormFieldOptions.LANGUAGE
-        );
-        if (languageOption) {
-            language = languageOption.value;
-        }
-
-        setTimeout(() => {
-            this.initCodeEditor(language);
-        }, 100);
+        this.initCodeEditor();
     }
 
     public async onMount(): Promise<void> {
@@ -61,32 +51,28 @@ class Component extends FormInputComponent<string, ComponentState> {
 
             this.state.prepared = true;
 
-            setTimeout(() => {
-                this.initCodeEditor();
-            }, 100);
+            this.initCodeEditor();
         }
     }
 
-    private initCodeEditor(language?: string): void {
+    private initCodeEditor(): void {
+        const languageOption = this.state.field?.options?.find(
+            (o) => o.option === FormFieldOptions.LANGUAGE
+        );
 
-        if (this.codeMirror) {
-            this.codeMirror.options.mode = language;
-            this.codeMirror.refresh();
-            return;
-        }
+        if (languageOption?.value) {
+            this.state.useEditor = true;
 
-        if (this.createEditorTimeout) {
-            window.clearTimeout(this.createEditorTimeout);
-        }
-        this.createEditorTimeout = setTimeout(() => {
-            const languageOption = this.state.field?.options?.find(
-                (o) => o.option === FormFieldOptions.LANGUAGE
-            );
-            if (languageOption) {
-                language = languageOption.value;
+            if (this.codeMirror) {
+                this.codeMirror.options.mode = languageOption.value;
+                this.codeMirror.refresh();
+                return;
             }
 
-            if (language) {
+            if (this.createEditorTimeout) {
+                window.clearTimeout(this.createEditorTimeout);
+            }
+            this.createEditorTimeout = setTimeout(() => {
                 const textareaElement = (this as any).getEl(this.state.field?.instanceId);
                 if (textareaElement) {
                     this.codeMirror = CodeMirror.fromTextArea(
@@ -94,7 +80,7 @@ class Component extends FormInputComponent<string, ComponentState> {
                         {
                             value: this.state.currentValue,
                             lineNumbers: true,
-                            mode: language,
+                            mode: languageOption.value,
                             readOnly: this.state.field?.readonly,
                             lineWrapping: true,
                             foldGutter: true,
@@ -120,8 +106,8 @@ class Component extends FormInputComponent<string, ComponentState> {
 
                     this.createEditorTimeout = null;
                 }
-            }
-        }, 500);
+            }, 500);
+        }
     }
 
     public async onDestroy(): Promise<void> {

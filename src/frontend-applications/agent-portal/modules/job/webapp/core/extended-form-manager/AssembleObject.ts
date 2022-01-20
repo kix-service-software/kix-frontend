@@ -36,7 +36,8 @@ export class AssembleObject extends ExtendedJobFormManager {
                     (cv) => cv[0] && cv[0].property === 'AssembleObjectType'
                 );
                 if (definitionValue && definitionValue[1]) {
-                    const type = Array.isArray(definitionValue[1]?.value) ? definitionValue[1].value[0] : 'JSON';
+                    const type = Array.isArray(definitionValue[1]?.value) ? definitionValue[1].value[0]
+                        : definitionValue[1]?.value ? definitionValue[1]?.value : 'JSON';
 
                     const definitionField = definitionValue[0]?.parent?.children?.find(
                         (p) => p.property === 'AssembleObjectDefinition'
@@ -84,8 +85,10 @@ export class AssembleObject extends ExtendedJobFormManager {
                 return field;
             } else if (option.Name === 'Definition') {
                 let defaultValue;
-                if (action && action.Parameters) {
+                let type: string;
+                if (action?.Parameters) {
                     defaultValue = action.Parameters[option.Name];
+                    type = action.Parameters['Type'] || 'JSON';
                 }
 
                 const field = this.getOptionField(
@@ -93,7 +96,7 @@ export class AssembleObject extends ExtendedJobFormManager {
                 );
                 field.property = 'AssembleObjectDefinition';
 
-                const type = defaultValue === 'JSON' ? 'javascript' : 'yaml';
+                type = type === 'JSON' ? 'javascript' : 'yaml';
                 field.options.push(new FormFieldOption(FormFieldOptions.LANGUAGE, type));
 
                 return field;
