@@ -105,16 +105,19 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                     ));
                     break;
                 case ConfigItemProperty.CLASS_ID:
+                case 'ClassIDs':
                     searchCriteria.property = 'ClassIDs';
                     searchCriteria.type = FilterDataType.NUMERIC;
                     newCriteria.push(searchCriteria);
                     break;
                 case ConfigItemProperty.CUR_DEPL_STATE_ID:
+                case 'DeplStateIDs':
                     searchCriteria.property = 'DeplStateIDs';
                     searchCriteria.type = FilterDataType.NUMERIC;
                     newCriteria.push(searchCriteria);
                     break;
                 case ConfigItemProperty.CUR_INCI_STATE_ID:
+                case 'InciStateIDs':
                     searchCriteria.property = 'InciStateIDs';
                     searchCriteria.type = FilterDataType.NUMERIC;
                     newCriteria.push(searchCriteria);
