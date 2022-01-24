@@ -28,6 +28,7 @@ import { MacroActionType } from '../model/MacroActionType';
 import { JobType } from '../model/JobType';
 import { JobRun } from '../model/JobRun';
 import { CacheService } from '../../../server/services/cache';
+import { IdService } from '../../../model/IdService';
 
 export class JobAPIService extends KIXObjectAPIService {
 
@@ -336,7 +337,7 @@ export class JobAPIService extends KIXObjectAPIService {
         let id;
         if (Array.isArray(events)) {
             const execPlanParameter: Array<[string, any]> = [
-                [ExecPlanProperty.NAME, `Event based Execution Plan for Job "${jobName}"`],
+                [ExecPlanProperty.NAME, IdService.generateDateBasedId('EventExecPlan-')],
                 [ExecPlanProperty.TYPE, ExecPlanTypes.EVENT_BASED],
                 [KIXObjectProperty.COMMENT, `Event based Execution Plan for Job "${jobName}"`],
                 [ExecPlanProperty.PARAMETERS, { Event: events }]
@@ -362,7 +363,7 @@ export class JobAPIService extends KIXObjectAPIService {
         let id;
         if (Array.isArray(execPlanWeekdays)) {
             const execPlanParameter: Array<[string, any]> = [
-                [ExecPlanProperty.NAME, `Time based Execution Plan for Job "${jobName}"`],
+                [ExecPlanProperty.NAME, IdService.generateDateBasedId('TimeExecPlan-')],
                 [ExecPlanProperty.TYPE, ExecPlanTypes.TIME_BASED],
                 [KIXObjectProperty.COMMENT, `Time based Execution Plan for Job "${jobName}"`],
                 [ExecPlanProperty.PARAMETERS, { Weekday: execPlanWeekdays, Time: execPlanTimes }]
