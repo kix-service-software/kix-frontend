@@ -35,7 +35,6 @@ import { SysConfigOption } from '../../modules/sysconfig/model/SysConfigOption';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { CacheService } from '../services/cache';
 import { ISocketResponse } from '../../modules/base-components/webapp/core/ISocketResponse';
-import { IConfiguration } from '../../model/configuration/IConfiguration';
 
 export class KIXModuleNamespace extends SocketNameSpace {
 
