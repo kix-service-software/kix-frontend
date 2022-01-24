@@ -928,7 +928,7 @@ async function setFormValues(field: FormFieldConfiguration, formInstance: FormIn
     }
 }
 
-function checkMacro(macro: Macro, field: FormFieldConfiguration, formInstance: FormInstance, checkName: boolean = true): void {
+function checkMacro(macro: Macro, field: FormFieldConfiguration, formInstance: FormInstance, checkComment: boolean = true): void {
     expect(macro).exist;
     expect(field).exist;
 
@@ -936,10 +936,10 @@ function checkMacro(macro: Macro, field: FormFieldConfiguration, formInstance: F
     expect(macroIdOption).exist;
     expect(macro.ID).equals(macroIdOption.value);
 
-    if (checkName) {
+    if (checkComment) {
         const nameValue = formInstance.getFormFieldValue(JobProperty.NAME);
         expect(nameValue).exist;
-        expect(macro.Name).equals(`Macro for Job "${nameValue.value}"`);
+        expect(macro.Comment).equals(`Macro for Job "${nameValue.value}"`);
     }
 
     const typeValue = formInstance.getFormFieldValue(JobProperty.TYPE);
