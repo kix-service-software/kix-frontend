@@ -172,8 +172,6 @@ export class Table implements Table {
                 this.columns.forEach((c) => {
                     r.addCell(new TableValue(c.getColumnId(), null));
                 });
-
-                r.initializeDisplayValues();
             });
 
             const sortColumn = this.columns.find((c) => c.getSortOrder());
@@ -706,10 +704,6 @@ export class Table implements Table {
             if (sort && this.sortColumnId && this.sortOrder) {
                 await this.sort(this.sortColumnId, this.sortOrder);
             }
-
-            this.rows.forEach((r) => {
-                r.initializeDisplayValues();
-            });
 
             this.toggleFirstRow();
 
