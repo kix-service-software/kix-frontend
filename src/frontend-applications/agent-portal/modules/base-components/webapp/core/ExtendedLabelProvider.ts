@@ -104,7 +104,7 @@ export abstract class ExtendedLabelProvider<T extends KIXObject = KIXObject> imp
         return null;
     }
 
-    public getDFDisplayValues(fieldValue: DynamicFieldValue): Promise<[string[], string, string[]]> {
+    public getDFDisplayValues(fieldValue: DynamicFieldValue, short?: boolean): Promise<[string[], string, string[]]> {
         return null;
     }
 
