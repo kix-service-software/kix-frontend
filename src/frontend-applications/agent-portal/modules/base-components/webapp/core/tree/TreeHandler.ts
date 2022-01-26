@@ -210,7 +210,9 @@ export class TreeHandler {
             let selectionChanged = true;
             if (nodes.length) {
                 if (this.multiselect) {
-                    nodes.forEach((n) => n.selected = selected);
+                    nodes.forEach((n) => {
+                        this.setSelectedNode(n.id, selected);
+                    });
                 } else {
                     const selectedNode = this.selectedNodes.find((n) => n.id === nodes[0].id);
 
@@ -220,26 +222,13 @@ export class TreeHandler {
                     } else {
                         this.selectedNodes.forEach((n) => n.selected = false);
                         this.selectedNodes = [];
-                        const node = TreeUtil.findNode(this.tree, nodes[0].id);
-                        if (node) {
-                            node.selected = selected;
-                            this.selectedNodes = [node];
-                        }
+                        this.setSelectedNode(nodes[0].id, selected);
                     }
 
                 }
 
                 if (selectionChanged) {
-                    nodes.forEach((n) => {
-                        const nodeIndex = this.selectedNodes.findIndex(
-                            (ftn) => ftn?.id?.toString() === n?.id?.toString()
-                        );
-                        if (nodeIndex === -1 && selected) {
-                            this.selectedNodes.push(n);
-                        } else if (nodeIndex !== -1 && !selected) {
-                            this.selectedNodes.splice(nodeIndex, 1);
-                        }
-                    });
+                    this.tidyUpSelectedNodes(nodes, selected);
                 }
             }
 
@@ -269,6 +258,30 @@ export class TreeHandler {
             this.listener.forEach((l) => l(this.getSelectedNodes()));
             if (!silent) {
                 this.selectionListener.forEach((l) => l(this.getSelectedNodes()));
+            }
+        }
+    }
+
+    private tidyUpSelectedNodes(nodes: TreeNode[], selected: boolean): void {
+        nodes.forEach((n) => {
+            const nodeIndex = this.selectedNodes.findIndex(
+                (ftn) => ftn?.id?.toString() === n?.id?.toString()
+            );
+            if (nodeIndex === -1 && selected) {
+                n.selected = true;
+                this.selectedNodes.push(n);
+            } else if (nodeIndex !== -1 && !selected) {
+                this.selectedNodes.splice(nodeIndex, 1);
+            }
+        });
+    }
+
+    private setSelectedNode(nodeId: number | string, selected: boolean): void {
+        const node = TreeUtil.findNode(this.tree, nodeId);
+        if (node) {
+            node.selected = selected;
+            if (selected && !this.selectedNodes.some((sn) => sn.id === nodeId)) {
+                this.selectedNodes.push(node);
             }
         }
     }
