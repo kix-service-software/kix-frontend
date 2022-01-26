@@ -442,7 +442,9 @@ export abstract class Context {
         userWidgets.forEach((w) => {
             if (typeof w === 'string') {
                 const widget = contextWidgets.find((cw) => cw.instanceId === w);
-                widgets.push(widget);
+                if (widget) {
+                    widgets.push(widget);
+                }
             } else {
                 widgets.push(w);
             }
