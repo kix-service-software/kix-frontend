@@ -236,12 +236,12 @@ export class JobAPIService extends KIXObjectAPIService {
                     && p[0] !== JobProperty.MACRO_ACTIONS
             );
 
-            if (Array.isArray(macroIds)) {
-                jobParameter.push([JobProperty.MACROS_IDS, macroIds]);
-            }
-
             const execValue = parameter.find((p) => p[0] === JobProperty.EXEC);
             if (!execValue) {
+                if (Array.isArray(macroIds)) {
+                    jobParameter.push([JobProperty.MACROS_IDS, macroIds]);
+                }
+
                 const loadingOptions = new KIXObjectLoadingOptions(undefined, undefined, 1, [
                     JobProperty.MACROS, JobProperty.EXEC_PLANS
                 ]);
