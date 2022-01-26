@@ -84,22 +84,25 @@ export class RedisCache implements ICache {
         return value;
     }
 
-    public async getAll(cacheKeyPrefix: string): Promise<any[]> {
-        let values;
+    public async getAll(type: string): Promise<any[]> {
+        const values = [];
         try {
-            values = await this.hvalsAsync(cacheKeyPrefix);
+            const cachedVvalues = await this.hvalsAsync(`${this.KIX_CACHE_PREFIX}::${type}`);
+            if (Array.isArray(cachedVvalues)) {
+                for (const v of cachedVvalues) {
+                    try {
+                        values.push(JSON.parse(v));
+                        // tslint:disable-next-line:no-empty
+                    } catch (error) {
+                        // do nothing
+                    }
+                }
+            }
         }
         catch (error) {
             LoggingService.getInstance().error(error);
             this.checkConnection();
             return null;
-        }
-
-        try {
-            values = JSON.parse(values);
-            // tslint:disable-next-line:no-empty
-        } catch (error) {
-            // do nothing
         }
 
         return values;
