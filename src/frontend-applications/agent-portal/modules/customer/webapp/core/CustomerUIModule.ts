@@ -9,13 +9,13 @@
 
 import { IUIModule } from '../../../../model/IUIModule';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
-import { OrganisationContext } from '.';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { OrganisationContext } from './context/OrganisationContext';
 
 export class UIModule implements IUIModule {
 

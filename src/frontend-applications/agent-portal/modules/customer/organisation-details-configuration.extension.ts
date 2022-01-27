@@ -8,7 +8,6 @@
  */
 
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
-import { OrganisationDetailsContext } from './webapp/core';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
@@ -38,6 +37,7 @@ import { TicketProperty } from '../ticket/model/TicketProperty';
 import { SearchOperator } from '../search/model/SearchOperator';
 import { FilterDataType } from '../../model/FilterDataType';
 import { FilterType } from '../../model/FilterType';
+import { OrganisationDetailsContext } from './webapp/core/context/OrganisationDetailsContext';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 

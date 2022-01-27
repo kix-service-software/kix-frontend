@@ -7,18 +7,13 @@
  * --
  */
 
-import { TableExportUtil } from '../../../../table/webapp/core/TableExportUtil';
-import { ContactProperty } from '../../../model/ContactProperty';
 import { CSVExportAction } from '../../../../import/webapp/core/actions';
+import { TableExportUtil } from '../../../../table/webapp/core/TableExportUtil';
 
-export class ContactCSVExportAction extends CSVExportAction {
-
-    public hasLink: boolean = false;
+export class OrganisationCSVExportAction extends CSVExportAction {
 
     public async run(): Promise<void> {
-        if (this.canRun()) {
-            TableExportUtil.export(this.data, [ContactProperty.PRIMARY_ORGANISATION_NUMBER], false, false);
-        }
+        TableExportUtil.export(this.data, undefined, false, false);
     }
 
 }

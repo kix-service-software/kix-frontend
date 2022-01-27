@@ -22,8 +22,8 @@ import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
-import { ContactService } from '../../../../customer/webapp/core';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { ContactService } from '../../../../customer/webapp/core/ContactService';
 
 class Component extends FormInputComponent<string[], ComponentState> {
 

@@ -13,11 +13,11 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { Organisation } from '../../../model/Organisation';
 import { Contact } from '../../../model/Contact';
 import { OrganisationProperty } from '../../../model/OrganisationProperty';
-
-import { OrganisationDetailsContext, ContactDetailsContext } from '../../core';
 import { ContextMode } from '../../../../../model/ContextMode';
 import { ContactProperty } from '../../../model/ContactProperty';
 import { UserProperty } from '../../../../user/model/UserProperty';
+import { OrganisationDetailsContext } from '../../core/context/OrganisationDetailsContext';
+import { ContactDetailsContext } from '../../core/context/ContactDetailsContext';
 
 class Component {
 

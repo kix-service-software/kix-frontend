@@ -15,17 +15,20 @@ import { Table } from '../../model/Table';
 export class TableExportUtil {
 
     public static async export(
-        table: Table, additionalColumns?: string[], useDisplayString?: boolean,
-        sortColumns?: boolean, allRows?: boolean, filename?: string, withDate?: boolean
+        table: Table, additionalColumns?: string[], useColumnDisplayString?: boolean,
+        useValueDisplayString?: boolean, sortColumns?: boolean, allRows?: boolean, filename?: string,
+        withDate?: boolean
     ): Promise<void> {
-        const csvString = await this.prepareCSVString(table, additionalColumns, useDisplayString, sortColumns, allRows);
+        const csvString = await this.prepareCSVString(
+            table, additionalColumns, useColumnDisplayString, useValueDisplayString, sortColumns, allRows
+        );
         const fileName = filename || `Export${table.getObjectType() ? '_' + table.getObjectType() : ''}`;
         BrowserUtil.downloadCSVFile(csvString, fileName, withDate);
     }
 
     private static async prepareCSVString(
-        table: Table, additionalColumns: string[] = [], useDisplayString: boolean = true,
-        sortColumns: boolean = true, allRows: boolean = false
+        table: Table, additionalColumns: string[] = [], useColumnDisplayString: boolean = true,
+        useValueDisplayString: boolean = true, sortColumns: boolean = true, allRows: boolean = false
     ): Promise<string> {
         const objectType = table.getObjectType();
         const columns = table.getColumns();
@@ -37,7 +40,9 @@ export class TableExportUtil {
         for (const c of columnIds) {
             let value = c;
             if (objectType) {
-                value = await LabelService.getInstance().getExportPropertyText(value, objectType, useDisplayString);
+                value = await LabelService.getInstance().getExportPropertyText(
+                    value, objectType, useColumnDisplayString
+                );
             }
             columnTitles.push(`"${this.escapeText(value.trim())}"`);
         }
@@ -51,27 +56,18 @@ export class TableExportUtil {
             for (const cId of columnIds) {
                 let displayValue = '';
                 const cell = row.getCell(cId);
-                if (cell) {
-                    if (useDisplayString) {
-                        displayValue = cell.getValue().displayValue;
-                    } else {
-                        const value = await LabelService.getInstance().getExportPropertyValue(
-                            cId, objectType, cell.getValue().objectValue
-                        );
-                        displayValue = value;
-                    }
+                if (cell && useValueDisplayString) {
+                    displayValue = cell.getValue().displayValue;
+                } else if (useValueDisplayString) {
+                    displayValue = await LabelService.getInstance().getDisplayText(
+                        row.getRowObject().getObject(), cId
+                    );
                 } else {
-                    if (useDisplayString) {
-                        displayValue = await LabelService.getInstance().getDisplayText(
-                            row.getRowObject().getObject(), cId
-                        );
-                    } else {
-                        const rowObject = row.getRowObject().getObject();
-                        const value = await LabelService.getInstance().getExportPropertyValue(
-                            cId, objectType, rowObject ? rowObject[cId] : ''
-                        );
-                        displayValue = value;
-                    }
+                    const rowObject = row.getRowObject().getObject();
+                    const value = await LabelService.getInstance().getExportPropertyValue(
+                        cId, objectType, rowObject ? rowObject[cId] : ''
+                    );
+                    displayValue = value;
                 }
                 values.push(`"${this.escapeText(displayValue)}"`);
             }
