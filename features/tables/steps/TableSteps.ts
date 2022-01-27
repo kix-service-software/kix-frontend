@@ -5,7 +5,7 @@ import { FAQArticleTableFactory, FAQCategoryTableFactory } from '../../../src/fr
 import { TicketTableFactory, TicketTypeTableFactory, TicketStateTableFactory, TicketPriorityTableFactory, TicketQueueTableFactory } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core';
 import { ArticleTableFactory } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/table/ArticleTableFactory';
 import { OrganisationTableFactory } from '../../../src/frontend-applications/agent-portal/modules/customer/webapp/core/table/OrganisationTableFactory';
-import { ContactTableFactory } from '../../../src/frontend-applications/agent-portal/modules/customer/webapp/core';
+import { ContactTableFactory } from '../../../src/frontend-applications/agent-portal/modules/customer/webapp/core/table/ContactTableFactory';
 import { ConfigItemTableFactory, ConfigItemClassTableFactory } from '../../../src/frontend-applications/agent-portal/modules/cmdb/webapp/core';
 import { MailAccountTableFactory } from '../../../src/frontend-applications/agent-portal/modules/mail-account/webapp/core';
 import { TranslationPatternTableFactory } from '../../../src/frontend-applications/agent-portal/modules/translation/webapp/core/admin/table';
