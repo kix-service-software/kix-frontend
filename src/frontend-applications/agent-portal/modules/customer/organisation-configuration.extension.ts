@@ -8,7 +8,6 @@
  */
 
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
-import { OrganisationContext } from './webapp/core';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
 import { TableConfiguration } from '../../model/configuration/TableConfiguration';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
@@ -24,6 +23,7 @@ import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { OrganisationProperty } from './model/OrganisationProperty';
 import { SortOrder } from '../../model/SortOrder';
 import { ContactProperty } from './model/ContactProperty';
+import { OrganisationContext } from './webapp/core/context/OrganisationContext';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -51,7 +51,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         const organisationTableWidget = new WidgetConfiguration(
             'customer-dashboard-organisations-widget', 'Organisations Widget', ConfigurationType.Widget,
             'table-widget', 'Translatable#Overview Organisations',
-            ['import-action', 'csv-export-action'],
+            ['import-action', 'organisation-csvexport-action'],
             new ConfigurationDefinition('customer-dashboard-table-widget', ConfigurationType.TableWidget), null,
             false, true, 'kix-icon-man-house', true
         );

@@ -7,8 +7,8 @@
  * --
  */
 
-import { OrganisationSearchContext } from './webapp/core';
 import { SearchExtension } from '../search/SearchExtension';
+import { OrganisationSearchContext } from './webapp/core/context/OrganisationSearchContext';
 
 export class Extension extends SearchExtension {
 

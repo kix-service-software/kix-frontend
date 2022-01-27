@@ -9,9 +9,9 @@
 
 import { AbstractAction } from '../../../../../../modules/base-components/webapp/core/AbstractAction';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
-import { NewContactDialogContext } from '../../../../../customer/webapp/core';
 import { UIComponentPermission } from '../../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
+import { NewContactDialogContext } from '../../../../../customer/webapp/core/context/NewContactDialogContext';
 
 export class UserCreateAction extends AbstractAction {
 

@@ -74,7 +74,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const dateString = DateTimeUtil.getTimestampNumbersOnly(new Date(this.jobRun.StartTime));
             fileName += `_${dateString}`;
 
-            TableExportUtil.export(table, undefined, undefined, false, true, fileName, false);
+            TableExportUtil.export(table, undefined, false, false, false, true, fileName, false);
         }
     }
 

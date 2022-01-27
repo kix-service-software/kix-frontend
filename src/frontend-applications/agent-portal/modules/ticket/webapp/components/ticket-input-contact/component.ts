@@ -30,7 +30,7 @@ import { Contact } from '../../../../customer/model/Contact';
 import { AutoCompleteConfiguration } from '../../../../../model/configuration/AutoCompleteConfiguration';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
-import { NewContactDialogContext } from '../../../../customer/webapp/core';
+import { NewContactDialogContext } from '../../../../customer/webapp/core/context/NewContactDialogContext';
 
 class Component extends FormInputComponent<number | string, ComponentState> {
 

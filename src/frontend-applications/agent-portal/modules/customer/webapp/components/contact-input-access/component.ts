@@ -15,10 +15,10 @@ import { ServiceRegistry } from '../../../../base-components/webapp/core/Service
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ServiceType } from '../../../../base-components/webapp/core/ServiceType';
 import { SortUtil } from '../../../../../model/SortUtil';
-import { ContactFormService } from '../../core';
 import { UserProperty } from '../../../../user/model/UserProperty';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { ContactFormService } from '../../core/ContactFormService';
 
 class Component extends FormInputComponent<string[], ComponentState> {
 

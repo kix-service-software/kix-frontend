@@ -7,8 +7,8 @@
  * --
  */
 
-import { ContactSearchContext } from './webapp/core';
 import { SearchExtension } from '../search/SearchExtension';
+import { ContactSearchContext } from './webapp/core/context/ContactSearchContext';
 
 export class Extension extends SearchExtension {
 

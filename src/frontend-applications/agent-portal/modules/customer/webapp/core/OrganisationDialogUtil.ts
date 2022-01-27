@@ -8,8 +8,9 @@
  */
 
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
-import { NewOrganisationDialogContext, EditOrganisationDialogContext } from '.';
 import { Organisation } from '../../model/Organisation';
+import { EditOrganisationDialogContext } from './context/EditOrganisationDialogContext';
+import { NewOrganisationDialogContext } from './context/NewOrganisationDialogContext';
 
 export class OrganisationDialogUtil {
 

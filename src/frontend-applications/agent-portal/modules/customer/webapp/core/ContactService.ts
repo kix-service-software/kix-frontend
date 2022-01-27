@@ -19,10 +19,10 @@ import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
-import { NewContactDialogContext } from './context';
 import { ContactProperty } from '../../model/ContactProperty';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
+import { NewContactDialogContext } from './context/NewContactDialogContext';
 
 export class ContactService extends KIXObjectService<Contact> {
 

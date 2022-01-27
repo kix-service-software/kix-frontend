@@ -8,7 +8,6 @@
  */
 
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
-import { ContactDetailsContext } from './webapp/core';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
@@ -39,6 +38,7 @@ import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetC
 import { FilterCriteria } from '../../model/FilterCriteria';
 import { FilterDataType } from '../../model/FilterDataType';
 import { FilterType } from '../../model/FilterType';
+import { ContactDetailsContext } from './webapp/core/context/ContactDetailsContext';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 

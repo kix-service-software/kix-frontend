@@ -17,11 +17,11 @@ import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
 import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
-import { OrganisationDetailsContext } from '..';
 import { ContextMode } from '../../../../../model/ContextMode';
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
 import { SearchCache } from '../../../../search/model/SearchCache';
+import { OrganisationDetailsContext } from '../context/OrganisationDetailsContext';
 
 export class OrganisationTableFactory extends TableFactory {
 

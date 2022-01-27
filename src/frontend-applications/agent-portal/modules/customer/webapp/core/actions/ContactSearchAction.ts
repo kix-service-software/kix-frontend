@@ -9,7 +9,7 @@
 
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { ContactSearchContext } from '../context';
+import { ContactSearchContext } from '../context/ContactSearchContext';
 
 export class ContactSearchAction extends AbstractAction {
 
