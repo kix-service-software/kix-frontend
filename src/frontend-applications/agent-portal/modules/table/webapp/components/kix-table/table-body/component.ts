@@ -68,7 +68,8 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                 this.state.rows = this.table.getRows();
                 this.state.loading = false;
             } else {
-                this.state.rows = this.table.getRows();
+                this.state.rows = [];
+                setTimeout(() => this.state.rows = this.table.getRows(), 50);
             }
         }
     }

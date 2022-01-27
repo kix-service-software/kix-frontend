@@ -578,6 +578,10 @@ export class Table implements Table {
         this.sortColumnId = columnId;
         this.sortOrder = sortOrder;
 
+        const promises = [];
+        this.getRows(true).forEach((r) => promises.push(r.getCell(this.sortColumnId)?.initDisplayValue));
+        await Promise.all(promises);
+
         this.getColumns().forEach((c) => c.setSortOrder(null));
         const column = this.getColumn(columnId);
         if (column) {

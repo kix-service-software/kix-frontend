@@ -23,8 +23,8 @@ export class Cell {
         private tableValue: TableValue
     ) { }
 
-    public initDisplayValue(): void {
-        this.tableValue.initDisplayValue(this);
+    public async initDisplayValue(): Promise<void> {
+        await this.tableValue.initDisplayValue(this);
     }
 
     public getRow(): Row {
