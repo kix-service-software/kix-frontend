@@ -7,24 +7,16 @@
  * --
  */
 
-import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
-import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
-import { Organisation } from '../../model/Organisation';
-import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
-import { OrganisationProperty } from '../../model/OrganisationProperty';
-import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
-import { SortUtil } from '../../../../model/SortUtil';
-import { TreeNode } from '../../../base-components/webapp/core/tree';
-import { OrganisationService } from '.';
-import { KIXObject } from '../../../../model/kix/KIXObject';
-import { FilterCriteria } from '../../../../model/FilterCriteria';
-import { SearchOperator } from '../../../search/model/SearchOperator';
-import { FilterDataType } from '../../../../model/FilterDataType';
-import { FilterType } from '../../../../model/FilterType';
-import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
-import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
-import { ImportManager, ImportPropertyOperator } from '../../../import/webapp/core';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
+import { SortUtil } from '../../../../../model/SortUtil';
+import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFieldTypes';
+import { LabelService } from '../../../../base-components/webapp/core/LabelService';
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
+import { ImportManager, ImportPropertyOperator } from '../../../../import/webapp/core';
+import { OrganisationProperty } from '../../../model/OrganisationProperty';
+import { OrganisationService } from '../OrganisationService';
 
 export class OrganisationImportManager extends ImportManager {
 
@@ -35,10 +27,6 @@ export class OrganisationImportManager extends ImportManager {
         this.values.push(new ObjectPropertyValue(
             KIXObjectProperty.VALID_ID, ImportPropertyOperator.REPLACE_EMPTY, [1])
         );
-    }
-
-    protected async getSpecificObject(object: any): Promise<Organisation> {
-        return new Organisation(object as Organisation);
     }
 
     public async getInputType(property: string): Promise<InputFieldTypes> {
@@ -86,29 +74,9 @@ export class OrganisationImportManager extends ImportManager {
         return properties;
     }
 
-    public async getRequiredProperties(): Promise<string[]> {
-        return [OrganisationProperty.NUMBER];
-    }
+
 
     public async getTreeNodes(property: string): Promise<TreeNode[]> {
         return await OrganisationService.getInstance().getTreeNodes(property);
-    }
-
-    protected async getExisting(organisation: Organisation): Promise<KIXObject> {
-        if (organisation.ObjectId) {
-            return super.getExisting(organisation);
-        } else {
-            const filter = [
-                new FilterCriteria(
-                    OrganisationProperty.NUMBER, SearchOperator.EQUALS,
-                    FilterDataType.STRING, FilterType.AND, organisation.Number
-                )
-            ];
-            const loadingOptions = new KIXObjectLoadingOptions(filter);
-            const organisations = await KIXObjectService.loadObjects(
-                this.objectType, null, loadingOptions, null, true
-            );
-            return organisations && !!organisations.length ? organisations[0] : null;
-        }
     }
 }

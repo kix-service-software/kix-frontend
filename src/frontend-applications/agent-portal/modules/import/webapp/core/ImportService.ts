@@ -9,6 +9,7 @@
 
 import { ImportManager } from './ImportManager';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ImportRunner } from './ImportRunner';
 
 export class ImportService {
 
@@ -24,9 +25,14 @@ export class ImportService {
     private constructor() { }
 
     private importManager: ImportManager[] = [];
+    private importRunner: ImportRunner[] = [];
 
     public registerImportManager(importManager: ImportManager): void {
         this.importManager.push(importManager);
+    }
+
+    public registerImportRunner(importRunner: ImportRunner): void {
+        this.importRunner.push(importRunner);
     }
 
     public getImportManager(objectType: KIXObjectType | string): ImportManager {
@@ -42,6 +48,10 @@ export class ImportService {
 
     public hasImportManager(objectType: KIXObjectType | string): boolean {
         return this.getImportManager(objectType) !== undefined;
+    }
+
+    public getImportRunner(objectType: KIXObjectType | string): ImportRunner {
+        return this.importRunner.find((bm) => bm.objectType === objectType);
     }
 
 }

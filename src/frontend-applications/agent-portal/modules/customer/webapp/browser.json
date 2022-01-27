@@ -10,6 +10,10 @@
         "require ./components/organisation-module",
         "require ./components/contact-input-access",
         "require ./components/setup-my-organisation",
-        "require ./core"
+        "require ./core/ContactEditUIModule",
+        "require ./core/ContactReadUIModule",
+        "require ./core/OrganisationEditUIModule",
+        "require ./core/OrganisationReadUIModule",
+        "require ./core/CustomerUIModule"
     ]
 }

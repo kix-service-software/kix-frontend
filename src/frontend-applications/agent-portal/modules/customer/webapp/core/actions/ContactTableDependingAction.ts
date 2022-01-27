@@ -7,8 +7,7 @@
  * --
  */
 
-import { OrganisationContext } from '../context';
-import { OrganisationAdditionalInformationKeys } from '../context/OrganisationContext';
+import { OrganisationAdditionalInformationKeys, OrganisationContext } from '../context/OrganisationContext';
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 

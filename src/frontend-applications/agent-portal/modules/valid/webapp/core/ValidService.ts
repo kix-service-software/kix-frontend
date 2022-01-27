@@ -13,6 +13,10 @@ import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 import { ValidObject } from '../../model/ValidObject';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { SearchOperator } from '../../../search/model/SearchOperator';
 
 export class ValidService extends KIXObjectService {
 
@@ -56,6 +60,19 @@ export class ValidService extends KIXObjectService {
         }
 
         return objects;
+    }
+
+    public static async getValidObjectbyName(name: string): Promise<ValidObject> {
+        const loadingOptions = new KIXObjectLoadingOptions(
+            [new FilterCriteria('Name', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, name)]
+        );
+        const validObjects = await KIXObjectService.loadObjects<ValidObject>(
+            KIXObjectType.VALID_OBJECT, null, loadingOptions, null, true
+        ).catch((error) => [] as ValidObject[]);
+
+        return Array.isArray(validObjects) && validObjects.length
+            ? validObjects[0]
+            : null;
     }
 
 

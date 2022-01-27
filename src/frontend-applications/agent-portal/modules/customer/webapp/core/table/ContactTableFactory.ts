@@ -17,7 +17,6 @@ import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
 import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
-import { ContactDetailsContext } from '..';
 import { ContextMode } from '../../../../../model/ContextMode';
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
@@ -25,6 +24,7 @@ import { DataType } from '../../../../../model/DataType';
 import { UserProperty } from '../../../../user/model/UserProperty';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { SearchCache } from '../../../../search/model/SearchCache';
+import { ContactDetailsContext } from '../context/ContactDetailsContext';
 
 export class ContactTableFactory extends TableFactory {
 

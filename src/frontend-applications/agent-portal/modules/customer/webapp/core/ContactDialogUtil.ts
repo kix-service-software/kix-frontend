@@ -8,8 +8,9 @@
  */
 
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
-import { NewContactDialogContext, EditContactDialogContext } from '.';
 import { Contact } from '../../model/Contact';
+import { EditContactDialogContext } from './context/EditContactDialogContext';
+import { NewContactDialogContext } from './context/NewContactDialogContext';
 
 export class ContactDialogUtil {
 
