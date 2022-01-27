@@ -65,10 +65,22 @@ export class ContactAPIService extends KIXObjectAPIService {
         let objects = [];
 
         if (objectType === KIXObjectType.CONTACT) {
-            objects = await super.load(
-                token, KIXObjectType.CONTACT, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.CONTACT,
-                Contact
-            );
+
+            if (loadingOptions) {
+                objects = await super.load<Contact>(
+                    token, KIXObjectType.CONTACT, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.CONTACT,
+                    Contact
+                );
+            } else {
+                objects = await super.load(
+                    token, KIXObjectType.CONTACT, this.RESOURCE_URI, null, null, KIXObjectType.CONTACT,
+                    Contact
+                );
+
+                if (Array.isArray(objectIds) && objectIds.length) {
+                    objects = objects.filter((o) => objectIds.some((oid) => Number(oid) === o.ID));
+                }
+            }
         }
 
         return objects;

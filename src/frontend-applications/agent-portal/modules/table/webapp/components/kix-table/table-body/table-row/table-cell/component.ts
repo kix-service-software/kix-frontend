@@ -42,8 +42,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         };
 
-        if (this.cell && !this.cell.getValue().displayValue && this.cell.getColumnConfiguration().showText) {
-            this.cell.getValue().initDisplayValue(this.cell);
+        const cellValue = this.cell.getValue();
+
+        if (!cellValue?.displayValue && this.cell?.getColumnConfiguration()?.showText) {
+            cellValue?.initDisplayValue(this.cell);
+        }
+
+        if (!cellValue?.displayIcons && this.cell?.getColumnConfiguration()?.showIcon) {
+            cellValue?.initDisplayIcons(this.cell);
         }
 
         EventService.getInstance().subscribe(TableEvent.DISPLAY_VALUE_CHANGED, this.subscriber);
