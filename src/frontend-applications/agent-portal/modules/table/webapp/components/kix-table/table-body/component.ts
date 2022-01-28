@@ -57,7 +57,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         }, 100);
     }
 
-    public eventPublished(data: TableEventData, eventId: string, subscriberId?: string): void {
+    public async eventPublished(data: TableEventData, eventId: string, subscriberId?: string): Promise<void> {
         if (this.table && data.tableId === this.table.getTableId()) {
             if (eventId === TableEvent.RELOAD) {
                 this.state.loading = true;
@@ -68,8 +68,19 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                 this.state.rows = this.table.getRows();
                 this.state.loading = false;
             } else {
-                this.state.rows = [];
-                setTimeout(() => this.state.rows = this.table.getRows(), 50);
+                const rows = this.table.getRows();
+                if (this.table.getTableConfiguration().displayLimit) {
+                    const promises = [];
+                    for (let i = 0; i < this.table.getTableConfiguration().displayLimit; i++) {
+                        if (rows[i]) {
+                            promises.push(rows[i].initializeDisplayValues());
+                        }
+                    }
+
+                    await Promise.all(promises);
+                }
+
+                this.state.rows = rows;
             }
         }
     }
