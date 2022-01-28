@@ -12,6 +12,7 @@ import { SysConfigOption } from '../../model/SysConfigOption';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { SysConfigKey } from '../../model/SysConfigKey';
 import { SysConfigOptionDefinition } from '../../model/SysConfigOptionDefinition';
+import { AgentPortalConfiguation } from '../../../../model/configuration/AgentPortalConfiguation';
 
 export class SysConfigService extends KIXObjectService<SysConfigOption> {
 
@@ -63,6 +64,21 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
         }
 
         return value;
+    }
+
+    public async getAgentPortalConfiguration(): Promise<AgentPortalConfiguation> {
+        let config: AgentPortalConfiguation;
+
+        const value = await this.getSysconfigOptionValue(AgentPortalConfiguation.CONFIGURATION_ID);
+        if (value) {
+            try {
+                config = JSON.parse(value);
+            } catch (error) {
+                console.error('Could not parse Agent Portal Configuration');
+            }
+        }
+
+        return config;
     }
 
 }

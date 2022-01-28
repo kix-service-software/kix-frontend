@@ -66,7 +66,9 @@ export class ContactAPIService extends KIXObjectAPIService {
 
         if (objectType === KIXObjectType.CONTACT) {
 
-            if (loadingOptions) {
+            const preload = await this.shouldPreload(token, KIXObjectType.CONTACT);
+
+            if (loadingOptions || !preload) {
                 objects = await super.load<Contact>(
                     token, KIXObjectType.CONTACT, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.CONTACT,
                     Contact

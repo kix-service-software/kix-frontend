@@ -57,7 +57,9 @@ export class ContactService extends KIXObjectService<Contact> {
 
         let objects: Contact[];
 
-        if (loadingOptions) {
+        const preload = await this.shouldPreload(KIXObjectType.ORGANISATION);
+
+        if (loadingOptions || !preload) {
             objects = await super.loadObjects<Contact>(KIXObjectType.CONTACT, objectIds, loadingOptions);
         } else {
             objects = await super.loadObjects<Contact>(

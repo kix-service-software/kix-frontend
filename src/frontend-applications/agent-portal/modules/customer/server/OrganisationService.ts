@@ -63,7 +63,9 @@ export class OrganisationAPIService extends KIXObjectAPIService {
 
         if (objectType === KIXObjectType.ORGANISATION) {
 
-            if (loadingOptions) {
+            const preload = await this.shouldPreload(token, KIXObjectType.CONTACT);
+
+            if (loadingOptions || !preload) {
                 objects = await super.load<Organisation>(
                     token, KIXObjectType.ORGANISATION, this.RESOURCE_URI,
                     loadingOptions, objectIds, KIXObjectType.ORGANISATION, Organisation

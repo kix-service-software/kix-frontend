@@ -15,6 +15,11 @@
             "kix-agent-portal": {
                 "module": "initial-data.extension"
             }
+        },
+        "kix:configuration": {
+            "agent-portal-configuration": {
+                "module": "agent-portal-configuration.extension"
+            }
         }
     }
 }

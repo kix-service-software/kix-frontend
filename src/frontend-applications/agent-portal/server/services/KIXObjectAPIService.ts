@@ -582,4 +582,15 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     ): Promise<Array<ObjectIcon | string>> {
         return null;
     }
+
+    public async shouldPreload(token: string, objectType: KIXObjectType | string): Promise<boolean> {
+        let preload = false;
+
+        const service = await KIXObjectServiceRegistry.getServiceInstance(KIXObjectType.SYS_CONFIG_OPTION);
+        if (service) {
+            const agentPortalConfig = await (service as any).getAgentPortalConfiguration(token);
+            preload = agentPortalConfig?.preloadObjects?.some((o) => o === objectType);
+        }
+        return preload;
+    }
 }

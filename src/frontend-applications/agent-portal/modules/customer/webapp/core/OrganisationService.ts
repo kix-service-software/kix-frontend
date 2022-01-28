@@ -21,6 +21,8 @@ import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptio
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { OrganisationProperty } from '../../model/OrganisationProperty';
+import { SysConfigService } from '../../../sysconfig/webapp/core';
+import { AgentPortalConfiguation } from '../../../../model/configuration/AgentPortalConfiguation';
 
 export class OrganisationService extends KIXObjectService<Organisation> {
 
@@ -54,7 +56,9 @@ export class OrganisationService extends KIXObjectService<Organisation> {
     ): Promise<O[]> {
         let objects: Organisation[];
 
-        if (loadingOptions) {
+        const preload = await this.shouldPreload(KIXObjectType.ORGANISATION);
+
+        if (loadingOptions || !preload) {
             objects = await super.loadObjects<Organisation>(KIXObjectType.ORGANISATION, objectIds, loadingOptions);
         } else {
             objects = await super.loadObjects<Organisation>(
