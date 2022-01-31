@@ -24,4 +24,8 @@ export abstract class FormFieldValueHandler {
         return;
     }
 
+    public async postInitValues(formInstance: FormInstance): Promise<void> {
+        return;
+    }
+
 }
