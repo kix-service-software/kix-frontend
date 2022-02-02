@@ -16,6 +16,7 @@ export class TreeUtil {
         linkNodes: boolean = true, setParentFlags: boolean = true
     ): void {
         if (tree) {
+            tree = tree.filter((n) => n instanceof TreeNode);
             this.setNodesVisible(tree);
             TreeUtil.removeNodeLinks(tree);
             TreeUtil.setNodeFlags(tree, null, setParentFlags);

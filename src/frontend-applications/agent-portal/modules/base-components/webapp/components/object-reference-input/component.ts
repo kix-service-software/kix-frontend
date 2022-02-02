@@ -180,6 +180,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             }
 
             nodes = await Promise.all<TreeNode>(promises);
+            nodes.filter((n) => n instanceof TreeNode);
         }
 
         SortUtil.sortObjects(nodes, 'label', DataType.STRING);
