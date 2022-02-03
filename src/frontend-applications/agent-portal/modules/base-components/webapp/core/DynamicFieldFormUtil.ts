@@ -273,6 +273,7 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
         );
         options.push(new FormFieldOption(ObjectReferenceOptions.COUNT_MIN, field?.countMin));
         options.push(new FormFieldOption(ObjectReferenceOptions.COUNT_MAX, field?.countMax));
+        options.push(new FormFieldOption(DynamicFormFieldOption.FIELD_NAME, dynamicField?.Name));
 
         return options;
     }
