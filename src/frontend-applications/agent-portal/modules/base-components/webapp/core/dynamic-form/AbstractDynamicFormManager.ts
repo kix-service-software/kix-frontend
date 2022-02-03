@@ -34,6 +34,7 @@ import { IKIXObjectService } from '../IKIXObjectService';
 import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
 import { ValidationSeverity } from '../ValidationSeverity';
 import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
+import { DynamicFieldFormUtil } from '../DynamicFieldFormUtil';
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 
@@ -262,7 +263,18 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
                 return result;
             }
         }
-        return [];
+
+        let options: Array<[string, any]> = [];
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
+            const field = await KIXObjectService.loadDynamicField(dfName);
+            if (field.FieldType === DynamicFieldTypes.CI_REFERENCE) {
+                const fieldOptions = DynamicFieldFormUtil.getInstance().getCIReferenceFieldOptions(field);
+                options = fieldOptions.map((o) => [o.option, o.value]);
+            }
+        }
+
+        return options;
     }
 
     public async isHiddenProperty(property: string): Promise<boolean> {
