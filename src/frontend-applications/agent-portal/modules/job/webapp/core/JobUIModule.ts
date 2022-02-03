@@ -12,7 +12,7 @@ import { ServiceRegistry } from '../../../../modules/base-components/webapp/core
 import { JobService, JobFormService, JobLabelProvider, MacroActionLabelProvider, JobTableFactory, JobDetailsContext, JobExecuteAction, JobCreateAction, NewJobDialogContext, JobEditAction, EditJobDialogContext } from '.';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
-import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { JobFilterTableFactory } from './table/JobFilterTableFactory';
 import { MacroActionTableFactory } from './table/MacroActionTableFactory';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';

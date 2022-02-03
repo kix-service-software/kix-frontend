@@ -22,7 +22,6 @@ import { SortUtil } from '../../../../../model/SortUtil';
 import { DataType } from '../../../../../model/DataType';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import { TableEvent, TableFactoryService, TableEventData, ValueState } from '../../../../base-components/webapp/core/table';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { LinkType } from '../../../model/LinkType';
@@ -36,6 +35,10 @@ import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOp
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { Context } from '../../../../../model/Context';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
+import { TableEvent } from '../../../../table/model/TableEvent';
+import { TableEventData } from '../../../../table/model/TableEventData';
+import { ValueState } from '../../../../table/model/ValueState';
+import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 
 class Component {
 

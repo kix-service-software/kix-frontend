@@ -21,6 +21,9 @@ export class OrganisationPlaceholderHandler extends AbstractPlaceholderHandler {
 
     public handlerId: string = '250-OrganisationPlaceholderHandler';
 
+    protected objectStrings: string[] = ['ORGANISATION'];
+
+
     public async replace(placeholder: string, organisation?: Organisation, language?: string): Promise<string> {
         let result = '';
         if (organisation) {

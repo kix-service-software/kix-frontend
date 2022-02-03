@@ -9,7 +9,6 @@
 
 import { ModuleConfigurationService } from '../../server/services/configuration';
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
-import { NewOrganisationDialogContext } from './webapp/core';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
 import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
@@ -30,6 +29,7 @@ import { FormContext } from '../../model/configuration/FormContext';
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { DynamicFormFieldOption } from '../dynamic-fields/webapp/core';
+import { NewOrganisationDialogContext } from './webapp/core/context/NewOrganisationDialogContext';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 

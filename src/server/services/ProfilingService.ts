@@ -12,8 +12,7 @@ import { ConfigurationService } from './ConfigurationService';
 import { LoggingService } from './LoggingService';
 import { IServerConfiguration } from '../model/IServerConfiguration';
 import { ServerUtil } from '../ServerUtil';
-import { IdService } from '../../frontend-applications/agent-portal/model/IdService';
-
+import { RequestCounter } from './RequestCounter';
 
 export class ProfilingService {
 
@@ -27,8 +26,8 @@ export class ProfilingService {
     }
 
     private active: boolean;
-    private tasks: Map<string, ProfileTask> = new Map();
-    private messageCounter: Map<string, number> = new Map<string, number>();
+    private tasks: Map<number, ProfileTask> = new Map();
+    private taskCounter: number = 0;
 
     private constructor() {
         const serverConfig: IServerConfiguration = ConfigurationService.getInstance().getServerConfiguration();
@@ -41,29 +40,46 @@ export class ProfilingService {
         }
     }
 
-    public start(category: string, message: string, inputData?: ProfilingData): string {
+    public start(category: string, message: string, inputData?: ProfilingData, logEntry: boolean = true): number {
         if (!this.active) {
             return null;  // invalid task ID
         }
 
-        let counter = this.messageCounter.get(message) || 0;
-        const task = new ProfileTask(category, message, counter, inputData);
+        const task = new ProfileTask(++this.taskCounter, category, message, inputData);
         this.tasks.set(task.id, task);
-        this.messageCounter.set(message, ++counter);
+        if (category === 'SocketIO') {
+            RequestCounter.getInstance().incrementTotalSocketRequestCount();
+        }
 
-        LoggingService.getInstance().debug(
-            task.id
-            + '\tStart'
-            + '\t' + task.category + ''
-            + '\t' + task.counter + ''
-            + '\t' + task.inputDataSize + ' bytes'
-            + '\t' + task.message
-        );
+        if (logEntry) {
+            this.logStart(task.id);
+        }
 
         return task.id;
     }
 
-    public stop(profileTaskId: string, outputData?: ProfilingData): void {
+    public logStart(taskId: number): void {
+        const task = this.tasks.get(taskId);
+        if (task) {
+            LoggingService.getInstance().debug(
+                '[Profiling]'
+                + '\t' + task.clientRequestId
+                + '\t' + task.id
+                + '\t' + Date.now()
+                + '\tStart'
+                + '\t' + task.category + ''
+                + '\t' + RequestCounter.getInstance().getTotalSocketRequestCount() + ''
+                + '\t' + RequestCounter.getInstance().getPendingSocketRequestCount() + ''
+                + '\t' + RequestCounter.getInstance().getTotalHttpRequestCount() + ''
+                + '\t' + RequestCounter.getInstance().getPendingHTTPRequestCount() + ''
+                + '\t-'
+                + '\t' + task.inputDataSize + ' bytes'
+                + '\t' + task.message
+            );
+        }
+    }
+
+    public stop(profileTaskId: number, outputData?: ProfilingData): void {
         if (!this.active) {
             return;
         }
@@ -75,10 +91,19 @@ export class ProfilingService {
             this.tasks.delete(profileTaskId);
 
             LoggingService.getInstance().debug(
-                profileTaskId
+                '[Profiling]'
+                + '\t' + task.clientRequestId
+                + '\t' + task.id
+                + '\t' + Date.now()
                 + '\tStop'
+                + '\t' + task.category + ''
+                + '\t' + RequestCounter.getInstance().getTotalSocketRequestCount() + ''
+                + '\t' + RequestCounter.getInstance().getPendingSocketRequestCount() + ''
+                + '\t' + RequestCounter.getInstance().getTotalHttpRequestCount() + ''
+                + '\t' + RequestCounter.getInstance().getPendingHTTPRequestCount() + ''
                 + '\t' + task.duration + ' ms'
                 + '\t' + task.outputDataSize + ' bytes'
+                + '\t' + task.message
             );
         }
     }
@@ -87,7 +112,7 @@ export class ProfilingService {
 // eslint-disable-next-line max-classes-per-file
 class ProfileTask {
 
-    public id: string = IdService.generateDateBasedId();
+    public clientRequestId: string;
     public startTime: number;
     public endTime?: number;
     public duration?: number;
@@ -95,11 +120,14 @@ class ProfileTask {
     public outputDataSize: number = 0;
 
     public constructor(
-        public category: string, public message: string, public counter: number, inputData: ProfilingData
+        public id, public category: string, public message: string, inputData: ProfilingData
     ) {
         this.startTime = new Date().getTime();
         this.message = this.message.replace(new RegExp('"Content":".*="'), '"Content":"..."');
+        this.clientRequestId = '<none>';
+
         if (inputData) {
+            this.clientRequestId = inputData.requestId ? inputData.requestId : this.clientRequestId;
             this.inputDataSize = JSON.stringify(inputData.data).length;
         }
     }
@@ -116,6 +144,7 @@ class ProfileTask {
 
 interface ProfilingData {
 
+    requestId?: string;
     data: Array<unknown>;
 
 }

@@ -11,7 +11,7 @@ import { IUIModule } from '../../../../model/IUIModule';
 import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
 import { DynamicFieldService } from './DynamicFieldService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { DynamicFieldLabelProvider } from './DynamicFieldLabelProvider';
 import { DynamicFieldTableFactory } from './DynamicFieldTableFactory';

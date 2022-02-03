@@ -10,10 +10,10 @@
 
 import { NotificationFilterTableContentProvider } from './NotificationFilterTableContentProvider';
 import { NotificationFilterTableProperty } from './NotificationFilterTableProperty';
-import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
+import { TableFactory } from '../../../../table/webapp/core/factory/TableFactory';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
-import { Table } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../table/model/Table';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
 import { DataType } from '../../../../../model/DataType';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';

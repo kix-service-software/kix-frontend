@@ -10,10 +10,10 @@
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
-import { ContactDialogUtil } from '..';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { Contact } from '../../../model/Contact';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ContactDialogUtil } from '../ContactDialogUtil';
 
 export class ContactDuplicateAction extends AbstractAction {
 

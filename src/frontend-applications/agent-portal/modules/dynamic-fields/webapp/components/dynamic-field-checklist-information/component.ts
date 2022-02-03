@@ -9,17 +9,19 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { Table, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
 import { IdService } from '../../../../../model/IdService';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
-import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
+import { TableContentProvider } from '../../../../table/webapp/core/TableContentProvider';
 import { CheckListItem } from '../../core/CheckListItem';
 import { DataType } from '../../../../../model/DataType';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { RowObject } from '../../../../table/model/RowObject';
+import { Table } from '../../../../table/model/Table';
+import { TableValue } from '../../../../table/model/TableValue';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

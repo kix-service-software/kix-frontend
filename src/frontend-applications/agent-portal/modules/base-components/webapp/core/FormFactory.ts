@@ -35,7 +35,7 @@ export class FormFactory {
 
     private static initFormFields(fields: FormFieldConfiguration[]): FormFieldConfiguration[] {
         if (fields) {
-            fields = fields.map((f) => this.cloneField(f));
+            fields = fields.filter((f) => f !== null && typeof f !== 'undefined').map((f) => this.cloneField(f));
         }
         return fields ? fields : [];
     }

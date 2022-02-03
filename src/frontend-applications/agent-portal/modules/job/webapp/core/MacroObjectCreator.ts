@@ -26,7 +26,8 @@ export class MacroObjectCreator {
         macro.ID = macroIdOption ? macroIdOption.value : null;
 
         const jobNameValue = await formInstance.getFormFieldValueByProperty(JobProperty.NAME);
-        macro.Name = jobNameValue ? `Macro for Job "${jobNameValue.value}"` : macroField.instanceId;
+        macro.Name = IdService.generateDateBasedId('Macro-');
+        macro.Comment = jobNameValue ? `Macro for Job "${jobNameValue.value}"` : macroField.instanceId;
 
         const typeValue = formInstance.getFormFieldValue<string>(macroField?.instanceId);
         macro.Type = Array.isArray(typeValue?.value) ? typeValue.value[0] : typeValue.value;
@@ -105,8 +106,7 @@ export class MacroObjectCreator {
             const optionNameValue = parameterField.options.find((o) => o.option === 'OptionName');
             if (optionNameValue?.value === 'MacroID') {
                 const macro = await this.createMacro(parameterField, formInstance);
-                macro.Name = `${macro.Name} - Action: ${action.Type} - ${IdService.generateDateBasedId()}`;
-                macro.Comment = `Referenced by Action: ${action.Type}`;
+                macro.Comment += ` - Referenced by Action: ${action.Type}`;
                 parameter[optionNameValue.value] = macro;
             } else if (optionNameValue?.value !== 'Skip') {
                 if (value && value.value !== null && typeof value.value !== 'undefined') {

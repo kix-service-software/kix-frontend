@@ -8,9 +8,8 @@
  */
 
 import { IUIModule } from '../../../../model/IUIModule';
-import { ContactImportManager } from './ContactImportManager';
+import { ContactImportManager } from './import/ContactImportManager';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
-import { NewContactDialogContext, EditContactDialogContext, ContactImportDialogContext, ContactCreateAction, ContactEditAction } from '.';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
@@ -20,7 +19,12 @@ import { ImportService } from '../../../import/webapp/core/ImportService';
 import { ContactDuplicateAction } from './actions/ContactDuplicateAction';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
-import { ContactDetailsContext } from './context';
+import { ContactImportRunner } from './import/ContactImportRunner';
+import { ContactDetailsContext } from './context/ContactDetailsContext';
+import { ContactCreateAction, ContactEditAction } from './actions';
+import { ContactImportDialogContext } from './context/ContactImportDialogContext';
+import { EditContactDialogContext } from './context/EditContactDialogContext';
+import { NewContactDialogContext } from './context/NewContactDialogContext';
 
 export class UIModule implements IUIModule {
 
@@ -34,6 +38,7 @@ export class UIModule implements IUIModule {
 
     public async register(): Promise<void> {
         ImportService.getInstance().registerImportManager(new ContactImportManager());
+        ImportService.getInstance().registerImportRunner(new ContactImportRunner());
 
         await this.registerContexts();
         this.registerActions();

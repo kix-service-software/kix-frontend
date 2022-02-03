@@ -58,7 +58,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         }
 
-        const currentDate = DateTimeUtil.format(new Date(report.CreateTime), 'yyyy-mm-dd_HHMMss');
+        const dateString = report.CreateTime?.replace(/-/g, '/');
+        const currentDate = DateTimeUtil.format(new Date(dateString), 'yyyy-mm-dd_HHMMss');
         const fileName = `${reportDefinition.Name}_${currentDate}.${fileExtension}`;
 
         BrowserUtil.startBrowserDownload(fileName, resultWithContent.Content,

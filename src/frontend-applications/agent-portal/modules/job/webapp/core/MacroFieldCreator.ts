@@ -8,7 +8,6 @@
  */
 
 import { DefaultSelectInputFormOption } from '../../../../model/configuration/DefaultSelectInputFormOption';
-import { FormContext } from '../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldOption } from '../../../../model/configuration/FormFieldOption';
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
@@ -16,6 +15,8 @@ import { IdService } from '../../../../model/IdService';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { FormFactory } from '../../../base-components/webapp/core/FormFactory';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
@@ -69,8 +70,14 @@ export class MacroFieldCreator {
         macroField.instanceId = `${parentInstanceId}###MACRO###${IdService.generateDateBasedId()}`;
         macroField.draggableFields = true;
 
-        if (macro && formInstance?.getFormContext() === FormContext.EDIT) {
-            macroField.options.push(new FormFieldOption('MacroId', macro.ID));
+        if (macro) {
+
+            const context = ContextService.getInstance().getActiveContext();
+            const duplicate = context?.getAdditionalInformation(AdditionalContextInformation.DUPLICATE);
+            if (duplicate) {
+                macro.ID = null;
+            }
+            macroField.options.push(new FormFieldOption('MacroId', macro?.ID));
 
             if (macro.ExecOrder && macro.ExecOrder.length) {
                 const actions = this.getSortedActions(macro);
@@ -145,7 +152,12 @@ export class MacroFieldCreator {
             true, 'Translatable#Helptext_Admin_JobCreateEdit_Actions'
         );
 
-        actionField.options.push(new FormFieldOption('ActionId', action ? action.ID : null));
+        const context = ContextService.getInstance().getActiveContext();
+        const duplicate = context?.getAdditionalInformation(AdditionalContextInformation.DUPLICATE);
+        if (duplicate && action) {
+            action.ID = null;
+        }
+        actionField.options.push(new FormFieldOption('ActionId', action?.ID));
         actionField.options.push(new FormFieldOption(DefaultSelectInputFormOption.UNIQUE, false));
 
         if (!type && macroField) {
@@ -163,7 +175,7 @@ export class MacroFieldCreator {
         actionField.countDefault = 1;
         actionField.countMax = 200;
         actionField.countMin = 1;
-        actionField.defaultValue = new FormFieldValue(action ? action.Type : null);
+        actionField.defaultValue = new FormFieldValue(action?.Type);
         actionField.instanceId = `${macroField.instanceId}###${actionField.property}###${IdService.generateDateBasedId()}`;
         actionField.parentInstanceId = macroField.instanceId;
         actionField.parent = macroField;

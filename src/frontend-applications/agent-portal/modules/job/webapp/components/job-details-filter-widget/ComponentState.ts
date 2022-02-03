@@ -9,7 +9,7 @@
 
 import { WidgetComponentState } from '../../../../base-components/webapp/core/WidgetComponentState';
 
-import { Table } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../table/model/Table';
 
 
 export class ComponentState extends WidgetComponentState {

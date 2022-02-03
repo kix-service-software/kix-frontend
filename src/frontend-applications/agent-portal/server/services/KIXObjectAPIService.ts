@@ -183,7 +183,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             }
 
             if (loadingOptions.query) {
-                loadingOptions.query.forEach((q) => query[q[0]] = q[1]);
+                loadingOptions.query.forEach((q) => query[q[0]] = Array.isArray(q[1]) ? JSON.stringify(q[1]) : q[1]);
             }
         }
 
@@ -376,7 +376,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     }
 
     public async buildFilter(
-        criteria: FilterCriteria[], objectProperty: string, query: any, token?: string
+        criteria: FilterCriteria[], objectProperty: string, query: any, token: string
     ): Promise<boolean> {
         criteria = criteria.filter((c) => c?.property);
 
@@ -467,7 +467,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     public prepareObjectFilter(filterCriteria: FilterCriteria[]): any {
         let objectFilter = {};
 
-        const prepareCriteria = [];
+        const prepareCriteria: FilterCriteria[] = [];
         filterCriteria.forEach((c) => {
             if (c?.property) {
                 c.property = c.property.replace(KIXObjectProperty.DYNAMIC_FIELDS + '.', 'DynamicField_');

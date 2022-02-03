@@ -7,14 +7,16 @@
  * --
  */
 
-import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
-import { RowObject, Table, TableValue } from '../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { LogFile } from '../../../model/LogFile';
 import { LogFolder } from '../../../model/LogFolder';
 import { LogFileProperty } from '../../../model/LogFileProperty';
 import { LogTier } from '../../../model/LogTier';
+import { RowObject } from '../../../../table/model/RowObject';
+import { Table } from '../../../../table/model/Table';
+import { TableValue } from '../../../../table/model/TableValue';
+import { TableContentProvider } from '../../../../table/webapp/core/TableContentProvider';
 
 export class LogFileTableContentProvider extends TableContentProvider<LogFile> {
 

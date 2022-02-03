@@ -7,9 +7,9 @@
  * --
  */
 
-import { TableExportUtil } from '../../../../base-components/webapp/core/table';
 import { TextModuleProperty } from '../../../model/TextModuleProperty';
 import { CSVExportAction } from '../../../../import/webapp/core/actions/CSVExportAction';
+import { TableExportUtil } from '../../../../table/webapp/core/TableExportUtil';
 
 export class TextModuleCSVExportAction extends CSVExportAction {
 

@@ -20,7 +20,7 @@ export class ContextStorageManager {
 
     public async getStorableContextPreference(forceRemove?: boolean): Promise<ContextPreference> {
         const contextPreference = new ContextPreference(
-            this.context.instanceId, this.context.getObjectId(), this.context.descriptor
+            this.context.instanceId, this.context.getObjectId(), this.context.contextId
         );
 
         await this.context.addStorableAdditionalInformation(contextPreference);

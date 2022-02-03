@@ -18,7 +18,7 @@ import { CRUD } from '../../../../../server/model/rest/CRUD';
 import { ServiceRegistry } from '../../base-components/webapp/core/ServiceRegistry';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { ServiceType } from '../../base-components/webapp/core/ServiceType';
-import { TableFactoryService } from '../../base-components/webapp/core/table';
+import { TableFactoryService } from '../../table/webapp/core/factory/TableFactoryService';
 import { LabelService } from '../../base-components/webapp/core/LabelService';
 import { ActionFactory } from '../../base-components/webapp/core/ActionFactory';
 

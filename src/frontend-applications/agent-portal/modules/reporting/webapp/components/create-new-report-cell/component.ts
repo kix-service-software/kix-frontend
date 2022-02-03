@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { Cell } from '../../../../base-components/webapp/core/table';
+import { Cell } from '../../../../table/model/Cell';
 import { ReportDefinition } from '../../../model/ReportDefinition';
 import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';

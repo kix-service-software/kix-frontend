@@ -11,6 +11,7 @@ import { EditConfigItemDialogContext, NewConfigItemDialogContext } from './conte
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { ConfigItem } from '../../model/ConfigItem';
 import { ConfigItemProperty } from '../../model/ConfigItemProperty';
+import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
 
 export class ConfigItemDialogUtil {
 
@@ -33,7 +34,7 @@ export class ConfigItemDialogUtil {
             NewConfigItemDialogContext.CONTEXT_ID, configItem.ConfigItemID, null,
             [
                 [ConfigItemProperty.CLASS_ID, configItem.ClassID],
-                ['DUPLICATE', true]
+                [AdditionalContextInformation.DUPLICATE, true]
             ]
         );
     }

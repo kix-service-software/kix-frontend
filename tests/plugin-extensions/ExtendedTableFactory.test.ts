@@ -11,13 +11,13 @@
 import * as chai from 'chai';
 const expect = chai.expect;
 
-import { ExtendedTableFactory } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table/ExtendedTableFactory';
-import { TableFactoryService } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
 import { KIXObjectType } from '../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 import { TicketTableFactory } from '../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/table/TicketTableFactory';
 import { TableConfiguration } from '../../src/frontend-applications/agent-portal/model/configuration/TableConfiguration';
 import { DefaultColumnConfiguration } from '../../src/frontend-applications/agent-portal/model/configuration/DefaultColumnConfiguration';
 import { ConfigurationType } from '../../src/frontend-applications/agent-portal/model/configuration/ConfigurationType';
+import { ExtendedTableFactory } from '../../src/frontend-applications/agent-portal/modules/table/webapp/core/factory/ExtendedTableFactory';
+import { TableFactoryService } from '../../src/frontend-applications/agent-portal/modules/table/webapp/core/factory/TableFactoryService';
 
 describe('ExtendedTestTableFactory', () => {
 

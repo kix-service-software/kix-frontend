@@ -8,13 +8,12 @@
  */
 
 import { AbstractAction } from '../../../../modules/base-components/webapp/core/AbstractAction';
-import { Table } from '../../../base-components/webapp/core/table';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { IdService } from '../../../../model/IdService';
 import { BulkService, BulkDialogContext } from '.';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
-
+import { Table } from '../../../table/model/Table';
 
 export class BulkAction extends AbstractAction<Table>  {
 

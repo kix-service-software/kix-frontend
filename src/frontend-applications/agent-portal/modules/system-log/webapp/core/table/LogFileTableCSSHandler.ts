@@ -7,7 +7,8 @@
  * --
  */
 
-import { ITableCSSHandler, TableValue } from '../../../../base-components/webapp/core/table';
+import { TableValue } from '../../../../table/model/TableValue';
+import { ITableCSSHandler } from '../../../../table/webapp/core/css-handler/ITableCSSHandler';
 import { LogFile } from '../../../model/LogFile';
 import { LogFolder } from '../../../model/LogFolder';
 

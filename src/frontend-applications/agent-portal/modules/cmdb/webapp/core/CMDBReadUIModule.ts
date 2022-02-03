@@ -38,9 +38,10 @@ import { ActionFactory } from '../../../base-components/webapp/core/ActionFactor
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
-import { TableCSSHandlerRegistry, TableFactoryService } from '../../../base-components/webapp/core/table';
 import { GraphService } from '../../../graph/webapp/core/GraphService';
 import { SearchService } from '../../../search/webapp/core';
+import { TableCSSHandlerRegistry } from '../../../table/webapp/core/css-handler/TableCSSHandlerRegistry';
+import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import ConfigItemPrintAction from './actions/ConfigItemPrintAction';
 import ConfigItemPrintSelectionAction from './actions/ConfigItemPrintSelectionAction';
 import { CMDBGraphInstance } from './CMDBGraphInstance';

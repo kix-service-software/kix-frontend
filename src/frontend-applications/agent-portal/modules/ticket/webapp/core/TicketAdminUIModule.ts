@@ -18,7 +18,7 @@ import {
     EditTicketPriorityDialogContext, TicketPriorityTableDeleteAction, TicketPriorityDetailsContext,
     TicketQueueCreateAction, NewQueueDialogContext, TicketQueueEditAction, EditQueueDialogContext, QueueDetailsContext,
 } from '.';
-import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';

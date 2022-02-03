@@ -9,7 +9,7 @@
 
 import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
 import { ImportManager } from '../../core';
-import { Table } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../table/model/Table';
 import { IdService } from '../../../../../model/IdService';
 
 export class ComponentState extends AbstractComponentState {

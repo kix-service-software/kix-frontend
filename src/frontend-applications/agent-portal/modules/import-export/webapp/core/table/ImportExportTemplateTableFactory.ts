@@ -7,10 +7,9 @@
  * --
  */
 
-import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
+import { TableFactory } from '../../../../table/webapp/core/factory/TableFactory';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
-import { Table, ToggleOptions } from '../../../../base-components/webapp/core/table';
 import { ImportExportTemplateTableContentProvider } from './ImportExportTemplateTableContentProvider';
 import { ImportExportTemplateProperty } from '../../../model/ImportExportTemplateProperty';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
@@ -19,6 +18,8 @@ import { TableRowHeight } from '../../../../../model/configuration/TableRowHeigh
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 import { DataType } from '../../../../../model/DataType';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
+import { Table } from '../../../../table/model/Table';
+import { ToggleOptions } from '../../../../table/model/ToggleOptions';
 
 export class ImportExportTemplateTableFactory extends TableFactory {
 

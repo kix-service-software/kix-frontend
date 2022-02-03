@@ -16,6 +16,7 @@ export class TreeUtil {
         linkNodes: boolean = true, setParentFlags: boolean = true
     ): void {
         if (tree) {
+            tree = tree.filter((n) => n instanceof TreeNode);
             this.setNodesVisible(tree);
             TreeUtil.removeNodeLinks(tree);
             TreeUtil.setNodeFlags(tree, null, setParentFlags);
@@ -149,7 +150,7 @@ export class TreeUtil {
     public static findNode(tree: TreeNode[], nodeId: string | number, searchValue?: string): TreeNode {
         if (Array.isArray(tree)) {
             for (const node of tree) {
-                if (nodeId && node.id?.toString() === nodeId.toString()) {
+                if (typeof nodeId !== 'undefined' && nodeId !== null && node.id?.toString() === nodeId.toString()) {
                     return node;
                 } else if (
                     searchValue &&

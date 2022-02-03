@@ -2,6 +2,7 @@ config/defaults/**/*.json
 config/user/**/*.json
 features/report
 .cache
+cache
 package-lock.json
 gulp-*
 dist
@@ -23,3 +24,5 @@ coverage
 src/plugins/*
 !src/plugins/readme.md
 !src/plugins/.gitkeep
+
+data/*_ContextList.json

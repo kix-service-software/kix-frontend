@@ -9,7 +9,7 @@
 
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { Cell } from '../../../../base-components/webapp/core/table';
+import { Cell } from '../../../../table/model/Cell';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { LogFile } from '../../../model/LogFile';
 import { ViewLogFileDialogContext } from '../../core/context/ViewLogFileDialogContext';

@@ -9,7 +9,7 @@
 
 import { IdService } from '../../../../../model/IdService';
 import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
-import { Table } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../table/model/Table';
 import { LinkManager } from '../../../../links/webapp/core/LinkManager';
 import { BulkManager } from '../../core/BulkManager';
 

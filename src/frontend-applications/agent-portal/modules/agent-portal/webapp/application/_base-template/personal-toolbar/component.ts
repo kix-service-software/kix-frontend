@@ -20,6 +20,7 @@ import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
 import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { AgentService } from '../../../../../user/webapp/core/AgentService';
+import { KIXStyle } from '../../../../../base-components/model/KIXStyle';
 
 class Component {
 
@@ -64,7 +65,7 @@ class Component {
     }
 
     private resizeHandling(): void {
-        this.state.isMobile = Boolean(window.innerWidth <= 1024);
+        this.state.isMobile = Boolean(window.innerWidth <= KIXStyle.MOBILE_BREAKPOINT);
     }
 
     private async initActions(): Promise<void> {

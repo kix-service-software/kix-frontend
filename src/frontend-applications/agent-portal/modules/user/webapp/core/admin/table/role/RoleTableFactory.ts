@@ -9,10 +9,8 @@
 
 
 import { RoleTableContentProvider } from './RoleTableContentProvider';
-import { TableFactory } from '../../../../../../base-components/webapp/core/table/TableFactory';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../../../model/configuration/TableConfiguration';
-import { Table } from '../../../../../../base-components/webapp/core/table';
 import { DefaultColumnConfiguration } from '../../../../../../../model/configuration/DefaultColumnConfiguration';
 import { RoleProperty } from '../../../../../model/RoleProperty';
 import { DataType } from '../../../../../../../model/DataType';
@@ -21,6 +19,8 @@ import { TableRowHeight } from '../../../../../../../model/configuration/TableRo
 import { RoutingConfiguration } from '../../../../../../../model/configuration/RoutingConfiguration';
 import { ContextMode } from '../../../../../../../model/ContextMode';
 import { RoleDetailsContext } from '../../context/RoleDetailsContext';
+import { Table } from '../../../../../../table/model/Table';
+import { TableFactory } from '../../../../../../table/webapp/core/factory/TableFactory';
 
 export class RoleTableFactory extends TableFactory {
 

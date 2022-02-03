@@ -7,15 +7,17 @@
  * --
  */
 
-import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
+import { TableContentProvider } from '../../../../table/webapp/core/TableContentProvider';
 import { MailFilterSet } from '../../../model/MailFilterSet';
-import { Table, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { MailFilter } from '../../../model/MailFilter';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { DataType } from '../../../../../model/DataType';
+import { RowObject } from '../../../../table/model/RowObject';
+import { Table } from '../../../../table/model/Table';
+import { TableValue } from '../../../../table/model/TableValue';
 
 export class MailFilterSetTableContentProvider extends TableContentProvider<MailFilterSet> {
 

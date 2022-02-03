@@ -9,8 +9,8 @@
 
 import { WidgetComponentState } from '../../../../../../modules/base-components/webapp/core/WidgetComponentState';
 import { AbstractAction } from '../../../../../../modules/base-components/webapp/core/AbstractAction';
-import { Table } from '../../../../../base-components/webapp/core/table';
 import { KIXObjectPropertyFilter } from '../../../../../../model/KIXObjectPropertyFilter';
+import { Table } from '../../../../../table/model/Table';
 
 export class ComponentState extends WidgetComponentState {
 

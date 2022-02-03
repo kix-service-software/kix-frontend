@@ -23,6 +23,7 @@ import { MobileShowEvent } from '../../../model/MobileShowEvent';
 import { MobileShowEventData } from '../../../model/MobileShowEventData';
 import { ContextHistory } from '../../../../base-components/webapp/core/ContextHistory';
 import { IKIXModuleExtension } from '../../../../../model/IKIXModuleExtension';
+import { KIXStyle } from '../../../../base-components/model/KIXStyle';
 
 class Component {
 
@@ -140,7 +141,7 @@ class Component {
     }
 
     private resizeHandling(): void {
-        this.state.isMobile = Boolean(window.innerWidth <= 1024);
+        this.state.isMobile = Boolean(window.innerWidth <= KIXStyle.MOBILE_BREAKPOINT);
     }
 
     private async initModules(): Promise<void> {
@@ -170,7 +171,7 @@ class Component {
                 const start = Date.now();
                 await uiModules[i].register();
                 const end = Date.now();
-                console.debug(`regsiter module: ${uiModules[i].priority} - ${uiModules[i].name} - ${end - start}ms`);
+                console.debug(`register module: ${uiModules[i].priority} - ${uiModules[i].name} - ${end - start}ms`);
             } else {
                 console.warn(`module with prioritiy ${uiModules[i].priority} did not implement register() method.`);
             }

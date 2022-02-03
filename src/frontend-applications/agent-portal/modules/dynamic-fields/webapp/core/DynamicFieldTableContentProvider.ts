@@ -8,10 +8,10 @@
  */
 
 import { DynamicField } from '../../model/DynamicField';
-import { TableContentProvider } from '../../../base-components/webapp/core/table/TableContentProvider';
-import { Table } from '../../../base-components/webapp/core/table';
+import { TableContentProvider } from '../../../table/webapp/core/TableContentProvider';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { Table } from '../../../table/model/Table';
 
 export class DynamicFieldTableContentProvider extends TableContentProvider<DynamicField> {
 

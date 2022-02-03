@@ -7,16 +7,23 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 <if(state.prepared && state.field)>
-    <textarea.input-style
-        key=state.field.instanceId
-        rows=state.rows
-        cols=50
-        class={
-            invalid: state.invalid
-        }
-        maxlength=state.field.maxLength
-        placeholder=state.placeholder
-        readonly=state.field.readonly
-        on-blur("focusLost")
-        on-change("valueChanged")>${state.currentValue}</textarea>
+    <if(!state.useEditor)>
+        <textarea.input-style
+            key=state.field.instanceId
+            rows=state.rows
+            cols=50
+            class={
+                invalid: state.invalid
+            }
+            maxlength=state.field.maxLength
+            placeholder=state.placeholder
+            readonly=state.field.readonly
+            on-blur("focusLost")
+            on-change("valueChanged")>${state.currentValue}</textarea>
+    </if>
+    <else>
+        <span no-update>
+            <textarea.input-style key=state.field.instanceId>${state.currentValue}</textarea>
+        </span>
+    </else>
 </if>

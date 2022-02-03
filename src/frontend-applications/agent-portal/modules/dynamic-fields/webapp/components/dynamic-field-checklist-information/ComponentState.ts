@@ -9,7 +9,7 @@
 
 import { DynamicField } from '../../../model/DynamicField';
 import { CheckListItem } from '../../core/CheckListItem';
-import { Table } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../table/model/Table';
 
 export class ComponentState {
 

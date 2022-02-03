@@ -25,8 +25,8 @@ import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetC
 import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
 import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
 import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
-import { ToggleOptions } from '../base-components/webapp/core/table';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { ToggleOptions } from '../table/model/ToggleOptions';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 

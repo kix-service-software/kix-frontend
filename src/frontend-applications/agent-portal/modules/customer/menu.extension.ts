@@ -8,11 +8,13 @@
  */
 
 import { IMainMenuExtension } from '../../server/extensions/IMainMenuExtension';
-import { OrganisationContext, OrganisationDetailsContext, ContactDetailsContext } from './webapp/core';
 import { UIComponentPermission } from '../../model/UIComponentPermission';
 import { CRUD } from '../../../../server/model/rest/CRUD';
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { ContactDetailsContext } from './webapp/core/context/ContactDetailsContext';
+import { OrganisationContext } from './webapp/core/context/OrganisationContext';
+import { OrganisationDetailsContext } from './webapp/core/context/OrganisationDetailsContext';
 
 class Extension extends KIXExtension implements IMainMenuExtension {
 

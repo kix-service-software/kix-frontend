@@ -2678,7 +2678,7 @@ msgid "This configuration defines which Deployment States are subject to this se
 msgstr ""
 msgid "This is the administration panel. Please select a module from the explorer."
 msgstr ""
-msgid "This value defines the offset (in seconds) to the very moment in which the field is initially displayed for input. Leave empty if the field should not hold any value upon first input. For instance, enter 3600 if the field should be initialized with "now+1h" or enter 86400 if the field should be initialized with "now+24h"."
+msgid "This value defines the offset (in seconds) to the very moment in which the field is initially displayed for input. Leave empty if the field should not hold any value upon first input. For instance, enter 3600 if the field should be initialized with \"now+1h\" or enter 86400 if the field should be initialized with \"now+24h\"."
 msgstr ""
 msgid "Thursday"
 msgstr ""

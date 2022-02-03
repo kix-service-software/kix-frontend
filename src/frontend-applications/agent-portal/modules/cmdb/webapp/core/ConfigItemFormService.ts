@@ -38,6 +38,7 @@ import { FormConfiguration } from '../../../../model/configuration/FormConfigura
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { ConfigItemFormFactory } from './ConfigItemFormFactory';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
+import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
 
 export class ConfigItemFormService extends KIXObjectFormService {
 
@@ -159,7 +160,7 @@ export class ConfigItemFormService extends KIXObjectFormService {
     ): Promise<any> {
         if (value) {
             const context = ContextService.getInstance().getActiveContext();
-            const duplicate = context?.getAdditionalInformation('DUPLICATE');
+            const duplicate = context?.getAdditionalInformation(AdditionalContextInformation.DUPLICATE);
             switch (property) {
                 case ConfigItemProperty.NAME:
                     if (formContext === FormContext.NEW) {

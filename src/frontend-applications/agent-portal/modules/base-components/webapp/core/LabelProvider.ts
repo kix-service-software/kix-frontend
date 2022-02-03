@@ -286,7 +286,9 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
         return true;
     }
 
-    public async getDFDisplayValues(fieldValue: DynamicFieldValue): Promise<[string[], string, string[]]> {
+    public async getDFDisplayValues(
+        fieldValue: DynamicFieldValue, short?: boolean
+    ): Promise<[string[], string, string[]]> {
         for (const elp of this.extendedLabelProvider) {
             const result = await elp.getDFDisplayValues(fieldValue);
             if (result) {
@@ -315,7 +317,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                         values = await LabelProvider.getDFSelectionFieldValues(dynamicField, fieldValue);
                         break;
                     case DynamicFieldTypes.CI_REFERENCE:
-                        values = await LabelProvider.getDFCIReferenceFieldValues(dynamicField, fieldValue);
+                        values = await LabelProvider.getDFCIReferenceFieldValues(dynamicField, fieldValue, short);
                         break;
                     case DynamicFieldTypes.CHECK_LIST:
                         values = LabelProvider.getDFChecklistFieldShortValues(dynamicField, fieldValue);
@@ -404,7 +406,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
     }
 
     public static async getDFCIReferenceFieldValues(
-        field: DynamicField, fieldValue: DynamicFieldValue
+        field: DynamicField, fieldValue: DynamicFieldValue, short: boolean = false
     ): Promise<string[]> {
         let values = fieldValue.PreparedValue;
 
@@ -422,7 +424,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
             ).catch(() => [] as ConfigItem[]);
 
             const valuePromises = [];
-            configItems.forEach((ci) => valuePromises.push(LabelService.getInstance().getObjectText(ci)));
+            configItems.forEach((ci) => valuePromises.push(LabelService.getInstance().getObjectText(ci, !short)));
             values = await Promise.all<string>(valuePromises);
         }
         return values || [];

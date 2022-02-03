@@ -10,8 +10,8 @@
 import { AbstractAction } from '../../../base-components/webapp/core/AbstractAction';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { Table } from '../../../base-components/webapp/core/table';
 import { EditSysConfigDialogContext } from './context';
+import { Table } from '../../../table/model/Table';
 
 export class SysconfigEditAction extends AbstractAction<Table> {
 

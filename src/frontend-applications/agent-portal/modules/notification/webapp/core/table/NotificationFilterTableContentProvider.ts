@@ -9,8 +9,7 @@
 
 
 import { NotificationFilterTableProperty } from './NotificationFilterTableProperty';
-import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
-import { Table, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
+import { TableContentProvider } from '../../../../table/webapp/core/TableContentProvider';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
@@ -23,6 +22,9 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { SearchDefinition, SearchOperatorUtil } from '../../../../search/webapp/core';
 import { ArticleProperty } from '../../../../ticket/model/ArticleProperty';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { RowObject } from '../../../../table/model/RowObject';
+import { Table } from '../../../../table/model/Table';
+import { TableValue } from '../../../../table/model/TableValue';
 
 export class NotificationFilterTableContentProvider extends TableContentProvider<any> {
 

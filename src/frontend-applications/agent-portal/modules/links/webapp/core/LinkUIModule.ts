@@ -10,7 +10,7 @@
 import { IUIModule } from '../../../../model/IUIModule';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { LinkService } from './LinkService';
-import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { LinkObjectTableFactory, LinkObjectLabelProvider, LinkedObjectsEditAction, EditLinkedObjectsDialogContext } from '.';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';

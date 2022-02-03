@@ -11,7 +11,7 @@ import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/
 import { ComponentContent } from '../../../../base-components/webapp/core/ComponentContent';
 import { OverlayService } from '../../../../base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../../base-components/webapp/core/OverlayType';
-import { Cell } from '../../../../base-components/webapp/core/table';
+import { Cell } from '../../../../table/model/Cell';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { FAQArticle } from '../../../model/FAQArticle';
 import { FAQArticleHandler } from '../../core/FAQArticleHandler';

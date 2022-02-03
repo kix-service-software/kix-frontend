@@ -408,7 +408,7 @@ export class ReportDefinitionFormCreator {
         parameterField.children.push(referencesField);
 
         const possibleValuesField = new FormFieldConfiguration(
-            'report-parameter-posiible-values', 'Translatable#Possible Values',
+            'report-parameter-possible-values', 'Translatable#Possible Values',
             ReportParameterProperty.POSSIBLE_VALUES,
             null, false, 'Translatable#Helptext_Reporting_ReportCreate_ParameterPossibleValues', []
         );
@@ -532,12 +532,6 @@ export class ReportDefinitionFormCreator {
         );
         outputFormatField.instanceId = IdService.generateDateBasedId();
 
-        const selectableOutputFormats = await this.getSelectableOutputFormats(formInstance);
-
-        outputFormatField.options.push(
-            new FormFieldOption(ObjectReferenceOptions.OBJECT_IDS, selectableOutputFormats)
-        );
-
         return outputFormatField;
     }
 
@@ -624,49 +618,5 @@ export class ReportDefinitionFormCreator {
         } else {
             formInstance.addFieldChildren(field, [], true);
         }
-
-        const outputFields = formInstance.getFormFieldsByProperty(ReportDefinitionProperty.AVAILABLE_OUTPUT_FORMATS);
-        const selectableOutputFormats = await this.getSelectableOutputFormats(formInstance);
-
-        for (const of of outputFields) {
-
-            const fieldValue = formInstance.getFormFieldValue(of.instanceId);
-            const values = fieldValue && fieldValue.value
-                ? [fieldValue.value, ...selectableOutputFormats]
-                : selectableOutputFormats;
-
-            const option = of.options.find((o) => o.option === ObjectReferenceOptions.OBJECT_IDS);
-            if (option) {
-                option.value = values;
-            } else {
-                of.options.push(new FormFieldOption(ObjectReferenceOptions.OBJECT_IDS, values));
-            }
-
-            EventService.getInstance().publish(
-                FormEvent.RELOAD_INPUT_VALUES, { formInstance, formField: of }
-            );
-        }
-    }
-
-    public static async getSelectableOutputFormats(formInstance: FormInstance): Promise<string[]> {
-        const existingValues = [];
-        const outputFields = formInstance.getFormFieldsByProperty(ReportDefinitionProperty.AVAILABLE_OUTPUT_FORMATS);
-
-        for (const of of outputFields) {
-            const ofValue = formInstance.getFormFieldValue(of.instanceId);
-            if (ofValue && ofValue.value) {
-                existingValues.push(ofValue.value);
-            }
-        }
-
-        const outputFormats = await KIXObjectService.loadObjects<ReportOutputFormat>(
-            KIXObjectType.REPORT_OUTPUT_FORMAT
-        );
-
-        const selectableOutputFormats = outputFormats
-            .filter((of) => !existingValues.some((ev) => of.Name === ev))
-            .map((of) => of.Name);
-
-        return selectableOutputFormats;
     }
 }

@@ -22,6 +22,8 @@ export class ContactPlaceholderHandler extends AbstractPlaceholderHandler {
 
     public handlerId: string = '200-ContactPlaceholderHandler';
 
+    protected objectStrings: string[] = ['CONTACT'];
+
     public async replace(placeholder: string, contact?: Contact, language?: string): Promise<string> {
         let result = '';
         if (contact) {

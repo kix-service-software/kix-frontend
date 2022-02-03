@@ -11,7 +11,7 @@ import { AbstractAction } from '../../../../base-components/webapp/core/Abstract
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { TextModuleDialogUtil } from '../TextModuleDialogUtil';
-import { Row } from '../../../../base-components/webapp/core/table';
+import { Row } from '../../../../table/model/Row';
 
 export class TextModuleDuplicateAction extends AbstractAction {
 

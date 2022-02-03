@@ -7,7 +7,7 @@
  * --
  */
 
-import { Cell } from '../../../../base-components/webapp/core/table/Cell';
+import { Cell } from '../../../../table/model/Cell';
 
 
 export class ComponentState {

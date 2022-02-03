@@ -9,13 +9,8 @@
 
 import { IUIModule } from '../../../../model/IUIModule';
 import { PlaceholderService } from '../../../../modules/base-components/webapp/core/PlaceholderService';
-import {
-    ContactService, ContactFormService, ContactTableFactory,
-    ContactLabelProvider, ContactSearchDefinition, ContactDetailsContext,
-    ContactSearchContext, ContactSearchAction, ContactCSVExportAction, ContactTableDependingAction
-} from '.';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
-import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { SearchService } from '../../../search/webapp/core';
@@ -27,6 +22,14 @@ import { ActionFactory } from '../../../../modules/base-components/webapp/core/A
 import { ContactPlaceholderHandler } from './ContactPlaceholderHandler';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { ContactService } from './ContactService';
+import { ContactSearchAction, ContactCSVExportAction, ContactTableDependingAction } from './actions';
+import { ContactFormService } from './ContactFormService';
+import { ContactLabelProvider } from './ContactLabelProvider';
+import { ContactSearchDefinition } from './ContactSearchDefinition';
+import { ContactDetailsContext } from './context/ContactDetailsContext';
+import { ContactSearchContext } from './context/ContactSearchContext';
+import { ContactTableFactory } from './table';
 
 export class UIModule implements IUIModule {
 

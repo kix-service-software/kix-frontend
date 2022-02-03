@@ -9,7 +9,7 @@
 
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
-import { Table } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../table/model/Table';
 import { CreateLinkDescription } from '../../../server/api/CreateLinkDescription';
 
 

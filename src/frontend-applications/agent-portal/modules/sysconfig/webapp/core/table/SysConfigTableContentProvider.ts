@@ -7,9 +7,8 @@
  * --
  */
 
-import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
+import { TableContentProvider } from '../../../../table/webapp/core/TableContentProvider';
 import { SysConfigOptionDefinition } from '../../../model/SysConfigOptionDefinition';
-import { Table, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { SysConfigOption } from '../../../model/SysConfigOption';
@@ -21,6 +20,9 @@ import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
 import { AdminContext } from '../../../../admin/webapp/core/AdminContext';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { RowObject } from '../../../../table/model/RowObject';
+import { Table } from '../../../../table/model/Table';
+import { TableValue } from '../../../../table/model/TableValue';
 
 export class SysConfigTableContentProvider extends TableContentProvider<SysConfigOptionDefinition> {
 

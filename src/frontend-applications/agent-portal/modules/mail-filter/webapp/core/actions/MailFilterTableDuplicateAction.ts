@@ -10,7 +10,7 @@
 import { AbstractAction } from '../../../../base-components/webapp/core/AbstractAction';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
-import { Row } from '../../../../base-components/webapp/core/table';
+import { Row } from '../../../../table/model/Row';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { NewMailFilterDialogContext } from '../context';
 

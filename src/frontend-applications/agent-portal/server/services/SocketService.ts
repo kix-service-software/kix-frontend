@@ -31,6 +31,8 @@ export class SocketService {
 
     private static INSTANCE: SocketService;
 
+    private namespaces = [];
+
     public static getInstance(): SocketService {
         if (!SocketService.INSTANCE) {
             SocketService.INSTANCE = new SocketService();
@@ -61,6 +63,7 @@ export class SocketService {
         for (const namespace of namespaces) {
             for (const c of namespace.getNamespaceClasses()) {
                 LoggingService.getInstance().info(`Register socket namespace: ${c.constructor.name}`);
+                this.namespaces.push(c);
                 await c.registerNamespace(this.socketIO);
             }
         }
@@ -69,4 +72,5 @@ export class SocketService {
     public broadcast(event: NotificationEvent, data: any): void {
         NotificationNamespace.getInstance().broadcast(event, data);
     }
+
 }

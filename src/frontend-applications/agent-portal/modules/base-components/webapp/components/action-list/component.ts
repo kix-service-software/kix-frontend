@@ -30,6 +30,7 @@ export class Component implements IActionListener {
 
     private contextListernerId: string;
     private contextListener: ComponentContextListener = null;
+    private prepareTimeout;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -44,24 +45,32 @@ export class Component implements IActionListener {
 
     private async initActionList(input: any): Promise<void> {
         this.state.displayText = typeof input.displayText !== 'undefined' ? input.displayText : true;
-        this.state.prepared = true;
+        this.state.prepared = false;
 
         if (Array.isArray(input.list) && input.list.length) {
             await this.setActionList(input.list);
         }
+        this.state.prepared = true;
 
-        setTimeout(() => this.prepareActionLists(), 100);
+        if (!this.prepareTimeout) {
+            this.prepareTimeout = setTimeout(() => {
+                this.prepareActionLists();
+                this.prepareTimeout = null;
+            }, 100);
+        }
     }
 
     private async setActionList(actionList: IAction[]): Promise<void> {
         const actions = [];
         if (Array.isArray(actionList)) {
-            for (const action of actionList) {
-                const canShow = await action.canShow();
-                if (canShow) {
-                    actions.push(action);
+            const actionPromises = [];
+            actionList.forEach((a) => actionPromises.push(a.canShow()));
+            const actionsResults = await Promise.all(actionPromises);
+            actionsResults.forEach((r, i) => {
+                if (r) {
+                    actions.push(actionList[i]);
                 }
-            }
+            });
         }
 
         this.state.actionList = actions;

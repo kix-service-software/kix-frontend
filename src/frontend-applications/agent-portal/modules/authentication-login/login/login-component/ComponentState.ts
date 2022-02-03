@@ -11,11 +11,13 @@ export class ComponentState {
 
     public constructor(
         public loading: boolean = true,
+        public loginProcess: boolean = false,
         public valid: boolean = false,
         public error: boolean = false,
         public doLogin: boolean = false,
         public logout: boolean = false,
-        public unsupportedBrowser: boolean = false
+        public unsupportedBrowser: boolean = false,
+        public userName: string = null
     ) { }
 
 }

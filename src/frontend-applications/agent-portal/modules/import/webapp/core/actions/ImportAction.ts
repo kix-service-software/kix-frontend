@@ -8,7 +8,7 @@
  */
 
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
-import { Table } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../table/model/Table';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { IdService } from '../../../../../model/IdService';
 import { ImportService } from '../';

@@ -8,10 +8,10 @@
  */
 
 import { FAQCategoryDetailsContext } from '../../context';
-import { TableFactory } from '../../../../../../base-components/webapp/core/table/TableFactory';
+import { TableFactory } from '../../../../../../table/webapp/core/factory/TableFactory';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../../../model/configuration/TableConfiguration';
-import { Table } from '../../../../../../base-components/webapp/core/table';
+import { Table } from '../../../../../../table/model/Table';
 import { FAQCategoryTableContentProvider } from '.';
 import { FAQCategoryProperty } from '../../../../../model/FAQCategoryProperty';
 import { KIXObjectProperty } from '../../../../../../../model/kix/KIXObjectProperty';

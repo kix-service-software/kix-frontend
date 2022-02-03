@@ -73,7 +73,7 @@ export class ContextService {
 
     private async createStoredContext(contextPreference: ContextPreference): Promise<void> {
         const context = await this.createContext(
-            contextPreference.contextDescriptor.contextId, contextPreference.objectId, contextPreference.instanceId,
+            contextPreference.contextId, contextPreference.objectId, contextPreference.instanceId,
             contextPreference
         );
         EventService.getInstance().publish(ContextEvents.CONTEXT_CHANGED, context);
@@ -519,10 +519,11 @@ export class ContextService {
             this.contextInstances.forEach((context) => {
                 if (context.descriptor.kixObjectTypes.some((ot) => ot === objectUpdate[0])) {
                     let publishEvent = true;
-                    if (
-                        context.descriptor.contextMode === ContextMode.DETAILS &&
-                        context.getObjectId()?.toString() !== objectUpdate[1]?.toString()
-                    ) {
+
+                    const detailsUpdate = context.descriptor.contextMode === ContextMode.DETAILS &&
+                        context.getObjectId()?.toString() !== objectUpdate[1]?.toString();
+
+                    if (detailsUpdate) {
                         publishEvent = false;
                     }
 
@@ -539,31 +540,18 @@ export class ContextService {
 
     public async isContextStored(instanceId: string): Promise<boolean> {
         let isStored = false;
-        const contextList = await this.getStoredContextList();
-        isStored = Array.isArray(contextList) ? contextList.some((c) => c.instanceId === instanceId) : false;
+        const contextList = await this.getStoredContextList() || [];
+
+        isStored = contextList
+            .filter((c) => c !== null && typeof c !== 'undefined')
+            .some((c) => c.instanceId === instanceId);
 
         return isStored;
     }
 
     public async getStoredContextList(): Promise<ContextPreference[]> {
         if (!this.storedContexts) {
-            let contextList: ContextPreference[] = [];
-            const preference = await AgentService.getInstance().getUserPreference('AgentPortalContextList');
-            if (preference) {
-                try {
-                    const value: string | string[] = preference.Value;
-                    if (typeof value === 'string') {
-                        contextList = [JSON.parse(value)];
-                    } else if (Array.isArray(value)) {
-                        contextList = (value as string[]).map((v) => JSON.parse(v));
-                    }
-                } catch (error) {
-                    console.error('Could not load ContextList from Preferences.');
-                    console.error(error);
-                }
-            }
-
-            this.storedContexts = Array.isArray(contextList) ? contextList : [];
+            this.storedContexts = await ContextSocketClient.getInstance().loadStoredContexts().catch(() => []);
         }
 
         return [...this.storedContexts];
@@ -600,7 +588,9 @@ export class ContextService {
             }
 
             let stored = false;
-            if (!remove) {
+            if (remove) {
+                ContextSocketClient.getInstance().removeStoredContext(context.instanceId);
+            } else {
                 const preference = await context?.getStorageManager()?.getStorableContextPreference()
                     .catch((error) => {
                         console.error('Could not store context');
@@ -612,12 +602,8 @@ export class ContextService {
                     this.storedContexts.push(preference);
                     stored = true;
                 }
+                ContextSocketClient.getInstance().storeContext(preference);
             }
-
-            const value = this.storedContexts.map((p) => JSON.stringify(p));
-            await AgentService.getInstance().setPreferences(
-                [['AgentPortalContextList', value.length ? value : null]]
-            );
 
             if (stored) {
                 EventService.getInstance().publish(ContextEvents.CONTEXT_STORED, context);

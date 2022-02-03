@@ -51,4 +51,18 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
         return stateTypes && !!stateTypes.length ? stateTypes : ['new', 'open', 'pending reminder', 'pending auto'];
     }
 
+    public async getSysconfigOptionValue<T = string>(key: string): Promise<T> {
+        const config: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [key]
+        ).catch((error): SysConfigOption[] => []);
+
+        let value;
+
+        if (Array.isArray(config) && config.length) {
+            value = config[0].Value;
+        }
+
+        return value;
+    }
+
 }
