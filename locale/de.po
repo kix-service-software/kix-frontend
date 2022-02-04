@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2022-01-20 10:44+0000\n"
+"PO-Revision-Date: 2022-02-04 13:44+0000\n"
 "Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
@@ -373,7 +373,7 @@ msgid "Avatar"
 msgstr "Avatar"
 
 msgid "Backend"
-msgstr ""
+msgstr "Backend"
 
 msgid "Based on class definition"
 msgstr "Basiert auf Klassendefinition"
@@ -403,7 +403,7 @@ msgid "Bulk Action: {0}"
 msgstr "Sammelaktion: {0}"
 
 msgid "Cancel"
-msgstr "Abbruch"
+msgstr "Abbrechen"
 
 msgid "Can not create link ({0})"
 msgstr "Verknüpfung konnte nicht angelegt werden ({0})"
@@ -575,7 +575,7 @@ msgid "Communication: Webform"
 msgstr "Kommunikation: Webformular"
 
 msgid "Community"
-msgstr ""
+msgstr "Community"
 
 msgid "Compare"
 msgstr "Vergleichen"
@@ -1310,7 +1310,7 @@ msgid "Force"
 msgstr "Erzwingen"
 
 msgid "Format"
-msgstr "Format"
+msgstr ""
 
 msgid "Form title"
 msgstr "Formulartitel"
@@ -1319,7 +1319,7 @@ msgid "For Tickets"
 msgstr "Für Tickets"
 
 msgid "Forum"
-msgstr ""
+msgstr "Forum"
 
 msgid "Forward"
 msgstr "Weiterleiten"
@@ -1334,7 +1334,7 @@ msgid "From"
 msgstr "Von"
 
 msgid "Frontend"
-msgstr ""
+msgstr "Frontend"
 
 msgid "Fullname"
 msgstr "Vollständiger Name"
@@ -1361,7 +1361,7 @@ msgid "Go to Asset"
 msgstr "Zu Asset springen"
 
 msgid "Graph"
-msgstr ""
+msgstr "Graph"
 
 msgid "Graph Options"
 msgstr "Graph Optionen"
@@ -1675,6 +1675,8 @@ msgstr ""
 
 msgid "Helptext_Admin_NotificationCreate_Name"
 msgstr ""
+"Der Name der Benachrichtigungsregel dient der Identifikation und "
+"inhaltlichen Klärung. Verwenden Sie einen kurzen und prägnanten Titel."
 
 msgid "Helptext_Admin_NotificationCreate_PreferencesTooltip"
 msgstr ""
@@ -1767,6 +1769,8 @@ msgstr ""
 
 msgid "Helptext_Admin_NotificationEdit_Name"
 msgstr ""
+"Der Name der Benachrichtigungsregel dient der Identifikation und "
+"inhaltlichen Klärung. Verwenden Sie einen kurzen und prägnanten Titel."
 
 msgid "Helptext_Admin_NotificationEdit_PreferencesTooltip"
 msgstr ""
@@ -1929,6 +1933,8 @@ msgstr "Geben Sie die Sprache an, in jener der Textbaustein angelegt ist."
 
 msgid "Helptext_Admin_TextModuleCreate_Name"
 msgstr ""
+"Der Name des Textbausteins erscheint bei der Nutzung vor der Auswahl. "
+"Verwenden Sie einen kurzen und prägnanten Titel."
 
 msgid "Helptext_Admin_TextModuleCreate_Text"
 msgstr ""
@@ -2126,6 +2132,8 @@ msgstr ""
 
 msgid "Helptext_Admin_WebformCreateEdit_SuccessMessage"
 msgstr ""
+"Diese Meldung wird angezeigt nachdem das Ticket über das Webformular "
+"erstellt wurde."
 
 msgid "Helptext_Admin_WebformCreateEdit_Title"
 msgstr "Der Formulartitel wird im Kopf des Webformulars angezeigt."
@@ -2182,6 +2190,8 @@ msgstr "Der Vorfallsstatus beschreibt den aktuellen Zustand des Assets."
 
 msgid "Helptext_CMDB_ConfigItemCreateEdit_Name"
 msgstr ""
+"Der Name eines Assets. Hier werden oft eindeutige, sprechende Bezeichner "
+"verwendet."
 
 msgid "Helptext_CMDB_ConfigItem_Link_Class"
 msgstr "Suchen Sie nach Assets innerhalb der gewählten Klasse."
@@ -2264,7 +2274,7 @@ msgid "Helptext_Customers_ContactCreate_Street"
 msgstr "Anschrift Straße des Kontakts, wenn von Organisation abweichend"
 
 msgid "Helptext_Customers_ContactCreate_Title"
-msgstr ""
+msgstr "Titel des Kontakts (z.B. Prof., Dr., etc.)"
 
 msgid "Helptext_Customers_ContactCreate_Validity"
 msgstr ""
@@ -2321,6 +2331,9 @@ msgstr ""
 
 msgid "Helptext_Customers_OrganisationCreate_Type"
 msgstr ""
+"Der Typ der Organisation - handelt es sich um einen Leistungsbezieher (Kunde)"
+", Lieferant/Partner oder Leistungserbringer (meist Betreiber dieses "
+"Servicemanagementsystems)."
 
 msgid "Helptext_Customers_OrganisationCreate_URL"
 msgstr ""
@@ -4070,7 +4083,7 @@ msgid "Required field {0} is no JSON."
 msgstr "Benötigtes Feld '{0}' ist kein gültiges JSON-Format."
 
 msgid "Reset"
-msgstr "Zurücksetzen"
+msgstr "Rücksetzen"
 
 msgid "Reset?"
 msgstr "Zurücksetzen?"
@@ -4082,7 +4095,7 @@ msgid "Reset Preference"
 msgstr "Einstellung zurücksetzen"
 
 msgid "Reset to Default"
-msgstr "Auf Standard zurücksetzen"
+msgstr "Auf Vorgabe zurücksetzen"
 
 msgid "Reset User Widgets"
 msgstr "Nutzer-Widgets zurücksetzen"
