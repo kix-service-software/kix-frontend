@@ -59,6 +59,7 @@ export class LogFile extends KIXObject {
             this.ModifyTime = logFile.ModifyTime;
             this.ModifyTimeUnix = logFile.ModifyTimeUnix;
             this.Content = logFile.Content;
+            this.tier = logFile.tier;
         }
     }
 

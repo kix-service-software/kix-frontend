@@ -204,7 +204,9 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
         EventService.getInstance().publish(
             TableEvent.ROW_CLICKED,
-            new TableEventData(this.state.row.getTable().getTableId(), this.state.row.getRowId())
+            new TableEventData(
+                this.state.row.getTable().getTableId(), this.state.row.getRowId(), null, this.state.row.getTable()
+            )
         );
     }
 

@@ -11,22 +11,17 @@ import { TableFactory } from '../../../../table/webapp/core/factory/TableFactory
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { LogFileTableContentProvider } from './LogFileTableContentProvider';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
 import { DataType } from '../../../../../model/DataType';
-import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
-import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
-import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { LogFileProperty } from '../../../model/LogFileProperty';
-import { LogFile } from '../../../model/LogFile';
 import { Table } from '../../../../table/model/Table';
-import { TableEvent } from '../../../../table/model/TableEvent';
-import { TableEventData } from '../../../../table/model/TableEventData';
 
 export class LogFileTableFactory extends TableFactory {
+
+    public static TABLE_ID = 'log-file-table';
 
     public objectType: KIXObjectType | string = KIXObjectType.LOG_FILE;
 
@@ -36,25 +31,12 @@ export class LogFileTableFactory extends TableFactory {
     ): Promise<Table> {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
-        const table = new Table(tableKey, tableConfiguration);
+        const table = new Table(LogFileTableFactory.TABLE_ID, tableConfiguration);
 
         table.setContentProvider(
             new LogFileTableContentProvider(table, objectIds, null, contextId)
         );
         table.setColumnConfiguration(tableConfiguration.tableColumns);
-
-        EventService.getInstance().subscribe(TableEvent.ROW_CLICKED, {
-            eventSubscriberId: 'logs-table-listener',
-            eventPublished: (data: TableEventData, eventId: string, subscriberId?: string) => {
-                if (eventId === TableEvent.ROW_CLICKED) {
-                    const row = table.getRow(data.rowId);
-                    if (row) {
-                        const logFile = row.getRowObject().getObject();
-                        this.downloadLogFile(logFile);
-                    }
-                }
-            }
-        });
 
         return table;
     }
@@ -109,16 +91,5 @@ export class LogFileTableFactory extends TableFactory {
                 config = super.getDefaultColumnConfiguration(property);
         }
         return config;
-    }
-
-    private async downloadLogFile(logFile: LogFile): Promise<void> {
-        const files = await KIXObjectService.loadObjects<LogFile>(
-            KIXObjectType.LOG_FILE, [logFile.ID],
-            new KIXObjectLoadingOptions(null, null, null, [LogFileProperty.CONTENT]), null, false, false
-        );
-
-        if (files && files.length) {
-            BrowserUtil.startBrowserDownload(files[0].Filename, files[0].Content, 'text/plain');
-        }
     }
 }
