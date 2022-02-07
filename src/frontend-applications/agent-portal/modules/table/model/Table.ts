@@ -394,8 +394,29 @@ export class Table implements Table {
     }
 
     public getRow(rowId: string): Row {
-        // TODO: neue Zeile liefern, nicht die Referenz
-        return this.rows.find((r) => r.getRowId() === rowId);
+        return this.findRow(this.rows, rowId);
+    }
+
+    private findRow(rows: Row[], rowId: string): Row {
+        let result: Row;
+
+        for (const row of rows) {
+
+            if (row.getRowId() === rowId) {
+                result = row;
+                break;
+            }
+
+            if (row.getChildren()?.length) {
+                const childRow = this.findRow(row.getChildren(), rowId);
+                if (childRow) {
+                    result = childRow;
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 
     public removeRows(rowIds: string[]): Row[] {
