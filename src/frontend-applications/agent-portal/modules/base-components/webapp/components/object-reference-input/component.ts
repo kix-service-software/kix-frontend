@@ -90,8 +90,10 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     this.uniqueNodes && eventId === FormEvent.VALUES_CHANGED &&
                     data && (data as FormValuesChangedEventData).changedValues?.length
                 ) {
+                    // update nodes (e.q. uniques) if different field instance of same property is changed
                     const samePropertyFieldChanged = (data as FormValuesChangedEventData).changedValues.some(
                         (cV) => cV[0].property === this.state.field?.property
+                            && cV[0].instanceId !== this.state.field?.instanceId
                     );
                     if (samePropertyFieldChanged) {
                         this.load(false);
