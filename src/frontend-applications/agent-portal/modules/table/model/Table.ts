@@ -566,6 +566,8 @@ export class Table implements Table {
 
         await this.filterColumns();
 
+        await this.initDisplayRows();
+
         EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
         EventService.getInstance().publish(TableEvent.TABLE_FILTERED, new TableEventData(this.getTableId()));
     }
@@ -623,11 +625,27 @@ export class Table implements Table {
                 }
                 await Promise.all(sortPromises);
             }
+
+            await this.initDisplayRows();
+
             EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
             EventService.getInstance().publish(
                 TableEvent.SORTED, new TableEventData(this.getTableId(), null, columnId)
             );
         }
+    }
+
+    private async initDisplayRows(): Promise<void> {
+        const rows = this.getRows();
+        const promises = [];
+        const displayLimit = this.getTableConfiguration()?.displayLimit || 15;
+        for (let i = 0; i < displayLimit; i++) {
+            if (rows[i]) {
+                promises.push(rows[i].initializeDisplayValues());
+            }
+        }
+
+        await Promise.all(promises);
     }
 
     public setRowSelection(rowIds: string[]): void {
