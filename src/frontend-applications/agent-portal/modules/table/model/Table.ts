@@ -182,15 +182,19 @@ export class Table implements Table {
 
             this.loadTableState();
 
-            if (this.sortColumnId && this.sortOrder) {
-                await this.sort(this.sortColumnId, this.sortOrder);
-            }
+            await this.initDisplayRows();
 
-            if (this.filterValue || this.filterCriteria?.length || this.columns.some((c) => c.isFiltered())) {
-                await this.filter();
-            }
+            setTimeout(async () => {
+                if (this.sortColumnId && this.sortOrder) {
+                    await this.sort(this.sortColumnId, this.sortOrder);
+                }
 
-            this.toggleFirstRow();
+                if (this.filterValue || this.filterCriteria?.length || this.columns.some((c) => c.isFiltered())) {
+                    await this.filter();
+                }
+
+                this.toggleFirstRow();
+            }, 250);
 
             setTimeout(() => {
                 setTimeout(async () => {
