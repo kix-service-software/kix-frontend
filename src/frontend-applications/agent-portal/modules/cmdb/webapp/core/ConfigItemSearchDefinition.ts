@@ -185,7 +185,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
     }
 
     public async getTableColumnConfiguration(searchParameter: Array<[string, any]>): Promise<IColumnConfiguration[]> {
-        const classParameter = searchParameter.find((p) => p[0] === ConfigItemProperty.CLASS_ID);
+        const classParameter = searchParameter.find((p) => p[0] === 'ClassIDs');
         let attributes: AttributeDefinition[];
         if (classParameter) {
             const classIds = Array.isArray(classParameter[1]) ? classParameter[1] : [classParameter[1]];
