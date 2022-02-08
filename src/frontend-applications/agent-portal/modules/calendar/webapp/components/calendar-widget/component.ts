@@ -406,7 +406,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             );
 
             if (tickets && tickets.length) {
-                const content = template.renderSync({
+                const content = template?.default?.renderSync({
                     ticket: tickets[0], calendarConfig: this.calendarConfig,
                     isPending: isNaN(Number(schedule.id))
                 });
