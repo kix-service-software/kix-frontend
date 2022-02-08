@@ -80,7 +80,7 @@ export class TableExportUtil {
         if (typeof text === 'undefined' || text === null) {
             text = '';
         }
-        text = text.toString().replace(/\"/g, '\\"');
+        text = text.toString().replace(/\"/g, '""');
         return text;
     }
 
