@@ -15,7 +15,9 @@ export class ComponentState {
     public constructor(
         public icons: Array<string | ObjectIcon> = null,
         public displayText: string = null,
-        public cell: Cell = null
+        public cell: Cell = null,
+        public showIcons: boolean = true,
+        public showText: boolean = true
     ) { }
 
 }

@@ -12,8 +12,6 @@ import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public showIcons: boolean = true;
-    public showText: boolean = true;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -25,14 +23,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private update(): void {
-        if (this.state.cell) {
-            const config = this.state.cell.getColumnConfiguration();
-            if (config) {
-                this.showIcons = config.showIcon;
-                this.showText = config.showText;
-            }
-            (this as any).setStateDirty();
-        }
+        const config = this.state.cell?.getColumnConfiguration();
+        this.state.showIcons = config?.showIcon;
+        this.state.showText = config?.showText;
     }
 
     public onDestroy(): void {
