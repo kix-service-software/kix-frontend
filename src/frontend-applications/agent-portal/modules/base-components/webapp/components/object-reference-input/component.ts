@@ -156,13 +156,13 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         let nodes: TreeNode[] = [];
 
         this.objects = await KIXObjectService.loadObjects(this.objectType, this.objectIds, this.loadingOptions);
-        const structureOption = this.state.field?.options.find(
+        const structureOption = this.state.field?.options?.find(
             (o) => o.option === ObjectReferenceOptions.USE_OBJECT_SERVICE
         );
 
         const objectId = await UIUtil.getEditObjectId(this.objectType);
 
-        const translatableOption = this.state.field?.options.find(
+        const translatableOption = this.state.field?.options?.find(
             (o) => o.option === ObjectReferenceOptions.TRANSLATABLE
         );
         const translatable = !translatableOption || Boolean(translatableOption.value);
@@ -192,7 +192,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     private async loadAdditionalNodes(): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
-        const additionalNodes = this.state.field?.options.find(
+        const additionalNodes = this.state.field?.options?.find(
             (o) => o.option === ObjectReferenceOptions.ADDITIONAL_NODES
         );
         if (additionalNodes) {
@@ -210,7 +210,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     private async preloadNodes(): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
-        const preloadPatternOption = this.state.field?.options.find(
+        const preloadPatternOption = this.state.field?.options?.find(
             (o) => o.option === ObjectReferenceOptions.AUTOCOMPLETE_PRELOAD_PATTERN
         );
 
@@ -247,7 +247,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     private fillTreeHandler(nodes: TreeNode[]): void {
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
         if (treeHandler) {
-            const keepSelectionOption = this.state.field?.options.find(
+            const keepSelectionOption = this.state.field?.options?.find(
                 (o) => o.option === ObjectReferenceOptions.KEEP_SELECTION
             );
 
@@ -294,7 +294,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                         this.objectType, idsToLoad, null, null, null, null, true
                     );
                     if (objects && !!objects.length) {
-                        const translatableOption = this.state.field?.options.find(
+                        const translatableOption = this.state.field?.options?.find(
                             (o) => o.option === ObjectReferenceOptions.TRANSLATABLE
                         );
                         const translatable = !translatableOption || Boolean(translatableOption.value);
@@ -341,47 +341,41 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     }
 
     private setOptions(): void {
-        const objectOption = this.state.field?.options.find((o) => o.option === ObjectReferenceOptions.OBJECT);
+        const objectOption = this.state.field?.options?.find((o) => o.option === ObjectReferenceOptions.OBJECT);
         this.objectType = objectOption?.value;
 
-        const configLoadingOptions = this.state.field?.options.find(
+        const configLoadingOptions = this.state.field?.options?.find(
             (o) => o.option === ObjectReferenceOptions.LOADINGOPTIONS
         );
         this.loadingOptions = configLoadingOptions?.value;
 
-        const specificLoadingOptions = this.state.field?.options.find(
+        const specificLoadingOptions = this.state.field?.options?.find(
             (o) => o.option === ObjectReferenceOptions.OBJECT_SPECIFIC_LOADINGOPTIONS
         );
         this.specificLoadingOptions = specificLoadingOptions?.value;
 
-        const objectIdOption = this.state.field?.options.find((o) => o.option === ObjectReferenceOptions.OBJECT_IDS);
+        const objectIdOption = this.state.field?.options?.find((o) => o.option === ObjectReferenceOptions.OBJECT_IDS);
         this.objectIds = objectIdOption && Array.isArray(objectIdOption.value) && objectIdOption.value.length
             ? objectIdOption.value
             : null;
 
         if (this.state.field?.countMax && this.state.field?.countMax > 1) {
-            const uniqueOption = this.state.field?.options.find((o) => o.option === ObjectReferenceOptions.UNIQUE);
-            this.uniqueNodes = uniqueOption
-                ? uniqueOption.value
-                : true;
+            const uniqueOption = this.state.field?.options?.find((o) => o.option === ObjectReferenceOptions.UNIQUE);
+            this.uniqueNodes = uniqueOption ? uniqueOption.value : true;
         }
 
-        const showValidOption = this.state.field?.options
-            ? this.state.field?.options.find((o) => o.option === FormFieldOptions.SHOW_INVALID)
-            : null;
+        const showValidOption = this.state.field?.options?.find((o) => o.option === FormFieldOptions.SHOW_INVALID);
         this.showInvalidNodes = showValidOption ? showValidOption.value : true;
 
-        const validClickableOption = this.state.field?.options
-            ? this.state.field?.options.find((o) => o.option === FormFieldOptions.INVALID_CLICKABLE)
-            : null;
-        this.isInvalidClickable = validClickableOption ? validClickableOption.value : false;
+        const validClickableOption = this.state.field?.options?.find(
+            (o) => o.option === FormFieldOptions.INVALID_CLICKABLE
+        );
+        this.isInvalidClickable = validClickableOption?.value || false;
 
-        const textAsIdOption = this.state.field?.options
-            ? this.state.field?.options.find((o) => o.option === ObjectReferenceOptions.TEXT_AS_ID)
-            : null;
+        const textAsIdOption = this.state.field?.options?.find((o) => o.option === ObjectReferenceOptions.TEXT_AS_ID);
         this.useTextAsId = textAsIdOption ? Boolean(textAsIdOption.value) : false;
 
-        const autocompleteOption = this.state.field?.options.find(
+        const autocompleteOption = this.state.field?.options?.find(
             (o) => o.option === ObjectReferenceOptions.AUTOCOMPLETE
         );
         if (typeof autocompleteOption !== 'undefined' && autocompleteOption !== null) {
@@ -393,28 +387,28 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             }
         }
 
-        const isMultiselectOption = this.state.field?.options.find(
+        const isMultiselectOption = this.state.field?.options?.find(
             (o) => o.option === ObjectReferenceOptions.MULTISELECT
         );
         this.state.multiselect = typeof isMultiselectOption === 'undefined' || isMultiselectOption === null
             ? false
             : isMultiselectOption.value;
 
-        const countMaxOption = this.state.field?.options.find(
+        const countMaxOption = this.state.field?.options?.find(
             (o) => o.option === ObjectReferenceOptions.COUNT_MAX
         );
         if (countMaxOption?.value === 1) {
             this.state.multiselect = false;
         }
 
-        const freeTextOption = this.state.field?.options.find(
+        const freeTextOption = this.state.field?.options?.find(
             (o) => o.option === ObjectReferenceOptions.FREETEXT
         );
         this.state.freeText = typeof freeTextOption !== 'undefined' && freeTextOption !== null
             ? freeTextOption.value
             : false;
 
-        const translatableOption = this.state.field?.options.find(
+        const translatableOption = this.state.field?.options?.find(
             (o) => o.option === ObjectReferenceOptions.TRANSLATABLE
         );
         this.translatable = !translatableOption || Boolean(translatableOption.value);

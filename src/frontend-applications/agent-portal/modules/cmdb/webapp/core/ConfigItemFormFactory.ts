@@ -282,6 +282,7 @@ export class ConfigItemFormFactory {
                 new FormFieldOption(ObjectReferenceOptions.OBJECT, objectType),
                 new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true),
                 new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
+                new FormFieldOption(ObjectReferenceOptions.UNIQUE, false),
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.OBJECT_REFERENCE)
             ], null, null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
             ad.Input.MaxLength, ad.Input.RegEx, ad.Input.RegExErrorMessage
