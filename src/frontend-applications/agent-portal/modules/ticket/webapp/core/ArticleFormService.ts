@@ -446,8 +446,8 @@ export class ArticleFormService extends KIXObjectFormService {
                 const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
                     KIXObjectType.SYSTEM_ADDRESS
                 );
-                if (systemAddresses.some((sa) => sa.Name === value.replace(/.+ <(.+)>/, '$1'))) {
-                    value = null;
+                if (systemAddresses?.some((sa) => sa.Name === value.replace(/.+ <(.+)>/, '$1'))) {
+                    value = await this.getReferencedValue(ArticleProperty.TO, dialogContext);
                 }
             }
         }
