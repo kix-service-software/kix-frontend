@@ -30,6 +30,8 @@ import { TableEvent } from '../../../../table/model/TableEvent';
 import { TableEventData } from '../../../../table/model/TableEventData';
 import { ValueState } from '../../../../table/model/ValueState';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { Table } from '../../../../table/model/Table';
 
 class Component {
 
@@ -74,7 +76,7 @@ class Component {
     private async setCanRun(): Promise<void> {
         const hasDefinedValues = await this.state.bulkManager?.hasDefinedValues();
         const hasDefinedLinks = await this.state.linkManager?.hasDefinedValues();
-        this.state.canRun = (hasDefinedValues || hasDefinedLinks) && !!this.state.bulkManager?.objects.length;
+        this.state.canRun = (hasDefinedValues || hasDefinedLinks) && !!this.state.bulkManager?.objects?.length;
     }
 
     public async reset(): Promise<void> {
@@ -100,9 +102,12 @@ class Component {
 
             if (this.state.bulkManager?.objects) {
 
-                const configuration = new TableConfiguration(null, null, null,
-                    null, null, null, null, [], true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
-                );
+                const configuration = new TableConfiguration(null, null);
+
+                configuration.displayLimit = 5;
+                configuration.headerHeight = TableHeaderHeight.SMALL;
+                configuration.rowHeight = TableRowHeight.SMALL;
+                configuration.enableSelection = true;
 
                 const table = await TableFactoryService.getInstance().createTable(
                     `bulk-form-list-${this.state.bulkManager?.objectType}`, this.state.bulkManager?.objectType,
@@ -116,11 +121,11 @@ class Component {
                     eventPublished: async (data: TableEventData, eventId: string): Promise<void> => {
                         if (data && data.tableId === table.getTableId()) {
                             if (eventId === TableEvent.TABLE_INITIALIZED) {
-                                table.selectAll();
+                                table?.selectAll();
                             }
 
-                            const rows = this.state.table.getSelectedRows();
-                            const objects = rows.map((r) => r.getRowObject().getObject());
+                            const rows = this.state.table?.getSelectedRows();
+                            const objects = rows?.map((r) => r.getRowObject().getObject());
                             if (this.state.bulkManager) {
                                 this.state.bulkManager.objects = objects;
                                 this.setCanRun();
@@ -134,6 +139,8 @@ class Component {
                 EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
                 EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
 
+                await table.initialize();
+
                 this.state.table = table;
             }
         }
@@ -142,7 +149,7 @@ class Component {
     private async prepareTitle(): Promise<void> {
         if (this.state.table) {
             const objectName = await LabelService.getInstance().getObjectName(this.state.bulkManager?.objectType, true);
-            const objectCount = this.state.table.getRows().length;
+            const objectCount = this.state.table?.getRows().length;
             this.state.tableTitle = await TranslationService.translate(
                 'Translatable#Selected {0} ({1})', [objectName, objectCount]
             );
@@ -192,7 +199,7 @@ class Component {
     private async runBulkManager(): Promise<void> {
         this.state.run = true;
 
-        this.state.table.getRows().forEach((r) => r.setValueState(ValueState.NONE));
+        this.state.table?.getRows().forEach((r) => r.setValueState(ValueState.NONE));
 
         const parameter = await this.state.bulkManager?.prepareParameter();
         const linkDescriptions = await this.state.linkManager?.prepareLinkDesriptions();
@@ -201,16 +208,14 @@ class Component {
             this.state.bulkManager.objects, this.state.bulkManager.objectType, parameter, linkDescriptions
         );
 
-        if (result.length === 2) {
-            result[0].forEach((o) => {
-                this.state.table.selectRowByObject(o, false);
-                this.state.table.setRowObjectValueState([o], ValueState.HIGHLIGHT_SUCCESS);
-            });
-
-            result[1].forEach((o) => this.state.table.setRowObjectValueState([o], ValueState.HIGHLIGHT_ERROR));
+        let successObjects = [];
+        let errorObjects = [];
+        if (result?.length === 2) {
+            successObjects = result[0];
+            errorObjects = result[1];
         }
 
-        await this.updateTable();
+        await this.updateTable(this.state.table, successObjects, errorObjects);
 
         if (!result[1].length) {
             const toast = await TranslationService.translate('Translatable#Changes saved.');
@@ -220,16 +225,29 @@ class Component {
         BrowserUtil.toggleLoadingShield('BULK_SHIELD', false);
     }
 
-    private async updateTable(): Promise<void> {
+    private async updateTable(table: Table, successObjects: KIXObject[], errorObjects: KIXObject[]): Promise<void> {
+        this.state.table = null;
+
         const context = ContextService.getInstance().getActiveContext();
         const oldObjects = await context.getObjectList(this.state.bulkManager?.objectType);
         const idsToLoad = oldObjects ? oldObjects.map((o) => o.ObjectId) : null;
 
         const newObjects = await KIXObjectService.loadObjects(
             this.state.bulkManager?.objectType, idsToLoad, null, null, false
-        );
+        ).catch(() => []);
         context.setObjectList(this.state.bulkManager?.objectType, newObjects);
         this.prepareTitle();
+
+        setTimeout(() => {
+            successObjects?.forEach((o) => {
+                table?.selectRowByObject(o, false);
+                table?.setRowObjectValueState([o], ValueState.HIGHLIGHT_SUCCESS);
+            });
+
+            errorObjects?.forEach((o) => table?.setRowObjectValueState([o], ValueState.HIGHLIGHT_ERROR));
+        }, 250);
+
+        setTimeout(() => this.state.table = table, 50);
     }
 }
 

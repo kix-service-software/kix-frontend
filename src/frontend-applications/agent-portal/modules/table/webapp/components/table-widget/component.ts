@@ -153,14 +153,10 @@ class Component {
                 objectChanged: (): void => { return; },
                 objectListChanged: (objectType: KIXObjectType | string): void => {
                     if (objectType === this.objectType) {
-                        if (settings && settings.resetFilterOnReload) {
-                            if (this.state.table) {
-                                this.state.table.resetFilter();
-                            }
+                        if (settings?.resetFilterOnReload) {
+                            this.state.table?.resetFilter();
                             const filterComponent = (this as any).getComponent('table-widget-filter');
-                            if (filterComponent) {
-                                filterComponent.reset();
-                            }
+                            filterComponent?.reset();
                         } else if (this.state.table) {
                             this.state.filterValue = this.state.table.getFilterValue();
                         }
