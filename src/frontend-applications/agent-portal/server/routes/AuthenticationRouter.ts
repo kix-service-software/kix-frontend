@@ -110,9 +110,15 @@ export class AuthenticationRouter extends KIXRouter {
     }
 
     private isUnsupportedBrowser(req: Request): boolean {
-        const browser = Bowser.getParser(req.headers['user-agent']);
-        const requesteBrowser = browser.getBrowser();
-        const unsupported = requesteBrowser.name === 'Internet Explorer' && requesteBrowser.version === '11.0';
+        let unsupported = true;
+
+        const userAgent = req.headers['user-agent'];
+        if (typeof userAgent === 'string') {
+            const browser = Bowser.getParser(userAgent);
+            const requesteBrowser = browser.getBrowser();
+            unsupported = requesteBrowser.name === 'Internet Explorer' && requesteBrowser.version === '11.0';
+        }
+
         return unsupported;
     }
 
