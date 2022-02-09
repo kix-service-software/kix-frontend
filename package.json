@@ -78,6 +78,7 @@
         "socket.io": "4.1.3",
         "socket.io-client": "^4.1.3",
         "tail": "^2.2.4",
+        "tui-calendar": "^1.15.2",
         "winston": "^3.3.3",
         "winston-daily-rotate-file": "^4.5.5"
     },

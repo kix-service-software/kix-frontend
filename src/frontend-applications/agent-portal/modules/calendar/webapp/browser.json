@@ -4,8 +4,6 @@
         "require ./components/calendar-widget",
         "require ./components/calendar-widget/calendar-schedule-details",
         "require ./core",
-        "./static/tui-code-snippet.js",
-        "./static/tui-calendar.min.js",
         "./static/tui-calendar.min.css"
     ]
 }
