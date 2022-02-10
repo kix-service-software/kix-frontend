@@ -7,13 +7,13 @@
  * --
  */
 
-import { ConfigurationType } from '../../../../../../model/configuration/ConfigurationType';
-import { TableConfiguration } from '../../../../../../model/configuration/TableConfiguration';
-import { SortOrder } from '../../../../../../model/SortOrder';
-import { AbstractMarkoComponent } from '../../../core/AbstractMarkoComponent';
-import { KIXModulesService } from '../../../core/KIXModulesService';
-import { LabelService } from '../../../core/LabelService';
-import { TreeHandler, TreeNode, TreeService, TreeUtil } from '../../../core/tree';
+import { ConfigurationType } from '../../../../../model/configuration/ConfigurationType';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { SortOrder } from '../../../../../model/SortOrder';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { KIXModulesService } from '../../../../base-components/webapp/core/KIXModulesService';
+import { LabelService } from '../../../../base-components/webapp/core/LabelService';
+import { TreeHandler, TreeNode, TreeService, TreeUtil } from '../../../../base-components/webapp/core/tree';
 import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState> {

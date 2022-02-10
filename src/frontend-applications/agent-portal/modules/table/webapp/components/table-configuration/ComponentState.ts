@@ -7,8 +7,8 @@
  * --
  */
 
-import { TableConfiguration } from '../../../../../../model/configuration/TableConfiguration';
-import { AbstractComponentState } from '../../../core/AbstractComponentState';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
 export class ComponentState extends AbstractComponentState {
 

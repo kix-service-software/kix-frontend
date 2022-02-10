@@ -7,15 +7,15 @@
  * --
  */
 
-import { DefaultColumnConfiguration } from '../../../../../../model/configuration/DefaultColumnConfiguration';
-import { IColumnConfiguration } from '../../../../../../model/configuration/IColumnConfiguration';
-import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
-import { TableFactoryService } from '../../../../../table/webapp/core/factory/TableFactoryService';
-import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
-import { AbstractMarkoComponent } from '../../../core/AbstractMarkoComponent';
-import { KIXObjectService } from '../../../core/KIXObjectService';
-import { LabelService } from '../../../core/LabelService';
-import { TreeHandler, TreeNode, TreeService } from '../../../core/tree';
+import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
+import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { TableFactoryService } from '../../core/factory/TableFactoryService';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { LabelService } from '../../../../base-components/webapp/core/LabelService';
+import { TreeHandler, TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
 import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
