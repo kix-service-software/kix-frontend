@@ -184,6 +184,8 @@ export class HttpService {
             'Authorization': 'Token ' + backendToken,
             'KIX-Request-ID': clientRequestId
         };
+        options.maxBodyLength = Infinity;
+        options.maxContentLength = Infinity;
 
         let parameter = '';
         if (options.method === 'GET') {
