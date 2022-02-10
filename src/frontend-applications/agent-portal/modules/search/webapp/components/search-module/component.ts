@@ -86,7 +86,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const title = await this.getTitle(category.objectType);
 
             this.resultWidgets.push(
-                [IdService.generateDateBasedId(), category.objectType, widgetConfiguration, title, icon]
+                [`search-table-${category.objectType}`, category.objectType, widgetConfiguration, title, icon]
             );
 
             if (Array.isArray(category.children) && category.children.length) {
