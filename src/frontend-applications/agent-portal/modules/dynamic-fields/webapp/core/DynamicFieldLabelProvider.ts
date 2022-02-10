@@ -68,7 +68,11 @@ export class DynamicFieldLabelProvider extends LabelProvider<DynamicField> {
 
         switch (property) {
             case DynamicFieldProperty.FIELD_TYPE:
-                displayValue = dynamicField.FieldTypeDisplayName;
+                if (dynamicField?.FieldTypeDisplayName) {
+                    displayValue = dynamicField.FieldTypeDisplayName;
+                } else {
+                    displayValue = await TranslationService.translate(value);
+                }
                 break;
             default:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
