@@ -420,7 +420,7 @@ export class ArticleFormService extends KIXObjectFormService {
         }
 
         if (Array.isArray(value)) {
-            value = value.filter((a) => a.Disposition !== 'inline');
+            value = value.filter((a) => a.Disposition !== 'inline' || a.ContentID.length === 0 && !a.Filename.match(/^file-(1|2)$/));
             if (value.length) {
                 // TODO: not very performant (maybe some reference attachment id)
                 const referencedArticle = await this.getReferencedArticle();

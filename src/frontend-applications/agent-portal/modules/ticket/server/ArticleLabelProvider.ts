@@ -101,7 +101,7 @@ export class ArticleLabelProvider {
         switch (property) {
             case ArticleProperty.ATTACHMENTS:
                 if (Array.isArray(article.Attachments)) {
-                    const attachments = article.Attachments.filter((a) => a.Disposition !== 'inline');
+                    const attachments = article.Attachments.filter((a) => a.Disposition !== 'inline' || a.ContentID.length === 0 && !a.Filename.match(/^file-(1|2)$/));
                     if (attachments.length > 0) {
                         icons = ['kix-icon-attachement'];
                     }

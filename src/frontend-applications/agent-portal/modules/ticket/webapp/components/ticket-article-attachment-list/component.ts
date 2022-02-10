@@ -24,7 +24,7 @@ class TicketArticleAttchementListComponent {
         if (input.article && input.article.Attachments) {
             this.state.article = input.article;
             const attachments: Attachment[] = input.article.Attachments;
-            this.state.attachments = attachments.filter((a) => a.Disposition !== 'inline');
+            this.state.attachments = attachments.filter((a) => a.Disposition !== 'inline' || a.ContentID.length === 0 && !a.Filename.match(/^file-(1|2)$/));
             this.prepareImages();
         }
     }
