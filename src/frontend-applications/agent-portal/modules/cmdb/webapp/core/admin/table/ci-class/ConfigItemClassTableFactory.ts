@@ -63,7 +63,7 @@ export class ConfigItemClassTableFactory extends TableFactory {
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
-        } else if (!tableConfiguration.tableColumns) {
+        } else if (!tableConfiguration.tableColumns?.length) {
             tableConfiguration.tableColumns = tableColumns;
         }
 

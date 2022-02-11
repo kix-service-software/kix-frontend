@@ -57,7 +57,7 @@ export class ConfigItemTableFactory extends TableFactory {
             );
             defaultToggle = true;
             defaultRouting = true;
-        } else if (!tableConfiguration.tableColumns) {
+        } else if (!tableConfiguration.tableColumns?.length) {
             tableConfiguration.tableColumns = tableColumns;
         }
 
