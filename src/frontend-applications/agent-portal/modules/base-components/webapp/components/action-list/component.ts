@@ -52,12 +52,7 @@ export class Component implements IActionListener {
         }
         this.state.prepared = true;
 
-        if (!this.prepareTimeout) {
-            this.prepareTimeout = setTimeout(() => {
-                this.prepareActionLists();
-                this.prepareTimeout = null;
-            }, 100);
-        }
+        this.prepareActionLists();
     }
 
     private async setActionList(actionList: IAction[]): Promise<void> {
@@ -112,18 +107,23 @@ export class Component implements IActionListener {
     }
 
     public prepareActionLists(): void {
-        const actionListElement = (this as any).getEl('action-list');
-        const listWidth = actionListElement ? actionListElement.scrollWidth : 0;
-        if (this.state.actionList) {
-            const actionWidth = (this.state.displayText ? 9.5 : 1.75) * this.getBrowserFontsize();
-            const gapWith = 1.5 * this.getBrowserFontsize();
-            let maxActions = this.state.actionList.length;
-            while ((maxActions * actionWidth) + ((maxActions - 1) * gapWith) > listWidth && maxActions > 0) {
-                maxActions--;
-            }
-            this.state.listDefault = this.state.actionList.slice(0, maxActions);
-            this.state.listExpansion = this.state.actionList.slice(maxActions);
+        if (this.prepareTimeout) {
+            window.clearTimeout(this.prepareTimeout);
         }
+        this.prepareTimeout = setTimeout(() => {
+            const actionListElement = (this as any).getEl('action-list');
+            const listWidth = actionListElement ? actionListElement.scrollWidth : 0;
+            if (this.state.actionList) {
+                const actionWidth = (this.state.displayText ? 9.5 : 1.75) * this.getBrowserFontsize();
+                const gapWith = 1.5 * this.getBrowserFontsize();
+                let maxActions = this.state.actionList.length;
+                while ((maxActions * actionWidth) + ((maxActions - 1) * gapWith) > listWidth && maxActions > 0) {
+                    maxActions--;
+                }
+                this.state.listDefault = this.state.actionList.slice(0, maxActions);
+                this.state.listExpansion = this.state.actionList.slice(maxActions);
+            }
+        }, 250);
     }
 
     private getBrowserFontsize(): number {
