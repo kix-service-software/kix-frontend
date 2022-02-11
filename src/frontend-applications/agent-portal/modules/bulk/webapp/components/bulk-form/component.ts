@@ -238,6 +238,8 @@ class Component {
         context.setObjectList(this.state.bulkManager?.objectType, newObjects);
         this.prepareTitle();
 
+        this.state.table = table;
+
         setTimeout(() => {
             successObjects?.forEach((o) => {
                 table?.selectRowByObject(o, false);
@@ -245,9 +247,7 @@ class Component {
             });
 
             errorObjects?.forEach((o) => table?.setRowObjectValueState([o], ValueState.HIGHLIGHT_ERROR));
-        }, 250);
-
-        setTimeout(() => this.state.table = table, 50);
+        }, 400);
     }
 }
 
