@@ -7,10 +7,10 @@
  * --
  */
 
-import { TableFactory } from '../../../../../../base-components/webapp/core/table/TableFactory';
+import { TableFactory } from '../../../../../../table/webapp/core/factory/TableFactory';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../../../model/configuration/TableConfiguration';
-import { Table } from '../../../../../../base-components/webapp/core/table';
+import { Table } from '../../../../../../table/model/Table';
 import { ConfigItemClassTableContentProvider } from '.';
 import { ConfigItemClassProperty } from '../../../../../model/ConfigItemClassProperty';
 import { KIXObjectProperty } from '../../../../../../../model/kix/KIXObjectProperty';
@@ -63,7 +63,7 @@ export class ConfigItemClassTableFactory extends TableFactory {
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
-        } else if (!tableConfiguration.tableColumns) {
+        } else if (!tableConfiguration.tableColumns?.length) {
             tableConfiguration.tableColumns = tableColumns;
         }
 

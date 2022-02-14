@@ -9,8 +9,8 @@
 
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { OrganisationContext } from '../../core';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { OrganisationContext } from '../../core/context/OrganisationContext';
 
 class Component {
 

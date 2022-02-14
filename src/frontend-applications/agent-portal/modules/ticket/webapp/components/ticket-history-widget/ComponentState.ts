@@ -8,8 +8,8 @@
  */
 
 import { WidgetComponentState } from '../../../../../modules/base-components/webapp/core/WidgetComponentState';
-import { Table } from '../../../../base-components/webapp/core/table';
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { Table } from '../../../../table/model/Table';
 
 export class ComponentState extends WidgetComponentState {
 

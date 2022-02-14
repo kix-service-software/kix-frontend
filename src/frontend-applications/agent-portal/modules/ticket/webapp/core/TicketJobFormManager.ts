@@ -13,6 +13,9 @@ import { SearchProperty } from '../../../search/model/SearchProperty';
 import { AbstractJobFormManager } from '../../../job/webapp/core/AbstractJobFormManager';
 import { TicketSearchFormManager } from './TicketSearchFormManager';
 import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { JobProperty } from '../../../job/model/JobProperty';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
 
 export class TicketJobFormManager extends AbstractJobFormManager {
 
@@ -35,6 +38,21 @@ export class TicketJobFormManager extends AbstractJobFormManager {
                 }
             };
         }
+    }
+
+    public async prepareCreateValue(
+        property: string, formField: FormFieldConfiguration, value: any
+    ): Promise<Array<[string, any]>> {
+        if (property === JobProperty.FILTER && Array.isArray(value)) {
+            value.forEach((v: FilterCriteria) => {
+
+                // backend mostly does not support a list value with equal operator
+                if (v.operator === SearchOperator.EQUALS && Array.isArray(v.value)) {
+                    v.value = v.value[0];
+                }
+            });
+        }
+        return [[property, value]];
     }
 }
 

@@ -103,7 +103,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             '/kix-module-ticket$0/webapp/components/ticket-dynamic-fields-container', []
         ),
         new UIComponent('ticket-history-widget', '/kix-module-ticket$0/webapp/components/ticket-history-widget', []),
-        new UIComponent('ticket-info-widget', '/kix-module-ticket$0/webapp/components/ticket-info-widget', []),
         new UIComponent('ticket-input-contact', '/kix-module-ticket$0/webapp/components/ticket-input-contact', []),
         new UIComponent(
             'ticket-input-organisation', '/kix-module-ticket$0/webapp/components/ticket-input-organisation', []

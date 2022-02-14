@@ -43,6 +43,7 @@ import { AttachmentLoadingOptions } from '../model/AttachmentLoadingOptions';
 import { Version } from '../model/Version';
 import { SearchProperty } from '../../search/model/SearchProperty';
 import { GeneralCatalogItemProperty } from '../../general-catalog/model/GeneralCatalogItemProperty';
+import { ConfigItemClass } from '../model/ConfigItemClass';
 
 
 export class CMDBAPIService extends KIXObjectAPIService {
@@ -158,7 +159,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
             }
 
         } else if (loadingOptions.filter) {
-            await this.buildFilter(loadingOptions.filter, 'ConfigItem', query);
+            await this.buildFilter(loadingOptions.filter, 'ConfigItem', query, token);
             const uri = this.buildUri('cmdb', 'configitems');
             const response = await this.getObjectByUri<ConfigItemsResponse>(token, uri, query);
             configItems = response.ConfigItem;
@@ -209,7 +210,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
                 }
 
             } else if (loadingOptions.filter) {
-                await this.buildFilter(loadingOptions.filter, 'Image', query);
+                await this.buildFilter(loadingOptions.filter, 'Image', query, token);
                 const uri = this.buildUri('cmdb', subResource);
                 const response = await this.getObjectByUri<ConfigItemImagesResponse>(token, uri, query);
                 images = response.Image;
@@ -359,6 +360,21 @@ export class CMDBAPIService extends KIXObjectAPIService {
             criteria = [...criteria, ...fulltextSearch];
         }
 
+        // add class id search if class filter is given to consider limit in core search
+        const classFilter = criteria.find((f) => f.property === ConfigItemProperty.CLASS);
+        if (classFilter && classFilter.value) {
+            const classIds = await this.getClassIds(token, classFilter);
+            if (classIds.length) {
+                criteria.push(
+                    new FilterCriteria(
+                        ConfigItemProperty.CLASS_ID, SearchOperator.IN,
+                        FilterDataType.NUMERIC, classFilter.filterType, classIds
+                    )
+                );
+            }
+
+        }
+
         const newCriteria = criteria.filter((c) =>
             (c.property === ConfigItemProperty.CONFIG_ITEM_ID && c.operator !== SearchOperator.NOT_EQUALS) ||
             c.property === ConfigItemProperty.NUMBER ||
@@ -398,5 +414,27 @@ export class CMDBAPIService extends KIXObjectAPIService {
             }
         }
         return newCriteria;
+    }
+
+    private async getClassIds(token: string, classFilter: FilterCriteria): Promise<number[]> {
+        const classIds = [];
+        const classNames = Array.isArray(classFilter.value) ? classFilter.value : [classFilter.value];
+        if (classNames.length) {
+            const service = KIXObjectServiceRegistry.getServiceInstance(KIXObjectType.CONFIG_ITEM_CLASS);
+            if (service) {
+                const classes: ConfigItemClass[] = await service.loadObjects(
+                    token, null, KIXObjectType.CONFIG_ITEM_CLASS, null, null, null
+                ).catch(() => []);
+                if (classes.length) {
+                    classNames.forEach((cn) => {
+                        const relevantClass = classes.find((c) => c.Name === cn);
+                        if (relevantClass) {
+                            classIds.push(relevantClass.ID);
+                        }
+                    });
+                }
+            }
+        }
+        return classIds;
     }
 }

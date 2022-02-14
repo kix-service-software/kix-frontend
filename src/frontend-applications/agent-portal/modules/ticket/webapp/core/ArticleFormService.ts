@@ -420,7 +420,7 @@ export class ArticleFormService extends KIXObjectFormService {
         }
 
         if (Array.isArray(value)) {
-            value = value.filter((a) => a.Disposition !== 'inline');
+            value = value.filter((a) => a.Disposition !== 'inline' || a.ContentID.length === 0 && !a.Filename.match(/^file-(1|2)$/));
             if (value.length) {
                 // TODO: not very performant (maybe some reference attachment id)
                 const referencedArticle = await this.getReferencedArticle();
@@ -446,8 +446,8 @@ export class ArticleFormService extends KIXObjectFormService {
                 const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
                     KIXObjectType.SYSTEM_ADDRESS
                 );
-                if (systemAddresses.some((sa) => sa.Name === value.replace(/.+ <(.+)>/, '$1'))) {
-                    value = null;
+                if (systemAddresses?.some((sa) => sa.Name === value.replace(/.+ <(.+)>/, '$1'))) {
+                    value = await this.getReferencedValue(ArticleProperty.TO, dialogContext);
                 }
             }
         }

@@ -8,7 +8,7 @@
  */
 
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
-import { Table } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../table/model/Table';
 import { LinkTypeDescription } from '../../../model/LinkTypeDescription';
 import { CreateLinkDescription } from '../../../server/api/CreateLinkDescription';
 import { IdService } from '../../../../../model/IdService';

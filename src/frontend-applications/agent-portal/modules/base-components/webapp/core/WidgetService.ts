@@ -7,7 +7,6 @@
  * --
  */
 
-import { Table } from './table';
 import { IAction } from './IAction';
 import { IActionListener } from './IActionListener';
 import { WidgetType } from '../../../../model/configuration/WidgetType';
@@ -17,6 +16,7 @@ import { EventService } from './EventService';
 import { TabContainerEvent } from './TabContainerEvent';
 import { TabContainerEventData } from './TabContainerEventData';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { Table } from '../../../table/model/Table';
 
 export class WidgetService {
 

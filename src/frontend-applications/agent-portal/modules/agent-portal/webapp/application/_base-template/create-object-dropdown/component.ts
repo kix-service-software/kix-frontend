@@ -11,6 +11,7 @@ import { Context } from '../../../../../../model/Context';
 import { ContextDescriptor } from '../../../../../../model/ContextDescriptor';
 import { ContextMode } from '../../../../../../model/ContextMode';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { KIXStyle } from '../../../../../base-components/model/KIXStyle';
 import { ContextEvents } from '../../../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
@@ -82,7 +83,7 @@ class Component {
             this.state.selectedValue = this.values[0];
         }
 
-        if (window.innerWidth > 1024) {
+        if (window.innerWidth > KIXStyle.MOBILE_BREAKPOINT) {
             this.state.values = this.values.filter((v) => v[0] !== this.state.selectedValue[0]);
         } else {
             this.state.values = this.values;

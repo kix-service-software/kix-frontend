@@ -7,10 +7,9 @@
  * --
  */
 
-import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
+import { TableFactory } from '../../../../table/webapp/core/factory/TableFactory';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import { TableEvent, Table } from '../../../../base-components/webapp/core/table';
 import { ArticleTableToggleSubscriber } from './ArticleTableToggleSubscriber';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { ArticleTableContentProvider } from '.';
@@ -19,6 +18,8 @@ import { ArticleProperty } from '../../../model/ArticleProperty';
 import { DataType } from '../../../../../model/DataType';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
+import { Table } from '../../../../table/model/Table';
+import { TableEvent } from '../../../../table/model/TableEvent';
 
 export class ArticleTableFactory extends TableFactory {
 

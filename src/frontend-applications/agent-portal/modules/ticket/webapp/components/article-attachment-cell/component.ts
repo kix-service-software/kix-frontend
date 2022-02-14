@@ -10,10 +10,10 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { Article } from '../../../model/Article';
-import { Cell } from '../../../../base-components/webapp/core/table';
 import { OverlayService } from '../../../../../modules/base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
 import { ComponentContent } from '../../../../../modules/base-components/webapp/core/ComponentContent';
+import { Cell } from '../../../../table/model/Cell';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -28,7 +28,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (cell) {
             this.article = cell.getRow().getRowObject().getObject();
             if (this.article && this.article.Attachments) {
-                const attachments = this.article.Attachments.filter((a) => a.Disposition !== 'inline');
+                const attachments = this.article.Attachments.filter((a) => a.Disposition !== 'inline' || a.ContentID.length === 0 && !a.Filename.match(/^file-(1|2)$/));
                 this.state.show = attachments.length > 0;
                 this.state.count = attachments.length;
             }

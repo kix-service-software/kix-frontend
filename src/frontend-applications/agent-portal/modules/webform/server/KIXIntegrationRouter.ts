@@ -68,7 +68,7 @@ export class KIXIntegrationRouter extends KIXRouter {
                         form, userLanguage
                     );
                 }
-                const template = require('../webapp/components/webform');
+                const template = require('../webapp/components/webform').default;
                 const htmlString = template.renderToString({ webform: form, translations });
                 res.status(200).json({
                     htmlString,

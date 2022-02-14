@@ -188,7 +188,7 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
             if (dynamicField) {
                 const separator = dynamicField.Config && dynamicField.Config.ItemSeparator ?
                     dynamicField.Config.ItemSeparator : ', ';
-                const values = await LabelService.getInstance().getDFDisplayValues(object.KIXObjectType, dfValue);
+                const values = await LabelService.getInstance().getDFDisplayValues(object.KIXObjectType, dfValue, true);
                 result = values ? values[1] : Array.isArray(dfValue.Value) ?
                     dfValue.Value.join(separator) : [dfValue.Value].join(separator);
             }

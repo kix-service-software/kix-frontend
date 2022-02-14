@@ -7,10 +7,9 @@
  * --
  */
 
-import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
+import { TableFactory } from '../../../../table/webapp/core/factory/TableFactory';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
-import { Table, ToggleOptions } from '../../../../base-components/webapp/core/table';
 import { ConfigItemTableContentProvider } from './ConfigItemTableContentProvider';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
 import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
@@ -21,6 +20,8 @@ import { ConfigItemDetailsContext } from '..';
 import { ContextMode } from '../../../../../model/ContextMode';
 import { SearchCache } from '../../../../search/model/SearchCache';
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
+import { Table } from '../../../../table/model/Table';
+import { ToggleOptions } from '../../../../table/model/ToggleOptions';
 
 export class ConfigItemTableFactory extends TableFactory {
 
@@ -56,7 +57,7 @@ export class ConfigItemTableFactory extends TableFactory {
             );
             defaultToggle = true;
             defaultRouting = true;
-        } else if (!tableConfiguration.tableColumns) {
+        } else if (!tableConfiguration.tableColumns?.length) {
             tableConfiguration.tableColumns = tableColumns;
         }
 

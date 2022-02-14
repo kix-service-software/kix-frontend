@@ -155,6 +155,11 @@ export class TicketFormService extends KIXObjectFormService {
                     } else {
                         const contact = await sourceContext?.getObject<Contact>(KIXObjectType.CONTACT);
                         value = contact ? contact.PrimaryOrganisationID : null;
+
+                        // use email of "unknown" contact
+                        if (!value && contact) {
+                            value = contact.Email;
+                        }
                     }
                 }
                 break;
@@ -367,10 +372,9 @@ export class TicketFormService extends KIXObjectFormService {
                     field.label = label;
                     break;
                 case TicketProperty.ORGANISATION_ID:
-                    field.inputComponent = 'object-reference-input';
+                    field.inputComponent = 'ticket-input-organisation';
                     field.options = [
-                        ...field.options,
-                        ...this.getObjectReferenceOptions(KIXObjectType.ORGANISATION, true)
+                        ...field.options
                     ];
                     field.label = label;
                     break;
@@ -464,9 +468,6 @@ export class TicketFormService extends KIXObjectFormService {
 
         if (objectType === KIXObjectType.QUEUE) {
             options.push(new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true));
-        }
-
-        if (objectType === KIXObjectType.QUEUE) {
             options.push(
                 new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                     new KIXObjectLoadingOptions(

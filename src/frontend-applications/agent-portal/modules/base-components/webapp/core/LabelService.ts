@@ -257,19 +257,19 @@ export class LabelService {
     }
 
     public async getDFDisplayValues(
-        objectType: KIXObjectType | string, fieldValue: DynamicFieldValue
+        objectType: KIXObjectType | string, fieldValue: DynamicFieldValue, short?: boolean
     ): Promise<[string[], string, string[]]> {
         const labelProvider = this.getLabelProviderForType(objectType);
 
         if (labelProvider) {
             for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
-                const result = await extendedLabelProvider.getDFDisplayValues(fieldValue);
+                const result = await extendedLabelProvider.getDFDisplayValues(fieldValue, short);
                 if (result) {
                     return result;
                 }
             }
 
-            return labelProvider.getDFDisplayValues(fieldValue);
+            return labelProvider.getDFDisplayValues(fieldValue, short);
         }
         return null;
     }

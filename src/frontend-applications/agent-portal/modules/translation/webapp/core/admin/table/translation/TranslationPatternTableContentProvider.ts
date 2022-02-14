@@ -7,13 +7,15 @@
  * --
  */
 
-import { TableContentProvider } from '../../../../../../base-components/webapp/core/table/TableContentProvider';
+import { TableContentProvider } from '../../../../../../table/webapp/core/TableContentProvider';
 import { TranslationPattern } from '../../../../../model/TranslationPattern';
-import { Table, RowObject, TableValue } from '../../../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { KIXObjectService } from '../../../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { TranslationPatternProperty } from '../../../../../model/TranslationPatternProperty';
+import { RowObject } from '../../../../../../table/model/RowObject';
+import { Table } from '../../../../../../table/model/Table';
+import { TableValue } from '../../../../../../table/model/TableValue';
 
 export class TranslationPatternTableContentProvider extends TableContentProvider<TranslationPattern> {
 

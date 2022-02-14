@@ -1,7 +1,6 @@
 {
     "dependencies": [
         "require ./dynamic-form",
-        "require ./table",
         "require ./tree",
         "require ./AbstractAction",
         "require ./AbstractComponentState",

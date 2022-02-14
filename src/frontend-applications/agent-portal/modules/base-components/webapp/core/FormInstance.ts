@@ -37,15 +37,26 @@ export class FormInstance {
 
     private formFieldValues: Map<string, FormFieldValue<any>> = new Map();
     private fixedValues: Map<string, [FormFieldConfiguration, FormFieldValue<any>]> = new Map();
+    private possibleValues: Map<string, FormFieldValue<any>> = new Map();
 
     private templateValues: Map<string, [FormFieldConfiguration, FormFieldValue<any>]> = new Map();
-    private savedValues: Map<string, [FormFieldConfiguration, FormFieldValue<any>]> = null;
 
     private form: FormConfiguration;
 
     public instanceId: string = IdService.generateDateBasedId('FormInstance');
 
     public constructor(public context: Context) { }
+
+    public setPossibleValue(property: string, value: FormFieldValue<any>): void {
+        this.possibleValues.set(property, value);
+        EventService.getInstance().publish(
+            FormEvent.POSSIBLE_VALUE_CHANGED, { formInstance: this, property, value }
+        );
+    }
+
+    public getPossibleValue(property: string): FormFieldValue<any> {
+        return this.possibleValues.get(property);
+    }
 
     public provideFixedValue(property: string, value: FormFieldValue, templateField?: FormFieldConfiguration): void {
         this.fixedValues.set(property, [templateField, value]);

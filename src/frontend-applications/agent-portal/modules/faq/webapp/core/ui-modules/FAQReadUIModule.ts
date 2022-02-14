@@ -14,7 +14,7 @@ import {
     FAQLabelProvider, FAQCategoryLabelProvider, FAQArticleHistoryLabelProvider, FAQService, FAQArticleFormService,
     FAQArticleSearchDefinition, FAQArticleSearchContext, FAQArticleVoteAction, LoadFAQAricleAction
 } from '..';
-import { TableFactoryService } from '../../../../base-components/webapp/core/table';
+import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { SearchService } from '../../../../search/webapp/core';

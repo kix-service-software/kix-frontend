@@ -8,7 +8,6 @@
  */
 
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
-import { ContactImportDialogContext } from './webapp/core';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
 import { HelpWidgetConfiguration } from '../../model/configuration/HelpWidgetConfiguration';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
@@ -21,6 +20,7 @@ import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { ContextMode } from '../../model/ContextMode';
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { ContactImportDialogContext } from './webapp/core/context/ContactImportDialogContext';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 

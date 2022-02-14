@@ -99,7 +99,7 @@ export class ApplicationRouter extends KIXRouter {
             const favIcon = await this.getIcon('agent-portal-icon');
 
             const templatePath = path.join('..', '..', 'modules', 'agent-portal', 'webapp', 'application');
-            const template = require(templatePath);
+            const template = require(templatePath).default;
 
             const modules = await PluginService.getInstance().getExtensions<IKIXModuleExtension>(
                 AgentPortalExtensions.MODULES

@@ -16,5 +16,9 @@
   "editor.tabSize": 4,
   "editor.formatOnSave": true,
   "less.lint.important": "warning",
-  "less.lint.float": "warning"
+  "less.lint.float": "warning",
+  "module-templates.engine": "handlebars",
+  "module-templates.templateFiles": [
+    "kix.module-templates.json"
+  ]
 }

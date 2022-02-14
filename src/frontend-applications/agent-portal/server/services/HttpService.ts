@@ -184,6 +184,8 @@ export class HttpService {
             'Authorization': 'Token ' + backendToken,
             'KIX-Request-ID': clientRequestId
         };
+        options.maxBodyLength = Infinity;
+        options.maxContentLength = Infinity;
 
         let parameter = '';
         if (options.method === 'GET') {
@@ -256,7 +258,7 @@ export class HttpService {
         } else {
             const backendError = new BackendHTTPError(error);
             LoggingService.getInstance().error(
-                `(${status}) ${backendError.error.Code}  ${backendError.error.Message}`
+                `(${status}) ${backendError.error.Code} ${backendError.error.Message}`
             );
             return new Error(backendError.error.Code?.toString(), backendError.error.Message, status);
         }
@@ -329,6 +331,9 @@ export class HttpService {
         return response.data['User'];
     }
 
+    public getPendingRequestCount(): number {
+        return this.requestPromises.size;
+    }
 }
 
 class BackendHTTPError {

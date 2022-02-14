@@ -108,44 +108,8 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent('rich-text-input', '/kix-module-base-components$0/webapp/components/rich-text-input', []),
         new UIComponent('router-outlet', '/kix-module-base-components$0/webapp/components/router-outlet', []),
         new UIComponent('sidebar', '/kix-module-base-components$0/webapp/components/sidebar', []),
-        new UIComponent('kix-table', '/kix-module-base-components$0/webapp/components/kix-table', []),
-        new UIComponent(
-            'table-configuration',
-            '/kix-module-base-components$0/webapp/components/ui-configuration/table-configuration',
-            []
-        ),
-        new UIComponent(
-            'crud-cell',
-            '/kix-module-base-components$0/webapp/components' +
-            '/kix-table/table-body/table-row/table-cell/crud-cell',
-            []
-        ),
-        new UIComponent(
-            'default-cell-content',
-            '/kix-module-base-components$0/webapp/components' +
-            '/kix-table/table-body/table-row/table-cell/default-cell-content',
-            []
-        ),
-        new UIComponent(
-            'label-list-cell-content',
-            '/kix-module-base-components$0/webapp/components' +
-            '/kix-table/table-body/table-row/table-cell/label-list-cell-content',
-            []
-        ),
-        new UIComponent(
-            'multiline-cell',
-            '/kix-module-base-components$0/webapp/components' +
-            '/kix-table/table-body/table-row/table-cell/multiline-cell',
-            []
-        ),
         new UIComponent('tab-container', '/kix-module-base-components$0/webapp/components/tab-container', []),
         new UIComponent('tab-widget', '/kix-module-base-components$0/webapp/components/tab-widget', []),
-        new UIComponent('table-widget', '/kix-module-base-components$0/webapp/components/table-widget', []),
-        new UIComponent(
-            'table-widget-configuration',
-            '/kix-module-base-components$0/webapp/components/ui-configuration/table-widget-configuration',
-            []
-        ),
         new UIComponent('text-area-input', '/kix-module-base-components$0/webapp/components/text-area-input', []),
         new UIComponent('timer', '/kix-module-base-components$0/webapp/components/timer', []),
         new UIComponent('translation-string', '/kix-module-base-components$0/webapp/components/translation-string', []),

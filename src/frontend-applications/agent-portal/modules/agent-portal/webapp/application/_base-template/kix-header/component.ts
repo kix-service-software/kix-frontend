@@ -7,6 +7,7 @@
  * --
  */
 
+import { KIXStyle } from '../../../../../base-components/model/KIXStyle';
 import { ComponentState } from './ComponentState';
 
 class Component {
@@ -27,7 +28,7 @@ class Component {
     }
 
     private resizeHandling(): void {
-        this.state.isMobile = Boolean(window.innerWidth <= 1024);
+        this.state.isMobile = Boolean(window.innerWidth <= KIXStyle.MOBILE_BREAKPOINT);
     }
 }
 

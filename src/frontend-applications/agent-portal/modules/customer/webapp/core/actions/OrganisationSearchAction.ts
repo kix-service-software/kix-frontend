@@ -11,7 +11,7 @@ import { AbstractAction } from '../../../../../modules/base-components/webapp/co
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { OrganisationSearchContext } from '../context';
+import { OrganisationSearchContext } from '../context/OrganisationSearchContext';
 
 export class OrganisationSearchAction extends AbstractAction {
 

@@ -19,7 +19,6 @@ import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { SysConfigKey } from '../../modules/sysconfig/model/SysConfigKey';
 import { SysConfigOption } from '../../modules/sysconfig/model/SysConfigOption';
 import { PluginService } from '../../../../server/services/PluginService';
-
 import { IMarkoApplication } from '../extensions/IMarkoApplication';
 import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
 import { LoggingService } from '../../../../server/services/LoggingService';
@@ -78,7 +77,7 @@ export class AuthenticationRouter extends KIXRouter {
                     const folder = app.internal ? 'modules' : 'plugins';
                     const templatePath = path.join(__dirname, '..', '..', folder, app.name, app.path);
 
-                    const template = require(templatePath);
+                    const template = require(templatePath).default;
                     this.setFrontendSocketUrl(res);
 
                     const logout = req.query.logout !== undefined;
@@ -111,9 +110,15 @@ export class AuthenticationRouter extends KIXRouter {
     }
 
     private isUnsupportedBrowser(req: Request): boolean {
-        const browser = Bowser.getParser(req.headers['user-agent']);
-        const requesteBrowser = browser.getBrowser();
-        const unsupported = requesteBrowser.name === 'Internet Explorer' && requesteBrowser.version === '11.0';
+        let unsupported = true;
+
+        const userAgent = req.headers['user-agent'];
+        if (typeof userAgent === 'string') {
+            const browser = Bowser.getParser(userAgent);
+            const requesteBrowser = browser.getBrowser();
+            unsupported = requesteBrowser.name === 'Internet Explorer' && requesteBrowser.version === '11.0';
+        }
+
         return unsupported;
     }
 

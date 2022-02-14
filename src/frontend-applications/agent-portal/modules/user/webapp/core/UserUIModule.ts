@@ -14,7 +14,6 @@ import { ServiceRegistry } from '../../../../modules/base-components/webapp/core
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { UserLabelProvider } from './UserLabelProvider';
 import { RoleLabelProvider } from './RoleLabelProvider';
-import { TableFactoryService, TableCSSHandlerRegistry } from '../../../base-components/webapp/core/table';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
@@ -44,6 +43,8 @@ import { UserRoleCreateAction } from './admin/actions/UserRoleCreateAction';
 import { UserRoleEditAction } from './admin/actions/UserRoleEditAction';
 import { RoleTableFactory, UserTableFactory } from './admin/table';
 import { RoleService } from './admin/RoleService';
+import { TableCSSHandlerRegistry } from '../../../table/webapp/core/css-handler/TableCSSHandlerRegistry';
+import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 
 
 export class UIModule implements IUIModule {

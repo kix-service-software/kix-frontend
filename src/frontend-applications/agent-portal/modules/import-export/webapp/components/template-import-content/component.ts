@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { TableFactoryService } from '../../../../base-components/webapp/core/table';
+import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { ImportExportTemplateRunTypes } from '../../../model/ImportExportTemplateRunTypes';

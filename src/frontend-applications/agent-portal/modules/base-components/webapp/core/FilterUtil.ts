@@ -80,7 +80,7 @@ export class FilterUtil {
     ): Promise<boolean> {
         if (filterValue === KIXObjectType.CURRENT_USER) {
             const currentUser = await AgentService.getInstance().getCurrentUser();
-            objectValue = currentUser.UserID;
+            filterValue = currentUser.UserID;
         }
 
         const criterionValue = objectValue !== null && typeof objectValue !== 'undefined'

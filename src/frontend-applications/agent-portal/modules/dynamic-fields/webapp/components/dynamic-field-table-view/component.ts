@@ -12,7 +12,10 @@ import { TableConfiguration } from '../../../../../model/configuration/TableConf
 import { IdService } from '../../../../../model/IdService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { RowObject, Table, TableContentProvider, TableValue } from '../../../../base-components/webapp/core/table';
+import { RowObject } from '../../../../table/model/RowObject';
+import { Table } from '../../../../table/model/Table';
+import { TableValue } from '../../../../table/model/TableValue';
+import { TableContentProvider } from '../../../../table/webapp/core/TableContentProvider';
 import { DynamicField } from '../../../model/DynamicField';
 import { ComponentState } from './ComponentState';
 

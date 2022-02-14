@@ -9,13 +9,8 @@
 
 import { IUIModule } from '../../../../model/IUIModule';
 import { PlaceholderService } from '../../../../modules/base-components/webapp/core/PlaceholderService';
-import {
-    OrganisationService, OrganisationFormService, OrganisationLabelProvider,
-    OrganisationSearchDefinition, OrganisationDetailsContext, OrganisationSearchContext,
-    OrganisationSearchAction
-} from '.';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
-import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { OrganisationTableFactory } from './table/OrganisationTableFactory';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
@@ -28,6 +23,14 @@ import { ActionFactory } from '../../../../modules/base-components/webapp/core/A
 import { OrganisationPlaceholderHandler } from './OrganisationPlaceholderHandler';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { OrganisationCSVExportAction } from './actions/OrganisationCSVExportAction';
+import { OrganisationSearchAction } from './actions';
+import { OrganisationDetailsContext } from './context/OrganisationDetailsContext';
+import { OrganisationSearchContext } from './context/OrganisationSearchContext';
+import { OrganisationFormService } from './OrganisationFormService';
+import { OrganisationLabelProvider } from './OrganisationLabelProvider';
+import { OrganisationSearchDefinition } from './OrganisationSearchDefinition';
+import { OrganisationService } from './OrganisationService';
 
 export class UIModule implements IUIModule {
 
@@ -77,6 +80,7 @@ export class UIModule implements IUIModule {
 
     private registerActions(): void {
         ActionFactory.getInstance().registerAction('organisation-search-action', OrganisationSearchAction);
+        ActionFactory.getInstance().registerAction('organisation-csvexport-action', OrganisationCSVExportAction);
     }
 
 }

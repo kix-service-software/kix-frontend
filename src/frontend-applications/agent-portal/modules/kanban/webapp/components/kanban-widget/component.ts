@@ -323,7 +323,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async createItem(ticket: Ticket): Promise<void> {
         const template = KIXModulesService.getComponentTemplate('kanban-item');
-        const content = template.renderSync({ ticket, kanbanConfig: this.kanbanConfig });
+        const content = template?.default?.renderSync({ ticket, kanbanConfig: this.kanbanConfig });
 
         const item = document.getElementById(`ticket-${ticket.TicketID}`);
         content.appendTo(item);

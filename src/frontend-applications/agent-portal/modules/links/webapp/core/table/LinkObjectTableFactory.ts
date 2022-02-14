@@ -7,10 +7,10 @@
  * --
  */
 
-import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
+import { TableFactory } from '../../../../table/webapp/core/factory/TableFactory';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
-import { Table } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../table/model/Table';
 import { LinkObjectTableContentProvider } from './LinkObjectTableContentProvider';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
 import { LinkObjectProperty } from '../../../model/LinkObjectProperty';

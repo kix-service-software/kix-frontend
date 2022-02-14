@@ -13,6 +13,8 @@ import { FormEvent } from './FormEvent';
 import { IEventSubscriber } from './IEventSubscriber';
 import { FormValuesChangedEventData } from './FormValuesChangedEventData';
 import { ContextService } from './ContextService';
+import { KIXObjectService } from './KIXObjectService';
+import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core';
 
 export abstract class FormInputComponent<T, C extends FormInputComponentState> {
 
@@ -44,17 +46,18 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState> {
     public async onMount(): Promise<void> {
         this.subscriber = {
             eventSubscriberId: `${this.state.field?.instanceId}_FormInputComponent`,
-            eventPublished: async (data: FormValuesChangedEventData, eventId: string): Promise<void> => {
+            eventPublished: async (data: any, eventId: string): Promise<void> => {
                 if (data?.formInstance?.getForm()?.id === this.state.formId) {
                     if (eventId === FormEvent.VALUES_CHANGED && this.state.field && data) {
-                        if (data.originInstanceId !== this.state.field?.instanceId) {
-                            const ownValue = data.changedValues.find(
+                        const changedData: FormValuesChangedEventData = data;
+                        if (changedData.originInstanceId !== this.state.field?.instanceId) {
+                            const ownValue = changedData.changedValues.find(
                                 (cv) => cv[0] && cv[0].instanceId === this.state.field?.instanceId
                             );
                             if (ownValue) {
                                 this.state.prepared = false;
                                 this.setCurrentValue();
-                                this.state.field = data.formInstance.getFormField(this.state.field?.instanceId);
+                                this.state.field = changedData.formInstance.getFormField(this.state.field?.instanceId);
                                 FormInputComponent.prototype.callSetInvalidState.call(this);
                                 setTimeout(() => this.state.prepared = true, 10);
                             }
@@ -63,12 +66,25 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState> {
                         }
                     } else if (eventId === FormEvent.FORM_VALIDATED) {
                         FormInputComponent.prototype.callSetInvalidState.call(this);
+                    } else if (eventId === FormEvent.POSSIBLE_VALUE_CHANGED && this.state.field && data) {
+                        const dfName = KIXObjectService.getDynamicFieldName(data.property);
+                        if (dfName) {
+                            const option = this.state.field.options?.find(
+                                (o) => o.option === DynamicFormFieldOption.FIELD_NAME
+                            );
+                            if (option?.value === dfName) {
+                                this.setPossibleValue();
+                            }
+                        } else if (data.property === this.state.field.property) {
+                            this.setPossibleValue();
+                        }
                     }
                 }
             }
         };
         EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(FormEvent.FORM_VALIDATED, this.subscriber);
+        EventService.getInstance().subscribe(FormEvent.POSSIBLE_VALUE_CHANGED, this.subscriber);
 
         FormInputComponent.prototype.callSetInvalidState.call(this);
         await this.setCurrentValue();
@@ -86,9 +102,14 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState> {
     public async onDestroy(): Promise<void> {
         EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.subscriber);
         EventService.getInstance().unsubscribe(FormEvent.FORM_VALIDATED, this.subscriber);
+        EventService.getInstance().unsubscribe(FormEvent.POSSIBLE_VALUE_CHANGED, this.subscriber);
     }
 
     public abstract setCurrentValue(): Promise<void>;
+
+    public async setPossibleValue(): Promise<void> {
+        return;
+    }
 
     protected async provideValue(value: T, silent?: boolean): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();

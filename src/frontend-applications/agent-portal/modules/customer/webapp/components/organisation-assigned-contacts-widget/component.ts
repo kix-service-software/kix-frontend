@@ -11,7 +11,7 @@ import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { Organisation } from '../../../model/Organisation';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { TableFactoryService } from '../../../../base-components/webapp/core/table';
+import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';

@@ -18,7 +18,7 @@ export class TreeNavigationHandler {
     private backwards: boolean = false;
 
     public setTree(tree: TreeNode[]): void {
-        this.tree = tree;
+        this.tree = tree?.filter((n) => n !== null && typeof n !== 'undefined');
     }
 
     public findNavigationNode(tree: TreeNode[] = this.tree): TreeNode {

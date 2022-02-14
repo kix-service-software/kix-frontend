@@ -31,6 +31,7 @@ import { Contact } from '../../../../customer/model/Contact';
 import { ContactProperty } from '../../../../customer/model/ContactProperty';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
 import { Context } from '../../../../../model/Context';
+import Calendar from 'tui-calendar';
 
 declare const tui: any;
 
@@ -177,7 +178,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         }
 
-        this.calendar = new tui.Calendar('#calendar', {
+        this.calendar = new Calendar('#calendar', {
             defaultView: 'month',
             useDetailPopup: true,
             taskView: [],
@@ -192,14 +193,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 daynames: dayNames,
             },
             week: {
-                moreLayerSize: {
-                    height: 'auto'
-                },
                 narrowWeekend: true,
                 startDayOfWeek: 1, // monday
-                visibleScheduleCount: 10,
-                hourStart: 7,
-                hourEnd: 18,
                 daynames: dayNames,
             }
         });
@@ -406,7 +401,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             );
 
             if (tickets && tickets.length) {
-                const content = template.renderSync({
+                const content = template?.default?.renderSync({
                     ticket: tickets[0], calendarConfig: this.calendarConfig,
                     isPending: isNaN(Number(schedule.id))
                 });

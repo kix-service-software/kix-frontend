@@ -16,7 +16,7 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { Cell } from '../../../../base-components/webapp/core/table';
+import { Cell } from '../../../../table/model/Cell';
 import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ConfigItem } from '../../../model/ConfigItem';

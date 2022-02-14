@@ -21,7 +21,6 @@
         "require ./components/ticket-chart-widget",
         "require ./components/ticket-description-widget",
         "require ./components/ticket-history-widget",
-        "require ./components/ticket-info-widget",
         "require ./components/ticket-input-contact",
         "require ./components/ticket-input-organisation",
         "require ./components/ticket-input-state-pending",

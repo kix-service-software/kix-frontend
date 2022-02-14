@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { TableFactoryService } from '../../../../base-components/webapp/core/table';
+import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { JobRun } from '../../../model/JobRun';
 import { SortOrder } from '../../../../../model/SortOrder';
 import { JobRunLogProperty } from '../../../model/JobRunLogProperty';

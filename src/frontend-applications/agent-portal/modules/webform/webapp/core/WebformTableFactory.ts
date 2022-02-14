@@ -8,10 +8,8 @@
  */
 
 import { WebformDetailsContext } from './context/WebformDetailsContext';
-import { TableFactory } from '../../../base-components/webapp/core/table/TableFactory';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../model/configuration/TableConfiguration';
-import { Table, ToggleOptions } from '../../../base-components/webapp/core/table';
 import { WebformTableContentProvider } from './WebformTableContentProvider';
 import { WebformProperty } from '../../model/WebformProperty';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
@@ -22,6 +20,9 @@ import { ContextMode } from '../../../../model/ContextMode';
 import { IColumnConfiguration } from '../../../../model/configuration/IColumnConfiguration';
 import { DefaultColumnConfiguration } from '../../../../model/configuration/DefaultColumnConfiguration';
 import { DataType } from '../../../../model/DataType';
+import { Table } from '../../../table/model/Table';
+import { ToggleOptions } from '../../../table/model/ToggleOptions';
+import { TableFactory } from '../../../table/webapp/core/factory/TableFactory';
 
 export class WebformTableFactory extends TableFactory {
 

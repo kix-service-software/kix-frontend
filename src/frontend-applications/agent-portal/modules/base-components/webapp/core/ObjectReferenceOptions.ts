@@ -37,6 +37,8 @@ export enum ObjectReferenceOptions {
 
     TRANSLATABLE = 'TRANSLATABLE',
 
-    TEXT_AS_ID = 'TEXT_AS_ID'
+    TEXT_AS_ID = 'TEXT_AS_ID',
+
+    UNIQUE = 'UNIQUE'
 
 }

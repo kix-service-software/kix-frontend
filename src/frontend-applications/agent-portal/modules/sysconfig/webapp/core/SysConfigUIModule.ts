@@ -9,7 +9,6 @@
 
 import { IUIModule } from '../../../../model/IUIModule';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { TableFactoryService, TableCSSHandlerRegistry } from '../../../base-components/webapp/core/table';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { SysConfigFormService, SysConfigTableFactory, SysConfigLabelProvider, EditSysConfigDialogContext } from '.';
@@ -27,6 +26,8 @@ import { PlaceholderService } from '../../../base-components/webapp/core/Placeho
 import { SysConfigPlaceholderHandler } from './SysConfigPlaceholderHandler';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { TableCSSHandlerRegistry } from '../../../table/webapp/core/css-handler/TableCSSHandlerRegistry';
+import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 
 export class UIModule implements IUIModule {
 

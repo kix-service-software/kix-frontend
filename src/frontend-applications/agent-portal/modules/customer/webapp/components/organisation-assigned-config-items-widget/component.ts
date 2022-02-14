@@ -10,7 +10,7 @@
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { TableFactoryService } from '../../../../base-components/webapp/core/table';
+import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { Organisation } from '../../../model/Organisation';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';

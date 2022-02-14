@@ -172,7 +172,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                 break;
             case ArticleProperty.ATTACHMENTS:
                 if (displayValue) {
-                    const attachments = displayValue.filter((a) => a.Disposition !== 'inline');
+                    const attachments = displayValue.filter((a) => a.Disposition !== 'inline' || a.ContentID.length === 0 && !a.Filename.match(/^file-(1|2)$/));
                     if (attachments.length > 0) {
                         displayValue = '(' + attachments.length + ')';
                     }
@@ -264,7 +264,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
         switch (property) {
             case ArticleProperty.ATTACHMENTS:
                 if (article.Attachments) {
-                    const attachments = article.Attachments.filter((a) => a.Disposition !== 'inline');
+                    const attachments = article.Attachments.filter((a) => a.Disposition !== 'inline' || a.ContentID.length === 0 && !a.Filename.match(/^file-(1|2)$/));
                     if (attachments.length > 0) {
                         icons.push('kix-icon-attachement');
                     }

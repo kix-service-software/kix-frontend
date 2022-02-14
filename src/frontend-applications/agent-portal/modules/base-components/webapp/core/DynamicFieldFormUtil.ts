@@ -218,7 +218,22 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
 
     private prepareCIReferenceField(field: FormFieldConfiguration, dynamicField: DynamicField): void {
         field.inputComponent = 'object-reference-input';
-        const isMultiSelect = field.countMax !== null && (field.countMax < 0 || field.countMax > 1);
+
+        field.options = this.getCIReferenceFieldOptions(dynamicField, field);
+
+        field.defaultValue = new FormFieldValue(
+            dynamicField.Config.DefaultValue ? JSON.parse(dynamicField.Config.DefaultValue) : null
+        );
+
+        field.countDefault = 1;
+        field.countMax = 1;
+        field.countMin = 1;
+    }
+
+    public getCIReferenceFieldOptions(dynamicField: DynamicField, field?: FormFieldConfiguration): FormFieldOption[] {
+        const options: FormFieldOption[] = [];
+
+        const isMultiSelect = field?.countMax !== null && (field?.countMax < 0 || field?.countMax > 1);
 
         const filter = [
             new FilterCriteria(
@@ -249,23 +264,18 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
             }
         }
 
-        field.options.push(new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.CONFIG_ITEM));
-        field.options.push(new FormFieldOption(ObjectReferenceOptions.MULTISELECT, isMultiSelect));
-        field.options.push(new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true));
-        field.options.push(new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.OBJECT_REFERENCE));
-        field.options.push(
+        options.push(new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.CONFIG_ITEM));
+        options.push(new FormFieldOption(ObjectReferenceOptions.MULTISELECT, isMultiSelect));
+        options.push(new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true));
+        options.push(new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.OBJECT_REFERENCE));
+        options.push(
             new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS, new KIXObjectLoadingOptions(filter))
         );
-        field.options.push(new FormFieldOption(ObjectReferenceOptions.COUNT_MIN, field.countMin));
-        field.options.push(new FormFieldOption(ObjectReferenceOptions.COUNT_MAX, field.countMax));
+        options.push(new FormFieldOption(ObjectReferenceOptions.COUNT_MIN, field?.countMin));
+        options.push(new FormFieldOption(ObjectReferenceOptions.COUNT_MAX, field?.countMax));
+        options.push(new FormFieldOption(DynamicFormFieldOption.FIELD_NAME, dynamicField?.Name));
 
-        field.defaultValue = new FormFieldValue(
-            dynamicField.Config.DefaultValue ? JSON.parse(dynamicField.Config.DefaultValue) : null
-        );
-
-        field.countDefault = 1;
-        field.countMax = 1;
-        field.countMin = 1;
+        return options;
     }
 
     public async handleDynamicFieldValues(

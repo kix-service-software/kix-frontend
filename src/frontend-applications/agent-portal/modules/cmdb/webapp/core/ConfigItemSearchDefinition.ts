@@ -105,16 +105,19 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                     ));
                     break;
                 case ConfigItemProperty.CLASS_ID:
+                case 'ClassIDs':
                     searchCriteria.property = 'ClassIDs';
                     searchCriteria.type = FilterDataType.NUMERIC;
                     newCriteria.push(searchCriteria);
                     break;
                 case ConfigItemProperty.CUR_DEPL_STATE_ID:
+                case 'DeplStateIDs':
                     searchCriteria.property = 'DeplStateIDs';
                     searchCriteria.type = FilterDataType.NUMERIC;
                     newCriteria.push(searchCriteria);
                     break;
                 case ConfigItemProperty.CUR_INCI_STATE_ID:
+                case 'InciStateIDs':
                     searchCriteria.property = 'InciStateIDs';
                     searchCriteria.type = FilterDataType.NUMERIC;
                     newCriteria.push(searchCriteria);
@@ -182,7 +185,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
     }
 
     public async getTableColumnConfiguration(searchParameter: Array<[string, any]>): Promise<IColumnConfiguration[]> {
-        const classParameter = searchParameter.find((p) => p[0] === ConfigItemProperty.CLASS_ID);
+        const classParameter = searchParameter.find((p) => p[0] === 'ClassIDs');
         let attributes: AttributeDefinition[];
         if (classParameter) {
             const classIds = Array.isArray(classParameter[1]) ? classParameter[1] : [classParameter[1]];

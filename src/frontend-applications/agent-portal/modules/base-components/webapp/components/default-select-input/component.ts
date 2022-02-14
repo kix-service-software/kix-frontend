@@ -13,8 +13,17 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { DefaultSelectInputFormOption } from '../../../../../model/configuration/DefaultSelectInputFormOption';
 import { TreeNode, TreeService, TreeHandler } from '../../core/tree';
 import { ContextService } from '../../core/ContextService';
+import { EventService } from '../../core/EventService';
+import { FormEvent } from '../../core/FormEvent';
+import { IEventSubscriber } from '../../core/IEventSubscriber';
+import { FormValuesChangedEventData } from '../../core/FormValuesChangedEventData';
 
 class Component extends FormInputComponent<string | number | string[] | number[], CompontentState> {
+
+    private formSubscriber: IEventSubscriber;
+
+    // TODO: move to FormInstance/ValueHandler as universal solution for unique handling (possible values)
+    private uniqueNodes: boolean;
 
     public onCreate(): void {
         this.state = new CompontentState();
@@ -42,12 +51,49 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             this.state.asMultiselect = typeof asMultiselectOption?.value === 'boolean'
                 ? asMultiselectOption.value
                 : false;
+
+            if (this.state.field?.countMax && this.state.field?.countMax > 1) {
+                const uniqueOption = this.state.field?.options.find(
+                    (o) => o.option === DefaultSelectInputFormOption.UNIQUE
+                );
+                this.uniqueNodes = uniqueOption && typeof uniqueOption.value === 'boolean' ? uniqueOption.value : true;
+            }
         }
         const treeHandler = new TreeHandler([], null, null, this.state.asMultiselect);
         TreeService.getInstance().registerTreeHandler(this.state.treeId, treeHandler);
+
         await this.load();
         await super.onMount();
+
+        if (this.uniqueNodes) {
+            this.formSubscriber = {
+                eventSubscriberId: this.state.field?.instanceId,
+                eventPublished: (data: any, eventId: string): void => {
+                    if (
+                        this.uniqueNodes && eventId === FormEvent.VALUES_CHANGED &&
+                        data && (data as FormValuesChangedEventData).changedValues?.length
+                    ) {
+                        const samePropertyFieldChanged = (data as FormValuesChangedEventData).changedValues.some(
+                            (cV) => cV[0].property === this.state.field?.property
+                        );
+                        if (samePropertyFieldChanged) {
+                            this.load();
+                        }
+                    }
+                }
+            };
+            EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
+        }
+
         this.state.prepared = true;
+    }
+
+    public async onDestroy(): Promise<void> {
+        super.onDestroy();
+        TreeService.getInstance().removeTreeHandler(this.state.treeId);
+        if (this.uniqueNodes) {
+            EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
+        }
     }
 
     public async load(): Promise<void> {
@@ -62,14 +108,8 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             );
             nodes = await this.getNodes(nodesOption ? nodesOption.value : [], translatable);
 
-            if (this.state.field?.countMax && this.state.field?.countMax > 1) {
-                const uniqueOption = this.state.field?.options.find(
-                    (o) => o.option === DefaultSelectInputFormOption.UNIQUE
-                );
-                const unique = uniqueOption && typeof uniqueOption.value === 'boolean' ? uniqueOption.value : true;
-                if (unique) {
-                    nodes = await this.handleUnique(nodes);
-                }
+            if (this.uniqueNodes) {
+                nodes = await this.handleUnique(nodes);
             }
 
             const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
@@ -113,7 +153,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         if (this.state.asMultiselect) {
             super.provideValue(nodes?.map((n) => n.id));
         } else {
-            super.provideValue(nodes[0].id);
+            super.provideValue(nodes[0]?.id);
         }
     }
 
@@ -121,6 +161,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         await super.focusLost();
     }
 
+    // TODO: move to FormInstance/ValueHandler as universal solution for unique handling (possible values)
     private async handleUnique(nodes: TreeNode[]): Promise<TreeNode[]> {
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();

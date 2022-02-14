@@ -146,7 +146,7 @@ export class TicketDetailsDFDataBuilder {
                 ), null
             ).catch(() => [] as ConfigItem[]);
 
-            values = configItems.map((ci) => ci.Number + '#' + ci.Name);
+            values = configItems.map((ci) => '#' + ci.Number + ' - ' + ci.Name);
         }
         return values || [];
     }

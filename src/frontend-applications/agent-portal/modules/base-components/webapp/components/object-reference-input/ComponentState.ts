@@ -22,7 +22,8 @@ export class ComponentState extends FormInputComponentState {
         public multiselect: boolean = false,
         public treeId: string = IdService.generateDateBasedId('object-reference-input-'),
         public prepared: boolean = false,
-        public freeText: boolean = false
+        public freeText: boolean = false,
+        public possibleValuesOnly: boolean = false
     ) {
         super();
     }

@@ -11,19 +11,15 @@
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 
-import {
-    FAQReadUIModule, FAQArticleSearchContext, FAQLabelProvider, FAQCategoryLabelProvider, FAQArticleHistoryLabelProvider, FAQArticleTableFactory, FAQArticleHistoryTableFactory, FAQArticleFormService, FAQArticleSearchDefinition
-} from '../webapp/core';
+import { FAQReadUIModule, FAQLabelProvider, FAQCategoryLabelProvider, FAQArticleHistoryLabelProvider, FAQArticleTableFactory, FAQArticleHistoryTableFactory, FAQArticleFormService, FAQArticleSearchDefinition } from '../webapp/core';
 import { ActionFactory } from '../../base-components/webapp/core/ActionFactory';
-import { FAQContext } from '../webapp/core/context/FAQContext';
-import { FAQDetailsContext } from '../webapp/core/context/FAQDetailsContext';
 import { LabelService } from '../../base-components/webapp/core/LabelService';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
-import { TableFactoryService } from '../../base-components/webapp/core/table';
 import { ServiceRegistry } from '../../base-components/webapp/core/ServiceRegistry';
 import { ServiceType } from '../../base-components/webapp/core/ServiceType';
 import { SearchService } from '../../search/webapp/core';
 import { TranslationService } from '../../translation/webapp/core/TranslationService';
+import { TableFactoryService } from '../../table/webapp/core/factory/TableFactoryService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

@@ -7,13 +7,15 @@
  * --
  */
 
-import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
+import { TableContentProvider } from '../../../../table/webapp/core/TableContentProvider';
 import { Organisation } from '../../../model/Organisation';
-import { Table, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { OrganisationProperty } from '../../../model/OrganisationProperty';
 import { TicketStats } from '../../../model/TicketStats';
+import { RowObject } from '../../../../table/model/RowObject';
+import { Table } from '../../../../table/model/Table';
+import { TableValue } from '../../../../table/model/TableValue';
 
 export class OrganisationTableContentProvider extends TableContentProvider<Organisation> {
 

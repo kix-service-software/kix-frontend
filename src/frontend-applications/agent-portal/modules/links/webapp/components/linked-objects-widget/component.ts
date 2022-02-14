@@ -12,7 +12,7 @@ import { AbstractMarkoComponent } from '../../../../../modules/base-components/w
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { TableFactoryService } from '../../../../base-components/webapp/core/table';
+import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { Context } from '../../../../../model/Context';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { LinkObject } from '../../../model/LinkObject';

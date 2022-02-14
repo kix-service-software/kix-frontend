@@ -20,7 +20,6 @@ import { SocketAuthenticationError } from '../../modules/base-components/webapp/
 import { PermissionError } from '../../modules/user/model/PermissionError';
 import { SocketErrorResponse } from '../../modules/base-components/webapp/core/SocketErrorResponse';
 import { RequestCounter } from '../../../../server/services/RequestCounter';
-import { RequestQueue } from './RequestQueue';
 
 export abstract class SocketNameSpace implements ISocketNamespace {
 
@@ -147,5 +146,6 @@ export abstract class SocketNameSpace implements ISocketNamespace {
         }
         return newParameter;
     }
+
 }
 

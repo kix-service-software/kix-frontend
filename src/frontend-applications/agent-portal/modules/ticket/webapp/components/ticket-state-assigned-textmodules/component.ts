@@ -13,12 +13,14 @@ import { IEventSubscriber } from '../../../../../modules/base-components/webapp/
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import { TableEvent, TableFactoryService, TableEventData } from '../../../../base-components/webapp/core/table';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { KIXObjectPropertyFilter } from '../../../../../model/KIXObjectPropertyFilter';
+import { TableEvent } from '../../../../table/model/TableEvent';
+import { TableEventData } from '../../../../table/model/TableEventData';
+import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

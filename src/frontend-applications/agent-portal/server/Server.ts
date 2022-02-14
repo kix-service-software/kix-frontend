@@ -10,10 +10,10 @@
 import path from 'path';
 
 import express from 'express';
-import nodeRequire = require('marko/node-require');
-nodeRequire.install(); // Allow Node.js to require and load `.marko` files
 
-import markoExpress = require('marko/express');
+require('@marko/compiler/register')({ meta: true });
+import markoExpress from '@marko/express';
+
 import { serveStatic } from 'lasso/middleware';
 
 import compression from 'compression';
@@ -25,30 +25,17 @@ import forceSSl from 'express-force-ssl';
 import { LoggingService } from '../../../server/services/LoggingService';
 import { IServerConfiguration } from '../../../server/model/IServerConfiguration';
 import { ConfigurationService } from '../../../server/services/ConfigurationService';
-import { CreateClientRegistration } from './model/CreateClientRegistration';
 import { MarkoService } from './services/MarkoService';
 import { ServerRouter } from './routes/ServerRouter';
-import { AuthenticationService } from './services/AuthenticationService';
 import { PluginService } from '../../../server/services/PluginService';
 import { AgentPortalExtensions } from './extensions/AgentPortalExtensions';
-import { IConfigurationExtension } from './extensions/IConfigurationExtension';
-import { IConfiguration } from '../model/configuration/IConfiguration';
-import { Error } from '../../../server/model/Error';
-import { SysConfigOptionDefinition } from '../modules/sysconfig/model/SysConfigOptionDefinition';
 import { IServer } from '../../../server/model/IServer';
 import { SocketService } from './services/SocketService';
 import { IServiceExtension } from './extensions/IServiceExtension';
-import { TranslationAPIService } from '../modules/translation/server/TranslationService';
-import { SysConfigAccessLevel } from '../modules/sysconfig/model/SysConfigAccessLevel';
-import { SysConfigKey } from '../modules/sysconfig/model/SysConfigKey';
 import { IInitialDataExtension } from '../model/IInitialDataExtension';
-import { IFormConfigurationExtension } from './extensions/IFormConfigurationExtension';
-import { FormGroupConfiguration } from '../model/configuration/FormGroupConfiguration';
-import { IModifyConfigurationExtension } from './extensions/IModifyConfigurationExtension';
 import { MigrationService } from '../migrations/MigrationService';
-import { ReleaseInfoUtil } from '../../../server/ReleaseInfoUtil';
+import { AuthenticationService } from './services/AuthenticationService';
 import { ClientRegistrationService } from './services/ClientRegistrationService';
-import { SystemInfo } from '../model/SystemInfo';
 
 export class Server implements IServer {
 
@@ -104,12 +91,22 @@ export class Server implements IServer {
         }
 
         this.serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+
+        const backendToken = AuthenticationService.getInstance().getCallbackToken();
+        const promises = [
+            ClientRegistrationService.getInstance().createClientRegistration(backendToken),
+            MarkoService.getInstance().initializeMarkoApplications()
+        ];
+
+        await Promise.all(promises).catch((error) => {
+            LoggingService.getInstance().error(error);
+            process.exit(99);
+        });
+
         await this.initializeApplication();
     }
 
     private async initializeApplication(): Promise<void> {
-        await MarkoService.getInstance().initializeMarkoApplications();
-
         this.application = express();
 
         this.application.use(compression());
@@ -127,7 +124,9 @@ export class Server implements IServer {
             this.application.use(forceSSl);
         }
 
-        await this.registerStaticContent();
+        this.application.use(markoExpress());
+        this.application.use(serveStatic());
+        this.application.use(express.static('../static/'));
 
         const router = new ServerRouter(this.application);
         await router.initializeRoutes();
@@ -135,7 +134,7 @@ export class Server implements IServer {
         this.initHttpServer();
     }
 
-    public async initHttpServer(): Promise<void> {
+    private async initHttpServer(): Promise<void> {
         const httpPort = this.serverConfig.HTTP_PORT || 3000;
         const httpServer = http.createServer(this.application).listen(httpPort, () => {
             LoggingService.getInstance().info('KIX (HTTP) running on *:' + httpPort);
@@ -162,225 +161,4 @@ export class Server implements IServer {
         }
     }
 
-    private async registerStaticContent(): Promise<void> {
-        this.application.use(markoExpress());
-        this.application.use(serveStatic());
-
-        this.application.use(express.static('../static/'));
-    }
-
-    public static async createClientRegistration(): Promise<void> {
-        LoggingService.getInstance().info('Create Client Registration');
-        let poDefinitions = [];
-
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-
-        const updateTranslations = serverConfig.UPDATE_TRANSLATIONS;
-        if (updateTranslations) {
-            LoggingService.getInstance().info('Update translations');
-            poDefinitions = await TranslationAPIService.getInstance().getPODefinitions();
-        }
-
-        const configurations = await this.createDefaultConfigurations();
-
-        const backendDependencies = this.getBackendDependencies();
-        const plugins = this.getPlugins();
-
-        const createClientRegistration = new CreateClientRegistration(
-            serverConfig.NOTIFICATION_CLIENT_ID,
-            serverConfig.NOTIFICATION_URL,
-            serverConfig.NOTIFICATION_INTERVAL,
-            'Token ' + AuthenticationService.getInstance().getCallbackToken(),
-            poDefinitions,
-            configurations,
-            backendDependencies,
-            plugins,
-            {
-                SystemInfo: 1
-            }
-        );
-
-        const systemInfo = await ClientRegistrationService.getInstance().createClientRegistration(
-            serverConfig.BACKEND_API_TOKEN, null, createClientRegistration
-        ).catch((error) => {
-            LoggingService.getInstance().error(error);
-            LoggingService.getInstance().error(
-                'Failed to register frontent server at backend (ClientRegistration). See errors above.'
-            );
-            process.exit(1);
-        });
-
-        ReleaseInfoUtil.getInstance().setSysteminfo(systemInfo as SystemInfo);
-        LoggingService.getInstance().info('ClientRegistration created.');
-    }
-
-    private static async createDefaultConfigurations(): Promise<SysConfigOptionDefinition[]> {
-        LoggingService.getInstance().info('Create Default Configurations');
-        const extensions = await PluginService.getInstance().getExtensions<IConfigurationExtension>(
-            AgentPortalExtensions.CONFIGURATION
-        ).catch((): IConfigurationExtension[] => []);
-
-        if (extensions) {
-            LoggingService.getInstance().info(`Found ${extensions.length} configuration extensions`);
-
-            let configurations: IConfiguration[] = [];
-            for (const extension of extensions) {
-                let formConfigurations = await extension.getFormConfigurations().catch(
-                    (error: Error): IConfiguration[] => {
-                        LoggingService.getInstance().error(error.Message);
-                        return [];
-                    }
-                );
-                let defaultConfigurations = await extension.getDefaultConfiguration().catch(
-                    (error: Error): IConfiguration[] => {
-                        LoggingService.getInstance().error(error.Message);
-                        return [];
-                    }
-                );
-
-                formConfigurations = formConfigurations || [];
-
-                defaultConfigurations = defaultConfigurations || [];
-
-                configurations = [
-                    ...configurations,
-                    ...formConfigurations,
-                    ...defaultConfigurations
-                ];
-            }
-
-            await this.extendFormConfigurations(configurations);
-            configurations = await this.handleConfigurationExtensions(configurations);
-
-            ConfigurationService.getInstance().getServerConfiguration();
-
-            const sysconfigOptionDefinitions = configurations.map((c) => {
-                const name = c.name ? c.name : c.id;
-                const definition: any = {
-                    AccessLevel: SysConfigAccessLevel.INTERNAL,
-                    Name: c.id,
-                    Description: name,
-                    Default: JSON.stringify(c),
-                    Context: 'kix18-web-frontend',
-                    ContextMetadata: c.type,
-                    Type: 'String',
-                    IsRequired: 0
-                };
-                return definition;
-            });
-
-            const browserTimeoutConfig: any = {
-                AccessLevel: SysConfigAccessLevel.INTERNAL,
-                Name: SysConfigKey.BROWSER_SOCKET_TIMEOUT_CONFIG,
-                Description: 'Timeout (in ms) configuration for socket requests.',
-                Default: '30000',
-                Context: 'kix18-web-frontend',
-                ContextMetadata: 'agent-portal-configuration',
-                Type: 'String',
-                IsRequired: 0
-            };
-            sysconfigOptionDefinitions.push(browserTimeoutConfig);
-
-            const setupAssistantConfig: any = {
-                AccessLevel: SysConfigAccessLevel.INTERNAL,
-                Name: SysConfigKey.SETUP_ASSISTANT_STATE,
-                Description: 'The state of the setup steps for the agent portal setup assistant.',
-                Default: JSON.stringify([]),
-                Context: 'kix18-web-frontend',
-                ContextMetadata: 'agent-portal-configuration',
-                Type: 'String',
-                IsRequired: 0
-            };
-            sysconfigOptionDefinitions.push(setupAssistantConfig);
-
-            return sysconfigOptionDefinitions;
-        }
-    }
-
-    private static getBackendDependencies(): any[] {
-        let dependencies = [];
-        const plugins = PluginService.getInstance().availablePlugins;
-        for (const plugin of plugins) {
-            dependencies = [
-                ...dependencies,
-                ...plugin[1].dependencies
-                    .filter((d) => d[0].startsWith('backend::'))
-                    .map((d) => {
-                        return {
-                            Product: d[0].replace('backend::', ''),
-                            Operator: d[1],
-                            BuildNumber: Number(d[2])
-                        };
-                    })
-            ];
-        }
-        return dependencies;
-    }
-
-    private static async extendFormConfigurations(formConfigurations: IConfiguration[]): Promise<void> {
-        if (formConfigurations.length) {
-            const extensions = await PluginService.getInstance().getExtensions<IFormConfigurationExtension>(
-                AgentPortalExtensions.EXTENDED_FORM_CONFIGURATION
-            );
-
-            for (const formExtension of extensions) {
-                const extendedFormFields = await formExtension.getFormFieldExtensions();
-
-                for (const fieldExtension of extendedFormFields) {
-                    const configuration = formConfigurations.find((c) => c.id === fieldExtension.groupId);
-                    if (configuration) {
-                        const groupConfiguration = configuration as FormGroupConfiguration;
-                        if (!groupConfiguration.fieldConfigurationIds) {
-                            groupConfiguration.fieldConfigurationIds = [];
-                        }
-
-                        const index = groupConfiguration.fieldConfigurationIds.findIndex(
-                            (id) => id === fieldExtension.afterFieldId
-                        );
-                        if (index !== -1) {
-                            groupConfiguration.fieldConfigurationIds.splice(
-                                index + 1, 0, fieldExtension.configuration.id
-                            );
-                        } else {
-                            groupConfiguration.fieldConfigurationIds.push(fieldExtension.configuration.id);
-                        }
-
-                        formConfigurations.push(fieldExtension.configuration);
-                    }
-                }
-            }
-        }
-    }
-
-    private static async handleConfigurationExtensions(configurations: IConfiguration[]): Promise<IConfiguration[]> {
-        if (configurations.length) {
-            const extensions = await PluginService.getInstance().getExtensions<IModifyConfigurationExtension>(
-                AgentPortalExtensions.MODIFY_CONFIGURATION
-            );
-
-            for (const extension of extensions) {
-                configurations = await extension.modifyConfigurations(configurations);
-            }
-        }
-
-        return configurations;
-    }
-
-    private static getPlugins(): any[] {
-        const plugins = [];
-        const availablePlugins = PluginService.getInstance().availablePlugins;
-        for (const plugin of availablePlugins) {
-            plugins.push({
-                Product: plugin[1].product,
-                Requires: plugin[1].requires,
-                Description: plugin[1].product,
-                BuildNumber: plugin[1].buildNumber,
-                Version: plugin[1].version,
-                ExtendedData: {
-                    BuildDate: plugin[1].buildDate
-                }
-            });
-        }
-        return plugins;
-    }
 }

@@ -8,6 +8,7 @@
  */
 
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { Table } from '../../../table/model/Table';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
 import { User } from '../../../user/model/User';
@@ -19,7 +20,6 @@ import { EventService } from './EventService';
 import { KIXObjectService } from './KIXObjectService';
 import { OverlayService } from './OverlayService';
 import { OverlayType } from './OverlayType';
-import { Table } from './table';
 
 export class ResetUserContextWidgetListAction extends AbstractAction<Table | User>{
 
