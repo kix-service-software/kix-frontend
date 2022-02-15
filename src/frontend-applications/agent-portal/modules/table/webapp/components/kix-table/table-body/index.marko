@@ -12,7 +12,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     "show-object": state.ready,
 }>
     <if(state.loading)>
-        <tr.empty-row style=("height: " + component.getRowHeight())>
+        <tr.empty-row style="height: " + component.getRowHeight()>
             <td colspan=component.getFullColumnLength()><loading-spinner/></td>
         </tr>
     </if>
@@ -20,6 +20,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <if(!!state.rows.length)>
             <for|row| of=state.rows>
                 <table-row
+                    key="table-row" + state.rowKey
                     row=row
                     columnLength=component.getFullColumnLength()
                     height=component.getRowHeight()
@@ -30,7 +31,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </for>
         </if>
         <else>
-            <tr.empty-row style=("height: " + component.getRowHeight())>
+            <tr.empty-row style="height: " + component.getRowHeight()>
                 <td colspan=component.getFullColumnLength()>
                     <translation-string pattern=component.getEmptyString()/>
                 </td>

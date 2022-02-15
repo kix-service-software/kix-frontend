@@ -21,6 +21,7 @@ import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecific
 import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
 import { SysConfigKey } from '../model/SysConfigKey';
 import { FilterCriteria } from '../../../model/FilterCriteria';
+import { AgentPortalConfiguation } from '../../../model/configuration/AgentPortalConfiguation';
 
 export class SysConfigService extends KIXObjectAPIService {
 
@@ -139,6 +140,23 @@ export class SysConfigService extends KIXObjectAPIService {
 
     public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         return [];
+    }
+
+    public async getAgentPortalConfiguration(token: string): Promise<AgentPortalConfiguation> {
+        const configs = await this.loadObjects<SysConfigOption>(
+            token, '', KIXObjectType.SYS_CONFIG_OPTION, [AgentPortalConfiguation.CONFIGURATION_ID], null, null
+        );
+
+        let config: AgentPortalConfiguation;
+        if (Array.isArray(configs) && configs.length) {
+            try {
+                config = JSON.parse(configs[0].Value);
+            } catch (error) {
+                LoggingService.getInstance().error(error);
+            }
+        }
+
+        return config;
     }
 
 }

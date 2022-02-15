@@ -62,10 +62,24 @@ export class OrganisationAPIService extends KIXObjectAPIService {
         let objects = [];
 
         if (objectType === KIXObjectType.ORGANISATION) {
-            objects = await super.load(
-                token, KIXObjectType.ORGANISATION, this.RESOURCE_URI, loadingOptions, objectIds,
-                KIXObjectType.ORGANISATION, Organisation
-            );
+
+            const preload = await this.shouldPreload(token, KIXObjectType.CONTACT);
+
+            if (loadingOptions || !preload) {
+                objects = await super.load<Organisation>(
+                    token, KIXObjectType.ORGANISATION, this.RESOURCE_URI,
+                    loadingOptions, objectIds, KIXObjectType.ORGANISATION, Organisation
+                );
+            } else {
+                objects = await super.load(
+                    token, KIXObjectType.CONTACT, this.RESOURCE_URI, null, null, KIXObjectType.ORGANISATION,
+                    Organisation
+                );
+
+                if (Array.isArray(objectIds) && objectIds.length) {
+                    objects = objects.filter((o) => objectIds.some((oid) => Number(oid) === o.ID));
+                }
+            }
         }
 
         return objects;

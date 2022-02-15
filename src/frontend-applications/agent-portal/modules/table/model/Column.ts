@@ -100,6 +100,12 @@ export class Column<T extends KIXObject = any> {
         this.filterValue = textValue;
         this.filterCriteria = criteria;
 
+        if (!this.getColumnConfiguration()?.hasListFilter) {
+            const rows = this.getTable().getRows(true);
+            const promises = [];
+            rows.forEach((r) => promises.push(r.getCell(this.getColumnId()).initDisplayValue()));
+            await Promise.all(promises);
+        }
 
         const filterDefinition = { filterValue: this.filterValue, filterCriteria: this.filterCriteria };
         try {

@@ -7,6 +7,7 @@
  * --
  */
 
+import { IdService } from '../../../../../../model/IdService';
 import { Row } from '../../../../model/Row';
 
 export class ComponentState {
@@ -14,6 +15,7 @@ export class ComponentState {
     public constructor(
         public rows: Row[] = [],
         public ready: boolean = false,
-        public loading: boolean = false
+        public loading: boolean = false,
+        public rowKey: string = IdService.generateDateBasedId()
     ) { }
 }

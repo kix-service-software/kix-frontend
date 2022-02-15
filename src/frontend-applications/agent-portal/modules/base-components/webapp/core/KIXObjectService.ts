@@ -741,4 +741,14 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return properties;
     }
 
+    protected async shouldPreload(objectType: KIXObjectType | string): Promise<boolean> {
+        let preload = false;
+        const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.SYS_CONFIG_OPTION);
+        if (service) {
+            const agentPortalConfig = await (service as any).getAgentPortalConfiguration();
+            preload = agentPortalConfig?.preloadObjects?.some((o) => o === objectType);
+        }
+        return preload;
+    }
+
 }

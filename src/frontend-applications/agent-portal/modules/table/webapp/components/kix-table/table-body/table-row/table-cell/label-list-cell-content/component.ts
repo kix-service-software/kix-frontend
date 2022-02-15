@@ -35,19 +35,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (value) {
             if (Array.isArray(value.displayValue)) {
                 values = value.displayValue.split(',').map((v) => v.trim());
-            } else if (Array.isArray(value.objectValue)) {
-                if (typeof value.objectValue[0] === 'object') {
-                    const stringValue = value.displayValue;
-                    values = stringValue.split(',').map((v) => v.trim());
-                } else {
-                    values = value.objectValue;
-                    icons = value.displayIcons ? value.displayIcons : [];
-                }
             } else if (typeof value.displayValue === 'string') {
                 values = value.displayValue ? value.displayValue.split(',').map((v) => v.trim()) : [];
             } else if (typeof value.objectValue !== 'undefined' && value.objectValue !== null) {
-                values = [value.objectValue];
+                values = Array.isArray(value.objectValue) ? value.objectValue : [value.objectValue];
             }
+
+            icons = value.displayIcons ? value.displayIcons : [];
         }
 
         this.state.cellLabels = SortUtil.sortObjects(
