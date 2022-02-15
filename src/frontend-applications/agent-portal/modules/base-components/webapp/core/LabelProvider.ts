@@ -160,25 +160,16 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
         let displayValue: string;
 
         const dfName = KIXObjectService.getDynamicFieldName(property);
-        if (dfName && object.KIXObjectType && object.ObjectId) {
-            const objects = await KIXObjectService.loadObjects(
-                object.KIXObjectType, [object.ObjectId],
-                new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS])
-            );
-
-            if (objects && objects.length) {
-                const kixObject = objects[0];
-                let fieldValue: DynamicFieldValue;
-                if (Array.isArray(kixObject.DynamicFields) && kixObject.DynamicFields.length) {
-                    fieldValue = kixObject.DynamicFields.find((dfv) => dfv.Name === dfName);
-                    if (fieldValue) {
-                        const preparedValue = await this.getDFDisplayValues(fieldValue);
-                        if (preparedValue && preparedValue[1]) {
-                            displayValue = preparedValue[1];
-                        } else {
-                            displayValue = fieldValue.DisplayValue.toString();
-                        }
-                    }
+        if (dfName) {
+            const fieldValue = object.DynamicFields?.find((dfv) => dfv.Name === dfName);
+            if (fieldValue) {
+                const preparedValue = await this.getDFDisplayValues(fieldValue);
+                if (preparedValue && preparedValue[1]) {
+                    displayValue = preparedValue[1];
+                } else if (fieldValue.DisplayValue) {
+                    displayValue = fieldValue.DisplayValue.toString();
+                } else {
+                    displayValue = fieldValue.Value.toString();
                 }
             }
         } else {

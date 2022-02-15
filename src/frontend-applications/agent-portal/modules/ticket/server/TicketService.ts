@@ -78,18 +78,8 @@ export class TicketAPIService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.TICKET) {
 
-            const includes = [TicketProperty.STATE_TYPE, KIXObjectType.CONTACT];
-            const expands = [
-                // TicketProperty.RESPONSIBLE_ID,
-                // TicketProperty.STATE_ID,
-                // TicketProperty.PRIORITY_ID,
-                // TicketProperty.TYPE_ID,
-                // TicketProperty.QUEUE_ID,
-                // TicketProperty.OWNER_ID,
-                // TicketProperty.PRIORITY_ID,
-                // TicketProperty.LOCK_ID,
-                // TicketProperty.CONTACT_ID
-            ];
+            const includes = [TicketProperty.STATE_TYPE, KIXObjectType.CONTACT, KIXObjectProperty.DYNAMIC_FIELDS];
+            const expands = [];
 
             if (!loadingOptions) {
                 loadingOptions = new KIXObjectLoadingOptions(null, null, null, includes, expands);

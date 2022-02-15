@@ -605,29 +605,29 @@ export class Table implements Table {
         this.sortColumnId = columnId;
         this.sortOrder = sortOrder;
 
+        const promises = [];
+        this.getRows(true).forEach((r) => promises.push(r.getCell(this.sortColumnId)?.initDisplayValue));
+        await Promise.all(promises);
+
         this.getColumns().forEach((c) => c.setSortOrder(null));
         const column = this.getColumn(columnId);
         if (column) {
             column.setSortOrder(sortOrder);
 
             if (this.filteredRows) {
-                this.filteredRows = await TableSortUtil.sort(
+                this.filteredRows = TableSortUtil.sort(
                     this.filteredRows, columnId, sortOrder, column.getColumnConfiguration().dataType
                 );
-                const sortPromises = [];
                 for (const row of this.filteredRows) {
-                    sortPromises.push(row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType));
+                    row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType);
                 }
-                await Promise.all(sortPromises);
             } else {
-                this.rows = await TableSortUtil.sort(
+                this.rows = TableSortUtil.sort(
                     this.rows, columnId, sortOrder, column.getColumnConfiguration().dataType
                 );
-                const sortPromises = [];
                 for (const row of this.rows) {
-                    sortPromises.push(row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType));
+                    row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType);
                 }
-                await Promise.all(sortPromises);
             }
 
             await this.initDisplayRows();
@@ -780,13 +780,10 @@ export class Table implements Table {
             this.getColumns().some((c) => c.isFiltered());
     }
 
-    public async updateRowObject(object: KIXObject): Promise<void> {
+    public updateRowObject(object: KIXObject): void {
         const row = this.getRowByObject(object);
         if (row) {
             row.getRowObject().updateObject(object);
-            for (const c of row.getCells()) {
-                await c.getDisplayValue(true);
-            }
             EventService.getInstance().publish(
                 TableEvent.ROW_VALUE_CHANGED,
                 new TableEventData(this.getTableId(), row.getRowId())
