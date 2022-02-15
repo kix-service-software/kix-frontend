@@ -31,7 +31,7 @@ import { DynamicField } from '../../dynamic-fields/model/DynamicField';
 import { DynamicFieldProperty } from '../../dynamic-fields/model/DynamicFieldProperty';
 import { SearchOperator } from '../../search/model/SearchOperator';
 import { SearchProperty } from '../../search/model/SearchProperty';
-import { SearchService } from '../../search/webapp/core';
+import { SearchContext, SearchService } from '../../search/webapp/core';
 import { TicketProperty } from '../../ticket/model/TicketProperty';
 import { AdditionalTableObjectsHandlerConfiguration } from '../webapp/core/AdditionalTableObjectsHandlerConfiguration';
 import { TableEvent } from './TableEvent';
@@ -40,6 +40,9 @@ import { SelectionState } from './SelectionState';
 import { TableValue } from './TableValue';
 import { ValueState } from './ValueState';
 import { TableEventData } from './TableEventData';
+import { ContextService } from '../../base-components/webapp/core/ContextService';
+import { ContextMode } from '../../../model/ContextMode';
+import { SearchCache } from '../../search/model/SearchCache';
 
 export class Table implements Table {
 
@@ -224,12 +227,19 @@ export class Table implements Table {
     }
 
     private async prepareAdditionalSearchColumns(): Promise<void> {
-        if (this.tableConfiguration?.searchId) {
-            const search = await SearchService.getInstance().loadSearchCache(this.tableConfiguration.searchId);
-            const searchDefinition = SearchService.getInstance().getSearchDefinition(search.objectType);
+        let searchCache: SearchCache;
+        const context = ContextService.getInstance().getActiveContext<SearchContext>();
+        if (context?.descriptor.contextMode === ContextMode.SEARCH && context?.getSearchCache()) {
+            searchCache = context.getSearchCache();
+        } else if (this.tableConfiguration?.searchId) {
+            searchCache = await SearchService.getInstance().loadSearchCache(this.tableConfiguration.searchId);
+        }
+
+        if (searchCache) {
+            const searchDefinition = SearchService.getInstance().getSearchDefinition(searchCache.objectType);
 
             const parameter: Array<[string, any]> = [];
-            const criteria = search.criteria.filter((c) => {
+            const criteria = searchCache.criteria.filter((c) => {
                 return c.property !== SearchProperty.FULLTEXT
                     && c.property !== TicketProperty.CLOSE_TIME
                     && c.property !== TicketProperty.LAST_CHANGE_TIME;
