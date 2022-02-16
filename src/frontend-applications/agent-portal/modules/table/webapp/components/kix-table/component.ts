@@ -117,7 +117,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().subscribe(TableEvent.SCROLL_TO_AND_TOGGLE_ROW, this.subscriber);
 
         setTimeout(() => {
-            const scrollPosString = ClientStorageService.getOption(`${this.state.table.getTableId()}-scrollpos`);
+            const scrollPosString = ClientStorageService.getOption(`${this.state.table?.getTableId()}-scrollpos`);
             const element: HTMLElement = (this as any).getEl(this.state.table?.getTableId() + 'table-container');
             if (scrollPosString && element) {
                 try {
