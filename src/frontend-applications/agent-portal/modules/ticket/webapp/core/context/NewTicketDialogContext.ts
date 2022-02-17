@@ -22,6 +22,7 @@ import { KIXObjectFormService } from '../../../../base-components/webapp/core/KI
 import { ServiceType } from '../../../../base-components/webapp/core/ServiceType';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { Contact } from '../../../../customer/model/Contact';
 
 export class NewTicketDialogContext extends Context {
 
@@ -68,6 +69,13 @@ export class NewTicketDialogContext extends Context {
         await this.setFormObject();
 
         const formInstance = await this.getFormManager().getFormInstance();
+
+        const contact = this.getAdditionalInformation(KIXObjectType.CONTACT) as Contact;
+        if (formInstance && contact)
+            formInstance.provideFormFieldValuesForProperties(
+                [[TicketProperty.CONTACT_ID, contact.ID]], undefined, undefined, false
+            );
+
         const contactValue = await formInstance?.getFormFieldValueByProperty<number>(TicketProperty.CONTACT_ID);
         if (contactValue && contactValue.value) {
             await this.handleContactValue(contactValue.value);
@@ -137,7 +145,8 @@ export class NewTicketDialogContext extends Context {
             if (contacts && contacts.length) {
                 this.contact = contacts[0];
             }
-        } else {
+        }
+        else {
             this.contact = null;
         }
 
