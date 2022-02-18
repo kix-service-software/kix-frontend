@@ -163,11 +163,14 @@ export abstract class KIXObject {
                 preparedFilter.push(filter);
             }
             else {
-                // this is a BETWEEN
+                const oppositeOperator = filter.Operator === SearchOperator.GREATER_THAN_OR_EQUAL
+                    ? SearchOperator.LESS_THAN_OR_EQUAL
+                    : SearchOperator.GREATER_THAN_OR_EQUAL;
                 const propertyFilter = preparedFilter.find(
-                    (f) => f.Field === filter.Field && f.Operator === SearchOperator.BETWEEN
+                    (f) => f.Field === filter.Field && f.Operator === oppositeOperator
                 );
-                if (propertyFilter) {
+                if (propertyFilter) { // this is a BETWEEN
+                    propertyFilter.Operator = SearchOperator.BETWEEN;
                     const dateA = filter.Value;
                     const dateB = propertyFilter.Value;
                     if (SortUtil.compareDate(dateA, dateB) > 0) {
@@ -176,7 +179,6 @@ export abstract class KIXObject {
                         propertyFilter.Value = [filter.Value, propertyFilter.Value];
                     }
                 } else {
-                    filter.Operator = SearchOperator.BETWEEN;
                     preparedFilter.push(filter);
                 }
             }
