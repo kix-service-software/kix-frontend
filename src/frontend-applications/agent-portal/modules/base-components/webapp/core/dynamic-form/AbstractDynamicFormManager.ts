@@ -268,7 +268,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         const dfName = KIXObjectService.getDynamicFieldName(property);
         if (dfName) {
             const field = await KIXObjectService.loadDynamicField(dfName);
-            if (field.FieldType === DynamicFieldTypes.CI_REFERENCE) {
+            if (field?.FieldType === DynamicFieldTypes.CI_REFERENCE) {
                 const fieldOptions = DynamicFieldFormUtil.getInstance().getCIReferenceFieldOptions(field);
                 options = fieldOptions.map((o) => [o.option, o.value]);
             }
