@@ -57,6 +57,9 @@ export class TableExportUtil {
                 let displayValue = '';
                 const cell = row.getCell(cId);
                 if (cell && useValueDisplayString) {
+                    if (!cell.getValue().displayValue) {
+                        await cell.initDisplayValue();
+                    }
                     displayValue = cell.getValue().displayValue;
                 } else if (useValueDisplayString) {
                     displayValue = await LabelService.getInstance().getDisplayText(
