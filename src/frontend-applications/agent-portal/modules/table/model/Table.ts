@@ -649,11 +649,13 @@ export class Table implements Table {
         }
     }
 
-    private async initDisplayRows(): Promise<void> {
+    public async initDisplayRows(all?: boolean): Promise<void> {
         const rows = this.getRows();
         const promises = [];
-        const displayLimit = this.getTableConfiguration()?.displayLimit || 15;
-        for (let i = 0; i < displayLimit + 2; i++) {
+        const displayLimit = all
+            ? this.getRows(true).length
+            : (this.getTableConfiguration()?.displayLimit || 15) + 2;
+        for (let i = 0; i < displayLimit; i++) {
             if (rows[i]) {
                 promises.push(rows[i].initializeDisplayValues());
             }

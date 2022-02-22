@@ -335,6 +335,9 @@ class Component {
             this.state.filterValue = textFilterValue;
             const predefinedCriteria = filter ? filter.criteria : [];
             const newFilter = [...predefinedCriteria, ...this.additionalFilterCriteria];
+
+            await this.state.table.initDisplayRows(true);
+
             this.state.table.setFilter(textFilterValue, newFilter);
             await this.state.table.filter();
             this.state.isFiltering = false;
