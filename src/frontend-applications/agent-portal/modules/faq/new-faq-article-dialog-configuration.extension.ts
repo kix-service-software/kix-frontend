@@ -185,7 +185,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'faq-article-new-form-field-tags',
                     'faq-article-new-form-field-relatedassets',
                     'faq-article-new-form-field-attachments',
-                    'faq-article-new-form-field-links',
                     'faq-article-new-form-field-symptom',
                     'faq-article-new-form-field-cause',
                     'faq-article-new-form-field-solution',
