@@ -18,7 +18,7 @@ import { ContextService } from '../../../../base-components/webapp/core/ContextS
 import { ReportingContext } from '../context/ReportingContext';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
-import { Row } from '../../../../base-components/webapp/core/table';
+import { Row } from '../../../../table/model/Row';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { ReportDefinition } from '../../../model/ReportDefinition';
 import { ToastContent } from '../../../../base-components/webapp/core/ToastContent';

@@ -16,7 +16,8 @@ import { LogFileProperty } from '../../../model/LogFileProperty';
 export class ComponentState {
     public constructor(
         public instanceId: string = 'system-admin-logs-list',
-        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
+        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
+            null, null, null,
             'table-widget', 'Translatable#System: Logs', [], null,
             new TableWidgetConfiguration(null, null, null,
                 KIXObjectType.LOG_FILE,

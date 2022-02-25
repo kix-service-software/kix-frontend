@@ -20,6 +20,7 @@ import { EventService } from '../../../../../base-components/webapp/core/EventSe
 import { MobileShowEventData } from '../../../../model/MobileShowEventData';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
+import { KIXStyle } from '../../../../../base-components/model/KIXStyle';
 
 class Component extends AbstractMarkoComponent {
 
@@ -69,7 +70,7 @@ class Component extends AbstractMarkoComponent {
     }
 
     private resizeHandling(): void {
-        this.state.isMobile = Boolean(window.innerWidth <= 1024);
+        this.state.isMobile = Boolean(window.innerWidth <= KIXStyle.MOBILE_BREAKPOINT);
     }
 
     private async loadEntries(): Promise<void> {

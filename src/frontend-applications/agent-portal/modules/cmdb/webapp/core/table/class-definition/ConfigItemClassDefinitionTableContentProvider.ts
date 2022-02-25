@@ -7,15 +7,17 @@
  * --
  */
 
-import { TableContentProvider } from '../../../../../base-components/webapp/core/table/TableContentProvider';
+import { TableContentProvider } from '../../../../../table/webapp/core/TableContentProvider';
 import { ConfigItemClassDefinition } from '../../../../model/ConfigItemClassDefinition';
-import { Table, RowObject, TableValue } from '../../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
 import { ConfigItemClass } from '../../../../model/ConfigItemClass';
 import { ConfigItemClassDefinitionProperty } from '../../../../model/ConfigItemClassDefinitionProperty';
+import { RowObject } from '../../../../../table/model/RowObject';
+import { Table } from '../../../../../table/model/Table';
+import { TableValue } from '../../../../../table/model/TableValue';
 
 export class ConfigItemClassDefinitionTableContentProvider extends TableContentProvider<ConfigItemClassDefinition> {
 

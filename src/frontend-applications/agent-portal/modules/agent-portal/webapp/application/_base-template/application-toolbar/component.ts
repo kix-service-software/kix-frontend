@@ -11,6 +11,7 @@ import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { WindowListener } from '../../../../../base-components/webapp/core/WindowListener';
+import { KIXStyle } from '../../../../../base-components/model/KIXStyle';
 
 class Component {
 
@@ -36,7 +37,7 @@ class Component {
     }
 
     private resizeHandling(): void {
-        this.state.isMobile = Boolean(window.innerWidth <= 1024);
+        this.state.isMobile = Boolean(window.innerWidth <= KIXStyle.MOBILE_BREAKPOINT);
     }
 
     public showPersonalSettings(): void {

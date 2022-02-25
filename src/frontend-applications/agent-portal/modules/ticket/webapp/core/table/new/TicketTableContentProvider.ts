@@ -7,12 +7,12 @@
  * --
  */
 
-import { TableContentProvider } from '../../../../../base-components/webapp/core/table/TableContentProvider';
+import { TableContentProvider } from '../../../../../table/webapp/core/TableContentProvider';
 import { Ticket } from '../../../../model/Ticket';
-import { Table } from '../../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { KIXObject } from '../../../../../../model/kix/KIXObject';
+import { Table } from '../../../../../table/model/Table';
 
 export class TicketTableContentProvider extends TableContentProvider<Ticket> {
 
@@ -24,6 +24,23 @@ export class TicketTableContentProvider extends TableContentProvider<Ticket> {
         objects?: KIXObject[]
     ) {
         super(KIXObjectType.TICKET, table, objectIds, loadingOptions, contextId, objects);
+    }
+
+    protected async prepareLoadingOptions(): Promise<KIXObjectLoadingOptions> {
+        const loadingOptions = await super.prepareLoadingOptions();
+
+        const ignoreDFDisplayValueTypes: [string, string] = [
+            'NoDynamicFieldDisplayValues',
+            'CheckList,ITSMConfigItemReference,TicketReference'
+        ];
+
+        if (loadingOptions?.query) {
+            loadingOptions.query.push(ignoreDFDisplayValueTypes);
+        } else {
+            loadingOptions.query = [ignoreDFDisplayValueTypes];
+        }
+
+        return loadingOptions;
     }
 
 }

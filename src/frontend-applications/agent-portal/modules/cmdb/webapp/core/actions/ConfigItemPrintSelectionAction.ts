@@ -10,7 +10,7 @@
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { Table } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../table/model/Table';
 import ConfigItemPrintAction from './ConfigItemPrintAction';
 
 
@@ -43,13 +43,13 @@ export default class ConfigItemPrintSelectionAction extends ConfigItemPrintActio
             const assetId = context.getObjectId();
             const printFrame: any = document.createElement('iframe');
 
-            printFrame.src = `/cmdb/configitems/${ assetId }/print` +
+            printFrame.src = `/cmdb/configitems/${assetId}/print` +
                 (versionIds?.length > 0 ? '?versionIds=' + versionIds.join(',') : '');
 
             document.body.appendChild(printFrame);
 
             EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, {loading: true, hint: 'Translatable#Prepare selection for print'}
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Prepare selection for print' }
             );
 
             printFrame.onload = (): void => {
@@ -58,7 +58,7 @@ export default class ConfigItemPrintSelectionAction extends ConfigItemPrintActio
                     window.frames[window.frames.length - 1].print();
                     document.body.removeChild(printFrame);
                     EventService.getInstance().publish(
-                        ApplicationEvent.APP_LOADING, {loading: false}
+                        ApplicationEvent.APP_LOADING, { loading: false }
                     );
                 }, 5000);
             };

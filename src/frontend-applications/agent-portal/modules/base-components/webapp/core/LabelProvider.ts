@@ -160,25 +160,16 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
         let displayValue: string;
 
         const dfName = KIXObjectService.getDynamicFieldName(property);
-        if (dfName && object.KIXObjectType && object.ObjectId) {
-            const objects = await KIXObjectService.loadObjects(
-                object.KIXObjectType, [object.ObjectId],
-                new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS])
-            );
-
-            if (objects && objects.length) {
-                const kixObject = objects[0];
-                let fieldValue: DynamicFieldValue;
-                if (Array.isArray(kixObject.DynamicFields) && kixObject.DynamicFields.length) {
-                    fieldValue = kixObject.DynamicFields.find((dfv) => dfv.Name === dfName);
-                    if (fieldValue) {
-                        const preparedValue = await this.getDFDisplayValues(fieldValue);
-                        if (preparedValue && preparedValue[1]) {
-                            displayValue = preparedValue[1];
-                        } else {
-                            displayValue = fieldValue.DisplayValue.toString();
-                        }
-                    }
+        if (dfName) {
+            const fieldValue = object.DynamicFields?.find((dfv) => dfv.Name === dfName);
+            if (fieldValue) {
+                const preparedValue = await this.getDFDisplayValues(fieldValue);
+                if (preparedValue && preparedValue[1]) {
+                    displayValue = preparedValue[1];
+                } else if (fieldValue.DisplayValue) {
+                    displayValue = fieldValue.DisplayValue.toString();
+                } else {
+                    displayValue = fieldValue.Value.toString();
                 }
             }
         } else {
@@ -286,7 +277,9 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
         return true;
     }
 
-    public async getDFDisplayValues(fieldValue: DynamicFieldValue): Promise<[string[], string, string[]]> {
+    public async getDFDisplayValues(
+        fieldValue: DynamicFieldValue, short?: boolean
+    ): Promise<[string[], string, string[]]> {
         for (const elp of this.extendedLabelProvider) {
             const result = await elp.getDFDisplayValues(fieldValue);
             if (result) {
@@ -315,7 +308,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                         values = await LabelProvider.getDFSelectionFieldValues(dynamicField, fieldValue);
                         break;
                     case DynamicFieldTypes.CI_REFERENCE:
-                        values = await LabelProvider.getDFCIReferenceFieldValues(dynamicField, fieldValue);
+                        values = await LabelProvider.getDFCIReferenceFieldValues(dynamicField, fieldValue, short);
                         break;
                     case DynamicFieldTypes.CHECK_LIST:
                         values = LabelProvider.getDFChecklistFieldShortValues(dynamicField, fieldValue);
@@ -404,7 +397,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
     }
 
     public static async getDFCIReferenceFieldValues(
-        field: DynamicField, fieldValue: DynamicFieldValue
+        field: DynamicField, fieldValue: DynamicFieldValue, short: boolean = false
     ): Promise<string[]> {
         let values = fieldValue.PreparedValue;
 
@@ -422,7 +415,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
             ).catch(() => [] as ConfigItem[]);
 
             const valuePromises = [];
-            configItems.forEach((ci) => valuePromises.push(LabelService.getInstance().getObjectText(ci)));
+            configItems.forEach((ci) => valuePromises.push(LabelService.getInstance().getObjectText(ci, !short)));
             values = await Promise.all<string>(valuePromises);
         }
         return values || [];

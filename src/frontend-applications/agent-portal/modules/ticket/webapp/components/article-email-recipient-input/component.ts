@@ -95,6 +95,10 @@ class Component extends FormInputComponent<string[], ComponentState> {
         const formInstance = await context?.getFormManager()?.getFormInstance();
         const value = this.state.field ? formInstance.getFormFieldValue<number>(this.state.field?.instanceId) : null;
         if (value && value.value) {
+            // handle multiple values separated by comma
+            if (value.value.toString().indexOf(',') >= 0)
+                value.value = value.value.toString().split(',') as any;
+
             let contactValues: any[] = Array.isArray(value.value) ? [...value.value] : [value.value];
             contactValues = contactValues.map((v) => v.replace(/.+ <(.+)>/, '$1'));
 

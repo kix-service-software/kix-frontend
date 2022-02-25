@@ -15,8 +15,8 @@ import { Queue } from '../../../model/Queue';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import { TableEvent } from '../../../../base-components/webapp/core/table';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
+import { TableEvent } from '../../../../table/model/TableEvent';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

@@ -70,17 +70,21 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </span>
     </div>
     <if(component.isLaneWidget() && !state.minimized)>
-        <ul.lane-content-actions key=("content-actions" + Math.random())>
-            <for|action| of=input.contentActions>
-                <li key=action.id>
-                    <action action=action displayText=false/>
-                </li>
-            </for>
-        </ul>
+        <if(Array.isArray(input.contentActions))>
+            <ul.lane-content-actions key=("content-actions" + Math.random())>
+                <if(Array.isArray(input.contentActions))>
+                    <for|action| of=input.contentActions>
+                        <li key=action.id>
+                            <action action=action displayText=false/>
+                        </li>
+                    </for>
+                </if>
+            </ul>
+        </if>
     </if>
     <if(!state.minimized)>
         <div.widget-content>
-            <if(Array.isArray(input.contentActions))>
+            <if(Array.isArray(input.contentActions) && input.contentActions.length)>
                 <!-- TODO: ContentAction analog der "header" Actions umsetzen (über WidgetService) -->
                 <if(component.isContentWidget())>
                     <div.content-actions key=("content-actions" + Math.random())>

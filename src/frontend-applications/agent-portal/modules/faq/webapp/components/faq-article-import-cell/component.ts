@@ -8,7 +8,7 @@
  */
 
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { Cell } from '../../../../base-components/webapp/core/table';
+import { Cell } from '../../../../table/model/Cell';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { FAQArticle } from '../../../model/FAQArticle';
 import { FAQArticleHandler } from '../../core/FAQArticleHandler';

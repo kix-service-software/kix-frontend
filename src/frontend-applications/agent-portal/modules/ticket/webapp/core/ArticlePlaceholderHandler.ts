@@ -18,6 +18,8 @@ import { AbstractPlaceholderHandler } from '../../../base-components/webapp/core
 import { IPlaceholderHandler } from '../../../base-components/webapp/core/IPlaceholderHandler';
 import { SortUtil } from '../../../../model/SortUtil';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { SystemAddress } from '../../../system-address/model/SystemAddress';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 
 export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
 
@@ -92,6 +94,25 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                             article, attribute, undefined, false
                         );
                         break;
+                    case 'REPLYRECIPIENT':
+                        result = await LabelService.getInstance().getDisplayText(
+                            article, ArticleProperty.FROM, undefined, false
+                        );
+
+                        // use To value if From is a system address
+                        const fromValue = article.From.replace(/.+ <(.+)>/, '$1');
+                        const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
+                            KIXObjectType.SYSTEM_ADDRESS, null
+                        ).catch(() => [] as SystemAddress[]);
+                        if (
+                            Array.isArray(systemAddresses) && systemAddresses.length
+                            && systemAddresses.some((sa) => sa.Name === fromValue)
+                        ) {
+                            result = await LabelService.getInstance().getDisplayText(
+                                article, ArticleProperty.TO, undefined, false
+                            );
+                        }
+                        break;
                     case KIXObjectProperty.CREATE_TIME:
                     case KIXObjectProperty.CHANGE_TIME:
                         result = await DateTimeUtil.getLocalDateTimeString(article[attribute], language);
@@ -112,6 +133,6 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
     private isKnownProperty(property: string): boolean {
         let knownProperties = Object.keys(ArticleProperty).map((p) => ArticleProperty[p]);
         knownProperties = [...knownProperties, ...Object.keys(KIXObjectProperty).map((p) => KIXObjectProperty[p])];
-        return property === 'ID' || knownProperties.some((p) => p === property);
+        return property === 'ID' || knownProperties.some((p) => p === property) || property === 'REPLYRECIPIENT';
     }
 }

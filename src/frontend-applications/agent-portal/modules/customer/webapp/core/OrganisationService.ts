@@ -21,6 +21,8 @@ import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptio
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { OrganisationProperty } from '../../model/OrganisationProperty';
+import { SysConfigService } from '../../../sysconfig/webapp/core';
+import { AgentPortalConfiguation } from '../../../../model/configuration/AgentPortalConfiguation';
 
 export class OrganisationService extends KIXObjectService<Organisation> {
 
@@ -52,24 +54,22 @@ export class OrganisationService extends KIXObjectService<Organisation> {
         loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
         cache: boolean = true, forceIds?: boolean
     ): Promise<O[]> {
-        let objects: O[];
-        let superLoad = false;
-        if (objectType === KIXObjectType.ORGANISATION) {
-            objects = await super.loadObjects<O>(
-                KIXObjectType.ORGANISATION,
-                forceIds || (Array.isArray(objectIds) && objectIds.length) ? objectIds : null,
-                loadingOptions
-            );
+        let objects: Organisation[];
+
+        const preload = await this.shouldPreload(KIXObjectType.ORGANISATION);
+
+        if (loadingOptions || !preload) {
+            objects = await super.loadObjects<Organisation>(KIXObjectType.ORGANISATION, objectIds, loadingOptions);
         } else {
-            superLoad = true;
-            objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
+            objects = await super.loadObjects<Organisation>(
+                KIXObjectType.ORGANISATION, null, loadingOptions, objectLoadingOptions
+            );
+            if (objectIds) {
+                objects = objects.filter((c) => objectIds.map((id) => Number(id)).some((oid) => c.ObjectId === oid));
+            }
         }
 
-        if (objectIds && !superLoad) {
-            objects = objects.filter((c) => objectIds.map((id) => Number(id)).some((oid) => c.ObjectId === oid));
-        }
-
-        return objects;
+        return objects as any[];
     }
 
     public determineDependendObjects(

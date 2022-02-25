@@ -15,9 +15,9 @@ import { ConfigurationType } from './ConfigurationType';
 import { KIXObjectType } from '../kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../KIXObjectLoadingOptions';
 import { RoutingConfiguration } from './RoutingConfiguration';
-import { ToggleOptions } from '../../modules/base-components/webapp/core/table';
 import { AdditionalTableObjectsHandlerConfiguration } from '../../modules/base-components/webapp/core/AdditionalTableObjectsHandlerConfiguration';
 import { KIXObjectSpecificLoadingOptions } from '../KIXObjectSpecificLoadingOptions';
+import { ToggleOptions } from '../../modules/table/model/ToggleOptions';
 
 export class TableConfiguration implements IConfiguration {
 

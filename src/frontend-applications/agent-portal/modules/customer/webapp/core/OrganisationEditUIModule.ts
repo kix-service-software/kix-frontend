@@ -8,7 +8,6 @@
  */
 
 import { IUIModule } from '../../../../model/IUIModule';
-import { OrganisationImportManager, NewOrganisationDialogContext, EditOrganisationDialogContext, OrganisationImportDialogContext, OrganisationCreateAction, OrganisationEditAction } from '.';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextType } from '../../../../model/ContextType';
@@ -21,7 +20,13 @@ import { SetupService } from '../../../setup-assistant/webapp/core/SetupService'
 import { SetupStep } from '../../../setup-assistant/webapp/core/SetupStep';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
-import { OrganisationDetailsContext } from './context';
+import { OrganisationImportRunner } from './import/OrganisationImportRunner';
+import { OrganisationImportManager } from './import/OrganisationImportManager';
+import { OrganisationCreateAction, OrganisationEditAction } from './actions';
+import { EditOrganisationDialogContext } from './context/EditOrganisationDialogContext';
+import { NewOrganisationDialogContext } from './context/NewOrganisationDialogContext';
+import { OrganisationDetailsContext } from './context/OrganisationDetailsContext';
+import { OrganisationImportDialogContext } from './context/OrganisationImportDialogContext';
 
 export class UIModule implements IUIModule {
 
@@ -35,6 +40,7 @@ export class UIModule implements IUIModule {
 
     public async register(): Promise<void> {
         ImportService.getInstance().registerImportManager(new OrganisationImportManager());
+        ImportService.getInstance().registerImportRunner(new OrganisationImportRunner());
 
         this.registerContexts();
         this.registerActions();

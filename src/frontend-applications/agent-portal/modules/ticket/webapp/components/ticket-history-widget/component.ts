@@ -12,8 +12,8 @@ import { ContextService } from '../../../../../modules/base-components/webapp/co
 import { TicketDetailsContext } from '../../core';
 import { Ticket } from '../../../model/Ticket';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { TableFactoryService } from '../../../../base-components/webapp/core/table';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
+import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 
 class Component {
 

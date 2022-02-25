@@ -35,6 +35,7 @@ import { ContextEvents } from '../modules/base-components/webapp/core/ContextEve
 import { ContextPreference } from './ContextPreference';
 import { AgentService } from '../modules/user/webapp/core/AgentService';
 import { IEventSubscriber } from '../modules/base-components/webapp/core/IEventSubscriber';
+import { ContextExtension } from './ContextExtension';
 
 export abstract class Context {
 
@@ -58,6 +59,8 @@ export abstract class Context {
 
     private eventSubsriber: IEventSubscriber;
 
+    public contextExtensions: ContextExtension[] = [];
+
     public constructor(
         public descriptor: ContextDescriptor,
         protected objectId: string | number = null,
@@ -72,6 +75,11 @@ export abstract class Context {
 
         if (!instanceId) {
             this.instanceId = IdService.generateDateBasedId();
+        }
+
+        const extensions = ContextService?.getInstance()?.getContextExtensions(this.descriptor?.contextId);
+        if (Array.isArray(extensions)) {
+            this.contextExtensions = extensions.map((e) => new e());
         }
 
         if (!formManager) {
@@ -93,21 +101,24 @@ export abstract class Context {
             this.eventSubsriber = {
                 eventSubscriberId: this.instanceId,
                 eventPublished: async (data: any, eventId: string): Promise<void> => {
-                    if (eventId === ApplicationEvent.OBJECT_UPDATED && data?.objectType) {
+                    const contextUpdateRequired = eventId === ContextEvents.CONTEXT_UPDATE_REQUIRED &&
+                        data?.instanceId === this.instanceId;
+
+                    const objectUpdate = eventId === ApplicationEvent.OBJECT_UPDATED && data?.objectType;
+
+                    if (objectUpdate) {
                         if (this.objectLists.has(data.objectType)) {
                             this.deleteObjectList(data.objectType);
                         }
-                        if (
-                            this.descriptor.contextMode === ContextMode.DETAILS
-                            && Array.isArray(this.descriptor.kixObjectTypes)
-                            && this.descriptor.kixObjectTypes.some((t) => t === data.objectType)
-                        ) {
+
+                        const objectReloadRequired = this.descriptor.contextMode === ContextMode.DETAILS
+                            && this.descriptor.kixObjectTypes?.some((t) => t === data.objectType);
+
+                        if (objectReloadRequired) {
                             await this.getObject(data.objectType, true);
                         }
-                    } else if (
-                        eventId === ContextEvents.CONTEXT_UPDATE_REQUIRED &&
-                        data?.instanceId === this.instanceId
-                    ) {
+
+                    } else if (contextUpdateRequired && this.descriptor.contextMode !== ContextMode.SEARCH) {
                         this.deleteObjectLists();
                     }
                 }
@@ -126,7 +137,7 @@ export abstract class Context {
     }
 
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
-        for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {
+        for (const extension of this.contextExtensions) {
             await extension.initContext(this, urlParams);
         }
 
@@ -172,7 +183,7 @@ export abstract class Context {
     }
 
     public async addExtendedUrlParams(url: string): Promise<string> {
-        for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {
+        for (const extension of this.contextExtensions) {
             url = await extension.addExtendedUrlParams(url);
         }
         return url;
@@ -180,7 +191,7 @@ export abstract class Context {
 
     public async getAdditionalActions(object?: KIXObject): Promise<AbstractAction[]> {
         let actions: AbstractAction[] = [];
-        for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {
+        for (const extension of this.contextExtensions) {
             const extendedActions = await extension.getAdditionalActions(this, object);
             if (Array.isArray(extendedActions)) {
                 actions = [...actions, ...extendedActions];
@@ -404,6 +415,8 @@ export abstract class Context {
                 if (allowed) {
                     allowedWidgets.push(widget);
                 }
+            } else {
+                allowedWidgets.push(widget);
             }
         }
         return allowedWidgets;
@@ -436,7 +449,9 @@ export abstract class Context {
         userWidgets.forEach((w) => {
             if (typeof w === 'string') {
                 const widget = contextWidgets.find((cw) => cw.instanceId === w);
-                widgets.push(widget);
+                if (widget) {
+                    widgets.push(widget);
+                }
             } else {
                 widgets.push(w);
             }
@@ -646,7 +661,7 @@ export abstract class Context {
     }
 
     public async addStorableAdditionalInformation(contextPreference: ContextPreference): Promise<void> {
-        for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {
+        for (const extension of this.contextExtensions) {
             await extension.addStorableAdditionalInformation(this, contextPreference);
         }
 
@@ -660,7 +675,7 @@ export abstract class Context {
     }
 
     public async loadAdditionalInformation(contextPreference: ContextPreference): Promise<void> {
-        for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {
+        for (const extension of this.contextExtensions) {
             await extension.loadAdditionalInformation(this, contextPreference);
         }
         this.setAdditionalInformation(

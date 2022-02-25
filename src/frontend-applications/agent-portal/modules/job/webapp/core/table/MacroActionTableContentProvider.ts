@@ -7,8 +7,7 @@
  * --
  */
 
-import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
-import { Table, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
+import { TableContentProvider } from '../../../../table/webapp/core/TableContentProvider';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
@@ -18,6 +17,9 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { MacroActionType } from '../../../model/MacroActionType';
 import { MacroActionTypeOption } from '../../../model/MacroActionTypeOption';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { RowObject } from '../../../../table/model/RowObject';
+import { Table } from '../../../../table/model/Table';
+import { TableValue } from '../../../../table/model/TableValue';
 
 export class MacroActionTableContentProvider extends TableContentProvider<any> {
 

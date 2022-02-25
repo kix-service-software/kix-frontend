@@ -12,7 +12,7 @@ import { ContextService } from '../../../../../modules/base-components/webapp/co
 import { ConfigItemDetailsContext } from '../../core';
 import { ConfigItem } from '../../../model/ConfigItem';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { TableFactoryService } from '../../../../base-components/webapp/core/table';
+import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 
 

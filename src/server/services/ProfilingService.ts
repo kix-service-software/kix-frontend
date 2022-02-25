@@ -12,7 +12,6 @@ import { ConfigurationService } from './ConfigurationService';
 import { LoggingService } from './LoggingService';
 import { IServerConfiguration } from '../model/IServerConfiguration';
 import { ServerUtil } from '../ServerUtil';
-import { IdService } from '../../frontend-applications/agent-portal/model/IdService';
 import { RequestCounter } from './RequestCounter';
 
 export class ProfilingService {
@@ -146,7 +145,6 @@ class ProfileTask {
 interface ProfilingData {
 
     requestId?: string;
-
     data: Array<unknown>;
 
 }

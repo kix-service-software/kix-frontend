@@ -155,7 +155,8 @@ export class ObjectReferenceUtil {
         const objectId = await UIUtil.getEditObjectId(objectOption?.value);
         if (structureOption && structureOption.value) {
             nodes = await KIXObjectService.prepareObjectTree(
-                objects, showInvalidNodes, isInvalidClickable, objectId ? [objectId] : null, translatable
+                objectOption?.value, objects, showInvalidNodes, isInvalidClickable,
+                objectId ? [objectId] : null, translatable
             );
         } else {
             for (const o of objects) {

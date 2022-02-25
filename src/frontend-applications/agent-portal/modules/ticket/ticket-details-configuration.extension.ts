@@ -27,7 +27,7 @@ import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { ObjectIcon } from '../icon/model/ObjectIcon';
 import { SearchOperator } from '../search/model/SearchOperator';
 import { TableConfiguration } from '../../model/configuration/TableConfiguration';
-import { ToggleOptions } from '../base-components/webapp/core/table';
+import { ToggleOptions } from '../table/model/ToggleOptions';
 import { FilterCriteria } from '../../model/FilterCriteria';
 import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
 import { TableHeaderHeight } from '../../model/configuration/TableHeaderHeight';

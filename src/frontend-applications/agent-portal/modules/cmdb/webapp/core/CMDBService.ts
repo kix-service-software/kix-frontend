@@ -36,6 +36,7 @@ import { VersionProperty } from '../../model/VersionProperty';
 import { GeneralCatalogItemProperty } from '../../../general-catalog/model/GeneralCatalogItemProperty';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
+import { SearchProperty } from '../../../search/model/SearchProperty';
 
 export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> {
 
@@ -418,5 +419,15 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
             ciClassNames, searchValue, loadingOptions
         );
         return configItems;
+    }
+
+    public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
+        const filter = [
+            new FilterCriteria(
+                SearchProperty.FULLTEXT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+            )
+        ];
+
+        return filter;
     }
 }

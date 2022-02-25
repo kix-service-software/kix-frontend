@@ -77,7 +77,10 @@ export class CacheService {
 
     public async updateCaches(events: ObjectUpdatedEventData[]): Promise<void> {
         for (const event of events) {
-            if (!event.Namespace) {
+            if (event.Event === 'CLEAR_CACHE') {
+                LoggingService.getInstance().debug('Backend Notification: ' + JSON.stringify(event));
+                await this.clearCache();
+            } else if (!event.Namespace) {
                 LoggingService.getInstance().warning('Ignore Backend Notification (missing Namespace in event)', event);
             } else if (!event.Namespace.startsWith(KIXObjectType.TRANSLATION_PATTERN)) {
                 LoggingService.getInstance().debug('Backend Notification: ' + JSON.stringify(event));
@@ -267,7 +270,7 @@ export class CacheService {
         return types;
     }
 
-    private async clearCache(): Promise<void> {
+    public async clearCache(): Promise<void> {
         const taskId = ProfilingService.getInstance().start('CacheService', 'Clear Cache');
         await this.getCacheBackendInstance()?.clear(this.ignorePrefixes);
         ProfilingService.getInstance().stop(taskId);

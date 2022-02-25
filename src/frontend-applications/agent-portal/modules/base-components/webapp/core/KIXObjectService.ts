@@ -486,14 +486,11 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     }
 
     public static async prepareObjectTree(
-        objects: KIXObject[], showInvalid?: boolean, invalidClickable?: boolean, filterIds?: Array<string | number>,
-        translatable?: boolean
+        objectType: KIXObjectType | string, objects: KIXObject[], showInvalid?: boolean,
+        invalidClickable?: boolean, filterIds?: Array<string | number>, translatable?: boolean
     ): Promise<TreeNode[]> {
-        let nodes: TreeNode[] = [];
-        if (objects && !!objects.length) {
-            const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objects[0].KIXObjectType);
-            nodes = await service.prepareObjectTree(objects, showInvalid, invalidClickable, filterIds, translatable);
-        }
+        const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
+        const nodes = await service.prepareObjectTree(objects, showInvalid, invalidClickable, filterIds, translatable);
         return nodes;
     }
 
@@ -742,6 +739,16 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             }
         }
         return properties;
+    }
+
+    protected async shouldPreload(objectType: KIXObjectType | string): Promise<boolean> {
+        let preload = false;
+        const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.SYS_CONFIG_OPTION);
+        if (service) {
+            const agentPortalConfig = await (service as any).getAgentPortalConfiguration();
+            preload = agentPortalConfig?.preloadObjects?.some((o) => o === objectType);
+        }
+        return preload;
     }
 
 }

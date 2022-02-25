@@ -10,7 +10,6 @@
 
 import { AbstractAction } from '../../../../../../modules/base-components/webapp/core/AbstractAction';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
-import { EditContactDialogContext } from '../../../../../customer/webapp/core';
 import { UIComponentPermission } from '../../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
@@ -22,6 +21,7 @@ import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadin
 import { Contact } from '../../../../../customer/model/Contact';
 import { ContactProperty } from '../../../../../customer/model/ContactProperty';
 import { SearchOperator } from '../../../../../search/model/SearchOperator';
+import { EditContactDialogContext } from '../../../../../customer/webapp/core/context/EditContactDialogContext';
 
 export class UserEditAction extends AbstractAction {
 
@@ -43,12 +43,10 @@ export class UserEditAction extends AbstractAction {
             if (userId) {
                 const contactId = await this.getContactId(userId);
                 const additionalInformation: Array<[string, any]> = [
-                    ['IS_AGENT_DIALOG', true],
-                    ['USER_ID', userId],
                     ['CONTACT_ID', contactId]
                 ];
                 await ContextService.getInstance().setActiveContext(
-                    EditContactDialogContext.CONTEXT_ID, null, null, additionalInformation
+                    EditContactDialogContext.CONTEXT_ID, contactId, null, additionalInformation
                 );
             }
         }

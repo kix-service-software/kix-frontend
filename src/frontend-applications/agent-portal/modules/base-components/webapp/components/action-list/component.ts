@@ -30,6 +30,7 @@ export class Component implements IActionListener {
 
     private contextListernerId: string;
     private contextListener: ComponentContextListener = null;
+    private prepareTimeout;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -44,24 +45,27 @@ export class Component implements IActionListener {
 
     private async initActionList(input: any): Promise<void> {
         this.state.displayText = typeof input.displayText !== 'undefined' ? input.displayText : true;
-        this.state.prepared = true;
+        this.state.prepared = false;
 
         if (Array.isArray(input.list) && input.list.length) {
             await this.setActionList(input.list);
         }
+        this.state.prepared = true;
 
-        setTimeout(() => this.prepareActionLists(), 100);
+        this.prepareActionLists();
     }
 
     private async setActionList(actionList: IAction[]): Promise<void> {
         const actions = [];
         if (Array.isArray(actionList)) {
-            for (const action of actionList) {
-                const canShow = await action.canShow();
-                if (canShow) {
-                    actions.push(action);
+            const actionPromises = [];
+            actionList.forEach((a) => actionPromises.push(a.canShow()));
+            const actionsResults = await Promise.all(actionPromises);
+            actionsResults.forEach((r, i) => {
+                if (r) {
+                    actions.push(actionList[i]);
                 }
-            }
+            });
         }
 
         this.state.actionList = actions;
@@ -103,18 +107,23 @@ export class Component implements IActionListener {
     }
 
     public prepareActionLists(): void {
-        const actionListElement = (this as any).getEl('action-list');
-        const listWidth = actionListElement ? actionListElement.scrollWidth : 0;
-        if (this.state.actionList) {
-            const actionWidth = (this.state.displayText ? 9.5 : 1.75) * this.getBrowserFontsize();
-            const gapWith = 1.5 * this.getBrowserFontsize();
-            let maxActions = this.state.actionList.length;
-            while ((maxActions * actionWidth) + ((maxActions - 1) * gapWith) > listWidth && maxActions > 0) {
-                maxActions--;
-            }
-            this.state.listDefault = this.state.actionList.slice(0, maxActions);
-            this.state.listExpansion = this.state.actionList.slice(maxActions);
+        if (this.prepareTimeout) {
+            window.clearTimeout(this.prepareTimeout);
         }
+        this.prepareTimeout = setTimeout(() => {
+            const actionListElement = (this as any).getEl('action-list');
+            const listWidth = actionListElement ? actionListElement.scrollWidth : 0;
+            if (this.state.actionList) {
+                const actionWidth = (this.state.displayText ? 9.5 : 1.75) * this.getBrowserFontsize();
+                const gapWith = 1.5 * this.getBrowserFontsize();
+                let maxActions = this.state.actionList.length;
+                while ((maxActions * actionWidth) + ((maxActions - 1) * gapWith) > listWidth && maxActions > 0) {
+                    maxActions--;
+                }
+                this.state.listDefault = this.state.actionList.slice(0, maxActions);
+                this.state.listExpansion = this.state.actionList.slice(maxActions);
+            }
+        }, 250);
     }
 
     private getBrowserFontsize(): number {

@@ -7,9 +7,9 @@
  * --
  */
 
-import { TableContentProvider } from '../../../../../../base-components/webapp/core/table/TableContentProvider';
+import { TableContentProvider } from '../../../../../../table/webapp/core/TableContentProvider';
 import { TicketType } from '../../../../../model/TicketType';
-import { Table } from '../../../../../../base-components/webapp/core/table';
+import { Table } from '../../../../../../table/model/Table';
 import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 

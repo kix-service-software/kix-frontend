@@ -9,13 +9,8 @@
 
 import { IUIModule } from '../../../../model/IUIModule';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
-import { SwitchColumnOrderAction } from './table/actions';
-import { TableCSSHandlerRegistry } from './table';
-import { InvalidObjectCSSHandler } from './table/InvalidObjectCSSHandler';
 import { FormValidationService } from './FormValidationService';
 import { ObjectReferenceCountValidator } from './ObjectReferenceCountValidator';
-import { KIXModulesService } from './KIXModulesService';
-import { ConfigurationType } from '../../../../model/configuration/ConfigurationType';
 import { ResetUserContextWidgetListAction } from './ResetUserContextWidgetListAction';
 
 export class UIModule implements IUIModule {
@@ -29,20 +24,8 @@ export class UIModule implements IUIModule {
     public priority: number = 800;
 
     public async register(): Promise<void> {
-        ActionFactory.getInstance().registerAction('switch-column-order-action', SwitchColumnOrderAction);
         ActionFactory.getInstance().registerAction('reset-user-context-widget-list', ResetUserContextWidgetListAction);
-
-        TableCSSHandlerRegistry.getInstance().registerCommonCSSHandler(new InvalidObjectCSSHandler());
-
         FormValidationService.getInstance().registerValidator(new ObjectReferenceCountValidator());
-
-        KIXModulesService.getInstance().registerConfigurationComponent(
-            ConfigurationType.TableWidget, 'table-widget-configuration'
-        );
-
-        KIXModulesService.getInstance().registerConfigurationComponent(
-            ConfigurationType.Table, 'table-configuration'
-        );
     }
 
 }

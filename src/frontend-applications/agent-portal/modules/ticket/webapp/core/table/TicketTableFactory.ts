@@ -7,10 +7,9 @@
  * --
  */
 
-import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
+import { TableFactory } from '../../../../table/webapp/core/factory/TableFactory';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
-import { Table, ToggleOptions } from '../../../../base-components/webapp/core/table';
 import { TicketTableContentProvider } from '.';
 import { TicketProperty } from '../../../model/TicketProperty';
 import { DataType } from '../../../../../model/DataType';
@@ -21,6 +20,8 @@ import { DefaultColumnConfiguration } from '../../../../../model/configuration/D
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 import { SearchCache } from '../../../../search/model/SearchCache';
+import { Table } from '../../../../table/model/Table';
+import { ToggleOptions } from '../../../../table/model/ToggleOptions';
 
 export class TicketTableFactory extends TableFactory {
 

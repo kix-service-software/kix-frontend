@@ -8,5 +8,9 @@
  */
 
 export class ComponentState {
-    public title = '';
+
+    public constructor(
+        public title = '',
+        public canShow: boolean = false
+    ) { }
 }

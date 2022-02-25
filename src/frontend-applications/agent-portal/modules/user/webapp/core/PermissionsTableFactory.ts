@@ -7,10 +7,8 @@
  * --
  */
 
-import { TableFactory } from '../../../base-components/webapp/core/table/TableFactory';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../model/configuration/TableConfiguration';
-import { Table } from '../../../base-components/webapp/core/table';
 import { PermissionsTableContentProvider } from './PermissionsTableContentProvider';
 import { TableHeaderHeight } from '../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../model/configuration/TableRowHeight';
@@ -18,6 +16,8 @@ import { IColumnConfiguration } from '../../../../model/configuration/IColumnCon
 import { DefaultColumnConfiguration } from '../../../../model/configuration/DefaultColumnConfiguration';
 import { DataType } from '../../../../model/DataType';
 import { PermissionProperty } from '../../model/PermissionProperty';
+import { TableFactory } from '../../../table/webapp/core/factory/TableFactory';
+import { Table } from '../../../table/model/Table';
 
 export class PermissionsTableFactory extends TableFactory {
 

@@ -16,7 +16,7 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
-import { Table } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../table/model/Table';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { SearchContext, SearchResultCategory, SearchService } from '../../core';
@@ -86,7 +86,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const title = await this.getTitle(category.objectType);
 
             this.resultWidgets.push(
-                [IdService.generateDateBasedId(), category.objectType, widgetConfiguration, title, icon]
+                [`search-table-${category.objectType}`, category.objectType, widgetConfiguration, title, icon]
             );
 
             if (Array.isArray(category.children) && category.children.length) {

@@ -8,8 +8,8 @@
  */
 
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
-import { Table, TableExportUtil } from '../../../../base-components/webapp/core/table';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { Table } from '../../../../table/model/Table';
+import { TableExportUtil } from '../../../../table/webapp/core/TableExportUtil';
 
 export class CSVExportAction extends AbstractAction<Table> {
 
@@ -31,15 +31,7 @@ export class CSVExportAction extends AbstractAction<Table> {
 
     public async run(): Promise<void> {
         if (this.canRun()) {
-            // TODO: "Schalter" für "übersetzen/nich übersetzen" ermöglichen (Nachfrage-Overlay?)
-            // im Moment nur für extra Organisation notwendig
-            if (
-                this.data.getObjectType() === KIXObjectType.ORGANISATION
-            ) {
-                TableExportUtil.export(this.data, undefined, false);
-            } else {
-                TableExportUtil.export(this.data);
-            }
+            TableExportUtil.export(this.data);
         }
     }
 

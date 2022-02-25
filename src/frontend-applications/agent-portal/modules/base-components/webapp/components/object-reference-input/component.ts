@@ -27,6 +27,10 @@ import { ObjectReferenceUtil } from './ObjectReferenceUtil';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../../model/KIXObjectSpecificLoadingOptions';
+import { FormValuesChangedEventData } from '../../core/FormValuesChangedEventData';
+import { Context } from '../../../../../model/Context';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
 
 class Component extends FormInputComponent<string | number | string[] | number[], ComponentState> {
 
@@ -43,6 +47,11 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     private objectIds: Array<string | number>;
     private autocomplete: boolean = false;
     private translatable: boolean;
+
+    // TODO: move to FormInstance/ValueHandler as universal solution for unique handling (possible values)
+    private uniqueNodes: boolean;
+
+    private context: Context;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -64,6 +73,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     }
 
     public async onMount(): Promise<void> {
+        this.context = ContextService.getInstance().getActiveContext();
         this.setOptions();
         const treeHandler = new TreeHandler([], null, null, this.state.multiselect);
         TreeService.getInstance().registerTreeHandler(this.state.treeId, treeHandler);
@@ -76,10 +86,25 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             eventPublished: (data: any, eventId: string): void => {
                 if (data.formField && data.formField.instanceId === this.state.field?.instanceId) {
                     this.load(false);
+                } else if (
+                    this.uniqueNodes && eventId === FormEvent.VALUES_CHANGED &&
+                    data && (data as FormValuesChangedEventData).changedValues?.length
+                ) {
+                    // update nodes (e.q. uniques) if different field instance of same property is changed
+                    const samePropertyFieldChanged = (data as FormValuesChangedEventData).changedValues.some(
+                        (cV) => cV[0].property === this.state.field?.property
+                            && cV[0].instanceId !== this.state.field?.instanceId
+                    );
+                    if (samePropertyFieldChanged) {
+                        this.load(false);
+                    }
                 }
             }
         };
         EventService.getInstance().subscribe(FormEvent.RELOAD_INPUT_VALUES, this.formSubscriber);
+        if (this.uniqueNodes) {
+            EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
+        }
 
         this.state.prepared = true;
     }
@@ -87,6 +112,10 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     public async onDestroy(): Promise<void> {
         super.onDestroy();
         TreeService.getInstance().removeTreeHandler(this.state.treeId);
+        EventService.getInstance().unsubscribe(FormEvent.RELOAD_INPUT_VALUES, this.formSubscriber);
+        if (this.uniqueNodes) {
+            EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
+        }
     }
 
     public async focusLost(event: any): Promise<void> {
@@ -116,38 +145,44 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             nodes = [...preloadedNodes, ...nodes];
         }
 
-        this.createTreeHandler(nodes);
+        if (this.uniqueNodes) {
+            nodes = await this.handleUnique(nodes);
+        }
+
+        this.fillTreeHandler(nodes);
     }
 
     private async loadNodes(): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
 
         this.objects = await KIXObjectService.loadObjects(this.objectType, this.objectIds, this.loadingOptions);
-        const structureOption = this.state.field?.options.find(
+        const structureOption = this.state.field?.options?.find(
             (o) => o.option === ObjectReferenceOptions.USE_OBJECT_SERVICE
         );
 
         const objectId = await UIUtil.getEditObjectId(this.objectType);
 
-        const translatableOption = this.state.field?.options.find(
+        const translatableOption = this.state.field?.options?.find(
             (o) => o.option === ObjectReferenceOptions.TRANSLATABLE
         );
         const translatable = !translatableOption || Boolean(translatableOption.value);
 
         if (structureOption && structureOption.value) {
             nodes = await KIXObjectService.prepareObjectTree(
-                this.objects, this.showInvalidNodes, this.isInvalidClickable, objectId ? [objectId] : null, translatable
+                this.objectType, this.objects, this.showInvalidNodes,
+                this.isInvalidClickable, objectId ? [objectId] : null, translatable
             );
         } else {
+            const promises = [];
             for (const o of this.objects) {
-                const node = await ObjectReferenceUtil.createTreeNode(
+                promises.push(ObjectReferenceUtil.createTreeNode(
                     o, this.showInvalidNodes, this.isInvalidClickable, this.useTextAsId,
                     translatable, objectId ? [objectId] : undefined
-                );
-                if (node) {
-                    nodes.push(node);
-                }
+                ));
             }
+
+            nodes = await Promise.all<TreeNode>(promises);
+            nodes.filter((n) => n instanceof TreeNode);
         }
 
         SortUtil.sortObjects(nodes, 'label', DataType.STRING);
@@ -157,7 +192,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     private async loadAdditionalNodes(): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
-        const additionalNodes = this.state.field?.options.find(
+        const additionalNodes = this.state.field?.options?.find(
             (o) => o.option === ObjectReferenceOptions.ADDITIONAL_NODES
         );
         if (additionalNodes) {
@@ -175,7 +210,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     private async preloadNodes(): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
-        const preloadPatternOption = this.state.field?.options.find(
+        const preloadPatternOption = this.state.field?.options?.find(
             (o) => o.option === ObjectReferenceOptions.AUTOCOMPLETE_PRELOAD_PATTERN
         );
 
@@ -186,10 +221,33 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         return nodes;
     }
 
-    private createTreeHandler(nodes: TreeNode[]): void {
+    // TODO: move to FormInstance/ValueHandler as universal solution for unique handling (possible values)
+    private async handleUnique(nodes: TreeNode[]): Promise<TreeNode[]> {
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
+        if (formInstance) {
+            const fieldList = await formInstance.getFields(this.state.field);
+            let usedValues = [];
+            fieldList.forEach((f) => {
+                if (f.property === this.state.field?.property && f.instanceId !== this.state.field?.instanceId) {
+                    const fieldValue = formInstance.getFormFieldValue(f.instanceId);
+                    if (fieldValue && fieldValue.value !== null) {
+                        if (Array.isArray(fieldValue.value)) {
+                            usedValues = [...usedValues, ...fieldValue.value];
+                        } else {
+                            usedValues.push(fieldValue.value);
+                        }
+                    }
+                }
+            });
+            nodes = nodes.filter((n) => !usedValues.some((v) => v === n.id));
+        }
+        return nodes;
+    }
+
+    private fillTreeHandler(nodes: TreeNode[]): void {
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
         if (treeHandler) {
-            const keepSelectionOption = this.state.field?.options.find(
+            const keepSelectionOption = this.state.field?.options?.find(
                 (o) => o.option === ObjectReferenceOptions.KEEP_SELECTION
             );
 
@@ -200,8 +258,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     }
 
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
         const formValue = formInstance?.getFormFieldValue<number>(this.state.field?.instanceId);
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
 
@@ -214,11 +271,12 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             let selectedNodes = [];
 
             // ignore placeholder and "useTextAsId" values (handle them like freetext)
-            const idsToLoad = !this.useTextAsId ? objectIds.filter((id) => typeof id !== 'string' || !id.match(/<KIX_.+>/)) : [];
-            if (idsToLoad) {
+            // and collect ids only if objectType is given (relevant if "additional node" is selected/current value)
+            const idsToLoad = !this.useTextAsId && this.objectType ? objectIds.filter((id) => typeof id !== 'string' || !id.match(/<KIX_.+>/)) : [];
+            if (idsToLoad.length) {
                 if (this.autocomplete) {
                     const objects = await KIXObjectService.loadObjects(
-                        this.objectType, idsToLoad, this.loadingOptions, this.specificLoadingOptions, null, null, true
+                        this.objectType, idsToLoad, this.loadingOptions, this.specificLoadingOptions, true, null, true
                     ).catch(() => []);
 
                     for (const object of objects) {
@@ -236,7 +294,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                         this.objectType, idsToLoad, null, null, null, null, true
                     );
                     if (objects && !!objects.length) {
-                        const translatableOption = this.state.field?.options.find(
+                        const translatableOption = this.state.field?.options?.find(
                             (o) => o.option === ObjectReferenceOptions.TRANSLATABLE
                         );
                         const translatable = !translatableOption || Boolean(translatableOption.value);
@@ -265,6 +323,8 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         } else if (treeHandler) {
             treeHandler.selectNone();
         }
+
+        this.setPossibleValue();
     }
 
     public nodesChanged(nodes: TreeNode[]): void {
@@ -281,40 +341,41 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     }
 
     private setOptions(): void {
-        const objectOption = this.state.field?.options.find((o) => o.option === ObjectReferenceOptions.OBJECT);
+        const objectOption = this.state.field?.options?.find((o) => o.option === ObjectReferenceOptions.OBJECT);
         this.objectType = objectOption?.value;
 
-        const configLoadingOptions = this.state.field?.options.find(
+        const configLoadingOptions = this.state.field?.options?.find(
             (o) => o.option === ObjectReferenceOptions.LOADINGOPTIONS
         );
         this.loadingOptions = configLoadingOptions?.value;
 
-        const specificLoadingOptions = this.state.field?.options.find(
+        const specificLoadingOptions = this.state.field?.options?.find(
             (o) => o.option === ObjectReferenceOptions.OBJECT_SPECIFIC_LOADINGOPTIONS
         );
         this.specificLoadingOptions = specificLoadingOptions?.value;
 
-        const objectIdOption = this.state.field?.options.find((o) => o.option === ObjectReferenceOptions.OBJECT_IDS);
+        const objectIdOption = this.state.field?.options?.find((o) => o.option === ObjectReferenceOptions.OBJECT_IDS);
         this.objectIds = objectIdOption && Array.isArray(objectIdOption.value) && objectIdOption.value.length
             ? objectIdOption.value
             : null;
 
-        const showValidOption = this.state.field?.options
-            ? this.state.field?.options.find((o) => o.option === FormFieldOptions.SHOW_INVALID)
-            : null;
+        if (this.state.field?.countMax && this.state.field?.countMax > 1) {
+            const uniqueOption = this.state.field?.options?.find((o) => o.option === ObjectReferenceOptions.UNIQUE);
+            this.uniqueNodes = uniqueOption ? uniqueOption.value : true;
+        }
+
+        const showValidOption = this.state.field?.options?.find((o) => o.option === FormFieldOptions.SHOW_INVALID);
         this.showInvalidNodes = showValidOption ? showValidOption.value : true;
 
-        const validClickableOption = this.state.field?.options
-            ? this.state.field?.options.find((o) => o.option === FormFieldOptions.INVALID_CLICKABLE)
-            : null;
-        this.isInvalidClickable = validClickableOption ? validClickableOption.value : false;
+        const validClickableOption = this.state.field?.options?.find(
+            (o) => o.option === FormFieldOptions.INVALID_CLICKABLE
+        );
+        this.isInvalidClickable = validClickableOption?.value || false;
 
-        const textAsIdOption = this.state.field?.options
-            ? this.state.field?.options.find((o) => o.option === ObjectReferenceOptions.TEXT_AS_ID)
-            : null;
+        const textAsIdOption = this.state.field?.options?.find((o) => o.option === ObjectReferenceOptions.TEXT_AS_ID);
         this.useTextAsId = textAsIdOption ? Boolean(textAsIdOption.value) : false;
 
-        const autocompleteOption = this.state.field?.options.find(
+        const autocompleteOption = this.state.field?.options?.find(
             (o) => o.option === ObjectReferenceOptions.AUTOCOMPLETE
         );
         if (typeof autocompleteOption !== 'undefined' && autocompleteOption !== null) {
@@ -326,31 +387,51 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             }
         }
 
-        const isMultiselectOption = this.state.field?.options.find(
+        const isMultiselectOption = this.state.field?.options?.find(
             (o) => o.option === ObjectReferenceOptions.MULTISELECT
         );
         this.state.multiselect = typeof isMultiselectOption === 'undefined' || isMultiselectOption === null
             ? false
             : isMultiselectOption.value;
 
-        const countMaxOption = this.state.field?.options.find(
+        const countMaxOption = this.state.field?.options?.find(
             (o) => o.option === ObjectReferenceOptions.COUNT_MAX
         );
         if (countMaxOption?.value === 1) {
             this.state.multiselect = false;
         }
 
-        const freeTextOption = this.state.field?.options.find(
+        const freeTextOption = this.state.field?.options?.find(
             (o) => o.option === ObjectReferenceOptions.FREETEXT
         );
         this.state.freeText = typeof freeTextOption !== 'undefined' && freeTextOption !== null
             ? freeTextOption.value
             : false;
 
-        const translatableOption = this.state.field?.options.find(
+        const translatableOption = this.state.field?.options?.find(
             (o) => o.option === ObjectReferenceOptions.TRANSLATABLE
         );
         this.translatable = !translatableOption || Boolean(translatableOption.value);
+    }
+
+    public async setPossibleValue(): Promise<void> {
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
+
+        const dfName = this.state.field?.options?.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME)?.value;
+        const property = this.state.field?.property === KIXObjectProperty.DYNAMIC_FIELDS
+            ? `${KIXObjectProperty.DYNAMIC_FIELDS}.${dfName}`
+            : this.state.field?.property;
+
+        const possibleValue = formInstance.getPossibleValue(property);
+        if (possibleValue && possibleValue.value) {
+            const values = Array.isArray(possibleValue.value) ? possibleValue.value : [possibleValue.value];
+            this.objectIds = values;
+            this.state.possibleValuesOnly = true;
+            const nodes = await this.loadNodes();
+            this.fillTreeHandler(nodes);
+        } else {
+            this.state.possibleValuesOnly = false;
+        }
     }
 }
 

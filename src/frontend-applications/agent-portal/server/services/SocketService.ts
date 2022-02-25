@@ -73,14 +73,4 @@ export class SocketService {
         NotificationNamespace.getInstance().broadcast(event, data);
     }
 
-    public getPendingRequestCount(): number {
-        let totalCount: number = 0;
-        if (this.namespaces && this.namespaces.length) {
-            this.namespaces.forEach((n) => {
-                totalCount += n.getRequestCounter();
-            });
-        }
-        return totalCount;
-    }
-
 }

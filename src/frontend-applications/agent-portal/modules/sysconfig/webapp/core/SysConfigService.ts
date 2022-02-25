@@ -12,6 +12,7 @@ import { SysConfigOption } from '../../model/SysConfigOption';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { SysConfigKey } from '../../model/SysConfigKey';
 import { SysConfigOptionDefinition } from '../../model/SysConfigOptionDefinition';
+import { AgentPortalConfiguation } from '../../../../model/configuration/AgentPortalConfiguation';
 
 export class SysConfigService extends KIXObjectService<SysConfigOption> {
 
@@ -49,6 +50,35 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
         const stateTypes: string[] = viewableStateTypes && viewableStateTypes.length ? viewableStateTypes[0].Value : [];
 
         return stateTypes && !!stateTypes.length ? stateTypes : ['new', 'open', 'pending reminder', 'pending auto'];
+    }
+
+    public async getSysconfigOptionValue<T = string>(key: string): Promise<T> {
+        const config: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [key]
+        ).catch((error): SysConfigOption[] => []);
+
+        let value;
+
+        if (Array.isArray(config) && config.length) {
+            value = config[0].Value;
+        }
+
+        return value;
+    }
+
+    public async getAgentPortalConfiguration(): Promise<AgentPortalConfiguation> {
+        let config: AgentPortalConfiguation;
+
+        const value = await this.getSysconfigOptionValue(AgentPortalConfiguation.CONFIGURATION_ID);
+        if (value) {
+            try {
+                config = JSON.parse(value);
+            } catch (error) {
+                console.error('Could not parse Agent Portal Configuration');
+            }
+        }
+
+        return config;
     }
 
 }

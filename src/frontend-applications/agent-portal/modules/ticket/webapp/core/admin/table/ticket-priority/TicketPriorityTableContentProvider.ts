@@ -7,11 +7,11 @@
  * --
  */
 
-import { TableContentProvider } from '../../../../../../base-components/webapp/core/table/TableContentProvider';
+import { TableContentProvider } from '../../../../../../table/webapp/core/TableContentProvider';
 import { TicketPriority } from '../../../../../model/TicketPriority';
-import { Table } from '../../../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
+import { Table } from '../../../../../../table/model/Table';
 
 export class TicketPriorityTableContentProvider extends TableContentProvider<TicketPriority> {
 

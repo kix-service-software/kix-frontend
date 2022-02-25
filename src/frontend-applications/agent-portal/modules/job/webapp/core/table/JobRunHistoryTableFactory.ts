@@ -7,16 +7,17 @@
  * --
  */
 
-import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
+import { TableFactory } from '../../../../table/webapp/core/factory/TableFactory';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
-import { Table, ToggleOptions } from '../../../../base-components/webapp/core/table';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
 import { DataType } from '../../../../../model/DataType';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { JobRunHistoryContentProvider } from './JobRunHistoryContentProvider';
 import { JobRunProperty } from '../../../model/JobRunProperty';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { Table } from '../../../../table/model/Table';
+import { ToggleOptions } from '../../../../table/model/ToggleOptions';
 
 export class JobRunHistoryTableFactory extends TableFactory {
 

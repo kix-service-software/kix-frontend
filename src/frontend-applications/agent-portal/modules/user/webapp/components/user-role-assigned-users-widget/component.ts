@@ -12,7 +12,6 @@ import { AbstractMarkoComponent } from '../../../../../modules/base-components/w
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { Role } from '../../../model/Role';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { TableFactoryService } from '../../../../base-components/webapp/core/table';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
 import { UserProperty } from '../../../model/UserProperty';
 import { DataType } from '../../../../../model/DataType';
@@ -24,6 +23,7 @@ import { ActionFactory } from '../../../../../modules/base-components/webapp/cor
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ContactProperty } from '../../../../customer/model/ContactProperty';
 import { RoleDetailsContext } from '../../core/admin/context/RoleDetailsContext';
+import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

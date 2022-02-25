@@ -16,10 +16,24 @@ import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOp
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { TicketProperty } from '../../../../ticket/model/TicketProperty';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
+import { Organisation } from '../../../model/Organisation';
 
 export class NewContactDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'new-contact-dialog-context';
+
+    public async postInit(): Promise<void> {
+        await super.postInit();
+
+        const formInstance = await this.getFormManager().getFormInstance();
+
+        const organisation = this.getAdditionalInformation(KIXObjectType.ORGANISATION) as Organisation;
+        if (formInstance && organisation) {
+            formInstance.provideFormFieldValuesForProperties(
+                [[ContactProperty.PRIMARY_ORGANISATION_ID, organisation.ID]], undefined, undefined, false
+            );
+        }
+    }
 
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.CONTACT, reload: boolean = false, changedProperties?: string[]

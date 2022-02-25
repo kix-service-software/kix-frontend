@@ -7,7 +7,7 @@
  * --
  */
 
-import { TableExportUtil } from '../../../../base-components/webapp/core/table';
+import { TableExportUtil } from '../../../../table/webapp/core/TableExportUtil';
 import { FAQCategoryProperty } from '../../../model/FAQCategoryProperty';
 import { CSVExportAction } from '../../../../import/webapp/core/actions';
 

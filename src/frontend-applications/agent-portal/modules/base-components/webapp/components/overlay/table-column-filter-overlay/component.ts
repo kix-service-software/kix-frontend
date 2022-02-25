@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { Column } from '../../../core/table';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
 import { TreeHandler, TreeService, TreeNode } from '../../../core/tree';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
@@ -18,6 +17,7 @@ import { DataType } from '../../../../../../model/DataType';
 import { SortOrder } from '../../../../../../model/SortOrder';
 import { KIXObject } from '../../../../../../model/kix/KIXObject';
 import { SortUtil } from '../../../../../../model/SortUtil';
+import { Column } from '../../../../../table/model/Column';
 
 
 class Component extends AbstractMarkoComponent<ComponentState> {

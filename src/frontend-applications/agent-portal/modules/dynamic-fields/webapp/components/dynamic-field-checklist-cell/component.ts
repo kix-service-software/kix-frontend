@@ -9,11 +9,9 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { Cell } from '../../../../base-components/webapp/core/table';
+import { Cell } from '../../../../table/model/Cell';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
-import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
-import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -33,16 +31,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const property = cell.getColumnConfiguration().property;
         const dfName = KIXObjectService.getDynamicFieldName(property);
         if (dfName) {
-            const objects = await KIXObjectService.loadObjects(
-                rowObject.KIXObjectType, [rowObject.ObjectId],
-                new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS])
-            );
-
-            if (Array.isArray(objects) && objects.length) {
-                const dfValue = objects[0].DynamicFields.find((df) => df.Name === dfName);
-                if (dfValue && dfValue.Value && Array.isArray(dfValue.Value) && dfValue.Value.length) {
-                    this.state.checklist = JSON.parse(dfValue.Value[0]);
-                }
+            const dfValue = rowObject.DynamicFields?.find((df) => df.Name === dfName);
+            if (dfValue && dfValue.Value && Array.isArray(dfValue.Value) && dfValue.Value.length) {
+                this.state.checklist = JSON.parse(dfValue.Value[0]);
             }
         }
     }

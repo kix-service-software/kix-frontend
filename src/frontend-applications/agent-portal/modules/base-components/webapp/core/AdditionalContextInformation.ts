@@ -19,6 +19,8 @@ export enum AdditionalContextInformation {
 
     SOURCE_CONTEXT = 'SourceContext',
 
-    DIALOG_SUBMIT_BUTTON_TEXT = 'DIALOG_SUBMIT_BUTTON_TEXT'
+    DIALOG_SUBMIT_BUTTON_TEXT = 'DIALOG_SUBMIT_BUTTON_TEXT',
+
+    DUPLICATE = 'DUPLICATE'
 
 }

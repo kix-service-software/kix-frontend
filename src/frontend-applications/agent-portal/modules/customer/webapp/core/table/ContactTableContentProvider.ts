@@ -7,9 +7,8 @@
  * --
  */
 
-import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
+import { TableContentProvider } from '../../../../table/webapp/core/TableContentProvider';
 import { Contact } from '../../../model/Contact';
-import { Table, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContactProperty } from '../../../model/ContactProperty';
@@ -17,6 +16,9 @@ import { TicketStats } from '../../../model/TicketStats';
 import { UserProperty } from '../../../../user/model/UserProperty';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { User } from '../../../../user/model/User';
+import { RowObject } from '../../../../table/model/RowObject';
+import { Table } from '../../../../table/model/Table';
+import { TableValue } from '../../../../table/model/TableValue';
 
 export class ContactTableContentProvider extends TableContentProvider<Contact> {
 

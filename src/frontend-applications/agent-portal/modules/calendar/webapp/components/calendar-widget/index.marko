@@ -10,9 +10,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <widget instanceId=input.instanceId title="Ticket Calendar">
         <@content>
             <div.calendar-header>
-                <div.calendar-date>
-                    <div.month>${state.currentDate}</div>
-                </div>
+                <div.calendar-date><div.month>${state.currentDate}</div></div>
                 <div.calendar-controls>
                     <span.kix-icon-circle-prior on-click("prev")/>
                     <div.calendar-button.today on-click("today")>
@@ -23,14 +21,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <if(state.view === "month")>
                             <span.kix-icon-calendar-week/>
                         </if>
-                        <else>
-                            <span.kix-icon-calendar-month/>
-                        </else>
+                        <else><span.kix-icon-calendar-month/></else>
                         <translation-string pattern=state.viewLabel/>
                     </div>
                 </div>
             </div>
-            <div id="calendar"/>
+            <div#calendar no-update/>
             <div.calendar-legend>
                 <if(state.loading)>
                     <span.kix-icon-arrow-refresh/>
@@ -40,10 +36,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <for|calendar| of=state.calendars>
                         <li
                             class={
-                                inactive: !calendar.visible
+                                inactive: !calendar.visible,
                             }
-                            style=("border-color:" + calendar.bgColor)
-                            on-click("toggleCalendar", calendar)>
+                            style="border-color:" + calendar.bgColor
+                            on-click("toggleCalendar", calendar)
+                        >
                             ${calendar.name}
                         </li>
                     </for>

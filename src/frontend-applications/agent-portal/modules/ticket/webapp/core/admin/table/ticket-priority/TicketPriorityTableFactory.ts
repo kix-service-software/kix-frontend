@@ -7,10 +7,9 @@
  * --
  */
 
-import { TableFactory } from '../../../../../../base-components/webapp/core/table/TableFactory';
+import { TableFactory } from '../../../../../../table/webapp/core/factory/TableFactory';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../../../model/configuration/TableConfiguration';
-import { Table } from '../../../../../../base-components/webapp/core/table';
 import { TicketPriorityTableContentProvider } from './TicketPriorityTableContentProvider';
 import { TicketPriorityProperty } from '../../../../../model/TicketPriorityProperty';
 import { KIXObjectProperty } from '../../../../../../../model/kix/KIXObjectProperty';
@@ -20,10 +19,9 @@ import { RoutingConfiguration } from '../../../../../../../model/configuration/R
 import { TicketPriorityDetailsContext } from '../..';
 import { ContextMode } from '../../../../../../../model/ContextMode';
 import { IColumnConfiguration } from '../../../../../../../model/configuration/IColumnConfiguration';
-import {
-    DefaultColumnConfiguration
-} from '../../../../../../../model/configuration/DefaultColumnConfiguration';
+import { DefaultColumnConfiguration } from '../../../../../../../model/configuration/DefaultColumnConfiguration';
 import { DataType } from '../../../../../../../model/DataType';
+import { Table } from '../../../../../../table/model/Table';
 
 export class TicketPriorityTableFactory extends TableFactory {
 

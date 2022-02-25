@@ -23,7 +23,6 @@ import { ServiceRegistry } from '../../../../modules/base-components/webapp/core
 import { FormValidationService } from '../../../../modules/base-components/webapp/core/FormValidationService';
 import { SearchService } from '../../../search/webapp/core';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
-import { TableFactoryService, TableCSSHandlerRegistry } from '../../../base-components/webapp/core/table';
 import { ArticleTableFactory } from './table/ArticleTableFactory';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
@@ -54,6 +53,8 @@ import { TicketStateSet } from './form/extended-form-manager/TicketStateSet';
 import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
 import { ArticlePlaceholderHandler } from './ArticlePlaceholderHandler';
+import { TableCSSHandlerRegistry } from '../../../table/webapp/core/css-handler/TableCSSHandlerRegistry';
+import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 
 export class UIModule implements IUIModule {
 

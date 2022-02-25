@@ -19,8 +19,10 @@ import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
-import { NewContactDialogContext } from './context';
 import { ContactProperty } from '../../model/ContactProperty';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
+import { NewContactDialogContext } from './context/NewContactDialogContext';
 
 export class ContactService extends KIXObjectService<Contact> {
 
@@ -45,6 +47,30 @@ export class ContactService extends KIXObjectService<Contact> {
 
     public getLinkObjectName(): string {
         return 'Person';
+    }
+
+    public async loadObjects<O extends KIXObject>(
+        objectType: KIXObjectType | string, objectIds: Array<string | number>,
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
+        cache: boolean = true, forceIds?: boolean
+    ): Promise<O[]> {
+
+        let objects: Contact[];
+
+        const preload = await this.shouldPreload(KIXObjectType.ORGANISATION);
+
+        if (loadingOptions || !preload) {
+            objects = await super.loadObjects<Contact>(KIXObjectType.CONTACT, objectIds, loadingOptions);
+        } else {
+            objects = await super.loadObjects<Contact>(
+                KIXObjectType.CONTACT, null, loadingOptions, objectLoadingOptions
+            );
+            if (objectIds) {
+                objects = objects.filter((c) => objectIds.map((id) => Number(id)).some((oid) => c.ObjectId === oid));
+            }
+        }
+
+        return objects as any[];
     }
 
     public determineDependendObjects(contacts: Contact[], targetObjectType: KIXObjectType): string[] | number[] {

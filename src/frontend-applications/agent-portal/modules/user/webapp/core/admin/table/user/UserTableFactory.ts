@@ -8,10 +8,8 @@
  */
 
 import { UserTableContentProvider } from './UserTableContentProvider';
-import { TableFactory } from '../../../../../../base-components/webapp/core/table/TableFactory';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../../../model/configuration/TableConfiguration';
-import { Table } from '../../../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoadingOptions';
 import { UserProperty } from '../../../../../model/UserProperty';
 import { DefaultColumnConfiguration } from '../../../../../../../model/configuration/DefaultColumnConfiguration';
@@ -24,6 +22,8 @@ import { ContextMode } from '../../../../../../../model/ContextMode';
 import { ContactProperty } from '../../../../../../customer/model/ContactProperty';
 import { IColumnConfiguration } from '../../../../../../../model/configuration/IColumnConfiguration';
 import { UserDetailsContext } from '../../context/user';
+import { Table } from '../../../../../../table/model/Table';
+import { TableFactory } from '../../../../../../table/webapp/core/factory/TableFactory';
 
 export class UserTableFactory extends TableFactory {
 

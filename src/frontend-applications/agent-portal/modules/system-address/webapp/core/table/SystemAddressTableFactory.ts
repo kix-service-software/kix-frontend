@@ -8,10 +8,10 @@
  */
 
 import { SystemAddressDetailsContext } from '../context';
-import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
+import { TableFactory } from '../../../../table/webapp/core/factory/TableFactory';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
-import { Table } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../table/model/Table';
 import { SystemAddressTableContentProvider } from './SystemAddressTableContentProvider';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
 import { SystemAddressProperty } from '../../../model/SystemAddressProperty';

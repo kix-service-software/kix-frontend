@@ -8,7 +8,6 @@
  */
 
 import { AbstractAction } from '../../../../../../../modules/base-components/webapp/core/AbstractAction';
-import { Table } from '../../../../../../base-components/webapp/core/table';
 import { TranslationService } from '../../../TranslationService';
 import { ComponentContent } from '../../../../../../../modules/base-components/webapp/core/ComponentContent';
 import { ConfirmOverlayContent } from '../../../../../../../modules/base-components/webapp/core/ConfirmOverlayContent';
@@ -19,6 +18,7 @@ import { ApplicationEvent } from '../../../../../../../modules/base-components/w
 import { KIXObjectService } from '../../../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { ToastContent } from '../../../../../../../modules/base-components/webapp/core/ToastContent';
+import { Table } from '../../../../../../table/model/Table';
 
 export class TranslationTableDeleteAction extends AbstractAction<Table> {
 

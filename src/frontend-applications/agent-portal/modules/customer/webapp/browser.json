@@ -1,17 +1,19 @@
 {
     "dependencies": [
         "require ./components/contact-assigned-organisations-widget",
-        "require ./components/contact-assigned-tickets-widget",
         "require ./components/contact-assigned-config-items-widget",
         "require ./components/contact-list-widget",
         "require ./components/create-new-ticket-cell",
         "require ./components/customer-label",
         "require ./components/organisation-assigned-contacts-widget",
-        "require ./components/organisation-assigned-tickets-widget",
         "require ./components/organisation-assigned-config-items-widget",
         "require ./components/organisation-module",
         "require ./components/contact-input-access",
         "require ./components/setup-my-organisation",
-        "require ./core"
+        "require ./core/ContactEditUIModule",
+        "require ./core/ContactReadUIModule",
+        "require ./core/OrganisationEditUIModule",
+        "require ./core/OrganisationReadUIModule",
+        "require ./core/CustomerUIModule"
     ]
 }

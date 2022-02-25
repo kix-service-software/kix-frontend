@@ -96,20 +96,6 @@ export class AttachmentUtil {
         return sizeString;
     }
 
-    public static getHumanReadableContentSize(size: number): string {
-        let readableSize: string;
-
-        if (size < 1024) {
-            readableSize = size + ' Bytes';
-        } else if (size >= 1024 && size < 1024000) {
-            readableSize = (size / 1024).toFixed(1) + ' KBytes';
-        } else if (size >= 1024000) {
-            readableSize = (size / 1024000).toFixed(1) + ' MBytes';
-        }
-
-        return readableSize;
-    }
-
     public static isAttachmentObject(object: any): boolean {
         return object
             && Object.prototype.hasOwnProperty.call(object, 'AttachmentID')

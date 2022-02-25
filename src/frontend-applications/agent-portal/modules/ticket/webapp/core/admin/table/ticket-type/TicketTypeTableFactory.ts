@@ -7,10 +7,9 @@
  * --
  */
 
-import { TableFactory } from '../../../../../../base-components/webapp/core/table/TableFactory';
+import { TableFactory } from '../../../../../../table/webapp/core/factory/TableFactory';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../../../model/configuration/TableConfiguration';
-import { Table } from '../../../../../../base-components/webapp/core/table';
 import { TicketTypeTableContentProvider } from '.';
 import { TicketTypeProperty } from '../../../../../model/TicketTypeProperty';
 import { KIXObjectProperty } from '../../../../../../../model/kix/KIXObjectProperty';
@@ -19,11 +18,10 @@ import { TableRowHeight } from '../../../../../../../model/configuration/TableRo
 import { RoutingConfiguration } from '../../../../../../../model/configuration/RoutingConfiguration';
 import { ContextMode } from '../../../../../../../model/ContextMode';
 import { IColumnConfiguration } from '../../../../../../../model/configuration/IColumnConfiguration';
-import {
-    DefaultColumnConfiguration
-} from '../../../../../../../model/configuration/DefaultColumnConfiguration';
+import { DefaultColumnConfiguration } from '../../../../../../../model/configuration/DefaultColumnConfiguration';
 import { DataType } from '../../../../../../../model/DataType';
 import { EditTicketTypeDialogContext } from '../../context';
+import { Table } from '../../../../../../table/model/Table';
 
 export class TicketTypeTableFactory extends TableFactory {
 

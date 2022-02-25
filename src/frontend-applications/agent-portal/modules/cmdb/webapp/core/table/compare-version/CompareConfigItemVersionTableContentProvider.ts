@@ -7,9 +7,8 @@
  * --
  */
 
-import { TableContentProvider } from '../../../../../base-components/webapp/core/table/TableContentProvider';
+import { TableContentProvider } from '../../../../../table/webapp/core/TableContentProvider';
 import { Version } from '../../../../model/Version';
-import { Table, RowObject, TableValue, ValueState } from '../../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
@@ -18,6 +17,10 @@ import { TranslationService } from '../../../../../../modules/translation/webapp
 import { SortUtil } from '../../../../../../model/SortUtil';
 import { PreparedData } from '../../../../model/PreparedData';
 import { DateTimeUtil } from '../../../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { RowObject } from '../../../../../table/model/RowObject';
+import { Table } from '../../../../../table/model/Table';
+import { TableValue } from '../../../../../table/model/TableValue';
+import { ValueState } from '../../../../../table/model/ValueState';
 
 export class CompareConfigItemVersionTableContentProvider extends TableContentProvider<Version> {
 

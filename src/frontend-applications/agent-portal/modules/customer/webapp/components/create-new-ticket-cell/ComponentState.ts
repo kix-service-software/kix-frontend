@@ -7,10 +7,13 @@
  * --
  */
 
+import { Contact } from '../../../model/Contact';
+
 export class ComponentState {
 
     public constructor(
-        public show: boolean = false
+        public show: boolean = false,
+        public contact: Contact = null
     ) { }
 
 }

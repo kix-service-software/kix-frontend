@@ -11,7 +11,12 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { Table, TableEventData, TableEvent, TableContentProvider, RowObject, TableValue } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
+import { Table } from '../../src/frontend-applications/agent-portal/modules/table/model/Table';
+import { RowObject } from '../../src/frontend-applications/agent-portal/modules/table/model/RowObject';
+import { TableValue } from '../../src/frontend-applications/agent-portal/modules/table/model/TableValue';
+import { TableEvent } from '../../src/frontend-applications/agent-portal/modules/table/model/TableEvent';
+import { TableEventData } from '../../src/frontend-applications/agent-portal/modules/table/model/TableEventData';
+import { TableContentProvider } from '../../src/frontend-applications/agent-portal/modules/table/webapp/core/TableContentProvider';
 import { DataType } from '../../src/frontend-applications/agent-portal/model/DataType';
 import { SortOrder } from '../../src/frontend-applications/agent-portal/model/SortOrder';
 import { IEventSubscriber } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/IEventSubscriber';

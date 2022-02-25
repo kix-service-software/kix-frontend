@@ -7,10 +7,9 @@
  * --
  */
 
-import { TableFactory } from '../../../../../base-components/webapp/core/table/TableFactory';
+import { TableFactory } from '../../../../../table/webapp/core/factory/TableFactory';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../../model/configuration/TableConfiguration';
-import { Table } from '../../../../../base-components/webapp/core/table';
 import { CompareConfigItemVersionTableContentProvider } from './CompareConfigItemVersionTableContentProvider';
 import { DefaultColumnConfiguration } from '../../../../../../model/configuration/DefaultColumnConfiguration';
 import { DataType } from '../../../../../../model/DataType';
@@ -19,6 +18,7 @@ import { TableRowHeight } from '../../../../../../model/configuration/TableRowHe
 import { IColumnConfiguration } from '../../../../../../model/configuration/IColumnConfiguration';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { Version } from '../../../../model/Version';
+import { Table } from '../../../../../table/model/Table';
 
 export class CompareConfigItemVersionTableFactory extends TableFactory {
 

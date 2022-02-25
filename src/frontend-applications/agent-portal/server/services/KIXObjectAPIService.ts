@@ -183,7 +183,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             }
 
             if (loadingOptions.query) {
-                loadingOptions.query.forEach((q) => query[q[0]] = q[1]);
+                loadingOptions.query.forEach((q) => query[q[0]] = Array.isArray(q[1]) ? JSON.stringify(q[1]) : q[1]);
             }
         }
 
@@ -376,7 +376,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     }
 
     public async buildFilter(
-        criteria: FilterCriteria[], objectProperty: string, query: any, token?: string
+        criteria: FilterCriteria[], objectProperty: string, query: any, token: string
     ): Promise<boolean> {
         criteria = criteria.filter((c) => c?.property);
 
@@ -467,7 +467,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     public prepareObjectFilter(filterCriteria: FilterCriteria[]): any {
         let objectFilter = {};
 
-        const prepareCriteria = [];
+        const prepareCriteria: FilterCriteria[] = [];
         filterCriteria.forEach((c) => {
             if (c?.property) {
                 c.property = c.property.replace(KIXObjectProperty.DYNAMIC_FIELDS + '.', 'DynamicField_');
@@ -581,5 +581,16 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         token: string, object: KIXObject, property: string
     ): Promise<Array<ObjectIcon | string>> {
         return null;
+    }
+
+    public async shouldPreload(token: string, objectType: KIXObjectType | string): Promise<boolean> {
+        let preload = false;
+
+        const service = await KIXObjectServiceRegistry.getServiceInstance(KIXObjectType.SYS_CONFIG_OPTION);
+        if (service) {
+            const agentPortalConfig = await (service as any).getAgentPortalConfiguration(token);
+            preload = agentPortalConfig?.preloadObjects?.some((o) => o === objectType);
+        }
+        return preload;
     }
 }

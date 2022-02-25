@@ -84,22 +84,25 @@ export class RedisCache implements ICache {
         return value;
     }
 
-    public async getAll(cacheKeyPrefix: string): Promise<any[]> {
-        let values;
+    public async getAll(type: string): Promise<any[]> {
+        const values = [];
         try {
-            values = await this.hvalsAsync(cacheKeyPrefix);
+            const cachedVvalues = await this.hvalsAsync(`${this.KIX_CACHE_PREFIX}::${type}`);
+            if (Array.isArray(cachedVvalues)) {
+                for (const v of cachedVvalues) {
+                    try {
+                        values.push(JSON.parse(v));
+                        // tslint:disable-next-line:no-empty
+                    } catch (error) {
+                        // do nothing
+                    }
+                }
+            }
         }
         catch (error) {
             LoggingService.getInstance().error(error);
             this.checkConnection();
             return null;
-        }
-
-        try {
-            values = JSON.parse(values);
-            // tslint:disable-next-line:no-empty
-        } catch (error) {
-            // do nothing
         }
 
         return values;
@@ -126,9 +129,9 @@ export class RedisCache implements ICache {
     }
 
     private checkConnection(): void {
-        if (this.redisClient && !this.redisClient.connected) {
+        if (!this.redisClient || !this.redisClient?.connected) {
             LoggingService.getInstance().info('REDIS quit');
-            this.redisClient.quit();
+            this.redisClient?.quit();
             this.connect();
         }
     }
@@ -143,37 +146,25 @@ export class RedisCache implements ICache {
 
         const redis = require('redis');
 
-        this.redisClient = redis.createClient({
-            port,
-            host,
-            retry_strategy: (options) => {
-                if (options.error) {
-                    LoggingService.getInstance().error(options.error);
-                }
+        try {
+            this.redisClient = redis.createClient({
+                port, host, retry_strategy: (options) => 2000
+            });
 
-                if (options.error && options.error.code === 'ECONNREFUSED') {
-                    LoggingService.getInstance().error('The server refused the connection');
-                    return new Error('REDIS: The server refused the connection');
-                }
-                if (options.total_retry_time > 1000 * 60 * 60) {
-                    LoggingService.getInstance().error('Retry time exhausted');
-                    return new Error('REDIS: Retry time exhausted');
-                }
-                if (options.attempt > 10) {
-                    LoggingService.getInstance().error('REDIS: Attempts > 10');
-                    return undefined;
-                }
+            this.redisClient.on('error', (error) => {
+                LoggingService.getInstance().error(error);
+            });
 
-                return Math.min(options.attempt * 100, 3000);
-            }
-        });
+            this.delAsync = promisify(this.redisClient.del).bind(this.redisClient);
+            this.scanAsync = promisify(this.redisClient.scan).bind(this.redisClient);
+            this.hgetAsync = promisify(this.redisClient.hget).bind(this.redisClient);
+            this.hsetAsync = promisify(this.redisClient.hset).bind(this.redisClient);
+            this.hdelAsync = promisify(this.redisClient.hdel).bind(this.redisClient);
+            this.hvalsAsync = promisify(this.redisClient.hvals).bind(this.redisClient);
+        } catch (error) {
+            LoggingService.getInstance().error(error);
+        }
 
-        this.delAsync = promisify(this.redisClient.del).bind(this.redisClient);
-        this.scanAsync = promisify(this.redisClient.scan).bind(this.redisClient);
-        this.hgetAsync = promisify(this.redisClient.hget).bind(this.redisClient);
-        this.hsetAsync = promisify(this.redisClient.hset).bind(this.redisClient);
-        this.hdelAsync = promisify(this.redisClient.hdel).bind(this.redisClient);
-        this.hvalsAsync = promisify(this.redisClient.hvals).bind(this.redisClient);
     }
 
     private async scan(pattern: string): Promise<string[]> {

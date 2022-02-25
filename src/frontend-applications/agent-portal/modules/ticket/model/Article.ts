@@ -225,9 +225,9 @@ export class Article extends KIXObject {
     public getAttachments(inline?: boolean): Attachment[] {
         let attachments = this.Attachments;
         if (inline && Array.isArray(this.Attachments)) {
-            attachments = this.Attachments.filter((a) => a.Disposition === 'inline');
+            attachments = this.Attachments.filter((a) => a.Disposition === 'inline' && a.ContentID.length > 0);
         } else if (Array.isArray(this.Attachments)) {
-            attachments = this.Attachments.filter((a) => a.Disposition !== 'inline');
+            attachments = this.Attachments.filter((a) => a.Disposition !== 'inline' || a.ContentID.length === 0 && !a.Filename.match(/^file-(1|2)$/));
         }
         return attachments || [];
     }
