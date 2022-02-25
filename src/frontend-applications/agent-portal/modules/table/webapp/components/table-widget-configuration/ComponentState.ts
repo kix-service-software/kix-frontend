@@ -7,9 +7,9 @@
  * --
  */
 
-import { TableWidgetConfiguration } from '../../../../../../model/configuration/TableWidgetConfiguration';
-import { IdService } from '../../../../../../model/IdService';
-import { AbstractComponentState } from '../../../core/AbstractComponentState';
+import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
+import { IdService } from '../../../../../model/IdService';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
 export class ComponentState extends AbstractComponentState {
 

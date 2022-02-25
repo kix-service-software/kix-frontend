@@ -26,4 +26,21 @@ export class TicketTableContentProvider extends TableContentProvider<Ticket> {
         super(KIXObjectType.TICKET, table, objectIds, loadingOptions, contextId, objects);
     }
 
+    protected async prepareLoadingOptions(): Promise<KIXObjectLoadingOptions> {
+        const loadingOptions = await super.prepareLoadingOptions();
+
+        const ignoreDFDisplayValueTypes: [string, string] = [
+            'NoDynamicFieldDisplayValues',
+            'CheckList,ITSMConfigItemReference,TicketReference'
+        ];
+
+        if (loadingOptions?.query) {
+            loadingOptions.query.push(ignoreDFDisplayValueTypes);
+        } else {
+            loadingOptions.query = [ignoreDFDisplayValueTypes];
+        }
+
+        return loadingOptions;
+    }
+
 }

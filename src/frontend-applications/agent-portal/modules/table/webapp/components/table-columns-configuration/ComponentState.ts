@@ -7,9 +7,9 @@
  * --
  */
 
-import { IColumnConfiguration } from '../../../../../../model/configuration/IColumnConfiguration';
-import { IdService } from '../../../../../../model/IdService';
-import { AbstractComponentState } from '../../../core/AbstractComponentState';
+import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
+import { IdService } from '../../../../../model/IdService';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
 export class ComponentState extends AbstractComponentState {
 

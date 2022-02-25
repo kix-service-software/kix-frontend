@@ -15,7 +15,6 @@ import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptio
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
-import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldValue';
 import { SearchService } from '../../../search/webapp/core';
@@ -148,15 +147,13 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         return rowObjects;
     }
 
-    protected async prepareSpecificValues(values: TableValue[], object: any): Promise<void> {
+    protected async prepareSpecificValues(values: TableValue[], object: T): Promise<void> {
         if (Array.isArray(object[KIXObjectProperty.DYNAMIC_FIELDS])) {
             for (const dfv of object[KIXObjectProperty.DYNAMIC_FIELDS] as DynamicFieldValue[]) {
-                const dfValue = await LabelService.getInstance().getDFDisplayValues(object.KIXObjectType, dfv);
-
                 values.push(new TableValue(
                     `${KIXObjectProperty.DYNAMIC_FIELDS}.${dfv.Name}`,
-                    dfValue && dfValue[0] ? dfValue[0] : dfv.Value,
-                    dfValue && dfValue[1] ? dfValue[1] : dfv.DisplayValue.toString()
+                    dfv.Value,
+                    dfv.DisplayValue?.toString()
                 ));
             }
         }

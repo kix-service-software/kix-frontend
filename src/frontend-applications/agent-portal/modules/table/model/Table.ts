@@ -31,7 +31,7 @@ import { DynamicField } from '../../dynamic-fields/model/DynamicField';
 import { DynamicFieldProperty } from '../../dynamic-fields/model/DynamicFieldProperty';
 import { SearchOperator } from '../../search/model/SearchOperator';
 import { SearchProperty } from '../../search/model/SearchProperty';
-import { SearchService } from '../../search/webapp/core';
+import { SearchContext, SearchService } from '../../search/webapp/core';
 import { TicketProperty } from '../../ticket/model/TicketProperty';
 import { AdditionalTableObjectsHandlerConfiguration } from '../webapp/core/AdditionalTableObjectsHandlerConfiguration';
 import { TableEvent } from './TableEvent';
@@ -40,6 +40,9 @@ import { SelectionState } from './SelectionState';
 import { TableValue } from './TableValue';
 import { ValueState } from './ValueState';
 import { TableEventData } from './TableEventData';
+import { ContextService } from '../../base-components/webapp/core/ContextService';
+import { ContextMode } from '../../../model/ContextMode';
+import { SearchCache } from '../../search/model/SearchCache';
 
 export class Table implements Table {
 
@@ -182,15 +185,19 @@ export class Table implements Table {
 
             this.loadTableState();
 
-            if (this.sortColumnId && this.sortOrder) {
-                await this.sort(this.sortColumnId, this.sortOrder);
-            }
+            await this.initDisplayRows();
 
-            if (this.filterValue || this.filterCriteria?.length || this.columns.some((c) => c.isFiltered())) {
-                await this.filter();
-            }
+            setTimeout(async () => {
+                if (this.sortColumnId && this.sortOrder) {
+                    await this.sort(this.sortColumnId, this.sortOrder);
+                }
 
-            this.toggleFirstRow();
+                if (this.filterValue || this.filterCriteria?.length || this.columns.some((c) => c.isFiltered())) {
+                    await this.filter();
+                }
+
+                this.toggleFirstRow();
+            }, 250);
 
             setTimeout(() => {
                 setTimeout(async () => {
@@ -220,12 +227,19 @@ export class Table implements Table {
     }
 
     private async prepareAdditionalSearchColumns(): Promise<void> {
-        if (this.tableConfiguration?.searchId) {
-            const search = await SearchService.getInstance().loadSearchCache(this.tableConfiguration.searchId);
-            const searchDefinition = SearchService.getInstance().getSearchDefinition(search.objectType);
+        let searchCache: SearchCache;
+        const context = ContextService.getInstance().getActiveContext<SearchContext>();
+        if (context?.descriptor.contextMode === ContextMode.SEARCH && context?.getSearchCache()) {
+            searchCache = context.getSearchCache();
+        } else if (this.tableConfiguration?.searchId) {
+            searchCache = await SearchService.getInstance().loadSearchCache(this.tableConfiguration.searchId);
+        }
+
+        if (searchCache) {
+            const searchDefinition = SearchService.getInstance().getSearchDefinition(searchCache.objectType);
 
             const parameter: Array<[string, any]> = [];
-            const criteria = search.criteria.filter((c) => {
+            const criteria = searchCache.criteria.filter((c) => {
                 return c.property !== SearchProperty.FULLTEXT
                     && c.property !== TicketProperty.CLOSE_TIME
                     && c.property !== TicketProperty.LAST_CHANGE_TIME;
@@ -394,8 +408,29 @@ export class Table implements Table {
     }
 
     public getRow(rowId: string): Row {
-        // TODO: neue Zeile liefern, nicht die Referenz
-        return this.rows.find((r) => r.getRowId() === rowId);
+        return this.findRow(this.rows, rowId);
+    }
+
+    private findRow(rows: Row[], rowId: string): Row {
+        let result: Row;
+
+        for (const row of rows) {
+
+            if (row.getRowId() === rowId) {
+                result = row;
+                break;
+            }
+
+            if (row.getChildren()?.length) {
+                const childRow = this.findRow(row.getChildren(), rowId);
+                if (childRow) {
+                    result = childRow;
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 
     public removeRows(rowIds: string[]): Row[] {
@@ -545,6 +580,8 @@ export class Table implements Table {
 
         await this.filterColumns();
 
+        await this.initDisplayRows();
+
         EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
         EventService.getInstance().publish(TableEvent.TABLE_FILTERED, new TableEventData(this.getTableId()));
     }
@@ -578,35 +615,53 @@ export class Table implements Table {
         this.sortColumnId = columnId;
         this.sortOrder = sortOrder;
 
+        const promises = [];
+        this.getRows(true).forEach((r) => promises.push(r.getCell(this.sortColumnId)?.initDisplayValue));
+        await Promise.all(promises);
+
         this.getColumns().forEach((c) => c.setSortOrder(null));
         const column = this.getColumn(columnId);
         if (column) {
             column.setSortOrder(sortOrder);
 
             if (this.filteredRows) {
-                this.filteredRows = await TableSortUtil.sort(
+                this.filteredRows = TableSortUtil.sort(
                     this.filteredRows, columnId, sortOrder, column.getColumnConfiguration().dataType
                 );
-                const sortPromises = [];
                 for (const row of this.filteredRows) {
-                    sortPromises.push(row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType));
+                    row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType);
                 }
-                await Promise.all(sortPromises);
             } else {
-                this.rows = await TableSortUtil.sort(
+                this.rows = TableSortUtil.sort(
                     this.rows, columnId, sortOrder, column.getColumnConfiguration().dataType
                 );
-                const sortPromises = [];
                 for (const row of this.rows) {
-                    sortPromises.push(row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType));
+                    row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType);
                 }
-                await Promise.all(sortPromises);
             }
+
+            await this.initDisplayRows();
+
             EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
             EventService.getInstance().publish(
                 TableEvent.SORTED, new TableEventData(this.getTableId(), null, columnId)
             );
         }
+    }
+
+    public async initDisplayRows(all?: boolean): Promise<void> {
+        const rows = this.getRows();
+        const promises = [];
+        const displayLimit = all
+            ? this.getRows(true).length
+            : (this.getTableConfiguration()?.displayLimit || 15) + 2;
+        for (let i = 0; i < displayLimit; i++) {
+            if (rows[i]) {
+                promises.push(rows[i].initializeDisplayValues());
+            }
+        }
+
+        await Promise.all(promises);
     }
 
     public setRowSelection(rowIds: string[]): void {
@@ -706,7 +761,7 @@ export class Table implements Table {
             }
 
             this.toggleFirstRow();
-
+            this.initDisplayRows();
             EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
             EventService.getInstance().publish(TableEvent.RELOADED, new TableEventData(this.getTableId()));
 
@@ -737,13 +792,10 @@ export class Table implements Table {
             this.getColumns().some((c) => c.isFiltered());
     }
 
-    public async updateRowObject(object: KIXObject): Promise<void> {
+    public updateRowObject(object: KIXObject): void {
         const row = this.getRowByObject(object);
         if (row) {
             row.getRowObject().updateObject(object);
-            for (const c of row.getCells()) {
-                await c.getDisplayValue(true);
-            }
             EventService.getInstance().publish(
                 TableEvent.ROW_VALUE_CHANGED,
                 new TableEventData(this.getTableId(), row.getRowId())

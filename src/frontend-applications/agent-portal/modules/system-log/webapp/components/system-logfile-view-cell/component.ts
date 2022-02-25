@@ -27,6 +27,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const cell: Cell = input.cell;
         if (cell) {
             this.logFile = cell.getRow().getRowObject().getObject();
+            this.state.canShow = this.logFile instanceof LogFile;
         }
     }
 
@@ -37,7 +38,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async showLogViewer(event: any): Promise<void> {
         event.stopPropagation();
         event.preventDefault();
-        ContextService.getInstance().setActiveContext(ViewLogFileDialogContext.CONTEXT_ID, this.logFile.ID);
+        ContextService.getInstance().setActiveContext(
+            ViewLogFileDialogContext.CONTEXT_ID, this.logFile.ID, null, [['TIER', this.logFile.tier]]
+        );
     }
 
 }

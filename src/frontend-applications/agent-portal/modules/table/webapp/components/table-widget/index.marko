@@ -33,7 +33,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 />
             </if>
             <if(input.filterActions)>
-                <action-list list=input.filterActions displayText=false/>
+                <div.filter-action-list>
+                    <action-list list=input.filterActions displayText=false/>
+                </div>
             </if>
         </@headerfilter>
         <@content>

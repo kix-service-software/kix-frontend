@@ -57,6 +57,9 @@ export class TableExportUtil {
                 let displayValue = '';
                 const cell = row.getCell(cId);
                 if (cell && useValueDisplayString) {
+                    if (!cell.getValue().displayValue) {
+                        await cell.initDisplayValue();
+                    }
                     displayValue = cell.getValue().displayValue;
                 } else if (useValueDisplayString) {
                     displayValue = await LabelService.getInstance().getDisplayText(
@@ -80,7 +83,7 @@ export class TableExportUtil {
         if (typeof text === 'undefined' || text === null) {
             text = '';
         }
-        text = text.toString().replace(/\"/g, '\\"');
+        text = text.toString().replace(/\"/g, '""');
         return text;
     }
 

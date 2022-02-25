@@ -97,7 +97,7 @@ class Component {
 
                 setTimeout(() => {
                     this.state.reloadContent = false;
-                }, 100);
+                }, 500);
             }
         });
 

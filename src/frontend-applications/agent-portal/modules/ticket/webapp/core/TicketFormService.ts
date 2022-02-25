@@ -155,6 +155,11 @@ export class TicketFormService extends KIXObjectFormService {
                     } else {
                         const contact = await sourceContext?.getObject<Contact>(KIXObjectType.CONTACT);
                         value = contact ? contact.PrimaryOrganisationID : null;
+
+                        // use email of "unknown" contact
+                        if (!value && contact) {
+                            value = contact.Email;
+                        }
                     }
                 }
                 break;

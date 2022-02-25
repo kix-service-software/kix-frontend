@@ -296,8 +296,8 @@ export class FAQService extends KIXObjectAPIService {
             criteria = [...criteria, ...primarySearch];
         }
 
-        const fulltext = criteria.find((f) => f.property === SearchProperty.FULLTEXT);
-        if (fulltext) {
+        const fulltextFilter = criteria.filter((f) => f.property === SearchProperty.FULLTEXT);
+        for (const fulltext of fulltextFilter) {
             const fulltextSearch = this.getFulltextSearch(fulltext);
             criteria = [...criteria, ...fulltextSearch];
         }

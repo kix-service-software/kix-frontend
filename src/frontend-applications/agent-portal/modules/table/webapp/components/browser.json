@@ -5,6 +5,8 @@
         "require ./kix-table/table-body/table-row/table-cell/default-cell-content",
         "require ./kix-table/table-body/table-row/table-cell/label-list-cell-content",
         "require ./kix-table/table-body/table-row/table-cell/multiline-cell",
+        "require ./table-configuration",
+        "require ./table-widget-configuration",
         "require ./table-widget"
     ]
 }

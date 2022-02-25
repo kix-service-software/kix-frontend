@@ -23,8 +23,8 @@ export class Cell {
         private tableValue: TableValue
     ) { }
 
-    public initDisplayValue(): void {
-        this.tableValue.initDisplayValue(this);
+    public async initDisplayValue(): Promise<void> {
+        await this.tableValue.initDisplayValue(this);
     }
 
     public getRow(): Row {
@@ -44,43 +44,8 @@ export class Cell {
         await this.getDisplayValue(true);
     }
 
-    public async getDisplayValue(changed: boolean = false): Promise<string> {
-        if (!changed && this.getValue().displayValue) {
-            return this.getValue().displayValue;
-        }
-
-        if (this.loadingPromise) {
-            return this.loadingPromise;
-        }
-
-        this.loadingPromise = new Promise<string>(async (resolve, reject) => {
-
-            let value: string;
-            const object = this.getRow().getRowObject().getObject();
-
-            const columnConfiguration = this.getColumnConfiguration();
-            const translatable = columnConfiguration ? columnConfiguration.translatable : true;
-
-            if (object) {
-                value = await LabelService.getInstance().getDisplayText(
-                    object, this.tableValue.property, this.tableValue.objectValue, translatable
-                );
-            } else {
-                const objectType = this.getRow().getTable().getObjectType();
-                value = await LabelService.getInstance().getPropertyValueDisplayText(
-                    objectType,
-                    this.tableValue.property,
-                    this.tableValue.objectValue ? this.tableValue.objectValue.toString() : null,
-                    translatable
-                );
-            }
-            this.getValue().displayValue = value;
-
-            resolve(value);
-            this.loadingPromise = null;
-        });
-
-        return this.loadingPromise;
+    public getDisplayValue(changed: boolean = false): string {
+        return this.getValue().displayValue;
     }
 
     public async filter(filterValue: string, criteria: UIFilterCriterion[]): Promise<boolean> {

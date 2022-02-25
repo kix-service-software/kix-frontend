@@ -12,7 +12,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <div.parameters>
                 <label>
                     <span.field>${component.getString("Log Level")}</span>
-                    <form-list treeId=state.logLevelTreeId loadNodes=state.loadLogLevelNodes multiselect=true placeholder="Translatable#Filter Log Level" readonly=state.run on-nodesChanged("logLevelFilterChanged")/>
+                    <form-list loadNodes=state.loadLogLevelNodes multiselect=true placeholder="Translatable#Filter Log Level" readonly=state.run on-nodesChanged("logLevelFilterChanged")/>
                 </label>
                 <label>
                     <span.field>${component.getString("Tail Lines")}</span>
@@ -24,7 +24,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </label>
                 <label>
                     <span.field>${component.getString("Wrap Lines")}</span>
-                    <form-list treeId=state.wrapLinesTreeId loadNodes=state.loadWrapLinesNodes placeholder="Translatable#Wrap Lines" readonly=state.run on-nodesChanged("wrapLinesChanged")/>
+                    <form-list loadNodes=state.loadWrapLinesNodes placeholder="Translatable#Wrap Lines" readonly=state.run on-nodesChanged("wrapLinesChanged")/>
                 </label>
                 <label>
                     <span.field>${component.getString("Filter")}</span>

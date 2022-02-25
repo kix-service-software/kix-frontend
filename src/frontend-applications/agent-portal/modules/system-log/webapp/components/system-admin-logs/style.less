@@ -10,4 +10,21 @@
 .log-download {
     color: @primary-0;
     cursor: pointer;
+
+    &:hover {
+        color: @secondary-2;
+    }
+}
+
+.log-folder-row {
+    font-weight: bold;
+    background-color: @primary-0;
+    color: @secondary-6;
+    cursor: default;
+}
+
+.table-container>.kix-table>tbody:not(.with-toggle)>tr:not(.spacer-rows):not(.opened):not(:hover):nth-of-type(2n) {
+    &.log-folder-row {
+        background-color: @primary-0;
+    }
 }

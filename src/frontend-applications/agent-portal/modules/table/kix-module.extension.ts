@@ -28,11 +28,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
     public uiComponents: UIComponent[] = [
         new UIComponent('kix-table', '/kix-module-table$0/webapp/components/kix-table', []),
         new UIComponent(
-            'table-configuration',
-            '/kix-module-table$0/webapp/components/ui-configuration/table-configuration',
-            []
-        ),
-        new UIComponent(
             'crud-cell',
             '/kix-module-table$0/webapp/components' +
             '/kix-table/table-body/table-row/table-cell/crud-cell',
@@ -40,28 +35,32 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         ),
         new UIComponent(
             'default-cell-content',
-            '/kix-module-table$0/webapp/components' +
-            '/kix-table/table-body/table-row/table-cell/default-cell-content',
+            '/kix-module-table$0/webapp/components/kix-table/table-body/table-row/table-cell/default-cell-content',
             []
         ),
         new UIComponent(
             'label-list-cell-content',
-            '/kix-module-table$0/webapp/components' +
-            '/kix-table/table-body/table-row/table-cell/label-list-cell-content',
+            '/kix-module-table$0/webapp/components/kix-table/table-body/table-row/table-cell/label-list-cell-content',
             []
         ),
         new UIComponent(
             'multiline-cell',
-            '/kix-module-table$0/webapp/components' +
-            '/kix-table/table-body/table-row/table-cell/multiline-cell',
+            '/kix-module-table$0/webapp/components/kix-table/table-body/table-row/table-cell/multiline-cell',
             []
         ),
-        new UIComponent('table-widget', '/kix-module-table$0/webapp/components/table-widget', []),
+        new UIComponent(
+            'table-widget', '/kix-module-table$0/webapp/components/table-widget', []
+        ),
+        new UIComponent(
+            'table-configuration',
+            '/kix-module-table$0/webapp/components/table-configuration',
+            []
+        ),
         new UIComponent(
             'table-widget-configuration',
-            '/kix-module-table$0/webapp/components/ui-configuration/table-widget-configuration',
+            '/kix-module-table$0/webapp/components/table-widget-configuration',
             []
-        )
+        ),
     ];
 
     public webDependencies: string[] = [

@@ -22,7 +22,7 @@ import { ReportDefinition } from '../../../model/ReportDefinition';
 
 import mimeTypes from 'mime-types';
 import { DateTimeUtil } from '../../../../base-components/webapp/core/DateTimeUtil';
-import { AttachmentUtil } from '../../../../base-components/webapp/core/AttachmentUtil';
+import { Attachment } from '../../../../../model/kix/Attachment';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -34,7 +34,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const results: ReportResult[] = input.cell.getValue().objectValue;
         this.state.cellLabels = SortUtil.sortObjects(
             results.map((r) => new Label(
-                r, r.ID, null, r.Format, null, AttachmentUtil.getHumanReadableContentSize(r.ContentSize), false
+                r, r.ID, null, r.Format, null, Attachment.getHumanReadableContentSize(r.ContentSize), false
             )),
             'text', DataType.STRING
         );

@@ -9,6 +9,7 @@
 
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { LogTier } from './LogTier';
 
 export class LogFile extends KIXObject {
 
@@ -40,6 +41,8 @@ export class LogFile extends KIXObject {
 
     public Content: string;
 
+    public tier: LogTier;
+
     public constructor(logFile?: LogFile) {
         super(logFile);
         if (logFile) {
@@ -56,6 +59,7 @@ export class LogFile extends KIXObject {
             this.ModifyTime = logFile.ModifyTime;
             this.ModifyTimeUnix = logFile.ModifyTimeUnix;
             this.Content = logFile.Content;
+            this.tier = logFile.tier;
         }
     }
 

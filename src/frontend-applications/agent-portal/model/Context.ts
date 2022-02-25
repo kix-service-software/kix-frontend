@@ -35,7 +35,7 @@ import { ContextEvents } from '../modules/base-components/webapp/core/ContextEve
 import { ContextPreference } from './ContextPreference';
 import { AgentService } from '../modules/user/webapp/core/AgentService';
 import { IEventSubscriber } from '../modules/base-components/webapp/core/IEventSubscriber';
-import { ContextType } from './ContextType';
+import { ContextExtension } from './ContextExtension';
 
 export abstract class Context {
 
@@ -59,6 +59,8 @@ export abstract class Context {
 
     private eventSubsriber: IEventSubscriber;
 
+    public contextExtensions: ContextExtension[] = [];
+
     public constructor(
         public descriptor: ContextDescriptor,
         protected objectId: string | number = null,
@@ -73,6 +75,11 @@ export abstract class Context {
 
         if (!instanceId) {
             this.instanceId = IdService.generateDateBasedId();
+        }
+
+        const extensions = ContextService?.getInstance()?.getContextExtensions(this.descriptor?.contextId);
+        if (Array.isArray(extensions)) {
+            this.contextExtensions = extensions.map((e) => new e());
         }
 
         if (!formManager) {
@@ -130,7 +137,7 @@ export abstract class Context {
     }
 
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
-        for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {
+        for (const extension of this.contextExtensions) {
             await extension.initContext(this, urlParams);
         }
 
@@ -176,7 +183,7 @@ export abstract class Context {
     }
 
     public async addExtendedUrlParams(url: string): Promise<string> {
-        for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {
+        for (const extension of this.contextExtensions) {
             url = await extension.addExtendedUrlParams(url);
         }
         return url;
@@ -184,7 +191,7 @@ export abstract class Context {
 
     public async getAdditionalActions(object?: KIXObject): Promise<AbstractAction[]> {
         let actions: AbstractAction[] = [];
-        for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {
+        for (const extension of this.contextExtensions) {
             const extendedActions = await extension.getAdditionalActions(this, object);
             if (Array.isArray(extendedActions)) {
                 actions = [...actions, ...extendedActions];
@@ -654,7 +661,7 @@ export abstract class Context {
     }
 
     public async addStorableAdditionalInformation(contextPreference: ContextPreference): Promise<void> {
-        for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {
+        for (const extension of this.contextExtensions) {
             await extension.addStorableAdditionalInformation(this, contextPreference);
         }
 
@@ -668,7 +675,7 @@ export abstract class Context {
     }
 
     public async loadAdditionalInformation(contextPreference: ContextPreference): Promise<void> {
-        for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {
+        for (const extension of this.contextExtensions) {
             await extension.loadAdditionalInformation(this, contextPreference);
         }
         this.setAdditionalInformation(

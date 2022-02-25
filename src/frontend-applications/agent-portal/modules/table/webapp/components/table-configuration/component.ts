@@ -7,11 +7,11 @@
  * --
  */
 
-import { IColumnConfiguration } from '../../../../../../model/configuration/IColumnConfiguration';
-import { TableHeaderHeight } from '../../../../../table/model/TableHeaderHeight';
-import { TableRowHeight } from '../../../../../table/model/TableRowHeight';
-import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
-import { AbstractMarkoComponent } from '../../../core/AbstractMarkoComponent';
+import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { TableHeaderHeight } from '../../../model/TableHeaderHeight';
+import { TableRowHeight } from '../../../model/TableRowHeight';
 import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState> {

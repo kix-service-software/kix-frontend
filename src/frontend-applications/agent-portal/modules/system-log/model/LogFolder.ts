@@ -7,15 +7,11 @@
  * --
  */
 
-import { IdService } from '../../../../../../model/IdService';
-import { Row } from '../../../../model/Row';
-
-export class ComponentState {
+export class LogFolder {
 
     public constructor(
-        public rows: Row[] = [],
-        public ready: boolean = false,
-        public loading: boolean = false,
-        public rowKey: string = IdService.generateDateBasedId()
+        public DisplayName: string,
+        public objectId: string = DisplayName
     ) { }
+
 }

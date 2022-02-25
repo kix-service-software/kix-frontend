@@ -7,15 +7,29 @@
  * --
  */
 
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { Contact } from '../../model/Contact';
+import { Organisation } from '../../model/Organisation';
 import { EditContactDialogContext } from './context/EditContactDialogContext';
 import { NewContactDialogContext } from './context/NewContactDialogContext';
 
 export class ContactDialogUtil {
 
     public static async create(): Promise<void> {
-        ContextService.getInstance().setActiveContext(NewContactDialogContext.CONTEXT_ID);
+        const additionalInformation: Array<[string, any]> = [];
+        const context = ContextService.getInstance().getActiveContext();
+
+        if (context) {
+            const organisation = await context.getObject<Organisation>(KIXObjectType.ORGANISATION);
+            if (organisation) {
+                additionalInformation.push([KIXObjectType.ORGANISATION, organisation]);
+            }
+        }
+
+        ContextService.getInstance().setActiveContext(
+            NewContactDialogContext.CONTEXT_ID, undefined, undefined, additionalInformation
+        );
     }
 
     public static async edit(contactId?: string | number): Promise<void> {

@@ -52,7 +52,7 @@ export class ContextService {
     private serviceListener: Map<string, IContextServiceListener> = new Map();
     private activeContext: Context;
     private activeContextIndex: number;
-    private contextExtensions: Map<string, ContextExtension[]> = new Map();
+    private contextExtensions: Map<string, Array<new () => ContextExtension>> = new Map();
 
     private storedContexts: ContextPreference[];
     private storageProcessQueue: Array<Promise<boolean>> = [];
@@ -192,9 +192,8 @@ export class ContextService {
                     }
                     const context = this.contextInstances.splice(index, 1)[0];
 
-                    const contextExtensions = this.getContextExtensions(context.contextId);
-                    for (const extension of contextExtensions) {
-                        await extension.destroy(context);
+                    for (const extension of context?.contextExtensions) {
+                        await extension?.destroy(context);
                     }
 
                     await context.destroy();
@@ -313,9 +312,8 @@ export class ContextService {
 
             await this.activeContext.postInit();
 
-            const contextExtensions = this.getContextExtensions(context.contextId);
-            for (const extension of contextExtensions) {
-                await extension.postInitContext(context);
+            for (const extension of context?.contextExtensions) {
+                await extension?.postInitContext(context);
             }
             await context.update(null);
 
@@ -398,14 +396,14 @@ export class ContextService {
             .slice(0, limit);
     }
 
-    public addExtendedContext(contextId: string, extension: ContextExtension): void {
+    public addExtendedContext(contextId: string, extension: new () => ContextExtension): void {
         if (!this.contextExtensions.has(contextId)) {
             this.contextExtensions.set(contextId, []);
         }
         this.contextExtensions.get(contextId).push(extension);
     }
 
-    public getContextExtensions(contextId: string): ContextExtension[] {
+    public getContextExtensions(contextId: string): Array<new () => ContextExtension> {
         if (this.contextExtensions.has(contextId)) {
             return this.contextExtensions.get(contextId);
         }
