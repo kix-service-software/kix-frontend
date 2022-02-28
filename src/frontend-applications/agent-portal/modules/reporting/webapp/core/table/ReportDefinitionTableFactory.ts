@@ -81,7 +81,7 @@ export class ReportDefinitionTableFactory extends TableFactory {
     }
 
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        let config;
+        let config: IColumnConfiguration;
         switch (property) {
             case ReportDefinitionProperty.NAME:
                 config = new DefaultColumnConfiguration(

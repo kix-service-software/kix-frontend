@@ -12,6 +12,11 @@ import { Report } from '../../../model/Report';
 import { Table } from '../../../../table/model/Table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ReportProperty } from '../../../model/ReportProperty';
+import { TableValue } from '../../../../table/model/TableValue';
+import { RowObject } from '../../../../table/model/RowObject';
+import { ValueState } from '../../../../table/model/ValueState';
+import { SortUtil } from '../../../../../model/SortUtil';
 
 export class ReportTableContentProvider extends TableContentProvider<Report> {
 
@@ -22,5 +27,39 @@ export class ReportTableContentProvider extends TableContentProvider<Report> {
         contextId?: string
     ) {
         super(KIXObjectType.REPORT, table, objectIds, loadingOptions, contextId);
+    }
+
+    public async getRowObjects(objects: Report[]): Promise<RowObject[]> {
+        const rowObjects = await super.getRowObjects(objects);
+
+        for (const rowObject of rowObjects) {
+            const hasRow = rowObjects.some(
+                (ro) => ro.getObject()?.DefinitionID === rowObject.getObject()?.DefinitionID
+                    && SortUtil.compareDate(ro.getObject()?.CreateTime, rowObject.getObject()?.CreateTime) > 0
+            );
+
+            if (hasRow) {
+                rowObject.setValueState(null);
+            } else {
+                rowObject.setValueState(ValueState.HIGHLIGHT_SUCCESS);
+            }
+        }
+
+        return rowObjects;
+    }
+
+    protected async prepareSpecificValues(values: TableValue[], report: Report): Promise<void> {
+        const parameterValue = values.find((v) => v.property === ReportProperty.PARAMETER);
+        if (parameterValue) {
+            const parameters = report?.Config?.Parameters || [];
+            const value: string[] = [];
+            for (const p in parameters) {
+                if (parameters[p]) {
+                    value.push(`${p} - ${parameters[p]}`);
+                }
+            }
+            parameterValue.objectValue = value.join(',');
+            parameterValue.displayValue = value.join(',');
+        }
     }
 }
