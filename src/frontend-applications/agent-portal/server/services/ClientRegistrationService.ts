@@ -302,6 +302,7 @@ export class ClientRegistrationService extends KIXObjectAPIService {
                 Requires: plugin[1].requires,
                 Description: plugin[1].product,
                 BuildNumber: plugin[1].buildNumber,
+                PatchNumber: plugin[1].patchNumber,
                 Version: plugin[1].version,
                 ExtendedData: {
                     BuildDate: plugin[1].buildDate

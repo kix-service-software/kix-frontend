@@ -55,6 +55,8 @@ export class ReleaseInfoUtil {
                         releaseInfo.buildHost = releaseValue[1];
                     } else if (releaseValue[0] === 'BUILDNUMBER') {
                         releaseInfo.buildNumber = Number(releaseValue[1]);
+                    } else if (releaseValue[0] === 'PATCHNUMBER') {
+                        releaseInfo.patchNumber = Number(releaseValue[1]);
                     } else if (releaseValue[0] === 'REQUIRES') {
                         releaseInfo.dependencies = this.parseRequirements(releaseValue[1]);
                         releaseInfo.requires = releaseValue[1];

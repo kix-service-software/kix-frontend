@@ -69,7 +69,8 @@ class Component {
 
     private getBuildNumber(releaseInfo: ReleaseInfo): string {
         const backendBuildNumber = releaseInfo.backendSystemInfo ? releaseInfo.backendSystemInfo.BuildNumber : '';
-        return `(Build: ${releaseInfo.buildNumber.toString()}.${backendBuildNumber})`;
+        const backendPatchNumber = releaseInfo.backendSystemInfo ? releaseInfo.backendSystemInfo.PatchNumber : '';
+        return `(Build: ${releaseInfo.buildNumber.toString()}-${releaseInfo.patchNumber.toString()}.${backendBuildNumber}-${backendPatchNumber})`;
     }
 }
 
