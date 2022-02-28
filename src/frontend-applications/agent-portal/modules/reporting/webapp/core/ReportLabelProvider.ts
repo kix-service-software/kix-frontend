@@ -67,6 +67,9 @@ export class ReportLabelProvider extends LabelProvider<Report> {
             case ReportProperty.RESULTS:
                 displayValue = 'Translatable#Download Result';
                 break;
+            case ReportProperty.PARAMETER:
+                displayValue = 'Translatable#Parameters';
+                break;
             default:
                 displayValue = await super.getPropertyText(property, short, translatable);
         }

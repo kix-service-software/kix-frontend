@@ -115,7 +115,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         return await this.getRowObjects(objects);
     }
 
-    public async getRowObjects(objects: T[]): Promise<RowObject[]> {
+    public async getRowObjects(objects: T[]): Promise<RowObject<T>[]> {
         const rowObjectPromises: Array<Promise<RowObject<T>>> = [];
         if (objects) {
             for (const o of objects) {

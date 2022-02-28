@@ -47,6 +47,7 @@ export class ReportTableFactory extends TableFactory {
             this.getDefaultColumnConfiguration(ReportProperty.CREATE_TIME),
             this.getDefaultColumnConfiguration(ReportProperty.CREATE_BY),
             this.getDefaultColumnConfiguration(ReportProperty.RESULTS),
+            this.getDefaultColumnConfiguration(ReportProperty.PARAMETER)
         ];
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(null, null, null,
@@ -63,13 +64,23 @@ export class ReportTableFactory extends TableFactory {
     }
 
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        let config;
+        let config: IColumnConfiguration;
         switch (property) {
             case ReportProperty.RESULTS:
                 config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 250, true, true, true,
                     DataType.STRING, true, 'reportresult-list-cell'
                 );
+                break;
+            case ReportProperty.PARAMETER:
+                config = new DefaultColumnConfiguration(null, null, null, property);
+                config.showText = true;
+                config.showIcon = false;
+                config.size = 350;
+                config.filterable = true;
+                config.sortable = true;
+                config.hasListFilter = true;
+                config.componentId = 'label-list-cell-content';
                 break;
             default:
                 config = new DefaultColumnConfiguration(
