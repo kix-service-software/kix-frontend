@@ -64,7 +64,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(queueExplorerConfig);
 
         const predefinedTicketFilter = [
-            new KIXObjectPropertyFilter('Translatable#Owner', [
+            new KIXObjectPropertyFilter('Translatable#owned by me', [
                 new UIFilterCriterion(TicketProperty.OWNER_ID, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER)
             ]),
             new KIXObjectPropertyFilter('Translatable#Watched Tickets', [
@@ -78,7 +78,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             new KIXObjectPropertyFilter('Translatable#Locked Tickets', [
                 new UIFilterCriterion(TicketProperty.LOCK_ID, SearchOperator.EQUALS, 2)
             ]),
-            new KIXObjectPropertyFilter('Translatable#Responsible Tickets', [
+            new KIXObjectPropertyFilter('Translatable#responsibility by me', [
                 new UIFilterCriterion(
                     TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER
                 )
