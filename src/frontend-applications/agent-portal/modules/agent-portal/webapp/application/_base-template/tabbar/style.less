@@ -104,7 +104,7 @@ div.tabbar {
 @media only screen and (min-width: @mobile-breakpoint + 1px) {
     div.tabbar {
         display: grid;
-        grid-template-columns: 2rem auto 2rem;
+        grid-template-columns: 2rem auto 2rem 2rem;
         height: 3rem;
         background: @secondary-3;
 
@@ -125,6 +125,21 @@ div.tabbar {
             &.right {
                 border-left: 1px solid @secondary-2;
             }
+
+            &:hover {
+                background-color: darken(@secondary-3, 20%);
+            }
+        }
+
+        div.tab-closeall {
+            box-sizing: border-box;
+            width: 2rem;
+            font-size: 2rem;
+            display: grid;
+            align-content: center;
+            justify-content: center;
+            transition: background-color 0.25s;
+            cursor: pointer;
 
             &:hover {
                 background-color: darken(@secondary-3, 20%);

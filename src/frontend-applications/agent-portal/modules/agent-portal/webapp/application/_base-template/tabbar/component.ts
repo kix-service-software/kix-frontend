@@ -12,6 +12,7 @@ import { ContextType } from '../../../../../../model/ContextType';
 import { IdService } from '../../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ApplicationEvent } from '../../../../../base-components/webapp/core/ApplicationEvent';
+import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
 import { ContextEvents } from '../../../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
@@ -155,12 +156,43 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         const switchToTarget = context?.instanceId === tab.contextInstanceId;
         const removed = await ContextService.getInstance().removeContext(
-            tab.contextInstanceId, null, null, switchToTarget
+            tab.contextInstanceId, null, null, switchToTarget, false
         );
         this.state.blocked = false;
         if (removed) {
             this.removeEntry(tab.contextInstanceId);
         }
+    }
+
+    public async closeAllTabs(event: any): Promise<void> {
+        event.stopPropagation();
+        event.preventDefault();
+
+        this.state.blocked = true;
+
+        let question = 'Translatable#All open tabs will be closed. Continue?';
+
+        // check for open dialogs
+        if (this.state.contextTabs.find((tab) => tab.isDialog)) {
+            question = 'Translatable#There are open dialogs. Any data you may have entered will be lost. Continue?';
+        }
+
+        const confirmed = await new Promise(async (resolve, reject) => {
+            BrowserUtil.openConfirmOverlay(
+                'Translatable#Close all open tabs',
+                question,
+                () => resolve(true),
+                () => resolve(false),
+                ['Translatable#Yes', 'Translatable#No'],
+                false
+            );
+        });
+
+        if (confirmed) {
+            await ContextService.getInstance().removeAllContexts(true);
+        }
+
+        this.state.blocked = false;
     }
 
     private removeEntry(contextInstanceId: string): void {
