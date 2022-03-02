@@ -251,7 +251,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         TicketProperty.STATE_ID, SearchOperator.EQUALS,
                         FilterDataType.NUMERIC, FilterType.OR, 1
                     )
-                ], 'Ticket.Age:numeric', 100, [TicketProperty.WATCHERS]
+                ], 'Ticket.-Age:numeric', 100, [TicketProperty.WATCHERS]
             ),
             null,
             [
