@@ -1,0 +1,40 @@
+<!--
+Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<div.portal-notification-list>
+   <for|group| of=state.notifications>
+      <for|notification| of=group[1]>
+         <div.notification-item class={
+            "notification-advise": notification.type === "advise",
+            "notification-info": notification.type === "info",
+            "notification-warning": notification.type === "warning",
+            "notification-important": notification.type === "important"
+         }>
+            <div.notification-header>
+               <span class=notification.icon/>
+               <div.notification-title>${notification.title}</div>
+               <div.notification-teaser>${notification.teaserText}</div>
+               <div.notification-expand on-click("toggleNotification", notification)>
+                  <if(component.isExpanded(notification))>
+                     <span.kix-icon-minus/>
+                  </if>
+                  <else>
+                     <span.kix-icon-plus-blank/>
+                  </else>
+               </div>
+            </div>
+            <if(component.isExpanded(notification))>
+               <div.notification-content>
+                  <editor readOnly=true value=notification.fullText useReadonlyStyle=false/>
+               </div>
+            </if>
+         </div>
+      </for>
+   </for>
+</div>

@@ -31,6 +31,8 @@ export class NotificationRouter extends KIXRouter {
         super();
     }
 
+    private notificationListener: Array<(events: ObjectUpdatedEventData[]) => void> = [];
+
     public getBaseRoute(): string {
         return '/notifications';
     }
@@ -42,6 +44,10 @@ export class NotificationRouter extends KIXRouter {
             this.handleRequest.bind(this));
     }
 
+    public registerNotificationListener(listener: (events: ObjectUpdatedEventData[]) => void): void {
+        this.notificationListener.push(listener);
+    }
+
     private async handleRequest(req: Request, res: Response): Promise<void> {
         if (Array.isArray(req.body)) {
             const objectEvents: ObjectUpdatedEventData[] = req.body;
@@ -51,6 +57,8 @@ export class NotificationRouter extends KIXRouter {
                 }).catch((error) => {
                     LoggingService.getInstance().error(error);
                 });
+
+            this.notificationListener.forEach((l) => l(objectEvents));
         }
 
         res.status(201).send();

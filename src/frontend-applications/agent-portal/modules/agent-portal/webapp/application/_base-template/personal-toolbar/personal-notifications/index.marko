@@ -1,0 +1,54 @@
+<!--
+Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<div.notification-dropdown-container class=state.notificationClass title=state.translations["Translatable#Notifications"]>
+    <div.action-icon><icon icon=state.notificationIcon/></div>
+    <div.action-text>
+        <if(state.isMobile)>
+            ${state.translations["Translatable#Notifications"] +
+            " (" +
+            state.notificationsCount +
+            ")"}
+        </if>
+        <else>${state.notificationsCount}</else>
+    </div> 
+    <div.notification-group-list>
+        <for|group| of=state.notifications>
+            <div.notification-group>
+                <div.notification-group-title>
+                    <span>${group[0]} (${group[1].length})</span>
+                    <if(component.isGroupRemovable(group[0]))>
+                        <div.notification-group-remove on-click("removeGroup", group[0])><span.kix-icon-close/></div>
+                    </if>
+                    </div>
+                <ul>
+                    <for|notification| of=group[1]>
+                        <li
+                            on-click("notificationClicked", notification)
+                            class={
+                                "notification-advise": notification.type === "advise",
+                                "notification-info": notification.type === "info",
+                                "notification-warning": notification.type === "warning",
+                                "notification-important": notification.type === "important",
+                            }
+                        >
+                            <div.notification-icon><icon icon=notification.icon/></div>
+                            <div.notification-date>${component.getCreateTime(notification)}</div>
+                            <div>${notification.title}</div>
+                            <div.notification-teaser>${notification.teaserText}</div>
+                            <if(notification.isLocal)>
+                                <div.notification-remove on-click("removeNotification", notification)><span.kix-icon-close/></div>
+                            </if>
+                        </li>
+                    </for>
+                </ul>
+            </div>
+        </for>
+    </div>
+</div>

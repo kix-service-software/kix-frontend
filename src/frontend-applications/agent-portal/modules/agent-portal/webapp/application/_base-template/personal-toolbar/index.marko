@@ -11,15 +11,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <div.toolbar-group>
             <personal-bookmarks/>
             <div
-                title=state.translations["Translatable#Personal Kanban Board"]
-                on-click("showKanban")>
-                <div.action-icon>
-                    <icon icon="kix-icon-kanban"/>
-                </div>
+                title=(state.translations["Translatable#Personal Kanban Board"])
+                on-click("showKanban")
+            >
+                <div.action-icon><icon icon="kix-icon-kanban"/></div>
                 <div.action-text>
                     <if(state.isMobile)>
                         ${state.translations[
-                        "Translatable#Personal Kanban Board"
+                            "Translatable#Personal Kanban Board"
                         ] +
                         " (" +
                         state.ownedTicketsCount +
@@ -29,15 +28,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </div>
             </div>
             <div
-                title=state.translations["Translatable#Personal Ticket Calendar"]
-                on-click("showCalendar")>
-                <div.action-icon>
-                    <icon icon="kix-icon-calendar"/>
-                </div>
+                title=(
+                    state.translations["Translatable#Personal Ticket Calendar"]
+                )
+                on-click("showCalendar")
+            >
+                <div.action-icon><icon icon="kix-icon-calendar"/></div>
                 <div.action-text>
                     <if(state.isMobile)>
                         ${state.translations[
-                        "Translatable#Personal Ticket Calendar"
+                            "Translatable#Personal Ticket Calendar"
                         ] +
                         " (" +
                         state.ownedTicketsCount +
@@ -51,9 +51,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <for|group| of=state.toolbarGroups>
                 <div.toolbar-group>
                     <for|action| of=group>
-                        <div title=action.title on-click("actionClicked", action)>
+                        <div
+                            title=action.title
+                            on-click("actionClicked", action)
+                        >
                             <div.action-icon>
-                                <icon icon=action.icon showUnknown=true/>
+                                <icon icon=action.icon showUnknown/>
                             </div>
                             <if(action.infoIcon)>
                                 <span.kix-icon-i-orange.new-icon>
@@ -62,7 +65,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 </span>
                             </if>
                             <div.action-text>
-                                <if(state.isMobile)>${action.title + " (" + action.count + ")"}</if>
+                                <if(state.isMobile)>
+                                    ${action.title + " (" + action.count + ")"}
+                                </if>
                                 <else>${action.count}</else>
                             </div>
                         </div>
@@ -70,5 +75,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </div>
             </for>
         </if>
+        <div.toolbar-group><personal-notifications/></div>
     </div>
 </if>
