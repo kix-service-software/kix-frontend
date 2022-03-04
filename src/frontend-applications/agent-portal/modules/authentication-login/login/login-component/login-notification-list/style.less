@@ -1,0 +1,58 @@
+/**
+ * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+.portal-notification-list {
+   display: grid;
+   row-gap: 1rem;
+   margin: 1rem;
+
+   .notification-item {
+      border-radius: 4px;
+      background-color: @secondary-2;
+      padding: 0.5rem 1rem;
+      box-shadow: 1px 1px 3px #c6c6c6;
+
+      &.notification-advise {
+         background: @secondary-1;
+         color: @secondary-6;
+      }
+
+      &.notification-info {
+         background: @primary-2;
+         color: @secondary-6;
+      }
+
+      &.notification-warning {
+         background: @tertiary-1;
+         color: @secondary-6;
+      }
+
+      &.notification-important {
+         background: @tertiary-0;
+         color: @secondary-6;
+      }
+
+      .notification-header {
+         display: grid;
+         grid-auto-flow: column;
+         grid-auto-columns: max-content max-content max-content auto;
+         column-gap: 1rem;
+         align-items: center;
+
+         .notification-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+         }
+
+         .notification-expand {
+            justify-self: end;
+         }
+      }
+   }
+}

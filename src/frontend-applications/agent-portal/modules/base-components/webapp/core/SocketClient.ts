@@ -11,8 +11,6 @@ import { ClientStorageService } from './ClientStorageService';
 import { io, Socket } from 'socket.io-client';
 import { SocketEvent } from './SocketEvent';
 import { WindowListener } from './WindowListener';
-import { SocketAuthenticationError } from './SocketAuthenticationError';
-import { BrowserUtil } from './BrowserUtil';
 
 export abstract class SocketClient {
 

@@ -12,6 +12,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
         <if(!state.loading)>
             <div.login-dialog>
+                <if(
+                    Array.isArray(state.notifications) &&
+                    state.notifications.length,
+                )>
+                    <div.portal-notifications>
+                        <login-notification-list notifications=state.notifications/>
+                    </div>
+                </if>
                 <div.dialog-header>
                     <div#kix-logo>
                         <if(input.logo)>
@@ -34,6 +42,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </div>
                     <h1>${component.getString("Welcome to KIX")}</h1>
                 </div>
+
                 <if(state.error || state.logout || state.unsupportedBrowser)>
                     <div.dialog-message-area>
                         <if(state.unsupportedBrowser)>

@@ -7,6 +7,8 @@
  * --
  */
 
+import { PortalNotification } from '../../../portal-notification/model/PortalNotification';
+
 export class ComponentState {
 
     public constructor(
@@ -17,7 +19,8 @@ export class ComponentState {
         public doLogin: boolean = false,
         public logout: boolean = false,
         public unsupportedBrowser: boolean = false,
-        public userName: string = null
+        public userName: string = null,
+        public notifications: PortalNotification[] = []
     ) { }
 
 }
