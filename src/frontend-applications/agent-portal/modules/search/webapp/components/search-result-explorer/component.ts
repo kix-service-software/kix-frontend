@@ -73,29 +73,31 @@ export class Component {
         const nodes: TreeNode[] = [];
 
         const context = ContextService.getInstance().getActiveContext<SearchContext>();
-        const searchCache = context?.getSearchCache();
-        if (searchCache && categories) {
-            const objectService = ServiceRegistry.getServiceInstance<IKIXObjectService>(searchCache.objectType);
-            if (objectService) {
-                for (const category of categories) {
-                    if (isRoot) {
-                        category.objectIds = searchCache.result.map((o) => o.ObjectId.toString());
-                    } else {
-                        category.objectIds = objectService.determineDependendObjects(
-                            searchCache.result, category.objectType
-                        ) || [];
+        if (context instanceof SearchContext) {
+            const searchCache = context?.getSearchCache();
+            if (searchCache && categories) {
+                const objectService = ServiceRegistry.getServiceInstance<IKIXObjectService>(searchCache.objectType);
+                if (objectService) {
+                    for (const category of categories) {
+                        if (isRoot) {
+                            category.objectIds = searchCache.result.map((o) => o.ObjectId.toString());
+                        } else {
+                            category.objectIds = objectService.determineDependendObjects(
+                                searchCache.result, category.objectType
+                            ) || [];
+                        }
+
+                        const label = await TranslationService.translate(category.label);
+                        const children = await this.prepareTreeNodes(category.children);
+
+                        nodes.push(new TreeNode(
+                            category,
+                            label + ` (${category.objectIds.length})`,
+                            null, null,
+                            children,
+                            null, null, null, null, isRoot
+                        ));
                     }
-
-                    const label = await TranslationService.translate(category.label);
-                    const children = await this.prepareTreeNodes(category.children);
-
-                    nodes.push(new TreeNode(
-                        category,
-                        label + ` (${category.objectIds.length})`,
-                        null, null,
-                        children,
-                        null, null, null, null, isRoot
-                    ));
                 }
             }
         }
