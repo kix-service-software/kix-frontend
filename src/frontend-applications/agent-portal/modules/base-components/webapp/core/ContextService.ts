@@ -30,7 +30,6 @@ import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsPr
 import { ContextConfiguration } from '../../../../model/configuration/ContextConfiguration';
 import { AdditionalContextInformation } from './AdditionalContextInformation';
 import { ApplicationEvent } from './ApplicationEvent';
-import { HomeContext } from '../../../home/webapp/core';
 
 export class ContextService {
 
@@ -220,7 +219,7 @@ export class ContextService {
         for (const c of [...this.contextInstances]) {
             await this.removeContext(c.instanceId, null, null, false, silent);
         }
-        this.switchToTargetContext(null, HomeContext.CONTEXT_ID);
+        this.switchToTargetContext(null, 'home');
     }
 
     private checkDialogConfirmation(contextInstanceId: string, silent?: boolean): Promise<boolean> {
