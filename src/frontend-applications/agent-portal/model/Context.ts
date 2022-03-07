@@ -106,20 +106,22 @@ export abstract class Context {
 
                     const objectUpdate = eventId === ApplicationEvent.OBJECT_UPDATED && data?.objectType;
 
-                    if (objectUpdate) {
-                        if (this.objectLists.has(data.objectType)) {
-                            this.deleteObjectList(data.objectType);
+                    if (this.descriptor.contextMode !== ContextMode.SEARCH) {
+                        if (objectUpdate) {
+                            if (this.objectLists.has(data.objectType)) {
+                                this.deleteObjectList(data.objectType);
+                            }
+
+                            const objectReloadRequired = this.descriptor.contextMode === ContextMode.DETAILS
+                                && this.descriptor.kixObjectTypes?.some((t) => t === data.objectType);
+
+                            if (objectReloadRequired) {
+                                await this.getObject(data.objectType, true);
+                            }
+
+                        } else if (contextUpdateRequired) {
+                            this.deleteObjectLists();
                         }
-
-                        const objectReloadRequired = this.descriptor.contextMode === ContextMode.DETAILS
-                            && this.descriptor.kixObjectTypes?.some((t) => t === data.objectType);
-
-                        if (objectReloadRequired) {
-                            await this.getObject(data.objectType, true);
-                        }
-
-                    } else if (contextUpdateRequired && this.descriptor.contextMode !== ContextMode.SEARCH) {
-                        this.deleteObjectLists();
                     }
                 }
             };
