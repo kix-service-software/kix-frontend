@@ -41,7 +41,7 @@ export class ObjectReferenceCountValidator implements IFormFieldValidator {
             const countMin = formField.options.find((o) => o.option === ObjectReferenceOptions.COUNT_MIN);
             const countMax = formField.options.find((o) => o.option === ObjectReferenceOptions.COUNT_MAX);
 
-            return await this.checkCountValues(fieldValue.length, countMin.value, countMax.value, formField.label);
+            return await this.checkCountValues(fieldValue?.length, countMin?.value, countMax?.value, formField?.label);
         }
         return new ValidationResult(ValidationSeverity.OK, '');
     }
