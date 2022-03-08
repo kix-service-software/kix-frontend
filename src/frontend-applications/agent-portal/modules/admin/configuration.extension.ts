@@ -14,7 +14,6 @@ import { WidgetConfiguration } from '../../model/configuration/WidgetConfigurati
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
 import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
 import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
-
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
