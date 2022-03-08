@@ -416,7 +416,7 @@ export class ReportDefinitionFormCreator {
         possibleValuesField.defaultValue = parameter ? new FormFieldValue(parameter.PossibleValues) : null;
         possibleValuesField.parent = parameterField;
         possibleValuesField.parentInstanceId = parameterField.instanceId;
-        ReportingFormUtil.setInputComponent(possibleValuesField, parameter, false, true);
+        await ReportingFormUtil.setInputComponent(possibleValuesField, parameter, false, true);
         parameterField.children.push(possibleValuesField);
 
         const defaultField = new FormFieldConfiguration(
@@ -427,7 +427,7 @@ export class ReportDefinitionFormCreator {
         defaultField.defaultValue = parameter ? new FormFieldValue(parameter.Default) : null;
         defaultField.parent = parameterField;
         defaultField.parentInstanceId = parameterField.instanceId;
-        ReportingFormUtil.setInputComponent(defaultField, parameter);
+        await ReportingFormUtil.setInputComponent(defaultField, parameter);
         parameterField.children.push(defaultField);
 
         await formInstance.provideFormFieldValues([
