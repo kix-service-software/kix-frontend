@@ -33,6 +33,7 @@ import { ArticleReceiver } from '../../../model/ArticleReceiver';
 import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { IKIXObjectService } from '../../../../../modules/base-components/webapp/core/IKIXObjectService';
 import { Contact } from '../../../../customer/model/Contact';
+import addrparser from 'address-rfc2822';
 
 class Component extends FormInputComponent<string[], ComponentState> {
 
@@ -95,12 +96,21 @@ class Component extends FormInputComponent<string[], ComponentState> {
         const formInstance = await context?.getFormManager()?.getFormInstance();
         const value = this.state.field ? formInstance.getFormFieldValue<number>(this.state.field?.instanceId) : null;
         if (value && value.value) {
-            // handle multiple values separated by comma
-            if (value.value.toString().indexOf(',') >= 0)
-                value.value = value.value.toString().split(',') as any;
 
             let contactValues: any[] = Array.isArray(value.value) ? [...value.value] : [value.value];
-            contactValues = contactValues.map((v) => v.replace(/.+ <(.+)>/, '$1'));
+
+            const contactValuesPrepared = [];
+            contactValues.forEach((v) => {
+                if (isNaN(v)) {
+                    addrparser.parse(v).forEach((address) => {
+                        contactValuesPrepared.push(address.address);
+                    });
+                }
+                else
+                    contactValuesPrepared.push(v);
+            });
+
+            contactValues = contactValuesPrepared.map((v) => v.replace(/.+ <(.+)>/, '$1'));
 
             const emailAddresses = contactValues.filter((v) => isNaN(v));
             const contactIds = contactValues.filter((v) => !isNaN(v) && v !== '' && v !== null).map((v) => Number(v));
