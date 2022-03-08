@@ -138,11 +138,11 @@ export abstract class KIXObject {
                 const isPlus = firstChar === '+';
                 const isMinus = firstChar === '-';
 
-                if (isMinus) {
-                    if (isMinus && filter.Value === '0s' && isGTLTOrEqual) {
-                        return; // ignore this part
-                    }
+                if (filter.Value === '0s' && isGTLTOrEqual) {
+                    return; // ignore this part
+                }
 
+                if (isMinus) {
                     if (filter.Operator === SearchOperator.GREATER_THAN_OR_EQUAL) {
                         filter.Operator = SearchOperator.WITHIN_THE_LAST;
                     } else if (filter.Operator === SearchOperator.GREATER_THAN) {
