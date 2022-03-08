@@ -147,6 +147,8 @@ export class ReportFormCreator {
             ReportingFormUtil.createDefaultValueInput(field, parameter);
         }
 
+        field.required = Boolean(parameter.Required);
+
         if (allowPlaceholder) {
             field.options.push(new FormFieldOption(FormFieldOptions.ALLOW_PLACEHOLDER, true));
         }
