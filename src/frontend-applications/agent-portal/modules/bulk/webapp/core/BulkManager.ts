@@ -115,7 +115,7 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
                 dfObjectValues.push(value);
             }
             if (dfValue.operator === PropertyOperator.CLEAR) {
-                value.Value = null;
+                value.Value = [];
             } else if (Array.isArray(dfValue.value)) {
                 value.Value = dfValue.value;
             } else if (!value.Value.some((v) => v === dfValue.value)) {
