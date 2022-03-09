@@ -461,11 +461,13 @@ export class TicketService extends KIXObjectService<Ticket> {
             const match = content.match(/(<body[^>]*>)([\w|\W]*)(<\/body>)/);
             if (match && match.length >= 3) {
                 content = match[2];
+            } else {
+                content = content.replace(/(\r\n|\n\r|\n|\r)/g, '<br>');
             }
 
             return [content, inlineContent];
         } else {
-            const body = article.Body.replace(/(\n|\r)/g, '<br>');
+            const body = article.Body.replace(/(\r\n|\n\r|\n|\r)/g, '<br>');
             return [body, null];
         }
     }
