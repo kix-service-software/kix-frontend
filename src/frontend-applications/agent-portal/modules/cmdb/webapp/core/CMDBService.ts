@@ -37,6 +37,7 @@ import { GeneralCatalogItemProperty } from '../../../general-catalog/model/Gener
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
 import { SearchProperty } from '../../../search/model/SearchProperty';
+import { ConfigItemClassProperty } from '../../model/ConfigItemClassProperty';
 
 export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> {
 
@@ -289,52 +290,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
 
             const context = ContextService.getInstance().getActiveContext();
             if (context.descriptor.contextMode === ContextMode.EDIT_BULK) {
-                const loadingOptions = new KIXObjectLoadingOptions();
-                loadingOptions.includes = [ConfigItemProperty.CURRENT_VERSION, VersionProperty.DATA];
-                const cis = await KIXObjectService.loadObjects<ConfigItem>(
-                    KIXObjectType.CONFIG_ITEM, [objectId], loadingOptions
-                ).catch((): ConfigItem[] => []);
-
-                let configItem: ConfigItem;
-                let versionData: any;
-
-                if (Array.isArray(cis) && cis.length) {
-                    configItem = cis[0];
-                    versionData = configItem?.CurrentVersion?.Data;
-                }
-
-                const newParameter: Array<[string, any]> = [];
-                for (const p of parameter) {
-                    if (
-                        p[0] === VersionProperty.DEPL_STATE_ID ||
-                        p[0] === VersionProperty.INCI_STATE_ID ||
-                        p[0] === ConfigItemProperty.NAME ||
-                        p[0] === ConfigItemProperty.LINKS
-                    ) {
-                        newParameter.push(p);
-                    } else {
-                        // determine attribute path and set value to version data
-                        const path = await ConfigItemClassAttributeUtil.getAttributePath(p[0], configItem?.ClassID);
-                        this.setVersionData(versionData, path, p[1]);
-                    }
-                }
-
-                newParameter.push([VersionProperty.DATA, versionData]);
-
-                // Add default values from latest version if not defined in bulk form
-                if (!newParameter.some((p) => p[0] === VersionProperty.DEPL_STATE_ID)) {
-                    newParameter.push([VersionProperty.DEPL_STATE_ID, configItem?.CurrentVersion?.DeplStateID]);
-                }
-
-                if (!newParameter.some((p) => p[0] === VersionProperty.INCI_STATE_ID)) {
-                    newParameter.push([VersionProperty.INCI_STATE_ID, configItem?.CurrentVersion?.InciStateID]);
-                }
-
-                if (!newParameter.some((p) => p[0] === VersionProperty.NAME)) {
-                    newParameter.push([VersionProperty.NAME, configItem?.CurrentVersion?.Name]);
-                }
-
-                parameter = newParameter;
+                parameter = await this.createParameterFromBulk(parameter, objectId);
             }
 
             await KIXObjectService.createObject(
@@ -351,19 +307,112 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         return super.updateObject(objectType, parameter, objectId, cacheKeyPrefix, silent);
     }
 
-    private setVersionData(data: any, path: string, value: any): void {
+    private async createParameterFromBulk(
+        parameter: Array<[string, any]>, objectId: number | string
+    ): Promise<Array<[string, any]>> {
+        const loadingOptions = new KIXObjectLoadingOptions();
+        loadingOptions.includes = [ConfigItemProperty.CURRENT_VERSION, VersionProperty.DATA];
+        const cis = await KIXObjectService.loadObjects<ConfigItem>(
+            KIXObjectType.CONFIG_ITEM, [objectId], loadingOptions
+        ).catch((): ConfigItem[] => []);
+
+        let configItem: ConfigItem;
+        let versionData: any;
+
+        if (Array.isArray(cis) && cis.length) {
+            configItem = cis[0];
+            versionData = configItem?.CurrentVersion?.Data;
+        }
+
+        const newParameter: Array<[string, any]> = [];
+        for (const p of parameter) {
+            if (
+                p[0] === VersionProperty.DEPL_STATE_ID ||
+                p[0] === VersionProperty.INCI_STATE_ID ||
+                p[0] === ConfigItemProperty.NAME ||
+                p[0] === ConfigItemProperty.LINKS
+            ) {
+                newParameter.push(p);
+            } else {
+
+                const loadingOptions = new KIXObjectLoadingOptions(
+                    null, null, null, [ConfigItemClassProperty.CURRENT_DEFINITION]
+                );
+
+                const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
+                    KIXObjectType.CONFIG_ITEM_CLASS, [configItem?.ClassID], loadingOptions
+                );
+
+                // determine attribute path and set value to version data
+                if (ciClasses?.length) {
+                    const path = await ConfigItemClassAttributeUtil.getAttributePath(p[0], configItem?.ClassID);
+                    await this.setVersionData(versionData, path, p[1], ciClasses[0]);
+                }
+            }
+        }
+
+        newParameter.push([VersionProperty.DATA, versionData]);
+
+        // Add default values from latest version if not defined in bulk form
+        if (!newParameter.some((p) => p[0] === VersionProperty.DEPL_STATE_ID)) {
+            newParameter.push([VersionProperty.DEPL_STATE_ID, configItem?.CurrentVersion?.DeplStateID]);
+        }
+
+        if (!newParameter.some((p) => p[0] === VersionProperty.INCI_STATE_ID)) {
+            newParameter.push([VersionProperty.INCI_STATE_ID, configItem?.CurrentVersion?.InciStateID]);
+        }
+
+        if (!newParameter.some((p) => p[0] === VersionProperty.NAME)) {
+            newParameter.push([VersionProperty.NAME, configItem?.CurrentVersion?.Name]);
+        }
+
+        return newParameter;
+    }
+
+    private async setVersionData(data: any, path: string, value: any, ciClass: ConfigItemClass): Promise<void> {
         if (data && path) {
             const pathArray = path?.split('.');
             let obj = data;
             const propertyIndex = pathArray.length - 1;
+
             for (let i = 0; i < propertyIndex; ++i) {
                 const key = pathArray[i];
-                if (!(key in obj)) {
-                    obj[key] = {};
+
+                const attribute = await ConfigItemClassAttributeUtil.getAttribute(
+                    ciClass.CurrentDefinition.Definition, key
+                );
+
+                let subStructure = obj[key];
+                // Check for Array Value
+                if (attribute.CountMax > 1) {
+                    if (!Array.isArray(subStructure)) {
+                        subStructure = [];
+                    }
+
+                    // check for hash value
+                    if (attribute.Sub?.length) {
+                        if (!subStructure.length) {
+                            subStructure.push({});
+                        }
+                    }
+                } else if (attribute.Sub?.length) {
+                    if (typeof subStructure !== 'object') {
+                        subStructure = {};
+                    }
                 }
+                obj[key] = subStructure;
                 obj = obj[key];
             }
-            obj[pathArray[propertyIndex]] = value;
+
+            if (Array.isArray(obj)) {
+                if (typeof obj[0] === 'object') {
+                    obj[0][pathArray[propertyIndex]] = value;
+                } else {
+                    obj[0] = value;
+                }
+            } else {
+                obj[pathArray[propertyIndex]] = value;
+            }
         }
     }
 
