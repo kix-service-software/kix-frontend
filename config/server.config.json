@@ -1,7 +1,7 @@
 {
     "HTTP_PORT": 3000,
     "HTTPS_PORT": 3001,
-    "USE_SSL": false,
+    "USE_SSL": true,
     "FRONTEND_URL": "",
     "FRONTEND_TOKEN_SECRET": "kix-agent-portal",
     "CHECK_TOKEN_ORIGIN": false,
