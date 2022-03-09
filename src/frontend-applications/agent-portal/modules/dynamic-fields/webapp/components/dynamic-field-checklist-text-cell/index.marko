@@ -8,9 +8,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 <div.checklist-text-cell>
     <if(state.checklistItem.input === "TextArea")>
-        <pre>
-           ${" "}${state.checklistItem.value}
-       ${" "}</pre>
+        <pre>${state.checklistItem.value}</pre>
     </if>
     <else>${state.checklistItem.value}</else>
 </div>

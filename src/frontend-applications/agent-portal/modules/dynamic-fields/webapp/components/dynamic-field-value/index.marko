@@ -26,9 +26,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     </else-if>
     <else-if(state.field.FieldType === "TextArea")>
         <for|value| of=(state.dfValue.Value)>
-            <pre.df-textarea>
-           ${" "}${value}
-         ${" "}</pre>
+            <pre.df-textarea>${value}</pre>
         </for>
     </else-if>
     <else>
