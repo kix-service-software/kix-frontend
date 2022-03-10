@@ -197,14 +197,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: TicketProperty.QUEUE_ID
-                                    },
-                                    conditions: [
-                                        new UIFilterCriterion(
-                                            TicketProperty.OWNER_ID,
-                                            SearchOperator.NOT_EQUALS,
-                                            1
-                                        )
-                                    ]
+                                    }
                                 }
                             ]
                         ],
