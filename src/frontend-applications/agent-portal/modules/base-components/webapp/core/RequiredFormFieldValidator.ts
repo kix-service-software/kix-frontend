@@ -14,6 +14,7 @@ import { FormFieldConfiguration } from '../../../../model/configuration/FormFiel
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
 import { ContextService } from './ContextService';
+import { FormInstance } from './FormInstance';
 
 export class RequiredFormFieldValidator implements IFormFieldValidator {
 
@@ -23,10 +24,14 @@ export class RequiredFormFieldValidator implements IFormFieldValidator {
         return formField.required;
     }
 
-    public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
-        const value = formInstance.getFormFieldValue(formField.instanceId);
+    public async validate(
+        formField: FormFieldConfiguration, formId: string, formInstance?: FormInstance
+    ): Promise<ValidationResult> {
+        if (!formInstance) {
+            const context = ContextService.getInstance().getActiveContext();
+            formInstance = await context?.getFormManager()?.getFormInstance();
+        }
+        const value = formInstance?.getFormFieldValue(formField.instanceId);
         let ok = false;
         if (value && typeof value.value !== 'undefined' && value.value !== null && value.value !== '') {
             if (Array.isArray(value.value)) {

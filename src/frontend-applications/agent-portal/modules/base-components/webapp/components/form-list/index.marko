@@ -7,42 +7,47 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 <div.form-list key=state.listId on-click("setKeepExpanded")>
-    <if(state.prepared)>
-        <div.form-list-input-container.input-style
-            class={
-                        "list-shown": state.expanded,
-                        autocomplete: state.asAutocomplete,
-                        invalid: state.invalid,
-                        readonly: state.readonly
-                    }
-            key=("form-list-input-container-" + state.listId)
-            title=state.placeholder>
-            <div.selected-nodes tabindex="0" on-focus("focus") key=("form-list-selected-nodes-" + state.listId)>
-                <dropdown-selected-nodes-list
-                    treeId=state.treeId
-                    canRemoveNode=state.removeNodes
-                    placeholder=state.placeholder
-                    invalid=state.invalid/>
-            </div>
-            <div.form-input-control-list>
-                <dropdown-action-list actions=state.actions/>
-                <span.form-list-button.kix-icon-sort-down on-click("toggleList", true)/>
-            </div>
-        </div>
-        <if(state.expanded)>
-            <div.value-list style=state.treeStyle key=("value-list-" + state.treeId)>
-                <dropdown-filter
-                    autocompleteConfiguration=input.autoCompleteConfiguration
-                    autocompleteSearchCallback=input.searchCallback
-                    treeId=state.treeId
-                    freeText=input.freeText
-                    key=("form-list-input-" + state.listId)/>
-                <form-list-tree key=state.treeId treeId=state.treeId tabIndex=-1/>
-                <if(state.multiselect)>
-                    <dropdown-button-bar treeId=state.treeId on-submit("submitClicked") key=("buttonbar" + state.listId)/>
-                </if>
-            </div>
-        </if>
+    <if(input.loading)>
+        <loading-spinner/>
     </if>
+    <else>
+        <if(state.prepared)>
+            <div.form-list-input-container.input-style
+                class={
+                            "list-shown": state.expanded,
+                            autocomplete: state.asAutocomplete,
+                            invalid: state.invalid,
+                            readonly: state.readonly
+                        }
+                key=("form-list-input-container-" + state.listId)
+                title=state.placeholder>
+                <div.selected-nodes tabindex="0" on-focus("focus") key=("form-list-selected-nodes-" + state.listId)>
+                    <dropdown-selected-nodes-list
+                        treeId=state.treeId
+                        canRemoveNode=state.removeNodes
+                        placeholder=state.placeholder
+                        invalid=state.invalid/>
+                </div>
+                <div.form-input-control-list>
+                    <dropdown-action-list actions=state.actions/>
+                    <span.form-list-button.kix-icon-sort-down on-click("toggleList", true)/>
+                </div>
+            </div>
+            <if(state.expanded)>
+                <div.value-list style=state.treeStyle key=("value-list-" + state.treeId)>
+                    <dropdown-filter
+                        autocompleteConfiguration=input.autoCompleteConfiguration
+                        autocompleteSearchCallback=input.searchCallback
+                        treeId=state.treeId
+                        freeText=input.freeText
+                        key=("form-list-input-" + state.listId)/>
+                    <form-list-tree key=state.treeId treeId=state.treeId tabIndex=-1/>
+                    <if(state.multiselect)>
+                        <dropdown-button-bar treeId=state.treeId on-submit("submitClicked") key=("buttonbar" + state.listId)/>
+                    </if>
+                </div>
+            </if>
+        </if>
+    </else>
 </div>
 <input.hidden-input type="text" key="hidden-form-list-input"/>

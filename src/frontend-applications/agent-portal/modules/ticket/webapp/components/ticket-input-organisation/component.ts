@@ -15,6 +15,7 @@ import { KIXObjectService } from '../../../../../modules/base-components/webapp/
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { Organisation } from '../../../../customer/model/Organisation';
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -33,34 +34,72 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        this.setCurrentValue();
+        this.setPossibleValue();
     }
 
     public async onDestroy(): Promise<void> {
         await super.onDestroy();
     }
 
+    public async setPossibleValue(): Promise<void> {
+        this.state.loading = true;
+        const context = ContextService.getInstance().getActiveContext();
+        const formInstance = await context?.getFormManager()?.getFormInstance();
+        const possibleValues = formInstance?.getPossibleValue(this.state.field?.property);
+        const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
+        if (treeHandler) {
+            if (Array.isArray(possibleValues?.value) && possibleValues.value.length && possibleValues.value[0]) {
+                if (!isNaN(Number(possibleValues.value[0]))) {
+                    const organisations = await KIXObjectService.loadObjects<Organisation>(
+                        KIXObjectType.ORGANISATION, possibleValues.value
+                    ).catch(() => []);
+                    if (organisations?.length) {
+                        const nodesPromises = [];
+                        organisations.forEach((o) => nodesPromises.push(this.getOrgNode(o)));
+                        const nodes = await Promise.all(nodesPromises);
+                        treeHandler.setTree(nodes.filter((n) => n), null, true);
+                    }
+                } else {
+                    const icon = LabelService.getInstance().getObjectIconForType(KIXObjectType.ORGANISATION);
+                    treeHandler.setTree(
+                        [new TreeNode(possibleValues.value[0], possibleValues.value[0], icon)],
+                        null, true
+                    );
+                }
+            } else {
+                treeHandler.setTree([]);
+            }
+        }
+        this.state.loading = false;
+    }
+
+    private async getOrgNode(organisation: Organisation): Promise<TreeNode> {
+        if (organisation) {
+            const displayValue = await LabelService.getInstance().getObjectText(organisation);
+            const displayIcon = await LabelService.getInstance().getObjectIcon(organisation);
+            return new TreeNode(organisation.ObjectId, displayValue, displayIcon);
+        }
+        return;
+    }
+
     public async setCurrentValue(): Promise<void> {
         let nodes = [];
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
-        const value = formInstance.getFormFieldValue<number>(this.state.field?.instanceId);
+        const value = formInstance?.getFormFieldValue<number>(this.state.field?.instanceId);
         if (value && value.value) {
-            const icon = LabelService.getInstance().getObjectIconForType(KIXObjectType.ORGANISATION);
-
             if (!isNaN(value.value)) {
-                const organisations = await KIXObjectService.loadObjects(
+                const organisations = await KIXObjectService.loadObjects<Organisation>(
                     KIXObjectType.ORGANISATION, [value.value]
                 );
-
-                if (organisations && organisations.length) {
-                    const organisation = organisations[0];
-                    const displayValue = await LabelService.getInstance().getObjectText(organisation);
-
-                    const currentNode = new TreeNode(organisation.ObjectId, displayValue, icon);
-                    nodes = [currentNode];
+                if (organisations?.length) {
+                    const currentNode = await this.getOrgNode(organisations[0]);
+                    if (currentNode) {
+                        nodes = [currentNode];
+                    }
                 }
             } else {
+                const icon = LabelService.getInstance().getObjectIconForType(KIXObjectType.ORGANISATION);
                 const currentNode = new TreeNode(
                     value.value, value.value.toString(), icon
                 );
@@ -70,7 +109,6 @@ class Component extends FormInputComponent<number, ComponentState> {
 
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
         if (treeHandler) {
-            treeHandler.setTree(nodes);
             treeHandler.setSelection(nodes, true, true);
         }
     }
