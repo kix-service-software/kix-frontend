@@ -16,7 +16,8 @@ export class ComponentState extends FormInputComponentState {
         public primaryOrganisationId: number = null,
         public hasContact: boolean = false,
         public placeholder: string = '',
-        public treeId: string = IdService.generateDateBasedId('ticket-input-organisation')
+        public treeId: string = IdService.generateDateBasedId('ticket-input-organisation'),
+        public loading: boolean = true
     ) {
         super();
     }

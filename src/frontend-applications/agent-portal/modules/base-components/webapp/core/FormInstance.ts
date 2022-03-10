@@ -401,7 +401,7 @@ export class FormInstance {
 
             const formField = this.getFormField(instanceId);
             if (validate) {
-                const result = await FormValidationService.getInstance().validate(formField, this.form.id);
+                const result = await FormValidationService.getInstance().validate(formField, this.form.id, this);
                 formFieldValue.valid = true;
                 formFieldValue.errorMessages = [];
                 result.forEach((r) => {
@@ -625,7 +625,7 @@ export class FormInstance {
 
     public async validateField(field: FormFieldConfiguration): Promise<ValidationResult[]> {
         let result: ValidationResult[];
-        const fieldResult = await FormValidationService.getInstance().validate(field, this.form.id);
+        const fieldResult = await FormValidationService.getInstance().validate(field, this.form.id, this);
         const formFieldValue = this.getFormFieldValue(field.instanceId);
         if (formFieldValue) {
             formFieldValue.valid = true;

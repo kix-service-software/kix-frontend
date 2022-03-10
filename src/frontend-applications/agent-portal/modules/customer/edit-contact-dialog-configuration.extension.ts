@@ -90,12 +90,25 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'contact-edit-form-field-organisation',
-                'Translatable#Organisation', ContactProperty.PRIMARY_ORGANISATION_ID, 'object-reference-input',
+                'Translatable#Organisations', ContactProperty.ORGANISATION_IDS, 'object-reference-input',
                 true, 'Translatable#Helptext_Customers_ContactCreate_Organisation',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ORGANISATION),
-                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                     new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true)
+                ]
+            )
+        );
+
+        configurations.push(
+            new FormFieldConfiguration(
+                'contact-edit-form-field-primary-organisation',
+                'Translatable#Primary Organisation', ContactProperty.PRIMARY_ORGANISATION_ID, 'object-reference-input',
+                true, 'Translatable#Helptext_Customers_ContactCreate_PrimaryOrganisation',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ORGANISATION),
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false)
                 ]
             )
         );
@@ -231,6 +244,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'contact-edit-form-field-firstname',
                     'contact-edit-form-field-lastname',
                     'contact-edit-form-field-organisation',
+                    'contact-edit-form-field-primary-organisation',
                     'contact-edit-form-field-communication-container',
                     'contact-edit-form-field-address-container',
                     'contact-edit-form-field-other-container'

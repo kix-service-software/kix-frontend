@@ -90,12 +90,24 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'contact-new-form-field-organisation',
-                'Translatable#Organisation', ContactProperty.PRIMARY_ORGANISATION_ID, 'object-reference-input',
+                'Translatable#Organisations', ContactProperty.ORGANISATION_IDS, 'object-reference-input',
                 true, 'Translatable#Helptext_Customers_ContactCreate_Organisation',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ORGANISATION),
-                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                     new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true)
+                ]
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'contact-new-form-field-primary-organisation',
+                'Translatable#Primary Organisation', ContactProperty.PRIMARY_ORGANISATION_ID, 'object-reference-input',
+                true, 'Translatable#Helptext_Customers_ContactCreate_PrimaryOrganisation',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ORGANISATION),
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false)
                 ]
             )
         );
@@ -231,6 +243,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'contact-new-form-field-firstname',
                     'contact-new-form-field-lastname',
                     'contact-new-form-field-organisation',
+                    'contact-new-form-field-primary-organisation',
                     'contact-new-form-field-communication-container',
                     'contact-new-form-field-address-container',
                     'contact-new-form-field-other-container'
