@@ -616,7 +616,7 @@ export class Table implements Table {
         this.sortOrder = sortOrder;
 
         const promises = [];
-        this.getRows(true).forEach((r) => promises.push(r.getCell(this.sortColumnId)?.initDisplayValue));
+        this.getRows(true).forEach((r) => promises.push(r.getCell(this.sortColumnId)?.initDisplayValue()));
         await Promise.all(promises);
 
         this.getColumns().forEach((c) => c.setSortOrder(null));
