@@ -10,7 +10,6 @@
 import { IColumnConfiguration } from '../../../model/configuration/IColumnConfiguration';
 import { UIFilterCriterion } from '../../../model/UIFilterCriterion';
 import { FilterUtil } from '../../base-components/webapp/core/FilterUtil';
-import { LabelService } from '../../base-components/webapp/core/LabelService';
 import { Row } from './Row';
 import { TableValue } from './TableValue';
 
