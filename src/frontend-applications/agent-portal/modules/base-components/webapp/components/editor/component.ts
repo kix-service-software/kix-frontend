@@ -153,6 +153,8 @@ class EditorComponent {
 
                                         setTimeout(() => {
                                             this.editor.insertElement(element);
+                                            event.editor.commands.source.exec();
+                                            setTimeout(() => event.editor.commands.source.exec(), 10);
                                         }, 0);
                                     };
                                     reader.readAsDataURL(file);
