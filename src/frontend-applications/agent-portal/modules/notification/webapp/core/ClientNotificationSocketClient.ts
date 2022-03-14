@@ -9,7 +9,7 @@
 
 import { SocketClient } from '../../../../modules/base-components/webapp/core/SocketClient';
 import { NotificationEvent } from '../../../../model/NotificationEvent';
-import { ObjectUpdatedEventData } from '../../../../model/ObjectUpdatedEventData';
+import { BackendNotification } from '../../../../model/BackendNotification';
 import { ClientStorageService } from '../../../../modules/base-components/webapp/core/ClientStorageService';
 import { NotificationHandler } from '../../../../modules/base-components/webapp/core/NotificationHandler';
 import { FormService } from '../../../../modules/base-components/webapp/core/FormService';
@@ -31,7 +31,8 @@ export class ClientNotificationSocketClient extends SocketClient {
         super('notifications');
 
         this.socket.on(
-            NotificationEvent.UPDATE_EVENTS, (events: ObjectUpdatedEventData[]) => {
+            NotificationEvent.UPDATE_EVENTS, (events: BackendNotification[]) => {
+                events = events.map((e) => new BackendNotification(e));
                 BrowserCacheService.getInstance().updateCaches(events);
                 events = events
                     .filter((e) => e.RequestID !== ClientStorageService.getClientRequestId())

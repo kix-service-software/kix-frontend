@@ -7,20 +7,23 @@
  * --
  */
 
-import { ObjectUpdatedEventData } from '../../../../model/ObjectUpdatedEventData';
+import { BackendNotification } from '../../../../model/BackendNotification';
 import { ContextService } from './ContextService';
 import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { BrowserUtil } from './BrowserUtil';
+import { EventService } from './EventService';
+import { ApplicationEvent } from './ApplicationEvent';
 
 export class NotificationHandler {
 
-    public static async handleUpdateNotifications(events: ObjectUpdatedEventData[]): Promise<void> {
+    public static async handleUpdateNotifications(events: BackendNotification[]): Promise<void> {
         await NotificationHandler.checkForPermissionUpdate(events);
         NotificationHandler.checkForDataUpdate(events);
+        NotificationHandler.publishEvents(events);
     }
 
-    private static async checkForPermissionUpdate(events: ObjectUpdatedEventData[]): Promise<void> {
+    private static async checkForPermissionUpdate(events: BackendNotification[]): Promise<void> {
         const user = await AgentSocketClient.getInstance().getCurrentUser();
 
         let userIsAffacted = events
@@ -43,7 +46,7 @@ export class NotificationHandler {
         }
     }
 
-    private static checkForDataUpdate(events: ObjectUpdatedEventData[]): void {
+    private static checkForDataUpdate(events: BackendNotification[]): void {
         const updates: Array<[KIXObjectType | string, string | number]> = events.map(
             (e): [KIXObjectType | string, string | number] => {
                 const objectType = this.getObjectType(e.Namespace);
@@ -79,6 +82,19 @@ export class NotificationHandler {
         }
 
         return objects[0];
+    }
+
+    private static publishEvents(events: BackendNotification[]): void {
+        for (const e of events) {
+            let event = ApplicationEvent.OBJECT_CREATED;
+            if (e.Event === 'UPDATE') {
+                event = ApplicationEvent.OBJECT_UPDATED;
+            } else if (e.Event === 'DELETE') {
+                event = ApplicationEvent.OBJECT_DELETED;
+            }
+
+            EventService.getInstance().publish(event, e);
+        }
     }
 
 }
