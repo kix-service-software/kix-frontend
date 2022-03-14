@@ -37,6 +37,7 @@
             }
         ],
         "new-parens": 2,
+        "no-control-regex": "off",
         "no-bitwise": 0,
         "no-cond-assign": 2,
         "no-consecutive-blank-lines": 0,
