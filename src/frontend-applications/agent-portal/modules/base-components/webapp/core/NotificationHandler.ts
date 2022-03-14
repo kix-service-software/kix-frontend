@@ -12,6 +12,8 @@ import { ContextService } from './ContextService';
 import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { BrowserUtil } from './BrowserUtil';
+import { EventService } from './EventService';
+import { ApplicationEvent } from './ApplicationEvent';
 
 export class NotificationHandler {
 
@@ -56,6 +58,8 @@ export class NotificationHandler {
         );
 
         ContextService.getInstance().notifyUpdates(updates);
+        if (updates.length > 0)
+            EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
     }
 
     private static getObjectType(namespace: string): string {
