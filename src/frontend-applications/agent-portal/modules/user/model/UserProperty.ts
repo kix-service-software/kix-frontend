@@ -35,6 +35,8 @@ export enum UserProperty {
 
     CONTACT = 'Contact',
 
+    USER_FULLNAME = 'UserFullname',
+
     // UI properties
     USER_VALID = 'UserValid',
 

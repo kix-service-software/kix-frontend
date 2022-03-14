@@ -9,7 +9,7 @@
 
 import { ObjectUpdatedEvent } from './ObjectUpdatedEvent';
 
-export class ObjectUpdatedEventData {
+export class BackendNotification {
 
     public RequestID: string;
     public Namespace: string;
@@ -18,4 +18,14 @@ export class ObjectUpdatedEventData {
     public Event: ObjectUpdatedEvent;
     public ObjectType: string;
 
+    public constructor(notification?: BackendNotification) {
+        if (notification) {
+            this.Event = notification.Event;
+            this.Namespace = notification.Namespace;
+            this.ObjectID = notification.ObjectID;
+            this.Timestamp = notification.Timestamp;
+            this.RequestID = notification.RequestID;
+            this.ObjectType = notification.ObjectType;
+        }
+    }
 }

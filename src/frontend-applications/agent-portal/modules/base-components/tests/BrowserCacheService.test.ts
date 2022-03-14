@@ -13,7 +13,7 @@ import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 import { BrowserCacheService } from '../webapp/core/CacheService';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
-import { ObjectUpdatedEventData } from '../../../model/ObjectUpdatedEventData';
+import { BackendNotification } from '../../../model/BackendNotification';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -482,7 +482,7 @@ describe('BrowserCacheService', () => {
         });
 
         it('should delete the keys for the events', async () => {
-            const data = new ObjectUpdatedEventData();
+            const data = new BackendNotification();
             data.Namespace = 'TestKey1';
             data.RequestID = 'testrequest';
 

@@ -9,7 +9,7 @@
 
 import md5 from 'md5';
 import { ClientStorageService } from './ClientStorageService';
-import { ObjectUpdatedEventData } from '../../../../model/ObjectUpdatedEventData';
+import { BackendNotification } from '../../../../model/BackendNotification';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { EventService } from './EventService';
 import { ApplicationEvent } from './ApplicationEvent';
@@ -97,7 +97,7 @@ export class BrowserCacheService {
         EventService.getInstance().publish(ApplicationEvent.CACHE_KEYS_DELETED, prefixes);
     }
 
-    public async updateCaches(events: ObjectUpdatedEventData[]): Promise<void> {
+    public async updateCaches(events: BackendNotification[]): Promise<void> {
         if (events.some((e) => e.Event === ObjectUpdatedEvent.CLEAR_CACHE)) {
             this.clear();
         } else {

@@ -12,7 +12,7 @@ import { KIXRouter } from './KIXRouter';
 import { AuthenticationService } from '../services/AuthenticationService';
 import { CacheService } from '../services/cache';
 import { NotificationEvent } from '../../model/NotificationEvent';
-import { ObjectUpdatedEventData } from '../../model/ObjectUpdatedEventData';
+import { BackendNotification } from '../../model/BackendNotification';
 import { SocketService } from '../services/SocketService';
 import { LoggingService } from '../../../../server/services/LoggingService';
 
@@ -31,7 +31,7 @@ export class NotificationRouter extends KIXRouter {
         super();
     }
 
-    private notificationListener: Array<(events: ObjectUpdatedEventData[]) => void> = [];
+    private notificationListener: Array<(events: BackendNotification[]) => void> = [];
 
     public getBaseRoute(): string {
         return '/notifications';
@@ -44,13 +44,13 @@ export class NotificationRouter extends KIXRouter {
             this.handleRequest.bind(this));
     }
 
-    public registerNotificationListener(listener: (events: ObjectUpdatedEventData[]) => void): void {
+    public registerNotificationListener(listener: (events: BackendNotification[]) => void): void {
         this.notificationListener.push(listener);
     }
 
     private async handleRequest(req: Request, res: Response): Promise<void> {
         if (Array.isArray(req.body)) {
-            const objectEvents: ObjectUpdatedEventData[] = req.body;
+            const objectEvents: BackendNotification[] = req.body;
             CacheService.getInstance().updateCaches(objectEvents)
                 .then(() => {
                     SocketService.getInstance().broadcast(NotificationEvent.UPDATE_EVENTS, objectEvents);
