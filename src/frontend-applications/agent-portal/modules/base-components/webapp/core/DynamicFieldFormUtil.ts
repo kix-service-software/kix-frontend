@@ -328,6 +328,9 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
                 let extendedUtilResult: boolean = false;
                 for (const util of this.extendedUtils) {
                     extendedUtilResult = await util.setFieldValue(dynamicField, dfValue, field);
+                    if (extendedUtilResult) {
+                        break;
+                    }
                 }
 
                 if (extendedUtilResult) {

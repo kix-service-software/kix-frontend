@@ -512,7 +512,7 @@ export class LabelService {
 
         if (labelProvider) {
             for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
-                const result = extendedLabelProvider.createLabelsFromDFValue(fieldValue);
+                const result = await extendedLabelProvider.createLabelsFromDFValue(fieldValue);
                 if (result) {
                     return result;
                 }

@@ -12,6 +12,10 @@ import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { Contact } from './Contact';
 import { Ticket } from '../../ticket/model/Ticket';
+import { SearchOperator } from '../../search/model/SearchOperator';
+import { OrganisationProperty } from './OrganisationProperty';
+import { FilterDataType } from '../../../model/FilterDataType';
+import { InputFieldTypes } from '../../base-components/webapp/core/InputFieldTypes';
 
 export class Organisation extends KIXObject {
 
@@ -74,6 +78,83 @@ export class Organisation extends KIXObject {
         }
     }
 
+    private static NUMBER_OPERATORS = [
+        SearchOperator.EQUALS,
+        SearchOperator.LESS_THAN,
+        SearchOperator.GREATER_THAN,
+        SearchOperator.LESS_THAN_OR_EQUAL,
+        SearchOperator.GREATER_THAN_OR_EQUAL,
+        SearchOperator.BETWEEN
+    ];
 
+    private static DATETIME_OPERATORS = [
+        SearchOperator.LESS_THAN,
+        SearchOperator.GREATER_THAN,
+        SearchOperator.LESS_THAN_OR_EQUAL,
+        SearchOperator.GREATER_THAN_OR_EQUAL,
+        SearchOperator.BETWEEN,
+        SearchOperator.WITHIN_THE_LAST,
+        SearchOperator.WITHIN_THE_NEXT,
+        SearchOperator.MORE_THAN_AGO,
+        SearchOperator.IN_MORE_THAN,
+        SearchOperator.LESS_THAN_AGO,
+        SearchOperator.IN_LESS_THAN
+    ];
+
+    private static STRING_OPERATORS = [
+        SearchOperator.EQUALS,
+        SearchOperator.CONTAINS,
+        SearchOperator.STARTS_WITH,
+        SearchOperator.ENDS_WITH,
+        SearchOperator.LIKE
+    ];
+
+    // tslint:disable: max-line-length
+    // TODO: allow all possible (in backend) Operators for attributes - managers should limit
+    public static SEARCH_PROPERTIES = [
+        {
+            Property: OrganisationProperty.NAME,
+            Operations: Organisation.STRING_OPERATORS,
+            DataType: FilterDataType.STRING,
+            InputType: InputFieldTypes.TEXT
+        },
+        {
+            Property: OrganisationProperty.CITY,
+            Operations: Organisation.STRING_OPERATORS,
+            DataType: FilterDataType.STRING,
+            InputType: InputFieldTypes.TEXT
+        },
+        {
+            Property: OrganisationProperty.NUMBER,
+            Operations: Organisation.STRING_OPERATORS,
+            DataType: FilterDataType.STRING,
+            InputType: InputFieldTypes.TEXT
+        },
+        {
+            Property: OrganisationProperty.STREET,
+            Operations: Organisation.STRING_OPERATORS,
+            DataType: FilterDataType.STRING,
+            InputType: InputFieldTypes.TEXT
+        },
+        {
+            Property: OrganisationProperty.URL,
+            Operations: Organisation.STRING_OPERATORS,
+            DataType: FilterDataType.STRING,
+            InputType: InputFieldTypes.TEXT
+        },
+        {
+            Property: OrganisationProperty.ZIP,
+            Operations: Organisation.STRING_OPERATORS,
+            DataType: FilterDataType.STRING,
+            InputType: InputFieldTypes.TEXT
+        },
+        {
+            Property: OrganisationProperty.COUNTRY,
+            Operations: Organisation.STRING_OPERATORS,
+            DataType: FilterDataType.STRING,
+            InputType: InputFieldTypes.TEXT
+        }
+    ];
+    // tslint:enable
 
 }

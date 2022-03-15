@@ -15,12 +15,30 @@ import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptio
 import { UserProperty } from '../../../user/model/UserProperty';
 import { ContactProperty } from '../../model/ContactProperty';
 import { SearchProperty } from '../../../search/model/SearchProperty';
+import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
 
 export class ContactSearchDefinition extends SearchDefinition {
 
     public constructor() {
         super(KIXObjectType.CONTACT);
         this.formManager = new ContactSearchFormManager();
+    }
+
+    public createFormManager(
+        ignoreProperties: string[] = [], validDynamicFields: boolean = true
+    ): SearchFormManager {
+        const formManager = new ContactSearchFormManager(ignoreProperties, validDynamicFields);
+        formManager.init = (): void => {
+
+            // get extended managers on init because they could be added after filterManager was created
+            if (this.formManager) {
+                formManager['extendedFormManager'] = [];
+                this.formManager.getExtendedFormManager().forEach(
+                    (m) => formManager.addExtendedFormManager(m)
+                );
+            }
+        };
+        return formManager;
     }
 
     public getLoadingOptions(criteria: FilterCriteria[], limit: number): KIXObjectLoadingOptions {
