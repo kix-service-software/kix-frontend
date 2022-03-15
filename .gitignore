@@ -1,7 +1,6 @@
 config/server.config.json
 features/report
 .cache
-cache
 package-lock.json
 gulp-*
 dist
