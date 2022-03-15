@@ -59,6 +59,8 @@ export class NotificationHandler {
         );
 
         ContextService.getInstance().notifyUpdates(updates);
+        if (updates.length > 0)
+            EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
     }
 
     private static getObjectType(namespace: string): string {
