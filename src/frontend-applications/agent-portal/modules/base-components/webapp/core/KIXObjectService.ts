@@ -683,6 +683,14 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public async getObjectTypeForProperty(property: string): Promise<KIXObjectType | string> {
         let objectType = this.objectType;
+
+        for (const extendedService of this.extendedServices) {
+            const extentedObjectType = await extendedService.getObjectTypeForProperty(property);
+            if (extentedObjectType) {
+                return extentedObjectType;
+            }
+        }
+
         const dfName = KIXObjectService.getDynamicFieldName(property);
         if (dfName) {
             objectType = null;

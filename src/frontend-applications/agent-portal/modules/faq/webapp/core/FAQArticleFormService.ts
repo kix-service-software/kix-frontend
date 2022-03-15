@@ -16,6 +16,7 @@ import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { Attachment } from '../../../../model/kix/Attachment';
 import { BrowserUtil } from '../../../../modules/base-components/webapp/core/BrowserUtil';
 import { FAQArticleHandler } from './FAQArticleHandler';
+import { FormContext } from '../../../../model/configuration/FormContext';
 
 export class FAQArticleFormService extends KIXObjectFormService {
 
@@ -36,7 +37,10 @@ export class FAQArticleFormService extends KIXObjectFormService {
         return objectType === KIXObjectType.FAQ_ARTICLE;
     }
 
-    protected async getValue(property: string, value: any, faqArticle: FAQArticle): Promise<any> {
+    protected async getValue(
+        property: string, value: any, faqArticle: FAQArticle,
+        formField: FormFieldConfiguration, formContext: FormContext
+    ): Promise<any> {
         if (value) {
             switch (property) {
                 case FAQArticleProperty.KEYWORDS:
@@ -55,6 +59,7 @@ export class FAQArticleFormService extends KIXObjectFormService {
                     value = faqArticle.Attachments.filter((a) => a.Disposition !== 'inline');
                     break;
                 default:
+                    value = await super.getValue(property, value, faqArticle, formField, formContext);
             }
         }
         return value;

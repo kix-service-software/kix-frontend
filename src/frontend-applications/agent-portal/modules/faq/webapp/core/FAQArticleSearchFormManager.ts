@@ -29,6 +29,13 @@ export class FAQArticleSearchFormManager extends SearchFormManager {
 
     protected readPermissions: Map<string, boolean> = new Map();
 
+    public constructor(
+        public ignorePropertiesFixed: string[] = [],
+        private validDynamicFields: boolean = true
+    ) {
+        super();
+    }
+
     public async getProperties(): Promise<Array<[string, string]>> {
         let properties: Array<[string, string]> = [
             [SearchProperty.FULLTEXT, null],
@@ -71,7 +78,7 @@ export class FAQArticleSearchFormManager extends SearchFormManager {
             p[1] = label;
         }
 
-        const superProperties = await super.getProperties();
+        const superProperties = await super.getProperties(this.validDynamicFields);
         properties = [...properties, ...superProperties];
 
         properties = properties.filter(
@@ -163,10 +170,10 @@ export class FAQArticleSearchFormManager extends SearchFormManager {
         return components;
     }
 
-    public async getTreeNodes(property: string): Promise<TreeNode[]> {
+    public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
         let nodes = await super.getTreeNodes(property);
         if (!nodes || !nodes.length) {
-            nodes = await FAQService.getInstance().getTreeNodes(property, true, true);
+            nodes = await FAQService.getInstance().getTreeNodes(property, true, true, objectIds);
         }
         return nodes;
     }

@@ -23,10 +23,14 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
     public objectType: string;
     public uniqueProperties: boolean;
     public resetOperator?: boolean;
-    public useOwnSearch?: boolean;
+    public useOwnSearch: boolean = null;
 
     public async getFieldOptions(): Promise<any[]> {
         return [];
+    }
+
+    public async getUseOwnSearch(property: string): Promise<boolean> {
+        return this.useOwnSearch;
     }
 
     public getValidDFTypes(): Array<DynamicFieldTypes | string> {

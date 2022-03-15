@@ -515,6 +515,7 @@ export class ContactFormService extends KIXObjectFormService {
                 }
                 break;
             default:
+                value = await super.getValue(property, value, contact, formField, formContext);
         }
         return value;
     }

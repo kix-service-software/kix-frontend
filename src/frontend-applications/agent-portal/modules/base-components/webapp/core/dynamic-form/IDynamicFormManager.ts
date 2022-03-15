@@ -32,6 +32,8 @@ export interface IDynamicFormManager {
 
     getFieldOptions(): Promise<any[]>;
 
+    getUseOwnSearch(property: string): Promise<boolean>;
+
     searchObjectTree(
         property: string, searchValue: string, loadingOptions?: KIXObjectLoadingOptions
     ): Promise<TreeNode[]>;

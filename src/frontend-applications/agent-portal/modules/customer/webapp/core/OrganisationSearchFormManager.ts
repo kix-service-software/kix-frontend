@@ -8,9 +8,6 @@
  */
 
 import { OrganisationService } from './OrganisationService';
-import {
-    AbstractDynamicFormManager
-} from '../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { OrganisationProperty } from '../../model/OrganisationProperty';
@@ -20,18 +17,27 @@ import { AuthenticationSocketClient } from '../../../../modules/base-components/
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { SearchOperator } from '../../../search/model/SearchOperator';
-import { SearchDefinition, SearchOperatorUtil } from '../../../search/webapp/core';
+import { SearchOperatorUtil } from '../../../search/webapp/core';
 import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
 import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
+import { Organisation } from '../../model/Organisation';
 
-export class OrganisationSearchFormManager extends AbstractDynamicFormManager {
+export class OrganisationSearchFormManager extends SearchFormManager {
 
     public objectType: KIXObjectType = KIXObjectType.ORGANISATION;
 
     protected readPermissions: Map<string, boolean> = new Map();
 
+    public constructor(
+        public ignorePropertiesFixed: string[] = [],
+        private validDynamicFields: boolean = true
+    ) {
+        super();
+    }
+
     public async getProperties(): Promise<Array<[string, string]>> {
-        const properties: Array<[string, string]> = [
+        let properties: Array<[string, string]> = [
             [SearchProperty.FULLTEXT, null],
             [OrganisationProperty.NAME, null],
             [OrganisationProperty.NUMBER, null],
@@ -53,7 +59,15 @@ export class OrganisationSearchFormManager extends AbstractDynamicFormManager {
             p[1] = label;
         }
 
-        return properties;
+        const superProperties = await super.getProperties(this.validDynamicFields);
+        properties = [...properties, ...superProperties];
+
+        properties = properties.filter(
+            (p) => !this.ignorePropertiesFixed.some((ip) => ip === p[0])
+                && !this.ignoreProperties.some((ip) => ip === p[0])
+        );
+
+        return properties.sort((a, b) => a[1].localeCompare(b[1]));
     }
 
     protected async checkReadPermissions(resource: string): Promise<boolean> {
@@ -67,26 +81,41 @@ export class OrganisationSearchFormManager extends AbstractDynamicFormManager {
         return this.readPermissions.get(resource);
     }
 
-    public async getOperations(property: string): Promise<any[]> {
-        let operations: SearchOperator[] = [];
+    public async getOperations(property: string): Promise<Array<string | SearchOperator>> {
+        let operations: Array<string | SearchOperator> = [];
 
-        if (property === SearchProperty.FULLTEXT) {
-            operations = [SearchOperator.CONTAINS];
-        } else if (this.isDropDown(property)) {
-            operations = [SearchOperator.IN];
+        const searchProperty = Organisation.SEARCH_PROPERTIES.find((p) => p.Property === property);
+        if (searchProperty) {
+            operations = searchProperty.Operations;
         } else {
-            operations = SearchDefinition.getStringOperators();
+            switch (property) {
+                case KIXObjectProperty.VALID_ID:
+                    operations = [SearchOperator.IN];
+                    break;
+                case SearchProperty.FULLTEXT:
+                    operations = [SearchOperator.CONTAINS];
+                    break;
+                default:
+                    operations = await super.getOperations(property);
+            }
         }
 
         return operations;
     }
 
     public async getInputType(property: string): Promise<InputFieldTypes | string> {
-        if (this.isDropDown(property)) {
-            return InputFieldTypes.DROPDOWN;
+        let inputType: InputFieldTypes | string;
+        const searchProperty = Organisation.SEARCH_PROPERTIES.find((p) => p.Property === property);
+
+        if (searchProperty) {
+            inputType = searchProperty.InputType;
+        } else if (this.isDropDown(property)) {
+            inputType = InputFieldTypes.DROPDOWN;
+        } else {
+            inputType = await super.getInputType(property);
         }
 
-        return InputFieldTypes.TEXT;
+        return inputType;
     }
 
     private isDropDown(property: string): boolean {
@@ -98,11 +127,22 @@ export class OrganisationSearchFormManager extends AbstractDynamicFormManager {
     }
 
     public async isMultiselect(property: string, operator: SearchOperator | string): Promise<boolean> {
+        const result = await super.isMultiselect(property, operator, true);
+        if (result !== null && typeof result !== 'undefined') {
+            return result;
+        }
         return true;
     }
 
-    public getTreeNodes(property: string): Promise<TreeNode[]> {
-        return OrganisationService.getInstance().getTreeNodes(property, true);
+    public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
+        let nodes = [];
+        switch (property) {
+            default:
+                nodes = await super.getTreeNodes(property);
+                if (!nodes || !nodes.length) {
+                    nodes = await OrganisationService.getInstance().getTreeNodes(property, true, true, objectIds);
+                }
+        }
+        return nodes;
     }
-
 }

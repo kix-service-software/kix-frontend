@@ -84,6 +84,8 @@ export class DynamicFieldTypeLabelProvider extends LabelProvider<DynamicFieldTyp
                 return 'fa fa-th-list';
             case 'TicketReference':
                 return 'kix-icon-ticket';
+            case 'Table':
+                return 'fas fa-table';
             default:
                 return new ObjectIcon(null, KIXObjectType.DYNAMIC_FIELD_TYPE, dynamicFieldType.Name);
         }

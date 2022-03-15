@@ -56,6 +56,16 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
     protected propertiesIgnoreList: string[] = [];
 
+    public async getUseOwnSearch(property: string): Promise<boolean> {
+        for (const extendedManager of this.extendedFormManager) {
+            const extentedUseOwnSearch = await extendedManager.getUseOwnSearch(property);
+            if (extentedUseOwnSearch !== null) {
+                return extentedUseOwnSearch;
+            }
+        }
+        return this.useOwnSearch;
+    }
+
     public async addToPropertiesIgnoreList(properties: string[]): Promise<void> {
         properties.forEach((p) => {
             if (!this.propertiesIgnoreList.some((ip) => ip === p)) {
@@ -186,6 +196,12 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     public async searchObjectTree(
         property: string, searchValue: string, loadingOptions: KIXObjectLoadingOptions
     ): Promise<TreeNode[]> {
+        for (const extendedManager of this.extendedFormManager) {
+            const extentedNode = await extendedManager.searchObjectTree(property, searchValue, loadingOptions);
+            if (extentedNode) {
+                return extentedNode;
+            }
+        }
         return [];
     }
 

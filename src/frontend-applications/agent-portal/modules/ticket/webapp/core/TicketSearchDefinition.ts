@@ -34,7 +34,18 @@ export class TicketSearchDefinition extends SearchDefinition {
     public createFormManager(
         ignoreProperties: string[] = [], validDynamicFields: boolean = true
     ): SearchFormManager {
-        return new TicketSearchFormManager(ignoreProperties, validDynamicFields);
+        const formManager = new TicketSearchFormManager(ignoreProperties, validDynamicFields);
+        formManager.init = (): void => {
+
+            // get extended managers on init because they could be added after filterManager was created
+            if (this.formManager) {
+                formManager['extendedFormManager'] = [];
+                this.formManager.getExtendedFormManager().forEach(
+                    (m) => formManager.addExtendedFormManager(m)
+                );
+            }
+        };
+        return formManager;
     }
 
     public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {
