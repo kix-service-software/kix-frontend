@@ -31,6 +31,8 @@ export class TextModule extends KIXObject {
 
     public Language: string;
 
+    public keywordsDisplayString: string;
+
     public equals(textModule: TextModule): boolean {
         return this.ID === textModule.ID;
     }
@@ -51,6 +53,8 @@ export class TextModule extends KIXObject {
             this.CreateTime = textModule.CreateTime;
             this.ChangeBy = textModule.ChangeBy;
             this.ChangeTime = textModule.ChangeTime;
+
+            this.keywordsDisplayString = this.Keywords?.join(', ');
         }
     }
 
