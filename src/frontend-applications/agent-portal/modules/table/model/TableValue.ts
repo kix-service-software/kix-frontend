@@ -37,7 +37,7 @@ export class TableValue {
   public async initDisplayText(cell: Cell): Promise<void> {
     const object = cell.getRow().getRowObject<KIXObject>().getObject();
 
-    if (!this.displayValue && cell?.getColumnConfiguration()?.showText && object) {
+    if (!this.displayValue && object) {
       this.displayValue = await LabelService.getInstance().getDisplayText(
         object, this.property, object[this.property], cell.getColumnConfiguration().translatable
       );
