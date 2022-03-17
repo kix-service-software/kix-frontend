@@ -7,4 +7,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<editor value=state.content inlineContent=state.inlineContent readOnly=true useReadonlyStyle=true/>
+<if(state.show)>
+    <editor
+        value=state.content
+        plainText=state.plainText
+        inlineContent=state.inlineContent
+        readOnly
+        useReadonlyStyle
+    />
+</if>
