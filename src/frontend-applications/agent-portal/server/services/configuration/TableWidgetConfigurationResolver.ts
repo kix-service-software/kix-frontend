@@ -37,12 +37,11 @@ export class TableWidgetConfigurationResolver implements IConfigurationResolver<
 
             if (tableOption && tableOption.Value) {
                 const tableConfig = JSON.parse(tableOption.Value);
-                configuration.tableConfiguration = tableConfig;
                 configuration.configuration = tableConfig;
                 await TableConfigurationResolver.getInstance().resolve(token, tableConfig, sysConfigOptions);
             }
-        } else if (configuration?.tableConfiguration) {
-            configuration.configuration = configuration.tableConfiguration;
+        } else if (!configuration.configuration && (configuration as any)?.tableConfiguration) {
+            configuration.configuration = (configuration as any).tableConfiguration;
         }
     }
 
