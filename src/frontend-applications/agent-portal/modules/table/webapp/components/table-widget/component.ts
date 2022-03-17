@@ -93,10 +93,6 @@ class Component {
                         this.state.loading = true;
                     }
 
-                    if (eventId === ApplicationEvent.OBJECT_CREATED || eventId === ApplicationEvent.OBJECT_UPDATED) {
-                        this.state.table?.reload(true);
-                    }
-
                     if (data?.tableId === this.state.table?.getTableId()) {
                         if (eventId === TableEvent.RELOAD) {
                             this.state.loading = true;
