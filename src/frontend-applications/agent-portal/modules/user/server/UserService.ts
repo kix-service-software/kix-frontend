@@ -318,8 +318,6 @@ export class UserService extends KIXObjectAPIService {
     public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         const filterProperties = [
             KIXObjectProperty.VALID_ID,
-            UserProperty.IS_AGENT,
-            UserProperty.IS_CUSTOMER,
             UserProperty.USAGE_CONTEXT
         ];
         const filterCriteria = criteria.filter((f) => filterProperties.some((fp) => f.property === fp));
@@ -329,11 +327,14 @@ export class UserService extends KIXObjectAPIService {
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         const searchProperties = [
             UserProperty.USER_LOGIN,
-            'Search'
+            'Search',
+            UserProperty.IS_AGENT,
+            UserProperty.IS_CUSTOMER,
+            UserProperty.PREFERENCES + '\..*?'
         ];
 
         const searchCriteria = criteria.filter(
-            (f) => searchProperties.some((sp) => sp === f.property) && f.operator !== SearchOperator.NOT_EQUALS
+            (f) => searchProperties.some((sp) => f.property.match(sp)) && f.operator !== SearchOperator.NOT_EQUALS
         );
 
         return searchCriteria;
