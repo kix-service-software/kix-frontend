@@ -27,7 +27,6 @@ import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { ObjectIcon } from '../icon/model/ObjectIcon';
 import { SearchOperator } from '../search/model/SearchOperator';
 import { TableConfiguration } from '../../model/configuration/TableConfiguration';
-import { ToggleOptions } from '../table/model/ToggleOptions';
 import { FilterCriteria } from '../../model/FilterCriteria';
 import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
 import { TableHeaderHeight } from '../../model/configuration/TableHeaderHeight';
@@ -45,6 +44,7 @@ import { UIFilterCriterion } from '../../model/UIFilterCriterion';
 import { TicketSearchContext } from './webapp/core';
 import { ConfigItemProperty } from '../cmdb/model/ConfigItemProperty';
 import { SortOrder } from '../../model/SortOrder';
+import { ArticleColorsConfiguration } from './model/ArticleColorsConfiguration';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -55,6 +55,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
     // tslint:disable: max-line-length
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
         const configurations = [];
+
+        configurations.push(new ArticleColorsConfiguration());
 
         const ticketInfoCard = new WidgetConfiguration(
             'ticket-details-info-card', 'Ticket Info Widget', ConfigurationType.Widget,
@@ -631,57 +633,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(suggestedFAQWidget);
 
-        const toReceiverOverlay = new WidgetConfiguration(
-            'ticket-details-to-receiver-overlay', 'To Receiver Overlay', ConfigurationType.Widget,
-            'article-receiver-list', 'Translatable#Recipient: To', [], null, null,
-            false, false, 'kix-icon-man-mail-To', false
+        const communicationWidget = new WidgetConfiguration(
+            'ticket-communication-widget', 'Communication Widget', ConfigurationType.Widget,
+            'ticket-communication-widget', 'Translatable#Communication History', [], null, null, false, true, null, true
         );
-        configurations.push(toReceiverOverlay);
-
-        const ccReceiverOverlay = new WidgetConfiguration(
-            'ticket-details-cc-receiver-overlay', 'Cc Receiver Overlay', ConfigurationType.Widget,
-            'article-receiver-list', 'Translatable#Recipient: Cc', [], null, null,
-            false, false, 'kix-icon-man-mail-Cc', false
-        );
-        configurations.push(ccReceiverOverlay);
-
-        const bccReceiverOverlay = new WidgetConfiguration(
-            'ticket-details-bcc-receiver-overlay', 'Bcc Receiver Overlay', ConfigurationType.Widget,
-            'article-receiver-list', 'Translatable#Recipient: Bcc', [], null, null,
-            false, false, 'kix-icon-man-mail-Bcc', false
-        );
-        configurations.push(bccReceiverOverlay);
-
-        const articleAttachmentOverlay = new WidgetConfiguration(
-            'ticket-details-article-attachments-overlay', 'Article Attachments Overlay', ConfigurationType.Widget,
-            'article-attachment-widget', 'Translatable#Attachments', ['article-attachment-zip-download'], null, null,
-            false, false, 'kix-icon-attachement', false
-        );
-        configurations.push(articleAttachmentOverlay);
-
-        const tableSettings = new TableWidgetConfiguration(
-            'ticket-details-article-list-table-config', 'Article Table', ConfigurationType.TableWidget,
-            KIXObjectType.ARTICLE, undefined, undefined, new TableConfiguration(
-                'ticket-details-article-list-table', 'Article Table', ConfigurationType.Table, KIXObjectType.ARTICLE,
-                null, null, null, null, null, true, new ToggleOptions(
-                    'ticket-article-details', 'article',
-                    [
-                        'article-reply-action',
-                        'article-forward-action',
-                        'article-get-plain-action'
-                    ], true, null, null, true
-                )
-            ), ['article-attachment-count']
-        );
-        configurations.push(tableSettings);
-
-        const articleListWidget = new WidgetConfiguration(
-            'ticket-details-article-list-widget', 'Article List Widget', ConfigurationType.Widget,
-            'table-widget', 'Translatable#Article Overview', [],
-            new ConfigurationDefinition('ticket-details-article-list-table-config', ConfigurationType.TableWidget),
-            null, false, true, null, true
-        );
-        configurations.push(articleListWidget);
+        configurations.push(communicationWidget);
 
         const ticketsForAssetsWidget = new WidgetConfiguration(
             'ticket-details-affected-asset-tickets', 'Tickets for Assets', ConfigurationType.Widget,
@@ -829,9 +785,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     new ConfiguredWidget('ticket-details-tab-widget', 'ticket-details-tab-widget'),
                 ],
                 [
-                    new ConfiguredWidget(
-                        'ticket-details-article-list-widget', 'ticket-details-article-list-widget', null
-                    )
+                    new ConfiguredWidget('ticket-communication-widget', 'ticket-communication-widget', null)
                 ],
                 [
                     'ticket-create-action'
@@ -848,11 +802,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     new ConfiguredWidget(
                         'contact-info-overlay', 'ticket-details-contact-overlay', null,
                         [new UIComponentPermission('contacts', [CRUD.READ])]
-                    ),
-                    new ConfiguredWidget('to-receiver-overlay', 'ticket-details-to-receiver-overlay'),
-                    new ConfiguredWidget('cc-receiver-overlay', 'ticket-details-cc-receiver-overlay'),
-                    new ConfiguredWidget('bcc-receiver-overlay', 'ticket-details-bcc-receiver-overlay'),
-                    new ConfiguredWidget('article-attachment-widget', 'ticket-details-article-attachments-overlay')
+                    )
                 ],
                 [
                     new ConfiguredWidget('ticket-details-info-card', 'ticket-details-info-card'),

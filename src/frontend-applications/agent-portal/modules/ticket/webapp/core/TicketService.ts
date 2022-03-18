@@ -57,6 +57,8 @@ import { TicketTypeProperty } from '../../model/TicketTypeProperty';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
 import { CreateTicketArticleOptions } from '../../model/CreateTicketArticleOptions';
 import { Error } from '../../../../../../server/model/Error';
+import { Contact } from '../../../customer/model/Contact';
+import { ContactProperty } from '../../../customer/model/ContactProperty';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -605,5 +607,42 @@ export class TicketService extends KIXObjectService<Ticket> {
             }
         }
         return [...objectProperties, ...superProperties];
+    }
+
+    public static async getContactForArticle(article: Article): Promise<Contact> {
+        let contact: Contact;
+        if (article) {
+            if (article.SenderType === 'external') {
+                const matches = article.From.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/);
+                if (matches?.length) {
+                    const email = matches[0];
+                    const loadingOptions = new KIXObjectLoadingOptions([
+                        new FilterCriteria(
+                            ContactProperty.EMAIL, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, email
+                        )
+                    ]);
+                    const contacts = await KIXObjectService.loadObjects<Contact>(
+                        KIXObjectType.CONTACT, null, loadingOptions
+                    ).catch((): Contact[] => []);
+
+                    if (contacts?.length) {
+                        contact = contacts[0];
+                    }
+                }
+            } else {
+                const loadingOptions = new KIXObjectLoadingOptions(
+                    null, null, null, [UserProperty.CONTACT], [UserProperty.CONTACT]
+                );
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [article.CreatedBy], loadingOptions
+                ).catch((): User[] => []);
+
+                if (users?.length) {
+                    contact = users[0].Contact;
+                }
+            }
+        }
+
+        return contact;
     }
 }

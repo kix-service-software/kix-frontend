@@ -1,0 +1,216 @@
+/**
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+@message-border-radius: 5px;
+@message-padding: 1.25rem;
+
+.message-shadow() {
+   box-shadow: 1px 1px 3px 1px fade(@shadow-color, 90%);
+}
+
+.unread-shadow() {
+   box-shadow: 1px 1px 4px 2px fade(darken(@shadow-color, 50%), 90%);
+}
+
+.message-content-container {
+   display: grid;
+   grid-template-columns: max-content auto max-content;
+   color: @secondary-0;
+   width: 100%;
+   min-height: 10rem;
+
+   >.loading-spinner {
+      grid-column: 2;
+   }
+
+   &:last-of-type .message .message-footer .actions-list .action-list-expansion-container {
+      top: unset;
+      bottom: 2.25rem;
+   }
+
+   &:not(:last-of-type) {
+      margin-bottom: 1rem;
+   }
+
+   &.unread {
+      div {
+         &.message {
+            .unread-shadow();
+            color: #000;
+
+            .message-footer .actions-list .action-list-wrapper .action-list-expansion-container {
+               .unread-shadow();
+            }
+         }
+
+         .speech-bubble,
+         .contact-avatar {
+            .unread-shadow();
+         }
+      }
+   }
+
+   .left-avatar {
+      grid-template-columns: auto max-content;
+      justify-content: end;
+
+      .speech-bubble {
+         margin: 0 -10px 0 @margin-small;
+      }
+   }
+
+   .right-avatar {
+      grid-template-columns: max-content auto;
+      justify-content: start;
+
+      .speech-bubble {
+         margin: 0 @margin-small 0 -10px;
+      }
+   }
+
+   .left-avatar,
+   .right-avatar {
+      display: grid;
+      align-content: start;
+      padding-top: 1.5rem;
+      width: 8rem;
+      gap: @margin-small;
+      overflow: hidden;
+
+      .contact-avatar {
+         width: 5rem;
+         height: 5rem;
+         font-size: 4rem;
+         justify-self: center;
+         align-self: center;
+         border: 5px solid @secondary-6;
+         border-radius: 50%;
+         display: grid;
+         overflow: hidden;
+
+         .message-shadow();
+      }
+
+      .speech-bubble {
+         width: 20px;
+         height: 20px;
+         transform: rotate(45deg);
+         align-self: center;
+
+         .message-shadow();
+      }
+   }
+
+   .message {
+      border-radius: @message-border-radius;
+      padding: @message-padding;
+
+      .message-shadow();
+
+      .header {
+         margin-bottom: 1rem;
+         display: grid;
+      }
+
+      .receiver-list {
+         background-color: fade(#777, 10%);
+         padding: @margin-small;
+         margin: 0 -(@margin-small);
+         border-radius: @message-border-radius;
+
+         .receiver {
+            display: grid;
+            grid-template-columns: max-content auto;
+
+            .title {
+               font-weight: bold;
+               margin-right: @margin-small;
+            }
+         }
+      }
+
+      .message-body-short {
+         border: 1px solid @secondary-5;
+
+         >.short-message {
+            background-color: @secondary-6;
+            opacity: 0.5;
+            padding: 0.25rem;
+            font-style: italic;
+         }
+      }
+
+      .message-body-short,
+      .message-body {
+         margin-top: 1rem;
+         border-radius: @message-border-radius;
+
+         >.show-message {
+            background-color: @secondary-6;
+            opacity: 0.5;
+            font-weight: bold;
+            justify-self: center;
+            padding: 0.25rem;
+            text-align: center;
+
+            &.hide-top {
+               border-top-left-radius: @message-border-radius;
+               border-top-right-radius: @message-border-radius;
+            }
+
+            &:not(.hide-top) {
+               border-bottom-left-radius: @message-border-radius;
+               border-bottom-right-radius: @message-border-radius;
+            }
+
+            &:hover {
+               cursor: pointer;
+               color: @primary-2;
+               border-color: @primary-2;
+            }
+         }
+      }
+
+      .message-footer {
+         display: grid;
+         grid-template-columns: auto 50%;
+
+         .attachments-list {
+            display: grid;
+            column-gap: 0.75rem;
+            grid-template-columns: repeat(auto-fit, minmax(15rem, 0fr));
+            margin-top: 1rem;
+         }
+
+         .actions-list {
+            width: 100%;
+            margin-top: .5rem;
+            justify-self: end;
+            position: relative;
+
+            .action-list-wrapper {
+               background-color: inherit;
+
+               .action-list-expansion-container {
+                  background-color: inherit;
+                  border-radius: @message-border-radius;
+                  right: -@message-padding;
+                  border: 1px solid @secondary-0;
+
+                  .shadow-1();
+
+                  li {
+                     border-top: 1px solid fade(#777, 20%);
+                  }
+               }
+            }
+         }
+      }
+   }
+}

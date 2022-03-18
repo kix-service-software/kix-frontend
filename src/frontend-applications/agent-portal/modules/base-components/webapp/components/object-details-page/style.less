@@ -89,7 +89,10 @@
                         .action-list-expansion {
                             li {
                                 color: @secondary-6;
-                                border-color: @secondary-6;
+
+                                >div {
+                                    border-color: @secondary-6;
+                                }
 
                                 a {
                                     color: @secondary-6
@@ -114,11 +117,6 @@
                         }
                     }
                 }
-            }
-
-            >.widget-content {
-                max-height: 192rem - @default-widget-header-height;
-                overflow-y: auto;
             }
         }
     }

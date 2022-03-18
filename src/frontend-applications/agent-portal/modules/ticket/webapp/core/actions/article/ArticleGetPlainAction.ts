@@ -63,6 +63,8 @@ export class ArticleGetPlainAction extends AbstractAction {
                 this.articleId = this.data[0].ArticleID;
             } else if (typeof this.data === 'string' || typeof this.data === 'number') {
                 this.articleId = Number(this.data);
+            } else if (typeof this.data === 'object' && this.data instanceof Article) {
+                this.articleId = this.data.ArticleID;
             }
         }
     }
