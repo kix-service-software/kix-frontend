@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -68,7 +68,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             : this.state.field?.required ? this.state.field?.label : '';
 
         this.state.placeholder = await TranslationService.translate(placeholderText);
-
+        this.setOptions();
         (this as any).setStateDirty('field');
     }
 
@@ -92,8 +92,8 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                 ) {
                     // update nodes (e.q. uniques) if different field instance of same property is changed
                     const samePropertyFieldChanged = (data as FormValuesChangedEventData).changedValues.some(
-                        (cV) => cV[0].property === this.state.field?.property
-                            && cV[0].instanceId !== this.state.field?.instanceId
+                        (cV) => cV[0]?.property === this.state.field?.property
+                            && cV[0]?.instanceId !== this.state.field?.instanceId
                     );
                     if (samePropertyFieldChanged) {
                         this.load(false);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -100,7 +100,7 @@ export class ReportDefinitionFormValueHandler extends FormFieldValueHandler {
         let possibleValuesField = field.parent.children.find(
             (f) => f.property === ReportParameterProperty.POSSIBLE_VALUES
         );
-        possibleValuesField = formInstance.getFormField(possibleValuesField.instanceId);
+        possibleValuesField = formInstance.getFormField(possibleValuesField?.instanceId);
 
         const multipleField = field.parent.children.find((f) => f.property === ReportParameterProperty.MULTIPLE);
         const multipleValue = formInstance.getFormFieldValue(multipleField?.instanceId);
@@ -135,7 +135,7 @@ export class ReportDefinitionFormValueHandler extends FormFieldValueHandler {
         field: FormFieldConfiguration, value: FormFieldValue<string>, formInstance: FormInstance, keepValue?: boolean
     ): Promise<void> {
         let defaultField = field.parent.children.find((f) => f.property === ReportParameterProperty.DEFAULT);
-        defaultField = formInstance.getFormField(defaultField.instanceId);
+        defaultField = formInstance.getFormField(defaultField?.instanceId);
         if (defaultField) {
             const multipleField = field.parent.children.find((f) => f.property === ReportParameterProperty.MULTIPLE);
             const multipleValue = formInstance.getFormFieldValue(multipleField?.instanceId);
@@ -167,12 +167,7 @@ export class ReportDefinitionFormValueHandler extends FormFieldValueHandler {
 
             await ReportingFormUtil.setInputComponent(defaultField, parameter);
             setTimeout(async () => {
-                await formInstance.provideFormFieldValues(
-                    [
-                        [defaultField.instanceId, existingValue ? existingValue.value : null]
-                    ],
-                    null
-                );
+                await formInstance.provideFormFieldValues([[defaultField.instanceId, existingValue?.value]], null);
 
                 EventService.getInstance().publish(
                     FormEvent.RELOAD_INPUT_VALUES, { formInstance, formField: defaultField }

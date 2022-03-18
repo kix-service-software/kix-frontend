@@ -27,6 +27,7 @@ The RELEASE file defines the current state and the requirements of the plugin. T
 | VERSION     | String which describes the version | 1 or V1                             |
 | BUILDDATE   | String with the date of build      | Fri, 17 Apr 2020 07:30:54 +0200     |
 | BUILDNUMBER | The build number of the version    | 1, 3354                             |
+| PATCHNUMBER | The patch number of the version    | 1                                   |
 | REQUIRES    | Dependencies for the plugin        | framework(>3), backend::Maintenance |
 
 **REQUIRES**
@@ -45,6 +46,7 @@ PRODUCT = MyPlugin
 VERSION = 1
 BUILDDATE = Fri, 17 Apr 2020 07:30:54 +0200
 BUILDNUMBER = 12
+PATCHNUMBER = 0
 REQUIRES = framework(>3340), backend::KIXPro
 ```
 

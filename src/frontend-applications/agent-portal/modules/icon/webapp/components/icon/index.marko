@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
@@ -12,13 +12,19 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <if(state.base64)>
             <img.svg-icon
                 style=input.style
-                src=("data:" + state.contentType + ";base64," + state.content)
-                title=state.title
+                src="data:" + state.contentType + ";base64," + state.content
+                title=state.tooltip
                 key=state.iconId
-                alt=state.title/>
+                alt=state.tooltip
+            >
         </if>
         <else>
-            <span style=input.style class=state.content title=state.tooltip key=state.iconId>
+            <span
+                style=input.style
+                class=state.content
+                title=state.tooltip
+                key=state.iconId
+            >
                 <span.path1/>
                 <span.path2/>
                 <span.path3/>

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -13,6 +13,7 @@ import { Link } from '../../modules/links/model/Link';
 import { DynamicFieldValue } from '../../modules/dynamic-fields/model/DynamicFieldValue';
 import { SearchOperator } from '../../modules/search/model/SearchOperator';
 import { ObjectIcon } from '../../modules/icon/model/ObjectIcon';
+import { SortUtil } from '../SortUtil';
 
 export abstract class KIXObject {
 
@@ -123,48 +124,63 @@ export abstract class KIXObject {
     protected prepareObjectFilter(preparedFilter: any[], filter: any): void {
         // prepare the filter and handle BETWEEN and relative time operators
 
-        if (filter.Operator === SearchOperator.GREATER_THAN_OR_EQUAL ||
-            filter.Operator === SearchOperator.LESS_THAN_OR_EQUAL ||
-            (typeof filter.Value === 'string' && filter.Value.match(/^[+-]\d+\w+$/))) {
+        const isGTLTOrEqual = filter?.Operator === SearchOperator.GREATER_THAN_OR_EQUAL ||
+            filter?.Operator === SearchOperator.LESS_THAN_OR_EQUAL;
+        const isTimeValue = typeof filter?.Value === 'string' && filter?.Value?.toString().match(/^[+-]\d+\w+$/);
+
+        if (isGTLTOrEqual || isTimeValue) {
             // we have to handle this
 
-            if (!filter.Value.match(/^[+-]\d+\w+$/)) {
-                // this is a BETWEEN
-                const propertyFilter = preparedFilter.find(
-                    (f) => f.Field === filter.Field
-                        && f.Operator === (filter.Operator === SearchOperator.LESS_THAN_OR_EQUAL) ?
-                        SearchOperator.GREATER_THAN_OR_EQUAL : SearchOperator.LESS_THAN_OR_EQUAL
-                );
-                if (propertyFilter) {
-                    propertyFilter.Operator = SearchOperator.BETWEEN;
-                    propertyFilter.Value = [
-                        propertyFilter.Value,
-                        filter.Value,
-                    ];
-                }
-            }
-            else {
+            if (filter && filter?.Value?.toString().match(/^[+-]\d+\w+$/)) {
                 const firstChar = filter.Value.charAt(0);
                 filter.Value = filter.Value.substring(1);
 
-                if (firstChar === '+' && filter.Value === '0s' &&
-                    (filter.Operator === SearchOperator.GREATER_THAN_OR_EQUAL ||
-                        filter.Operator === SearchOperator.LESS_THAN_OR_EQUAL))
+                const isPlus = firstChar === '+';
+                const isMinus = firstChar === '-';
+
+                if (filter.Value === '0s' && isGTLTOrEqual) {
                     return; // ignore this part
-                if (firstChar === '-' && filter.Operator === SearchOperator.GREATER_THAN_OR_EQUAL)
-                    filter.Operator = SearchOperator.WITHIN_THE_LAST;
-                if (firstChar === '+' && filter.Operator === SearchOperator.LESS_THAN_OR_EQUAL)
-                    filter.Operator = SearchOperator.WITHIN_THE_NEXT;
-                else if (firstChar === '-' && filter.Operator === SearchOperator.GREATER_THAN)
-                    filter.Operator = SearchOperator.LESS_THAN_AGO;
-                else if (firstChar === '-' && filter.Operator === SearchOperator.LESS_THAN)
-                    filter.Operator = SearchOperator.MORE_THAN_AGO;
-                else if (firstChar === '+' && filter.Operator === SearchOperator.LESS_THAN)
-                    filter.Operator = SearchOperator.IN_LESS_THAN;
-                else if (firstChar === '+' && filter.Operator === SearchOperator.GREATER_THAN)
-                    filter.Operator = SearchOperator.IN_MORE_THAN;
+                }
+
+                if (isMinus) {
+                    if (filter.Operator === SearchOperator.GREATER_THAN_OR_EQUAL) {
+                        filter.Operator = SearchOperator.WITHIN_THE_LAST;
+                    } else if (filter.Operator === SearchOperator.GREATER_THAN) {
+                        filter.Operator = SearchOperator.LESS_THAN_AGO;
+                    } else if (filter.Operator === SearchOperator.LESS_THAN) {
+                        filter.Operator = SearchOperator.MORE_THAN_AGO;
+                    }
+                } else if (isPlus) {
+                    if (filter.Operator === SearchOperator.LESS_THAN_OR_EQUAL) {
+                        filter.Operator = SearchOperator.WITHIN_THE_NEXT;
+                    } else if (filter.Operator === SearchOperator.LESS_THAN) {
+                        filter.Operator = SearchOperator.IN_LESS_THAN;
+                    } else if (filter.Operator === SearchOperator.GREATER_THAN) {
+                        filter.Operator = SearchOperator.IN_MORE_THAN;
+                    }
+                }
 
                 preparedFilter.push(filter);
+            }
+            else {
+                const oppositeOperator = filter.Operator === SearchOperator.GREATER_THAN_OR_EQUAL
+                    ? SearchOperator.LESS_THAN_OR_EQUAL
+                    : SearchOperator.GREATER_THAN_OR_EQUAL;
+                const propertyFilter = preparedFilter.find(
+                    (f) => f.Field === filter.Field && f.Operator === oppositeOperator
+                );
+                if (propertyFilter) { // this is a BETWEEN
+                    propertyFilter.Operator = SearchOperator.BETWEEN;
+                    const dateA = filter.Value;
+                    const dateB = propertyFilter.Value;
+                    if (SortUtil.compareDate(dateA, dateB) > 0) {
+                        propertyFilter.Value = [propertyFilter.Value, filter.Value];
+                    } else {
+                        propertyFilter.Value = [filter.Value, propertyFilter.Value];
+                    }
+                } else {
+                    preparedFilter.push(filter);
+                }
             }
         } else {
             // just add it unhandled

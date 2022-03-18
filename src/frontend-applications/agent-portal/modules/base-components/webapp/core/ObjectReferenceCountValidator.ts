@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -41,7 +41,7 @@ export class ObjectReferenceCountValidator implements IFormFieldValidator {
             const countMin = formField.options.find((o) => o.option === ObjectReferenceOptions.COUNT_MIN);
             const countMax = formField.options.find((o) => o.option === ObjectReferenceOptions.COUNT_MAX);
 
-            return await this.checkCountValues(fieldValue.length, countMin.value, countMax.value, formField.label);
+            return await this.checkCountValues(fieldValue?.length, countMin?.value, countMax?.value, formField?.label);
         }
         return new ValidationResult(ValidationSeverity.OK, '');
     }

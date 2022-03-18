@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -66,6 +66,9 @@ export class ReportLabelProvider extends LabelProvider<Report> {
                 break;
             case ReportProperty.RESULTS:
                 displayValue = 'Translatable#Download Result';
+                break;
+            case ReportProperty.PARAMETER:
+                displayValue = 'Translatable#Parameters';
                 break;
             default:
                 displayValue = await super.getPropertyText(property, short, translatable);

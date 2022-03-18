@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -185,7 +185,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'faq-article-new-form-field-tags',
                     'faq-article-new-form-field-relatedassets',
                     'faq-article-new-form-field-attachments',
-                    'faq-article-new-form-field-links',
                     'faq-article-new-form-field-symptom',
                     'faq-article-new-form-field-cause',
                     'faq-article-new-form-field-solution',

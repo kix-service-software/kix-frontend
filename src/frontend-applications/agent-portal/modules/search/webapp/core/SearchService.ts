@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -35,6 +35,11 @@ import { SearchContext } from './SearchContext';
 import { ContextMode } from '../../../../model/ContextMode';
 import { Table } from '../../../table/model/Table';
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
+import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
+import { EventService } from '../../../base-components/webapp/core/EventService';
+import { OverlayService } from '../../../base-components/webapp/core/OverlayService';
+import { OverlayType } from '../../../base-components/webapp/core/OverlayType';
+import { StringContent } from '../../../base-components/webapp/core/StringContent';
 
 export class SearchService {
 
@@ -167,8 +172,36 @@ export class SearchService {
 
         searchCache.primaryValue = searchValue;
 
-        await this.setSearchContext(searchCache?.objectType);
+        const searchContext = await this.setSearchContext(searchCache?.objectType);
         const objects = await this.searchObjects(searchCache);
+
+        if (Array.isArray(objects) && objects.length === 1) {
+            const contextService = ContextService.getInstance();
+            const contextDescriptors = contextService.getContextDescriptors(ContextMode.DETAILS);
+            const detailContextId = contextDescriptors.find(
+                (cd) => cd.kixObjectTypes.some((ot) =>
+                    ot === searchContext?.descriptor.kixObjectTypes[0])
+            );
+            if (detailContextId) {
+                contextService.toggleActiveContext();
+                contextService.setActiveContext(detailContextId.contextId, objects[0].ObjectId);
+            }
+        } else {
+            await ContextService.getInstance().removeContext(searchContext.instanceId);
+            await SearchService.getInstance().executeFullTextSearch(
+                objectType, searchValue
+            ).catch((error) => {
+                OverlayService.getInstance().openOverlay(
+                    OverlayType.WARNING, null, new StringContent(error), 'Translatable#Search error!',
+                    null, true
+                );
+            });
+
+            EventService.getInstance().publish(
+                ApplicationEvent.APP_LOADING, { loading: false, hint: '' }
+            );
+        }
+
         return (objects as any);
     }
 

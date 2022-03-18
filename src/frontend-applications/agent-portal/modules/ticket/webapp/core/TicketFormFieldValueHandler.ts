@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -27,6 +27,7 @@ import { ContextService } from '../../../base-components/webapp/core/ContextServ
 import { ArticleProperty } from '../../model/ArticleProperty';
 import { Attachment } from '../../../../model/kix/Attachment';
 import { FormService } from '../../../base-components/webapp/core/FormService';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 
 export class TicketFormFieldValueHandler extends FormFieldValueHandler {
 
@@ -56,15 +57,7 @@ export class TicketFormFieldValueHandler extends FormFieldValueHandler {
     ): Promise<void> {
         const contactValue = changedFieldValues.find((cv) => cv[0] && cv[0].property === TicketProperty.CONTACT_ID);
         if (contactValue) {
-            let organisationId: number | string = null;
-            if (contactValue[1].value) {
-                organisationId = await this.getOrganisationsFromContact(contactValue[1].value);
-            }
-
-            const field = formInstance.getFormFieldByProperty(TicketProperty.ORGANISATION_ID);
-            if (field) {
-                formInstance.provideFormFieldValues([[field.instanceId, organisationId]], null);
-            }
+            await this.handleOrganisationValue(formInstance, contactValue[1].value);
         }
 
         const stateValue = changedFieldValues.find((cv) => cv[0] && cv[0].property === TicketProperty.STATE_ID);
@@ -91,18 +84,60 @@ export class TicketFormFieldValueHandler extends FormFieldValueHandler {
         }
     }
 
-    private async getOrganisationsFromContact(contactId: number): Promise<number | string> {
-        let organisationId: number;
+    public async postInitValues(formInstance: FormInstance): Promise<void> {
+        const contactValue = await formInstance.getFormFieldValueByProperty(TicketProperty.CONTACT_ID);
+        this.handleOrganisationValue(formInstance, contactValue?.value);
+    }
+
+    private async handleOrganisationValue(
+        formInstance: FormInstance, contactId: any
+    ): Promise<void> {
+        if (contactId) {
+            const field = formInstance.getFormFieldByProperty(TicketProperty.ORGANISATION_ID);
+            if (field) {
+                const organisationIds: [number, number[]] = await this.getOrganisationsFromContact(contactId);
+                if (organisationIds[0]) {
+
+                    // set new value (org) if current is not new primary AND not in possible list
+                    const fieldValue = formInstance.getFormFieldValue(field.instanceId);
+                    if (
+                        fieldValue?.value !== organisationIds[0] &&
+                        (
+                            !Array.isArray(organisationIds[1])
+                            || !organisationIds[1].some((oId) => Number(oId) === Number(fieldValue?.value))
+                        )
+                    ) {
+                        formInstance.provideFormFieldValues([[field.instanceId, organisationIds[0]]], null);
+                    }
+
+                    // provide possible values for organisations
+                    formInstance.setPossibleValue(
+                        TicketProperty.ORGANISATION_ID, new FormFieldValue(organisationIds[1] || [organisationIds[0]])
+                    );
+                } else {
+                    formInstance.setPossibleValue(
+                        TicketProperty.ORGANISATION_ID, new FormFieldValue(null)
+                    );
+                }
+            }
+        }
+    }
+
+    private async getOrganisationsFromContact(contactId: number): Promise<[number, number[]]> {
+        let organisationIds: [number, number[]];
         if (!isNaN(contactId)) {
-            const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, [contactId]);
-            if (contacts && contacts.length) {
-                const contact = contacts[0];
-                organisationId = contact.PrimaryOrganisationID;
+            const contacts = await KIXObjectService.loadObjects<Contact>(
+
+                // use loadingOptions to prevent unnecessary preload
+                KIXObjectType.CONTACT, [contactId], new KIXObjectLoadingOptions()
+            );
+            if (contacts?.length) {
+                organisationIds = [contacts[0].PrimaryOrganisationID, contacts[0].OrganisationIDs];
             }
         } else {
-            organisationId = contactId;
+            organisationIds = [contactId, null];
         }
-        return organisationId;
+        return organisationIds;
     }
 
     private async setPendingTimeField(formInstance: FormInstance): Promise<void> {

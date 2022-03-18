@@ -1,8 +1,7 @@
-config/defaults/**/*.json
-config/user/**/*.json
+config/server.config.json
 features/report
 .cache
-cache
+data/*
 package-lock.json
 gulp-*
 dist

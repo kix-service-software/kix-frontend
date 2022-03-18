@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -131,36 +131,6 @@ class EditorComponent {
                         ...this.state.config
                     });
                 }
-
-                this.editor.on('paste', (event: any) => {
-                    const fileSize = event.data.dataTransfer.getFilesCount();
-                    if (fileSize > 0) {
-                        event.stop();
-                        if (!this.state.noImages) {
-                            for (let i = 0; i < fileSize; i++) {
-                                const file = event.data.dataTransfer.getFile(i);
-                                const valid = AttachmentUtil.checkMimeType(
-                                    file, ['image/png', 'image/jpg', 'image/jpeg', 'image/bmp', 'image/svg+xml']
-                                );
-                                if (valid) {
-                                    const reader = new FileReader();
-                                    reader.onload = (evt: any): void => {
-                                        const element = this.editor.document.createElement('img', {
-                                            attributes: {
-                                                src: evt.target.result
-                                            }
-                                        });
-
-                                        setTimeout(() => {
-                                            this.editor.insertElement(element);
-                                        }, 0);
-                                    };
-                                    reader.readAsDataURL(file);
-                                }
-                            }
-                        }
-                    }
-                });
 
                 const changeListener = (): void => {
                     if (this.changeTimeout) {

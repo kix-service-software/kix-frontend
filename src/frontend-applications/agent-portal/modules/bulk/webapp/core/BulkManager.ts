@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -115,7 +115,7 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
                 dfObjectValues.push(value);
             }
             if (dfValue.operator === PropertyOperator.CLEAR) {
-                value.Value = null;
+                value.Value = [];
             } else if (Array.isArray(dfValue.value)) {
                 value.Value = dfValue.value;
             } else if (!value.Value.some((v) => v === dfValue.value)) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -17,17 +17,33 @@ import { BreadcrumbInformation } from '../../../../../model/BreadcrumbInformatio
 import { TicketContext } from './TicketContext';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { TicketProperty } from '../../../model/TicketProperty';
-import { ArticleProperty } from '../../../model/ArticleProperty';
 import { Article } from '../../../model/Article';
 import { ArticleLoadingOptions } from '../../../model/ArticleLoadingOptions';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { ArticleProperty } from '../../../model/ArticleProperty';
 
 export class TicketDetailsContext extends Context {
 
     public static CONTEXT_ID = 'ticket-details';
 
+    private scrolledDone: boolean;
+
     public getIcon(): string {
         return 'kix-icon-ticket';
+    }
+
+    public setAdditionalInformation(key: string, value: any): void {
+
+        if (key === 'NEWEST_ARTICLE_ID') {
+
+            // set if not already scrolled or "reset"
+            if (!this.scrolledDone || !value) {
+                this.scrolledDone = true;
+                super.setAdditionalInformation(key, value);
+            }
+        } else {
+            super.setAdditionalInformation(key, value);
+        }
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
@@ -93,8 +109,9 @@ export class TicketDetailsContext extends Context {
             objects = await KIXObjectService.loadObjects<Article>(
                 KIXObjectType.ARTICLE, null,
                 new KIXObjectLoadingOptions(
-                    null, null, null, [ArticleProperty.ATTACHMENTS, ArticleProperty.FLAGS, 'ObjectActions']
-                ), new ArticleLoadingOptions(this.objectId)
+                    null, 'Article.IncomingTime', null, [ArticleProperty.FLAGS]
+                ),
+                new ArticleLoadingOptions(this.objectId)
             ).catch(() => [] as Article[]) || [];
         } else if (objectType === KIXObjectType.TICKET_HISTORY) {
             const tickets = await KIXObjectService.loadObjects<Ticket>(

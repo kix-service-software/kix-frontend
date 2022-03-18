@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -12,7 +12,8 @@ import { AbstractMarkoComponent } from '../../../../../modules/base-components/w
 import { Cell } from '../../../../table/model/Cell';
 import { Contact } from '../../../model/Contact';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { NewTicketDialogContext } from '../../../../ticket/webapp/core';
+import { NewTicketDialogContext, TicketDialogUtil } from '../../../../ticket/webapp/core';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -23,8 +24,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public onInput(input: any): void {
         if (input.cell) {
             const cell: Cell = input.cell;
-            const contact: Contact = cell.getRow().getRowObject().getObject();
-            this.update(contact);
+            this.state.contact = cell.getRow().getRowObject().getObject();
+            this.update(this.state.contact);
 
         }
     }
@@ -38,7 +39,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public labelClicked(event: any): void {
         event.stopPropagation();
         event.preventDefault();
-        ContextService.getInstance().setActiveContext(NewTicketDialogContext.CONTEXT_ID);
+        TicketDialogUtil.createTicket(null, null, null, null, [[KIXObjectType.CONTACT, this.state.contact as any]]);
     }
 
 }

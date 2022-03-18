@@ -1,0 +1,47 @@
+<!--
+Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<widget
+   instanceId=state.instanceId
+   title=state.widgetTitle
+   contentActions=state.actions
+>
+   <@content>
+      <div.communication-container>
+         <div.communication-header>
+            <message-filter/>
+            <!-- TODO: for performance reasons currently not active -->
+            <!-- <div.expand-action on-click("toggleAll")>
+               <if(state.expanded)>
+                  <span.kix-icon-minus/>
+                  <translation-string pattern="Translatable#close all"/>
+               </if>
+               <else>
+                  <span.kix-icon-plus-blank/>
+                  <translation-string pattern="Translatable#expand all"/>
+               </else>
+            </div> -->
+            <div.read-action class={active:state.activeUnreadAction} on-click("readAll")>
+               <span.fas.fa-book-open/>
+               <translation-string pattern="Translatable#Mark all as read"/>
+            </div>
+         </div>
+         <div.communication-list>
+            <if(state.articles)>
+               <for|article| of=state.articles>
+                  <message-content
+                     article=article
+                     key="article-" + article.ArticleID
+                  />
+               </for>
+            </if>
+         </div>
+      </div>
+   </@content>
+</widget>

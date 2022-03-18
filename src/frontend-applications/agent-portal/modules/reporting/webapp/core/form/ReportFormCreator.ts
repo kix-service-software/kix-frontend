@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -146,6 +146,8 @@ export class ReportFormCreator {
         } else if (Array.isArray(parameter.PossibleValues) && parameter.PossibleValues.length) {
             ReportingFormUtil.createDefaultValueInput(field, parameter);
         }
+
+        field.required = Boolean(parameter.Required);
 
         if (allowPlaceholder) {
             field.options.push(new FormFieldOption(FormFieldOptions.ALLOW_PLACEHOLDER, true));

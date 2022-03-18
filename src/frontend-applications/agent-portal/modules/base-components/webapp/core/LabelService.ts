@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -94,7 +94,8 @@ export class LabelService {
     }
 
     public async getDisplayText<T extends KIXObject>(
-        object: T, property: string, defaultValue?: string, translatable: boolean = true
+        object: T, property: string, defaultValue?: string, translatable: boolean = true,
+        short?: boolean
     ): Promise<string> {
 
         let displayValue;
@@ -102,7 +103,7 @@ export class LabelService {
         if (labelProvider) {
             for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
                 const result = await extendedLabelProvider.getDisplayText(
-                    object, property, defaultValue, translatable
+                    object, property, defaultValue, translatable, short
                 );
                 if (result) {
                     displayValue = result;
@@ -152,7 +153,7 @@ export class LabelService {
         }
 
         const requestPromise = this.createRequestDisplayValuePromise(
-            object, property, key, valueString, defaultValue, translatable
+            object, property, key, valueString, defaultValue, translatable, short
         );
         this.requestDisplayValuePromises.set(key, requestPromise);
         return requestPromise;
@@ -160,7 +161,7 @@ export class LabelService {
 
     private createRequestDisplayValuePromise<T extends KIXObject>(
         object: T, property: string, key: string, valueString: string, defaultValue?: string,
-        translatable: boolean = true
+        translatable: boolean = true, short?: boolean
     ): Promise<string> {
         return new Promise(async (resolve, reject) => {
             let displayValue;
@@ -171,7 +172,7 @@ export class LabelService {
             }
 
             if (!displayValue) {
-                displayValue = await labelProvider?.getDisplayText(object, property, defaultValue, translatable);
+                displayValue = await labelProvider?.getDisplayText(object, property, defaultValue, translatable, short);
             }
             this.displayValueCache.get(object.KIXObjectType).get(property).set(valueString, displayValue);
             this.requestDisplayValuePromises.delete(key);
@@ -512,7 +513,7 @@ export class LabelService {
 
         if (labelProvider) {
             for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
-                const result = extendedLabelProvider.createLabelsFromDFValue(fieldValue);
+                const result = await extendedLabelProvider.createLabelsFromDFValue(fieldValue);
                 if (result) {
                     return result;
                 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -259,8 +259,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
 
         const channelID = value && value !== ''
             ? value
-            : article ? article.ChannelID : null
-            ;
+            : article ? article.ChannelID : null;
         switch (property) {
             case ArticleProperty.ATTACHMENTS:
                 if (article.Attachments) {
