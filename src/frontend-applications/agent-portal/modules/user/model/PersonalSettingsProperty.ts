@@ -25,6 +25,8 @@ export enum PersonalSettingsProperty {
 
     CONTEXT_WIDGET_LISTS = 'ContextWidgetLists',
 
-    USER_TOKEN = 'UserToken'
+    USER_TOKEN = 'UserToken',
+
+    ARTICLE_SORT_ORDER = 'ArticleSortOrder'
 
 }

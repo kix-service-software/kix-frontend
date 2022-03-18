@@ -1,0 +1,61 @@
+<!--
+Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<div.message-filter-container>
+   <div.fulltext>
+      <input.input-style
+         value=state.filterValue
+         placeholder=state.searchPlaceholder + " ..."
+         on-keydown("keyDown")
+      >
+   </div>
+   <div.static-filter>
+      <!-- TODO: for performance reasons currently not active -->
+      <!-- <div.filter-action>
+         <input#filter-with-attachments
+            type="checkbox"
+            checked=state.filterAttachment
+            on-click("filterChanged", "attachment")
+         >
+         <label for="filter-with-attachments">
+            <translation-string pattern="Translatable#With attachments"/>
+         </label>
+      </div> -->
+      <div.filter-action>
+         <input#filter-external
+            type="checkbox"
+            checked=state.filterExternal
+            on-click("filterChanged", "external")
+         >
+         <label for="filter-external">
+            <translation-string pattern="Translatable#From external"/>
+         </label>
+      </div>
+      <div.filter-action>
+         <input#filter-customer
+            type="checkbox"
+            checked=state.filterCustomer
+            on-click("filterChanged", "customer")
+         >
+         <label for="filter-customer">
+            <translation-string pattern="Translatable#Visible in customer portal"/>
+         </label>
+      </div>
+      <div.filter-action>
+         <input#filter-unread
+            type="checkbox"
+            checked=state.filterUnread
+            on-click("filterChanged", "unread")
+         >
+         <label for="filter-unread">
+            <translation-string pattern="Translatable#Unread"/>
+         </label>
+      </div>
+   </div>
+</div>

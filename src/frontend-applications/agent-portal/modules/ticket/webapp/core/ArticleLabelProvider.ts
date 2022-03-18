@@ -259,8 +259,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
 
         const channelID = value && value !== ''
             ? value
-            : article ? article.ChannelID : null
-            ;
+            : article ? article.ChannelID : null;
         switch (property) {
             case ArticleProperty.ATTACHMENTS:
                 if (article.Attachments) {

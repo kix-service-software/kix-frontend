@@ -10,16 +10,22 @@
 .attachment {
     display: grid;
     grid-column-gap: @margin-small;
-    grid-template-columns: 1rem 3fr 1fr;
+    grid-template-columns: min-content auto 1fr;
+
     .attachment-link {
+        .shorten-text();
+
         color: @primary-0;
         cursor: pointer;
-        white-space: nowrap;
     }
+
     .inactive-link {
+        .shorten-text();
+
         color: @secondary-0;
         cursor: none;
     }
+
     .file-size {
         white-space: nowrap;
     }
