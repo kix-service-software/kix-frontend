@@ -132,38 +132,6 @@ class EditorComponent {
                     });
                 }
 
-                this.editor.on('paste', (event: any) => {
-                    const fileSize = event.data.dataTransfer.getFilesCount();
-                    if (fileSize > 0) {
-                        event.stop();
-                        if (!this.state.noImages) {
-                            for (let i = 0; i < fileSize; i++) {
-                                const file = event.data.dataTransfer.getFile(i);
-                                const valid = AttachmentUtil.checkMimeType(
-                                    file, ['image/png', 'image/jpg', 'image/jpeg', 'image/bmp', 'image/svg+xml']
-                                );
-                                if (valid) {
-                                    const reader = new FileReader();
-                                    reader.onload = (evt: any): void => {
-                                        const element = this.editor.document.createElement('img', {
-                                            attributes: {
-                                                src: evt.target.result
-                                            }
-                                        });
-
-                                        setTimeout(() => {
-                                            this.editor.insertElement(element);
-                                            event.editor.commands.source.exec();
-                                            setTimeout(() => event.editor.commands.source.exec(), 10);
-                                        }, 0);
-                                    };
-                                    reader.readAsDataURL(file);
-                                }
-                            }
-                        }
-                    }
-                });
-
                 const changeListener = (): void => {
                     if (this.changeTimeout) {
                         window.clearTimeout(this.changeTimeout);

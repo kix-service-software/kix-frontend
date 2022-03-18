@@ -87,7 +87,7 @@ export class ComponentState {
             toolbarCanCollapse: this.simple ? false : true,
             readOnly: this.readOnly,
             removeButtons: '',
-            removePlugins: 'elementspath'
+            removePlugins: 'pastefromexcel,elementspath'
                 + (this.readOnly || this.noImages ? ',image2' : '')
                 + (this.readOnly ? '' : ',autogrow')
                 + (this.readOnly ? ',stylesheetparser' : ''),
