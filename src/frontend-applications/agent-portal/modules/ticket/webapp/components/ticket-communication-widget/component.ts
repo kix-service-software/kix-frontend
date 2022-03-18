@@ -60,7 +60,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         ) : null;
         this.sortOrder = preference?.Value;
 
-        await this.setFilteredArticles();
+        this.setFilteredArticles();
 
         // enable read action
         const allArticles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || [];
@@ -69,12 +69,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 (a) => a.isUnread() && a.ArticleID !== allArticles[allArticles.length - 1].ArticleID
             );
 
-        }
-
-        // toggle newest visible (filtered) article
-        if (this.state.articles.length) {
-            const index = this.sortOrder === 'newest' ? 0 : this.state.articles.length - 1;
-            this.context.setAdditionalInformation('NEWEST_ARTICLE_ID', this.state.articles[index].ArticleID);
         }
     }
 
@@ -86,6 +80,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.sortOrder === 'newest' ? SortOrder.DOWN : SortOrder.UP
         );
 
+        // change widget title
         const allArticles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || [];
         this.state.widgetTitle = this.state.widgetConfiguration?.title +
             ` (${articles?.length < allArticles?.length ? articles.length + '/' : ''}${allArticles?.length})`;

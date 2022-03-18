@@ -26,24 +26,8 @@ export class TicketDetailsContext extends Context {
 
     public static CONTEXT_ID = 'ticket-details';
 
-    private scrolledDone: boolean;
-
     public getIcon(): string {
         return 'kix-icon-ticket';
-    }
-
-    public setAdditionalInformation(key: string, value: any): void {
-
-        if (key === 'NEWEST_ARTICLE_ID') {
-
-            // set if not already scrolled or "reset"
-            if (!this.scrolledDone || !value) {
-                this.scrolledDone = true;
-                super.setAdditionalInformation(key, value);
-            }
-        } else {
-            super.setAdditionalInformation(key, value);
-        }
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
