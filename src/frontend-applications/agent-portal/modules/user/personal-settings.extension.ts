@@ -23,8 +23,10 @@ import { FilterDataType } from '../../model/FilterDataType';
 import { FilterType } from '../../model/FilterType';
 import { NotificationProperty } from '../notification/model/NotificationProperty';
 import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
-
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { FormFieldValue } from '../../model/configuration/FormFieldValue';
+import { DefaultSelectInputFormOption } from '../../model/configuration/DefaultSelectInputFormOption';
+import { TreeNode } from '../base-components/webapp/core/tree';
 
 class Extension extends KIXExtension implements IPersonalSettingsExtension {
 
@@ -132,6 +134,22 @@ class Extension extends KIXExtension implements IPersonalSettingsExtension {
                 'Translatable#User Token',
                 'Translatable#Helptext_PersonalSettings_user_token_Hint',
                 'user-token-input'
+            ),
+            new PersonalSetting(
+                'Translatable#Article sort order',
+                PersonalSettingsProperty.ARTICLE_SORT_ORDER,
+                'Translatable#Article sort order',
+                'Translatable#Helptext_PersonalSettings_article_sort_order_Hint',
+                'default-select-input',
+                false, new FormFieldValue('oldest'),
+                [
+                    new FormFieldOption(DefaultSelectInputFormOption.NODES,
+                        [
+                            new TreeNode('oldest', 'Translatable#Oldest first'),
+                            new TreeNode('newest', 'Translatable#Newest first')
+                        ]
+                    )
+                ]
             )
         ];
     }
