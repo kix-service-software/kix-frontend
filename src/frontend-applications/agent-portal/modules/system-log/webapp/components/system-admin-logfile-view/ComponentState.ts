@@ -21,7 +21,8 @@ export class ComponentState extends AbstractComponentState {
         public tailCount: number = 100,
         public refreshInterval: number = 10,
         public wrapLines: boolean = true,
-        public run: boolean = false
+        public run: boolean = false,
+        public prepared: boolean = false
     ) {
         super();
     }

@@ -45,6 +45,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             'Translatable#Wrap Lines',
             'Translatable#yes',
             'Translatable#no',
+            'Translatable#Filter Log Level'
         ]);
 
         await this.loadLogFile();
@@ -53,6 +54,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             + ': ' + this.logFile.DisplayName;
 
         this.setRefreshInterval();
+
+        this.state.prepared = true;
     }
 
     public onDestroy(): void {
