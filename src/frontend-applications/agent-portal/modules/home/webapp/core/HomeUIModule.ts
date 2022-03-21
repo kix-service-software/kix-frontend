@@ -27,7 +27,7 @@ export class UIModule implements IUIModule {
 
     public async register(): Promise<void> {
         const homeContext = new ContextDescriptor(
-            HomeContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN, ContextMode.DASHBOARD,
+            HomeContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'home', ['home'], HomeContext
         );
         ContextService.getInstance().registerContext(homeContext);
