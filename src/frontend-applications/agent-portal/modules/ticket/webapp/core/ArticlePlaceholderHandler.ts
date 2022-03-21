@@ -80,6 +80,7 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                         }
                         break;
                     case ArticleProperty.BODY_RICHTEXT:
+                    case ArticleProperty.BODY_RICHTEXT_NO_INLINE:
                     case ArticleProperty.FROM_REALNAME:
                     case ArticleProperty.TO_REALNAME:
                     case ArticleProperty.CC_REALNAME:
