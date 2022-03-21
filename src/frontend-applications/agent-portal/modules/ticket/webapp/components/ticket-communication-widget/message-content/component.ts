@@ -39,8 +39,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private contextListenerId: string;
     private article: Article;
 
-    private scrollAgainWhenLoaded: boolean;
-
     private observer: IntersectionObserver;
 
     public onCreate(): void {
@@ -78,16 +76,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             additionalInformationChanged: (): void => { return; }
         };
         this.context.registerListener(this.contextListenerId, this.contextListener);
-
-        const newestArticleId = this.context.getAdditionalInformation('NEWEST_ARTICLE_ID');
-        if (newestArticleId && Number(this.article?.ArticleID) === Number(newestArticleId)) {
-            // reset value
-            this.context.setAdditionalInformation('NEWEST_ARTICLE_ID', null);
-            this.state.expanded = true;
-            this.setArticleSeen();
-            this.scrollToArticle();
-            this.scrollAgainWhenLoaded = true;
-        }
     }
 
     public onDestroy(): void {
@@ -144,13 +132,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         await this.prepareData();
         this.state.loading = false;
         this.state.show = true;
-
-        if (this.scrollAgainWhenLoaded) {
-            this.scrollAgainWhenLoaded = false;
-            setTimeout(() => {
-                this.scrollToArticle();
-            }, 150);
-        }
     }
 
     private intersectionCallback(entries, observer): void {
