@@ -62,7 +62,7 @@ class Component {
             const formField = new FormFieldConfiguration(
                 ps.property,
                 ps.label, ps.property, ps.inputComponent, !!ps.required, ps.hint,
-                ps.options, new FormFieldValue(ps.defaultValue)
+                ps.options, ps.defaultValue
             );
             if (group) {
                 group.formFields.push(formField);
