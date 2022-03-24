@@ -25,6 +25,7 @@ import { OrganisationService } from '../OrganisationService';
 import { ContactService } from '../ContactService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { ContextPreference } from '../../../../../model/ContextPreference';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
 export class OrganisationContext extends Context {
 
@@ -134,6 +135,7 @@ export class OrganisationContext extends Context {
 
             const filter = await OrganisationService.getInstance().prepareFullTextFilter(this.filterValue);
             const loadingOptions = new KIXObjectLoadingOptions(filter);
+            loadingOptions.includes = [KIXObjectProperty.DYNAMIC_FIELDS];
 
             const organisations = await KIXObjectService.loadObjects(
                 KIXObjectType.ORGANISATION, null, loadingOptions, null, false
@@ -159,7 +161,8 @@ export class OrganisationContext extends Context {
         );
 
         let contacts = [];
-        const loadingOptions = new KIXObjectLoadingOptions([], null, null, [ContactProperty.USER]);
+        const loadingOptions = new KIXObjectLoadingOptions();
+        loadingOptions.includes = [ContactProperty.USER, KIXObjectProperty.DYNAMIC_FIELDS];
         if (organisations && organisations.length && isOrganisationDepending) {
             const organisationIds = organisations.map((o) => Number(o.ObjectId));
             if (organisationIds && organisationIds.length) {
