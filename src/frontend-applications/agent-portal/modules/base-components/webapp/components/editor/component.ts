@@ -68,7 +68,7 @@ class EditorComponent {
                 );
 
                 const plainText: string = input.plainText;
-                const matches = plainText.match(/(<.*?>)/g);
+                const matches = plainText?.match(/(<.*?>)/g);
                 if (matches) {
                     for (const m of matches) {
                         let replacedString = m.replace(/>/g, '&gt;');
