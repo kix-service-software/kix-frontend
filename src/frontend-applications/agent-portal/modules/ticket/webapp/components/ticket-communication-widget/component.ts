@@ -65,9 +65,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         // enable read action
         const allArticles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || [];
         if (allArticles.length) {
-            this.state.activeUnreadAction = allArticles.some(
-                (a) => a.isUnread() && a.ArticleID !== allArticles[allArticles.length - 1].ArticleID
-            );
+            this.state.activeUnreadAction = allArticles.some((a) => a.isUnread());
 
         }
     }
