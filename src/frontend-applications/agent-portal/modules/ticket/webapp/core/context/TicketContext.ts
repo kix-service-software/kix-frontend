@@ -191,4 +191,11 @@ export class TicketContext extends Context {
         this.filterValue = contextPreference['FILTER_VALUE'];
     }
 
+    public deleteObjectList(objectType: KIXObjectType | string): void {
+        super.deleteObjectList(objectType);
+        if (objectType === KIXObjectType.TICKET) {
+            this.loadTickets();
+        }
+    }
+
 }
