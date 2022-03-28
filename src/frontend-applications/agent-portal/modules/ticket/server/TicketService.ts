@@ -273,11 +273,13 @@ export class TicketAPIService extends KIXObjectAPIService {
                     to = contactId;
                 }
 
-                // switch To and From by channel note on new ticket (= incomming call) so ticket "is" from customer
+                // switch To and From with external sendertype by channel note on new ticket (= incomming call)
+                // - so ticket "is" from customer
                 if (!ticketId && channelId === 1) {
                     const oldFrom = from;
                     from = to;
                     to = oldFrom;
+                    senderType = 3;
                 }
             }
 
