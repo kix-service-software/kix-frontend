@@ -158,10 +158,19 @@ export class Article extends KIXObject {
 
     private prepareRecieverList(list: ArticleReceiver[], mailValue: string): void {
         if (mailValue && !Array.isArray(mailValue)) {
-            addrparser.parse(mailValue).forEach((address) => {
-                const realName = address.phrase !== '' ? address.phrase : address.address;
-                list.push(new ArticleReceiver(address.address, realName));
-            });
+            try {
+                addrparser.parse(mailValue).forEach((address) => {
+                    const realName = address.phrase !== '' ? address.phrase : address.address;
+                    list.push(new ArticleReceiver(address.address, realName));
+                });
+            } catch {
+                const mailList = mailValue.split(/\s*,\s*/);
+                mailList.forEach((mail) => {
+                    const realName = mail.replace(/(.+)\s*<.+/, '$1');
+                    const address = mail.replace(/.+\s*<(.+)>/, '$1');
+                    list.push(new ArticleReceiver(address ? address : mail, realName ? realName : mail));
+                });
+            }
         }
     }
 
