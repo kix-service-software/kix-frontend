@@ -74,5 +74,6 @@ export enum ArticleProperty {
     REFERENCED_ARTICLE_ID = 'ReferencedArticleID',
     EXEC_REPLY = 'ExecReply',
     EXEC_FORWARD = 'ExecForward',
-    BODY_RICHTEXT = 'BodyRichtext'
+    BODY_RICHTEXT = 'BodyRichtext',
+    BODY_RICHTEXT_NO_INLINE = 'BodyRichtextNoInline'
 }

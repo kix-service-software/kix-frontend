@@ -426,26 +426,13 @@ export class TicketService extends KIXObjectService<Ticket> {
         return context.descriptor.urlPaths[0] + '/' + id;
     }
 
-    public async getPreparedArticleBodyContent(article: Article): Promise<[string, InlineContent[]]> {
+    public async getPreparedArticleBodyContent(
+        article: Article, removeInlineImages: boolean = false
+    ): Promise<[string, InlineContent[]]> {
         if (article.bodyAttachment) {
 
             const attachmentWithContent = await this.loadArticleAttachment(
                 article.TicketID, article.ArticleID, article.bodyAttachment.ID
-            );
-
-            const inlineAttachments = article.getAttachments(true);
-            for (const inlineAttachment of inlineAttachments) {
-                const attachment = await this.loadArticleAttachment(
-                    article.TicketID, article.ArticleID, inlineAttachment.ID
-                );
-                if (attachment) {
-                    inlineAttachment.Content = attachment.Content;
-                }
-            }
-
-            const inlineContent: InlineContent[] = [];
-            inlineAttachments.forEach(
-                (a) => inlineContent.push(new InlineContent(a.ContentID, a.Content, a.ContentType))
             );
 
             let buffer = Buffer.from(attachmentWithContent.Content, 'base64');
@@ -465,6 +452,27 @@ export class TicketService extends KIXObjectService<Ticket> {
                 content = match[2];
             } else {
                 content = content.replace(/(\r\n|\n\r|\n|\r)/g, '<br>');
+            }
+
+            const inlineContent: InlineContent[] = [];
+            if (!removeInlineImages) {
+                const inlineAttachments = article.getAttachments(true);
+                for (const inlineAttachment of inlineAttachments) {
+                    const attachment = await this.loadArticleAttachment(
+                        article.TicketID, article.ArticleID, inlineAttachment.ID
+                    );
+                    if (attachment) {
+                        inlineAttachment.Content = attachment.Content;
+                    }
+                }
+
+                inlineAttachments.forEach(
+                    (a) => inlineContent.push(new InlineContent(a.ContentID, a.Content, a.ContentType))
+                );
+            } else {
+
+                // remove inline images
+                content = content.replace(/<img.+?src="cid:.+?>/, '');
             }
 
             return [content, inlineContent];
