@@ -16,11 +16,15 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
+import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 
 export class Component {
 
     private state: ComponentState;
     private subscriber: IEventSubscriber;
+    private contextListenerId: string;
+    private context: TicketContext;
 
     public listenerId: string;
 
@@ -34,22 +38,35 @@ export class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext() as TicketContext;
-        this.state.widgetConfiguration = context
-            ? await context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
-        await this.loadQueues(context);
+        this.context = ContextService.getInstance().getActiveContext<TicketContext>();
+        this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
+        await this.loadQueues(this.context);
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
             eventPublished: (data: any, eventId: string): void => {
-                this.state.activeNode = this.getActiveNode(context?.queueId);
+                this.state.activeNode = this.getActiveNode(this.context?.queueId);
             }
         };
 
-        this.state.activeNode = this.getActiveNode(context?.queueId);
+        this.state.activeNode = this.getActiveNode(this.context?.queueId);
 
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
+
+        this.contextListenerId = IdService.generateDateBasedId('ticket-queue-explorer');
+        this.context.registerListener(this.contextListenerId, {
+            filteredObjectListChanged: async () => null,
+            additionalInformationChanged: (key: string, value: any) => {
+                if (key === AdditionalContextInformation.LOADING) {
+                    BrowserUtil.toggleLoadingShield('ticket-queue-explorer', value);
+                }
+            },
+            objectChanged: () => null,
+            objectListChanged: () => null,
+            scrollInformationChanged: () => null,
+            sidebarLeftToggled: () => null,
+            sidebarRightToggled: () => null
+        });
     }
 
     public onDestroy(): void {
