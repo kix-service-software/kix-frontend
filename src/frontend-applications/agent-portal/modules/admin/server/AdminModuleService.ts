@@ -11,7 +11,6 @@ import { AdminModuleCategory } from '../model/AdminModuleCategory';
 import { PluginService } from '../../../../../server/services/PluginService';
 import { IAdminModuleExtension } from './IAdminModuleExtension';
 import { AdminModule } from '../model/AdminModule';
-import { PermissionService } from '../../../server/services/PermissionService';
 import { AgentPortalExtensions } from '../../../server/extensions/AgentPortalExtensions';
 
 export class AdminModuleService {
@@ -42,22 +41,25 @@ export class AdminModuleService {
         return categories;
     }
 
-    private mergeCategory(categories: AdminModuleCategory[], module: AdminModuleCategory | AdminModule): void {
+    private mergeCategory(
+        categories: Array<AdminModuleCategory | AdminModule>, module: AdminModuleCategory | AdminModule
+    ): void {
         if (module instanceof AdminModuleCategory) {
             const existingCategory = categories.find((c) => c.id === module.id);
             if (existingCategory) {
+                const category = existingCategory as AdminModuleCategory;
                 if (module.children) {
-                    if (!existingCategory.children) {
-                        existingCategory.children = [];
+                    if (!category.children) {
+                        category.children = [];
                     }
-                    module.children.forEach((c) => this.mergeCategory(existingCategory.children, c));
+                    module.children.forEach((c) => this.mergeCategory(category.children, c));
                 }
 
                 if (module.modules) {
-                    if (!existingCategory.modules) {
-                        existingCategory.modules = [];
+                    if (!category.modules) {
+                        category.modules = [];
                     }
-                    module.modules.forEach((m) => existingCategory.modules.push(m));
+                    module.modules.forEach((m) => category.modules.push(m));
                 }
             } else {
                 categories.push(module);
@@ -66,48 +68,4 @@ export class AdminModuleService {
             categories.push(module);
         }
     }
-
-    private async checkPermissions(
-        token: string, modules: Array<AdminModuleCategory | AdminModule>
-    ): Promise<AdminModuleCategory[]> {
-        const result: AdminModuleCategory[] = [];
-        for (const module of modules) {
-            if (module instanceof AdminModuleCategory) {
-                const childModules: AdminModule[] = [];
-
-                if (module.modules) {
-                    for (const adminModule of module.modules) {
-                        const allowed = await PermissionService.getInstance().checkPermissions(
-                            token, adminModule.permissions
-                        );
-
-                        if (allowed) {
-                            childModules.push(adminModule);
-                        }
-                    }
-                }
-
-                module.modules = childModules;
-
-                if (module.children && module.children.length) {
-                    module.children = await this.checkPermissions(token, module.children);
-                }
-
-                if (module.modules.length || (module.children && !!module.children.length)) {
-                    result.push(module);
-                }
-            } else {
-                const allowed = await PermissionService.getInstance().checkPermissions(
-                    token, module.permissions
-                );
-
-                if (allowed) {
-                    result.push(module);
-                }
-            }
-        }
-
-        return result;
-    }
-
 }

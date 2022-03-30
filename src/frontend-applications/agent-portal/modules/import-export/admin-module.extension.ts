@@ -21,19 +21,22 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
     public getAdminModules(): AdminModuleCategory[] {
         return [
             new AdminModuleCategory(
-                null, 'cmdb', 'Translatable#Assets', null, [],
-                [
-                    new AdminModule(
-                        null, 'import_export', 'Translatable#Import/Export', null,
-                        KIXObjectType.IMPORT_EXPORT_TEMPLATE, 'admin-import-export-templates',
-                        [
-                            new UIComponentPermission(
-                                'system/importexport/templates', [CRUD.READ], true
-                            )
-                        ]
-                    )
-                ]
-            )
+                null, 'kix', 'Translatable#KIX', null, [
+                new AdminModuleCategory(
+                    null, 'cmdb', 'Translatable#Assets', null, [],
+                    [
+                        new AdminModule(
+                            null, 'import_export', 'Translatable#Import/Export', null,
+                            KIXObjectType.IMPORT_EXPORT_TEMPLATE, 'admin-import-export-templates',
+                            [
+                                new UIComponentPermission(
+                                    'system/importexport/templates', [CRUD.READ], true
+                                )
+                            ]
+                        )
+                    ]
+                )
+            ])
         ];
     }
 }
