@@ -34,6 +34,7 @@ class Component {
 
     public onInput(input: any): void {
         this.manager = input.manager;
+        this.state.invalid = input.invalid;
     }
 
     public reset(): void {
