@@ -193,6 +193,9 @@ export class Table implements Table {
                 }
 
                 if (this.filterValue || this.filterCriteria?.length || this.columns.some((c) => c.isFiltered())) {
+                    if (this.filterValue) {
+                        await this.initDisplayRows(true);
+                    }
                     await this.filter();
                 }
 
