@@ -741,7 +741,7 @@ export class FormInstance {
         let invalidFields: FormFieldConfiguration[] = [];
         for (const field of fields) {
             const value = this.getFormFieldValue(field.instanceId);
-            if (!value.valid) {
+            if (!value?.valid) {
                 invalidFields.push(field);
             }
 

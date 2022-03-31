@@ -37,7 +37,7 @@ export class NotificationFilterValidator implements IFormFieldValidator {
         const formInstance = await context.getFormManager().getFormInstance();
 
         if (
-            formInstance.getForm().objectType === KIXObjectType.NOTIFICATION_FILTER
+            formInstance.getForm().objectType === KIXObjectType.NOTIFICATION
             && formField.property === NotificationProperty.FILTER
         ) {
             const value = formInstance.getFormFieldValue(formField.instanceId);
