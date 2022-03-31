@@ -19,7 +19,8 @@ export class ComponentState extends AbstractComponentState {
         public hasAdditionalOptions: boolean = false,
         public additionalOptionsValidationResult: Map<string, string> = new Map(),
         public draggableValueId: string = null,
-        public dragStartIndex: number = null
+        public dragStartIndex: number = null,
+        public invalid: boolean = false
     ) {
         super();
     }
