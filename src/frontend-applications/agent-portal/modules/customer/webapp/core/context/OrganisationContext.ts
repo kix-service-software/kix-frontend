@@ -161,7 +161,7 @@ export class OrganisationContext extends Context {
         );
 
         let contacts = [];
-        const loadingOptions = new KIXObjectLoadingOptions();
+        const loadingOptions = new KIXObjectLoadingOptions([]);
         loadingOptions.includes = [ContactProperty.USER, KIXObjectProperty.DYNAMIC_FIELDS];
         if (organisations && organisations.length && isOrganisationDepending) {
             const organisationIds = organisations.map((o) => Number(o.ObjectId));
