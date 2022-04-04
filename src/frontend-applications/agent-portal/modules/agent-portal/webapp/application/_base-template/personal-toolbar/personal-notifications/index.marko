@@ -40,7 +40,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         >
                             <div.notification-icon><icon icon=notification.icon/></div>
                             <div.notification-date>${component.getCreateTime(notification)}</div>
-                            <div>${notification.title}</div>
+                            <div.notification-title>${notification.title}</div>
                             <div.notification-teaser>${notification.teaserText}</div>
                             <if(notification.isLocal)>
                                 <div.notification-remove on-click("removeNotification", notification)><span.kix-icon-close/></div>
