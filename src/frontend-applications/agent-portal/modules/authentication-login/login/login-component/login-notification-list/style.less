@@ -17,6 +17,7 @@
       background-color: @secondary-2;
       padding: 0.5rem 1rem;
       box-shadow: 1px 1px 3px #c6c6c6;
+      box-sizing: border-box;
 
       &.notification-advise {
          background: @secondary-1;
@@ -41,7 +42,7 @@
       .notification-header {
          display: grid;
          grid-auto-flow: column;
-         grid-auto-columns: max-content max-content max-content auto;
+         grid-auto-columns: max-content max-content auto max-content;
          column-gap: 1rem;
          align-items: center;
 
