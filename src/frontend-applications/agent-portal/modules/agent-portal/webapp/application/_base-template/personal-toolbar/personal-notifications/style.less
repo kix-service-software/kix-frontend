@@ -77,7 +77,7 @@
                         display: grid;
                         color: @secondary-0;
                         grid-auto-flow: column;
-                        grid-auto-columns: 1rem max-content;
+                        grid-auto-columns: 1rem minmax(20rem, auto);
                         column-gap: 1rem;
                         row-gap: 0.15rem;
                         padding: .5rem;
@@ -131,6 +131,14 @@
                         &:hover {
                             background-color: @secondary-3;
                             color: @secondary-0;
+                        }
+
+                        .notification-title {
+                            .shorten-text();
+                        }
+
+                        .notification-teaser {
+                            .shorten-text();
                         }
                     }
                 }
