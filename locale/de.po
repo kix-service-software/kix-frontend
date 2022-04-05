@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2022-03-22 16:44+0000\n"
-"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
+"PO-Revision-Date: 2022-04-05 12:44+0000\n"
+"Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
 "Language: de\n"
@@ -197,7 +197,7 @@ msgid "All Objects"
 msgstr "Alle Objekte"
 
 msgid "All open tabs will be closed. Continue?"
-msgstr ""
+msgstr "Alle geöffneten Tabs werden geschlossen. Fortfahren?"
 
 msgid "All tickets"
 msgstr "Alle Tickets"
@@ -269,7 +269,7 @@ msgid "Article Id"
 msgstr "Artikel ID"
 
 msgid "Article sort order"
-msgstr ""
+msgstr "Artikelsortierung"
 
 msgid "Article Text"
 msgstr "Artikeltext"
@@ -317,7 +317,7 @@ msgid "Assigned Roles"
 msgstr "Zugeordnete Rollen"
 
 msgid "Assigned Tickets"
-msgstr ""
+msgstr "Zugeordnete Tickets"
 
 msgid "Assignees"
 msgstr "Verantwortlichkeiten"
@@ -509,10 +509,10 @@ msgid "Close"
 msgstr "Schließen"
 
 msgid "close all"
-msgstr ""
+msgstr "alle schließen"
 
 msgid "Close all open tabs"
-msgstr ""
+msgstr "Alle offenen Tabs schließen"
 
 msgid "Closed"
 msgstr "Geschlossen"
@@ -578,7 +578,7 @@ msgid "Communication: Email: Outbox"
 msgstr "Kommunikation: E-Mail: Postausgang"
 
 msgid "Communication History"
-msgstr ""
+msgstr "Kommunikationshistorie"
 
 msgid "Communication: Webform"
 msgstr "Kommunikation: Webformular"
@@ -885,7 +885,7 @@ msgid "Download"
 msgstr "Download"
 
 msgid "Download all attachments"
-msgstr ""
+msgstr "Alle Anhänge herunterladen"
 
 msgid "Download log"
 msgstr "Log Download"
@@ -1167,7 +1167,7 @@ msgid "Existing Links ({0})"
 msgstr "Vorhandene Verknüpfungen ({0})"
 
 msgid "expand all"
-msgstr ""
+msgstr "alle erweitern"
 
 msgid "expected time required:"
 msgstr "voraussichtlich benötigte Zeit:"
@@ -1349,7 +1349,7 @@ msgid "From"
 msgstr "Von"
 
 msgid "From external"
-msgstr ""
+msgstr "von extern"
 
 msgid "Frontend"
 msgstr "Frontend"
@@ -2290,6 +2290,9 @@ msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_PrimaryOrganisation"
 msgstr ""
+"Die dem Kontakt zugeordnete primäre Organisation, wird als Standardwert "
+"verwendet oder vorausgewählt wenn noch keine andere Organisation angegeben "
+"ist."
 
 msgid "Helptext_Customers_ContactCreate_Street"
 msgstr "Anschrift Straße des Kontakts, wenn von Organisation abweichend"
@@ -2880,10 +2883,10 @@ msgid "HelptImporConfigext_Import_File"
 msgstr ""
 
 msgid "Hide"
-msgstr ""
+msgstr "Ausblenden"
 
 msgid "Hide Message"
-msgstr ""
+msgstr "Nachricht ausblenden"
 
 msgid "History"
 msgstr "Historie"
@@ -3197,10 +3200,10 @@ msgid "Manuals"
 msgstr "Handbücher"
 
 msgid "Mark all as read"
-msgstr ""
+msgstr "als gelesen markieren"
 
 msgid "Marked all articles as read."
-msgstr ""
+msgstr "Alle Artikel als gelesen markieren."
 
 msgid "Max Depth"
 msgstr "Max. Tiefe"
@@ -3335,7 +3338,7 @@ msgid "New Email Filter"
 msgstr "Neuer E-Mail Filter"
 
 msgid "Newest first"
-msgstr ""
+msgstr "neueste zuerst"
 
 msgid "New FAQ"
 msgstr "Neue FAQ"
@@ -3599,7 +3602,7 @@ msgid "Observer"
 msgstr "Beobachter"
 
 msgid "Oldest first"
-msgstr ""
+msgstr "älteste zuerst"
 
 msgid "Once a day"
 msgstr "Einmal pro Tag"
@@ -3716,7 +3719,7 @@ msgid "Overview Versions"
 msgstr "Versionsübersicht"
 
 msgid "owned by me"
-msgstr ""
+msgstr "in Bearbeitung durch mich"
 
 msgid "Owner"
 msgstr "Bearbeiter"
@@ -3840,7 +3843,7 @@ msgid "Previous Image"
 msgstr "Vorheriges Bild"
 
 msgid "Primary Organisation"
-msgstr ""
+msgstr "Primäre Organisation"
 
 msgid "Print"
 msgstr "Drucken"
@@ -4137,7 +4140,7 @@ msgid "Resizable"
 msgstr "Größe änderbar"
 
 msgid "responsibility by me"
-msgstr ""
+msgstr "verantwortet durch mich"
 
 msgid "Responsible"
 msgstr "Verantwortlicher"
@@ -4764,6 +4767,8 @@ msgstr ""
 msgid ""
 "There are open dialogs. Any data you may have entered will be lost. Continue?"
 msgstr ""
+"Es gibt offene Dialoge. Alle ggf. eingegebenen Daten gehen verloren. "
+"Fortfahren?"
 
 msgid ""
 "The value for the field is in the future! The date needs to be in the past!"
@@ -5064,7 +5069,7 @@ msgid "Visible in customer portal"
 msgstr "Sichtbar in Kundenportal"
 
 msgid "Visible in Self Service Portal"
-msgstr ""
+msgstr "Sichtbar im Kundenportal"
 
 msgid "Votes"
 msgstr "Bewertungen"
@@ -5127,7 +5132,7 @@ msgid "Wildcard Search"
 msgstr "Wildcard-Suche"
 
 msgid "With attachments"
-msgstr ""
+msgstr "mit Anhängen"
 
 msgid "within the last"
 msgstr "innerhalb der letzten"
