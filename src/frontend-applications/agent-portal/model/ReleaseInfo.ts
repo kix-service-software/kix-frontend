@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -17,6 +17,7 @@ export class ReleaseInfo {
         public buildDate?: string,
         public buildHost?: string,
         public buildNumber?: number,
+        public patchNumber?: number,
         public dependencies?: Array<[string, string, string]>,
         public backendSystemInfo?: SystemInfo,
         public requires?: string,

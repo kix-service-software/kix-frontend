@@ -1,0 +1,46 @@
+/**
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+.communication-container {
+    background-color: @secondary-4;
+    padding-bottom: 1rem;
+
+    .communication-header {
+        display: grid;
+        grid-auto-flow: column;
+        background-color: @secondary-2;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding: @margin-small @margin-middle;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+
+        .expand-action,
+        .read-action {
+            display: grid;
+            grid-template-columns: max-content auto;
+            gap: @margin-small;
+            align-content: center;
+            align-items: center;
+            cursor: pointer;
+            justify-self: end;
+
+            span {
+                font-size: 1.25rem;
+            }
+        }
+
+        .read-action:not(.active) {
+            cursor: auto;
+            color: @secondary-1;
+        }
+    }
+
+}

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -9,16 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { IActionListener } from '../../../../../modules/base-components/webapp/core/IActionListener';
-import { IdService } from '../../../../../model/IdService';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import {
-    AbstractContextServiceListener
-} from '../../../../../modules/base-components/webapp/core/AbstractContextServiceListener';
-import { IContextListener } from '../../../../../modules/base-components/webapp/core/IContextListener';
-import { KIXObject } from '../../../../../model/kix/KIXObject';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { Context } from '../../../../../model/Context';
 import { IAction } from '../../core/IAction';
 
 export class Component implements IActionListener {
@@ -28,14 +19,13 @@ export class Component implements IActionListener {
 
     public listenerInstanceId: string;
 
-    private contextListernerId: string;
-    private contextListener: ComponentContextListener = null;
     private prepareTimeout;
+
+    private observer: ResizeObserver;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
         this.listenerInstanceId = input.instanceId;
-        this.contextListernerId = IdService.generateDateBasedId('action-list-');
         this.initActionList(input);
     }
 
@@ -87,22 +77,31 @@ export class Component implements IActionListener {
             this.prepareActionLists();
         }
 
-        ContextService.getInstance().registerListener(new ComponentContextServiceListener(this));
-        this.contextListener = new ComponentContextListener(this);
-
-        window.addEventListener('resize', this.windowResizeThrottler.bind(this), false);
+        this.prepareObserver();
     }
 
-    public setContext(context: Context): void {
-        context.registerListener(this.contextListernerId, this.contextListener);
+    public onDestroy(): void {
+        if (this.observer) {
+            this.observer.disconnect();
+        }
     }
 
-    private windowResizeThrottler(): void {
+    private prepareObserver(): void {
+        if (window.ResizeObserver) {
+            this.observer = new ResizeObserver((entries) => {
+                this.resizeThrottler();
+            });
+            const rootElement = (this as any).getEl();
+            this.observer.observe(rootElement);
+        }
+    }
+
+    private resizeThrottler(): void {
         if (!this.resizeTimeout) {
             this.resizeTimeout = setTimeout(() => {
                 this.resizeTimeout = null;
                 this.prepareActionLists();
-            }, 66);
+            }, 100);
         }
     }
 
@@ -152,61 +151,5 @@ export class Component implements IActionListener {
         (this as any).setStateDirty('listExpansion');
     }
 }
-
-// tslint:disable-next-line:max-classes-per-file
-class ComponentContextServiceListener extends AbstractContextServiceListener {
-
-    public constructor(private actionListComponent: Component) {
-        super();
-    }
-
-    public contextChanged(contextId: string, context: Context): void {
-        this.actionListComponent.setContext(context);
-    }
-
-}
-
-// tslint:disable-next-line:max-classes-per-file
-class ComponentContextListener implements IContextListener {
-
-    public constructor(private actionListComponent: Component) { }
-
-    public sidebarRightToggled(): void {
-        setTimeout(() => {
-            this.actionListComponent.prepareActionLists();
-        }, 50);
-    }
-
-    public sidebarLeftToggled(): void {
-        setTimeout(() => {
-            this.actionListComponent.prepareActionLists();
-        }, 50);
-    }
-
-    public objectChanged(objectId: string | number, object: KIXObject): void {
-        return;
-    }
-
-    public objectProvided(objectId: string | number, object: KIXObject): void {
-        return;
-    }
-
-    public objectListChanged(objectType: KIXObjectType | string, objectList: KIXObject[]): void {
-        return;
-    }
-
-    public filteredObjectListChanged(objectType: KIXObjectType | string, objectList: KIXObject[]): void {
-        return;
-    }
-
-    public scrollInformationChanged(): void {
-        return;
-    }
-
-    public additionalInformationChanged(): void {
-        return;
-    }
-}
-
 
 module.exports = Component;

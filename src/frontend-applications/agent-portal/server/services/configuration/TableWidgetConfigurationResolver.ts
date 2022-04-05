@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -37,12 +37,11 @@ export class TableWidgetConfigurationResolver implements IConfigurationResolver<
 
             if (tableOption && tableOption.Value) {
                 const tableConfig = JSON.parse(tableOption.Value);
-                configuration.tableConfiguration = tableConfig;
                 configuration.configuration = tableConfig;
                 await TableConfigurationResolver.getInstance().resolve(token, tableConfig, sysConfigOptions);
             }
-        } else if (configuration?.tableConfiguration) {
-            configuration.configuration = configuration.tableConfiguration;
+        } else if (!configuration.configuration && (configuration as any)?.tableConfiguration) {
+            configuration.configuration = (configuration as any).tableConfiguration;
         }
     }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -19,7 +19,8 @@ export class ComponentState extends AbstractComponentState {
         public hasAdditionalOptions: boolean = false,
         public additionalOptionsValidationResult: Map<string, string> = new Map(),
         public draggableValueId: string = null,
-        public dragStartIndex: number = null
+        public dragStartIndex: number = null,
+        public invalid: boolean = false
     ) {
         super();
     }

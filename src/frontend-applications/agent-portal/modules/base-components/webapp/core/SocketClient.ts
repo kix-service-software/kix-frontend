@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -11,8 +11,6 @@ import { ClientStorageService } from './ClientStorageService';
 import { io, Socket } from 'socket.io-client';
 import { SocketEvent } from './SocketEvent';
 import { WindowListener } from './WindowListener';
-import { SocketAuthenticationError } from './SocketAuthenticationError';
-import { BrowserUtil } from './BrowserUtil';
 
 export abstract class SocketClient {
 

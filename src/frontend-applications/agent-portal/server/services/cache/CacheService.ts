@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -11,7 +11,7 @@ import { RedisCache } from './RedisCache';
 import { FileCache } from './FileCache';
 
 import md5 from 'md5';
-import { ObjectUpdatedEventData } from '../../../model/ObjectUpdatedEventData';
+import { BackendNotification } from '../../../model/BackendNotification';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { RequestMethod } from '../../../../../server/model/rest/RequestMethod';
@@ -75,7 +75,7 @@ export class CacheService {
         await this.getCacheBackendInstance()?.set(type, key, value);
     }
 
-    public async updateCaches(events: ObjectUpdatedEventData[]): Promise<void> {
+    public async updateCaches(events: BackendNotification[]): Promise<void> {
         for (const event of events) {
             if (event.Event === 'CLEAR_CACHE') {
                 LoggingService.getInstance().debug('Backend Notification: ' + JSON.stringify(event));

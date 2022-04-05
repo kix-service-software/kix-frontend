@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -22,6 +22,9 @@ import { Report } from '../../../model/Report';
 import { ReportDefinition } from '../../../model/ReportDefinition';
 import { ReportResultLoadingOptions } from '../../../model/ReportResultLoadingOptions';
 import { ReportDefinitionProperty } from '../../../model/ReportDefinitionProperty';
+import { SortUtil } from '../../../../../model/SortUtil';
+import { DataType } from '../../../../../model/DataType';
+import { SortOrder } from '../../../../../model/SortOrder';
 
 export class ReportingContext extends Context {
 
@@ -72,6 +75,7 @@ export class ReportingContext extends Context {
                 reports = Array.isArray(reportList) ? reports.concat(reportList) : reports;
             }
         }
+        reports = SortUtil.sortObjects(reports, ReportProperty.CREATE_TIME, DataType.DATE_TIME, SortOrder.DOWN);
         this.setObjectList(KIXObjectType.REPORT, reports);
     }
 

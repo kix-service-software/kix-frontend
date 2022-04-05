@@ -1,0 +1,57 @@
+/**
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+.message-filter-container {
+   display: grid;
+   grid-auto-flow: column;
+   align-content: center;
+   align-items: center;
+   grid-auto-columns: max-content;
+   grid-template-columns: .5fr 1fr;
+   gap: @margin-default;
+
+   .static-filter {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: max-content;
+      gap: 1.5rem;
+
+      .filter-action {
+         >[type="checkbox"] {
+            position: relative;
+            left: 15px;
+            top: -4px;
+            z-index: 0;
+            -webkit-appearance: none;
+         }
+
+         label {
+            .shorten-text();
+         }
+
+         >[type="checkbox"]+label::before {
+            width: 15px;
+            height: 15px;
+            border-radius: 5px;
+            border: 2px solid @secondary-0;
+            display: block;
+            content: "";
+            float: left;
+            margin-right: 5px;
+            z-index: 5;
+            position: relative;
+         }
+
+         >[type="checkbox"]:checked+label::before {
+            box-shadow: inset 0px 0px 0px 3px @secondary-2;
+            background-color: @secondary-0;
+         }
+      }
+   }
+}

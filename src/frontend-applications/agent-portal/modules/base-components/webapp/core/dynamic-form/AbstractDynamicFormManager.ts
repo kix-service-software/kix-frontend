@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -55,6 +55,16 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     public validDFTypes = [];
 
     protected propertiesIgnoreList: string[] = [];
+
+    public async getUseOwnSearch(property: string): Promise<boolean> {
+        for (const extendedManager of this.extendedFormManager) {
+            const extentedUseOwnSearch = await extendedManager.getUseOwnSearch(property);
+            if (extentedUseOwnSearch !== null) {
+                return extentedUseOwnSearch;
+            }
+        }
+        return this.useOwnSearch;
+    }
 
     public async addToPropertiesIgnoreList(properties: string[]): Promise<void> {
         properties.forEach((p) => {
@@ -186,6 +196,12 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     public async searchObjectTree(
         property: string, searchValue: string, loadingOptions: KIXObjectLoadingOptions
     ): Promise<TreeNode[]> {
+        for (const extendedManager of this.extendedFormManager) {
+            const extentedNode = await extendedManager.searchObjectTree(property, searchValue, loadingOptions);
+            if (extentedNode) {
+                return extentedNode;
+            }
+        }
         return [];
     }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -63,6 +63,8 @@ export class ArticleGetPlainAction extends AbstractAction {
                 this.articleId = this.data[0].ArticleID;
             } else if (typeof this.data === 'string' || typeof this.data === 'number') {
                 this.articleId = Number(this.data);
+            } else if (typeof this.data === 'object' && this.data instanceof Article) {
+                this.articleId = this.data.ArticleID;
             }
         }
     }

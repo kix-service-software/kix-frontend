@@ -1,39 +1,42 @@
 <!--
-Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
+
 <widget instanceId="system-admin-logfile-view" title=state.title>
     <@content>
         <div.logFileView>
-            <div.parameters>
-                <label>
-                    <span.field>${component.getString("Log Level")}</span>
-                    <form-list loadNodes=state.loadLogLevelNodes multiselect=true placeholder="Translatable#Filter Log Level" readonly=state.run on-nodesChanged("logLevelFilterChanged")/>
-                </label>
-                <label>
-                    <span.field>${component.getString("Tail Lines")}</span>
-                    <input.input-style type="text" pattern="[0-9]*" value=state.tailCount disabled=state.run onChange("tailCountChanged")/>
-                </label>
-                <label>
-                    <span.field>${component.getString("Refresh Interval(sec)")}</span>
-                    <input.input-style type="text" pattern="[0-9]*" value=state.refreshInterval disabled=state.run onChange("refreshIntervalChanged")/>
-                </label>
-                <label>
-                    <span.field>${component.getString("Wrap Lines")}</span>
-                    <form-list loadNodes=state.loadWrapLinesNodes placeholder="Translatable#Wrap Lines" readonly=state.run on-nodesChanged("wrapLinesChanged")/>
-                </label>
-                <label>
-                    <span.field>${component.getString("Filter")}</span>
-                    <input.input-style type="text" value=state.filter disabled=state.run on-keydown("keydown") onChange("filterChanged")/>
-                </label>
-            </div>
-            <textarea.input-style.content readonly class={
-                nowrap: !state.wrapLines
-            }>${state.content}</textarea>
+            <if(state.prepared)>
+                <div.parameters>
+                    <label>
+                        <span.field>${component.getString("Log Level")}</span>
+                        <form-list loadNodes=state.loadLogLevelNodes multiselect=true placeholder=component.getString("Filter Log Level") readonly=state.run on-nodesChanged("logLevelFilterChanged")/>
+                    </label>
+                    <label>
+                        <span.field>${component.getString("Tail Lines")}</span>
+                        <input.input-style type="text" pattern="[0-9]*" value=state.tailCount disabled=state.run onChange("tailCountChanged")/>
+                    </label>
+                    <label>
+                        <span.field>${component.getString("Refresh Interval(sec)")}</span>
+                        <input.input-style type="text" pattern="[0-9]*" value=state.refreshInterval disabled=state.run onChange("refreshIntervalChanged")/>
+                    </label>
+                    <label>
+                        <span.field>${component.getString("Wrap Lines")}</span>
+                        <form-list loadNodes=state.loadWrapLinesNodes placeholder="Translatable#Wrap Lines" readonly=state.run on-nodesChanged("wrapLinesChanged")/>
+                    </label>
+                    <label>
+                        <span.field>${component.getString("Filter")}</span>
+                        <input.input-style type="text" value=state.filter disabled=state.run on-keydown("keydown") onChange("filterChanged")/>
+                    </label>
+                </div>
+                <textarea.input-style.content readonly class={
+                    nowrap: !state.wrapLines
+                }>${state.content}</textarea>
+            </if>
         </div>
     </@content>
 </widget>

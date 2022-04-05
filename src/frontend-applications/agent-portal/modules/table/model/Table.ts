@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -193,6 +193,9 @@ export class Table implements Table {
                 }
 
                 if (this.filterValue || this.filterCriteria?.length || this.columns.some((c) => c.isFiltered())) {
+                    if (this.filterValue) {
+                        await this.initDisplayRows(true);
+                    }
                     await this.filter();
                 }
 
@@ -616,7 +619,7 @@ export class Table implements Table {
         this.sortOrder = sortOrder;
 
         const promises = [];
-        this.getRows(true).forEach((r) => promises.push(r.getCell(this.sortColumnId)?.initDisplayValue));
+        this.getRows(true).forEach((r) => promises.push(r.getCell(this.sortColumnId)?.initDisplayValue()));
         await Promise.all(promises);
 
         this.getColumns().forEach((c) => c.setSortOrder(null));

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -59,7 +59,7 @@ export class TextModuleService extends KIXObjectService {
                 = '<li data-id="{id}" class="text-module-autofill-item">'
                 + '<div class="text-module-info">'
                 + '<span class="text-module-name">{Name}</span>'
-                + '<span class="text-module-label">{Keywords}</span>'
+                + '<span class="text-module-label">{keywordsDisplayString}</span>'
                 + '</div>'
                 + '</li>';
 
@@ -121,6 +121,7 @@ export class TextModuleService extends KIXObjectService {
         const textModules = await KIXObjectService.loadObjects<TextModule>(
             KIXObjectType.TEXT_MODULE, null, loadingOptions
         );
+
         return textModules;
     }
 }

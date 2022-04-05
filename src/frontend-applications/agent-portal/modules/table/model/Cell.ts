@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -10,7 +10,6 @@
 import { IColumnConfiguration } from '../../../model/configuration/IColumnConfiguration';
 import { UIFilterCriterion } from '../../../model/UIFilterCriterion';
 import { FilterUtil } from '../../base-components/webapp/core/FilterUtil';
-import { LabelService } from '../../base-components/webapp/core/LabelService';
 import { Row } from './Row';
 import { TableValue } from './TableValue';
 

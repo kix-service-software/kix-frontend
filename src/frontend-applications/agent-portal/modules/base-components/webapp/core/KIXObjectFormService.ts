@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -29,6 +29,7 @@ import { FormInstance } from './FormInstance';
 import { KIXObjectService } from './KIXObjectService';
 import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core/DynamicFormFieldOption';
 import { FormFactory } from './FormFactory';
+import { FormService } from './FormService';
 
 export abstract class KIXObjectFormService {
 
@@ -77,6 +78,12 @@ export abstract class KIXObjectFormService {
         (formInstance as any).formFieldValues = formFieldValues;
         for (const extendedService of this.extendedFormServices) {
             await extendedService.postInitValues(form, formInstance, kixObject);
+        }
+        const valueHandler = FormService.getInstance().getFormFieldValueHandler(form.objectType);
+        if (valueHandler) {
+            for (const handler of valueHandler) {
+                await handler.postInitValues(formInstance);
+            }
         }
     }
 

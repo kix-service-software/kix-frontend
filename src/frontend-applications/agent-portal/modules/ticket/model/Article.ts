@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -14,6 +14,7 @@ import { ArticleFlag } from './ArticleFlag';
 import { SenderType } from './SenderType';
 import { ArticleReceiver } from './ArticleReceiver';
 import { ArticleProperty } from './ArticleProperty';
+import addrparser from 'address-rfc2822';
 
 export class Article extends KIXObject {
 
@@ -83,9 +84,9 @@ export class Article extends KIXObject {
     // UI Properties
 
     public senderType: SenderType;
-    public toList: ArticleReceiver[];
-    public ccList: ArticleReceiver[];
-    public bccList: ArticleReceiver[];
+    public toList: ArticleReceiver[] = [];
+    public ccList: ArticleReceiver[] = [];
+    public bccList: ArticleReceiver[] = [];
     public bodyAttachment: Attachment = null;
 
     public constructor(article?: Article) {
@@ -150,44 +151,27 @@ export class Article extends KIXObject {
     }
 
     private prepareReceiverLists(): void {
-        const splitRegex = /,\s(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/;
-        let toStringList = [];
-        if (!Array.isArray(this.To)) {
-            toStringList = this.To ? this.To.split(splitRegex) : [];
-        }
+        this.prepareRecieverList(this.toList, this.To);
+        this.prepareRecieverList(this.ccList, this.Cc);
+        this.prepareRecieverList(this.bccList, this.Bcc);
+    }
 
-        let ccStringList = [];
-        if (!Array.isArray(this.Cc)) {
-            ccStringList = this.Cc ? this.Cc.split(splitRegex) : [];
+    private prepareRecieverList(list: ArticleReceiver[], mailValue: string): void {
+        if (mailValue && !Array.isArray(mailValue)) {
+            try {
+                addrparser.parse(mailValue).forEach((address) => {
+                    const realName = address.phrase !== '' ? address.phrase : address.address;
+                    list.push(new ArticleReceiver(address.address, realName));
+                });
+            } catch {
+                const mailList = mailValue.split(/\s*,\s*/);
+                mailList.forEach((mail) => {
+                    const realName = mail.replace(/(.+)\s*<.+/, '$1');
+                    const address = mail.replace(/.+\s*<(.+)>/, '$1');
+                    list.push(new ArticleReceiver(address ? address : mail, realName ? realName : mail));
+                });
+            }
         }
-
-        let bccStringList = [];
-        if (!Array.isArray(this.Bcc)) {
-            bccStringList = this.Bcc ? this.Bcc.split(splitRegex) : [];
-        }
-
-        let toRealNameStringList = [];
-        if (!Array.isArray(this.ToRealname)) {
-            toRealNameStringList = this.ToRealname ? this.ToRealname.split(splitRegex) : [];
-        }
-
-        let ccRealNameStringList = [];
-        if (!Array.isArray(this.CcRealname)) {
-            ccRealNameStringList = this.CcRealname ? this.CcRealname.split(splitRegex) : [];
-        }
-
-        let bccRealNameStringList = [];
-        if (!Array.isArray(this.BccRealname)) {
-            bccRealNameStringList = this.BccRealname ? this.BccRealname.split(splitRegex) : [];
-        }
-
-        this.toList = toStringList.map((t, index) => new ArticleReceiver(t, toRealNameStringList[index]));
-        this.ccList = ccStringList.map(
-            (cc, index) => new ArticleReceiver(cc, ccRealNameStringList[index], ArticleProperty.CC)
-        );
-        this.bccList = bccStringList.map(
-            (bcc, index) => new ArticleReceiver(bcc, bccRealNameStringList[index], ArticleProperty.BCC)
-        );
     }
 
     public isUnread(): boolean {

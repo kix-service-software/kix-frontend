@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -126,6 +126,9 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         ),
         new UIComponent(
             'ticket-state-info-widget', '/kix-module-ticket$0/webapp/components/ticket-state-info-widget', []
+        ),
+        new UIComponent(
+            'ticket-communication-widget', '/kix-module-ticket$0/webapp/components/ticket-communication-widget', []
         ),
     ];
 

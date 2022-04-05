@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -80,6 +80,10 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
         return schema;
     }
 
+    public hasConfigSchema(id: string): boolean {
+        return this.schema.has(id) || this.schemaHandler.has(id);
+    }
+
     public async prepareObjectTree(
         dynamicFieldType: DynamicFieldType[], showInvalid?: boolean,
         invalidClickable?: boolean, filterIds?: Array<string | number>
@@ -88,7 +92,7 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
         if (dynamicFieldType && !!dynamicFieldType.length) {
             for (const type of dynamicFieldType) {
                 const fieldType = type.Name;
-                if (await DynamicFieldService.getInstance().getConfigSchema(fieldType)) {
+                if (this.hasConfigSchema(fieldType)) {
                     const label = await LabelService.getInstance().getObjectText(type);
                     const icon = LabelService.getInstance().getObjectIcon(type);
                     nodes.push(new TreeNode(fieldType, label, icon));

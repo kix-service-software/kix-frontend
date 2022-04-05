@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -10,6 +10,7 @@
 import { ValidationResult } from './ValidationResult';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
+import { FormInstance } from './FormInstance';
 
 export interface IFormFieldValidator {
 
@@ -17,7 +18,7 @@ export interface IFormFieldValidator {
 
     isValidatorFor(formField: FormFieldConfiguration, formId: string): boolean;
 
-    validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult>;
+    validate(formField: FormFieldConfiguration, formId: string, formInstance?: FormInstance): Promise<ValidationResult>;
 
     isValidatorForDF(dynamicField: DynamicField): boolean;
 

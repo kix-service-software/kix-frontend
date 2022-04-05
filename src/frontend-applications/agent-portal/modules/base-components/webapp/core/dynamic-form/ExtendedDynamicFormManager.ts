@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -23,10 +23,14 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
     public objectType: string;
     public uniqueProperties: boolean;
     public resetOperator?: boolean;
-    public useOwnSearch?: boolean;
+    public useOwnSearch: boolean = null;
 
     public async getFieldOptions(): Promise<any[]> {
         return [];
+    }
+
+    public async getUseOwnSearch(property: string): Promise<boolean> {
+        return this.useOwnSearch;
     }
 
     public getValidDFTypes(): Array<DynamicFieldTypes | string> {
