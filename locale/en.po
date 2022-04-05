@@ -191,6 +191,9 @@ msgstr "All unlocked tickets"
 msgid "All Objects"
 msgstr ""
 
+msgid "All open tabs will be closed. Continue?"
+msgstr ""
+
 msgid "All tickets"
 msgstr ""
 
@@ -252,7 +255,7 @@ msgstr ""
 msgid "Article Id"
 msgstr ""
 
-msgid "Article Overview"
+msgid "Article sort order"
 msgstr ""
 
 msgid "Article Text"
@@ -300,6 +303,9 @@ msgstr ""
 msgid "Assigned Roles"
 msgstr ""
 
+msgid "Assigned Tickets"
+msgstr ""
+
 msgid "Assignees"
 msgstr ""
 
@@ -331,9 +337,6 @@ msgid "Attributes"
 msgstr ""
 
 msgid "Attributes to be edited"
-msgstr ""
-
-msgid "Ausblenden"
 msgstr ""
 
 msgid "Authorization URL"
@@ -397,9 +400,6 @@ msgid "Can not use file (file is empty)."
 msgstr ""
 
 msgid "Can not use file (missing required properties):"
-msgstr ""
-
-msgid "Can not use file (no known properties found)."
 msgstr ""
 
 msgid "Category"
@@ -492,6 +492,12 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
+msgid "close all"
+msgstr ""
+
+msgid "Close all open tabs"
+msgstr ""
+
 msgid "Closed"
 msgstr ""
 
@@ -553,6 +559,9 @@ msgid "Communication: Email: OAuth2 Profiles"
 msgstr ""
 
 msgid "Communication: Email: Outbox"
+msgstr ""
+
+msgid "Communication History"
 msgstr ""
 
 msgid "Communication: Webform"
@@ -857,6 +866,9 @@ msgstr "\" (Double Quotes)"
 msgid "Download"
 msgstr ""
 
+msgid "Download all attachments"
+msgstr ""
+
 msgid "Download log"
 msgstr ""
 
@@ -873,6 +885,9 @@ msgid "Dynamic Field"
 msgstr ""
 
 msgid "DynamicField"
+msgstr ""
+
+msgid "Dynamic_Field_DateTime_DefaultValue_Description"
 msgstr ""
 
 msgid "Dynamic Fields"
@@ -1121,9 +1136,6 @@ msgstr ""
 msgid "Execute"
 msgstr ""
 
-msgid "Execute console command"
-msgstr ""
-
 msgid "Execute now"
 msgstr ""
 
@@ -1134,6 +1146,9 @@ msgid "Execution Plan"
 msgstr ""
 
 msgid "Existing Links ({0})"
+msgstr ""
+
+msgid "expand all"
 msgstr ""
 
 msgid "expected time required:"
@@ -1309,6 +1324,9 @@ msgid "Friday"
 msgstr ""
 
 msgid "From"
+msgstr ""
+
+msgid "From external"
 msgstr ""
 
 msgid "Frontend"
@@ -2140,6 +2158,9 @@ msgstr ""
 msgid "Helptext_Customers_ContactCreate_Phone"
 msgstr ""
 
+msgid "Helptext_Customers_ContactCreate_PrimaryOrganisation"
+msgstr ""
+
 msgid "Helptext_Customers_ContactCreate_Street"
 msgstr ""
 
@@ -2292,9 +2313,6 @@ msgstr ""
 "Enables standardised usage of special characters, etc. UTF-8 is the European "
 "standard."
 
-msgid "Helptext_Import_File"
-msgstr "Choose a .csv-file which contains importable values."
-
 msgid "Helptext_Import_TextSeparator."
 msgstr ""
 "Marks the beginning and the end of each attribute. If unknown, open your ."
@@ -2312,6 +2330,9 @@ msgstr ""
 "like \"${VariableName}\"."
 
 msgid "Helptext_PersonalSettings_Always_close_dialog_tab_without_asking_Hint"
+msgstr ""
+
+msgid "Helptext_PersonalSettings_article_sort_order_Hint"
 msgstr ""
 
 msgid "Helptext_PersonalSettings_MyQueues_Hint"
@@ -2673,6 +2694,15 @@ msgstr ""
 msgid "Helptext_User_UserCreateEdit_Preferences_UserToken"
 msgstr ""
 
+msgid "HelptImporConfigext_Import_File"
+msgstr ""
+
+msgid "Hide"
+msgstr ""
+
+msgid "Hide Message"
+msgstr ""
+
 msgid "History"
 msgstr ""
 
@@ -2980,6 +3010,12 @@ msgstr ""
 msgid "Manuals"
 msgstr ""
 
+msgid "Mark all as read"
+msgstr ""
+
+msgid "Marked all articles as read."
+msgstr ""
+
 msgid "Max Depth"
 msgstr ""
 
@@ -3112,6 +3148,9 @@ msgstr ""
 msgid "New Email Filter"
 msgstr ""
 
+msgid "Newest first"
+msgstr ""
+
 msgid "New FAQ"
 msgstr ""
 
@@ -3179,9 +3218,6 @@ msgid "New Text Module"
 msgstr ""
 
 msgid "New Ticket"
-msgstr ""
-
-msgid "New Tickets"
 msgstr ""
 
 msgid "New Tickets Chart"
@@ -3376,6 +3412,9 @@ msgstr ""
 msgid "Observer"
 msgstr ""
 
+msgid "Oldest first"
+msgstr ""
+
 msgid "Once a day"
 msgstr ""
 
@@ -3490,6 +3529,9 @@ msgstr "Tickets by States"
 msgid "Overview Versions"
 msgstr ""
 
+msgid "owned by me"
+msgstr ""
+
 msgid "Owner"
 msgstr "Owner"
 
@@ -3521,9 +3563,6 @@ msgid "Pending"
 msgstr ""
 
 msgid "Pending date is not in the future."
-msgstr ""
-
-msgid "Pending Tickets"
 msgstr ""
 
 msgid "Pending until"
@@ -3611,6 +3650,9 @@ msgid "Previous"
 msgstr ""
 
 msgid "Previous Image"
+msgstr ""
+
+msgid "Primary Organisation"
 msgstr ""
 
 msgid "Print"
@@ -3730,16 +3772,7 @@ msgstr ""
 msgid "Recently Closed"
 msgstr ""
 
-msgid "Recipient: Bcc"
-msgstr ""
-
-msgid "Recipient: Cc"
-msgstr ""
-
 msgid "Recipients"
-msgstr ""
-
-msgid "Recipient: To"
 msgstr ""
 
 msgid "Redirect URL"
@@ -3913,10 +3946,10 @@ msgstr ""
 msgid "Resizable"
 msgstr ""
 
-msgid "Responsible"
+msgid "responsibility by me"
 msgstr ""
 
-msgid "Responsible Tickets"
+msgid "Responsible"
 msgstr ""
 
 msgid "Result names"
@@ -3953,9 +3986,6 @@ msgid "Row Number"
 msgstr ""
 
 msgid "Row Selection"
-msgstr ""
-
-msgid "Rows with too less values"
 msgstr ""
 
 msgid "Run"
@@ -4387,6 +4417,9 @@ msgstr ""
 msgid "System Addresses"
 msgstr ""
 
+msgid "System: Console"
+msgstr ""
+
 msgid "System: Dynamic Fields"
 msgstr ""
 
@@ -4512,6 +4545,10 @@ msgid ""
 msgstr ""
 
 msgid ""
+"There are open dialogs. Any data you may have entered will be lost. Continue?"
+msgstr ""
+
+msgid ""
 "The value for the field is in the future! The date needs to be in the past!"
 msgstr ""
 
@@ -4533,14 +4570,6 @@ msgstr ""
 
 msgid ""
 "This is the administration panel. Please select a module from the explorer."
-msgstr ""
-
-msgid ""
-"This value defines the offset (in seconds) to the very moment in which the "
-"field is initially displayed for input. Leave empty if the field should not "
-"hold any value upon first input. For instance, enter 3600 if the field "
-"should be initialized with \"now+1h\" or enter 86400 if the field should be "
-"initialized with \"now+24h\"."
 msgstr ""
 
 msgid "Thursday"
@@ -4698,9 +4727,6 @@ msgstr "Type(s) successfully removed."
 msgid "unequal"
 msgstr ""
 
-msgid "Unknown properties (will be ignored):"
-msgstr ""
-
 msgid "Unlock"
 msgstr ""
 
@@ -4806,6 +4832,12 @@ msgstr ""
 msgid "View Log File"
 msgstr ""
 
+msgid "Visible in customer portal"
+msgstr ""
+
+msgid "Visible in Self Service Portal"
+msgstr ""
+
 msgid "Votes"
 msgstr ""
 
@@ -4864,6 +4896,9 @@ msgid "Widget Configuration"
 msgstr ""
 
 msgid "Wildcard Search"
+msgstr ""
+
+msgid "With attachments"
 msgstr ""
 
 msgid "within the last"
@@ -4928,6 +4963,9 @@ msgstr ""
 
 msgid "ZIP"
 msgstr ""
+
+#~ msgid "Helptext_Import_File"
+#~ msgstr "Choose a .csv-file which contains importable values."
 
 #~ msgid "Helptext_Admin_MailAccountEdit_IMAPFolder"
 #~ msgstr ""

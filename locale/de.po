@@ -196,6 +196,9 @@ msgstr "Alle freien Tickets"
 msgid "All Objects"
 msgstr "Alle Objekte"
 
+msgid "All open tabs will be closed. Continue?"
+msgstr ""
+
 msgid "All tickets"
 msgstr "Alle Tickets"
 
@@ -265,8 +268,8 @@ msgstr "Artikeldaten"
 msgid "Article Id"
 msgstr "Artikel ID"
 
-msgid "Article Overview"
-msgstr "Übersicht der Artikel"
+msgid "Article sort order"
+msgstr ""
 
 msgid "Article Text"
 msgstr "Artikeltext"
@@ -313,6 +316,9 @@ msgstr "Zugeordnete Organisationen"
 msgid "Assigned Roles"
 msgstr "Zugeordnete Rollen"
 
+msgid "Assigned Tickets"
+msgstr ""
+
 msgid "Assignees"
 msgstr "Verantwortlichkeiten"
 
@@ -347,9 +353,6 @@ msgstr "Attribute"
 
 msgid "Attributes to be edited"
 msgstr "Zu ändernde Attribute"
-
-msgid "Ausblenden"
-msgstr "Ausblenden"
 
 msgid "Authorization URL"
 msgstr "Authorisierungs-URL"
@@ -413,9 +416,6 @@ msgstr "Datei kann nicht verwendet werden (Datei ist leer)."
 
 msgid "Can not use file (missing required properties):"
 msgstr "Datei kann nicht verwendet werden (Fehlende Pflichtangaben):"
-
-msgid "Can not use file (no known properties found)."
-msgstr "Datei kann nicht verwendet werden (keine bekannten Angaben gefunden)."
 
 msgid "Category"
 msgstr "Kategorie"
@@ -508,6 +508,12 @@ msgstr "Client Secret"
 msgid "Close"
 msgstr "Schließen"
 
+msgid "close all"
+msgstr ""
+
+msgid "Close all open tabs"
+msgstr ""
+
 msgid "Closed"
 msgstr "Geschlossen"
 
@@ -570,6 +576,9 @@ msgstr "Kommunikation: E-Mail: OAuth2 Profile"
 
 msgid "Communication: Email: Outbox"
 msgstr "Kommunikation: E-Mail: Postausgang"
+
+msgid "Communication History"
+msgstr ""
 
 msgid "Communication: Webform"
 msgstr "Kommunikation: Webformular"
@@ -875,6 +884,9 @@ msgstr "\" (Doppeltes Hochkomma)"
 msgid "Download"
 msgstr "Download"
 
+msgid "Download all attachments"
+msgstr ""
+
 msgid "Download log"
 msgstr "Log Download"
 
@@ -892,6 +904,9 @@ msgstr "Dynamisches Feld"
 
 msgid "DynamicField"
 msgstr "Dynamisches Feld"
+
+msgid "Dynamic_Field_DateTime_DefaultValue_Description"
+msgstr ""
 
 msgid "Dynamic Fields"
 msgstr "Dynamische Felder"
@@ -1139,9 +1154,6 @@ msgstr "Events"
 msgid "Execute"
 msgstr "Ausführen"
 
-msgid "Execute console command"
-msgstr "Kommando ausführen"
-
 msgid "Execute now"
 msgstr "Jetzt ausführen"
 
@@ -1153,6 +1165,9 @@ msgstr "Ausführungsplan"
 
 msgid "Existing Links ({0})"
 msgstr "Vorhandene Verknüpfungen ({0})"
+
+msgid "expand all"
+msgstr ""
 
 msgid "expected time required:"
 msgstr "voraussichtlich benötigte Zeit:"
@@ -1332,6 +1347,9 @@ msgstr "Freitag"
 
 msgid "From"
 msgstr "Von"
+
+msgid "From external"
+msgstr ""
 
 msgid "Frontend"
 msgstr "Frontend"
@@ -2270,6 +2288,9 @@ msgstr ""
 msgid "Helptext_Customers_ContactCreate_Phone"
 msgstr ""
 
+msgid "Helptext_Customers_ContactCreate_PrimaryOrganisation"
+msgstr ""
+
 msgid "Helptext_Customers_ContactCreate_Street"
 msgstr "Anschrift Straße des Kontakts, wenn von Organisation abweichend"
 
@@ -2331,8 +2352,8 @@ msgstr ""
 
 msgid "Helptext_Customers_OrganisationCreate_Type"
 msgstr ""
-"Der Typ der Organisation - handelt es sich um einen Leistungsbezieher (Kunde)"
-", Lieferant/Partner oder Leistungserbringer (meist Betreiber dieses "
+"Der Typ der Organisation - handelt es sich um einen Leistungsbezieher "
+"(Kunde), Lieferant/Partner oder Leistungserbringer (meist Betreiber dieses "
 "Servicemanagementsystems)."
 
 msgid "Helptext_Customers_OrganisationCreate_URL"
@@ -2441,9 +2462,6 @@ msgstr ""
 "Ermöglicht standardisierte Verwendung von Sonderzeichen u.ä. Standard für "
 "Europa ist UTF-8."
 
-msgid "Helptext_Import_File"
-msgstr "Wählen Sie eine .csv-Datei mit zu importierenden Werten."
-
 msgid "Helptext_Import_TextSeparator."
 msgstr ""
 "Markiert Anfang & Ende des Inhaltes eines Attributs. Falls unbekannt, öffnen "
@@ -2464,6 +2482,9 @@ msgid "Helptext_PersonalSettings_Always_close_dialog_tab_without_asking_Hint"
 msgstr ""
 "Bei Abbruch einer Bearbeitung (Schließen eines Dialogs) keine Bestätigung "
 "abfragen."
+
+msgid "Helptext_PersonalSettings_article_sort_order_Hint"
+msgstr ""
 
 msgid "Helptext_PersonalSettings_MyQueues_Hint"
 msgstr ""
@@ -2855,6 +2876,15 @@ msgstr ""
 "Erstellen Sie einen neuen Token, wenn Sie ihn versehentlich weitergegeben "
 "haben sollten."
 
+msgid "HelptImporConfigext_Import_File"
+msgstr ""
+
+msgid "Hide"
+msgstr ""
+
+msgid "Hide Message"
+msgstr ""
+
 msgid "History"
 msgstr "Historie"
 
@@ -3166,6 +3196,12 @@ msgstr "Mailfilter Details"
 msgid "Manuals"
 msgstr "Handbücher"
 
+msgid "Mark all as read"
+msgstr ""
+
+msgid "Marked all articles as read."
+msgstr ""
+
 msgid "Max Depth"
 msgstr "Max. Tiefe"
 
@@ -3298,6 +3334,9 @@ msgstr "Neue Emailadresse"
 msgid "New Email Filter"
 msgstr "Neuer E-Mail Filter"
 
+msgid "Newest first"
+msgstr ""
+
 msgid "New FAQ"
 msgstr "Neue FAQ"
 
@@ -3366,9 +3405,6 @@ msgstr "Neuer Textbaustein"
 
 msgid "New Ticket"
 msgstr "Neues Ticket"
-
-msgid "New Tickets"
-msgstr "Neue Tickets"
 
 msgid "New Tickets Chart"
 msgstr "Neuer Ticketchart"
@@ -3562,6 +3598,9 @@ msgstr "Objekttyp"
 msgid "Observer"
 msgstr "Beobachter"
 
+msgid "Oldest first"
+msgstr ""
+
 msgid "Once a day"
 msgstr "Einmal pro Tag"
 
@@ -3676,6 +3715,9 @@ msgstr "Tickets nach Status"
 msgid "Overview Versions"
 msgstr "Versionsübersicht"
 
+msgid "owned by me"
+msgstr ""
+
 msgid "Owner"
 msgstr "Bearbeiter"
 
@@ -3708,9 +3750,6 @@ msgstr "Wartend"
 
 msgid "Pending date is not in the future."
 msgstr "\"Warten bis\"-Datum liegt nicht in der Zukunft."
-
-msgid "Pending Tickets"
-msgstr "Tickets im Warten-Status"
 
 msgid "Pending until"
 msgstr "Warten bis"
@@ -3799,6 +3838,9 @@ msgstr "Vorherig"
 
 msgid "Previous Image"
 msgstr "Vorheriges Bild"
+
+msgid "Primary Organisation"
+msgstr ""
 
 msgid "Print"
 msgstr "Drucken"
@@ -3920,17 +3962,8 @@ msgstr "Nur Lesen"
 msgid "Recently Closed"
 msgstr "Kürzlich Geschlossen"
 
-msgid "Recipient: Bcc"
-msgstr "Empfänger: Bcc"
-
-msgid "Recipient: Cc"
-msgstr "Empfänger: Cc"
-
 msgid "Recipients"
 msgstr "Empfänger"
-
-msgid "Recipient: To"
-msgstr "Empfänger: An"
 
 msgid "Redirect URL"
 msgstr "Redirect URL"
@@ -4103,11 +4136,11 @@ msgstr "Nutzer-Widgets zurücksetzen"
 msgid "Resizable"
 msgstr "Größe änderbar"
 
+msgid "responsibility by me"
+msgstr ""
+
 msgid "Responsible"
 msgstr "Verantwortlicher"
-
-msgid "Responsible Tickets"
-msgstr "Verantwortliche Tickets"
 
 msgid "Result names"
 msgstr "Ergebnisbezeichnungen"
@@ -4146,9 +4179,6 @@ msgstr "Zeilennummer"
 
 msgid "Row Selection"
 msgstr "Spaltenauswahl"
-
-msgid "Rows with too less values"
-msgstr "Zeilen mit zu wenigen Werten"
 
 msgid "Run"
 msgstr "Ausführen"
@@ -4590,6 +4620,9 @@ msgstr "Systemadresse"
 msgid "System Addresses"
 msgstr "Systemadressen"
 
+msgid "System: Console"
+msgstr ""
+
 msgid "System: Dynamic Fields"
 msgstr "System: Dynamische Felder"
 
@@ -4729,6 +4762,10 @@ msgstr ""
 "Fortfahren?"
 
 msgid ""
+"There are open dialogs. Any data you may have entered will be lost. Continue?"
+msgstr ""
+
+msgid ""
 "The value for the field is in the future! The date needs to be in the past!"
 msgstr ""
 "Der Wert des Feldes liegt in der Zukunft! Das Datum muss in der "
@@ -4759,19 +4796,6 @@ msgid ""
 msgstr ""
 "Sie befinden sich im Administrationsbereich. Bitte wählen Sie ein Modul aus "
 "dem Explorer."
-
-msgid ""
-"This value defines the offset (in seconds) to the very moment in which the "
-"field is initially displayed for input. Leave empty if the field should not "
-"hold any value upon first input. For instance, enter 3600 if the field "
-"should be initialized with \"now+1h\" or enter 86400 if the field should be "
-"initialized with \"now+24h\"."
-msgstr ""
-"Dieser Wert definiert den Versatz (in Sekunden) zu dem Moment, in dem das "
-"Feld erstmalig zur Eingabe angezeigt wird. Leer lassen, wenn das Feld bei "
-"der ersten Eingabe keinen Wert enthalten soll. Geben Sie bspw. 3600 ein, "
-"wenn das Feld mit jetzt+1h initialisiert werden soll, oder geben Sie 86400 "
-"ein, wenn das Feld mit jetzt+24h initialisiert werden soll."
 
 msgid "Thursday"
 msgstr "Donnerstag"
@@ -4931,9 +4955,6 @@ msgstr "Typ(en) wurde(n) erfolgreich gelöscht."
 msgid "unequal"
 msgstr "ungleich"
 
-msgid "Unknown properties (will be ignored):"
-msgstr "Unbekannte Eigenschaften (werden ignoriert):"
-
 msgid "Unlock"
 msgstr "Freigeben"
 
@@ -5039,6 +5060,12 @@ msgstr "Sichtbare Status"
 msgid "View Log File"
 msgstr "Log File Anzeigen"
 
+msgid "Visible in customer portal"
+msgstr "Sichtbar in Kundenportal"
+
+msgid "Visible in Self Service Portal"
+msgstr ""
+
 msgid "Votes"
 msgstr "Bewertungen"
 
@@ -5098,6 +5125,9 @@ msgstr "Widget-Konfiguration"
 
 msgid "Wildcard Search"
 msgstr "Wildcard-Suche"
+
+msgid "With attachments"
+msgstr ""
 
 msgid "within the last"
 msgstr "innerhalb der letzten"
@@ -5161,6 +5191,59 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Article Overview"
+#~ msgstr "Übersicht der Artikel"
+
+#~ msgid "Ausblenden"
+#~ msgstr "Ausblenden"
+
+#~ msgid "Can not use file (no known properties found)."
+#~ msgstr ""
+#~ "Datei kann nicht verwendet werden (keine bekannten Angaben gefunden)."
+
+#~ msgid "Execute console command"
+#~ msgstr "Kommando ausführen"
+
+#~ msgid "Helptext_Import_File"
+#~ msgstr "Wählen Sie eine .csv-Datei mit zu importierenden Werten."
+
+#~ msgid "New Tickets"
+#~ msgstr "Neue Tickets"
+
+#~ msgid "Pending Tickets"
+#~ msgstr "Tickets im Warten-Status"
+
+#~ msgid "Recipient: Bcc"
+#~ msgstr "Empfänger: Bcc"
+
+#~ msgid "Recipient: Cc"
+#~ msgstr "Empfänger: Cc"
+
+#~ msgid "Recipient: To"
+#~ msgstr "Empfänger: An"
+
+#~ msgid "Responsible Tickets"
+#~ msgstr "Verantwortliche Tickets"
+
+#~ msgid "Rows with too less values"
+#~ msgstr "Zeilen mit zu wenigen Werten"
+
+#~ msgid ""
+#~ "This value defines the offset (in seconds) to the very moment in which "
+#~ "the field is initially displayed for input. Leave empty if the field "
+#~ "should not hold any value upon first input. For instance, enter 3600 if "
+#~ "the field should be initialized with \"now+1h\" or enter 86400 if the "
+#~ "field should be initialized with \"now+24h\"."
+#~ msgstr ""
+#~ "Dieser Wert definiert den Versatz (in Sekunden) zu dem Moment, in dem das "
+#~ "Feld erstmalig zur Eingabe angezeigt wird. Leer lassen, wenn das Feld bei "
+#~ "der ersten Eingabe keinen Wert enthalten soll. Geben Sie bspw. 3600 ein, "
+#~ "wenn das Feld mit jetzt+1h initialisiert werden soll, oder geben Sie "
+#~ "86400 ein, wenn das Feld mit jetzt+24h initialisiert werden soll."
+
+#~ msgid "Unknown properties (will be ignored):"
+#~ msgstr "Unbekannte Eigenschaften (werden ignoriert):"
 
 #~ msgid "Customer Frontend"
 #~ msgstr "Kundenfrontend"
@@ -5856,9 +5939,6 @@ msgstr "PLZ"
 #~ msgid "Helptext_Customers_ContactCreate_Login"
 #~ msgstr ""
 #~ "Der Nutzername muss eineindeutig sein und kann nicht bearbeitet werden."
-
-#~ msgid "Visible in customer portal"
-#~ msgstr "Sichtbar in Kundenportal"
 
 #~ msgid "internal"
 #~ msgstr "intern"
