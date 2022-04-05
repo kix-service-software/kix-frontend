@@ -26,9 +26,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <dynamic-field-table-view table=state.table dynamicField=state.field/>
     </else-if>
     <else-if(state.field.FieldType === "TextArea")>
-        <for|value| of=(state.dfValue.Value)>
-            <pre.df-textarea>${value}</pre>
-        </for>
+        <if(state.dfValue && Array.isArray(state.dfValue.Value))>
+            <for|value| of=(state.dfValue.Value)>
+                <pre.df-textarea>${value}</pre>
+            </for>
+        </if>
     </else-if>
     <else>
         <label-list

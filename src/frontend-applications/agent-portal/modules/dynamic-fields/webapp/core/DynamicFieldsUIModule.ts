@@ -314,7 +314,7 @@ export class UIModule implements IUIModule {
 
     private async registerSchemaForDateTime(): Promise<void> {
 
-        const defaultValueDescription = await TranslationService.translate('Translatable#This value defines the offset (in seconds) to the very moment in which the field is initially displayed for input. Leave empty if the field should not hold any value upon first input. For instance, enter 3600 if the field should be initialized with "now+1h" or enter 86400 if the field should be initialized with "now+24h".');
+        const defaultValueDescription = await TranslationService.translate('Translatable#Dynamic_Field_DateTime_DefaultValue_Description');
         const yearsInFuture = await TranslationService.translate('Translatable#Years in Future');
         const yearsInPast = await TranslationService.translate('Translatable#Years in Past');
         const dateRestriction = await TranslationService.translate('Translatable#Date Restriction');
