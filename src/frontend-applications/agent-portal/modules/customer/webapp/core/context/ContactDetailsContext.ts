@@ -16,6 +16,7 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { ContactProperty } from '../../../model/ContactProperty';
 import { OrganisationContext } from './OrganisationContext';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
 export class ContactDetailsContext extends Context {
 
@@ -54,7 +55,7 @@ export class ContactDetailsContext extends Context {
     private async loadContact(): Promise<Contact> {
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null,
-            [ContactProperty.USER]
+            [KIXObjectProperty.DYNAMIC_FIELDS, ContactProperty.USER]
         );
 
         return await this.loadDetailsObject<Contact>(KIXObjectType.CONTACT, loadingOptions);
