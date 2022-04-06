@@ -21,19 +21,22 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
     public getAdminModules(): AdminModuleCategory[] {
         return [
             new AdminModuleCategory(
-                null, 'communication', 'Translatable#Communication', null, [],
-                [
-                    new AdminModule(
-                        null, 'webforms', 'Translatable#Webform', null,
-                        KIXObjectType.WEBFORM, 'admin-webforms',
-                        [
-                            new UIComponentPermission('system/ticket/types', [CRUD.CREATE, CRUD.READ]),
-                            new UIComponentPermission('system/ticket/states', [CRUD.CREATE, CRUD.READ]),
-                            new UIComponentPermission('system/ticket/priorities', [CRUD.CREATE, CRUD.READ]),
-                            new UIComponentPermission('system/ticket/queues', [CRUD.CREATE, CRUD.READ])
-                        ]
-                    ),
-                ])
+                null, 'kix', 'Translatable#KIX', null, [
+                new AdminModuleCategory(
+                    null, 'communication', 'Translatable#Communication', null, [],
+                    [
+                        new AdminModule(
+                            null, 'webforms', 'Translatable#Webform', null,
+                            KIXObjectType.WEBFORM, 'admin-webforms',
+                            [
+                                new UIComponentPermission('system/ticket/types', [CRUD.CREATE, CRUD.READ]),
+                                new UIComponentPermission('system/ticket/states', [CRUD.CREATE, CRUD.READ]),
+                                new UIComponentPermission('system/ticket/priorities', [CRUD.CREATE, CRUD.READ]),
+                                new UIComponentPermission('system/ticket/queues', [CRUD.CREATE, CRUD.READ])
+                            ]
+                        ),
+                    ])
+            ])
         ];
     }
 
