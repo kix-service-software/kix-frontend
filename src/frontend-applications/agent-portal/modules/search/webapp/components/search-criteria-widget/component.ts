@@ -103,6 +103,18 @@ class Component {
         });
     }
 
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(SearchEvent.SAVE_SEARCH_FINISHED, this.subscriber);
+        EventService.getInstance().unsubscribe(SearchEvent.SEARCH_DELETED, this.subscriber);
+        EventService.getInstance().unsubscribe(SearchEvent.SEARCH_CACHE_CHANGED, this.subscriber);
+
+        this.state.manager?.unregisterListener(this.managerListenerId);
+
+        if (this.keyListenerElement) {
+            this.keyListenerElement.removeEventListener('keydown', this.keyListener);
+        }
+    }
+
     private async initManager(): Promise<void> {
         this.state.manager?.reset();
 
@@ -124,15 +136,6 @@ class Component {
         const dynamicFormComponent = (this as any).getComponent('search-criteria-dynamic-form');
         if (dynamicFormComponent) {
             dynamicFormComponent.updateValues();
-        }
-    }
-
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(SearchEvent.SAVE_SEARCH_FINISHED, this.subscriber);
-        this.state.manager?.unregisterListener(this.managerListenerId);
-
-        if (this.keyListenerElement) {
-            this.keyListenerElement.removeEventListener('keydown', this.keyListener);
         }
     }
 
