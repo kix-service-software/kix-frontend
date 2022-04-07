@@ -38,16 +38,6 @@ export class TicketParameterUtil {
                     const pendingTime = DateTimeUtil.getKIXDateTimeString(value);
                     parameter.push([TicketProperty.PENDING_TIME, pendingTime]);
                 }
-            } else if (property === TicketProperty.TITLE) {
-                parameter.push([TicketProperty.TITLE, value]);
-                if (!forUpdate) {
-                    parameter.push([ArticleProperty.SUBJECT, value]);
-                }
-            } else if (property === ArticleProperty.SUBJECT) {
-                if (!forUpdate) {
-                    parameter.push([TicketProperty.TITLE, value]);
-                }
-                parameter.push([ArticleProperty.SUBJECT, value]);
             } else if (property === ArticleProperty.ATTACHMENTS) {
                 if (value) {
                     const attachments = await TicketParameterUtil.prepareAttachments(value);

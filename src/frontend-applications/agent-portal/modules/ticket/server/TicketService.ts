@@ -139,6 +139,14 @@ export class TicketAPIService extends KIXObjectAPIService {
                 orgParameter[1] = null;
             }
 
+            const titleParameter = parameter.find((p) => p[0] === TicketProperty.TITLE);
+            if (!titleParameter) {
+                const subjectParameter = parameter.find((p) => p[0] === ArticleProperty.SUBJECT);
+                if (subjectParameter) {
+                    parameter.push([TicketProperty.TITLE, subjectParameter[1]]);
+                }
+            }
+
             const articleParameter = await this.prepareArticleData(
                 token, null, parameter, queueId, contactId
             );
