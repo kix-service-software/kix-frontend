@@ -18,6 +18,7 @@ import { EventService } from '../../../../../modules/base-components/webapp/core
 import { ClientStorageService } from '../../core/ClientStorageService';
 import { TabContainerEvent } from '../../core/TabContainerEvent';
 import { TabContainerEventData } from '../../core/TabContainerEventData';
+import { BrowserUtil } from '../../core/BrowserUtil';
 
 class WidgetComponent implements IEventSubscriber {
 
@@ -116,6 +117,13 @@ class WidgetComponent implements IEventSubscriber {
             if (this.state.minimized) {
                 ClientStorageService.setOption(`${this.state.instanceId}-minimized`, this.state.minimized.toString());
             } else {
+                setTimeout(() => {
+                    const element = (this as any).getEl('widget-content');
+                    if (element) {
+                        BrowserUtil.scrollIntoViewIfNeeded(element);
+                    }
+                }, 100);
+
                 ClientStorageService.deleteState(`${this.state.instanceId}-minimized`);
             }
         }
