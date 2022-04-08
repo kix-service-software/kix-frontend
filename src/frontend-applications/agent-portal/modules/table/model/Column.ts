@@ -57,6 +57,10 @@ export class Column<T extends KIXObject = any> {
         }
     }
 
+    public destroy(): void {
+        ClientStorageService.deleteState(this.getConfigurationKey('filter'));
+    }
+
     public getColumnId(): string {
         return this.id;
     }
