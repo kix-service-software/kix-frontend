@@ -174,10 +174,7 @@ class Component {
         if (valueList) {
             const formListInputContainer = (this as any).getEl('form-list-input-container-' + this.state.listId);
             let container = formListInputContainer;
-            while (container
-                && container.className !== 'tab-content'
-                && container.parentNode
-                && container.parentNode.className !== 'lane-widget') {
+            while (!container?.classList.contains('form-page') && container?.parentNode) {
                 container = container.parentNode;
             }
 
