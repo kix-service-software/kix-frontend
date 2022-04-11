@@ -450,7 +450,7 @@ export class TicketService extends KIXObjectService<Ticket> {
             const match = content.match(/(<body[^>]*>)([\w|\W]*)(<\/body>)/);
             if (match && match.length >= 3) {
                 content = match[2];
-            } else {
+            } else if (attachmentWithContent.Filename !== 'file-2') {
                 content = content.replace(/(\r\n|\n\r|\n|\r)/g, '<br>');
             }
 
