@@ -277,6 +277,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 article.TicketID, article.ArticleID
             );
             await this.loadArticle(silent, true);
+            this.context.reloadObjectList(KIXObjectType.ARTICLE);
         }
     }
 }

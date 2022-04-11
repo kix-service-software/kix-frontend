@@ -16,17 +16,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
       <div.communication-container>
          <div.communication-header>
             <message-filter/>
-            <!-- TODO: for performance reasons currently not active -->
-            <!-- <div.expand-action on-click("toggleAll")>
-               <if(state.expanded)>
-                  <span.kix-icon-minus/>
-                  <translation-string pattern="Translatable#close all"/>
-               </if>
-               <else>
-                  <span.kix-icon-plus-blank/>
-                  <translation-string pattern="Translatable#expand all"/>
-               </else>
-            </div> -->
             <div.read-action class={active:state.activeUnreadAction} on-click("readAll")>
                <span.fas.fa-book-open/>
                <translation-string pattern="Translatable#Mark all as read"/>
