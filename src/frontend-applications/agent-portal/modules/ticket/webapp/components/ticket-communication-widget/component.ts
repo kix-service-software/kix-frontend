@@ -47,7 +47,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     this.setFilteredArticles();
                 }
             },
-            objectListChanged: (objectType: KIXObjectType) => null,
+            objectListChanged: (objectType: KIXObjectType) => this.setArticles(),
             additionalInformationChanged: () => null,
             objectChanged: () => null,
             scrollInformationChanged: () => null,
@@ -60,14 +60,15 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             (p) => p.ID === PersonalSettingsProperty.ARTICLE_SORT_ORDER
         ) : null;
         this.sortOrder = preference?.Value;
+    }
 
+    private async setArticles(): Promise<void> {
         this.setFilteredArticles();
 
         // enable read action
         const allArticles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || [];
         if (allArticles.length) {
             this.state.activeUnreadAction = allArticles.some((a) => a.isUnread());
-
         }
     }
 
@@ -89,11 +90,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onDestroy(): void {
         this.context.unregisterListener('communication-widget');
-    }
-
-    public toggleAll(): void {
-        this.state.expanded = !this.state.expanded;
-        EventService.getInstance().publish('TOGGLE_ARTICLE', this.state.expanded);
     }
 
     public async readAll(): Promise<void> {
