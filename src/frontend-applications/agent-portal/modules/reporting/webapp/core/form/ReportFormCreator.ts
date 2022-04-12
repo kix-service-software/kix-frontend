@@ -142,7 +142,7 @@ export class ReportFormCreator {
         }
 
         if (parameter.References) {
-            await ReportingFormUtil.setInputComponent(field, parameter);
+            await ReportingFormUtil.setInputComponent(field, parameter, undefined, undefined, KIXObjectType.REPORT);
         } else if (Array.isArray(parameter.PossibleValues) && parameter.PossibleValues.length) {
             ReportingFormUtil.createDefaultValueInput(field, parameter);
         }
