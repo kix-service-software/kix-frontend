@@ -266,7 +266,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         if (treeHandler && formValue && valueDefined) {
             const objectIds: Array<string | number> = Array.isArray(formValue.value)
                 ? formValue.value
-                : [formValue.value];
+                : formValue.value ? [formValue.value] : [];
 
             let selectedNodes = [];
 
