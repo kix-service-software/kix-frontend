@@ -15,7 +15,7 @@ import {
     EditTicketTypeDialogContext, TicketTypeTableDeleteAction, TicketStateCreateAction,
     NewTicketStateDialogContext, TicketStateEditAction, EditTicketStateDialogContext, TicketStateTableDeleteAction,
     TicketStateDetailsContext, TicketPriorityCreateAction, NewTicketPriorityDialogContext, TicketPriorityEditAction,
-    EditTicketPriorityDialogContext, TicketPriorityTableDeleteAction, TicketPriorityDetailsContext,
+    EditTicketPriorityDialogContext, TicketPriorityTableDeleteAction,
     TicketQueueCreateAction, NewQueueDialogContext, TicketQueueEditAction, EditQueueDialogContext, QueueDetailsContext,
 } from '.';
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
@@ -143,7 +143,7 @@ export class UIModule extends TicketReadUIModule {
             [
                 new UIComponentPermission('system/ticket/priorities', [CRUD.CREATE])
             ],
-            'Translatable#New Priority', 'kix-icon-gear', TicketPriorityDetailsContext.CONTEXT_ID
+            'Translatable#New Priority', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(newTicketPriorityContext);
 
@@ -156,24 +156,13 @@ export class UIModule extends TicketReadUIModule {
             [
                 new UIComponentPermission('system/ticket/priorities', [CRUD.CREATE])
             ],
-            'Translatable#Edit Priority', 'kix-icon-gear', TicketPriorityDetailsContext.CONTEXT_ID
+            'Translatable#Edit Priority', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(editTicketPriorityContext);
 
         ActionFactory.getInstance().registerAction('ticket-admin-priority-table-delete',
             TicketPriorityTableDeleteAction
         );
-
-        const ticketPriorityDetailsContextDescriptor = new ContextDescriptor(
-            TicketPriorityDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET_PRIORITY],
-            ContextType.MAIN, ContextMode.DETAILS,
-            true, 'object-details-page', ['priorities'], TicketPriorityDetailsContext,
-            [
-                new UIComponentPermission('system/ticket/priorities', [CRUD.READ])
-            ],
-            'Translatable#Priority Details', 'kix-icon-gear'
-        );
-        ContextService.getInstance().registerContext(ticketPriorityDetailsContextDescriptor);
     }
 
     private async registerTicketQueuesAdmin(): Promise<void> {
