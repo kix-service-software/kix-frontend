@@ -21,6 +21,8 @@ export enum AdditionalContextInformation {
 
     DIALOG_SUBMIT_BUTTON_TEXT = 'DIALOG_SUBMIT_BUTTON_TEXT',
 
-    DUPLICATE = 'DUPLICATE'
+    DUPLICATE = 'DUPLICATE',
+
+    LOADING = 'LOADING'
 
 }

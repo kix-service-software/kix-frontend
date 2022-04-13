@@ -26,24 +26,8 @@ export class TicketDetailsContext extends Context {
 
     public static CONTEXT_ID = 'ticket-details';
 
-    private scrolledDone: boolean;
-
     public getIcon(): string {
         return 'kix-icon-ticket';
-    }
-
-    public setAdditionalInformation(key: string, value: any): void {
-
-        if (key === 'NEWEST_ARTICLE_ID') {
-
-            // set if not already scrolled or "reset"
-            if (!this.scrolledDone || !value) {
-                this.scrolledDone = true;
-                super.setAdditionalInformation(key, value);
-            }
-        } else {
-            super.setAdditionalInformation(key, value);
-        }
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
@@ -96,35 +80,49 @@ export class TicketDetailsContext extends Context {
         return new BreadcrumbInformation(this.getIcon(), [TicketContext.CONTEXT_ID], text);
     }
 
-    private loadTicket(changedProperties: string[] = [], cache: boolean = true): Promise<Ticket> {
+    private async loadTicket(changedProperties: string[] = [], cache: boolean = true): Promise<Ticket> {
+        await this.loadArticles();
+        await this.loadTicketHistory();
+
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, ['StateType', 'ObjectActions', KIXObjectProperty.DYNAMIC_FIELDS, TicketProperty.WATCHERS]
         );
-        return this.loadDetailsObject<Ticket>(KIXObjectType.TICKET, loadingOptions);
+
+        const ticket = this.loadDetailsObject<Ticket>(KIXObjectType.TICKET, loadingOptions);
+        return ticket;
     }
 
     public async getObjectList<T = KIXObject>(objectType: KIXObjectType | string): Promise<T[]> {
-        let objects = [];
-        if (objectType === KIXObjectType.ARTICLE) {
-            objects = await KIXObjectService.loadObjects<Article>(
-                KIXObjectType.ARTICLE, null,
-                new KIXObjectLoadingOptions(
-                    null, 'Article.IncomingTime', null, [ArticleProperty.FLAGS]
-                ),
-                new ArticleLoadingOptions(this.objectId)
-            ).catch(() => [] as Article[]) || [];
-        } else if (objectType === KIXObjectType.TICKET_HISTORY) {
-            const tickets = await KIXObjectService.loadObjects<Ticket>(
-                KIXObjectType.TICKET, [this.objectId],
-                new KIXObjectLoadingOptions(null, null, null, [TicketProperty.HISTORY])
-            );
-            if (Array.isArray(tickets) && tickets.length) {
-                objects = Array.isArray(tickets[0].History) ? tickets[0].History : [];
-            }
-        } else {
-            objects = await super.getObjectList(objectType);
-        }
-
+        const objects = await super.getObjectList<T>(objectType);
         return objects;
+    }
+
+    public async reloadObjectList(objectType: KIXObjectType | string, silent: boolean = false): Promise<void> {
+        if (objectType === KIXObjectType.ARTICLE) {
+            this.loadArticles();
+        }
+    }
+
+    private async loadArticles(): Promise<void> {
+        const articles = await KIXObjectService.loadObjects<Article>(
+            KIXObjectType.ARTICLE, null,
+            new KIXObjectLoadingOptions(
+                null, 'Article.IncomingTime', null, [ArticleProperty.FLAGS]
+            ),
+            new ArticleLoadingOptions(this.objectId)
+        ).catch(() => [] as Article[]) || [];
+
+        this.setObjectList(KIXObjectType.ARTICLE, articles);
+    }
+
+    private async loadTicketHistory(): Promise<void> {
+        const tickets = await KIXObjectService.loadObjects<Ticket>(
+            KIXObjectType.TICKET, [this.objectId],
+            new KIXObjectLoadingOptions(null, null, null, [TicketProperty.HISTORY])
+        );
+        if (Array.isArray(tickets) && tickets.length) {
+            const history = Array.isArray(tickets[0].History) ? tickets[0].History : [];
+            super.setObjectList(KIXObjectType.TICKET_HISTORY, history);
+        }
     }
 }

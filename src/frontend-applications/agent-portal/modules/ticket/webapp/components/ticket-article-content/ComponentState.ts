@@ -13,6 +13,8 @@ export class ComponentState {
 
     public constructor(
         public content: string = null,
-        public inlineContent: InlineContent[] = []
+        public inlineContent: InlineContent[] = [],
+        public plainText: string = null,
+        public show: boolean = false
     ) { }
 }

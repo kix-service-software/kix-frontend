@@ -130,6 +130,17 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                     translatable = false;
                 }
                 break;
+            case ArticleProperty.BODY_RICHTEXT_NO_INLINE:
+                if (article) {
+                    const prepareContent = await TicketService.getInstance().getPreparedArticleBodyContent(
+                        article, true
+                    );
+                    if (prepareContent) {
+                        displayValue = prepareContent[0];
+                    }
+                    translatable = false;
+                }
+                break;
             default:
                 displayValue = await super.getDisplayText(article, property, defaultValue, translatable);
         }

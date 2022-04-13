@@ -30,7 +30,8 @@ export abstract class SocketClient {
         const socketUrl = ClientStorageService.getFrontendSocketUrl();
 
         const options = {
-            withCredentials: true
+            withCredentials: true,
+            closeOnBeforeunload: false
         };
 
         this.socket = io(socketUrl + '/' + this.namespace, options);

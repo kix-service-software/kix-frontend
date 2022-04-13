@@ -91,24 +91,8 @@ export class ContactAPIService extends KIXObjectAPIService {
     public async createObject(
         token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>
     ): Promise<string> {
-        let userId;
+
         const userParameter = this.getUserParameters(parameter);
-        if (userParameter.length) {
-            const assignedUserId = this.getParameterValue(parameter, ContactProperty.ASSIGNED_USER_ID);
-            userId = await this.createOrUpdateUser(token, clientRequestId, userParameter, assignedUserId).catch(
-                (error: Error) => {
-                    LoggingService.getInstance().error(
-                        `${error.Code}: Could not create or update user for contact ${error.Message}`, error
-                    );
-                    throw new Error(error.Code, error.Message);
-                }
-            );
-            if (!assignedUserId && userId) {
-                parameter.push(
-                    [ContactProperty.ASSIGNED_USER_ID, userId]
-                );
-            }
-        }
 
         const contactParameter = parameter.filter(
             (p) => !userParameter.some((up) => up[0] === p[0]) || p[0] === KIXObjectProperty.VALID_ID
@@ -121,11 +105,27 @@ export class ContactAPIService extends KIXObjectAPIService {
             this.objectType
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            if (userId) {
-                this.deleteObject(token, clientRequestId, KIXObjectType.USER, userId, undefined, KIXObjectType.CONTACT);
-            }
             throw new Error(error.Code, error.Message);
         });
+
+        let userId;
+        if (userParameter.length) {
+            const assignedUserId = this.getParameterValue(parameter, ContactProperty.ASSIGNED_USER_ID);
+            userId = await this.createOrUpdateUser(token, clientRequestId, userParameter, assignedUserId).catch(
+                (error: Error) => {
+                    LoggingService.getInstance().error(
+                        `${error.Code}: Could not create or update user for contact ${error.Message}`, error
+                    );
+                    throw new Error(error.Code, error.Message);
+                }
+            );
+            if (!assignedUserId && userId) {
+                await this.updateObject(
+                    token, clientRequestId, KIXObjectType.CONTACT,
+                    [[ContactProperty.ASSIGNED_USER_ID, userId]], response.ContactID
+                );
+            }
+        }
 
         const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
         if (icon && icon.Content) {

@@ -13,160 +13,165 @@
 @dynamic-value-columns-no-operation: 15rem minmax(15rem, auto) 1rem;
 @dynamic-value-columns-with-options-no-operation: minmax(1rem, max-content) 15rem minmax(15rem, auto) 1rem;
 
-.dynamic-form-field-header {
-    display: grid;
-    grid-template-columns: @dynamic-value-columns;
-}
+.dynamic-form-field-container {
 
-.dynamic-form-field-value {
-    display: grid;
-    grid-template-columns: @dynamic-value-columns;
-    grid-auto-columns: 1rem;
-    align-items: center;
-    grid-column-gap: @dynamic-value-gap;
-    margin-bottom: @margin-small;
-    align-items: start;
-    grid-row-gap: @margin-small;
-    position: relative; // necessary for dnd
+    padding: @margin-small;
 
-    &[draggable="true"] {
-        -khtml-user-drag: element;
-    }
-
-    &.dragging {
-        .no-select();
-        background-color: @secondary-3;
-        border-radius: @border-radius;
-    }
-
-    >.drag-button {
-        grid-row: 1;
-        grid-column: -1;
+    .dynamic-form-field-header {
         display: grid;
-        cursor: row-resize;
-        height: 1.5rem;
-        align-content: center;
-
-        >span:last-child {
-            margin-top: -0.3rem;
-        }
+        grid-template-columns: @dynamic-value-columns;
     }
 
-    .addtional-options {
-        grid-row: 2;
-        grid-column: 2 /span 3;
+    .dynamic-form-field-value {
+        display: grid;
+        grid-template-columns: @dynamic-value-columns;
+        grid-auto-columns: 1rem;
+        align-items: center;
+        grid-column-gap: @dynamic-value-gap;
+        margin-bottom: @margin-small;
+        align-items: start;
+        grid-row-gap: @margin-small;
+        position: relative; // necessary for dnd
 
-        color: @primary-0;
-
-        &:hover {
-            color: @primary-4;
-            cursor: pointer;
+        &[draggable="true"] {
+            -khtml-user-drag: element;
         }
 
-        .additonal-editor-container {
-            height: 40rem;
+        &.dragging {
+            .no-select();
+            background-color: @secondary-3;
+            border-radius: @border-radius;
+        }
+
+        >.drag-button {
+            grid-row: 1;
+            grid-column: -1;
             display: grid;
-            grid-template-columns: 15rem auto;
-            gap: .5rem 0;
+            cursor: row-resize;
+            height: 1.5rem;
+            align-content: center;
 
-            padding: 0 0 0 @margin-small;
-        }
-    }
-
-    &.with-options:not(.no-operation) {
-        grid-template-columns: @dynamic-value-columns-with-options
-    }
-
-    &.no-operation:not(.with-options) {
-        grid-template-columns: @dynamic-value-columns-no-operation;
-    }
-
-    &.with-options.no-operation {
-        grid-template-columns: @dynamic-value-columns-with-options-no-operation;
-    }
-
-    .value {
-
-        >.dynamic-form-date-input.between,
-        >.dynamic-form-date-time-input,
-        >.dynamic-form-number-input.between {
-            grid-gap: @margin-small/2 @margin-small;
-
-            >div {
-                align-self: center;
-                justify-self: center;
+            >span:last-child {
+                margin-top: -0.3rem;
             }
         }
 
-        >.dynamic-form-date-input.between,
-        >.dynamic-form-number-input.between {
-            display: grid;
-            grid-template-columns: 1fr max-content 1fr;
+        .addtional-options {
+            grid-row: 2;
+            grid-column: 2 /span 3;
 
-        }
+            color: @primary-0;
 
-        >.dynamic-form-date-time-input {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            &:hover {
+                color: @primary-4;
+                cursor: pointer;
+            }
 
-            &.between {
-                grid-template-columns: 1fr 1fr max-content 1fr 1fr;
+            .additonal-editor-container {
+                height: 40rem;
+                display: grid;
+                grid-template-columns: 15rem auto;
+                gap: .5rem 0;
+
+                padding: 0 0 0 @margin-small;
             }
         }
 
-        >.dynamic-form-relative-time-input {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            grid-gap: @margin-small/2 @margin-small;
-
-            >div.form-list {
-                width: 100%;
-            }
+        &.with-options:not(.no-operation) {
+            grid-template-columns: @dynamic-value-columns-with-options
         }
 
-        @media only screen and(max-width: 1600px) {
-            >.dynamic-form-date-input.between {
-                grid-template-columns: 1fr;
-            }
+        &.no-operation:not(.with-options) {
+            grid-template-columns: @dynamic-value-columns-no-operation;
         }
 
-        @media only screen and (min-width: 1401px) and (max-width: 1600px) {
+        &.with-options.no-operation {
+            grid-template-columns: @dynamic-value-columns-with-options-no-operation;
+        }
 
-            >.dynamic-form-date-time-input.between {
-                grid-template-columns: 1fr 1fr;
+        .value {
+
+            >.dynamic-form-date-input.between,
+            >.dynamic-form-date-time-input,
+            >.dynamic-form-number-input.between {
+                grid-gap: @margin-small/2 @margin-small;
 
                 >div {
-                    grid-column: 1 / span 2;
+                    align-self: center;
+                    justify-self: center;
                 }
             }
-        }
 
-        @media only screen and (max-width: 1400px) {
+            >.dynamic-form-date-input.between,
+            >.dynamic-form-number-input.between {
+                display: grid;
+                grid-template-columns: 1fr max-content 1fr;
 
-            >.dynamic-form-date-time-input,
-            >.dynamic-form-date-time-input.between {
-                grid-template-columns: 1fr;
             }
+
+            >.dynamic-form-date-time-input {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+
+                &.between {
+                    grid-template-columns: 1fr 1fr max-content 1fr 1fr;
+                }
+            }
+
+            >.dynamic-form-relative-time-input {
+                display: grid;
+                grid-template-columns: 1fr auto;
+                grid-gap: @margin-small/2 @margin-small;
+
+                >div.form-list {
+                    width: 100%;
+                }
+            }
+
+            @media only screen and(max-width: 1600px) {
+                >.dynamic-form-date-input.between {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+            @media only screen and (min-width: 1401px) and (max-width: 1600px) {
+
+                >.dynamic-form-date-time-input.between {
+                    grid-template-columns: 1fr 1fr;
+
+                    >div {
+                        grid-column: 1 / span 2;
+                    }
+                }
+            }
+
+            @media only screen and (max-width: 1400px) {
+
+                >.dynamic-form-date-time-input,
+                >.dynamic-form-date-time-input.between {
+                    grid-template-columns: 1fr;
+                }
+            }
+
         }
 
+        >.remove-value {
+            cursor: pointer;
+        }
     }
 
-    >.remove-value {
-        cursor: pointer;
-    }
-}
+    // TODO: copied from field-cotainer
+    .dynamic-form-field-drop-zone {
+        height: 1rem;
+        background-color: @secondary-3;
+        border: 1px dashed @secondary-2;
+        border-radius: @border-radius;
+        transition: height 0.175s, background-color 0.175s;
+        margin-bottom: @margin-small;
 
-// TODO: copied from field-cotainer
-.dynamic-form-field-drop-zone {
-    height: 1rem;
-    background-color: @secondary-3;
-    border: 1px dashed @secondary-2;
-    border-radius: @border-radius;
-    transition: height 0.175s, background-color 0.175s;
-    margin-bottom: @margin-small;
-
-    &.drag-over {
-        height: 3rem;
-        background-color: darken(@secondary-3, 10%);
+        &.drag-over {
+            height: 3rem;
+            background-color: darken(@secondary-3, 10%);
+        }
     }
 }

@@ -242,18 +242,9 @@ export class LoggingService {
                     filename: logDirectory + '/kix.log',
                     humanReadableUnhandledException: true,
                     handleExceptions: true,
-                    maxsize: 100000000,
-                    prepend: true
-                }),
-                new (require('winston-daily-rotate-file'))({
-                    level: 'error',
-                    name: 'error-file',
-                    filename: logDirectory + '/kix-error.log',
-                    humanReadableUnhandledException: true,
-                    handleExceptions: true,
-                    json: false,
-                    maxsize: 100000000,
-                    prepend: true
+                    maxSize: '100m',
+                    prepend: true,
+                    maxFiles: '20'
                 })
             ]
         });

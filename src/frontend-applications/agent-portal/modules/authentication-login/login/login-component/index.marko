@@ -96,11 +96,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         </label>
                         <label>
                             <span>${component.getString("Password")}:</span>
+                            <!-- no-update to keep autofilled passwords -->
                             <input.input-style
                                 type="password"
                                 name="password"
                                 tabindex="2"
                                 key="login-user-password"
+                                no-update
                             >
                         </label>
                         <div.dialog-buttons>

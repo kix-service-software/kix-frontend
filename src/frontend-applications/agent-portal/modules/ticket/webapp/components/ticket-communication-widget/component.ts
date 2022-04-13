@@ -22,6 +22,7 @@ import { SortOrder } from '../../../../../model/SortOrder';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -46,7 +47,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     this.setFilteredArticles();
                 }
             },
-            objectListChanged: (objectType: KIXObjectType) => null,
+            objectListChanged: (objectType: KIXObjectType) => this.setArticles(),
             additionalInformationChanged: () => null,
             objectChanged: () => null,
             scrollInformationChanged: () => null,
@@ -59,45 +60,36 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             (p) => p.ID === PersonalSettingsProperty.ARTICLE_SORT_ORDER
         ) : null;
         this.sortOrder = preference?.Value;
+    }
 
-        await this.setFilteredArticles();
+    private async setArticles(): Promise<void> {
+        this.setFilteredArticles();
 
         // enable read action
         const allArticles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || [];
         if (allArticles.length) {
-            this.state.activeUnreadAction = allArticles.some(
-                (a) => a.isUnread() && a.ArticleID !== allArticles[allArticles.length - 1].ArticleID
-            );
-
-        }
-
-        // toggle newest visible (filtered) article
-        if (this.state.articles.length) {
-            const index = this.sortOrder === 'newest' ? 0 : this.state.articles.length - 1;
-            this.context.setAdditionalInformation('NEWEST_ARTICLE_ID', this.state.articles[index].ArticleID);
+            this.state.activeUnreadAction = allArticles.some((a) => a.isUnread());
         }
     }
 
     private async setFilteredArticles(): Promise<void> {
         const articles = this.context.getFilteredObjectList<Article>(KIXObjectType.ARTICLE) || [];
 
+        const sortOrder = this.sortOrder === 'newest' ? SortOrder.DOWN : SortOrder.UP;
+
         this.state.articles = SortUtil.sortObjects(
-            [...articles], ArticleProperty.INCOMING_TIME, DataType.INTEGER,
-            this.sortOrder === 'newest' ? SortOrder.DOWN : SortOrder.UP
+            [...articles], ArticleProperty.INCOMING_TIME, DataType.INTEGER, sortOrder
         );
 
+        // change widget title
         const allArticles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || [];
-        this.state.widgetTitle = this.state.widgetConfiguration?.title +
-            ` (${articles?.length < allArticles?.length ? articles.length + '/' : ''}${allArticles?.length})`;
+        const articleLengthText = (articles?.length < allArticles?.length ? articles.length + '/' : '') + allArticles?.length;
+        const title = await TranslationService.translate(this.state.widgetConfiguration?.title);
+        this.state.widgetTitle = `${title} (${articleLengthText})`;
     }
 
     public onDestroy(): void {
         this.context.unregisterListener('communication-widget');
-    }
-
-    public toggleAll(): void {
-        this.state.expanded = !this.state.expanded;
-        EventService.getInstance().publish('TOGGLE_ARTICLE', this.state.expanded);
     }
 
     public async readAll(): Promise<void> {

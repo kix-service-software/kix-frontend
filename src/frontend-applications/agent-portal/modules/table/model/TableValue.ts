@@ -39,7 +39,7 @@ export class TableValue {
 
     if (!this.displayValue && object) {
       this.displayValue = await LabelService.getInstance().getDisplayText(
-        object, this.property, object[this.property], cell.getColumnConfiguration().translatable
+        object, this.property, object[this.property], cell.getColumnConfiguration()?.translatable
       );
     }
   }
