@@ -63,9 +63,6 @@
             "edit-ticket-state-dialog-configuration": {
                 "module": "edit-ticket-state-dialog-configuration.extension"
             },
-            "ticket-priority-details-configuration": {
-                "module": "ticket-priority-details-configuration.extension"
-            },
             "new-ticket-priority-dialog-configuration": {
                 "module": "new-ticket-priority-dialog-configuration.extension"
             },
