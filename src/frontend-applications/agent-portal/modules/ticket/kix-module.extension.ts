@@ -113,9 +113,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent('ticket-list-module', '/kix-module-ticket$0/webapp/components/ticket-list-module', []),
         new UIComponent('ticket-module', '/kix-module-ticket$0/webapp/components/ticket-module', []),
         new UIComponent('ticket-queue-explorer', '/kix-module-ticket$0/webapp/components/ticket-queue-explorer', []),
-        new UIComponent(
-            'ticket-queue-info-widget', '/kix-module-ticket$0/webapp/components/ticket-queue-info-widget', []
-        ),
         new UIComponent('ticket-queue-signature', '/kix-module-ticket$0/webapp/components/ticket-queue-signature', []),
         new UIComponent(
             'ticket-state-info-widget', '/kix-module-ticket$0/webapp/components/ticket-state-info-widget', []

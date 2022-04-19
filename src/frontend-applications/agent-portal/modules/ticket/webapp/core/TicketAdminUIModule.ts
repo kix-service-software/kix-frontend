@@ -29,7 +29,6 @@ import { QueueDuplicateAction } from './admin';
 import { UIModule as TicketReadUIModule } from './TicketReadUIModule';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
-import { QueueDetailsContext } from './admin/context/ticket-queue/QueueDetailsContext';
 
 export class UIModule extends TicketReadUIModule {
 
@@ -166,7 +165,7 @@ export class UIModule extends TicketReadUIModule {
             [
                 new UIComponentPermission('system/ticket/queues', [CRUD.CREATE])
             ],
-            'Translatable#New Team', 'kix-icon-gear', QueueDetailsContext.CONTEXT_ID
+            'Translatable#New Team', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(newQueueContext);
 
@@ -179,21 +178,10 @@ export class UIModule extends TicketReadUIModule {
             [
                 new UIComponentPermission('system/ticket/queues', [CRUD.CREATE])
             ],
-            'Translatable#Edit Team', 'kix-icon-gear', QueueDetailsContext.CONTEXT_ID
+            'Translatable#Edit Team', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(editQueueContext);
 
         ActionFactory.getInstance().registerAction('ticket-admin-queue-duplicate', QueueDuplicateAction);
-
-        const ticketQueueDetailsContextDescriptor = new ContextDescriptor(
-            QueueDetailsContext.CONTEXT_ID, [KIXObjectType.QUEUE],
-            ContextType.MAIN, ContextMode.DETAILS,
-            true, 'object-details-page', ['queues'], QueueDetailsContext,
-            [
-                new UIComponentPermission('system/ticket/queues', [CRUD.READ])
-            ],
-            'Translatable#Team Details', 'kix-icon-gear'
-        );
-        ContextService.getInstance().registerContext(ticketQueueDetailsContextDescriptor);
     }
 }

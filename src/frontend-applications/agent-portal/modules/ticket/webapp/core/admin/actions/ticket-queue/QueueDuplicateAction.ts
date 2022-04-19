@@ -11,9 +11,7 @@ import { AbstractAction } from '../../../../../../base-components/webapp/core/Ab
 import { UIComponentPermission } from '../../../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../../../server/model/rest/CRUD';
 import { QueueDialogUtil } from '../../QueueDialogUtil';
-import { ContextService } from '../../../../../../base-components/webapp/core/ContextService';
-import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
-import { Queue } from '../../../../../model/Queue';
+import { Row } from '../../../../../../table/model/Row';
 
 export class QueueDuplicateAction extends AbstractAction {
 
@@ -26,12 +24,19 @@ export class QueueDuplicateAction extends AbstractAction {
         this.icon = 'kix-icon-copy';
     }
 
-    public async run(event: any): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const queue = await context.getObject<Queue>(KIXObjectType.QUEUE);
-        if (queue) {
-            QueueDialogUtil.duplicate(queue);
+    public canRun(): boolean {
+        let canRun: boolean = false;
+        if (this.data) {
+            const selectedRows = this.data.getSelectedRows();
+            canRun = selectedRows && selectedRows.length && selectedRows.length === 1;
         }
+        return canRun;
     }
 
+    public async run(event: any): Promise<void> {
+        if (this.canRun()) {
+            const selectedRows: Row = this.data.getSelectedRows();
+            QueueDialogUtil.duplicate(selectedRows[0].getRowObject().getObject());
+        }
+    }
 }

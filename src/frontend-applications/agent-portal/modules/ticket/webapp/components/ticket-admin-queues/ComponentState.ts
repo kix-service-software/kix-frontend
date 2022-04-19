@@ -29,7 +29,7 @@ export class ComponentState {
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Ticket: Queues',
             [
-                'ticket-admin-queue-create', 'csv-export-action'
+                'ticket-admin-queue-create', 'ticket-admin-queue-duplicate', 'csv-export-action'
             ], null,
             new TableWidgetConfiguration(
                 null, null, null,
