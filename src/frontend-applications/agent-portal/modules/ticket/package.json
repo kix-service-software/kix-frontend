@@ -69,9 +69,6 @@
             "new-ticket-queue-dialog-configuration": {
                 "module": "new-ticket-queue-dialog-configuration.extension"
             },
-            "ticket-queue-details-configuration": {
-                "module": "ticket-queue-details-configuration.extension"
-            },
             "edit-ticket-queue-dialog-configuration": {
                 "module": "edit-ticket-queue-dialog-configuration.extension"
             }

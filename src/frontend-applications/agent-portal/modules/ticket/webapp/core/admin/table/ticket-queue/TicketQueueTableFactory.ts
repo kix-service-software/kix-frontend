@@ -8,7 +8,7 @@
  */
 
 
-import { QueueDetailsContext } from '../../context';
+import { EditQueueDialogContext } from '../../context';
 import { TableFactory } from '../../../../../../table/webapp/core/factory/TableFactory';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../../../model/configuration/TableConfiguration';
@@ -75,8 +75,8 @@ export class TicketQueueTableFactory extends TableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                QueueDetailsContext.CONTEXT_ID, KIXObjectType.QUEUE,
-                ContextMode.DETAILS, QueueProperty.QUEUE_ID
+                EditQueueDialogContext.CONTEXT_ID, KIXObjectType.QUEUE,
+                ContextMode.EDIT, QueueProperty.QUEUE_ID
             );
         }
 
