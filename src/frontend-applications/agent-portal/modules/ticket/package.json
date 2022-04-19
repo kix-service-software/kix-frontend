@@ -54,9 +54,6 @@
             "edit-ticket-type-dialog-configuration": {
                 "module": "edit-ticket-type-dialog-configuration.extension"
             },
-            "ticket-state-details-configuration": {
-                "module": "ticket-state-details-configuration.extension"
-            },
             "new-ticket-state-dialog-configuration": {
                 "module": "new-ticket-state-dialog-configuration.extension"
             },

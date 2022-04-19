@@ -16,11 +16,11 @@ import { KIXObjectProperty } from '../../../../../../../model/kix/KIXObjectPrope
 import { TableHeaderHeight } from '../../../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../../../model/configuration/TableRowHeight';
 import { RoutingConfiguration } from '../../../../../../../model/configuration/RoutingConfiguration';
-import { TicketStateDetailsContext } from '../..';
 import { ContextMode } from '../../../../../../../model/ContextMode';
 import { IColumnConfiguration } from '../../../../../../../model/configuration/IColumnConfiguration';
 import { DefaultColumnConfiguration } from '../../../../../../../model/configuration/DefaultColumnConfiguration';
 import { DataType } from '../../../../../../../model/DataType';
+import { EditTicketStateDialogContext } from '../../context';
 import { Table } from '../../../../../../table/model/Table';
 
 export class TicketStateTableFactory extends TableFactory {
@@ -68,8 +68,8 @@ export class TicketStateTableFactory extends TableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                TicketStateDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_STATE,
-                ContextMode.DETAILS, TicketStateProperty.ID
+                EditTicketStateDialogContext.CONTEXT_ID, KIXObjectType.TICKET_STATE,
+                ContextMode.EDIT, TicketStateProperty.ID
             );
         }
 
