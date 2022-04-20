@@ -99,20 +99,22 @@ export class TicketDetailsContext extends Context {
 
     public async reloadObjectList(objectType: KIXObjectType | string, silent: boolean = false): Promise<void> {
         if (objectType === KIXObjectType.ARTICLE) {
-            this.loadArticles();
+            await this.loadArticles(true);
         }
     }
 
-    private async loadArticles(): Promise<void> {
-        const articles = await KIXObjectService.loadObjects<Article>(
-            KIXObjectType.ARTICLE, null,
-            new KIXObjectLoadingOptions(
-                null, 'Article.IncomingTime', null, [ArticleProperty.FLAGS]
-            ),
-            new ArticleLoadingOptions(this.objectId)
-        ).catch(() => [] as Article[]) || [];
+    private async loadArticles(force?: boolean): Promise<void> {
+        if (!this.hasObjectList(KIXObjectType.ARTICLE) || force) {
+            const articles = await KIXObjectService.loadObjects<Article>(
+                KIXObjectType.ARTICLE, null,
+                new KIXObjectLoadingOptions(
+                    null, 'Article.IncomingTime', null, [ArticleProperty.FLAGS]
+                ),
+                new ArticleLoadingOptions(this.objectId)
+            ).catch(() => [] as Article[]) || [];
 
-        this.setObjectList(KIXObjectType.ARTICLE, articles);
+            this.setObjectList(KIXObjectType.ARTICLE, articles);
+        }
     }
 
     private async loadTicketHistory(): Promise<void> {

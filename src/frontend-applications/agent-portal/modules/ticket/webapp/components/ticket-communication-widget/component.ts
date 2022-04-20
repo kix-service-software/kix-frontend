@@ -23,6 +23,7 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { TicketService } from '../../core';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -47,7 +48,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     this.setFilteredArticles();
                 }
             },
-            objectListChanged: (objectType: KIXObjectType) => this.setArticles(),
+            objectListChanged: (objectType: KIXObjectType) => {
+                if (objectType === KIXObjectType.ARTICLE) {
+                    this.setArticles();
+                }
+            },
             additionalInformationChanged: () => null,
             objectChanged: () => null,
             scrollInformationChanged: () => null,
@@ -93,20 +98,23 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async readAll(): Promise<void> {
-        if (this.state.activeUnreadAction) {
-            EventService.getInstance().publish('READ_ALL_ARTICLES');
-
-            // show loading as visual effect ... something is done ;)
+        if (this.state.activeUnreadAction && this.context.getObjectId()) {
             EventService.getInstance().publish(
                 ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Loading ...' }
             );
+
+            await TicketService.getInstance().markTicketAsSeen(Number(this.context.getObjectId()));
+
+            // FIXME: reload list (Ticket.Article.Flag updates are filtered from notification events)
+            this.state.articles = [];
+            await this.context.reloadObjectList(KIXObjectType.ARTICLE);
+
             setTimeout(() => {
                 EventService.getInstance().publish(
                     ApplicationEvent.APP_LOADING, { loading: false, hint: '' }
                 );
                 BrowserUtil.openSuccessOverlay('Translatable#Marked all articles as read.');
-                this.state.activeUnreadAction = false;
-            }, 1000);
+            }, 50);
         }
     }
 }
