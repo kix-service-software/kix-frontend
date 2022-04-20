@@ -115,6 +115,12 @@ export class ReportDefinitionTableFactory extends TableFactory {
                     null, null, null, property, true, false, true, false, 130, true, true, true
                 );
                 break;
+            case KIXObjectProperty.CREATE_TIME:
+            case KIXObjectProperty.CHANGE_TIME:
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, true, false, true, false, 100, true, true, false, DataType.DATE_TIME
+                );
+                break;
             default:
                 config = new DefaultColumnConfiguration(
                     null, null, null, property, true, false, true, false, 150, true, true
