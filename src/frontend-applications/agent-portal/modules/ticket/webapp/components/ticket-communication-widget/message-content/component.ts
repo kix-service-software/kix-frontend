@@ -63,7 +63,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             sidebarLeftToggled: (): void => { return; },
             filteredObjectListChanged: (): void => { return; },
             objectChanged: (): void => { return; },
-            objectListChanged: (): void => { return; },
+            objectListChanged: (objectType: KIXObjectType): void => {
+                if (objectType === KIXObjectType.ARTICLE && this.state.article) {
+                    this.loadArticle(undefined, true);
+                }
+            },
             sidebarRightToggled: (): void => { return; },
             scrollInformationChanged: (objectType: KIXObjectType | string, objectId: string | number): void => {
                 if (
@@ -80,7 +84,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onDestroy(): void {
         EventService.getInstance().unsubscribe('TOGGLE_ARTICLE', this.eventSubscriber);
-        EventService.getInstance().unsubscribe('READ_ALL_ARTICLES', this.eventSubscriber);
 
         if (this.observer) {
             this.observer.disconnect();
@@ -207,13 +210,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     if (this.state.expanded) {
                         this.setArticleSeen();
                     }
-                } else if (eventId === 'READ_ALL_ARTICLES') {
-                    this.setArticleSeen();
                 }
             }
         };
         EventService.getInstance().subscribe('TOGGLE_ARTICLE', this.eventSubscriber);
-        EventService.getInstance().subscribe('READ_ALL_ARTICLES', this.eventSubscriber);
     }
 
     private getFallbackColor(): string {

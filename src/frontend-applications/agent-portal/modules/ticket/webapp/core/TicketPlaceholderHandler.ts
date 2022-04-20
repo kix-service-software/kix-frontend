@@ -234,7 +234,7 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
 
     private async getArticles(ticket: Ticket, articleId?: number): Promise<Article[]> {
         let articles = ticket.Articles;
-        if (!Array.isArray(articles) || !articles.length) {
+        if (!articles?.length && ticket.TicketID) {
             articles = await KIXObjectService.loadObjects<Article>(
                 KIXObjectType.ARTICLE, articleId ? [articleId] : null,
                 new KIXObjectLoadingOptions(

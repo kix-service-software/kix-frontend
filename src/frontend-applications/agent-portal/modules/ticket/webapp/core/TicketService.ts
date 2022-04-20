@@ -134,6 +134,12 @@ export class TicketService extends KIXObjectService<Ticket> {
         EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
     }
 
+    public async markTicketAsSeen(ticketId: number): Promise<void> {
+        await KIXObjectService.updateObject(
+            KIXObjectType.TICKET, [['MarkAsSeen', 1]], ticketId
+        );
+    }
+
     public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
         const filter = [
             new FilterCriteria(
