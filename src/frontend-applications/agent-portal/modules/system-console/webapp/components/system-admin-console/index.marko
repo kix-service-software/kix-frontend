@@ -1,14 +1,13 @@
 <!--
-Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<widget
-    instanceId="system-admin-console"
-    title="Translatable#Execute console command">
+
+<widget instanceId="system-admin-console" title="Translatable#System: Console">
     <@content>
         <div.console>
             <div.console-command>
@@ -16,12 +15,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     loadNodes=state.loadNodes
                     placeholder="Translatable#Choose a command"
                     readonly=state.run
-                    on-nodesChanged("commandChanged")/>
+                    on-nodesChanged("commandChanged")
+                />
                 <button.kix-button.button.button-without-text
                     type="button"
-                    title=state.translations["Translatable#Help"]
+                    title=(state.translations["Translatable#Help"])
                     disabled=state.run
-                    on-click("showCommandHelp", false)>
+                    on-click("showCommandHelp", false)
+                >
                     <span.kix-icon-question/>
                 </button>
                 <input.input-style
@@ -29,12 +30,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     value=state.parameter
                     disabled=state.run
                     on-keydown("keydown")
-                    onChange("parameterChanged")/>
+                    onChange("parameterChanged")
+                >
                 <button.kix-button.submit-button
                     type="button"
-                    title=state.translations["Translatable#Execute"]
-                    disabled=(!state.canRun || state.run)
-                    on-click("run")>
+                    title=(state.translations["Translatable#Execute"])
+                    disabled=!state.canRun || state.run
+                    on-click("run")
+                >
                     <span.kix-icon-check/>
                     <translation-string pattern="Translatable#Execute"/>
                 </button>

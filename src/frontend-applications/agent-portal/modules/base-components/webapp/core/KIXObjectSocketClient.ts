@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -34,6 +34,10 @@ import { SocketEvent } from './SocketEvent';
 import { Error } from '../../../../../../server/model/Error';
 import { EventService } from './EventService';
 import { ApplicationEvent } from './ApplicationEvent';
+import { PortalNotificationService } from '../../../portal-notification/webapp/core/PortalNotificationService';
+import { PortalNotification } from '../../../portal-notification/model/PortalNotification';
+import { PortalNotificationType } from '../../../portal-notification/model/PortalNotificationType';
+import { DateTimeUtil } from './DateTimeUtil';
 
 export class KIXObjectSocketClient extends SocketClient {
 
@@ -108,6 +112,14 @@ export class KIXObjectSocketClient extends SocketClient {
                     try {
                         object = new objectConstructor(object);
                     } catch (error) {
+                        PortalNotificationService.getInstance().publishNotifications([
+                            new PortalNotification(
+                                IdService.generateDateBasedId('object-error'), 'error',
+                                PortalNotificationType.IMPORTANT,
+                                'Error Loading Objects', new Date().toLocaleString(), true, false,
+                                request.objectType + request.objectIds?.join(','), JSON.stringify(error)
+                            )
+                        ]);
                         console.error(error);
                     }
                 }
@@ -205,7 +217,15 @@ export class KIXObjectSocketClient extends SocketClient {
                 timeout = window.setTimeout(() => {
                     const timeoutInSeconds = socketTimeout / 1000;
                     // tslint:disable-next-line:max-line-length
-                    const error = `Zeitüberschreitung der Anfrage (Event: ${event} - ${requestObject.objectType}) (Timeout: ${timeoutInSeconds} Sekunden)`;
+                    const error = `Request Timeout (Event: ${event} - ${requestObject.objectType}) (Timeout: ${timeoutInSeconds} Sekunden)`;
+                    PortalNotificationService.getInstance().publishNotifications([
+                        new PortalNotification(
+                            IdService.generateDateBasedId('timeout'), 'error',
+                            PortalNotificationType.IMPORTANT,
+                            'Request Timeout', new Date().toLocaleString(), true, false,
+                            '', JSON.stringify(error)
+                        )
+                    ]);
                     console.error(error);
                     reject(new Error('TIMEOUT', error));
                 }, socketTimeout);
@@ -222,6 +242,14 @@ export class KIXObjectSocketClient extends SocketClient {
                 if (error.requestId === requestObject.requestId) {
                     window.clearTimeout(timeout);
                     const errorMessage = `Socket Error: Event - ${event}, Object - ${requestObject.objectType}`;
+                    PortalNotificationService.getInstance().publishNotifications([
+                        new PortalNotification(
+                            IdService.generateDateBasedId('socket-error'), 'error',
+                            PortalNotificationType.IMPORTANT,
+                            'Socket Error', new Date().toLocaleString(), true, false,
+                            errorMessage, JSON.stringify(error)
+                        )
+                    ]);
                     console.error(errorMessage);
                     console.error(error.error);
                     reject(error.error);
@@ -231,6 +259,14 @@ export class KIXObjectSocketClient extends SocketClient {
             this.socket.on(SocketEvent.PERMISSION_ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestObject.requestId) {
                     window.clearTimeout(timeout);
+                    PortalNotificationService.getInstance().publishNotifications([
+                        new PortalNotification(
+                            IdService.generateDateBasedId('permission-error'), 'error',
+                            PortalNotificationType.IMPORTANT,
+                            'Permission Error', new Date().toLocaleString(), true, false,
+                            error.error, JSON.stringify(error)
+                        )
+                    ]);
                     console.error('No permissions');
                     console.error(error.error);
                     const permissionError = error.error as PermissionError;

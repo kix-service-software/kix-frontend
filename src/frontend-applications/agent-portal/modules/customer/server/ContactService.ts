@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -91,24 +91,8 @@ export class ContactAPIService extends KIXObjectAPIService {
     public async createObject(
         token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>
     ): Promise<string> {
-        let userId;
+
         const userParameter = this.getUserParameters(parameter);
-        if (userParameter.length) {
-            const assignedUserId = this.getParameterValue(parameter, ContactProperty.ASSIGNED_USER_ID);
-            userId = await this.createOrUpdateUser(token, clientRequestId, userParameter, assignedUserId).catch(
-                (error: Error) => {
-                    LoggingService.getInstance().error(
-                        `${error.Code}: Could not create or update user for contact ${error.Message}`, error
-                    );
-                    throw new Error(error.Code, error.Message);
-                }
-            );
-            if (!assignedUserId && userId) {
-                parameter.push(
-                    [ContactProperty.ASSIGNED_USER_ID, userId]
-                );
-            }
-        }
 
         const contactParameter = parameter.filter(
             (p) => !userParameter.some((up) => up[0] === p[0]) || p[0] === KIXObjectProperty.VALID_ID
@@ -121,11 +105,27 @@ export class ContactAPIService extends KIXObjectAPIService {
             this.objectType
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            if (userId) {
-                this.deleteObject(token, clientRequestId, KIXObjectType.USER, userId, undefined, KIXObjectType.CONTACT);
-            }
             throw new Error(error.Code, error.Message);
         });
+
+        let userId;
+        if (userParameter.length) {
+            const assignedUserId = this.getParameterValue(parameter, ContactProperty.ASSIGNED_USER_ID);
+            userId = await this.createOrUpdateUser(token, clientRequestId, userParameter, assignedUserId).catch(
+                (error: Error) => {
+                    LoggingService.getInstance().error(
+                        `${error.Code}: Could not create or update user for contact ${error.Message}`, error
+                    );
+                    throw new Error(error.Code, error.Message);
+                }
+            );
+            if (!assignedUserId && userId) {
+                await this.updateObject(
+                    token, clientRequestId, KIXObjectType.CONTACT,
+                    [[ContactProperty.ASSIGNED_USER_ID, userId]], response.ContactID
+                );
+            }
+        }
 
         const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
         if (icon && icon.Content) {
@@ -232,8 +232,7 @@ export class ContactAPIService extends KIXObjectAPIService {
             p[0] === UserProperty.ROLE_IDS ||
             p[0] === PersonalSettingsProperty.MY_QUEUES ||
             p[0] === PersonalSettingsProperty.NOTIFICATIONS ||
-            p[0] === PersonalSettingsProperty.USER_LANGUAGE ||
-            p[0] === KIXObjectProperty.VALID_ID // use contact valid to bias user valid
+            p[0] === PersonalSettingsProperty.USER_LANGUAGE
         );
     }
 

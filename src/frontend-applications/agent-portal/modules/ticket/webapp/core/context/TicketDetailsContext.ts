@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -17,10 +17,10 @@ import { BreadcrumbInformation } from '../../../../../model/BreadcrumbInformatio
 import { TicketContext } from './TicketContext';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { TicketProperty } from '../../../model/TicketProperty';
-import { ArticleProperty } from '../../../model/ArticleProperty';
 import { Article } from '../../../model/Article';
 import { ArticleLoadingOptions } from '../../../model/ArticleLoadingOptions';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { ArticleProperty } from '../../../model/ArticleProperty';
 
 export class TicketDetailsContext extends Context {
 
@@ -80,34 +80,51 @@ export class TicketDetailsContext extends Context {
         return new BreadcrumbInformation(this.getIcon(), [TicketContext.CONTEXT_ID], text);
     }
 
-    private loadTicket(changedProperties: string[] = [], cache: boolean = true): Promise<Ticket> {
+    private async loadTicket(changedProperties: string[] = [], cache: boolean = true): Promise<Ticket> {
+        await this.loadArticles();
+        await this.loadTicketHistory();
+
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, ['StateType', 'ObjectActions', KIXObjectProperty.DYNAMIC_FIELDS, TicketProperty.WATCHERS]
         );
-        return this.loadDetailsObject<Ticket>(KIXObjectType.TICKET, loadingOptions);
+
+        const ticket = this.loadDetailsObject<Ticket>(KIXObjectType.TICKET, loadingOptions);
+        return ticket;
     }
 
     public async getObjectList<T = KIXObject>(objectType: KIXObjectType | string): Promise<T[]> {
-        let objects = [];
+        const objects = await super.getObjectList<T>(objectType);
+        return objects;
+    }
+
+    public async reloadObjectList(objectType: KIXObjectType | string, silent: boolean = false): Promise<void> {
         if (objectType === KIXObjectType.ARTICLE) {
-            objects = await KIXObjectService.loadObjects<Article>(
+            await this.loadArticles(true);
+        }
+    }
+
+    private async loadArticles(force?: boolean): Promise<void> {
+        if (!this.hasObjectList(KIXObjectType.ARTICLE) || force) {
+            const articles = await KIXObjectService.loadObjects<Article>(
                 KIXObjectType.ARTICLE, null,
                 new KIXObjectLoadingOptions(
-                    null, null, null, [ArticleProperty.ATTACHMENTS, ArticleProperty.FLAGS, 'ObjectActions']
-                ), new ArticleLoadingOptions(this.objectId)
+                    null, 'Article.IncomingTime', null, [ArticleProperty.FLAGS]
+                ),
+                new ArticleLoadingOptions(this.objectId)
             ).catch(() => [] as Article[]) || [];
-        } else if (objectType === KIXObjectType.TICKET_HISTORY) {
-            const tickets = await KIXObjectService.loadObjects<Ticket>(
-                KIXObjectType.TICKET, [this.objectId],
-                new KIXObjectLoadingOptions(null, null, null, [TicketProperty.HISTORY])
-            );
-            if (Array.isArray(tickets) && tickets.length) {
-                objects = Array.isArray(tickets[0].History) ? tickets[0].History : [];
-            }
-        } else {
-            objects = await super.getObjectList(objectType);
-        }
 
-        return objects;
+            this.setObjectList(KIXObjectType.ARTICLE, articles);
+        }
+    }
+
+    private async loadTicketHistory(): Promise<void> {
+        const tickets = await KIXObjectService.loadObjects<Ticket>(
+            KIXObjectType.TICKET, [this.objectId],
+            new KIXObjectLoadingOptions(null, null, null, [TicketProperty.HISTORY])
+        );
+        if (Array.isArray(tickets) && tickets.length) {
+            const history = Array.isArray(tickets[0].History) ? tickets[0].History : [];
+            super.setObjectList(KIXObjectType.TICKET_HISTORY, history);
+        }
     }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -24,7 +24,7 @@ export class TableWidgetConfiguration implements IConfiguration {
         public objectType: KIXObjectType | string,
         public sort?: [string, SortOrder],
         public subConfigurationDefinition?: ConfigurationDefinition,
-        public tableConfiguration?: TableConfiguration, // TODO: @deprecated: use configuration instead
+        tableConfiguration?: TableConfiguration, // TODO: @deprecated: use configuration instead
         public headerComponents?: string[],
         public showFilter: boolean = true,
         public shortTable: boolean = false,

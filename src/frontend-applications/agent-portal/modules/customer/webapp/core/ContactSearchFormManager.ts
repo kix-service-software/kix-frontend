@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -8,9 +8,6 @@
  */
 
 import { ContactService } from './ContactService';
-import {
-    AbstractDynamicFormManager
-} from '../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { ContactProperty } from '../../model/ContactProperty';
@@ -20,21 +17,30 @@ import { AuthenticationSocketClient } from '../../../../modules/base-components/
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { SearchOperator } from '../../../search/model/SearchOperator';
-import { SearchDefinition, SearchOperatorUtil } from '../../../search/webapp/core';
+import { SearchOperatorUtil } from '../../../search/webapp/core';
 import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
 import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { Organisation } from '../../model/Organisation';
 import { UserProperty } from '../../../user/model/UserProperty';
+import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
+import { Contact } from '../../model/Contact';
 
-export class ContactSearchFormManager extends AbstractDynamicFormManager {
+export class ContactSearchFormManager extends SearchFormManager {
 
     public objectType: KIXObjectType = KIXObjectType.CONTACT;
 
     protected readPermissions: Map<string, boolean> = new Map();
 
+    public constructor(
+        public ignorePropertiesFixed: string[] = [],
+        private validDynamicFields: boolean = true
+    ) {
+        super();
+    }
+
     public async getProperties(): Promise<Array<[string, string]>> {
-        const properties: Array<[string, string]> = [
+        let properties: Array<[string, string]> = [
             [SearchProperty.FULLTEXT, null],
             [ContactProperty.FIRSTNAME, null],
             [ContactProperty.LASTNAME, null],
@@ -64,7 +70,15 @@ export class ContactSearchFormManager extends AbstractDynamicFormManager {
             p[1] = label;
         }
 
-        return properties;
+        const superProperties = await super.getProperties(this.validDynamicFields);
+        properties = [...properties, ...superProperties];
+
+        properties = properties.filter(
+            (p) => !this.ignorePropertiesFixed.some((ip) => ip === p[0])
+                && !this.ignoreProperties.some((ip) => ip === p[0])
+        );
+
+        return properties.sort((a, b) => a[1].localeCompare(b[1]));
     }
 
     protected async checkReadPermissions(resource: string): Promise<boolean> {
@@ -78,28 +92,41 @@ export class ContactSearchFormManager extends AbstractDynamicFormManager {
         return this.readPermissions.get(resource);
     }
 
-    public async getOperations(property: string): Promise<any[]> {
-        let operations: SearchOperator[] = [];
+    public async getOperations(property: string): Promise<Array<string | SearchOperator>> {
+        let operations: Array<string | SearchOperator> = [];
 
-        if (property === SearchProperty.FULLTEXT) {
-            operations = [SearchOperator.CONTAINS];
-        } else if (this.isDropDown(property)) {
-            operations = [SearchOperator.IN];
+        const searchProperty = Contact.SEARCH_PROPERTIES.find((p) => p.Property === property);
+        if (searchProperty) {
+            operations = searchProperty.Operations;
         } else {
-            operations = SearchDefinition.getStringOperators();
+            switch (property) {
+                case KIXObjectProperty.VALID_ID:
+                    operations = [SearchOperator.IN];
+                    break;
+                case SearchProperty.FULLTEXT:
+                    operations = [SearchOperator.CONTAINS];
+                    break;
+                default:
+                    operations = await super.getOperations(property);
+            }
         }
 
         return operations;
     }
 
     public async getInputType(property: string): Promise<InputFieldTypes | string> {
-        if (property === ContactProperty.PRIMARY_ORGANISATION_ID) {
-            return InputFieldTypes.OBJECT_REFERENCE;
+        let inputType: InputFieldTypes | string;
+        const searchProperty = Contact.SEARCH_PROPERTIES.find((p) => p.Property === property);
+
+        if (searchProperty) {
+            inputType = searchProperty.InputType;
         } else if (this.isDropDown(property)) {
-            return InputFieldTypes.DROPDOWN;
+            inputType = InputFieldTypes.DROPDOWN;
+        } else {
+            inputType = await super.getInputType(property);
         }
 
-        return InputFieldTypes.TEXT;
+        return inputType;
     }
 
     private isDropDown(property: string): boolean {
@@ -112,6 +139,10 @@ export class ContactSearchFormManager extends AbstractDynamicFormManager {
     }
 
     public async isMultiselect(property: string, operator: SearchOperator | string): Promise<boolean> {
+        const result = await super.isMultiselect(property, operator, true);
+        if (result !== null && typeof result !== 'undefined') {
+            return result;
+        }
         return true;
     }
 
@@ -127,9 +158,11 @@ export class ContactSearchFormManager extends AbstractDynamicFormManager {
                 }
                 break;
             default:
-                nodes = await ContactService.getInstance().getTreeNodes(property, true);
+                nodes = await super.getTreeNodes(property);
+                if (!nodes || !nodes.length) {
+                    nodes = await ContactService.getInstance().getTreeNodes(property, true, true, objectIds);
+                }
         }
         return nodes;
     }
-
 }

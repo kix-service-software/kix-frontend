@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -31,6 +31,7 @@ import { AutoCompleteConfiguration } from '../../../../../model/configuration/Au
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 import { NewContactDialogContext } from '../../../../customer/webapp/core/context/NewContactDialogContext';
+import { ObjectReferenceOptions } from '../../../../base-components/webapp/core/ObjectReferenceOptions';
 
 class Component extends FormInputComponent<number | string, ComponentState> {
 
@@ -61,8 +62,7 @@ class Component extends FormInputComponent<number | string, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        this.state.searchCallback = this.searchContacts.bind(this);
-        this.state.autoCompleteConfiguration = new AutoCompleteConfiguration();
+        await this.prepareAutoComplete();
 
         const additionalTypeOption = this.state.field?.options.find((o) => o.option === 'SHOW_NEW_CONTACT');
         const actions = [];
@@ -78,6 +78,26 @@ class Component extends FormInputComponent<number | string, ComponentState> {
         }
 
         this.state.actions = actions;
+    }
+
+    private async prepareAutoComplete(): Promise<void> {
+        this.state.searchCallback = this.searchContacts.bind(this);
+        const objectName = await LabelService.getInstance().getObjectName(KIXObjectType.CONTACT, true, false);
+
+        let autoCompleteConfiguration = new AutoCompleteConfiguration(undefined, undefined, undefined, objectName);
+
+        const autocompleteOption = this.state.field?.options?.find(
+            (o) => o.option === ObjectReferenceOptions.AUTOCOMPLETE
+        );
+        if (typeof autocompleteOption !== 'undefined' && autocompleteOption !== null) {
+            if (autocompleteOption.value) {
+                autoCompleteConfiguration = typeof autocompleteOption.value === 'object'
+                    ? autocompleteOption.value
+                    : autoCompleteConfiguration;
+            }
+        }
+
+        this.state.autoCompleteConfiguration = autoCompleteConfiguration;
     }
 
     private async actionClicked(action: FormInputAction): Promise<void> {

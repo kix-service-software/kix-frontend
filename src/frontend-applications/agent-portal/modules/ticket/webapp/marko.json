@@ -2,5 +2,9 @@
     "taglibImports": [
         "../../base-components/marko.json",
         "../../dynamic-fields/webapp/marko.json"
+    ],
+    "tags-dir": [
+        "./components",
+        "./components/ticket-communication-widget"
     ]
 }

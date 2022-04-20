@@ -1,0 +1,8 @@
+{
+    "taglibImports": [
+        "../../base-components/marko.json"
+    ],
+    "tags-dir": [
+        "./components"
+    ]
+}

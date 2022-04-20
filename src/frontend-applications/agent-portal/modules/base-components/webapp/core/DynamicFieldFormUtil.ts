@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -235,7 +235,7 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
 
         const isMultiSelect = field?.countMax !== null && (field?.countMax < 0 || field?.countMax > 1);
 
-        const filter = [
+        const defaultFilter = [
             new FilterCriteria(
                 ConfigItemProperty.NUMBER, SearchOperator.LIKE,
                 FilterDataType.STRING, FilterType.OR, SearchProperty.SEARCH_VALUE
@@ -246,10 +246,11 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
             )
         ];
 
+        const dfFilter = [];
         if (dynamicField.Config) {
             const classes = dynamicField.Config.ITSMConfigItemClasses;
             if (classes && Array.isArray(classes) && classes.length) {
-                filter.push(new FilterCriteria(
+                dfFilter.push(new FilterCriteria(
                     ConfigItemProperty.CLASS_ID, SearchOperator.IN,
                     FilterDataType.NUMERIC, FilterType.AND, classes.map((c) => Number(c))
                 ));
@@ -257,7 +258,7 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
 
             const depStates = dynamicField.Config.DeploymentStates;
             if (depStates && Array.isArray(depStates) && depStates.length) {
-                filter.push(new FilterCriteria(
+                dfFilter.push(new FilterCriteria(
                     ConfigItemProperty.CUR_DEPL_STATE_ID, SearchOperator.IN,
                     FilterDataType.NUMERIC, FilterType.AND, depStates.map((d) => Number(d))
                 ));
@@ -266,13 +267,37 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
 
         options.push(new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.CONFIG_ITEM));
         options.push(new FormFieldOption(ObjectReferenceOptions.MULTISELECT, isMultiSelect));
-        options.push(new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true));
         options.push(new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.OBJECT_REFERENCE));
-        options.push(
-            new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS, new KIXObjectLoadingOptions(filter))
-        );
-        options.push(new FormFieldOption(ObjectReferenceOptions.COUNT_MIN, field?.countMin));
-        options.push(new FormFieldOption(ObjectReferenceOptions.COUNT_MAX, field?.countMax));
+        if (!field?.options?.some((o) => o.option === ObjectReferenceOptions.AUTOCOMPLETE)) {
+            options.push(new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true));
+        }
+
+        if (!field?.options?.some((o) => o.option === ObjectReferenceOptions.LOADINGOPTIONS)) {
+            defaultFilter.push(...dfFilter);
+            options.push(
+                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS, new KIXObjectLoadingOptions(defaultFilter))
+            );
+        } else {
+            const option = field?.options?.find((o) => o.option === ObjectReferenceOptions.LOADINGOPTIONS);
+            const loadingOptions: KIXObjectLoadingOptions = option.value;
+            if (Array.isArray(loadingOptions.filter)) {
+                loadingOptions.filter.push(...dfFilter);
+            } else {
+                defaultFilter.push(...dfFilter);
+                loadingOptions.filter = defaultFilter;
+            }
+
+            options.push(option);
+        }
+
+        if (!field?.options?.some((o) => o.option === ObjectReferenceOptions.COUNT_MIN)) {
+            options.push(new FormFieldOption(ObjectReferenceOptions.COUNT_MIN, field?.countMin));
+        }
+
+        if (!field?.options?.some((o) => o.option === ObjectReferenceOptions.COUNT_MAX)) {
+            options.push(new FormFieldOption(ObjectReferenceOptions.COUNT_MAX, field?.countMax));
+        }
+
         options.push(new FormFieldOption(DynamicFormFieldOption.FIELD_NAME, dynamicField?.Name));
 
         return options;
@@ -328,6 +353,9 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
                 let extendedUtilResult: boolean = false;
                 for (const util of this.extendedUtils) {
                     extendedUtilResult = await util.setFieldValue(dynamicField, dfValue, field);
+                    if (extendedUtilResult) {
+                        break;
+                    }
                 }
 
                 if (extendedUtilResult) {

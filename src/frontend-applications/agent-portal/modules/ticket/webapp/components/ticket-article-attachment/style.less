@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -10,16 +10,22 @@
 .attachment {
     display: grid;
     grid-column-gap: @margin-small;
-    grid-template-columns: 1rem 3fr 1fr;
+    grid-template-columns: min-content auto 1fr;
+
     .attachment-link {
+        .shorten-text();
+
         color: @primary-0;
         cursor: pointer;
-        white-space: nowrap;
     }
+
     .inactive-link {
+        .shorten-text();
+
         color: @secondary-0;
         cursor: none;
     }
+
     .file-size {
         white-space: nowrap;
     }

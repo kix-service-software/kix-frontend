@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -66,17 +66,17 @@ class EditorComponent {
                 let contentString = BrowserUtil.replaceInlineContent(
                     input.value ? input.value : '', input.inlineContent
                 );
-                const matches = contentString.match(
-                    /<(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))>/ig);
+
+                const plainText: string = input.plainText;
+                const matches = plainText?.match(/(<.*?>)/g);
                 if (matches) {
-                    for (const m in matches) {
-                        if (Object.prototype.hasOwnProperty.call(matches, m)) {
-                            let replacedString = matches[m].replace(/>/g, '&gt;');
-                            replacedString = replacedString.replace(/</g, '&lt;');
-                            contentString = contentString.replace(matches[m], replacedString);
-                        }
+                    for (const m of matches) {
+                        let replacedString = m.replace(/>/g, '&gt;');
+                        replacedString = replacedString.replace(/</g, '&lt;');
+                        contentString = contentString.replace(m, replacedString);
                     }
                 }
+
                 if (this.editor.getData() !== contentString) {
                     this.editor.setData(contentString, () => {
                         this.editor.updateElement();
@@ -131,36 +131,6 @@ class EditorComponent {
                         ...this.state.config
                     });
                 }
-
-                this.editor.on('paste', (event: any) => {
-                    const fileSize = event.data.dataTransfer.getFilesCount();
-                    if (fileSize > 0) {
-                        event.stop();
-                        if (!this.state.noImages) {
-                            for (let i = 0; i < fileSize; i++) {
-                                const file = event.data.dataTransfer.getFile(i);
-                                const valid = AttachmentUtil.checkMimeType(
-                                    file, ['image/png', 'image/jpg', 'image/jpeg', 'image/bmp', 'image/svg+xml']
-                                );
-                                if (valid) {
-                                    const reader = new FileReader();
-                                    reader.onload = (evt: any): void => {
-                                        const element = this.editor.document.createElement('img', {
-                                            attributes: {
-                                                src: evt.target.result
-                                            }
-                                        });
-
-                                        setTimeout(() => {
-                                            this.editor.insertElement(element);
-                                        }, 0);
-                                    };
-                                    reader.readAsDataURL(file);
-                                }
-                            }
-                        }
-                    }
-                });
 
                 const changeListener = (): void => {
                     if (this.changeTimeout) {

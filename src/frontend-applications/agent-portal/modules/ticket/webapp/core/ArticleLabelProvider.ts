@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -126,6 +126,17 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                     const prepareContent = await TicketService.getInstance().getPreparedArticleBodyContent(article);
                     if (prepareContent) {
                         displayValue = BrowserUtil.replaceInlineContent(prepareContent[0], prepareContent[1]);
+                    }
+                    translatable = false;
+                }
+                break;
+            case ArticleProperty.BODY_RICHTEXT_NO_INLINE:
+                if (article) {
+                    const prepareContent = await TicketService.getInstance().getPreparedArticleBodyContent(
+                        article, true
+                    );
+                    if (prepareContent) {
+                        displayValue = prepareContent[0];
                     }
                     translatable = false;
                 }
@@ -259,8 +270,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
 
         const channelID = value && value !== ''
             ? value
-            : article ? article.ChannelID : null
-            ;
+            : article ? article.ChannelID : null;
         switch (property) {
             case ArticleProperty.ATTACHMENTS:
                 if (article.Attachments) {

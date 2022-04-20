@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -16,6 +16,7 @@ import { ValidationResult } from './ValidationResult';
 import addrparser from 'address-rfc2822';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
+import { FormInstance } from './FormInstance';
 
 export class FormValidationService {
 
@@ -51,12 +52,14 @@ export class FormValidationService {
         }
     }
 
-    public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult[]> {
+    public async validate(
+        formField: FormFieldConfiguration, formId: string, formInstance?: FormInstance
+    ): Promise<ValidationResult[]> {
         const result = [];
         if (formField && !formField.empty) {
             const validators = this.formFieldValidators.filter((ffv) => ffv.isValidatorFor(formField, formId));
             for (const v of validators) {
-                const validationResult = await v.validate(formField, formId);
+                const validationResult = await v.validate(formField, formId, formInstance);
                 result.push(validationResult);
             }
         }

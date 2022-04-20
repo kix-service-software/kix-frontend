@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -47,7 +47,7 @@ export class TicketNamespace extends SocketNameSpace {
         this.registerEventHandler(
             client, TicketEvent.LOAD_ARTICLE_ZIP_ATTACHMENT, this.loadArticleZipAttachment.bind(this)
         );
-        this.registerEventHandler(client, TicketEvent.REMOVE_ARTICLE_SEEN_FLAG, this.removeArticleSeenFlag.bind(this));
+        this.registerEventHandler(client, TicketEvent.SET_ARTICLE_SEEN_FLAG, this.setArticleSeenFlag.bind(this));
     }
 
     private async loadArticleAttachment(
@@ -86,7 +86,7 @@ export class TicketNamespace extends SocketNameSpace {
         return response;
     }
 
-    private async removeArticleSeenFlag(
+    private async setArticleSeenFlag(
         data: SetArticleSeenFlagRequest, client: Socket
     ): Promise<SocketResponse> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
@@ -95,7 +95,7 @@ export class TicketNamespace extends SocketNameSpace {
         const response = await TicketAPIService.getInstance().setArticleSeenFlag(
             token, null, data.ticketId, data.articleId
         ).then(() =>
-            new SocketResponse(TicketEvent.REMOVE_ARTICLE_SEEN_FLAG_DONE, { requestId: data.requestId })
+            new SocketResponse(TicketEvent.SET_ARTICLE_SEEN_FLAG_DONE, { requestId: data.requestId })
         ).catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
 
         CacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);

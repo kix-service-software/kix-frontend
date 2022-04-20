@@ -1,18 +1,21 @@
 <!--
-Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
+
 <if(state.field)>
     <form-list
-        readonly=(!state.hasContact || state.field.readonly)
+        readonly=(state.field.readonly)
         placeholder=state.placeholder
         on-focusLost("focusLost")
         on-nodesChanged("nodesChanged")
         treeId=state.treeId
         invalid=state.invalid
-        key="organisation-form-list"/>
+        loading=state.loading
+        key="organisation-form-list"
+    />
 </if>

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -41,6 +41,7 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState> {
         const formInstance = await context?.getFormManager()?.getFormInstance();
         this.state.formContext = formInstance?.getFormContext();
         this.state.field = formInstance?.getFormField(this.state.field?.instanceId);
+        FormInputComponent.prototype.callSetInvalidState.call(this);
     }
 
     public async onMount(): Promise<void> {
@@ -64,7 +65,10 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState> {
                         } else {
                             FormInputComponent.prototype.callSetInvalidState.call(this);
                         }
-                    } else if (eventId === FormEvent.FORM_VALIDATED) {
+                    } else if (
+                        eventId === FormEvent.FORM_VALIDATED ||
+                        (eventId === FormEvent.FIELD_VALIDATED && data?.instanceId === this.state.field?.instanceId)
+                    ) {
                         FormInputComponent.prototype.callSetInvalidState.call(this);
                     } else if (eventId === FormEvent.POSSIBLE_VALUE_CHANGED && this.state.field && data) {
                         const dfName = KIXObjectService.getDynamicFieldName(data.property);

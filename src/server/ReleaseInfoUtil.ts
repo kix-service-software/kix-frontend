@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -55,6 +55,8 @@ export class ReleaseInfoUtil {
                         releaseInfo.buildHost = releaseValue[1];
                     } else if (releaseValue[0] === 'BUILDNUMBER') {
                         releaseInfo.buildNumber = Number(releaseValue[1]);
+                    } else if (releaseValue[0] === 'PATCHNUMBER') {
+                        releaseInfo.patchNumber = Number(releaseValue[1]);
                     } else if (releaseValue[0] === 'REQUIRES') {
                         releaseInfo.dependencies = this.parseRequirements(releaseValue[1]);
                         releaseInfo.requires = releaseValue[1];

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -34,6 +34,7 @@ import { ServiceRegistry } from '../../../../../modules/base-components/webapp/c
 import { IKIXObjectService } from '../../../../../modules/base-components/webapp/core/IKIXObjectService';
 import { Contact } from '../../../../customer/model/Contact';
 import addrparser from 'address-rfc2822';
+import { ObjectReferenceOptions } from '../../../../base-components/webapp/core/ObjectReferenceOptions';
 
 class Component extends FormInputComponent<string[], ComponentState> {
 
@@ -52,11 +53,10 @@ class Component extends FormInputComponent<string[], ComponentState> {
     public async onMount(): Promise<void> {
         this.treeHandler = new TreeHandler([], null, null, true);
         TreeService.getInstance().registerTreeHandler(this.state.treeId, this.treeHandler);
-        await super.onMount();
-        this.state.searchCallback = this.searchContacts.bind(this);
-        const objectName = await LabelService.getInstance().getObjectName(KIXObjectType.CONTACT, true, false);
-        this.state.autoCompleteConfiguration = new AutoCompleteConfiguration(10, 2000, 3, objectName);
 
+        await super.onMount();
+
+        await this.prepareAutoComplete();
         await this.prepareActions();
 
         if (this.state.field?.property === ArticleProperty.CC) {
@@ -89,6 +89,26 @@ class Component extends FormInputComponent<string[], ComponentState> {
         await super.onDestroy();
         EventService.getInstance().unsubscribe('SET_CC_RECIPIENTS', this.ccSubscriber);
         EventService.getInstance().unsubscribe('CC_READY', this.ccReadySubscriber);
+    }
+
+    private async prepareAutoComplete(): Promise<void> {
+        this.state.searchCallback = this.searchContacts.bind(this);
+        const objectName = await LabelService.getInstance().getObjectName(KIXObjectType.CONTACT, true, false);
+
+        let autoCompleteConfiguration = new AutoCompleteConfiguration(undefined, undefined, undefined, objectName);
+
+        const autocompleteOption = this.state.field?.options?.find(
+            (o) => o.option === ObjectReferenceOptions.AUTOCOMPLETE
+        );
+        if (typeof autocompleteOption !== 'undefined' && autocompleteOption !== null) {
+            if (autocompleteOption.value) {
+                autoCompleteConfiguration = typeof autocompleteOption.value === 'object'
+                    ? autocompleteOption.value
+                    : autoCompleteConfiguration;
+            }
+        }
+
+        this.state.autoCompleteConfiguration = autoCompleteConfiguration;
     }
 
     public async setCurrentValue(): Promise<void> {
@@ -303,16 +323,15 @@ class Component extends FormInputComponent<string[], ComponentState> {
     private async searchContacts(limit: number, searchValue: string): Promise<TreeNode[]> {
         let nodes = [];
         const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.CONTACT);
-        if (service) {
+        if (service && searchValue && searchValue !== '') {
             const filter = await service.prepareFullTextFilter(searchValue);
             const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
             const contacts = await KIXObjectService.loadObjects<Contact>(
                 KIXObjectType.CONTACT, null, loadingOptions, null, false
             );
 
-            if (searchValue && searchValue !== '') {
-                nodes = await this.createTreeNodes(contacts.filter((co) => co.Email));
-            }
+
+            nodes = await this.createTreeNodes(contacts.filter((co) => co.Email));
         }
 
         return nodes;

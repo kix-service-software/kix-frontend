@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -10,6 +10,9 @@
 .loading-spinner {
     margin: 0 auto;
     position: relative;
+    display: inline-grid;
+    max-height: 100%;
+    align-content: center;
 
     @keyframes dot-keyframes {
         0% {
@@ -29,8 +32,10 @@
     }
 
     .loading-dots {
-        text-align: center;
         width: 100%;
+        display: grid;
+        grid-auto-flow: column;
+        gap: @margin-small;
 
         &--dot {
             animation: dot-keyframes 1.5s infinite ease-in-out;
@@ -39,7 +44,6 @@
             display: inline-block;
             height: 12px;
             width: 12px;
-            margin-right: 0.5rem;
 
             &:nth-child(2) {
                 animation-delay: .5s;

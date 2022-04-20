@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -91,10 +91,6 @@ class Component {
                     if (eventId === ContextUIEvent.RELOAD_OBJECTS && data === this.state.table?.getObjectType()
                     ) {
                         this.state.loading = true;
-                    }
-
-                    if (eventId === ApplicationEvent.OBJECT_CREATED || eventId === ApplicationEvent.OBJECT_UPDATED) {
-                        this.state.table?.reload(true);
                     }
 
                     if (data?.tableId === this.state.table?.getTableId()) {

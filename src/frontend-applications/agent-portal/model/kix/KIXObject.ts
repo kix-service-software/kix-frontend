@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -124,25 +124,25 @@ export abstract class KIXObject {
     protected prepareObjectFilter(preparedFilter: any[], filter: any): void {
         // prepare the filter and handle BETWEEN and relative time operators
 
-        const isGTLTOrEqual = filter.Operator === SearchOperator.GREATER_THAN_OR_EQUAL ||
-            filter.Operator === SearchOperator.LESS_THAN_OR_EQUAL;
-        const isTimeValue = typeof filter.Value === 'string' && filter.Value.match(/^[+-]\d+\w+$/);
+        const isGTLTOrEqual = filter?.Operator === SearchOperator.GREATER_THAN_OR_EQUAL ||
+            filter?.Operator === SearchOperator.LESS_THAN_OR_EQUAL;
+        const isTimeValue = typeof filter?.Value === 'string' && filter?.Value?.toString().match(/^[+-]\d+\w+$/);
 
         if (isGTLTOrEqual || isTimeValue) {
             // we have to handle this
 
-            if (filter.Value.match(/^[+-]\d+\w+$/)) {
+            if (filter && filter?.Value?.toString().match(/^[+-]\d+\w+$/)) {
                 const firstChar = filter.Value.charAt(0);
                 filter.Value = filter.Value.substring(1);
 
                 const isPlus = firstChar === '+';
                 const isMinus = firstChar === '-';
 
-                if (isMinus) {
-                    if (isMinus && filter.Value === '0s' && isGTLTOrEqual) {
-                        return; // ignore this part
-                    }
+                if (filter.Value === '0s' && isGTLTOrEqual) {
+                    return; // ignore this part
+                }
 
+                if (isMinus) {
                     if (filter.Operator === SearchOperator.GREATER_THAN_OR_EQUAL) {
                         filter.Operator = SearchOperator.WITHIN_THE_LAST;
                     } else if (filter.Operator === SearchOperator.GREATER_THAN) {

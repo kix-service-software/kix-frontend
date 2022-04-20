@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -215,6 +215,12 @@ export class ContextService {
         return removed;
     }
 
+    public async removeAllContexts(silent: boolean = false): Promise<void> {
+        for (const c of [...this.contextInstances]) {
+            await this.removeContext(c.instanceId, null, null, false, silent);
+        }
+        this.switchToTargetContext(null, 'home');
+    }
 
     private checkDialogConfirmation(contextInstanceId: string, silent?: boolean): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {

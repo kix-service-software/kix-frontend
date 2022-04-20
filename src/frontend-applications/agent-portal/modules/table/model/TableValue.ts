@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -37,9 +37,9 @@ export class TableValue {
   public async initDisplayText(cell: Cell): Promise<void> {
     const object = cell.getRow().getRowObject<KIXObject>().getObject();
 
-    if (!this.displayValue && cell?.getColumnConfiguration()?.showText && object) {
+    if (!this.displayValue && object) {
       this.displayValue = await LabelService.getInstance().getDisplayText(
-        object, this.property, object[this.property], cell.getColumnConfiguration().translatable
+        object, this.property, object[this.property], cell.getColumnConfiguration()?.translatable
       );
     }
   }

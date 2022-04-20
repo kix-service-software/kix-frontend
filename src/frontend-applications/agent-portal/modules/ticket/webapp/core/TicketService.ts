@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -57,6 +57,8 @@ import { TicketTypeProperty } from '../../model/TicketTypeProperty';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
 import { CreateTicketArticleOptions } from '../../model/CreateTicketArticleOptions';
 import { Error } from '../../../../../../server/model/Error';
+import { Contact } from '../../../customer/model/Contact';
+import { ContactProperty } from '../../../customer/model/ContactProperty';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -130,6 +132,12 @@ export class TicketService extends KIXObjectService<Ticket> {
     public async setArticleSeenFlag(ticketId: number, articleId: number): Promise<void> {
         await TicketSocketClient.getInstance().setArticleSeenFlag(ticketId, articleId);
         EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
+    }
+
+    public async markTicketAsSeen(ticketId: number): Promise<void> {
+        await KIXObjectService.updateObject(
+            KIXObjectType.TICKET, [['MarkAsSeen', 1]], ticketId
+        );
     }
 
     public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
@@ -424,26 +432,13 @@ export class TicketService extends KIXObjectService<Ticket> {
         return context.descriptor.urlPaths[0] + '/' + id;
     }
 
-    public async getPreparedArticleBodyContent(article: Article): Promise<[string, InlineContent[]]> {
+    public async getPreparedArticleBodyContent(
+        article: Article, removeInlineImages: boolean = false
+    ): Promise<[string, InlineContent[]]> {
         if (article.bodyAttachment) {
 
             const attachmentWithContent = await this.loadArticleAttachment(
                 article.TicketID, article.ArticleID, article.bodyAttachment.ID
-            );
-
-            const inlineAttachments = article.getAttachments(true);
-            for (const inlineAttachment of inlineAttachments) {
-                const attachment = await this.loadArticleAttachment(
-                    article.TicketID, article.ArticleID, inlineAttachment.ID
-                );
-                if (attachment) {
-                    inlineAttachment.Content = attachment.Content;
-                }
-            }
-
-            const inlineContent: InlineContent[] = [];
-            inlineAttachments.forEach(
-                (a) => inlineContent.push(new InlineContent(a.ContentID, a.Content, a.ContentType))
             );
 
             let buffer = Buffer.from(attachmentWithContent.Content, 'base64');
@@ -461,11 +456,34 @@ export class TicketService extends KIXObjectService<Ticket> {
             const match = content.match(/(<body[^>]*>)([\w|\W]*)(<\/body>)/);
             if (match && match.length >= 3) {
                 content = match[2];
+            } else if (attachmentWithContent.Filename !== 'file-2') {
+                content = content.replace(/(\r\n|\n\r|\n|\r)/g, '<br>');
+            }
+
+            const inlineContent: InlineContent[] = [];
+            if (!removeInlineImages) {
+                const inlineAttachments = article.getAttachments(true);
+                for (const inlineAttachment of inlineAttachments) {
+                    const attachment = await this.loadArticleAttachment(
+                        article.TicketID, article.ArticleID, inlineAttachment.ID
+                    );
+                    if (attachment) {
+                        inlineAttachment.Content = attachment.Content;
+                    }
+                }
+
+                inlineAttachments.forEach(
+                    (a) => inlineContent.push(new InlineContent(a.ContentID, a.Content, a.ContentType))
+                );
+            } else {
+
+                // remove inline images
+                content = content.replace(/<img.+?src="cid:.+?>/, '');
             }
 
             return [content, inlineContent];
         } else {
-            const body = article.Body.replace(/(\n|\r)/g, '<br>');
+            const body = article.Body.replace(/(\r\n|\n\r|\n|\r)/g, '<br>');
             return [body, null];
         }
     }
@@ -603,5 +621,42 @@ export class TicketService extends KIXObjectService<Ticket> {
             }
         }
         return [...objectProperties, ...superProperties];
+    }
+
+    public static async getContactForArticle(article: Article): Promise<Contact> {
+        let contact: Contact;
+        if (article) {
+            if (article.SenderType === 'external') {
+                const matches = article.From.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/);
+                if (matches?.length) {
+                    const email = matches[0];
+                    const loadingOptions = new KIXObjectLoadingOptions([
+                        new FilterCriteria(
+                            ContactProperty.EMAIL, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, email
+                        )
+                    ]);
+                    const contacts = await KIXObjectService.loadObjects<Contact>(
+                        KIXObjectType.CONTACT, null, loadingOptions
+                    ).catch((): Contact[] => []);
+
+                    if (contacts?.length) {
+                        contact = contacts[0];
+                    }
+                }
+            } else {
+                const loadingOptions = new KIXObjectLoadingOptions(
+                    null, null, null, [UserProperty.CONTACT], [UserProperty.CONTACT]
+                );
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [article.CreatedBy], loadingOptions
+                ).catch((): User[] => []);
+
+                if (users?.length) {
+                    contact = users[0].Contact;
+                }
+            }
+        }
+
+        return contact;
     }
 }

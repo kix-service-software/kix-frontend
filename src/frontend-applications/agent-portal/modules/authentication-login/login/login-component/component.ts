@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2021 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -10,6 +10,10 @@
 import { ComponentState } from './ComponentState';
 import * as Bowser from 'bowser';
 import { AgentService } from '../../../user/webapp/core/AgentService';
+import { PortalNotificationService } from '../../../portal-notification/webapp/core/PortalNotificationService';
+import { EventService } from '../../../base-components/webapp/core/EventService';
+import { PortalNotificationEvent } from '../../../portal-notification/model/PortalNotificationEvent';
+import { IEventSubscriber } from '../../../base-components/webapp/core/IEventSubscriber';
 
 declare const window: Window;
 
@@ -18,8 +22,8 @@ class Component {
     public state: ComponentState;
 
     private redirectUrl: string;
-
     private translations: Array<[string, string]>;
+    private subscriber: IEventSubscriber;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -30,16 +34,33 @@ class Component {
         this.redirectUrl = input.redirectUrl;
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         this.initTranslations();
         this.checkBrowser();
+
         this.state.loading = false;
+        this.state.notifications = await PortalNotificationService.getInstance().getPreLoginNotifications();
+
+        this.subscriber = {
+            eventSubscriberId: 'login-component',
+            eventPublished: async (): Promise<void> => {
+                this.state.notifications = await PortalNotificationService.getInstance().getPreLoginNotifications();
+            }
+        };
+        EventService.getInstance().subscribe(PortalNotificationEvent.PRE_LOGIN_NOTIFICATIONS_UPDATED, this.subscriber);
+
         setTimeout(() => {
             const userElement = (this as any).getEl('login-user-name');
             if (userElement) {
                 userElement.focus();
             }
         }, 200);
+    }
+
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(
+            PortalNotificationEvent.PRE_LOGIN_NOTIFICATIONS_UPDATED, this.subscriber
+        );
     }
 
     private initTranslations(): void {
