@@ -305,6 +305,10 @@ export abstract class Context {
         return this.objectLists.get(objectType) as any[];
     }
 
+    public hasObjectList(objectType: KIXObjectType | string): boolean {
+        return this.objectLists.has(objectType);
+    }
+
     public setObjectList(objectType: KIXObjectType | string, objectList: KIXObject[], silent?: boolean): void {
         this.objectLists.set(objectType, objectList);
         if (!silent) {
