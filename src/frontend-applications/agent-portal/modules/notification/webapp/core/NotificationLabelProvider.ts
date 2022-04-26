@@ -210,6 +210,9 @@ export class NotificationLabelProvider extends LabelProvider {
                 case NotificationRecipientTypes.AGENT_OWNER:
                     displayString = 'Translatable#Owner';
                     break;
+                case NotificationRecipientTypes.AGENT_WATCHER:
+                    displayString = 'Translatable#All agents watching this ticket';
+                    break;
                 default:
             }
             if (displayString) {
