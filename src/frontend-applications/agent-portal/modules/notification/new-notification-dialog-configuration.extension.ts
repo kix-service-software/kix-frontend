@@ -182,7 +182,8 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                                 NotificationRecipientTypes.AGENT_MY_QUEUES,
                                 'Translatable#All agents subscribed to the tickets queue'
                             ),
-                            new TreeNode(NotificationRecipientTypes.CUSTOMER, 'Translatable#Contact')
+                            new TreeNode(NotificationRecipientTypes.CUSTOMER, 'Translatable#Contact'),
+                            new TreeNode(NotificationRecipientTypes.AGENT_WATCHER, 'Translatable#All agents watching this ticket')
                         ]),
                     new FormFieldOption(DefaultSelectInputFormOption.MULTI, true)
                 ]
