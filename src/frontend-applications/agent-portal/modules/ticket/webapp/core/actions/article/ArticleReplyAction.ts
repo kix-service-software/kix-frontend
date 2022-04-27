@@ -15,8 +15,9 @@ import { NewTicketArticleContext } from '../..';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
 import { AuthenticationSocketClient } from '../../../../../base-components/webapp/core/AuthenticationSocketClient';
 import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
+import { Article } from '../../../../model/Article';
 
-export class ArticleReplyAction extends AbstractAction {
+export class ArticleReplyAction extends AbstractAction<Article> {
 
     private articleId: number = null;
     private ticketId: number = null;
@@ -44,15 +45,9 @@ export class ArticleReplyAction extends AbstractAction {
         return show;
     }
 
-    public async setData(data: any): Promise<void> {
+    public async setData(data: Article): Promise<void> {
         super.setData(data);
-        if (this.data) {
-            if (Array.isArray(this.data)) {
-                this.articleId = this.data[0].ArticleID;
-            } else if (typeof this.data === 'string' || typeof this.data === 'number') {
-                this.articleId = Number(this.data);
-            }
-        }
+        this.articleId = this.data?.ArticleID;
     }
 
     public async run(event: any): Promise<void> {
