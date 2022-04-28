@@ -84,6 +84,10 @@ export class ReportFormCreator {
         }
 
         if (outputFormat) {
+            if (!nodes.some((n) => n.id === outputFormat)) {
+                nodes.push(new TreeNode(outputFormat, outputFormat));
+            }
+
             outputFormatField.defaultValue = new FormFieldValue(
                 Array.isArray(outputFormat) ? outputFormat : [outputFormat]
             );

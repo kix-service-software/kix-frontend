@@ -55,6 +55,12 @@ export class ReportDefinitionLabelProvider extends LabelProvider<ReportDefinitio
             case ReportDefinitionProperty.DATASOURCE:
                 displayValue = 'Translatable#Data Source';
                 break;
+            case ReportDefinitionProperty.IS_PERIODIC:
+                displayValue = 'Translatable#Periodic';
+                break;
+            case ReportDefinitionProperty.REPORT_COUNT:
+                displayValue = 'Translatable#Count';
+                break;
             default:
                 displayValue = await super.getPropertyText(property, short, translatable);
         }
@@ -91,6 +97,14 @@ export class ReportDefinitionLabelProvider extends LabelProvider<ReportDefinitio
                 break;
             case ReportDefinitionProperty.NAME:
                 translatable = false;
+                break;
+            case ReportDefinitionProperty.REPORT_COUNT:
+                const count = reportDefinition.Reports?.length || 0;
+                const max = reportDefinition.MaxReports || '-';
+                displayValue = `${count}/${max}`;
+                break;
+            case ReportDefinitionProperty.IS_PERIODIC:
+                displayValue = displayValue ? 'Translatable#Yes' : 'Translatable#No';
                 break;
             default:
                 displayValue = await super.getDisplayText(reportDefinition, property, defaultValue, translatable);
