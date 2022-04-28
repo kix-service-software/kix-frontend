@@ -184,7 +184,7 @@ export class QueueLabelProvider extends LabelProvider<Queue> {
 
     public async getObjectText(
         queue: Queue, id?: boolean, title?: boolean, translatable: boolean = true): Promise<string> {
-        const returnValue = id && title ? queue.Fullname.replace(/::/g, '/') : queue.Name;
+        const returnValue = title ? queue.Fullname.replace(/::/g, '/') : queue.Name;
         return translatable ? await TranslationService.translate(returnValue) : returnValue;
     }
 

@@ -317,6 +317,9 @@ export class DynamicFormFieldValue {
                         currentValues.push(new TreeNode(v, v));
                     }
                 }
+
+                this.valueTreeHandler.setSelection(currentValues);
+                this.valueTreeHandler?.expandSelection();
             } else if (this.isDropdown && this.isAutocomplete) {
                 const selectValues = Array.isArray(this.value.value) ? this.value.value : [this.value.value];
                 currentValues = await this.manager.getTreeNodes(
@@ -331,6 +334,7 @@ export class DynamicFormFieldValue {
                             .map((v) => new TreeNode(v, v)), true, true, true, false
                     );
                 }
+                this.valueTreeHandler?.expandSelection();
             } else if (this.isDate) {
                 if (this.isBetween) {
                     const date = new Date(this.value.value[0]);
