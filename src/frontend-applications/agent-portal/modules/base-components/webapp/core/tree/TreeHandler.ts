@@ -262,6 +262,25 @@ export class TreeHandler {
         }
     }
 
+    public expandSelection(tree: TreeNode[] = this.tree): boolean {
+        let expand = false;
+        for (const node of tree) {
+            if (node.children) {
+                const childSelected = this.expandSelection(node.children);
+                if (childSelected) {
+                    node.expanded = true;
+                    expand = true;
+                }
+            }
+
+            if (node.selected) {
+                expand = true;
+            }
+        }
+
+        return expand;
+    }
+
     private tidyUpSelectedNodes(nodes: TreeNode[], selected: boolean): void {
         nodes.forEach((n) => {
             const nodeIndex = this.selectedNodes.findIndex(

@@ -50,6 +50,7 @@ import { TicketCreateDynamicFields } from './form/extended-form-manager/TicketCr
 import { TicketJobFormManager } from './TicketJobFormManager';
 import { ArticleFormFieldValueHandler } from './ArticleFormFieldValueHandler';
 import { TicketStateSet } from './form/extended-form-manager/TicketStateSet';
+import { TeamSet } from './form/extended-form-manager/TeamSet';
 import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
 import { ArticlePlaceholderHandler } from './ArticlePlaceholderHandler';
@@ -126,6 +127,7 @@ export class UIModule implements IUIModule {
             ticketManager.addExtendedJobFormManager(new FetchAssetAttributes());
             ticketManager.addExtendedJobFormManager(new TicketCreateDynamicFields());
             ticketManager.addExtendedJobFormManager(new TicketStateSet());
+            ticketManager.addExtendedJobFormManager(new TeamSet());
         }
 
         if (this.doRegisterContexts) {
