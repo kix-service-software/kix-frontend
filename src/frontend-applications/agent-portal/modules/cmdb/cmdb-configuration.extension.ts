@@ -13,7 +13,7 @@ import { ConfigItemChartWidgetConfiguration } from './webapp/core/charts/ConfigI
 import { IConfiguration } from '../../model/configuration/IConfiguration';
 import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
-import { ChartComponentConfiguration } from '../charts/model/ChartComponentConfiguration';
+import { ChartComponentConfiguration } from '../report-charts/model/ChartComponentConfiguration';
 import { ConfigItemProperty } from './model/ConfigItemProperty';
 import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
 import { ConfigurationService } from '../../../../server/services/ConfigurationService';

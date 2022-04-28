@@ -155,7 +155,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     private async loadNodes(): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
 
-        this.objects = await KIXObjectService.loadObjects(this.objectType, this.objectIds, this.loadingOptions);
+        this.objects = await KIXObjectService.loadObjects(
+            this.objectType, this.objectIds, this.loadingOptions, null, true
+        ).catch(() => []);
         const structureOption = this.state.field?.options?.find(
             (o) => o.option === ObjectReferenceOptions.USE_OBJECT_SERVICE
         );
@@ -272,7 +274,8 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
             // ignore placeholder and "useTextAsId" values (handle them like freetext)
             // and collect ids only if objectType is given (relevant if "additional node" is selected/current value)
-            const idsToLoad = !this.useTextAsId && this.objectType ? objectIds.filter((id) => typeof id !== 'string' || !id.match(/<KIX_.+>/)) : [];
+            const ids = objectIds.filter((id) => typeof id !== 'string' || (!id.match(/<KIX_.+>/) && !id.match(/\$\{.+\}/)));
+            const idsToLoad = !this.useTextAsId && this.objectType ? ids : [];
             if (idsToLoad.length) {
                 if (this.autocomplete) {
                     const objects = await KIXObjectService.loadObjects(
@@ -291,7 +294,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     }
                 } else {
                     const objects = await KIXObjectService.loadObjects(
-                        this.objectType, idsToLoad, null, null, null, null, true
+                        this.objectType, idsToLoad, null, null, true, null, true
                     );
                     if (objects && !!objects.length) {
                         const translatableOption = this.state.field?.options?.find(

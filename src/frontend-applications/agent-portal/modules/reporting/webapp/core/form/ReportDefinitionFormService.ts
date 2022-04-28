@@ -24,7 +24,6 @@ import { FormInstance } from '../../../../base-components/webapp/core/FormInstan
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { KIXObjectFormService } from '../../../../base-components/webapp/core/KIXObjectFormService';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
-import { ObjectReferenceOptions } from '../../../../base-components/webapp/core/ObjectReferenceOptions';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { PermissionProperty } from '../../../../user/model/PermissionProperty';
 import { Role } from '../../../../user/model/Role';

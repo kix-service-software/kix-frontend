@@ -17,7 +17,7 @@ import { UIFilterCriterion } from '../../model/UIFilterCriterion';
 import { TicketProperty } from './model/TicketProperty';
 import { SearchOperator } from '../search/model/SearchOperator';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
-import { ChartComponentConfiguration } from '../charts/model/ChartComponentConfiguration';
+import { ChartComponentConfiguration } from '../report-charts/model/ChartComponentConfiguration';
 import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
 import { TableConfiguration } from '../../model/configuration/TableConfiguration';
 import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';

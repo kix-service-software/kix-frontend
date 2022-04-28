@@ -143,13 +143,16 @@ export class AbstractJobFormManager {
         );
 
         const timeNodes = [];
-        [...Array(24)].forEach((v, i) => {
-            const hour = i < 10 ? '0' + i.toString() : i;
+        for (let i = 0; i < 24; i++) {
+            const hour = i.toString().padStart(2, '0');
             for (let j = 0; j < 60; j += 5) {
-                timeNodes.push(
-                    new TreeNode(`${ hour }:${ j < 10 ? '0' + j : j }:00`, `${ i }:${ j < 10 ? '0' + j : j }`));
+                const minute = j.toString().padStart(2, '0');
+                const time = `${hour}:${minute}`;
+                const id = `${time}:00`;
+                const node = new TreeNode(id, time);
+                timeNodes.push(node);
             }
-        });
+        }
 
         const timesValue = await this.getValue(JobProperty.EXEC_PLAN_WEEKDAYS_TIMES, null, null, this.job, formContext);
         const times = new FormFieldConfiguration(

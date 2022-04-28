@@ -11,7 +11,7 @@ import { IConfiguration } from '../../../../../model/configuration/IConfiguratio
 import { ConfigurationType } from '../../../../../model/configuration/ConfigurationType';
 import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
 import { ConfigurationDefinition } from '../../../../../model/configuration/ConfigurationDefinition';
-import { ChartComponentConfiguration } from '../../../../charts/model/ChartComponentConfiguration';
+import { ChartComponentConfiguration } from '../../../../report-charts/model/ChartComponentConfiguration';
 
 export class ConfigItemChartWidgetConfiguration implements IConfiguration {
 
