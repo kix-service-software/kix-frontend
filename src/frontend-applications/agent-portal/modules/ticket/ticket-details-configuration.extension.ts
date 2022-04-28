@@ -525,11 +525,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                             value: '<KIX_TICKET_ContactID>'
                                                         },
                                                         {
-                                                            property: TicketProperty.STATE_ID,
+                                                            property: TicketProperty.STATE_TYPE,
                                                             operator: SearchOperator.EQUALS,
-                                                            type: FilterDataType.NUMERIC,
+                                                            type: FilterDataType.STRING,
                                                             filterType: FilterType.AND,
-                                                            value: 2
+                                                            value: 'Open'
                                                         }
                                                     ]
                                                 }
@@ -558,11 +558,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                             value: '<KIX_TICKET_OrganisationID>'
                                                         },
                                                         {
-                                                            property: TicketProperty.STATE_ID,
+                                                            property: TicketProperty.STATE_TYPE,
                                                             operator: SearchOperator.EQUALS,
-                                                            type: FilterDataType.NUMERIC,
+                                                            type: FilterDataType.STRING,
                                                             filterType: FilterType.AND,
-                                                            value: 2
+                                                            value: 'Open'
                                                         }
                                                     ]
                                                 }
