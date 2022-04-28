@@ -60,7 +60,7 @@ export class ConfigItemBulkManager extends BulkManager {
 
         let classAttributes = [];
         if (classIds.length === 1) {
-            classAttributes = await ConfigItemClassAttributeUtil.getMergedClassAttributeIds(classIds);
+            classAttributes = await ConfigItemClassAttributeUtil.getMergedClassAttributeIds(classIds, false);
         }
 
         const superProperties = await super.getProperties();
