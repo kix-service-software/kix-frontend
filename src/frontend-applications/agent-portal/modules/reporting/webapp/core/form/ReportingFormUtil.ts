@@ -14,7 +14,10 @@ import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOp
 import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { DynamicFieldFormUtil } from '../../../../base-components/webapp/core/DynamicFieldFormUtil';
+import { KIXObjectFormService } from '../../../../base-components/webapp/core/KIXObjectFormService';
 import { ObjectReferenceOptions } from '../../../../base-components/webapp/core/ObjectReferenceOptions';
+import { ServiceRegistry } from '../../../../base-components/webapp/core/ServiceRegistry';
+import { ServiceType } from '../../../../base-components/webapp/core/ServiceType';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
 import { ReportParameter } from '../../../model/ReportParamater';
@@ -36,6 +39,8 @@ export class ReportingFormUtil {
             return;
         }
 
+        const fieldLabel = field.label;
+
         field.options = [];
 
         if (parameter && parameter.References) {
@@ -48,6 +53,7 @@ export class ReportingFormUtil {
                         field, parts[1], Boolean(parameter.Multiple), parameter.PossibleValues, objectType
                     );
                 } else {
+
                     field.options = [];
                     field.inputComponent = 'object-reference-input';
                     field.options.push(new FormFieldOption(ObjectReferenceOptions.OBJECT, object));
@@ -56,6 +62,15 @@ export class ReportingFormUtil {
                         multiple ? multiple : Boolean(parameter.Multiple))
                     );
                     field.options.push(new FormFieldOption(FormFieldOptions.SHOW_INVALID, false));
+
+                    const formService = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
+                        object, ServiceType.FORM
+                    );
+
+                    if (formService) {
+                        field = await formService.createFormFieldConfiguration(parts[1], field);
+                        field.label = fieldLabel;
+                    }
 
                     if (filterPossibleValues) {
                         field.options.push(

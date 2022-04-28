@@ -78,7 +78,7 @@ export class QueueService extends KIXObjectService<Queue> {
 
     public async prepareObjectTree(
         queues: Queue[], showInvalid?: boolean, invalidClickable: boolean = false,
-        filterIds?: number[], translatable?: boolean, includeTicketStats: boolean = false
+        filterIds?: number[], translatable?: boolean, useTextAsId?: boolean, includeTicketStats: boolean = false
     ): Promise<TreeNode[]> {
         const nodes = [];
         if (queues && !!queues.length) {
@@ -99,12 +99,14 @@ export class QueueService extends KIXObjectService<Queue> {
                 }
 
                 const subTree = await this.prepareObjectTree(
-                    queue.SubQueues, showInvalid, invalidClickable, filterIds, translatable, includeTicketStats
+                    queue.SubQueues, showInvalid, invalidClickable, filterIds, translatable,
+                    useTextAsId, includeTicketStats
                 );
 
                 const icon = LabelService.getInstance().getObjectIcon(queue);
+                const label = await LabelService.getInstance().getObjectText(queue, false, useTextAsId);
 
-                const treeNode = new TreeNode(queue.QueueID, queue.Name, icon);
+                const treeNode = new TreeNode(queue.QueueID, label, icon);
                 treeNode.children = subTree;
                 treeNode.properties = ticketStats;
                 treeNode.selectable = invalidClickable ? true : queue.ValidID === 1;

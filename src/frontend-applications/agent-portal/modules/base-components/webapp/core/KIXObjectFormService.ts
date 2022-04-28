@@ -470,4 +470,10 @@ export abstract class KIXObjectFormService {
 
         return formFields;
     }
+
+    public async createFormFieldConfiguration(
+        property: string, field: FormFieldConfiguration
+    ): Promise<FormFieldConfiguration> {
+        return field;
+    }
 }

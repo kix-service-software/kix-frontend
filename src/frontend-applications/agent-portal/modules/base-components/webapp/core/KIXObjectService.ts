@@ -487,16 +487,18 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public static async prepareObjectTree(
         objectType: KIXObjectType | string, objects: KIXObject[], showInvalid?: boolean,
-        invalidClickable?: boolean, filterIds?: Array<string | number>, translatable?: boolean
+        invalidClickable?: boolean, filterIds?: Array<string | number>, translatable?: boolean, useTextAsId?: boolean
     ): Promise<TreeNode[]> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
-        const nodes = await service.prepareObjectTree(objects, showInvalid, invalidClickable, filterIds, translatable);
+        const nodes = await service.prepareObjectTree(
+            objects, showInvalid, invalidClickable, filterIds, translatable, useTextAsId
+        );
         return nodes;
     }
 
     public async prepareObjectTree(
         objects: KIXObject[], showInvalid?: boolean, invalidClickable?: boolean, filterIds?: Array<string | number>,
-        translatable?: boolean
+        translatable?: boolean, useTextAsId?: boolean
     ): Promise<TreeNode[]> {
         const nodes: TreeNode[] = [];
         if (objects && !!objects.length) {

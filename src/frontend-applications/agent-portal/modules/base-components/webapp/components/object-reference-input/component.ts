@@ -172,7 +172,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         if (structureOption && structureOption.value) {
             nodes = await KIXObjectService.prepareObjectTree(
                 this.objectType, this.objects, this.showInvalidNodes,
-                this.isInvalidClickable, objectId ? [objectId] : null, translatable
+                this.isInvalidClickable, objectId ? [objectId] : null, translatable, this.useTextAsId
             );
         } else {
             const promises = [];
@@ -322,7 +322,10 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             }
 
             treeHandler.selectNone(true);
-            setTimeout(() => treeHandler.setSelection(selectedNodes, true, true, true), 200);
+            setTimeout(() => {
+                treeHandler.setSelection(selectedNodes, true, true, true);
+                treeHandler.expandSelection();
+            }, 200);
         } else if (treeHandler) {
             treeHandler.selectNone();
         }
