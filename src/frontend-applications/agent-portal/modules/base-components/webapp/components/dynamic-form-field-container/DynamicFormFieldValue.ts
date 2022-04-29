@@ -50,6 +50,7 @@ export class DynamicFormFieldValue {
     public isFreeText: boolean = false;
 
     public isBetween: boolean = false;
+    public isTable: boolean = false;
 
     public label: string = '';
 
@@ -262,7 +263,7 @@ export class DynamicFormFieldValue {
             this.isDate = inputType === InputFieldTypes.DATE;
             this.isDateTime = inputType === InputFieldTypes.DATE_TIME;
             this.isNumber = inputType === InputFieldTypes.NUMBER;
-
+            this.isTable = inputType === InputFieldTypes.TABLE;
             this.isDropdown = inputType === InputFieldTypes.DROPDOWN || inputType === InputFieldTypes.OBJECT_REFERENCE;
             this.isAutocomplete = inputType === InputFieldTypes.OBJECT_REFERENCE;
             this.isMultiselect = await this.manager.isMultiselect(property, this.value.operator);
@@ -300,6 +301,7 @@ export class DynamicFormFieldValue {
                 const tree = await this.doAutocompleteSearch(10, preloadOption[1].toString());
                 this.valueTreeHandler.setTree(tree);
             }
+            /*if (this.isTable) {}*/
         }
     }
 
