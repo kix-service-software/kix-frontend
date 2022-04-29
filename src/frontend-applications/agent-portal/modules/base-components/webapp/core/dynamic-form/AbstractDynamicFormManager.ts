@@ -38,7 +38,7 @@ import { DynamicFieldFormUtil } from '../DynamicFieldFormUtil';
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 
-    public abstract objectType: KIXObjectType | string = KIXObjectType.ANY;
+    public objectType: KIXObjectType | string = KIXObjectType.ANY;
 
     protected values: ObjectPropertyValue[] = [];
 
@@ -117,7 +117,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
                             DynamicFieldTypes.SELECTION,
                             DynamicFieldTypes.CI_REFERENCE,
                             DynamicFieldTypes.TICKET_REFERENCE,
-                            DynamicFieldTypes.TABLE,
+                            // Implementation of this type is postponed // DynamicFieldTypes.TABLE,
                             ...validTypes
                         ]
                     )
@@ -539,19 +539,27 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         if (dfName) {
             const field = await KIXObjectService.loadDynamicField(dfName);
             if (field) {
-                if (field.FieldType === DynamicFieldTypes.TEXT_AREA) {
-                    inputFieldType = InputFieldTypes.TEXT_AREA;
-                } else if (field.FieldType === DynamicFieldTypes.DATE) {
-                    inputFieldType = InputFieldTypes.DATE;
-                } else if (field.FieldType === DynamicFieldTypes.DATE_TIME) {
-                    inputFieldType = InputFieldTypes.DATE_TIME;
-                } else if (field.FieldType === DynamicFieldTypes.SELECTION) {
-                    inputFieldType = InputFieldTypes.DROPDOWN;
-                } else if (
-                    field.FieldType === DynamicFieldTypes.CI_REFERENCE ||
-                    field.FieldType === DynamicFieldTypes.TICKET_REFERENCE
-                ) {
-                    inputFieldType = InputFieldTypes.OBJECT_REFERENCE;
+                switch (field.FieldType) {
+                    case DynamicFieldTypes.TEXT_AREA:
+                        inputFieldType = InputFieldTypes.TEXT_AREA;
+                        break;
+                    case DynamicFieldTypes.DATE:
+                        inputFieldType = InputFieldTypes.DATE;
+                        break;
+                    case DynamicFieldTypes.DATE_TIME:
+                        inputFieldType = InputFieldTypes.DATE_TIME;
+                        break;
+                    case DynamicFieldTypes.SELECTION:
+                        inputFieldType = InputFieldTypes.DROPDOWN;
+                        break;
+                    case DynamicFieldTypes.CI_REFERENCE:
+                    case DynamicFieldTypes.TICKET_REFERENCE:
+                        inputFieldType = InputFieldTypes.OBJECT_REFERENCE;
+                        break;
+                    case DynamicFieldTypes.TABLE:
+                        inputFieldType = InputFieldTypes.TABLE;
+                        break;
+                    default: inputFieldType = InputFieldTypes.TEXT;
                 }
             }
         }
