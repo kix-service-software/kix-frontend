@@ -21,6 +21,7 @@ import { DisplayImageDescription } from '../../../../../base-components/webapp/c
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { IContextListener } from '../../../../../base-components/webapp/core/IContextListener';
 import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
+import { KIXModulesSocketClient } from '../../../../../base-components/webapp/core/KIXModulesSocketClient';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { LabelService } from '../../../../../base-components/webapp/core/LabelService';
 import { SysConfigOption } from '../../../../../sysconfig/model/SysConfigOption';
@@ -132,7 +133,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             }
         }
 
-        await this.prepareData();
+        await this.prepareActions();
+        this.prepareAttachments();
+        await this.prepareArticleData();
         this.state.loading = false;
         this.state.show = true;
     }
@@ -153,14 +156,29 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private async prepareData(): Promise<void> {
-        this.prepareAttachments();
+    private async prepareActions(): Promise<void> {
+        const actions = await this.context.getAdditionalActions(this.state.article) || [];
 
-        this.state.actions = await this.context.getAdditionalActions(this.state.article) || [];
-        this.state.actions.push(
-            ...await ActionFactory.getInstance().generateActions(['article-get-plain-action'], this.state.article)
-        );
+        const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+        if (!releaseInfo?.plugins?.some((p) => p.product === 'KIXPro')) {
+            const startActions = ['article-reply-action', 'article-forward-action'];
+            const actionInstance = await ActionFactory.getInstance().generateActions(startActions, this.state.article);
+            actions.push(...actionInstance);
+        }
 
+        const plainTextAction = await ActionFactory.getInstance().generateActions(['article-get-plain-action'], this.state.article);
+        actions.push(...plainTextAction);
+
+        const filteredActions = [];
+        for (const a of actions) {
+            if (await a.canShow()) {
+                filteredActions.push(a);
+            }
+        }
+        this.state.actions = filteredActions;
+    }
+
+    private async prepareArticleData(): Promise<void> {
         this.state.isExternal = this.state.article?.SenderType === 'external';
 
         const contact = await TicketService.getContactForArticle(this.state.article);
