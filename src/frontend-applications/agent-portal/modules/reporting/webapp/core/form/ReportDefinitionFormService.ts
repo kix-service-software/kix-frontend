@@ -10,7 +10,6 @@
 import { FormConfiguration } from '../../../../../model/configuration/FormConfiguration';
 import { FormContext } from '../../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
-import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
@@ -30,6 +29,7 @@ import { Role } from '../../../../user/model/Role';
 import { RoleProperty } from '../../../../user/model/RoleProperty';
 import { ReportDefinition } from '../../../model/ReportDefinition';
 import { ReportDefinitionProperty } from '../../../model/ReportDefinitionProperty';
+import { ReportParameterProperty } from '../../../model/ReportParameterProperty';
 import { ReportDefinitionFormCreator } from './ReportDefinitionFormCreator';
 import { ReportDefintionObjectCreator } from './ReportDefintionObjectCreator';
 
@@ -145,6 +145,10 @@ export class ReportDefinitionFormService extends KIXObjectFormService {
     ): Promise<FormFieldConfiguration> {
         withChildren = f.property === ReportDefinitionProperty.PARAMTER;
         const field = await super.getNewFormField(formInstance, f, parent, withChildren);
+
+        if (f.property === ReportParameterProperty.POSSIBLE_VALUES || f.property === ReportParameterProperty.DEFAULT) {
+            field.inputComponent = null;
+        }
 
         return field;
     }
