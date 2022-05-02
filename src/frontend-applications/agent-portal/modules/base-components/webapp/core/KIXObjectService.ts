@@ -574,7 +574,9 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 ), null, true
             ).catch(() => [] as DynamicField[]);
 
-            if (Array.isArray(dynamicFields) && dynamicFields.length) {
+            if (id && dynamicFields?.length) {
+                dynamicField = dynamicFields[0];
+            } else if (Array.isArray(dynamicFields) && dynamicFields.length) {
                 // use string, if name contains only numbers
                 dynamicField = dynamicFields.find((df) => df.Name.toString() === name.toString());
             }
