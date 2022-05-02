@@ -10,7 +10,9 @@
 import { IUIModule } from '../../../../model/IUIModule';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
 import { FormValidationService } from './FormValidationService';
+import { KIXObjectPlaceholderHandler } from './KIXObjectPlaceholderHandler';
 import { ObjectReferenceCountValidator } from './ObjectReferenceCountValidator';
+import { PlaceholderService } from './PlaceholderService';
 import { ResetUserContextWidgetListAction } from './ResetUserContextWidgetListAction';
 
 export class UIModule implements IUIModule {
@@ -26,6 +28,7 @@ export class UIModule implements IUIModule {
     public async register(): Promise<void> {
         ActionFactory.getInstance().registerAction('reset-user-context-widget-list', ResetUserContextWidgetListAction);
         FormValidationService.getInstance().registerValidator(new ObjectReferenceCountValidator());
+        PlaceholderService.getInstance().registerPlaceholderHandler(new KIXObjectPlaceholderHandler());
     }
 
 }

@@ -23,10 +23,6 @@ import { TableConfiguration } from '../../../../../model/configuration/TableConf
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
-import { TabContainerEvent } from '../../../../base-components/webapp/core/TabContainerEvent';
-import { TabContainerEventData } from '../../../../base-components/webapp/core/TabContainerEventData';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
@@ -75,11 +71,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (Array.isArray(loadedObjects) && loadedObjects.length && Array.isArray(loadedObjects[0].Links)) {
             linkObjects = await this.prepareLinkObjects(loadedObjects[0]);
         }
-
-        const title = await TranslationService.translate('Translatable#Linked Objects ({0})', [linkObjects.length]);
-        EventService.getInstance().publish(
-            TabContainerEvent.CHANGE_TITLE, new TabContainerEventData(this.state.instanceId, title)
-        );
 
         const tableConfiguration = new TableConfiguration(
             null, null, null, KIXObjectType.LINK_OBJECT, null, 25, null, [], false, false,
