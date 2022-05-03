@@ -404,7 +404,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         const linkedObjectsWidget = new WidgetConfiguration(
             'ticket-details-linked-objects-widget', 'linked objects', ConfigurationType.Widget,
-            'linked-objects-widget', 'Translatable#Linked Objects', [],
+            'linked-objects-widget', 'Translatable#Linked Objects (<KIX_OBJECT_LinkCount>)', [],
             new ConfigurationDefinition('ticket-details-linked-objects-config', ConfigurationType.LinkedObjects),
             null, false, false, null, false
         );

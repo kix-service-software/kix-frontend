@@ -85,7 +85,13 @@ export class TicketDetailsContext extends Context {
         await this.loadTicketHistory();
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, ['StateType', 'ObjectActions', KIXObjectProperty.DYNAMIC_FIELDS, TicketProperty.WATCHERS]
+            null, null, null,
+            [
+                'StateType', 'ObjectActions',
+                KIXObjectProperty.DYNAMIC_FIELDS,
+                TicketProperty.WATCHERS,
+                KIXObjectProperty.LINKS
+            ]
         );
 
         const ticket = this.loadDetailsObject<Ticket>(KIXObjectType.TICKET, loadingOptions);
