@@ -11,11 +11,13 @@ import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { IKIXObjectService } from '../../../../../modules/base-components/webapp/core/IKIXObjectService';
 import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
-import { AttachmentUtil } from '../../../../../modules/base-components/webapp/core/AttachmentUtil';
 import { AutocompleteFormFieldOption } from '../../../../../model/AutocompleteFormFieldOption';
 import { PlaceholderService } from '../../../../../modules/base-components/webapp/core/PlaceholderService';
 import { TextModule } from '../../../../textmodule/model/TextModule';
 import { BrowserUtil } from '../../core/BrowserUtil';
+import { KIXObjectService } from '../../core/KIXObjectService';
+import { SysConfigOption } from '../../../../sysconfig/model/SysConfigOption';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 declare let CKEDITOR: any;
 
@@ -114,6 +116,32 @@ class EditorComponent {
                 window.clearTimeout(this.createTimeout);
                 this.createTimeout = null;
             }
+
+            CKEDITOR.on('instanceCreated', async function () {
+                const options = await KIXObjectService.loadObjects<SysConfigOption>(
+                    KIXObjectType.SYS_CONFIG_OPTION, ['Frontend::RichText::DefaultCSS']
+                );
+
+                if (
+                    Array.isArray(options)
+                    && options.length
+                    && options[0].Value !== null
+                ) {
+                    let defaultCSS = '';
+                    for (const css of JSON.parse(options[0].Value)) {
+                        if (
+                            css?.Selector
+                            && css?.Value
+                        ) {
+                            defaultCSS += css.Selector + '{' + css.Value + '}';
+                        }
+                    }
+                    if (defaultCSS) {
+                        CKEDITOR.addCss(defaultCSS);
+                    }
+                }
+            });
+
             this.createTimeout = setTimeout(async () => {
                 if (!this.state.readOnly) {
                     const userLanguage = await TranslationService.getUserLanguage();
