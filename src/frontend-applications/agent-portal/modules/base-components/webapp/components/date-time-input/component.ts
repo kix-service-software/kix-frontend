@@ -14,8 +14,11 @@ import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOp
 import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
 import { ContextService } from '../../core/ContextService';
 import { InputFieldTypes } from '../../core/InputFieldTypes';
+import { TimeoutTimer } from '../../core/TimeoutTimer';
 
 class Component extends FormInputComponent<string | Date, ComponentState> {
+
+    private timoutTimer: TimeoutTimer = new TimeoutTimer();
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -75,6 +78,10 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
     }
 
     public dateChanged(event: any): void {
+        this.timoutTimer.restartTimer(() => this.setDateValue(event));
+    }
+
+    private setDateValue(event: any): void {
         if (event) {
             this.state.dateValue = event.target && event.target.value !== '' ? event.target.value : null;
             this.setValue();

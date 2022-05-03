@@ -15,11 +15,15 @@ import { SysConfigOption } from '../../../../sysconfig/model/SysConfigOption';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { SysConfigKey } from '../../../../sysconfig/model/SysConfigKey';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { TimeoutTimer } from '../../../../base-components/webapp/core/TimeoutTimer';
 
 class Component extends FormInputComponent<Date, ComponentState> {
 
+    private timoutTimer: TimeoutTimer = new TimeoutTimer();
+
     public onCreate(): void {
         this.state = new ComponentState();
+        // this.timoutTimer = new TimeoutTimer();
     }
 
     public onInput(input: any): void {
@@ -57,6 +61,10 @@ class Component extends FormInputComponent<Date, ComponentState> {
     }
 
     public dateChanged(event: any): void {
+        this.timoutTimer.restartTimer(() => this.setDateChanged(event));
+    }
+
+    private setDateChanged(event: any): void {
         this.state.selectedDate = event.target.value;
         this.setValue();
     }

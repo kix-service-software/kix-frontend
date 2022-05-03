@@ -14,6 +14,7 @@ import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { TreeNode } from '../../core/tree';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
+import { TimeoutTimer } from '../../core/TimeoutTimer';
 
 declare const JSONEditor: any;
 
@@ -27,6 +28,7 @@ class Component {
     private advancedOptionsMap: Map<string, boolean> = new Map();
     private optionEditor: Map<string, any> = new Map();
     private additionalOptionsTimeout: any;
+    private timoutTimer: TimeoutTimer = new TimeoutTimer();
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -166,7 +168,11 @@ class Component {
         this.provideValue(value);
     }
 
-    public setDateValue(value: DynamicFormFieldValue, event: any): void {
+    public dateValueChanged(value: DynamicFormFieldValue, event: any): void {
+        this.timoutTimer.restartTimer(() => this.setDateValue(value, event));
+    }
+
+    private setDateValue(value: DynamicFormFieldValue, event: any): void {
         const newValue = event.target.value;
         value.setDateValue(newValue);
         this.provideValue(value);

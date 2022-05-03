@@ -125,6 +125,7 @@
         "require ./StringContent",
         "require ./TabContainerEvent",
         "require ./TabContainerEventData",
+        "require ./TimeoutTimer",
         "require ./ToastContent",
         "require ./UIUtil",
         "require ./UpdateFormEvent",

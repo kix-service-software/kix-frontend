@@ -111,7 +111,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                     dynamicValue.readonly &&
                                     !dynamicValue.changeable
                                 )
-                                on-change("setDateValue", dynamicValue)/>
+                                on-change("dateValueChanged", dynamicValue)/>
                             <if(dynamicValue.isBetween)>
                                 <div.between-space>
                                     <translation-string pattern="Translatable#and"/>
@@ -137,7 +137,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                     dynamicValue.readonly &&
                                     !dynamicValue.changeable
                                 )
-                                on-change("setDateValue", dynamicValue)/>
+                                on-change("dateValueChanged", dynamicValue)/>
                             <input.input-style
                                 class={
                                     invalid: !dynamicValue.value.valid
