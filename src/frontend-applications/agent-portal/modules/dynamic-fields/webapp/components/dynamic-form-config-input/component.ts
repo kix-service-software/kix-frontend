@@ -87,9 +87,11 @@ class Component extends FormInputComponent<JSON, ComponentState> {
                         disable_array_reorder: true
                     });
 
-                    if (value) {
-                        this.editor.setValue(value);
-                    }
+                    this.editor.on('ready', () => {
+                        if (value) {
+                            this.editor.setValue(value);
+                        }
+                    });
 
                     this.editor.on('change', this.valueChanged.bind(this));
                 }
