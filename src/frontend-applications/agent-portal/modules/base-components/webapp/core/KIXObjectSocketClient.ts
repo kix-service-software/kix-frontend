@@ -259,14 +259,6 @@ export class KIXObjectSocketClient extends SocketClient {
             this.socket.on(SocketEvent.PERMISSION_ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestObject.requestId) {
                     window.clearTimeout(timeout);
-                    PortalNotificationService.getInstance().publishNotifications([
-                        new PortalNotification(
-                            IdService.generateDateBasedId('permission-error'), 'error',
-                            PortalNotificationType.IMPORTANT,
-                            'Permission Error', new Date().toLocaleString(), true, false,
-                            error.error, JSON.stringify(error)
-                        )
-                    ]);
                     console.error('No permissions');
                     console.error(error.error);
                     const permissionError = error.error as PermissionError;
