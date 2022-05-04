@@ -146,6 +146,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         return instances.length > 1 || !isHomeContext;
     }
 
+    public async closeTabWithMMB(tab: ContextTab, event: any): Promise<void> {
+        if (event.button !== 1) return;
+        await this.closeTab(tab, event);
+    }
+
     public async closeTab(tab: ContextTab, event: any): Promise<void> {
         event.stopPropagation();
         event.preventDefault();
