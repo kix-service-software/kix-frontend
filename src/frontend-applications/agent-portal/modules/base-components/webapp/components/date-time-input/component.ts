@@ -18,10 +18,11 @@ import { TimeoutTimer } from '../../core/TimeoutTimer';
 
 class Component extends FormInputComponent<string | Date, ComponentState> {
 
-    private timoutTimer: TimeoutTimer = new TimeoutTimer();
+    private timoutTimer: TimeoutTimer;
 
     public onCreate(): void {
         this.state = new ComponentState();
+        this.timoutTimer = new TimeoutTimer();
     }
 
     public onInput(input: any): void {
