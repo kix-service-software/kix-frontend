@@ -15,6 +15,8 @@ import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { User } from '../../user/model/User';
 import { Link } from '../../links/model/Link';
+import { ConfigItemProperty } from './ConfigItemProperty';
+import { FilterDataType } from '../../../model/FilterDataType';
 
 export class ConfigItem extends KIXObject {
 
@@ -136,4 +138,48 @@ export class ConfigItem extends KIXObject {
         }
         return preparedData;
     }
+
+    // TODO: allow all possible (in backend) sort attributes - managers should limit
+    public static SORT_PROPERTIES = [
+        {
+            Property: ConfigItemProperty.CONFIG_ITEM_ID,
+            DataType: FilterDataType.NUMERIC,
+        },
+        {
+            Property: ConfigItemProperty.NAME,
+            DataType: FilterDataType.STRING,
+        },
+        {
+            Property: ConfigItemProperty.NUMBER,
+            DataType: FilterDataType.STRING,
+        },
+        // {
+        //     Property: ConfigItemProperty.CLASS_ID,
+        //     DataType: FilterDataType.NUMERIC,
+        // },
+        // {
+        //     Property: VersionProperty.DEPL_STATE_ID,
+        //     DataType: FilterDataType.NUMERIC,
+        // },
+        // {
+        //     Property: VersionProperty.INCI_STATE_ID,
+        //     DataType: FilterDataType.NUMERIC,
+        // },
+        {
+            Property: ConfigItemProperty.CREATE_TIME,
+            DataType: FilterDataType.DATETIME,
+        },
+        // {
+        //     Property: ConfigItemProperty.CREATE_BY,
+        //     DataType: FilterDataType.NUMERIC,
+        // },
+        {
+            Property: ConfigItemProperty.CHANGE_TIME,
+            DataType: FilterDataType.DATETIME,
+        },
+        // {
+        //     Property: ConfigItemProperty.CHANGE_BY,
+        //     DataType: FilterDataType.NUMERIC,
+        // },
+    ];
 }

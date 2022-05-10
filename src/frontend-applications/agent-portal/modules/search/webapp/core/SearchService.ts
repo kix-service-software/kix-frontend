@@ -58,7 +58,6 @@ export class SearchService {
     private formSearches: Map<KIXObjectType | string, (formId: string) => Promise<any[]>> = new Map();
     private formTableConfigs: Map<KIXObjectType | string, Table> = new Map();
     private searchDefinitions: SearchDefinition[] = [];
-    private searchCategory: SearchResultCategory = null;
 
     public registerFormSearch<T extends KIXObject>(
         objectType: KIXObjectType | string,
@@ -123,7 +122,7 @@ export class SearchService {
             }
         });
 
-        const loadingOptions = searchDefinition.getLoadingOptions(criteria, null);
+        const loadingOptions = await searchDefinition.getLoadingOptions(criteria, null);
         const objects = await KIXObjectService.loadObjects(formObjectType, null, loadingOptions, null, false);
         return (objects as any);
     }
@@ -147,7 +146,9 @@ export class SearchService {
         let preparedCriteria = await searchDefinition.prepareFormFilterCriteria([...searchCache.criteria]);
         preparedCriteria = this.prepareCriteria(preparedCriteria);
 
-        const loadingOptions = searchDefinition.getLoadingOptions(preparedCriteria, searchCache.limit);
+        const loadingOptions = await searchDefinition.getLoadingOptions(
+            preparedCriteria, searchCache.limit, searchCache.sortAttribute, searchCache.sortDescanding
+        );
         const objects = await KIXObjectService.loadObjects(
             searchCache.objectType, null, loadingOptions, null, false
         );

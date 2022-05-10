@@ -81,8 +81,45 @@ export abstract class SearchDefinition {
         return [];
     }
 
-    public getLoadingOptions(criteria: FilterCriteria[], limit: number): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(criteria, null, limit);
+    public async getLoadingOptions(
+        criteria: FilterCriteria[], limit: number, sortAttribute?: string, sortDescanding?: boolean
+    ): Promise<KIXObjectLoadingOptions> {
+        const sortOrder = await this.getSortOrder(sortAttribute, sortDescanding);
+        return new KIXObjectLoadingOptions(criteria, sortOrder, limit);
+    }
+
+    private async getSortOrder(sortAttribute: string, sortDescanding: boolean): Promise<string> {
+        let sortOrder: string;
+        if (sortAttribute) {
+            let type = await (this.formManager as SearchFormManager).getSortAttributeType(sortAttribute);
+
+            if (!type) {
+                const dfName = KIXObjectService.getDynamicFieldName(sortAttribute);
+                if (dfName) {
+
+                    // DynamicFields.Name => DynamicField_Name
+                    sortAttribute = sortAttribute.replace(/s?\./, '_');
+                    const field = await KIXObjectService.loadDynamicField(dfName);
+                    if (field) {
+                        if (field.FieldType === DynamicFieldTypes.DATE) {
+                            type = FilterDataType.DATE;
+                        } else if (field.FieldType === DynamicFieldTypes.DATE_TIME) {
+                            type = FilterDataType.DATETIME;
+                        }
+                    }
+                }
+            }
+
+            if (type !== FilterDataType.NUMERIC &&
+                type !== FilterDataType.DATE &&
+                type !== FilterDataType.DATETIME) {
+                type = null;
+            }
+
+            // create some string like "Ticket.-Age:numeric"
+            sortOrder = `${this.objectType}.${sortDescanding ? '-' : ''}${sortAttribute}${type ? ':' + type : ''}`;
+        }
+        return sortOrder;
     }
 
     public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {

@@ -22,6 +22,8 @@ import { SearchContext } from '../../core';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { TreeHandler, TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
+import { SearchFormManager } from '../../../../base-components/webapp/core/SearchFormManager';
 
 class Component {
 
@@ -36,6 +38,8 @@ class Component {
     private keyListener: any;
 
     private valueChangedTimeout: any;
+
+    private sortAttributeTreeHandler: TreeHandler;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -58,6 +62,7 @@ class Component {
                 if (data.instanceId === this.contextInstanceId) {
                     if (eventId === SearchEvent.SEARCH_DELETED || eventId === SearchEvent.SEARCH_CACHE_CHANGED) {
                         this.initManager();
+                        this.initSort();
                     }
                     this.setTitle();
                 }
@@ -79,9 +84,10 @@ class Component {
         const searchDefinition = SearchService.getInstance().getSearchDefinition(
             context.descriptor.kixObjectTypes[0]
         );
-        this.state.manager = searchDefinition?.formManager;
+        this.state.manager = (searchDefinition?.formManager as SearchFormManager);
         this.setTitle();
         this.initManager();
+        this.initSort();
 
         this.managerListenerId = IdService.generateDateBasedId('search-criteria-widget');
         this.state.manager?.registerListener(this.managerListenerId, async () => {
@@ -113,6 +119,10 @@ class Component {
         if (this.keyListenerElement) {
             this.keyListenerElement.removeEventListener('keydown', this.keyListener);
         }
+
+        if (this.sortAttributeTreeHandler && this.state.sortTreeId) {
+            TreeService.getInstance().removeTreeHandler(this.state.sortTreeId);
+        }
     }
 
     private async initManager(): Promise<void> {
@@ -139,6 +149,34 @@ class Component {
         }
     }
 
+    private async initSort(): Promise<void> {
+        const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
+        const cache = context?.getSearchCache();
+
+        this.state.sortAttribute = cache?.sortAttribute;
+        this.state.sortDescanding = cache?.sortDescanding;
+
+        let sortAttributeNodes = [];
+        if (this.state.manager) {
+            sortAttributeNodes = await this.state.manager.getSortAttributeTree();
+        }
+
+        if (Array.isArray(sortAttributeNodes) && sortAttributeNodes.length) {
+            if (!this.sortAttributeTreeHandler) {
+                this.state.sortTreeId = IdService.generateDateBasedId('search-sort-attribute-');
+                this.sortAttributeTreeHandler = new TreeHandler(null, null, null, false);
+                TreeService.getInstance().registerTreeHandler(this.state.sortTreeId, this.sortAttributeTreeHandler);
+            }
+            this.sortAttributeTreeHandler.setTree(sortAttributeNodes);
+            if (this.state.sortAttribute) {
+                const node = sortAttributeNodes.find((n) => n.id === this.state.sortAttribute);
+                if (node) {
+                    this.sortAttributeTreeHandler.setSelection([node], true, true, true);
+                }
+            }
+        }
+    }
+
     private async prepareActions(): Promise<void> {
         this.state.contentActions = await ActionFactory.getInstance().generateActions(
             ['save-search-action', 'delete-search-action']
@@ -159,6 +197,24 @@ class Component {
         const searchCache = context?.getSearchCache();
         if (searchCache) {
             searchCache.limit = this.state.limit;
+        }
+    }
+
+    public sortAttributeChanged(nodes: TreeNode[]): void {
+        this.state.sortAttribute = nodes.length ? nodes[0].id : null;
+        const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
+        const searchCache = context?.getSearchCache();
+        if (searchCache) {
+            searchCache.sortAttribute = this.state.sortAttribute;
+        }
+    }
+
+    public sortDescandingChanged(event: any): void {
+        this.state.sortDescanding = event.target.checked;
+        const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
+        const searchCache = context?.getSearchCache();
+        if (searchCache) {
+            searchCache.sortDescanding = this.state.sortDescanding;
         }
     }
 

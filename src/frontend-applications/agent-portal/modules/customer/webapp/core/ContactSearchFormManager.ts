@@ -165,4 +165,9 @@ export class ContactSearchFormManager extends SearchFormManager {
         }
         return nodes;
     }
+
+    public async getSortAttributeTree(): Promise<TreeNode[]> {
+        // TODO: currently not supported
+        return;
+    }
 }

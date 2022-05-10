@@ -28,10 +28,13 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
         this.formManager = new FAQArticleSearchFormManager();
     }
 
-    public getLoadingOptions(criteria: FilterCriteria[], limit: number): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(
-            criteria, null, limit, [KIXObjectProperty.LINKS, FAQArticleProperty.VOTES], [KIXObjectProperty.LINKS]
-        );
+    public async getLoadingOptions(
+        criteria: FilterCriteria[], limit: number, sortAttribute?: string, sortDescanding?: boolean
+    ): Promise<KIXObjectLoadingOptions> {
+        const loadingOptions = await super.getLoadingOptions(criteria, limit, sortAttribute, sortDescanding);
+        loadingOptions.includes = [KIXObjectProperty.LINKS, FAQArticleProperty.VOTES];
+        loadingOptions.expands = [KIXObjectProperty.LINKS];
+        return loadingOptions;
     }
 
     public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {

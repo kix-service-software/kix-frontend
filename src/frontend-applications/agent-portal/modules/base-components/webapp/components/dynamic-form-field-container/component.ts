@@ -32,6 +32,7 @@ class Component {
 
     public onCreate(): void {
         this.state = new ComponentState();
+        this.timoutTimer = new TimeoutTimer();
     }
 
     public onInput(input: any): void {
