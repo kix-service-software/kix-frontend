@@ -7,23 +7,23 @@
  * --
  */
 
-import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ComponentState } from './ComponentState';
 import { Context } from '../../../../../model/Context';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { Article } from '../../../model/Article';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { AgentService } from '../../../../user/webapp/core/AgentService';
-import { PersonalSettingsProperty } from '../../../../user/model/PersonalSettingsProperty';
-import { SortUtil } from '../../../../../model/SortUtil';
-import { ArticleProperty } from '../../../model/ArticleProperty';
 import { DataType } from '../../../../../model/DataType';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { SortOrder } from '../../../../../model/SortOrder';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { SortUtil } from '../../../../../model/SortUtil';
+import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
+import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { PersonalSettingsProperty } from '../../../../user/model/PersonalSettingsProperty';
+import { AgentService } from '../../../../user/webapp/core/AgentService';
+import { Article } from '../../../model/Article';
+import { ArticleProperty } from '../../../model/ArticleProperty';
 import { TicketService } from '../../core';
+import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -43,14 +43,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
         this.context.registerListener('communication-widget', {
-            filteredObjectListChanged: (objectType: KIXObjectType) => {
+            filteredObjectListChanged: async (objectType: KIXObjectType) => {
                 if (objectType === KIXObjectType.ARTICLE) {
-                    this.setFilteredArticles();
+                    await this.setFilteredArticles();
                 }
             },
-            objectListChanged: (objectType: KIXObjectType) => {
+            objectListChanged: async (objectType: KIXObjectType) => {
                 if (objectType === KIXObjectType.ARTICLE) {
-                    this.setArticles();
+                    await this.setArticles();
                 }
             },
             additionalInformationChanged: () => null,
@@ -65,10 +65,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             (p) => p.ID === PersonalSettingsProperty.ARTICLE_SORT_ORDER
         ) : null;
         this.sortOrder = preference?.Value;
+
+        this.state.translations = await TranslationService.createTranslationObject(['Translatable#Go to top']);
     }
 
     private async setArticles(): Promise<void> {
-        this.setFilteredArticles();
+        await this.setFilteredArticles();
 
         // enable read action
         const allArticles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || [];
@@ -86,11 +88,19 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             [...articles], ArticleProperty.INCOMING_TIME, DataType.INTEGER, sortOrder
         );
 
+        this.state.articles.forEach((a, index) => {
+                a.countNumber = sortOrder === SortOrder.DOWN ? index + 1 : articles.length - index;
+            }
+        );
+
+        (this as any).setStateDirty('articles');
+
         // change widget title
         const allArticles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || [];
-        const articleLengthText = (articles?.length < allArticles?.length ? articles.length + '/' : '') + allArticles?.length;
+        const articleLengthText = (articles?.length < allArticles?.length ? articles.length + '/' : '') +
+            allArticles?.length;
         const title = await TranslationService.translate(this.state.widgetConfiguration?.title);
-        this.state.widgetTitle = `${title} (${articleLengthText})`;
+        this.state.widgetTitle = `${ title } (${ articleLengthText })`;
     }
 
     public onDestroy(): void {
@@ -100,7 +110,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public async readAll(): Promise<void> {
         if (this.state.activeUnreadAction && this.context.getObjectId()) {
             EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Loading ...' }
+                ApplicationEvent.APP_LOADING, {loading: true, hint: 'Translatable#Loading ...'}
             );
 
             await TicketService.getInstance().markTicketAsSeen(Number(this.context.getObjectId()));
@@ -111,7 +121,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
             setTimeout(() => {
                 EventService.getInstance().publish(
-                    ApplicationEvent.APP_LOADING, { loading: false, hint: '' }
+                    ApplicationEvent.APP_LOADING, {loading: false, hint: ''}
                 );
                 BrowserUtil.openSuccessOverlay('Translatable#Marked all articles as read.');
             }, 50);
