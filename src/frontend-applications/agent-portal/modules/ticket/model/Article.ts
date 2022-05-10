@@ -88,6 +88,7 @@ export class Article extends KIXObject {
     public ccList: ArticleReceiver[] = [];
     public bccList: ArticleReceiver[] = [];
     public bodyAttachment: Attachment = null;
+    public countNumber: number = 0;
 
     public constructor(article?: Article) {
         super(article);

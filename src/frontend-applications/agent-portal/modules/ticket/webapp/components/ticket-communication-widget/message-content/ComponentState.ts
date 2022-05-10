@@ -19,6 +19,7 @@ export class ComponentState extends AbstractComponentState {
     public constructor(
         public title: string = 'message-content Component',
         public article: Article = null,
+        public articleCountNumber: number = 0,
         public expanded: boolean = false,
         public actions: AbstractAction[] = [],
         public isExternal: boolean = false,

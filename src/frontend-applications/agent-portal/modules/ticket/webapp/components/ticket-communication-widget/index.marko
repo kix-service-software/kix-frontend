@@ -26,10 +26,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                <for|article| of=state.articles>
                   <message-content
                      article=article
+                     articleCountNumber=article.countNumber
                      key="article-" + article.ArticleID
                   />
                </for>
             </if>
+            <a href="#pageTop" class="top" title=state.translations["Translatable#Go to top"]>
+               <i.fa.fa-arrow-up.move-up />
+            </a>
          </div>
       </div>
    </@content>
