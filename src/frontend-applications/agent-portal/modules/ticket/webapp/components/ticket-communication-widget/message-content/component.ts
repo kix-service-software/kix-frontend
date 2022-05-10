@@ -48,7 +48,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         this.article = input.article;
-        this.state.articleCountNumber = input.article.countNumber;
 
         // on update, some article was already loaded
         if (this.state.article && this.state.article.ArticleID !== this.article.ArticleID) {
@@ -220,10 +219,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.backgroundColor = '#fff';
             }
 
-            if (this.state.articleCountNumber) {
-                this.state.article.countNumber = this.state.articleCountNumber;
-                (this as any).setStateDirty('article');
-            }
         }
 
         this.eventSubscriber = {

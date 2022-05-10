@@ -7,23 +7,23 @@
  * --
  */
 
-import { Context } from '../../../../../model/Context';
-import { DataType } from '../../../../../model/DataType';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { SortOrder } from '../../../../../model/SortOrder';
-import { SortUtil } from '../../../../../model/SortUtil';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
-import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
-import { PersonalSettingsProperty } from '../../../../user/model/PersonalSettingsProperty';
-import { AgentService } from '../../../../user/webapp/core/AgentService';
-import { Article } from '../../../model/Article';
-import { ArticleProperty } from '../../../model/ArticleProperty';
-import { TicketService } from '../../core';
 import { ComponentState } from './ComponentState';
+import { Context } from '../../../../../model/Context';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { Article } from '../../../model/Article';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { AgentService } from '../../../../user/webapp/core/AgentService';
+import { PersonalSettingsProperty } from '../../../../user/model/PersonalSettingsProperty';
+import { SortUtil } from '../../../../../model/SortUtil';
+import { ArticleProperty } from '../../../model/ArticleProperty';
+import { DataType } from '../../../../../model/DataType';
+import { SortOrder } from '../../../../../model/SortOrder';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { TicketService } from '../../core';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -43,14 +43,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
 
         this.context.registerListener('communication-widget', {
-            filteredObjectListChanged: async (objectType: KIXObjectType) => {
+            filteredObjectListChanged: (objectType: KIXObjectType) => {
                 if (objectType === KIXObjectType.ARTICLE) {
-                    await this.setFilteredArticles();
+                    this.setFilteredArticles();
                 }
             },
-            objectListChanged: async (objectType: KIXObjectType) => {
+            objectListChanged: (objectType: KIXObjectType) => {
                 if (objectType === KIXObjectType.ARTICLE) {
-                    await this.setArticles();
+                    this.setArticles();
                 }
             },
             additionalInformationChanged: () => null,
@@ -70,7 +70,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async setArticles(): Promise<void> {
-        await this.setFilteredArticles();
+        this.setFilteredArticles();
 
         // enable read action
         const allArticles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || [];
@@ -80,25 +80,26 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async setFilteredArticles(): Promise<void> {
-        const articles = this.context.getFilteredObjectList<Article>(KIXObjectType.ARTICLE) || [];
+        const filteredArticles = this.context.getFilteredObjectList<Article>(KIXObjectType.ARTICLE) || [];
 
         const sortOrder = this.sortOrder === 'newest' ? SortOrder.DOWN : SortOrder.UP;
 
-        this.state.articles = SortUtil.sortObjects(
-            [...articles], ArticleProperty.INCOMING_TIME, DataType.INTEGER, sortOrder
+        let allArticles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || [];
+
+        allArticles = SortUtil.sortObjects(
+            [...allArticles], ArticleProperty.INCOMING_TIME, DataType.INTEGER, sortOrder
         );
 
-        this.state.articles.forEach((a, index) => {
-                a.countNumber = sortOrder === SortOrder.DOWN ? index + 1 : articles.length - index;
+        allArticles.forEach((a, index) => {
+                a['countNumber'] = sortOrder === SortOrder.UP ? index + 1 : allArticles.length - index;
             }
         );
 
-        (this as any).setStateDirty('articles');
+        this.state.articles = allArticles.filter((a) => filteredArticles.find((fa) => a.ArticleID === fa.ArticleID));
 
         // change widget title
-        const allArticles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || [];
-        const articleLengthText = (articles?.length < allArticles?.length ? articles.length + '/' : '') +
-            allArticles?.length;
+        const articleLengthText = (filteredArticles?.length < allArticles?.length ? filteredArticles.length +
+            '/' : '') + allArticles?.length;
         const title = await TranslationService.translate(this.state.widgetConfiguration?.title);
         this.state.widgetTitle = `${ title } (${ articleLengthText })`;
     }
