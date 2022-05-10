@@ -28,7 +28,7 @@ class Component {
     private advancedOptionsMap: Map<string, boolean> = new Map();
     private optionEditor: Map<string, any> = new Map();
     private additionalOptionsTimeout: any;
-    private timoutTimer: TimeoutTimer = new TimeoutTimer();
+    private timoutTimer: TimeoutTimer;
 
     public onCreate(): void {
         this.state = new ComponentState();
