@@ -10,7 +10,7 @@
 import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
 import { Label } from '../../../../../modules/base-components/webapp/core/Label';
 import { IAction } from '../../../../../modules/base-components/webapp/core/IAction';
-import { AbstractDynamicFormManager } from '../../../../base-components/webapp/core/dynamic-form';
+import { SearchFormManager } from '../../../../base-components/webapp/core/SearchFormManager';
 
 export class ComponentState extends AbstractComponentState {
 
@@ -19,9 +19,12 @@ export class ComponentState extends AbstractComponentState {
         public displayCriteria: Array<[string, string, Label[]]> = [],
         public title: string = null,
         public contentActions: IAction[] = [],
-        public manager: AbstractDynamicFormManager = null,
+        public manager: SearchFormManager = null,
         public canSearch: boolean = false,
-        public limit: number = 50
+        public limit: number = 50,
+        public sortAttribute: string = null,
+        public sortDescanding: boolean = false,
+        public sortTreeId: string = null
     ) {
         super();
     }

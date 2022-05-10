@@ -41,8 +41,12 @@ export class ContactSearchDefinition extends SearchDefinition {
         return formManager;
     }
 
-    public getLoadingOptions(criteria: FilterCriteria[], limit: number): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(criteria, null, limit, ['Tickets'], null);
+    public async getLoadingOptions(
+        criteria: FilterCriteria[], limit: number, sortAttribute?: string, sortDescanding?: boolean
+    ): Promise<KIXObjectLoadingOptions> {
+        const loadingOptions = await super.getLoadingOptions(criteria, limit, sortAttribute, sortDescanding);
+        loadingOptions.includes = ['Tickets'];
+        return loadingOptions;
     }
 
     public async getSearchResultCategories(): Promise<SearchResultCategory[]> {

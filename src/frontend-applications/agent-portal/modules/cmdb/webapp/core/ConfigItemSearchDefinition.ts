@@ -45,19 +45,26 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         return new ConfigItemSearchFormManager(ignoreProperties);
     }
 
-    public getLoadingOptions(criteria: FilterCriteria[], limit: number): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(
-            criteria, null, limit,
-            [VersionProperty.DATA, VersionProperty.PREPARED_DATA, 'Links', ConfigItemProperty.CURRENT_VERSION],
-            [VersionProperty.DATA, VersionProperty.PREPARED_DATA, 'Links']
-        );
+    public async getLoadingOptions(
+        criteria: FilterCriteria[], limit: number, sortAttribute?: string, sortDescanding?: boolean
+    ): Promise<KIXObjectLoadingOptions> {
+        const loadingOptions = await super.getLoadingOptions(criteria, limit, sortAttribute, sortDescanding);
+        loadingOptions.includes = [
+            VersionProperty.DATA, VersionProperty.PREPARED_DATA,
+            KIXObjectProperty.LINKS, ConfigItemProperty.CURRENT_VERSION
+        ];
+        loadingOptions.expands = [VersionProperty.DATA, VersionProperty.PREPARED_DATA, KIXObjectProperty.LINKS];
+        return loadingOptions;
     }
 
     public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {
         return new KIXObjectLoadingOptions(
             null, null, null,
-            [VersionProperty.DATA, VersionProperty.PREPARED_DATA, 'Links', ConfigItemProperty.CURRENT_VERSION],
-            [VersionProperty.DATA, VersionProperty.PREPARED_DATA, 'Links']
+            [
+                VersionProperty.DATA, VersionProperty.PREPARED_DATA,
+                KIXObjectProperty.LINKS, ConfigItemProperty.CURRENT_VERSION
+            ],
+            [VersionProperty.DATA, VersionProperty.PREPARED_DATA, KIXObjectProperty.LINKS]
         );
     }
 
