@@ -24,11 +24,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public onInput(input: any): void {
         const cell = input.cell;
         if (cell) {
-            this.setLabels(cell);
+            this.setLabels(cell, input.sort);
         }
     }
 
-    private setLabels(cell: Cell): void {
+    private setLabels(cell: Cell, sort: boolean = true): void {
         let values = [];
         let icons: Array<string | ObjectIcon> = [];
         const value = cell.getValue();
@@ -44,14 +44,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             icons = value.displayIcons ? value.displayIcons : [];
         }
 
-        this.state.cellLabels = SortUtil.sortObjects(
-            values.map((v, index) => new Label(
-                null, v,
-                icons[index] ? icons[index] : null,
-                v, null, v, false
-            )),
-            'text', DataType.STRING
-        );
+        values = values.map((v, index) => new Label(
+            null, v,
+            icons[index] ? icons[index] : null,
+            v, null, v, false
+        ));
+        if (sort) {
+            values = SortUtil.sortObjects(values, 'text', DataType.STRING);
+        }
+        this.state.cellLabels = values;
     }
 
 }

@@ -9,9 +9,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <if(state.cell)>
     <if(state.isLabelCell)>
-        <label-list-cell-content cell=state.cell/>
+        <label-list-cell-content cell=state.cell sort=state.doLabelSort/>
     </if>
-    <else>
-        <default-cell-content cell=state.cell/>
-    </else>
+    <else><default-cell-content cell=state.cell/></else>
 </if>

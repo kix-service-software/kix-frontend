@@ -227,6 +227,7 @@ export class Ticket extends KIXObject {
         SearchOperator.BETWEEN,
         SearchOperator.WITHIN_THE_LAST,
         SearchOperator.WITHIN_THE_NEXT,
+        SearchOperator.WITHIN,
         SearchOperator.MORE_THAN_AGO,
         SearchOperator.IN_MORE_THAN,
         SearchOperator.LESS_THAN_AGO,

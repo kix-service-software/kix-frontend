@@ -248,7 +248,13 @@ export class SearchService {
         criteria.forEach((c) => {
             switch (c.operator) {
                 case SearchOperator.BETWEEN:
-                    if (c.value) {
+                    if (Array.isArray(c.value) && c.value[0] && c.value[1]) {
+                        // switch if necessary
+                        if (SortUtil.compareDate(c.value[0].toString(), c.value[1].toString()) > 0) {
+                            const oldStartDate = c.value[0];
+                            c.value[0] = c.value[1];
+                            c.value[1] = oldStartDate;
+                        }
                         prepareCriteria.push(new FilterCriteria(
                             c.property, SearchOperator.GREATER_THAN_OR_EQUAL, c.type, c.filterType, c.value[0]
                         ));
@@ -257,11 +263,74 @@ export class SearchService {
                         ));
                     }
                     break;
+                case SearchOperator.WITHIN:
+                    if (
+                        Array.isArray(c.value) &&
+                        c.value[0] && c.value[1] && c.value[2] && c.value[3] && c.value[4] && c.value[5] &&
+                        !isNaN(Number(c.value[1])) && !isNaN(Number(c.value[4]))
+                    ) {
+                        // switch if necessary
+                        let switchWithin = false;
+                        if (c.value[0] !== c.value[3]) {
+                            switchWithin = c.value[3] === '-';
+                        } else if (
+                            (
+                                c.value[0] === '+' &&
+                                this.getSeconds(Number(c.value[1]), c.value[2].toString()) >
+                                this.getSeconds(Number(c.value[4]), c.value[5].toString())
+                            ) || (
+                                c.value[0] === '-' &&
+                                this.getSeconds(Number(c.value[1]), c.value[2].toString()) <
+                                this.getSeconds(Number(c.value[4]), c.value[5].toString())
+                            )
+                        ) {
+                            switchWithin = true;
+                        }
+                        if (switchWithin) {
+                            const oldStartType = c.value[0];
+                            const oldStartValue = c.value[1];
+                            const oldStartUnit = c.value[2];
+                            c.value[0] = c.value[3];
+                            c.value[1] = c.value[4];
+                            c.value[2] = c.value[5];
+                            c.value[3] = oldStartType;
+                            c.value[4] = oldStartValue;
+                            c.value[5] = oldStartUnit;
+                        }
+                        prepareCriteria.push(new FilterCriteria(
+                            c.property, SearchOperator.GREATER_THAN_OR_EQUAL, c.type, c.filterType,
+                            `${c.value[0]}${c.value[1]}${c.value[2]}`
+                        ));
+                        prepareCriteria.push(new FilterCriteria(
+                            c.property, SearchOperator.LESS_THAN_OR_EQUAL, c.type, c.filterType,
+                            `${c.value[3]}${c.value[4]}${c.value[5]}`
+                        ));
+                    }
+                    break;
                 default:
                     prepareCriteria.push(c);
             }
         });
         return prepareCriteria;
+    }
+
+    private getSeconds(value: number, unit: string): number {
+        switch (unit) {
+            case 'm':
+                return value * 60;
+            case 'h':
+                return value * 60 * 60;
+            case 'd':
+                return value * 60 * 60 * 24;
+            case 'w':
+                return value * 60 * 60 * 24 * 7;
+            case 'M':
+                return value * 60 * 60 * 24 * 30;
+            case 'Y':
+                return value * 60 * 60 * 24 * 365;
+            default:
+                return value;
+        }
     }
 
     public async getSearchBookmarks(publish?: boolean): Promise<Bookmark[]> {

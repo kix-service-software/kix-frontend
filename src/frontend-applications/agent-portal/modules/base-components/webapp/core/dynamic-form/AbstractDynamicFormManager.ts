@@ -236,6 +236,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         }
 
         await this.checkProperties();
+        // TODO: do something with validate results
         await this.validate();
         this.notifyListeners();
     }
@@ -416,6 +417,34 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
                     if (result) {
                         fullResult.push(...result);
                     }
+                }
+            }
+            if (value.operator === SearchOperator.WITHIN && Array.isArray(value.value)) {
+                value.valid = true;
+                const missingMapping = [
+                    'Translatable#Type of first value is missing.',
+                    'Translatable#First number value is missing.',
+                    'Translatable#Unit of first value is missing.',
+                    'Translatable#Type of second value is missing.',
+                    'Translatable#Second number value is missing.',
+                    'Translatable#Unit of second value is missing.',
+                ];
+                for (let i = 0; i < 6; i++) {
+                    if (!value.value[i]) {
+                        fullResult.push(new ValidationResult(
+                            ValidationSeverity.ERROR, missingMapping[i]
+                        ));
+                    }
+                }
+                if (value.value[1] && !value.value[1].match(/^\d+$/)) {
+                    fullResult.push(new ValidationResult(
+                        ValidationSeverity.ERROR, 'Translatable#First number value is not an integer.'
+                    ));
+                }
+                if (value.value[4] && !value.value[4].match(/^\d+$/)) {
+                    fullResult.push(new ValidationResult(
+                        ValidationSeverity.ERROR, 'Translatable#Second number value is not an integer.'
+                    ));
                 }
             }
         }

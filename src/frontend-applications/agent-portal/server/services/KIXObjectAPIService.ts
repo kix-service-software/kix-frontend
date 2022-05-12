@@ -33,7 +33,7 @@ import { ExtendedKIXObjectAPIService } from './ExtendedKIXObjectAPIService';
 import { CacheService } from './cache';
 import { SearchProperty } from '../../modules/search/model/SearchProperty';
 import { SearchOperator } from '../../modules/search/model/SearchOperator';
-import { KIXObjectInitializer } from './KIXObjectInitializer';
+import { SortUtil } from '../../model/SortUtil';
 
 export abstract class KIXObjectAPIService implements IKIXObjectService {
 
@@ -473,7 +473,13 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                 c.property = c.property.replace(KIXObjectProperty.DYNAMIC_FIELDS + '.', 'DynamicField_');
                 switch (c.operator) {
                     case SearchOperator.BETWEEN:
-                        if (c.value) {
+                        if (Array.isArray(c.value) && c.value[0] && c.value[1]) {
+                            // switch if necessary
+                            if (SortUtil.compareDate(c.value[0].toString(), c.value[1].toString()) > 0) {
+                                const oldStartDate = c.value[0];
+                                c.value[0] = c.value[1];
+                                c.value[1] = oldStartDate;
+                            }
                             prepareCriteria.push(new FilterCriteria(
                                 c.property, SearchOperator.GREATER_THAN_OR_EQUAL, c.type, c.filterType, c.value[0]
                             ));
@@ -502,6 +508,68 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                                 c.property, SearchOperator.LESS_THAN_OR_EQUAL, c.type, c.filterType, '+' +
                                 c.value[0] + c.value[1]
                             ));
+                        }
+                        break;
+                    case SearchOperator.WITHIN:
+                        if (Array.isArray(c.value)) {
+                            if (c.value.length === 2) {
+                                const preparedValues = [];
+                                const partsFrom = c.value[0].toString().split(/(\d+)/);
+                                if (partsFrom.length === 3) {
+                                    preparedValues[0] = partsFrom[0];
+                                    preparedValues[1] = partsFrom[1];
+                                    preparedValues[2] = partsFrom[2];
+                                }
+                                const partsTo = c.value[1].toString().split(/(\d+)/);
+                                if (partsTo.length === 3) {
+                                    preparedValues[3] = partsTo[0];
+                                    preparedValues[4] = partsTo[1];
+                                    preparedValues[5] = partsTo[2];
+                                }
+                                c.value = preparedValues;
+                            }
+                            if (
+                                c.value.length === 6 &&
+                                c.value[0] && c.value[1] && c.value[2] && c.value[3] && c.value[4] && c.value[5] &&
+                                !isNaN(Number(c.value[1])) && !isNaN(Number(c.value[4]))
+                            ) {
+                                // switch if necessary
+                                let switchWithin = false;
+                                if (c.value[0] !== c.value[3]) {
+                                    switchWithin = c.value[3] === '-';
+                                } else if (
+                                    (
+                                        c.value[0] === '+' &&
+                                        this.getSeconds(Number(c.value[1]), c.value[2].toString()) >
+                                        this.getSeconds(Number(c.value[4]), c.value[5].toString())
+                                    ) || (
+                                        c.value[0] === '-' &&
+                                        this.getSeconds(Number(c.value[1]), c.value[2].toString()) <
+                                        this.getSeconds(Number(c.value[4]), c.value[5].toString())
+                                    )
+                                ) {
+                                    switchWithin = true;
+                                }
+                                if (switchWithin) {
+                                    const oldStartType = c.value[0];
+                                    const oldStartValue = c.value[1];
+                                    const oldStartUnit = c.value[2];
+                                    c.value[0] = c.value[3];
+                                    c.value[1] = c.value[4];
+                                    c.value[2] = c.value[5];
+                                    c.value[3] = oldStartType;
+                                    c.value[4] = oldStartValue;
+                                    c.value[5] = oldStartUnit;
+                                }
+                                prepareCriteria.push(new FilterCriteria(
+                                    c.property, SearchOperator.GREATER_THAN_OR_EQUAL, c.type, c.filterType,
+                                    `${c.value[0]}${c.value[1]}${c.value[2]}`
+                                ));
+                                prepareCriteria.push(new FilterCriteria(
+                                    c.property, SearchOperator.LESS_THAN_OR_EQUAL, c.type, c.filterType,
+                                    `${c.value[3]}${c.value[4]}${c.value[5]}`
+                                ));
+                            }
                         }
                         break;
                     case SearchOperator.LESS_THAN_AGO:
@@ -559,6 +627,25 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         }
 
         return objectFilter;
+    }
+
+    private getSeconds(value: number, unit: string): number {
+        switch (unit) {
+            case 'm':
+                return value * 60;
+            case 'h':
+                return value * 60 * 60;
+            case 'd':
+                return value * 60 * 60 * 24;
+            case 'w':
+                return value * 60 * 60 * 24 * 7;
+            case 'M':
+                return value * 60 * 60 * 24 * 30;
+            case 'Y':
+                return value * 60 * 60 * 24 * 365;
+            default:
+                return value;
+        }
     }
 
     public static getDynamicFieldName(property: string): string {

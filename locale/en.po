@@ -4048,6 +4048,12 @@ msgstr ""
 msgid "Search error!"
 msgstr ""
 
+msgid "SEARCH_OPERATOR_WITHIN_LAST"
+msgstr "the last"
+
+msgid "SEARCH_OPERATOR_WITHIN_NEXT"
+msgstr "the next"
+
 msgid "Search Results"
 msgstr ""
 

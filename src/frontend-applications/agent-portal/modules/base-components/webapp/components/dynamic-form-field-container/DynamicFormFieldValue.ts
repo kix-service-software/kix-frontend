@@ -52,6 +52,8 @@ export class DynamicFormFieldValue {
     public isBetween: boolean = false;
     public isTable: boolean = false;
 
+    public isWithin: boolean = false;
+
     public label: string = '';
 
     public autoCompleteConfiguration: AutoCompleteConfiguration;
@@ -62,6 +64,11 @@ export class DynamicFormFieldValue {
     private valueTreeHandler: TreeHandler;
     private relativeTimeUnitTreeHandler: TreeHandler;
 
+    private withinStartTypeTreeHandler: TreeHandler;
+    private withinEndTypeTreeHandler: TreeHandler;
+    private withinStartUnitTreeHandler: TreeHandler;
+    private withinEndUnitTreeHandler: TreeHandler;
+
     private date: string;
     private time: string;
 
@@ -70,6 +77,14 @@ export class DynamicFormFieldValue {
 
     private relativeTimeValue: string;
     private relativeTimeUnit: string;
+
+    private withinStartType: string;
+    private withinStartValue: string;
+    private withinStartUnit: string;
+
+    private withinEndType: string;
+    private withinEndValue: string;
+    private withinEndUnit: string;
 
     private numberValue: string;
     private betweenEndNumberValue: string;
@@ -99,6 +114,15 @@ export class DynamicFormFieldValue {
         this.relativeTimeUnitTreeHandler = new TreeHandler([], null, null, false);
         TreeService.getInstance().registerTreeHandler('relativeTimeUnit-' + this.id, this.relativeTimeUnitTreeHandler);
 
+        this.withinStartTypeTreeHandler = new TreeHandler([], null, null, false);
+        TreeService.getInstance().registerTreeHandler('withinStartType-' + this.id, this.withinStartTypeTreeHandler);
+        this.withinStartUnitTreeHandler = new TreeHandler([], null, null, false);
+        TreeService.getInstance().registerTreeHandler('withinStartUnit-' + this.id, this.withinStartUnitTreeHandler);
+        this.withinEndTypeTreeHandler = new TreeHandler([], null, null, false);
+        TreeService.getInstance().registerTreeHandler('withinEndType-' + this.id, this.withinEndTypeTreeHandler);
+        this.withinEndUnitTreeHandler = new TreeHandler([], null, null, false);
+        TreeService.getInstance().registerTreeHandler('withinEndUnit-' + this.id, this.withinEndUnitTreeHandler);
+
         this.autoCompleteCallback = this.doAutocompleteSearch.bind(this);
     }
 
@@ -106,6 +130,9 @@ export class DynamicFormFieldValue {
         await this.setProperty(this.value.property, false, true);
         await this.setOperator(this.value.operator);
         await this.setCurrentValue(undefined, true);
+        // set prepared value
+        this.value = this.getValue();
+        await this.manager.setValue(this.value, true);
     }
 
     public updateProperties(): void {
@@ -150,8 +177,9 @@ export class DynamicFormFieldValue {
 
         await this.setPropertyTree();
         await this.setOperationTree();
-        await this.createValueInput();
         await this.setRelativeTimeUnitTree();
+        await this.setWithinTrees();
+        await this.createValueInput();
     }
 
     public async setPropertyTree(): Promise<void> {
@@ -241,11 +269,59 @@ export class DynamicFormFieldValue {
         this.relativeTimeUnit = 'm';
     }
 
+    private async setWithinTrees(): Promise<void> {
+        const translations = await TranslationService.createTranslationObject([
+            'Translatable#Year(s)',
+            'Translatable#Month(s)',
+            'Translatable#Week(s)',
+            'Translatable#Day(s)',
+            'Translatable#Hour(s)',
+            'Translatable#Minutes(s)',
+            'Translatable#Seconds(s)',
+            'Translatable#SEARCH_OPERATOR_WITHIN_LAST',
+            'Translatable#SEARCH_OPERATOR_WITHIN_NEXT'
+        ]);
+
+        const timeUnitNodes = [
+            new TreeNode('Y', translations['Translatable#Year(s)']),
+            new TreeNode('M', translations['Translatable#Month(s)']),
+            new TreeNode('w', translations['Translatable#Week(s)']),
+            new TreeNode('d', translations['Translatable#Day(s)']),
+            new TreeNode('h', translations['Translatable#Hour(s)']),
+            new TreeNode('m', translations['Translatable#Minutes(s)']),
+            new TreeNode('s', translations['Translatable#Seconds(s)'])
+        ];
+        const selectedUnitNode = timeUnitNodes.find((n) => n.id === 'm');
+
+        this.withinStartUnitTreeHandler.setTree(timeUnitNodes);
+        this.withinStartUnitTreeHandler.setSelection([selectedUnitNode], true);
+        this.withinStartUnit = 'm';
+        // use new nodes, not references
+        this.withinEndUnitTreeHandler.setTree(timeUnitNodes.map((n) => new TreeNode(n.id, n.label)));
+        this.withinEndUnitTreeHandler.setSelection([selectedUnitNode], true);
+        this.withinEndUnit = 'm';
+
+        const typeNodes = [
+            new TreeNode('-', translations['Translatable#SEARCH_OPERATOR_WITHIN_LAST']),
+            new TreeNode('+', translations['Translatable#SEARCH_OPERATOR_WITHIN_NEXT'])
+        ];
+        const selectedTypeNode = typeNodes.find((n) => n.id === '+');
+
+        this.withinStartTypeTreeHandler.setTree(typeNodes);
+        this.withinStartTypeTreeHandler.setSelection([selectedTypeNode], true);
+        this.withinStartType = '+';
+        // use new nodes, not references
+        this.withinEndTypeTreeHandler.setTree(typeNodes.map((n) => new TreeNode(n.id, n.label)));
+        this.withinEndTypeTreeHandler.setSelection([selectedTypeNode], true);
+        this.withinEndType = '+';
+    }
+
     public async setOperator(operator: string): Promise<void> {
         const relativeDateTimeOperators = SearchDefinition.getRelativeDateTimeOperators();
 
         this.value.operator = operator;
         this.isBetween = this.value.operator === SearchOperator.BETWEEN;
+        this.isWithin = this.value.operator === SearchOperator.WITHIN;
         this.isRelativeTime = relativeDateTimeOperators.includes(operator as SearchOperator);
         if (this.manager.resetValue) {
             await this.createValueInput();
@@ -336,7 +412,57 @@ export class DynamicFormFieldValue {
                             .map((v) => new TreeNode(v, v)), true, true, true, false
                     );
                 }
-                this.valueTreeHandler?.expandSelection();
+            } else if (this.isWithin) {
+                if (Array.isArray(this.value.value)) {
+                    if (this.value.value.length === 2) {
+                        const partsFrom = this.value.value[0].split(/(\d+)/);
+                        if (partsFrom.length === 3) {
+                            this.withinStartType = partsFrom[0];
+                            this.withinStartValue = partsFrom[1];
+                            this.withinStartUnit = partsFrom[2];
+                        }
+                        const partsTo = this.value.value[1].split(/(\d+)/);
+                        if (partsTo.length === 3) {
+                            this.withinEndType = partsTo[0];
+                            this.withinEndValue = partsTo[1];
+                            this.withinEndUnit = partsTo[2];
+                        }
+                    } else if (this.value.value.length === 6) {
+                        this.withinStartType = this.value.value[0];
+                        this.withinStartValue = this.value.value[1];
+                        this.withinStartUnit = this.value.value[2];
+                        this.withinEndType = this.value.value[3];
+                        this.withinEndValue = this.value.value[4];
+                        this.withinEndUnit = this.value.value[5];
+
+                    }
+                    const startType = TreeUtil.findNode(
+                        this.withinStartTypeTreeHandler.getTree(), this.withinStartType
+                    );
+                    this.withinStartTypeTreeHandler.setSelection([startType], true, silent, true);
+                    const endType = TreeUtil.findNode(this.withinEndTypeTreeHandler.getTree(), this.withinEndType);
+                    this.withinEndTypeTreeHandler.setSelection([endType], true, silent, true);
+
+                    const startUnit = TreeUtil.findNode(
+                        this.withinStartUnitTreeHandler.getTree(), this.withinStartUnit
+                    );
+                    this.withinStartUnitTreeHandler.setSelection([startUnit], true, silent, true);
+                    const endUnit = TreeUtil.findNode(this.withinEndUnitTreeHandler.getTree(), this.withinEndUnit);
+                    this.withinEndUnitTreeHandler.setSelection([endUnit], true, silent, true);
+                }
+            } else if (this.isRelativeTime) {
+                if (Array.isArray(this.value.value)) {
+                    this.relativeTimeValue = this.value.value[0];
+                    this.relativeTimeUnit = this.value.value[1];
+                } else if (typeof this.value.value === 'string') {
+                    const parts = this.value.value.split(/(\d+)/);
+                    if (parts.length === 3) {
+                        this.relativeTimeValue = parts[1];
+                        this.relativeTimeUnit = parts[2];
+                    }
+                }
+                const node = TreeUtil.findNode(this.relativeTimeUnitTreeHandler.getTree(), this.relativeTimeUnit);
+                this.relativeTimeUnitTreeHandler.setSelection([node], true, silent, true);
             } else if (this.isDate) {
                 if (this.isBetween) {
                     const date = new Date(this.value.value[0]);
@@ -413,19 +539,6 @@ export class DynamicFormFieldValue {
                 } else {
                     this.numberValue = !isNaN(this.value.value) ? this.value.value : null;
                 }
-            } else if (this.isRelativeTime) {
-                if (Array.isArray(this.value.value)) {
-                    this.relativeTimeValue = this.value.value[0];
-                    this.relativeTimeUnit = this.value.value[1];
-                } else if (typeof this.value.value === 'string') {
-                    const parts = this.value.value.split(/(\d+)/);
-                    if (parts.length === 3) {
-                        this.relativeTimeValue = parts[1];
-                        this.relativeTimeUnit = parts[2];
-                    }
-                }
-                const node = TreeUtil.findNode(this.relativeTimeUnitTreeHandler.getTree(), this.relativeTimeUnit);
-                currentValues.push(node);
             } else if (!this.isSpecificInput) {
                 this.value.value = Array.isArray(this.value.value) ? this.value.value[0] : this.value.value;
             }
@@ -433,9 +546,6 @@ export class DynamicFormFieldValue {
 
         if (this.isDropdown) {
             this.valueTreeHandler.setSelection(currentValues, true, silent, true);
-        }
-        if (this.isRelativeTime) {
-            this.relativeTimeUnitTreeHandler.setSelection(currentValues, true, silent, true);
         }
     }
 
@@ -516,6 +626,30 @@ export class DynamicFormFieldValue {
         this.relativeTimeValue = value;
     }
 
+    public setWithinStartType(value: string): void {
+        this.withinStartType = value;
+    }
+
+    public setWithinStartValue(value: string): void {
+        this.withinStartValue = value;
+    }
+
+    public setWithinStartUnit(value: string): void {
+        this.withinStartUnit = value;
+    }
+
+    public setWithinEndType(value: string): void {
+        this.withinEndType = value;
+    }
+
+    public setWithinEndValue(value: string): void {
+        this.withinEndValue = value;
+    }
+
+    public setWithinEndUnit(value: string): void {
+        this.withinEndUnit = value;
+    }
+
     public setNumberValue(value: string): void {
         this.numberValue = value;
     }
@@ -559,7 +693,24 @@ export class DynamicFormFieldValue {
             }
         }
         if (this.isRelativeTime) {
-            currentValue.value = [this.relativeTimeValue, this.relativeTimeUnit];
+            if (!isNaN(Number(this.relativeTimeValue)) && this.relativeTimeUnit) {
+                currentValue.value = [this.relativeTimeValue, this.relativeTimeUnit];
+            }
+        }
+        if (this.isWithin) {
+            if (
+                this.withinStartType && this.withinStartValue && this.withinStartUnit &&
+                this.withinEndType && this.withinEndValue && this.withinEndUnit &&
+                !isNaN(Number(this.withinStartValue)) &&
+                !isNaN(Number(this.withinEndValue))
+            ) {
+                currentValue.value = [
+                    this.withinStartType, this.withinStartValue, this.withinStartUnit,
+                    this.withinEndType, this.withinEndValue, this.withinEndUnit
+                ];
+            } else {
+                currentValue.value = null;
+            }
         }
         return currentValue;
     }
