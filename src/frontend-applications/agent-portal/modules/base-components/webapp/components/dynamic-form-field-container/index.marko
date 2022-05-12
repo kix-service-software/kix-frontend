@@ -97,6 +97,88 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             searchCallback=dynamicValue.autoCompleteCallback
                             on-nodesChanged("treeValueChanged", dynamicValue)/>
                     </if>
+                    <else-if(dynamicValue.isWithin)>
+                        <span.dynamic-form-within-input>
+                            <form-list.input-style
+                                treeId=("withinStartType-" + dynamicValue.id)
+                                key=("withinStartType-" + dynamicValue.id)
+                                canRemoveNode=false
+                                readonly=dynamicValue.readonly
+                                invalid=!dynamicValue.value.valid
+                                on-nodesChanged("setWithinStartType", dynamicValue)/>
+                            <input.input-style
+                                class={
+                                    invalid: !dynamicValue.value.valid
+                                }
+                                value=dynamicValue.withinStartValue
+                                type="text"
+                                disabled=(
+                                    dynamicValue.readonly &&
+                                    !dynamicValue.changeable
+                                )
+                                on-input("setWithinStartValue", dynamicValue)/>
+                            <form-list.input-style
+                                treeId=("withinStartUnit-" + dynamicValue.id)
+                                key=("withinStartUnit-" + dynamicValue.id)
+                                canRemoveNode=false
+                                readonly=dynamicValue.readonly
+                                invalid=!dynamicValue.value.valid
+                                on-nodesChanged("setWithinStartUnit", dynamicValue)/>
+                            <div.within-space>
+                                <translation-string pattern="Translatable#to"/>
+                            </div>
+                            <form-list.input-style
+                                treeId=("withinEndType-" + dynamicValue.id)
+                                key=("withinEndType-" + dynamicValue.id)
+                                canRemoveNode=false
+                                readonly=dynamicValue.readonly
+                                invalid=!dynamicValue.value.valid
+                                on-nodesChanged("setWithinEndType", dynamicValue)/>
+                            <input.input-style
+                                class={
+                                    invalid: !dynamicValue.value.valid
+                                }
+                                value=dynamicValue.withinEndValue
+                                type="text"
+                                disabled=(
+                                    dynamicValue.readonly &&
+                                    !dynamicValue.changeable
+                                )
+                                on-input("setWithinEndValue", dynamicValue)/>
+                            <form-list.input-style
+                                treeId=("withinEndUnit-" + dynamicValue.id)
+                                key=("withinEndUnit-" + dynamicValue.id)
+                                canRemoveNode=false
+                                readonly=dynamicValue.readonly
+                                invalid=!dynamicValue.value.valid
+                                on-nodesChanged("setWithinEndUnit", dynamicValue)/>
+                        </span>
+                    </else-if>
+                    <else-if(dynamicValue.isRelativeTime)>
+                        <span.dynamic-form-relative-time-input>
+                            <input.input-style
+                                class={
+                                    invalid: !dynamicValue.value.valid
+                                }
+                                value=dynamicValue.relativeTimeValue
+                                type="text"
+                                disabled=(
+                                    dynamicValue.readonly &&
+                                    !dynamicValue.changeable
+                                )
+                                on-input("setRelativeTimeValue", dynamicValue)/>
+                            <form-list.input-style
+                                treeId=("relativeTimeUnit-" + dynamicValue.id)
+                                key=("relativeTimeUnit-" + dynamicValue.id)
+                                canRemoveNode=(
+                                    !dynamicValue.readonly ||
+                                    dynamicValue.changeable
+                                )
+                                readonly=dynamicValue.readonly
+                                invalid=!dynamicValue.value.valid
+                                on-nodesChanged("setRelativeUnitValue", dynamicValue)/>
+                        </span>
+                    </else-if>
                     <else-if(dynamicValue.isDate)>
                         <span.dynamic-form-date-input class={
                             between: dynamicValue.isBetween
@@ -220,31 +302,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                     on-change("setNumberEndValue", dynamicValue)
                                     value=dynamicValue.betweenEndNumberValue/>
                             </if>
-                        </span>
-                    </else-if>
-                    <else-if(dynamicValue.isRelativeTime)>
-                        <span.dynamic-form-relative-time-input>
-                            <input.input-style
-                                class={
-                                    invalid: !dynamicValue.value.valid
-                                }
-                                value=dynamicValue.relativeTimeValue
-                                type="text"
-                                disabled=(
-                                    dynamicValue.readonly &&
-                                    !dynamicValue.changeable
-                                )
-                                on-input("setRelativeTimeValue", dynamicValue)/>
-                            <form-list.input-style
-                                treeId=("relativeTimeUnit-" + dynamicValue.id)
-                                key=("relativeTimeUnit-" + dynamicValue.id)
-                                canRemoveNode=(
-                                    !dynamicValue.readonly ||
-                                    dynamicValue.changeable
-                                )
-                                readonly=dynamicValue.readonly
-                                invalid=!dynamicValue.value.valid
-                                on-nodesChanged("treeValueChanged", dynamicValue)/>
                         </span>
                     </else-if>
                     <else>

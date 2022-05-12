@@ -13,4 +13,5 @@ export class ComponentState {
 
     public cell: Cell = null;
     public isLabelCell: boolean = true;
+    public doLabelSort: boolean = true;
 }

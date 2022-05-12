@@ -197,6 +197,7 @@ export abstract class SearchDefinition {
             SearchOperator.BETWEEN,
             SearchOperator.WITHIN_THE_LAST,
             SearchOperator.WITHIN_THE_NEXT,
+            SearchOperator.WITHIN,
             SearchOperator.MORE_THAN_AGO,
             SearchOperator.IN_MORE_THAN,
             SearchOperator.LESS_THAN_AGO,
@@ -208,6 +209,7 @@ export abstract class SearchDefinition {
         return [
             SearchOperator.WITHIN_THE_LAST,
             SearchOperator.WITHIN_THE_NEXT,
+            SearchOperator.WITHIN,
             SearchOperator.MORE_THAN_AGO,
             SearchOperator.IN_MORE_THAN,
             SearchOperator.LESS_THAN_AGO,

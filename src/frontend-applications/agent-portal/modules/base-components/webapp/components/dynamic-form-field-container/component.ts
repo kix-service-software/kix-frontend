@@ -25,13 +25,14 @@ class Component {
     private provideTimeout: any;
     private addEmptyValueTimeout: any;
 
-    private advancedOptionsMap: Map<string, boolean> = new Map();
-    private optionEditor: Map<string, any> = new Map();
+    private advancedOptionsMap: Map<string, boolean>;
+    private optionEditor: Map<string, any>;
     private additionalOptionsTimeout: any;
-    private timoutTimer: TimeoutTimer = new TimeoutTimer();
+    private timoutTimer: TimeoutTimer;
 
     public onCreate(): void {
         this.state = new ComponentState();
+        this.timoutTimer = new TimeoutTimer();
     }
 
     public onInput(input: any): void {
@@ -143,10 +144,7 @@ class Component {
     }
 
     public treeValueChanged(value: DynamicFormFieldValue, nodes: TreeNode[]): void {
-        if (value.isRelativeTime)
-            value.setRelativeTimeUnitValue(nodes.map((n) => n.id).pop() as string);
-        else
-            value.setValue(nodes.map((n) => n.id));
+        value.setValue(nodes.map((n) => n.id));
         this.provideValue(value);
     }
 
@@ -187,6 +185,43 @@ class Component {
     public setRelativeTimeValue(value: DynamicFormFieldValue, event: any): void {
         const newValue = event.target.value;
         value.setRelativeTimeValue(newValue);
+        this.provideValue(value);
+    }
+
+    public setRelativeUnitValue(value: DynamicFormFieldValue, nodes: TreeNode[]): void {
+        value.setRelativeTimeUnitValue(nodes.map((n) => n.id).pop() as string);
+        this.provideValue(value);
+    }
+
+    public setWithinStartType(value: DynamicFormFieldValue, nodes: TreeNode[]): void {
+        value.setWithinStartType(nodes.map((n) => n.id).pop() as string);
+        this.provideValue(value);
+    }
+
+    public setWithinStartValue(value: DynamicFormFieldValue, event: any): void {
+        const newValue = event.target.value;
+        value.setWithinStartValue(newValue);
+        this.provideValue(value);
+    }
+
+    public setWithinStartUnit(value: DynamicFormFieldValue, nodes: TreeNode[]): void {
+        value.setWithinStartUnit(nodes.map((n) => n.id).pop() as string);
+        this.provideValue(value);
+    }
+
+    public setWithinEndType(value: DynamicFormFieldValue, nodes: TreeNode[]): void {
+        value.setWithinEndType(nodes.map((n) => n.id).pop() as string);
+        this.provideValue(value);
+    }
+
+    public setWithinEndValue(value: DynamicFormFieldValue, event: any): void {
+        const newValue = event.target.value;
+        value.setWithinEndValue(newValue);
+        this.provideValue(value);
+    }
+
+    public setWithinEndUnit(value: DynamicFormFieldValue, nodes: TreeNode[]): void {
+        value.setWithinEndUnit(nodes.map((n) => n.id).pop() as string);
         this.provideValue(value);
     }
 

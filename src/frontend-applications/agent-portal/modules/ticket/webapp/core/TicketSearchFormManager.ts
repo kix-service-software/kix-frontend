@@ -120,12 +120,6 @@ export class TicketSearchFormManager extends SearchFormManager {
             inputType = await super.getInputType(property);
         }
 
-        if (inputType === InputFieldTypes.DATE || inputType === InputFieldTypes.DATE_TIME) {
-            const relativeDateTimeOperators = SearchDefinition.getRelativeDateTimeOperators();
-            if (operator && relativeDateTimeOperators.includes(operator))
-                inputType = InputFieldTypes.TEXT;
-        }
-
         return inputType;
     }
 
