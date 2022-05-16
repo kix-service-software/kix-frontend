@@ -99,7 +99,7 @@ export class NotificationAPIService extends KIXObjectAPIService {
         const messageProperties = {};
 
         const messageRegEx = new RegExp(
-            `^(${NotificationProperty.MESSAGE_BODY}|${NotificationProperty.MESSAGE_SUBJECT})###(.+)$`
+            `^(${NotificationProperty.MESSAGE_BODY}|${NotificationProperty.MESSAGE_SUBJECT}|${NotificationProperty.MESSAGE_CONTENTTYPE})###(.+)$`
         );
         parameter.forEach((p) => {
             if (p[0] === NotificationProperty.NAME ||
