@@ -29,6 +29,8 @@ import { SetupService } from '../../../setup-assistant/webapp/core/SetupService'
 import { SetupStep } from '../../../setup-assistant/webapp/core/SetupStep';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { NotificationFormFieldValueHandler } from './NotificationFormFieldValueHandler';
+import { FormService } from '../../../base-components/webapp/core/FormService';
 
 export class UIModule implements IUIModule {
 
@@ -71,6 +73,8 @@ export class UIModule implements IUIModule {
             'Translatable#Edit Notification', 'kix-icon-gear', NotificationDetailsContext.CONTEXT_ID
         );
         ContextService.getInstance().registerContext(editNotificationDialogContext);
+
+        FormService.getInstance().addFormFieldValueHandler(new NotificationFormFieldValueHandler());
 
         ActionFactory.getInstance().registerAction('notification-table-delete', NotificationTableDeleteAction);
 

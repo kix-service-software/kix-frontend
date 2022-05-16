@@ -7,10 +7,13 @@
  * --
  */
 
+import { DefaultSelectInputFormOption } from '../../../../model/configuration/DefaultSelectInputFormOption';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { NotificationConfig } from '../../model/NotificationConfig';
 import { NotificationProperty } from '../../model/NotificationProperty';
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
@@ -67,14 +70,16 @@ export class NotificationFormService extends KIXObjectFormService {
             const languageFields: FormFieldConfiguration[] = [];
             if (languages) {
                 languages.forEach((l) => {
-                    const languagField = this.getLanguageField(form, l);
+                    const languagField = this.getLanguageField(form, l, notification);
                     languageFields.push(languagField);
 
                     if (
                         form.formContext === FormContext.EDIT &&
                         notification && notification.Message && notification.Message[l[0]]
                     ) {
-                        this.setTextValue(languagField.children, formFieldValues, notification.Message[l[0]]);
+                        this.setTextValue(
+                            languagField.children, formInstance, formFieldValues, notification.Message[l[0]]
+                        );
                     }
                 });
             }
@@ -102,7 +107,16 @@ export class NotificationFormService extends KIXObjectFormService {
         return hasPermissions;
     }
 
-    private getLanguageField(form: FormConfiguration, language: [string, string]): FormFieldConfiguration {
+    private getLanguageField(
+        form: FormConfiguration, language: [string, string], notification: Notification
+    ): FormFieldConfiguration {
+        let contentType = 'text/html';
+        if (
+            form.formContext === FormContext.EDIT &&
+            notification && notification.Message && notification.Message[language[0]]
+        ) {
+            contentType = notification.Message[language[0]].ContentType;
+        }
         const subjectField = new FormFieldConfiguration(
             'subject-field',
             'Translatable#Subject', `${NotificationProperty.MESSAGE_SUBJECT}###${language[0]}`, null, true,
@@ -111,18 +125,25 @@ export class NotificationFormService extends KIXObjectFormService {
                 'Translatable#Helptext_Admin_NotificationCreate_MessageSubject'
         );
         subjectField.instanceId = IdService.generateDateBasedId(`notification-${language[0]}`);
-        const bodyField = new FormFieldConfiguration(
-            'body-field',
-            'Translatable#Text', `${NotificationProperty.MESSAGE_BODY}###${language[0]}`, 'rich-text-input', true,
+        const contentTypeField = new FormFieldConfiguration(
+            'contentType-field',
+            'Translatable#ContentType', `${NotificationProperty.MESSAGE_CONTENTTYPE}###${language[0]}`, 'default-select-input', true,
             form && form.formContext === FormContext.EDIT ?
-                'Translatable#Helptext_Admin_NotificationEdit_MessageText' :
-                'Translatable#Helptext_Admin_NotificationCreate_MessageText',
-            [new FormFieldOption('NO_IMAGES', true)]
+                'Translatable#Helptext_Admin_NotificationEdit_MessageContentType' :
+                'Translatable#Helptext_Admin_NotificationCreate_MessageContentType',
+                [
+                    new FormFieldOption(
+                        DefaultSelectInputFormOption.NODES,
+                        NotificationConfig.getContentType().map((v) => new TreeNode(v.key, v.label))
+                    )
+                ],
+                new FormFieldValue('text/html')
         );
-        bodyField.instanceId = IdService.generateDateBasedId(`notification-${language[0]}`);
+        contentTypeField.instanceId = IdService.generateDateBasedId(`notification-${language[0]}`);
+
         const languagField = new FormFieldConfiguration(
             'language-field',
-            language[1], null, null, null, null, null, null, null, [subjectField, bodyField],
+            language[1], null, null, null, null, null, null, null, [subjectField, contentTypeField],
             undefined, undefined, undefined, undefined, undefined, undefined, undefined,
             true, true
         );
@@ -130,15 +151,19 @@ export class NotificationFormService extends KIXObjectFormService {
         return languagField;
     }
 
-    private setTextValue(
-        fields: FormFieldConfiguration[], formFieldValues: Map<string, FormFieldValue<any>>,
+    private async setTextValue(
+        fields: FormFieldConfiguration[], formInstance: FormInstance, formFieldValues: Map<string, FormFieldValue<any>>,
         message: NotificationMessage
-    ): void {
+    ): Promise<void> {
         let subjectValue;
+        let contentTypeValue;
         let bodyValue;
         if (message) {
             if (message.Subject) {
                 subjectValue = new FormFieldValue(message.Subject);
+            }
+            if (message.ContentType) {
+                contentTypeValue = new FormFieldValue(message.ContentType);
             }
             if (message.Body) {
                 bodyValue = new FormFieldValue(message.Body);
@@ -147,9 +172,95 @@ export class NotificationFormService extends KIXObjectFormService {
         if (subjectValue) {
             formFieldValues.set(fields[0].instanceId, subjectValue);
         }
-        if (bodyValue) {
-            formFieldValues.set(fields[1].instanceId, bodyValue);
+        if (contentTypeValue) {
+            formFieldValues.set(fields[1].instanceId, contentTypeValue);
+
+            const contentTypeFields = await this.getFormFieldsForContentType(
+                formInstance, fields[1], contentTypeValue.value, formInstance.getForm().id, true
+            );
+            formInstance.addFieldChildren(fields[1], contentTypeFields, true);
+            if (bodyValue) {
+                formFieldValues.set(contentTypeFields[0].instanceId, bodyValue);
+            }
         }
+    }
+
+    public async getFormFieldsForContentType(
+        formInstance: FormInstance, field: FormFieldConfiguration, contentType: string,
+        formId: string, clear: boolean = false
+    ): Promise<FormFieldConfiguration[]> {
+        let fields: FormFieldConfiguration[] = [];
+
+        const fieldRegEx = new RegExp(`^${NotificationProperty.MESSAGE_CONTENTTYPE}###(.+)$`);
+
+        let fieldPromises = [];
+        if (field.property.match(fieldRegEx)) {
+            const language = field.property.replace(fieldRegEx, '$1');
+            if (contentType === 'text/html') {
+                fieldPromises = [
+                    this.getRichtextBodyField(formInstance, language, clear)
+                ];
+
+            } else if (contentType === 'text/plain') {
+                fieldPromises = [
+                    this.getPlainBodyField(formInstance, language, clear)
+                ];
+            }
+        }
+
+        await Promise.all(fieldPromises).then((newFields: FormFieldConfiguration[]) => {
+            fields = newFields.filter((nf) => typeof nf !== 'undefined' && nf !== null);
+        });
+
+        return fields;
+    }
+
+    private async getRichtextBodyField(
+        formInstance: FormInstance, language: string, clear: boolean
+    ): Promise<FormFieldConfiguration> {
+        let bodyField = new FormFieldConfiguration(
+            'body-field',
+            'Translatable#Text', `${NotificationProperty.MESSAGE_BODY}###${language}`, 'rich-text-input', true,
+            formInstance.getFormContext() === FormContext.EDIT ?
+                'Translatable#Helptext_Admin_NotificationEdit_MessageText' :
+                'Translatable#Helptext_Admin_NotificationCreate_MessageText',
+            [new FormFieldOption('NO_IMAGES', true)]
+        );
+        if (!clear && formInstance) {
+            const existingField = formInstance.getFormFieldByProperty(`${NotificationProperty.MESSAGE_BODY}###${language}`);
+            if (existingField) {
+                bodyField = existingField;
+                const value = formInstance.getFormFieldValue<string>(existingField.instanceId);
+                if (value) {
+                    bodyField.defaultValue = value;
+                }
+            }
+        }
+        return bodyField;
+    }
+
+    private async getPlainBodyField(
+        formInstance: FormInstance, language: string, clear: boolean
+    ): Promise<FormFieldConfiguration> {
+        let bodyField = new FormFieldConfiguration(
+            'body-field',
+            'Translatable#Text', `${NotificationProperty.MESSAGE_BODY}###${language}`, 'text-area-input', true,
+            formInstance.getFormContext() === FormContext.EDIT ?
+                'Translatable#Helptext_Admin_NotificationEdit_MessageText' :
+                'Translatable#Helptext_Admin_NotificationCreate_MessageText',
+            [new FormFieldOption('NO_IMAGES', true)]
+        );
+        if (!clear && formInstance) {
+            const existingField = formInstance.getFormFieldByProperty(`${NotificationProperty.MESSAGE_BODY}###${language}`);
+            if (existingField) {
+                bodyField = existingField;
+                const value = formInstance.getFormFieldValue<string>(existingField.instanceId);
+                if (value) {
+                    bodyField.defaultValue = value;
+                }
+            }
+        }
+        return bodyField;
     }
 
     public async prepareCreateValue(

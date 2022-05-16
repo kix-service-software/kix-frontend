@@ -18,9 +18,15 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <@content>
                         <div.notification-message>
                             <object-property-label object=group[1] property="Subject" labelProvider=state.labelProvider/>
+                            <object-property-label object=group[1] property="ContentType" labelProvider=state.labelProvider/>
                             <object-property-label object=group[1] property="Body" labelProvider=state.labelProvider>
                                 <@value>
-                                    <editor readOnly=true value=group[1].Body useReadonlyStyle=true/>
+                                    <if(group[1].ContentType && group[1].ContentType === "text/html")> 
+                                        <editor readOnly=true value=group[1].Body useReadonlyStyle=true/>
+                                    </if>
+                                    <else>
+                                        <textarea.input-style.content readonly class={nowrap: true}>${group[1].Body}</textarea>
+                                    </else>
                                 </@value>
                             </object-property-label>
                         </div>
