@@ -78,19 +78,14 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         }
 
         let objects: O[] = [];
-
-        const emptyResult = objectIds && objectIds.length === 0;
-        if (emptyResult) {
-            return objects;
+        let uri = baseUri;
+        if (objectIds) {
+            objectIds = objectIds.filter((id) => typeof id !== 'undefined' && id !== null && id.toString() !== '');
+            if (objectIds.length === 0) {
+                return [];
+            }
+            uri = this.buildUri(baseUri, objectIds.join(','));
         }
-
-        objectIds = objectIds
-            ? objectIds.filter((id) => typeof id !== 'undefined' && id !== null && id.toString() !== '')
-            : [];
-
-        const uri = objectIds.length
-            ? this.buildUri(baseUri, objectIds.join(','))
-            : baseUri;
 
         const response = await this.getObjectByUri(token, uri, query, objectType, useCache);
 
