@@ -328,7 +328,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 ArticleProperty.SUBJECT
                             ]
                         )
-                    ],
+                    ], false
                 ), null, false, false, null
             ),
             false, true, 'kix-icon-faq', false, false, true, ['DynamicFields.AffectedAsset']
