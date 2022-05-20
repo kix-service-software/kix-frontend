@@ -59,8 +59,10 @@ export class NotificationHandler {
         );
 
         ContextService.getInstance().notifyUpdates(updates);
-        if (updates.length > 0)
+
+        if (updates?.some((u) => u[0] === KIXObjectType.TICKET)) {
             EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
+        }
     }
 
     private static getObjectType(namespace: string): string {
