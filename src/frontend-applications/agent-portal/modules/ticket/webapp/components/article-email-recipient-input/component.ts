@@ -35,6 +35,7 @@ import { IKIXObjectService } from '../../../../../modules/base-components/webapp
 import { Contact } from '../../../../customer/model/Contact';
 import addrparser from 'address-rfc2822';
 import { ObjectReferenceOptions } from '../../../../base-components/webapp/core/ObjectReferenceOptions';
+import { ArticleLoadingOptions } from '../../../model/ArticleLoadingOptions';
 
 class Component extends FormInputComponent<string[], ComponentState> {
 
@@ -176,7 +177,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
                 !mailContacts.some((c) => c.ID === v || c.Email === v) &&
                 !unknownMailAddresses.some((uMA) => uMA === v) &&
                 !systemAddresses.some((sa) => sa.Name === v)
-            ).map((n) => new TreeNode(n, n));
+            ).map((n) => new TreeNode(n, n, 'kix-icon-man-bubble'));
             nodes = [...nodes, ...unknownNodes];
 
             this.treeHandler.setSelection(nodes, true, true);
@@ -252,28 +253,40 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     private async handleReplyAll(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const dialogContext = ContextService.getInstance().getActiveContext();
-        if (this.state.field?.property === ArticleProperty.TO && context && dialogContext) {
-            const replyId = dialogContext.getAdditionalInformation('REFERENCED_ARTICLE_ID');
-            const articles = await context.getObjectList<Article>(KIXObjectType.ARTICLE);
-            if (replyId && articles && articles.length) {
-                const replyArticle = articles.find((a) => a.ArticleID === replyId);
-                if (replyArticle) {
-                    const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
-                        KIXObjectType.SYSTEM_ADDRESS
-                    );
-                    const newToNodes = this.prepareMailNodes(replyArticle.toList, systemAddresses.map((sa) => sa.Name));
-                    this.treeHandler.setSelection(newToNodes, true, true, true);
-                    this.contactChanged(newToNodes);
+        if (this.state.field?.property === ArticleProperty.TO) {
+            const replyArticle = await this.getReplyArticle();
+            if (replyArticle) {
+                const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
+                    KIXObjectType.SYSTEM_ADDRESS
+                );
+                const newToNodes = this.prepareMailNodes(replyArticle.toList, systemAddresses.map((sa) => sa.Name));
+                this.treeHandler.setSelection(newToNodes, true, true, true);
+                this.contactChanged(newToNodes);
 
-                    this.handleCcField(
-                        replyArticle,
-                        [...newToNodes.map((n) => n.id), ...systemAddresses.map((sa) => sa.Name)]
-                    );
-                }
+                this.handleCcField(
+                    replyArticle,
+                    [...newToNodes.map((n) => n.id), ...systemAddresses.map((sa) => sa.Name)]
+                );
             }
         }
+    }
+
+    private async getReplyArticle(): Promise<Article> {
+        let replyArticle: Article;
+        const dialogContext = ContextService.getInstance().getActiveContext();
+        const replyId = dialogContext?.getAdditionalInformation('REFERENCED_ARTICLE_ID');
+        if (replyId) {
+            const referencedTicketId = dialogContext.getAdditionalInformation('REFERENCED_TICKET_ID') ||
+                dialogContext.getObjectId();
+            if (referencedTicketId) {
+                const articles = await KIXObjectService.loadObjects<Article>(
+                    KIXObjectType.ARTICLE, [replyId], null,
+                    new ArticleLoadingOptions(referencedTicketId), true
+                ).catch(() => [] as Article[]);
+                replyArticle = articles.find((a) => a.ArticleID === replyId);
+            }
+        }
+        return replyArticle;
     }
 
     private async handleCcField(replyArticle: Article, filterList: string[]): Promise<void> {
