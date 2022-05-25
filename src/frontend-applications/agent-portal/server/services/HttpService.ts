@@ -284,11 +284,11 @@ export class HttpService {
         return key;
     }
 
-    public async getUserByToken(token: string, useCache: boolean = true): Promise<User> {
+    public async getUserByToken(token: string): Promise<User> {
         const backendToken = AuthenticationService.getInstance().getBackendToken(token);
 
         const user = await CacheService.getInstance().get(backendToken, KIXObjectType.CURRENT_USER);
-        if (user && useCache) {
+        if (user) {
             return user;
         }
 

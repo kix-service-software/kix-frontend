@@ -41,7 +41,7 @@ export class AgentSocketClient extends SocketClient {
         super('agent');
     }
 
-    public async getCurrentUser(useCache: boolean = true): Promise<User> {
+    public async getCurrentUser(): Promise<User> {
         let currentUserRequestPromise;
         if (BrowserCacheService.getInstance().has(KIXObjectType.CURRENT_USER, KIXObjectType.CURRENT_USER)) {
             currentUserRequestPromise = BrowserCacheService.getInstance().get(
@@ -53,8 +53,7 @@ export class AgentSocketClient extends SocketClient {
             const requestId = IdService.generateDateBasedId();
             const currentUserRequest = new GetCurrentUserRequest(
                 requestId,
-                ClientStorageService.getClientRequestId(),
-                true
+                ClientStorageService.getClientRequestId()
             );
 
             const socketTimeout = ClientStorageService.getSocketTimeout();

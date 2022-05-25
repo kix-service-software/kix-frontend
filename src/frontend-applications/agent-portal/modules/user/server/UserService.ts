@@ -78,8 +78,8 @@ export class UserService extends KIXObjectAPIService {
         return objects;
     }
 
-    public getUserByToken(token: string, useCache: boolean = true): Promise<User> {
-        return HttpService.getInstance().getUserByToken(token, useCache);
+    public getUserByToken(token: string): Promise<User> {
+        return HttpService.getInstance().getUserByToken(token);
     }
 
     public async createObject(
