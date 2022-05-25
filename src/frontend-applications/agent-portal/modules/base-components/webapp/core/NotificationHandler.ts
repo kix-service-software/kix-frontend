@@ -73,6 +73,11 @@ export class NotificationHandler {
                 EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
             }
 
+            ContextService.getInstance().notifyUpdates(this.updates);
+
+            if (this.updates?.some((u) => u[0] === KIXObjectType.TICKET)) {
+                EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
+            }
             this.updates = [];
         }, 3000);
     }
