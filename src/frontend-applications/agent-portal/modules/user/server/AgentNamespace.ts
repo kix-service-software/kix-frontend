@@ -97,7 +97,7 @@ export class AgentNamespace extends SocketNameSpace {
         const token = parsedCookie ? parsedCookie.token : '';
 
         let response: SocketResponse;
-        const user = await UserService.getInstance().getUserByToken(token, data.useCache).catch((error) => {
+        const user = await UserService.getInstance().getUserByToken(token).catch((error) => {
             response = new SocketResponse(SocketEvent.ERROR, error);
             return null;
         });
