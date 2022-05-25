@@ -44,6 +44,8 @@
         "@json-editor/json-editor": "^2.5.4",
         "@lasso/marko-taglib": "^2.0.3",
         "@marko/express": "^1.0.0",
+        "@socket.io/cluster-adapter": "^0.2.0",
+        "@socket.io/sticky": "^1.0.1",
         "@types/d3": "^7.1.0",
         "address-rfc2822": "^2.1.0",
         "axios": "^0.21.1",
