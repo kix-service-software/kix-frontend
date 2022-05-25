@@ -17,6 +17,9 @@ import { ApplicationEvent } from './ApplicationEvent';
 
 export class NotificationHandler {
 
+    private static updateTimeout: any;
+    private static updates: Array<[KIXObjectType | string, string | number]> = [];
+
     public static async handleUpdateNotifications(events: BackendNotification[]): Promise<void> {
         await NotificationHandler.checkForPermissionUpdate(events);
         NotificationHandler.checkForDataUpdate(events);
@@ -47,22 +50,31 @@ export class NotificationHandler {
     }
 
     private static checkForDataUpdate(events: BackendNotification[]): void {
-        const updates: Array<[KIXObjectType | string, string | number]> = events.map(
-            (e): [KIXObjectType | string, string | number] => {
-                const objectType = this.getObjectType(e.Namespace);
-                let eventObjectId = e.ObjectID;
-                if (eventObjectId && typeof eventObjectId === 'string') {
-                    eventObjectId = eventObjectId.split('::')[0];
-                }
-                return [objectType, eventObjectId];
+        for (const e of events) {
+            const objectType = this.getObjectType(e.Namespace);
+            let eventObjectId = e.ObjectID;
+            if (eventObjectId && typeof eventObjectId === 'string') {
+                eventObjectId = eventObjectId.split('::')[0];
             }
-        );
 
-        ContextService.getInstance().notifyUpdates(updates);
-
-        if (updates?.some((u) => u[0] === KIXObjectType.TICKET)) {
-            EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
+            if (!this.updates.some((u) => u[0] === objectType && u[1] === eventObjectId)) {
+                this.updates.push([objectType, eventObjectId]);
+            }
         }
+
+        if (this.updateTimeout) {
+            window.clearTimeout(this.updateTimeout);
+        }
+
+        this.updateTimeout = setTimeout(() => {
+            ContextService.getInstance().notifyUpdates(this.updates);
+
+            if (this.updates?.some((u) => u[0] === KIXObjectType.TICKET)) {
+                EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
+            }
+
+            this.updates = [];
+        }, 3000);
     }
 
     private static getObjectType(namespace: string): string {
