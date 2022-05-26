@@ -60,7 +60,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             eventPublished: async (data: TableEventData, eventId: string): Promise<void> => {
                 if (this.state.table && data && data.tableId === this.state.table.getTableId()) {
                     if (eventId === TableEvent.REFRESH) {
-                        await this.provideContextContent();
+                        //await this.provideContextContent();
                         this.setTableHeight();
 
                         EventService.getInstance().publish(
