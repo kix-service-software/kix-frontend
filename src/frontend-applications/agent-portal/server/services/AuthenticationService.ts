@@ -171,7 +171,7 @@ export class AuthenticationService {
             'auth', userLogin, null, clientRequestId, undefined, false
         );
         const token = fakeLogin ? response.Token : this.createToken(user, response.Token, remoteAddress);
-        await UserService.getInstance().getUserByToken(token, true).catch(() => null);
+        await UserService.getInstance().getUserByToken(token).catch(() => null);
         await TranslationAPIService.getInstance().loadObjects(token, 'login', KIXObjectType.TRANSLATION, null, null, null);
         await ObjectIconService.getInstance().getObjectIcons(token);
         return token;

@@ -519,27 +519,26 @@ export class ContextService {
     }
 
     public notifyUpdates(updates: Array<[KIXObjectType | string, string | number]>): void {
-        updates.forEach((objectUpdate) => {
-            this.contextInstances.forEach((context) => {
-                if (context.descriptor.kixObjectTypes.some((ot) => ot === objectUpdate[0])) {
-                    let publishEvent = true;
+        for (const context of this.contextInstances) {
+            const detailsUpdate = context.descriptor.contextMode === ContextMode.DETAILS;
+            const objectType = context.descriptor.kixObjectTypes[0];
+            const objectId = context.getObjectId()?.toString();
 
-                    const detailsUpdate = context.descriptor.contextMode === ContextMode.DETAILS &&
-                        context.getObjectId()?.toString() !== objectUpdate[1]?.toString();
+            let publishEvent = false;
 
-                    if (detailsUpdate) {
-                        publishEvent = false;
-                    }
+            if (detailsUpdate) {
+                publishEvent = updates.some((u) => u[0] === objectType && u[1].toString() === objectId);
+            } else {
+                publishEvent = updates.some((u) => u[0] === objectType);
+            }
 
-                    if (publishEvent) {
-                        EventService.getInstance().publish(
-                            ContextEvents.CONTEXT_UPDATE_REQUIRED,
-                            context
-                        );
-                    }
-                }
-            });
-        });
+            if (publishEvent) {
+                EventService.getInstance().publish(
+                    ContextEvents.CONTEXT_UPDATE_REQUIRED,
+                    context
+                );
+            }
+        }
     }
 
     public async isContextStored(instanceId: string): Promise<boolean> {
