@@ -15,7 +15,7 @@ import { IMainMenuExtension } from '../../../server/extensions/IMainMenuExtensio
 import { MainMenuConfiguration } from '../../../model/MainMenuConfiguration';
 import { PluginService } from '../../../../../server/services/PluginService';
 import { AgentPortalExtensions } from '../../../server/extensions/AgentPortalExtensions';
-import { ModuleConfigurationService } from '../../../server/services/configuration';
+import { ModuleConfigurationService } from '../../../server/services/configuration/ModuleConfigurationService';
 import { MainMenuEntriesResponse } from '../model/MainMenuEntriesResponse';
 import { SocketEvent } from '../../../modules/base-components/webapp/core/SocketEvent';
 import { SocketErrorResponse } from '../../../modules/base-components/webapp/core/SocketErrorResponse';

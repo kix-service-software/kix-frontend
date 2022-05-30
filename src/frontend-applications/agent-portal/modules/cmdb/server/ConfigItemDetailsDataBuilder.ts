@@ -15,7 +15,7 @@ import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions'
 import { LabelValueGroup } from '../../../model/LabelValueGroup';
 import { LabelValueGroupValue } from '../../../model/LabelValueGroupValue';
 import { SortUtil } from '../../../model/SortUtil';
-import { ModuleConfigurationService } from '../../../server/services/configuration';
+import { ModuleConfigurationService } from '../../../server/services/configuration/ModuleConfigurationService';
 import { DateTimeAPIUtil } from '../../../server/services/DateTimeAPIUtil';
 import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
 import { KIXObjectService } from '../../base-components/webapp/core/KIXObjectService';
@@ -155,7 +155,7 @@ export class ConfigItemDetailsDataBuilder {
                         const hookConfig = await this.loadObjectDisplayValue<SysConfigOption>(token,
                             SysConfigService.getInstance(), SysConfigKey.CONFIG_ITEM_HOOK,
                             KIXObjectType.SYS_CONFIG_OPTION);
-                            value = (hookConfig?.Value || 'CI#') + configItem[property];
+                        value = (hookConfig?.Value || 'CI#') + configItem[property];
                         break;
                     default:
                         value = configItem[property];

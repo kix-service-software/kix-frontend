@@ -33,7 +33,7 @@ import { FormGroupConfiguration } from '../../model/configuration/FormGroupConfi
 import { FormPageConfiguration } from '../../model/configuration/FormPageConfiguration';
 import { FormConfiguration } from '../../model/configuration/FormConfiguration';
 import { FormContext } from '../../model/configuration/FormContext';
-import { ModuleConfigurationService } from '../../server/services/configuration';
+import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
 import { DynamicFormFieldOption } from '../dynamic-fields/webapp/core';
 import { AdditionalTableObjectsHandlerConfiguration } from '../base-components/webapp/core/AdditionalTableObjectsHandlerConfiguration';
 import { DefaultColumnConfiguration } from '../../model/configuration/DefaultColumnConfiguration';

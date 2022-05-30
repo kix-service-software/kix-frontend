@@ -21,6 +21,9 @@ import { PermissionService } from '../services/PermissionService';
 
 import * as cookie from 'cookie';
 import { Server, Socket } from 'socket.io';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { TranslationAPIService } from '../../modules/translation/server/TranslationService';
+import { ObjectIconService } from '../../modules/icon/server/ObjectIconService';
 
 export class AuthenticationNamespace extends SocketNameSpace {
 
@@ -58,7 +61,9 @@ export class AuthenticationNamespace extends SocketNameSpace {
     private async login(data: LoginRequest, client: Socket): Promise<SocketResponse> {
         const response = await AuthenticationService.getInstance()
             .login(data.userName, data.password, data.clientRequestId, client.handshake.address)
-            .then((token: string) => {
+            .then(async (token: string) => {
+                await TranslationAPIService.getInstance().loadObjects(token, 'login', KIXObjectType.TRANSLATION, null, null, null);
+                await ObjectIconService.getInstance().getObjectIcons(token);
                 return new SocketResponse(
                     AuthenticationEvent.AUTHORIZED,
                     new AuthenticationResult(token, data.requestId, data.redirectUrl)

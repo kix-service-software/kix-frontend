@@ -33,7 +33,6 @@ import { ExtendedKIXObjectAPIService } from './ExtendedKIXObjectAPIService';
 import { CacheService } from './cache';
 import { SearchProperty } from '../../modules/search/model/SearchProperty';
 import { SearchOperator } from '../../modules/search/model/SearchOperator';
-import { KIXObjectInitializer } from './KIXObjectInitializer';
 
 export abstract class KIXObjectAPIService implements IKIXObjectService {
 

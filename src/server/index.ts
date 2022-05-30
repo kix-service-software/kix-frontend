@@ -7,29 +7,17 @@
  * --
  */
 
-import cluster from 'node:cluster';
-import { cpus } from 'node:os';
-import express = require('express');
-
 import { ConfigurationService } from './services/ConfigurationService';
-import { PluginService } from './services/PluginService';
 import { LoggingService } from './services/LoggingService';
-import { Server } from '../frontend-applications/agent-portal/server/Server';
-import { AgentPortalExtensions } from '../frontend-applications/agent-portal/server/extensions/AgentPortalExtensions';
-import { MarkoService } from '../frontend-applications/agent-portal/server/services/MarkoService';
-import { IInitialDataExtension } from '../frontend-applications/agent-portal/model/IInitialDataExtension';
 
-import fs = require('fs');
-import https = require('https');
-import http = require('http');
-import { SocketService } from '../frontend-applications/agent-portal/server/services/SocketService';
-import { ClientRegistrationService } from '../frontend-applications/agent-portal/server/services/ClientRegistrationService';
-
-const path = require('path');
+const cluster = require('cluster');
+const http = require('http');
+import { Server } from 'socket.io';
 const { setupMaster, setupWorker } = require('@socket.io/sticky');
 const { createAdapter, setupPrimary } = require('@socket.io/cluster-adapter');
+import { cpus } from 'node:os';
 
-const numCPUs = cpus().length;
+const path = require('path');
 
 process.setMaxListeners(0);
 
@@ -43,138 +31,226 @@ async function initializeServer(): Promise<void> {
 
     const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
 
-    await initializeFrontend();
+    if (cluster.isPrimary) {
+        LoggingService.getInstance().info(`Master ${process.pid} is running`);
 
-    if (serverConfig.CLUSTER_ENABLED) {
-        if (cluster.isPrimary) {
+        const httpServer = http.createServer();
 
-
-            const httpServer = await startApplication();
-
-            setupMaster(httpServer, {
-                loadBalancingMethod: 'least-connection',
-            });
-
-            setupPrimary();
-        } else {
-            console.log(`Worker ${process.pid} started`);
-
-            await startApplication(true);
-
-            for (let i = 0; i < numCPUs; i++) {
-                cluster.fork();
-            }
-
-            cluster.on('exit', (worker) => {
-                console.log(`Worker ${worker.process.pid} died`);
-                cluster.fork();
-            });
-        }
-    } else {
-        await startApplication();
-    }
-}
-
-async function initializeFrontend(): Promise<void> {
-
-    // load registered plugins
-    const pluginDirs = [
-        'frontend-applications',
-        'frontend-applications/agent-portal/modules'
-    ];
-    await PluginService.getInstance().init(pluginDirs.map((pd) => path.join('..', pd)));
-
-    // create initial data
-    const initialDataExtensions = await PluginService.getInstance().getExtensions<IInitialDataExtension>(
-        AgentPortalExtensions.INITIAL_DATA
-    );
-    LoggingService.getInstance().info(`Create initial data (${initialDataExtensions.length} extensions)`);
-    for (const extension of initialDataExtensions) {
-        await extension.createData().catch((e) => {
-            LoggingService.getInstance().error(`Error creating inital data: ${extension.name}.`, e);
+        // setup sticky sessions
+        setupMaster(httpServer, {
+            loadBalancingMethod: 'least-connection',
         });
-    }
 
-    await createClientRegistration();
+        // setup connections between the workers
+        setupPrimary();
 
-    await MarkoService.getInstance().initializeMarkoApplications();
-}
+        httpServer.listen(3000);
 
-async function startApplication(aasWorker: boolean = false): Promise<any> {
-    const options = {
-        key: fs.readFileSync(path.join(__dirname, 'cert', 'key.pem')),
-        cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem')),
-        passphrase: 'kix2018'
-    };
+        const numCPUs = serverConfig.CLUSTER_WORKER_COUNT || cpus().length;
+        for (let i = 0; i < numCPUs; i++) {
+            cluster.fork();
+        }
 
-    const app = express();
-    let server;
-
-    const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-    if (serverConfig.USE_SSL) {
-        server = https.createServer(options, app);
+        cluster.on('exit', (worker) => {
+            LoggingService.getInstance().info(`Worker ${worker.process.pid} died`);
+            cluster.fork();
+        });
     } else {
-        server = http.createServer(app);
-    }
+        LoggingService.getInstance().info(`Worker ${process.pid} started`);
 
-    await initApplication(app);
+        const httpServer = http.createServer();
+        const io = new Server(httpServer);
 
-    const sio = require('socket.io');
+        // use the cluster adapter
+        io.adapter(createAdapter());
 
-    if (aasWorker) {
-        sio.adapter(createAdapter());
         // setup connection with the primary process
-        setupWorker(sio);
+        setupWorker(io);
+
+        io.on('connection', (socket) => {
+            LoggingService.getInstance().info('Connected');
+        });
+
+        const namespace = io.of('/test');
+        namespace
+            .on('connection', (socket) => {
+                LoggingService.getInstance().info('connection on test');
+            });
     }
+    // if (serverConfig.CLUSTER_ENABLED) {
+    //     if (cluster.isPrimary) {
 
-    const io = sio.listen(server);
-    await SocketService.getInstance().initialize(io);
+    //         LoggingService.getInstance().info('CLUSTER - Master start');
 
-    return server;
+    //         await initPlugins();
+    //         await initializeFrontend();
+    //         await initApplication();
+
+    //         const httpServer = createHTTPServer();
+
+    //         setupMaster(httpServer, {
+    //             loadBalancingMethod: 'least-connection',
+    //         });
+
+    //         setupPrimary();
+
+    //         const port = getPort();
+    //         httpServer.listen(port);
+    //         LoggingService.getInstance().info(`Frontend server is running on HTTPS: https://FQDN:${port}`);
+
+    //         const numCPUs = serverConfig.CLUSTER_WORKER_COUNT || cpus().length;
+    //         for (let i = 0; i < numCPUs; i++) {
+    //             cluster.fork();
+    //         }
+
+    //         cluster.on('exit', (worker) => {
+    //             LoggingService.getInstance().info(`Worker ${worker.process.pid} died`);
+    //             // cluster.fork();
+    //         });
+
+    //     } else {
+    //         LoggingService.getInstance().info(`CLUSTER - Worker ${process.pid} started`);
+
+    //         await initPlugins();
+
+    //         const { Server } = require('socket.io');
+
+    //         const httpServer = createHTTPServer();
+    //         const io = new Server(httpServer);
+
+    //         // use the cluster adapter
+    //         io.adapter(createAdapter());
+
+    //         // setup connection with the primary process
+    //         setupWorker(io);
+
+    //         await SocketService.getInstance().initialize(io);
+
+    //         io.on('connection', (socket) => {
+    //             LoggingService.getInstance().info('Connected');
+    //         });
+    //     }
+    // } else {
+    //     await initPlugins();
+    //     await initializeFrontend();
+    //     await initApplication();
+
+    //     const port = getPort();
+    //     const httpServer = createHTTPServer();
+    //     httpServer.listen(port);
+    //     await SocketService.getInstance().initialize(httpServer);
+    // eslint-disable-next-line max-len
+    //     LoggingService.getInstance().info(`Frontend server is running on HTTPS: https://FQDN:${serverConfig.HTTPS_PORT}`);
+    // }
 }
 
-async function initApplication(application: express.Application): Promise<void> {
-    const configDir = path.join(__dirname, '..', '..', 'config');
-    const certDir = path.join(__dirname, '..', '..', 'cert');
-    const dataDir = path.join(__dirname, '..', '..', 'data');
-    ConfigurationService.getInstance().init(configDir, certDir, dataDir);
+// async function initPlugins(): Promise<void> {
+//     // load registered plugins
+//     const pluginDirs = [
+//         'frontend-applications',
+//         'frontend-applications/agent-portal/modules'
+//     ];
+//     await PluginService.getInstance().init(pluginDirs.map((pd) => path.join('..', pd)));
+// }
 
-    const pluginDirs = [
-        'frontend-applications',
-        'frontend-applications/agent-portal/modules'
-    ];
-    await PluginService.getInstance().init(pluginDirs.map((pd) => path.join('..', pd)));
+// async function initializeFrontend(): Promise<void> {
 
-    try {
-        const startUpBegin = Date.now();
-        await Server.getInstance().initServer();
-        const startUpEnd = Date.now();
-        LoggingService.getInstance().info(`[SERVER] Ready - Startup in ${(startUpEnd - startUpBegin) / 1000}s`);
-    } catch (error) {
-        LoggingService.getInstance().error('Could not initialize server');
-        LoggingService.getInstance().error(error);
-    }
+//     await createClientRegistration();
 
-}
+//     // create initial data
+//     const initialDataExtensions = await PluginService.getInstance().getExtensions<IInitialDataExtension>(
+//         AgentPortalExtensions.INITIAL_DATA
+//     );
+//     LoggingService.getInstance().info(`Create initial data (${initialDataExtensions.length} extensions)`);
+//     for (const extension of initialDataExtensions) {
+//         await extension.createData().catch((e) => {
+//             LoggingService.getInstance().error(`Error creating inital data: ${extension.name}.`, e);
+//         });
+//     }
+
+//     const success = await MigrationService.getInstance().startMigration();
+//     if (!success) {
+//         LoggingService.getInstance().error('Startup failed. Could not migrate!');
+//         process.exit(1);
+//     }
+
+//     await MarkoService.getInstance().initializeMarkoApplications();
+// }
+
+// function getPort(): number {
+//     let port = 3001;
+//     const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+//     if (serverConfig.USE_SSL) {
+//         port = serverConfig.HTTPS_PORT || 3001;
+//     } else {
+//         port = serverConfig.HTTP_PORT || 3000;
+//     }
+
+//     return port;
+// }
+
+// function createHTTPServer(): any {
+//     const options = {
+//         key: fs.readFileSync(path.join(__dirname, '..', '..', 'cert', 'key.pem')),
+//         cert: fs.readFileSync(path.join(__dirname, '..', '..', 'cert', 'cert.pem')),
+//         passphrase: 'kix2018'
+//     };
+
+//     const app = Server.getInstance().application || express();
+//     let server;
+
+//     const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+//     if (serverConfig.USE_SSL) {
+//         server = https.createServer(options, app);
+//     } else {
+//         server = http.createServer(app);
+//     }
+
+//     return server;
+// }
+
+// async function initApplication(): Promise<void> {
+//     const configDir = path.join(__dirname, '..', '..', 'config');
+//     const certDir = path.join(__dirname, '..', '..', 'cert');
+//     const dataDir = path.join(__dirname, '..', '..', 'data');
+//     ConfigurationService.getInstance().init(configDir, certDir, dataDir);
+
+//     const pluginDirs = [
+//         'frontend-applications',
+//         'frontend-applications/agent-portal/modules'
+//     ];
+//     await PluginService.getInstance().init(pluginDirs.map((pd) => path.join('..', pd)));
+
+//     try {
+//         const startUpBegin = Date.now();
+//         await Server.getInstance().initServer();
+//         const startUpEnd = Date.now();
+//         LoggingService.getInstance().info(`[SERVER] Ready - Startup in ${(startUpEnd - startUpBegin) / 1000}s`);
+//     } catch (error) {
+//         LoggingService.getInstance().error('Could not initialize server');
+//         LoggingService.getInstance().error(error);
+//     }
+
+// }
 
 
-async function createClientRegistration(): Promise<void> {
-    LoggingService.getInstance().info('Create ClientRegsitration');
+// async function createClientRegistration(): Promise<void> {
+//     LoggingService.getInstance().info('Create ClientRegsitration');
 
-    const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+//     const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
 
-    await ClientRegistrationService.getInstance().createClientRegistration(
-        serverConfig.BACKEND_API_TOKEN
-    ).catch((error) => {
-        LoggingService.getInstance().error(error);
-        LoggingService.getInstance().error(
-            'Failed to register frontent server at backend (ClientRegistration). See errors above.'
-        );
-        process.exit(1);
-    });
+//     await ClientRegistrationService.getInstance().createClientRegistration(
+//         serverConfig.BACKEND_API_TOKEN
+//     ).catch((error) => {
+//         LoggingService.getInstance().error(error);
+//         LoggingService.getInstance().error(
+//             'Failed to register frontent server at backend (ClientRegistration). See errors above.'
+//         );
+//         process.exit(1);
+//     });
 
-    LoggingService.getInstance().info('ClientRegistration created.');
-}
+//     LoggingService.getInstance().info('ClientRegistration created.');
+// }
 
 
 initializeServer();

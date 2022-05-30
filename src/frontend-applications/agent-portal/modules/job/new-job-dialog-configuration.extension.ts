@@ -18,7 +18,7 @@ import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { ContextMode } from '../../model/ContextMode';
 import { FormConfiguration } from '../../model/configuration/FormConfiguration';
 import { FormContext } from '../../model/configuration/FormContext';
-import { ModuleConfigurationService } from '../../server/services/configuration';
+import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 
