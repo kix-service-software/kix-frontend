@@ -160,8 +160,14 @@ export class HttpService {
         const cacheKey = token + resource;
         let headers = await CacheService.getInstance().get(cacheKey, RequestMethod.OPTIONS);
         if (!headers) {
-            headers = await this.executeRequest<Response>(resource, token, null, options, true);
+            if (!this.requestPromises.has(cacheKey)) {
+                this.requestPromises.set(cacheKey, this.executeRequest<Response>(resource, token, null, options, true));
+            }
+
+            const request = this.requestPromises.get(cacheKey);
+            headers = await request;
             await CacheService.getInstance().set(cacheKey, headers, RequestMethod.OPTIONS);
+            this.requestPromises.delete(cacheKey);
         }
 
         return new OptionsResponse(headers);

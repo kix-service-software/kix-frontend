@@ -43,7 +43,7 @@ export class TicketHistory extends KIXObject {
     public PriorityID: number;
 
     public constructor(ticketHistory?: TicketHistory) {
-        super();
+        super(ticketHistory);
         if (ticketHistory) {
             this.HistoryID = ticketHistory.HistoryID;
             this.ObjectId = this.HistoryID;

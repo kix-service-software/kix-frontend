@@ -59,6 +59,7 @@ import { CreateTicketArticleOptions } from '../../model/CreateTicketArticleOptio
 import { Error } from '../../../../../../server/model/Error';
 import { Contact } from '../../../customer/model/Contact';
 import { ContactProperty } from '../../../customer/model/ContactProperty';
+import { TicketHistory } from '../../model/TicketHistory';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -79,6 +80,7 @@ export class TicketService extends KIXObjectService<Ticket> {
         this.objectConstructors.set(KIXObjectType.SENDER_TYPE, [SenderType]);
         this.objectConstructors.set(KIXObjectType.TICKET_LOCK, [TicketLock]);
         this.objectConstructors.set(KIXObjectType.WATCHER, [Watcher]);
+        this.objectConstructors.set(KIXObjectType.TICKET_HISTORY, [TicketHistory]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
@@ -86,7 +88,8 @@ export class TicketService extends KIXObjectService<Ticket> {
             || kixObjectType === KIXObjectType.ARTICLE
             || kixObjectType === KIXObjectType.SENDER_TYPE
             || kixObjectType === KIXObjectType.TICKET_LOCK
-            || kixObjectType === KIXObjectType.WATCHER;
+            || kixObjectType === KIXObjectType.WATCHER
+            || kixObjectType === KIXObjectType.TICKET_HISTORY;
     }
 
     public async loadObjects<O extends KIXObject>(
