@@ -22,6 +22,7 @@ import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 import { Socket } from 'socket.io';
 import { LoggingService } from '../../../../server/services/LoggingService';
+import { CacheService } from './cache';
 
 export class AuthenticationService {
 
@@ -34,15 +35,16 @@ export class AuthenticationService {
         return AuthenticationService.INSTANCE;
     }
 
-    private backendCallbackToken: string;
-
     private tokenSecret: string;
 
-    private constructor() {
-        const config = ConfigurationService.getInstance().getServerConfiguration();
-        this.tokenSecret = config.FRONTEND_TOKEN_SECRET;
+    private constructor() { }
 
-        this.backendCallbackToken = jwt.sign({ name: 'backen-callback', created: Date.now() }, this.tokenSecret);
+    private async createCallbackToken(): Promise<void> {
+        const config = ConfigurationService.getInstance().getServerConfiguration();
+        this.tokenSecret = config?.FRONTEND_TOKEN_SECRET;
+
+        const backendCallbackToken = jwt.sign({ name: 'backen-callback', created: Date.now() }, this.tokenSecret);
+        await CacheService.getInstance().set('CALLBACK_TOKEN', backendCallbackToken);
     }
 
     private createToken(userLogin: string, backendToken: string, remoteAddress: string): string {
@@ -87,8 +89,14 @@ export class AuthenticationService {
         });
     }
 
-    public getCallbackToken(): string {
-        return this.backendCallbackToken;
+    public async getCallbackToken(): Promise<string> {
+        let token = await CacheService.getInstance().get('CALLBACK_TOKEN');
+        if (!token) {
+            await this.createCallbackToken();
+            token = await CacheService.getInstance().get('CALLBACK_TOKEN');
+        }
+
+        return token;
     }
 
     public async isAuthenticated(req: Request, res: Response, next: () => void): Promise<void> {
@@ -123,7 +131,8 @@ export class AuthenticationService {
         if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Token') {
             const token = req.headers.authorization.split(' ')[1];
             if (token) {
-                if (token === this.backendCallbackToken) {
+                const callbackToken = await this.getCallbackToken();
+                if (token === callbackToken) {
                     next();
                 } else {
                     res.status(401).send('Not authorized!');

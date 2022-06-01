@@ -29,6 +29,7 @@ import { MarkoService } from '../frontend-applications/agent-portal/server/servi
 import { SocketService } from '../frontend-applications/agent-portal/server/services/SocketService';
 import { PluginService } from './services/PluginService';
 import { Server } from '../frontend-applications/agent-portal/server/Server';
+import { AuthenticationService } from '../frontend-applications/agent-portal/server/services/AuthenticationService';
 
 const path = require('path');
 
@@ -266,17 +267,15 @@ async function initApplication(): Promise<void> {
 async function createClientRegistration(): Promise<void> {
     LoggingService.getInstance().info('Create ClientRegsitration');
 
-    const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-
-    await ClientRegistrationService.getInstance().createClientRegistration(
-        serverConfig.BACKEND_API_TOKEN
-    ).catch((error) => {
-        LoggingService.getInstance().error(error);
-        LoggingService.getInstance().error(
-            'Failed to register frontent server at backend (ClientRegistration). See errors above.'
-        );
-        process.exit(1);
-    });
+    const backendToken = await AuthenticationService.getInstance().getCallbackToken();
+    await ClientRegistrationService.getInstance().createClientRegistration(backendToken)
+        .catch((error) => {
+            LoggingService.getInstance().error(error);
+            LoggingService.getInstance().error(
+                'Failed to register frontent server at backend (ClientRegistration). See errors above.'
+            );
+            process.exit(1);
+        });
 
     LoggingService.getInstance().info('ClientRegistration created.');
 }
