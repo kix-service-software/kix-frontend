@@ -16,8 +16,6 @@
  * --
  */
 
-import https from 'https';
-import http from 'http';
 import { NotificationEvent } from '../../model/NotificationEvent';
 import { NotificationNamespace } from '../socket-namespaces/NotificationNamespace';
 import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
@@ -25,7 +23,6 @@ import { PluginService } from '../../../../server/services/PluginService';
 import { ISocketNamespaceRegistryExtension } from '../extensions/ISocketNamespaceRegistryExtension';
 import { LoggingService } from '../../../../server/services/LoggingService';
 import { Server } from 'socket.io';
-import { ConfigurationService } from '../../../../server/services/ConfigurationService';
 
 export class SocketService {
 

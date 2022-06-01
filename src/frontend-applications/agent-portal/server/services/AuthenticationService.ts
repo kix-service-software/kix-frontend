@@ -11,7 +11,6 @@
 
 import { Request, Response } from 'express';
 import { ConfigurationService } from '../../../../server/services/ConfigurationService';
-import { AuthenticationRouter } from '../routes/AuthenticationRouter';
 import { HttpService } from './HttpService';
 import { SessionResponse } from '../model/SessionResponse';
 import { LoginResponse } from '../model/LoginResponse';
@@ -108,15 +107,15 @@ export class AuthenticationService {
                     next();
                 } else {
                     res.clearCookie('token');
-                    AuthenticationRouter.getInstance().login(req, res);
+                    res.redirect('/auth');
                 }
             }).catch((error) => {
                 res.clearCookie('token');
-                AuthenticationRouter.getInstance().login(req, res);
+                res.redirect('/auth');
             });
         } else {
             res.clearCookie('token');
-            AuthenticationRouter.getInstance().login(req, res);
+            res.redirect('/auth');
         }
     }
 
