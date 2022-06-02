@@ -37,6 +37,7 @@ import { TicketLock } from '../model/TicketLock';
 import { Contact } from '../../customer/model/Contact';
 import { CacheService } from '../../../server/services/cache';
 import { PersonalSettingsProperty } from '../../user/model/PersonalSettingsProperty';
+import { TicketHistory } from '../model/TicketHistory';
 
 export class TicketAPIService extends KIXObjectAPIService {
 
@@ -67,7 +68,8 @@ export class TicketAPIService extends KIXObjectAPIService {
             || kixObjectType === KIXObjectType.ARTICLE
             || kixObjectType === KIXObjectType.SENDER_TYPE
             || kixObjectType === KIXObjectType.TICKET_LOCK
-            || kixObjectType === KIXObjectType.WATCHER;
+            || kixObjectType === KIXObjectType.WATCHER
+            || kixObjectType === KIXObjectType.TICKET_HISTORY;
     }
 
     public async loadObjects<T>(
@@ -119,6 +121,15 @@ export class TicketAPIService extends KIXObjectAPIService {
                 );
                 objects = await super.load(
                     token, KIXObjectType.ARTICLE, uri, loadingOptions, objectIds, 'Article', Article
+                );
+            }
+        } else if (objectType === KIXObjectType.TICKET_HISTORY) {
+            if (objectIds?.length) {
+                const uri = this.buildUri(
+                    this.RESOURCE_URI, objectIds[0], 'history'
+                );
+                objects = await super.load(
+                    token, KIXObjectType.TICKET_HISTORY, uri, loadingOptions, null, 'History', TicketHistory
                 );
             }
         }
