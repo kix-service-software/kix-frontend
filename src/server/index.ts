@@ -45,58 +45,6 @@ async function initializeServer(): Promise<void> {
 
     const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
 
-    // if (cluster.isPrimary) {
-    //     LoggingService.getInstance().info(`Master ${process.pid} is running`);
-
-    //     const httpServer = http.createServer();
-
-    //     // setup sticky sessions
-    //     setupMaster(httpServer, {
-    //         loadBalancingMethod: 'least-connection',
-    //     });
-
-    //     // setup connections between the workers
-    //     setupPrimary();
-
-    //     httpServer.listen(3000);
-
-    //     const numCPUs = serverConfig.CLUSTER_WORKER_COUNT || cpus().length;
-    //     for (let i = 0; i < numCPUs; i++) {
-    //         cluster.fork();
-    //     }
-
-    //     cluster.on('exit', (worker) => {
-    //         LoggingService.getInstance().info(`Worker ${worker.process.pid} died`);
-    //         cluster.fork();
-    //     });
-    // } else {
-    //     LoggingService.getInstance().info(`Worker ${process.pid} started`);
-
-    //     const httpServer = http.createServer();
-    //     const io = new Server(httpServer, {
-    //         cors: {
-    //             origin: 'http://localhost',
-    //             methods: ['GET', 'POST'],
-    //             credentials: true
-    //         }
-    //     });
-
-    //     // use the cluster adapter
-    //     io.adapter(createAdapter());
-
-    //     // setup connection with the primary process
-    //     setupWorker(io);
-
-    //     io.on('connection', (socket) => {
-    //         LoggingService.getInstance().info('Connected');
-    //     });
-
-    //     const namespace = io.of('/test');
-    //     namespace.on('connection', (socket) => {
-    //         LoggingService.getInstance().info('connection on test');
-    //     });
-    // }
-
     if (serverConfig.CLUSTER_ENABLED) {
         if (cluster.isPrimary) {
 
@@ -135,13 +83,7 @@ async function initializeServer(): Promise<void> {
             await initApplication();
 
             const httpServer = createHTTPServer();
-            const io = require('socket.io')(httpServer, {
-                cors: {
-                    origin: true,
-                    methods: ['GET', 'POST'],
-                    credentials: true
-                }
-            });
+            const io = new SocketServer(httpServer);
 
             // use the cluster adapter
             io.adapter(createAdapter());
@@ -157,13 +99,7 @@ async function initializeServer(): Promise<void> {
         await initApplication();
 
         const httpServer = createHTTPServer();
-        const io = require('socket.io')(httpServer, {
-            cors: {
-                origin: true,
-                methods: ['GET', 'POST'],
-                credentials: true
-            }
-        });
+        const io = require('socket.io')(httpServer);
 
         await SocketService.getInstance().initialize(io);
 

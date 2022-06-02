@@ -37,12 +37,12 @@ export class AuthenticationService {
 
     private tokenSecret: string;
 
-    private constructor() { }
-
-    private async createCallbackToken(): Promise<void> {
+    private constructor() {
         const config = ConfigurationService.getInstance().getServerConfiguration();
         this.tokenSecret = config?.FRONTEND_TOKEN_SECRET;
+    }
 
+    private async createCallbackToken(): Promise<void> {
         const backendCallbackToken = jwt.sign({ name: 'backen-callback', created: Date.now() }, this.tokenSecret);
         await CacheService.getInstance().set('CALLBACK_TOKEN', backendCallbackToken);
     }
