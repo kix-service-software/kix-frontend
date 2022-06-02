@@ -54,7 +54,7 @@ async function initializeServer(): Promise<void> {
             await initializeFrontend();
             await initApplication();
 
-            const httpServer = createHTTPServer();
+            const httpServer = createHTTPServer(false);
 
             setupMaster(httpServer, {
                 loadBalancingMethod: 'least-connection',
@@ -82,7 +82,7 @@ async function initializeServer(): Promise<void> {
             await initPlugins();
             await initApplication();
 
-            const httpServer = createHTTPServer();
+            const httpServer = createHTTPServer(false);
             const io = new SocketServer(httpServer);
 
             // use the cluster adapter
@@ -153,7 +153,7 @@ function getPort(): number {
     return port;
 }
 
-function createHTTPServer(): any {
+function createHTTPServer(ssl: boolean = true): any {
     const options = {
         key: fs.readFileSync(path.join(__dirname, '..', '..', 'cert', 'key.pem')),
         cert: fs.readFileSync(path.join(__dirname, '..', '..', 'cert', 'cert.pem')),
@@ -164,7 +164,7 @@ function createHTTPServer(): any {
 
     let server;
     const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-    if (serverConfig.USE_SSL) {
+    if (ssl && serverConfig.USE_SSL) {
         server = https.createServer(options, app);
     } else {
         server = http.createServer(app);
