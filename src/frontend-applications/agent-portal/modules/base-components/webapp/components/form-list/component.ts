@@ -173,24 +173,17 @@ class Component {
         let transformValue = 1;
         if (valueList) {
             const formListInputContainer = (this as any).getEl('form-list-input-container-' + this.state.listId);
-            let container = formListInputContainer;
-            while (!container?.classList?.contains('form-page') && container?.parentNode) {
-                container = container.parentNode;
-            }
 
             const dropdownListEnd = formListInputContainer.getBoundingClientRect().top
                 + formListInputContainer.getBoundingClientRect().height
                 + valueList.getBoundingClientRect().height;
 
-            const containerEnd = container && container.getBoundingClientRect
-                ? container.getBoundingClientRect().top + container.getBoundingClientRect().height
-                : dropdownListEnd;
-
             const input = (this as any).getComponent('form-list-input-' + this.state.listId)?.el;
             const list = (this as any).getComponent(this.state.treeId)?.el;
             const buttons = (this as any).getComponent('buttonbar' + this.state.listId)?.el;
 
-            if (containerEnd < dropdownListEnd) {
+            const gap = (window.innerHeight || document.documentElement.clientHeight) - dropdownListEnd;
+            if (gap < 0) {
                 transformValue
                     = formListInputContainer.getBoundingClientRect().height
                     + valueList.getBoundingClientRect().height
