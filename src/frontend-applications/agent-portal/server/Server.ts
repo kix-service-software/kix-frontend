@@ -36,6 +36,7 @@ import { IInitialDataExtension } from '../model/IInitialDataExtension';
 import { MigrationService } from '../migrations/MigrationService';
 import { AuthenticationService } from './services/AuthenticationService';
 import { ClientRegistrationService } from './services/ClientRegistrationService';
+import { MainMenuNamespace } from '../modules/agent-portal/server/MainMenuNamespace';
 
 export class Server implements IServer {
 
@@ -103,6 +104,7 @@ export class Server implements IServer {
             process.exit(99);
         });
 
+        MainMenuNamespace.getInstance().createDefaultConfiguration(this.serverConfig.BACKEND_API_TOKEN);
         await this.initializeApplication();
     }
 
