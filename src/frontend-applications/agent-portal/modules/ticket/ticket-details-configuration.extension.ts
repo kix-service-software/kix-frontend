@@ -519,10 +519,10 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                     criteria: [
                                                         {
                                                             property: TicketProperty.CONTACT_ID,
-                                                            operator: SearchOperator.EQUALS,
-                                                            type: 'STRING',
+                                                            operator: SearchOperator.IN,
+                                                            type: FilterDataType.NUMERIC,
                                                             filterType: FilterType.AND,
-                                                            value: '<KIX_TICKET_ContactID>'
+                                                            value: ['<KIX_TICKET_ContactID>']
                                                         },
                                                         {
                                                             property: TicketProperty.STATE_TYPE,
@@ -552,10 +552,10 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                     criteria: [
                                                         {
                                                             property: TicketProperty.ORGANISATION_ID,
-                                                            operator: SearchOperator.EQUALS,
-                                                            type: 'STRING',
+                                                            operator: SearchOperator.IN,
+                                                            type: FilterDataType.NUMERIC,
                                                             filterType: FilterType.AND,
-                                                            value: '<KIX_TICKET_OrganisationID>'
+                                                            value: ['<KIX_TICKET_OrganisationID>']
                                                         },
                                                         {
                                                             property: TicketProperty.STATE_TYPE,
