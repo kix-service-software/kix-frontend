@@ -113,7 +113,7 @@ class Component {
 
             values.forEach((v) => this.advancedOptionsMap.set(v.instanceId, false));
 
-            this.state.dynamicValues = values;
+            this.state.dynamicValues = values.sort((a, b) => a.required ? -1 : 0);
 
             this.state.options = await this.manager.getFieldOptions();
 

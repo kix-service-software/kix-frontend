@@ -32,6 +32,11 @@
         align-items: start;
         grid-row-gap: @margin-small;
         position: relative; // necessary for dnd
+        align-items: center;
+
+        >span.label {
+            padding-left: @margin-small;
+        }
 
         &[draggable="true"] {
             -khtml-user-drag: element;
