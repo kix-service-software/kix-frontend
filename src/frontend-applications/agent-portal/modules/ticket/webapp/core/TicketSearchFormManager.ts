@@ -28,6 +28,7 @@ import { QueueProperty } from '../../model/QueueProperty';
 import { Ticket } from '../../model/Ticket';
 import { ArticleProperty } from '../../model/ArticleProperty';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
 
 export class TicketSearchFormManager extends SearchFormManager {
 
@@ -149,7 +150,6 @@ export class TicketSearchFormManager extends SearchFormManager {
             property === TicketProperty.LOCK_ID
             || property === 'Queue.FollowUpID'
             || property === ArticleProperty.CUSTOMER_VISIBLE
-            || property === TicketProperty.STATE_TYPE
         ) {
             return false;
         }
@@ -233,5 +233,19 @@ export class TicketSearchFormManager extends SearchFormManager {
         const property = Ticket.SORT_PROPERTIES.find((p) => p.Property === attribute);
         return property ? property.DataType : null;
     }
+
+    public async setValue(newValue: ObjectPropertyValue, silent?: boolean): Promise<void> {
+        if (newValue.property === TicketProperty.STATE_TYPE) {
+            newValue.readonly = false;
+            newValue.required = true;
+            newValue.changeable = false;
+            if (!newValue.value) {
+                newValue.value = ['Open'];
+            }
+        }
+
+        await super.setValue(newValue, silent);
+    }
+
 
 }

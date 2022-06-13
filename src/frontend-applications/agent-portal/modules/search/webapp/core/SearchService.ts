@@ -218,6 +218,9 @@ export class SearchService {
 
         searchCache.fulltextValue = searchValue;
 
+        const searchDefinition = this.getSearchDefinition(objectType);
+        searchDefinition?.appendFullTextCriteria(searchCache.criteria);
+
         await this.setSearchContext(searchCache?.objectType);
         const objects = await this.searchObjects(searchCache);
         return (objects as any);
