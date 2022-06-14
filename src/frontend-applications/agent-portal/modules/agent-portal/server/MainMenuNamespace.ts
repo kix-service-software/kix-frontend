@@ -52,19 +52,19 @@ export class MainMenuNamespace extends SocketNameSpace {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';
 
-        const extensions = await PluginService.getInstance().getExtensions<IMainMenuExtension>(
-            AgentPortalExtensions.MAIN_MENU
-        ).catch(() => []);
-
         let configuration = await ModuleConfigurationService.getInstance().loadConfiguration<MainMenuConfiguration>(
             token, 'application-main-menu'
         );
 
         if (!configuration) {
-            configuration = await this.createDefaultConfiguration(token, extensions).catch(() => null);
+            configuration = await this.createDefaultConfiguration(token).catch(() => null);
         }
 
         if (configuration) {
+            const extensions = await PluginService.getInstance().getExtensions<IMainMenuExtension>(
+                AgentPortalExtensions.MAIN_MENU
+            ).catch(() => []);
+
             const primaryEntries = await this.getMenuEntries(
                 token, extensions, configuration.primaryMenuEntryConfigurations
             ).catch(() => []);
@@ -85,9 +85,10 @@ export class MainMenuNamespace extends SocketNameSpace {
         }
     }
 
-    private async createDefaultConfiguration(
-        token: string, extensions: IMainMenuExtension[]
-    ): Promise<MainMenuConfiguration> {
+    public async createDefaultConfiguration(token: string): Promise<MainMenuConfiguration> {
+        const extensions = await PluginService.getInstance().getExtensions<IMainMenuExtension>(
+            AgentPortalExtensions.MAIN_MENU
+        ).catch(() => []);
 
         const primaryConfiguration = extensions
             .filter((me) => me.primaryMenu)
