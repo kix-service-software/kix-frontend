@@ -121,6 +121,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
 
             const contactValuesPrepared = [];
             contactValues.forEach((v) => {
+                v = v.replace(/^(.*?),$/, '$1');
                 if (isNaN(v)) {
                     addrparser.parse(v).forEach((address) => {
                         contactValuesPrepared.push(address.address);
