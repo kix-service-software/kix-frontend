@@ -46,7 +46,8 @@ export class ValidObjectService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.VALID_OBJECT) {
             objects = await super.load<ValidObject>(
-                token, KIXObjectType.VALID_OBJECT, this.RESOURCE_URI, loadingOptions, objectIds, 'Valid', ValidObject
+                token, KIXObjectType.VALID_OBJECT, this.RESOURCE_URI, loadingOptions, objectIds, 'Valid',
+                clientRequestId, ValidObject
             );
         }
 

@@ -187,4 +187,8 @@ export class Contact extends KIXObject {
         }
     ];
     // tslint:enable
+
+    public toString(): string {
+        return `${this.Firstname} ${this.Lastname}`;
+    }
 }

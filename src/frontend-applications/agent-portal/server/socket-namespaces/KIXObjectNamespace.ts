@@ -24,6 +24,8 @@ import { DeleteObjectResponse } from '../../modules/base-components/webapp/core/
 import { Socket } from 'socket.io';
 
 import cookie from 'cookie';
+import { DisplayValueRequest } from '../../model/DisplayValueRequest';
+import { DisplayValueResponse } from '../../model/DisplayValueResponse';
 
 export class KIXObjectNamespace extends SocketNameSpace {
 
@@ -49,6 +51,7 @@ export class KIXObjectNamespace extends SocketNameSpace {
         this.registerEventHandler(client, KIXObjectEvent.CREATE_OBJECT, this.createObject.bind(this));
         this.registerEventHandler(client, KIXObjectEvent.UPDATE_OBJECT, this.updateObject.bind(this));
         this.registerEventHandler(client, KIXObjectEvent.DELETE_OBJECT, this.deleteObject.bind(this));
+        this.registerEventHandler(client, KIXObjectEvent.LOAD_DISPLAY_VALUE, this.loadDisplayValue.bind(this));
     }
 
     private async loadObjects(data: LoadObjectsRequest, client: Socket): Promise<SocketResponse> {
@@ -152,6 +155,21 @@ export class KIXObjectNamespace extends SocketNameSpace {
                 KIXObjectEvent.DELETE_OBJECT_ERROR, new SocketErrorResponse(data.requestId, errorMessage)
             );
         }
+
+        return response;
+    }
+
+    private async loadDisplayValue(data: DisplayValueRequest, client: Socket): Promise<SocketResponse> {
+        const service = KIXObjectServiceRegistry.getServiceInstance(data.objectType);
+
+        let displayValue = '';
+        if (service) {
+            displayValue = await service.loadDisplayValue(data.objectType, data.objectId);
+        }
+
+        const response = new SocketResponse(
+            KIXObjectEvent.LOAD_DISPLAY_VALUE_FINISHED, new DisplayValueResponse(data.requestId, displayValue)
+        );
 
         return response;
     }

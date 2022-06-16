@@ -58,7 +58,8 @@ export class ConfigItemAPIClassService extends KIXObjectAPIService {
 
         if (objectType === KIXObjectType.CONFIG_ITEM_CLASS) {
             objects = await super.load(
-                token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'ConfigItemClass', ConfigItemClass
+                token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'ConfigItemClass',
+                clientRequestId, ConfigItemClass
             );
         }
 

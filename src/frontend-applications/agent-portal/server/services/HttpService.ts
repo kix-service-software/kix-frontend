@@ -151,7 +151,9 @@ export class HttpService {
         return errors;
     }
 
-    public async options(token: string, resource: string, content: any): Promise<OptionsResponse> {
+    public async options(
+        token: string, resource: string, content: any, clientRequestId: string
+    ): Promise<OptionsResponse> {
         const options: AxiosRequestConfig = {
             method: RequestMethod.OPTIONS,
             data: content
@@ -161,7 +163,12 @@ export class HttpService {
         let headers = await CacheService.getInstance().get(cacheKey, RequestMethod.OPTIONS);
         if (!headers) {
             if (!this.requestPromises.has(cacheKey)) {
-                this.requestPromises.set(cacheKey, this.executeRequest<Response>(resource, token, null, options, true));
+                this.requestPromises.set(
+                    cacheKey,
+                    this.executeRequest<Response>(
+                        resource, token, clientRequestId, options, true
+                    )
+                );
             }
 
             const request = this.requestPromises.get(cacheKey);
@@ -209,7 +216,7 @@ export class HttpService {
         // start profiling
         const profileTaskId = ProfilingService.getInstance().start(
             'HttpService',
-            options.method + ' ' + resource + parameter,
+            options.method + '\t' + resource + '\t' + parameter,
             {
                 requestId: clientRequestId,
                 data: [options, parameter]

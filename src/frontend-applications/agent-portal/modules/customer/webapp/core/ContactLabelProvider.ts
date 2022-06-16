@@ -38,12 +38,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
         switch (property) {
             case ContactProperty.PRIMARY_ORGANISATION_ID:
                 if (value) {
-                    const primaryOrganisations = await KIXObjectService.loadObjects<Organisation>(
-                        KIXObjectType.ORGANISATION, [value], null, null, true, true, false
-                    ).catch((error) => console.error(error));
-                    displayValue = primaryOrganisations && !!primaryOrganisations.length
-                        ? `${primaryOrganisations[0].Name} (${primaryOrganisations[0].Number})`
-                        : '';
+                    displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.ORGANISATION, value);
                 }
                 break;
             case ContactProperty.PRIMARY_ORGANISATION_NUMBER:

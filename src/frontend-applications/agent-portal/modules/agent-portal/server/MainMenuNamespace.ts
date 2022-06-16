@@ -66,11 +66,11 @@ export class MainMenuNamespace extends SocketNameSpace {
 
         if (configuration) {
             const primaryEntries = await this.getMenuEntries(
-                token, extensions, configuration.primaryMenuEntryConfigurations
+                token, extensions, configuration.primaryMenuEntryConfigurations, data.clientRequestId
             ).catch(() => []);
 
             const secondaryEntries = await this.getMenuEntries(
-                token, extensions, configuration.secondaryMenuEntryConfigurations, false
+                token, extensions, configuration.secondaryMenuEntryConfigurations, data.clientRequestId, false
             ).catch(() => []);
 
             const response = new MainMenuEntriesResponse(
@@ -111,7 +111,8 @@ export class MainMenuNamespace extends SocketNameSpace {
     }
 
     private async getMenuEntries(
-        token: string, extensions: IMainMenuExtension[], entryConfigurations: MenuEntry[], primary: boolean = true
+        token: string, extensions: IMainMenuExtension[], entryConfigurations: MenuEntry[],
+        clientRequestId: string, primary: boolean = true
     ): Promise<MenuEntry[]> {
 
         const entries: MenuEntry[] = [];
@@ -119,8 +120,10 @@ export class MainMenuNamespace extends SocketNameSpace {
         for (const ec of entryConfigurations) {
             const menu = extensions.find((me) => me.mainContextId === ec.mainContextId);
             if (menu) {
-                const allowed = await PermissionService.getInstance().checkPermissions(token, menu.permissions)
-                    .catch(() => false);
+                const allowed = await PermissionService.getInstance().checkPermissions(
+                    token, menu.permissions, clientRequestId
+                ).catch(() => false);
+
                 if (allowed) {
                     entries.push(new MenuEntry(menu.icon, menu.text, menu.mainContextId, menu.contextIds));
                 }
@@ -130,8 +133,9 @@ export class MainMenuNamespace extends SocketNameSpace {
         // add extensions which are not in cofniguration
         for (const extension of extensions) {
             if (!entries.some((e) => e.mainContextId === extension.mainContextId)) {
-                const allowed = await PermissionService.getInstance().checkPermissions(token, extension.permissions)
-                    .catch(() => false);
+                const allowed = await PermissionService.getInstance().checkPermissions(
+                    token, extension.permissions, clientRequestId
+                ).catch(() => false);
                 if (allowed && extension.primaryMenu === primary) {
                     entries.push(
                         new MenuEntry(extension.icon, extension.text, extension.mainContextId, extension.contextIds)

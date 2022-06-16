@@ -107,10 +107,12 @@ export class AuthenticationNamespace extends SocketNameSpace {
             const parsedCookie = socket ? cookie.parse(socket.handshake.headers.cookie) : null;
             const token = parsedCookie ? parsedCookie.token : '';
 
-            const valid = await AuthenticationService.getInstance().validateToken(token, socket.handshake.address)
-                .catch(
-                    (error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error))
-                );
+            const valid = await AuthenticationService.getInstance().validateToken(
+                token, socket.handshake.address, data.clientRequestId
+            ).catch(
+                (error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error))
+            );
+
             let event = AuthenticationEvent.UNAUTHORIZED;
             if (valid) {
                 event = AuthenticationEvent.AUTHORIZED;
@@ -135,8 +137,9 @@ export class AuthenticationNamespace extends SocketNameSpace {
 
         let event = AuthenticationEvent.PERMISSION_CHECK_SUCCESS;
 
-        const allowed = await PermissionService.getInstance().checkPermissions(token, data.permissions, data.object)
-            .catch(() => false);
+        const allowed = await PermissionService.getInstance().checkPermissions(
+            token, data.permissions, data.clientRequestId, data.object
+        ).catch(() => false);
 
         if (!allowed) {
             event = AuthenticationEvent.PERMISSION_CHECK_FAILED;

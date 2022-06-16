@@ -85,13 +85,13 @@ describe('Permission Service', () => {
                 new UIComponentPermission('tickets', [CRUD.READ]),
                 new UIComponentPermission('organisations', [CRUD.READ]),
                 new UIComponentPermission('contacts', [CRUD.READ])
-            ]);
+            ], 'TEST');
 
             expect(allowed).true;
         });
 
         it('The permissions must be checked correctly and allow access if no permissions given', async () => {
-            const allowed = await PermissionService.getInstance().checkPermissions('token1234', []);
+            const allowed = await PermissionService.getInstance().checkPermissions('token1234', [], 'TEST');
             expect(allowed).true;
         });
 
@@ -100,7 +100,7 @@ describe('Permission Service', () => {
                 new UIComponentPermission('tickets', [CRUD.READ]),
                 new UIComponentPermission('organisations', [CRUD.CREATE]),
                 new UIComponentPermission('contacts', [CRUD.READ])
-            ]);
+            ], 'TEST');
 
             expect(allowed).false;
         });
@@ -110,7 +110,7 @@ describe('Permission Service', () => {
                 new UIComponentPermission('tickets', [CRUD.READ, CRUD.CREATE]),
                 new UIComponentPermission('organisations', [CRUD.READ]),
                 new UIComponentPermission('contacts', [CRUD.READ])
-            ]);
+            ], 'TEST');
 
             expect(allowed).false;
         });
@@ -142,7 +142,7 @@ describe('Permission Service', () => {
             const allowed = await PermissionService.getInstance().checkPermissions('token1234', [
                 new UIComponentPermission('organisations', [CRUD.READ]),
                 new UIComponentPermission('contacts', [CRUD.READ], true)
-            ]);
+            ], 'TEST');
 
             expect(allowed).true;
         });
@@ -153,7 +153,7 @@ describe('Permission Service', () => {
                 new UIComponentPermission('tickets', [CRUD.READ], true),
                 new UIComponentPermission('faq', [CRUD.READ], true),
                 new UIComponentPermission('contacts', [CRUD.READ], true)
-            ]);
+            ], 'TEST');
 
             expect(allowed).true;
         });
@@ -164,7 +164,7 @@ describe('Permission Service', () => {
                 new UIComponentPermission('tickets', [CRUD.READ], true),
                 new UIComponentPermission('faq', [CRUD.READ], true),
                 new UIComponentPermission('organisations', [CRUD.READ], true)
-            ]);
+            ], 'TEST');
 
             expect(allowed).true;
         });
@@ -173,7 +173,7 @@ describe('Permission Service', () => {
             const allowed = await PermissionService.getInstance().checkPermissions('token1234', [
                 new UIComponentPermission('organisations', [CRUD.UPDATE]),
                 new UIComponentPermission('contacts', [CRUD.CREATE], true)
-            ]);
+            ], 'TEST');
 
             expect(allowed).false;
         });
@@ -184,7 +184,7 @@ describe('Permission Service', () => {
                 new UIComponentPermission('tickets', [CRUD.READ], true),
                 new UIComponentPermission('faq', [CRUD.READ], true),
                 new UIComponentPermission('organisations', [CRUD.READ], true)
-            ]);
+            ], 'TEST');
 
             expect(allowed).false;
         });
@@ -194,13 +194,13 @@ describe('Permission Service', () => {
                 new UIComponentPermission('tickets', [CRUD.READ], true),
                 new UIComponentPermission('faq', [CRUD.READ], true),
                 new UIComponentPermission('organisations', [CRUD.READ], true)
-            ]);
+            ], 'TEST');
 
             expect(allowed).false;
         });
 
         it('The permissions must be checked correctly and allow access (no permissions given)', async () => {
-            const allowed = await PermissionService.getInstance().checkPermissions('token1234', []);
+            const allowed = await PermissionService.getInstance().checkPermissions('token1234', [], 'TEST');
             expect(allowed).true;
         });
 
@@ -223,12 +223,12 @@ describe('Permission Service', () => {
         })
 
         it('Should return true if no permissions are given and the option request provides errors.', async () => {
-            const allowed = await PermissionService.getInstance().checkPermissions('test-token-1234', []);
+            const allowed = await PermissionService.getInstance().checkPermissions('test-token-1234', [], 'TEST');
             expect(allowed).true;
         });
 
         it('Should return false if permissions are given and the option request provides errors.', async () => {
-            const allowed = await PermissionService.getInstance().checkPermissions('test-token-1234', [new UIComponentPermission('somewhere', [CRUD.READ])]);
+            const allowed = await PermissionService.getInstance().checkPermissions('test-token-1234', [new UIComponentPermission('somewhere', [CRUD.READ])], 'TEST');
             expect(allowed).false;
         });
     });

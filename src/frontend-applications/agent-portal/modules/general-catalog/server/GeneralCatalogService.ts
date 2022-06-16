@@ -52,12 +52,12 @@ export class GeneralCatalogService extends KIXObjectAPIService {
         if (objectType === KIXObjectType.GENERAL_CATALOG_ITEM) {
             objects = await super.load(
                 token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'GeneralCatalogItem',
-                GeneralCatalogItem
+                clientRequestId, GeneralCatalogItem
             );
         } else if (objectType === KIXObjectType.GENERAL_CATALOG_CLASS) {
             const uri = this.buildUri('system', 'generalcatalog', 'classes');
             objects = await super.load<string>(
-                token, KIXObjectType.GENERAL_CATALOG_CLASS, uri, null, null, 'GeneralCatalogClass'
+                token, KIXObjectType.GENERAL_CATALOG_CLASS, uri, null, null, 'GeneralCatalogClass', clientRequestId
             );
             if (objectIds) {
                 objects = objects.filter((o) => objectIds.some((oi) => oi === o));

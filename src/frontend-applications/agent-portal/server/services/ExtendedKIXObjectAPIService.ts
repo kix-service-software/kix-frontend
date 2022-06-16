@@ -23,6 +23,10 @@ export abstract class ExtendedKIXObjectAPIService implements IKIXObjectService {
         return false;
     }
 
+    public async loadDisplayValue(objectType: string, objectId: string | number): Promise<string> {
+        return '';
+    }
+
     public async loadObjects<T extends KIXObject = any>(
         token: string, clientRequestId: string, objectType: string, objectIds: Array<string | number>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions

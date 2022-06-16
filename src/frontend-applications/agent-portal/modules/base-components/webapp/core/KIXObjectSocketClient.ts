@@ -38,6 +38,8 @@ import { PortalNotificationService } from '../../../portal-notification/webapp/c
 import { PortalNotification } from '../../../portal-notification/model/PortalNotification';
 import { PortalNotificationType } from '../../../portal-notification/model/PortalNotificationType';
 import { DateTimeUtil } from './DateTimeUtil';
+import { DisplayValueRequest } from '../../../../model/DisplayValueRequest';
+import { DisplayValueResponse } from '../../../../model/DisplayValueResponse';
 
 export class KIXObjectSocketClient extends SocketClient {
 
@@ -53,6 +55,41 @@ export class KIXObjectSocketClient extends SocketClient {
 
     private constructor() {
         super('kixobjects');
+    }
+
+    public async loadDisplayValue(
+        objectType: KIXObjectType | string, objectId: string | number
+    ): Promise<string> {
+        this.checkSocketConnection();
+
+        const requestId = IdService.generateDateBasedId();
+
+        const request = new DisplayValueRequest(
+            requestId, ClientStorageService.getClientRequestId(), objectType, objectId
+        );
+
+        let requestPromise: Promise<string>;
+        const cacheKey = 'DisplayValue' + JSON.stringify({ objectType, objectId });
+
+        requestPromise = BrowserCacheService.getInstance().get(cacheKey, objectType);
+        if (!requestPromise) {
+            requestPromise = this.createDisplayValuePromise(request);
+            BrowserCacheService.getInstance().set(cacheKey, requestPromise, objectType);
+
+            requestPromise.catch((error) => {
+                BrowserCacheService.getInstance().delete(cacheKey, objectType);
+            });
+        }
+        return requestPromise;
+    }
+
+    private async createDisplayValuePromise(request: DisplayValueRequest): Promise<string> {
+        const response = await this.sendRequest<DisplayValueResponse>(
+            request,
+            KIXObjectEvent.LOAD_DISPLAY_VALUE, KIXObjectEvent.LOAD_DISPLAY_VALUE_FINISHED
+        ).catch((): DisplayValueResponse => new DisplayValueResponse(null, ''));
+
+        return response.displayValue;
     }
 
     public async loadObjects<T extends KIXObject>(
@@ -75,7 +112,7 @@ export class KIXObjectSocketClient extends SocketClient {
 
             requestPromise = BrowserCacheService.getInstance().get(cacheKey, kixObjectType);
             if (!requestPromise) {
-                requestPromise = this.createRequestPromise<T>(request, objectConstructors, timeout);
+                requestPromise = this.createLoadRequestPromise<T>(request, objectConstructors, timeout);
                 BrowserCacheService.getInstance().set(cacheKey, requestPromise, kixObjectType);
 
                 requestPromise.catch((error) => {
@@ -85,11 +122,11 @@ export class KIXObjectSocketClient extends SocketClient {
             return requestPromise;
         }
 
-        requestPromise = this.createRequestPromise<T>(request, objectConstructors, timeout);
+        requestPromise = this.createLoadRequestPromise<T>(request, objectConstructors, timeout);
         return requestPromise;
     }
 
-    private async createRequestPromise<T extends KIXObject>(
+    private async createLoadRequestPromise<T extends KIXObject>(
         request: LoadObjectsRequest, objectConstructors: Array<new (object?: T) => T>, timeout?: number
     ): Promise<T[]> {
         const response = await this.sendRequest<LoadObjectsResponse<T>>(

@@ -62,4 +62,8 @@ export class Queue extends KIXObject {
         return 'QueueID';
     }
 
+    public toString(): string {
+        return this.Name;
+    }
+
 }

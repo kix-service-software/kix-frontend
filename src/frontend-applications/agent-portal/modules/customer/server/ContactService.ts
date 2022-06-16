@@ -31,6 +31,9 @@ import { ObjectIcon } from '../../icon/model/ObjectIcon';
 import { FilterDataType } from '../../../model/FilterDataType';
 import { FilterType } from '../../../model/FilterType';
 import { SearchProperty } from '../../search/model/SearchProperty';
+import { CacheService } from '../../../server/services/cache';
+import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
+import { KIXObject } from '../../../model/kix/KIXObject';
 
 export class ContactAPIService extends KIXObjectAPIService {
 
@@ -58,9 +61,44 @@ export class ContactAPIService extends KIXObjectAPIService {
         return kixObjectType === KIXObjectType.CONTACT;
     }
 
+    protected getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+        let objectClass;
+
+        if (objectType === KIXObjectType.CONTACT) {
+            objectClass = Contact;
+        }
+        return objectClass;
+    }
+
+    public async loadDisplayValue(objectType: KIXObjectType | string, objectId: string | number): Promise<string> {
+        let displayValue = '';
+
+        if (objectType === KIXObjectType.CONTACT) {
+            const cacheKey = `${objectType}-${objectId}-displayvalue`;
+            displayValue = await CacheService.getInstance().get(cacheKey, objectType);
+            if (!displayValue && objectId) {
+                const loadingOptions = new KIXObjectLoadingOptions();
+                loadingOptions.includes = [ContactProperty.USER];
+
+                const config = ConfigurationService.getInstance().getServerConfiguration();
+                const contacts = await this.loadObjects<Contact>(
+                    config?.BACKEND_API_TOKEN, 'ContactAPIService', objectType, [objectId], loadingOptions
+                );
+
+                if (contacts?.length) {
+                    const contact = new Contact(contacts[0]);
+                    displayValue = contact.toString();
+                    await CacheService.getInstance().set(cacheKey, displayValue, objectType);
+                }
+            }
+        }
+
+        return displayValue;
+    }
+
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType,
-        objectIds: string[], loadingOptions: KIXObjectLoadingOptions
+        objectIds: Array<number | string>, loadingOptions: KIXObjectLoadingOptions
     ): Promise<T[]> {
         let objects = [];
 
@@ -71,12 +109,12 @@ export class ContactAPIService extends KIXObjectAPIService {
             if (loadingOptions || !preload) {
                 objects = await super.load<Contact>(
                     token, KIXObjectType.CONTACT, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.CONTACT,
-                    Contact
+                    clientRequestId, Contact
                 );
             } else {
                 objects = await super.load(
                     token, KIXObjectType.CONTACT, this.RESOURCE_URI, null, null, KIXObjectType.CONTACT,
-                    Contact
+                    clientRequestId, Contact
                 );
 
                 if (Array.isArray(objectIds) && objectIds.length) {

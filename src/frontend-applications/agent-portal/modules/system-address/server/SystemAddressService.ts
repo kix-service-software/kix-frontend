@@ -50,7 +50,7 @@ export class SystemAddressService extends KIXObjectAPIService {
         if (objectType === KIXObjectType.SYSTEM_ADDRESS) {
             objects = await super.load<SystemAddress>(
                 token, KIXObjectType.SYSTEM_ADDRESS, this.RESOURCE_URI, loadingOptions, objectIds, 'SystemAddress',
-                SystemAddress
+                clientRequestId, SystemAddress
             );
         }
 

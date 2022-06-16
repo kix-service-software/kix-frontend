@@ -110,7 +110,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
                     );
                     objects = await super.load(
                         token, KIXObjectType.CONFIG_ITEM_VERSION, uri, loadingOptions, objectIds, 'ConfigItemVersion',
-                        Version
+                        clientRequestId, Version
                     );
                 }
                 break;
