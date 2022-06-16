@@ -21,6 +21,7 @@ import { AgentService } from '../../../user/webapp/core/AgentService';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
 import { User } from '../../../user/model/User';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 
 export class TranslationService extends KIXObjectService<TranslationPattern> {
 
@@ -188,8 +189,9 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
                 this.loadTranslationPromise = new Promise<void>(async (resolve, reject) => {
                     this.userLanguage = await TranslationService.getUserLanguage();
 
+                    const loadingOptions = new KIXObjectLoadingOptions([], null, 0);
                     const translations = await KIXObjectService.loadObjects<Translation>(
-                        KIXObjectType.TRANSLATION
+                        KIXObjectType.TRANSLATION, null, loadingOptions
                     );
 
                     if (translations && translations.length) {
