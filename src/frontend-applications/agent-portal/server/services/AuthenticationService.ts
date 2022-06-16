@@ -69,7 +69,7 @@ export class AuthenticationService {
         return jwt.decode(token, this.tokenSecret);
     }
 
-    public async validateToken(token: string, remoteAddress: string): Promise<boolean> {
+    public async validateToken(token: string, remoteAddress: string, clientRequestId: string): Promise<boolean> {
         const config = ConfigurationService.getInstance().getServerConfiguration();
         if (config.CHECK_TOKEN_ORIGIN) {
             const decodedToken = this.decodeToken(token);
@@ -80,7 +80,7 @@ export class AuthenticationService {
 
         return new Promise<boolean>((resolve, reject) => {
             HttpService.getInstance().get<SessionResponse>(
-                'session', {}, token, null, null, false
+                'session', {}, token, clientRequestId, null, false
             ).then((response: SessionResponse) => {
                 resolve(
                     typeof response !== 'undefined' && response !== null &&
@@ -105,7 +105,8 @@ export class AuthenticationService {
 
             this.validateToken(
                 token,
-                Array.isArray(remoteAddress) ? remoteAddress[0] : remoteAddress
+                Array.isArray(remoteAddress) ? remoteAddress[0] : remoteAddress,
+                'AuthenticationService'
             ).then((valid) => {
                 if (valid) {
                     res.cookie('token', token, { httpOnly: true });
@@ -144,8 +145,9 @@ export class AuthenticationService {
             const parsedCookie = cookie.parse(socket.handshake.headers.cookie);
             const token = parsedCookie.token;
             if (token) {
-                const valid = await this.validateToken(token, socket.handshake.address)
-                    .catch(() => next(new SocketAuthenticationError('Error validating token!')));
+                const valid = await this.validateToken(
+                    token, socket.handshake.address, 'AuthenticationService'
+                ).catch(() => next(new SocketAuthenticationError('Error validating token!')));
 
                 if (valid) {
                     next();

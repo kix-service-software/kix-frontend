@@ -67,47 +67,4 @@ export class AdminModuleService {
         }
     }
 
-    private async checkPermissions(
-        token: string, modules: Array<AdminModuleCategory | AdminModule>
-    ): Promise<AdminModuleCategory[]> {
-        const result: AdminModuleCategory[] = [];
-        for (const module of modules) {
-            if (module instanceof AdminModuleCategory) {
-                const childModules: AdminModule[] = [];
-
-                if (module.modules) {
-                    for (const adminModule of module.modules) {
-                        const allowed = await PermissionService.getInstance().checkPermissions(
-                            token, adminModule.permissions
-                        );
-
-                        if (allowed) {
-                            childModules.push(adminModule);
-                        }
-                    }
-                }
-
-                module.modules = childModules;
-
-                if (module.children && module.children.length) {
-                    module.children = await this.checkPermissions(token, module.children);
-                }
-
-                if (module.modules.length || (module.children && !!module.children.length)) {
-                    result.push(module);
-                }
-            } else {
-                const allowed = await PermissionService.getInstance().checkPermissions(
-                    token, module.permissions
-                );
-
-                if (allowed) {
-                    result.push(module);
-                }
-            }
-        }
-
-        return result;
-    }
-
 }

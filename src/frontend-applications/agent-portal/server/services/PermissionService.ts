@@ -24,16 +24,16 @@ export class PermissionService {
     private constructor() { }
 
     public async checkPermissions(
-        token: string, permissions: UIComponentPermission[] = [], object?: any
+        token: string, permissions: UIComponentPermission[] = [], clientRequestId: string, object?: any
     ): Promise<boolean> {
         if (permissions && permissions.length) {
             const andPermissionChecks: Array<Promise<boolean>> = [];
             const orPermissionChecks: Array<Promise<boolean>> = [];
             permissions.filter((p) => p.OR).forEach((p) => {
-                orPermissionChecks.push(this.methodAllowed(token, p, object));
+                orPermissionChecks.push(this.methodAllowed(token, p, object, clientRequestId));
             });
             permissions.filter((p) => !p.OR).forEach((p) => {
-                andPermissionChecks.push(this.methodAllowed(token, p, object));
+                andPermissionChecks.push(this.methodAllowed(token, p, object, clientRequestId));
             });
 
             const andChecks = await Promise.all(andPermissionChecks);
@@ -49,14 +49,16 @@ export class PermissionService {
         return true;
     }
 
-    private async methodAllowed(token: string, permission: UIComponentPermission, object: any): Promise<boolean> {
+    private async methodAllowed(
+        token: string, permission: UIComponentPermission, object: any, clientRequestId: string
+    ): Promise<boolean> {
         if (permission.permissions && permission.permissions.length) {
             if (permission.target.startsWith('/')) {
                 permission.target = permission.target.substr(1, permission.target.length);
             }
 
             const response = await HttpService.getInstance().options(
-                token, permission.target, object
+                token, permission.target, object, clientRequestId
             ).catch((error) => {
                 console.error(error);
                 return null;

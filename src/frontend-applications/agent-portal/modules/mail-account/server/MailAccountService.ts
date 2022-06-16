@@ -53,12 +53,13 @@ export class MailAccountService extends KIXObjectAPIService {
         if (objectType === KIXObjectType.MAIL_ACCOUNT) {
             const uri = this.buildUri('system', 'communication', 'mailaccounts');
             objects = await super.load<MailAccount>(
-                token, KIXObjectType.MAIL_ACCOUNT, uri, loadingOptions, objectIds, 'MailAccount', MailAccount
+                token, KIXObjectType.MAIL_ACCOUNT, uri, loadingOptions, objectIds, 'MailAccount',
+                clientRequestId, MailAccount
             );
         } else if (objectType === KIXObjectType.MAIL_ACCOUNT_TYPE) {
             const uri = this.buildUri('system', 'communication', 'mailaccounts', 'types');
             objects = await super.load<string>(
-                token, KIXObjectType.MAIL_ACCOUNT_TYPE, uri, null, null, 'MailAccountType'
+                token, KIXObjectType.MAIL_ACCOUNT_TYPE, uri, null, null, 'MailAccountType', clientRequestId
             );
         }
 

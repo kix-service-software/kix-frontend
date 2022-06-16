@@ -157,4 +157,8 @@ export class Organisation extends KIXObject {
     ];
     // tslint:enable
 
+    public toString(): string {
+        return this.Name;
+    }
+
 }

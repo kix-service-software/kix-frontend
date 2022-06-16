@@ -59,7 +59,7 @@ export class OAuth2APIService extends KIXObjectAPIService {
         if (objectType === KIXObjectType.OAUTH2_PROFILE) {
             objects = await super.load<OAuth2Profile>(
                 token, KIXObjectType.OAUTH2_PROFILE, this.RESOURCE_URI, loadingOptions, objectIds,
-                'Profile', OAuth2Profile
+                'Profile', clientRequestId, OAuth2Profile
             );
         } else if (objectType === KIXObjectType.OAUTH2_PROFILE_AUTH_URL) {
             if (
@@ -72,7 +72,7 @@ export class OAuth2APIService extends KIXObjectAPIService {
                 // get url never from cache (backend state handling)
                 objects = await super.load<string>(
                     token, KIXObjectType.OAUTH2_PROFILE_AUTH_URL, uri, loadingOptions, objectIds,
-                    'AuthURL', undefined, false
+                    'AuthURL', clientRequestId, undefined, false
                 );
             }
         }

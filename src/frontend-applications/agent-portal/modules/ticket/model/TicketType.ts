@@ -51,4 +51,8 @@ export class TicketType extends KIXObject {
     return this.ID === type.ID;
   }
 
+  public toString(): string {
+    return this.Name;
+  }
+
 }

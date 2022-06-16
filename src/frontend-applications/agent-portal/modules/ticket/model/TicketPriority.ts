@@ -52,5 +52,8 @@ export class TicketPriority extends KIXObject {
         return this.ID === priority.ID;
     }
 
+    public toString(): string {
+        return this.Name;
+    }
 
 }

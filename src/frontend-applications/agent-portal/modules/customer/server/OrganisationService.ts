@@ -27,6 +27,7 @@ import { SearchProperty } from '../../search/model/SearchProperty';
 import { SearchOperator } from '../../search/model/SearchOperator';
 import { FilterType } from '../../../model/FilterType';
 import { FilterDataType } from '../../../model/FilterDataType';
+import { KIXObject } from '../../../model/kix/KIXObject';
 
 export class OrganisationAPIService extends KIXObjectAPIService {
 
@@ -54,6 +55,15 @@ export class OrganisationAPIService extends KIXObjectAPIService {
         return kixObjectType === KIXObjectType.ORGANISATION;
     }
 
+    protected getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+        let objectClass;
+
+        if (objectType === KIXObjectType.ORGANISATION) {
+            objectClass = Organisation;
+        }
+        return objectClass;
+    }
+
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType,
         objectIds: string[], loadingOptions: KIXObjectLoadingOptions
@@ -68,12 +78,13 @@ export class OrganisationAPIService extends KIXObjectAPIService {
             if (loadingOptions || !preload) {
                 objects = await super.load<Organisation>(
                     token, KIXObjectType.ORGANISATION, this.RESOURCE_URI,
-                    loadingOptions, objectIds, KIXObjectType.ORGANISATION, Organisation
+                    loadingOptions, objectIds, KIXObjectType.ORGANISATION,
+                    clientRequestId, Organisation
                 );
             } else {
                 objects = await super.load(
                     token, KIXObjectType.CONTACT, this.RESOURCE_URI, null, null, KIXObjectType.ORGANISATION,
-                    Organisation
+                    clientRequestId, Organisation
                 );
 
                 if (Array.isArray(objectIds) && objectIds.length) {
