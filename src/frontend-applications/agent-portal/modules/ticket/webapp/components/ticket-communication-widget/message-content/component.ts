@@ -121,7 +121,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         if (!this.state.article || force) {
             const loadingOptions = new KIXObjectLoadingOptions(
-                null, null, null, [ArticleProperty.FLAGS, ArticleProperty.ATTACHMENTS, 'ObjectActions']
+                null, null, null,
+                [
+                    ArticleProperty.PLAIN, ArticleProperty.FLAGS,
+                    ArticleProperty.ATTACHMENTS, 'ObjectActions'
+                ]
             );
             const articles = await KIXObjectService.loadObjects<Article>(
                 KIXObjectType.ARTICLE, [this.article.ArticleID], loadingOptions,
@@ -167,7 +171,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         const plainTextAction = await ActionFactory.getInstance().generateActions(['article-get-plain-action'], this.state.article);
-        actions.push(...plainTextAction);
+        if (plainTextAction?.length) {
+            plainTextAction[0].setData(this.article);
+            actions.push(...plainTextAction);
+        }
 
         const filteredActions = [];
         for (const a of actions) {

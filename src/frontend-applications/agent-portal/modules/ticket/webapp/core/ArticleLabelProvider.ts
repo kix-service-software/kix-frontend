@@ -99,12 +99,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
             ? defaultValue : article[property];
         switch (property) {
             case ArticleProperty.SENDER_TYPE_ID:
-                const senderTypes = await KIXObjectService.loadObjects<SenderType>(
-                    KIXObjectType.SENDER_TYPE, [article.SenderTypeID]
-                ).catch((error) => []);
-
-                displayValue = senderTypes && senderTypes.length ?
-                    typeof senderTypes[0] === 'object' ? senderTypes[0].Name : senderTypes[0] : null;
+                displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.SENDER_TYPE, article.SenderTypeID);
                 break;
             case ArticleProperty.TO:
                 displayValue = article.toList.length ? short

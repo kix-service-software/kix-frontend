@@ -57,13 +57,13 @@ export class SysConfigService extends KIXObjectAPIService {
         if (objectType === KIXObjectType.SYS_CONFIG_OPTION) {
             objects = await super.load<SysConfigOption>(
                 token, KIXObjectType.SYS_CONFIG_OPTION, this.RESOURCE_URI, loadingOptions, objectIds, 'SysConfigOption',
-                SysConfigOption
+                clientRequestId, SysConfigOption
             );
         } else if (objectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION) {
             const uri = this.buildUri(this.RESOURCE_URI, 'definitions');
             objects = await super.load<SysConfigOptionDefinition>(
                 token, KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, uri,
-                loadingOptions, objectIds, 'SysConfigOptionDefinition', SysConfigOptionDefinition
+                loadingOptions, objectIds, 'SysConfigOptionDefinition', clientRequestId, SysConfigOptionDefinition
             );
         }
 

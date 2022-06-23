@@ -34,6 +34,7 @@ import { CacheService } from './cache';
 import { SearchProperty } from '../../modules/search/model/SearchProperty';
 import { SearchOperator } from '../../modules/search/model/SearchOperator';
 import { SortUtil } from '../../model/SortUtil';
+import { ConfigurationService } from '../../../../server/services/ConfigurationService';
 
 export abstract class KIXObjectAPIService implements IKIXObjectService {
 
@@ -53,6 +54,38 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         this.extendedServices.push(service);
     }
 
+    protected getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+        return null;
+    }
+
+    public async loadDisplayValue(objectType: KIXObjectType | string, objectId: string | number): Promise<string> {
+        let displayValue = '';
+
+        if (objectType && objectId) {
+            const cacheKey = `${objectType}-${objectId}-displayvalue`;
+            displayValue = await CacheService.getInstance().get(cacheKey, objectType);
+            if (!displayValue && objectId) {
+
+                const config = ConfigurationService.getInstance().getServerConfiguration();
+                const objects = await this.loadObjects(
+                    config?.BACKEND_API_TOKEN, 'KIXObjectAPIService', objectType, [objectId], null, null
+                );
+
+                if (objects?.length) {
+                    let object = objects[0];
+                    const objectClass = this.getObjectClass(objectType);
+                    if (objectClass) {
+                        object = new objectClass(object);
+                    }
+                    displayValue = object.toString();
+                    await CacheService.getInstance().set(cacheKey, displayValue, objectType);
+                }
+            }
+        }
+
+        return displayValue;
+    }
+
     public async loadObjects<O extends KIXObject = any>(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
@@ -62,7 +95,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
     protected async load<O extends KIXObject | string | number = any>(
         token: string, objectType: KIXObjectType | string, baseUri: string, loadingOptions: KIXObjectLoadingOptions,
-        objectIds: Array<number | string>, responseProperty: string,
+        objectIds: Array<number | string>, responseProperty: string, clientRequestId: string,
         objectConstructor?: new (object?: KIXObject) => O,
         useCache?: boolean
     ): Promise<O[]> {
@@ -78,21 +111,16 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         }
 
         let objects: O[] = [];
-
-        const emptyResult = objectIds && objectIds.length === 0;
-        if (emptyResult) {
-            return objects;
+        let uri = baseUri;
+        if (objectIds) {
+            objectIds = objectIds.filter((id) => typeof id !== 'undefined' && id !== null && id.toString() !== '');
+            if (objectIds.length === 0) {
+                return [];
+            }
+            uri = this.buildUri(baseUri, objectIds.join(','));
         }
 
-        objectIds = objectIds
-            ? objectIds.filter((id) => typeof id !== 'undefined' && id !== null && id.toString() !== '')
-            : [];
-
-        const uri = objectIds.length
-            ? this.buildUri(baseUri, objectIds.join(','))
-            : baseUri;
-
-        const response = await this.getObjectByUri(token, uri, query, objectType, useCache);
+        const response = await this.getObjectByUri(token, uri, clientRequestId, query, objectType, useCache);
 
         const responseObject = response[responseProperty];
 
@@ -158,7 +186,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         let query = {};
 
         if (loadingOptions) {
-            if (loadingOptions.limit) {
+            if (loadingOptions.limit || loadingOptions.limit === 0) {
                 query = { ...query, limit: loadingOptions.limit, searchlimit: loadingOptions.limit };
             }
 
@@ -212,19 +240,20 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         return await this.httpService.get<R>(this.RESOURCE_URI, query, token, null, this.objectType);
     }
 
-    protected getObject<R>(token: string, objectId: number | string, query?: any): Promise<R> {
+    protected getObject<R>(token: string, objectId: number | string, clientRequestId: string, query?: any): Promise<R> {
         const uri = this.buildUri(this.RESOURCE_URI, objectId);
-        return this.getObjectByUri(token, uri, query);
+        return this.getObjectByUri(token, uri, clientRequestId, query);
     }
 
     protected getObjectByUri<R>(
-        token: string, uri: string, query?: any, cacheKeyPrefix: string = this.objectType, useCache?: boolean
+        token: string, uri: string, clientRequestId: string, query?: any, cacheKeyPrefix: string = this.objectType,
+        useCache?: boolean
     ): Promise<R> {
         if (!query) {
             query = {};
         }
 
-        return this.httpService.get<R>(uri, query, token, null, cacheKeyPrefix, useCache);
+        return this.httpService.get<R>(uri, query, token, clientRequestId, cacheKeyPrefix, useCache);
     }
 
     protected sendRequest(

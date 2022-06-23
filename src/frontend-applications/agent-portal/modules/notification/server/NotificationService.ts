@@ -54,7 +54,7 @@ export class NotificationAPIService extends KIXObjectAPIService {
         if (objectType === KIXObjectType.NOTIFICATION) {
             objects = await super.load<Notification>(
                 token, KIXObjectType.NOTIFICATION, this.RESOURCE_URI, loadingOptions, objectIds, 'Notification',
-                Notification
+                clientRequestId, Notification
             );
         }
 

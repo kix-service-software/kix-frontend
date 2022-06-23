@@ -7,13 +7,13 @@
  * --
  */
 
-import { ISocketRequest } from './ISocketRequest';
+import { ISocketResponse } from '../modules/base-components/webapp/core/ISocketResponse';
 
-export class GetCurrentUserRequest implements ISocketRequest {
+export class DisplayValueResponse implements ISocketResponse {
 
     public constructor(
         public requestId: string,
-        public clientRequestId: string
+        public displayValue: string
     ) { }
 
 }

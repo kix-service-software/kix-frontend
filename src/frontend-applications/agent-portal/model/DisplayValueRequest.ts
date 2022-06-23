@@ -7,13 +7,15 @@
  * --
  */
 
-import { ISocketRequest } from './ISocketRequest';
+import { ISocketRequest } from '../modules/base-components/webapp/core/ISocketRequest';
+import { KIXObjectType } from './kix/KIXObjectType';
 
-export class GetCurrentUserRequest implements ISocketRequest {
+export class DisplayValueRequest implements ISocketRequest {
 
     public constructor(
         public requestId: string,
-        public clientRequestId: string
+        public clientRequestId: string,
+        public objectType: KIXObjectType | string,
+        public objectId: string | number
     ) { }
-
 }

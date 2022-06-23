@@ -40,4 +40,6 @@ export interface IKIXObjectService extends IService {
         deleteOptions: KIXObjectSpecificDeleteOptions, cacheKeyPrefix: string
     ): Promise<Error[]>;
 
+    loadDisplayValue(objectType: KIXObjectType | string, objectId: string | number): Promise<string>;
+
 }

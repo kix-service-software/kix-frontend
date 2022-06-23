@@ -68,4 +68,5 @@ export class AdminModuleService {
             categories.push(module);
         }
     }
+
 }

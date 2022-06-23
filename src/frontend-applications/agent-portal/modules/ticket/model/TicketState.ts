@@ -58,4 +58,8 @@ export class TicketState extends KIXObject {
         return this.ID === state.ID;
     }
 
+    public toString(): string {
+        return this.Name;
+    }
+
 }

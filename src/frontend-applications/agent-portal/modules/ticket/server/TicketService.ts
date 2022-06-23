@@ -37,6 +37,7 @@ import { TicketLock } from '../model/TicketLock';
 import { Contact } from '../../customer/model/Contact';
 import { CacheService } from '../../../server/services/cache';
 import { PersonalSettingsProperty } from '../../user/model/PersonalSettingsProperty';
+import { TicketHistory } from '../model/TicketHistory';
 
 export class TicketAPIService extends KIXObjectAPIService {
 
@@ -67,7 +68,8 @@ export class TicketAPIService extends KIXObjectAPIService {
             || kixObjectType === KIXObjectType.ARTICLE
             || kixObjectType === KIXObjectType.SENDER_TYPE
             || kixObjectType === KIXObjectType.TICKET_LOCK
-            || kixObjectType === KIXObjectType.WATCHER;
+            || kixObjectType === KIXObjectType.WATCHER
+            || kixObjectType === KIXObjectType.TICKET_HISTORY;
     }
 
     public async loadObjects<T>(
@@ -100,14 +102,18 @@ export class TicketAPIService extends KIXObjectAPIService {
 
             objects = await super.load(
                 token, KIXObjectType.TICKET, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.TICKET,
-                Ticket
+                clientRequestId, Ticket
             );
         } else if (objectType === KIXObjectType.SENDER_TYPE) {
             const uri = this.buildUri('system', 'communication', 'sendertypes');
-            objects = await super.load(token, KIXObjectType.SENDER_TYPE, uri, null, null, 'SenderType', SenderType);
+            objects = await super.load(
+                token, KIXObjectType.SENDER_TYPE, uri, null, null, 'SenderType', clientRequestId, SenderType
+            );
         } else if (objectType === KIXObjectType.TICKET_LOCK) {
             const uri = this.buildUri('system', 'ticket', 'locks');
-            objects = await super.load(token, KIXObjectType.TICKET_LOCK, uri, null, null, 'Lock', TicketLock);
+            objects = await super.load(
+                token, KIXObjectType.TICKET_LOCK, uri, null, null, 'Lock', clientRequestId, TicketLock
+            );
         } else if (objectType === KIXObjectType.ARTICLE) {
             if (objectLoadingOptions) {
                 if (!(objectLoadingOptions as ArticleLoadingOptions).ticketId) {
@@ -118,7 +124,18 @@ export class TicketAPIService extends KIXObjectAPIService {
                     this.RESOURCE_URI, (objectLoadingOptions as ArticleLoadingOptions).ticketId, 'articles'
                 );
                 objects = await super.load(
-                    token, KIXObjectType.ARTICLE, uri, loadingOptions, objectIds, 'Article', Article
+                    token, KIXObjectType.ARTICLE, uri, loadingOptions, objectIds, 'Article',
+                    clientRequestId, Article
+                );
+            }
+        } else if (objectType === KIXObjectType.TICKET_HISTORY) {
+            if (objectIds?.length) {
+                const uri = this.buildUri(
+                    this.RESOURCE_URI, objectIds[0], 'history'
+                );
+                objects = await super.load(
+                    token, KIXObjectType.TICKET_HISTORY, uri, loadingOptions, null, 'History',
+                    clientRequestId, TicketHistory
                 );
             }
         }
@@ -179,7 +196,8 @@ export class TicketAPIService extends KIXObjectAPIService {
 
             let queueId;
             const tickets = await super.load<Ticket>(
-                token, KIXObjectType.TICKET, this.RESOURCE_URI, null, [options.ticketId], KIXObjectType.TICKET, Ticket
+                token, KIXObjectType.TICKET, this.RESOURCE_URI, null, [options.ticketId], KIXObjectType.TICKET,
+                clientRequestId, Ticket
             );
             if (tickets && tickets.length) {
                 queueId = tickets[0].QueueID;
@@ -272,7 +290,8 @@ export class TicketAPIService extends KIXObjectAPIService {
             if (!to && contactId && senderType !== 3) {
                 if (!isNaN(contactId)) {
                     const contacts = await super.load<Contact>(
-                        token, KIXObjectType.CONTACT, 'contacts', null, [contactId], 'Contact', Contact
+                        token, KIXObjectType.CONTACT, 'contacts', null, [contactId], 'Contact',
+                        'TicketService', Contact
                     );
                     if (contacts && contacts.length) {
                         to = contacts[0].Email;
@@ -325,9 +344,9 @@ export class TicketAPIService extends KIXObjectAPIService {
                 ArticleProperty.EXEC_FORWARD, this.getParameterValue(parameter, ArticleProperty.EXEC_FORWARD)
             ]);
 
-            articleParameter.push([ArticleProperty.CONTENT_TYPE, 'text/html; charset=utf8']);
+            articleParameter.push([ArticleProperty.CONTENT_TYPE, 'text/html; charset=utf-8']);
             articleParameter.push([ArticleProperty.MIME_TYPE, 'text/html']);
-            articleParameter.push([ArticleProperty.CHARSET, 'utf8']);
+            articleParameter.push([ArticleProperty.CHARSET, 'utf-8']);
 
             for (const service of this.extendedServices) {
                 service.postPrepareParameter(parameter, articleParameter);
@@ -356,7 +375,8 @@ export class TicketAPIService extends KIXObjectAPIService {
 
                     const referedAttachments = await super.load<Attachment>(
                         token, KIXObjectType.ATTACHMENT, uri,
-                        new KIXObjectLoadingOptions(null, null, null, ['Content']), null, 'Attachment'
+                        new KIXObjectLoadingOptions(null, null, null, ['Content']), null, 'Attachment',
+                        'TicketService'
                     );
 
                     newAttachments.push(referedAttachments[0]);
@@ -384,7 +404,7 @@ export class TicketAPIService extends KIXObjectAPIService {
             this.RESOURCE_URI, ticketId, 'articles', articleId, 'attachments', attachmentId
         );
 
-        const response = await this.getObjectByUri(token, uri, {
+        const response = await this.getObjectByUri(token, uri, 'TicketService', {
             include: 'Content'
         });
         return response['Attachment'];
@@ -395,7 +415,7 @@ export class TicketAPIService extends KIXObjectAPIService {
             this.RESOURCE_URI, ticketId, 'articles', articleId, 'attachments', 'zip'
         );
 
-        const response = await this.getObjectByUri(token, uri, {
+        const response = await this.getObjectByUri(token, uri, 'TicketService', {
             include: 'Content'
         });
         return response['Attachment'];
@@ -412,7 +432,8 @@ export class TicketAPIService extends KIXObjectAPIService {
         );
 
         const articles = await super.load<Article>(
-            token, KIXObjectType.ARTICLE, baseUri, loadingOptions, null, 'Article', Article
+            token, KIXObjectType.ARTICLE, baseUri, loadingOptions, null, 'Article',
+            clientRequestId, Article
         );
 
         const article = articles && articles.length ? articles[0] : null;

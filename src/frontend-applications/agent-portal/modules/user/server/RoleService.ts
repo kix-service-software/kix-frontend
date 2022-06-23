@@ -64,13 +64,14 @@ export class RoleService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.ROLE) {
             objects = await super.load(
-                token, this.objectType, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.ROLE, Role
+                token, this.objectType, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.ROLE,
+                clientRequestId, Role
             );
         } else if (objectType === KIXObjectType.PERMISSION_TYPE) {
             const uri = this.buildUri(this.RESOURCE_URI, 'permissiontypes');
             objects = await super.load(
                 token, KIXObjectType.PERMISSION_TYPE, uri, loadingOptions, objectIds, KIXObjectType.PERMISSION_TYPE,
-                PermissionType
+                clientRequestId, PermissionType
             );
         }
 
@@ -119,7 +120,8 @@ export class RoleService extends KIXObjectAPIService {
             null, null, null, [RoleProperty.USER_IDS, RoleProperty.PERMISSIONS]
         );
         const roles = await super.load<Role>(
-            token, this.objectType, this.RESOURCE_URI, loadingOptions, [id], KIXObjectType.ROLE, Role
+            token, this.objectType, this.RESOURCE_URI, loadingOptions, [id], KIXObjectType.ROLE,
+            clientRequestId, Role
         ).catch(() => [] as Role[]);
 
         if (Array.isArray(roles) && roles[0]) {
