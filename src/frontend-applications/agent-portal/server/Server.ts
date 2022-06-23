@@ -71,7 +71,7 @@ export class Server implements IServer {
 
         this.serverConfig = ConfigurationService.getInstance().getServerConfiguration();
 
-        const backendToken = AuthenticationService.getInstance().getCallbackToken();
+        const backendToken = await AuthenticationService.getInstance().getCallbackToken();
         const promises = [
             ClientRegistrationService.getInstance().createClientRegistration(backendToken),
             MarkoService.getInstance().initializeMarkoApplications()
