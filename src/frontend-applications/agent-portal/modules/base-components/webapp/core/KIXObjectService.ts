@@ -99,6 +99,12 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return object;
     }
 
+    public static async loadDisplayValue(
+        objectType: KIXObjectType | string, objectId: string | number
+    ): Promise<string> {
+        return KIXObjectSocketClient.getInstance().loadDisplayValue(objectType, objectId);
+    }
+
     public static async loadObjects<T extends KIXObject>(
         objectType: KIXObjectType | string, objectIds?: Array<number | string>,
         loadingOptions?: KIXObjectLoadingOptions,

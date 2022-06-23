@@ -25,6 +25,9 @@ import { UserProperty } from '../model/UserProperty';
 import { FilterCriteria } from '../../../model/FilterCriteria';
 import { SearchOperator } from '../../search/model/SearchOperator';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { CacheService } from '../../../server/services/cache';
+import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
 
 export class UserService extends KIXObjectAPIService {
 
@@ -52,6 +55,45 @@ export class UserService extends KIXObjectAPIService {
             || kixObjectType === KIXObjectType.CURRENT_USER;
     }
 
+    protected getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+        let objectClass;
+
+        if (objectType === KIXObjectType.USER) {
+            objectClass = User;
+        } else if (objectType === KIXObjectType.USER_PREFERENCE) {
+            objectClass = UserPreference;
+        }
+        return objectClass;
+    }
+
+    public async loadDisplayValue(objectType: KIXObjectType | string, objectId: string | number): Promise<string> {
+        let displayValue = '';
+
+        if (objectType === KIXObjectType.USER) {
+            const cacheKey = `${objectType}-${objectId}-displayvalue`;
+            displayValue = await CacheService.getInstance().get(cacheKey, objectType);
+            if (!displayValue && objectId) {
+                const loadingOptions = new KIXObjectLoadingOptions();
+                loadingOptions.includes = [UserProperty.CONTACT];
+
+                const config = ConfigurationService.getInstance().getServerConfiguration();
+                const users = await this.loadObjects<User>(
+                    config?.BACKEND_API_TOKEN, 'UserAPIService', objectType, [objectId], loadingOptions, null
+                );
+
+                if (users?.length) {
+                    const user = new User(users[0]);
+                    displayValue = user.toString();
+                    await CacheService.getInstance().set(cacheKey, displayValue, objectType);
+                }
+            }
+        } else {
+            displayValue = await super.loadDisplayValue(objectType, objectId);
+        }
+
+        return displayValue;
+    }
+
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
@@ -60,7 +102,8 @@ export class UserService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.USER) {
             objects = await super.load(
-                token, KIXObjectType.USER, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.USER, User
+                token, KIXObjectType.USER, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.USER,
+                clientRequestId, User
             );
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
             let uri = this.buildUri('session', 'user', 'preferences');
@@ -71,7 +114,7 @@ export class UserService extends KIXObjectAPIService {
 
             objects = await super.load(
                 token, KIXObjectType.USER_PREFERENCE, uri, loadingOptions, objectIds, KIXObjectType.USER_PREFERENCE,
-                UserPreference
+                clientRequestId, UserPreference
             );
         }
 
@@ -226,7 +269,7 @@ export class UserService extends KIXObjectAPIService {
         }
 
         const baseUri = this.buildUri(this.RESOURCE_URI, userId, 'roleids');
-        const existingRoleIds = await this.load<number>(token, null, baseUri, null, null, 'RoleIDs', null, false);
+        const existingRoleIds = await this.load<number>(token, null, baseUri, null, null, 'RoleIDs', clientReqeustId, null, false);
 
         const rolesToDelete = existingRoleIds ? existingRoleIds.filter((r) => !roleIds.some((rid) => rid === r)) : [];
         const rolesToCreate = existingRoleIds

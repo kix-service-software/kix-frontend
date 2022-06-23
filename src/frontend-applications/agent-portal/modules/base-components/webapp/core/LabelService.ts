@@ -50,6 +50,11 @@ export class LabelService {
     private displayIconCache: Map<KIXObjectType | string, Map<string, Map<any, Array<ObjectIcon | string>>>> = new Map();
 
 
+    public clearDisplayValueCache(objectType: KIXObjectType | string): void {
+        this.displayIconCache.delete(objectType);
+        this.displayValueCache.delete(objectType);
+    }
+
     public registerLabelProvider<T>(labelProvider: ILabelProvider<T>): void {
         if (!this.objectLabelProvider.some((lp) => lp.isLabelProviderForType(labelProvider.kixObjectType))) {
             this.objectLabelProvider.push(labelProvider);

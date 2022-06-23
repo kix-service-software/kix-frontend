@@ -51,7 +51,7 @@ export class ConsoleCommandService extends KIXObjectAPIService {
         if (objectType === KIXObjectType.CONSOLE_COMMAND) {
             objects = await super.load<ConsoleCommand>(
                 token, KIXObjectType.CONSOLE_COMMAND, this.RESOURCE_URI, loadingOptions, objectIds, 'ConsoleCommand',
-                ConsoleCommand
+                clientRequestId, ConsoleCommand
             );
 
             // ignore help and search script - not needed

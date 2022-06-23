@@ -73,7 +73,7 @@ export class ReportingAPIService extends KIXObjectAPIService {
             const uri = this.buildUri(this.RESOURCE_URI, 'reportdefinitions');
             objects = await super.load(
                 token, KIXObjectType.REPORT_DEFINITION, uri, loadingOptions, objectIds,
-                KIXObjectType.REPORT_DEFINITION, ReportDefinition
+                KIXObjectType.REPORT_DEFINITION, clientRequestId, ReportDefinition
             );
         } else if (objectType === KIXObjectType.REPORT) {
             const uri = this.buildUri(
@@ -81,7 +81,7 @@ export class ReportingAPIService extends KIXObjectAPIService {
             );
             objects = await super.load(
                 token, KIXObjectType.REPORT, uri, loadingOptions, objectIds,
-                KIXObjectType.REPORT, Report
+                KIXObjectType.REPORT, clientRequestId, Report
             );
         } else if (objectType === KIXObjectType.REPORT_RESULT) {
             const uri = this.buildUri(
@@ -90,19 +90,19 @@ export class ReportingAPIService extends KIXObjectAPIService {
             );
             objects = await super.load(
                 token, KIXObjectType.REPORT_RESULT, uri, loadingOptions, objectIds,
-                KIXObjectType.REPORT_RESULT, ReportResult
+                KIXObjectType.REPORT_RESULT, clientRequestId, ReportResult
             );
         } else if (objectType === KIXObjectType.REPORT_DATA_SOURCE) {
             const uri = this.buildUri(this.RESOURCE_URI, 'datasources');
             objects = await super.load(
                 token, KIXObjectType.REPORT_DATA_SOURCE, uri, loadingOptions, objectIds,
-                KIXObjectType.REPORT_DATA_SOURCE, DataSource
+                KIXObjectType.REPORT_DATA_SOURCE, clientRequestId, DataSource
             );
         } else if (objectType === KIXObjectType.REPORT_OUTPUT_FORMAT) {
             const uri = this.buildUri(this.RESOURCE_URI, 'outputformats');
             objects = await super.load(
                 token, KIXObjectType.REPORT_OUTPUT_FORMAT, uri, loadingOptions, objectIds,
-                KIXObjectType.REPORT_OUTPUT_FORMAT, ReportOutputFormat
+                KIXObjectType.REPORT_OUTPUT_FORMAT, clientRequestId, ReportOutputFormat
             );
         }
 

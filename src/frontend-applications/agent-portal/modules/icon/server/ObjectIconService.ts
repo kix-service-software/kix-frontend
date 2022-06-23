@@ -76,7 +76,8 @@ export class ObjectIconService extends KIXObjectAPIService {
 
     public async getObjectIcons(token: string): Promise<ObjectIcon[]> {
         return await super.load<ObjectIcon>(
-            token, KIXObjectType.OBJECT_ICON, this.RESOURCE_URI, null, null, 'ObjectIcon', ObjectIcon
+            token, KIXObjectType.OBJECT_ICON, this.RESOURCE_URI, null, null, 'ObjectIcon',
+            'ObjectIconService', ObjectIcon
         );
     }
 
