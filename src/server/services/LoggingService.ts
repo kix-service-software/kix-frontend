@@ -62,6 +62,7 @@ export class LoggingService {
 
     public error(message: string, meta?: any): void {
         if (this.checkLogLevel(LogLevel.ERROR)) {
+            message = `${process.pid} - ${message}`;
             if (this.kixLogger) {
                 const winstonMeta = { ...meta };
                 if (this.trace) {
@@ -76,6 +77,7 @@ export class LoggingService {
 
     public warning(message: string, meta?: any): void {
         if (this.checkLogLevel(LogLevel.WARNING)) {
+            message = `${process.pid} - ${message}`;
             if (this.kixLogger) {
                 const winstonMeta = { ...meta };
                 this.kixLogger.warn(message, winstonMeta);
@@ -87,6 +89,7 @@ export class LoggingService {
 
     public info(message: string, meta?: any): void {
         if (this.checkLogLevel(LogLevel.INFO)) {
+            message = `${process.pid} - ${message}`;
             if (this.kixLogger) {
                 const winstonMeta = { ...meta };
                 this.kixLogger.info(message, winstonMeta);
@@ -99,6 +102,7 @@ export class LoggingService {
 
     public debug(message: string, meta?: any): void {
         if (this.checkLogLevel(LogLevel.DEBUG)) {
+            message = `${process.pid} - ${message}`;
             if (this.kixLogger) {
                 const winstonMeta = { ...meta };
                 this.kixLogger.debug(message, winstonMeta);

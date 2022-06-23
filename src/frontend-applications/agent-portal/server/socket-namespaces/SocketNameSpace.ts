@@ -37,6 +37,10 @@ export abstract class SocketNameSpace implements ISocketNamespace {
             .on(SocketEvent.CONNECTION, (client: Socket) => {
                 this.registerEvents(client);
             });
+
+        this.namespace.on('connection', (socket) => {
+            LoggingService.getInstance().info(`connection on ${this.getNamespace()}`);
+        });
     }
 
     protected async initialize(): Promise<void> {

@@ -40,7 +40,7 @@ import { SortOrder } from '../../model/SortOrder';
 import { UIComponentPermission } from '../../model/UIComponentPermission';
 import { ObjectReferenceOptions } from '../../modules/base-components/webapp/core/ObjectReferenceOptions';
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
-import { ModuleConfigurationService } from '../../server/services/configuration';
+import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
 import { ObjectInformationCardConfiguration } from '../base-components/webapp/components/object-information-card-widget/ObjectInformationCardConfiguration';
 import { AdditionalTableObjectsHandlerConfiguration } from '../base-components/webapp/core/AdditionalTableObjectsHandlerConfiguration';
 import { ConfigItemProperty } from '../cmdb/model/ConfigItemProperty';

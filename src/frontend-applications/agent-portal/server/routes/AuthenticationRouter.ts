@@ -23,7 +23,6 @@ import { IMarkoApplication } from '../extensions/IMarkoApplication';
 import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
 import { LoggingService } from '../../../../server/services/LoggingService';
 import { AuthenticationService } from '../services/AuthenticationService';
-import { PortalNotificationService } from '../../modules/portal-notification/server/PortalNotificationService';
 
 export class AuthenticationRouter extends KIXRouter {
 
