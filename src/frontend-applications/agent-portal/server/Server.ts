@@ -27,8 +27,6 @@ import { PluginService } from '../../../server/services/PluginService';
 import { AgentPortalExtensions } from './extensions/AgentPortalExtensions';
 import { IServer } from '../../../server/model/IServer';
 import { IServiceExtension } from './extensions/IServiceExtension';
-import { AuthenticationService } from './services/AuthenticationService';
-import { ClientRegistrationService } from './services/ClientRegistrationService';
 import { MainMenuNamespace } from '../modules/agent-portal/server/MainMenuNamespace';
 import { MarkoService } from './services/MarkoService';
 
@@ -71,9 +69,7 @@ export class Server implements IServer {
 
         this.serverConfig = ConfigurationService.getInstance().getServerConfiguration();
 
-        const backendToken = await AuthenticationService.getInstance().getCallbackToken();
         const promises = [
-            ClientRegistrationService.getInstance().createClientRegistration(backendToken),
             MarkoService.getInstance().initializeMarkoApplications()
         ];
 
