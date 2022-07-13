@@ -249,16 +249,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private prepareAttachments(): void {
         const attachments = (this.state.article?.Attachments || []).filter(
-            (a) => !a.Filename.match(/^file-(1|2)$/)
+            (a) => !a.Filename.match(/^file-(1|2)$/) && a.Disposition !== 'inline'
         );
         attachments.sort((a, b) => {
-            let result = -1;
-            if (a.Disposition === b.Disposition) {
-                result = SortUtil.compareString(a.Filename, b.Filename);
-            } else if (a.Disposition === 'inline') {
-                result = 1;
-            }
-            return result;
+            return SortUtil.compareString(a.Filename, b.Filename);
         });
         this.prepareImages(attachments);
         this.state.articleAttachments = attachments;
