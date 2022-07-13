@@ -55,16 +55,22 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </div>
          </else>
          <div.message-footer>
-            <div.attachments-list>
-               <if(Array.isArray(state.articleAttachments))>
-                  <for|attachment| of=state.articleAttachments>
-                     <ticket-article-attachment
-                        article=state.article
-                        attachment=attachment
-                        images=state.images
-                     />
-                  </for>
-               </if>
+            <div.attachments-control>
+               <div.attachments-list>
+                  <if(Array.isArray(state.articleAttachments))>
+                     <for|attachment| of=state.articleAttachments>
+                        <ticket-article-attachment
+                           article=state.article
+                           attachment=attachment
+                           images=state.images
+                        />
+                     </for>
+                  </if>
+               </div>
+               <a.attachmentsToggle on-click("toggleAttachments")>
+                  <translation-string
+                     pattern=`Translatable#${state.showAllAttachments ? 'Show less' : 'Show all'}`/>
+               </a>
             </div>
             <div.actions-list style=`background-color: ${state.backgroundColor};`>
                <if(state.actions && state.actions.length)>

@@ -248,13 +248,26 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private prepareAttachments(): void {
+        this.filterAttachments();
+        this.prepareImages(this.state.articleAttachments);
+    }
+
+    private filterAttachments(): void {
         const attachments = (this.state.article?.Attachments || []).filter(
-            (a) => !a.Filename.match(/^file-(1|2)$/) && a.Disposition !== 'inline'
+            (a) => !a.Filename.match(/^file-(1|2)$/) &&
+                this.state.showAllAttachments ? true : a.Disposition !== 'inline'
         );
         attachments.sort((a, b) => {
-            return SortUtil.compareString(a.Filename, b.Filename);
+            if (!this.state.showAllAttachments) return SortUtil.compareString(a.Filename, b.Filename);
+
+            let result = -1;
+            if (a.Disposition === b.Disposition) {
+                result = SortUtil.compareString(a.Filename, b.Filename);
+            } else if (a.Disposition === 'inline') {
+                result = 1;
+            }
+            return result;
         });
-        this.prepareImages(attachments);
         this.state.articleAttachments = attachments;
     }
 
@@ -299,6 +312,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             await this.loadArticle(silent, true);
             this.context.reloadObjectList(KIXObjectType.ARTICLE);
         }
+    }
+
+    public toggleAttachments(): void {
+        this.state.showAllAttachments = !this.state.showAllAttachments;
+        this.filterAttachments();
     }
 }
 

@@ -181,11 +181,23 @@
          display: grid;
          grid-template-columns: auto 50%;
 
-         .attachments-list {
+         .attachments-control {
             display: grid;
-            column-gap: 0.75rem;
-            grid-template-columns: repeat(auto-fit, minmax(15rem, 0fr));
-            margin-top: 1rem;
+
+            .attachments-list {
+               display: grid;
+               column-gap: 0.75rem;
+               grid-template-columns: repeat(auto-fit, minmax(15rem, 0fr));
+               margin-top: 1rem;
+            }
+
+            .attachmentsToggle {
+               margin-top: 1rem;
+
+               &:hover {
+                  cursor: pointer;
+               }
+            }
          }
 
          .actions-list {
