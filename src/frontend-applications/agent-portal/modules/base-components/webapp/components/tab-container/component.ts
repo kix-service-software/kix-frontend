@@ -108,7 +108,8 @@ class TabLaneComponent implements IEventSubscriber {
                         oldContext.unregisterListener(this.contextListenerId);
                     }
                 },
-                contextRegistered: () => { return; }
+                contextRegistered: () => { return; },
+                beforeDestroy: () => null
             });
             this.prepareContext();
         }

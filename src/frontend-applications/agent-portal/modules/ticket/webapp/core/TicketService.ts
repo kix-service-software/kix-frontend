@@ -410,18 +410,18 @@ export class TicketService extends KIXObjectService<Ticket> {
     public static async isPendingState(stateId: number): Promise<boolean> {
         let pending = false;
 
-        const states = await KIXObjectService.loadObjects<TicketState>(
-            KIXObjectType.TICKET_STATE, [stateId]
-        );
-
-        if (states && states.length) {
-            const stateTypes = await KIXObjectService.loadObjects<StateType>(
-                KIXObjectType.TICKET_STATE_TYPE, null
+        if (stateId) {
+            const states = await KIXObjectService.loadObjects<TicketState>(
+                KIXObjectType.TICKET_STATE, [stateId]
             );
-            const stateType = stateTypes.find((t) => t.ID === states[0].TypeID);
 
-            if (stateType && stateType.Name.toLocaleLowerCase().indexOf('pending') >= 0) {
-                pending = true;
+            if (states && states.length) {
+                const stateTypes = await KIXObjectService.loadObjects<StateType>(KIXObjectType.TICKET_STATE_TYPE);
+                const stateType = stateTypes.find((t) => t.ID === states[0].TypeID);
+
+                if (stateType && stateType.Name.toLocaleLowerCase().indexOf('pending') >= 0) {
+                    pending = true;
+                }
             }
         }
 
@@ -514,7 +514,7 @@ export class TicketService extends KIXObjectService<Ticket> {
     ): Promise<string | number> {
         if (objectType === KIXObjectType.ARTICLE) {
             const dialogContext = ContextService.getInstance().getActiveContext();
-            const referencedTicketId = dialogContext?.getAdditionalInformation('REFERENCED_TICKET_ID');
+            const referencedTicketId = dialogContext?.getAdditionalInformation('REFERENCED_SOURCE_OBJECT_ID');
             if (referencedTicketId) {
                 // TODO: keep given createOptions?
                 const articleCreateOptions = new CreateTicketArticleOptions(referencedTicketId);

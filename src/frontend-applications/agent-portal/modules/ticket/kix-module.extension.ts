@@ -61,15 +61,8 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent(
             'article-attachment-count', '/kix-module-ticket$0/webapp/components/article-attachment-count', []
         ),
-        new UIComponent(
-            'article-email-from-input', '/kix-module-ticket$0/webapp/components/article-email-from-input', []
-        ),
-        new UIComponent(
-            'article-email-recipient-input', '/kix-module-ticket$0/webapp/components/article-email-recipient-input', []
-        ),
         new UIComponent('article-receiver-list', '/kix-module-ticket$0/webapp/components/article-receiver-list', []),
-        new UIComponent('channel-input', '/kix-module-ticket$0/webapp/components/channel-input', []),
-        new UIComponent('customer-visible-input', '/kix-module-ticket$0/webapp/components/customer-visible-input', []),
+        new UIComponent('channel-form-input', '/kix-module-ticket$0/webapp/components/inputs/channel-form-input', []),
         new UIComponent('go-to-article-cell', '/kix-module-ticket$0/webapp/components/go-to-article-cell', []),
         new UIComponent('queue-input-follow-up', '/kix-module-ticket$0/webapp/components/queue-input-follow-up', []),
         new UIComponent(

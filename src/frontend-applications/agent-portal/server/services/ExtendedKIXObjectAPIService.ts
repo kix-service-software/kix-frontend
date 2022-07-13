@@ -55,6 +55,10 @@ export abstract class ExtendedKIXObjectAPIService implements IKIXObjectService {
         return [];
     }
 
+    public async commitObject(token: string, clientRequestId: string, object: KIXObject): Promise<string | number> {
+        throw null;
+    }
+
     public getAdditionalIncludes(objectType: KIXObjectType | string): string[] {
         return [];
     }

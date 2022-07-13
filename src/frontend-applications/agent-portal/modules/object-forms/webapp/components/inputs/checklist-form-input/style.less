@@ -1,0 +1,41 @@
+/**
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+.accordion-item {
+    .progress-bar {
+        background-color: @primary-6;
+    }
+
+    &.readonly {
+        background-color: @readonly-input-background;
+
+        .accordion-button {
+            background-color: @readonly-input-background;
+
+            .progress-bar {
+                opacity: .5;
+            }
+        }
+
+        input:read-only:focus,
+        textarea:read-only:focus {
+            box-shadow: none;
+            border-color: unset;
+        }
+
+        .select-input-container {
+            background-color: @readonly-input-background;
+
+            .list-group-item:hover {
+                background-color: @readonly-input-item-background;
+                cursor: auto;
+            }
+        }
+    }
+}

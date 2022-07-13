@@ -65,7 +65,8 @@ class Component {
             contextChanged: (contextId: string, context: Context, type: ContextType) => {
                 this.setContext(context);
             },
-            contextRegistered: () => { return; }
+            contextRegistered: () => { return; },
+            beforeDestroy: () => null
         });
 
         EventService.getInstance().subscribe(ApplicationEvent.APP_LOADING, {

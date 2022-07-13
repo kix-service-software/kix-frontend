@@ -57,7 +57,7 @@ export class ContactService extends KIXObjectService<Contact> {
 
         let objects: Contact[];
 
-        const preload = await this.shouldPreload(KIXObjectType.ORGANISATION);
+        const preload = await this.shouldPreload(KIXObjectType.CONTACT);
 
         if (loadingOptions || !preload) {
             objects = await super.loadObjects<Contact>(KIXObjectType.CONTACT, objectIds, loadingOptions);
@@ -144,7 +144,9 @@ export class ContactService extends KIXObjectService<Contact> {
         const contactId = await super.createObjectByForm(objectType, formId, createOptions, cacheKeyPrefix);
 
         const context = ContextService.getInstance().getActiveContext<NewContactDialogContext>();
-        context?.setAdditionalInformation('NEW_CONTACT_ID', contactId);
+        if (context) {
+            context.contactId = Number(contactId);
+        }
 
         return contactId;
     }

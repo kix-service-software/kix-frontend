@@ -172,7 +172,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         const plainTextAction = await ActionFactory.getInstance().generateActions(['article-get-plain-action'], this.state.article);
         if (plainTextAction?.length) {
-            plainTextAction[0].setData(this.article);
+            plainTextAction[0].setData(this.state.article);
             actions.push(...plainTextAction);
         }
 

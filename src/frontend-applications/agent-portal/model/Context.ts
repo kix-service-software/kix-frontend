@@ -135,6 +135,8 @@ export abstract class Context {
         EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.eventSubsriber);
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.eventSubsriber);
 
+        await this.formManager?.destroy();
+
         return;
     }
 
@@ -154,7 +156,7 @@ export abstract class Context {
 
     public async postInit(): Promise<void> {
         const formId = this.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
-        if (formId) {
+        if (formId && !this.formManager.formId) {
             this.formManager.setFormId(formId);
         }
     }

@@ -35,7 +35,7 @@ export class PortalNotificationService {
         EventService.getInstance().subscribe(PortalNotificationEvent.NOTIFICATIONS_UPDATED, subscriber);
     }
 
-    private notifications: PortalNotification[];
+    private notifications: PortalNotification[] = [];
 
     public publishNotifications(notifications: PortalNotification[], removeGroupNotifications: string[] = []): void {
         this.notifications = this.notifications.filter((n) => !removeGroupNotifications.some((g) => g === n.group));

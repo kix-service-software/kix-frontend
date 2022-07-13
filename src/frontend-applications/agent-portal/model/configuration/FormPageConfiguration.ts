@@ -16,7 +16,7 @@ export class FormPageConfiguration implements IConfiguration {
     public constructor(
         public id: string,
         public name: string,
-        public groupConfigurationIds: string[],
+        public groupConfigurationIds: string[] = [],
         public singleFormGroupOpen: boolean = false,
         public showSingleGroup: boolean = false,
         public groups: FormGroupConfiguration[] = [],

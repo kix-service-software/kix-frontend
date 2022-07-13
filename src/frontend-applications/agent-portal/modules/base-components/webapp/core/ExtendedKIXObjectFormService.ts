@@ -43,10 +43,4 @@ export class ExtendedKIXObjectFormService {
         return;
     }
 
-    public async createFormFieldConfigurations(
-        formFields: FormFieldConfiguration[]
-    ): Promise<FormFieldConfiguration[]> {
-        return null;
-    }
-
 }

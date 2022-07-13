@@ -43,6 +43,7 @@ class Component {
         }
         this.setCurrentValue();
         this.options = input.options;
+        this.state.readonly = input.readonly;
     }
 
     public async onMount(): Promise<void> {
@@ -90,9 +91,11 @@ class Component {
     }
 
     private preventDefaultDragBehavior(event: any): void {
-        event.stopPropagation();
-        event.preventDefault();
-        event.dataTransfer.dropEffect = 'copy';
+        if (!this.state.readonly) {
+            event.stopPropagation();
+            event.preventDefault();
+            event.dataTransfer.dropEffect = 'copy';
+        }
     }
 
     public triggerFileUpload(): void {
@@ -164,68 +167,64 @@ class Component {
     }
 
     private dragEnter(event: any): void {
-        event.stopPropagation();
-        event.preventDefault();
-        if (event.dataTransfer.items && event.dataTransfer.items[0] && event.dataTransfer.items[0].kind === 'file') {
-            this.dragCounter++;
-            this.state.dragging = true;
-            this.state.minimized = false;
+        if (!this.state.readonly) {
+            event.stopPropagation();
+            event.preventDefault();
+            if (event.dataTransfer.items && event.dataTransfer.items[0] && event.dataTransfer.items[0].kind === 'file') {
+                this.dragCounter++;
+                this.state.dragging = true;
+                this.state.minimized = false;
+            }
         }
     }
 
     private dragLeave(event: any): void {
-        event.stopPropagation();
-        event.preventDefault();
-        if (event.dataTransfer.items && event.dataTransfer.items[0] && event.dataTransfer.items[0].kind === 'file') {
-            this.dragCounter--;
-            if (this.dragCounter === 0) {
-                this.state.dragging = false;
+        if (!this.state.readonly) {
+            event.stopPropagation();
+            event.preventDefault();
+            if (event.dataTransfer.items && event.dataTransfer.items[0] && event.dataTransfer.items[0].kind === 'file') {
+                this.dragCounter--;
+                if (this.dragCounter === 0) {
+                    this.state.dragging = false;
+                }
             }
         }
     }
 
     public drop(event: any): void {
-        event.stopPropagation();
-        event.preventDefault();
+        if (!this.state.readonly) {
+            event.stopPropagation();
+            event.preventDefault();
 
-        if (event.dataTransfer.files) {
-            const files: File[] = Array.from(event.dataTransfer.files);
-            this.appendFiles(files.filter((f) => f.type !== '' || (f.size % 4096 > 0)));
+            if (event.dataTransfer.files) {
+                const files: File[] = Array.from(event.dataTransfer.files);
+                this.appendFiles(files.filter((f) => f.type !== '' || (f.size % 4096 > 0)));
+            }
+
+            this.state.dragging = false;
+            this.dragCounter = 0;
         }
-
-        this.state.dragging = false;
-        this.dragCounter = 0;
     }
 
     public minimize(): void {
         this.state.minimized = !this.state.minimized;
     }
 
-    private getFileIcon(mimeType: string = ''): ObjectIcon {
-        let fileIcon = null;
-        const idx = mimeType.lastIndexOf('/');
-        if (idx >= 0) {
-            const extension = mimeType.substring(idx + 1, mimeType.length);
-            fileIcon = new ObjectIcon(null, 'Filetype', extension);
-        } else if (mimeType) {
-            fileIcon = new ObjectIcon(null, 'Filetype', mimeType);
-        }
-        return fileIcon;
-    }
-
     public removeFile(label: Label): void {
-        const fileIndex = this.files.findIndex((sf) => sf.name === label.id);
-        if (fileIndex !== -1) {
-            this.files.splice(fileIndex, 1);
-        } else {
-            const attachmentIndex = this.attachments.findIndex((sf) => sf.Filename === label.id);
-            if (attachmentIndex !== -1) {
-                this.attachments.splice(attachmentIndex, 1);
+        if (!this.state.readonly) {
+            const fileIndex = this.files.findIndex((sf) => sf.name === label.id);
+            if (fileIndex !== -1) {
+                this.files.splice(fileIndex, 1);
+            } else {
+                const attachmentIndex = this.attachments.findIndex((sf) => sf.Filename === label.id);
+                if (attachmentIndex !== -1) {
+                    this.attachments.splice(attachmentIndex, 1);
+                }
             }
+            this.state.count = this.attachments.length + this.files.length;
+            (this as any).emit('valueChanged', [...this.attachments, ...this.files]);
+            this.createLabels();
         }
-        this.state.count = this.attachments.length + this.files.length;
-        (this as any).emit('valueChanged', [...this.attachments, ...this.files]);
-        this.createLabels();
     }
 
     private createLabels(): void {

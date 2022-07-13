@@ -36,7 +36,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     this.moduleChanged();
                 }
             },
-            contextRegistered: () => { return; }
+            contextRegistered: () => { return; },
+            beforeDestroy: () => null
         });
         this.moduleChanged();
 

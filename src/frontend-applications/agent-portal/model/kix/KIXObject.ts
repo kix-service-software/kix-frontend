@@ -14,8 +14,9 @@ import { DynamicFieldValue } from '../../modules/dynamic-fields/model/DynamicFie
 import { SearchOperator } from '../../modules/search/model/SearchOperator';
 import { ObjectIcon } from '../../modules/icon/model/ObjectIcon';
 import { SortUtil } from '../SortUtil';
+import { BindableObject } from '../BindableObject';
 
-export abstract class KIXObject {
+export abstract class KIXObject extends BindableObject {
 
     public displayValues: Array<[string, string]>;
     public displayIcons: Array<[string, Array<ObjectIcon | string>]>;
@@ -26,25 +27,26 @@ export abstract class KIXObject {
 
     public ConfiguredPermissions: ConfiguredPermissions;
 
-    public Links: Link[];
+    public Links: Link[] = [];
 
-    public LinkTypeName: string;
+    public LinkTypeName: string = null;
 
-    public ChangeBy: number;
+    public ChangeBy: number = null;
 
-    public ChangeTime: string;
+    public ChangeTime: string = null;
 
-    public CreateBy: number;
+    public CreateBy: number = null;
 
-    public CreateTime: string;
+    public CreateTime: string = null;
 
-    public ValidID: number;
+    public ValidID: number = null;
 
-    public Comment: string;
+    public Comment: string = null;
 
-    public DynamicFields: DynamicFieldValue[];
+    public DynamicFields: DynamicFieldValue[] = [];
 
     public constructor(object?: KIXObject) {
+        super();
         this.displayValues = [];
         this.displayIcons = [];
         if (object) {
@@ -54,10 +56,16 @@ export abstract class KIXObject {
                 }
             }
 
+            if (Array.isArray(this.DynamicFields)) {
+                this.DynamicFields = this.DynamicFields.map((dfv) => new DynamicFieldValue(dfv));
+            }
+
             this.displayValues = object.displayValues ? object.displayValues : [];
             this.DynamicFields = object.DynamicFields
                 ? object.DynamicFields.map((df) => new DynamicFieldValue(df))
                 : [];
+
+            this.propertyBindings = [];
         }
     }
 
@@ -201,5 +209,4 @@ export abstract class KIXObject {
             preparedFilter.push(filter);
         }
     }
-
 }

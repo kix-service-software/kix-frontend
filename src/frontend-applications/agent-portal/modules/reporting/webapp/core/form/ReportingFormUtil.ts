@@ -63,15 +63,6 @@ export class ReportingFormUtil {
                     );
                     field.options.push(new FormFieldOption(FormFieldOptions.SHOW_INVALID, false));
 
-                    const formService = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
-                        object, ServiceType.FORM
-                    );
-
-                    if (formService) {
-                        field = await formService.createFormFieldConfiguration(parts[1], field);
-                        field.label = fieldLabel;
-                    }
-
                     if (filterPossibleValues) {
                         field.options.push(
                             new FormFieldOption(ObjectReferenceOptions.OBJECT_IDS, parameter.PossibleValues)

@@ -170,12 +170,12 @@ export class TreeHandler {
         TreeUtil.linkTreeNodes(this.tree, filterValue);
         this.navigationHandler.setTree(this.tree);
 
-        this.selectedNodes.forEach((n) => {
+        for (const n of this.selectedNodes) {
             const node = TreeUtil.findNode(this.tree, n.id);
             if (node) {
                 node.selected = true;
             }
-        });
+        }
         const treeSelection = this.getSelection(this.tree);
         this.setSelection(treeSelection, true, true, true, filterSelection);
 
@@ -312,8 +312,15 @@ export class TreeHandler {
 
     public selectNone(silent: boolean = false): void {
         const nodes = TreeUtil.getVisibleNodes(this.tree, this.filterValue);
+        for (const n of nodes) {
+            this.setSelectedNode(n.id, false);
+        }
         this.selectedNodes = [];
-        this.setSelection(nodes, false, silent);
+
+        this.listener.forEach((l) => l(this.getSelectedNodes()));
+        if (!silent) {
+            this.selectionListener.forEach((l) => l(this.getSelectedNodes()));
+        }
     }
 
     public getSelectedNodes(): TreeNode[] {

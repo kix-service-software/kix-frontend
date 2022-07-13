@@ -151,35 +151,39 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
         getOnlyPattern: boolean = false
     ): Promise<string> {
         let translationValue = pattern ? pattern : '';
-        if (translationValue !== null) {
+        try {
+            if (translationValue !== null) {
 
-            translationValue = this.prepareValue(translationValue);
+                translationValue = this.prepareValue(translationValue);
 
-            if (!getOnlyPattern) {
+                if (!getOnlyPattern) {
 
-                const translation = await this.getInstance().getTranslationObject(translationValue);
+                    const translation = await this.getInstance().getTranslationObject(translationValue);
 
-                if (translation) {
-                    language = language ? language : this.getInstance().userLanguage;
-                    if (language) {
-                        const translationLanguageValue = translation.Languages[language];
-                        if (translationLanguageValue) {
-                            translationValue = translationLanguageValue;
+                    if (translation) {
+                        language = language ? language : this.getInstance().userLanguage;
+                        if (language) {
+                            const translationLanguageValue = translation.Languages[language];
+                            if (translationLanguageValue) {
+                                translationValue = translationLanguageValue;
+                            }
                         }
                     }
+
+                    translationValue = this.format(translationValue, placeholderValues.map(
+                        (p) => (typeof p !== 'undefined' && p !== null ? p : '').toString()
+                    ));
                 }
-
-                translationValue = this.format(translationValue, placeholderValues.map(
-                    (p) => (typeof p !== 'undefined' && p !== null ? p : '').toString()
-                ));
             }
-        }
-        const debug = ClientStorageService.getOption('i18n-debug');
+            const debug = ClientStorageService.getOption('i18n-debug');
 
-        if (debug && debug !== 'false' && debug !== '0') {
-            translationValue = 'TR-' + pattern;
-        }
+            if (debug && debug !== 'false' && debug !== '0') {
+                translationValue = 'TR-' + pattern;
+            }
 
+        } catch (error) {
+            // nothing
+        }
         return translationValue;
     }
 
