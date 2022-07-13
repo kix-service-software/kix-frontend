@@ -265,11 +265,14 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     ), 10,
                     [
                         new DefaultColumnConfiguration(
-                            null, null, null, TicketProperty.TITLE, true, false, true, false, 320, true, true
+                            null, null, null, TicketProperty.TITLE, true, false, true, false, 250, true, true
                         ),
                         new DefaultColumnConfiguration(
-                            null, null, null, TicketProperty.TYPE_ID, false, true, true, false, 50, true, true, true
-                        )
+                            null, null, null, TicketProperty.STATE_ID, true, true, true, false, 70,
+                        ),
+                        new DefaultColumnConfiguration(
+                            null, null, null, TicketProperty.TYPE_ID, true, false, true, false, 50, true, true, true
+                        ),
                     ], null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 ), null, false, false, null
             ),
