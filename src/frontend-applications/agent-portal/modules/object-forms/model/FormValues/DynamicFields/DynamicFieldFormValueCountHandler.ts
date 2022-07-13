@@ -41,7 +41,7 @@ export class DynamicFieldFormValueCountHandler {
             const parent = formValue.parent as DynamicFieldObjectFormValue;
             const fv = await parent.createFormValue((formValue as any).dfName, dfValue, false);
             fv.parent = formValue;
-            fv.enabled = true;
+            fv.enabled = formValue.enabled;
             fv.visible = true;
             fv.isSortable = false;
             fv.readonly = formValue.readonly;
