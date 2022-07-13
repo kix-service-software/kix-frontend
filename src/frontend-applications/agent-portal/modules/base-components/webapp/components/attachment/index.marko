@@ -10,21 +10,24 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <div.file-upload
     class={
         dragging: state.dragging,
-        invalid: input.invalid
+        invalid: input.invalid,
+        readonly: state.readonly
     }
     on-drop("drop")>
-    <button.kix-button.form-button.file-upload-button
-        type="button"
-        on-click("triggerFileUpload")
-        title=state.translations["Translatable#Select file"]>
-        <span.kix-icon-attachement/>
-        <translation-string pattern="Translatable#Select file"/>
-        <input.file-upload-input
-            type="file"
-            multiple=state.multiple
-            key="fileUploadInput"
-            on-change("setAttachments")/>
-    </button>
+    <if(!state.readonly)>
+        <button.kix-button.form-button.file-upload-button
+            type="button"
+            on-click("triggerFileUpload")
+            title=state.translations["Translatable#Select file"]>
+            <span.kix-icon-attachement/>
+            <translation-string pattern="Translatable#Select file"/>
+            <input.file-upload-input
+                type="file"
+                multiple=state.multiple
+                key="fileUploadInput"
+                on-change("setAttachments")/>
+        </button>
+    </if>
     <span.file-upload-notice
         on-click("minimize")
         class={
@@ -57,6 +60,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <label-list
             labels=state.labels
             showUnknownIcon=false
+            removeLabels=!state.readonly
             on-removeLabel("removeFile")/>
     </if>
 </div>

@@ -127,14 +127,6 @@ export class FormService {
         formFields: FormFieldConfiguration[], objectType: KIXObjectType | string,
         formName: string, formContext: FormContext
     ): Promise<FormConfiguration> {
-        const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
-            objectType, ServiceType.FORM
-        );
-
-        if (service) {
-            formFields = await service.createFormFieldConfigurations(formFields);
-        }
-
         const form = new FormConfiguration(
             `${objectType}-template-form-${formName}`, formName, [],
             objectType,

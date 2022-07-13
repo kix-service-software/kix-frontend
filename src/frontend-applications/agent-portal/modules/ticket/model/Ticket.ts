@@ -103,12 +103,14 @@ export class Ticket extends KIXObject {
 
     public constructor(ticket?: Ticket) {
         super(ticket);
+
         if (ticket) {
-            this.TicketID = Number(ticket.TicketID);
+            this.TicketID = Number(ticket.TicketID) || null;
+
             this.ObjectId = this.TicketID;
             this.Unseen = Number(ticket.Unseen);
             this.Articles = ticket.Articles
-                ? ticket.Articles.map((a) => new Article(a))
+                ? ticket.Articles.map((a) => new Article(a, this))
                 : [];
 
             this.Links = ticket.Links
@@ -174,6 +176,42 @@ export class Ticket extends KIXObject {
                 this.Type = new TicketType(object);
                 this.TypeID = object?.ID;
             }
+        } else {
+            this.TicketNumber = null;
+            this.Title = null;
+            this.TicketID = null;
+            this.Age = null;
+            this.Created = null;
+            this.CreateTimeUnix = null;
+            this.CreateBy = null;
+            this.Changed = null;
+            this.ChangeBy = null;
+            this.ArchiveFlag = null;
+            this.PendingTime = null;
+            this.PendingTimeUnix = null;
+            this.Unseen = null;
+            this.StateType = null;
+            this.StateID = null;
+            this.PriorityID = null;
+            this.LockID = null;
+            this.QueueID = null;
+            this.OrganisationID = null;
+            this.ContactID = null;
+            this.OwnerID = null;
+            this.TypeID = null;
+            this.ResponsibleID = null;
+            this.Articles = [];
+            this.History = null;
+            this.Watchers = null;
+            this.Contact = null;
+            this.TicketLock = null;
+            this.Organisation = null;
+            this.Owner = null;
+            this.Priority = null;
+            this.Queue = null;
+            this.Responsible = null;
+            this.State = null;
+            this.Type = null;
         }
 
     }

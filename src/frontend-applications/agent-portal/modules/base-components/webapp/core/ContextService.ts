@@ -72,11 +72,13 @@ export class ContextService {
     }
 
     private async createStoredContext(contextPreference: ContextPreference): Promise<void> {
-        const context = await this.createContext(
-            contextPreference.contextId, contextPreference.objectId, contextPreference.instanceId,
-            contextPreference
-        );
-        EventService.getInstance().publish(ContextEvents.CONTEXT_CHANGED, context);
+        if (contextPreference) {
+            const context = await this.createContext(
+                contextPreference.contextId, contextPreference.objectId, contextPreference.instanceId,
+                contextPreference
+            );
+            EventService.getInstance().publish(ContextEvents.CONTEXT_CHANGED, context);
+        }
     }
 
     public getContextDescriptors(contextMode: ContextMode): ContextDescriptor[] {
@@ -191,6 +193,14 @@ export class ContextService {
                         this.updateStorage(instanceId, true);
                     }
                     const context = this.contextInstances.splice(index, 1)[0];
+
+                    const iter = this.serviceListener.values();
+                    let entry = iter.next();
+                    while (entry.value) {
+                        const listener = entry.value as IContextServiceListener;
+                        await listener.beforeDestroy(context);
+                        entry = iter.next();
+                    }
 
                     for (const extension of context?.contextExtensions) {
                         await extension?.destroy(context);
@@ -585,7 +595,7 @@ export class ContextService {
                 return;
             }
 
-            const index = this.storedContexts.findIndex((c) => c.instanceId === context.instanceId);
+            const index = this.storedContexts.findIndex((c) => c?.instanceId === context.instanceId);
             if (index !== -1) {
                 this.storedContexts.splice(index, 1);
             }

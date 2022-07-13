@@ -63,7 +63,7 @@ export class ConfigItem extends KIXObject {
     public History: ConfigItemHistory[];
 
     public constructor(configItem?: ConfigItem) {
-        super();
+        super(configItem);
         if (configItem) {
             this.ConfigItemID = Number(configItem.ConfigItemID);
             this.ObjectId = this.ConfigItemID;

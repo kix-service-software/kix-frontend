@@ -19,7 +19,7 @@ export class FormConfiguration implements IConfiguration {
     public constructor(
         public id: string,
         public name: string,
-        public pageConfigurationIds: string[],
+        public pageConfigurationIds: string[] = [],
         public objectType: KIXObjectType | string,
         public validation: boolean = true,
         public formContext: FormContext = FormContext.NEW,

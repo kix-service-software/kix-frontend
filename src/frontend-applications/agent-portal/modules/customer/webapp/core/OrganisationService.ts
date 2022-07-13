@@ -21,8 +21,6 @@ import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptio
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { OrganisationProperty } from '../../model/OrganisationProperty';
-import { SysConfigService } from '../../../sysconfig/webapp/core';
-import { AgentPortalConfiguation } from '../../../../model/configuration/AgentPortalConfiguation';
 
 export class OrganisationService extends KIXObjectService<Organisation> {
 

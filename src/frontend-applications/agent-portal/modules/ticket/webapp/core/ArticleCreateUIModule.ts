@@ -10,17 +10,10 @@
 import { IUIModule } from '../../../../model/IUIModule';
 import { FormValidationService } from '../../../../modules/base-components/webapp/core/FormValidationService';
 import {
-    EmailRecipientValidator, TicketFormService, NewTicketArticleContext, ArticleNewAction,
+    EmailRecipientValidator, TicketFormService, ArticleNewAction,
     ArticleReplyAction, ArticleForwardAction, ArticleGetPlainAction
 } from '.';
-import { ContextDescriptor } from '../../../../model/ContextDescriptor';
-import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { ContextType } from '../../../../model/ContextType';
-import { ContextMode } from '../../../../model/ContextMode';
-import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
-import { CRUD } from '../../../../../../server/model/rest/CRUD';
-import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 
 export class UIModule implements IUIModule {
 
@@ -37,20 +30,9 @@ export class UIModule implements IUIModule {
 
         TicketFormService.getInstance();
 
-        await this.registerContexts();
         this.registerTicketActions();
     }
 
-    private async registerContexts(): Promise<void> {
-        const newTicketArticleContext = new ContextDescriptor(
-            NewTicketArticleContext.CONTEXT_ID, [KIXObjectType.ARTICLE], ContextType.DIALOG, ContextMode.CREATE_SUB,
-            true, 'object-dialog', ['articles'], NewTicketArticleContext,
-            [
-                new UIComponentPermission('tickets', [CRUD.CREATE])
-            ]
-        );
-        ContextService.getInstance().registerContext(newTicketArticleContext);
-    }
 
     private registerTicketActions(): void {
         ActionFactory.getInstance().registerAction('article-new-action', ArticleNewAction);

@@ -100,7 +100,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async addEntry(context: Context, setActive: boolean = false): Promise<void> {
-        if (context) {
+        // make sure it is really a context
+        if (context?.contextId) {
 
             const hasTab = this.state.contextTabs.some((e) => e.contextInstanceId === context.instanceId);
 

@@ -39,7 +39,8 @@ class Component {
                 this.setContext(context);
                 this.handleShowSidebarAreaState(context);
             },
-            contextRegistered: () => { return; }
+            contextRegistered: () => { return; },
+            beforeDestroy: () => null
         });
         this.setContext(ContextService.getInstance().getActiveContext());
 

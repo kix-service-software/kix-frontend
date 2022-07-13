@@ -88,10 +88,17 @@
     }
 }
 
+@mobile-wrapper-padding: clamp(5px, 3%, 20px);
+
 // "mobile"
 @media only screen and (max-width: @mobile-breakpoint) {
     .app-wrapper {
         grid-template-columns: minmax(@mobile-header-min-width, auto);
+
+        .content-wrapper {
+            padding-left: @mobile-wrapper-padding;
+            padding-right: @mobile-wrapper-padding;
+        }
 
         &.blur {
 
@@ -147,7 +154,7 @@
 }
 
 // not "mobile"
-@media only screen and (min-width: @mobile-breakpoint + 1px) {
+@media only screen and (min-width: (@mobile-breakpoint + 1px)) {
     .app-wrapper {
         grid-template-columns: [main-menu] (@main-menu-width) [sidebar-left] max-content [content] minmax(25rem, 1fr) [sidebar-right] max-content;
 
@@ -163,7 +170,7 @@
 }
 
 // sidbear left
-@media only screen and (min-width: @sidebar-left-breakpoint + 1px) {
+@media only screen and (min-width: (@sidebar-left-breakpoint + 1px)) {
     .app-wrapper {
         >.content-wrapper {
             margin-left: 1rem;
@@ -176,7 +183,7 @@
 }
 
 // sidebar right
-@media only screen and (min-width: @sidebar-right-breakpoint + 1px) {
+@media only screen and (min-width: (@sidebar-right-breakpoint + 1px)) {
     .app-wrapper {
         >.content-wrapper {
             margin-right: 1rem;

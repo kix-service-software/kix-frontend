@@ -31,6 +31,8 @@ class EditorComponent {
     private createTimeout: any;
     private maxReadyTries: number;
 
+    private handleOnInputChange: boolean = false;
+
     public onCreate(input: any): void {
         this.state = new ComponentState(
             input.inline,
@@ -80,8 +82,10 @@ class EditorComponent {
                 }
 
                 if (this.editor.getData() !== contentString) {
+                    this.handleOnInputChange = true;
                     this.editor.setData(contentString, () => {
                         this.editor.updateElement();
+                        this.handleOnInputChange = false;
                     });
                 }
             }
@@ -128,7 +132,13 @@ class EditorComponent {
                     && options[0].Value !== null
                 ) {
                     let defaultCSS = '';
-                    for (const css of JSON.parse(options[0].Value)) {
+                    let jsonOptions: any[];
+                    try {
+                        jsonOptions = JSON.parse(options[0].Value);
+                    } catch (e) {
+                        jsonOptions = [];
+                    }
+                    for (const css of jsonOptions) {
                         if (
                             css?.Selector
                             && css?.Value
@@ -161,16 +171,18 @@ class EditorComponent {
                 }
 
                 const changeListener = (): void => {
-                    if (this.changeTimeout) {
-                        window.clearTimeout(this.changeTimeout);
-                        this.changeTimeout = null;
-                    }
+                    if (!this.handleOnInputChange) {
+                        if (this.changeTimeout) {
+                            window.clearTimeout(this.changeTimeout);
+                            this.changeTimeout = null;
+                        }
 
-                    this.changeTimeout = setTimeout(() => {
-                        const value = this.editor.getData();
-                        (this as any).emit('valueChanged', value);
-                        this.changeTimeout = null;
-                    }, 200);
+                        this.changeTimeout = setTimeout(() => {
+                            const value = this.editor.getData();
+                            (this as any).emit('valueChanged', value);
+                            this.changeTimeout = null;
+                        }, 200);
+                    }
                 };
 
                 this.editor.on('change', changeListener);

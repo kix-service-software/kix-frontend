@@ -1,0 +1,75 @@
+/**
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+@readonly-input-background: #e9ecef;
+@readonly-input-item-background: @secondary-5;
+
+.object-form-container {}
+
+.form-submission-buttons {
+    position: sticky;
+    display: flex;
+    bottom: 0;
+    right: 0;
+    width: inherit;
+    height: 50px;
+    justify-content: flex-end;
+    background-color: @secondary-3;
+    z-index: 100;
+    padding: 7.5px 10px;
+
+    .btn-outline-danger {
+        border-color: @tertiary-0;
+
+        &:hover {
+            background-color: @tertiary-0;
+        }
+    }
+
+    .btn-outline-success {
+        border-color: @primary-6;
+
+        &:hover {
+            background-color: @primary-6;
+        }
+    }
+}
+
+.btn {
+    color: black;
+
+    &:hover {
+        color: @secondary-3;
+    }
+}
+
+.btn-label-mixin {
+    position: relative;
+    left: -12px;
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 3px 0 0 3px;
+}
+
+.btn-label {
+    &-success {
+        .btn-label-mixin();
+        background-color: @primary-6;
+    }
+
+    &-danger {
+        .btn-label-mixin();
+        background-color: @tertiary-0;
+    }
+}
+
+.btn-labeled {
+    padding-top: 0;
+    padding-bottom: 0;
+}

@@ -169,7 +169,7 @@ class FormComponent {
             const form = this.state.formInstance.getForm();
             if (!isNaN(this.state.activePageIndex)) {
                 const page = form.pages[this.state.activePageIndex];
-                if (form && page && page.singleFormGroupOpen && page.groupConfigurationIds.length > 1) {
+                if (form && page && page.singleFormGroupOpen && page.groupConfigurationIds?.length > 1) {
                     const formElement = (this as any).getEl();
                     if (formElement) {
                         formElement.style.opacity = 0;
@@ -188,7 +188,7 @@ class FormComponent {
             const form = this.state.formInstance.getForm();
             if (!isNaN(this.state.activePageIndex)) {
                 const page = form.pages[this.state.activePageIndex];
-                if (form && page && page.singleFormGroupOpen && page.groupConfigurationIds.length > 1) {
+                if (form && page && page.singleFormGroupOpen && page.groupConfigurationIds?.length > 1) {
                     const otherGroups = page.groups.filter((g) => g.name !== groupName);
                     if (minimized === false) {
                         otherGroups.forEach((g) => {
@@ -197,7 +197,7 @@ class FormComponent {
                                 groupComponent.setMinizedState(true);
                             }
                         });
-                    } else if (minimized === true && page.groupConfigurationIds.length === 2) {
+                    } else if (minimized === true && page.groupConfigurationIds?.length === 2) {
                         otherGroups.forEach((g) => {
                             const groupComponent = (this as any).getComponent(g.name);
                             if (groupComponent) {

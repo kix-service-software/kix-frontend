@@ -37,7 +37,7 @@ export class UIModule implements IUIModule {
     private async registerContexts(): Promise<void> {
         const newTicketContext = new ContextDescriptor(
             NewTicketDialogContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.DIALOG, ContextMode.CREATE,
-            false, 'object-dialog', ['tickets'], NewTicketDialogContext,
+            false, 'object-form', ['tickets'], NewTicketDialogContext,
             [
                 new UIComponentPermission('tickets', [CRUD.CREATE])
             ],
