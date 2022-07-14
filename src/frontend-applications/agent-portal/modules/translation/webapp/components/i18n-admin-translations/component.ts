@@ -131,7 +131,7 @@ class TranslationPatternContentProvider extends TableContentProvider {
             ];
 
             const loadingOptions = new KIXObjectLoadingOptions(
-                filter, null, null, [TranslationPatternProperty.AVAILABLE_LANGUAGES]
+                filter, null, 0, [TranslationPatternProperty.AVAILABLE_LANGUAGES]
             );
 
             const pattern = await KIXObjectService.loadObjects<TranslationPattern>(
