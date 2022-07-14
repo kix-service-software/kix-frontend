@@ -55,8 +55,8 @@ export class ArticleAttachmentFormValue extends ObjectFormValue<string> {
         const useRefArticleAttachments = context?.getAdditionalInformation('USE_REFERENCED_ATTACHMENTS');
         const refArticleId = context?.getAdditionalInformation('REFERENCED_ARTICLE_ID');
         if (useRefArticleAttachments && refArticleId) {
-            const refTicketId = await context?.getObjectId();
-            const refArticle = refTicketId ? await this.getReplyArticle(Number(refTicketId), refArticleId) : null;
+            const refTicketId = context?.getObjectId();
+            const refArticle = await this.loadReferencedArticle(Number(refTicketId), refArticleId);
             if (refArticle) {
                 const attachments = await this.getRefAttachments(
                     refArticle.getAttachments(), refArticleId, Number(refTicketId)
@@ -72,8 +72,8 @@ export class ArticleAttachmentFormValue extends ObjectFormValue<string> {
         }
     }
 
-    private async getReplyArticle(refTicketId: number, refArticleId: number): Promise<Article> {
-        let replyArticle: Article;
+    private async loadReferencedArticle(refTicketId: number, refArticleId: number): Promise<Article> {
+        let article: Article;
         if (refArticleId && refTicketId) {
             const articles = await KIXObjectService.loadObjects<Article>(
                 KIXObjectType.ARTICLE, [refArticleId], new KIXObjectLoadingOptions(
@@ -81,9 +81,9 @@ export class ArticleAttachmentFormValue extends ObjectFormValue<string> {
                 ),
                 new ArticleLoadingOptions(refTicketId), true
             ).catch(() => [] as Article[]);
-            replyArticle = articles.find((a) => a.ArticleID === refArticleId);
+            article = articles.find((a) => a.ArticleID === refArticleId);
         }
-        return replyArticle;
+        return article;
     }
 
     private async getRefAttachments(
