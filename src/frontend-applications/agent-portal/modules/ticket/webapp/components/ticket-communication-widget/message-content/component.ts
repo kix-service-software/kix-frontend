@@ -249,7 +249,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private prepareAttachments(): void {
         this.filterAttachments();
+        this.hasInlineAttachments();
         this.prepareImages(this.state.articleAttachments);
+    }
+
+    private hasInlineAttachments(): void {
+        this.state.hasInlineAttachments =
+            (this.state.article?.Attachments || []).some((a) => a.Disposition === 'inline');
     }
 
     private filterAttachments(): void {

@@ -67,10 +67,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                      </for>
                   </if>
                </div>
-               <a.attachmentsToggle on-click("toggleAttachments")>
-                  <translation-string
-                     pattern=`Translatable#${state.showAllAttachments ? 'Show less' : 'Show all'}`/>
-               </a>
+               <if(state.hasInlineAttachments)>
+                  <a.attachmentsToggle on-click("toggleAttachments")>
+                     <translation-string
+                        pattern=`Translatable#${state.showAllAttachments ? 'Hide inline attachments' : 'Show all attachments'}`/>
+                  </a>
+               </if>
             </div>
             <div.actions-list style=`background-color: ${state.backgroundColor};`>
                <if(state.actions && state.actions.length)>
