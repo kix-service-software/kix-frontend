@@ -37,7 +37,6 @@ import { ApplicationEvent } from './ApplicationEvent';
 import { PortalNotificationService } from '../../../portal-notification/webapp/core/PortalNotificationService';
 import { PortalNotification } from '../../../portal-notification/model/PortalNotification';
 import { PortalNotificationType } from '../../../portal-notification/model/PortalNotificationType';
-import { DateTimeUtil } from './DateTimeUtil';
 import { DisplayValueRequest } from '../../../../model/DisplayValueRequest';
 import { DisplayValueResponse } from '../../../../model/DisplayValueResponse';
 
@@ -95,7 +94,8 @@ export class KIXObjectSocketClient extends SocketClient {
     public async loadObjects<T extends KIXObject>(
         kixObjectType: KIXObjectType | string, objectConstructors: Array<new (object?: T) => T>,
         objectIds: Array<string | number> = null, loadingOptions: KIXObjectLoadingOptions = null,
-        objectLoadingOptions: KIXObjectSpecificLoadingOptions = null, cache: boolean = true, timeout?: number
+        objectLoadingOptions: KIXObjectSpecificLoadingOptions = null, cache: boolean = true, timeout?: number,
+        silent?: boolean
     ): Promise<T[]> {
         this.checkSocketConnection();
 
@@ -112,7 +112,7 @@ export class KIXObjectSocketClient extends SocketClient {
 
             requestPromise = BrowserCacheService.getInstance().get(cacheKey, kixObjectType);
             if (!requestPromise) {
-                requestPromise = this.createLoadRequestPromise<T>(request, objectConstructors, timeout);
+                requestPromise = this.createLoadRequestPromise<T>(request, objectConstructors, timeout, silent);
                 BrowserCacheService.getInstance().set(cacheKey, requestPromise, kixObjectType);
 
                 requestPromise.catch((error) => {
@@ -122,16 +122,16 @@ export class KIXObjectSocketClient extends SocketClient {
             return requestPromise;
         }
 
-        requestPromise = this.createLoadRequestPromise<T>(request, objectConstructors, timeout);
+        requestPromise = this.createLoadRequestPromise<T>(request, objectConstructors, timeout, silent);
         return requestPromise;
     }
 
     private async createLoadRequestPromise<T extends KIXObject>(
-        request: LoadObjectsRequest, objectConstructors: Array<new (object?: T) => T>, timeout?: number
+        request: LoadObjectsRequest, objectConstructors: Array<new (object?: T) => T>, timeout?: number,
+        silent?: boolean
     ): Promise<T[]> {
         const response = await this.sendRequest<LoadObjectsResponse<T>>(
-            request,
-            KIXObjectEvent.LOAD_OBJECTS, KIXObjectEvent.LOAD_OBJECTS_FINISHED, timeout
+            request, KIXObjectEvent.LOAD_OBJECTS, KIXObjectEvent.LOAD_OBJECTS_FINISHED, timeout, silent
         ).catch((error): LoadObjectsResponse<T> => {
             if (error instanceof PermissionError) {
                 return new LoadObjectsResponse(request.clientRequestId, []);
@@ -241,7 +241,8 @@ export class KIXObjectSocketClient extends SocketClient {
     }
 
     private async sendRequest<T extends ISocketResponse>(
-        requestObject: ISocketObjectRequest, event: string, finishEvent: string, defaultTimeout?: number
+        requestObject: ISocketObjectRequest, event: string, finishEvent: string, defaultTimeout?: number,
+        silent?: boolean
     ): Promise<T> {
         this.checkSocketConnection();
 
@@ -279,14 +280,16 @@ export class KIXObjectSocketClient extends SocketClient {
                 if (error.requestId === requestObject.requestId) {
                     window.clearTimeout(timeout);
                     const errorMessage = `Socket Error: Event - ${event}, Object - ${requestObject.objectType}`;
-                    PortalNotificationService.getInstance().publishNotifications([
-                        new PortalNotification(
-                            IdService.generateDateBasedId('socket-error'), 'error',
-                            PortalNotificationType.IMPORTANT,
-                            'Socket Error', new Date().toLocaleString(), true, false,
-                            errorMessage, JSON.stringify(error)
-                        )
-                    ]);
+                    if (silent) {
+                        PortalNotificationService.getInstance().publishNotifications([
+                            new PortalNotification(
+                                IdService.generateDateBasedId('socket-error'), 'error',
+                                PortalNotificationType.IMPORTANT,
+                                'Socket Error', new Date().toLocaleString(), true, false,
+                                errorMessage, JSON.stringify(error)
+                            )
+                        ]);
+                    }
                     console.error(errorMessage);
                     console.error(error.error);
                     reject(error.error);

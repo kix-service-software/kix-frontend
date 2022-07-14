@@ -1,0 +1,15 @@
+{
+    "name": "kix-module-object-forms",
+    "extensions": {
+        "kix:modules": {
+            "kix-module-object-forms-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:socket:namespace": {
+            "object-forms-socket-namespace-registry": {
+                "module": "NamespaceRegistry.extension"
+            }
+        }
+    }
+}

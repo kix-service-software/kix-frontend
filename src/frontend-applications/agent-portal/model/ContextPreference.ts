@@ -7,15 +7,14 @@
  * --
  */
 
-import { ContextDescriptor } from './ContextDescriptor';
-
 export class ContextPreference {
 
     public constructor(
         public instanceId: string,
         public objectId: string | number,
         public contextId: string,
-        public formValue?: any
+        public formValue?: any,
+        public formObject?: any
     ) { }
 
 }

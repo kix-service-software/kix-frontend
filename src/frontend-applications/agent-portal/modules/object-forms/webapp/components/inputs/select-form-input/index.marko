@@ -1,0 +1,93 @@
+<!--
+Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<if(state.prepared)>
+   <div.dropdown>
+      <div.select-input-row
+         role="button"
+         id=`id_${state.searchValueKey}`
+         ...state.dropdownAttributes
+         on-click("inputClicked")
+      >
+         <div.form-control.select-input-container class={readonly: state.readonly}>
+            <ul.list-group.list-group-horizontal.flex-wrap>
+               <for|node| of=state.selectedNodes>
+
+                  <li.list-group-item.ps-2.pe-2.pt-0.pb-0.mb-1.me-1.border>
+                     <if(node.icon !== null)>
+                        <icon.me-2 icon=node.icon withoutStyle/>
+                     </if>
+                      ${node.label}
+                     <if(!state.readonly)>
+                        <i.fas.fa-times on-click("removeValue", node)/>
+                     </if>
+                  </li>
+               </for>
+            </ul>
+         </div>
+         <if(!state.readonly)>
+         <button.btn.btn-outline-secondary type="button" on-click("clearValue")>
+            <i.far.fa-times-circle/>
+         </button>
+         <button.btn.btn-outline-secondary.dropdown-toggle type="button"/>
+      </if>
+      </div>
+      <div.select-input-list.dropdown-menu.w-100.pt-0.pb-0
+         on-click("selectInputClicked")
+         aria-labelledby=`id_${state.searchValueKey}`
+      >
+         <if(state.hasFilter)>
+            <div.dropdown-item.sticky-top.bg-white key=state.searchValueKey +
+            "-keylistener">
+               <input.form-control
+                  type="text"
+                  placeholder=state.searchPlaceholder
+                  key=state.searchValueKey
+                  on-keyup("searchValueChanged")
+                  on-keydown("keydown")
+                  no-update
+               >
+               <input.hidden-input
+                  type="text"
+                  key=state.searchValueKey + "-hidden"
+                  on-keydown("keydown")
+               >
+               <if(state.autoComplete && state.noResult)>
+                  <div.mt-2.ms-2.fst-italic.text-secondary>
+                     ${state.autoCompleteHint}
+                  </div>
+               </if>
+            </div>
+         </if>
+         <if(state.searchLoading)>
+            <loading-spinner/>
+         </if>
+         <else-if(state.treeId)>
+            <div.ms-3.mt-2>
+               <form-list-tree key=state.treeId treeId=state.treeId/>
+            </div>
+            <if(state.multiselect)>
+               <div.ps-3.pt-2.border-top.dropdown-buttons>
+                  <button.btn.btn-outline-success
+                     type="button"
+                     on-click("selectAll")
+                  >
+                     <if(state.selectedNodes.length)>
+                        <translation-string pattern="Translatable#Select None"/>
+                     </if>
+                     <else>
+                        <translation-string pattern="Translatable#Select All"/>
+                     </else>
+                  </button>
+               </div>
+            </if>
+         </else-if>
+      </div>
+   </div>
+</if>

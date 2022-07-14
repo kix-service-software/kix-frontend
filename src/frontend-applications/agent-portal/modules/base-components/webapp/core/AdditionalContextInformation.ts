@@ -23,6 +23,8 @@ export enum AdditionalContextInformation {
 
     DUPLICATE = 'DUPLICATE',
 
+    FORM_CONFIGURATION = 'FORM_CONFIGURATION',
+
     LOADING = 'LOADING'
 
 }

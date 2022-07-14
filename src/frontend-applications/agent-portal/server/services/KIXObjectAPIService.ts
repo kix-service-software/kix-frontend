@@ -129,7 +129,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             : [responseObject];
 
         objects = objects.filter((o) => o !== null && typeof o !== 'undefined');
-        objects = objectConstructor ? objects.map((o) => new objectConstructor(o as KIXObject)) : objects;
+        // objects = objectConstructor ? objects.map((o) => new objectConstructor(o as KIXObject)) : objects;
 
         return objects;
     }
@@ -172,14 +172,18 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         token: string, clientRequestId: string, objectType: KIXObjectType | string, parameter: Array<[string, string]>,
         createOptions: KIXObjectSpecificCreateOptions, cacheKeyPrefix: string
     ): Promise<string | number> {
-        throw new Error('', 'Method not implemented.');
+        throw new Error('', 'Method createObject not implemented.');
     }
 
     public async updateObject(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, parameter: Array<[string, string]>,
         objectId: number | string, updateOptions: KIXObjectSpecificCreateOptions, cacheKeyPrefix: string
     ): Promise<string | number> {
-        throw new Error('', 'Method not implemented.');
+        throw new Error('', 'Method updateObject not implemented.');
+    }
+
+    public async commitObject(token: string, clientRequestId: string, object: KIXObject): Promise<number | string> {
+        throw new Error('', 'Method commitObject not implemented.');
     }
 
     protected prepareQuery(loadingOptions: KIXObjectLoadingOptions, objectType: KIXObjectType | string): any {

@@ -18,7 +18,6 @@ import { FormConfiguration } from '../../model/configuration/FormConfiguration';
 import { FormContext } from '../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../model/configuration/FormFieldConfiguration';
 import { FormFieldOption } from '../../model/configuration/FormFieldOption';
-import { FormFieldOptions } from '../../model/configuration/FormFieldOptions';
 import { FormFieldValue } from '../../model/configuration/FormFieldValue';
 import { FormGroupConfiguration } from '../../model/configuration/FormGroupConfiguration';
 import { FormPageConfiguration } from '../../model/configuration/FormPageConfiguration';
@@ -265,11 +264,14 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     ), 10,
                     [
                         new DefaultColumnConfiguration(
-                            null, null, null, TicketProperty.TITLE, true, false, true, false, 320, true, true
+                            null, null, null, TicketProperty.TITLE, true, false, true, false, 250, true, true
                         ),
                         new DefaultColumnConfiguration(
-                            null, null, null, TicketProperty.TYPE_ID, false, true, true, false, 50, true, true, true
-                        )
+                            null, null, null, TicketProperty.STATE_ID, true, true, true, false, 70,
+                        ),
+                        new DefaultColumnConfiguration(
+                            null, null, null, TicketProperty.TYPE_ID, true, false, true, false, 50, true, true, true
+                        ),
                     ], null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 ), null, false, false, null
             ),
@@ -419,19 +421,43 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'ticket-new-form-field-contact',
-                'Translatable#Contact', TicketProperty.CONTACT_ID, 'ticket-input-contact', true,
+                'Translatable#Contact', TicketProperty.CONTACT_ID, 'object-reference-input', true,
                 'Translatable#Helptext_Tickets_TicketCreate_Contact',
                 [
-                    new FormFieldOption('SHOW_NEW_CONTACT', true),
-                    new FormFieldOption(FormFieldOptions.SHOW_INVALID, false)
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.CONTACT),
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ]
+                        )
+                    )
                 ]
             )
         );
         configurations.push(
             new FormFieldConfiguration(
                 'ticket-new-form-field-organisation',
-                'Translatable#Organisation', TicketProperty.ORGANISATION_ID, 'ticket-input-organisation', true,
-                'Translatable#Helptext_Tickets_TicketCreate_Organisation'
+                'Translatable#Organisation', TicketProperty.ORGANISATION_ID, 'object-reference-input', true,
+                'Translatable#Helptext_Tickets_TicketCreate_Organisation',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ORGANISATION),
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ]
+                        )
+                    )
+                ]
             )
         );
 
@@ -442,7 +468,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 'Translatable#Helptext_Tickets_TicketCreate_Type',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_TYPE),
-
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
                             [

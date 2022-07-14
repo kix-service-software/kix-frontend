@@ -1,0 +1,92 @@
+/**
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+.file-upload {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(@button-min-width, min-content) auto;
+    grid-template-rows: @default-button-height max-content;
+    grid-column-gap: @margin-default;
+    align-items: center;
+
+    &.readonly {
+        grid-template-columns: auto;
+
+        .label-list .label-item {
+            cursor: auto;
+        }
+    }
+
+    &.dragging {
+        border: 2px dotted @secondary-3;
+        border-radius: @border-radius;
+        padding: @margin-small;
+    }
+
+    &.invalid {
+        >.label-list {
+            border-color: @tertiary-0;
+        }
+
+        >button,
+        >button>span {
+            color: @tertiary-0;
+            border-color: @tertiary-0;
+        }
+    }
+
+    >.file-upload-button {
+        .file-upload-input {
+            display: none;
+        }
+    }
+
+    >.file-upload-notice {
+        width: 100%;
+        display: grid;
+        grid-template-columns: auto;
+        grid-gap: 1rem;
+        align-items: center;
+        grid-template-rows: @default-button-height;
+        color: @secondary-1;
+        cursor: pointer;
+
+        &:hover {
+            >.toggle {
+                color: darken(@secondary-0, 20%);
+            }
+        }
+
+        &.has-text {
+            grid-template-columns: max-content auto;
+        }
+
+        >.toggle {
+            .icon-font-size-normal;
+            display: grid;
+            grid-template-columns: auto max-content;
+            grid-gap: @margin-small;
+            align-items: center;
+            color: @secondary-0;
+
+            >.line {
+                background-color: @secondary-3;
+                height: 1px;
+
+                &.minimized {
+                    background-color: @secondary-1;
+                }
+            }
+        }
+    }
+
+    &:not(.readonly)>.label-list {
+        grid-column: 1 / span 2;
+    }
+}

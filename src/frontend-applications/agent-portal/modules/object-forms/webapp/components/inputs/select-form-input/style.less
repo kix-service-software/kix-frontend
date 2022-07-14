@@ -1,0 +1,49 @@
+/**
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+.dropdown {
+   width: 100%;
+   display: flex;
+   min-height: 30px;
+
+   .select-input-row {
+      display: flex;
+      flex-direction: row;
+      flex: 1 0 100%;
+
+      .select-input-container.readonly {
+         cursor: auto;
+         background-color: @readonly-input-background;
+
+         li {
+            background-color: @readonly-input-item-background;
+
+            &:hover {
+               background-color: @readonly-input-item-background;
+               cursor: auto;
+            }
+         }
+      }
+   }
+
+   .dropdown-menu {
+      max-height: 300px;
+      overflow-x: scroll;
+   }
+
+   .dropdown-buttons {
+      position: sticky;
+      bottom: 0;
+      background: @secondary-6;
+   }
+
+   .select-input-container {
+      min-height: 2.8rem;
+   }
+}

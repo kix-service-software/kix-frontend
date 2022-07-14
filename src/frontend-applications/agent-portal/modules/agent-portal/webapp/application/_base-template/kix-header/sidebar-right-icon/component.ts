@@ -30,7 +30,8 @@ class Component {
                 const sidebars = await changedContext?.getSidebarsRight();
                 this.state.hasSidebarsRight = Boolean(sidebars?.length);
             },
-            contextRegistered: () => { return; }
+            contextRegistered: () => { return; },
+            beforeDestroy: () => null
         });
 
         this.state.translations = await TranslationService.createTranslationObject([

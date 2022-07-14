@@ -610,7 +610,7 @@ export class UIModule implements IUIModule {
                     description: rowsMinDescription,
                     type: 'integer',
                     default: '1',
-                    minimum: '1',
+                    minimum: '0',
                     required: true
                 },
                 RowsInit: {
@@ -618,7 +618,7 @@ export class UIModule implements IUIModule {
                     description: rowsinitDescription,
                     type: 'integer',
                     default: '1',
-                    minimum: '1',
+                    minimum: '0',
                     required: true
                 },
                 RowsMax: {
@@ -626,7 +626,7 @@ export class UIModule implements IUIModule {
                     description: rowsMaxDescription,
                     type: 'integer',
                     default: '1',
-                    minimum: '1',
+                    minimum: '0',
                     required: true
                 },
                 TranslatableColumn: {

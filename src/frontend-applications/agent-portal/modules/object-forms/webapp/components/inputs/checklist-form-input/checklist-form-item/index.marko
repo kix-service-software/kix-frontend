@@ -1,0 +1,72 @@
+<!--
+Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+
+<if(state.item && state.prepared)>
+    <div.input-group.mt-3>
+        <div.input-group-text class={
+            'col-sm-3': state.item.input === "Text" || state.item.input === "TextArea",
+            'col-sm-9': state.item.input === "ChecklistState"
+        }>
+            ${state.item.title}
+        </div>
+        <if(state.item.input === "Text")>
+            <input.form-control
+                type="text"
+                value=(state.item.value)
+                readonly=input.readonly
+                disabled=input.readonly
+                on-change("valueChanged")
+            >
+        </if>
+        <else-if(state.item.input === "TextArea")>
+            <textarea.form-control
+                rows=5
+                value=(state.item.value)
+                readonly=input.readonly
+                disabled=input.readonly
+                on-change("valueChanged")
+            />
+        </else-if>
+        <else>
+            <div.form-control.p-0.border-0 class={dropdown: !input.readonly}>
+                <div.select-input-row role=(!input.readonly && "button") id=`id_${state.dropdownId}` data-bs-toggle=(!input.readonly && "dropdown") aria-expanded="false">
+                    <div.form-control.select-input-container>
+                        <ul.list-group.list-group-horizontal>
+                            <if(state.selectedNode)>
+                                <li.list-group-item.ps-2.pe-2.pt-0.pb-0><icon.me-2 icon=state.selectedNode.icon withoutStyle=true/> ${state.selectedNode.label}</li>
+                            </if>
+                        </ul>
+                    </div>
+                    <if(!input.readonly)>
+                        <button.btn.btn-outline-secondary.dropdown-toggle type="button"></button>
+                    </if>
+                </div>
+                <if(!input.readonly)>
+                    <div.select-input-list.dropdown-menu.w-100 aria-labelledby=`id_${state.dropdownId}`>
+                        <tree-view nodes=state.nodes on-nodeSelected("nodeSelected")/>
+                    </div>
+                </if>
+            </div>
+        </else>
+    </div>
+    <span class="ps-2 pe-2"><i>${state.item.description}</i></span>
+    <if(Array.isArray(state.item.sub))>
+        <div.ms-4.mt-1>
+            <for|subItem| of=(state.item.sub)>
+                <checklist-form-item
+                    item=subItem
+                    readonly=input.readonly
+                    on-itemValueChanged("itemValueChanged")
+                />
+            </for>
+        </div>
+    </if>
+</if>
+

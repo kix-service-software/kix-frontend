@@ -48,7 +48,6 @@ import { FetchAssetAttributes } from './form/extended-form-manager/FetchAssetAtt
 import { TicketArticleCreate } from './form/extended-form-manager/TicketArticleCreate';
 import { TicketCreateDynamicFields } from './form/extended-form-manager/TicketCreateDynamicFields';
 import { TicketJobFormManager } from './TicketJobFormManager';
-import { ArticleFormFieldValueHandler } from './ArticleFormFieldValueHandler';
 import { TicketStateSet } from './form/extended-form-manager/TicketStateSet';
 import { TeamSet } from './form/extended-form-manager/TeamSet';
 import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
@@ -115,7 +114,6 @@ export class UIModule implements IUIModule {
         ServiceRegistry.registerAdditionalTableObjectsHandler(new SuggestedFAQHandler());
 
         FormService.getInstance().addFormFieldValueHandler(new TicketFormFieldValueHandler());
-        FormService.getInstance().addFormFieldValueHandler(new ArticleFormFieldValueHandler());
 
         this.registerTicketActions();
 
