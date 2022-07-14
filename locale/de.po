@@ -179,6 +179,9 @@ msgstr "Alle"
 msgid "All agents subscribed to the tickets queue"
 msgstr "Alle Agenten, die das Team des Tickets abonniert haben"
 
+msgid "All agents watching this ticket"
+msgstr ""
+
 msgid "All agents with read permissions for the ticket"
 msgstr "Alle Agenten, die Leseberechtigungen auf das Ticket haben"
 
@@ -378,6 +381,9 @@ msgstr "Avatar"
 msgid "Backend"
 msgstr "Backend"
 
+msgid "Back to top"
+msgstr ""
+
 msgid "Based on class definition"
 msgstr "Basiert auf Klassendefinition"
 
@@ -507,9 +513,6 @@ msgstr "Client Secret"
 
 msgid "Close"
 msgstr "Schließen"
-
-msgid "close all"
-msgstr "alle schließen"
 
 msgid "Close all open tabs"
 msgstr "Alle offenen Tabs schließen"
@@ -672,6 +675,9 @@ msgstr "Anfrage konnte nicht bearbeitet werden."
 
 msgid "Could not load file {0}."
 msgstr "Konnte Datei nicht laden {0}."
+
+msgid "Count"
+msgstr ""
 
 msgid "Count Default"
 msgstr "Anzahl (Standard)"
@@ -1100,6 +1106,9 @@ msgstr "Endwert fehlt"
 msgid "Enter search value"
 msgstr "Suchbegriff eingeben"
 
+msgid "Entered date-time value is invalid.'"
+msgstr ""
+
 msgid "Envelope From"
 msgstr "Envelope From"
 
@@ -1165,9 +1174,6 @@ msgstr "Ausführungsplan"
 
 msgid "Existing Links ({0})"
 msgstr "Vorhandene Verknüpfungen ({0})"
-
-msgid "expand all"
-msgstr "alle erweitern"
 
 msgid "expected time required:"
 msgstr "voraussichtlich benötigte Zeit:"
@@ -2542,6 +2548,9 @@ msgstr ""
 "sind direkt von den entsprechenden SQL-Statements abhängig. Werden diese "
 "verändert, funktionieren die Berichte nicht mehr."
 
+msgid "Helptext_Reporting_ReportCreate_MaxReports"
+msgstr ""
+
 msgid "Helptext_Reporting_ReportCreate_OutputFormat"
 msgstr ""
 "Wählen Sie aus, in welchen Ausgabeformaten der Bericht erzeugt werden kann. "
@@ -2607,6 +2616,9 @@ msgstr ""
 "Wen diese Checkbox gewählt ist, ist das Feld beim Erstellen des konkreten "
 "Berichtes ein Pflichtfeld, welches zwingend eine Eingabe durch den "
 "Berichtersteller erfordert."
+
+msgid "Helptext_Reporting_ReportCreate_Periodic"
+msgstr ""
 
 msgid "Helptext_Reporting_ReportCreate_Roles"
 msgstr ""
@@ -2986,6 +2998,11 @@ msgstr "Vorfallsstatus"
 msgid "Include this code into the <head> area of your webpage."
 msgstr "Binden Sie diesen Code in den <head>-Bereich Ihrer Webseite ein."
 
+msgid ""
+"Incorrect data mapping. Length of dataset properties is different from value "
+"properties."
+msgstr ""
+
 msgid "Incorrectly processed lines"
 msgstr "Fehlerhaft verarbeitete Zeilen"
 
@@ -3051,6 +3068,9 @@ msgstr "Job erfolgreich ausgeführt."
 
 msgid "Keywords"
 msgstr "Schlagworte"
+
+msgid "KIX"
+msgstr ""
 
 msgid "KIX Forum"
 msgstr ""
@@ -3207,6 +3227,9 @@ msgstr "Alle Artikel als gelesen markieren."
 
 msgid "Max Depth"
 msgstr "Max. Tiefe"
+
+msgid "Max. Reports"
+msgstr ""
 
 msgid "Menu"
 msgstr "Modulmenü"
@@ -3487,8 +3510,8 @@ msgstr "Keine Berechtigung für dieses Objekt."
 msgid "No rating available."
 msgstr "Keine Bewertung verfügbar."
 
-msgid "No signature defined."
-msgstr "Keine Signatur definiert."
+msgid "No report available"
+msgstr ""
 
 msgid "Not available (not any more or not yet)"
 msgstr "Noch nicht verfügbar / nicht mehr verfügbar"
@@ -3562,6 +3585,12 @@ msgstr "Anzahl Assets"
 msgid "Number of Config Items in critical incident state"
 msgstr "Anzahl Assets mit kritischem Vorfallsstatus"
 
+msgid "Number of open tickets by priority"
+msgstr ""
+
+msgid "Number of open tickets by state"
+msgstr ""
+
 msgid "Number of ratings"
 msgstr "Anzahl Bewertungen"
 
@@ -3573,6 +3602,9 @@ msgstr "Anzahl Zeilen (max.)"
 
 msgid "Number of rows (min)"
 msgstr "Anzahl Zeilen (min.)"
+
+msgid "Number of tickets created within the last 7 days"
+msgstr ""
 
 msgid "Number of version"
 msgstr "Anzahl Versionen"
@@ -3760,6 +3792,12 @@ msgstr "Warten bis"
 msgid "Pending until: {0} ({1})"
 msgstr "warten bis: {0} ({1})"
 
+msgid "Periodic"
+msgstr ""
+
+msgid "Periodic Creation"
+msgstr ""
+
 msgid "Permission"
 msgstr "Berechtigung"
 
@@ -3869,17 +3907,8 @@ msgstr "Priorität"
 msgid "Priority Chart"
 msgstr "Prioritäts-Chart"
 
-msgid "Priority Chart Widget"
-msgstr "Prioritäts-Chart-Widget"
-
 msgid "Priority Data"
 msgstr "Prioritätsdaten"
-
-msgid "Priority Details"
-msgstr "Prioritätsdetails"
-
-msgid "Priority Information"
-msgstr "Prioritäten-Informationen"
 
 msgid "Profiles successfully removed."
 msgstr "Profil(e) entfernt."
@@ -4084,6 +4113,9 @@ msgstr "Allen antworten"
 
 msgid "Report"
 msgstr "Bericht"
+
+msgid "Report Chart"
+msgstr ""
 
 msgid "Report Definition"
 msgstr "Berichtsdefinition"
@@ -4533,12 +4565,6 @@ msgstr "Status"
 msgid "State Data"
 msgstr "Stammdaten"
 
-msgid "State Details"
-msgstr "Statusdetails"
-
-msgid "State Information"
-msgstr "Status-Informationen"
-
 msgid "States"
 msgstr "Status"
 
@@ -4686,9 +4712,6 @@ msgstr "Team"
 msgid "Team Backlog"
 msgstr "Team Backlog"
 
-msgid "Team Details"
-msgstr "Teamdetails"
-
 msgid ""
 "Technical Customer Service mit KIX - work order documentation, checklists, "
 "scheduling, offline information for maintenance and repairs."
@@ -4713,6 +4736,9 @@ msgstr "Textbaustein(e) wurde(n) erfolgreich gelöscht."
 
 msgid "Text separator"
 msgstr "Texttrenner"
+
+msgid "The entered date is out of boundaries. "
+msgstr ""
 
 msgid "The file {0} has no valid MIME-TYPE."
 msgstr "Die Datei '{0}' hat keinen gültigen MIME-Typ."
@@ -5202,6 +5228,33 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "close all"
+#~ msgstr "alle schließen"
+
+#~ msgid "expand all"
+#~ msgstr "alle erweitern"
+
+#~ msgid "No signature defined."
+#~ msgstr "Keine Signatur definiert."
+
+#~ msgid "Priority Chart Widget"
+#~ msgstr "Prioritäts-Chart-Widget"
+
+#~ msgid "Priority Details"
+#~ msgstr "Prioritätsdetails"
+
+#~ msgid "Priority Information"
+#~ msgstr "Prioritäten-Informationen"
+
+#~ msgid "State Details"
+#~ msgstr "Statusdetails"
+
+#~ msgid "State Information"
+#~ msgstr "Status-Informationen"
+
+#~ msgid "Team Details"
+#~ msgstr "Teamdetails"
 
 #~ msgid "Article Overview"
 #~ msgstr "Übersicht der Artikel"

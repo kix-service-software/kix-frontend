@@ -176,6 +176,9 @@ msgstr ""
 msgid "All agents subscribed to the tickets queue"
 msgstr "All agents subscribed to the tickets team"
 
+msgid "All agents watching this ticket"
+msgstr ""
+
 msgid "All agents with read permissions for the ticket"
 msgstr ""
 
@@ -363,6 +366,9 @@ msgstr ""
 msgid "Backend"
 msgstr ""
 
+msgid "Back to top"
+msgstr ""
+
 msgid "Based on class definition"
 msgstr ""
 
@@ -490,9 +496,6 @@ msgid "Client Secret"
 msgstr ""
 
 msgid "Close"
-msgstr ""
-
-msgid "close all"
 msgstr ""
 
 msgid "Close all open tabs"
@@ -655,6 +658,9 @@ msgid "Could not handle request."
 msgstr ""
 
 msgid "Could not load file {0}."
+msgstr ""
+
+msgid "Count"
 msgstr ""
 
 msgid "Count Default"
@@ -1082,6 +1088,9 @@ msgstr ""
 msgid "Enter search value"
 msgstr ""
 
+msgid "Entered date-time value is invalid.'"
+msgstr ""
+
 msgid "Envelope From"
 msgstr ""
 
@@ -1146,9 +1155,6 @@ msgid "Execution Plan"
 msgstr ""
 
 msgid "Existing Links ({0})"
-msgstr ""
-
-msgid "expand all"
 msgstr ""
 
 msgid "expected time required:"
@@ -2382,6 +2388,9 @@ msgstr ""
 "dependend on the SQL statement. If the SQL statement is changed, reports "
 "cannot be created anymore."
 
+msgid "Helptext_Reporting_ReportCreate_MaxReports"
+msgstr ""
+
 msgid "Helptext_Reporting_ReportCreate_OutputFormat"
 msgstr ""
 "Choose which for output formats the report is available. Choose one output "
@@ -2447,6 +2456,9 @@ msgstr ""
 "If this checkbox is checked, the form field is \"required\" in the form "
 "field when actually creating a report and necessarily requires an input by "
 "the user."
+
+msgid "Helptext_Reporting_ReportCreate_Periodic"
+msgstr ""
 
 msgid "Helptext_Reporting_ReportCreate_Roles"
 msgstr ""
@@ -2797,6 +2809,11 @@ msgstr ""
 msgid "Include this code into the <head> area of your webpage."
 msgstr ""
 
+msgid ""
+"Incorrect data mapping. Length of dataset properties is different from value "
+"properties."
+msgstr ""
+
 msgid "Incorrectly processed lines"
 msgstr ""
 
@@ -2861,6 +2878,9 @@ msgid "Job successfully ran."
 msgstr ""
 
 msgid "Keywords"
+msgstr ""
+
+msgid "KIX"
 msgstr ""
 
 msgid "KIX Forum"
@@ -3017,6 +3037,9 @@ msgid "Marked all articles as read."
 msgstr ""
 
 msgid "Max Depth"
+msgstr ""
+
+msgid "Max. Reports"
 msgstr ""
 
 msgid "Menu"
@@ -3298,7 +3321,7 @@ msgstr ""
 msgid "No rating available."
 msgstr ""
 
-msgid "No signature defined."
+msgid "No report available"
 msgstr ""
 
 msgid "Not available (not any more or not yet)"
@@ -3373,6 +3396,12 @@ msgstr "Number of Assets"
 msgid "Number of Config Items in critical incident state"
 msgstr "Number of Assets in critical incident state"
 
+msgid "Number of open tickets by priority"
+msgstr ""
+
+msgid "Number of open tickets by state"
+msgstr ""
+
 msgid "Number of ratings"
 msgstr ""
 
@@ -3383,6 +3412,9 @@ msgid "Number of rows (max)"
 msgstr ""
 
 msgid "Number of rows (min)"
+msgstr ""
+
+msgid "Number of tickets created within the last 7 days"
 msgstr ""
 
 msgid "Number of version"
@@ -3571,6 +3603,12 @@ msgstr ""
 msgid "Pending until: {0} ({1})"
 msgstr ""
 
+msgid "Periodic"
+msgstr ""
+
+msgid "Periodic Creation"
+msgstr ""
+
 msgid "Permission"
 msgstr ""
 
@@ -3679,16 +3717,7 @@ msgstr ""
 msgid "Priority Chart"
 msgstr ""
 
-msgid "Priority Chart Widget"
-msgstr ""
-
 msgid "Priority Data"
-msgstr ""
-
-msgid "Priority Details"
-msgstr ""
-
-msgid "Priority Information"
 msgstr ""
 
 msgid "Profiles successfully removed."
@@ -3890,6 +3919,9 @@ msgid "Reply all"
 msgstr ""
 
 msgid "Report"
+msgstr ""
+
+msgid "Report Chart"
 msgstr ""
 
 msgid "Report Definition"
@@ -4327,12 +4359,6 @@ msgstr ""
 msgid "State Data"
 msgstr ""
 
-msgid "State Details"
-msgstr ""
-
-msgid "State Information"
-msgstr ""
-
 msgid "States"
 msgstr ""
 
@@ -4480,9 +4506,6 @@ msgstr ""
 msgid "Team Backlog"
 msgstr ""
 
-msgid "Team Details"
-msgstr ""
-
 msgid ""
 "Technical Customer Service mit KIX - work order documentation, checklists, "
 "scheduling, offline information for maintenance and repairs."
@@ -4504,6 +4527,9 @@ msgid "Text Modules successfully removed."
 msgstr "Text Module(s) successfully removed."
 
 msgid "Text separator"
+msgstr ""
+
+msgid "The entered date is out of boundaries. "
 msgstr ""
 
 msgid "The file {0} has no valid MIME-TYPE."
