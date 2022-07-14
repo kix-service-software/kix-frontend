@@ -1,0 +1,54 @@
+<!--
+Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<if(state.prepared && state.value)>
+    <div.form-control.p-0.border-0>
+        <div.accordion id=state.checklistId>
+            <div.accordion-item class={readonly: state.readonly}>
+                <h2.accordion-header id=`${state.checklistId}-header`>
+                    <button.accordion-button
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target=`#${state.checklistId}-content`
+                        aria-expanded="true"
+                        aria-controls=`#${state.checklistId}-content`
+                    >
+                        <div.progress.w-100>
+                            <div.progress-bar
+                                role="progressbar"
+                                style=`width: ${state.progressValue}%;`
+                                aria-valuenow=state.progressValue
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                            >
+                                ${state.progressValue}%
+                            </div>
+                        </div>
+                        <span.ms-2.me-2>${state.progressText}</span>
+                    </button>
+                </h2>
+                <div.accordion-collapse.collapse.show
+                    id=`${state.checklistId}-content`
+                    aria-labelledby="headingOne"
+                    data-bs-parent=`#${state.checklistId}`
+                >
+                    <div.accordion-body>
+                        <for|item| of=state.value>
+                            <checklist-form-item
+                                item=item
+                                readonly=state.readonly
+                                on-itemValueChanged("itemValueChanged")
+                            />
+                        </for>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</if>

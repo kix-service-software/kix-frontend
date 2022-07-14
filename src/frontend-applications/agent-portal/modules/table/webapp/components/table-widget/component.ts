@@ -21,19 +21,18 @@ import { ActionFactory } from '../../../../../modules/base-components/webapp/cor
 import { KIXObjectPropertyFilter } from '../../../../../model/KIXObjectPropertyFilter';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
-import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
 import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
-import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
-import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
 import { IContextListener } from '../../../../base-components/webapp/core/IContextListener';
 import { Table } from '../../../model/Table';
 import { TableEvent } from '../../../model/TableEvent';
 import { TableEventData } from '../../../model/TableEventData';
 import { TableFactoryService } from '../../core/factory/TableFactoryService';
+import { Context } from '../../../../../model/Context';
+import { FormValueProperty } from '../../../../object-forms/model/FormValueProperty';
+import { ObjectFormValue } from '../../../../object-forms/model/FormValues/ObjectFormValue';
 
 class Component {
 
@@ -45,8 +44,8 @@ class Component {
     private configuredTitle: boolean = true;
     private useContext: boolean = true;
     private contextListener: IContextListener;
-    private formSubscriber: IEventSubscriber;
     private prepareTitleTimeout: any;
+    private context: Context;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -68,12 +67,10 @@ class Component {
     public async onMount(): Promise<void> {
         this.state.filterPlaceholder = await TranslationService.translate(this.state.filterPlaceholder);
         this.additionalFilterCriteria = [];
-        const context = ContextService.getInstance().getActiveContext();
+        this.context = ContextService.getInstance().getActiveContext();
 
         if (this.useContext) {
-            this.state.widgetConfiguration = context
-                ? await context.getWidgetConfiguration(this.state.instanceId)
-                : undefined;
+            this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
         }
 
         if (this.state.widgetConfiguration) {
@@ -172,42 +169,22 @@ class Component {
         }
     }
 
-    private prepareFormDependency(): void {
+    private async prepareFormDependency(): Promise<void> {
         if (this.state.widgetConfiguration.formDependent) {
-            this.formSubscriber = {
-                eventSubscriberId: IdService.generateDateBasedId('table-widget-' + this.state.instanceId),
-                eventPublished: (data: FormValuesChangedEventData, eventId: string): void => {
-                    const properties: string[] = [];
-                    for (const cv of data.changedValues) {
-                        if (cv[0]?.property) {
-                            let property = cv[0].property;
-                            if (property === KIXObjectProperty.DYNAMIC_FIELDS) {
-                                const dfNameOption = cv[0].options.find(
-                                    (o) => o.option === DynamicFormFieldOption.FIELD_NAME
-                                );
-                                if (dfNameOption) {
-                                    property = 'DynamicFields.' + dfNameOption.value;
-                                }
-                            }
-                            properties.push(property);
-                        }
-                    }
 
-                    const relevantHandlerConfigIds = this.getRelevantHandlerConfigIds(properties);
-                    if (
-                        this.state.table &&
-                        (
-                            relevantHandlerConfigIds.length
-                            || this.state.widgetConfiguration.formDependencyProperties.some(
-                                (fdp) => properties.some((p) => p === fdp)
-                            )
-                        )
-                    ) {
-                        this.state.table.reload(null, null, relevantHandlerConfigIds);
-                    }
+            const formHandler = await this.context.getFormManager().getObjectFormHandler();
+
+            const properties = this.state.widgetConfiguration.formDependencyProperties;
+            if (Array.isArray(properties)) {
+                const relevantHandlerConfigIds = this.getRelevantHandlerConfigIds(properties);
+
+                for (const p of properties) {
+                    const formValue = formHandler?.objectFormValueMapper?.findFormValue(p);
+                    formValue?.addPropertyBinding(FormValueProperty.VALUE, (value: ObjectFormValue) => {
+                        this.state.table?.reload(null, null, relevantHandlerConfigIds);
+                    });
                 }
-            };
-            EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
+            }
         }
     }
 
@@ -244,11 +221,6 @@ class Component {
         if (context) {
             context.unregisterListener('table-widget-' + this.state.instanceId);
         }
-
-        if (this.formSubscriber) {
-            EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
-        }
-
     }
 
     private async prepareHeader(): Promise<void> {

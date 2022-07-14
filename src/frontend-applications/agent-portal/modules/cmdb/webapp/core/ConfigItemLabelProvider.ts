@@ -196,24 +196,17 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
     public async getObjectText(configItem: ConfigItem, id: boolean = true, name: boolean = true): Promise<string> {
         let returnString = '';
         if (configItem) {
-            if (id) {
-                let configItemHook: string = '';
+            let configItemHook: string = '';
 
-                const hookConfig: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
-                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.CONFIG_ITEM_HOOK]
-                ).catch((error): SysConfigOption[] => []);
+            const hookConfig: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
+                KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.CONFIG_ITEM_HOOK]
+            ).catch((error): SysConfigOption[] => []);
 
-                if (hookConfig && hookConfig.length) {
-                    configItemHook = hookConfig[0].Value;
-                }
-
-                returnString = `${configItemHook}${configItem.Number}`;
+            if (hookConfig && hookConfig.length) {
+                configItemHook = hookConfig[0].Value;
             }
-            if (name) {
-                returnString += (id ? ' - ' : '') + configItem.Name;
-            }
-        } else {
-            returnString = await this.getObjectName(false);
+
+            returnString = `${configItemHook}${configItem.Number} - ${configItem.Name}`;
         }
         return returnString;
     }

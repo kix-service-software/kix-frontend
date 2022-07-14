@@ -15,82 +15,87 @@ import { SenderType } from './SenderType';
 import { ArticleReceiver } from './ArticleReceiver';
 import { ArticleProperty } from './ArticleProperty';
 import addrparser from 'address-rfc2822';
+import { Ticket } from './Ticket';
 
 export class Article extends KIXObject {
 
-    public ObjectId: string | number;
+    public ObjectId: string | number = null;
 
     public KIXObjectType: KIXObjectType = KIXObjectType.ARTICLE;
 
-    public TicketID: number;
+    public TicketID: number = null;
 
-    public ArticleID: number;
+    public ArticleID: number = null;
 
-    public From: string;
+    public CustomerVisible: boolean = null;
 
-    public FromRealname: string;
+    public From: string = null;
 
-    public To: string;
+    public FromRealname: string = null;
 
-    public ToRealname: string;
+    public To: string = null;
 
-    public Cc: string;
+    public ToRealname: string = null;
 
-    public CcRealname: string;
+    public Cc: string = null;
 
-    public Bcc: string;
+    public CcRealname: string = null;
 
-    public BccRealname: string;
+    public Bcc: string = null;
 
-    public Subject: string;
+    public BccRealname: string = null;
 
-    public Body: string;
+    public Subject: string = null;
 
-    public ReplyTo: string;
+    public Body: string = null;
 
-    public MessageID: number;
+    public ReplyTo: string = null;
 
-    public InReplyTo: string;
+    public MessageID: number = null;
 
-    public References: string;
+    public InReplyTo: string = null;
 
-    public SenderTypeID: number;
+    public References: string = null;
 
-    public SenderType: string;
+    public SenderTypeID: number = null;
 
-    public ChannelID: number;
+    public SenderType: string = null;
 
-    public Channel: string;
+    public ChannelID: number = null;
 
-    public ContentType: string;
+    public Channel: string = null;
 
-    public Charset: string;
+    public ContentType: string = null;
 
-    public MimeType: string;
+    public Charset: string = null;
 
-    public IncomingTime: number;
+    public MimeType: string = null;
 
-    public Attachments: Attachment[];
+    public IncomingTime: number = null;
 
-    public Flags: ArticleFlag[];
+    public Attachments: Attachment[] = null;
 
-    public CustomerVisible: boolean;
+    public Flags: ArticleFlag[] = null;
 
-    public CreatedBy: number;
-    public ChangedBy: number;
+    public CreatedBy: number = null;
+    public ChangedBy: number = null;
 
-    public Plain: string;
+    public Plain: string = null;
 
     // UI Properties
 
-    public senderType: SenderType;
+    public senderType: SenderType = null;
     public toList: ArticleReceiver[] = [];
     public ccList: ArticleReceiver[] = [];
     public bccList: ArticleReceiver[] = [];
     public bodyAttachment: Attachment = null;
 
-    public constructor(article?: Article) {
+    public ticket: Ticket;
+
+    public constructor(article?: Article, ticket?: Ticket) {
         super(article);
+
+        this.ticket = ticket;
 
         if (article) {
             this.TicketID = article.TicketID;
@@ -156,7 +161,7 @@ export class Article extends KIXObject {
         this.prepareRecieverList(this.bccList, this.Bcc);
     }
 
-    private prepareRecieverList(list: ArticleReceiver[], mailValue: string): void {
+    public prepareRecieverList(list: ArticleReceiver[], mailValue: string): void {
         if (mailValue && !Array.isArray(mailValue)) {
             try {
                 addrparser.parse(mailValue).forEach((address) => {

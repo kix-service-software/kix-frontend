@@ -9,7 +9,6 @@
 
 import { Context } from '../../../../../model/Context';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { TicketProperty } from '../../../model/TicketProperty';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
@@ -17,11 +16,9 @@ import { Ticket } from '../../../model/Ticket';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { Organisation } from '../../../../customer/model/Organisation';
 import { Contact } from '../../../../customer/model/Contact';
-import { ServiceRegistry } from '../../../../base-components/webapp/core/ServiceRegistry';
-import { ServiceType } from '../../../../base-components/webapp/core/ServiceType';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
-import { KIXObjectFormService } from '../../../../base-components/webapp/core/KIXObjectFormService';
-import { ArticleProperty } from '../../../model/ArticleProperty';
+import { FormService } from '../../../../base-components/webapp/core/FormService';
+import { FormContext } from '../../../../../model/configuration/FormContext';
 
 export class EditTicketDialogContext extends Context {
 
@@ -31,63 +28,21 @@ export class EditTicketDialogContext extends Context {
     private organisation: Organisation;
 
     public async initContext(): Promise<void> {
+        await this.loadTicket();
+
+        let formId = this.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
+        if (!formId) {
+            formId = await FormService.getInstance().getFormIdByContext(FormContext.EDIT, KIXObjectType.TICKET);
+        }
+        this.getFormManager().setFormId(formId, null, true);
+
         await super.initContext();
-        this.setFormObject(false);
     }
 
-    public async setFormObject(overwrite: boolean = true): Promise<void> {
-        const formId = this.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
-        const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
-            KIXObjectType.TICKET, ServiceType.FORM
-        );
-        if (service) {
-            const ticket = await this.loadTicket();
-            let formObject = ticket;
-            if (overwrite) {
-                const parameter = await service.getFormParameter(formId, null, false);
-                parameter.forEach((p) => {
-                    if (p[0] === KIXObjectProperty.DYNAMIC_FIELDS) {
-                        this.setDynamicFields(formObject, p[1]);
-                    } else if (p[1] !== undefined) {
-                        formObject[p[0]] = p[1];
-                    }
-                });
-
-                formObject = await KIXObjectService.createObjectInstance<any>(
-                    KIXObjectType.TICKET, formObject
-                );
-            }
-            this.setAdditionalInformation(AdditionalContextInformation.FORM_OBJECT, formObject);
-        }
-    }
-
-    private setDynamicFields(formObject: Ticket, dfList: any[]): void {
-        if (!formObject.DynamicFields) {
-            formObject.DynamicFields = [];
-        }
-        if (Array.isArray(dfList)) {
-            dfList.forEach((dfValue) => {
-                if (typeof dfValue === 'object' && dfValue.Name) {
-                    const dfValueIndex = formObject.DynamicFields.findIndex((dfv) => dfv.Name === dfValue.Name);
-                    if (dfValueIndex === -1) {
-                        formObject.DynamicFields.push(dfValue);
-                    } else {
-                        formObject.DynamicFields[dfValueIndex] = dfValue;
-                    }
-                }
-            });
-        }
-    }
-
-    private async loadTicket(): Promise<Ticket> {
+    private async loadTicket(): Promise<void> {
         const ticketId = this.getObjectId();
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null,
-            [
-                KIXObjectProperty.DYNAMIC_FIELDS,
-                TicketProperty.ARTICLES,
-                ArticleProperty.ATTACHMENTS
-            ]
+            null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS]
         );
 
         let tickets: Ticket[];
@@ -102,7 +57,7 @@ export class EditTicketDialogContext extends Context {
             ticket = KIXObjectService.createObjectInstance(KIXObjectType.TICKET, tickets[0]);
         }
 
-        return ticket;
+        this.setAdditionalInformation(AdditionalContextInformation.FORM_OBJECT, ticket);
     }
 
     public async getObject<O extends KIXObject>(kixObjectType: KIXObjectType = KIXObjectType.TICKET): Promise<O> {

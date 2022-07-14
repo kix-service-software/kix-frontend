@@ -37,7 +37,8 @@ import { ApplicationEvent } from './ApplicationEvent';
 import { PortalNotificationService } from '../../../portal-notification/webapp/core/PortalNotificationService';
 import { PortalNotification } from '../../../portal-notification/model/PortalNotification';
 import { PortalNotificationType } from '../../../portal-notification/model/PortalNotificationType';
-import { DateTimeUtil } from './DateTimeUtil';
+import { DisplayValueRequest } from '../../../../model/DisplayValueRequest';
+import { DisplayValueResponse } from '../../../../model/DisplayValueResponse';
 
 export class KIXObjectSocketClient extends SocketClient {
 
@@ -55,10 +56,46 @@ export class KIXObjectSocketClient extends SocketClient {
         super('kixobjects');
     }
 
+    public async loadDisplayValue(
+        objectType: KIXObjectType | string, objectId: string | number
+    ): Promise<string> {
+        this.checkSocketConnection();
+
+        const requestId = IdService.generateDateBasedId();
+
+        const request = new DisplayValueRequest(
+            requestId, ClientStorageService.getClientRequestId(), objectType, objectId
+        );
+
+        let requestPromise: Promise<string>;
+        const cacheKey = 'DisplayValue' + JSON.stringify({ objectType, objectId });
+
+        requestPromise = BrowserCacheService.getInstance().get(cacheKey, objectType);
+        if (!requestPromise) {
+            requestPromise = this.createDisplayValuePromise(request);
+            BrowserCacheService.getInstance().set(cacheKey, requestPromise, objectType);
+
+            requestPromise.catch((error) => {
+                BrowserCacheService.getInstance().delete(cacheKey, objectType);
+            });
+        }
+        return requestPromise;
+    }
+
+    private async createDisplayValuePromise(request: DisplayValueRequest): Promise<string> {
+        const response = await this.sendRequest<DisplayValueResponse>(
+            request,
+            KIXObjectEvent.LOAD_DISPLAY_VALUE, KIXObjectEvent.LOAD_DISPLAY_VALUE_FINISHED
+        ).catch((): DisplayValueResponse => new DisplayValueResponse(null, ''));
+
+        return response.displayValue;
+    }
+
     public async loadObjects<T extends KIXObject>(
         kixObjectType: KIXObjectType | string, objectConstructors: Array<new (object?: T) => T>,
         objectIds: Array<string | number> = null, loadingOptions: KIXObjectLoadingOptions = null,
-        objectLoadingOptions: KIXObjectSpecificLoadingOptions = null, cache: boolean = true, timeout?: number
+        objectLoadingOptions: KIXObjectSpecificLoadingOptions = null, cache: boolean = true, timeout?: number,
+        silent?: boolean
     ): Promise<T[]> {
         this.checkSocketConnection();
 
@@ -75,7 +112,7 @@ export class KIXObjectSocketClient extends SocketClient {
 
             requestPromise = BrowserCacheService.getInstance().get(cacheKey, kixObjectType);
             if (!requestPromise) {
-                requestPromise = this.createRequestPromise<T>(request, objectConstructors, timeout);
+                requestPromise = this.createLoadRequestPromise<T>(request, objectConstructors, timeout, silent);
                 BrowserCacheService.getInstance().set(cacheKey, requestPromise, kixObjectType);
 
                 requestPromise.catch((error) => {
@@ -85,16 +122,16 @@ export class KIXObjectSocketClient extends SocketClient {
             return requestPromise;
         }
 
-        requestPromise = this.createRequestPromise<T>(request, objectConstructors, timeout);
+        requestPromise = this.createLoadRequestPromise<T>(request, objectConstructors, timeout, silent);
         return requestPromise;
     }
 
-    private async createRequestPromise<T extends KIXObject>(
-        request: LoadObjectsRequest, objectConstructors: Array<new (object?: T) => T>, timeout?: number
+    private async createLoadRequestPromise<T extends KIXObject>(
+        request: LoadObjectsRequest, objectConstructors: Array<new (object?: T) => T>, timeout?: number,
+        silent?: boolean
     ): Promise<T[]> {
         const response = await this.sendRequest<LoadObjectsResponse<T>>(
-            request,
-            KIXObjectEvent.LOAD_OBJECTS, KIXObjectEvent.LOAD_OBJECTS_FINISHED, timeout
+            request, KIXObjectEvent.LOAD_OBJECTS, KIXObjectEvent.LOAD_OBJECTS_FINISHED, timeout, silent
         ).catch((error): LoadObjectsResponse<T> => {
             if (error instanceof PermissionError) {
                 return new LoadObjectsResponse(request.clientRequestId, []);
@@ -204,7 +241,8 @@ export class KIXObjectSocketClient extends SocketClient {
     }
 
     private async sendRequest<T extends ISocketResponse>(
-        requestObject: ISocketObjectRequest, event: string, finishEvent: string, defaultTimeout?: number
+        requestObject: ISocketObjectRequest, event: string, finishEvent: string, defaultTimeout?: number,
+        silent?: boolean
     ): Promise<T> {
         this.checkSocketConnection();
 
@@ -242,14 +280,16 @@ export class KIXObjectSocketClient extends SocketClient {
                 if (error.requestId === requestObject.requestId) {
                     window.clearTimeout(timeout);
                     const errorMessage = `Socket Error: Event - ${event}, Object - ${requestObject.objectType}`;
-                    PortalNotificationService.getInstance().publishNotifications([
-                        new PortalNotification(
-                            IdService.generateDateBasedId('socket-error'), 'error',
-                            PortalNotificationType.IMPORTANT,
-                            'Socket Error', new Date().toLocaleString(), true, false,
-                            errorMessage, JSON.stringify(error)
-                        )
-                    ]);
+                    if (silent) {
+                        PortalNotificationService.getInstance().publishNotifications([
+                            new PortalNotification(
+                                IdService.generateDateBasedId('socket-error'), 'error',
+                                PortalNotificationType.IMPORTANT,
+                                'Socket Error', new Date().toLocaleString(), true, false,
+                                errorMessage, JSON.stringify(error)
+                            )
+                        ]);
+                    }
                     console.error(errorMessage);
                     console.error(error.error);
                     reject(error.error);
@@ -259,14 +299,6 @@ export class KIXObjectSocketClient extends SocketClient {
             this.socket.on(SocketEvent.PERMISSION_ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestObject.requestId) {
                     window.clearTimeout(timeout);
-                    PortalNotificationService.getInstance().publishNotifications([
-                        new PortalNotification(
-                            IdService.generateDateBasedId('permission-error'), 'error',
-                            PortalNotificationType.IMPORTANT,
-                            'Permission Error', new Date().toLocaleString(), true, false,
-                            error.error, JSON.stringify(error)
-                        )
-                    ]);
                     console.error('No permissions');
                     console.error(error.error);
                     const permissionError = error.error as PermissionError;

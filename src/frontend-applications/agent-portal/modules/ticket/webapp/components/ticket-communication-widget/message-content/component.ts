@@ -21,6 +21,7 @@ import { DisplayImageDescription } from '../../../../../base-components/webapp/c
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { IContextListener } from '../../../../../base-components/webapp/core/IContextListener';
 import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
+import { KIXModulesSocketClient } from '../../../../../base-components/webapp/core/KIXModulesSocketClient';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { LabelService } from '../../../../../base-components/webapp/core/LabelService';
 import { SysConfigOption } from '../../../../../sysconfig/model/SysConfigOption';
@@ -63,7 +64,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             sidebarLeftToggled: (): void => { return; },
             filteredObjectListChanged: (): void => { return; },
             objectChanged: (): void => { return; },
-            objectListChanged: (): void => { return; },
+            objectListChanged: (objectType: KIXObjectType): void => {
+                if (objectType === KIXObjectType.ARTICLE && this.state.article) {
+                    this.loadArticle(undefined, true);
+                }
+            },
             sidebarRightToggled: (): void => { return; },
             scrollInformationChanged: (objectType: KIXObjectType | string, objectId: string | number): void => {
                 if (
@@ -80,7 +85,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onDestroy(): void {
         EventService.getInstance().unsubscribe('TOGGLE_ARTICLE', this.eventSubscriber);
-        EventService.getInstance().unsubscribe('READ_ALL_ARTICLES', this.eventSubscriber);
 
         if (this.observer) {
             this.observer.disconnect();
@@ -117,7 +121,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         if (!this.state.article || force) {
             const loadingOptions = new KIXObjectLoadingOptions(
-                null, null, null, [ArticleProperty.FLAGS, ArticleProperty.ATTACHMENTS, 'ObjectActions']
+                null, null, null,
+                [
+                    ArticleProperty.PLAIN, ArticleProperty.FLAGS,
+                    ArticleProperty.ATTACHMENTS, 'ObjectActions'
+                ]
             );
             const articles = await KIXObjectService.loadObjects<Article>(
                 KIXObjectType.ARTICLE, [this.article.ArticleID], loadingOptions,
@@ -129,7 +137,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             }
         }
 
-        await this.prepareData();
+        await this.prepareActions();
+        this.prepareAttachments();
+        await this.prepareArticleData();
         this.state.loading = false;
         this.state.show = true;
     }
@@ -150,14 +160,32 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private async prepareData(): Promise<void> {
-        this.prepareAttachments();
+    private async prepareActions(): Promise<void> {
+        const actions = await this.context.getAdditionalActions(this.state.article) || [];
 
-        this.state.actions = await this.context.getAdditionalActions(this.state.article) || [];
-        this.state.actions.push(
-            ...await ActionFactory.getInstance().generateActions(['article-get-plain-action'], this.state.article)
-        );
+        const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+        if (!releaseInfo?.plugins?.some((p) => p.product === 'KIXPro')) {
+            const startActions = ['article-reply-action', 'article-forward-action'];
+            const actionInstance = await ActionFactory.getInstance().generateActions(startActions, this.state.article);
+            actions.push(...actionInstance);
+        }
 
+        const plainTextAction = await ActionFactory.getInstance().generateActions(['article-get-plain-action'], this.state.article);
+        if (plainTextAction?.length) {
+            plainTextAction[0].setData(this.state.article);
+            actions.push(...plainTextAction);
+        }
+
+        const filteredActions = [];
+        for (const a of actions) {
+            if (await a.canShow()) {
+                filteredActions.push(a);
+            }
+        }
+        this.state.actions = filteredActions;
+    }
+
+    private async prepareArticleData(): Promise<void> {
         this.state.isExternal = this.state.article?.SenderType === 'external';
 
         const contact = await TicketService.getContactForArticle(this.state.article);
@@ -197,6 +225,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 // no option means no specific color
                 this.state.backgroundColor = '#fff';
             }
+
         }
 
         this.eventSubscriber = {
@@ -207,13 +236,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     if (this.state.expanded) {
                         this.setArticleSeen();
                     }
-                } else if (eventId === 'READ_ALL_ARTICLES') {
-                    this.setArticleSeen();
                 }
             }
         };
         EventService.getInstance().subscribe('TOGGLE_ARTICLE', this.eventSubscriber);
-        EventService.getInstance().subscribe('READ_ALL_ARTICLES', this.eventSubscriber);
     }
 
     private getFallbackColor(): string {
@@ -277,6 +303,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 article.TicketID, article.ArticleID
             );
             await this.loadArticle(silent, true);
+            this.context.reloadObjectList(KIXObjectType.ARTICLE);
         }
     }
 }

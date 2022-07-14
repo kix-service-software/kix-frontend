@@ -1,0 +1,31 @@
+<!--
+Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<div.container-fluid.m-0.p-0.pe-1 class={'text-center': !state.prepared}>        
+    <if(state.prepared)>
+        <object-form-values-container formValues=state.formValues/>
+        <div.form-submission-buttons>
+            <div.bg-light.me-2>
+                <button.btn.btn-labeled.btn-outline-danger type="button" on-click("cancel")>
+                    <span.btn-label-danger><i class="fa fa-times text-light"></i></span>
+                    <translation-string pattern="Translatable#Cancel"/>
+                </button>
+            </div>
+            <div.bg-light>
+                <button.btn.btn-labeled.btn-outline-success type="button" on-click("submit")>
+                    <span.btn-label-success><i class="fa fa-check text-light"></i></span>
+                    <translation-string pattern="Translatable#Save"/>
+                </button>
+            </div>
+        </div>
+    </if>
+    <else>
+        <loading-spinner/>
+    </else>    
+</div>

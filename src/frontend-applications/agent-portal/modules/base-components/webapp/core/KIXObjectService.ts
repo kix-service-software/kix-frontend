@@ -99,6 +99,12 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return object;
     }
 
+    public static async loadDisplayValue(
+        objectType: KIXObjectType | string, objectId: string | number
+    ): Promise<string> {
+        return KIXObjectSocketClient.getInstance().loadDisplayValue(objectType, objectId);
+    }
+
     public static async loadObjects<T extends KIXObject>(
         objectType: KIXObjectType | string, objectIds?: Array<number | string>,
         loadingOptions?: KIXObjectLoadingOptions,
@@ -109,7 +115,8 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         let objects = [];
         if (service) {
             objects = await service.loadObjects(
-                objectType, objectIds ? [...objectIds] : null, loadingOptions, objectLoadingOptions, cache, forceIds
+                objectType, objectIds ? [...objectIds] : null, loadingOptions, objectLoadingOptions, cache, forceIds,
+                silent
             ).catch((error: Error) => {
                 if (!silent) {
                     // TODO: Publish event to show an error dialog
@@ -135,7 +142,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     public async loadObjects<O extends KIXObject>(
         objectType: KIXObjectType | string, objectIds: Array<string | number>,
         loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
-        cache: boolean = true, forceIds?: boolean
+        cache: boolean = true, forceIds?: boolean, silent?: boolean
     ): Promise<O[]> {
         const objectConstructors = this.getObjectConstructors(objectType);
 
@@ -143,12 +150,14 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         if (objectIds) {
             if (objectIds.length) {
                 objects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
-                    objectType, objectConstructors, objectIds, loadingOptions, objectLoadingOptions, cache
+                    objectType, objectConstructors, objectIds, loadingOptions, objectLoadingOptions, cache,
+                    undefined, silent
                 );
             }
         } else {
             objects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
-                objectType, objectConstructors, objectIds, loadingOptions, objectLoadingOptions, cache
+                objectType, objectConstructors, objectIds, loadingOptions, objectLoadingOptions, cache,
+                undefined, silent
             );
         }
         return objects;
@@ -487,25 +496,25 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public static async prepareObjectTree(
         objectType: KIXObjectType | string, objects: KIXObject[], showInvalid?: boolean,
-        invalidClickable?: boolean, filterIds?: Array<string | number>, translatable?: boolean
+        invalidClickable?: boolean, filterIds?: Array<string | number>, translatable?: boolean, useTextAsId?: boolean
     ): Promise<TreeNode[]> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
-        const nodes = await service.prepareObjectTree(objects, showInvalid, invalidClickable, filterIds, translatable);
+        const nodes = await service?.prepareObjectTree(
+            objects, showInvalid, invalidClickable, filterIds, translatable, useTextAsId
+        ) || [];
         return nodes;
     }
 
     public async prepareObjectTree(
         objects: KIXObject[], showInvalid?: boolean, invalidClickable?: boolean, filterIds?: Array<string | number>,
-        translatable?: boolean
+        translatable?: boolean, useTextAsId?: boolean
     ): Promise<TreeNode[]> {
         const nodes: TreeNode[] = [];
         if (objects && !!objects.length) {
             for (const o of objects) {
-                nodes.push(
-                    new TreeNode(
-                        o.ObjectId, await LabelService.getInstance().getObjectText(o, null, null, translatable)
-                    )
-                );
+                const label = await LabelService.getInstance().getObjectText(o, null, null, translatable);
+                const icon = LabelService.getInstance().getObjectIcon(o);
+                nodes.push(new TreeNode(o.ObjectId, label, icon));
             }
         }
         return nodes;
@@ -572,7 +581,9 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 ), null, true
             ).catch(() => [] as DynamicField[]);
 
-            if (Array.isArray(dynamicFields) && dynamicFields.length) {
+            if (id && dynamicFields?.length) {
+                dynamicField = dynamicFields[0];
+            } else if (Array.isArray(dynamicFields) && dynamicFields.length) {
                 // use string, if name contains only numbers
                 dynamicField = dynamicFields.find((df) => df.Name.toString() === name.toString());
             }
@@ -607,7 +618,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     }
 
     public static isDynamicFieldProperty(property: string): boolean {
-        return Boolean(property.match(/^DynamicFields?\..+/));
+        return typeof property === 'string' && Boolean(property.match(/^DynamicFields?\..+/));
     }
 
     public getObjectRoutingConfiguration(object: KIXObject): RoutingConfiguration {
@@ -717,6 +728,18 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 case TicketProperty.ORGANISATION_ID:
                 case ContactProperty.PRIMARY_ORGANISATION_ID:
                     objectType = KIXObjectType.ORGANISATION;
+                    break;
+                case TicketProperty.TYPE_ID:
+                    objectType = KIXObjectType.TICKET_TYPE;
+                    break;
+                case TicketProperty.QUEUE_ID:
+                    objectType = KIXObjectType.QUEUE;
+                    break;
+                case TicketProperty.PRIORITY_ID:
+                    objectType = KIXObjectType.TICKET_PRIORITY;
+                    break;
+                case TicketProperty.STATE_ID:
+                    objectType = KIXObjectType.TICKET_STATE;
                     break;
                 default:
             }

@@ -142,7 +142,7 @@ export class ApplicationRouter extends KIXRouter {
     public async filterUIComponents(token: string, uiComponents: UIComponent[]): Promise<UIComponent[]> {
         const components: UIComponent[] = [];
         for (const component of uiComponents) {
-            if (await PermissionService.getInstance().checkPermissions(token, component.permissions)) {
+            if (await PermissionService.getInstance().checkPermissions(token, component.permissions, 'ApplicationRouter')) {
                 components.push(component);
             }
         }

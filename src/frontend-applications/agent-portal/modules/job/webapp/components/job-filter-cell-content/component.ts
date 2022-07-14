@@ -12,7 +12,7 @@ import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/
 import { Cell } from '../../../../table/model/Cell';
 import { JobFilterTableProperty } from '../../../../job/webapp/core/table/JobFilterTableProperty';
 import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFieldTypes';
-import { SearchService } from '../../../../search/webapp/core';
+import { SearchDefinition, SearchService } from '../../../../search/webapp/core';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -30,6 +30,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const inputType = propertyCell && manager
                 ? await manager.getInputType(propertyCell.getValue().objectValue, operatorCell.getValue().objectValue)
                 : null;
+            // no sort for relative values
+            this.state.doLabelSort = !SearchDefinition.getRelativeDateTimeOperators().includes(
+                operatorCell.getValue().objectValue
+            );
             this.state.isLabelCell = inputType === InputFieldTypes.DROPDOWN
                 || inputType === InputFieldTypes.OBJECT_REFERENCE
                 || inputType === InputFieldTypes.DATE

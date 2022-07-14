@@ -25,7 +25,7 @@ import { FormGroupConfiguration } from '../../model/configuration/FormGroupConfi
 import { FormPageConfiguration } from '../../model/configuration/FormPageConfiguration';
 import { FormConfiguration } from '../../model/configuration/FormConfiguration';
 import { FormContext } from '../../model/configuration/FormContext';
-import { ModuleConfigurationService } from '../../server/services/configuration';
+import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
 import { DefaultSelectInputFormOption } from '../../model/configuration/DefaultSelectInputFormOption';
 import { TreeNode } from '../base-components/webapp/core/tree';
 import { RoleUsageContextTypes } from './model/RoleUsageContextTypes';

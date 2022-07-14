@@ -21,33 +21,36 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
     public getAdminModules(): AdminModuleCategory[] {
         return [
             new AdminModuleCategory(
-                null, 'communication', 'Translatable#Communication', null,
-                [
-                    new AdminModuleCategory(
-                        null, 'communication_email', 'Translatable#Email', null, [],
-                        [
-                            new AdminModule(
-                                null, 'mail-account', 'Translatable#Inbox', null,
-                                KIXObjectType.MAIL_ACCOUNT, 'admin-mail-accounts',
-                                [
-                                    new UIComponentPermission(
-                                        'system/communication/mailaccounts', [CRUD.CREATE], true
-                                    )
-                                ]
-                            ),
-                            new AdminModule(
-                                null, 'sending-email', 'Translatable#Outbox', null,
-                                KIXObjectType.ANY, 'setup-sending-email',
-                                [
-                                    new UIComponentPermission(
-                                        'system/config/SendmailModule', [CRUD.UPDATE], true
-                                    )
-                                ]
-                            )
-                        ]
-                    )
-                ]
-            )
+                null, 'kix', 'Translatable#KIX', null, [
+                new AdminModuleCategory(
+                    null, 'communication', 'Translatable#Communication', null,
+                    [
+                        new AdminModuleCategory(
+                            null, 'communication_email', 'Translatable#Email', null, [],
+                            [
+                                new AdminModule(
+                                    null, 'mail-account', 'Translatable#Inbox', null,
+                                    KIXObjectType.MAIL_ACCOUNT, 'admin-mail-accounts',
+                                    [
+                                        new UIComponentPermission(
+                                            'system/communication/mailaccounts', [CRUD.CREATE], true
+                                        )
+                                    ]
+                                ),
+                                new AdminModule(
+                                    null, 'sending-email', 'Translatable#Outbox', null,
+                                    KIXObjectType.ANY, 'setup-sending-email',
+                                    [
+                                        new UIComponentPermission(
+                                            'system/config/SendmailModule', [CRUD.UPDATE], true
+                                        )
+                                    ]
+                                )
+                            ]
+                        )
+                    ]
+                )
+            ])
         ];
     }
 

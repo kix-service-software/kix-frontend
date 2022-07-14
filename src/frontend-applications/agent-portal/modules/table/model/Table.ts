@@ -119,6 +119,7 @@ export class Table implements Table {
 
     public deleteTableState(): void {
         ClientStorageService.deleteState(this.getTableId());
+        this.columns.forEach((c) => c.destroy());
     }
 
     public getTableId(): string {

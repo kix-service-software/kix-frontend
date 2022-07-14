@@ -71,21 +71,21 @@ export class ReportDefinitionFormValueHandler extends FormFieldValueHandler {
             const referencesValue = changedFieldValues.find(
                 (cv) => cv[0] && cv[0].property === ReportParameterProperty.REFERENCES
             );
-            if (referencesValue && referencesValue.values) {
+            if (referencesValue && referencesValue[1].value) {
                 await this.handleReferencesValue(referencesValue[0], referencesValue[1], formInstance);
             }
 
             const possibleValuesValue = changedFieldValues.find(
                 (cv) => cv[0] && cv[0].property === ReportParameterProperty.POSSIBLE_VALUES
             );
-            if (possibleValuesValue && possibleValuesValue.values) {
+            if (possibleValuesValue && possibleValuesValue[1].value) {
                 await this.prepareDefaultInput(possibleValuesValue[0], possibleValuesValue[1], formInstance);
             }
 
             const multipleValue = changedFieldValues.find(
                 (cv) => cv[0] && cv[0].property === ReportParameterProperty.MULTIPLE
             );
-            if (multipleValue && multipleValue.values) {
+            if (multipleValue && multipleValue[1].value) {
                 await this.prepareDefaultInput(multipleValue[0], multipleValue[1], formInstance);
             }
 

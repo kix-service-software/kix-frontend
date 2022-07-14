@@ -51,6 +51,8 @@ export class SearchOperatorUtil {
                 return await TranslationService.translate('Translatable#within the last');
             case SearchOperator.WITHIN_THE_NEXT:
                 return await TranslationService.translate('Translatable#within the next');
+            case SearchOperator.WITHIN:
+                return await TranslationService.translate('Translatable#within');
             default:
                 return operator;
         }

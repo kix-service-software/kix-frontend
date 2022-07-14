@@ -17,6 +17,8 @@ import { StateType } from '../model/StateType';
 import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { Error } from '../../../../../server/model/Error';
+import { TicketStateType } from '../model/TicketStateType';
+import { KIXObject } from '../../../model/kix/KIXObject';
 
 export class TicketStateAPIService extends KIXObjectAPIService {
 
@@ -43,6 +45,17 @@ export class TicketStateAPIService extends KIXObjectAPIService {
             || kixObjectType === KIXObjectType.TICKET_STATE_TYPE;
     }
 
+    protected getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+        let objectClass;
+
+        if (objectType === KIXObjectType.TICKET_STATE) {
+            objectClass = TicketState;
+        } else if (objectType === KIXObjectType.TICKET_STATE_TYPE) {
+            objectClass = TicketStateType;
+        }
+        return objectClass;
+    }
+
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
@@ -52,16 +65,17 @@ export class TicketStateAPIService extends KIXObjectAPIService {
         if (objectType === KIXObjectType.TICKET_STATE) {
             objects = await super.load<TicketState>(
                 token, KIXObjectType.TICKET_STATE, this.RESOURCE_URI, loadingOptions, null, 'TicketState',
-                TicketState
+                clientRequestId, TicketState
             );
 
             if (objectIds && objectIds.length) {
-                objects = objects.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
+                objects = objects.filter((t) => objectIds.some((oid) => oid === t.ID));
             }
         } else if (objectType === KIXObjectType.TICKET_STATE_TYPE) {
             const uri = this.buildUri(this.RESOURCE_URI, 'types');
             objects = await super.load<StateType>(
-                token, KIXObjectType.TICKET_STATE_TYPE, uri, loadingOptions, objectIds, 'StateType', StateType
+                token, KIXObjectType.TICKET_STATE_TYPE, uri, loadingOptions, objectIds, 'StateType',
+                clientRequestId, StateType
             );
         }
 

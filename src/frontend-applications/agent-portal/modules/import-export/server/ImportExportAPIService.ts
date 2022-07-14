@@ -55,7 +55,7 @@ export class ImportExportAPIService extends KIXObjectAPIService {
         if (objectType === KIXObjectType.IMPORT_EXPORT_TEMPLATE) {
             objects = await super.load<ImportExportTemplate>(
                 token, KIXObjectType.IMPORT_EXPORT_TEMPLATE, this.RESOURCE_URI, loadingOptions, objectIds,
-                'ImportExportTemplate', ImportExportTemplate
+                'ImportExportTemplate', clientRequestId, ImportExportTemplate
             );
         }
 

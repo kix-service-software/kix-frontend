@@ -17,6 +17,7 @@ import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIServic
 import { Error } from '../../../../../server/model/Error';
 import { Queue } from '../model/Queue';
 import { FollowUpType } from '../model/FollowUpType';
+import { KIXObject } from '../../../model/kix/KIXObject';
 
 export class QueueAPIService extends KIXObjectAPIService {
 
@@ -43,6 +44,15 @@ export class QueueAPIService extends KIXObjectAPIService {
             || kixObjectType === KIXObjectType.FOLLOW_UP_TYPE;
     }
 
+    protected getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+        let objectClass;
+
+        if (objectType === KIXObjectType.QUEUE) {
+            objectClass = Queue;
+        }
+        return objectClass;
+    }
+
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
@@ -51,18 +61,18 @@ export class QueueAPIService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.QUEUE) {
             const uri = this.buildUri(this.RESOURCE_URI);
-            objects = await super.load(
-                token, KIXObjectType.QUEUE, uri, loadingOptions, null, KIXObjectType.QUEUE, Queue
+            objects = await super.load<Queue>(
+                token, KIXObjectType.QUEUE, uri, loadingOptions, null, KIXObjectType.QUEUE, clientRequestId, Queue
             );
 
             if (objectIds && objectIds.length) {
-                objects = objects.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
+                objects = objects.filter((t) => objectIds.some((oid) => oid === t.QueueID));
             }
         } else if (objectType === KIXObjectType.FOLLOW_UP_TYPE) {
             const uri = this.buildUri(this.RESOURCE_URI, 'followuptypes');
             objects = await super.load(
                 token, KIXObjectType.FOLLOW_UP_TYPE, uri, loadingOptions, null, KIXObjectType.FOLLOW_UP_TYPE,
-                FollowUpType
+                clientRequestId, FollowUpType
             );
             if (objectIds && objectIds.length) {
                 objects = objects.filter((q) => objectIds.some((oid) => oid.toString() === q.ObjectId.toString()));

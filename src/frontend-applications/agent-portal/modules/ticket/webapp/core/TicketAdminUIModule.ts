@@ -14,9 +14,9 @@ import {
     TicketTypeCreateAction, NewTicketTypeDialogContext, TicketTypeEditAction,
     EditTicketTypeDialogContext, TicketTypeTableDeleteAction, TicketStateCreateAction,
     NewTicketStateDialogContext, TicketStateEditAction, EditTicketStateDialogContext, TicketStateTableDeleteAction,
-    TicketStateDetailsContext, TicketPriorityCreateAction, NewTicketPriorityDialogContext, TicketPriorityEditAction,
-    EditTicketPriorityDialogContext, TicketPriorityTableDeleteAction, TicketPriorityDetailsContext,
-    TicketQueueCreateAction, NewQueueDialogContext, TicketQueueEditAction, EditQueueDialogContext, QueueDetailsContext,
+    TicketPriorityCreateAction, NewTicketPriorityDialogContext, TicketPriorityEditAction,
+    EditTicketPriorityDialogContext, TicketPriorityTableDeleteAction,
+    TicketQueueCreateAction, NewQueueDialogContext, TicketQueueEditAction, EditQueueDialogContext
 } from '.';
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
@@ -101,7 +101,7 @@ export class UIModule extends TicketReadUIModule {
             [
                 new UIComponentPermission('system/ticket/states', [CRUD.CREATE])
             ],
-            'Translatable#New State', 'kix-icon-gear', TicketStateDetailsContext.CONTEXT_ID
+            'Translatable#New State', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(newTicketStateContext);
 
@@ -114,22 +114,11 @@ export class UIModule extends TicketReadUIModule {
             [
                 new UIComponentPermission('system/ticket/states', [CRUD.CREATE])
             ],
-            'Translatable#Edit State', 'kix-icon-gear', TicketStateDetailsContext.CONTEXT_ID
+            'Translatable#Edit State', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(editTicketStateContext);
 
         ActionFactory.getInstance().registerAction('ticket-admin-state-table-delete', TicketStateTableDeleteAction);
-
-        const ticketStateDetailsContextDescriptor = new ContextDescriptor(
-            TicketStateDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET_STATE],
-            ContextType.MAIN, ContextMode.DETAILS,
-            true, 'object-details-page', ['ticketstates'], TicketStateDetailsContext,
-            [
-                new UIComponentPermission('system/ticket/states', [CRUD.READ])
-            ],
-            'Translatable#State Details', 'kix-icon-gear'
-        );
-        ContextService.getInstance().registerContext(ticketStateDetailsContextDescriptor);
     }
 
     private async registerTicketPrioritiesAdmin(): Promise<void> {
@@ -143,7 +132,7 @@ export class UIModule extends TicketReadUIModule {
             [
                 new UIComponentPermission('system/ticket/priorities', [CRUD.CREATE])
             ],
-            'Translatable#New Priority', 'kix-icon-gear', TicketPriorityDetailsContext.CONTEXT_ID
+            'Translatable#New Priority', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(newTicketPriorityContext);
 
@@ -156,24 +145,13 @@ export class UIModule extends TicketReadUIModule {
             [
                 new UIComponentPermission('system/ticket/priorities', [CRUD.CREATE])
             ],
-            'Translatable#Edit Priority', 'kix-icon-gear', TicketPriorityDetailsContext.CONTEXT_ID
+            'Translatable#Edit Priority', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(editTicketPriorityContext);
 
         ActionFactory.getInstance().registerAction('ticket-admin-priority-table-delete',
             TicketPriorityTableDeleteAction
         );
-
-        const ticketPriorityDetailsContextDescriptor = new ContextDescriptor(
-            TicketPriorityDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET_PRIORITY],
-            ContextType.MAIN, ContextMode.DETAILS,
-            true, 'object-details-page', ['priorities'], TicketPriorityDetailsContext,
-            [
-                new UIComponentPermission('system/ticket/priorities', [CRUD.READ])
-            ],
-            'Translatable#Priority Details', 'kix-icon-gear'
-        );
-        ContextService.getInstance().registerContext(ticketPriorityDetailsContextDescriptor);
     }
 
     private async registerTicketQueuesAdmin(): Promise<void> {
@@ -187,7 +165,7 @@ export class UIModule extends TicketReadUIModule {
             [
                 new UIComponentPermission('system/ticket/queues', [CRUD.CREATE])
             ],
-            'Translatable#New Team', 'kix-icon-gear', QueueDetailsContext.CONTEXT_ID
+            'Translatable#New Team', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(newQueueContext);
 
@@ -200,21 +178,10 @@ export class UIModule extends TicketReadUIModule {
             [
                 new UIComponentPermission('system/ticket/queues', [CRUD.CREATE])
             ],
-            'Translatable#Edit Team', 'kix-icon-gear', QueueDetailsContext.CONTEXT_ID
+            'Translatable#Edit Team', 'kix-icon-gear'
         );
         ContextService.getInstance().registerContext(editQueueContext);
 
         ActionFactory.getInstance().registerAction('ticket-admin-queue-duplicate', QueueDuplicateAction);
-
-        const ticketQueueDetailsContextDescriptor = new ContextDescriptor(
-            QueueDetailsContext.CONTEXT_ID, [KIXObjectType.QUEUE],
-            ContextType.MAIN, ContextMode.DETAILS,
-            true, 'object-details-page', ['queues'], QueueDetailsContext,
-            [
-                new UIComponentPermission('system/ticket/queues', [CRUD.READ])
-            ],
-            'Translatable#Team Details', 'kix-icon-gear'
-        );
-        ContextService.getInstance().registerContext(ticketQueueDetailsContextDescriptor);
     }
 }

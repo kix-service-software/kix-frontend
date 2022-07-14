@@ -1,0 +1,22 @@
+{
+    "dependencies": [
+        "require ./components/actions-container",
+        "require ./components/object-form",
+        "require ./components/object-form-values-container",
+        "require ./components/object-form-values-container/object-form-value",
+        "require ./components/inputs/attachment-form-input",
+        "require ./components/inputs/checkbox-form-input",
+        "require ./components/inputs/checklist-form-input",
+        "require ./components/inputs/checklist-form-input/checklist-form-item",
+        "require ./components/inputs/count-handler-form-input",
+        "require ./components/inputs/datetime-form-input",
+        "require ./components/inputs/number-form-input",
+        "require ./components/inputs/richtext-form-input",
+        "require ./components/inputs/select-form-input",
+        "require ./components/inputs/table-form-input",
+        "require ./components/inputs/text-form-input",
+        "require ./components/inputs/textarea-form-input",
+        "require ./components/inputs/tree-view",
+        "require ./core/ObjectFormUIModule"
+    ]
+}

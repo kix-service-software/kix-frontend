@@ -21,25 +21,28 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
     public getAdminModules(): AdminModuleCategory[] {
         return [
             new AdminModuleCategory(
-                null, 'communication', 'Translatable#Communication', null,
-                [
-                    new AdminModuleCategory(
-                        null, 'communication_email', 'Translatable#Email', null, [],
-                        [
-                            new AdminModule(
-                                null, 'system-address', 'Translatable#Email Addresses', null,
-                                KIXObjectType.SYSTEM_ADDRESS, 'admin-system-addresses',
-                                [
-                                    new UIComponentPermission(
-                                        'system/communication/systemaddresses', [CRUD.CREATE], true
-                                    )
+                null, 'kix', 'Translatable#KIX', null, [
+                new AdminModuleCategory(
+                    null, 'communication', 'Translatable#Communication', null,
+                    [
+                        new AdminModuleCategory(
+                            null, 'communication_email', 'Translatable#Email', null, [],
+                            [
+                                new AdminModule(
+                                    null, 'system-address', 'Translatable#Email Addresses', null,
+                                    KIXObjectType.SYSTEM_ADDRESS, 'admin-system-addresses',
+                                    [
+                                        new UIComponentPermission(
+                                            'system/communication/systemaddresses', [CRUD.CREATE], true
+                                        )
 
-                                ]
-                            )
-                        ]
-                    )
-                ]
-            )
+                                    ]
+                                )
+                            ]
+                        )
+                    ]
+                )
+            ])
         ];
     }
 

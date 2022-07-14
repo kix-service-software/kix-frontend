@@ -19,6 +19,7 @@ export class ComponentState extends AbstractComponentState {
         public labels: Label[] = [],
         public multiple: boolean = true,
         public accept: string = null,
+        public readonly: boolean = null
     ) {
         super();
     }

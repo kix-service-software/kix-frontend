@@ -4243,6 +4243,12 @@ msgstr "Suche {0} wird gelöscht. Sind Sie sicher?"
 msgid "Search error!"
 msgstr "Fehler bei Suche!"
 
+msgid "SEARCH_OPERATOR_WITHIN_LAST"
+msgstr "der letzten"
+
+msgid "SEARCH_OPERATOR_WITHIN_NEXT"
+msgstr "der nächsten"
+
 msgid "Search Results"
 msgstr "Suchergebnisse"
 

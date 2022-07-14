@@ -51,7 +51,7 @@ export class MailFilterAPIService extends KIXObjectAPIService {
         if (objectType === KIXObjectType.MAIL_FILTER) {
             objects = await super.load<MailFilter>(
                 token, KIXObjectType.MAIL_FILTER, this.RESOURCE_URI, loadingOptions, objectIds, 'MailFilter',
-                MailFilter
+                clientRequestId, MailFilter
             );
         }
 

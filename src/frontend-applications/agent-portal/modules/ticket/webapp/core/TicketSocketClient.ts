@@ -127,10 +127,10 @@ export class TicketSocketClient extends SocketClient {
             );
 
             const timeout = window.setTimeout(() => {
-                reject('Timeout: ' + TicketEvent.REMOVE_ARTICLE_SEEN_FLAG);
+                reject('Timeout: ' + TicketEvent.SET_ARTICLE_SEEN_FLAG);
             }, socketTimeout);
 
-            this.socket.on(TicketEvent.REMOVE_ARTICLE_SEEN_FLAG_DONE, (result: ISocketResponse) => {
+            this.socket.on(TicketEvent.SET_ARTICLE_SEEN_FLAG_DONE, (result: ISocketResponse) => {
                 if (result.requestId === requestId) {
                     BrowserCacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
                     BrowserCacheService.getInstance().deleteKeys(KIXObjectType.TICKET);
@@ -147,7 +147,7 @@ export class TicketSocketClient extends SocketClient {
                 }
             });
 
-            this.socket.emit(TicketEvent.REMOVE_ARTICLE_SEEN_FLAG, request);
+            this.socket.emit(TicketEvent.SET_ARTICLE_SEEN_FLAG, request);
         });
     }
 

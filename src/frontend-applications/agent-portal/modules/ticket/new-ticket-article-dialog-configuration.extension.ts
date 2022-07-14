@@ -7,9 +7,8 @@
  * --
  */
 
-import { ModuleConfigurationService } from '../../server/services/configuration';
+import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
-import { NewTicketArticleContext } from './webapp/core';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
 import { HelpWidgetConfiguration } from '../../model/configuration/HelpWidgetConfiguration';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
@@ -28,11 +27,12 @@ import { FormConfiguration } from '../../model/configuration/FormConfiguration';
 import { FormContext } from '../../model/configuration/FormContext';
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { FormFieldValue } from '../../model/configuration/FormFieldValue';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
-        return NewTicketArticleContext.CONTEXT_ID;
+        return 'new-ticket-article-dialog-context';
     }
 
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
@@ -111,7 +111,110 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 KIXObjectType.ARTICLE
             )
         );
+
         ModuleConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.ARTICLE, formId);
+
+        const replyFormId = 'article-reply';
+        configurations.push(
+            new FormConfiguration(replyFormId, 'Translatable#Reply',
+                undefined, KIXObjectType.ARTICLE,
+                undefined, FormContext.NEW, null,
+                [
+                    new FormPageConfiguration('article-reply-page', 'Translatable#Reply',
+                        undefined, undefined, undefined,
+                        [
+                            new FormGroupConfiguration('article-reply-group', 'Translatable#Reply',
+                                undefined, undefined,
+                                [
+                                    new FormFieldConfiguration(
+                                        'article-reply-channel',
+                                        'Translatable#Channel', ArticleProperty.CHANNEL_ID, undefined, true,
+                                        'Translatable#Helptext_Tickets_ArticleCreate_Channel', null,
+                                        new FormFieldValue('<KIX_ARTICLE_ChannelID>')
+                                    ),
+                                    new FormFieldConfiguration(
+                                        'article-reply-to',
+                                        'Translatable#To', ArticleProperty.TO, undefined, true,
+                                        'Translatable#Helptext_Tickets_ArticleCreate_ReceiverTo', null,
+                                        new FormFieldValue('<KIX_ARTICLE_REPLYRECIPIENT>')
+                                    ),
+                                    new FormFieldConfiguration(
+                                        'article-reply-subject',
+                                        'Translatable#Subject', ArticleProperty.SUBJECT, undefined, true,
+                                        'Translatable#Helptext_Tickets_ArticleCreate_Subject', null,
+                                        new FormFieldValue('<KIX_CONFIG_Ticket::SubjectRe>: <KIX_ARTICLE_Subject>')
+                                    ),
+                                    new FormFieldConfiguration(
+                                        'article-reply-body',
+                                        'Translatable#Article Text', ArticleProperty.BODY, undefined, true,
+                                        'Translatable#Helptext_Tickets_ArticleCreate_Body', null,
+                                        // eslint-disable-next-line max-len
+                                        new FormFieldValue('<p>&nbsp;</p>\n\n<p>&lt;KIX_ARTICLE_From&gt; wrote &lt;KIX_ARTICLE_ChangeTime&gt;:</p>\n\n<div style=\"border-left:2px solid #0a7cb3;padding:10px;\" type=\"cite\">&lt;KIX_ARTICLE_BodyRichtext&gt;</div>')
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                ]
+            )
+        );
+        ModuleConfigurationService.getInstance().registerFormId(replyFormId);
+
+        const forwardFormId = 'article-forward';
+        configurations.push(
+            new FormConfiguration(forwardFormId, 'Translatable#Forward',
+                undefined, KIXObjectType.ARTICLE,
+                undefined, FormContext.NEW, null,
+                [
+                    new FormPageConfiguration('article-forward-page', 'Translatable#Forward',
+                        undefined, undefined, undefined,
+                        [
+                            new FormGroupConfiguration('article-forward-group', 'Translatable#Forward',
+                                undefined, undefined,
+                                [
+                                    new FormFieldConfiguration(
+                                        'article-forward-channel',
+                                        'Translatable#Channel', ArticleProperty.CHANNEL_ID, undefined, true,
+                                        'Translatable#Helptext_Tickets_ArticleCreate_Channel', null,
+                                        new FormFieldValue(2)
+                                    ),
+                                    new FormFieldConfiguration(
+                                        'article-forward-to',
+                                        'Translatable#To', ArticleProperty.TO, undefined, true,
+                                        'Translatable#Helptext_Tickets_ArticleCreate_ReceiverTo', null,
+                                        new FormFieldValue('<KIX_ARTICLE_From>')
+                                    ),
+                                    new FormFieldConfiguration(
+                                        'article-forward-subject',
+                                        'Translatable#Subject', ArticleProperty.SUBJECT, undefined, true,
+                                        'Translatable#Helptext_Tickets_ArticleCreate_Subject', null,
+                                        new FormFieldValue('<KIX_CONFIG_Ticket::SubjectFwd>: <KIX_ARTICLE_Subject>')
+                                    ),
+                                    new FormFieldConfiguration(
+                                        'article-forward-body',
+                                        'Translatable#Article Text', ArticleProperty.BODY, undefined, true,
+                                        'Translatable#Helptext_Tickets_ArticleCreate_Body', null,
+                                        // eslint-disable-next-line max-len
+                                        new FormFieldValue('<p>&nbsp;</p>\n\n<p>&lt;KIX_ARTICLE_From&gt; wrote &lt;KIX_ARTICLE_ChangeTime&gt;:</p>\n\n<div style=\"border-left:2px solid #0a7cb3;padding:10px;\" type=\"cite\">&lt;KIX_ARTICLE_BodyRichtext&gt;</div>')
+                                    ),
+                                    new FormFieldConfiguration(
+                                        'article-forward-referenced-attachments',
+                                        '', 'USE_REFERENCED_ATTACHMENTS', undefined, false,
+                                        '', null,
+                                        // eslint-disable-next-line max-len
+                                        new FormFieldValue(1),
+                                        null, null, null, null, null, null, null, null, null,
+                                        true, null, null, null, null, null, null, null, null, null, false
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                ]
+            )
+        );
+        ModuleConfigurationService.getInstance().registerFormId(forwardFormId);
+
         return configurations;
     }
 

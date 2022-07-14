@@ -13,8 +13,7 @@ export class GetCurrentUserRequest implements ISocketRequest {
 
     public constructor(
         public requestId: string,
-        public clientRequestId: string,
-        public useCache: boolean
+        public clientRequestId: string
     ) { }
 
 }

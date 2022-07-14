@@ -8,7 +8,7 @@
  */
 
 import { Webform } from '../model/Webform';
-import { ModuleConfigurationService } from '../../../server/services/configuration';
+import { ModuleConfigurationService } from '../../../server/services/configuration/ModuleConfigurationService';
 import { DateTimeUtil } from '../../../modules/base-components/webapp/core/DateTimeUtil';
 import { KIXIntegrationRouter } from './KIXIntegrationRouter';
 import { LoggingService } from '../../../../../server/services/LoggingService';

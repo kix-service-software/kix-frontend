@@ -33,7 +33,8 @@ import { ExtendedKIXObjectAPIService } from './ExtendedKIXObjectAPIService';
 import { CacheService } from './cache';
 import { SearchProperty } from '../../modules/search/model/SearchProperty';
 import { SearchOperator } from '../../modules/search/model/SearchOperator';
-import { KIXObjectInitializer } from './KIXObjectInitializer';
+import { SortUtil } from '../../model/SortUtil';
+import { ConfigurationService } from '../../../../server/services/ConfigurationService';
 
 export abstract class KIXObjectAPIService implements IKIXObjectService {
 
@@ -53,6 +54,38 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         this.extendedServices.push(service);
     }
 
+    protected getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+        return null;
+    }
+
+    public async loadDisplayValue(objectType: KIXObjectType | string, objectId: string | number): Promise<string> {
+        let displayValue = '';
+
+        if (objectType && objectId) {
+            const cacheKey = `${objectType}-${objectId}-displayvalue`;
+            displayValue = await CacheService.getInstance().get(cacheKey, objectType);
+            if (!displayValue && objectId) {
+
+                const config = ConfigurationService.getInstance().getServerConfiguration();
+                const objects = await this.loadObjects(
+                    config?.BACKEND_API_TOKEN, 'KIXObjectAPIService', objectType, [objectId], null, null
+                );
+
+                if (objects?.length) {
+                    let object = objects[0];
+                    const objectClass = this.getObjectClass(objectType);
+                    if (objectClass) {
+                        object = new objectClass(object);
+                    }
+                    displayValue = object.toString();
+                    await CacheService.getInstance().set(cacheKey, displayValue, objectType);
+                }
+            }
+        }
+
+        return displayValue;
+    }
+
     public async loadObjects<O extends KIXObject = any>(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
@@ -62,7 +95,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
     protected async load<O extends KIXObject | string | number = any>(
         token: string, objectType: KIXObjectType | string, baseUri: string, loadingOptions: KIXObjectLoadingOptions,
-        objectIds: Array<number | string>, responseProperty: string,
+        objectIds: Array<number | string>, responseProperty: string, clientRequestId: string,
         objectConstructor?: new (object?: KIXObject) => O,
         useCache?: boolean
     ): Promise<O[]> {
@@ -78,21 +111,16 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         }
 
         let objects: O[] = [];
-
-        const emptyResult = objectIds && objectIds.length === 0;
-        if (emptyResult) {
-            return objects;
+        let uri = baseUri;
+        if (objectIds) {
+            objectIds = objectIds.filter((id) => typeof id !== 'undefined' && id !== null && id.toString() !== '');
+            if (objectIds.length === 0) {
+                return [];
+            }
+            uri = this.buildUri(baseUri, objectIds.join(','));
         }
 
-        objectIds = objectIds
-            ? objectIds.filter((id) => typeof id !== 'undefined' && id !== null && id.toString() !== '')
-            : [];
-
-        const uri = objectIds.length
-            ? this.buildUri(baseUri, objectIds.join(','))
-            : baseUri;
-
-        const response = await this.getObjectByUri(token, uri, query, objectType, useCache);
+        const response = await this.getObjectByUri(token, uri, clientRequestId, query, objectType, useCache);
 
         const responseObject = response[responseProperty];
 
@@ -101,7 +129,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             : [responseObject];
 
         objects = objects.filter((o) => o !== null && typeof o !== 'undefined');
-        objects = objectConstructor ? objects.map((o) => new objectConstructor(o as KIXObject)) : objects;
+        // objects = objectConstructor ? objects.map((o) => new objectConstructor(o as KIXObject)) : objects;
 
         return objects;
     }
@@ -144,21 +172,25 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         token: string, clientRequestId: string, objectType: KIXObjectType | string, parameter: Array<[string, string]>,
         createOptions: KIXObjectSpecificCreateOptions, cacheKeyPrefix: string
     ): Promise<string | number> {
-        throw new Error('', 'Method not implemented.');
+        throw new Error('', 'Method createObject not implemented.');
     }
 
     public async updateObject(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, parameter: Array<[string, string]>,
         objectId: number | string, updateOptions: KIXObjectSpecificCreateOptions, cacheKeyPrefix: string
     ): Promise<string | number> {
-        throw new Error('', 'Method not implemented.');
+        throw new Error('', 'Method updateObject not implemented.');
+    }
+
+    public async commitObject(token: string, clientRequestId: string, object: KIXObject): Promise<number | string> {
+        throw new Error('', 'Method commitObject not implemented.');
     }
 
     protected prepareQuery(loadingOptions: KIXObjectLoadingOptions, objectType: KIXObjectType | string): any {
         let query = {};
 
         if (loadingOptions) {
-            if (loadingOptions.limit) {
+            if (loadingOptions.limit || loadingOptions.limit === 0) {
                 query = { ...query, limit: loadingOptions.limit, searchlimit: loadingOptions.limit };
             }
 
@@ -212,19 +244,20 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         return await this.httpService.get<R>(this.RESOURCE_URI, query, token, null, this.objectType);
     }
 
-    protected getObject<R>(token: string, objectId: number | string, query?: any): Promise<R> {
+    protected getObject<R>(token: string, objectId: number | string, clientRequestId: string, query?: any): Promise<R> {
         const uri = this.buildUri(this.RESOURCE_URI, objectId);
-        return this.getObjectByUri(token, uri, query);
+        return this.getObjectByUri(token, uri, clientRequestId, query);
     }
 
     protected getObjectByUri<R>(
-        token: string, uri: string, query?: any, cacheKeyPrefix: string = this.objectType, useCache?: boolean
+        token: string, uri: string, clientRequestId: string, query?: any, cacheKeyPrefix: string = this.objectType,
+        useCache?: boolean
     ): Promise<R> {
         if (!query) {
             query = {};
         }
 
-        return this.httpService.get<R>(uri, query, token, null, cacheKeyPrefix, useCache);
+        return this.httpService.get<R>(uri, query, token, clientRequestId, cacheKeyPrefix, useCache);
     }
 
     protected sendRequest(
@@ -473,7 +506,13 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                 c.property = c.property.replace(KIXObjectProperty.DYNAMIC_FIELDS + '.', 'DynamicField_');
                 switch (c.operator) {
                     case SearchOperator.BETWEEN:
-                        if (c.value) {
+                        if (Array.isArray(c.value) && c.value[0] && c.value[1]) {
+                            // switch if necessary
+                            if (SortUtil.compareDate(c.value[0].toString(), c.value[1].toString()) > 0) {
+                                const oldStartDate = c.value[0];
+                                c.value[0] = c.value[1];
+                                c.value[1] = oldStartDate;
+                            }
                             prepareCriteria.push(new FilterCriteria(
                                 c.property, SearchOperator.GREATER_THAN_OR_EQUAL, c.type, c.filterType, c.value[0]
                             ));
@@ -502,6 +541,68 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                                 c.property, SearchOperator.LESS_THAN_OR_EQUAL, c.type, c.filterType, '+' +
                                 c.value[0] + c.value[1]
                             ));
+                        }
+                        break;
+                    case SearchOperator.WITHIN:
+                        if (Array.isArray(c.value)) {
+                            if (c.value.length === 2) {
+                                const preparedValues = [];
+                                const partsFrom = c.value[0].toString().split(/(\d+)/);
+                                if (partsFrom.length === 3) {
+                                    preparedValues[0] = partsFrom[0];
+                                    preparedValues[1] = partsFrom[1];
+                                    preparedValues[2] = partsFrom[2];
+                                }
+                                const partsTo = c.value[1].toString().split(/(\d+)/);
+                                if (partsTo.length === 3) {
+                                    preparedValues[3] = partsTo[0];
+                                    preparedValues[4] = partsTo[1];
+                                    preparedValues[5] = partsTo[2];
+                                }
+                                c.value = preparedValues;
+                            }
+                            if (
+                                c.value.length === 6 &&
+                                c.value[0] && c.value[1] && c.value[2] && c.value[3] && c.value[4] && c.value[5] &&
+                                !isNaN(Number(c.value[1])) && !isNaN(Number(c.value[4]))
+                            ) {
+                                // switch if necessary
+                                let switchWithin = false;
+                                if (c.value[0] !== c.value[3]) {
+                                    switchWithin = c.value[3] === '-';
+                                } else if (
+                                    (
+                                        c.value[0] === '+' &&
+                                        this.getSeconds(Number(c.value[1]), c.value[2].toString()) >
+                                        this.getSeconds(Number(c.value[4]), c.value[5].toString())
+                                    ) || (
+                                        c.value[0] === '-' &&
+                                        this.getSeconds(Number(c.value[1]), c.value[2].toString()) <
+                                        this.getSeconds(Number(c.value[4]), c.value[5].toString())
+                                    )
+                                ) {
+                                    switchWithin = true;
+                                }
+                                if (switchWithin) {
+                                    const oldStartType = c.value[0];
+                                    const oldStartValue = c.value[1];
+                                    const oldStartUnit = c.value[2];
+                                    c.value[0] = c.value[3];
+                                    c.value[1] = c.value[4];
+                                    c.value[2] = c.value[5];
+                                    c.value[3] = oldStartType;
+                                    c.value[4] = oldStartValue;
+                                    c.value[5] = oldStartUnit;
+                                }
+                                prepareCriteria.push(new FilterCriteria(
+                                    c.property, SearchOperator.GREATER_THAN_OR_EQUAL, c.type, c.filterType,
+                                    `${c.value[0]}${c.value[1]}${c.value[2]}`
+                                ));
+                                prepareCriteria.push(new FilterCriteria(
+                                    c.property, SearchOperator.LESS_THAN_OR_EQUAL, c.type, c.filterType,
+                                    `${c.value[3]}${c.value[4]}${c.value[5]}`
+                                ));
+                            }
                         }
                         break;
                     case SearchOperator.LESS_THAN_AGO:
@@ -559,6 +660,25 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         }
 
         return objectFilter;
+    }
+
+    private getSeconds(value: number, unit: string): number {
+        switch (unit) {
+            case 'm':
+                return value * 60;
+            case 'h':
+                return value * 60 * 60;
+            case 'd':
+                return value * 60 * 60 * 24;
+            case 'w':
+                return value * 60 * 60 * 24 * 7;
+            case 'M':
+                return value * 60 * 60 * 24 * 30;
+            case 'Y':
+                return value * 60 * 60 * 24 * 365;
+            default:
+                return value;
+        }
     }
 
     public static getDynamicFieldName(property: string): string {

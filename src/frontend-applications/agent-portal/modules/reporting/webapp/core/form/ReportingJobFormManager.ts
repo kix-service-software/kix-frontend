@@ -7,22 +7,21 @@
  * --
  */
 
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { FormPageConfiguration } from '../../../../../model/configuration/FormPageConfiguration';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { FormInstance } from '../../../../base-components/webapp/core/FormInstance';
 import { ExecPlanTypes } from '../../../../job/model/ExecPlanTypes';
-import { Job } from '../../../../job/model/Job';
+import { JobProperty } from '../../../../job/model/JobProperty';
 import { AbstractJobFormManager } from '../../../../job/webapp/core/AbstractJobFormManager';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { ReportingJobFilterManager } from './ReportingJobFilterManager';
 
 export class ReportingJobFormManager extends AbstractJobFormManager {
 
-    public supportFilter(): boolean {
-        return false;
-    }
-
-    public async getPages(job: Job, formInstance: FormInstance): Promise<FormPageConfiguration[]> {
-        const execPlanPage = await this.getExecPlanPage(formInstance);
-        const actionPage = await this.getMacroPage(job, formInstance);
-        return [execPlanPage, actionPage];
+    public constructor() {
+        super();
+        this.filterManager = new ReportingJobFilterManager();
     }
 
     public supportPlan(planType: ExecPlanTypes): boolean {
@@ -34,6 +33,21 @@ export class ReportingJobFormManager extends AbstractJobFormManager {
         return new FormPageConfiguration(
             this.execPageId, 'Translatable#Execution Plan', undefined, undefined, undefined, [timeGroup]
         );
+    }
+
+    public async prepareCreateValue(
+        property: string, formField: FormFieldConfiguration, value: any
+    ): Promise<Array<[string, any]>> {
+        if (property === JobProperty.FILTER && Array.isArray(value)) {
+            value.forEach((v: FilterCriteria) => {
+
+                // backend mostly does not support a list value with equal operator
+                if (v.operator === SearchOperator.EQUALS && Array.isArray(v.value)) {
+                    v.value = v.value[0];
+                }
+            });
+        }
+        return [[property, value]];
     }
 
 }

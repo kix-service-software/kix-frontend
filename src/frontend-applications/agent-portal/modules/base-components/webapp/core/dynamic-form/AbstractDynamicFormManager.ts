@@ -38,7 +38,7 @@ import { DynamicFieldFormUtil } from '../DynamicFieldFormUtil';
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 
-    public abstract objectType: KIXObjectType | string = KIXObjectType.ANY;
+    public objectType: KIXObjectType | string = KIXObjectType.ANY;
 
     protected values: ObjectPropertyValue[] = [];
 
@@ -117,7 +117,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
                             DynamicFieldTypes.SELECTION,
                             DynamicFieldTypes.CI_REFERENCE,
                             DynamicFieldTypes.TICKET_REFERENCE,
-                            DynamicFieldTypes.TABLE,
+                            // Implementation of this type is postponed // DynamicFieldTypes.TABLE,
                             ...validTypes
                         ]
                     )
@@ -236,6 +236,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         }
 
         await this.checkProperties();
+        // TODO: do something with validate results
         await this.validate();
         this.notifyListeners();
     }
@@ -418,6 +419,34 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
                     }
                 }
             }
+            if (value.operator === SearchOperator.WITHIN && Array.isArray(value.value)) {
+                value.valid = true;
+                const missingMapping = [
+                    'Translatable#Type of first value is missing.',
+                    'Translatable#First number value is missing.',
+                    'Translatable#Unit of first value is missing.',
+                    'Translatable#Type of second value is missing.',
+                    'Translatable#Second number value is missing.',
+                    'Translatable#Unit of second value is missing.',
+                ];
+                for (let i = 0; i < 6; i++) {
+                    if (!value.value[i]) {
+                        fullResult.push(new ValidationResult(
+                            ValidationSeverity.ERROR, missingMapping[i]
+                        ));
+                    }
+                }
+                if (value.value[1] && !value.value[1].match(/^\d+$/)) {
+                    fullResult.push(new ValidationResult(
+                        ValidationSeverity.ERROR, 'Translatable#First number value is not an integer.'
+                    ));
+                }
+                if (value.value[4] && !value.value[4].match(/^\d+$/)) {
+                    fullResult.push(new ValidationResult(
+                        ValidationSeverity.ERROR, 'Translatable#Second number value is not an integer.'
+                    ));
+                }
+            }
         }
         return fullResult;
     }
@@ -539,19 +568,27 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         if (dfName) {
             const field = await KIXObjectService.loadDynamicField(dfName);
             if (field) {
-                if (field.FieldType === DynamicFieldTypes.TEXT_AREA) {
-                    inputFieldType = InputFieldTypes.TEXT_AREA;
-                } else if (field.FieldType === DynamicFieldTypes.DATE) {
-                    inputFieldType = InputFieldTypes.DATE;
-                } else if (field.FieldType === DynamicFieldTypes.DATE_TIME) {
-                    inputFieldType = InputFieldTypes.DATE_TIME;
-                } else if (field.FieldType === DynamicFieldTypes.SELECTION) {
-                    inputFieldType = InputFieldTypes.DROPDOWN;
-                } else if (
-                    field.FieldType === DynamicFieldTypes.CI_REFERENCE ||
-                    field.FieldType === DynamicFieldTypes.TICKET_REFERENCE
-                ) {
-                    inputFieldType = InputFieldTypes.OBJECT_REFERENCE;
+                switch (field.FieldType) {
+                    case DynamicFieldTypes.TEXT_AREA:
+                        inputFieldType = InputFieldTypes.TEXT_AREA;
+                        break;
+                    case DynamicFieldTypes.DATE:
+                        inputFieldType = InputFieldTypes.DATE;
+                        break;
+                    case DynamicFieldTypes.DATE_TIME:
+                        inputFieldType = InputFieldTypes.DATE_TIME;
+                        break;
+                    case DynamicFieldTypes.SELECTION:
+                        inputFieldType = InputFieldTypes.DROPDOWN;
+                        break;
+                    case DynamicFieldTypes.CI_REFERENCE:
+                    case DynamicFieldTypes.TICKET_REFERENCE:
+                        inputFieldType = InputFieldTypes.OBJECT_REFERENCE;
+                        break;
+                    case DynamicFieldTypes.TABLE:
+                        inputFieldType = InputFieldTypes.TABLE;
+                        break;
+                    default: inputFieldType = InputFieldTypes.TEXT;
                 }
             }
         }

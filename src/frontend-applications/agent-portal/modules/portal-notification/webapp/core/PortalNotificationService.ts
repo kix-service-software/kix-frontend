@@ -35,7 +35,7 @@ export class PortalNotificationService {
         EventService.getInstance().subscribe(PortalNotificationEvent.NOTIFICATIONS_UPDATED, subscriber);
     }
 
-    private notifications: PortalNotification[];
+    private notifications: PortalNotification[] = [];
 
     public publishNotifications(notifications: PortalNotification[], removeGroupNotifications: string[] = []): void {
         this.notifications = this.notifications.filter((n) => !removeGroupNotifications.some((g) => g === n.group));
@@ -83,9 +83,14 @@ export class PortalNotificationService {
             groupMap.get(n.group).push(n);
         });
 
-        groupMap.forEach((notifications, group) => {
-            this.publishNotifications(notifications, [group]);
-        });
+
+        if (groupMap.size === 0) {
+            this.publishNotifications([], ['news']);
+        } else {
+            groupMap.forEach((notifications, group) => {
+                this.publishNotifications(notifications, [group]);
+            });
+        }
     }
 
 }

@@ -15,7 +15,7 @@ import { IMainMenuExtension } from '../../../server/extensions/IMainMenuExtensio
 import { MainMenuConfiguration } from '../../../model/MainMenuConfiguration';
 import { PluginService } from '../../../../../server/services/PluginService';
 import { AgentPortalExtensions } from '../../../server/extensions/AgentPortalExtensions';
-import { ModuleConfigurationService } from '../../../server/services/configuration';
+import { ModuleConfigurationService } from '../../../server/services/configuration/ModuleConfigurationService';
 import { MainMenuEntriesResponse } from '../model/MainMenuEntriesResponse';
 import { SocketEvent } from '../../../modules/base-components/webapp/core/SocketEvent';
 import { SocketErrorResponse } from '../../../modules/base-components/webapp/core/SocketErrorResponse';
@@ -52,25 +52,25 @@ export class MainMenuNamespace extends SocketNameSpace {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
         const token = parsedCookie ? parsedCookie.token : '';
 
-        const extensions = await PluginService.getInstance().getExtensions<IMainMenuExtension>(
-            AgentPortalExtensions.MAIN_MENU
-        ).catch(() => []);
-
         let configuration = await ModuleConfigurationService.getInstance().loadConfiguration<MainMenuConfiguration>(
             token, 'application-main-menu'
         );
 
         if (!configuration) {
-            configuration = await this.createDefaultConfiguration(token, extensions).catch(() => null);
+            configuration = await this.createDefaultConfiguration(token).catch(() => null);
         }
 
         if (configuration) {
+            const extensions = await PluginService.getInstance().getExtensions<IMainMenuExtension>(
+                AgentPortalExtensions.MAIN_MENU
+            ).catch(() => []);
+
             const primaryEntries = await this.getMenuEntries(
-                token, extensions, configuration.primaryMenuEntryConfigurations
+                token, extensions, configuration.primaryMenuEntryConfigurations, data.clientRequestId
             ).catch(() => []);
 
             const secondaryEntries = await this.getMenuEntries(
-                token, extensions, configuration.secondaryMenuEntryConfigurations, false
+                token, extensions, configuration.secondaryMenuEntryConfigurations, data.clientRequestId, false
             ).catch(() => []);
 
             const response = new MainMenuEntriesResponse(
@@ -85,9 +85,10 @@ export class MainMenuNamespace extends SocketNameSpace {
         }
     }
 
-    private async createDefaultConfiguration(
-        token: string, extensions: IMainMenuExtension[]
-    ): Promise<MainMenuConfiguration> {
+    public async createDefaultConfiguration(token: string): Promise<MainMenuConfiguration> {
+        const extensions = await PluginService.getInstance().getExtensions<IMainMenuExtension>(
+            AgentPortalExtensions.MAIN_MENU
+        ).catch(() => []);
 
         const primaryConfiguration = extensions
             .filter((me) => me.primaryMenu)
@@ -111,7 +112,8 @@ export class MainMenuNamespace extends SocketNameSpace {
     }
 
     private async getMenuEntries(
-        token: string, extensions: IMainMenuExtension[], entryConfigurations: MenuEntry[], primary: boolean = true
+        token: string, extensions: IMainMenuExtension[], entryConfigurations: MenuEntry[],
+        clientRequestId: string, primary: boolean = true
     ): Promise<MenuEntry[]> {
 
         const entries: MenuEntry[] = [];
@@ -119,8 +121,10 @@ export class MainMenuNamespace extends SocketNameSpace {
         for (const ec of entryConfigurations) {
             const menu = extensions.find((me) => me.mainContextId === ec.mainContextId);
             if (menu) {
-                const allowed = await PermissionService.getInstance().checkPermissions(token, menu.permissions)
-                    .catch(() => false);
+                const allowed = await PermissionService.getInstance().checkPermissions(
+                    token, menu.permissions, clientRequestId
+                ).catch(() => false);
+
                 if (allowed) {
                     entries.push(new MenuEntry(menu.icon, menu.text, menu.mainContextId, menu.contextIds));
                 }
@@ -130,8 +134,9 @@ export class MainMenuNamespace extends SocketNameSpace {
         // add extensions which are not in cofniguration
         for (const extension of extensions) {
             if (!entries.some((e) => e.mainContextId === extension.mainContextId)) {
-                const allowed = await PermissionService.getInstance().checkPermissions(token, extension.permissions)
-                    .catch(() => false);
+                const allowed = await PermissionService.getInstance().checkPermissions(
+                    token, extension.permissions, clientRequestId
+                ).catch(() => false);
                 if (allowed && extension.primaryMenu === primary) {
                     entries.push(
                         new MenuEntry(extension.icon, extension.text, extension.mainContextId, extension.contextIds)

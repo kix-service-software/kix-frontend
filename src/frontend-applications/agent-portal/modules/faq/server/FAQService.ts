@@ -67,13 +67,15 @@ export class FAQService extends KIXObjectAPIService {
         switch (objectType) {
             case KIXObjectType.FAQ_ARTICLE:
                 objects = await super.load(
-                    token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'FAQArticle', FAQArticle
+                    token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'FAQArticle',
+                    clientRequestId, FAQArticle
                 );
                 break;
             case KIXObjectType.FAQ_CATEGORY:
                 const categoryUri = this.buildUri('system', 'faq', 'categories');
                 objects = await super.load(
-                    token, objectType, categoryUri, loadingOptions, objectIds, 'FAQCategory', FAQCategory
+                    token, objectType, categoryUri, loadingOptions, objectIds, 'FAQCategory',
+                    clientRequestId, FAQCategory
                 );
                 break;
             case KIXObjectType.FAQ_ARTICLE_ATTACHMENT:
@@ -84,7 +86,7 @@ export class FAQService extends KIXObjectAPIService {
             case KIXObjectType.FAQ_KEYWORD:
                 const uri = this.buildUri(this.RESOURCE_URI, 'keywords');
                 objects = await super.load<string>(
-                    token, KIXObjectType.FAQ_KEYWORD, uri, null, null, 'FAQKeyword'
+                    token, KIXObjectType.FAQ_KEYWORD, uri, null, null, 'FAQKeyword', clientRequestId
                 );
                 break;
             default:
@@ -131,7 +133,7 @@ export class FAQService extends KIXObjectAPIService {
         const uri = this.buildUri(this.RESOURCE_URI, objectId, 'attachments');
 
         const existingAttachments = await super.load<Attachment>(
-            token, KIXObjectType.FAQ_ARTICLE_ATTACHMENT, uri, null, null, 'Attachment', Attachment
+            token, KIXObjectType.FAQ_ARTICLE_ATTACHMENT, uri, null, null, 'Attachment', clientRequestId, Attachment
         );
 
         const deletableAttachments = existingAttachments
@@ -255,7 +257,7 @@ export class FAQService extends KIXObjectAPIService {
             );
 
             const attachments = await super.load<Attachment>(
-                token, null, uri, loadingOptions, null, 'Attachment', Attachment
+                token, null, uri, loadingOptions, null, 'Attachment', 'FAQService', Attachment
             );
             return attachments;
         } else {

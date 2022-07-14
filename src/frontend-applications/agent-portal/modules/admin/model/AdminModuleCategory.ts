@@ -17,8 +17,8 @@ export class AdminModuleCategory {
         public id?: string,
         public name?: string,
         public icon?: string | ObjectIcon,
-        public children?: AdminModuleCategory[],
-        public modules?: AdminModule[]
+        public children: AdminModuleCategory[] = [],
+        public modules: AdminModule[] = []
     ) {
         if (category) {
             this.id = category.id;

@@ -31,6 +31,9 @@ import { ObjectIcon } from '../../icon/model/ObjectIcon';
 import { FilterDataType } from '../../../model/FilterDataType';
 import { FilterType } from '../../../model/FilterType';
 import { SearchProperty } from '../../search/model/SearchProperty';
+import { CacheService } from '../../../server/services/cache';
+import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
+import { KIXObject } from '../../../model/kix/KIXObject';
 
 export class ContactAPIService extends KIXObjectAPIService {
 
@@ -58,9 +61,44 @@ export class ContactAPIService extends KIXObjectAPIService {
         return kixObjectType === KIXObjectType.CONTACT;
     }
 
+    protected getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+        let objectClass;
+
+        if (objectType === KIXObjectType.CONTACT) {
+            objectClass = Contact;
+        }
+        return objectClass;
+    }
+
+    public async loadDisplayValue(objectType: KIXObjectType | string, objectId: string | number): Promise<string> {
+        let displayValue = '';
+
+        if (objectType === KIXObjectType.CONTACT) {
+            const cacheKey = `${objectType}-${objectId}-displayvalue`;
+            displayValue = await CacheService.getInstance().get(cacheKey, objectType);
+            if (!displayValue && objectId) {
+                const loadingOptions = new KIXObjectLoadingOptions();
+                loadingOptions.includes = [ContactProperty.USER];
+
+                const config = ConfigurationService.getInstance().getServerConfiguration();
+                const contacts = await this.loadObjects<Contact>(
+                    config?.BACKEND_API_TOKEN, 'ContactAPIService', objectType, [objectId], loadingOptions
+                );
+
+                if (contacts?.length) {
+                    const contact = new Contact(contacts[0]);
+                    displayValue = contact.toString();
+                    await CacheService.getInstance().set(cacheKey, displayValue, objectType);
+                }
+            }
+        }
+
+        return displayValue;
+    }
+
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType,
-        objectIds: string[], loadingOptions: KIXObjectLoadingOptions
+        objectIds: Array<number | string>, loadingOptions: KIXObjectLoadingOptions
     ): Promise<T[]> {
         let objects = [];
 
@@ -71,12 +109,12 @@ export class ContactAPIService extends KIXObjectAPIService {
             if (loadingOptions || !preload) {
                 objects = await super.load<Contact>(
                     token, KIXObjectType.CONTACT, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.CONTACT,
-                    Contact
+                    clientRequestId, Contact
                 );
             } else {
                 objects = await super.load(
                     token, KIXObjectType.CONTACT, this.RESOURCE_URI, null, null, KIXObjectType.CONTACT,
-                    Contact
+                    clientRequestId, Contact
                 );
 
                 if (Array.isArray(objectIds) && objectIds.length) {
@@ -91,24 +129,8 @@ export class ContactAPIService extends KIXObjectAPIService {
     public async createObject(
         token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>
     ): Promise<string> {
-        let userId;
+
         const userParameter = this.getUserParameters(parameter);
-        if (userParameter.length) {
-            const assignedUserId = this.getParameterValue(parameter, ContactProperty.ASSIGNED_USER_ID);
-            userId = await this.createOrUpdateUser(token, clientRequestId, userParameter, assignedUserId).catch(
-                (error: Error) => {
-                    LoggingService.getInstance().error(
-                        `${error.Code}: Could not create or update user for contact ${error.Message}`, error
-                    );
-                    throw new Error(error.Code, error.Message);
-                }
-            );
-            if (!assignedUserId && userId) {
-                parameter.push(
-                    [ContactProperty.ASSIGNED_USER_ID, userId]
-                );
-            }
-        }
 
         const contactParameter = parameter.filter(
             (p) => !userParameter.some((up) => up[0] === p[0]) || p[0] === KIXObjectProperty.VALID_ID
@@ -121,11 +143,27 @@ export class ContactAPIService extends KIXObjectAPIService {
             this.objectType
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            if (userId) {
-                this.deleteObject(token, clientRequestId, KIXObjectType.USER, userId, undefined, KIXObjectType.CONTACT);
-            }
             throw new Error(error.Code, error.Message);
         });
+
+        let userId;
+        if (userParameter.length) {
+            const assignedUserId = this.getParameterValue(parameter, ContactProperty.ASSIGNED_USER_ID);
+            userId = await this.createOrUpdateUser(token, clientRequestId, userParameter, assignedUserId).catch(
+                (error: Error) => {
+                    LoggingService.getInstance().error(
+                        `${error.Code}: Could not create or update user for contact ${error.Message}`, error
+                    );
+                    throw new Error(error.Code, error.Message);
+                }
+            );
+            if (!assignedUserId && userId) {
+                await this.updateObject(
+                    token, clientRequestId, KIXObjectType.CONTACT,
+                    [[ContactProperty.ASSIGNED_USER_ID, userId]], response.ContactID
+                );
+            }
+        }
 
         const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
         if (icon && icon.Content) {

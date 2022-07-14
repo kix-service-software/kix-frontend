@@ -54,7 +54,7 @@ export class NotificationAPIService extends KIXObjectAPIService {
         if (objectType === KIXObjectType.NOTIFICATION) {
             objects = await super.load<Notification>(
                 token, KIXObjectType.NOTIFICATION, this.RESOURCE_URI, loadingOptions, objectIds, 'Notification',
-                Notification
+                clientRequestId, Notification
             );
         }
 
@@ -99,7 +99,7 @@ export class NotificationAPIService extends KIXObjectAPIService {
         const messageProperties = {};
 
         const messageRegEx = new RegExp(
-            `^(${NotificationProperty.MESSAGE_BODY}|${NotificationProperty.MESSAGE_SUBJECT})###(.+)$`
+            `^(${NotificationProperty.MESSAGE_BODY}|${NotificationProperty.MESSAGE_SUBJECT}|${NotificationProperty.MESSAGE_CONTENTTYPE})###(.+)$`
         );
         parameter.forEach((p) => {
             if (p[0] === NotificationProperty.NAME ||

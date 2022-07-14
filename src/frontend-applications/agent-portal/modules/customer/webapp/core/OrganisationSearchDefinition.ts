@@ -57,8 +57,12 @@ export class OrganisationSearchDefinition extends SearchDefinition {
         return [new SearchResultCategory('Translatable#Organisations', KIXObjectType.ORGANISATION, categories)];
     }
 
-    public getLoadingOptions(criteria: FilterCriteria[], limit: number): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(criteria, null, limit, ['Tickets', 'Contacts']);
+    public async getLoadingOptions(
+        criteria: FilterCriteria[], limit: number, sortAttribute?: string, sortDescanding?: boolean
+    ): Promise<KIXObjectLoadingOptions> {
+        const loadingOptions = await super.getLoadingOptions(criteria, limit, sortAttribute, sortDescanding);
+        loadingOptions.includes = ['Tickets', 'Contacts'];
+        return loadingOptions;
     }
 
     public getDefaultSearchCriteria(): string[] {

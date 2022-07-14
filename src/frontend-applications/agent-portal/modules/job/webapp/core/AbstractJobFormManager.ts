@@ -7,28 +7,28 @@
  * --
  */
 
-import { FormGroupConfiguration } from '../../../../model/configuration/FormGroupConfiguration';
-import { JobProperty } from '../../model/JobProperty';
+import { JobService } from '.';
+import { DefaultSelectInputFormOption } from '../../../../model/configuration/DefaultSelectInputFormOption';
+import { FormContext } from '../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldOption } from '../../../../model/configuration/FormFieldOption';
-import { DefaultSelectInputFormOption } from '../../../../model/configuration/DefaultSelectInputFormOption';
-import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { FormGroupConfiguration } from '../../../../model/configuration/FormGroupConfiguration';
 import { FormPageConfiguration } from '../../../../model/configuration/FormPageConfiguration';
-import { Macro } from '../../model/Macro';
-import { JobService } from '.';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
-import { Job } from '../../model/Job';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { AbstractDynamicFormManager } from '../../../base-components/webapp/core/dynamic-form';
+import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
+import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { ExecPlan } from '../../model/ExecPlan';
 import { ExecPlanTypes } from '../../model/ExecPlanTypes';
-import { AbstractDynamicFormManager } from '../../../base-components/webapp/core/dynamic-form';
-import { FormContext } from '../../../../model/configuration/FormContext';
-import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
+import { Job } from '../../model/Job';
+import { JobProperty } from '../../model/JobProperty';
+import { Macro } from '../../model/Macro';
 import { ExtendedJobFormManager } from './ExtendedJobFormManager';
-import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 import { MacroFieldCreator } from './MacroFieldCreator';
-import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class AbstractJobFormManager {
 
@@ -143,11 +143,16 @@ export class AbstractJobFormManager {
         );
 
         const timeNodes = [];
-        [...Array(24)].forEach((v, i) => {
-            const hour = i < 10 ? '0' + i.toString() : i;
-            timeNodes.push(new TreeNode(hour + ':00:00', i + ':00'));
-            timeNodes.push(new TreeNode(hour + ':30:00', i + ':30'));
-        });
+        for (let i = 0; i < 24; i++) {
+            const hour = i.toString().padStart(2, '0');
+            for (let j = 0; j < 60; j += 5) {
+                const minute = j.toString().padStart(2, '0');
+                const time = `${hour}:${minute}`;
+                const id = `${time}:00`;
+                const node = new TreeNode(id, time);
+                timeNodes.push(node);
+            }
+        }
 
         const timesValue = await this.getValue(JobProperty.EXEC_PLAN_WEEKDAYS_TIMES, null, null, this.job, formContext);
         const times = new FormFieldConfiguration(

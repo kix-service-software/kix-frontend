@@ -10,16 +10,11 @@
 import { AbstractAction } from '../../../../../../modules/base-components/webapp/core/AbstractAction';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
 import { BrowserUtil } from '../../../../../../modules/base-components/webapp/core/BrowserUtil';
-import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
-import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
-import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
-import { ArticleLoadingOptions } from '../../../../model/ArticleLoadingOptions';
 import { Article } from '../../../../model/Article';
-import { ArticleProperty } from '../../../../model/ArticleProperty';
 import { Ticket } from '../../../../model/Ticket';
 import { LabelService } from '../../../../../base-components/webapp/core/LabelService';
 
-export class ArticleGetPlainAction extends AbstractAction {
+export class ArticleGetPlainAction extends AbstractAction<Article> {
 
     private articleId: number = null;
 
@@ -30,43 +25,21 @@ export class ArticleGetPlainAction extends AbstractAction {
         this.icon = 'kix-icon-listview';
     }
 
+    public async setData(data: Article): Promise<void> {
+        super.setData(data);
+        this.articleId = this.data?.ArticleID;
+    }
+
     public async canShow(): Promise<boolean> {
         let show = false;
         const context = ContextService.getInstance().getActiveContext();
         const objectId = context ? context.getObjectId() : null;
 
         if (objectId && this.articleId) {
-            const article = await this.getArticle(objectId);
-
-            show = article && article.ChannelID === 2 && article.Plain && article.Plain !== '';
+            show = this.data.ChannelID === 2 && this.data.Plain && this.data.Plain !== '';
         }
 
         return show;
-    }
-
-    private async getArticle(objectId: string | number): Promise<Article> {
-        const articles = await KIXObjectService.loadObjects<Article>(
-            KIXObjectType.ARTICLE, [this.articleId],
-            new KIXObjectLoadingOptions(
-                null, null, null, [ArticleProperty.PLAIN]
-            ),
-            new ArticleLoadingOptions(objectId), true
-        ).catch(() => [] as Article[]);
-
-        return (articles && articles[0]) ? articles[0] : null;
-    }
-
-    public async setData(data: any): Promise<void> {
-        super.setData(data);
-        if (this.data) {
-            if (Array.isArray(this.data)) {
-                this.articleId = this.data[0].ArticleID;
-            } else if (typeof this.data === 'string' || typeof this.data === 'number') {
-                this.articleId = Number(this.data);
-            } else if (typeof this.data === 'object' && this.data instanceof Article) {
-                this.articleId = this.data.ArticleID;
-            }
-        }
     }
 
     public async run(event: any): Promise<void> {
@@ -75,13 +48,12 @@ export class ArticleGetPlainAction extends AbstractAction {
             const objectId = context ? context.getObjectId() : null;
 
             if (objectId && this.articleId) {
-                const article = await this.getArticle(objectId);
-                if (article && article.Plain) {
+                if (this.data?.Plain) {
                     const ticket = await context.getObject<Ticket>();
                     if (ticket) {
                         const ticketText = await LabelService.getInstance().getObjectText(ticket, true, false);
                         const fileName = ticketText + '_' + this.articleId + '.eml';
-                        BrowserUtil.startBrowserDownload(fileName, article.Plain, 'message/rfc822', false);
+                        BrowserUtil.startBrowserDownload(fileName, this.data.Plain, 'message/rfc822', false);
                     }
                 }
             }

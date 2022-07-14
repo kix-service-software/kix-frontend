@@ -9,20 +9,14 @@
 
 import { Context } from '../../../../../model/Context';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { TicketProperty } from '../../../model/TicketProperty';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
-import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
-import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
-import { FormContext } from '../../../../../model/configuration/FormContext';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
-import { ServiceRegistry } from '../../../../base-components/webapp/core/ServiceRegistry';
-import { KIXObjectFormService } from '../../../../base-components/webapp/core/KIXObjectFormService';
-import { ServiceType } from '../../../../base-components/webapp/core/ServiceType';
-import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { Contact } from '../../../../customer/model/Contact';
+import { Ticket } from '../../../model/Ticket';
+import { TicketProperty } from '../../../model/TicketProperty';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { FormService } from '../../../../base-components/webapp/core/FormService';
+import { FormContext } from '../../../../../model/configuration/FormContext';
+import { KIXModulesSocketClient } from '../../../../base-components/webapp/core/KIXModulesSocketClient';
 
 export class NewTicketDialogContext extends Context {
 
@@ -31,86 +25,65 @@ export class NewTicketDialogContext extends Context {
     private contact: any;
     private organisation: any;
 
-    private subscriber: IEventSubscriber;
+    private bindingIds: string[] = [];
 
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
+        if (!this.getAdditionalInformation(AdditionalContextInformation.FORM_OBJECT)) {
+            this.setNewTicketObject();
+        }
+
+        const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+        const kixPro = releaseInfo?.plugins?.some((p) => p.product === 'KIXPro');
+
+        if (!kixPro) {
+            const formId = await FormService.getInstance().getFormIdByContext(FormContext.NEW, KIXObjectType.TICKET);
+            this.getFormManager().setFormId(formId, null, true);
+        }
+
         await super.initContext(urlParams);
+    }
+
+    public setNewTicketObject(ticket?: Ticket): void {
+        const oldTicket: KIXObject = this.getAdditionalInformation(AdditionalContextInformation.FORM_OBJECT);
+        if (oldTicket) {
+            oldTicket.removeBindings(this.bindingIds);
+        }
+
+        if (!ticket) {
+            ticket = new Ticket();
+        }
+
         this.contact = null;
         this.organisation = null;
 
-        this.subscriber = {
-            eventSubscriberId: NewTicketDialogContext.CONTEXT_ID,
-            eventPublished: async (data: FormValuesChangedEventData, eventId: string): Promise<void> => {
-                const form = data.formInstance.getForm();
-                await this.setFormObject();
-                if (form.objectType === KIXObjectType.TICKET && form.formContext === FormContext.NEW) {
-                    const organisationValue = data.changedValues.find(
-                        (cv) => cv[0]?.property === TicketProperty.ORGANISATION_ID
-                    );
-                    if (organisationValue) {
-                        this.handleOrganisationValue(organisationValue[1].value);
-                    }
-
-                    const contactValue = data.changedValues.find(
-                        (cv) => cv[0]?.property === TicketProperty.CONTACT_ID
-                    );
-                    if (contactValue) {
-                        this.handleContactValue(contactValue[1].value);
-                    }
-                }
-            }
-        };
-        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.subscriber);
+        this.addTicketBindings(ticket);
+        this.setAdditionalInformation(AdditionalContextInformation.FORM_OBJECT, ticket);
     }
 
-    public async postInit(): Promise<void> {
-        await super.postInit();
+    private addTicketBindings(ticket: Ticket): void {
+        this.bindingIds = [];
 
-        await this.setFormObject();
-
-        const formInstance = await this.getFormManager().getFormInstance();
-
-        const contact = this.getAdditionalInformation(KIXObjectType.CONTACT) as Contact;
-        if (formInstance && contact)
-            formInstance.provideFormFieldValuesForProperties(
-                [[TicketProperty.CONTACT_ID, contact.ID]], undefined, undefined, false
-            );
-
-        const contactValue = await formInstance?.getFormFieldValueByProperty<number>(TicketProperty.CONTACT_ID);
-        if (contactValue && contactValue.value) {
-            await this.handleContactValue(contactValue.value);
-        }
-    }
-
-    public async destroy(): Promise<void> {
-        await super.destroy();
-        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.subscriber);
-    }
-
-    public async setFormObject(overwrite: boolean = true): Promise<void> {
-        const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
-            KIXObjectType.TICKET, ServiceType.FORM
+        this.bindingIds.push(
+            ticket.addBinding(TicketProperty.CONTACT_ID, (value: number) => {
+                this.handleContactValue(value);
+            })
         );
-        if (service) {
-            const formId = this.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
-            const newObject = {};
-            const parameter = await service.getFormParameter(formId, null, false);
-            parameter.forEach((p) => {
-                if (p[1] !== undefined) {
-                    newObject[p[0]] = p[1];
-                }
-            });
 
-            const formObject = await KIXObjectService.createObjectInstance<any>(
-                KIXObjectType.TICKET, newObject
-            );
-            this.setAdditionalInformation(AdditionalContextInformation.FORM_OBJECT, formObject);
-        }
+        this.bindingIds.push(
+            ticket.addBinding(TicketProperty.ORGANISATION_ID, (value: number) => {
+                this.handleOrganisationValue(value);
+            })
+        );
     }
 
-    public async getObject<O extends KIXObject>(kixObjectType: KIXObjectType = KIXObjectType.TICKET): Promise<O> {
+    public async getObject<O extends KIXObject>(
+        kixObjectType: KIXObjectType = KIXObjectType.TICKET, reload: boolean = false
+    ): Promise<O> {
         let object;
         if (kixObjectType === KIXObjectType.TICKET) {
+            if (reload) {
+                this.setNewTicketObject();
+            }
             object = this.getAdditionalInformation(AdditionalContextInformation.FORM_OBJECT);
         } else if (kixObjectType === KIXObjectType.ORGANISATION) {
             object = this.organisation;
@@ -154,4 +127,6 @@ export class NewTicketDialogContext extends Context {
             contactId, this.contact, KIXObjectType.CONTACT
         ));
     }
+
+
 }

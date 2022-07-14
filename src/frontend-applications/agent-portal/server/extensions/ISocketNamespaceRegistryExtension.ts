@@ -7,8 +7,10 @@
  * --
  */
 
+import { SocketNameSpace } from '../socket-namespaces/SocketNameSpace';
+
 export interface ISocketNamespaceRegistryExtension {
 
-    getNamespaceClasses(): any[];
+    getNamespaceClasses(): SocketNameSpace[];
 
 }

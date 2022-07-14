@@ -21,6 +21,7 @@ import { AgentService } from '../../../user/webapp/core/AgentService';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
 import { User } from '../../../user/model/User';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 
 export class TranslationService extends KIXObjectService<TranslationPattern> {
 
@@ -150,35 +151,39 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
         getOnlyPattern: boolean = false
     ): Promise<string> {
         let translationValue = pattern ? pattern : '';
-        if (translationValue !== null) {
+        try {
+            if (translationValue !== null) {
 
-            translationValue = this.prepareValue(translationValue);
+                translationValue = this.prepareValue(translationValue);
 
-            if (!getOnlyPattern) {
+                if (!getOnlyPattern) {
 
-                const translation = await this.getInstance().getTranslationObject(translationValue);
+                    const translation = await this.getInstance().getTranslationObject(translationValue);
 
-                if (translation) {
-                    language = language ? language : this.getInstance().userLanguage;
-                    if (language) {
-                        const translationLanguageValue = translation.Languages[language];
-                        if (translationLanguageValue) {
-                            translationValue = translationLanguageValue;
+                    if (translation) {
+                        language = language ? language : this.getInstance().userLanguage;
+                        if (language) {
+                            const translationLanguageValue = translation.Languages[language];
+                            if (translationLanguageValue) {
+                                translationValue = translationLanguageValue;
+                            }
                         }
                     }
+
+                    translationValue = this.format(translationValue, placeholderValues.map(
+                        (p) => (typeof p !== 'undefined' && p !== null ? p : '').toString()
+                    ));
                 }
-
-                translationValue = this.format(translationValue, placeholderValues.map(
-                    (p) => (typeof p !== 'undefined' && p !== null ? p : '').toString()
-                ));
             }
-        }
-        const debug = ClientStorageService.getOption('i18n-debug');
+            const debug = ClientStorageService.getOption('i18n-debug');
 
-        if (debug && debug !== 'false' && debug !== '0') {
-            translationValue = 'TR-' + pattern;
-        }
+            if (debug && debug !== 'false' && debug !== '0') {
+                translationValue = 'TR-' + pattern;
+            }
 
+        } catch (error) {
+            // nothing
+        }
         return translationValue;
     }
 
@@ -188,8 +193,9 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
                 this.loadTranslationPromise = new Promise<void>(async (resolve, reject) => {
                     this.userLanguage = await TranslationService.getUserLanguage();
 
+                    const loadingOptions = new KIXObjectLoadingOptions([], null, 0);
                     const translations = await KIXObjectService.loadObjects<Translation>(
-                        KIXObjectType.TRANSLATION
+                        KIXObjectType.TRANSLATION, null, loadingOptions
                     );
 
                     if (translations && translations.length) {

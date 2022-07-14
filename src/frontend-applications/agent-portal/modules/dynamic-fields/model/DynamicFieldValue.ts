@@ -7,7 +7,9 @@
  * --
  */
 
-export class DynamicFieldValue {
+import { BindableObject } from '../../../model/BindableObject';
+
+export class DynamicFieldValue extends BindableObject {
 
     public ID: string;
     public Name: string;
@@ -19,6 +21,7 @@ export class DynamicFieldValue {
     public DisplayValueShort: string;
 
     public constructor(value?: DynamicFieldValue) {
+        super();
         if (value) {
             this.ID = value.ID;
             this.Name = value.Name;

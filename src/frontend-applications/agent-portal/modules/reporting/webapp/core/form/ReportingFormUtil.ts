@@ -12,8 +12,12 @@ import { FormFieldConfiguration } from '../../../../../model/configuration/FormF
 import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { DynamicFieldFormUtil } from '../../../../base-components/webapp/core/DynamicFieldFormUtil';
+import { KIXObjectFormService } from '../../../../base-components/webapp/core/KIXObjectFormService';
 import { ObjectReferenceOptions } from '../../../../base-components/webapp/core/ObjectReferenceOptions';
+import { ServiceRegistry } from '../../../../base-components/webapp/core/ServiceRegistry';
+import { ServiceType } from '../../../../base-components/webapp/core/ServiceType';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
 import { ReportParameter } from '../../../model/ReportParamater';
@@ -29,11 +33,13 @@ export class ReportingFormUtil {
      */
     public static async setInputComponent(
         field: FormFieldConfiguration, parameter: ReportParameter, filterPossibleValues: boolean = true,
-        multiple?: boolean
+        multiple?: boolean, objectType: KIXObjectType = KIXObjectType.REPORT_DEFINITION
     ): Promise<void> {
         if (!field) {
             return;
         }
+
+        const fieldLabel = field.label;
 
         field.options = [];
 
@@ -44,9 +50,10 @@ export class ReportingFormUtil {
 
                 if (object === 'DynamicField') {
                     await this.prepareDynamicFieldInput(
-                        field, parts[1], Boolean(parameter.Multiple), parameter.PossibleValues
+                        field, parts[1], Boolean(parameter.Multiple), parameter.PossibleValues, objectType
                     );
                 } else {
+
                     field.options = [];
                     field.inputComponent = 'object-reference-input';
                     field.options.push(new FormFieldOption(ObjectReferenceOptions.OBJECT, object));
@@ -97,13 +104,14 @@ export class ReportingFormUtil {
     }
 
     private static async prepareDynamicFieldInput(
-        field: FormFieldConfiguration, dfName: string, multiple: boolean, possibleValues?: string[] | number[]
+        field: FormFieldConfiguration, dfName: string, multiple: boolean, possibleValues?: string[] | number[],
+        objectType: KIXObjectType = KIXObjectType.REPORT_DEFINITION
     ): Promise<void> {
         field.options.push(new FormFieldOption(DynamicFormFieldOption.FIELD_NAME, dfName));
         await DynamicFieldFormUtil.getInstance().createDynamicFormField(field);
         if (field.inputComponent === 'object-reference-input') {
             const countMaxOptionIndex = field.options.findIndex((o) => o.option === ObjectReferenceOptions.COUNT_MAX);
-            if (countMaxOptionIndex) {
+            if (countMaxOptionIndex !== -1) {
                 field.options[countMaxOptionIndex].value = -1;
             }
             const multiSelectIndex = field.options.findIndex((o) => o.option === ObjectReferenceOptions.MULTISELECT);
@@ -117,6 +125,18 @@ export class ReportingFormUtil {
             field.options.push(new FormFieldOption(FormFieldOptions.SHOW_INVALID, false));
 
             if (possibleValues) {
+                if (objectType === KIXObjectType.REPORT) {
+                    const nodesIndex = field.options.findIndex(
+                        (o) => o.option === ObjectReferenceOptions.ADDITIONAL_NODES
+                    );
+                    if (nodesIndex !== -1 && Array.isArray(field.options[nodesIndex].value)) {
+                        const nodes = field.options[nodesIndex].value as TreeNode[];
+                        field.options[nodesIndex].value = nodes.filter(
+                            (n) => possibleValues.some((pv) => pv?.toString() === n.id?.toString())
+                        );
+                    }
+                }
+
                 field.options.push(
                     new FormFieldOption(ObjectReferenceOptions.OBJECT_IDS, possibleValues)
                 );

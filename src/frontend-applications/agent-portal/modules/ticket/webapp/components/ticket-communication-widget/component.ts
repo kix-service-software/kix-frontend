@@ -22,6 +22,8 @@ import { SortOrder } from '../../../../../model/SortOrder';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { TicketService } from '../../core';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -46,7 +48,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     this.setFilteredArticles();
                 }
             },
-            objectListChanged: (objectType: KIXObjectType) => null,
+            objectListChanged: (objectType: KIXObjectType) => {
+                if (objectType === KIXObjectType.ARTICLE) {
+                    this.setArticles();
+                }
+            },
             additionalInformationChanged: () => null,
             objectChanged: () => null,
             scrollInformationChanged: () => null,
@@ -60,54 +66,66 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         ) : null;
         this.sortOrder = preference?.Value;
 
+        this.state.translations = await TranslationService.createTranslationObject(['Translatable#Go to top']);
+    }
+
+    private async setArticles(): Promise<void> {
         this.setFilteredArticles();
 
         // enable read action
         const allArticles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || [];
         if (allArticles.length) {
             this.state.activeUnreadAction = allArticles.some((a) => a.isUnread());
-
         }
     }
 
     private async setFilteredArticles(): Promise<void> {
-        const articles = this.context.getFilteredObjectList<Article>(KIXObjectType.ARTICLE) || [];
+        const filteredArticles = this.context.getFilteredObjectList<Article>(KIXObjectType.ARTICLE) || [];
 
-        this.state.articles = SortUtil.sortObjects(
-            [...articles], ArticleProperty.INCOMING_TIME, DataType.INTEGER,
-            this.sortOrder === 'newest' ? SortOrder.DOWN : SortOrder.UP
+        const sortOrder = this.sortOrder === 'newest' ? SortOrder.DOWN : SortOrder.UP;
+
+        let allArticles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || [];
+
+        allArticles = SortUtil.sortObjects(
+            [...allArticles], ArticleProperty.INCOMING_TIME, DataType.INTEGER, sortOrder
         );
 
+        allArticles.forEach((a, index) => {
+                a['countNumber'] = sortOrder === SortOrder.UP ? index + 1 : allArticles.length - index;
+            }
+        );
+
+        this.state.articles = allArticles.filter((a) => filteredArticles.find((fa) => a.ArticleID === fa.ArticleID));
+
         // change widget title
-        const allArticles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || [];
-        this.state.widgetTitle = this.state.widgetConfiguration?.title +
-            ` (${articles?.length < allArticles?.length ? articles.length + '/' : ''}${allArticles?.length})`;
+        const articleLengthText = (filteredArticles?.length < allArticles?.length ? filteredArticles.length +
+            '/' : '') + allArticles?.length;
+        const title = await TranslationService.translate(this.state.widgetConfiguration?.title);
+        this.state.widgetTitle = `${ title } (${ articleLengthText })`;
     }
 
     public onDestroy(): void {
         this.context.unregisterListener('communication-widget');
     }
 
-    public toggleAll(): void {
-        this.state.expanded = !this.state.expanded;
-        EventService.getInstance().publish('TOGGLE_ARTICLE', this.state.expanded);
-    }
-
     public async readAll(): Promise<void> {
-        if (this.state.activeUnreadAction) {
-            EventService.getInstance().publish('READ_ALL_ARTICLES');
-
-            // show loading as visual effect ... something is done ;)
+        if (this.state.activeUnreadAction && this.context.getObjectId()) {
             EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Loading ...' }
+                ApplicationEvent.APP_LOADING, {loading: true, hint: 'Translatable#Loading ...'}
             );
+
+            await TicketService.getInstance().markTicketAsSeen(Number(this.context.getObjectId()));
+
+            // FIXME: reload list (Ticket.Article.Flag updates are filtered from notification events)
+            this.state.articles = [];
+            await this.context.reloadObjectList(KIXObjectType.ARTICLE);
+
             setTimeout(() => {
                 EventService.getInstance().publish(
-                    ApplicationEvent.APP_LOADING, { loading: false, hint: '' }
+                    ApplicationEvent.APP_LOADING, {loading: false, hint: ''}
                 );
                 BrowserUtil.openSuccessOverlay('Translatable#Marked all articles as read.');
-                this.state.activeUnreadAction = false;
-            }, 1000);
+            }, 50);
         }
     }
 }

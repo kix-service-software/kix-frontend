@@ -16,6 +16,7 @@ import { LoggingService } from '../../../../../server/services/LoggingService';
 import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
 import { Error } from '../../../../../server/model/Error';
 import { TicketType } from '../model/TicketType';
+import { KIXObject } from '../../../model/kix/KIXObject';
 
 export class TicketTypeAPIService extends KIXObjectAPIService {
 
@@ -41,6 +42,10 @@ export class TicketTypeAPIService extends KIXObjectAPIService {
         return kixObjectType === KIXObjectType.TICKET_TYPE;
     }
 
+    protected getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+        return TicketType;
+    }
+
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
@@ -49,11 +54,12 @@ export class TicketTypeAPIService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.TICKET_TYPE) {
             objects = await super.load<TicketType>(
-                token, KIXObjectType.TICKET_TYPE, this.RESOURCE_URI, loadingOptions, null, 'TicketType', TicketType
+                token, KIXObjectType.TICKET_TYPE, this.RESOURCE_URI, loadingOptions, null, 'TicketType',
+                clientRequestId, TicketType
             );
 
             if (objectIds && objectIds.length) {
-                objects = objects.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
+                objects = objects.filter((t) => objectIds.some((oid) => oid === t.ID));
             }
         }
 

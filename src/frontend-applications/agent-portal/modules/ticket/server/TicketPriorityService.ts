@@ -16,6 +16,7 @@ import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecific
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
 import { Error } from '../../../../../server/model/Error';
+import { KIXObject } from '../../../model/kix/KIXObject';
 
 export class TicketPriorityAPIService extends KIXObjectAPIService {
 
@@ -41,6 +42,10 @@ export class TicketPriorityAPIService extends KIXObjectAPIService {
         return kixObjectType === KIXObjectType.TICKET_PRIORITY;
     }
 
+    protected getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+        return TicketPriority;
+    }
+
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
@@ -50,11 +55,11 @@ export class TicketPriorityAPIService extends KIXObjectAPIService {
         if (objectType === KIXObjectType.TICKET_PRIORITY) {
             objects = await super.load<TicketPriority>(
                 token, KIXObjectType.TICKET_PRIORITY, this.RESOURCE_URI, loadingOptions, null, 'Priority',
-                TicketPriority
+                clientRequestId, TicketPriority
             );
 
             if (objectIds && objectIds.length) {
-                objects = objects.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
+                objects = objects.filter((t) => objectIds.some((oid) => oid === t.ID));
             }
         }
 

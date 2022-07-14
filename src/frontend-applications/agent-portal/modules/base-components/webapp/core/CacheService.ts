@@ -14,6 +14,7 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { EventService } from './EventService';
 import { ApplicationEvent } from './ApplicationEvent';
 import { ObjectUpdatedEvent } from '../../../../model/ObjectUpdatedEvent';
+import { LabelService } from './LabelService';
 
 export class BrowserCacheService {
 
@@ -93,6 +94,8 @@ export class BrowserCacheService {
                 }
                 this.keyIndex.delete(prefix);
             }
+
+            LabelService.getInstance().clearDisplayValueCache(prefix);
         }
         EventService.getInstance().publish(ApplicationEvent.CACHE_KEYS_DELETED, prefixes);
     }

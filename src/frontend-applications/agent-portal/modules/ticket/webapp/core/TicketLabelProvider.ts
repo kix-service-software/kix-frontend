@@ -77,73 +77,41 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.CREATED_QUEUE_ID:
             case TicketProperty.QUEUE_ID:
                 if (value) {
-                    const queues = await KIXObjectService.loadObjects<Queue>(
-                        KIXObjectType.QUEUE, [value], null, null, true
-                    ).catch((error) => [] as Queue[]);
-                    const queue = queues.find((q) => q.QueueID.toString() === value.toString());
-                    displayValue = queue ? queue.Name : value;
+                    displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.QUEUE, value);
                 }
                 break;
             case TicketProperty.CREATED_STATE_ID:
             case TicketProperty.STATE_ID:
                 if (value) {
-                    const states = await KIXObjectService.loadObjects<TicketState>(
-                        KIXObjectType.TICKET_STATE, [value], null, null, true
-                    ).catch((error) => []);
-                    displayValue = states && !!states.length ? states[0].Name : value;
+                    displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.TICKET_STATE, value);
                 }
                 break;
             case TicketProperty.STATE_TYPE:
             case TicketProperty.STATE_TYPE_ID:
                 if (value) {
-                    const stateTypes = await KIXObjectService.loadObjects<StateType>(
-                        KIXObjectType.TICKET_STATE_TYPE, [value], null, null, true
-                    ).catch((error) => []);
-                    displayValue = stateTypes && !!stateTypes.length ? stateTypes[0].Name : value;
+                    displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.TICKET_STATE_TYPE, value);
                 }
                 break;
             case TicketProperty.CREATED_PRIORITY_ID:
             case TicketProperty.PRIORITY_ID:
                 if (value) {
-                    const priority = await KIXObjectService.loadObjects<TicketPriority>(
-                        KIXObjectType.TICKET_PRIORITY, [value], null, null, true
-                    ).catch((error) => []);
-                    displayValue = priority && !!priority.length ? priority[0].Name : value;
+                    displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.TICKET_PRIORITY, value);
                 }
                 break;
             case TicketProperty.CREATED_TYPE_ID:
             case TicketProperty.TYPE_ID:
                 if (value) {
-                    const types = await KIXObjectService.loadObjects<TicketType>(
-                        KIXObjectType.TICKET_TYPE, [value], null, null, true
-                    ).catch((error) => []);
-                    displayValue = types && !!types.length ? types[0].Name : value;
+                    displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.TICKET_TYPE, value);
                 }
                 break;
             case TicketProperty.ORGANISATION_ID:
-                if (value) {
-                    let organisations;
-                    if (!isNaN(Number(value))) {
-                        organisations = await KIXObjectService.loadObjects(
-                            KIXObjectType.ORGANISATION, [value], null, null, true, true, false
-                        ).catch((error) => []);
-                    }
-                    displayValue = organisations && organisations.length
-                        ? organisations[0].Name
-                        : value;
+                if (!isNaN(Number(value))) {
+                    displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.ORGANISATION, value);
                 }
                 break;
             case TicketProperty.CONTACT_ID:
-                if (value) {
-                    let contacts;
-                    if (!isNaN(Number(value))) {
-                        contacts = await KIXObjectService.loadObjects(
-                            KIXObjectType.CONTACT, [value], null, null, true
-                        ).catch((error) => []);
-                    }
-                    displayValue = contacts && contacts.length
-                        ? contacts[0].Firstname + ' ' + contacts[0].Lastname
-                        : value;
+                if (!isNaN(Number(value))) {
+                    displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.CONTACT, value);
                 }
                 break;
             case TicketProperty.CREATED:
@@ -170,14 +138,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.OWNER_ID:
             case TicketProperty.RESPONSIBLE_ID:
                 if (value) {
-                    const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [value],
-                        new KIXObjectLoadingOptions(
-                            null, null, 1, [UserProperty.CONTACT]
-                        ), null, true, true, true
-                    ).catch((error) => [] as User[]);
-                    displayValue = users && users.length ?
-                        users[0].Contact ? users[0].Contact.Fullname : users[0].UserLogin : value;
+                    displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.USER, value);
                 }
                 break;
             case TicketProperty.WATCHERS:
@@ -440,37 +401,27 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
     public async getObjectText(
         ticket: Ticket, id: boolean = true, title: boolean = true, translatable: boolean = true
     ): Promise<string> {
-        let returnString = '';
-        if (ticket) {
-            if (id) {
-                let ticketHook: string = '';
-                let ticketHookDivider: string = '';
+        let ticketHook: string = '';
+        let ticketHookDivider: string = '';
 
-                const hookConfig = await KIXObjectService.loadObjects<SysConfigOption>(
-                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_HOOK]
-                ).catch((error): SysConfigOption[] => []);
-                const dividerConfig = await KIXObjectService.loadObjects<SysConfigOption>(
-                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_HOOK_DIVIDER]
-                ).catch((error): SysConfigOption[] => []);
+        const hookConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_HOOK]
+        ).catch((error): SysConfigOption[] => []);
 
-                if (hookConfig && hookConfig.length) {
-                    ticketHook = hookConfig[0].Value ? hookConfig[0].Value : '';
-                }
+        const dividerConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_HOOK_DIVIDER]
+        ).catch((error): SysConfigOption[] => []);
 
-                if (dividerConfig && dividerConfig.length) {
-                    ticketHookDivider = dividerConfig[0].Value ? dividerConfig[0].Value : '';
-                }
-
-                if (ticket.TicketNumber) {
-                    returnString = ticketHook + ticketHookDivider + ticket.TicketNumber;
-                }
-            }
-            if (title) {
-                returnString += (id && ticket.Title ? ' - ' : '') + (ticket.Title ? ticket.Title : '');
-            }
+        if (hookConfig.length) {
+            ticketHook = hookConfig[0].Value ? hookConfig[0].Value : '';
         }
 
-        return returnString;
+        if (dividerConfig.length) {
+            ticketHookDivider = dividerConfig[0].Value ? dividerConfig[0].Value : '';
+        }
+
+        const text = `${ticketHook}${ticketHookDivider}${ticket?.TicketNumber} - ${ticket?.Title}`;
+        return text;
     }
 
     public getObjectAdditionalText(ticket: Ticket, translatable: boolean = true): string {

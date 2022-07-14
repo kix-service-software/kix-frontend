@@ -9,8 +9,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <if(state.article)>
    <div.message-header-container>
-
-      <div.header-title>${state.article.Subject}</div>
+      <div.header-title>
+        [#${input.articleCountNumber}] ${state.article.Subject}
+      </div>
       <div.header-right>
          <if(state.article.CustomerVisible)>
             <icon

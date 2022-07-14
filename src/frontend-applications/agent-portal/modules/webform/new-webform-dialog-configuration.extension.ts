@@ -34,7 +34,7 @@ import { FormFieldOptions } from '../../model/configuration/FormFieldOptions';
 import { InputFieldTypes } from '../../modules/base-components/webapp/core/InputFieldTypes';
 import { FormPageConfiguration } from '../../model/configuration/FormPageConfiguration';
 import { FormConfiguration } from '../../model/configuration/FormConfiguration';
-import { ModuleConfigurationService } from '../../server/services/configuration';
+import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
 import { FormContext } from '../../model/configuration/FormContext';
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';

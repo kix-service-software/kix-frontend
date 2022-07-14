@@ -25,6 +25,7 @@ import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { Context } from '../../../../../model/Context';
 import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
 import { ClientStorageService } from '../../core/ClientStorageService';
+import { PlaceholderService } from '../../core/PlaceholderService';
 
 class TabLaneComponent implements IEventSubscriber {
 
@@ -74,9 +75,14 @@ class TabLaneComponent implements IEventSubscriber {
         this.tabContainerPrefId = `${this.context?.descriptor?.contextId}-${this.context?.getObjectId()}-${this.id}-activetab`;
         const tabId = ClientStorageService.getOption(this.tabContainerPrefId);
         if (this.state.tabWidgets.length) {
-            this.state.translations = await TranslationService.createTranslationObject(
-                this.state.tabWidgets.map((t) => t.configuration ? t.configuration.title : '')
-            );
+            const object = await this.context?.getObject();
+            for (const tab of this.state.tabWidgets) {
+                const translatedTitle = await TranslationService.translate(tab.configuration?.title);
+                const titleWithPlaceholder = await PlaceholderService.getInstance().replacePlaceholders(
+                    translatedTitle, object
+                );
+                this.tabTitles.set(tab.instanceId, titleWithPlaceholder || translatedTitle);
+            }
 
             if (tabId) {
                 await this.tabClicked(this.state.tabWidgets.find((tw) => tw.instanceId === tabId), true);
@@ -102,7 +108,8 @@ class TabLaneComponent implements IEventSubscriber {
                         oldContext.unregisterListener(this.contextListenerId);
                     }
                 },
-                contextRegistered: () => { return; }
+                contextRegistered: () => { return; },
+                beforeDestroy: () => null
             });
             this.prepareContext();
         }
@@ -224,7 +231,7 @@ class TabLaneComponent implements IEventSubscriber {
         const title = tab.configuration ? (tab.configuration as WidgetConfiguration).title : '';
         return this.tabTitles.has(tab.instanceId)
             ? this.tabTitles.get(tab.instanceId)
-            : this.state.translations[title];
+            : title;
     }
 
     public getIcon(tab: WidgetConfiguration): string | ObjectIcon {

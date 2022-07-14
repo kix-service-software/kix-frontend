@@ -1,0 +1,10 @@
+{
+    "name": "kix-module-report-charts",
+    "extensions": {
+        "kix:modules": {
+            "kix-module-report-charts-module": {
+                "module": "kix-module.extension"
+            }
+        }
+    }
+}

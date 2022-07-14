@@ -21,17 +21,20 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
     public getAdminModules(): AdminModuleCategory[] {
         return [
             new AdminModuleCategory(
-                null, 'system', 'Translatable#System', null, [],
-                [
-                    new AdminModule(
-                        null, 'logs', 'Translatable#Logs', null,
-                        KIXObjectType.LOG_FILE, 'system-admin-logs',
-                        [
-                            new UIComponentPermission('system/logs', [CRUD.READ])
-                        ]
-                    )
-                ]
-            )
+                null, 'kix', 'Translatable#KIX', null, [
+                new AdminModuleCategory(
+                    null, 'system', 'Translatable#System', null, [],
+                    [
+                        new AdminModule(
+                            null, 'logs', 'Translatable#Logs', null,
+                            KIXObjectType.LOG_FILE, 'system-admin-logs',
+                            [
+                                new UIComponentPermission('system/logs', [CRUD.READ])
+                            ]
+                        )
+                    ]
+                )
+            ])
         ];
     }
 

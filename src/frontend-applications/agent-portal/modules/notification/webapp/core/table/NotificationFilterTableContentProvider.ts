@@ -25,6 +25,7 @@ import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { RowObject } from '../../../../table/model/RowObject';
 import { Table } from '../../../../table/model/Table';
 import { TableValue } from '../../../../table/model/TableValue';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 export class NotificationFilterTableContentProvider extends TableContentProvider<any> {
 
@@ -48,30 +49,20 @@ export class NotificationFilterTableContentProvider extends TableContentProvider
                 if (notification.Filter[filter] && Array.isArray(notification.Filter[filter])) {
                     for (const criterion of notification.Filter[filter]) {
                         let displayKey = criterion.Field;
-                        let displayValuesAndIcons = [];
-                        if (KIXObjectService.getDynamicFieldName(displayKey)) {
-                            displayValuesAndIcons = await this.getDFValues(
-                                displayKey, criterion.Value, KIXObjectType.TICKET
-                            );
-                            displayKey = await LabelService.getInstance().getPropertyText(
-                                displayKey, KIXObjectType.TICKET
-                            );
-                        } else {
-                            const isTranslatable = relativeDateTimeOperators.includes(
-                                criterion.Operator as SearchOperator) ? false : true;
-                            const isArticleProperty = this.isArticleProperty(displayKey);
-                            displayValuesAndIcons = await this.getValue(
-                                displayKey, criterion.Value,
-                                isArticleProperty ? KIXObjectType.ARTICLE : KIXObjectType.TICKET, isTranslatable
-                            );
-                            displayKey = await LabelService.getInstance().getPropertyText(
-                                displayKey, isArticleProperty ? KIXObjectType.ARTICLE : KIXObjectType.TICKET
-                            );
-                        }
 
-                        const displayString = Array.isArray(displayValuesAndIcons[0])
-                            ? displayValuesAndIcons[0].join(', ')
-                            : '';
+                        const isArticleProperty = this.isArticleProperty(displayKey);
+                        displayKey = await LabelService.getInstance().getPropertyText(
+                            displayKey, isArticleProperty ? KIXObjectType.ARTICLE : KIXObjectType.TICKET
+                        );
+
+                        const displayValuesAndIcons = await this.prepareValue(
+                            relativeDateTimeOperators, criterion, displayKey, isArticleProperty
+                        );
+
+                        const displayString = displayValuesAndIcons[2] ? displayValuesAndIcons[2] :
+                            Array.isArray(displayValuesAndIcons[0])
+                                ? displayValuesAndIcons[0].join(', ')
+                                : '';
 
                         const operatorLabel = await SearchOperatorUtil.getText(criterion.Operator);
 
@@ -94,10 +85,64 @@ export class NotificationFilterTableContentProvider extends TableContentProvider
         return rowObjects;
     }
 
+    private async prepareValue(
+        relativeDateTimeOperators: SearchOperator[], criterion: any, displayKey: any, isArticleProperty: boolean
+    ): Promise<[string[], Array<string | ObjectIcon>, any]> {
+        if (relativeDateTimeOperators.includes(criterion.Operator as SearchOperator)) {
+            const valueList = await this.getRelativedateTimeValues(criterion.Value);
+            return [valueList, null, null];
+        } else if (KIXObjectService.getDynamicFieldName(displayKey)) {
+            return await this.getDFValues(
+                displayKey, criterion.Value, KIXObjectType.TICKET
+            );
+        } else {
+            return await this.getValue(
+                displayKey, criterion.Value,
+                isArticleProperty ? KIXObjectType.ARTICLE : KIXObjectType.TICKET
+            );
+        }
+    }
+
+    private async getRelativedateTimeValues(value: string | number | string[] | number[]): Promise<string[]> {
+        const valueList = [];
+        if (value) {
+            const values = Array.isArray(value) ? value : [value];
+            const translations = await TranslationService.createTranslationObject([
+                'Translatable#Year(s)',
+                'Translatable#Month(s)',
+                'Translatable#Week(s)',
+                'Translatable#Day(s)',
+                'Translatable#Hour(s)',
+                'Translatable#Minutes(s)',
+                'Translatable#Seconds(s)',
+                'Translatable#SEARCH_OPERATOR_WITHIN_LAST',
+                'Translatable#SEARCH_OPERATOR_WITHIN_NEXT'
+            ]);
+            const timeUnitList = {
+                Y: translations['Translatable#Year(s)'],
+                M: translations['Translatable#Month(s)'],
+                w: translations['Translatable#Week(s)'],
+                d: translations['Translatable#Day(s)'],
+                h: translations['Translatable#Hour(s)'],
+                m: translations['Translatable#Minutes(s)'],
+                s: translations['Translatable#Seconds(s)']
+            };
+            const typeList = {
+                '-': translations['Translatable#SEARCH_OPERATOR_WITHIN_LAST'],
+                '+': translations['Translatable#SEARCH_OPERATOR_WITHIN_NEXT']
+            };
+            values.forEach((v) => {
+                const parts = v.toString().split(/(\d+)/);
+                valueList.push((parts[0] ? typeList[parts[0]] + ' ' : '') + parts[1] + ' ' + timeUnitList[parts[2]]);
+            });
+        }
+        return valueList;
+    }
+
     private async getValue(
         property: string, value: string | number | string[] | number[], objectType: KIXObjectType | string,
         translatable: boolean = true
-    ): Promise<[string[], Array<string | ObjectIcon>]> {
+    ): Promise<[string[], Array<string | ObjectIcon>, any]> {
         const displayValues: string[] = [];
         const displayIcons: Array<string | ObjectIcon> = [];
         if (Array.isArray(value)) {
@@ -127,7 +172,7 @@ export class NotificationFilterTableContentProvider extends TableContentProvider
                 displayIcons.push(null);
             }
         }
-        return [displayValues, displayIcons];
+        return [displayValues, displayIcons, null];
     }
 
     private async getDFValues(

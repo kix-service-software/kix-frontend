@@ -132,15 +132,9 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                             const articleId = dialogContext.getAdditionalInformation('REFERENCED_ARTICLE_ID');
                             if (articleId) {
                                 let referencedArticle;
-                                if (ticket.Articles && !!ticket.Articles.length) {
-                                    referencedArticle = ticket.Articles.find(
-                                        (a) => a.ArticleID.toString() === articleId.toString()
-                                    );
-                                } else {
-                                    const articles = await this.getArticles(ticket, articleId);
-                                    if (articles && articles.length) {
-                                        referencedArticle = articles[0];
-                                    }
+                                const articles = await this.getArticles(ticket, Number(articleId));
+                                if (articles && articles.length) {
+                                    referencedArticle = articles[0];
                                 }
                                 if (referencedArticle) {
                                     result = await ArticlePlaceholderHandler.getInstance().replace(
@@ -233,8 +227,20 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
     }
 
     private async getArticles(ticket: Ticket, articleId?: number): Promise<Article[]> {
-        let articles = ticket.Articles;
-        if (!Array.isArray(articles) || !articles.length) {
+        let articles: Article[] = [];
+        if (
+            ticket?.Articles && ticket.Articles.length &&
+            ticket.Articles.every((a) => a.ArticleID)
+        ) {
+            if (articleId) {
+                const article = ticket.Articles.find((a) => a.ArticleID === articleId);
+                if (article) {
+                    articles = [article];
+                }
+            } else {
+                articles = ticket.Articles;
+            }
+        } else if (ticket.TicketID) {
             articles = await KIXObjectService.loadObjects<Article>(
                 KIXObjectType.ARTICLE, articleId ? [articleId] : null,
                 new KIXObjectLoadingOptions(

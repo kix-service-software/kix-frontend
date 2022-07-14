@@ -151,7 +151,9 @@ export class HttpService {
         return errors;
     }
 
-    public async options(token: string, resource: string, content: any): Promise<OptionsResponse> {
+    public async options(
+        token: string, resource: string, content: any, clientRequestId: string
+    ): Promise<OptionsResponse> {
         const options: AxiosRequestConfig = {
             method: RequestMethod.OPTIONS,
             data: content
@@ -160,8 +162,19 @@ export class HttpService {
         const cacheKey = token + resource;
         let headers = await CacheService.getInstance().get(cacheKey, RequestMethod.OPTIONS);
         if (!headers) {
-            headers = await this.executeRequest<Response>(resource, token, null, options, true);
+            if (!this.requestPromises.has(cacheKey)) {
+                this.requestPromises.set(
+                    cacheKey,
+                    this.executeRequest<Response>(
+                        resource, token, clientRequestId, options, true
+                    )
+                );
+            }
+
+            const request = this.requestPromises.get(cacheKey);
+            headers = await request;
             await CacheService.getInstance().set(cacheKey, headers, RequestMethod.OPTIONS);
+            this.requestPromises.delete(cacheKey);
         }
 
         return new OptionsResponse(headers);
@@ -203,7 +216,7 @@ export class HttpService {
         // start profiling
         const profileTaskId = ProfilingService.getInstance().start(
             'HttpService',
-            options.method + ' ' + resource + parameter,
+            options.method + '\t' + resource + '\t' + parameter,
             {
                 requestId: clientRequestId,
                 data: [options, parameter]
@@ -284,11 +297,11 @@ export class HttpService {
         return key;
     }
 
-    public async getUserByToken(token: string, useCache: boolean = true): Promise<User> {
+    public async getUserByToken(token: string): Promise<User> {
         const backendToken = AuthenticationService.getInstance().getBackendToken(token);
 
         const user = await CacheService.getInstance().get(backendToken, KIXObjectType.CURRENT_USER);
-        if (user && useCache) {
+        if (user) {
             return user;
         }
 

@@ -1,0 +1,12 @@
+{
+    "taglibImports": [
+        "../../base-components/marko.json",
+        "../../dynamic-fields/webapp/marko.json"
+    ],
+    "tags-dir": [
+        "./components/",
+        "./components/object-form-values-container",
+        "./components/inputs/",
+        "./components/inputs/checklist-form-input"
+    ]
+}

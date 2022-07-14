@@ -21,6 +21,8 @@ import { Article } from '../../../model/Article';
 import { ArticleLoadingOptions } from '../../../model/ArticleLoadingOptions';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { ArticleProperty } from '../../../model/ArticleProperty';
+import { TicketHistory } from '../../../model/TicketHistory';
+import { ArticleFormService } from '../ArticleFormService';
 
 export class TicketDetailsContext extends Context {
 
@@ -80,35 +82,55 @@ export class TicketDetailsContext extends Context {
         return new BreadcrumbInformation(this.getIcon(), [TicketContext.CONTEXT_ID], text);
     }
 
-    private loadTicket(changedProperties: string[] = [], cache: boolean = true): Promise<Ticket> {
+    private async loadTicket(changedProperties: string[] = [], cache: boolean = true): Promise<Ticket> {
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, ['StateType', 'ObjectActions', KIXObjectProperty.DYNAMIC_FIELDS, TicketProperty.WATCHERS]
+            null, null, null,
+            [
+                'StateType', 'ObjectActions',
+                KIXObjectProperty.DYNAMIC_FIELDS,
+                TicketProperty.WATCHERS,
+                KIXObjectProperty.LINKS
+            ]
         );
-        return this.loadDetailsObject<Ticket>(KIXObjectType.TICKET, loadingOptions);
+
+        const ticket = this.loadDetailsObject<Ticket>(KIXObjectType.TICKET, loadingOptions);
+        return ticket;
     }
 
     public async getObjectList<T = KIXObject>(objectType: KIXObjectType | string): Promise<T[]> {
         let objects = [];
         if (objectType === KIXObjectType.ARTICLE) {
-            objects = await KIXObjectService.loadObjects<Article>(
-                KIXObjectType.ARTICLE, null,
-                new KIXObjectLoadingOptions(
-                    null, 'Article.IncomingTime', null, [ArticleProperty.FLAGS]
-                ),
-                new ArticleLoadingOptions(this.objectId)
-            ).catch(() => [] as Article[]) || [];
+            objects = await this.loadArticles();
         } else if (objectType === KIXObjectType.TICKET_HISTORY) {
-            const tickets = await KIXObjectService.loadObjects<Ticket>(
-                KIXObjectType.TICKET, [this.objectId],
-                new KIXObjectLoadingOptions(null, null, null, [TicketProperty.HISTORY])
-            );
-            if (Array.isArray(tickets) && tickets.length) {
-                objects = Array.isArray(tickets[0].History) ? tickets[0].History : [];
-            }
+            objects = await this.loadTicketHistory();
         } else {
-            objects = await super.getObjectList(objectType);
+            objects = await super.getObjectList<T>(objectType);
         }
-
         return objects;
+    }
+
+    public async reloadObjectList(objectType: KIXObjectType | string, silent: boolean = false): Promise<void> {
+        if (objectType === KIXObjectType.ARTICLE) {
+            await this.loadArticles(true);
+        }
+    }
+
+    private async loadArticles(force?: boolean): Promise<Article[]> {
+        const articles: Article[] = await KIXObjectService.loadObjects<Article>(
+            KIXObjectType.ARTICLE, null,
+            new KIXObjectLoadingOptions(
+                null, 'Article.IncomingTime', null, [ArticleProperty.FLAGS]
+            ),
+            new ArticleLoadingOptions(this.objectId)
+        ).catch(() => [] as Article[]) || [];
+
+        return articles;
+    }
+
+    private async loadTicketHistory(): Promise<TicketHistory[]> {
+        const ticketHistory = await KIXObjectService.loadObjects<TicketHistory>(
+            KIXObjectType.TICKET_HISTORY, [this.objectId]
+        );
+        return ticketHistory;
     }
 }

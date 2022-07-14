@@ -7,7 +7,6 @@
  * --
  */
 
-import { release } from 'os';
 import { ReleaseInfo } from '../frontend-applications/agent-portal/model/ReleaseInfo';
 import { SystemInfo } from '../frontend-applications/agent-portal/model/SystemInfo';
 import { PluginService } from './services/PluginService';

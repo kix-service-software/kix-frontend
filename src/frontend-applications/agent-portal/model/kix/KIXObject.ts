@@ -14,8 +14,9 @@ import { DynamicFieldValue } from '../../modules/dynamic-fields/model/DynamicFie
 import { SearchOperator } from '../../modules/search/model/SearchOperator';
 import { ObjectIcon } from '../../modules/icon/model/ObjectIcon';
 import { SortUtil } from '../SortUtil';
+import { BindableObject } from '../BindableObject';
 
-export abstract class KIXObject {
+export abstract class KIXObject extends BindableObject {
 
     public displayValues: Array<[string, string]>;
     public displayIcons: Array<[string, Array<ObjectIcon | string>]>;
@@ -26,25 +27,26 @@ export abstract class KIXObject {
 
     public ConfiguredPermissions: ConfiguredPermissions;
 
-    public Links: Link[];
+    public Links: Link[] = [];
 
-    public LinkTypeName: string;
+    public LinkTypeName: string = null;
 
-    public ChangeBy: number;
+    public ChangeBy: number = null;
 
-    public ChangeTime: string;
+    public ChangeTime: string = null;
 
-    public CreateBy: number;
+    public CreateBy: number = null;
 
-    public CreateTime: string;
+    public CreateTime: string = null;
 
-    public ValidID: number;
+    public ValidID: number = null;
 
-    public Comment: string;
+    public Comment: string = null;
 
-    public DynamicFields: DynamicFieldValue[];
+    public DynamicFields: DynamicFieldValue[] = [];
 
     public constructor(object?: KIXObject) {
+        super();
         this.displayValues = [];
         this.displayIcons = [];
         if (object) {
@@ -54,10 +56,16 @@ export abstract class KIXObject {
                 }
             }
 
+            if (Array.isArray(this.DynamicFields)) {
+                this.DynamicFields = this.DynamicFields.map((dfv) => new DynamicFieldValue(dfv));
+            }
+
             this.displayValues = object.displayValues ? object.displayValues : [];
             this.DynamicFields = object.DynamicFields
                 ? object.DynamicFields.map((df) => new DynamicFieldValue(df))
                 : [];
+
+            this.propertyBindings = [];
         }
     }
 
@@ -128,20 +136,36 @@ export abstract class KIXObject {
             filter?.Operator === SearchOperator.LESS_THAN_OR_EQUAL;
         const isTimeValue = typeof filter?.Value === 'string' && filter?.Value?.toString().match(/^[+-]\d+\w+$/);
 
-        if (isGTLTOrEqual || isTimeValue) {
-            // we have to handle this
+        if (isTimeValue) {
+            const firstChar = filter.Value.charAt(0);
+            filter.Value = filter.Value.substring(1);
 
-            if (filter && filter?.Value?.toString().match(/^[+-]\d+\w+$/)) {
-                const firstChar = filter.Value.charAt(0);
-                filter.Value = filter.Value.substring(1);
+            const isPlus = firstChar === '+';
+            const isMinus = firstChar === '-';
 
-                const isPlus = firstChar === '+';
-                const isMinus = firstChar === '-';
+            if (filter.Value === '0s' && isGTLTOrEqual) {
+                return; // ignore this part
+            }
 
-                if (filter.Value === '0s' && isGTLTOrEqual) {
-                    return; // ignore this part
+            const samePropertyFilter = preparedFilter.find((f) => f.Field === filter.Field);
+            if (samePropertyFilter) { // this is a whitin
+
+                // change already added filter
+                samePropertyFilter.Value = (
+                    samePropertyFilter.Operator === SearchOperator.WITHIN_THE_LAST ||
+                    samePropertyFilter.Operator === SearchOperator.LESS_THAN_AGO ||
+                    samePropertyFilter.Operator === SearchOperator.MORE_THAN_AGO
+                ) ? '-' + samePropertyFilter.Value : '+' + samePropertyFilter.Value;
+                filter.Value = (isMinus ? '-' : '+') + filter.Value;
+
+                samePropertyFilter.Operator = SearchOperator.WITHIN;
+
+                if (filter.Operator === SearchOperator.GREATER_THAN_OR_EQUAL) {
+                    samePropertyFilter.Value = [filter.Value, samePropertyFilter.Value];
+                } else {
+                    samePropertyFilter.Value = [samePropertyFilter.Value, filter.Value];
                 }
-
+            } else {
                 if (isMinus) {
                     if (filter.Operator === SearchOperator.GREATER_THAN_OR_EQUAL) {
                         filter.Operator = SearchOperator.WITHIN_THE_LAST;
@@ -159,33 +183,30 @@ export abstract class KIXObject {
                         filter.Operator = SearchOperator.IN_MORE_THAN;
                     }
                 }
-
                 preparedFilter.push(filter);
             }
-            else {
-                const oppositeOperator = filter.Operator === SearchOperator.GREATER_THAN_OR_EQUAL
-                    ? SearchOperator.LESS_THAN_OR_EQUAL
-                    : SearchOperator.GREATER_THAN_OR_EQUAL;
-                const propertyFilter = preparedFilter.find(
-                    (f) => f.Field === filter.Field && f.Operator === oppositeOperator
-                );
-                if (propertyFilter) { // this is a BETWEEN
-                    propertyFilter.Operator = SearchOperator.BETWEEN;
-                    const dateA = filter.Value;
-                    const dateB = propertyFilter.Value;
-                    if (SortUtil.compareDate(dateA, dateB) > 0) {
-                        propertyFilter.Value = [propertyFilter.Value, filter.Value];
-                    } else {
-                        propertyFilter.Value = [filter.Value, propertyFilter.Value];
-                    }
+        } else if (isGTLTOrEqual) {
+            const oppositeOperator = filter.Operator === SearchOperator.GREATER_THAN_OR_EQUAL
+                ? SearchOperator.LESS_THAN_OR_EQUAL
+                : SearchOperator.GREATER_THAN_OR_EQUAL;
+            const samePropertyFilter = preparedFilter.find(
+                (f) => f.Field === filter.Field && f.Operator === oppositeOperator
+            );
+            if (samePropertyFilter) { // this is a BETWEEN
+                samePropertyFilter.Operator = SearchOperator.BETWEEN;
+                const dateA = filter.Value;
+                const dateB = samePropertyFilter.Value;
+                if (SortUtil.compareDate(dateA, dateB) > 0) {
+                    samePropertyFilter.Value = [samePropertyFilter.Value, filter.Value];
                 } else {
-                    preparedFilter.push(filter);
+                    samePropertyFilter.Value = [filter.Value, samePropertyFilter.Value];
                 }
+            } else {
+                preparedFilter.push(filter);
             }
         } else {
             // just add it unhandled
             preparedFilter.push(filter);
         }
     }
-
 }

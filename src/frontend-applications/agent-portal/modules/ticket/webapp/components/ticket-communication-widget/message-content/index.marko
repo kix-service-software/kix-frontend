@@ -21,7 +21,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
          </if>
       </div>
       <div.message style=`background-color: ${state.backgroundColor};`>
-         <div.header><message-header article=state.article/></div>
+         <div.header>
+            <message-header
+                article=state.article
+                articleCountNumber=input.articleCountNumber
+            />
+         </div>
          <if(state.expanded)>
             <div.receiver-list>
                <if(state.articleTo)>

@@ -11,12 +11,13 @@ import { AbstractAction } from '../../../../../../modules/base-components/webapp
 import { UIComponentPermission } from '../../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
-import { NewTicketArticleContext } from '../..';
+import { EditTicketDialogContext } from '../..';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
 import { AuthenticationSocketClient } from '../../../../../base-components/webapp/core/AuthenticationSocketClient';
 import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
+import { Article } from '../../../../model/Article';
 
-export class ArticleForwardAction extends AbstractAction {
+export class ArticleForwardAction extends AbstractAction<Article> {
 
     private articleId: number = null;
     private ticketId: number = null;
@@ -44,15 +45,9 @@ export class ArticleForwardAction extends AbstractAction {
         return show;
     }
 
-    public async setData(data: any): Promise<void> {
+    public async setData(data: Article): Promise<void> {
         super.setData(data);
-        if (this.data) {
-            if (Array.isArray(this.data)) {
-                this.articleId = this.data[0].ArticleID;
-            } else if (typeof this.data === 'string' || typeof this.data === 'number') {
-                this.articleId = Number(this.data);
-            }
-        }
+        this.articleId = this.data?.ArticleID;
     }
 
     public async run(event: any): Promise<void> {
@@ -73,19 +68,17 @@ export class ArticleForwardAction extends AbstractAction {
 
     private async openDialog(): Promise<void> {
         if (this.articleId) {
-            ContextService.getInstance().setActiveContext(NewTicketArticleContext.CONTEXT_ID, this.articleId,
-                undefined,
+            const editContext = await ContextService.getInstance().setActiveContext(EditTicketDialogContext.CONTEXT_ID,
+                this.ticketId, undefined,
                 [
-                    ['REFERENCED_TICKET_ID', this.ticketId],
+                    ['REFERENCED_SOURCE_OBJECT_ID', this.ticketId],
                     ['REFERENCED_ARTICLE_ID', this.articleId],
                     ['ARTICLE_FORWARD', true],
-                    [
-                        AdditionalContextInformation.DISPLAY_TEXT,
-                        await TranslationService.translate(this.text)
-                    ],
-                    [AdditionalContextInformation.ICON, this.icon]
+                    [AdditionalContextInformation.FORM_ID, 'article-forward']
                 ]
             );
+            editContext.setIcon(this.icon);
+            editContext.setDisplayText(await TranslationService.translate(this.text));
         }
     }
 }

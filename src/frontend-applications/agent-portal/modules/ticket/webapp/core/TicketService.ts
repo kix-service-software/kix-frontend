@@ -59,6 +59,7 @@ import { CreateTicketArticleOptions } from '../../model/CreateTicketArticleOptio
 import { Error } from '../../../../../../server/model/Error';
 import { Contact } from '../../../customer/model/Contact';
 import { ContactProperty } from '../../../customer/model/ContactProperty';
+import { TicketHistory } from '../../model/TicketHistory';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -79,6 +80,7 @@ export class TicketService extends KIXObjectService<Ticket> {
         this.objectConstructors.set(KIXObjectType.SENDER_TYPE, [SenderType]);
         this.objectConstructors.set(KIXObjectType.TICKET_LOCK, [TicketLock]);
         this.objectConstructors.set(KIXObjectType.WATCHER, [Watcher]);
+        this.objectConstructors.set(KIXObjectType.TICKET_HISTORY, [TicketHistory]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
@@ -86,7 +88,8 @@ export class TicketService extends KIXObjectService<Ticket> {
             || kixObjectType === KIXObjectType.ARTICLE
             || kixObjectType === KIXObjectType.SENDER_TYPE
             || kixObjectType === KIXObjectType.TICKET_LOCK
-            || kixObjectType === KIXObjectType.WATCHER;
+            || kixObjectType === KIXObjectType.WATCHER
+            || kixObjectType === KIXObjectType.TICKET_HISTORY;
     }
 
     public async loadObjects<O extends KIXObject>(
@@ -132,6 +135,12 @@ export class TicketService extends KIXObjectService<Ticket> {
     public async setArticleSeenFlag(ticketId: number, articleId: number): Promise<void> {
         await TicketSocketClient.getInstance().setArticleSeenFlag(ticketId, articleId);
         EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
+    }
+
+    public async markTicketAsSeen(ticketId: number): Promise<void> {
+        await KIXObjectService.updateObject(
+            KIXObjectType.TICKET, [['MarkAsSeen', 1]], ticketId
+        );
     }
 
     public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
@@ -401,18 +410,18 @@ export class TicketService extends KIXObjectService<Ticket> {
     public static async isPendingState(stateId: number): Promise<boolean> {
         let pending = false;
 
-        const states = await KIXObjectService.loadObjects<TicketState>(
-            KIXObjectType.TICKET_STATE, [stateId]
-        );
-
-        if (states && states.length) {
-            const stateTypes = await KIXObjectService.loadObjects<StateType>(
-                KIXObjectType.TICKET_STATE_TYPE, null
+        if (stateId) {
+            const states = await KIXObjectService.loadObjects<TicketState>(
+                KIXObjectType.TICKET_STATE, [stateId]
             );
-            const stateType = stateTypes.find((t) => t.ID === states[0].TypeID);
 
-            if (stateType && stateType.Name.toLocaleLowerCase().indexOf('pending') >= 0) {
-                pending = true;
+            if (states && states.length) {
+                const stateTypes = await KIXObjectService.loadObjects<StateType>(KIXObjectType.TICKET_STATE_TYPE);
+                const stateType = stateTypes.find((t) => t.ID === states[0].TypeID);
+
+                if (stateType && stateType.Name.toLocaleLowerCase().indexOf('pending') >= 0) {
+                    pending = true;
+                }
             }
         }
 
@@ -450,7 +459,7 @@ export class TicketService extends KIXObjectService<Ticket> {
             const match = content.match(/(<body[^>]*>)([\w|\W]*)(<\/body>)/);
             if (match && match.length >= 3) {
                 content = match[2];
-            } else {
+            } else if (attachmentWithContent.Filename !== 'file-2') {
                 content = content.replace(/(\r\n|\n\r|\n|\r)/g, '<br>');
             }
 
@@ -505,7 +514,7 @@ export class TicketService extends KIXObjectService<Ticket> {
     ): Promise<string | number> {
         if (objectType === KIXObjectType.ARTICLE) {
             const dialogContext = ContextService.getInstance().getActiveContext();
-            const referencedTicketId = dialogContext?.getAdditionalInformation('REFERENCED_TICKET_ID');
+            const referencedTicketId = dialogContext?.getAdditionalInformation('REFERENCED_SOURCE_OBJECT_ID');
             if (referencedTicketId) {
                 // TODO: keep given createOptions?
                 const articleCreateOptions = new CreateTicketArticleOptions(referencedTicketId);
