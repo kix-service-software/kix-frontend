@@ -11,7 +11,7 @@ import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
-import { TreeNode, TreeService, TreeHandler, TreeUtil } from '../../core/tree';
+import { TreeNode, TreeService, TreeHandler } from '../../core/tree';
 import { ObjectReferenceOptions } from '../../../../../modules/base-components/webapp/core/ObjectReferenceOptions';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { DataType } from '../../../../../model/DataType';
@@ -133,7 +133,10 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     private async load(preload: boolean = true): Promise<void> {
         let nodes = [];
 
-        if (!this.autocomplete) {
+        if (this.autocomplete) {
+            const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
+            nodes = treeHandler?.getTree() || [];
+        } else {
             nodes = await this.loadNodes().catch(() => []);
         }
 
