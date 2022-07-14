@@ -41,6 +41,9 @@ msgstr "{0} Link created"
 msgid "{0} link(s) assigned."
 msgstr "{0} link(s) assigned."
 
+msgid "Aborted by user."
+msgstr ""
+
 msgid "Accepted domains"
 msgstr "Accepted domains"
 
@@ -366,9 +369,6 @@ msgstr ""
 msgid "Backend"
 msgstr ""
 
-msgid "Back to top"
-msgstr ""
-
 msgid "Based on class definition"
 msgstr ""
 
@@ -645,6 +645,9 @@ msgstr ""
 msgid "contains"
 msgstr ""
 
+msgid "ContentType"
+msgstr ""
+
 msgid "Context"
 msgstr "Context"
 
@@ -841,6 +844,9 @@ msgid "Deployment States"
 msgstr ""
 
 msgid "DESC"
+msgstr ""
+
+msgid "Descending:"
 msgstr ""
 
 msgid "Description"
@@ -1085,10 +1091,10 @@ msgstr "End Time"
 msgid "End value is not given"
 msgstr ""
 
-msgid "Enter search value"
+msgid "Entered date-time value is invalid."
 msgstr ""
 
-msgid "Entered date-time value is invalid.'"
+msgid "Enter search value"
 msgstr ""
 
 msgid "Envelope From"
@@ -1291,6 +1297,12 @@ msgstr ""
 msgid "First Name"
 msgstr ""
 
+msgid "First number value is missing."
+msgstr ""
+
+msgid "First number value is not an integer."
+msgstr ""
+
 msgid "Fixed First Column"
 msgstr ""
 
@@ -1309,6 +1321,9 @@ msgid "Force"
 msgstr ""
 
 msgid "Format"
+msgstr ""
+
+msgid "Form contains invalid values"
 msgstr ""
 
 msgid "Form title"
@@ -1360,6 +1375,9 @@ msgid "Generate new user token"
 msgstr ""
 
 msgid "Go to Asset"
+msgstr ""
+
+msgid "Go to top"
 msgstr ""
 
 msgid "Graph"
@@ -1626,6 +1644,9 @@ msgstr ""
 "least one article related event is chosen above the filter attributes "
 "\"Sendertype\" & \"Channel\" are obligatory."
 
+msgid "Helptext_Admin_NotificationCreate_MessageContentType"
+msgstr ""
+
 msgid "Helptext_Admin_NotificationCreate_MessageSubject"
 msgstr ""
 "Insert the subject you want to show in the email send out by this "
@@ -1709,6 +1730,9 @@ msgstr ""
 "is supposed to react to. Please use an extra line for each attribute. If at "
 "least one article related event is chosen above the filter attributes "
 "\"Sendertype\" & \"Channel\" are obligatory."
+
+msgid "Helptext_Admin_NotificationEdit_MessageContentType"
+msgstr ""
 
 msgid "Helptext_Admin_NotificationEdit_MessageSubject"
 msgstr ""
@@ -2496,54 +2520,21 @@ msgstr ""
 "Ticket properties as ticket number, title, article content, from, to, Cc "
 "will be searched. Using wildcards (*) is possible."
 
-msgid "Helptext_Tickets_ArticleCreate_Attachments"
+msgid "Helptext_Tickets_ArticleCreate_Body"
 msgstr ""
-"Choose if you want to save the ticket description only internally (Note) or "
-"additionally sending an email (Email)."
 
 msgid "Helptext_Tickets_ArticleCreate_Channel"
 msgstr ""
 "Choose if you want to save the ticket description only internally (Note) or "
 "additionally sending an email (Email)."
 
-msgid "Helptext_Tickets_ArticleCreateEdit_Body"
-msgstr ""
-"Describe the article concern. If you chose “Email” as channel, this is the "
-"text the recipient(s) will receive."
-
-msgid "Helptext_Tickets_ArticleCreateEdit_CustomerVisible"
-msgstr ""
-"Choose if the following article should be visible in the Self Service "
-"Portal. If \"Email\" is choosen as chanal above, and one of the following "
-"form fields (To, Cc, Bcc) contains an adresss conected to the ticket's "
-"customer, the checkbox will be set automatically and cannot be removed."
-
-msgid "Helptext_Tickets_ArticleCreateEdit_Subject"
-msgstr "Briefly summarize the article topic."
-
-msgid "Helptext_Tickets_ArticleCreate_From"
-msgstr ""
-"Choose how to display the Sender of this message for the email receiver. It "
-"depends on the chosen team which email addresses are available here."
-
-msgid "Helptext_Tickets_ArticleCreate_ReceiverBcc"
-msgstr ""
-"For an email, send by a new ticket, the contact is automatically set as to-"
-"recipient. Here you can insert further recipients by either choose agents "
-"from the system or insert email addresses. They will receive a blind copy of "
-"this message."
-
-msgid "Helptext_Tickets_ArticleCreate_ReceiverCc"
-msgstr ""
-"For an email, send by a new ticket, the contact is automatically set as to-"
-"recipient. Here you can insert further recipients by either choose agents "
-"from the system or insert email addresses. They will receive a copy of this "
-"message."
-
 msgid "Helptext_Tickets_ArticleCreate_ReceiverTo"
 msgstr ""
 "Choose recipients from the system or insert email addresses that will "
 "receive this message."
+
+msgid "Helptext_Tickets_ArticleCreate_Subject"
+msgstr ""
 
 msgid "Helptext_Tickets_Link_FullText"
 msgstr ""
@@ -2575,11 +2566,6 @@ msgstr ""
 "Enter affected assets here. Assets will be linked with this ticket. You may "
 "search by asset number or name. The number of values is limited."
 
-msgid "Helptext_Tickets_TicketCreate_Body"
-msgstr ""
-"Describe the ticket concern. If you chose “Email” as channel, this is the "
-"text the recipient(s) will receive."
-
 msgid "Helptext_Tickets_TicketCreate_Channel"
 msgstr ""
 "Specidy if the ticket description should be stored as note/comment or sent "
@@ -2593,13 +2579,6 @@ msgstr ""
 "pattern. The search is applied to all properties of the contact. If a "
 "contact is not yet known, you may create this contact or just enter a "
 "syntactically correct email address."
-
-msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
-msgstr ""
-"Choose if the following article should be visible in the Self Service "
-"Portal. If \"Email\" is choosen as chanal above, and one of the following "
-"form fields (To, Cc, Bcc) contains an adresss conected to the ticket's "
-"customer, the checkbox will be set automatically and cannot be removed."
 
 msgid "Helptext_Tickets_TicketCreate_Organisation"
 msgstr ""
@@ -2618,9 +2597,6 @@ msgstr ""
 
 msgid "Helptext_Tickets_TicketCreate_State"
 msgstr ""
-
-msgid "Helptext_Tickets_TicketCreate_Subject"
-msgstr "Briefly summarize the ticket topic."
 
 msgid "Helptext_Tickets_TicketCreate_Type"
 msgstr ""
@@ -2946,10 +2922,7 @@ msgstr "Link Asset with"
 msgid "Linked as"
 msgstr ""
 
-msgid "Linked Objects"
-msgstr ""
-
-msgid "Linked Objects ({0})"
+msgid "Linked Objects (<KIX_OBJECT_LinkCount>)"
 msgstr ""
 
 msgid "Link FAQ with"
@@ -3306,6 +3279,9 @@ msgstr ""
 msgid "No article available."
 msgstr ""
 
+msgid "No Channel"
+msgstr ""
+
 msgid "No data available."
 msgstr ""
 
@@ -3636,6 +3612,9 @@ msgstr ""
 msgid "Place this code wherever you want to open the webform dialog."
 msgstr ""
 
+msgid "Plaintext"
+msgstr ""
+
 msgid "Plan: {0} - {1}"
 msgstr ""
 
@@ -3915,7 +3894,7 @@ msgstr ""
 msgid "Reply"
 msgstr ""
 
-msgid "Reply all"
+msgid "Reply All"
 msgstr ""
 
 msgid "Report"
@@ -3988,6 +3967,9 @@ msgid "Result names"
 msgstr ""
 
 msgid "Results"
+msgstr ""
+
+msgid "Richtext"
 msgstr ""
 
 msgid "Role"
@@ -4068,6 +4050,9 @@ msgstr ""
 msgid "Scope"
 msgstr ""
 
+msgid "search ..."
+msgstr ""
+
 msgid "Search"
 msgstr ""
 
@@ -4107,10 +4092,19 @@ msgstr "Search template(s) successfully removed."
 msgid "Search Title"
 msgstr ""
 
+msgid "Second number value is missing."
+msgstr ""
+
+msgid "Second number value is not an integer."
+msgstr ""
+
 msgid "Seconds(s)"
 msgstr ""
 
 msgid "Select all"
+msgstr ""
+
+msgid "Select All"
 msgstr ""
 
 msgid "Selected {0} ({1})"
@@ -4126,6 +4120,9 @@ msgid "Select file"
 msgstr ""
 
 msgid "Select image file"
+msgstr ""
+
+msgid "Select None"
 msgstr ""
 
 msgid "Self Service Manual"
@@ -4287,6 +4284,9 @@ msgid "Sort"
 msgstr ""
 
 msgid "Sortable"
+msgstr ""
+
+msgid "Sort attribute:"
 msgstr ""
 
 msgid "Source"
@@ -4529,7 +4529,7 @@ msgstr "Text Module(s) successfully removed."
 msgid "Text separator"
 msgstr ""
 
-msgid "The entered date is out of boundaries. "
+msgid "The entered date is out of boundaries."
 msgstr ""
 
 msgid "The file {0} has no valid MIME-TYPE."
@@ -4616,9 +4616,6 @@ msgstr ""
 msgid "Ticket Data"
 msgstr ""
 
-msgid "Ticket Description"
-msgstr ""
-
 msgid "Ticket Flags"
 msgstr ""
 
@@ -4696,6 +4693,9 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
+msgid "to"
+msgstr ""
+
 msgid "To"
 msgstr ""
 
@@ -4747,7 +4747,13 @@ msgstr ""
 msgid "Type Data"
 msgstr ""
 
+msgid "Type of first value is missing."
+msgstr ""
+
 msgid "Type of Job"
+msgstr ""
+
+msgid "Type of second value is missing."
 msgstr ""
 
 msgid "Types"
@@ -4757,6 +4763,12 @@ msgid "Types successfully removed."
 msgstr "Type(s) successfully removed."
 
 msgid "unequal"
+msgstr ""
+
+msgid "Unit of first value is missing."
+msgstr ""
+
+msgid "Unit of second value is missing."
 msgstr ""
 
 msgid "Unlock"
@@ -4933,6 +4945,9 @@ msgstr ""
 msgid "With attachments"
 msgstr ""
 
+msgid "within"
+msgstr ""
+
 msgid "within the last"
 msgstr ""
 
@@ -4995,6 +5010,60 @@ msgstr ""
 
 msgid "ZIP"
 msgstr ""
+
+#~ msgid "Helptext_Tickets_ArticleCreate_Attachments"
+#~ msgstr ""
+#~ "Choose if you want to save the ticket description only internally (Note) "
+#~ "or additionally sending an email (Email)."
+
+#~ msgid "Helptext_Tickets_ArticleCreateEdit_Body"
+#~ msgstr ""
+#~ "Describe the article concern. If you chose “Email” as channel, this is "
+#~ "the text the recipient(s) will receive."
+
+#~ msgid "Helptext_Tickets_ArticleCreateEdit_CustomerVisible"
+#~ msgstr ""
+#~ "Choose if the following article should be visible in the Self Service "
+#~ "Portal. If \"Email\" is choosen as chanal above, and one of the following "
+#~ "form fields (To, Cc, Bcc) contains an adresss conected to the ticket's "
+#~ "customer, the checkbox will be set automatically and cannot be removed."
+
+#~ msgid "Helptext_Tickets_ArticleCreateEdit_Subject"
+#~ msgstr "Briefly summarize the article topic."
+
+#~ msgid "Helptext_Tickets_ArticleCreate_From"
+#~ msgstr ""
+#~ "Choose how to display the Sender of this message for the email receiver. "
+#~ "It depends on the chosen team which email addresses are available here."
+
+#~ msgid "Helptext_Tickets_ArticleCreate_ReceiverBcc"
+#~ msgstr ""
+#~ "For an email, send by a new ticket, the contact is automatically set as "
+#~ "to-recipient. Here you can insert further recipients by either choose "
+#~ "agents from the system or insert email addresses. They will receive a "
+#~ "blind copy of this message."
+
+#~ msgid "Helptext_Tickets_ArticleCreate_ReceiverCc"
+#~ msgstr ""
+#~ "For an email, send by a new ticket, the contact is automatically set as "
+#~ "to-recipient. Here you can insert further recipients by either choose "
+#~ "agents from the system or insert email addresses. They will receive a "
+#~ "copy of this message."
+
+#~ msgid "Helptext_Tickets_TicketCreate_Body"
+#~ msgstr ""
+#~ "Describe the ticket concern. If you chose “Email” as channel, this is the "
+#~ "text the recipient(s) will receive."
+
+#~ msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
+#~ msgstr ""
+#~ "Choose if the following article should be visible in the Self Service "
+#~ "Portal. If \"Email\" is choosen as chanal above, and one of the following "
+#~ "form fields (To, Cc, Bcc) contains an adresss conected to the ticket's "
+#~ "customer, the checkbox will be set automatically and cannot be removed."
+
+#~ msgid "Helptext_Tickets_TicketCreate_Subject"
+#~ msgstr "Briefly summarize the ticket topic."
 
 #~ msgid "Helptext_Import_File"
 #~ msgstr "Choose a .csv-file which contains importable values."

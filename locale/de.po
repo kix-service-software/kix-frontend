@@ -41,6 +41,9 @@ msgstr "{0} Verknüpfung(en) angelegt"
 msgid "{0} link(s) assigned."
 msgstr "{0} Verknüpfung(en) erstellt."
 
+msgid "Aborted by user."
+msgstr ""
+
 msgid "Accepted domains"
 msgstr "Akzeptierte Domains"
 
@@ -381,9 +384,6 @@ msgstr "Avatar"
 msgid "Backend"
 msgstr "Backend"
 
-msgid "Back to top"
-msgstr ""
-
 msgid "Based on class definition"
 msgstr "Basiert auf Klassendefinition"
 
@@ -661,6 +661,9 @@ msgstr "enthalten in betroffenen Assets"
 msgid "contains"
 msgstr "enthält"
 
+msgid "ContentType"
+msgstr ""
+
 msgid "Context"
 msgstr "Kontext"
 
@@ -858,6 +861,9 @@ msgstr "Verwendungsstatus"
 
 msgid "DESC"
 msgstr "Absteigend"
+
+msgid "Descending:"
+msgstr ""
 
 msgid "Description"
 msgstr "Beschreibung"
@@ -1103,11 +1109,11 @@ msgstr "Endzeitpunkt"
 msgid "End value is not given"
 msgstr "Endwert fehlt"
 
+msgid "Entered date-time value is invalid."
+msgstr ""
+
 msgid "Enter search value"
 msgstr "Suchbegriff eingeben"
-
-msgid "Entered date-time value is invalid.'"
-msgstr ""
 
 msgid "Envelope From"
 msgstr "Envelope From"
@@ -1311,6 +1317,12 @@ msgstr "beendet"
 msgid "First Name"
 msgstr "Vorname"
 
+msgid "First number value is missing."
+msgstr ""
+
+msgid "First number value is not an integer."
+msgstr ""
+
 msgid "Fixed First Column"
 msgstr "Erste Spalte fixieren"
 
@@ -1332,6 +1344,9 @@ msgstr "Erzwingen"
 
 msgid "Format"
 msgstr "Format"
+
+msgid "Form contains invalid values"
+msgstr ""
 
 msgid "Form title"
 msgstr "Formulartitel"
@@ -1383,6 +1398,9 @@ msgstr "Erstelle neuen Benutzertoken"
 
 msgid "Go to Asset"
 msgstr "Zu Asset springen"
+
+msgid "Go to top"
+msgstr ""
 
 msgid "Graph"
 msgstr "Graph"
@@ -1686,6 +1704,9 @@ msgstr ""
 "eine neue Zeile. Ist unter \"Events\" mindestens ein artikelbezogenes Event "
 "ausgewählt, sind die Filterattribute \"Sendertyp\" & \"Kanal\" Pflichtfelder."
 
+msgid "Helptext_Admin_NotificationCreate_MessageContentType"
+msgstr ""
+
 msgid "Helptext_Admin_NotificationCreate_MessageSubject"
 msgstr ""
 "Geben Sie den Betreff ein, der in der E-Mail angezeigt werden soll, die "
@@ -1779,6 +1800,9 @@ msgstr ""
 "eingeben, auf den der Filter reagiert. Nutzen Sie für jedes weitere Attribut "
 "eine neue Zeile. Ist unter \"Events\" mindestens ein artikelbezogenes Event "
 "ausgewählt, sind die Filterattribute \"Sendertyp\" & \"Kanal\" Pflichtfelder."
+
+msgid "Helptext_Admin_NotificationEdit_MessageContentType"
+msgstr ""
 
 msgid "Helptext_Admin_NotificationEdit_MessageSubject"
 msgstr ""
@@ -2662,56 +2686,21 @@ msgstr ""
 "\"Artikelinhalt\", \"Von\", \"An\", \"Cc\". Verwendung von Wildcards (*) ist "
 "möglich."
 
-msgid "Helptext_Tickets_ArticleCreate_Attachments"
+msgid "Helptext_Tickets_ArticleCreate_Body"
 msgstr ""
-"Wählen Sie ob die Ticketbeschreibung nur als Notiz abgelegt oder direkt als "
-"Email versendet wird."
 
 msgid "Helptext_Tickets_ArticleCreate_Channel"
 msgstr ""
 "Wählen Sie aus, ob Sie den Artikel intern am Ticket hinterlegen (Notiz) oder "
 "zusätzlich per E-Mail versenden (E-Mail) wollen."
 
-msgid "Helptext_Tickets_ArticleCreateEdit_Body"
-msgstr ""
-"Beschreiben Sie hier das Anliegen des Artikels. Wenn Sie als Kanal „E-Mail“ "
-"gewählt haben, erhält der Empfänger diesen Text."
-
-msgid "Helptext_Tickets_ArticleCreateEdit_CustomerVisible"
-msgstr ""
-"Wählen Sie aus, ob der folgende Artikel im Self Service Portal angezeigt "
-"wird. Haben Sie oben den Kanal \"E-Mail\" gewählt und in einem der folgenden "
-"Empfänger-Felder (An, Cc oder Bcc) eine Adresse gewählt, die einem Kontakt "
-"der Organisation dieses Tickets zugeordnet ist, wird der Haken automatisch "
-"gesetzt und kann nicht entfernt werden."
-
-msgid "Helptext_Tickets_ArticleCreateEdit_Subject"
-msgstr "Eine kurze Zusammenfassung Ihrer Nachricht"
-
-msgid "Helptext_Tickets_ArticleCreate_From"
-msgstr ""
-"Wählen Sie aus, wie der Absender dieser Nachricht für den E-Mail Empfänger "
-"dargestellt wird. Die hier auswählbare E-Mail-Adresse ist abhängig von dem "
-"gewählten Team."
-
-msgid "Helptext_Tickets_ArticleCreate_ReceiverBcc"
-msgstr ""
-"Der An-Empfänger einer E-Mail, die aus einem neuen Ticket heraus versendet "
-"wird, ist automatisch der „Kontakt“. Hier können Sie weitere Empfänger aus "
-"dem System wählen oder E-Mail-Adressen eingeben, die die Nachricht als "
-"Blindkopie erhalten."
-
-msgid "Helptext_Tickets_ArticleCreate_ReceiverCc"
-msgstr ""
-"Der An-Empfänger einer E-Mail, die aus einem neuen Ticket heraus versendet "
-"wird, ist automatisch der „Kontakt“. Hier können Sie weitere Empfänger aus "
-"dem System wählen oder E-Mail-Adressen eingeben, welche die Nachricht in "
-"Kopie erhalten."
-
 msgid "Helptext_Tickets_ArticleCreate_ReceiverTo"
 msgstr ""
 "Wählen Sie Empfänger für die Nachricht aus dem System oder geben Sie E-Mail-"
 "Adressen ein."
+
+msgid "Helptext_Tickets_ArticleCreate_Subject"
+msgstr ""
 
 msgid "Helptext_Tickets_Link_FullText"
 msgstr ""
@@ -2744,11 +2733,6 @@ msgstr ""
 "Ticket verknüpft. Sie können nach der Asset Nummer und/oder dem Asset Name "
 "suchen. Die maximale Anzahl der Einträge ist begrenzt."
 
-msgid "Helptext_Tickets_TicketCreate_Body"
-msgstr ""
-"Beschreiben Sie hier das Anliegen des Tickets. Wenn Sie als Kanal „E-Mail“ "
-"gewählt haben, erhält der Empfänger diesen Text."
-
 msgid "Helptext_Tickets_TicketCreate_Channel"
 msgstr ""
 "Wählen Sie aus, ob Sie die Ticketbeschreibung intern am Ticket hinterlegen "
@@ -2765,14 +2749,6 @@ msgstr ""
 "können Sie einen neuen Kontakt anlegen & mit dem Speichern automatisch "
 "hierher zurückkehren. Für unbekannte Kontakte ist auch die Eingabe einer "
 "syntaktisch korrekten E-Mail-Adresse (name@beispiel.de) möglich."
-
-msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
-msgstr ""
-"Wählen Sie aus, ob der folgende Artikel im Self Service Portal angezeigt "
-"wird. Haben Sie oben den Kanal \"E-Mail\" gewählt und in einem der folgenden "
-"Empfänger-Felder (An, Cc oder Bcc) eine Adresse gewählt, die einem Kontakt "
-"der Organisation dieses Tickets zugeordnet ist, wird der Haken automatisch "
-"gesetzt und kann nicht entfernt werden."
 
 msgid "Helptext_Tickets_TicketCreate_Organisation"
 msgstr ""
@@ -2791,9 +2767,6 @@ msgid "Helptext_Tickets_TicketCreate_State"
 msgstr ""
 "Der Status definiert, in welchem Bearbeitungszustand sich das Ticket "
 "befindet."
-
-msgid "Helptext_Tickets_TicketCreate_Subject"
-msgstr "Eine kurze Zusammenfassung ihrer Meldung"
 
 msgid "Helptext_Tickets_TicketCreate_Type"
 msgstr ""
@@ -3135,11 +3108,8 @@ msgstr "Asset verknüpfen mit"
 msgid "Linked as"
 msgstr "Verknüpft als"
 
-msgid "Linked Objects"
-msgstr "Verknüpfte Objekte"
-
-msgid "Linked Objects ({0})"
-msgstr "Verknüpfte Objekte ({0})"
+msgid "Linked Objects (<KIX_OBJECT_LinkCount>)"
+msgstr ""
 
 msgid "Link FAQ with"
 msgstr "FAQ verknüpfen mit"
@@ -3495,6 +3465,9 @@ msgstr "Kein Artikel"
 msgid "No article available."
 msgstr "Kein Artikel verfügbar."
 
+msgid "No Channel"
+msgstr ""
+
 msgid "No data available."
 msgstr "Keine Angaben verfügbar."
 
@@ -3826,6 +3799,9 @@ msgid "Place this code wherever you want to open the webform dialog."
 msgstr ""
 "Platzieren Sie diesen Code dort, wo das Webformular geöffnet werden soll."
 
+msgid "Plaintext"
+msgstr ""
+
 msgid "Plan: {0} - {1}"
 msgstr "Plan: {0} - {1}"
 
@@ -4108,8 +4084,8 @@ msgstr "Wert ersetzen"
 msgid "Reply"
 msgstr "Antworten"
 
-msgid "Reply all"
-msgstr "Allen antworten"
+msgid "Reply All"
+msgstr ""
 
 msgid "Report"
 msgstr "Bericht"
@@ -4182,6 +4158,9 @@ msgstr "Ergebnisbezeichnungen"
 
 msgid "Results"
 msgstr "Ergebnisse"
+
+msgid "Richtext"
+msgstr ""
 
 msgid "Role"
 msgstr "Rolle"
@@ -4263,6 +4242,9 @@ msgstr "Zeitplanung"
 msgid "Scope"
 msgstr "Scope"
 
+msgid "search ..."
+msgstr ""
+
 msgid "Search"
 msgstr "Suchen"
 
@@ -4302,11 +4284,20 @@ msgstr "Suchvorlage(n) wurde(n) erfolgreich gelöscht."
 msgid "Search Title"
 msgstr "Name der Suche"
 
+msgid "Second number value is missing."
+msgstr ""
+
+msgid "Second number value is not an integer."
+msgstr ""
+
 msgid "Seconds(s)"
 msgstr "Sekunde(n)"
 
 msgid "Select all"
 msgstr "Alle auswählen"
+
+msgid "Select All"
+msgstr ""
 
 msgid "Selected {0} ({1})"
 msgstr "Ausgewählte {0} ({1})"
@@ -4322,6 +4313,9 @@ msgstr "Datei wählen"
 
 msgid "Select image file"
 msgstr "Bilddatei wählen"
+
+msgid "Select None"
+msgstr ""
 
 msgid "Self Service Manual"
 msgstr "Self Service Handbuch"
@@ -4485,6 +4479,9 @@ msgstr "Sortieren"
 
 msgid "Sortable"
 msgstr "Sortierbar"
+
+msgid "Sort attribute:"
+msgstr ""
 
 msgid "Source"
 msgstr "Quelle"
@@ -4737,7 +4734,7 @@ msgstr "Textbaustein(e) wurde(n) erfolgreich gelöscht."
 msgid "Text separator"
 msgstr "Texttrenner"
 
-msgid "The entered date is out of boundaries. "
+msgid "The entered date is out of boundaries."
 msgstr ""
 
 msgid "The file {0} has no valid MIME-TYPE."
@@ -4846,9 +4843,6 @@ msgstr "Ticketattribute"
 msgid "Ticket Data"
 msgstr "Ticketdaten"
 
-msgid "Ticket Description"
-msgstr "Ticketbeschreibung"
-
 msgid "Ticket Flags"
 msgstr "Ticket Kennzeichnung"
 
@@ -4929,6 +4923,9 @@ msgstr ""
 msgid "Title"
 msgstr "Titel"
 
+msgid "to"
+msgstr ""
+
 msgid "To"
 msgstr "To"
 
@@ -4980,8 +4977,14 @@ msgstr "Typ"
 msgid "Type Data"
 msgstr "Typdaten"
 
+msgid "Type of first value is missing."
+msgstr ""
+
 msgid "Type of Job"
 msgstr "Job Typ"
+
+msgid "Type of second value is missing."
+msgstr ""
 
 msgid "Types"
 msgstr "Typen"
@@ -4991,6 +4994,12 @@ msgstr "Typ(en) wurde(n) erfolgreich gelöscht."
 
 msgid "unequal"
 msgstr "ungleich"
+
+msgid "Unit of first value is missing."
+msgstr ""
+
+msgid "Unit of second value is missing."
+msgstr ""
 
 msgid "Unlock"
 msgstr "Freigeben"
@@ -5166,6 +5175,9 @@ msgstr "Wildcard-Suche"
 msgid "With attachments"
 msgstr "mit Anhängen"
 
+msgid "within"
+msgstr ""
+
 msgid "within the last"
 msgstr "innerhalb der letzten"
 
@@ -5228,6 +5240,75 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Helptext_Tickets_ArticleCreate_Attachments"
+#~ msgstr ""
+#~ "Wählen Sie ob die Ticketbeschreibung nur als Notiz abgelegt oder direkt "
+#~ "als Email versendet wird."
+
+#~ msgid "Helptext_Tickets_ArticleCreateEdit_Body"
+#~ msgstr ""
+#~ "Beschreiben Sie hier das Anliegen des Artikels. Wenn Sie als Kanal „E-"
+#~ "Mail“ gewählt haben, erhält der Empfänger diesen Text."
+
+#~ msgid "Helptext_Tickets_ArticleCreateEdit_CustomerVisible"
+#~ msgstr ""
+#~ "Wählen Sie aus, ob der folgende Artikel im Self Service Portal angezeigt "
+#~ "wird. Haben Sie oben den Kanal \"E-Mail\" gewählt und in einem der "
+#~ "folgenden Empfänger-Felder (An, Cc oder Bcc) eine Adresse gewählt, die "
+#~ "einem Kontakt der Organisation dieses Tickets zugeordnet ist, wird der "
+#~ "Haken automatisch gesetzt und kann nicht entfernt werden."
+
+#~ msgid "Helptext_Tickets_ArticleCreateEdit_Subject"
+#~ msgstr "Eine kurze Zusammenfassung Ihrer Nachricht"
+
+#~ msgid "Helptext_Tickets_ArticleCreate_From"
+#~ msgstr ""
+#~ "Wählen Sie aus, wie der Absender dieser Nachricht für den E-Mail "
+#~ "Empfänger dargestellt wird. Die hier auswählbare E-Mail-Adresse ist "
+#~ "abhängig von dem gewählten Team."
+
+#~ msgid "Helptext_Tickets_ArticleCreate_ReceiverBcc"
+#~ msgstr ""
+#~ "Der An-Empfänger einer E-Mail, die aus einem neuen Ticket heraus "
+#~ "versendet wird, ist automatisch der „Kontakt“. Hier können Sie weitere "
+#~ "Empfänger aus dem System wählen oder E-Mail-Adressen eingeben, die die "
+#~ "Nachricht als Blindkopie erhalten."
+
+#~ msgid "Helptext_Tickets_ArticleCreate_ReceiverCc"
+#~ msgstr ""
+#~ "Der An-Empfänger einer E-Mail, die aus einem neuen Ticket heraus "
+#~ "versendet wird, ist automatisch der „Kontakt“. Hier können Sie weitere "
+#~ "Empfänger aus dem System wählen oder E-Mail-Adressen eingeben, welche die "
+#~ "Nachricht in Kopie erhalten."
+
+#~ msgid "Helptext_Tickets_TicketCreate_Body"
+#~ msgstr ""
+#~ "Beschreiben Sie hier das Anliegen des Tickets. Wenn Sie als Kanal „E-"
+#~ "Mail“ gewählt haben, erhält der Empfänger diesen Text."
+
+#~ msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
+#~ msgstr ""
+#~ "Wählen Sie aus, ob der folgende Artikel im Self Service Portal angezeigt "
+#~ "wird. Haben Sie oben den Kanal \"E-Mail\" gewählt und in einem der "
+#~ "folgenden Empfänger-Felder (An, Cc oder Bcc) eine Adresse gewählt, die "
+#~ "einem Kontakt der Organisation dieses Tickets zugeordnet ist, wird der "
+#~ "Haken automatisch gesetzt und kann nicht entfernt werden."
+
+#~ msgid "Helptext_Tickets_TicketCreate_Subject"
+#~ msgstr "Eine kurze Zusammenfassung ihrer Meldung"
+
+#~ msgid "Linked Objects"
+#~ msgstr "Verknüpfte Objekte"
+
+#~ msgid "Linked Objects ({0})"
+#~ msgstr "Verknüpfte Objekte ({0})"
+
+#~ msgid "Reply all"
+#~ msgstr "Allen antworten"
+
+#~ msgid "Ticket Description"
+#~ msgstr "Ticketbeschreibung"
 
 #~ msgid "close all"
 #~ msgstr "alle schließen"
