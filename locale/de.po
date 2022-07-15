@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2022-05-25 08:45+0000\n"
-"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
+"PO-Revision-Date: 2022-07-15 08:45+0000\n"
+"Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
 "Language: de\n"
@@ -42,7 +42,7 @@ msgid "{0} link(s) assigned."
 msgstr "{0} Verknüpfung(en) erstellt."
 
 msgid "Aborted by user."
-msgstr ""
+msgstr "Durch Nutzer abgebrochen."
 
 msgid "Accepted domains"
 msgstr "Akzeptierte Domains"
@@ -183,7 +183,7 @@ msgid "All agents subscribed to the tickets queue"
 msgstr "Alle Agenten, die das Team des Tickets abonniert haben"
 
 msgid "All agents watching this ticket"
-msgstr ""
+msgstr "Agenten die das Ticket beobachten"
 
 msgid "All agents with read permissions for the ticket"
 msgstr "Alle Agenten, die Leseberechtigungen auf das Ticket haben"
@@ -863,7 +863,7 @@ msgid "DESC"
 msgstr "Absteigend"
 
 msgid "Descending:"
-msgstr ""
+msgstr "Absteigend:"
 
 msgid "Description"
 msgstr "Beschreibung"
@@ -1110,7 +1110,7 @@ msgid "End value is not given"
 msgstr "Endwert fehlt"
 
 msgid "Entered date-time value is invalid."
-msgstr ""
+msgstr "Eingegebener Zeitpunkt ist ungültig."
 
 msgid "Enter search value"
 msgstr "Suchbegriff eingeben"
@@ -1318,10 +1318,10 @@ msgid "First Name"
 msgstr "Vorname"
 
 msgid "First number value is missing."
-msgstr ""
+msgstr "Erster Wert fehlt."
 
 msgid "First number value is not an integer."
-msgstr ""
+msgstr "Erster Wert ist keine Ganzzahl."
 
 msgid "Fixed First Column"
 msgstr "Erste Spalte fixieren"
@@ -1346,7 +1346,7 @@ msgid "Format"
 msgstr "Format"
 
 msgid "Form contains invalid values"
-msgstr ""
+msgstr "Formular beinhaltet ungültige Werte"
 
 msgid "Form title"
 msgstr "Formulartitel"
@@ -1361,7 +1361,7 @@ msgid "Forward"
 msgstr "Weiterleiten"
 
 msgid "FQDN"
-msgstr ""
+msgstr "FQDN"
 
 msgid "Friday"
 msgstr "Freitag"
@@ -1400,7 +1400,7 @@ msgid "Go to Asset"
 msgstr "Zu Asset springen"
 
 msgid "Go to top"
-msgstr ""
+msgstr "nach oben"
 
 msgid "Graph"
 msgstr "Graph"
@@ -1705,7 +1705,7 @@ msgstr ""
 "ausgewählt, sind die Filterattribute \"Sendertyp\" & \"Kanal\" Pflichtfelder."
 
 msgid "Helptext_Admin_NotificationCreate_MessageContentType"
-msgstr ""
+msgstr "Definiert den Inhaltstyp der Benachrichtigung."
 
 msgid "Helptext_Admin_NotificationCreate_MessageSubject"
 msgstr ""
@@ -1802,7 +1802,7 @@ msgstr ""
 "ausgewählt, sind die Filterattribute \"Sendertyp\" & \"Kanal\" Pflichtfelder."
 
 msgid "Helptext_Admin_NotificationEdit_MessageContentType"
-msgstr ""
+msgstr "Definiert den Inhaltstyp der Benachrichtigung."
 
 msgid "Helptext_Admin_NotificationEdit_MessageSubject"
 msgstr ""
@@ -2067,6 +2067,8 @@ msgstr ""
 
 msgid "Helptext_Admin_Tickets_StateCreate_Name"
 msgstr ""
+"Bezeichnung des Status (Übersetzung bitte über Internationalisierungen "
+"pflegen)."
 
 msgid "Helptext_Admin_Tickets_StateCreate_Type"
 msgstr "Über den Statustyp werden Status gruppiert."
@@ -2086,6 +2088,8 @@ msgstr ""
 
 msgid "Helptext_Admin_Tickets_TypeCreate_Name"
 msgstr ""
+"Bezeichnung des Vorgangstyps (Übersetzung bitte über Internationalisierungen "
+"pflegen)."
 
 msgid "Helptext_Admin_Tickets_TypeCreate_Valid"
 msgstr "Der Typ kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
@@ -2167,7 +2171,7 @@ msgstr ""
 "Webformular erstellt werden."
 
 msgid "Helptext_Admin_WebformCreateEdit_SaveButtonLabel"
-msgstr ""
+msgstr "Beschriftung des Absende-Buttons"
 
 msgid "Helptext_Admin_WebformCreateEdit_ShowTitle"
 msgstr ""
@@ -2517,7 +2521,7 @@ msgstr ""
 "abfragen."
 
 msgid "Helptext_PersonalSettings_article_sort_order_Hint"
-msgstr ""
+msgstr "Definiert die Reihenfolge der Artikel in der Kommunikationshistorie."
 
 msgid "Helptext_PersonalSettings_MyQueues_Hint"
 msgstr ""
@@ -2574,6 +2578,8 @@ msgstr ""
 
 msgid "Helptext_Reporting_ReportCreate_MaxReports"
 msgstr ""
+"Maximale Anzahl der vorzuhaltenden Berichte für diese Berichtsdefinition. "
+"Bitte \"0\" setzen, wenn alle Berichte erhalten bleiben sollen."
 
 msgid "Helptext_Reporting_ReportCreate_OutputFormat"
 msgstr ""
@@ -2643,6 +2649,8 @@ msgstr ""
 
 msgid "Helptext_Reporting_ReportCreate_Periodic"
 msgstr ""
+"Wenn aktiv wird der Bericht periodisch automatisch erstellt und steht zur "
+"Verwendung per persönlicher URL oder im Home-Dashboard zur Verfügung."
 
 msgid "Helptext_Reporting_ReportCreate_Roles"
 msgstr ""
@@ -2700,7 +2708,7 @@ msgstr ""
 "Adressen ein."
 
 msgid "Helptext_Tickets_ArticleCreate_Subject"
-msgstr ""
+msgstr "Zusammenfassung/Titel der anzulegenden Nachricht/Notiz"
 
 msgid "Helptext_Tickets_Link_FullText"
 msgstr ""
@@ -3109,7 +3117,7 @@ msgid "Linked as"
 msgstr "Verknüpft als"
 
 msgid "Linked Objects (<KIX_OBJECT_LinkCount>)"
-msgstr ""
+msgstr "Verknüpfte Objekte (<KIX_OBJECT_LinkCount>)"
 
 msgid "Link FAQ with"
 msgstr "FAQ verknüpfen mit"
@@ -3199,7 +3207,7 @@ msgid "Max Depth"
 msgstr "Max. Tiefe"
 
 msgid "Max. Reports"
-msgstr ""
+msgstr "Max. Berichte"
 
 msgid "Menu"
 msgstr "Modulmenü"
@@ -3466,7 +3474,7 @@ msgid "No article available."
 msgstr "Kein Artikel verfügbar."
 
 msgid "No Channel"
-msgstr ""
+msgstr "Kein Kanal"
 
 msgid "No data available."
 msgstr "Keine Angaben verfügbar."
@@ -3484,7 +3492,7 @@ msgid "No rating available."
 msgstr "Keine Bewertung verfügbar."
 
 msgid "No report available"
-msgstr ""
+msgstr "Kein Bericht verfügbar"
 
 msgid "Not available (not any more or not yet)"
 msgstr "Noch nicht verfügbar / nicht mehr verfügbar"
@@ -3559,10 +3567,10 @@ msgid "Number of Config Items in critical incident state"
 msgstr "Anzahl Assets mit kritischem Vorfallsstatus"
 
 msgid "Number of open tickets by priority"
-msgstr ""
+msgstr "Anzahl offener Tickets nach Priorität"
 
 msgid "Number of open tickets by state"
-msgstr ""
+msgstr "Anzahl offener Tickets nach Status"
 
 msgid "Number of ratings"
 msgstr "Anzahl Bewertungen"
@@ -3577,7 +3585,7 @@ msgid "Number of rows (min)"
 msgstr "Anzahl Zeilen (min.)"
 
 msgid "Number of tickets created within the last 7 days"
-msgstr ""
+msgstr "Anzahl offener Tickets der letzten 7 Tage"
 
 msgid "Number of version"
 msgstr "Anzahl Versionen"
@@ -3766,10 +3774,10 @@ msgid "Pending until: {0} ({1})"
 msgstr "warten bis: {0} ({1})"
 
 msgid "Periodic"
-msgstr ""
+msgstr "Periodisch"
 
 msgid "Periodic Creation"
-msgstr ""
+msgstr "Periodische Erstellung"
 
 msgid "Permission"
 msgstr "Berechtigung"
@@ -3800,7 +3808,7 @@ msgstr ""
 "Platzieren Sie diesen Code dort, wo das Webformular geöffnet werden soll."
 
 msgid "Plaintext"
-msgstr ""
+msgstr "Klartext"
 
 msgid "Plan: {0} - {1}"
 msgstr "Plan: {0} - {1}"
@@ -4085,13 +4093,13 @@ msgid "Reply"
 msgstr "Antworten"
 
 msgid "Reply All"
-msgstr ""
+msgstr "Allen Antworten"
 
 msgid "Report"
 msgstr "Bericht"
 
 msgid "Report Chart"
-msgstr ""
+msgstr "Berichtsgrafik"
 
 msgid "Report Definition"
 msgstr "Berichtsdefinition"
@@ -4243,7 +4251,7 @@ msgid "Scope"
 msgstr "Scope"
 
 msgid "search ..."
-msgstr ""
+msgstr "suchen ..."
 
 msgid "Search"
 msgstr "Suchen"
@@ -4285,10 +4293,10 @@ msgid "Search Title"
 msgstr "Name der Suche"
 
 msgid "Second number value is missing."
-msgstr ""
+msgstr "Zweiter Wert fehlt."
 
 msgid "Second number value is not an integer."
-msgstr ""
+msgstr "Zweiter Wert ist keine Ganzzahl."
 
 msgid "Seconds(s)"
 msgstr "Sekunde(n)"
@@ -4297,7 +4305,7 @@ msgid "Select all"
 msgstr "Alle auswählen"
 
 msgid "Select All"
-msgstr ""
+msgstr "Alle(s) auswählen"
 
 msgid "Selected {0} ({1})"
 msgstr "Ausgewählte {0} ({1})"
@@ -4315,7 +4323,7 @@ msgid "Select image file"
 msgstr "Bilddatei wählen"
 
 msgid "Select None"
-msgstr ""
+msgstr "Leere Auswahl"
 
 msgid "Self Service Manual"
 msgstr "Self Service Handbuch"
@@ -4481,7 +4489,7 @@ msgid "Sortable"
 msgstr "Sortierbar"
 
 msgid "Sort attribute:"
-msgstr ""
+msgstr "Sortierattribut:"
 
 msgid "Source"
 msgstr "Quelle"
@@ -4735,7 +4743,7 @@ msgid "Text separator"
 msgstr "Texttrenner"
 
 msgid "The entered date is out of boundaries."
-msgstr ""
+msgstr "Das eingegebene Datum ist außerhalb des zulässigen Wertebereichs."
 
 msgid "The file {0} has no valid MIME-TYPE."
 msgstr "Die Datei '{0}' hat keinen gültigen MIME-Typ."
@@ -4978,13 +4986,13 @@ msgid "Type Data"
 msgstr "Typdaten"
 
 msgid "Type of first value is missing."
-msgstr ""
+msgstr "Typ des ersten Werts fehlt."
 
 msgid "Type of Job"
 msgstr "Job Typ"
 
 msgid "Type of second value is missing."
-msgstr ""
+msgstr "Typ des zweiten Werts fehlt."
 
 msgid "Types"
 msgstr "Typen"
@@ -4996,10 +5004,10 @@ msgid "unequal"
 msgstr "ungleich"
 
 msgid "Unit of first value is missing."
-msgstr ""
+msgstr "Einheit des ersten Werts fehlt."
 
 msgid "Unit of second value is missing."
-msgstr ""
+msgstr "Einheit des zweiten Werts fehlt."
 
 msgid "Unlock"
 msgstr "Freigeben"
@@ -5176,7 +5184,7 @@ msgid "With attachments"
 msgstr "mit Anhängen"
 
 msgid "within"
-msgstr ""
+msgstr "innerhalb"
 
 msgid "within the last"
 msgstr "innerhalb der letzten"
