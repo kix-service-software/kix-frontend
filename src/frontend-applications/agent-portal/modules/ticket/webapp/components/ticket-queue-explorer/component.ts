@@ -77,7 +77,7 @@ export class Component {
         this.state.nodes = null;
         const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy();
         this.state.nodes = await QueueService.getInstance().prepareObjectTree(
-            queuesHierarchy, true, false, null, undefined, true
+            queuesHierarchy, true, false, null, undefined, true, true
         );
     }
 
