@@ -32,7 +32,7 @@ export class ReportDefintionObjectCreator {
         const maxReportsValue = await formInstance.getFormFieldValueByProperty<number>(
             ReportDefinitionProperty.MAX_REPORTS
         );
-        reportDefinition.MaxReports = maxReportsValue && isPeriodicValue.value ? maxReportsValue.value : 0;
+        reportDefinition.MaxReports = Number(maxReportsValue?.value) || 0;
 
         const commentValue = await formInstance.getFormFieldValueByProperty<string>(ReportDefinitionProperty.COMMENT);
         reportDefinition.Comment = commentValue && commentValue.value ? commentValue.value : '';
