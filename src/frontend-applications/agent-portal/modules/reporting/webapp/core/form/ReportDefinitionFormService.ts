@@ -104,32 +104,34 @@ export class ReportDefinitionFormService extends KIXObjectFormService {
         property: string, value: any, reportDefinition: ReportDefinition,
         formField: FormFieldConfiguration, formContext: FormContext
     ): Promise<any> {
-        if (reportDefinition) {
-            if (property === ReportDefinitionProperty.ROLE_IDS) {
-                const loadingOptions = new KIXObjectLoadingOptions(
-                    [
-                        new FilterCriteria(
-                            `${RoleProperty.PERMISSIONS}.${PermissionProperty.TARGET}`, SearchOperator.EQUALS,
-                            FilterDataType.STRING, FilterType.AND, `/reporting/reportdefinitions/${reportDefinition.ID}`
-                        ),
-                        new FilterCriteria(
-                            `${RoleProperty.PERMISSIONS}.${PermissionProperty.TYPE_ID}`, SearchOperator.EQUALS,
-                            FilterDataType.NUMERIC, FilterType.AND, 1
-                        ),
-                        new FilterCriteria(
-                            `${RoleProperty.PERMISSIONS}.${PermissionProperty.VALUE}`, SearchOperator.EQUALS,
-                            FilterDataType.NUMERIC, FilterType.AND, 2
-                        )
-                    ],
-                    null, null, [RoleProperty.PERMISSIONS]
-                );
-                const roles = await KIXObjectService.loadObjects<Role>(KIXObjectType.ROLE, null, loadingOptions);
-                if (Array.isArray(roles) && roles.length) {
-                    return roles
-                        .filter((r) => Array.isArray(r.Permissions) && r.Permissions.length)
-                        .map((r) => r.ID);
-                }
+        if (property === ReportDefinitionProperty.ROLE_IDS && reportDefinition) {
+            const loadingOptions = new KIXObjectLoadingOptions(
+                [
+                    new FilterCriteria(
+                        `${RoleProperty.PERMISSIONS}.${PermissionProperty.TARGET}`, SearchOperator.EQUALS,
+                        FilterDataType.STRING, FilterType.AND, `/reporting/reportdefinitions/${reportDefinition.ID}`
+                    ),
+                    new FilterCriteria(
+                        `${RoleProperty.PERMISSIONS}.${PermissionProperty.TYPE_ID}`, SearchOperator.EQUALS,
+                        FilterDataType.NUMERIC, FilterType.AND, 1
+                    ),
+                    new FilterCriteria(
+                        `${RoleProperty.PERMISSIONS}.${PermissionProperty.VALUE}`, SearchOperator.EQUALS,
+                        FilterDataType.NUMERIC, FilterType.AND, 2
+                    )
+                ],
+                null, null, [RoleProperty.PERMISSIONS]
+            );
+            const roles = await KIXObjectService.loadObjects<Role>(KIXObjectType.ROLE, null, loadingOptions);
+            if (Array.isArray(roles) && roles.length) {
+                return roles
+                    .filter((r) => Array.isArray(r.Permissions) && r.Permissions.length)
+                    .map((r) => r.ID);
             }
+        }
+
+        if (property === ReportDefinitionProperty.MAX_REPORTS && !reportDefinition?.MaxReports) {
+            return 0;
         }
 
         if (formContext === FormContext.EDIT && reportDefinition) {
