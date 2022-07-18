@@ -28,6 +28,7 @@ export enum ConfigItemProperty {
     CURRENT_VERSION = 'CurrentVersion',
 
     // search properties
-    ASSIGNED_CONTACT = 'AssignedContact'
+    ASSIGNED_CONTACT = 'AssignedContact',
+    ASSIGNED_ORGANISATION = 'AssignedOrganisation'
 
 }

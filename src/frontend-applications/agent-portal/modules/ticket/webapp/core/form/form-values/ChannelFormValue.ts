@@ -11,7 +11,6 @@ import { FormContext } from '../../../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
-import { BooleanFormValue } from '../../../../../object-forms/model/FormValues/BooleanFormValue';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { RichTextFormValue } from '../../../../../object-forms/model/FormValues/RichTextFormValue';
 import { SelectObjectFormValue } from '../../../../../object-forms/model/FormValues/SelectObjectFormValue';
@@ -20,6 +19,7 @@ import { Article } from '../../../../model/Article';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
 import { Channel } from '../../../../model/Channel';
 import { ArticleAttachmentFormValue } from './ArticleAttachmentFormValue';
+import { CustomerVisibleFormValue } from './CustomerVisibleFormValue';
 import { FromObjectFormValue } from './FromObjectFormValue';
 import { RecipientFormValue } from './RecipientFormValue';
 
@@ -91,7 +91,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                     formValue = new FromObjectFormValue(property, article.ticket, this.objectValueMapper, this);
                     break;
                 case ArticleProperty.CUSTOMER_VISIBLE:
-                    formValue = new BooleanFormValue(property, article, this.objectValueMapper, this);
+                    formValue = new CustomerVisibleFormValue(property, article, this.objectValueMapper, this);
                     break;
                 case ArticleProperty.SUBJECT:
                     formValue = new ObjectFormValue(property, article, this.objectValueMapper, this);
@@ -186,11 +186,6 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                 // make sure relevant properties are always required
                 if (formValue.property === ArticleProperty.FROM || formValue.property === ArticleProperty.TO) {
                     formValue.required = channelName === 'email' && this.visible;
-                }
-
-                // if not already set, activate customer visibility by default
-                if (formValue.property === ArticleProperty.CUSTOMER_VISIBLE && formValue.value === null) {
-                    formValue.value = true;
                 }
             }
         }
