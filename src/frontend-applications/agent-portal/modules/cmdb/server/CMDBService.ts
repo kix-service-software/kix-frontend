@@ -336,7 +336,8 @@ export class CMDBAPIService extends KIXObjectAPIService {
                 c.property !== 'ClassIDs' &&
                 !c.property.startsWith('Data') &&
                 !c.property.startsWith('CurrentVersion') &&
-                c.property !== ConfigItemProperty.ASSIGNED_CONTACT;
+                c.property !== ConfigItemProperty.ASSIGNED_CONTACT &&
+                c.property !== ConfigItemProperty.ASSIGNED_ORGANISATION;
         });
     }
 
@@ -394,7 +395,8 @@ export class CMDBAPIService extends KIXObjectAPIService {
             c.property === 'ClassIDs' ||
             c.property.startsWith('Data') ||
             c.property.startsWith('CurrentVersion') ||
-            c.property === ConfigItemProperty.ASSIGNED_CONTACT
+            c.property === ConfigItemProperty.ASSIGNED_CONTACT ||
+            c.property === ConfigItemProperty.ASSIGNED_ORGANISATION
         );
 
         for (const searchCriteria of newCriteria) {
