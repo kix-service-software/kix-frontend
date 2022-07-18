@@ -135,7 +135,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
         if (this.autocomplete) {
             const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
-            nodes = treeHandler?.getTree() || [];
+            nodes = treeHandler?.getSelectedNodes() || [];
         } else {
             nodes = await this.loadNodes().catch(() => []);
         }
