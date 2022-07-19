@@ -326,11 +326,16 @@ export class ContextService {
 
             EventService.getInstance().publish(ContextEvents.CONTEXT_CHANGED, context);
 
-            await this.activeContext.postInit();
+            if (!this.activeContext.initialized) {
+                await this.activeContext.postInit();
 
-            for (const extension of context?.contextExtensions) {
-                await extension?.postInitContext(context);
+                for (const extension of context?.contextExtensions) {
+                    await extension?.postInitContext(context);
+                }
+
+                this.activeContext.initialized = true;
             }
+
             await context.update(null);
 
             EventService.getInstance().publish(RoutingEvent.ROUTE_TO,
