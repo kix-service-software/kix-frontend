@@ -54,13 +54,20 @@ class Component {
         for (const cv of currentValues) {
             const existingValue = this.state.dynamicValues.find((bv) => bv.value.id === cv.id);
             if (existingValue) {
+
                 if (existingValue.value.operator !== cv.operator) {
                     await existingValue.setOperator(cv.operator);
                 }
+
+                if (!existingValue.value.operator) {
+                    existingValue.setOperationTree();
+                }
+
                 if (existingValue.value.value !== cv.value) {
                     existingValue.setValue(cv.value);
                     existingValue.setCurrentValue(true);
                 }
+
                 existingValue.required = cv.required;
             } else {
                 const value = new DynamicFormFieldValue(this.manager, cv, cv.id);

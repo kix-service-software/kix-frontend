@@ -212,7 +212,7 @@ export class DynamicFormFieldValue {
         }
     }
 
-    private async setOperationTree(): Promise<void> {
+    public async setOperationTree(): Promise<void> {
         const operationsType = await this.manager.getOpertationsType(this.value.property);
         switch (operationsType) {
             case DynamicFormOperationsType.STRING:
