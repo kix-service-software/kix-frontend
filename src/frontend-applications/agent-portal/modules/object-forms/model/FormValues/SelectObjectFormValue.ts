@@ -354,7 +354,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
         if (Array.isArray(this.value)) {
             for (const v of this.value) {
-                const node = TreeUtil.findNode(this.treeHandler?.getTree(), v);
+                const node = TreeUtil.findNode(nodes, v);
                 if (node) {
                     node.selected = true;
                 }
