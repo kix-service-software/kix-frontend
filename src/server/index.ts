@@ -44,6 +44,8 @@ async function initializeServer(): Promise<void> {
     LoggingService.getInstance().info('[SERVER] Start');
 
     const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+    const maxConfig = serverConfig?.SOCKET_MAX_HTTP_BUFFER_SIZE;
+    const maxHttpBufferSize = maxConfig || 1e8;
 
     if (serverConfig.CLUSTER_ENABLED) {
         if (cluster.isPrimary) {
@@ -83,7 +85,9 @@ async function initializeServer(): Promise<void> {
             await initApplication();
 
             const httpServer = createHTTPServer(false);
-            const io = new SocketServer(httpServer);
+            const io = new SocketServer(httpServer, {
+                maxHttpBufferSize
+            });
 
             // use the cluster adapter
             io.adapter(createAdapter());
@@ -99,7 +103,10 @@ async function initializeServer(): Promise<void> {
         await initApplication();
 
         const httpServer = createHTTPServer();
-        const io = require('socket.io')(httpServer);
+
+        const io = require('socket.io')(httpServer, {
+            maxHttpBufferSize
+        });
 
         await SocketService.getInstance().initialize(io);
 
