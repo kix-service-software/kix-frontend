@@ -10,6 +10,8 @@
 import { FormContext } from '../../../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
+import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { RichTextFormValue } from '../../../../../object-forms/model/FormValues/RichTextFormValue';
@@ -148,13 +150,18 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                 ArticleProperty.TO
             ];
 
+            let submitPattern = 'Translatable#Save';
             if (channel?.Name === 'note') {
                 this.disableChannelFormValues(allFields.filter((p) => !noteFields.includes(p)));
                 this.enableChannelFormValues(channel.Name, noteFields);
             } else if (channel?.Name === 'email') {
                 this.disableChannelFormValues(allFields.filter((p) => !mailFields.includes(p)));
                 this.enableChannelFormValues(channel.Name, mailFields);
+                submitPattern = 'Translatable#Send';
             }
+
+            const context = this.objectValueMapper.objectFormHandler.context;
+            context.setAdditionalInformation(AdditionalContextInformation.DIALOG_SUBMIT_BUTTON_TEXT, submitPattern);
         } else {
             this.disableChannelFormValues(allFields);
         }
