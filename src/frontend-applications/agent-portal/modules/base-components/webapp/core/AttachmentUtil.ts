@@ -53,7 +53,8 @@ export class AttachmentUtil {
             if (mt === '') {
                 return mt === file.type;
             } else {
-                return !!file.type.match(new RegExp(mt));
+                const pattern = mt;
+                return !!file.type.match(new RegExp(pattern.replace('+', '\\\+')));
             }
         });
     }
