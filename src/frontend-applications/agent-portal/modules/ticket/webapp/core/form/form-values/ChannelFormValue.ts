@@ -90,7 +90,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                     formValue = new RecipientFormValue(property, article, this.objectValueMapper, this);
                     break;
                 case ArticleProperty.FROM:
-                    formValue = new FromObjectFormValue(property, article.ticket, this.objectValueMapper, this);
+                    formValue = new FromObjectFormValue(property, article, this.objectValueMapper, this);
                     break;
                 case ArticleProperty.CUSTOMER_VISIBLE:
                     formValue = new CustomerVisibleFormValue(property, article, this.objectValueMapper, this);
