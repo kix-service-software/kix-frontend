@@ -145,18 +145,16 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
     }
 
     public async setFormValue(value: any): Promise<void> {
+        let newValue;
         if (value) {
             if (Array.isArray(value)) {
-                value = value[0];
-            }
-
-            if (value) {
-                return super.setFormValue(value);
+                newValue = value[0];
             } else {
-                return super.setFormValue(null);
+                newValue = value;
             }
-        } else {
-            return super.setFormValue(null);
+        }
+        if (newValue !== this.value) {
+            return super.setFormValue(newValue);
         }
     }
 

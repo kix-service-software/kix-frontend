@@ -25,15 +25,15 @@ export class FromObjectFormValue extends SelectObjectFormValue {
 
     public constructor(
         property: string,
-        ticket: Ticket,
+        object: any,
         objectValueMapper: ObjectFormValueMapper,
         public parent: ObjectFormValue
     ) {
-        super(property, ticket, objectValueMapper, parent);
+        super(property, object, objectValueMapper, parent);
 
         this.hasFilter = false;
 
-        ticket?.addBinding(TicketProperty.QUEUE_ID, async (queueId: number) => {
+        this.objectValueMapper?.object?.addBinding(TicketProperty.QUEUE_ID, async (queueId: number) => {
             this.initNodes(queueId);
         });
     }
