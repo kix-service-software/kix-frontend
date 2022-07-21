@@ -311,6 +311,23 @@ export class TicketAPIService extends KIXObjectAPIService {
 
 
 
+    public async updateObject(
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number
+    ): Promise<string | number> {
+
+        if (parameter.length) {
+            const uri = this.buildUri(this.RESOURCE_URI, objectId);
+            await super.executeUpdateOrCreateRequest<number>(
+                token, clientRequestId, parameter, uri, this.objectType, 'TicketID'
+            ).catch((error: Error) => {
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                throw new Error(error.Code, error.Message);
+            });
+        }
+
+        return objectId;
+    }
 
     public async commitObject(token: string, clientRequestId: string, ticket: Ticket): Promise<number | string> {
 
