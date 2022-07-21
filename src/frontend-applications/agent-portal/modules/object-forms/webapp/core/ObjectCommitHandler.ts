@@ -49,12 +49,12 @@ export class ObjectCommitHandler<T extends KIXObject = KIXObject> {
         this.extensions.push(extension);
     }
 
-    public async prepareObject(object: T, filterDisabledFormValues: boolean = true): Promise<T> {
+    public async prepareObject(object: T, forCommit: boolean = true): Promise<T> {
         const newObject = this.cloneObject(object);
 
-        this.deleteCommonProperties(newObject, filterDisabledFormValues);
-        this.prepareDynamicFields(newObject, filterDisabledFormValues);
-        if (filterDisabledFormValues) {
+        this.deleteCommonProperties(newObject, forCommit);
+        this.prepareDynamicFields(newObject, forCommit);
+        if (forCommit) {
             this.removeDisabledProperties(newObject);
         }
 
@@ -83,7 +83,7 @@ export class ObjectCommitHandler<T extends KIXObject = KIXObject> {
         return newObject;
     }
 
-    protected deleteCommonProperties(object: KIXObject, forSave: boolean): void {
+    protected deleteCommonProperties(object: KIXObject, forCommit: boolean): void {
         delete object['propertyBindings'];
         delete object['displayValues'];
         delete object['displayIcons'];
@@ -96,12 +96,12 @@ export class ObjectCommitHandler<T extends KIXObject = KIXObject> {
         delete object.Links;
         delete object.ObjectId;
 
-        if (forSave) {
+        if (forCommit) {
             delete object['temp'];
         }
     }
 
-    protected prepareDynamicFields(object: KIXObject, filterDisabledFormValues: boolean = true): void {
+    protected prepareDynamicFields(object: KIXObject, forCommit: boolean): void {
         const dfValues: DynamicFieldValue[] = [];
         if (Array.isArray(object.DynamicFields)) {
             const isNewContext = this.objectValueMapper?.formContext === FormContext.NEW;
@@ -109,7 +109,7 @@ export class ObjectCommitHandler<T extends KIXObject = KIXObject> {
             for (const dfv of object.DynamicFields) {
                 const formValue = this.objectValueMapper?.findFormValue(`DynamicFields.${dfv.Name}`);
 
-                if (!filterDisabledFormValues || formValue?.enabled) {
+                if (!forCommit || formValue?.enabled) {
                     const dfValue = new DynamicFieldValue(dfv);
                     delete dfValue['propertyBindings'];
                     delete dfValue['displayValues'];

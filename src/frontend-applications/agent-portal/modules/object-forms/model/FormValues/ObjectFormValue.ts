@@ -266,7 +266,7 @@ export class ObjectFormValue<T = any> {
                 });
 
                 let newValue = await Promise.all(newValuePromises);
-                newValue = newValue.filter((v) => v !== '' && v !== null && typeof v !== 'undefined');
+                newValue = newValue.filter((v) => v !== '' && v !== null && typeof v !== 'undefined' && !Array.isArray(v));
                 value = newValue as any;
             }
         }

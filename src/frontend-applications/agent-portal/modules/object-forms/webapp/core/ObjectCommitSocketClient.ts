@@ -7,7 +7,6 @@
  * --
  */
 
-import { response } from 'express';
 import { IdService } from '../../../../model/IdService';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
