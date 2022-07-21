@@ -12,6 +12,7 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { Report } from '../../model/Report';
 import { ReportDefinition } from '../../model/ReportDefinition';
 import { ReportParameter } from '../../model/ReportParamater';
+import { DataSource } from '../../model/DataSource';
 
 export class ReportService extends KIXObjectService<Report> {
 
@@ -28,6 +29,7 @@ export class ReportService extends KIXObjectService<Report> {
     private constructor() {
         super(KIXObjectType.REPORT);
         this.objectConstructors.set(KIXObjectType.REPORT, [Report]);
+        this.objectConstructors.set(KIXObjectType.REPORT_DATA_SOURCE, [DataSource]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {

@@ -133,7 +133,7 @@ export enum KIXObjectType {
 
     REPORT_RESULT = 'ReportResult',
 
-    REPORT_DATA_SOURCE = 'DataSource',
+    REPORT_DATA_SOURCE = 'ReportDataSource',
 
     ROLE = 'Role',
 
