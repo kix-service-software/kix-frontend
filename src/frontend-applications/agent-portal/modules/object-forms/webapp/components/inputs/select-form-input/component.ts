@@ -139,11 +139,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         const isFilterInput = filterInput && document.activeElement === filterInput;
 
-        let searchValue;
-
         if (isFilterInput && !this.navigationKeyPressed(event.key)) {
             this.stopPropagation(event);
-            searchValue = event.target.value;
 
         } else if (isFilterInput && event.key === 'ArrowUp' || event.key === 'ArrowDown') {
             if (hiddenInput) {
