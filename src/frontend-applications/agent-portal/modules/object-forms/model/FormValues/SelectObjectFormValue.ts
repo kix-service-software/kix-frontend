@@ -105,7 +105,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
     }
 
     public async setFormValue(value: any): Promise<void> {
-        super.setFormValue(value);
+        await super.setFormValue(value);
         if (!this.readonly) {
             await this.loadSelectedValues();
         }
@@ -257,8 +257,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             this.structureOption = !structureOption || Boolean(structureOption?.value);
         }
 
-        // INFO: do not init treehandler here it set selected nodes and
-        // for some DFs type not all relevant info is already set (e.g. possibleValues)
+        // INFO: do not init treehandler here bacause it will set selected nodes and
+        // for some DFs type not all relevant info is already given (e.g. possibleValues)
 
         await super.initFormValueByField(field);
     }
@@ -434,10 +434,11 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                 );
             }
 
-            // ignore placeholder and "useTextAsId" values (handle them like freetext)
+            // ignore text values if ids are no texts themself (handle them like freetext), ignore placeholders
             // and collect ids only if objectType is given (relevant if "additional node" is selected/current value)
-            const idsToLoad = !this.useTextAsId && this.objectType
-                ? objectIds.filter((id) => !isNaN(Number(id)) || typeof id !== 'string' || !id.match(/<KIX_.+>/))
+            const idsToLoad = this.objectType
+                ? !this.useTextAsId ? objectIds.filter((id) => !isNaN(Number(id)))
+                    : objectIds.filter((id) => !id.toString().match(/<KIX_.+>/))
                 : [];
             if (idsToLoad.length) {
                 if (this.isAutoComplete) {

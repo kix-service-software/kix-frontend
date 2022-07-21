@@ -48,8 +48,7 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
                 this.objectValueMapper?.validateFormValue(this, true);
             });
 
-        const contactFormValue = this.objectValueMapper?.findFormValue(TicketProperty.CONTACT_ID);
-        this.setOrganisationValue(contactFormValue?.value);
+        await this.setOrganisationValue();
     }
 
     public destroy(): void {
@@ -63,44 +62,59 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
         const contactValue = this.objectValueMapper.findFormValue(TicketProperty.CONTACT_ID);
         if (contactValue?.value) {
             const contactId = Array.isArray(contactValue?.value) ? contactValue?.value[0] : contactValue?.value;
-            const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, [contactId])
-                .catch((): Contact[] => []);
-            if (contacts.length) {
-                const contact = contacts[0];
+            if (!isNaN(Number(contactId))) {
+                const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, [contactId])
+                    .catch((): Contact[] => []);
+                if (contacts.length) {
+                    const contact = contacts[0];
 
-                const organisations = await KIXObjectService.loadObjects<Organisation>(
-                    KIXObjectType.ORGANISATION, contact.OrganisationIDs
-                );
+                    const organisations = await KIXObjectService.loadObjects<Organisation>(
+                        KIXObjectType.ORGANISATION, contact.OrganisationIDs
+                    );
 
-                const promises = [];
-                for (const o of organisations) {
-                    promises.push(ObjectReferenceUtil.createTreeNode(
-                        o, this.showInvalidNodes, this.isInvalidClickable, this.useTextAsId, this.translatable
-                    ));
+                    const promises = [];
+                    for (const o of organisations) {
+                        promises.push(ObjectReferenceUtil.createTreeNode(
+                            o, this.showInvalidNodes, this.isInvalidClickable, this.useTextAsId, this.translatable
+                        ));
+                    }
+
+                    const nodes = (await Promise.all<TreeNode>(promises)).filter((n) => n instanceof TreeNode);
+
+                    SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+
+                    this.possibleValues = contact.OrganisationIDs;
+                    this.treeHandler.setTree(nodes);
                 }
-
-                const nodes = await Promise.all<TreeNode>(promises);
-                nodes.filter((n) => n instanceof TreeNode);
-
-                SortUtil.sortObjects(nodes, 'label', DataType.STRING);
-
-                this.possibleValues = contact.OrganisationIDs;
-                this.treeHandler.setTree(nodes);
+            } else if (typeof contactId === 'string') {
+                const node = new TreeNode(contactId, contactId.toString());
+                this.possibleValues = [contactId];
+                this.treeHandler.setTree([node]);
+            } else {
+                this.clearPossibleValuesAndNodes();
             }
         } else {
             this.clearPossibleValuesAndNodes();
         }
     }
 
-    private async setOrganisationValue(contactId: number): Promise<void> {
+    private async setOrganisationValue(contactId?: number): Promise<void> {
         let organisationId: number | string = null;
+
+        if (!contactId) {
+            const contactFormValue = this.objectValueMapper?.findFormValue(TicketProperty.CONTACT_ID);
+            contactId = contactFormValue?.value;
+        }
+        if (Array.isArray(contactId)) {
+            contactId = contactId[0];
+        }
 
         if (!contactId) {
             this.clearPossibleValuesAndNodes();
         }
 
         // if contact is an id, get its organisations
-        else if (!isNaN(contactId)) {
+        else if (!isNaN(Number(contactId))) {
             const contacts = await KIXObjectService.loadObjects<Contact>(
                 KIXObjectType.CONTACT, [contactId], null, null, true
             ).catch((): Contact[] => []);
@@ -118,15 +132,32 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
         }
 
         // else use it as simple string value (unknown contact => unknown organisation)
-        else {
-            const node = new TreeNode(contactId, contactId.toString());
-            this.possibleValues = [contactId];
-            this.treeHandler.setTree([node]);
-            this.treeHandler.setSelection([node], true);
-            organisationId = contactId;
+        else if (typeof contactId === 'string') {
+            const node = this.treeHandler.getTree().find((n) => n.id === contactId);
+            if (node) {
+                organisationId = contactId;
+                this.treeHandler.setTree([node]);
+                this.treeHandler.setSelection([node], true, false, true);
+            }
         }
 
-        this.setFormValue(organisationId);
+        return this.setFormValue(organisationId ? [organisationId] : null);
+    }
+
+    public async setFormValue(value: any): Promise<void> {
+        if (value) {
+            if (Array.isArray(value)) {
+                value = value[0];
+            }
+
+            if (value) {
+                return super.setFormValue(value);
+            } else {
+                return super.setFormValue(null);
+            }
+        } else {
+            return super.setFormValue(null);
+        }
     }
 
     private clearPossibleValuesAndNodes(): void {

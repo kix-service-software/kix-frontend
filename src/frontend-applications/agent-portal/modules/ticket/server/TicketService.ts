@@ -406,6 +406,11 @@ export class TicketAPIService extends KIXObjectAPIService {
                 }
             }
 
+            // new/unkown contact
+            else {
+                article.To = ticket.ContactID.toString();
+            }
+
             // switch To and From with external sendertype by channel note on new ticket (= incomming call)
             // - so ticket "is" from customer
             if (!ticket.TicketID && article.ChannelID === 1) {

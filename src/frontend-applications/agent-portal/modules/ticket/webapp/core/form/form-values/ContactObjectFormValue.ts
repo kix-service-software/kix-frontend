@@ -42,19 +42,48 @@ export class ContactObjectFormValue extends SelectObjectFormValue {
         super.initFormValue();
     }
 
+    public async setFormValue(value: any): Promise<void> {
+        if (value) {
+            if (Array.isArray(value)) {
+                value = value[0];
+            }
+
+            if (value) {
+
+                // if unknown contact
+                if (isNaN(Number(value))) {
+                    value = await this.getPossibleContactId(value);
+                }
+
+                return super.setFormValue(value);
+            } else {
+                return super.setFormValue(null);
+            }
+        } else {
+            return super.setFormValue(null);
+        }
+    }
+
     public async setObjectValue(value: (string | number)[]): Promise<void> {
         let contactId = null;
 
-        if (Array.isArray(value) && value.length) {
+        if (Array.isArray(value)) {
+            contactId = value[0];
+        } else {
+            contactId = value;
+        }
+
+        if (contactId) {
             const nodes = this.getSelectableTreeNodeValues();
-            const currentNode = TreeUtil.findNode(nodes, value[0]);
-            contactId = currentNode ? currentNode.id : value;
+            const currentNode = TreeUtil.findNode(nodes, contactId);
+            contactId = currentNode?.id || contactId;
             if (isNaN(contactId)) {
-                contactId = await this.handleUnknownContactId(contactId);
+                contactId = await this.getPossibleContactId(contactId);
             }
         }
 
-        if (contactId && isNaN(contactId)) {
+        // if unknown contact
+        if (contactId && isNaN(Number(contactId))) {
             const node = new TreeNode(value, value.toString());
             this.treeHandler.setTree([node]);
             this.treeHandler.setSelection([node], true, true);
@@ -63,7 +92,7 @@ export class ContactObjectFormValue extends SelectObjectFormValue {
         await super.setObjectValue(contactId);
     }
 
-    private async handleUnknownContactId(contactId: number | string): Promise<string | number> {
+    private async getPossibleContactId(contactId: number | string): Promise<string | number> {
         if (FormValidationService.getInstance().isValidEmail(contactId.toString())) {
             const loadingOptions = new KIXObjectLoadingOptions([
                 new FilterCriteria(

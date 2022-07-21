@@ -360,8 +360,10 @@ export class ObjectFormValue<T = any> {
     }
 
     public async setFormValue(value: any): Promise<void> {
-        if (!this.readonly) {
-            this.value = value;
+        if (this.value !== value) {
+            if (!this.readonly) {
+                this.value = value;
+            }
         }
     }
 
