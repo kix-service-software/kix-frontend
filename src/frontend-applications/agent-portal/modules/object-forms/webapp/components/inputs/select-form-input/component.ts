@@ -124,7 +124,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         if (event.key === 'Enter' && this.formValue.freeText) {
-            if (Array.isArray(this.formValue.value)) {
+            if (Array.isArray(this.formValue.value) && this.formValue.multiselect) {
                 this.formValue.setFormValue([...this.formValue.value, event.target.value]);
             } else {
                 this.formValue.setFormValue([event.target.value]);
