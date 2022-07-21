@@ -14,7 +14,8 @@ export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public formValues: ObjectFormValue[] = [],
-        public prepared: boolean = true
+        public prepared: boolean = true,
+        public submitPattern: string = 'Translatable#Save'
     ) {
         super();
     }

@@ -18,6 +18,7 @@ import { IdService } from '../../../../../model/IdService';
 import { ObjectFormHandler } from '../../core/ObjectFormHandler';
 import { ObjectFormEvent } from '../../../model/ObjectFormEvent';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -31,6 +32,28 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         this.context = ContextService.getInstance().getActiveContext();
+
+        this.context.registerListener(IdService.generateDateBasedId('object-forms'), {
+            additionalInformationChanged: (key: string, value: any) => {
+                if (key === AdditionalContextInformation.DIALOG_SUBMIT_BUTTON_TEXT) {
+                    this.state.submitPattern = value;
+                }
+            },
+            filteredObjectListChanged: () => null,
+            objectChanged: () => null,
+            objectListChanged: () => null,
+            scrollInformationChanged: () => null,
+            sidebarLeftToggled: () => null,
+            sidebarRightToggled: () => null
+        });
+
+        const submitButtonText = this.context?.getAdditionalInformation(
+            AdditionalContextInformation.DIALOG_SUBMIT_BUTTON_TEXT
+        );
+        if (submitButtonText) {
+            this.state.submitPattern = submitButtonText;
+        }
+
         await this.loadForm();
 
         this.subscriber = {
