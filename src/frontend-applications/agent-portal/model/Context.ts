@@ -61,6 +61,8 @@ export abstract class Context {
 
     public contextExtensions: ContextExtension[] = [];
 
+    public initialized: boolean = false;
+
     public constructor(
         public descriptor: ContextDescriptor,
         protected objectId: string | number = null,
