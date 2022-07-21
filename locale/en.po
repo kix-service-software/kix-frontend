@@ -4131,6 +4131,9 @@ msgstr ""
 msgid "; (semicolon)"
 msgstr ""
 
+msgid "Send"
+msgstr ""
+
 msgid "Send despite out of office"
 msgstr ""
 

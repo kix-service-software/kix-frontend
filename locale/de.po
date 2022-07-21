@@ -4331,6 +4331,9 @@ msgstr "Self Service Handbuch"
 msgid "; (semicolon)"
 msgstr "; (Semikolon)"
 
+msgid "Send"
+msgstr "Senden"
+
 msgid "Send despite out of office"
 msgstr "Trotz „nicht im Büro“"
 
@@ -5753,9 +5756,6 @@ msgstr "PLZ"
 
 #~ msgid "Selected ticket functions"
 #~ msgstr "Ausgewählte Ticketfunktionen"
-
-#~ msgid "Send"
-#~ msgstr "Senden"
 
 #~ msgid "State successfully created."
 #~ msgstr "Status wurde erfolgreich angelegt."
