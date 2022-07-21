@@ -15,20 +15,22 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <div.input-group>
 
                <div.col-11.col-sm-2.d-flex.p-0>
-                  <span.flex-fill.input-group-text.min-w-0.p-0.ps-2.pe-2 class={
+                  <span.object-forms-component.flex-fill.input-group-text.min-w-0.p-0.ps-2.pe-2.rounded-0.rounded-start class={
                      border: !state.valid,
                      'bg-danger': !state.valid,
                      'text-white': !state.valid,
                      'border-danger': !state.valid,
-                     'rounded-left"': !state.valid
+                     'rounded-left"': !state.valid,
+                     'border-end-0': state.hint,
+                     'border-end-1': !state.hint
                   }
                   title=state.label>
-                     <span.text-truncate>${state.label}</span>
+                  <span.text-truncate>${state.label}</span>
                      <if(state.required)>*</if>
                   </span>
 
                   <if(state.hint)>
-                     <span.input-group-text.hint-wrapper>
+                     <span.object-forms-component.input-group-text.hint-wrapper.rounded-0.border-start-0>
                         <overlay-icon isHint=true content=state.hint title=state.label/>
                      </span>
                   </if>

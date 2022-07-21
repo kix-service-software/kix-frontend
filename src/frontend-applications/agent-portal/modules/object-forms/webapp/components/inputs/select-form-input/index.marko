@@ -15,7 +15,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
          ...state.dropdownAttributes
          on-click("inputClicked")
       >
-         <div.form-control.select-input-container class={readonly: state.readonly}>
+         <div.form-control.select-input-container.rounded-0 class={readonly: state.readonly}>
             <ul.list-group.list-group-horizontal.flex-wrap>
                <for|node| of=state.selectedNodes>
 
@@ -32,10 +32,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </ul>
          </div>
          <if(!state.readonly)>
-         <button.btn.btn-outline-secondary type="button" on-click("clearValue")>
+         <button.object-forms-component.btn.btn-outline-secondary.rounded-0.border-start-0.border-end-0 type="button" on-click("clearValue")>
             <i.far.fa-times-circle/>
          </button>
-         <button.btn.btn-outline-secondary.dropdown-toggle type="button"/>
+         <button.object-forms-component.btn.btn-outline-secondary.dropdown-toggle.rounded-0.border-start-0.border-start-0.rounded-end type="button"/>
       </if>
       </div>
       <div.select-input-list.dropdown-menu.w-100.pt-0.pb-0

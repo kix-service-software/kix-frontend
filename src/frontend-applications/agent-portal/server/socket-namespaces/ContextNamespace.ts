@@ -122,6 +122,7 @@ export class ContextNamespace extends SocketNameSpace {
 
                 const contextOptions = options.filter((c) => c.ContextMetadata === 'Context');
 
+
                 LoggingService.getInstance().info(`Build ${contextOptions.length} context configurations.`);
 
                 for (const contextOption of contextOptions) {
