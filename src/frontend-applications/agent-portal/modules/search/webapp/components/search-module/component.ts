@@ -54,7 +54,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         table?.removeAdditonalColumns();
                         await table?.addAdditionalColumns(columns);
 
-                        table.sort(
+                        table?.sort(
                             context?.getSearchCache().sortAttribute,
                             context.getSearchCache().sortDescanding ? SortOrder.DOWN : SortOrder.UP
                         );
