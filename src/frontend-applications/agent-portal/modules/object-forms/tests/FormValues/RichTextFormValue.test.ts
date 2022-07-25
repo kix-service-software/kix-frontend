@@ -40,8 +40,10 @@ describe('RichTextFormValue', () => {
             expect(formValue.noImages).false;
         });
 
-        it('Option AutoComplete should not exist', () => {
-            expect(formValue.autocompleteOption).not.exist;
+        it('Option AutoComplete should be empty', () => {
+            expect(formValue.autocompleteOption).exist;
+            expect(formValue.autocompleteOption.autocompleteObjects).an('array');
+            expect(formValue.autocompleteOption.autocompleteObjects).empty;
         });
 
     });
@@ -68,8 +70,10 @@ describe('RichTextFormValue', () => {
             expect(formValue.noImages).true;
         });
 
-        it('Option AutoComplete should not exist', () => {
-            expect(formValue.autocompleteOption).not.exist;
+        it('Option AutoComplete should be empty', () => {
+            expect(formValue.autocompleteOption).exist;
+            expect(formValue.autocompleteOption.autocompleteObjects).an('array');
+            expect(formValue.autocompleteOption.autocompleteObjects).empty;
         });
 
     });

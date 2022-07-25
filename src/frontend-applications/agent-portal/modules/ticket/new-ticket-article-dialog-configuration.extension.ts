@@ -108,17 +108,17 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new FormConfiguration(formId, 'Translatable#New Article',
                 ['ticket-article-new-form-page'],
-                KIXObjectType.ARTICLE
+                KIXObjectType.TICKET, undefined, FormContext.EDIT
             )
         );
 
-        ModuleConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.ARTICLE, formId);
+        ModuleConfigurationService.getInstance().registerFormId(formId);
 
         const replyFormId = 'article-reply';
         configurations.push(
             new FormConfiguration(replyFormId, 'Translatable#Reply',
-                undefined, KIXObjectType.ARTICLE,
-                undefined, FormContext.NEW, null,
+                undefined, KIXObjectType.TICKET,
+                undefined, FormContext.EDIT, null,
                 [
                     new FormPageConfiguration('article-reply-page', 'Translatable#Reply',
                         undefined, undefined, undefined,
@@ -163,7 +163,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const forwardFormId = 'article-forward';
         configurations.push(
             new FormConfiguration(forwardFormId, 'Translatable#Forward',
-                undefined, KIXObjectType.ARTICLE,
+                undefined, KIXObjectType.TICKET,
                 undefined, FormContext.NEW, null,
                 [
                     new FormPageConfiguration('article-forward-page', 'Translatable#Forward',

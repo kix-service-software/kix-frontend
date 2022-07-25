@@ -32,7 +32,7 @@ export class ObjectFormHandler<T extends KIXObject = any> {
     public objectFormValidator: ObjectFormValidator;
 
     public destroy(): void {
-        this.objectFormValueMapper.destroy();
+        this.objectFormValueMapper?.destroy();
         this.objectFormValidator?.destroy();
     }
 

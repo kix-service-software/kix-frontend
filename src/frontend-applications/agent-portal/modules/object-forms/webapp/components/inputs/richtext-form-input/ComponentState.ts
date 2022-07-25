@@ -14,7 +14,7 @@ export class ComponentState {
     public constructor(
         public currentValue: string = null,
         public noImages: boolean = false,
-        public editorId: string = IdService.generateDateBasedId('-editor'),
+        public editorId: string = IdService.generateDateBasedId('editor'),
         public prepared: boolean = false,
         public readonly: boolean = false
     ) { }
