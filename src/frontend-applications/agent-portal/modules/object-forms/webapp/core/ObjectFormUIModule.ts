@@ -13,7 +13,6 @@ import { DateTimeFormValueValidator } from './validation/validator/DateTimeFormV
 import { PossibleValuesValidator } from './validation/validator/PossibleValuesValidator';
 import { RequiredFormValueValidator } from './validation/validator/RequiredFormValueValidator';
 import { SelectionFormValueValidator } from './validation/validator/SelectionFormValueValidator';
-import { DynamicFieldDateTimeValidator } from './validation/validator/dynamic-fields/DynamicFieldDateTimeValidator';
 import { RegexFormValueValidator } from './validation/validator/RegexFormValueValidator';
 
 export class UIModule implements IUIModule {
@@ -27,7 +26,6 @@ export class UIModule implements IUIModule {
         ObjectFormRegistry.getInstance().registerObjectFormValueValidator(SelectionFormValueValidator);
         ObjectFormRegistry.getInstance().registerObjectFormValueValidator(DateTimeFormValueValidator);
         ObjectFormRegistry.getInstance().registerObjectFormValueValidator(PossibleValuesValidator);
-        ObjectFormRegistry.getInstance().registerObjectFormValueValidator(DynamicFieldDateTimeValidator);
         ObjectFormRegistry.getInstance().registerObjectFormValueValidator(RegexFormValueValidator);
     }
 
