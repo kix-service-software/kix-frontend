@@ -56,15 +56,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.state.noImages = this.formValue?.noImages;
 
-        const autocompleteOption = this.formValue?.autocompleteOption;
-        if (autocompleteOption) {
-            const component = (this as any).getComponent(this.state.editorId);
-            if (component) {
-                component.setAutocompleteConfiguration(autocompleteOption);
-            }
-        }
-
         this.state.prepared = true;
+
+        setTimeout(() => {
+            const autocompleteOption = this.formValue?.autocompleteOption;
+            if (autocompleteOption) {
+                const component = (this as any).getComponent(this.state.editorId);
+                if (component) {
+                    component.setAutocompleteConfiguration(autocompleteOption);
+                }
+            }
+        }, 150);
     }
 
     public valueChanged(value: string): void {

@@ -45,12 +45,11 @@ export class ArticleNewAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        const formId = await FormService.getInstance().getFormIdByContext(FormContext.NEW, KIXObjectType.ARTICLE);
         const editContext = await ContextService.getInstance().setActiveContext(EditTicketDialogContext.CONTEXT_ID,
             this.ticketId, undefined,
             [
                 ['REFERENCED_SOURCE_OBJECT_ID', this.ticketId],
-                [AdditionalContextInformation.FORM_ID, formId]
+                [AdditionalContextInformation.FORM_ID, 'ticket-article-new-form']
             ]
         );
         editContext.setIcon(this.icon);

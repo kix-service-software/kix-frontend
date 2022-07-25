@@ -7,6 +7,7 @@
  * --
  */
 
+import { AutocompleteOption } from '../../../../../../model/AutocompleteOption';
 import { FormContext } from '../../../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
@@ -100,7 +101,10 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                     formValue.required = true;
                     break;
                 case ArticleProperty.BODY:
-                    formValue = new RichTextFormValue(property, article, this.objectValueMapper, this);
+                    formValue = new RichTextFormValue(
+                        property, article, this.objectValueMapper, this,
+                        [new AutocompleteOption(KIXObjectType.TEXT_MODULE, '::')]
+                    );
                     formValue.required = true;
                     break;
                 case ArticleProperty.ATTACHMENTS:
