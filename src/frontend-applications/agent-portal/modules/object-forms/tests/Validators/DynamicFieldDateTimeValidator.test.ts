@@ -13,7 +13,6 @@ import { KIXObjectService } from '../../../base-components/webapp/core/KIXObject
 import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
 import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldValue';
 import { DynamicFieldDateTimeFormValue } from '../../model/FormValues/DynamicFields/DynamicFieldDateTimeFormValue';
-import { DynamicFieldDateTimeValidator } from '../../webapp/core/validation/validator/dynamic-fields/DynamicFieldDateTimeValidator';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { TestObjectValueMapper } from '../MockData';
 
