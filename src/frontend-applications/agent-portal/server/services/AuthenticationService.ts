@@ -43,7 +43,8 @@ export class AuthenticationService {
     }
 
     private async createCallbackToken(): Promise<void> {
-        const backendCallbackToken = jwt.sign({ name: 'backen-callback', created: Date.now() }, this.tokenSecret);
+        const backendCallbackToken = jwt.sign({ name: 'backend-callback', created: Date.now() }, this.tokenSecret);
+        ConfigurationService.getInstance().saveDataFileContent('backend_callback_token.json', { 'CallbackToken': backendCallbackToken });
         await CacheService.getInstance().set('CALLBACK_TOKEN', backendCallbackToken);
     }
 
@@ -91,6 +92,11 @@ export class AuthenticationService {
 
     public async getCallbackToken(): Promise<string> {
         let token = await CacheService.getInstance().get('CALLBACK_TOKEN');
+        if (!token) {
+            // check if we have one in the filesystem
+            const callbackToken = ConfigurationService.getInstance().getDataFileContent('backend_callback_token.json');
+            token = callbackToken.CallbackToken;
+        }
         if (!token) {
             await this.createCallbackToken();
             token = await CacheService.getInstance().get('CALLBACK_TOKEN');
