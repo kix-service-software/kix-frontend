@@ -239,11 +239,16 @@ export class ContextNamespace extends SocketNameSpace {
                 fileName, []
             );
 
-            const index = contextList.findIndex((cp) => cp.instanceId === data?.contextPreference?.instanceId);
+            const index = contextList
+                .filter((c) => c !== null && typeof c !== 'undefined')
+                .findIndex((cp) => cp?.instanceId === data?.contextPreference?.instanceId);
             if (index !== -1) {
                 contextList.splice(index, 1);
             }
-            contextList.push(data.contextPreference);
+
+            if (data.contextPreference) {
+                contextList.push(data.contextPreference);
+            }
             ConfigurationService.getInstance().saveDataFileContent(fileName, contextList);
         }
 
@@ -262,7 +267,9 @@ export class ContextNamespace extends SocketNameSpace {
                 fileName, []
             );
 
-            const index = contextList.findIndex((cp) => cp.instanceId === data?.instanceId);
+            const index = contextList
+                .filter((c) => c !== null && typeof c !== 'undefined')
+                .findIndex((cp) => cp?.instanceId === data?.contextPreference?.instanceId);
             if (index !== -1) {
                 contextList.splice(index, 1);
             }

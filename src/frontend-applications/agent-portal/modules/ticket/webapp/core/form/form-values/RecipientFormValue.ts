@@ -19,12 +19,12 @@ import { Contact } from '../../../../../customer/model/Contact';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { SelectObjectFormValue } from '../../../../../object-forms/model/FormValues/SelectObjectFormValue';
 import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectFormValueMapper';
-import addrparser from 'address-rfc2822';
 import { FilterCriteria } from '../../../../../../model/FilterCriteria';
 import { SearchOperator } from '../../../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../../model/FilterType';
 import { SystemAddress } from '../../../../../system-address/model/SystemAddress';
+import addrparser from 'address-rfc2822';
 
 export class RecipientFormValue extends SelectObjectFormValue {
 
@@ -74,36 +74,31 @@ export class RecipientFormValue extends SelectObjectFormValue {
         const valueDefined = typeof this.value !== 'undefined' && this.value !== null;
 
         if (valueDefined && this.treeHandler) {
-            const contactValues: any[] = Array.isArray(this.value) ? this.value
+            const contactValues: any[] = Array.isArray(this.value)
+                ? this.value.filter((v) => v !== null && typeof v !== 'undefined')
                 : typeof this.value === 'string' ? (this.value as string).split(/\s?,\s/) : [];
 
-            const emailAddresses = [];
+            let emailAddresses = [];
             const contactIds = [];
             const placeholders = [];
-            contactValues.forEach((v) => {
-                v = v.replace(/^(.*?),$/, '$1');
+            for (let value of contactValues) {
+                value = value.replace(/^(.*?),$/, '$1');
 
-                if (v.match(/(<|&lt;)KIX_/)) {
-                    placeholders.push(v);
-                } else if (isNaN(v)) {
-                    addrparser.parse(v).forEach((address) => {
-                        if (address.phrase && address.phrase !== address.address) {
-                            emailAddresses.push(`"${address.phrase}" <${address.address}>`);
-                        } else {
-                            emailAddresses.push(address.address);
-                        }
-                    });
-                } else if (v !== null && v !== '') {
-                    contactIds.push(Number(v));
+                if (value.match(/(<|&lt;)KIX_/)) {
+                    placeholders.push(value);
+                } else if (isNaN(value)) {
+                    emailAddresses = this.parseAddresses(value);
+                } else if (value !== null && value !== '') {
+                    contactIds.push(Number(value));
                 }
-            });
+            }
 
-            if (contactIds.length) {
+            if (contactIds?.length) {
                 const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, contactIds);
                 selectedNodes = await this.getContactNodes(contacts);
             }
 
-            if (emailAddresses.length) {
+            if (emailAddresses?.length) {
                 selectedNodes = await this.addEmailAddressNodes(emailAddresses, selectedNodes);
             }
 
@@ -111,10 +106,9 @@ export class RecipientFormValue extends SelectObjectFormValue {
                 KIXObjectType.SYSTEM_ADDRESS
             );
 
-            selectedNodes = [
-                ...selectedNodes.filter((n) => !systemAddresses.some((sa) => sa.Name === n.id)),
-                ...placeholders.map((n) => new TreeNode(n, n, 'kix-icon-man-bubble'))
-            ];
+            const filteredSystemNodes = selectedNodes.filter((n) => !systemAddresses.some((sa) => sa.Name === n.id));
+            const placeholderNodes = placeholders.map((n) => new TreeNode(n, n, 'kix-icon-man-bubble'));
+            selectedNodes = [...filteredSystemNodes, ...placeholderNodes];
 
             this.treeHandler.setSelection(selectedNodes, true, true);
         } else {
@@ -122,6 +116,23 @@ export class RecipientFormValue extends SelectObjectFormValue {
         }
 
         this.selectedNodes = selectedNodes;
+    }
+
+    private parseAddresses(value: string): string[] {
+        const emailAddresses = [];
+        try {
+            const parseResult = addrparser.parse(value);
+            for (const address of parseResult) {
+                if (address.phrase && address.phrase !== address.address) {
+                    emailAddresses.push(`"${address.phrase}" <${address.address}>`);
+                } else {
+                    emailAddresses.push(address.address);
+                }
+            }
+        } catch (error) {
+            console.error(error);
+        }
+        return emailAddresses;
     }
 
     private async addEmailAddressNodes(emailAddresses: any[], nodes: TreeNode[]): Promise<TreeNode[]> {
