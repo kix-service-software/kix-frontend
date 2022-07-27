@@ -239,9 +239,8 @@ export class JobAPIService extends KIXObjectAPIService {
             const execValue = parameter.find((p) => p[0] === JobProperty.EXEC);
             if (!execValue) {
 
-                const loadingOptions = new KIXObjectLoadingOptions(undefined, undefined, 1, [
-                    JobProperty.MACROS, JobProperty.EXEC_PLANS
-                ]);
+                const loadingOptions = new KIXObjectLoadingOptions();
+                loadingOptions.includes = [JobProperty.MACROS, JobProperty.EXEC_PLANS];
                 const jobs = await super.load<Job>(
                     token, KIXObjectType.JOB, this.RESOURCE_URI, loadingOptions, [jobId], 'Job', clientRequestId, Job
                 ).catch((error: Error) => {
