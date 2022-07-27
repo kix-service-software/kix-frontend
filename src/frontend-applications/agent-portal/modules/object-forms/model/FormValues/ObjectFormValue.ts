@@ -239,6 +239,12 @@ export class ObjectFormValue<T = any> {
         if (!this.value && this.object[this.property]) {
             this.setFormValue(this.object[this.property]);
         }
+
+        if (!this.label || this.label === this.property) {
+            this.label = await LabelService.getInstance().getPropertyText(
+                this.property, this.object?.KIXObjectType
+            );
+        }
     }
 
     private async handlePlaceholders(value: any): Promise<any> {

@@ -17,6 +17,7 @@ import { ArticleLoadingOptions } from '../../../../model/ArticleLoadingOptions';
 export class CustomerVisibleFormValue extends BooleanFormValue {
 
     public async initFormValue(): Promise<void> {
+        await super.initFormValue();
         const context = ContextService.getInstance().getActiveContext();
         const refArticleId = context?.getAdditionalInformation('REFERENCED_ARTICLE_ID');
         if (refArticleId) {
