@@ -160,12 +160,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             window.clearTimeout(this.searchTimeout);
         }
 
-        this.searchTimeout = setTimeout(async () => {
-            this.state.searchLoading = true;
-            await this.formValue?.search(event.target.value);
-            this.state.noResult = !this.formValue.getSelectableTreeNodeValues()?.length;
-            setTimeout(() => this.state.searchLoading = false, 100);
-        }, this.formValue?.autoCompleteConfiguration?.delay || 300);
+        if (!this.navigationKeyPressed(event.key)) {
+            this.searchTimeout = setTimeout(async () => {
+                this.state.searchLoading = true;
+                await this.formValue?.search(event.target.value);
+                this.state.noResult = !this.formValue.getSelectableTreeNodeValues()?.length;
+                setTimeout(() => this.state.searchLoading = false, 100);
+            }, this.formValue?.autoCompleteConfiguration?.delay || 300);
+        }
     }
 
     private navigationKeyPressed(key: string): boolean {
