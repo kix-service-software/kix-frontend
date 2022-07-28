@@ -46,7 +46,10 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
                     if (Array.isArray(this.value) && this.value.length) {
                         dynamicFieldValue = this.value.find((v) => v.Name === df.Name);
                     }
-                    await this.createFormValue(df.Name, dynamicFieldValue);
+                    const formValue = this.findFormValue(df.Name);
+                    if (!formValue) {
+                        await this.createFormValue(df.Name, dynamicFieldValue);
+                    }
                 }
             }
         }
