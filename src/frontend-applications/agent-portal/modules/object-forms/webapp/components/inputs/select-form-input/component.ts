@@ -133,6 +133,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+    public keydownOnSelectInput(event: any): void {
+        if (event.code === 'Space' || event.key === 'Enter') {
+            this.stopPropagation(event);
+            event.target?.click();
+        }
+    }
+
     public searchValueChanged(event: any): void {
         const filterInput = (this as any).getEl(this.state.searchValueKey);
         const hiddenInput = (this as any).getEl(this.state.searchValueKey + '-hidden');

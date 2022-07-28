@@ -13,6 +13,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
          role="button"
          id=`id_${state.searchValueKey}`
          ...state.dropdownAttributes
+         tabindex="0"
+         on-keydown("keydownOnSelectInput")
          on-click("inputClicked")
       >
          <div.form-control.select-input-container.rounded-0 class={readonly: state.readonly}>
