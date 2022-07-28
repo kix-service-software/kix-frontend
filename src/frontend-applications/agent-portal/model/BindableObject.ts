@@ -27,8 +27,10 @@ export class BindableObject {
     }
 
     public removeBindings(bindingIds: string[]): void {
-        for (const binding of this.propertyBindings) {
-            binding.removeBindings(bindingIds);
+        if (Array.isArray(this.propertyBindings)) {
+            for (const binding of this.propertyBindings) {
+                binding.removeBindings(bindingIds);
+            }
         }
     }
 }

@@ -23,6 +23,8 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue implements 
 
     public dfValues: DynamicFieldValue[] = [];
 
+    private bindingIds: string[] = [];
+
     public constructor(
         public property: string,
         protected object: DynamicFieldValue,
@@ -33,6 +35,10 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue implements 
         super(property, object, objectValueMapper, parent);
         this.inputComponentId = 'datetime-form-input';
         this.addBindings();
+    }
+
+    public destroy(): void {
+        this.removePropertyBinding(this.bindingIds);
     }
 
     public findFormValue(property: string): ObjectFormValue {
@@ -146,8 +152,9 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue implements 
     }
 
     private addBindings(): void {
-        this.addPropertyBinding(FormValueProperty.COUNT_MAX, (value: ObjectFormValue) => this._countMax());
-        // this.addPropertyBinding(FormValueProperty.COUNT_MIN, (value: ObjectFormValue) => this._countMin());
+        this.bindingIds.push(
+            this.addPropertyBinding(FormValueProperty.COUNT_MAX, (value: ObjectFormValue) => this._countMax())
+        );
     }
 
 }
