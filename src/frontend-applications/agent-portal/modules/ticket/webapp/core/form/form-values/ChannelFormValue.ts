@@ -54,9 +54,10 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
     public async initFormValue(): Promise<void> {
         await super.initFormValue();
 
-        if (!this.value) {
-            const selectedNodes = this.getSelectableTreeNodeValues();
-            const selection = selectedNodes?.length ? [selectedNodes[0]] : [];
+        if (!this.value && !this.noChannelSelectable) {
+            const selectableNodes = this.getSelectableTreeNodeValues();
+            const selectableNode = selectableNodes.filter((n)=> n.id === 1);
+            const selection = selectableNode ? selectableNode : [];
             this.treeHandler.setSelection(selection);
         }
 
