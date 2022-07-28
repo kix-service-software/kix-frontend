@@ -191,6 +191,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         const contact = await TicketService.getContactForArticle(this.state.article);
         if (contact) {
             this.state.contactIcon = LabelService.getInstance().getObjectIcon(contact);
+
+            if (!this.state.isExternal) {
+                this.state.fromDisplayName = await LabelService.getInstance().getObjectText(contact, false, true);
+            }
         } else {
             this.state.contactIcon = LabelService.getInstance().getObjectIconForType(KIXObjectType.CONTACT);
         }
