@@ -38,8 +38,6 @@ import { TicketPlaceholderHandler } from './TicketPlaceholderHandler';
 import { TicketPrintAction } from './actions/TicketPrintAction';
 import { SuggestedFAQHandler } from './SuggestedFAQHandler';
 import { TicketHistoryTableFactory } from './table';
-import { FormService } from '../../../base-components/webapp/core/FormService';
-import { TicketFormFieldValueHandler } from './TicketFormFieldValueHandler';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { JobFormService } from '../../../job/webapp/core';
@@ -112,8 +110,6 @@ export class UIModule implements IUIModule {
         );
 
         ServiceRegistry.registerAdditionalTableObjectsHandler(new SuggestedFAQHandler());
-
-        FormService.getInstance().addFormFieldValueHandler(new TicketFormFieldValueHandler());
 
         this.registerTicketActions();
 
