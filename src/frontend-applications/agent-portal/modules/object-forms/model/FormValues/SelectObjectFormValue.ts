@@ -487,7 +487,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             this.treeHandler?.selectNone(true);
         }
 
-        this.selectedNodes = selectedNodes;
+        this.selectedNodes = selectedNodes.sort((a, b) => a.id - b.id);
     }
 
     public removeValue(value: string | number): void {
