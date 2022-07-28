@@ -57,6 +57,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.prepared = true;
     }
 
+    public async onDestroy(): Promise<void> {
+        if (this.bindingIds?.length && this.formValue) {
+            this.formValue.removePropertyBinding(this.bindingIds);
+        }
+    }
+
     public removeTable(): void {
         this.state.value = null;
         this.formValue?.setFormValue(null);

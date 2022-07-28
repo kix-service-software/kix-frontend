@@ -69,6 +69,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }, 150);
     }
 
+    public async onDestroy(): Promise<void> {
+        if (this.bindingIds?.length && this.formValue) {
+            this.formValue.removePropertyBinding(this.bindingIds);
+        }
+    }
+
     public valueChanged(value: string): void {
         this.state.currentValue = value;
         if (this.state.currentValue === '') {

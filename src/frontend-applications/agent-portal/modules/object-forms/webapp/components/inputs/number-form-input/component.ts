@@ -58,6 +58,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.prepared = true;
     }
 
+    public async onDestroy(): Promise<void> {
+        if (this.bindingIds?.length && this.formValue) {
+            this.formValue.removePropertyBinding(this.bindingIds);
+        }
+    }
+
     private async prepareOptions(): Promise<void> {
         this.state.max = this.formValue?.max;
         this.state.min = this.formValue?.min;
