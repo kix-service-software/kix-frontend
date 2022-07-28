@@ -34,11 +34,20 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.bindingIds = [];
 
         this.bindingIds.push(
+            this.formValue?.addPropertyBinding(
+                FormValueProperty.VALUE, async (formValue: ObjectFormValue) => {
+                    this.state.value = formValue.value;
+                }
+            )
+        );
+
+        this.bindingIds.push(
             this.formValue.addPropertyBinding(FormValueProperty.READ_ONLY, (formValue: ObjectFormValue) => {
                 this.state.readonly = formValue.readonly;
             })
         );
 
+        this.state.value = this.formValue?.value;
         this.state.readonly = this.formValue?.readonly;
     }
 
