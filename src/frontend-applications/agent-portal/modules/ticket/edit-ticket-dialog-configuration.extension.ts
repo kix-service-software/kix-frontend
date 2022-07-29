@@ -50,6 +50,7 @@ import { ConfigItemProperty } from '../cmdb/model/ConfigItemProperty';
 import { SortOrder } from '../../model/SortOrder';
 import { UIComponentPermission } from '../../model/UIComponentPermission';
 import { CRUD } from '../../../../server/model/rest/CRUD';
+import { UserProperty } from '../user/model/UserProperty';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -475,6 +476,10 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 new FilterCriteria(
                                     KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
                                     FilterType.AND, 1
+                                ),
+                                new FilterCriteria(
+                                    UserProperty.IS_AGENT, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
                                 )
                             ], undefined, undefined, undefined, undefined,
                             [
@@ -499,6 +504,10 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             [
                                 new FilterCriteria(
                                     KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                ),
+                                new FilterCriteria(
+                                    UserProperty.IS_AGENT, SearchOperator.EQUALS, FilterDataType.NUMERIC,
                                     FilterType.AND, 1
                                 )
                             ], undefined, undefined, undefined, undefined,

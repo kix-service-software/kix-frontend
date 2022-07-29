@@ -8,10 +8,18 @@
  */
 
 import { AutoCompleteConfiguration } from '../../../../../../model/configuration/AutoCompleteConfiguration';
+import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
+import { FilterCriteria } from '../../../../../../model/FilterCriteria';
+import { FilterDataType } from '../../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../../model/FilterType';
+import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { SelectObjectFormValue } from '../../../../../object-forms/model/FormValues/SelectObjectFormValue';
 import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectFormValueMapper';
+import { SearchOperator } from '../../../../../search/model/SearchOperator';
+import { UserProperty } from '../../../../../user/model/UserProperty';
 import { Ticket } from '../../../../model/Ticket';
 import { TicketProperty } from '../../../../model/TicketProperty';
 
@@ -30,6 +38,50 @@ export class UserObjectFormValue extends SelectObjectFormValue {
 
         if (this.property === TicketProperty.OWNER_ID) {
             this.value = null;
+        }
+    }
+
+
+    public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
+        super.initFormValueByField(field);
+
+        // add default loading options for (agent) users
+        const filter: FilterCriteria[] = [
+            new FilterCriteria(
+                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                FilterType.AND, 1
+            ),
+            new FilterCriteria(
+                UserProperty.IS_AGENT, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                FilterType.AND, 1
+            )
+        ];
+        const query: [string, string][] = [
+            ['requiredPermission', 'TicketRead,TicketCreate']
+        ];
+
+        if (!this.loadingOptions) {
+            this.loadingOptions = new KIXObjectLoadingOptions();
+        }
+
+        if (Array.isArray(this.loadingOptions.filter)) {
+            filter.forEach((f) => {
+                if (!this.loadingOptions.filter.some((lof) => lof.property === f.property)) {
+                    this.loadingOptions.filter.push(f);
+                }
+            });
+        } else {
+            this.loadingOptions.filter = filter;
+        }
+
+        if (Array.isArray(this.loadingOptions.query)) {
+            query.forEach((q) => {
+                if (!this.loadingOptions.query.some((loq) => loq[0] === q[0])) {
+                    this.loadingOptions.query.push(q);
+                }
+            });
+        } else {
+            this.loadingOptions.query = query;
         }
     }
 
