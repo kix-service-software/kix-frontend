@@ -79,6 +79,10 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                 }
             }
         }
+
+        if (!ticket.Articles.length) {
+            delete ticket.Articles;
+        }
     }
 
 

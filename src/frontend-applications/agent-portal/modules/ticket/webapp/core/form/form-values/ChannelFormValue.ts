@@ -29,6 +29,7 @@ import { RecipientFormValue } from './RecipientFormValue';
 export class ChannelFormValue extends SelectObjectFormValue<number> {
 
     public noChannelSelectable: boolean = false;
+    private hasChannelField: boolean = false;
 
     public constructor(
         property: string,
@@ -54,9 +55,9 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
     public async initFormValue(): Promise<void> {
         await super.initFormValue();
 
-        if (!this.value && !this.noChannelSelectable) {
+        if (!this.value && !this.noChannelSelectable && this.hasChannelField) {
             const selectableNodes = this.getSelectableTreeNodeValues();
-            const selectableNode = selectableNodes.filter((n)=> n.id === 1);
+            const selectableNode = selectableNodes.filter((n) => n.id === 1);
             const selection = selectableNode ? selectableNode : [];
             this.treeHandler.setSelection(selection);
         }
@@ -66,6 +67,8 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
         await super.initFormValueByField(field);
+
+        this.hasChannelField = true;
 
         const noChannelOption = field.options.find((o) => o.option === 'NO_CHANNEL');
         if (noChannelOption) {
