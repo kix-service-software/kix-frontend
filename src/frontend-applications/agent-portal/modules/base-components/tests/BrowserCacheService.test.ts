@@ -227,7 +227,7 @@ describe('BrowserCacheService', () => {
                 const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.TICKET);
                 expect(prefixes).exist;
                 expect(prefixes).an('array');
-                expect(prefixes.length).equals(8);
+                expect(prefixes.length).equals(9);
 
                 expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
@@ -237,6 +237,7 @@ describe('BrowserCacheService', () => {
                 expect(prefixes.find((p) => p === KIXObjectType.CURRENT_USER)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.ARTICLE)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.ROLE)).exist;
+                expect(prefixes.find((p) => p === KIXObjectType.TICKET_HISTORY)).exist;
             });
 
             it('should resolve the namespace for Article', () => {
