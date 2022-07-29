@@ -30,7 +30,8 @@ export class ComponentState extends AbstractComponentState {
         public images: DisplayImageDescription[] = [],
         public show: boolean = false,
         public loading: boolean = false,
-        public backgroundColor: string = '#fff'
+        public backgroundColor: string = '#fff',
+        public fromDisplayName: string = ''
     ) {
         super();
     }
