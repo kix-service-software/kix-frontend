@@ -32,14 +32,15 @@ export class PortalNotificationService {
             eventSubscriberId: 'PortalNotificationService',
             eventPublished: () => this.loadNotifications()
         };
+        PortalNotificationSocketClient.getInstance();
         EventService.getInstance().subscribe(PortalNotificationEvent.NOTIFICATIONS_UPDATED, subscriber);
     }
 
-    private notifications: PortalNotification[] = [];
+    private notifications: PortalNotification[] = null;
 
     public publishNotifications(notifications: PortalNotification[], removeGroupNotifications: string[] = []): void {
-        this.notifications = this.notifications.filter((n) => !removeGroupNotifications.some((g) => g === n.group));
-        this.notifications.push(...notifications);
+        this.notifications = this.notifications?.filter((n) => !removeGroupNotifications.some((g) => g === n.group));
+        this.notifications?.push(...notifications);
         this.notifications = SortUtil.sortObjects(
             this.notifications, 'createTime', DataType.DATE_TIME, SortOrder.DOWN
         );
@@ -48,15 +49,15 @@ export class PortalNotificationService {
     }
 
     public removeNotification(notification: PortalNotification): void {
-        const index = this.notifications.findIndex((n) => n.id === notification.id);
+        const index = this.notifications?.findIndex((n) => n.id === notification.id);
         if (index !== -1) {
-            this.notifications.splice(index, 1);
+            this.notifications?.splice(index, 1);
         }
         EventService.getInstance().publish(PortalNotificationEvent.NOTIFICATION_PUSHED);
     }
 
     public removeNotifications(groups: string[] = []): void {
-        this.notifications = this.notifications.filter((n) => !groups.some((g) => g === n.group));
+        this.notifications = this.notifications?.filter((n) => !groups.some((g) => g === n.group));
         EventService.getInstance().publish(PortalNotificationEvent.NOTIFICATION_PUSHED);
     }
 
