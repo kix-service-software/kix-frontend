@@ -155,6 +155,7 @@ export class CacheService {
                 types.push(KIXObjectType.CONTACT);
                 types.push(KIXObjectType.QUEUE);
                 types.push(KIXObjectType.CURRENT_USER);
+                types.push(KIXObjectType.TICKET_HISTORY);
                 // needed for permission checks of objectactions (HttpService) - check new after ticket update
                 types.push(RequestMethod.OPTIONS);
                 break;
