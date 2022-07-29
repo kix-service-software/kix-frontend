@@ -269,7 +269,7 @@ export class ContextNamespace extends SocketNameSpace {
 
             const index = contextList
                 .filter((c) => c !== null && typeof c !== 'undefined')
-                .findIndex((cp) => cp?.instanceId === data?.contextPreference?.instanceId);
+                .findIndex((cp) => cp?.instanceId === data?.instanceId);
             if (index !== -1) {
                 contextList.splice(index, 1);
             }
