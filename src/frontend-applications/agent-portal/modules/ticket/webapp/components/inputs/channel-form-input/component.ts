@@ -93,6 +93,19 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+    public keydown(node: TreeNode, event: any): void {
+        if (event.code === 'Space' || event.key === 'Enter') {
+            event.stopPropagation();
+            event.preventDefault();
+
+            if (node) {
+                this.selectChannel(node);
+            } else {
+                this.clearValue();
+            }
+        }
+    }
+
 }
 
 module.exports = Component;

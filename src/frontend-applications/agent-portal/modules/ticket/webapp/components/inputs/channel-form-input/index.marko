@@ -14,7 +14,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <li.nav-item>
                     <a.nav-link class={
                         "active": state.selectedNode && state.selectedNode.id === node.id
-                    } aria-current="page" on-click("selectChannel", node)>
+                    } aria-current="page" tabindex="0" on-click("selectChannel", node) on-keydown("keydown", node)>
                         <span.channel-icon>
                             <icon icon=node.icon/>
                         </span>
@@ -26,7 +26,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <li.nav-item>
                     <a.nav-link class={
                         "active": !state.selectedNode
-                    } aria-current="page" on-click("clearValue")>
+                    } aria-current="page" tabindex="0" on-click("clearValue") on-keydown("keydown", null)>
                         <span.channel-icon>
                             <icon icon="kix-icon-unselect"/>
                         </span>
