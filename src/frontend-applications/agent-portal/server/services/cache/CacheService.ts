@@ -212,7 +212,6 @@ export class CacheService {
             case KIXObjectType.ROLE:
             case 'Migration':
                 await this.clearCache();
-                types = [];
                 break;
             case KIXObjectType.TRANSLATION_PATTERN:
             case KIXObjectType.TRANSLATION:
