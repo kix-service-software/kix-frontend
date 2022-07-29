@@ -68,4 +68,27 @@ describe('ObjectCommitHandler', () => {
         });
 
     });
+
+    describe('Remove articles if no article with channel is defined', () => {
+        let ticket: Ticket;
+
+        before(async () => {
+            ticket = new Ticket();
+
+            ticket.Articles = [];
+
+            for (let i = 0; i < 3; i++) {
+                const article = new Article(null, ticket);
+                ticket.Articles.push(article);
+            }
+
+            const commitHandler = new TicketObjectCommitHandler(null);
+            ticket = await commitHandler.prepareObject(ticket);
+        });
+
+        it('Ticket should not have articles property', () => {
+            expect(ticket.Articles).not.exist;
+        });
+    });
+
 });
