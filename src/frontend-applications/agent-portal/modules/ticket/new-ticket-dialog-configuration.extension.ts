@@ -47,6 +47,7 @@ import { DynamicFormFieldOption } from '../dynamic-fields/webapp/core';
 import { FAQArticleProperty } from '../faq/model/FAQArticleProperty';
 import { ObjectIcon } from '../icon/model/ObjectIcon';
 import { SearchOperator } from '../search/model/SearchOperator';
+import { UserProperty } from '../user/model/UserProperty';
 import { ArticleProperty } from './model/ArticleProperty';
 import { QueueProperty } from './model/QueueProperty';
 import { TicketProperty } from './model/TicketProperty';
@@ -532,6 +533,10 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             [
                                 new FilterCriteria(
                                     KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                ),
+                                new FilterCriteria(
+                                    UserProperty.IS_AGENT, SearchOperator.EQUALS, FilterDataType.NUMERIC,
                                     FilterType.AND, 1
                                 )
                             ], undefined, undefined, undefined, undefined,
