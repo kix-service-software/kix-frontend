@@ -212,7 +212,6 @@ export class BrowserCacheService {
             case KIXObjectType.ROLE:
             case 'Migration':
                 this.clear();
-                cacheKeyPrefixes = [];
                 break;
             case KIXObjectType.QUEUE:
             case KIXObjectType.TICKET_PRIORITY:
