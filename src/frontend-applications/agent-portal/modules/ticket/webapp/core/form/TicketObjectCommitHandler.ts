@@ -7,6 +7,7 @@
  * --
  */
 
+import { FormContext } from '../../../../../model/configuration/FormContext';
 import { Attachment } from '../../../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
@@ -126,7 +127,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
     }
 
     private prepareTitle(ticket: Ticket): void {
-        if (!ticket.Title) {
+        if (!ticket.Title && this.objectValueMapper?.formContext === FormContext.NEW) {
             ticket.Title = new Date().toLocaleDateString();
             if (ticket.Articles?.length) {
                 const article = ticket.Articles.find((a) => !a.ArticleID);
