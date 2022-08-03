@@ -37,6 +37,8 @@ export class PendingTimeFormValue extends DateTimeFormValue {
             this.setNewInitialState('enabled', this.enabled);
             this.setNewInitialState('visible', this.visible);
 
+            this.minDate = DateTimeUtil.getKIXDateTimeString(new Date());
+
             const date = new Date();
             let offset = 86400;
             const offsetConfig = await KIXObjectService.loadObjects<SysConfigOption>(
