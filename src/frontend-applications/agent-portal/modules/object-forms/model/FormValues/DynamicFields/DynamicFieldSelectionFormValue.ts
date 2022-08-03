@@ -72,7 +72,7 @@ export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string
                 }
             }
 
-            this.treeHandler.setTree(nodes, null, true, true);
+            this.treeHandler?.setTree(nodes, null, true, true);
         }
     }
 
@@ -92,7 +92,7 @@ export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string
             }
         }
 
-        this.treeHandler.setSelection(selectedNodes, true, true, true, true);
+        this.treeHandler?.setSelection(selectedNodes, true, true, true, true);
 
         this.selectedNodes = selectedNodes;
     }

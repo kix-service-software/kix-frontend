@@ -42,7 +42,7 @@ export class ContactObjectFormValue extends SelectObjectFormValue {
         super.initFormValue();
     }
 
-    public async setFormValue(value: any): Promise<void> {
+    public async setFormValue(value: any, force?: boolean): Promise<void> {
         let newValue;
         if (value) {
             if (Array.isArray(value)) {
@@ -56,9 +56,7 @@ export class ContactObjectFormValue extends SelectObjectFormValue {
                 newValue = await this.getPossibleContactId(newValue);
             }
         }
-        if (newValue !== this.value) {
-            return super.setFormValue(newValue);
-        }
+        return super.setFormValue(newValue, force);
     }
 
     public async setObjectValue(value: (string | number)[]): Promise<void> {

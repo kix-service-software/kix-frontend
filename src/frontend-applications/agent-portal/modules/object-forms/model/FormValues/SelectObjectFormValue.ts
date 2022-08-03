@@ -104,8 +104,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         await this.loadSelectedValues();
     }
 
-    public async setFormValue(value: any): Promise<void> {
-        await super.setFormValue(value);
+    public async setFormValue(value: any, force?: boolean): Promise<void> {
+        await super.setFormValue(value, force);
         if (!this.readonly) {
             await this.loadSelectedValues();
         }
@@ -138,7 +138,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
         this.addPropertyBinding('multiselect', (value: SelectObjectFormValue) => {
             if (!this.multiselect && Array.isArray(this.value) && this.value.length > 1) {
-                this.setFormValue([this.value[0]]);
+                this.setFormValue([this.value[0]], true);
             }
         });
 
@@ -147,11 +147,10 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             this.treeHandler?.setMultiSelect(this.multiselect);
 
             if (this.multiselect && Array.isArray(this.value) && this.value.length > 1) {
-                const hasMoreValues = this.value.length > this.maxSelectCount;
-
-                if (this.maxSelectCount > 1 && hasMoreValues) {
+                const hasMoreValues = this.maxSelectCount > 1 && this.value.length > this.maxSelectCount;
+                if (hasMoreValues) {
                     const newValue = this.value.slice(0, this.maxSelectCount);
-                    this.setFormValue(newValue);
+                    this.setFormValue(newValue, true);
                 }
             }
         });
@@ -263,7 +262,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         await super.initFormValueByField(field);
     }
 
-    private async initTreeHandler(): Promise<void> {
+    protected async initTreeHandler(): Promise<void> {
         this.treeHandler = new TreeHandler([], null, null, this.multiselect);
         TreeService.getInstance().registerTreeHandler(this.instanceId, this.treeHandler);
 

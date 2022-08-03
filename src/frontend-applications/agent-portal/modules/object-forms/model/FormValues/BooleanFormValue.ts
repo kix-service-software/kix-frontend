@@ -22,11 +22,11 @@ export class BooleanFormValue extends ObjectFormValue<boolean> {
         this.inputComponentId = 'checkbox-form-input';
     }
 
-    public async setFormValue(value: any): Promise<void> {
+    public async setFormValue(value: any, force?: boolean): Promise<void> {
         if (Array.isArray(value)) {
             value = value[0];
         }
-        await super.setFormValue(Boolean(value));
+        await super.setFormValue(Boolean(value), force);
     }
 
     public async setObjectValue(value: any): Promise<void> {

@@ -141,10 +141,10 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
             }
         }
 
-        return this.setFormValue(organisationId ? [organisationId] : null);
+        return this.setFormValue(organisationId, true);
     }
 
-    public async setFormValue(value: any): Promise<void> {
+    public async setFormValue(value: any, force?: boolean): Promise<void> {
         let newValue;
         if (value) {
             if (Array.isArray(value)) {
@@ -153,9 +153,7 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
                 newValue = value;
             }
         }
-        if (newValue !== this.value) {
-            return super.setFormValue(newValue);
-        }
+        return super.setFormValue(newValue, force);
     }
 
     private clearPossibleValuesAndNodes(): void {
