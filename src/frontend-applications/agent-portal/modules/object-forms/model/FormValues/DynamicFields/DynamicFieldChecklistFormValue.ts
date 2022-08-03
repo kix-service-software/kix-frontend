@@ -62,13 +62,15 @@ export class DynamicFieldChecklistFormValue extends ObjectFormValue<CheckListIte
         await super.setObjectValue(v);
     }
 
-    public async setFormValue(value: any): Promise<void> {
+    public async setFormValue(value: any, force?: boolean): Promise<void> {
         try {
+            let newValue;
             if (typeof value === 'string') {
-                this.value = JSON.parse(value);
+                newValue = JSON.parse(value);
             } else {
-                this.value = value;
+                newValue = value;
             }
+            super.setFormValue(newValue, force);
         } catch (e) {
             console.error(e);
         }

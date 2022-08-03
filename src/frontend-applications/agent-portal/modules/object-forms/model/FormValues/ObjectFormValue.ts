@@ -363,16 +363,32 @@ export class ObjectFormValue<T = any> {
     }
 
     public async setObjectValue(value: any): Promise<void> {
-        if (this.object && !this.readonly) {
+        // INFO: do not check readonly here - it is only relevant for form value!
+        if (this.object) {
             this.object[this.property] = value;
             // Hint: do not trigger setObjectValueToFormValue here (it is already done by binding (FormValueBinding))
         }
     }
 
-    public async setFormValue(value: any): Promise<void> {
-        if (!this.readonly && this.value !== value) {
+    public async setFormValue(value: any, force?: boolean): Promise<void> {
+        if ((force || !this.readonly) && !this.isSameValue(value)) {
             this.value = value;
         }
+    }
+
+    protected isSameValue(value: any): boolean {
+        let isSameValue = false;
+
+        if (Array.isArray(this.value) && Array.isArray(value)) {
+            isSameValue = this.value.length === value.length;
+            if (isSameValue) {
+                isSameValue = this.value.every((v) => value.some((val) => v.toString() === val.toString()));
+            }
+        } else {
+            isSameValue = this.value === value;
+        }
+
+        return isSameValue;
     }
 
     public removeValue(value: any): void {
@@ -433,10 +449,11 @@ export class ObjectFormValue<T = any> {
                 }
             }
 
+            // force - only selectable values
             if (newValue.length) {
-                this.setFormValue(newValue);
+                this.setFormValue(newValue, true);
             } else {
-                this.setFormValue(null);
+                this.setFormValue(null, true);
             }
         }
     }

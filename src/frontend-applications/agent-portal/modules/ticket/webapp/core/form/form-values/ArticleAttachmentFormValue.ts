@@ -66,7 +66,7 @@ export class ArticleAttachmentFormValue extends ObjectFormValue<string> {
                     if (Array.isArray(this.value) && this.value.length) {
                         newValue.push(...this.value);
                     }
-                    this.setFormValue(newValue);
+                    this.setFormValue(newValue, true);
                 }
             }
         }

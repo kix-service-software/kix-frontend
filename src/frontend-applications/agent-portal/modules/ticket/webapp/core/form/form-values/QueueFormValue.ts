@@ -7,7 +7,6 @@
  * --
  */
 
-import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { FilterCriteria } from '../../../../../../model/FilterCriteria';
 import { FilterDataType } from '../../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../../model/FilterType';
@@ -19,9 +18,7 @@ import { QueueProperty } from '../../../../model/QueueProperty';
 
 export class QueueFormValue extends SelectObjectFormValue<number> {
 
-    public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
-        await super.initFormValueByField(field);
-
+    public async initFormValue(): Promise<void> {
         if (!this.loadingOptions) {
             this.loadingOptions = new KIXObjectLoadingOptions();
         }
@@ -49,5 +46,8 @@ export class QueueFormValue extends SelectObjectFormValue<number> {
 
         this.structureOption = true;
         this.objectType = KIXObjectType.QUEUE;
+
+        await super.initFormValue();
     }
+
 }

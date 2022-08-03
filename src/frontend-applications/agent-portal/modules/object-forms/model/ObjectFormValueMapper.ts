@@ -332,11 +332,11 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                 }
 
                 if (instructionProperty === InstructionProperty.CLEAR) {
-                    await formValue.setFormValue(null);
+                    await formValue.setFormValue(null, true);
                 }
 
                 if (instructionProperty === InstructionProperty.SET) {
-                    await formValue.setFormValue(instruction.Set);
+                    await formValue.setFormValue(instruction.Set, true);
                 }
 
                 if (instructionProperty === InstructionProperty.READ_ONLY) {
@@ -385,7 +385,7 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                     if (formValue.enabled === instruction.Disable) {
                         formValue.enabled = false;
                         formValue.visible = false;
-                        await formValue.setFormValue(null);
+                        await formValue.setFormValue(null, true);
                     }
                 }
 

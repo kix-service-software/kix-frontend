@@ -34,10 +34,11 @@ export class FormValueBinding {
         });
 
         if (property === FormValueProperty.VALUE) {
-            object.addBinding(objectProperty, (value: any): void => {
-                // this.value = value;
-                // formValue.setFormValue(value);
-            });
+            // FIXME: currently not active because of circle (form => object => form => object ...)
+            // object.addBinding(objectProperty, (value: any): void => {
+            //     this.value = value;
+            //     formValue.setFormValue(value);
+            // });
         }
     }
 
