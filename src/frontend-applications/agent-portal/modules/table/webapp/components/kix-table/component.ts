@@ -49,7 +49,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async init(table: Table): Promise<void> {
         this.eventSubscriberId = table.getTableId();
 
-        table.initialize();
+        await table.initialize();
         this.setTableHeight();
     }
 
