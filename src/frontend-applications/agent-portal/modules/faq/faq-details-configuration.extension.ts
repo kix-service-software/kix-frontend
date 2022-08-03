@@ -148,7 +148,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
 
         const faqLinkedObjectsLane = new WidgetConfiguration(
             'faq-article-linked-objects-widget', 'Linked Objects', ConfigurationType.Widget,
-            'linked-objects-widget', 'Translatable#Linked Objects', [],
+            'linked-objects-widget', 'Translatable#Linked Objects (<KIX_OBJECT_LinkCount>)', [],
             new ConfigurationDefinition('faq-article-linked-objects-config', ConfigurationType.LinkedObjects),
             null, false, false, null, false
         );

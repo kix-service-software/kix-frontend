@@ -1,0 +1,55 @@
+/**
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+.channel-list {
+
+    >ul {
+        li {
+            a.nav-link {
+                color: unset;
+
+                &:hover {
+                    cursor: pointer;
+                    color: unset;
+                    text-decoration: none;
+                }
+
+                &:focus {
+                    border: 1px solid @primary-0;
+                }
+
+                &.active {
+                    background-color: @primary-2;
+                    color: @secondary-6;
+                    text-decoration: none;
+                }
+            }
+        }
+
+    }
+
+    &.readonly {
+        background-color: @readonly-input-background;
+
+        ul li a.nav-link {
+            background-color: @readonly-input-item-background;
+            border-bottom-color: @readonly-input-item-background;
+            color: unset;
+
+            &:hover {
+                cursor: auto;
+                border-bottom-color: @readonly-input-item-background;
+            }
+
+            &:not(.active) {
+                background-color: unset;
+            }
+        }
+    }
+}

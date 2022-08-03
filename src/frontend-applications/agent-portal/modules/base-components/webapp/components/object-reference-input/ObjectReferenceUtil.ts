@@ -91,7 +91,7 @@ export class ObjectReferenceUtil {
         return objects;
     }
 
-    private static async prepareLoadingOptions(
+    public static async prepareLoadingOptions(
         loadingOptions: KIXObjectLoadingOptions, searchValue: string
     ): Promise<KIXObjectLoadingOptions> {
         const preparedLoadingOptions = new KIXObjectLoadingOptions(
@@ -199,9 +199,9 @@ export class ObjectReferenceUtil {
                 text ? text : object.ObjectId?.toString(),
                 icon,
                 undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
-                typeof object.ValidID === 'undefined' || object.ValidID === 1 || invalidClickable,
+                object.ValidID === 1 || invalidClickable,
                 tooltip, undefined, undefined, undefined,
-                typeof object.ValidID !== 'undefined' && object.ValidID !== 1
+                object.ValidID !== 1
             );
         }
 

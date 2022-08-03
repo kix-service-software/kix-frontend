@@ -11,7 +11,6 @@ import { AdminModuleCategory } from '../model/AdminModuleCategory';
 import { PluginService } from '../../../../../server/services/PluginService';
 import { IAdminModuleExtension } from './IAdminModuleExtension';
 import { AdminModule } from '../model/AdminModule';
-import { PermissionService } from '../../../server/services/PermissionService';
 import { AgentPortalExtensions } from '../../../server/extensions/AgentPortalExtensions';
 
 export class AdminModuleService {
@@ -42,22 +41,25 @@ export class AdminModuleService {
         return categories;
     }
 
-    private mergeCategory(categories: AdminModuleCategory[], module: AdminModuleCategory | AdminModule): void {
+    private mergeCategory(
+        categories: Array<AdminModuleCategory | AdminModule>, module: AdminModuleCategory | AdminModule
+    ): void {
         if (module instanceof AdminModuleCategory) {
             const existingCategory = categories.find((c) => c.id === module.id);
             if (existingCategory) {
+                const category = existingCategory as AdminModuleCategory;
                 if (module.children) {
-                    if (!existingCategory.children) {
-                        existingCategory.children = [];
+                    if (!category.children) {
+                        category.children = [];
                     }
-                    module.children.forEach((c) => this.mergeCategory(existingCategory.children, c));
+                    module.children.forEach((c) => this.mergeCategory(category.children, c));
                 }
 
                 if (module.modules) {
-                    if (!existingCategory.modules) {
-                        existingCategory.modules = [];
+                    if (!category.modules) {
+                        category.modules = [];
                     }
-                    module.modules.forEach((m) => existingCategory.modules.push(m));
+                    module.modules.forEach((m) => category.modules.push(m));
                 }
             } else {
                 categories.push(module);

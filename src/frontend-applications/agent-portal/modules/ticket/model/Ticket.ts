@@ -103,12 +103,14 @@ export class Ticket extends KIXObject {
 
     public constructor(ticket?: Ticket) {
         super(ticket);
+
         if (ticket) {
-            this.TicketID = Number(ticket.TicketID);
+            this.TicketID = Number(ticket.TicketID) || null;
+
             this.ObjectId = this.TicketID;
             this.Unseen = Number(ticket.Unseen);
             this.Articles = ticket.Articles
-                ? ticket.Articles.map((a) => new Article(a))
+                ? ticket.Articles.map((a) => new Article(a, this))
                 : [];
 
             this.Links = ticket.Links
@@ -174,6 +176,42 @@ export class Ticket extends KIXObject {
                 this.Type = new TicketType(object);
                 this.TypeID = object?.ID;
             }
+        } else {
+            this.TicketNumber = null;
+            this.Title = null;
+            this.TicketID = null;
+            this.Age = null;
+            this.Created = null;
+            this.CreateTimeUnix = null;
+            this.CreateBy = null;
+            this.Changed = null;
+            this.ChangeBy = null;
+            this.ArchiveFlag = null;
+            this.PendingTime = null;
+            this.PendingTimeUnix = null;
+            this.Unseen = null;
+            this.StateType = null;
+            this.StateID = null;
+            this.PriorityID = null;
+            this.LockID = null;
+            this.QueueID = null;
+            this.OrganisationID = null;
+            this.ContactID = null;
+            this.OwnerID = null;
+            this.TypeID = null;
+            this.ResponsibleID = null;
+            this.Articles = [];
+            this.History = null;
+            this.Watchers = null;
+            this.Contact = null;
+            this.TicketLock = null;
+            this.Organisation = null;
+            this.Owner = null;
+            this.Priority = null;
+            this.Queue = null;
+            this.Responsible = null;
+            this.State = null;
+            this.Type = null;
         }
 
     }
@@ -227,6 +265,7 @@ export class Ticket extends KIXObject {
         SearchOperator.BETWEEN,
         SearchOperator.WITHIN_THE_LAST,
         SearchOperator.WITHIN_THE_NEXT,
+        SearchOperator.WITHIN,
         SearchOperator.MORE_THAN_AGO,
         SearchOperator.IN_MORE_THAN,
         SearchOperator.LESS_THAN_AGO,
@@ -241,7 +280,6 @@ export class Ticket extends KIXObject {
         SearchOperator.LIKE
     ];
 
-    // tslint:disable: max-line-length
     // TODO: allow all possible (in backend) Operators for attributes - managers should limit
     public static SEARCH_PROPERTIES = [
         {
@@ -396,7 +434,7 @@ export class Ticket extends KIXObject {
         },
         {
             Property: TicketProperty.STATE_TYPE,
-            Operations: [SearchOperator.EQUALS],
+            Operations: [SearchOperator.IN],
             DataType: FilterDataType.STRING,
             InputType: InputFieldTypes.DROPDOWN
         },
@@ -461,6 +499,141 @@ export class Ticket extends KIXObject {
             InputType: InputFieldTypes.DROPDOWN
         }
     ];
-    // tslint:enable
+
+    // TODO: allow all possible (in backend) sort attributes - managers should limit
+    public static SORT_PROPERTIES = [
+        // {
+        //     Property: TicketProperty.ARCHIVE_FLAG,
+        //     DataType: FilterDataType.NUMERIC,
+        // },
+        // {
+        //     Property: ArticleProperty.CHANNEL_ID,
+        //     DataType: FilterDataType.NUMERIC,
+        // },
+        // {
+        //     Property: ArticleProperty.SENDER_TYPE_ID,
+        //     DataType: FilterDataType.NUMERIC,
+        // },
+        {
+            Property: ArticleProperty.CUSTOMER_VISIBLE,
+            DataType: FilterDataType.NUMERIC,
+        },
+        {
+            Property: ArticleProperty.FROM,
+            DataType: FilterDataType.STRING,
+        },
+        {
+            Property: ArticleProperty.TO,
+            DataType: FilterDataType.STRING,
+        },
+        {
+            Property: ArticleProperty.CC,
+            DataType: FilterDataType.STRING,
+        },
+        {
+            Property: ArticleProperty.SUBJECT,
+            DataType: FilterDataType.STRING,
+        },
+        {
+            Property: ArticleProperty.BODY,
+            DataType: FilterDataType.STRING,
+        },
+        {
+            Property: TicketProperty.ARTICLE_CREATE_TIME,
+            DataType: FilterDataType.DATETIME,
+        },
+        // {
+        //     Property: TicketProperty.CONTACT_ID,
+        //     DataType: FilterDataType.NUMERIC,
+        // },
+        // {
+        //     Property: TicketProperty.CREATED_PRIORITY_ID,
+        //     DataType: FilterDataType.NUMERIC,
+        // },
+        // {
+        //     Property: TicketProperty.CREATED_QUEUE_ID,
+        //     DataType: FilterDataType.NUMERIC,
+        // },
+        // {
+        //     Property: TicketProperty.CREATED_STATE_ID,
+        //     DataType: FilterDataType.NUMERIC,
+        // },
+        // {
+        //     Property: TicketProperty.CREATED_TYPE_ID,
+        //     DataType: FilterDataType.NUMERIC,
+        // },
+        // {
+        //     Property: TicketProperty.CREATED_USER_ID,
+        //     DataType: FilterDataType.NUMERIC,
+        // },
+        {
+            Property: TicketProperty.CHANGE_TIME,
+            DataType: FilterDataType.DATETIME,
+        },
+        {
+            Property: TicketProperty.CLOSE_TIME,
+            DataType: FilterDataType.DATETIME,
+        },
+        // {
+        //     Property: TicketProperty.LOCK_ID,
+        //     DataType: FilterDataType.NUMERIC,
+        // },
+        // {
+        //     Property: TicketProperty.ORGANISATION_ID,
+        //     DataType: FilterDataType.NUMERIC,
+        // },
+        // {
+        //     Property: TicketProperty.OWNER_ID,
+        //     DataType: FilterDataType.NUMERIC,
+        // },
+        // {
+        //     Property: TicketProperty.RESPONSIBLE_ID,
+        //     DataType: FilterDataType.NUMERIC,
+        // },
+        // {
+        //     Property: TicketProperty.PRIORITY_ID,
+        //     DataType: FilterDataType.NUMERIC,
+        // },
+        // {
+        //     Property: TicketProperty.QUEUE_ID,
+        //     DataType: FilterDataType.NUMERIC,
+        // },
+        // {
+        //     Property: TicketProperty.STATE_ID,
+        //     DataType: FilterDataType.NUMERIC,
+        // },
+        {
+            Property: TicketProperty.TICKET_ID,
+            DataType: FilterDataType.NUMERIC,
+        },
+        {
+            Property: TicketProperty.TICKET_NUMBER,
+            DataType: FilterDataType.STRING,
+        },
+        {
+            Property: TicketProperty.AGE,
+            DataType: FilterDataType.NUMERIC,
+        },
+        {
+            Property: TicketProperty.CREATE_TIME,
+            DataType: FilterDataType.DATETIME,
+        },
+        {
+            Property: TicketProperty.PENDING_TIME,
+            DataType: FilterDataType.DATETIME,
+        },
+        {
+            Property: TicketProperty.LAST_CHANGE_TIME,
+            DataType: FilterDataType.DATETIME,
+        },
+        {
+            Property: TicketProperty.TITLE,
+            DataType: FilterDataType.STRING,
+        },
+        // {
+        //     Property: TicketProperty.TYPE_ID,
+        //     DataType: FilterDataType.NUMERIC,
+        // }
+    ];
 
 }

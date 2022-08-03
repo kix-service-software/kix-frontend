@@ -12,14 +12,26 @@
 
     >.search-limit {
         display: grid;
-        grid-template-columns: max-content auto;
+        grid-template-columns: minmax(min-content, 12rem) max-content;
         grid-column-gap: @margin-small;
         align-items: center;
-        margin: 2rem 0 0rem 0;
+        margin-top: 2rem;
 
         >input {
             width: 5rem;
             text-align: right;
+        }
+    }
+
+    >.search-sort {
+        display: grid;
+        grid-template-columns: minmax(min-content, 12rem) 15rem max-content max-content;
+        grid-column-gap: @margin-small;
+        align-items: center;
+        margin-top: 1rem;
+
+        .search-sort-descending {
+            margin-left: @margin-small;
         }
     }
 

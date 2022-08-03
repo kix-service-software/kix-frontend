@@ -63,14 +63,6 @@
         position: relative;
         overflow: auto;
         z-index: 1; // needed, else scrollbars could overlay other elements with higher z-index and also in mobile modus (overlap sidebar-right-wrapper if not shown)
-
-        // hide scrollbar for webkit browser
-        &::-webkit-scrollbar {
-            display: none;
-        }
-
-        // hide scrollbar for Firefox
-        scrollbar-width: none;
     }
 
     >.content-wrapper {
@@ -92,14 +84,21 @@
     }
 
     .overlay {
-        z-index: 300;
+        z-index: 550;
     }
 }
+
+@mobile-wrapper-padding: clamp(5px, 3%, 20px);
 
 // "mobile"
 @media only screen and (max-width: @mobile-breakpoint) {
     .app-wrapper {
         grid-template-columns: minmax(@mobile-header-min-width, auto);
+
+        .content-wrapper {
+            padding-left: @mobile-wrapper-padding;
+            padding-right: @mobile-wrapper-padding;
+        }
 
         &.blur {
 
@@ -155,7 +154,7 @@
 }
 
 // not "mobile"
-@media only screen and (min-width: @mobile-breakpoint + 1px) {
+@media only screen and (min-width: (@mobile-breakpoint + 1px)) {
     .app-wrapper {
         grid-template-columns: [main-menu] (@main-menu-width) [sidebar-left] max-content [content] minmax(25rem, 1fr) [sidebar-right] max-content;
 
@@ -171,7 +170,7 @@
 }
 
 // sidbear left
-@media only screen and (min-width: @sidebar-left-breakpoint + 1px) {
+@media only screen and (min-width: (@sidebar-left-breakpoint + 1px)) {
     .app-wrapper {
         >.content-wrapper {
             margin-left: 1rem;
@@ -184,7 +183,7 @@
 }
 
 // sidebar right
-@media only screen and (min-width: @sidebar-right-breakpoint + 1px) {
+@media only screen and (min-width: (@sidebar-right-breakpoint + 1px)) {
     .app-wrapper {
         >.content-wrapper {
             margin-right: 1rem;

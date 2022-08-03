@@ -172,7 +172,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         const plainTextAction = await ActionFactory.getInstance().generateActions(['article-get-plain-action'], this.state.article);
         if (plainTextAction?.length) {
-            plainTextAction[0].setData(this.article);
+            plainTextAction[0].setData(this.state.article);
             actions.push(...plainTextAction);
         }
 
@@ -191,6 +191,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         const contact = await TicketService.getContactForArticle(this.state.article);
         if (contact) {
             this.state.contactIcon = LabelService.getInstance().getObjectIcon(contact);
+
+            if (!this.state.isExternal) {
+                this.state.fromDisplayName = await LabelService.getInstance().getObjectText(contact, false, true);
+            }
         } else {
             this.state.contactIcon = LabelService.getInstance().getObjectIconForType(KIXObjectType.CONTACT);
         }
@@ -225,6 +229,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 // no option means no specific color
                 this.state.backgroundColor = '#fff';
             }
+
         }
 
         this.eventSubscriber = {

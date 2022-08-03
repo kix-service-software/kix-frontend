@@ -154,6 +154,7 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.QUEUE);
                 cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
                 cacheKeyPrefixes.push(KIXObjectType.ARTICLE);
+                cacheKeyPrefixes.push(KIXObjectType.TICKET_HISTORY);
                 // needed for permission checks of objectactions (UIObjectActions/AuthenticationSocketClient)
                 // - check new after ticket update
                 cacheKeyPrefixes.push(KIXObjectType.ROLE);
@@ -211,7 +212,6 @@ export class BrowserCacheService {
             case KIXObjectType.ROLE:
             case 'Migration':
                 this.clear();
-                cacheKeyPrefixes = [];
                 break;
             case KIXObjectType.QUEUE:
             case KIXObjectType.TICKET_PRIORITY:

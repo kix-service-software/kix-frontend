@@ -19,7 +19,7 @@ import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { NewReportDefinitionDialogContext } from './webapp/core/context/NewReportDefinitionDialogContext';
 import { FormConfiguration } from '../../model/configuration/FormConfiguration';
 import { FormContext } from '../../model/configuration/FormContext';
-import { ModuleConfigurationService } from '../../server/services/configuration';
+import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 

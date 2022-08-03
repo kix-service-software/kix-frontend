@@ -96,8 +96,13 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                         );
                         break;
                     case 'REPLYRECIPIENT':
+                        let replyProperty = ArticleProperty.FROM;
+                        if (article.ReplyTo) {
+                            replyProperty = ArticleProperty.REPLY_TO;
+                        }
+
                         result = await LabelService.getInstance().getDisplayText(
-                            article, ArticleProperty.FROM, undefined, false
+                            article, replyProperty, undefined, false
                         );
 
                         // use To value if From is a system address
@@ -105,10 +110,7 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                         const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
                             KIXObjectType.SYSTEM_ADDRESS, null
                         ).catch(() => [] as SystemAddress[]);
-                        if (
-                            Array.isArray(systemAddresses) && systemAddresses.length
-                            && systemAddresses.some((sa) => sa.Name === fromValue)
-                        ) {
+                        if (systemAddresses?.some((sa) => sa.Name === fromValue)) {
                             result = await LabelService.getInstance().getDisplayText(
                                 article, ArticleProperty.TO, undefined, false
                             );

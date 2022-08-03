@@ -54,17 +54,11 @@
             "edit-ticket-type-dialog-configuration": {
                 "module": "edit-ticket-type-dialog-configuration.extension"
             },
-            "ticket-state-details-configuration": {
-                "module": "ticket-state-details-configuration.extension"
-            },
             "new-ticket-state-dialog-configuration": {
                 "module": "new-ticket-state-dialog-configuration.extension"
             },
             "edit-ticket-state-dialog-configuration": {
                 "module": "edit-ticket-state-dialog-configuration.extension"
-            },
-            "ticket-priority-details-configuration": {
-                "module": "ticket-priority-details-configuration.extension"
             },
             "new-ticket-priority-dialog-configuration": {
                 "module": "new-ticket-priority-dialog-configuration.extension"
@@ -74,9 +68,6 @@
             },
             "new-ticket-queue-dialog-configuration": {
                 "module": "new-ticket-queue-dialog-configuration.extension"
-            },
-            "ticket-queue-details-configuration": {
-                "module": "ticket-queue-details-configuration.extension"
             },
             "edit-ticket-queue-dialog-configuration": {
                 "module": "edit-ticket-queue-dialog-configuration.extension"

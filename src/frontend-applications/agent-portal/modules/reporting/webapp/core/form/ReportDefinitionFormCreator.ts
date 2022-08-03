@@ -23,10 +23,10 @@ import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { FormInstance } from '../../../../base-components/webapp/core/FormInstance';
+import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFieldTypes';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { NumberInputOptions } from '../../../../base-components/webapp/core/NumberInputOptions';
 import { ObjectReferenceOptions } from '../../../../base-components/webapp/core/ObjectReferenceOptions';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
@@ -60,6 +60,33 @@ export class ReportDefinitionFormCreator {
             new FormFieldValue(reportDefinition?.Name)
         );
         titleField.instanceId = IdService.generateDateBasedId();
+
+        const isPeriodicField = new FormFieldConfiguration(
+            'report-common-is-periodic', 'Translatable#Periodic Creation', ReportDefinitionProperty.IS_PERIODIC, 'default-select-input', false,
+            'Translatable#Helptext_Reporting_ReportCreate_Periodic',
+            [
+                new FormFieldOption(
+                    DefaultSelectInputFormOption.NODES,
+                    [
+                        new TreeNode(0, 'Translatable#No'),
+                        new TreeNode(1, 'Translatable#Yes')
+                    ]
+                )
+            ],
+            new FormFieldValue((reportDefinition && reportDefinition.IsPeriodic) ? reportDefinition.IsPeriodic : 0)
+        );
+        isPeriodicField.instanceId = IdService.generateDateBasedId();
+
+        const maxReportsField = new FormFieldConfiguration(
+            'report-common-max-freports', 'Translatable#Max. Reports', ReportDefinitionProperty.MAX_REPORTS, 'number-input', true,
+            'Translatable#Helptext_Reporting_ReportCreate_MaxReports',
+            [
+                new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.NUMBER),
+                new FormFieldOption(NumberInputOptions.MIN, 0)
+            ],
+            new FormFieldValue(reportDefinition?.MaxReports || 0)
+        );
+        maxReportsField.instanceId = IdService.generateDateBasedId();
 
         const commentField = new FormFieldConfiguration(
             'report-common-comment', 'Translatable#Comment', ReportDefinitionProperty.COMMENT, 'text-area-input', false,
@@ -103,7 +130,7 @@ export class ReportDefinitionFormCreator {
 
         const group = new FormGroupConfiguration(
             'report-common-group', 'Report Common Group', [], null,
-            [titleField, commentField, roleField, validField]
+            [titleField, isPeriodicField, maxReportsField, commentField, roleField, validField]
         );
 
         return new FormPageConfiguration(

@@ -11,7 +11,6 @@
 
 import { Request, Response } from 'express';
 import { ConfigurationService } from '../../../../server/services/ConfigurationService';
-import { AuthenticationRouter } from '../routes/AuthenticationRouter';
 import { HttpService } from './HttpService';
 import { SessionResponse } from '../model/SessionResponse';
 import { LoginResponse } from '../model/LoginResponse';
@@ -23,10 +22,7 @@ import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 import { Socket } from 'socket.io';
 import { LoggingService } from '../../../../server/services/LoggingService';
-import { UserService } from '../../modules/user/server/UserService';
-import { TranslationAPIService } from '../../modules/translation/server/TranslationService';
-import { KIXObjectType } from '../../model/kix/KIXObjectType';
-import { ObjectIconService } from '../../modules/icon/server/ObjectIconService';
+import { CacheService } from './cache';
 
 export class AuthenticationService {
 
@@ -39,15 +35,17 @@ export class AuthenticationService {
         return AuthenticationService.INSTANCE;
     }
 
-    private backendCallbackToken: string;
-
     private tokenSecret: string;
 
     private constructor() {
         const config = ConfigurationService.getInstance().getServerConfiguration();
-        this.tokenSecret = config.FRONTEND_TOKEN_SECRET;
+        this.tokenSecret = config?.FRONTEND_TOKEN_SECRET;
+    }
 
-        this.backendCallbackToken = jwt.sign({ name: 'backen-callback', created: Date.now() }, this.tokenSecret);
+    private async createCallbackToken(): Promise<void> {
+        const backendCallbackToken = jwt.sign({ name: 'backend-callback', created: Date.now() }, this.tokenSecret);
+        ConfigurationService.getInstance().saveDataFileContent('backend_callback_token.json', { 'CallbackToken': backendCallbackToken });
+        await CacheService.getInstance().set('CALLBACK_TOKEN', backendCallbackToken);
     }
 
     private createToken(userLogin: string, backendToken: string, remoteAddress: string): string {
@@ -92,8 +90,19 @@ export class AuthenticationService {
         });
     }
 
-    public getCallbackToken(): string {
-        return this.backendCallbackToken;
+    public async getCallbackToken(): Promise<string> {
+        let token = await CacheService.getInstance().get('CALLBACK_TOKEN');
+        if (!token) {
+            // check if we have one in the filesystem
+            const callbackToken = ConfigurationService.getInstance().getDataFileContent('backend_callback_token.json');
+            token = callbackToken.CallbackToken;
+        }
+        if (!token) {
+            await this.createCallbackToken();
+            token = await CacheService.getInstance().get('CALLBACK_TOKEN');
+        }
+
+        return token;
     }
 
     public async isAuthenticated(req: Request, res: Response, next: () => void): Promise<void> {
@@ -113,15 +122,15 @@ export class AuthenticationService {
                     next();
                 } else {
                     res.clearCookie('token');
-                    AuthenticationRouter.getInstance().login(req, res);
+                    res.redirect('/auth');
                 }
             }).catch((error) => {
                 res.clearCookie('token');
-                AuthenticationRouter.getInstance().login(req, res);
+                res.redirect('/auth');
             });
         } else {
             res.clearCookie('token');
-            AuthenticationRouter.getInstance().login(req, res);
+            res.redirect('/auth');
         }
     }
 
@@ -129,7 +138,8 @@ export class AuthenticationService {
         if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Token') {
             const token = req.headers.authorization.split(' ')[1];
             if (token) {
-                if (token === this.backendCallbackToken) {
+                const callbackToken = await this.getCallbackToken();
+                if (token === callbackToken) {
                     next();
                 } else {
                     res.status(401).send('Not authorized!');
@@ -173,9 +183,6 @@ export class AuthenticationService {
             'auth', userLogin, null, clientRequestId, undefined, false
         );
         const token = fakeLogin ? response.Token : this.createToken(user, response.Token, remoteAddress);
-        await UserService.getInstance().getUserByToken(token).catch(() => null);
-        await TranslationAPIService.getInstance().loadObjects(token, 'login', KIXObjectType.TRANSLATION, null, null, null);
-        await ObjectIconService.getInstance().getObjectIcons(token);
         return token;
     }
 

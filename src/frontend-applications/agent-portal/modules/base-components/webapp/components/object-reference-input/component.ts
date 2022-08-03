@@ -11,7 +11,7 @@ import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
-import { TreeNode, TreeService, TreeHandler, TreeUtil } from '../../core/tree';
+import { TreeNode, TreeService, TreeHandler } from '../../core/tree';
 import { ObjectReferenceOptions } from '../../../../../modules/base-components/webapp/core/ObjectReferenceOptions';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { DataType } from '../../../../../model/DataType';
@@ -133,7 +133,10 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     private async load(preload: boolean = true): Promise<void> {
         let nodes = [];
 
-        if (!this.autocomplete) {
+        if (this.autocomplete) {
+            const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
+            nodes = treeHandler?.getSelectedNodes() || [];
+        } else {
             nodes = await this.loadNodes().catch(() => []);
         }
 
@@ -155,7 +158,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     private async loadNodes(): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
 
-        this.objects = await KIXObjectService.loadObjects(this.objectType, this.objectIds, this.loadingOptions);
+        this.objects = await KIXObjectService.loadObjects(
+            this.objectType, this.objectIds, this.loadingOptions, null, true
+        ).catch(() => []);
         const structureOption = this.state.field?.options?.find(
             (o) => o.option === ObjectReferenceOptions.USE_OBJECT_SERVICE
         );
@@ -170,7 +175,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         if (structureOption && structureOption.value) {
             nodes = await KIXObjectService.prepareObjectTree(
                 this.objectType, this.objects, this.showInvalidNodes,
-                this.isInvalidClickable, objectId ? [objectId] : null, translatable
+                this.isInvalidClickable, objectId ? [objectId] : null, translatable, this.useTextAsId
             );
         } else {
             const promises = [];
@@ -272,7 +277,8 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
             // ignore placeholder and "useTextAsId" values (handle them like freetext)
             // and collect ids only if objectType is given (relevant if "additional node" is selected/current value)
-            const idsToLoad = !this.useTextAsId && this.objectType ? objectIds.filter((id) => typeof id !== 'string' || !id.match(/<KIX_.+>/)) : [];
+            const ids = objectIds.filter((id) => typeof id !== 'string' || (!id.match(/<KIX_.+>/) && !id.match(/\$\{.+\}/)));
+            const idsToLoad = !this.useTextAsId && this.objectType ? ids : [];
             if (idsToLoad.length) {
                 if (this.autocomplete) {
                     const objects = await KIXObjectService.loadObjects(
@@ -291,7 +297,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     }
                 } else {
                     const objects = await KIXObjectService.loadObjects(
-                        this.objectType, idsToLoad, null, null, null, null, true
+                        this.objectType, idsToLoad, null, null, true, null, true
                     );
                     if (objects && !!objects.length) {
                         const translatableOption = this.state.field?.options?.find(
@@ -319,7 +325,10 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             }
 
             treeHandler.selectNone(true);
-            setTimeout(() => treeHandler.setSelection(selectedNodes, true, true, true), 200);
+            setTimeout(() => {
+                treeHandler.setSelection(selectedNodes, true, true, true);
+                treeHandler.expandSelection();
+            }, 200);
         } else if (treeHandler) {
             treeHandler.selectNone();
         }

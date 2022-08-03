@@ -24,6 +24,16 @@ export class ReportDefintionObjectCreator {
             ? nameValue.value
             : IdService.generateDateBasedId('Report - ');
 
+        const isPeriodicValue = await formInstance.getFormFieldValueByProperty<number>(
+            ReportDefinitionProperty.IS_PERIODIC
+        );
+        reportDefinition.IsPeriodic = isPeriodicValue && isPeriodicValue.value ? isPeriodicValue.value : 0;
+
+        const maxReportsValue = await formInstance.getFormFieldValueByProperty<number>(
+            ReportDefinitionProperty.MAX_REPORTS
+        );
+        reportDefinition.MaxReports = Number(maxReportsValue?.value) || 0;
+
         const commentValue = await formInstance.getFormFieldValueByProperty<string>(ReportDefinitionProperty.COMMENT);
         reportDefinition.Comment = commentValue && commentValue.value ? commentValue.value : '';
 

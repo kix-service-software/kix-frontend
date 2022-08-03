@@ -1,0 +1,46 @@
+<!--
+Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<ul.list-group-flush.accordion id=component.searchValueKey>
+   <for|node| of=state.nodes>
+      <li.accordion-item
+         on-click("nodeSelected", node)>
+            <a.dropdown-item.accordion-header
+               class={"active": node.selected,
+                  "list-group-item": !component.hasChildren(node),
+                  "p-0": component.hasChildren(node)}
+               id=`heading_${node.id}`>
+               <if(!component.hasChildren(node))>
+                  <div><icon icon=node.icon/></div>
+                  <div>${node.label}</div>
+               </if>
+               <else>
+                  <button.accordion-button.collapsed.list-group-item
+                     class={"active": node.selected}
+                     on-click("nodeSelected", node)
+                     type="button"
+                     data-bs-toggle="collapse"
+                     data-bs-target=`#collapse_${component.getAccordionId(node.id)}`
+                     aria-expanded="false"
+                     aria-controls=`collapse_${component.getAccordionId(node.id)}`> 
+                     <div><icon icon=node.icon/></div>
+                     <div>${node.label}</div>
+                  </button>
+               </else>
+            </a>
+      </li>
+      <if(component.hasChildren(node))>
+         <div id=`collapse_${component.getAccordionId(node.id)}` class="accordion-collapse collapse" aria-labelledby=`heading_${node.id}` data-bs-parent=`#${component.searchValueKey}`>
+            <div class="accordion-body p-0 ps-3">
+               <tree-view nodes=node.children searchValueKey=component.getAccordionId(node.id) on-nodeSelected('nodeSelected')/>
+            </div>
+         </div>
+      </if>
+   </for>
+</ul>

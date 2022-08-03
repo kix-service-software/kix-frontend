@@ -13,7 +13,6 @@ import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServ
 import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
 import { TicketProperty } from '../model/TicketProperty';
-import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
 import { ArticleProperty } from '../model/ArticleProperty';
@@ -24,20 +23,20 @@ import { FilterCriteria } from '../../../model/FilterCriteria';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { SearchOperator } from '../../search/model/SearchOperator';
 import { FilterDataType } from '../../../model/FilterDataType';
-import { CreateTicketArticleOptions } from '../model/CreateTicketArticleOptions';
 import { ArticleLoadingOptions } from '../model/ArticleLoadingOptions';
-import { CreateTicketWatcherOptions } from '../model/CreateTicketWatcherOptions';
 import { Error } from '../../../../../server/model/Error';
 import { SearchProperty } from '../../search/model/SearchProperty';
 import { FilterType } from '../../../model/FilterType';
 import { Ticket } from '../model/Ticket';
-import { RequestObject } from '../../../../../server/model/rest/RequestObject';
 import { SenderType } from '../model/SenderType';
 import { TicketLock } from '../model/TicketLock';
-import { Contact } from '../../customer/model/Contact';
 import { CacheService } from '../../../server/services/cache';
 import { PersonalSettingsProperty } from '../../user/model/PersonalSettingsProperty';
+import { Contact } from '../../customer/model/Contact';
 import { TicketHistory } from '../model/TicketHistory';
+import { RequestObject } from '../../../../../server/model/rest/RequestObject';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { CreateTicketWatcherOptions } from '../model/CreateTicketWatcherOptions';
 
 export class TicketAPIService extends KIXObjectAPIService {
 
@@ -179,82 +178,10 @@ export class TicketAPIService extends KIXObjectAPIService {
             );
 
             return ticketId;
-        } else if (objectType === KIXObjectType.ARTICLE) {
-            const options = createOptions as CreateTicketArticleOptions;
-
-            if (!options.ticketId) {
-                throw new Error('', 'Could not create article without ID of relevant ticket!');
-            }
-
-            let queueId;
-            const tickets = await super.load<Ticket>(
-                token, KIXObjectType.TICKET, this.RESOURCE_URI, null, [options.ticketId], KIXObjectType.TICKET,
-                clientRequestId, Ticket
-            );
-            if (tickets && tickets.length) {
-                queueId = tickets[0].QueueID;
-            }
-
-            const articleParameter = await this.prepareArticleData(token, options.ticketId, parameter, queueId);
-            if (articleParameter) {
-                const articleUri = this.buildUri(this.RESOURCE_URI, tickets[0].TicketID, 'articles');
-                const articleId = await super.executeUpdateOrCreateRequest<number>(
-                    token, clientRequestId, articleParameter, articleUri, KIXObjectType.ARTICLE, 'ArticleID', true
-                ).catch((error: Error) => {
-                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                    throw new Error(error.Code, error.Message);
-                });
-
-                return articleId;
-            }
-            return null;
         } else if (objectType === KIXObjectType.WATCHER) {
             const watcherOptions = createOptions as CreateTicketWatcherOptions;
             return this.addWatcher(token, clientRequestId, watcherOptions.ticketId, watcherOptions.userId);
         }
-    }
-
-    public async deleteObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType, objectId: number,
-        deleteOptions: KIXObjectSpecificDeleteOptions
-    ): Promise<Error[]> {
-        if (objectType === KIXObjectType.WATCHER) {
-            return this.removeWatcher(token, clientRequestId, objectId);
-        }
-    }
-
-    public async updateObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType,
-        parameter: Array<[string, any]>, objectId: number
-    ): Promise<string | number> {
-        const queueId = this.getParameterValue(parameter, TicketProperty.QUEUE_ID);
-        const articleParameter = await this.prepareArticleData(token, objectId, parameter, queueId);
-
-        const ticketParameter = articleParameter ? parameter.filter(
-            (p) => !articleParameter.some((ap) => ap[0] === p[0])
-        ) : parameter;
-
-        if (ticketParameter.length) {
-            const uri = this.buildUri(this.RESOURCE_URI, objectId);
-            await super.executeUpdateOrCreateRequest<number>(
-                token, clientRequestId, ticketParameter, uri, this.objectType, 'TicketID'
-            ).catch((error: Error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
-        }
-
-        if (articleParameter) {
-            const articleUri = this.buildUri(this.RESOURCE_URI, objectId, 'articles');
-            await super.executeUpdateOrCreateRequest<number>(
-                token, clientRequestId, articleParameter, articleUri, KIXObjectType.ARTICLE, 'ArticleID', true
-            ).catch((error: Error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
-        }
-
-        return objectId;
     }
 
     private async prepareArticleData(
@@ -329,12 +256,6 @@ export class TicketAPIService extends KIXObjectAPIService {
                 ArticleProperty.REFERENCED_ARTICLE_ID,
                 this.getParameterValue(parameter, ArticleProperty.REFERENCED_ARTICLE_ID)
             ]);
-            articleParameter.push([
-                ArticleProperty.EXEC_REPLY, this.getParameterValue(parameter, ArticleProperty.EXEC_REPLY)
-            ]);
-            articleParameter.push([
-                ArticleProperty.EXEC_FORWARD, this.getParameterValue(parameter, ArticleProperty.EXEC_FORWARD)
-            ]);
 
             articleParameter.push([ArticleProperty.CONTENT_TYPE, 'text/html; charset=utf-8']);
             articleParameter.push([ArticleProperty.MIME_TYPE, 'text/html']);
@@ -386,6 +307,132 @@ export class TicketAPIService extends KIXObjectAPIService {
             );
         }
         return result;
+    }
+
+
+
+    public async updateObject(
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number
+    ): Promise<string | number> {
+
+        if (parameter.length) {
+            const uri = this.buildUri(this.RESOURCE_URI, objectId);
+            await super.executeUpdateOrCreateRequest<number>(
+                token, clientRequestId, parameter, uri, this.objectType, 'TicketID'
+            ).catch((error: Error) => {
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                throw new Error(error.Code, error.Message);
+            });
+        }
+
+        return objectId;
+    }
+
+    public async commitObject(token: string, clientRequestId: string, ticket: Ticket): Promise<number | string> {
+
+        const content = { Ticket: ticket };
+        const create = !(ticket.TicketID > 0);
+
+        let uri = this.RESOURCE_URI;
+        let articles: Article[];
+
+        if (ticket.Articles?.length) {
+            const articlePromises = [];
+            for (const article of ticket.Articles) {
+                articlePromises.push(this.prepareArticle(token, ticket, article));
+            }
+
+            await Promise.all(articlePromises);
+        }
+
+        if (!create) {
+            uri = this.buildUri(this.RESOURCE_URI, ticket?.TicketID);
+            articles = ticket.Articles;
+            delete ticket.Articles;
+        }
+
+        if (!Array.isArray(ticket.DynamicFields) || !ticket.DynamicFields.length) {
+            delete ticket.DynamicFields;
+        }
+
+        const response = await this.sendRequest(
+            token, clientRequestId, uri, content, KIXObjectType.TICKET, create
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
+
+        if (!create && articles?.length && ticket.TicketID) {
+            for (const article of articles) {
+                if (!article.ArticleID) {
+                    const uri = this.buildUri(this.RESOURCE_URI, ticket.TicketID, 'articles');
+                    await this.sendRequest(
+                        token, clientRequestId, uri, { Article: article }, KIXObjectType.ARTICLE, true
+                    ).catch((error: Error) => {
+                        LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                    });
+                }
+            }
+        }
+
+        return response[TicketProperty.TICKET_ID];
+    }
+
+    private async prepareArticle(token: string, ticket: Ticket, article: Article): Promise<void> {
+        if (!article.From) {
+            const user = await UserService.getInstance().getUserByToken(token);
+            if (user.Contact) {
+                article.From = user.Contact.Email;
+                if (!article.From.match(/.+\s<.+>/)) {
+                    article.From = `"${user.Contact.Firstname} ${user.Contact.Lastname}" <${article.From}>`;
+                }
+            }
+        }
+
+        if (!article.SenderTypeID) {
+            article.SenderTypeID = 1;
+        }
+
+        if (!article.To && ticket.ContactID && article.SenderTypeID !== 3) {
+            const contacts = await super.load<Contact>(
+                token, KIXObjectType.CONTACT, 'contacts', null, [ticket.ContactID], 'Contact', 'prepareArticle',
+                Contact
+            );
+            if (contacts && contacts.length) {
+                article.To = contacts[0].Email;
+                if (!article.To.match(/.+\s<.+>/)) {
+                    article.To = `"${contacts[0].Firstname} ${contacts[0].Lastname}" <${article.To}>`;
+                }
+            }
+
+            // new/unkown contact
+            else {
+                article.To = ticket.ContactID.toString();
+            }
+
+            // switch To and From with external sendertype by channel note on new ticket (= incomming call)
+            // - so ticket "is" from customer
+            if (!ticket.TicketID && article.ChannelID === 1) {
+                const oldFrom = article.From;
+                article.From = article.To;
+                article.To = oldFrom;
+                article.SenderTypeID = 3;
+            }
+        }
+
+        article.ContentType = 'text/html; charset=utf8';
+        article.MimeType = 'text/html';
+        article.Charset = 'utf8';
+    }
+
+    public async deleteObject(
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectId: number,
+        deleteOptions: KIXObjectSpecificDeleteOptions
+    ): Promise<Error[]> {
+        if (objectType === KIXObjectType.WATCHER) {
+            return this.removeWatcher(token, clientRequestId, objectId);
+        }
     }
 
     public async loadArticleAttachment(
@@ -547,6 +594,26 @@ export class TicketAPIService extends KIXObjectAPIService {
             && lockCriteria.operator === SearchOperator.EQUALS
         ) {
             lockCriteria.value = lockCriteria.value[0];
+        }
+
+        const hasStateSearch = searchCriteria.some((c) =>
+            c.property === TicketProperty.STATE_ID ||
+            c.property === TicketProperty.STATE_TYPE ||
+            c.property === TicketProperty.STATE_TYPE_ID
+        );
+
+        const hasTicketSearch = searchCriteria.some((c) =>
+            c.property === TicketProperty.TICKET_NUMBER ||
+            c.property === TicketProperty.TICKET_ID
+        );
+
+        if (!hasStateSearch && !hasTicketSearch) {
+            searchCriteria.push(
+                new FilterCriteria(
+                    TicketProperty.STATE_TYPE, SearchOperator.IN,
+                    FilterDataType.STRING, FilterType.AND, 'Open'
+                )
+            );
         }
 
         return searchCriteria;

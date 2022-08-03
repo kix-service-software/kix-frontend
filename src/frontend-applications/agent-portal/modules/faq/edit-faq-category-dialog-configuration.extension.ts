@@ -32,7 +32,7 @@ import { FormPageConfiguration } from '../../model/configuration/FormPageConfigu
 import { FormConfiguration } from '../../model/configuration/FormConfiguration';
 import { FormContext } from '../../model/configuration/FormContext';
 
-import { ModuleConfigurationService } from '../../server/services/configuration';
+import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
 import { FormFieldOptions } from '../../model/configuration/FormFieldOptions';
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';

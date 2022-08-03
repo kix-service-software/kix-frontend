@@ -17,6 +17,8 @@ export enum NotificationProperty {
 
     MESSAGE_SUBJECT = 'Subject',
 
+    MESSAGE_CONTENTTYPE = 'ContentType',
+
     MESSAGE_BODY = 'Body',
 
     DATA = 'Data',

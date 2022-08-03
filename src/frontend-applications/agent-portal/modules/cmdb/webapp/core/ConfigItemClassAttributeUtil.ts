@@ -21,12 +21,16 @@ import { SortUtil } from '../../../../model/SortUtil';
 export class ConfigItemClassAttributeUtil {
 
     public static async getMergedClassAttributeIds(
-        classIds?: number | number[]
+        classIds?: number | number[], searchableOnly: boolean = true
     ): Promise<Array<[string, string, string]>> {
-        const attributes = await this.getAttributeDefinitions(classIds);
-        const result: Array<[string, string, string]> = [];
-        attributes.filter((a) => a.Input.Type !== 'Attachment' && a.Searchable)
-            .forEach((a) => result.push([a.Key, a.Name, a.Input.Type]));
+        let attributes = await this.getAttributeDefinitions(classIds);
+
+        attributes = attributes.filter((a) => a.Input.Type !== 'Attachment');
+        if (searchableOnly) {
+            attributes = attributes.filter((a) => a.Searchable);
+        }
+
+        const result: Array<[string, string, string]> = attributes.map((a) => [a.Key, a.Name, a.Input.Type]);
         return result;
     }
 

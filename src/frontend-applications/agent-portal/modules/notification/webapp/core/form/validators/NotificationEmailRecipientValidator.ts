@@ -7,19 +7,19 @@
  * --
  */
 
-import { IFormFieldValidator } from '../../../../../../modules/base-components/webapp/core/IFormFieldValidator';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
-import { NotificationProperty } from '../../../../model/NotificationProperty';
+import { FormFieldValue } from '../../../../../../model/configuration/FormFieldValue';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { FormValidationService } from '../../../../../../modules/base-components/webapp/core/FormValidationService';
+import { IFormFieldValidator } from '../../../../../../modules/base-components/webapp/core/IFormFieldValidator';
+import { KIXObjectService } from '../../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ValidationResult } from '../../../../../../modules/base-components/webapp/core/ValidationResult';
 import { ValidationSeverity } from '../../../../../../modules/base-components/webapp/core/ValidationSeverity';
-import { FormFieldValue } from '../../../../../../model/configuration/FormFieldValue';
-import { FormValidationService } from '../../../../../../modules/base-components/webapp/core/FormValidationService';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
-import { KIXObjectService } from '../../../../../../modules/base-components/webapp/core/KIXObjectService';
-import { SystemAddress } from '../../../../../system-address/model/SystemAddress';
-import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
-import { DynamicField } from '../../../../../dynamic-fields/model/DynamicField';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
+import { DynamicField } from '../../../../../dynamic-fields/model/DynamicField';
+import { SystemAddress } from '../../../../../system-address/model/SystemAddress';
+import { NotificationProperty } from '../../../../model/NotificationProperty';
 
 export class NotificationEmailRecipientValidator implements IFormFieldValidator {
 
@@ -54,18 +54,20 @@ export class NotificationEmailRecipientValidator implements IFormFieldValidator 
         if (value && !!value.length) {
             const mailAddresses = Array.isArray(value) ? value : [value];
             for (const mail of mailAddresses) {
-                if (!FormValidationService.getInstance().isValidEmail(mail)) {
-                    const errorString = await TranslationService.translate(
-                        `${FormValidationService.EMAIL_REGEX_ERROR_MESSAGE} ({0}).`, [mail]
-                    );
-                    return new ValidationResult(ValidationSeverity.ERROR, errorString);
-                }
+                if (!(/^<KIX_.*>$/gi.test(mail))) {
+                    if (!FormValidationService.getInstance().isValidEmail(mail)) {
+                        const errorString = await TranslationService.translate(
+                            `${ FormValidationService.EMAIL_REGEX_ERROR_MESSAGE } ({0}).`, [mail]
+                        );
+                        return new ValidationResult(ValidationSeverity.ERROR, errorString);
+                    }
 
-                if (await this.isSystemAddress(mail.replace(/.+ <(.+)>/, '$1'))) {
-                    const errorString = await TranslationService.translate(
-                        'Translatable#Inserted email address must not be a system address ({0}).', [mail]
-                    );
-                    return new ValidationResult(ValidationSeverity.ERROR, errorString);
+                    if (await this.isSystemAddress(mail.replace(/.+ <(.+)>/, '$1'))) {
+                        const errorString = await TranslationService.translate(
+                            'Translatable#Inserted email address must not be a system address ({0}).', [mail]
+                        );
+                        return new ValidationResult(ValidationSeverity.ERROR, errorString);
+                    }
                 }
             }
         }

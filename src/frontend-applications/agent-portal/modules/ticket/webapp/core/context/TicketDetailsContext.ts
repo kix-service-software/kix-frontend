@@ -22,7 +22,6 @@ import { ArticleLoadingOptions } from '../../../model/ArticleLoadingOptions';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { ArticleProperty } from '../../../model/ArticleProperty';
 import { TicketHistory } from '../../../model/TicketHistory';
-import { ArticleFormService } from '../ArticleFormService';
 
 export class TicketDetailsContext extends Context {
 
@@ -84,7 +83,13 @@ export class TicketDetailsContext extends Context {
 
     private async loadTicket(changedProperties: string[] = [], cache: boolean = true): Promise<Ticket> {
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, ['StateType', 'ObjectActions', KIXObjectProperty.DYNAMIC_FIELDS, TicketProperty.WATCHERS]
+            null, null, null,
+            [
+                'StateType', 'ObjectActions',
+                KIXObjectProperty.DYNAMIC_FIELDS,
+                TicketProperty.WATCHERS,
+                KIXObjectProperty.LINKS
+            ]
         );
 
         const ticket = this.loadDetailsObject<Ticket>(KIXObjectType.TICKET, loadingOptions);

@@ -317,4 +317,33 @@ export class ConfigItemSearchFormManager extends SearchFormManager {
         super.setValue(newValue, silent);
     }
 
+    public async getSortAttributeTree(): Promise<TreeNode[]> {
+        let sortNodes: TreeNode[] = [];
+        for (const prop of ConfigItem.SORT_PROPERTIES) {
+            sortNodes.push(new TreeNode(prop.Property, null));
+        }
+
+        for (const n of sortNodes) {
+            const label = await LabelService.getInstance().getPropertyText(
+                n.id, this.objectType
+            );
+            n.label = label;
+        }
+
+        const superNodes = await super.getSortAttributeTree(false);
+        sortNodes = [...sortNodes, ...superNodes];
+
+        return sortNodes.sort((a, b) => a.label.localeCompare(b.label));
+    }
+
+    public async getSortAttributeType(attribute: string): Promise<string> {
+        const superType = await super.getSortAttributeType(attribute);
+        if (superType) {
+            return superType;
+        }
+
+        const property = ConfigItem.SORT_PROPERTIES.find((p) => p.Property === attribute);
+        return property ? property.DataType : null;
+    }
+
 }

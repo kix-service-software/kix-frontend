@@ -69,7 +69,7 @@ export class TicketStateAPIService extends KIXObjectAPIService {
             );
 
             if (objectIds && objectIds.length) {
-                objects = objects.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
+                objects = objects.filter((t) => objectIds.some((oid) => oid === t.ID));
             }
         } else if (objectType === KIXObjectType.TICKET_STATE_TYPE) {
             const uri = this.buildUri(this.RESOURCE_URI, 'types');

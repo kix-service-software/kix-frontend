@@ -72,7 +72,8 @@ export class CreateReportActionJobFormManager extends ExtendedJobFormManager {
                 field.property = KIXObjectType.REPORT_DEFINITION;
                 field.options = [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.REPORT_DEFINITION),
-                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false)
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
+                    new FormFieldOption(ObjectReferenceOptions.FREETEXT, true)
                 ];
 
                 if (action) {
@@ -125,8 +126,8 @@ export class CreateReportActionJobFormManager extends ExtendedJobFormManager {
     ): Promise<void> {
         if (definitionId && parameterField) {
             const reportDefinitions = await KIXObjectService.loadObjects<ReportDefinition>(
-                KIXObjectType.REPORT_DEFINITION, [definitionId]
-            );
+                KIXObjectType.REPORT_DEFINITION, [definitionId], null, null, true
+            ).catch(() => []);
 
             if (Array.isArray(reportDefinitions) && reportDefinitions.length) {
                 const fields = await ReportFormCreator.createParameterFields(
@@ -145,20 +146,19 @@ export class CreateReportActionJobFormManager extends ExtendedJobFormManager {
     ): Promise<void> {
         if (definitionId && outputFormatField) {
             const reportDefinitions = await KIXObjectService.loadObjects<ReportDefinition>(
-                KIXObjectType.REPORT_DEFINITION, [definitionId]
+                KIXObjectType.REPORT_DEFINITION, [definitionId], null, null, true
+            ).catch(() => []);
+
+            const definition = reportDefinitions?.length ? reportDefinitions[0] : null;
+            const field = await ReportFormCreator.createOutputFormatField(definition, outputFormat);
+            outputFormatField.options = [...outputFormatField.options, ...field.options];
+            outputFormatField.defaultValue = field.defaultValue;
+            outputFormatField.asStructure = false;
+
+            await formInstance?.addFieldChildren(outputFormatField, []);
+            EventService.getInstance().publish(
+                FormEvent.RELOAD_INPUT_VALUES, { formInstance, formField: outputFormatField }
             );
-
-            if (Array.isArray(reportDefinitions) && reportDefinitions.length) {
-                const field = await ReportFormCreator.createOutputFormatField(reportDefinitions[0], outputFormat);
-                outputFormatField.options = [...outputFormatField.options, ...field.options];
-                outputFormatField.defaultValue = field.defaultValue;
-                outputFormatField.asStructure = false;
-
-                await formInstance?.addFieldChildren(outputFormatField, []);
-                EventService.getInstance().publish(
-                    FormEvent.RELOAD_INPUT_VALUES, { formInstance, formField: outputFormatField }
-                );
-            }
         } else if (outputFormatField) {
             outputFormatField.asStructure = true;
             await formInstance?.addFieldChildren(outputFormatField, []);
@@ -194,8 +194,8 @@ export class CreateReportActionJobFormManager extends ExtendedJobFormManager {
         const defintionValue = formInstance.getFormFieldValue<number>(field?.instanceId);
         const definitionId = defintionValue ? defintionValue.value : null;
         const definitions = await KIXObjectService.loadObjects<ReportDefinition>(
-            KIXObjectType.REPORT_DEFINITION, [definitionId]
-        );
+            KIXObjectType.REPORT_DEFINITION, [definitionId], null, null, true
+        ).catch(() => []);
 
         return Array.isArray(definitions) && definitions.length ? definitions[0] : null;
     }

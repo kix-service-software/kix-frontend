@@ -11,24 +11,49 @@ import { Attachment } from '../../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
-import { EventService } from '../../../base-components/webapp/core/EventService';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { InlineContent } from '../../../base-components/webapp/core/InlineContent';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
+import { ArticleProperty } from '../../../ticket/model/ArticleProperty';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { FAQArticle } from '../../model/FAQArticle';
 import { FAQArticleAttachmentLoadingOptions } from '../../model/FAQArticleAttachmentLoadingOptions';
 import { FAQArticleProperty } from '../../model/FAQArticleProperty';
-import { FAQEvent } from './FAQEvent';
 
 export class FAQArticleHandler {
 
     public static async publishFAQArticleAsHTMLWithAttachments(articleId: number): Promise<void> {
-        const faqArticleHTML = await FAQArticleHandler.prepareFAQArticleHTML(articleId);
-        EventService.getInstance().publish(FAQEvent.APPEND_FAQ_ARTICLE_HTML, faqArticleHTML);
 
-        const attachments = await this.getFAQArticleAttachments(articleId);
-        EventService.getInstance().publish(FAQEvent.APPEND_FAQ_ARTICLE_ATTACHMENTS, attachments);
+        // FIXME: add on object, not on form value (if binding works again)
+        const context = ContextService.getInstance().getActiveContext();
+        const formhandler = await context?.getFormManager()?.getObjectFormHandler();
+        const objectFormValueMapper = formhandler?.objectFormValueMapper;
+        if (objectFormValueMapper) {
+            const faqArticleHTML = await FAQArticleHandler.prepareFAQArticleHTML(articleId);
+            if (faqArticleHTML) {
+                const bodyValue = objectFormValueMapper.findFormValue(ArticleProperty.BODY);
+                if (bodyValue) {
+                    if (!bodyValue.value) {
+                        bodyValue.value = faqArticleHTML;
+                    } else {
+                        bodyValue.value += faqArticleHTML;
+                    }
+                }
+            }
+
+            const attachments = await this.getFAQArticleAttachments(articleId);
+            if (attachments?.length) {
+                const attachmentValue = objectFormValueMapper.findFormValue(ArticleProperty.ATTACHMENTS);
+                if (attachmentValue) {
+                    if (Array.isArray(attachmentValue.value)) {
+                        attachmentValue.value = [...attachmentValue.value, ...attachments];
+                    } else {
+                        attachmentValue.value = [...attachments];
+                    }
+                }
+            }
+        }
     }
 
     public static async getFAQArticleAttachments(articleId: number): Promise<Attachment[]> {

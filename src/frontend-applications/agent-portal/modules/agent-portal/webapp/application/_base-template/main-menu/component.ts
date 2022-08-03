@@ -41,7 +41,8 @@ class Component extends AbstractMarkoComponent {
             },
             contextRegistered: (descriptor: ContextDescriptor) => {
                 this.updateEntries(this.state.primaryMenuEntries, this.state.secondaryMenuEntries);
-            }
+            },
+            beforeDestroy: () => null
         });
 
         window.addEventListener('resize', this.resizeHandling.bind(this), false);

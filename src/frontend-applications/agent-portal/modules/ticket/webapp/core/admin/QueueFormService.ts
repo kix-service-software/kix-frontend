@@ -19,6 +19,15 @@ import { LabelService } from '../../../../../modules/base-components/webapp/core
 import { IdService } from '../../../../../model/IdService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { FormInstance } from '../../../../base-components/webapp/core/FormInstance';
+import { TicketProperty } from '../../../model/TicketProperty';
+import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
+import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { FilterDataType } from '../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../model/FilterType';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { ObjectReferenceOptions } from '../../../../base-components/webapp/core/ObjectReferenceOptions';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
 
 export class QueueFormService extends KIXObjectFormService {
 

@@ -57,4 +57,8 @@ export interface IServerConfiguration {
 
     SOCKET_MAX_HTTP_BUFFER_SIZE: number;
 
+    CLUSTER_WORKER_COUNT: number;
+
+    CLUSTER_ENABLED: boolean;
+
 }

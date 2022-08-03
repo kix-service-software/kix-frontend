@@ -21,7 +21,6 @@ import { ValidationSeverity } from './ValidationSeverity';
 import { EventService } from './EventService';
 import { ApplicationEvent } from './ApplicationEvent';
 import { LoadingShieldEventData } from './LoadingShieldEventData';
-import { ContextHistory } from './ContextHistory';
 import { ContextService } from './ContextService';
 import { PlaceholderService } from './PlaceholderService';
 import { InlineContent } from './InlineContent';

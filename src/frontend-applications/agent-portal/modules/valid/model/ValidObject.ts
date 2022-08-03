@@ -30,6 +30,7 @@ export class ValidObject extends KIXObject {
             this.ID = Number(validObject.ID);
             this.ObjectId = this.ID;
             this.Name = validObject.Name;
+            this.ValidID = ValidObject.VALID;
         }
     }
 

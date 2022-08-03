@@ -16,6 +16,12 @@ import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpec
 import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { DynamicFieldType } from '../../model/DynamicFieldType';
+import { DynamicFieldProperty } from '../../model/DynamicFieldProperty';
+import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
+import { rejects } from 'assert';
+import { Resolver } from 'dns';
+import { Error } from '../../../../../../server/model/Error';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class DynamicFieldService extends KIXObjectService<DynamicField> {
 
@@ -59,6 +65,40 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
         }
 
         return objects as any[];
+    }
+
+    public async updateObject(
+        objectType: KIXObjectType | string, parameter: Array<[string, any]>, objectId: number,
+        cacheKeyPrefix: string = objectType, silent?: boolean
+    ): Promise<string | number> {
+        const dynamicField = await KIXObjectService.loadDynamicField(null, objectId);
+        const dfName = parameter.find((p) => p[0] === DynamicFieldProperty.NAME);
+
+        let id;
+        if (dfName && dfName[1] !== dynamicField.Name) {
+            const askForUpdatePromise = new Promise<number>((resolve, reject) => {
+                BrowserUtil.openConfirmOverlay(
+                    'Translatable#Warning', 'Admin_DynamicField_Edit_Name_Hint',
+                    async () => {
+                        const id = await super.updateObject(
+                            objectType, parameter, objectId, cacheKeyPrefix, silent
+                        ).catch((e) => reject(e));
+
+                        resolve(Number(id));
+                    },
+                    async () => {
+                        const msg = await TranslationService.translate('Translatable#Aborted by user.');
+                        reject(new Error('', msg));
+                    },
+                    ['OK', 'Cancel']
+                );
+            });
+            id = await askForUpdatePromise;
+        } else {
+            id = await super.updateObject(objectType, parameter, objectId, cacheKeyPrefix, silent);
+        }
+
+        return id;
     }
 
     public registerConfigSchema(id: string, schema: any): void {

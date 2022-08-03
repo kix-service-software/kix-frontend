@@ -34,7 +34,8 @@ class Component {
             contextChanged: (contextId: string, context: Context, type: ContextType): void => {
                 this.closeMobile();
             },
-            contextRegistered: () => { return; }
+            contextRegistered: () => { return; },
+            beforeDestroy: () => null
         });
 
         this.eventSubscriber = {

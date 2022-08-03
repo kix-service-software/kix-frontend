@@ -15,10 +15,7 @@ export class AgentPortalConfiguation implements IConfiguration {
     public static CONFIGURATION_ID = 'agent-portal-configuration';
 
     public constructor(
-        public preloadObjects: Array<KIXObjectType | string> = [
-            KIXObjectType.CONTACT,
-            KIXObjectType.ORGANISATION
-        ],
+        public preloadObjects: Array<KIXObjectType | string> = [],
         public id: string = AgentPortalConfiguation.CONFIGURATION_ID,
         public name: string = 'Agent Portal Configuration',
         public type: string = 'Agent Portal'

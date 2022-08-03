@@ -50,12 +50,11 @@ export class ReportDefinitionTableFactory extends TableFactory {
             this.getDefaultColumnConfiguration(ReportDefinitionProperty.NAME),
             this.getDefaultColumnConfiguration(ReportDefinitionProperty.DATASOURCE),
             this.getDefaultColumnConfiguration(ReportDefinitionProperty.COMMENT),
+            this.getDefaultColumnConfiguration(ReportDefinitionProperty.IS_PERIODIC),
             this.getDefaultColumnConfiguration(ReportDefinitionProperty.VALID_ID),
             this.getDefaultColumnConfiguration(ReportDefinitionProperty.AVAILABLE_OUTPUT_FORMATS),
             this.getDefaultColumnConfiguration(ReportDefinitionProperty.CREATE_NEW_REPORT),
-            this.getDefaultColumnConfiguration(ReportDefinitionProperty.REPORTS),
-            this.getDefaultColumnConfiguration(ReportDefinitionProperty.CREATE_TIME),
-            this.getDefaultColumnConfiguration(ReportDefinitionProperty.CREATE_BY),
+            this.getDefaultColumnConfiguration(ReportDefinitionProperty.REPORT_COUNT),
             this.getDefaultColumnConfiguration(ReportDefinitionProperty.CHANGE_TIME),
             this.getDefaultColumnConfiguration(ReportDefinitionProperty.CHANGE_BY)
         ];
@@ -93,6 +92,11 @@ export class ReportDefinitionTableFactory extends TableFactory {
                     null, null, null, property, true, false, true, false, 200, true, true
                 );
                 break;
+            case ReportDefinitionProperty.IS_PERIODIC:
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, true, false, true, false, 50, true, true, true
+                );
+                break;
             case ReportDefinitionProperty.AVAILABLE_OUTPUT_FORMATS:
                 config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 150, true, true, true,
@@ -113,6 +117,12 @@ export class ReportDefinitionTableFactory extends TableFactory {
             case KIXObjectProperty.VALID_ID:
                 config = new DefaultColumnConfiguration(
                     null, null, null, property, true, false, true, false, 130, true, true, true
+                );
+                break;
+            case KIXObjectProperty.CREATE_TIME:
+            case KIXObjectProperty.CHANGE_TIME:
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, true, false, true, false, 100, true, true, false, DataType.DATE_TIME
                 );
                 break;
             default:

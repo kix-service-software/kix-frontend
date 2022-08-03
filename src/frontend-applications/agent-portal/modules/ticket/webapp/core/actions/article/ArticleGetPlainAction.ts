@@ -25,6 +25,11 @@ export class ArticleGetPlainAction extends AbstractAction<Article> {
         this.icon = 'kix-icon-listview';
     }
 
+    public async setData(data: Article): Promise<void> {
+        super.setData(data);
+        this.articleId = this.data?.ArticleID;
+    }
+
     public async canShow(): Promise<boolean> {
         let show = false;
         const context = ContextService.getInstance().getActiveContext();

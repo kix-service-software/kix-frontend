@@ -65,12 +65,19 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             (p) => p.ID === PersonalSettingsProperty.ARTICLE_SORT_ORDER
         ) : null;
         this.sortOrder = preference?.Value;
+
+        this.state.translations = await TranslationService.createTranslationObject(['Translatable#Go to top']);
+
+        // enable read action if necessary
+        this.enableReadAction();
     }
 
     private async setArticles(): Promise<void> {
         this.setFilteredArticles();
+        this.enableReadAction();
+    }
 
-        // enable read action
+    private async enableReadAction(): Promise<void> {
         const allArticles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || [];
         if (allArticles.length) {
             this.state.activeUnreadAction = allArticles.some((a) => a.isUnread());
@@ -78,17 +85,25 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async setFilteredArticles(): Promise<void> {
-        const articles = this.context.getFilteredObjectList<Article>(KIXObjectType.ARTICLE) || [];
+        const filteredArticles = this.context.getFilteredObjectList<Article>(KIXObjectType.ARTICLE) || [];
 
         const sortOrder = this.sortOrder === 'newest' ? SortOrder.DOWN : SortOrder.UP;
 
-        this.state.articles = SortUtil.sortObjects(
-            [...articles], ArticleProperty.INCOMING_TIME, DataType.INTEGER, sortOrder
+        let allArticles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || [];
+
+        allArticles = SortUtil.sortObjects(
+            [...allArticles], ArticleProperty.INCOMING_TIME, DataType.INTEGER, sortOrder
         );
 
+        allArticles.forEach((a, index) => {
+            a['countNumber'] = sortOrder === SortOrder.UP ? index + 1 : allArticles.length - index;
+        });
+
+        this.state.articles = allArticles.filter((a) => filteredArticles.find((fa) => a.ArticleID === fa.ArticleID));
+
         // change widget title
-        const allArticles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || [];
-        const articleLengthText = (articles?.length < allArticles?.length ? articles.length + '/' : '') + allArticles?.length;
+        const articleLengthText = (filteredArticles?.length < allArticles?.length ? filteredArticles.length +
+            '/' : '') + allArticles?.length;
         const title = await TranslationService.translate(this.state.widgetConfiguration?.title);
         this.state.widgetTitle = `${title} (${articleLengthText})`;
     }

@@ -19,11 +19,14 @@ import { ClientStorageService } from '../../core/ClientStorageService';
 import { TabContainerEvent } from '../../core/TabContainerEvent';
 import { TabContainerEventData } from '../../core/TabContainerEventData';
 import { BrowserUtil } from '../../core/BrowserUtil';
+import { PlaceholderService } from '../../core/PlaceholderService';
+import { Context } from '../../../../../model/Context';
 
 class WidgetComponent implements IEventSubscriber {
 
     private state: ComponentState;
     public eventSubscriberId: string;
+    private context: Context;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -49,21 +52,27 @@ class WidgetComponent implements IEventSubscriber {
     }
 
     private async setTitle(title: string): Promise<void> {
-        this.state.title = await TranslationService.translate(title);
+        const translatedTitle = await TranslationService.translate(title);
+        const object = await this.context?.getObject();
+        const titleWithPlaceholder = await PlaceholderService.getInstance().replacePlaceholders(
+            translatedTitle, object
+        );
+
+        this.state.title = titleWithPlaceholder || translatedTitle;
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
+        this.context = ContextService.getInstance().getActiveContext();
 
-        this.state.widgetType = WidgetService.getInstance().getWidgetType(this.state.instanceId, context);
+        this.state.widgetType = WidgetService.getInstance().getWidgetType(this.state.instanceId, this.context);
 
         // set before config (prevent await delay)
         if (this.state.widgetType === WidgetType.SIDEBAR) {
-            this.state.minimized = !context.isSidebarWidgetOpen(this.state.instanceId);
+            this.state.minimized = !this.context.isSidebarWidgetOpen(this.state.instanceId);
         }
 
         if (!this.state.widgetConfiguration) {
-            const config = await context.getWidgetConfiguration(this.state.instanceId);
+            const config = await this.context.getWidgetConfiguration(this.state.instanceId);
             this.state.widgetConfiguration = config;
         }
 

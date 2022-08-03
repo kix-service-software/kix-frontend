@@ -37,6 +37,10 @@ export abstract class SocketNameSpace implements ISocketNamespace {
             .on(SocketEvent.CONNECTION, (client: Socket) => {
                 this.registerEvents(client);
             });
+
+        this.namespace.on('connection', (socket) => {
+            LoggingService.getInstance().info(`connection on ${this.getNamespace()}`);
+        });
     }
 
     protected async initialize(): Promise<void> {
@@ -93,31 +97,6 @@ export abstract class SocketNameSpace implements ISocketNamespace {
 
                 return null;
             });
-
-            // Queue socket requests
-            // try {
-            //     response = await RequestQueue.getInstance().enqueue(handler(data, client), profileTaskId)
-            //         .catch((error) => {
-            //             if (error instanceof SocketAuthenticationError) {
-            //                 client.emit(SocketEvent.INVALID_TOKEN, new SocketErrorResponse(data.requestId, error));
-            //             } else if (error instanceof PermissionError) {
-            //                 client.emit(
-            // SocketEvent.PERMISSION_ERROR, new SocketErrorResponse(data.requestId, error));
-            //             } else {
-            //                 client.emit(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error));
-            //             }
-
-            //             return null;
-            //         });
-            // } catch (error) {
-            //     if (error instanceof SocketAuthenticationError) {
-            //         client.emit(SocketEvent.INVALID_TOKEN, new SocketErrorResponse(data.requestId, error));
-            //     } else if (error instanceof PermissionError) {
-            //         client.emit(SocketEvent.PERMISSION_ERROR, new SocketErrorResponse(data.requestId, error));
-            //     } else {
-            //         client.emit(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error));
-            //     }
-            // }
 
             let responseData = [];
             if (response) {

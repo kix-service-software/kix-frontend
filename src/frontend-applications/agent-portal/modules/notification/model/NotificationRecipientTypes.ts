@@ -19,5 +19,7 @@ export enum NotificationRecipientTypes {
 
     AGENT_MY_QUEUES = 'AgentMyQueues',
 
-    CUSTOMER = 'Customer'
+    CUSTOMER = 'Customer',
+
+    AGENT_WATCHER = 'AgentWatcher'
 }

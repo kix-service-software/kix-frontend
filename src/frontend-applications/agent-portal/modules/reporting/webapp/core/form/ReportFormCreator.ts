@@ -84,6 +84,10 @@ export class ReportFormCreator {
         }
 
         if (outputFormat) {
+            if (!nodes.some((n) => n.id === outputFormat)) {
+                nodes.push(new TreeNode(outputFormat, outputFormat));
+            }
+
             outputFormatField.defaultValue = new FormFieldValue(
                 Array.isArray(outputFormat) ? outputFormat : [outputFormat]
             );
@@ -142,7 +146,7 @@ export class ReportFormCreator {
         }
 
         if (parameter.References) {
-            await ReportingFormUtil.setInputComponent(field, parameter);
+            await ReportingFormUtil.setInputComponent(field, parameter, undefined, undefined, KIXObjectType.REPORT);
         } else if (Array.isArray(parameter.PossibleValues) && parameter.PossibleValues.length) {
             ReportingFormUtil.createDefaultValueInput(field, parameter);
         }

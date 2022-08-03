@@ -27,7 +27,6 @@ import { IdService } from '../../../../model/IdService';
 import { ExtendedKIXObjectFormService } from './ExtendedKIXObjectFormService';
 import { FormInstance } from './FormInstance';
 import { KIXObjectService } from './KIXObjectService';
-import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core/DynamicFormFieldOption';
 import { FormFactory } from './FormFactory';
 import { FormService } from './FormService';
 
@@ -441,33 +440,5 @@ export abstract class KIXObjectFormService {
             }
         }
         return foundField;
-    }
-
-    public async createFormFieldConfigurations(
-        formFields: FormFieldConfiguration[]
-    ): Promise<FormFieldConfiguration[]> {
-        for (const ff of formFields) {
-            ff.label = ff.property;
-            ff.readonly = Boolean(ff.readonly);
-
-            if (ff.property === KIXObjectProperty.DYNAMIC_FIELDS && Array.isArray(ff.options)) {
-                const nameOption = ff.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
-                if (nameOption) {
-                    const dynamicField = await KIXObjectService.loadDynamicField(nameOption.value);
-                    if (dynamicField) {
-                        ff.label = dynamicField.Label;
-                    }
-                }
-            }
-        }
-
-        for (const extendedService of this.extendedFormServices) {
-            const extendedFields = await extendedService.createFormFieldConfigurations(formFields);
-            if (extendedFields) {
-                formFields = extendedFields;
-            }
-        }
-
-        return formFields;
     }
 }

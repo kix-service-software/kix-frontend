@@ -66,7 +66,10 @@ class TreeNodeComponent {
         }
     }
 
-    public toggleNode(): void {
+    public toggleNode(event: any): void {
+        event.stopPropagation();
+        event.preventDefault();
+
         if (this.treeHandler) {
             this.treeHandler.toggleNode(this.state.node);
         }

@@ -1,0 +1,116 @@
+<!--
+Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<div.form-control.table-form-input class={readonly: state.readonly}>
+    <if(state.prepared)>
+        <if(!state.required)>
+            <div.df-table-buttons>
+                <if(!state.readonly)>
+                    <if(state.value)>
+                        <button.btn.btn-sm.btn-labeled.btn-danger
+                            type="button"
+                            title=(
+                                state.translations["Translatable#Remove table"]
+                            )
+                            on-click("removeTable")
+                        >
+                            <i.fas.fa-times.p-1/>
+                            <translation-string pattern="Translatable#Remove table"/>
+                        </button>
+                    </if>
+                    <else>
+                        <button.kix-button.submit-button
+                            type="button"
+                            on-click("addInitialTable")
+                            title=(
+                                state.translations[
+                                    "Translatable#Add initial table"
+                                ]
+                            )
+                        >
+                            <span.kix-icon-check/>
+                            <translation-string pattern="Translatable#Add initial table"/>
+                        </button>
+                    </else>
+                </if>
+            </div>
+        </if>
+        <div.df-table-input-container.table-container>
+            <table.table.table-striped class={"table-hover": !state.readonly }>
+                <thead>
+                    <tr>
+                        <for|col| of=state.columns>
+                            <th scope="col">${col}</th>
+                        </for>
+                        <if(state.hasAction && !state.readonly)>
+                            <th scope="col">
+                                <translation-string pattern="Translatable#Action"/>
+                            </th>
+                        </if>
+                    </tr>
+                </thead>
+                <tbody>
+                    <if(state.value)>
+                        <for|row, rowIndex| of=state.value>
+                            <tr>
+                                <for|value, colIndex| of=row>
+                                    <td>
+                                        <input.form-control
+                                            type="text"
+                                            value=value
+                                            disabled=state.readonly
+                                            on-change(
+                                                "tableValueChanged",
+                                                rowIndex,
+                                                colIndex,
+                                            )
+                                        >
+                                    </td>
+                                </for>
+                                <if(state.hasAction && !state.readonly)>
+                                    <td.content-cell>
+                                        <if(component.canRemove(rowIndex))>
+                                            <button.button.btn.btn-sm.btn-secondary
+                                                type="button"
+                                                title=(
+                                                    state.translations[
+                                                        "Translatable#Remove"
+                                                    ]
+                                                )
+                                                on-click(
+                                                    "tableRowRemoved",
+                                                    rowIndex,
+                                                )
+                                            >
+                                                <i.fas.fa-minus/>
+                                            </button>
+                                        </if>
+                                        <if(component.canAdd(rowIndex))>
+                                            <button.button.btn.btn-sm.btn-secondary.ms-1
+                                                type="button"
+                                                title=(
+                                                    state.translations[
+                                                        "Translatable#Add"
+                                                    ]
+                                                )
+                                                on-click("tableRowAdded")
+                                            >
+                                                <i.fas.fa-plus/>
+                                            </button>
+                                        </if>
+                                    </td>
+                                </if>
+                            </tr>
+                        </for>
+                    </if>
+                </tbody>
+            </table>
+        </div>
+    </if>
+</div>

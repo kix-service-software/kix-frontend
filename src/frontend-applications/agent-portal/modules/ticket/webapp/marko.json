@@ -5,6 +5,7 @@
     ],
     "tags-dir": [
         "./components",
+        "./components/inputs",
         "./components/ticket-communication-widget"
     ]
 }

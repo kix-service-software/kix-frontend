@@ -11,10 +11,13 @@ import { AbstractAction } from '../../../../../../modules/base-components/webapp
 import { UIComponentPermission } from '../../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
-import { NewTicketArticleContext } from '../..';
+import { EditTicketDialogContext } from '../..';
 import { AuthenticationSocketClient } from '../../../../../base-components/webapp/core/AuthenticationSocketClient';
 import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
+import { FormService } from '../../../../../base-components/webapp/core/FormService';
+import { FormContext } from '../../../../../../model/configuration/FormContext';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 
 export class ArticleNewAction extends AbstractAction {
 
@@ -42,17 +45,15 @@ export class ArticleNewAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        ContextService.getInstance().setActiveContext(NewTicketArticleContext.CONTEXT_ID,
-            undefined, undefined,
+        const editContext = await ContextService.getInstance().setActiveContext(EditTicketDialogContext.CONTEXT_ID,
+            this.ticketId, undefined,
             [
-                ['REFERENCED_TICKET_ID', this.ticketId],
-                [
-                    AdditionalContextInformation.DISPLAY_TEXT,
-                    await TranslationService.translate(this.text)
-                ],
-                [AdditionalContextInformation.ICON, this.icon]
+                ['REFERENCED_SOURCE_OBJECT_ID', this.ticketId],
+                [AdditionalContextInformation.FORM_ID, 'ticket-article-new-form']
             ]
         );
+        editContext.setIcon(this.icon);
+        editContext.setDisplayText(await TranslationService.translate(this.text));
     }
 
 }

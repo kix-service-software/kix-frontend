@@ -401,37 +401,27 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
     public async getObjectText(
         ticket: Ticket, id: boolean = true, title: boolean = true, translatable: boolean = true
     ): Promise<string> {
-        let returnString = '';
-        if (ticket) {
-            if (id) {
-                let ticketHook: string = '';
-                let ticketHookDivider: string = '';
+        let ticketHook: string = '';
+        let ticketHookDivider: string = '';
 
-                const hookConfig = await KIXObjectService.loadObjects<SysConfigOption>(
-                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_HOOK]
-                ).catch((error): SysConfigOption[] => []);
-                const dividerConfig = await KIXObjectService.loadObjects<SysConfigOption>(
-                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_HOOK_DIVIDER]
-                ).catch((error): SysConfigOption[] => []);
+        const hookConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_HOOK]
+        ).catch((error): SysConfigOption[] => []);
 
-                if (hookConfig && hookConfig.length) {
-                    ticketHook = hookConfig[0].Value ? hookConfig[0].Value : '';
-                }
+        const dividerConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_HOOK_DIVIDER]
+        ).catch((error): SysConfigOption[] => []);
 
-                if (dividerConfig && dividerConfig.length) {
-                    ticketHookDivider = dividerConfig[0].Value ? dividerConfig[0].Value : '';
-                }
-
-                if (ticket.TicketNumber) {
-                    returnString = ticketHook + ticketHookDivider + ticket.TicketNumber;
-                }
-            }
-            if (title) {
-                returnString += (id && ticket.Title ? ' - ' : '') + (ticket.Title ? ticket.Title : '');
-            }
+        if (hookConfig.length) {
+            ticketHook = hookConfig[0].Value ? hookConfig[0].Value : '';
         }
 
-        return returnString;
+        if (dividerConfig.length) {
+            ticketHookDivider = dividerConfig[0].Value ? dividerConfig[0].Value : '';
+        }
+
+        const text = `${ticketHook}${ticketHookDivider}${ticket?.TicketNumber} - ${ticket?.Title}`;
+        return text;
     }
 
     public getObjectAdditionalText(ticket: Ticket, translatable: boolean = true): string {
