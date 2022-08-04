@@ -22,7 +22,6 @@ import { ArticleLoadingOptions } from '../../../model/ArticleLoadingOptions';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { ArticleProperty } from '../../../model/ArticleProperty';
 import { TicketHistory } from '../../../model/TicketHistory';
-import { ArticleFormService } from '../ArticleFormService';
 
 export class TicketDetailsContext extends Context {
 

@@ -11,7 +11,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
    <if(state.show && state.article)>
       <div.left-avatar>
          <if(state.isExternal)>
-            <div.contact-avatar>
+            <div.contact-avatar title=state.fromDisplayName>
                <if(state.contactIcon)>
                   <icon icon=state.contactIcon/>
                </if>
@@ -25,6 +25,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <message-header
                 article=state.article
                 articleCountNumber=input.articleCountNumber
+                fromDisplayName=state.fromDisplayName
             />
          </div>
          <if(state.expanded)>
@@ -76,7 +77,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
       <div.right-avatar>
          <if(!state.isExternal)>
             <div.speech-bubble style=`background-color: ${state.backgroundColor};`></div>
-            <div.contact-avatar>
+            <div.contact-avatar title=state.fromDisplayName>
                <if(state.contactIcon)>
                   <icon icon=state.contactIcon/>
                </if>

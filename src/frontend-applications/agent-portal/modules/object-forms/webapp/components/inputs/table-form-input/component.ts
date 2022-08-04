@@ -39,6 +39,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.readonly = formValue.readonly;
             })
         );
+
+        this.bindingIds.push(
+            this.formValue.addPropertyBinding(FormValueProperty.VALUE, (formValue: ObjectFormValue) => {
+                this.state.value = formValue.value;
+            })
+        );
+
         this.state.readonly = this.formValue?.readonly;
     }
 
@@ -55,6 +62,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.hasAction = this.formValue.minRowCount !== this.formValue.maxRowCount;
 
         this.state.prepared = true;
+    }
+
+    public async onDestroy(): Promise<void> {
+        if (this.bindingIds?.length && this.formValue) {
+            this.formValue.removePropertyBinding(this.bindingIds);
+        }
     }
 
     public removeTable(): void {

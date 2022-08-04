@@ -170,7 +170,7 @@ export class TicketArticleCreate extends ExtendedJobFormManager {
             } else if (optionName === 'Team' && !isNaN(value)) {
                 const object = await this.loadObject<Queue>(KIXObjectType.QUEUE, value);
                 if (object) {
-                    const queueName = await this.getQueueName(object);
+                    const queueName = object.Fullname;
                     return queueName;
                 }
             } else if (optionName === 'Type' && !isNaN(value)) {
@@ -190,17 +190,5 @@ export class TicketArticleCreate extends ExtendedJobFormManager {
         }
 
         return object;
-    }
-
-    private async getQueueName(queue: Queue): Promise<string> {
-        let queueName = queue.Name;
-        if (queue.ParentID) {
-            const parentQeue = await this.loadObject<Queue>(KIXObjectType.QUEUE, queue.ParentID);
-            if (parentQeue) {
-                queueName = `${parentQeue.Name}::${queueName}`;
-            }
-        }
-
-        return queueName;
     }
 }

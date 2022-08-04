@@ -8,24 +8,21 @@
  */
 
 import { ContextMode } from '../../../../../model/ContextMode';
-import { IdService } from '../../../../../model/IdService';
-import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
-import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
-import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { Cell } from '../../../../table/model/Cell';
-import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ConfigItem } from '../../../model/ConfigItem';
 import { ComponentState } from './ComponentState';
+import { Ticket } from '../../../../ticket/model/Ticket';
+import { FormValueProperty } from '../../../../object-forms/model/FormValueProperty';
+import { ObjectFormValue } from '../../../../object-forms/model/FormValues/ObjectFormValue';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private configItemId: number;
-    private formSubscriber: IEventSubscriber;
+    private formValue: ObjectFormValue;
+    private formValueBindingId: string;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -41,61 +38,42 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
-        const formInstance = context?.descriptor?.contextMode !== ContextMode.DETAILS ?
-            await context?.getFormManager().getFormInstance() : null;
-        const affectedAssettField = await formInstance?.getFormFieldByProperty(
-            'DynamicField.AffectedAsset'
-        );
 
-        if (affectedAssettField) {
-            this.addFormListener();
-        } else {
+        const ticket = await context?.getObject<Ticket>();
+        if (context?.descriptor?.contextMode === ContextMode.DETAILS) {
             this.state.readonly = true;
+        } else {
+            const formHandler = await context.getFormManager().getObjectFormHandler();
+            this.formValue = formHandler?.objectFormValueMapper?.findFormValue('DynamicField.AffectedAsset');
+            this.formValueBindingId = this.formValue?.addPropertyBinding(FormValueProperty.VALUE, (value: any) => {
+                this.setStates(value);
+            });
         }
 
-        // set inital state by object (details) / formObject ("dialog")
-        const object = await context?.getObject();
-        const affectedAssetsDF = object?.DynamicFields.find((df) => df.Name === 'AffectedAsset');
+        const affectedAssetsDF = ticket?.DynamicFields.find((df) => df.Name === 'AffectedAsset');
         if (affectedAssetsDF) {
             this.setStates(affectedAssetsDF.Value);
         }
     }
 
-    private addFormListener(): void {
-        this.formSubscriber = {
-            eventSubscriberId: IdService.generateDateBasedId('add-to-affected-asset-cell'),
-            eventPublished: (data: FormValuesChangedEventData, eventId: string): void => {
-                const affectedAssetsValue = data.changedValues.find((cv) =>
-                    cv[0]?.property === KIXObjectProperty.DYNAMIC_FIELDS &&
-                    cv[0]?.options?.some((o) =>
-                        o.option === DynamicFormFieldOption.FIELD_NAME &&
-                        o.value === 'AffectedAsset'
-                    )
-                );
-                if (affectedAssetsValue && affectedAssetsValue[1]) {
-                    this.setStates(affectedAssetsValue[1].value);
-                }
-            }
-        };
-        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
-    }
-
     private async setStates(value: any): Promise<void> {
-        this.state.checked = Array.isArray(value) ?
-            value.some((v) => Number(v) === this.configItemId) :
-            false;
-        this.state.title = await TranslationService.translate(
-            this.state.readonly ?
-                'Translatable#Contained in Affected Assets' :
-                this.state.checked ?
-                    'Translatable#Remove from Affected Assets' :
-                    'Translatable#Add to Affected Assets'
-        );
+        this.state.checked = Array.isArray(value)
+            ? value.some((v) => Number(v) === this.configItemId)
+            : false;
+
+        let title = 'Translatable#Contained in Affected Assets';
+        if (!this.state.readonly) {
+            title = this.state.checked
+                ? 'Translatable#Remove from Affected Assets'
+                : 'Translatable#Add to Affected Assets';
+        }
+
+        this.state.title = await TranslationService.translate(title);
     }
 
     public onDestroy(): void {
-        if (this.formSubscriber) {
-            EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
+        if (this.formValueBindingId) {
+            this.formValue?.removePropertyBinding([this.formValueBindingId]);
         }
     }
 
@@ -105,28 +83,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.state.checked = !this.state.checked;
 
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager().getFormInstance();
-        if (formInstance) {
-            const currentFieldValue = await formInstance.getFormFieldValueByProperty<number[]>(
-                'DynamicField.AffectedAsset'
-            );
-            let currentValue: number[] = [];
-            if (Array.isArray(currentFieldValue?.value)) {
-                currentValue = currentFieldValue.value;
-            }
-            const idIndex = currentValue.findIndex((id) => Number(id) === this.configItemId);
-            if (this.state.checked && idIndex === -1) {
-                currentValue.push(this.configItemId);
-                formInstance.provideFormFieldValuesForProperties(
-                    [['DynamicField.AffectedAsset', currentValue]], null
-                );
-            } else if (!this.state.checked && idIndex !== -1) {
-                currentValue.splice(idIndex, 1);
-                formInstance.provideFormFieldValuesForProperties(
-                    [['DynamicField.AffectedAsset', currentValue]], null
-                );
-            }
+        const currentValue: number[] = this.formValue?.value || [];
+        const idIndex = currentValue.findIndex((id) => Number(id) === this.configItemId);
+        if (this.state.checked && idIndex === -1) {
+            currentValue.push(this.configItemId);
+            this.formValue?.setFormValue(currentValue);
+        } else if (!this.state.checked && idIndex !== -1) {
+            currentValue.splice(idIndex, 1);
+            this.formValue?.setFormValue(currentValue);
         }
     }
 

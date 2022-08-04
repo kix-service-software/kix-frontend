@@ -257,12 +257,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 pendingSchedule.id = 'pending-' + pendingSchedule.id;
 
                 const pendingDate = new Date(ticket.PendingTime);
-                pendingSchedule.start = pendingDate;
-                const endDate = new Date(pendingDate);
-                endDate.setHours(endDate.getHours() + 1);
+                if (!isNaN(pendingDate.getTime())) {
+                    pendingSchedule.start = pendingDate;
+                    const endDate = new Date(pendingDate);
+                    endDate.setHours(endDate.getHours() + 1);
 
-                pendingSchedule.end = pendingDate;
-                schedules.push(pendingSchedule);
+                    pendingSchedule.end = pendingDate;
+                    schedules.push(pendingSchedule);
+                }
             }
 
             if (await this.setScheduleDates(ticket, schedule)) {

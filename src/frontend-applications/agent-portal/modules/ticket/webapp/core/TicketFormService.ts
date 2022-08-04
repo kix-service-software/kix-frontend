@@ -9,10 +9,6 @@
 
 import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { TicketProperty } from '../../model/TicketProperty';
-import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
-import { ArticleProperty } from '../../model/ArticleProperty';
-import { CRUD } from '../../../../../../server/model/rest/CRUD';
 
 export class TicketFormService extends KIXObjectFormService {
 

@@ -210,9 +210,13 @@ export class ObjectFormValue<T = any> {
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
         const isEdit = this.objectValueMapper.formContext === FormContext.EDIT;
-        if ((!this.value || isEdit) && field.defaultValue?.value) {
+        if ((!this.value || isEdit) && field.defaultValue?.value && !field.empty) {
             const value = await this.handlePlaceholders(field.defaultValue?.value);
             this.setFormValue(value);
+        }
+
+        if (field.empty) {
+            this.setFormValue(null);
         }
 
         this.enabled = true;
@@ -238,6 +242,12 @@ export class ObjectFormValue<T = any> {
         this.actions = await ObjectFormRegistry.getInstance().getActions(this, this.objectValueMapper);
         if (!this.value && this.object[this.property]) {
             this.setFormValue(this.object[this.property]);
+        }
+
+        if (!this.label || this.label === this.property) {
+            this.label = await LabelService.getInstance().getPropertyText(
+                this.property, this.object?.KIXObjectType
+            );
         }
     }
 
@@ -266,7 +276,7 @@ export class ObjectFormValue<T = any> {
                 });
 
                 let newValue = await Promise.all(newValuePromises);
-                newValue = newValue.filter((v) => v !== '' && v !== null && typeof v !== 'undefined');
+                newValue = newValue.filter((v) => v !== '' && v !== null && typeof v !== 'undefined' && !Array.isArray(v));
                 value = newValue as any;
             }
         }
@@ -353,16 +363,32 @@ export class ObjectFormValue<T = any> {
     }
 
     public async setObjectValue(value: any): Promise<void> {
-        if (this.object && !this.readonly) {
+        // INFO: do not check readonly here - it is only relevant for form value!
+        if (this.object) {
             this.object[this.property] = value;
             // Hint: do not trigger setObjectValueToFormValue here (it is already done by binding (FormValueBinding))
         }
     }
 
-    public async setFormValue(value: any): Promise<void> {
-        if (!this.readonly) {
+    public async setFormValue(value: any, force?: boolean): Promise<void> {
+        if ((force || !this.readonly) && !this.isSameValue(value)) {
             this.value = value;
         }
+    }
+
+    protected isSameValue(value: any): boolean {
+        let isSameValue = false;
+
+        if (Array.isArray(this.value) && Array.isArray(value)) {
+            isSameValue = this.value.length === value.length;
+            if (isSameValue) {
+                isSameValue = this.value.every((v) => value.some((val) => v.toString() === val.toString()));
+            }
+        } else {
+            isSameValue = this.value === value;
+        }
+
+        return isSameValue;
     }
 
     public removeValue(value: any): void {
@@ -423,10 +449,11 @@ export class ObjectFormValue<T = any> {
                 }
             }
 
+            // force - only selectable values
             if (newValue.length) {
-                this.setFormValue(newValue);
+                this.setFormValue(newValue, true);
             } else {
-                this.setFormValue(null);
+                this.setFormValue(null, true);
             }
         }
     }

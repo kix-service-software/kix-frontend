@@ -7,6 +7,7 @@
  * --
  */
 
+import { FormContext } from '../../../../../model/configuration/FormContext';
 import { Attachment } from '../../../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
@@ -18,10 +19,10 @@ import { Ticket } from '../../../model/Ticket';
 
 export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
 
-    public async prepareObject(ticket: Ticket, filterDisabledFormValues: boolean = true): Promise<Ticket> {
-        const newTicket = await super.prepareObject(ticket, filterDisabledFormValues);
+    public async prepareObject(ticket: Ticket, forCommit: boolean = true): Promise<Ticket> {
+        const newTicket = await super.prepareObject(ticket, forCommit);
 
-        await this.prepareArticles(newTicket);
+        await this.prepareArticles(newTicket, forCommit);
         this.prepareTitle(newTicket);
         this.prepareTicket(newTicket);
         this.prepareSpecificAttributes(newTicket);
@@ -29,7 +30,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         return newTicket;
     }
 
-    private async prepareArticles(ticket: Ticket): Promise<void> {
+    private async prepareArticles(ticket: Ticket, forCommit: boolean): Promise<void> {
         if (ticket.Articles?.length) {
             ticket.Articles = ticket.Articles.filter((a) => a.ChannelID);
 
@@ -58,11 +59,15 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                 this.deleteCommonProperties(article, true);
                 delete article.ValidID;
 
-                if (article.Attachments?.length) {
-                    article.Attachments = await this.prepareAttachments(article.Attachments);
-                }
+                if (forCommit) {
+                    if (article.Attachments?.length) {
+                        article.Attachments = await this.prepareAttachments(article.Attachments);
+                    }
 
-                article.Body = await this.addQueueSignature(ticket.QueueID, article.Body, article.ChannelID);
+                    article.Body = await this.addQueueSignature(ticket.QueueID, article.Body, article.ChannelID);
+                } else {
+                    article.Attachments = null;
+                }
 
                 if (Array.isArray(article.From)) {
                     article.From = article.From.join(',');
@@ -74,6 +79,10 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                     article.Bcc = article.Bcc.join(',');
                 }
             }
+        }
+
+        if (!ticket.Articles.length) {
+            delete ticket.Articles;
         }
     }
 
@@ -118,7 +127,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
     }
 
     private prepareTitle(ticket: Ticket): void {
-        if (!ticket.Title) {
+        if (!ticket.Title && this.objectValueMapper?.formContext === FormContext.NEW) {
             ticket.Title = new Date().toLocaleDateString();
             if (ticket.Articles?.length) {
                 const article = ticket.Articles.find((a) => !a.ArticleID);
@@ -128,6 +137,11 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
     }
 
     private prepareTicket(ticket: Ticket): void {
+
+        if (ticket.LockID === 2 && (!ticket.OwnerID || ticket.OwnerID === 1)) {
+            delete ticket.LockID;
+        }
+
         delete ticket.Age;
         delete ticket.ArchiveFlag;
         delete ticket.Changed;

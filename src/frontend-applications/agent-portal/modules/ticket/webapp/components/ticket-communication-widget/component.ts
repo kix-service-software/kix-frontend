@@ -67,12 +67,17 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.sortOrder = preference?.Value;
 
         this.state.translations = await TranslationService.createTranslationObject(['Translatable#Go to top']);
+
+        // enable read action if necessary
+        this.enableReadAction();
     }
 
     private async setArticles(): Promise<void> {
         this.setFilteredArticles();
+        this.enableReadAction();
+    }
 
-        // enable read action
+    private async enableReadAction(): Promise<void> {
         const allArticles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || [];
         if (allArticles.length) {
             this.state.activeUnreadAction = allArticles.some((a) => a.isUnread());
@@ -91,9 +96,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         );
 
         allArticles.forEach((a, index) => {
-                a['countNumber'] = sortOrder === SortOrder.UP ? index + 1 : allArticles.length - index;
-            }
-        );
+            a['countNumber'] = sortOrder === SortOrder.UP ? index + 1 : allArticles.length - index;
+        });
 
         this.state.articles = allArticles.filter((a) => filteredArticles.find((fa) => a.ArticleID === fa.ArticleID));
 
@@ -101,7 +105,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         const articleLengthText = (filteredArticles?.length < allArticles?.length ? filteredArticles.length +
             '/' : '') + allArticles?.length;
         const title = await TranslationService.translate(this.state.widgetConfiguration?.title);
-        this.state.widgetTitle = `${ title } (${ articleLengthText })`;
+        this.state.widgetTitle = `${title} (${articleLengthText})`;
     }
 
     public onDestroy(): void {
@@ -111,7 +115,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public async readAll(): Promise<void> {
         if (this.state.activeUnreadAction && this.context.getObjectId()) {
             EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, {loading: true, hint: 'Translatable#Loading ...'}
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Loading ...' }
             );
 
             await TicketService.getInstance().markTicketAsSeen(Number(this.context.getObjectId()));
@@ -122,7 +126,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
             setTimeout(() => {
                 EventService.getInstance().publish(
-                    ApplicationEvent.APP_LOADING, {loading: false, hint: ''}
+                    ApplicationEvent.APP_LOADING, { loading: false, hint: '' }
                 );
                 BrowserUtil.openSuccessOverlay('Translatable#Marked all articles as read.');
             }, 50);

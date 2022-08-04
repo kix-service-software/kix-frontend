@@ -47,7 +47,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         this.state.inputType = this.formValue?.inputType || InputFieldTypes.DATE;
         this.state.dateValue = DateTimeUtil.getKIXDateString(new Date(this.formValue.value?.toString()));
-        this.state.timeValue = DateTimeUtil.getKIXTimeString(new Date(this.formValue.value?.toString()));
+
+        if (this.state.inputType === InputFieldTypes.DATE_TIME) {
+            this.state.timeValue = DateTimeUtil.getKIXTimeString(new Date(this.formValue.value?.toString()));
+        }
         this.state.minDate = this.formValue.minDate ?
             DateTimeUtil.getKIXDateString(new Date(this.formValue.minDate)) : null;
         this.state.maxDate = this.formValue.maxDate ?
@@ -61,14 +64,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public dateChanged(event: any): void {
         if (event) {
-            this.state.dateValue = event?.target?.value !== '' ? event.target.value : null;
+            this.state.dateValue = event?.target?.value ? event.target.value : null;
             this.setValue();
         }
     }
 
     public timeChanged(event: any): void {
         if (event) {
-            this.state.timeValue = event?.target?.value !== '' ? event.target.value : null;
+            this.state.timeValue = event?.target?.value ? event.target.value : null;
             this.setValue();
         }
     }
@@ -76,9 +79,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private setValue(): void {
         const dateValue = this.state.dateValue || '2000-01-01';
 
-        const date = new Date(
-            dateValue + (this.state.timeValue ? ` ${this.state.timeValue}` : '')
-        );
+        const time = (this.state.timeValue ? ` ${this.state.timeValue}` : '');
+        const date = new Date(dateValue + time);
 
         if (date && this.formValue.inputType === InputFieldTypes.DATE) {
             date.setHours(0, 0, 0, 0);

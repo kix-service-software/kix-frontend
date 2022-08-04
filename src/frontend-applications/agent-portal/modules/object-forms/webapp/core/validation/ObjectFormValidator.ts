@@ -45,10 +45,14 @@ export class ObjectFormValidator {
     }
 
     public async validateForm(): Promise<boolean> {
+        let valid = true;
+
         if (this.enabled && this.objectFormValueMapper?.initialized) {
             await this.validateFormValues(this.objectFormValueMapper?.getFormValues());
-            return this.isFormValid(this.objectFormValueMapper?.getFormValues());
+            valid = this.isFormValid(this.objectFormValueMapper?.getFormValues());
         }
+
+        return valid;
     }
 
     private async validateFormValues(formValues: ObjectFormValue[] = []): Promise<void> {

@@ -26,6 +26,7 @@ import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil
 import { FormInstance } from '../../../../base-components/webapp/core/FormInstance';
 import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFieldTypes';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { NumberInputOptions } from '../../../../base-components/webapp/core/NumberInputOptions';
 import { ObjectReferenceOptions } from '../../../../base-components/webapp/core/ObjectReferenceOptions';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
@@ -77,12 +78,13 @@ export class ReportDefinitionFormCreator {
         isPeriodicField.instanceId = IdService.generateDateBasedId();
 
         const maxReportsField = new FormFieldConfiguration(
-            'report-common-max-freports', 'Translatable#Max. Reports', ReportDefinitionProperty.MAX_REPORTS, null, true,
+            'report-common-max-freports', 'Translatable#Max. Reports', ReportDefinitionProperty.MAX_REPORTS, 'number-input', true,
             'Translatable#Helptext_Reporting_ReportCreate_MaxReports',
             [
-                new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.NUMBER)
+                new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.NUMBER),
+                new FormFieldOption(NumberInputOptions.MIN, 0)
             ],
-            new FormFieldValue(reportDefinition?.MaxReports)
+            new FormFieldValue(reportDefinition?.MaxReports || 0)
         );
         maxReportsField.instanceId = IdService.generateDateBasedId();
 

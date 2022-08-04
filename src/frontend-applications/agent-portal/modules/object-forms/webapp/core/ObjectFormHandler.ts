@@ -11,7 +11,6 @@ import { Error } from '../../../../../../server/model/Error';
 import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
 import { Context } from '../../../../model/Context';
 import { KIXObject } from '../../../../model/kix/KIXObject';
-import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ComponentContent } from '../../../base-components/webapp/core/ComponentContent';
 import { FormFactory } from '../../../base-components/webapp/core/FormFactory';
 import { OverlayService } from '../../../base-components/webapp/core/OverlayService';
@@ -33,7 +32,7 @@ export class ObjectFormHandler<T extends KIXObject = any> {
     public objectFormValidator: ObjectFormValidator;
 
     public destroy(): void {
-        this.objectFormValueMapper.destroy();
+        this.objectFormValueMapper?.destroy();
         this.objectFormValidator?.destroy();
     }
 

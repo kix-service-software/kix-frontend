@@ -14,7 +14,7 @@ export class ArticleColorsConfiguration implements IConfiguration {
     public static CONFIGURATION_ID = 'article-colors-configuration';
 
     public id: string = ArticleColorsConfiguration.CONFIGURATION_ID;
-    public name: string = 'Define colors (CSS) for article channels, suche as "note" or "email".';
+    public name: string = 'Define colors (CSS) for article channels, such as "note" or "email".';
     public type: string = 'ArticleColorsConfiguration';
 
     public constructor(

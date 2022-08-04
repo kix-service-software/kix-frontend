@@ -7,9 +7,11 @@
  * --
  */
 
+import { AutocompleteOption } from '../../../../../../model/AutocompleteOption';
 import { FormContext } from '../../../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { RichTextFormValue } from '../../../../../object-forms/model/FormValues/RichTextFormValue';
@@ -26,6 +28,7 @@ import { RecipientFormValue } from './RecipientFormValue';
 export class ChannelFormValue extends SelectObjectFormValue<number> {
 
     public noChannelSelectable: boolean = false;
+    private hasChannelField: boolean = false;
 
     public constructor(
         property: string,
@@ -51,9 +54,10 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
     public async initFormValue(): Promise<void> {
         await super.initFormValue();
 
-        if (!this.value) {
-            const selectedNodes = this.getSelectableTreeNodeValues();
-            const selection = selectedNodes?.length ? [selectedNodes[0]] : [];
+        if (!this.value && !this.noChannelSelectable && this.hasChannelField) {
+            const selectableNodes = this.getSelectableTreeNodeValues();
+            const selectableNode = selectableNodes.filter((n) => n.id === 1);
+            const selection = selectableNode ? selectableNode : [];
             this.treeHandler.setSelection(selection);
         }
 
@@ -62,6 +66,8 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
         await super.initFormValueByField(field);
+
+        this.hasChannelField = true;
 
         const noChannelOption = field.options.find((o) => o.option === 'NO_CHANNEL');
         if (noChannelOption) {
@@ -88,7 +94,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                     formValue = new RecipientFormValue(property, article, this.objectValueMapper, this);
                     break;
                 case ArticleProperty.FROM:
-                    formValue = new FromObjectFormValue(property, article.ticket, this.objectValueMapper, this);
+                    formValue = new FromObjectFormValue(property, article, this.objectValueMapper, this);
                     break;
                 case ArticleProperty.CUSTOMER_VISIBLE:
                     formValue = new CustomerVisibleFormValue(property, article, this.objectValueMapper, this);
@@ -98,7 +104,10 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                     formValue.required = true;
                     break;
                 case ArticleProperty.BODY:
-                    formValue = new RichTextFormValue(property, article, this.objectValueMapper, this);
+                    formValue = new RichTextFormValue(
+                        property, article, this.objectValueMapper, this,
+                        [new AutocompleteOption(KIXObjectType.TEXT_MODULE, '::')]
+                    );
                     formValue.required = true;
                     break;
                 case ArticleProperty.ATTACHMENTS:
@@ -148,13 +157,18 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                 ArticleProperty.TO
             ];
 
+            let submitPattern = 'Translatable#Save';
             if (channel?.Name === 'note') {
                 this.disableChannelFormValues(allFields.filter((p) => !noteFields.includes(p)));
                 this.enableChannelFormValues(channel.Name, noteFields);
             } else if (channel?.Name === 'email') {
                 this.disableChannelFormValues(allFields.filter((p) => !mailFields.includes(p)));
                 this.enableChannelFormValues(channel.Name, mailFields);
+                submitPattern = 'Translatable#Send';
             }
+
+            const context = this.objectValueMapper.objectFormHandler.context;
+            context.setAdditionalInformation(AdditionalContextInformation.DIALOG_SUBMIT_BUTTON_TEXT, submitPattern);
         } else {
             this.disableChannelFormValues(allFields);
         }

@@ -10,7 +10,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <if(state.article)>
    <div.message-header-container>
       <div.header-title>
-        [#${input.articleCountNumber}] ${state.article.Subject}
+         [#${input.articleCountNumber}] ${state.article.Subject}
       </div>
       <div.header-right>
          <if(state.article.CustomerVisible)>
@@ -41,6 +41,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
       </div>
       <div.header-from title=(state.translations["Translatable#From"])>
          ${state.article.From}
+         <if(input.fromDisplayName)>
+            <span.fw-bold> | ${input.fromDisplayName}</span>
+         </if>
       </div>
       <div.accounted-time title=(state.translations["Translatable#Created at"])>
          <if(state.timeUnits)>

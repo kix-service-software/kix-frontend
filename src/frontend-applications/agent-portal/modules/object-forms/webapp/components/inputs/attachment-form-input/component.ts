@@ -11,9 +11,11 @@ import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { Attachment } from '../../../../../../model/kix/Attachment';
 import { ArticleAttachmentFormValue } from '../../../../../ticket/webapp/core/form/form-values/ArticleAttachmentFormValue';
+import { FormValueProperty } from '../../../../model/FormValueProperty';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
+    private bindingIds: string[];
     private formValue: ArticleAttachmentFormValue;
 
     public onCreate(): void {
@@ -22,14 +24,28 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         if (this.formValue?.instanceId !== input.formValue?.instanceId) {
+            this.formValue?.removePropertyBinding(this.bindingIds);
             this.formValue = input.formValue;
             this.update();
         }
     }
 
     private async update(): Promise<void> {
-        this.state.value = this.formValue?.value;
-        this.state.readonly = this.formValue.readonly;
+        this.bindingIds = [];
+        this.bindingIds.push(
+            this.formValue?.addPropertyBinding(
+                FormValueProperty.VALUE, async (formValue: ArticleAttachmentFormValue) => {
+                    this.state.value = Array.isArray(formValue.value)
+                        ? formValue.value
+                        : [formValue.value];
+                }
+            ),
+            this.formValue?.addPropertyBinding(FormValueProperty.READ_ONLY, (formValue: ArticleAttachmentFormValue) => {
+                this.state.readonly = formValue.readonly;
+            })
+        );
+
+        this.state.readonly = this.formValue?.readonly;
         if (Array.isArray(this.formValue?.options)) {
             this.state.options = this.formValue.options;
         }
@@ -44,9 +60,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.prepared = true;
     }
 
+    public async onDestroy(): Promise<void> {
+        if (this.bindingIds?.length && this.formValue) {
+            this.formValue.removePropertyBinding(this.bindingIds);
+        }
+    }
+
     public valueChanged(value: Array<Attachment | File>): void {
         this.state.value = value;
-        this.formValue.setObjectValue(this.state.value);
+        this.formValue.setFormValue(this.state.value);
     }
 
 }

@@ -104,8 +104,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         await this.loadSelectedValues();
     }
 
-    public async setFormValue(value: any): Promise<void> {
-        super.setFormValue(value);
+    public async setFormValue(value: any, force?: boolean): Promise<void> {
+        await super.setFormValue(value, force);
         if (!this.readonly) {
             await this.loadSelectedValues();
         }
@@ -138,7 +138,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
         this.addPropertyBinding('multiselect', (value: SelectObjectFormValue) => {
             if (!this.multiselect && Array.isArray(this.value) && this.value.length > 1) {
-                this.setFormValue([this.value[0]]);
+                this.setFormValue([this.value[0]], true);
             }
         });
 
@@ -147,11 +147,10 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             this.treeHandler?.setMultiSelect(this.multiselect);
 
             if (this.multiselect && Array.isArray(this.value) && this.value.length > 1) {
-                const hasMoreValues = this.value.length > this.maxSelectCount;
-
-                if (this.maxSelectCount > 1 && hasMoreValues) {
+                const hasMoreValues = this.maxSelectCount > 1 && this.value.length > this.maxSelectCount;
+                if (hasMoreValues) {
                     const newValue = this.value.slice(0, this.maxSelectCount);
-                    this.setFormValue(newValue);
+                    this.setFormValue(newValue, true);
                 }
             }
         });
@@ -257,13 +256,13 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             this.structureOption = !structureOption || Boolean(structureOption?.value);
         }
 
-        // INFO: do not init treehandler here it set selected nodes and
-        // for some DFs type not all relevant info is already set (e.g. possibleValues)
+        // INFO: do not init treehandler here bacause it will set selected nodes and
+        // for some DFs type not all relevant info is already given (e.g. possibleValues)
 
         await super.initFormValueByField(field);
     }
 
-    private async initTreeHandler(): Promise<void> {
+    protected async initTreeHandler(): Promise<void> {
         this.treeHandler = new TreeHandler([], null, null, this.multiselect);
         TreeService.getInstance().registerTreeHandler(this.instanceId, this.treeHandler);
 
@@ -354,7 +353,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
         if (Array.isArray(this.value)) {
             for (const v of this.value) {
-                const node = TreeUtil.findNode(this.treeHandler?.getTree(), v);
+                const node = TreeUtil.findNode(nodes, v);
                 if (node) {
                     node.selected = true;
                 }
@@ -434,10 +433,11 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                 );
             }
 
-            // ignore placeholder and "useTextAsId" values (handle them like freetext)
+            // ignore text values if ids are no texts themself (handle them like freetext), ignore placeholders
             // and collect ids only if objectType is given (relevant if "additional node" is selected/current value)
-            const idsToLoad = !this.useTextAsId && this.objectType
-                ? objectIds.filter((id) => !isNaN(Number(id)) || typeof id !== 'string' || !id.match(/<KIX_.+>/))
+            const idsToLoad = this.objectType
+                ? !this.useTextAsId ? objectIds.filter((id) => !isNaN(Number(id)))
+                    : objectIds.filter((id) => !id.toString().match(/<KIX_.+>/))
                 : [];
             if (idsToLoad.length) {
                 if (this.isAutoComplete) {
@@ -486,7 +486,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             this.treeHandler?.selectNone(true);
         }
 
-        this.selectedNodes = selectedNodes;
+        this.selectedNodes = selectedNodes.sort((a, b) => a.id - b.id);
     }
 
     public removeValue(value: string | number): void {

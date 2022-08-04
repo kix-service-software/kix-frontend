@@ -202,7 +202,21 @@ export class ContextFormManager {
             };
         };
 
-        if (this.formInstance) {
+        if (this.useObjectForms) {
+
+            const object = await this.context?.getObject();
+
+            if (object) {
+                const formhandler = await this.getObjectFormHandler();
+                const commitHandler = ObjectFormRegistry.getInstance().createObjectCommitHandler(
+                    formhandler?.objectFormValueMapper
+                );
+
+                const preparedObject = await commitHandler?.prepareObject(object, false);
+                contextPreference.formObject = JSON.stringify(preparedObject);
+            }
+
+        } else if (this.formInstance) {
             const formObject = {};
             formObject['form'] = this.formInstance.getForm();
 
@@ -225,20 +239,6 @@ export class ContextFormManager {
             formObject['templateValues'] = templateValues;
 
             contextPreference.formValue = JSON.stringify(formObject, replacerFunc());
-        } else if (this.useObjectForms) {
-
-            const object = await this.context?.getObject();
-
-            if (object) {
-                const formhandler = await this.getObjectFormHandler();
-                const commitHandler = ObjectFormRegistry.getInstance().createObjectCommitHandler(
-                    formhandler?.objectFormValueMapper
-                );
-
-                const preparedObject = await commitHandler?.prepareObject(object);
-                contextPreference.formObject = JSON.stringify(preparedObject);
-            }
-
         }
     }
 

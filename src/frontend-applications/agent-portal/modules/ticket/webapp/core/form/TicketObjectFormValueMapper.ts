@@ -26,6 +26,7 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { FormContext } from '../../../../../model/configuration/FormContext';
 
 export class TicketObjectFormValueMapper extends ObjectFormValueMapper<Ticket> {
 
@@ -40,6 +41,11 @@ export class TicketObjectFormValueMapper extends ObjectFormValueMapper<Ticket> {
             }
 
             switch (property) {
+                case TicketProperty.TITLE:
+                    if (this.formContext === FormContext.EDIT) {
+                        this.formValues.push(new ObjectFormValue(property, ticket, this, null));
+                    }
+                    break;
                 case TicketProperty.OWNER_ID:
                 case TicketProperty.RESPONSIBLE_ID:
                     this.formValues.push(new UserObjectFormValue(property, ticket, this, null));

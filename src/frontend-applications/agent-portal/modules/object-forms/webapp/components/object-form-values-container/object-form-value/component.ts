@@ -36,8 +36,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     this.state.formValue?.inputComponentId
                 );
             }
-        }
-        else {
+        } else {
             this.setButtonsAndVisibility();
         }
     }
@@ -91,6 +90,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.formValue?.addPropertyBinding(
                 FormValueProperty.VISIBLE, (formValue: ObjectFormValue) => {
                     this.state.visible = formValue.visible;
+                    if (this.state.visible && this.state.formValue.isCountHandler) {
+                        this.setCanAdd();
+                        this.setCanRemove();
+                    }
                 }
             )
         );
@@ -126,16 +129,17 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.formValue?.removePropertyBinding(this.bindingIds);
     }
 
-    public canAdd(): void {
+    public setCanAdd(): void {
         this.state.canAdd = this.state.formValue?.canAddValue(this.state.formValue.instanceId);
     }
 
     public async addValue(): Promise<void> {
         await this.state.formValue?.addFormValue(this.state.formValue.instanceId);
+        this.setButtonsAndVisibility();
         (this as any).setStateDirty();
     }
 
-    public canRemove(): void {
+    public setCanRemove(): void {
         this.state.canRemove = this.state.formValue?.canRemoveValue(this.state.formValue.instanceId);
     }
 
@@ -146,8 +150,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async setButtonsAndVisibility(): Promise<void> {
         await this.state.formValue.setVisibilityAndComponent();
-        this.canAdd();
-        this.canRemove();
+        this.setCanAdd();
+        this.setCanRemove();
     }
 
 

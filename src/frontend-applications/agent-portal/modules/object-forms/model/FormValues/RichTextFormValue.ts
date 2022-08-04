@@ -8,6 +8,7 @@
  */
 
 import { AutocompleteFormFieldOption } from '../../../../model/AutocompleteFormFieldOption';
+import { AutocompleteOption } from '../../../../model/AutocompleteOption';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
 import { ObjectFormValueMapper } from '../ObjectFormValueMapper';
@@ -23,9 +24,11 @@ export class RichTextFormValue extends ObjectFormValue<string> {
         object: any,
         objectValueMapper: ObjectFormValueMapper,
         public parent: ObjectFormValue,
+        autoCompleteOptions: AutocompleteOption[] = []
     ) {
         super(property, object, objectValueMapper, parent);
         this.inputComponentId = 'richtext-form-input';
+        this.autocompleteOption = new AutocompleteFormFieldOption(autoCompleteOptions);
     }
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
@@ -34,6 +37,8 @@ export class RichTextFormValue extends ObjectFormValue<string> {
         this.noImages = Boolean(noImagesOption?.value);
 
         const autofillOption = field?.options.find((o) => o.option === FormFieldOptions.AUTO_COMPLETE);
-        this.autocompleteOption = autofillOption?.value;
+        if (autofillOption) {
+            this.autocompleteOption = autofillOption?.value;
+        }
     }
 }

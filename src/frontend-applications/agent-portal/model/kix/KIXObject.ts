@@ -67,6 +67,10 @@ export abstract class KIXObject extends BindableObject {
 
             this.propertyBindings = [];
         }
+
+        if (!this.ValidID) {
+            this.ValidID = 1;
+        }
     }
 
     public equals(object: KIXObject): boolean {

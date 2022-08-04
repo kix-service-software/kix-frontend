@@ -106,19 +106,19 @@ export class UIModule implements IUIModule {
     // tslint:disable:max-line-length
     private async registerSchemas(): Promise<void> {
         this.countMinTitle = await TranslationService.translate('Translatable#Count Min');
-        this.countMinDescription = await TranslationService.translate('Translatable#The minimum number of items which are available for input if field is shown in edit mode.');
+        this.countMinDescription = await TranslationService.translate('Translatable#Admin_DynamicField_Config_CountMin');
 
         this.countMaxTitle = await TranslationService.translate('Translatable#Count Max');
-        this.countMaxDescription = await TranslationService.translate('Translatable#The maximum number of array or selectable items for this field. if field is shown in edit mode.');
+        this.countMaxDescription = await TranslationService.translate('Translatable#Admin_DynamicField_Config_CountMax');
 
         this.countDefaultTitle = await TranslationService.translate('Translatable#Count Default');
-        this.countDefaultDescription = await TranslationService.translate('Translatable#If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.');
+        this.countDefaultDescription = await TranslationService.translate('Translatable#Admin_DynamicField_Config_CountDefault');
 
         this.itemSeparatorTitle = await TranslationService.translate('Translatable#Item Separator');
-        this.itemSeparatorDescription = await TranslationService.translate('Translatable#If field contains multiple values, single values are concatenated by this separator symbol/s.');
+        this.itemSeparatorDescription = await TranslationService.translate('Translatable#Admin_DynamicField_Config_ItemSeparator');
 
         this.defaultValueTitle = await TranslationService.translate('Translatable#Default Value');
-        this.defaultValueDescription = await TranslationService.translate('Translatable#The initial value of the field if shown in edit mode for the first time. Applies to first item of array only.');
+        this.defaultValueDescription = await TranslationService.translate('Translatable#Admin_DynamicField_Config_Value');
 
         this.registerSchemaForText();
         this.registerSchemaForTextArea();
@@ -135,7 +135,7 @@ export class UIModule implements IUIModule {
     private async registerSchemaForText(): Promise<void> {
 
         const regExListTitle: string = await TranslationService.translate('Translatable#RegEx List');
-        const regExListDescription: string = await TranslationService.translate('Translatable#A list of RegEx which are applied to values entered before submitting if field is shown in edit mode. The RegExError is shown if a RegEx does NOT match the value entered.');
+        const regExListDescription: string = await TranslationService.translate('Translatable#Admin_DynamicField_Config_RegexList');
         const regEx: string = await TranslationService.translate('Translatable#RegEx');
         const regExError: string = await TranslationService.translate('Translatable#RegExErrorMessage');
 
@@ -195,7 +195,7 @@ export class UIModule implements IUIModule {
     private async registerSchemaForTextArea(): Promise<void> {
 
         const regExListTitle: string = await TranslationService.translate('Translatable#RegEx List');
-        const regExListDescription: string = await TranslationService.translate('Translatable#A list of RegEx which are applied to values entered before submitting if field is shown in edit mode. The RegExError is shown if a RegEx does NOT match the value entered.');
+        const regExListDescription: string = await TranslationService.translate('Translatable#Admin_DynamicField_Config_RegexList');
         const regEx: string = await TranslationService.translate('Translatable#RegEx');
         const regExError: string = await TranslationService.translate('Translatable#RegExErrorMessage');
 
@@ -314,7 +314,7 @@ export class UIModule implements IUIModule {
 
     private async registerSchemaForDateTime(): Promise<void> {
 
-        const defaultValueDescription = await TranslationService.translate('Translatable#Dynamic_Field_DateTime_DefaultValue_Description');
+        const defaultValueDescription = await TranslationService.translate('Translatable#Admin_DynamicFieldDateTime_DefaultValue_Description');
         const yearsInFuture = await TranslationService.translate('Translatable#Years in Future');
         const yearsInPast = await TranslationService.translate('Translatable#Years in Past');
         const dateRestriction = await TranslationService.translate('Translatable#Date Restriction');
@@ -511,9 +511,9 @@ export class UIModule implements IUIModule {
         );
 
         const deploymentStatesTitle = await TranslationService.translate('Translatable#Deployment States');
-        const deploymentStatesDescription = await TranslationService.translate('Translatable#This configuration defines which Deployment States are subject to this selection. Please enter DeploymentStates.');
+        const deploymentStatesDescription = await TranslationService.translate('Translatable#Admin_DynamicField_Config_CIRef_DeploymentStates');
         const classesTitle = await TranslationService.translate('Translatable#Asset Classes');
-        const classesDescription = await TranslationService.translate('Translatable#This configuration defines which Asset Classes are subject to this selection. Please enter Classes.');
+        const classesDescription = await TranslationService.translate('Translatable#Admin_DynamicField_Config_CIRef_IncidentStates');
 
         const schema = {
             type: 'object',
@@ -585,11 +585,11 @@ export class UIModule implements IUIModule {
 
         const columns = await TranslationService.translate('Translatable#Columns');
         const rowsMinTitle = await TranslationService.translate('Translatable#Number of rows (min)');
-        const rowsMinDescription = await TranslationService.translate('Translatable#Specifies the minimum number of rows that the table has to display. It is not possible to delete rows below the minimum number of rows.\n Values less than 1 are not possible.');
+        const rowsMinDescription = await TranslationService.translate('Translatable#Admin_DynamicField_Config_Table_RowsMin');
         const rowsinitTitle = await TranslationService.translate('Translatable#Number of rows (init)');
-        const rowsinitDescription = await TranslationService.translate('Translatable#Specifies the initial number of rows that the table should display if there are no entries.\n The initial must not be smaller than the minimum and larger than the maximum of the number of rows.\n Values less than 1 are not possible.');
+        const rowsinitDescription = await TranslationService.translate('Translatable#Admin_DynamicField_Config_Table_RowsInit');
         const rowsMaxTitle = await TranslationService.translate('Translatable#Number of rows (max)');
-        const rowsMaxDescription = await TranslationService.translate('Translatable#Specifies the maximum number of rows in the table that can be displayed/added. Values less than 1 are not possible.');
+        const rowsMaxDescription = await TranslationService.translate('Translatable#Admin_DynamicField_Config_Table_RowsMax');
         const translatableColumns = await TranslationService.translate('Translatable#Translatable Columns');
 
         const schema = {

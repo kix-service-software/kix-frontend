@@ -10,7 +10,6 @@
 import { IdService } from '../../../../../../model/IdService';
 import { AbstractComponentState } from '../../../../../base-components/webapp/core/AbstractComponentState';
 import { ValidationResult } from '../../../../../base-components/webapp/core/ValidationResult';
-import { FormValueAction } from '../../../../model/FormValues/FormValueAction';
 import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
 
 export class ComponentState extends AbstractComponentState {

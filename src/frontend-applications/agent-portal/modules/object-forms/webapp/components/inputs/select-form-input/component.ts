@@ -124,12 +124,19 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         if (event.key === 'Enter' && this.formValue.freeText) {
-            if (Array.isArray(this.formValue.value)) {
+            if (Array.isArray(this.formValue.value) && this.formValue.multiselect) {
                 this.formValue.setFormValue([...this.formValue.value, event.target.value]);
             } else {
                 this.formValue.setFormValue([event.target.value]);
             }
 
+        }
+    }
+
+    public keydownOnSelectInput(event: any): void {
+        if (event.code === 'Space' || event.key === 'Enter') {
+            this.stopPropagation(event);
+            event.target?.click();
         }
     }
 
@@ -139,11 +146,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         const isFilterInput = filterInput && document.activeElement === filterInput;
 
-        let searchValue;
-
         if (isFilterInput && !this.navigationKeyPressed(event.key)) {
             this.stopPropagation(event);
-            searchValue = event.target.value;
 
         } else if (isFilterInput && event.key === 'ArrowUp' || event.key === 'ArrowDown') {
             if (hiddenInput) {
@@ -163,12 +167,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             window.clearTimeout(this.searchTimeout);
         }
 
-        this.searchTimeout = setTimeout(async () => {
-            this.state.searchLoading = true;
-            await this.formValue?.search(event.target.value);
-            this.state.noResult = !this.formValue.getSelectableTreeNodeValues()?.length;
-            setTimeout(() => this.state.searchLoading = false, 100);
-        }, this.formValue?.autoCompleteConfiguration?.delay || 300);
+        if (!this.navigationKeyPressed(event.key)) {
+            this.searchTimeout = setTimeout(async () => {
+                this.state.searchLoading = true;
+                await this.formValue?.search(event.target.value);
+                this.state.noResult = !this.formValue.getSelectableTreeNodeValues()?.length;
+                setTimeout(() => this.state.searchLoading = false, 100);
+            }, this.formValue?.autoCompleteConfiguration?.delay || 300);
+        }
     }
 
     private navigationKeyPressed(key: string): boolean {
