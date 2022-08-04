@@ -42,9 +42,7 @@ export class TicketObjectFormValueMapper extends ObjectFormValueMapper<Ticket> {
 
             switch (property) {
                 case TicketProperty.TITLE:
-                    if (this.formContext === FormContext.EDIT) {
-                        this.formValues.push(new ObjectFormValue(property, ticket, this, null));
-                    }
+                    this.formValues.push(new ObjectFormValue(property, ticket, this, null));
                     break;
                 case TicketProperty.OWNER_ID:
                 case TicketProperty.RESPONSIBLE_ID:
