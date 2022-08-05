@@ -47,7 +47,7 @@ export class DynamicFieldFormValueCountHandler {
             fv.readonly = formValue.readonly;
             fv.required = formValue.required;
             await fv.initFormValue();
-            formValue.formValues.push(fv);
+            formValue.formValues = [...formValue.formValues, fv];
 
             fv.addPropertyBinding(FormValueProperty.VALUE, () => {
                 (formValue as any).setDFValue();
@@ -79,6 +79,7 @@ export class DynamicFieldFormValueCountHandler {
             if (index !== -1) {
                 formValue.formValues[index].destroy();
                 formValue.formValues.splice(index, 1);
+                formValue.formValues = [...formValue.formValues];
                 (formValue as any).dfValues.splice(index, 1);
             }
 
