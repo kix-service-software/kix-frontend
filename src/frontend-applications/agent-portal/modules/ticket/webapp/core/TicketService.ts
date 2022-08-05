@@ -662,4 +662,20 @@ export class TicketService extends KIXObjectService<Ticket> {
 
         return contact;
     }
+
+    public static async getPendingDateDiff(date: Date = new Date()): Promise<Date> {
+        let offset = 86400;
+
+        const offsetConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_FRONTEND_PENDING_DIFF_TIME], null, null, true
+        ).catch((error): SysConfigOption[] => []);
+
+        if (offsetConfig?.length && offsetConfig[0].Value) {
+            offset = offsetConfig[0].Value;
+        }
+
+        date.setSeconds(date.getSeconds() + Number(offset));
+
+        return date;
+    }
 }
