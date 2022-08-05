@@ -150,8 +150,8 @@ export class ObjectFormValue<T = any> {
                 new FormValueBinding(this, FormValueProperty.ENABLED, object, property),
                 new FormValueBinding(this, FormValueProperty.COUNT_MAX, object, property),
                 new FormValueBinding(this, FormValueProperty.REGEX, object, property),
-                new FormValueBinding(this, FormValueProperty.REGEX_ERROR_MESSAGE, object, property)
-                // new FormValueBinding(this, FormValueProperty.COUNT_MIN, object, property),
+                new FormValueBinding(this, FormValueProperty.REGEX_ERROR_MESSAGE, object, property),
+                new FormValueBinding(this, FormValueProperty.FORM_VALUES, object, property)
             );
 
             this.addPropertyBinding(FormValueProperty.VALUE, async () => {
