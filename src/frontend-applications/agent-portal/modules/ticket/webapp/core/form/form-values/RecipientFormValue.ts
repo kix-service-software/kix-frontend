@@ -78,16 +78,16 @@ export class RecipientFormValue extends SelectObjectFormValue {
                 ? this.value.filter((v) => v !== null && typeof v !== 'undefined')
                 : typeof this.value === 'string' ? (this.value as string).split(/\s?,\s/) : [];
 
-            let emailAddresses = [];
-            const contactIds = [];
-            const placeholders = [];
+            const emailAddresses: string[] = [];
+            const contactIds: number[] = [];
+            const placeholders: string[] = [];
             for (let value of contactValues) {
                 value = value.replace(/^(.*?),$/, '$1');
 
                 if (value.match(/(<|&lt;)KIX_/)) {
                     placeholders.push(value);
                 } else if (isNaN(value)) {
-                    emailAddresses = this.parseAddresses(value);
+                    emailAddresses.push(...this.parseAddresses(value));
                 } else if (value !== null && value !== '') {
                     contactIds.push(Number(value));
                 }
