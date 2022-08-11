@@ -8,7 +8,7 @@
  */
 
 @message-border-radius: 5px;
-@message-padding: 1.25rem;
+@message-padding: 0.75rem;
 
 .message-shadow() {
    box-shadow: 1px 1px 3px 1px fade(@shadow-color, 90%);
@@ -16,6 +16,14 @@
 
 .unread-shadow() {
    box-shadow: 1px 1px 4px 2px fade(darken(@shadow-color, 50%), 90%);
+}
+
+.message-content-container.compact-view-message-content-container {
+   min-height: 3rem;
+
+   .message {
+      min-height: 3rem;
+   }
 }
 
 .message-content-container {
@@ -77,16 +85,16 @@
    .left-avatar,
    .right-avatar {
       display: grid;
-      align-content: start;
-      padding-top: 1.5rem;
       width: 8rem;
       gap: @margin-small;
       overflow: hidden;
+      height: 100%;
+      align-content: center;
 
       .contact-avatar {
-         width: 5rem;
-         height: 5rem;
-         font-size: 4rem;
+         width: 3rem;
+         height: 3rem;
+         font-size: 2rem;
          justify-self: center;
          align-self: center;
          border: 5px solid @secondary-6;
@@ -116,6 +124,10 @@
       .header {
          margin-bottom: 1rem;
          display: grid;
+      }
+
+      .header.list-view {
+         margin-bottom: 0;
       }
 
       .receiver-list {
@@ -221,6 +233,12 @@
                      border-top: 1px solid fade(#777, 20%);
                   }
                }
+            }
+
+            img {
+               height: 1.5rem;
+               width: 1.5rem;
+               margin-top: -0.2rem;
             }
          }
       }

@@ -67,3 +67,26 @@
     }
 
 }
+
+.icons-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+
+    &>i {
+        padding: 0.5rem 1rem;
+        color: @secondary-0;
+
+        &:hover {
+            color: black;
+        }
+    }
+
+    &>i.selected {
+        color: @primary-0;
+
+        &:hover {
+            color: black;
+        }
+    }
+}

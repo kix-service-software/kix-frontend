@@ -27,6 +27,8 @@ export enum PersonalSettingsProperty {
 
     USER_TOKEN = 'UserToken',
 
-    ARTICLE_SORT_ORDER = 'ArticleSortOrder'
+    ARTICLE_SORT_ORDER = 'ArticleSortOrder',
+
+    MESSAGE_COMPACT_VIEW = 'MessageCompactView'
 
 }
