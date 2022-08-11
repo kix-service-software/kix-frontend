@@ -24,6 +24,7 @@ import { MobileShowEventData } from '../../../model/MobileShowEventData';
 import { ContextHistory } from '../../../../base-components/webapp/core/ContextHistory';
 import { IKIXModuleExtension } from '../../../../../model/IKIXModuleExtension';
 import { KIXStyle } from '../../../../base-components/model/KIXStyle';
+import { PortalNotificationService } from '../../../../portal-notification/webapp/core/PortalNotificationService';
 
 class Component {
 
@@ -52,6 +53,7 @@ class Component {
         await this.checkAuthentication();
 
         ClientNotificationSocketClient.getInstance();
+        PortalNotificationService.getInstance();
         ContextHistory.getInstance();
 
         const startInitModules = Date.now();
@@ -65,7 +67,8 @@ class Component {
             contextChanged: (contextId: string, context: Context, type: ContextType) => {
                 this.setContext(context);
             },
-            contextRegistered: () => { return; }
+            contextRegistered: () => { return; },
+            beforeDestroy: () => null
         });
 
         EventService.getInstance().subscribe(ApplicationEvent.APP_LOADING, {

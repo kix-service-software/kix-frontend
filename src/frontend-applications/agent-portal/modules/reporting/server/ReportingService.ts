@@ -96,7 +96,7 @@ export class ReportingAPIService extends KIXObjectAPIService {
             const uri = this.buildUri(this.RESOURCE_URI, 'datasources');
             objects = await super.load(
                 token, KIXObjectType.REPORT_DATA_SOURCE, uri, loadingOptions, objectIds,
-                KIXObjectType.REPORT_DATA_SOURCE, clientRequestId, DataSource
+                'DataSource', clientRequestId, DataSource
             );
         } else if (objectType === KIXObjectType.REPORT_OUTPUT_FORMAT) {
             const uri = this.buildUri(this.RESOURCE_URI, 'outputformats');

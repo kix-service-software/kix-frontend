@@ -21,15 +21,18 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
     public getAdminModules(): AdminModuleCategory[] {
         return [
             new AdminModuleCategory(
-                null, 'ticket', 'Translatable#Ticket', null, [], [
-                new AdminModule(
-                    null, 'text-modules', 'Translatable#Text Modules', null,
-                    KIXObjectType.TEXT_MODULE, 'ticket-admin-text-modules', [
-                    new UIComponentPermission('system/textmodules', [CRUD.CREATE], true)
+                null, 'kix', 'Translatable#KIX', null, [
+                new AdminModuleCategory(
+                    null, 'ticket', 'Translatable#Ticket', null, [], [
+                    new AdminModule(
+                        null, 'text-modules', 'Translatable#Text Modules', null,
+                        KIXObjectType.TEXT_MODULE, 'ticket-admin-text-modules', [
+                        new UIComponentPermission('system/textmodules', [CRUD.CREATE], true)
+                    ]
+                    )
                 ]
                 )
-            ]
-            )
+            ])
         ];
     }
 

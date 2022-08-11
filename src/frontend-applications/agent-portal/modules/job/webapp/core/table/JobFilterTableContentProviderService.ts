@@ -19,6 +19,7 @@ import { JobTypes } from '../../../model/JobTypes';
 import { ExtendedJobFilterContentProvider } from './ExtendedJobFilterContentProvider';
 import { SearchDefinition } from '../../../../search/webapp/core';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 export class JobFilterTableContentProviderService {
 
@@ -38,8 +39,9 @@ export class JobFilterTableContentProviderService {
         this.extendedContentProvider.push(extentedProvider);
     }
 
-    public async getValues(displayKey: string, criterion: any, job: Job, criteria: any[]):
-        Promise<[string, any, Array<string | ObjectIcon>, string]> {
+    public async getValues(
+        displayKey: string, criterion: any, job: Job, criteria: any[]
+    ): Promise<[string, any, Array<string | ObjectIcon>, string]> {
         let result: [string, any, Array<string | ObjectIcon>, string] = [displayKey, criterion.value, null, ''];
 
         const extendedContentProvider = this.extendedContentProvider.find((cp) => cp.jobType === job.Type);
@@ -75,26 +77,66 @@ export class JobFilterTableContentProviderService {
     private async getDefaultDisplayValues(
         displayKey: string, criterion: any, job: Job
     ): Promise<[string, any, Array<string | ObjectIcon>, string]> {
-        if (KIXObjectService.getDynamicFieldName(displayKey)) {
+        const isArticleProperty = job.Type === JobTypes.TICKET ? this.isArticleProperty(displayKey) : false;
+        const displayName = await LabelService.getInstance().getPropertyText(
+            displayKey, isArticleProperty ? KIXObjectType.ARTICLE : KIXObjectType.TICKET
+        );
+
+        const relativeDateTimeOperators = SearchDefinition.getRelativeDateTimeOperators();
+        if (relativeDateTimeOperators.includes(criterion.Operator as SearchOperator)) {
+            const valueList = await this.getRelativedateTimeValues(criterion.Value);
+            return [displayName, valueList, null, null];
+        } else if (KIXObjectService.getDynamicFieldName(displayKey)) {
             const dfValues = await this.getDFValues(
                 displayKey, criterion.Value, job.Type as any
             );
             displayKey = await LabelService.getInstance().getPropertyText(
                 displayKey, KIXObjectType.TICKET
             );
-            return [displayKey, dfValues[0], null, dfValues[1]];
+            return [displayName, dfValues[0], null, dfValues[1]];
+        } else {
+            const displayValuesAndIcons = await this.getValue(
+                displayKey, criterion.Value,
+                isArticleProperty ? KIXObjectType.ARTICLE : KIXObjectType.TICKET
+            );
+            return [displayName, displayValuesAndIcons[0], displayValuesAndIcons[1], null];
         }
-        const relativeDateTimeOperators = SearchDefinition.getRelativeDateTimeOperators();
-        const isTranslatable = relativeDateTimeOperators.includes(criterion.Operator as SearchOperator) ? false : true;
-        const isArticleProperty = job.Type === JobTypes.TICKET ? this.isArticleProperty(displayKey) : false;
-        const displayValuesAndIcons = await this.getValue(
-            displayKey, criterion.Value,
-            isArticleProperty ? KIXObjectType.ARTICLE : KIXObjectType.TICKET, isTranslatable
-        );
-        displayKey = await LabelService.getInstance().getPropertyText(
-            displayKey, isArticleProperty ? KIXObjectType.ARTICLE : KIXObjectType.TICKET
-        );
-        return [displayKey, displayValuesAndIcons[0], displayValuesAndIcons[1], null];
+    }
+
+    private async getRelativedateTimeValues(value: string | number | string[] | number[]): Promise<string[]> {
+        const valueList = [];
+        if (value) {
+            const values = Array.isArray(value) ? value : [value];
+            const translations = await TranslationService.createTranslationObject([
+                'Translatable#Year(s)',
+                'Translatable#Month(s)',
+                'Translatable#Week(s)',
+                'Translatable#Day(s)',
+                'Translatable#Hour(s)',
+                'Translatable#Minutes(s)',
+                'Translatable#Seconds(s)',
+                'Translatable#SEARCH_OPERATOR_WITHIN_LAST',
+                'Translatable#SEARCH_OPERATOR_WITHIN_NEXT'
+            ]);
+            const timeUnitList = {
+                Y: translations['Translatable#Year(s)'],
+                M: translations['Translatable#Month(s)'],
+                w: translations['Translatable#Week(s)'],
+                d: translations['Translatable#Day(s)'],
+                h: translations['Translatable#Hour(s)'],
+                m: translations['Translatable#Minutes(s)'],
+                s: translations['Translatable#Seconds(s)']
+            };
+            const typeList = {
+                '-': translations['Translatable#SEARCH_OPERATOR_WITHIN_LAST'],
+                '+': translations['Translatable#SEARCH_OPERATOR_WITHIN_NEXT']
+            };
+            values.forEach((v) => {
+                const parts = v.toString().split(/(\d+)/);
+                valueList.push((parts[0] ? typeList[parts[0]] + ' ' : '') + parts[1] + ' ' + timeUnitList[parts[2]]);
+            });
+        }
+        return valueList;
     }
 
     private async getValue(
@@ -141,13 +183,12 @@ export class JobFilterTableContentProviderService {
         let displayValues: string[] = [];
         let displayString: string = '';
         if (dfName && value) {
-            const preparedValue = await LabelService.getInstance().getDFDisplayValues(
-                objectType,
-                new DynamicFieldValue({
-                    Name: dfName,
-                    Value: Array.isArray(value) ? value : [value]
-                } as DynamicFieldValue)
-            );
+
+            const val = Array.isArray(value) ? value : [value];
+            const preDFValue = { Name: dfName, Value: val, PreparedValue: val } as DynamicFieldValue;
+            const dfValue = new DynamicFieldValue(preDFValue);
+
+            const preparedValue = await LabelService.getInstance().getDFDisplayValues(objectType, dfValue);
             displayValues = preparedValue ? preparedValue[0] : Array.isArray(value) ? value : [value];
             displayString = preparedValue ? preparedValue[1] : '';
         }

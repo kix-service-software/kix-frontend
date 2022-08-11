@@ -13,14 +13,13 @@ import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { ContactProperty } from '../../../model/ContactProperty';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { TicketProperty } from '../../../../ticket/model/TicketProperty';
-import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 import { Organisation } from '../../../model/Organisation';
 
 export class NewContactDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'new-contact-dialog-context';
+
+    public contactId: number = null;
 
     public async postInit(): Promise<void> {
         await super.postInit();
@@ -51,24 +50,6 @@ export class NewContactDialogContext extends Context {
             object = objects && objects.length ? objects[0] : null;
         }
         return object;
-    }
-
-    public async destroy(): Promise<void> {
-        await super.destroy();
-
-        if (this.getAdditionalInformation('PROVIDE_CONTACT_ID_TO_SOURCE_CONTEXT')) {
-            const sourceContext = this.getAdditionalInformation(AdditionalContextInformation.SOURCE_CONTEXT);
-            const context = ContextService.getInstance().getContextInstances().find(
-                (c) => c.instanceId === sourceContext?.instanceId
-            );
-
-            const contactId = this.getAdditionalInformation('NEW_CONTACT_ID');
-
-            const formInstance = await context?.getFormManager()?.getFormInstance();
-            formInstance?.provideFormFieldValuesForProperties(
-                [[TicketProperty.CONTACT_ID, contactId]], undefined, undefined, false
-            );
-        }
     }
 
 }

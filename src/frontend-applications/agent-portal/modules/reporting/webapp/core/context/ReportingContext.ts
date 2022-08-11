@@ -52,7 +52,6 @@ export class ReportingContext extends Context {
 
     public async loadReportDefinitions(): Promise<void> {
         EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.REPORT_DEFINITION);
-
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, [ReportDefinitionProperty.REPORTS, ReportProperty.RESULTS]
         );
@@ -60,15 +59,16 @@ export class ReportingContext extends Context {
             .catch((error) => []);
 
         this.setObjectList(KIXObjectType.REPORT_DEFINITION, definitions);
-        this.setObjectList(KIXObjectType.REPORT, []);
-        this.setFilteredObjectList(KIXObjectType.REPORT, []);
         EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS_FINISHED, KIXObjectType.REPORT_DEFINITION);
     }
 
     public async loadReports(): Promise<void> {
         let reports = [];
 
+        console.debug('loadReports start');
         const definitions = this.getFilteredObjectList<ReportDefinition>(KIXObjectType.REPORT_DEFINITION);
+        console.debug('loadReports: definitions=');
+        console.table(definitions);
         if (Array.isArray(definitions)) {
             for (const definition of definitions) {
                 const reportList = definition.Reports;
@@ -77,6 +77,7 @@ export class ReportingContext extends Context {
         }
         reports = SortUtil.sortObjects(reports, ReportProperty.CREATE_TIME, DataType.DATE_TIME, SortOrder.DOWN);
         this.setObjectList(KIXObjectType.REPORT, reports);
+        console.debug('loadReports end');
     }
 
     public async loadReportResultWithContent(reportId: number, resultId: number): Promise<ReportResult> {

@@ -22,17 +22,20 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
     public getAdminModules(): AdminModuleCategory[] {
         return [
             new AdminModuleCategory(
-                null, 'automation', 'Translatable#Automation', null, [],
-                [
-                    new AdminModule(
-                        null, 'jobs', 'Translatable#Jobs', null,
-                        KIXObjectType.JOB, 'admin-jobs',
-                        [
-                            new UIComponentPermission('system/automation/jobs', [CRUD.CREATE], true)
-                        ]
-                    )
-                ]
-            )
+                null, 'kix', 'Translatable#KIX', null, [
+                new AdminModuleCategory(
+                    null, 'automation', 'Translatable#Automation', null, [],
+                    [
+                        new AdminModule(
+                            null, 'jobs', 'Translatable#Jobs', null,
+                            KIXObjectType.JOB, 'admin-jobs',
+                            [
+                                new UIComponentPermission('system/automation/jobs', [CRUD.CREATE], true)
+                            ]
+                        )
+                    ]
+                )
+            ])
         ];
     }
 

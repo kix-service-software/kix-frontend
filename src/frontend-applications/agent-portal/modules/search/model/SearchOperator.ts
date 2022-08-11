@@ -36,6 +36,7 @@ export enum SearchOperator {
     // special datetime operators
     WITHIN_THE_LAST = 'WITHIN_THE_LAST',    // has to be done with two filters (>= xxx and < now)
     WITHIN_THE_NEXT = 'WITHIN_THE_NEXT',    // has to be done with two filters (> now and <= xxx)
+    WITHIN = 'WITHIN',                      // has to be done with two filters (> xxx and <= yyy)
     MORE_THAN_AGO = 'MORE_THAN_AGO',
     IN_MORE_THAN = 'IN_MORE_THAN',
     LESS_THAN_AGO = 'LESS_THAN_AGO',

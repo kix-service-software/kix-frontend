@@ -30,7 +30,8 @@ class Component {
                 const sidbebars = await changedContext?.getSidebarsLeft();
                 this.state.hasSidebarsLeft = Boolean(sidbebars?.length);
             },
-            contextRegistered: () => { return; }
+            contextRegistered: () => { return; },
+            beforeDestroy: () => null
         });
 
         this.state.translations = await TranslationService.createTranslationObject([

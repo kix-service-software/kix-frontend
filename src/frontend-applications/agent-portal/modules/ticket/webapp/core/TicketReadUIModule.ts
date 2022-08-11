@@ -38,8 +38,6 @@ import { TicketPlaceholderHandler } from './TicketPlaceholderHandler';
 import { TicketPrintAction } from './actions/TicketPrintAction';
 import { SuggestedFAQHandler } from './SuggestedFAQHandler';
 import { TicketHistoryTableFactory } from './table';
-import { FormService } from '../../../base-components/webapp/core/FormService';
-import { TicketFormFieldValueHandler } from './TicketFormFieldValueHandler';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { JobFormService } from '../../../job/webapp/core';
@@ -48,8 +46,8 @@ import { FetchAssetAttributes } from './form/extended-form-manager/FetchAssetAtt
 import { TicketArticleCreate } from './form/extended-form-manager/TicketArticleCreate';
 import { TicketCreateDynamicFields } from './form/extended-form-manager/TicketCreateDynamicFields';
 import { TicketJobFormManager } from './TicketJobFormManager';
-import { ArticleFormFieldValueHandler } from './ArticleFormFieldValueHandler';
 import { TicketStateSet } from './form/extended-form-manager/TicketStateSet';
+import { TeamSet } from './form/extended-form-manager/TeamSet';
 import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
 import { ArticlePlaceholderHandler } from './ArticlePlaceholderHandler';
@@ -113,9 +111,6 @@ export class UIModule implements IUIModule {
 
         ServiceRegistry.registerAdditionalTableObjectsHandler(new SuggestedFAQHandler());
 
-        FormService.getInstance().addFormFieldValueHandler(new TicketFormFieldValueHandler());
-        FormService.getInstance().addFormFieldValueHandler(new ArticleFormFieldValueHandler());
-
         this.registerTicketActions();
 
         JobFormService.getInstance().registerJobFormManager(JobTypes.TICKET, new TicketJobFormManager());
@@ -126,6 +121,7 @@ export class UIModule implements IUIModule {
             ticketManager.addExtendedJobFormManager(new FetchAssetAttributes());
             ticketManager.addExtendedJobFormManager(new TicketCreateDynamicFields());
             ticketManager.addExtendedJobFormManager(new TicketStateSet());
+            ticketManager.addExtendedJobFormManager(new TeamSet());
         }
 
         if (this.doRegisterContexts) {

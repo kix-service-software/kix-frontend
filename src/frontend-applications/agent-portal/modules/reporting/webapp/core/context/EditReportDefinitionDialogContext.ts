@@ -26,8 +26,8 @@ export class EditReportDefinitionContext extends Context {
             const reportDefinitionId = this.getObjectId();
             if (reportDefinitionId) {
                 const objects = await KIXObjectService.loadObjects<ReportDefinition>(
-                    KIXObjectType.REPORT_DEFINITION, [reportDefinitionId]
-                );
+                    KIXObjectType.REPORT_DEFINITION, [reportDefinitionId], null, null, true
+                ).catch(() => []);
                 object = objects && objects.length ? objects[0] : null;
             }
         }

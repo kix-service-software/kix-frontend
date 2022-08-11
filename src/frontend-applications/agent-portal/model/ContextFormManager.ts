@@ -7,6 +7,7 @@
  * --
  */
 
+import { AdditionalContextInformation } from '../modules/base-components/webapp/core/AdditionalContextInformation';
 import { ContextFormManagerEvents } from '../modules/base-components/webapp/core/ContextFormManagerEvents';
 import { ContextService } from '../modules/base-components/webapp/core/ContextService';
 import { EventService } from '../modules/base-components/webapp/core/EventService';
@@ -14,6 +15,11 @@ import { FormEvent } from '../modules/base-components/webapp/core/FormEvent';
 import { FormInstance } from '../modules/base-components/webapp/core/FormInstance';
 import { FormService } from '../modules/base-components/webapp/core/FormService';
 import { IEventSubscriber } from '../modules/base-components/webapp/core/IEventSubscriber';
+import { KIXObjectService } from '../modules/base-components/webapp/core/KIXObjectService';
+import { ObjectFormEvent } from '../modules/object-forms/model/ObjectFormEvent';
+import { ObjectFormHandler } from '../modules/object-forms/webapp/core/ObjectFormHandler';
+import { ObjectFormRegistry } from '../modules/object-forms/webapp/core/ObjectFormRegistry';
+import { FormConfiguration } from './configuration/FormConfiguration';
 import { FormContext } from './configuration/FormContext';
 import { FormFieldConfiguration } from './configuration/FormFieldConfiguration';
 import { FormFieldValue } from './configuration/FormFieldValue';
@@ -25,29 +31,88 @@ import { KIXObject } from './kix/KIXObject';
 
 export class ContextFormManager {
 
+    public formId: string;
+
     protected formInstance: FormInstance;
-    protected formId: string;
     protected formSubscriber: IEventSubscriber;
     protected activeFormPageIndex: number;
+    protected form: FormConfiguration;
 
     private storageTimeout: any;
+
+    private createObjectHandlerPromise: Promise<ObjectFormHandler>;
+    public useObjectForms: boolean;
 
     public constructor(protected context?: Context) {
         this.formSubscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
             eventPublished: (data: any, eventId: string): void => {
-                this.handleValueChanged(data.formInstance);
+                if (eventId === FormEvent.VALUES_CHANGED) {
+                    this.handleValueChanged(data.formInstance);
+                } else {
+                    this.handleValueChanged();
+                }
             }
         };
 
         EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
+        EventService.getInstance().subscribe(ObjectFormEvent.OBJECT_FORM_VALUE_CHANGED, this.formSubscriber);
     }
 
     public setContext(context: Context): void {
         this.context = context;
     }
 
-    private handleValueChanged(formInstance: FormInstance): void {
+    public async destroy(): Promise<void> {
+        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
+        EventService.getInstance().unsubscribe(ObjectFormEvent.OBJECT_FORM_VALUE_CHANGED, this.formSubscriber);
+        if (this.useObjectForms) {
+            const objectFormHandler = await this.getObjectFormHandler();
+            objectFormHandler?.destroy();
+        }
+    }
+
+    public async setFormId(formId: string, kixObject?: KIXObject, useObjectForms?: boolean): Promise<void> {
+        this.useObjectForms = useObjectForms;
+
+        if (this.formId !== formId) {
+            this.formId = formId;
+
+            if (this.useObjectForms) {
+                await this.getObjectFormHandler(true);
+            } else {
+                await this.getFormInstance(true, undefined, kixObject);
+            }
+        }
+    }
+
+    public async getObjectFormHandler(createNewInstance?: boolean): Promise<ObjectFormHandler> {
+        if (createNewInstance && this.createObjectHandlerPromise) {
+            const handler = await this.createObjectHandlerPromise;
+            handler.destroy();
+        }
+
+        if (this.formId && (!this.createObjectHandlerPromise || createNewInstance)) {
+            this.createObjectHandlerPromise = this.createObjectFormhandler();
+        }
+        return this.createObjectHandlerPromise;
+    }
+
+    private async createObjectFormhandler(): Promise<ObjectFormHandler> {
+        this.form = await FormService.getInstance().getForm(this.formId);
+
+        const objectFormHandler = new ObjectFormHandler(this.context);
+        await objectFormHandler.loadForm();
+
+        EventService.getInstance().publish(FormEvent.OBJECT_FORM_HANDLER_CHANGED, this.context);
+        return objectFormHandler;
+    }
+
+    public getForm(): FormConfiguration {
+        return this.form;
+    }
+
+    private handleValueChanged(formInstance?: FormInstance): void {
         if (this.storageTimeout) {
             if (typeof window !== 'undefined') {
                 window.clearTimeout(this.storageTimeout);
@@ -56,14 +121,15 @@ export class ContextFormManager {
         }
 
         this.storageTimeout = setTimeout(async () => {
-            if (formInstance?.instanceId === this.formInstance?.instanceId) {
-                const isStored = await ContextService.getInstance().isContextStored(this.context?.instanceId);
-                if (isStored) {
-                    ContextService.getInstance().updateStorage(this.context?.instanceId);
-                }
+            let isStoreable = await ContextService.getInstance().isContextStored(this.context?.instanceId);
+            const isFormInstance = !formInstance || (formInstance?.instanceId === this.formInstance?.instanceId);
+            isStoreable = isStoreable && isFormInstance;
+
+            if (isStoreable) {
+                ContextService.getInstance().updateStorage(this.context?.instanceId);
             }
             this.storageTimeout = null;
-        }, 1000);
+        }, 2000);
     }
 
     public async getFormId(): Promise<string> {
@@ -122,13 +188,6 @@ export class ContextFormManager {
         return this.formInstance;
     }
 
-    public async setFormId(formId: string, kixObject?: KIXObject): Promise<void> {
-        if (this.formId !== formId) {
-            this.formId = formId;
-            await this.getFormInstance(true, undefined, kixObject);
-        }
-    }
-
     public async addStorableValue(contextPreference: ContextPreference): Promise<void> {
         const replacerFunc = (): (key: string, value: any) => string => {
             const visited = new WeakSet();
@@ -143,7 +202,21 @@ export class ContextFormManager {
             };
         };
 
-        if (this.formInstance) {
+        if (this.useObjectForms) {
+
+            const object = await this.context?.getObject();
+
+            if (object) {
+                const formhandler = await this.getObjectFormHandler();
+                const commitHandler = ObjectFormRegistry.getInstance().createObjectCommitHandler(
+                    formhandler?.objectFormValueMapper
+                );
+
+                const preparedObject = await commitHandler?.prepareObject(object, false);
+                contextPreference.formObject = JSON.stringify(preparedObject);
+            }
+
+        } else if (this.formInstance) {
             const formObject = {};
             formObject['form'] = this.formInstance.getForm();
 
@@ -170,7 +243,7 @@ export class ContextFormManager {
     }
 
     public async loadStoredValue(contextPreference: ContextPreference): Promise<void> {
-        if (contextPreference && contextPreference.formValue) {
+        if (contextPreference?.formValue) {
             this.formInstance = new FormInstance(this.context);
 
             const storedValue = JSON.parse(contextPreference.formValue);
@@ -194,6 +267,10 @@ export class ContextFormManager {
                 storedValue?.fixedValues.forEach((v) => map.set(v[0], v[1]));
                 (this.formInstance as any).fixedValues = map;
             }
+        } else if (contextPreference.formObject) {
+            const object = JSON.parse(contextPreference.formObject);
+            const formObject = KIXObjectService.createObjectInstance(object.KIXObjectType, object);
+            this.context.setAdditionalInformation(AdditionalContextInformation.FORM_OBJECT, formObject);
         }
     }
 

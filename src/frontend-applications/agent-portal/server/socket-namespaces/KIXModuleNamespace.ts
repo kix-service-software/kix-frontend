@@ -12,7 +12,7 @@ import { KIXModulesEvent } from '../../modules/base-components/webapp/core/KIXMo
 import { SocketResponse } from '../../modules/base-components/webapp/core/SocketResponse';
 import { SocketErrorResponse } from '../../modules/base-components/webapp/core/SocketErrorResponse';
 import { LoadFormConfigurationsRequest } from '../../modules/base-components/webapp/core/LoadFormConfigurationsRequest';
-import { ModuleConfigurationService } from '../services/configuration';
+import { ModuleConfigurationService } from '../services/configuration/ModuleConfigurationService';
 import { FormConfiguration } from '../../model/configuration/FormConfiguration';
 import { FormConfigurationResolver } from '../services/configuration/FormConfigurationResolver';
 import { LoggingService } from '../../../../server/services/LoggingService';

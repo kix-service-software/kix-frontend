@@ -26,6 +26,7 @@ import { FilterType } from '../../../../model/FilterType';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { Notification } from '../../model/Notification';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { NotificationConfig } from '../../model/NotificationConfig';
 
 
 export class NotificationLabelProvider extends LabelProvider {
@@ -50,6 +51,9 @@ export class NotificationLabelProvider extends LabelProvider {
                 break;
             case NotificationProperty.MESSAGE_SUBJECT:
                 displayValue = 'Translatable#Subject';
+                break;
+            case NotificationProperty.MESSAGE_CONTENTTYPE:
+                displayValue = 'Translatable#ContentType';
                 break;
             case NotificationProperty.MESSAGE_BODY:
                 displayValue = 'Translatable#Text';
@@ -172,8 +176,13 @@ export class NotificationLabelProvider extends LabelProvider {
                 break;
             case NotificationProperty.NAME:
             case NotificationProperty.DATA_VISIBLE_FOR_AGENT_TOOLTIP:
+            case NotificationProperty.MESSAGE_SUBJECT:
                 displayValue = value;
                 translatable = false;
+                break;
+            case NotificationProperty.MESSAGE_CONTENTTYPE:
+                displayValue = NotificationConfig.getContentType().filter((v) => v.key === value)[0].label;
+                translatable = true;
                 break;
             default:
                 displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
@@ -209,6 +218,9 @@ export class NotificationLabelProvider extends LabelProvider {
                     break;
                 case NotificationRecipientTypes.AGENT_OWNER:
                     displayString = 'Translatable#Owner';
+                    break;
+                case NotificationRecipientTypes.AGENT_WATCHER:
+                    displayString = 'Translatable#All agents watching this ticket';
                     break;
                 default:
             }

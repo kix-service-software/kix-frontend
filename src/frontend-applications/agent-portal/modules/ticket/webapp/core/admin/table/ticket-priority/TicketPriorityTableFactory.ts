@@ -16,11 +16,11 @@ import { KIXObjectProperty } from '../../../../../../../model/kix/KIXObjectPrope
 import { TableHeaderHeight } from '../../../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../../../model/configuration/TableRowHeight';
 import { RoutingConfiguration } from '../../../../../../../model/configuration/RoutingConfiguration';
-import { TicketPriorityDetailsContext } from '../..';
 import { ContextMode } from '../../../../../../../model/ContextMode';
 import { IColumnConfiguration } from '../../../../../../../model/configuration/IColumnConfiguration';
 import { DefaultColumnConfiguration } from '../../../../../../../model/configuration/DefaultColumnConfiguration';
 import { DataType } from '../../../../../../../model/DataType';
+import { EditTicketPriorityDialogContext } from '../../context';
 import { Table } from '../../../../../../table/model/Table';
 
 export class TicketPriorityTableFactory extends TableFactory {
@@ -67,8 +67,8 @@ export class TicketPriorityTableFactory extends TableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                TicketPriorityDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_PRIORITY,
-                ContextMode.DETAILS, TicketPriorityProperty.ID
+                EditTicketPriorityDialogContext.CONTEXT_ID, KIXObjectType.TICKET_PRIORITY,
+                ContextMode.EDIT, TicketPriorityProperty.ID
             );
         }
 

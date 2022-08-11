@@ -32,6 +32,11 @@
         align-items: start;
         grid-row-gap: @margin-small;
         position: relative; // necessary for dnd
+        align-items: center;
+
+        >span.label {
+            padding-left: @margin-small;
+        }
 
         &[draggable="true"] {
             -khtml-user-drag: element;
@@ -94,7 +99,7 @@
             >.dynamic-form-date-input.between,
             >.dynamic-form-date-time-input,
             >.dynamic-form-number-input.between {
-                grid-gap: @margin-small/2 @margin-small;
+                grid-gap: (@margin-small/2) @margin-small;
 
                 >div {
                     align-self: center;
@@ -121,7 +126,17 @@
             >.dynamic-form-relative-time-input {
                 display: grid;
                 grid-template-columns: 1fr auto;
-                grid-gap: @margin-small/2 @margin-small;
+                grid-gap: (@margin-small/2) @margin-small;
+
+                >div.form-list {
+                    width: 100%;
+                }
+            }
+
+            >.dynamic-form-within-input {
+                display: grid;
+                grid-template-columns: 1fr .5fr auto max-content 1fr .5fr auto;
+                grid-gap: (@margin-small/2) @margin-small;
 
                 >div.form-list {
                     width: 100%;

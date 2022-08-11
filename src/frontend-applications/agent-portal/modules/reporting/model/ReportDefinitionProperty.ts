@@ -17,6 +17,10 @@ export enum ReportDefinitionProperty {
 
     CONFIG_TITLE = 'Title',
 
+    IS_PERIODIC = 'IsPeriodic',
+
+    MAX_REPORTS = 'MaxReports',
+
     NAME = 'Name',
 
     TOKEN = 'Token',
@@ -44,5 +48,7 @@ export enum ReportDefinitionProperty {
 
     ROLE_IDS = 'ROLE_IDS',
 
-    PARAMTER = 'PARAMTER'
+    PARAMTER = 'PARAMTER',
+
+    REPORT_COUNT = 'REPORT_COUNT'
 }

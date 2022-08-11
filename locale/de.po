@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2022-04-05 12:44+0000\n"
+"PO-Revision-Date: 2022-07-27 10:32+0000\n"
 "Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
@@ -40,6 +40,9 @@ msgstr "{0} Verknüpfung(en) angelegt"
 
 msgid "{0} link(s) assigned."
 msgstr "{0} Verknüpfung(en) erstellt."
+
+msgid "Aborted by user."
+msgstr "Durch Nutzer abgebrochen."
 
 msgid "Accepted domains"
 msgstr "Akzeptierte Domains"
@@ -116,6 +119,42 @@ msgstr "Admin"
 msgid "Admin: {0}"
 msgstr "Admin: {0}"
 
+msgid "Admin_DynamicField_Config_CIRef_DeploymentStates"
+msgstr ""
+
+msgid "Admin_DynamicField_Config_CIRef_IncidentStates"
+msgstr ""
+
+msgid "Admin_DynamicField_Config_CountDefault"
+msgstr ""
+
+msgid "Admin_DynamicField_Config_CountMax"
+msgstr ""
+
+msgid "Admin_DynamicField_Config_CountMin"
+msgstr ""
+
+msgid "Admin_DynamicField_Config_ItemSeparator"
+msgstr ""
+
+msgid "Admin_DynamicField_Config_RegexList"
+msgstr ""
+
+msgid "Admin_DynamicField_Config_Table_RowsInit"
+msgstr ""
+
+msgid "Admin_DynamicField_Config_Table_RowsMax"
+msgstr ""
+
+msgid "Admin_DynamicField_Config_Table_RowsMin"
+msgstr ""
+
+msgid "Admin_DynamicField_Config_Value"
+msgstr ""
+
+msgid "Admin_DynamicFieldDateTime_DefaultValue_Description"
+msgstr ""
+
 msgid "Administration"
 msgstr "Administration"
 
@@ -164,20 +203,14 @@ msgstr "Kurzinfo für Agent"
 msgid "Agents"
 msgstr "Agenten"
 
-msgid ""
-"A list of RegEx which are applied to values entered before submitting if "
-"field is shown in edit mode. The RegExError is shown if a RegEx does NOT "
-"match the value entered."
-msgstr ""
-"Eine Liste von regulären Ausdrücken die auf die Eingabe angewandt werden "
-"bevor eine Übermittlung erfolgt. Tie Fehlermeldung wird angezeigt, wenn die "
-"Eingabe NICHT allen regulären Ausdrücken entspricht."
-
 msgid "All"
 msgstr "Alle"
 
 msgid "All agents subscribed to the tickets queue"
 msgstr "Alle Agenten, die das Team des Tickets abonniert haben"
+
+msgid "All agents watching this ticket"
+msgstr "Agenten die das Ticket beobachten"
 
 msgid "All agents with read permissions for the ticket"
 msgstr "Alle Agenten, die Leseberechtigungen auf das Ticket haben"
@@ -508,9 +541,6 @@ msgstr "Client Secret"
 msgid "Close"
 msgstr "Schließen"
 
-msgid "close all"
-msgstr "alle schließen"
-
 msgid "Close all open tabs"
 msgstr "Alle offenen Tabs schließen"
 
@@ -658,6 +688,9 @@ msgstr "enthalten in betroffenen Assets"
 msgid "contains"
 msgstr "enthält"
 
+msgid "ContentType"
+msgstr "Inhaltstyp"
+
 msgid "Context"
 msgstr "Kontext"
 
@@ -672,6 +705,9 @@ msgstr "Anfrage konnte nicht bearbeitet werden."
 
 msgid "Could not load file {0}."
 msgstr "Konnte Datei nicht laden {0}."
+
+msgid "Count"
+msgstr "Anzahl"
 
 msgid "Count Default"
 msgstr "Anzahl (Standard)"
@@ -853,6 +889,9 @@ msgstr "Verwendungsstatus"
 msgid "DESC"
 msgstr "Absteigend"
 
+msgid "Descending:"
+msgstr "Absteigend:"
+
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -904,9 +943,6 @@ msgstr "Dynamisches Feld"
 
 msgid "DynamicField"
 msgstr "Dynamisches Feld"
-
-msgid "Dynamic_Field_DateTime_DefaultValue_Description"
-msgstr ""
 
 msgid "Dynamic Fields"
 msgstr "Dynamische Felder"
@@ -1005,7 +1041,7 @@ msgid "Edit Report"
 msgstr "Berichtsdefinition bearbeiten"
 
 msgid "Edit Report Definition"
-msgstr "Reportdefinition Bearbeiten"
+msgstr "Berichtsdefinition bearbeiten"
 
 msgid "Edit Role"
 msgstr "Rolle bearbeiten"
@@ -1097,6 +1133,9 @@ msgstr "Endzeitpunkt"
 msgid "End value is not given"
 msgstr "Endwert fehlt"
 
+msgid "Entered date-time value is invalid."
+msgstr "Eingegebener Zeitpunkt ist ungültig."
+
 msgid "Enter search value"
 msgstr "Suchbegriff eingeben"
 
@@ -1165,9 +1204,6 @@ msgstr "Ausführungsplan"
 
 msgid "Existing Links ({0})"
 msgstr "Vorhandene Verknüpfungen ({0})"
-
-msgid "expand all"
-msgstr "alle erweitern"
 
 msgid "expected time required:"
 msgstr "voraussichtlich benötigte Zeit:"
@@ -1305,6 +1341,12 @@ msgstr "beendet"
 msgid "First Name"
 msgstr "Vorname"
 
+msgid "First number value is missing."
+msgstr "Erster Wert fehlt."
+
+msgid "First number value is not an integer."
+msgstr "Erster Wert ist keine Ganzzahl."
+
 msgid "Fixed First Column"
 msgstr "Erste Spalte fixieren"
 
@@ -1327,6 +1369,9 @@ msgstr "Erzwingen"
 msgid "Format"
 msgstr "Format"
 
+msgid "Form contains invalid values"
+msgstr "Formular beinhaltet ungültige Werte"
+
 msgid "Form title"
 msgstr "Formulartitel"
 
@@ -1340,7 +1385,7 @@ msgid "Forward"
 msgstr "Weiterleiten"
 
 msgid "FQDN"
-msgstr ""
+msgstr "FQDN"
 
 msgid "Friday"
 msgstr "Freitag"
@@ -1377,6 +1422,9 @@ msgstr "Erstelle neuen Benutzertoken"
 
 msgid "Go to Asset"
 msgstr "Zu Asset springen"
+
+msgid "Go to top"
+msgstr "nach oben"
 
 msgid "Graph"
 msgstr "Graph"
@@ -1680,6 +1728,9 @@ msgstr ""
 "eine neue Zeile. Ist unter \"Events\" mindestens ein artikelbezogenes Event "
 "ausgewählt, sind die Filterattribute \"Sendertyp\" & \"Kanal\" Pflichtfelder."
 
+msgid "Helptext_Admin_NotificationCreate_MessageContentType"
+msgstr "Definiert den Inhaltstyp der Benachrichtigung."
+
 msgid "Helptext_Admin_NotificationCreate_MessageSubject"
 msgstr ""
 "Geben Sie den Betreff ein, der in der E-Mail angezeigt werden soll, die "
@@ -1773,6 +1824,9 @@ msgstr ""
 "eingeben, auf den der Filter reagiert. Nutzen Sie für jedes weitere Attribut "
 "eine neue Zeile. Ist unter \"Events\" mindestens ein artikelbezogenes Event "
 "ausgewählt, sind die Filterattribute \"Sendertyp\" & \"Kanal\" Pflichtfelder."
+
+msgid "Helptext_Admin_NotificationEdit_MessageContentType"
+msgstr "Definiert den Inhaltstyp der Benachrichtigung."
 
 msgid "Helptext_Admin_NotificationEdit_MessageSubject"
 msgstr ""
@@ -2037,6 +2091,8 @@ msgstr ""
 
 msgid "Helptext_Admin_Tickets_StateCreate_Name"
 msgstr ""
+"Bezeichnung des Status (Übersetzung bitte über Internationalisierungen "
+"pflegen)."
 
 msgid "Helptext_Admin_Tickets_StateCreate_Type"
 msgstr "Über den Statustyp werden Status gruppiert."
@@ -2056,6 +2112,8 @@ msgstr ""
 
 msgid "Helptext_Admin_Tickets_TypeCreate_Name"
 msgstr ""
+"Bezeichnung des Vorgangstyps (Übersetzung bitte über Internationalisierungen "
+"pflegen)."
 
 msgid "Helptext_Admin_Tickets_TypeCreate_Valid"
 msgstr "Der Typ kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
@@ -2137,7 +2195,7 @@ msgstr ""
 "Webformular erstellt werden."
 
 msgid "Helptext_Admin_WebformCreateEdit_SaveButtonLabel"
-msgstr ""
+msgstr "Beschriftung des Absende-Buttons"
 
 msgid "Helptext_Admin_WebformCreateEdit_ShowTitle"
 msgstr ""
@@ -2487,7 +2545,7 @@ msgstr ""
 "abfragen."
 
 msgid "Helptext_PersonalSettings_article_sort_order_Hint"
-msgstr ""
+msgstr "Definiert die Reihenfolge der Artikel in der Kommunikationshistorie."
 
 msgid "Helptext_PersonalSettings_MyQueues_Hint"
 msgstr ""
@@ -2541,6 +2599,11 @@ msgstr ""
 "mitgelieferten Standardberichte benötigt. Die Parameter der Output-Handler "
 "sind direkt von den entsprechenden SQL-Statements abhängig. Werden diese "
 "verändert, funktionieren die Berichte nicht mehr."
+
+msgid "Helptext_Reporting_ReportCreate_MaxReports"
+msgstr ""
+"Maximale Anzahl der vorzuhaltenden Berichte für diese Berichtsdefinition. "
+"Bitte \"0\" setzen, wenn alle Berichte erhalten bleiben sollen."
 
 msgid "Helptext_Reporting_ReportCreate_OutputFormat"
 msgstr ""
@@ -2608,6 +2671,11 @@ msgstr ""
 "Berichtes ein Pflichtfeld, welches zwingend eine Eingabe durch den "
 "Berichtersteller erfordert."
 
+msgid "Helptext_Reporting_ReportCreate_Periodic"
+msgstr ""
+"Wenn aktiv wird der Bericht periodisch automatisch erstellt und steht zur "
+"Verwendung per persönlicher URL oder im Home-Dashboard zur Verfügung."
+
 msgid "Helptext_Reporting_ReportCreate_Roles"
 msgstr ""
 "Diese Berichtsdefinition steht nur den Agenten zur Verfügung, die den hier "
@@ -2650,56 +2718,21 @@ msgstr ""
 "\"Artikelinhalt\", \"Von\", \"An\", \"Cc\". Verwendung von Wildcards (*) ist "
 "möglich."
 
-msgid "Helptext_Tickets_ArticleCreate_Attachments"
+msgid "Helptext_Tickets_ArticleCreate_Body"
 msgstr ""
-"Wählen Sie ob die Ticketbeschreibung nur als Notiz abgelegt oder direkt als "
-"Email versendet wird."
 
 msgid "Helptext_Tickets_ArticleCreate_Channel"
 msgstr ""
 "Wählen Sie aus, ob Sie den Artikel intern am Ticket hinterlegen (Notiz) oder "
 "zusätzlich per E-Mail versenden (E-Mail) wollen."
 
-msgid "Helptext_Tickets_ArticleCreateEdit_Body"
-msgstr ""
-"Beschreiben Sie hier das Anliegen des Artikels. Wenn Sie als Kanal „E-Mail“ "
-"gewählt haben, erhält der Empfänger diesen Text."
-
-msgid "Helptext_Tickets_ArticleCreateEdit_CustomerVisible"
-msgstr ""
-"Wählen Sie aus, ob der folgende Artikel im Self Service Portal angezeigt "
-"wird. Haben Sie oben den Kanal \"E-Mail\" gewählt und in einem der folgenden "
-"Empfänger-Felder (An, Cc oder Bcc) eine Adresse gewählt, die einem Kontakt "
-"der Organisation dieses Tickets zugeordnet ist, wird der Haken automatisch "
-"gesetzt und kann nicht entfernt werden."
-
-msgid "Helptext_Tickets_ArticleCreateEdit_Subject"
-msgstr "Eine kurze Zusammenfassung Ihrer Nachricht"
-
-msgid "Helptext_Tickets_ArticleCreate_From"
-msgstr ""
-"Wählen Sie aus, wie der Absender dieser Nachricht für den E-Mail Empfänger "
-"dargestellt wird. Die hier auswählbare E-Mail-Adresse ist abhängig von dem "
-"gewählten Team."
-
-msgid "Helptext_Tickets_ArticleCreate_ReceiverBcc"
-msgstr ""
-"Der An-Empfänger einer E-Mail, die aus einem neuen Ticket heraus versendet "
-"wird, ist automatisch der „Kontakt“. Hier können Sie weitere Empfänger aus "
-"dem System wählen oder E-Mail-Adressen eingeben, die die Nachricht als "
-"Blindkopie erhalten."
-
-msgid "Helptext_Tickets_ArticleCreate_ReceiverCc"
-msgstr ""
-"Der An-Empfänger einer E-Mail, die aus einem neuen Ticket heraus versendet "
-"wird, ist automatisch der „Kontakt“. Hier können Sie weitere Empfänger aus "
-"dem System wählen oder E-Mail-Adressen eingeben, welche die Nachricht in "
-"Kopie erhalten."
-
 msgid "Helptext_Tickets_ArticleCreate_ReceiverTo"
 msgstr ""
 "Wählen Sie Empfänger für die Nachricht aus dem System oder geben Sie E-Mail-"
 "Adressen ein."
+
+msgid "Helptext_Tickets_ArticleCreate_Subject"
+msgstr "Zusammenfassung/Titel der anzulegenden Nachricht/Notiz"
 
 msgid "Helptext_Tickets_Link_FullText"
 msgstr ""
@@ -2732,11 +2765,6 @@ msgstr ""
 "Ticket verknüpft. Sie können nach der Asset Nummer und/oder dem Asset Name "
 "suchen. Die maximale Anzahl der Einträge ist begrenzt."
 
-msgid "Helptext_Tickets_TicketCreate_Body"
-msgstr ""
-"Beschreiben Sie hier das Anliegen des Tickets. Wenn Sie als Kanal „E-Mail“ "
-"gewählt haben, erhält der Empfänger diesen Text."
-
 msgid "Helptext_Tickets_TicketCreate_Channel"
 msgstr ""
 "Wählen Sie aus, ob Sie die Ticketbeschreibung intern am Ticket hinterlegen "
@@ -2753,14 +2781,6 @@ msgstr ""
 "können Sie einen neuen Kontakt anlegen & mit dem Speichern automatisch "
 "hierher zurückkehren. Für unbekannte Kontakte ist auch die Eingabe einer "
 "syntaktisch korrekten E-Mail-Adresse (name@beispiel.de) möglich."
-
-msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
-msgstr ""
-"Wählen Sie aus, ob der folgende Artikel im Self Service Portal angezeigt "
-"wird. Haben Sie oben den Kanal \"E-Mail\" gewählt und in einem der folgenden "
-"Empfänger-Felder (An, Cc oder Bcc) eine Adresse gewählt, die einem Kontakt "
-"der Organisation dieses Tickets zugeordnet ist, wird der Haken automatisch "
-"gesetzt und kann nicht entfernt werden."
 
 msgid "Helptext_Tickets_TicketCreate_Organisation"
 msgstr ""
@@ -2779,9 +2799,6 @@ msgid "Helptext_Tickets_TicketCreate_State"
 msgstr ""
 "Der Status definiert, in welchem Bearbeitungszustand sich das Ticket "
 "befindet."
-
-msgid "Helptext_Tickets_TicketCreate_Subject"
-msgstr "Eine kurze Zusammenfassung ihrer Meldung"
 
 msgid "Helptext_Tickets_TicketCreate_Type"
 msgstr ""
@@ -2886,7 +2903,7 @@ msgid "Hide"
 msgstr "Ausblenden"
 
 msgid "Hide Message"
-msgstr "Nachricht ausblenden"
+msgstr "Artikeltext ausblenden"
 
 msgid "History"
 msgstr "Historie"
@@ -2908,20 +2925,6 @@ msgstr "Id"
 
 msgid "ID"
 msgstr "ID"
-
-msgid ""
-"If field contains multiple values, single values are concatenated by this "
-"separator symbol/s."
-msgstr ""
-"Wenn das Feld mehrere Werte beinhaltet, werden diese mit dem Separator-"
-"Symbol konkateniert."
-
-msgid ""
-"If field is shown for display and no value is set, CountDefault numbers of "
-"inputs are displayed."
-msgstr ""
-"Wenn das Feld zur Eingabe steht, aber noch kein Wert gesetzt ist, wird die "
-"Standardanzahl an Eingabefeldern dargestellt."
 
 msgid "Ignore"
 msgstr "Ignorieren"
@@ -2985,6 +2988,11 @@ msgstr "Vorfallsstatus"
 
 msgid "Include this code into the <head> area of your webpage."
 msgstr "Binden Sie diesen Code in den <head>-Bereich Ihrer Webseite ein."
+
+msgid ""
+"Incorrect data mapping. Length of dataset properties is different from value "
+"properties."
+msgstr ""
 
 msgid "Incorrectly processed lines"
 msgstr "Fehlerhaft verarbeitete Zeilen"
@@ -3052,6 +3060,9 @@ msgstr "Job erfolgreich ausgeführt."
 msgid "Keywords"
 msgstr "Schlagworte"
 
+msgid "KIX"
+msgstr ""
+
 msgid "KIX Forum"
 msgstr ""
 
@@ -3115,11 +3126,8 @@ msgstr "Asset verknüpfen mit"
 msgid "Linked as"
 msgstr "Verknüpft als"
 
-msgid "Linked Objects"
-msgstr "Verknüpfte Objekte"
-
-msgid "Linked Objects ({0})"
-msgstr "Verknüpfte Objekte ({0})"
+msgid "Linked Objects (<KIX_OBJECT_LinkCount>)"
+msgstr "Verknüpfte Objekte (<KIX_OBJECT_LinkCount>)"
 
 msgid "Link FAQ with"
 msgstr "FAQ verknüpfen mit"
@@ -3207,6 +3215,9 @@ msgstr "Alle Artikel als gelesen markieren."
 
 msgid "Max Depth"
 msgstr "Max. Tiefe"
+
+msgid "Max. Reports"
+msgstr "Max. Berichte"
 
 msgid "Menu"
 msgstr "Modulmenü"
@@ -3472,6 +3483,9 @@ msgstr "Kein Artikel"
 msgid "No article available."
 msgstr "Kein Artikel verfügbar."
 
+msgid "No Channel"
+msgstr "Kein Kanal"
+
 msgid "No data available."
 msgstr "Keine Angaben verfügbar."
 
@@ -3487,8 +3501,8 @@ msgstr "Keine Berechtigung für dieses Objekt."
 msgid "No rating available."
 msgstr "Keine Bewertung verfügbar."
 
-msgid "No signature defined."
-msgstr "Keine Signatur definiert."
+msgid "No report available"
+msgstr "Kein Bericht verfügbar"
 
 msgid "Not available (not any more or not yet)"
 msgstr "Noch nicht verfügbar / nicht mehr verfügbar"
@@ -3533,7 +3547,7 @@ msgid "Notifications successfully removed."
 msgstr "Benachrichtigung(en) wurde(n) erfolgreich gelöscht."
 
 msgid "Notification Template"
-msgstr "Layout Benachrichtigungen"
+msgstr "Benachrichtigungen Layout"
 
 msgid "Notification Text"
 msgstr "Benachrichtigungstext"
@@ -3562,6 +3576,12 @@ msgstr "Anzahl Assets"
 msgid "Number of Config Items in critical incident state"
 msgstr "Anzahl Assets mit kritischem Vorfallsstatus"
 
+msgid "Number of open tickets by priority"
+msgstr "Anzahl offener Tickets nach Priorität"
+
+msgid "Number of open tickets by state"
+msgstr "Anzahl offener Tickets nach Status"
+
 msgid "Number of ratings"
 msgstr "Anzahl Bewertungen"
 
@@ -3573,6 +3593,9 @@ msgstr "Anzahl Zeilen (max.)"
 
 msgid "Number of rows (min)"
 msgstr "Anzahl Zeilen (min.)"
+
+msgid "Number of tickets created within the last 7 days"
+msgstr "Anzahl offener Tickets der letzten 7 Tage"
 
 msgid "Number of version"
 msgstr "Anzahl Versionen"
@@ -3760,6 +3783,12 @@ msgstr "Warten bis"
 msgid "Pending until: {0} ({1})"
 msgstr "warten bis: {0} ({1})"
 
+msgid "Periodic"
+msgstr "Periodisch"
+
+msgid "Periodic Creation"
+msgstr "Periodische Erstellung"
+
 msgid "Permission"
 msgstr "Berechtigung"
 
@@ -3787,6 +3816,9 @@ msgstr "Telefon"
 msgid "Place this code wherever you want to open the webform dialog."
 msgstr ""
 "Platzieren Sie diesen Code dort, wo das Webformular geöffnet werden soll."
+
+msgid "Plaintext"
+msgstr "Klartext"
 
 msgid "Plan: {0} - {1}"
 msgstr "Plan: {0} - {1}"
@@ -3869,17 +3901,8 @@ msgstr "Priorität"
 msgid "Priority Chart"
 msgstr "Prioritäts-Chart"
 
-msgid "Priority Chart Widget"
-msgstr "Prioritäts-Chart-Widget"
-
 msgid "Priority Data"
 msgstr "Prioritätsdaten"
-
-msgid "Priority Details"
-msgstr "Prioritätsdetails"
-
-msgid "Priority Information"
-msgstr "Prioritäten-Informationen"
 
 msgid "Profiles successfully removed."
 msgstr "Profil(e) entfernt."
@@ -4079,14 +4102,17 @@ msgstr "Wert ersetzen"
 msgid "Reply"
 msgstr "Antworten"
 
-msgid "Reply all"
-msgstr "Allen antworten"
+msgid "Reply All"
+msgstr "Allen Antworten"
 
 msgid "Report"
 msgstr "Bericht"
 
+msgid "Report Chart"
+msgstr "Berichtsgrafik"
+
 msgid "Report Definition"
-msgstr "Reportdefinition"
+msgstr "Berichtsdefinition"
 
 msgid "Report Definitions"
 msgstr "Berichtsdefinitionen"
@@ -4150,6 +4176,9 @@ msgstr "Ergebnisbezeichnungen"
 
 msgid "Results"
 msgstr "Ergebnisse"
+
+msgid "Richtext"
+msgstr ""
 
 msgid "Role"
 msgstr "Rolle"
@@ -4231,6 +4260,9 @@ msgstr "Zeitplanung"
 msgid "Scope"
 msgstr "Scope"
 
+msgid "search ..."
+msgstr "suchen ..."
+
 msgid "Search"
 msgstr "Suchen"
 
@@ -4242,6 +4274,12 @@ msgstr "Suche {0} wird gelöscht. Sind Sie sicher?"
 
 msgid "Search error!"
 msgstr "Fehler bei Suche!"
+
+msgid "SEARCH_OPERATOR_WITHIN_LAST"
+msgstr "der letzten"
+
+msgid "SEARCH_OPERATOR_WITHIN_NEXT"
+msgstr "der nächsten"
 
 msgid "Search Results"
 msgstr "Suchergebnisse"
@@ -4264,11 +4302,20 @@ msgstr "Suchvorlage(n) wurde(n) erfolgreich gelöscht."
 msgid "Search Title"
 msgstr "Name der Suche"
 
+msgid "Second number value is missing."
+msgstr "Zweiter Wert fehlt."
+
+msgid "Second number value is not an integer."
+msgstr "Zweiter Wert ist keine Ganzzahl."
+
 msgid "Seconds(s)"
 msgstr "Sekunde(n)"
 
 msgid "Select all"
 msgstr "Alle auswählen"
+
+msgid "Select All"
+msgstr "Alle(s) auswählen"
 
 msgid "Selected {0} ({1})"
 msgstr "Ausgewählte {0} ({1})"
@@ -4285,11 +4332,17 @@ msgstr "Datei wählen"
 msgid "Select image file"
 msgstr "Bilddatei wählen"
 
+msgid "Select None"
+msgstr "Leere Auswahl"
+
 msgid "Self Service Manual"
 msgstr "Self Service Handbuch"
 
 msgid "; (semicolon)"
 msgstr "; (Semikolon)"
+
+msgid "Send"
+msgstr "Senden"
 
 msgid "Send despite out of office"
 msgstr "Trotz „nicht im Büro“"
@@ -4383,7 +4436,7 @@ msgid "Set Value"
 msgstr "Wert setzen"
 
 msgid "Show all"
-msgstr "Alle anzeigen"
+msgstr "Alles anzeigen"
 
 msgid "Show Backlog"
 msgstr "Backlog anzeigen"
@@ -4398,7 +4451,7 @@ msgid "Show in agent preferences"
 msgstr "Anzeige Agenteneinstellung"
 
 msgid "Show in Customer Portal"
-msgstr "Im SSP anzeigen"
+msgstr "Im Kundenportal anzeigen"
 
 msgid "Show title in form"
 msgstr "Titel im Formular anzeigen"
@@ -4448,39 +4501,14 @@ msgstr "Sortieren"
 msgid "Sortable"
 msgstr "Sortierbar"
 
+msgid "Sort attribute:"
+msgstr "Sortierattribut:"
+
 msgid "Source"
 msgstr "Quelle"
 
 msgid "Source Message"
 msgstr "Quelltext"
-
-msgid ""
-"Specifies the initial number of rows that the table should display if there "
-"are no entries.\n"
-" The initial must not be smaller than the minimum and larger than the "
-"maximum of the number of rows.\n"
-" Values less than 1 are not possible."
-msgstr ""
-"Gibt die initiale Anzahl von Zeilen an, die die Tabelle anzeigen soll, wenn "
-"keine Einträge vorhanden sind. Der Initialwert darf nicht kleiner als das "
-"Minimum und größer als das Maximum der Zeilenanzahl sein. Werte kleiner als "
-"1 sind nicht möglich."
-
-msgid ""
-"Specifies the maximum number of rows in the table that can be displayed/"
-"added. Values less than 1 are not possible."
-msgstr ""
-"Definiert die max. Anzahl von Zeilen die die Tabelle zur Eingabe zulässt. "
-"Werte kleiner als 1 sind nicht zulässig."
-
-msgid ""
-"Specifies the minimum number of rows that the table has to display. It is "
-"not possible to delete rows below the minimum number of rows.\n"
-" Values less than 1 are not possible."
-msgstr ""
-"Definiert die minimale Anzahl an Zeilen die bei Eingabe von Daten "
-"erforderlich ist. Es ist nicht möglich mehr als die min. Anzahl von Zeilen "
-"zu entfernen. Werte kleiner als 1 sind nicht zulässig."
 
 msgid "Split Option"
 msgstr "Trennoptionen"
@@ -4526,12 +4554,6 @@ msgstr "Status"
 
 msgid "State Data"
 msgstr "Stammdaten"
-
-msgid "State Details"
-msgstr "Statusdetails"
-
-msgid "State Information"
-msgstr "Status-Informationen"
 
 msgid "States"
 msgstr "Status"
@@ -4680,9 +4702,6 @@ msgstr "Team"
 msgid "Team Backlog"
 msgstr "Team Backlog"
 
-msgid "Team Details"
-msgstr "Teamdetails"
-
 msgid ""
 "Technical Customer Service mit KIX - work order documentation, checklists, "
 "scheduling, offline information for maintenance and repairs."
@@ -4708,6 +4727,9 @@ msgstr "Textbaustein(e) wurde(n) erfolgreich gelöscht."
 msgid "Text separator"
 msgstr "Texttrenner"
 
+msgid "The entered date is out of boundaries."
+msgstr "Das eingegebene Datum ist außerhalb des zulässigen Wertebereichs."
+
 msgid "The file {0} has no valid MIME-TYPE."
 msgstr "Die Datei '{0}' hat keinen gültigen MIME-Typ."
 
@@ -4724,29 +4746,8 @@ msgstr ""
 msgid "The following {0} entries will be deleted. Are you sure?"
 msgstr "Die ausgewählten {0} Einträge werden gelöscht. Sind Sie sicher?"
 
-msgid ""
-"The initial value of the field if shown in edit mode for the first time. "
-"Applies to first item of array only."
-msgstr ""
-"Der initiale Wert des Feldes bei erstmaliger Eingabe. Wird nur auf den "
-"ersten Eintrag eines Arrays angewandt."
-
 msgid "The Job {0} will be ran now. Are you sure?"
 msgstr "Der Job {0} wird jetzt ausgeführt. Sind Sie sicher?"
-
-msgid ""
-"The maximum number of array or selectable items for this field. if field is "
-"shown in edit mode."
-msgstr ""
-"Die maximale Anzahl von auswählbaren Einträgen, wenn das Feld zur Eingabe "
-"angezeigt wird."
-
-msgid ""
-"The minimum number of items which are available for input if field is shown "
-"in edit mode."
-msgstr ""
-"Die minimale Anzahl von Einträgen die ausgewählt werden müssen, wenn das "
-"Feld zur Eingabe angezeigt wird."
 
 msgid "The password is changed for Admin."
 msgstr "Das Passwort für Admin wurde geändert."
@@ -4784,19 +4785,6 @@ msgstr ""
 "Das eingegebene Jahr darf nur maximal {0} Jahre in der Vergangenheit liegen."
 
 msgid ""
-"This configuration defines which Asset Classes are subject to this "
-"selection. Please enter Classes."
-msgstr ""
-"Legt fest, welche Asset-Klassen für zulässige Auswahlwerte betrachtet werden."
-
-msgid ""
-"This configuration defines which Deployment States are subject to this "
-"selection. Please enter DeploymentStates."
-msgstr ""
-"Legt fest welche Verwendungsstatus für zulässige Auswahlwerte betrachtet "
-"werden."
-
-msgid ""
 "This is the administration panel. Please select a module from the explorer."
 msgstr ""
 "Sie befinden sich im Administrationsbereich. Bitte wählen Sie ein Modul aus "
@@ -4813,9 +4801,6 @@ msgstr "Ticketattribute"
 
 msgid "Ticket Data"
 msgstr "Ticketdaten"
-
-msgid "Ticket Description"
-msgstr "Ticketbeschreibung"
 
 msgid "Ticket Flags"
 msgstr "Ticket Kennzeichnung"
@@ -4897,6 +4882,9 @@ msgstr ""
 msgid "Title"
 msgstr "Titel"
 
+msgid "to"
+msgstr ""
+
 msgid "To"
 msgstr "To"
 
@@ -4948,8 +4936,14 @@ msgstr "Typ"
 msgid "Type Data"
 msgstr "Typdaten"
 
+msgid "Type of first value is missing."
+msgstr "Typ des ersten Werts fehlt."
+
 msgid "Type of Job"
 msgstr "Job Typ"
+
+msgid "Type of second value is missing."
+msgstr "Typ des zweiten Werts fehlt."
 
 msgid "Types"
 msgstr "Typen"
@@ -4959,6 +4953,12 @@ msgstr "Typ(en) wurde(n) erfolgreich gelöscht."
 
 msgid "unequal"
 msgstr "ungleich"
+
+msgid "Unit of first value is missing."
+msgstr "Einheit des ersten Werts fehlt."
+
+msgid "Unit of second value is missing."
+msgstr "Einheit des zweiten Werts fehlt."
 
 msgid "Unlock"
 msgstr "Freigeben"
@@ -5134,6 +5134,9 @@ msgstr "Wildcard-Suche"
 msgid "With attachments"
 msgstr "mit Anhängen"
 
+msgid "within"
+msgstr "innerhalb"
+
 msgid "within the last"
 msgstr "innerhalb der letzten"
 
@@ -5196,6 +5199,188 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid ""
+#~ "A list of RegEx which are applied to values entered before submitting if "
+#~ "field is shown in edit mode. The RegExError is shown if a RegEx does NOT "
+#~ "match the value entered."
+#~ msgstr ""
+#~ "Eine Liste von regulären Ausdrücken die auf die Eingabe angewandt werden "
+#~ "bevor eine Übermittlung erfolgt. Tie Fehlermeldung wird angezeigt, wenn "
+#~ "die Eingabe NICHT allen regulären Ausdrücken entspricht."
+
+#~ msgid ""
+#~ "If field contains multiple values, single values are concatenated by this "
+#~ "separator symbol/s."
+#~ msgstr ""
+#~ "Wenn das Feld mehrere Werte beinhaltet, werden diese mit dem Separator-"
+#~ "Symbol konkateniert."
+
+#~ msgid ""
+#~ "If field is shown for display and no value is set, CountDefault numbers "
+#~ "of inputs are displayed."
+#~ msgstr ""
+#~ "Wenn das Feld zur Eingabe steht, aber noch kein Wert gesetzt ist, wird "
+#~ "die Standardanzahl an Eingabefeldern dargestellt."
+
+#~ msgid ""
+#~ "Specifies the initial number of rows that the table should display if "
+#~ "there are no entries.\n"
+#~ " The initial must not be smaller than the minimum and larger than the "
+#~ "maximum of the number of rows.\n"
+#~ " Values less than 1 are not possible."
+#~ msgstr ""
+#~ "Gibt die initiale Anzahl von Zeilen an, die die Tabelle anzeigen soll, "
+#~ "wenn keine Einträge vorhanden sind. Der Initialwert darf nicht kleiner "
+#~ "als das Minimum und größer als das Maximum der Zeilenanzahl sein. Werte "
+#~ "kleiner als 1 sind nicht möglich."
+
+#~ msgid ""
+#~ "Specifies the maximum number of rows in the table that can be displayed/"
+#~ "added. Values less than 1 are not possible."
+#~ msgstr ""
+#~ "Definiert die max. Anzahl von Zeilen die die Tabelle zur Eingabe zulässt. "
+#~ "Werte kleiner als 1 sind nicht zulässig."
+
+#~ msgid ""
+#~ "Specifies the minimum number of rows that the table has to display. It is "
+#~ "not possible to delete rows below the minimum number of rows.\n"
+#~ " Values less than 1 are not possible."
+#~ msgstr ""
+#~ "Definiert die minimale Anzahl an Zeilen die bei Eingabe von Daten "
+#~ "erforderlich ist. Es ist nicht möglich mehr als die min. Anzahl von "
+#~ "Zeilen zu entfernen. Werte kleiner als 1 sind nicht zulässig."
+
+#~ msgid ""
+#~ "The initial value of the field if shown in edit mode for the first time. "
+#~ "Applies to first item of array only."
+#~ msgstr ""
+#~ "Der initiale Wert des Feldes bei erstmaliger Eingabe. Wird nur auf den "
+#~ "ersten Eintrag eines Arrays angewandt."
+
+#~ msgid ""
+#~ "The maximum number of array or selectable items for this field. if field "
+#~ "is shown in edit mode."
+#~ msgstr ""
+#~ "Die maximale Anzahl von auswählbaren Einträgen, wenn das Feld zur Eingabe "
+#~ "angezeigt wird."
+
+#~ msgid ""
+#~ "The minimum number of items which are available for input if field is "
+#~ "shown in edit mode."
+#~ msgstr ""
+#~ "Die minimale Anzahl von Einträgen die ausgewählt werden müssen, wenn das "
+#~ "Feld zur Eingabe angezeigt wird."
+
+#~ msgid ""
+#~ "This configuration defines which Asset Classes are subject to this "
+#~ "selection. Please enter Classes."
+#~ msgstr ""
+#~ "Legt fest, welche Asset-Klassen für zulässige Auswahlwerte betrachtet "
+#~ "werden."
+
+#~ msgid ""
+#~ "This configuration defines which Deployment States are subject to this "
+#~ "selection. Please enter DeploymentStates."
+#~ msgstr ""
+#~ "Legt fest welche Verwendungsstatus für zulässige Auswahlwerte betrachtet "
+#~ "werden."
+
+#~ msgid "Helptext_Tickets_ArticleCreate_Attachments"
+#~ msgstr ""
+#~ "Wählen Sie ob die Ticketbeschreibung nur als Notiz abgelegt oder direkt "
+#~ "als Email versendet wird."
+
+#~ msgid "Helptext_Tickets_ArticleCreateEdit_Body"
+#~ msgstr ""
+#~ "Beschreiben Sie hier das Anliegen des Artikels. Wenn Sie als Kanal „E-"
+#~ "Mail“ gewählt haben, erhält der Empfänger diesen Text."
+
+#~ msgid "Helptext_Tickets_ArticleCreateEdit_CustomerVisible"
+#~ msgstr ""
+#~ "Wählen Sie aus, ob der folgende Artikel im Self Service Portal angezeigt "
+#~ "wird. Haben Sie oben den Kanal \"E-Mail\" gewählt und in einem der "
+#~ "folgenden Empfänger-Felder (An, Cc oder Bcc) eine Adresse gewählt, die "
+#~ "einem Kontakt der Organisation dieses Tickets zugeordnet ist, wird der "
+#~ "Haken automatisch gesetzt und kann nicht entfernt werden."
+
+#~ msgid "Helptext_Tickets_ArticleCreateEdit_Subject"
+#~ msgstr "Eine kurze Zusammenfassung Ihrer Nachricht"
+
+#~ msgid "Helptext_Tickets_ArticleCreate_From"
+#~ msgstr ""
+#~ "Wählen Sie aus, wie der Absender dieser Nachricht für den E-Mail "
+#~ "Empfänger dargestellt wird. Die hier auswählbare E-Mail-Adresse ist "
+#~ "abhängig von dem gewählten Team."
+
+#~ msgid "Helptext_Tickets_ArticleCreate_ReceiverBcc"
+#~ msgstr ""
+#~ "Der An-Empfänger einer E-Mail, die aus einem neuen Ticket heraus "
+#~ "versendet wird, ist automatisch der „Kontakt“. Hier können Sie weitere "
+#~ "Empfänger aus dem System wählen oder E-Mail-Adressen eingeben, die die "
+#~ "Nachricht als Blindkopie erhalten."
+
+#~ msgid "Helptext_Tickets_ArticleCreate_ReceiverCc"
+#~ msgstr ""
+#~ "Der An-Empfänger einer E-Mail, die aus einem neuen Ticket heraus "
+#~ "versendet wird, ist automatisch der „Kontakt“. Hier können Sie weitere "
+#~ "Empfänger aus dem System wählen oder E-Mail-Adressen eingeben, welche die "
+#~ "Nachricht in Kopie erhalten."
+
+#~ msgid "Helptext_Tickets_TicketCreate_Body"
+#~ msgstr ""
+#~ "Beschreiben Sie hier das Anliegen des Tickets. Wenn Sie als Kanal „E-"
+#~ "Mail“ gewählt haben, erhält der Empfänger diesen Text."
+
+#~ msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
+#~ msgstr ""
+#~ "Wählen Sie aus, ob der folgende Artikel im Self Service Portal angezeigt "
+#~ "wird. Haben Sie oben den Kanal \"E-Mail\" gewählt und in einem der "
+#~ "folgenden Empfänger-Felder (An, Cc oder Bcc) eine Adresse gewählt, die "
+#~ "einem Kontakt der Organisation dieses Tickets zugeordnet ist, wird der "
+#~ "Haken automatisch gesetzt und kann nicht entfernt werden."
+
+#~ msgid "Helptext_Tickets_TicketCreate_Subject"
+#~ msgstr "Eine kurze Zusammenfassung ihrer Meldung"
+
+#~ msgid "Linked Objects"
+#~ msgstr "Verknüpfte Objekte"
+
+#~ msgid "Linked Objects ({0})"
+#~ msgstr "Verknüpfte Objekte ({0})"
+
+#~ msgid "Reply all"
+#~ msgstr "Allen antworten"
+
+#~ msgid "Ticket Description"
+#~ msgstr "Ticketbeschreibung"
+
+#~ msgid "close all"
+#~ msgstr "alle schließen"
+
+#~ msgid "expand all"
+#~ msgstr "alle erweitern"
+
+#~ msgid "No signature defined."
+#~ msgstr "Keine Signatur definiert."
+
+#~ msgid "Priority Chart Widget"
+#~ msgstr "Prioritäts-Chart-Widget"
+
+#~ msgid "Priority Details"
+#~ msgstr "Prioritätsdetails"
+
+#~ msgid "Priority Information"
+#~ msgstr "Prioritäten-Informationen"
+
+#~ msgid "State Details"
+#~ msgstr "Statusdetails"
+
+#~ msgid "State Information"
+#~ msgstr "Status-Informationen"
+
+#~ msgid "Team Details"
+#~ msgstr "Teamdetails"
 
 #~ msgid "Article Overview"
 #~ msgstr "Übersicht der Artikel"
@@ -5605,9 +5790,6 @@ msgstr "PLZ"
 
 #~ msgid "Selected ticket functions"
 #~ msgstr "Ausgewählte Ticketfunktionen"
-
-#~ msgid "Send"
-#~ msgstr "Senden"
 
 #~ msgid "State successfully created."
 #~ msgstr "Status wurde erfolgreich angelegt."

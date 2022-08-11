@@ -14,7 +14,7 @@ import { FilterCriteria } from '../../model/FilterCriteria';
 import { SearchOperator } from '../search/model/SearchOperator';
 import { FilterDataType } from '../../model/FilterDataType';
 import { FilterType } from '../../model/FilterType';
-import { ChartComponentConfiguration } from '../charts/model/ChartComponentConfiguration';
+import { ChartComponentConfiguration } from '../report-charts/model/ChartComponentConfiguration';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
 import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
 import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
@@ -22,7 +22,6 @@ import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
 import { UIComponentPermission } from '../../model/UIComponentPermission';
 import { CRUD } from '../../../../server/model/rest/CRUD';
 import { WidgetSize } from '../../model/configuration/WidgetSize';
-import { TicketChartWidgetConfiguration } from '../ticket/webapp/core';
 import { TicketProperty } from '../ticket/model/TicketProperty';
 import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
 import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
@@ -34,6 +33,12 @@ import { DefaultColumnConfiguration } from '../../model/configuration/DefaultCol
 import { DataType } from '../../model/DataType';
 import { ToggleOptions } from '../table/model/ToggleOptions';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { ReportChartWidgetConfiguration } from '../report-charts/model/ReportChartWidgetConfiguration';
+import { CSVFormatConfiguration } from '../report-charts/model/CSVFormatConfiguration';
+import { ConfigurationService } from '../../../../server/services/ConfigurationService';
+import { ReportingAPIService } from '../reporting/server/ReportingService';
+import { ReportDefinition } from '../reporting/model/ReportDefinition';
+import { ReportDefinitionProperty } from '../reporting/model/ReportDefinitionProperty';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -47,164 +52,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         const stateTypeFilterCriteria = new FilterCriteria(
             TicketProperty.STATE_TYPE, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
         );
-
-        const chartConfig1 = new ChartComponentConfiguration(
-            'home-dashboard-ticket-chart-widget-priorities-config', 'Translatable#Priority Chart',
-            ConfigurationType.Chart,
-            {
-                type: 'bar',
-                options: {
-                    legend: {
-                        display: false
-                    },
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true,
-                                maxTicksLimit: 6
-                            }
-                        }]
-                    }
-                },
-                data: {
-                    datasets: [
-                        {
-                            backgroundColor: [
-                                'rgb(91, 91, 91)',
-                                'rgb(4, 83, 125)',
-                                'rgb(0, 141, 210)',
-                                'rgb(129, 189, 223)',
-                                'rgb(160, 230, 200)',
-                                'rgb(130, 200, 38)',
-                                'rgb(0, 152, 70)',
-                                'rgb(227, 30, 36)',
-                                'rgb(239, 127, 26)',
-                                'rgb(254, 204, 0)'
-                            ]
-                        }
-                    ]
-                }
-            }
-        );
-        configurations.push(chartConfig1);
-
-        const chartWidgetConfig1 = new TicketChartWidgetConfiguration(
-            'home-dashboard-ticket-chart-widget-priorities-chart', 'Translatable#Priority Chart',
-            ConfigurationType.ChartWidget,
-            TicketProperty.PRIORITY_ID,
-            new ConfigurationDefinition(
-                'home-dashboard-ticket-chart-widget-priorities-config', ConfigurationType.Chart
-            ),
-            null, new KIXObjectLoadingOptions([stateTypeFilterCriteria])
-        );
-        configurations.push(chartWidgetConfig1);
-
-        const chart1 = new WidgetConfiguration(
-            'home-dashboard-ticket-chart-widget-priorities', 'Translatable#Priority Chart Widget',
-            ConfigurationType.Widget,
-            'ticket-chart-widget', 'Overview Ticket Priorities', [],
-            new ConfigurationDefinition(
-                'home-dashboard-ticket-chart-widget-priorities-chart', ConfigurationType.ChartWidget
-            ),
-            null, false, true, null, false
-        );
-        configurations.push(chart1);
-
-        const chartConfig2 = new ChartComponentConfiguration(
-            'home-dashboard-ticket-chart-widget-states-config', 'Translatable#States Chart', ConfigurationType.Chart,
-            {
-                type: 'pie',
-                options: {
-                    legend: {
-                        display: true,
-                        position: 'right'
-                    }
-                },
-                data: {
-                    datasets: [
-                        {
-                            fill: true,
-                            backgroundColor: [
-                                'rgb(91, 91, 91)',
-                                'rgb(4, 83, 125)',
-                                'rgb(0, 141, 210)',
-                                'rgb(129, 189, 223)',
-                                'rgb(160, 230, 200)',
-                                'rgb(130, 200, 38)',
-                                'rgb(0, 152, 70)',
-                                'rgb(227, 30, 36)',
-                                'rgb(239, 127, 26)',
-                                'rgb(254, 204, 0)'
-                            ]
-                        }
-                    ]
-                }
-            }
-        );
-        configurations.push(chartConfig2);
-
-        const chartWidgetConfig2 = new TicketChartWidgetConfiguration(
-            'home-dashboard-ticket-chart-widget-states-chart', 'Translatable#States Chart',
-            ConfigurationType.ChartWidget,
-            TicketProperty.STATE_ID,
-            new ConfigurationDefinition('home-dashboard-ticket-chart-widget-states-config', ConfigurationType.Chart),
-            null, new KIXObjectLoadingOptions([stateTypeFilterCriteria])
-        );
-        configurations.push(chartWidgetConfig2);
-
-        const chart2 = new WidgetConfiguration(
-            'home-dashboard-ticket-chart-widget-states', 'Translatable#States Chart Widget', ConfigurationType.Widget,
-            'ticket-chart-widget', 'Overview Ticket States', [],
-            new ConfigurationDefinition(
-                'home-dashboard-ticket-chart-widget-states-chart', ConfigurationType.ChartWidget
-            ),
-            null, false, true, null, false
-        );
-        configurations.push(chart2);
-
-        const chartConfig3 = new ChartComponentConfiguration(
-            'home-dashboard-ticket-chart-widget-new-config', 'Translatable#New Tickets Chart', ConfigurationType.Chart,
-            {
-                type: 'line',
-                options: {
-                    legend: {
-                        display: false
-                    },
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true,
-                                maxTicksLimit: 6
-                            }
-                        }]
-                    }
-                },
-                data: {
-                    datasets: [{
-                        backgroundColor: 'rgb(91, 91, 91)'
-                    }]
-                },
-            }
-        );
-        configurations.push(chartConfig3);
-
-        const chartWidgetConfig3 = new TicketChartWidgetConfiguration(
-            'home-dashboard-ticket-chart-widget-new-chart', 'Translatable#New Tickets Chart',
-            ConfigurationType.ChartWidget,
-            TicketProperty.CREATED,
-            new ConfigurationDefinition('home-dashboard-ticket-chart-widget-new-config', ConfigurationType.Chart),
-            null, new KIXObjectLoadingOptions([stateTypeFilterCriteria])
-        );
-        configurations.push(chartWidgetConfig3);
-
-        const chart3 = new WidgetConfiguration(
-            'home-dashboard-ticket-chart-widget-new', 'Translatable#New Tickets Chart Widget', ConfigurationType.Widget,
-            'ticket-chart-widget', 'Translatable#New Tickets (recent 7 days)', [],
-            new ConfigurationDefinition('home-dashboard-ticket-chart-widget-new-chart',
-                ConfigurationType.ChartWidget),
-            null, false, true, null, false
-        );
-        configurations.push(chart3);
 
         const tableMyOpenTicketsConfiguration = new TableConfiguration(
             'home-dashboard-ticket-table-myOpenTickets', 'Translatable#My Open Tickets Table', ConfigurationType.Table,
@@ -267,10 +114,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.QUEUE_ID, true, false, true, true, 175, true, true, true
                 ),
-                // new DefaultColumnConfiguration(null, null, null,
-                //     'DynamicFields.AffectedAsset', true, false, true, false, 200, true, true, true, undefined, true,
-                //     'label-list-cell-content'
-                // ),
                 new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.ORGANISATION_ID, true, false, true, true, 225, true, true
                 ),
@@ -302,13 +145,14 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(newTicketsWidget);
 
-        // sidebars
         const notesSidebar = new WidgetConfiguration(
             'home-dashboard-notes-widget', 'Translatable#Notes', ConfigurationType.Widget,
             'notes-widget', 'Translatable#Notes', [], null, null,
             false, true, 'kix-icon-note', false
         );
         configurations.push(notesSidebar);
+
+        const chartWidgets = await this.getChartWidgetConfigurations();
 
         configurations.push(
             new ContextConfiguration(
@@ -319,19 +163,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 ],
                 [], [],
                 [
-                    new ConfiguredWidget(
-                        'home-dashboard-ticket-chart-widget-priorities',
-                        'home-dashboard-ticket-chart-widget-priorities',
-                        null, [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
-                    ),
-                    new ConfiguredWidget(
-                        'home-dashboard-ticket-chart-widget-states', 'home-dashboard-ticket-chart-widget-states', null,
-                        [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
-                    ),
-                    new ConfiguredWidget(
-                        'home-dashboard-ticket-chart-widget-new', 'home-dashboard-ticket-chart-widget-new', null,
-                        [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
-                    ),
+                    ...chartWidgets,
                     new ConfiguredWidget(
                         'home-dashboard-myOpenTickets-widget', 'home-dashboard-myOpenTickets-widget', null,
                         [new UIComponentPermission('tickets', [CRUD.READ])]
@@ -346,6 +178,117 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
 
         return configurations;
+    }
+
+    private async getChartWidgetConfigurations(): Promise<ConfiguredWidget[]> {
+        const chartWidgets: ConfiguredWidget[] = [];
+
+        const priorityReportId = await this.getReportId('Number of open tickets by priority');
+        chartWidgets.push(new ConfiguredWidget(
+            'home-dashboard-ticket-chart-widget-priorities', null,
+            new WidgetConfiguration(
+                'home-dashboard-ticket-chart-widget-priorities', 'Priority Chart Widget',
+                ConfigurationType.Widget,
+                'report-chart-widget', 'Translatable#Number of open tickets by priority', [], null,
+                new ReportChartWidgetConfiguration(
+                    'home-dashboard-ticket-chart-widget-priorities-chart', 'Translatable#Priority Chart',
+                    new ChartComponentConfiguration(
+                        'home-dashboard-ticket-chart-widget-priorities-config', 'Translatable#Priority Chart',
+                        ConfigurationType.Chart,
+                        {
+                            type: 'bar',
+                            options: {
+                                legend: {
+                                    display: false
+                                },
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true,
+                                            maxTicksLimit: 6
+                                        }
+                                    }]
+                                }
+                            }
+                        }
+                    ), priorityReportId, 'CSV', new CSVFormatConfiguration(['name'], 'name', ['count'], '"', ',')
+                ), false, true, null, false
+            ),
+            [new UIComponentPermission('reporting/reports', [CRUD.READ])], WidgetSize.SMALL
+        ));
+
+        const stateReportId = await this.getReportId('Number of open tickets by state');
+        chartWidgets.push(new ConfiguredWidget(
+            'home-dashboard-ticket-chart-widget-states', null,
+            new WidgetConfiguration(
+                'home-dashboard-ticket-chart-widget-states', 'Translatable#States Chart Widget', ConfigurationType.Widget,
+                'report-chart-widget', 'Translatable#Number of open tickets by state', [], null,
+                new ReportChartWidgetConfiguration(
+                    'home-dashboard-ticket-chart-widget-states-chart', 'Translatable#States Chart',
+                    new ChartComponentConfiguration(
+                        'home-dashboard-ticket-chart-widget-states-config', 'Translatable#States Chart', ConfigurationType.Chart,
+                        {
+                            type: 'pie',
+                            options: {
+                                legend: {
+                                    display: true,
+                                    position: 'bottom'
+                                }
+                            }
+                        }
+                    ), stateReportId, 'CSV', new CSVFormatConfiguration(['name'], 'name', ['count'], '"', ',')
+                ), false, true, null, false
+            ),
+            [new UIComponentPermission('reporting/reports', [CRUD.READ])], WidgetSize.SMALL
+        ));
+
+        const createdTicketsReportId = await this.getReportId('Number of tickets created within the last 7 days');
+        chartWidgets.push(new ConfiguredWidget(
+            'home-dashboard-ticket-chart-widget-new', null,
+            new WidgetConfiguration(
+                'home-dashboard-ticket-chart-widget-new', 'Translatable#New Tickets Chart Widget', ConfigurationType.Widget,
+                'report-chart-widget', 'Translatable#Number of tickets created within the last 7 days', [], null,
+                new ReportChartWidgetConfiguration(
+                    'home-dashboard-ticket-chart-widget-new-chart', 'Translatable#New Tickets Chart',
+                    new ChartComponentConfiguration(
+                        'home-dashboard-ticket-chart-widget-new-config', 'Translatable#New Tickets Chart', ConfigurationType.Chart,
+                        {
+                            type: 'line',
+                            options: {
+                                legend: {
+                                    display: false
+                                },
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true,
+                                            maxTicksLimit: 6
+                                        }
+                                    }]
+                                }
+                            }
+                        }
+                    ), createdTicketsReportId, 'CSV', new CSVFormatConfiguration(['day'], 'day', ['count'], '"', ',')
+                ), false, true, null, false
+            ),
+            [new UIComponentPermission('reporting/reports', [CRUD.READ])], WidgetSize.SMALL
+        ));
+
+        return chartWidgets;
+    }
+
+    private async getReportId(name: string): Promise<number> {
+        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+        const reportDefinitions = await ReportingAPIService.getInstance().loadObjects<ReportDefinition>(
+            serverConfig?.BACKEND_API_TOKEN, 'home-configuration', KIXObjectType.REPORT_DEFINITION, null,
+            new KIXObjectLoadingOptions([
+                new FilterCriteria(
+                    ReportDefinitionProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, name
+                )
+            ]), null
+        ).catch((): ReportDefinition[] => []);
+
+        return reportDefinitions?.length ? reportDefinitions[0].ID : null;
     }
 
     public async getFormConfigurations(): Promise<IConfiguration[]> {

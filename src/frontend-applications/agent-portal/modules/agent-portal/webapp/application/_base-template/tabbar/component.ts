@@ -100,7 +100,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async addEntry(context: Context, setActive: boolean = false): Promise<void> {
-        if (context) {
+        // make sure it is really a context
+        if (context?.contextId) {
 
             const hasTab = this.state.contextTabs.some((e) => e.contextInstanceId === context.instanceId);
 
@@ -144,6 +145,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             isHomeContext = instances[0].contextId === HomeContext.CONTEXT_ID;
         }
         return instances.length > 1 || !isHomeContext;
+    }
+
+    public async closeTabWithMMB(tab: ContextTab, event: any): Promise<void> {
+        if (event.button !== 1) return;
+        await this.closeTab(tab, event);
     }
 
     public async closeTab(tab: ContextTab, event: any): Promise<void> {

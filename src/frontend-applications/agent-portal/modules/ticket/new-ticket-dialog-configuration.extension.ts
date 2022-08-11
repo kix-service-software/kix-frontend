@@ -18,7 +18,6 @@ import { FormConfiguration } from '../../model/configuration/FormConfiguration';
 import { FormContext } from '../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../model/configuration/FormFieldConfiguration';
 import { FormFieldOption } from '../../model/configuration/FormFieldOption';
-import { FormFieldOptions } from '../../model/configuration/FormFieldOptions';
 import { FormFieldValue } from '../../model/configuration/FormFieldValue';
 import { FormGroupConfiguration } from '../../model/configuration/FormGroupConfiguration';
 import { FormPageConfiguration } from '../../model/configuration/FormPageConfiguration';
@@ -40,7 +39,7 @@ import { SortOrder } from '../../model/SortOrder';
 import { UIComponentPermission } from '../../model/UIComponentPermission';
 import { ObjectReferenceOptions } from '../../modules/base-components/webapp/core/ObjectReferenceOptions';
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
-import { ModuleConfigurationService } from '../../server/services/configuration';
+import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
 import { ObjectInformationCardConfiguration } from '../base-components/webapp/components/object-information-card-widget/ObjectInformationCardConfiguration';
 import { AdditionalTableObjectsHandlerConfiguration } from '../base-components/webapp/core/AdditionalTableObjectsHandlerConfiguration';
 import { ConfigItemProperty } from '../cmdb/model/ConfigItemProperty';
@@ -48,6 +47,7 @@ import { DynamicFormFieldOption } from '../dynamic-fields/webapp/core';
 import { FAQArticleProperty } from '../faq/model/FAQArticleProperty';
 import { ObjectIcon } from '../icon/model/ObjectIcon';
 import { SearchOperator } from '../search/model/SearchOperator';
+import { UserProperty } from '../user/model/UserProperty';
 import { ArticleProperty } from './model/ArticleProperty';
 import { QueueProperty } from './model/QueueProperty';
 import { TicketProperty } from './model/TicketProperty';
@@ -265,11 +265,14 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     ), 10,
                     [
                         new DefaultColumnConfiguration(
-                            null, null, null, TicketProperty.TITLE, true, false, true, false, 320, true, true
+                            null, null, null, TicketProperty.TITLE, true, false, true, false, 250, true, true
                         ),
                         new DefaultColumnConfiguration(
-                            null, null, null, TicketProperty.TYPE_ID, false, true, true, false, 50, true, true, true
-                        )
+                            null, null, null, TicketProperty.STATE_ID, true, true, true, false, 70,
+                        ),
+                        new DefaultColumnConfiguration(
+                            null, null, null, TicketProperty.TYPE_ID, true, false, true, false, 50, true, true, true
+                        ),
                     ], null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 ), null, false, false, null
             ),
@@ -328,7 +331,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 ArticleProperty.SUBJECT
                             ]
                         )
-                    ],
+                    ], false
                 ), null, false, false, null
             ),
             false, true, 'kix-icon-faq', false, false, true, ['DynamicFields.AffectedAsset']
@@ -351,7 +354,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         [
                             new FilterCriteria(
                                 ConfigItemProperty.ASSIGNED_CONTACT, SearchOperator.EQUALS,
-                                FilterDataType.NUMERIC, FilterType.AND, '<KIX_TICKET_ContactID>'
+                                FilterDataType.NUMERIC, FilterType.OR, '<KIX_TICKET_ContactID>'
+                            ),
+                            new FilterCriteria(
+                                ConfigItemProperty.ASSIGNED_ORGANISATION, SearchOperator.EQUALS,
+                                FilterDataType.NUMERIC, FilterType.OR, '<KIX_TICKET_OrganisationID>'
                             )
                         ], null, 100
                     ), 10,
@@ -371,7 +378,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     ], null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 )
             ),
-            false, true, 'kix-icon-cmdb', false, false, true, [TicketProperty.CONTACT_ID]
+            false, true, 'kix-icon-cmdb', false, false, true, [TicketProperty.CONTACT_ID, TicketProperty.ORGANISATION_ID]
         );
         configurations.push(assignedAssets);
 
@@ -419,19 +426,43 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'ticket-new-form-field-contact',
-                'Translatable#Contact', TicketProperty.CONTACT_ID, 'ticket-input-contact', true,
+                'Translatable#Contact', TicketProperty.CONTACT_ID, 'object-reference-input', true,
                 'Translatable#Helptext_Tickets_TicketCreate_Contact',
                 [
-                    new FormFieldOption('SHOW_NEW_CONTACT', true),
-                    new FormFieldOption(FormFieldOptions.SHOW_INVALID, false)
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.CONTACT),
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ]
+                        )
+                    )
                 ]
             )
         );
         configurations.push(
             new FormFieldConfiguration(
                 'ticket-new-form-field-organisation',
-                'Translatable#Organisation', TicketProperty.ORGANISATION_ID, 'ticket-input-organisation', true,
-                'Translatable#Helptext_Tickets_TicketCreate_Organisation'
+                'Translatable#Organisation', TicketProperty.ORGANISATION_ID, 'object-reference-input', true,
+                'Translatable#Helptext_Tickets_TicketCreate_Organisation',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ORGANISATION),
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ]
+                        )
+                    )
+                ]
             )
         );
 
@@ -442,7 +473,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 'Translatable#Helptext_Tickets_TicketCreate_Type',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_TYPE),
-
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
                             [
@@ -503,6 +533,10 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             [
                                 new FilterCriteria(
                                     KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                ),
+                                new FilterCriteria(
+                                    UserProperty.IS_AGENT, SearchOperator.EQUALS, FilterDataType.NUMERIC,
                                     FilterType.AND, 1
                                 )
                             ], undefined, undefined, undefined, undefined,

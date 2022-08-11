@@ -30,17 +30,21 @@ class Component extends FormInputComponent<string[], ComponentState> {
         await super.onMount();
         await this.loadDynamicField();
 
+        const config = this.dynamicField?.Config;
+        const min = Number(isNaN(config?.RowsMin) ? 1 : config.RowsMin);
+        const max = Number(isNaN(config?.RowsMax) ? 1 : config.RowsMax);
+
         this.state.translations = TranslationService.createTranslationObject([
             'Translatable#Add initial table', 'Translatable#Remove table'
         ]);
 
-        this.state.columns = this.dynamicField?.Config?.Columns;
-        if (this.dynamicField?.Config?.TranslatableColumn) {
+        this.state.columns = config?.Columns;
+        if (config?.TranslatableColumn) {
             for (let i = 0; i < this.state.columns.length; i++) {
                 this.state.columns[i] = await TranslationService.translate(this.state.columns[i]);
             }
         }
-        this.state.hasAction = this.dynamicField?.Config?.RowsMin !== this.dynamicField?.Config?.RowsMax;
+        this.state.hasAction = min !== max;
         this.state.prepared = true;
     }
 
@@ -48,17 +52,18 @@ class Component extends FormInputComponent<string[], ComponentState> {
         await this.loadDynamicField();
         const tableValues: Array<string[]> = [];
         const config = this.dynamicField?.Config;
-        const min = config?.RowsMin;
-        const max = config?.RowsMax;
-        const init = config?.RowsInit;
+        const min = Number(isNaN(config?.RowsMin) ? 1 : config.RowsMin);
+        const max = Number(isNaN(config?.RowsMax) ? 1 : config.RowsMax);
+        const init = Number(isNaN(config?.RowsInit) ? 1 : config.RowsInit);
 
-        let rowCount = init > min && init < max
-            ? config?.RowsInit
-            : config?.RowsMin;
+        let rowCount = 1;
+        if (init > min && init < max) {
+            rowCount = init;
+        } else {
+            rowCount = min;
+        }
 
-        if (rowCount <= 0) {
-            rowCount = 1;
-        } else if (rowCount > max) {
+        if (rowCount > max) {
             rowCount = max;
         }
 
@@ -140,13 +145,13 @@ class Component extends FormInputComponent<string[], ComponentState> {
 
     public canRemove(index: number): boolean {
         const rowMin = Number(this.dynamicField?.Config?.RowsMin);
-        const rowCount = this.state.tableValues?.length;
+        const rowCount = Number(this.state.tableValues?.length);
         return rowCount > rowMin;
     }
 
     public canAdd(index: number): boolean {
         const rowMax = Number(this.dynamicField?.Config?.RowsMax);
-        const rowCount = this.state.tableValues?.length;
+        const rowCount = Number(this.state.tableValues?.length);
         return rowCount < rowMax && index === rowCount - 1;
     }
 }

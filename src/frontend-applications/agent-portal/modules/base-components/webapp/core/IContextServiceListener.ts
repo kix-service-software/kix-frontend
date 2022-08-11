@@ -21,4 +21,6 @@ export interface IContextServiceListener {
 
     contextRegistered(descriptor: ContextDescriptor): void;
 
+    beforeDestroy(context: Context): Promise<void>;
+
 }

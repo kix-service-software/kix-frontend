@@ -28,7 +28,7 @@ import { TreeNode } from '../base-components/webapp/core/tree';
 import { NotificationRecipientTypes } from './model/NotificationRecipientTypes';
 import { FormPageConfiguration } from '../../model/configuration/FormPageConfiguration';
 import { FormConfiguration } from '../../model/configuration/FormConfiguration';
-import { ModuleConfigurationService } from '../../server/services/configuration';
+import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
 import { FormContext } from '../../model/configuration/FormContext';
 import { FormFieldOptions } from '../../model/configuration/FormFieldOptions';
 
@@ -182,7 +182,8 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                                 NotificationRecipientTypes.AGENT_MY_QUEUES,
                                 'Translatable#All agents subscribed to the tickets queue'
                             ),
-                            new TreeNode(NotificationRecipientTypes.CUSTOMER, 'Translatable#Contact')
+                            new TreeNode(NotificationRecipientTypes.CUSTOMER, 'Translatable#Contact'),
+                            new TreeNode(NotificationRecipientTypes.AGENT_WATCHER, 'Translatable#All agents watching this ticket')
                         ]),
                     new FormFieldOption(DefaultSelectInputFormOption.MULTI, true)
                 ]

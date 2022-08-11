@@ -10,39 +10,69 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <widget
     title=state.title
     instanceId=state.instanceId
-    contentActions=state.contentActions>
+    contentActions=state.contentActions
+>
     <@content>
         <div.criteria-container key="search-criteria-container">
             <if(state.manager)>
                 <div.search-criteria>
                     <dynamic-form-field-container
                         manager=state.manager
-                        key="search-criteria-dynamic-form"/>
+                        key="search-criteria-dynamic-form"
+                    />
                 </div>
                 <div.search-limit>
                     <span>
                         <translation-string pattern="Translatable#Limit:"/>
                     </span>
-                    <input.input-style type="number" value=state.limit on-input("limitChanged")/>
+                    <input.input-style
+                        type="number"
+                        value=state.limit
+                        on-input("limitChanged")
+                    >
                 </div>
+                <if(state.sortTreeId)>
+                    <div.search-sort>
+                        <span>
+                            <translation-string pattern="Translatable#Sort attribute:"/>
+                        </span>
+                        <form-list.input-style
+                            treeId=state.sortTreeId
+                            on-nodesChanged("sortAttributeChanged")
+                        />
+                        <span.search-sort-descending>
+                            <translation-string pattern="Translatable#Descending:"/>
+                        </span>
+                        <input.input-style
+                            type="checkbox"
+                            checked=state.sortDescanding
+                            on-input("sortDescandingChanged")
+                        >
+                    </div>
+                </if>
                 <div.search-button-container>
                     <button.kix-button.form-blank-cancel-button
                         type="button"
                         on-click("resetSearch")
-                        title=state.translations["Translatable#Reset data"]>
+                        title=(state.translations["Translatable#Reset data"])
+                    >
                         <span.kix-icon-delete/>
                         <translation-string pattern="Translatable#Reset data"/>
                     </button>
                     <button.kix-button.form-blank-submit-button
                         type="button"
                         on-click("search")
-                        title=state.translations["Translatable#Start search"]
-                        disabled=!state.canSearch>
+                        title=(state.translations["Translatable#Start search"])
+                        disabled=!state.canSearch
+                    >
                         <span.kix-icon-search/>
-                        <translation-string pattern="Translatable#Start search" placeholders=[]/>
+                        <translation-string
+                            pattern="Translatable#Start search"
+                            placeholders=[]
+                        />
                     </button>
                 </div>
-            </if> 
+            </if>
             <loading-shield shieldId="SEARCH_CRITERIA_SHIELD"/>
         </div>
     </@content>

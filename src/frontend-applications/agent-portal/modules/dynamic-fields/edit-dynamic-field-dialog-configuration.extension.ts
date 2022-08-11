@@ -20,7 +20,7 @@ import { FormGroupConfiguration } from '../../model/configuration/FormGroupConfi
 import { FormPageConfiguration } from '../../model/configuration/FormPageConfiguration';
 import { FormConfiguration } from '../../model/configuration/FormConfiguration';
 import { FormContext } from '../../model/configuration/FormContext';
-import { ModuleConfigurationService } from '../../server/services/configuration';
+import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
 import { DynamicFieldProperty } from './model/DynamicFieldProperty';
 import { FormFieldOption } from '../../model/configuration/FormFieldOption';
 import { ObjectReferenceOptions } from '../base-components/webapp/core/ObjectReferenceOptions';

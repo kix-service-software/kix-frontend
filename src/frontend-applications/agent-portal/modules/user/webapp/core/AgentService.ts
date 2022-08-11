@@ -118,7 +118,7 @@ export class AgentService extends KIXObjectService<User> {
         return [
             new FilterCriteria(
                 'Search', SearchOperator.CONTAINS, FilterDataType.STRING,
-                FilterType.OR, searchValue.toLocaleLowerCase()
+                FilterType.AND, searchValue.toLocaleLowerCase()
             )
         ];
     }

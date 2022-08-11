@@ -7,7 +7,7 @@
  * --
  */
 
-import { ModuleConfigurationService } from '../../server/services/configuration';
+import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
 import { NewTicketPriorityDialogContext } from './webapp/core';
 import { IConfiguration } from '../../model/configuration/IConfiguration';

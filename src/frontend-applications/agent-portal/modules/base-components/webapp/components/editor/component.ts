@@ -11,11 +11,13 @@ import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { IKIXObjectService } from '../../../../../modules/base-components/webapp/core/IKIXObjectService';
 import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
-import { AttachmentUtil } from '../../../../../modules/base-components/webapp/core/AttachmentUtil';
 import { AutocompleteFormFieldOption } from '../../../../../model/AutocompleteFormFieldOption';
 import { PlaceholderService } from '../../../../../modules/base-components/webapp/core/PlaceholderService';
 import { TextModule } from '../../../../textmodule/model/TextModule';
 import { BrowserUtil } from '../../core/BrowserUtil';
+import { KIXObjectService } from '../../core/KIXObjectService';
+import { SysConfigOption } from '../../../../sysconfig/model/SysConfigOption';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 declare let CKEDITOR: any;
 
@@ -28,6 +30,8 @@ class EditorComponent {
     private changeTimeout: any;
     private createTimeout: any;
     private maxReadyTries: number;
+
+    private handleOnInputChange: boolean = false;
 
     public onCreate(input: any): void {
         this.state = new ComponentState(
@@ -78,8 +82,10 @@ class EditorComponent {
                 }
 
                 if (this.editor.getData() !== contentString) {
+                    this.handleOnInputChange = true;
                     this.editor.setData(contentString, () => {
                         this.editor.updateElement();
+                        this.handleOnInputChange = false;
                     });
                 }
             }
@@ -114,6 +120,38 @@ class EditorComponent {
                 window.clearTimeout(this.createTimeout);
                 this.createTimeout = null;
             }
+
+            CKEDITOR.on('instanceCreated', async function () {
+                const options = await KIXObjectService.loadObjects<SysConfigOption>(
+                    KIXObjectType.SYS_CONFIG_OPTION, ['Frontend::RichText::DefaultCSS']
+                );
+
+                if (
+                    Array.isArray(options)
+                    && options.length
+                    && options[0].Value !== null
+                ) {
+                    let defaultCSS = '';
+                    let jsonOptions: any[];
+                    try {
+                        jsonOptions = JSON.parse(options[0].Value);
+                    } catch (e) {
+                        jsonOptions = [];
+                    }
+                    for (const css of jsonOptions) {
+                        if (
+                            css?.Selector
+                            && css?.Value
+                        ) {
+                            defaultCSS += css.Selector + '{' + css.Value + '}';
+                        }
+                    }
+                    if (defaultCSS) {
+                        CKEDITOR.addCss(defaultCSS);
+                    }
+                }
+            });
+
             this.createTimeout = setTimeout(async () => {
                 if (!this.state.readOnly) {
                     const userLanguage = await TranslationService.getUserLanguage();
@@ -133,16 +171,18 @@ class EditorComponent {
                 }
 
                 const changeListener = (): void => {
-                    if (this.changeTimeout) {
-                        window.clearTimeout(this.changeTimeout);
-                        this.changeTimeout = null;
-                    }
+                    if (!this.handleOnInputChange) {
+                        if (this.changeTimeout) {
+                            window.clearTimeout(this.changeTimeout);
+                            this.changeTimeout = null;
+                        }
 
-                    this.changeTimeout = setTimeout(() => {
-                        const value = this.editor.getData();
-                        (this as any).emit('valueChanged', value);
-                        this.changeTimeout = null;
-                    }, 200);
+                        this.changeTimeout = setTimeout(() => {
+                            const value = this.editor.getData();
+                            (this as any).emit('valueChanged', value);
+                            this.changeTimeout = null;
+                        }, 200);
+                    }
                 };
 
                 this.editor.on('change', changeListener);

@@ -11,7 +11,7 @@ import { AbstractAction } from '../../../../../../modules/base-components/webapp
 import { UIComponentPermission } from '../../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
-import { NewTicketArticleContext } from '../..';
+import { EditTicketDialogContext } from '../..';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
 import { AuthenticationSocketClient } from '../../../../../base-components/webapp/core/AuthenticationSocketClient';
 import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
@@ -68,19 +68,17 @@ export class ArticleForwardAction extends AbstractAction<Article> {
 
     private async openDialog(): Promise<void> {
         if (this.articleId) {
-            ContextService.getInstance().setActiveContext(NewTicketArticleContext.CONTEXT_ID, this.articleId,
-                undefined,
+            const editContext = await ContextService.getInstance().setActiveContext(EditTicketDialogContext.CONTEXT_ID,
+                this.ticketId, undefined,
                 [
-                    ['REFERENCED_TICKET_ID', this.ticketId],
+                    ['REFERENCED_SOURCE_OBJECT_ID', this.ticketId],
                     ['REFERENCED_ARTICLE_ID', this.articleId],
                     ['ARTICLE_FORWARD', true],
-                    [
-                        AdditionalContextInformation.DISPLAY_TEXT,
-                        await TranslationService.translate(this.text)
-                    ],
-                    [AdditionalContextInformation.ICON, this.icon]
+                    [AdditionalContextInformation.FORM_ID, 'article-forward']
                 ]
             );
+            editContext.setIcon(this.icon);
+            editContext.setDisplayText(await TranslationService.translate(this.text));
         }
     }
 }

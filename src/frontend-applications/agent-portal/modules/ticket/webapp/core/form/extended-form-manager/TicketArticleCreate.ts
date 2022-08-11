@@ -9,16 +9,22 @@
 
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldOption } from '../../../../../../model/configuration/FormFieldOption';
+import { FilterCriteria } from '../../../../../../model/FilterCriteria';
+import { FilterDataType } from '../../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../../model/FilterType';
 import { KIXObject } from '../../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { ObjectReferenceOptions } from '../../../../../base-components/webapp/core/ObjectReferenceOptions';
 import { JobTypes } from '../../../../../job/model/JobTypes';
 import { MacroAction } from '../../../../../job/model/MacroAction';
 import { MacroActionTypeOption } from '../../../../../job/model/MacroActionTypeOption';
 import { ExtendedJobFormManager } from '../../../../../job/webapp/core/ExtendedJobFormManager';
+import { SearchOperator } from '../../../../../search/model/SearchOperator';
 import { Channel } from '../../../../model/Channel';
 import { Queue } from '../../../../model/Queue';
+import { QueueProperty } from '../../../../model/QueueProperty';
 import { TicketPriority } from '../../../../model/TicketPriority';
 import { TicketState } from '../../../../model/TicketState';
 import { TicketType } from '../../../../model/TicketType';
@@ -98,6 +104,23 @@ export class TicketArticleCreate extends ExtendedJobFormManager {
                     defaultValue
                 );
                 this.setReferencedObjectOptions(field, KIXObjectType.QUEUE, false, true, false);
+                field.options.push(new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true));
+                field.options.push(new FormFieldOption(ObjectReferenceOptions.TEXT_AS_ID, true));
+                field.options.push(
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    QueueProperty.PARENT_ID, SearchOperator.EQUALS,
+                                    FilterDataType.STRING, FilterType.AND, null
+                                )
+                            ],
+                            null, null,
+                            [QueueProperty.SUB_QUEUES],
+                            [QueueProperty.SUB_QUEUES]
+                        )
+                    )
+                );
                 return field;
             } else if (option.Name === 'Type') {
                 const field = this.getOptionField(
@@ -147,7 +170,7 @@ export class TicketArticleCreate extends ExtendedJobFormManager {
             } else if (optionName === 'Team' && !isNaN(value)) {
                 const object = await this.loadObject<Queue>(KIXObjectType.QUEUE, value);
                 if (object) {
-                    const queueName = await this.getQueueName(object);
+                    const queueName = object.Fullname;
                     return queueName;
                 }
             } else if (optionName === 'Type' && !isNaN(value)) {
@@ -167,17 +190,5 @@ export class TicketArticleCreate extends ExtendedJobFormManager {
         }
 
         return object;
-    }
-
-    private async getQueueName(queue: Queue): Promise<string> {
-        let queueName = queue.Name;
-        if (queue.ParentID) {
-            const parentQeue = await this.loadObject<Queue>(KIXObjectType.QUEUE, queue.ParentID);
-            if (parentQeue) {
-                queueName = `${parentQeue.Name}::${queueName}`;
-            }
-        }
-
-        return queueName;
     }
 }

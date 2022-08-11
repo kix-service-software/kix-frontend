@@ -93,6 +93,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 if (lang) {
                     const message = this.state.notification.Message[lang];
                     if (message) {
+                        message.KIXObjectType = KIXObjectType.NOTIFICATION;
                         this.state.messageGroups.push([languageHash[lang], message]);
                     }
                 }

@@ -7,6 +7,7 @@
  * --
  */
 
+import { report } from 'process';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { Report } from './Report';
@@ -33,6 +34,10 @@ export class ReportDefinition extends KIXObject {
 
     public BaseURL: string;
 
+    public IsPeriodic: number;
+
+    public MaxReports: number;
+
     public constructor(reportDefinition?: ReportDefinition) {
         super(reportDefinition);
 
@@ -45,6 +50,8 @@ export class ReportDefinition extends KIXObject {
             this.BaseURL = reportDefinition.BaseURL;
             this.Config = reportDefinition.Config;
             this.Comment = reportDefinition.Comment;
+            this.IsPeriodic = reportDefinition.IsPeriodic;
+            this.MaxReports = reportDefinition.MaxReports;
             this.Reports = reportDefinition.Reports
                 ? reportDefinition.Reports.map((t) => new Report(t))
                 : [];

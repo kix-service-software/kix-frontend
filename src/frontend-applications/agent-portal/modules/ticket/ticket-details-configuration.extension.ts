@@ -404,7 +404,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         const linkedObjectsWidget = new WidgetConfiguration(
             'ticket-details-linked-objects-widget', 'linked objects', ConfigurationType.Widget,
-            'linked-objects-widget', 'Translatable#Linked Objects', [],
+            'linked-objects-widget', 'Translatable#Linked Objects (<KIX_OBJECT_LinkCount>)', [],
             new ConfigurationDefinition('ticket-details-linked-objects-config', ConfigurationType.LinkedObjects),
             null, false, false, null, false
         );
@@ -519,17 +519,17 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                     criteria: [
                                                         {
                                                             property: TicketProperty.CONTACT_ID,
-                                                            operator: SearchOperator.EQUALS,
-                                                            type: 'STRING',
-                                                            filterType: FilterType.AND,
-                                                            value: '<KIX_TICKET_ContactID>'
-                                                        },
-                                                        {
-                                                            property: TicketProperty.STATE_ID,
-                                                            operator: SearchOperator.EQUALS,
+                                                            operator: SearchOperator.IN,
                                                             type: FilterDataType.NUMERIC,
                                                             filterType: FilterType.AND,
-                                                            value: 2
+                                                            value: ['<KIX_TICKET_ContactID>']
+                                                        },
+                                                        {
+                                                            property: TicketProperty.STATE_TYPE,
+                                                            operator: SearchOperator.EQUALS,
+                                                            type: FilterDataType.STRING,
+                                                            filterType: FilterType.AND,
+                                                            value: 'Open'
                                                         }
                                                     ]
                                                 }
@@ -552,17 +552,17 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                     criteria: [
                                                         {
                                                             property: TicketProperty.ORGANISATION_ID,
-                                                            operator: SearchOperator.EQUALS,
-                                                            type: 'STRING',
-                                                            filterType: FilterType.AND,
-                                                            value: '<KIX_TICKET_OrganisationID>'
-                                                        },
-                                                        {
-                                                            property: TicketProperty.STATE_ID,
-                                                            operator: SearchOperator.EQUALS,
+                                                            operator: SearchOperator.IN,
                                                             type: FilterDataType.NUMERIC,
                                                             filterType: FilterType.AND,
-                                                            value: 2
+                                                            value: ['<KIX_TICKET_OrganisationID>']
+                                                        },
+                                                        {
+                                                            property: TicketProperty.STATE_TYPE,
+                                                            operator: SearchOperator.EQUALS,
+                                                            type: FilterDataType.STRING,
+                                                            filterType: FilterType.AND,
+                                                            value: 'Open'
                                                         }
                                                     ]
                                                 }
@@ -626,7 +626,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 ArticleProperty.SUBJECT
                             ]
                         )
-                    ],
+                    ], false
                 ), null, false, false, null
             ),
             false, true, 'kix-icon-faq', false, true

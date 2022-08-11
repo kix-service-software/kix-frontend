@@ -12,7 +12,7 @@ import { AbstractMarkoComponent } from '../../../../../modules/base-components/w
 import { Cell } from '../../../../table/model/Cell';
 import { NotificationFilterTableProperty } from '../../core';
 import { InputFieldTypes } from '../../../../../modules/base-components/webapp/core/InputFieldTypes';
-import { SearchService } from '../../../../search/webapp/core';
+import { SearchDefinition, SearchService } from '../../../../search/webapp/core';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -26,9 +26,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const searchDefinition = SearchService.getInstance().getSearchDefinition(KIXObjectType.TICKET);
             const manager = searchDefinition.createFormManager();
             const propertyCell = (input.cell as Cell).getRow().getCell(NotificationFilterTableProperty.FIELD);
+            const operatorCell = (input.cell as Cell).getRow().getCell(NotificationFilterTableProperty.OPERATOR);
             const inputType = propertyCell && manager
                 ? await manager.getInputType(propertyCell.getValue().objectValue, propertyCell.getValue().objectValue)
                 : null;
+
+            // no sort for relative values
+            this.state.doLabelSort = !SearchDefinition.getRelativeDateTimeOperators().includes(
+                operatorCell.getValue().objectValue
+            );
+
             this.state.isLabelCell = inputType === InputFieldTypes.DROPDOWN
                 || inputType === InputFieldTypes.OBJECT_REFERENCE
                 || inputType === InputFieldTypes.DATE

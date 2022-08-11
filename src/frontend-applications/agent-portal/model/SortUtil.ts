@@ -31,6 +31,7 @@ export class SortUtil {
                 sort = SortUtil.compareDate(a[property], b[property], sortOrder);
                 break;
             case DataType.NUMBER:
+            case DataType.INTEGER:
                 sort = SortUtil.compareNumber(a[property], b[property], sortOrder);
                 break;
             default:
@@ -47,6 +48,7 @@ export class SortUtil {
                 sort = SortUtil.compareDate(a, b, sortOrder);
                 break;
             case DataType.NUMBER:
+            case DataType.INTEGER:
                 sort = SortUtil.compareNumber(a, b, sortOrder);
                 break;
             default:

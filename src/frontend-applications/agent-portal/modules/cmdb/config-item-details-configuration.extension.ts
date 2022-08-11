@@ -132,7 +132,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
 
         const configItemLinkedObjectsWidget = new WidgetConfiguration(
             'config-item-details-linked-object-widget', 'Linked Objects', ConfigurationType.Widget,
-            'linked-objects-widget', 'Translatable#Linked Objects',
+            'linked-objects-widget', 'Translatable#Linked Objects (<KIX_OBJECT_LinkCount>)',
             [],
             new ConfigurationDefinition('config-item-details-linked-objects-config', ConfigurationType.LinkedObjects),
             null, false, false, null, false

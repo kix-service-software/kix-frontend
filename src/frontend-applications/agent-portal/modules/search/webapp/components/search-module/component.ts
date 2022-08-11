@@ -10,7 +10,6 @@
 import { ConfigurationType } from '../../../../../model/configuration/ConfigurationType';
 import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
-import { IdService } from '../../../../../model/IdService';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
@@ -21,6 +20,7 @@ import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { SearchContext, SearchResultCategory, SearchService } from '../../core';
 import { ComponentState } from './ComponentState';
+import { SortOrder } from '../../../../../model/SortOrder';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -52,7 +52,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         const tableWidget = (this as any).getComponent('search-result-table-' + objectType);
                         const table: Table = tableWidget?.getTable();
                         table?.removeAdditonalColumns();
-                        table?.addAdditionalColumns(columns);
+                        await table?.addAdditionalColumns(columns);
+
+                        table?.sort(
+                            context?.getSearchCache().sortAttribute,
+                            context.getSearchCache().sortDescanding ? SortOrder.DOWN : SortOrder.UP
+                        );
                     }
                 }, 50);
             },

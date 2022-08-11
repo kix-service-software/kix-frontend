@@ -16,7 +16,7 @@ import { SysConfigOption } from '../model/SysConfigOption';
 import { SysConfigOptionDefinition } from '../model/SysConfigOptionDefinition';
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { Error } from '../../../../../server/model/Error';
-import { ModuleConfigurationService } from '../../../server/services/configuration';
+import { ModuleConfigurationService } from '../../../server/services/configuration/ModuleConfigurationService';
 import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
 import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
 import { SysConfigKey } from '../model/SysConfigKey';

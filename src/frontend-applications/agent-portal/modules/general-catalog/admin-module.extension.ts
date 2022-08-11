@@ -21,14 +21,17 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
     public getAdminModules(): AdminModuleCategory[] {
         return [
             new AdminModuleCategory(
-                null, 'cmdb', 'Translatable#Assets', null, [], [
-                new AdminModule(
-                    null, 'general-catalog', 'Translatable#General Catalog', null,
-                    KIXObjectType.GENERAL_CATALOG_ITEM, 'admin-general-catalog',
-                    [
-                        new UIComponentPermission('system/generalcatalog', [CRUD.CREATE], true)
-                    ]
-                )
+                null, 'kix', 'Translatable#KIX', null, [
+                new AdminModuleCategory(
+                    null, 'cmdb', 'Translatable#Assets', null, [], [
+                    new AdminModule(
+                        null, 'general-catalog', 'Translatable#General Catalog', null,
+                        KIXObjectType.GENERAL_CATALOG_ITEM, 'admin-general-catalog',
+                        [
+                            new UIComponentPermission('system/generalcatalog', [CRUD.CREATE], true)
+                        ]
+                    )
+                ])
             ])
         ];
     }

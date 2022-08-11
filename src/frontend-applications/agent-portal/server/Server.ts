@@ -18,24 +18,17 @@ import { serveStatic } from 'lasso/middleware';
 
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
-import fs from 'fs';
-import http from 'http';
-import https from 'https';
 import forceSSl from 'express-force-ssl';
 import { LoggingService } from '../../../server/services/LoggingService';
 import { IServerConfiguration } from '../../../server/model/IServerConfiguration';
 import { ConfigurationService } from '../../../server/services/ConfigurationService';
-import { MarkoService } from './services/MarkoService';
 import { ServerRouter } from './routes/ServerRouter';
 import { PluginService } from '../../../server/services/PluginService';
 import { AgentPortalExtensions } from './extensions/AgentPortalExtensions';
 import { IServer } from '../../../server/model/IServer';
-import { SocketService } from './services/SocketService';
 import { IServiceExtension } from './extensions/IServiceExtension';
-import { IInitialDataExtension } from '../model/IInitialDataExtension';
-import { MigrationService } from '../migrations/MigrationService';
-import { AuthenticationService } from './services/AuthenticationService';
-import { ClientRegistrationService } from './services/ClientRegistrationService';
+import { MainMenuNamespace } from '../modules/agent-portal/server/MainMenuNamespace';
+import { MarkoService } from './services/MarkoService';
 
 export class Server implements IServer {
 
@@ -74,27 +67,9 @@ export class Server implements IServer {
             await extension.initServices();
         }
 
-        const success = await MigrationService.getInstance().startMigration();
-        if (!success) {
-            LoggingService.getInstance().error('Startup failed. Could not migrate!');
-            process.exit(1);
-        }
-
-        const initialDataExtensions = await PluginService.getInstance().getExtensions<IInitialDataExtension>(
-            AgentPortalExtensions.INITIAL_DATA
-        );
-        LoggingService.getInstance().info(`Create initial data (${initialDataExtensions.length} extensions)`);
-        for (const extension of initialDataExtensions) {
-            await extension.createData().catch((e) => {
-                LoggingService.getInstance().error(`Error creating inital data: ${extension.name}.`, e);
-            });
-        }
-
         this.serverConfig = ConfigurationService.getInstance().getServerConfiguration();
 
-        const backendToken = AuthenticationService.getInstance().getCallbackToken();
         const promises = [
-            ClientRegistrationService.getInstance().createClientRegistration(backendToken),
             MarkoService.getInstance().initializeMarkoApplications()
         ];
 
@@ -103,10 +78,11 @@ export class Server implements IServer {
             process.exit(99);
         });
 
+        MainMenuNamespace.getInstance().createDefaultConfiguration(this.serverConfig.BACKEND_API_TOKEN);
         await this.initializeApplication();
     }
 
-    private async initializeApplication(): Promise<void> {
+    public async initializeApplication(): Promise<void> {
         this.application = express();
 
         this.application.use(compression());
@@ -130,35 +106,6 @@ export class Server implements IServer {
 
         const router = new ServerRouter(this.application);
         await router.initializeRoutes();
-
-        this.initHttpServer();
-    }
-
-    private async initHttpServer(): Promise<void> {
-        const httpPort = this.serverConfig.HTTP_PORT || 3000;
-        const httpServer = http.createServer(this.application).listen(httpPort, () => {
-            LoggingService.getInstance().info('KIX (HTTP) running on *:' + httpPort);
-        });
-
-        if (this.serverConfig.USE_SSL) {
-            const options = {
-                key: fs.readFileSync(path.join(__dirname, 'cert', 'key.pem')),
-                cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem')),
-                passphrase: 'kix2018'
-            };
-
-            const httpsServer = https.createServer(options, this.application);
-
-            const httpsPort = this.serverConfig.HTTPS_PORT || 3001;
-
-            await SocketService.getInstance().initialize(httpsServer);
-
-            httpsServer.listen(httpsPort, () => {
-                LoggingService.getInstance().info('KIX (HTTPS) running on *:' + httpsPort);
-            });
-        } else {
-            await SocketService.getInstance().initialize(httpServer);
-        }
     }
 
 }

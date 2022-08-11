@@ -40,6 +40,8 @@ export interface IKIXObjectService extends IService {
         deleteOptions: KIXObjectSpecificDeleteOptions, cacheKeyPrefix: string
     ): Promise<Error[]>;
 
+    commitObject(token: string, clientRequestId: string, object: KIXObject): Promise<number | string>;
+
     loadDisplayValue(objectType: KIXObjectType | string, objectId: string | number): Promise<string>;
 
 }

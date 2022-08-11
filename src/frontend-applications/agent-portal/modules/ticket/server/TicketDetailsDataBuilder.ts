@@ -14,7 +14,7 @@ import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
 import { TicketProperty } from '../model/TicketProperty';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
-import { ModuleConfigurationService } from '../../../server/services/configuration';
+import { ModuleConfigurationService } from '../../../server/services/configuration/ModuleConfigurationService';
 import { ObjectInformationWidgetConfiguration } from '../../../model/configuration/ObjectInformationWidgetConfiguration';
 import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
 import { ArticleProperty } from '../model/ArticleProperty';

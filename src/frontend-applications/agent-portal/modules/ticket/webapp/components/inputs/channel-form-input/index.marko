@@ -1,0 +1,39 @@
+<!--
+Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<if(Array.isArray(state.nodes) && !state.loading)>
+    <div.channel-list.form-control.p-0.input-group class={readonly: state.readonly}>
+        <ul.nav.nav-tabs.border-0>
+            <for|node| of=state.nodes>
+                <li.nav-item>
+                    <a.nav-link class={
+                        "active": state.selectedNode && state.selectedNode.id === node.id
+                    } aria-current="page" tabindex="0" on-click("selectChannel", node) on-keydown("keydown", node)>
+                        <span.channel-icon>
+                            <icon icon=node.icon/>
+                        </span>
+                        <span.channel-text>${node.label}</span>
+                    </a>
+                </li>
+            </for>
+            <if(state.noChannel)>
+                <li.nav-item>
+                    <a.nav-link class={
+                        "active": !state.selectedNode
+                    } aria-current="page" tabindex="0" on-click("clearValue") on-keydown("keydown", null)>
+                        <span.channel-icon>
+                            <icon icon="kix-icon-unselect"/>
+                        </span>
+                        <span.channel-text><translation-string pattern='Translatable#No Channel'/></span>
+                    </a>
+                </li>
+            </if>
+        </ul>
+    </div>
+</if>

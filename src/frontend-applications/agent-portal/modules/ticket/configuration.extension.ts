@@ -17,7 +17,7 @@ import { UIFilterCriterion } from '../../model/UIFilterCriterion';
 import { TicketProperty } from './model/TicketProperty';
 import { SearchOperator } from '../search/model/SearchOperator';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
-import { ChartComponentConfiguration } from '../charts/model/ChartComponentConfiguration';
+import { ChartComponentConfiguration } from '../report-charts/model/ChartComponentConfiguration';
 import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
 import { TableConfiguration } from '../../model/configuration/TableConfiguration';
 import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
@@ -43,7 +43,7 @@ import { FormGroupConfiguration } from '../../model/configuration/FormGroupConfi
 import { FormPageConfiguration } from '../../model/configuration/FormPageConfiguration';
 import { FormConfiguration } from '../../model/configuration/FormConfiguration';
 import { FormContext } from '../../model/configuration/FormContext';
-import { ModuleConfigurationService } from '../../server/services/configuration';
+import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
 import { ToggleOptions } from '../table/model/ToggleOptions';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 

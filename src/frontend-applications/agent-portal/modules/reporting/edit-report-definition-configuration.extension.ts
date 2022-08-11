@@ -18,7 +18,7 @@ import { ContextMode } from '../../model/ContextMode';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { EditReportDefinitionContext } from './webapp/core/context/EditReportDefinitionDialogContext';
 import { FormConfiguration } from '../../model/configuration/FormConfiguration';
-import { ModuleConfigurationService } from '../../server/services/configuration';
+import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
 import { FormContext } from '../../model/configuration/FormContext';
 
 class Extension extends KIXExtension implements IConfigurationExtension {

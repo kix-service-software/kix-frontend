@@ -71,9 +71,9 @@ export enum ArticleProperty {
     NUMBER = 'Number',
     ARTICLE_TAG = 'ArticleTag',
     FLAGS = 'Flags',
+
     REFERENCED_ARTICLE_ID = 'ReferencedArticleID',
-    EXEC_REPLY = 'ExecReply',
-    EXEC_FORWARD = 'ExecForward',
+
     BODY_RICHTEXT = 'BodyRichtext',
     BODY_RICHTEXT_NO_INLINE = 'BodyRichtextNoInline'
 }

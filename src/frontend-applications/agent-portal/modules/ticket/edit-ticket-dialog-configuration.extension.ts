@@ -33,7 +33,7 @@ import { FormGroupConfiguration } from '../../model/configuration/FormGroupConfi
 import { FormPageConfiguration } from '../../model/configuration/FormPageConfiguration';
 import { FormConfiguration } from '../../model/configuration/FormConfiguration';
 import { FormContext } from '../../model/configuration/FormContext';
-import { ModuleConfigurationService } from '../../server/services/configuration';
+import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
 import { DynamicFormFieldOption } from '../dynamic-fields/webapp/core';
 import { AdditionalTableObjectsHandlerConfiguration } from '../base-components/webapp/core/AdditionalTableObjectsHandlerConfiguration';
 import { DefaultColumnConfiguration } from '../../model/configuration/DefaultColumnConfiguration';
@@ -50,6 +50,7 @@ import { ConfigItemProperty } from '../cmdb/model/ConfigItemProperty';
 import { SortOrder } from '../../model/SortOrder';
 import { UIComponentPermission } from '../../model/UIComponentPermission';
 import { CRUD } from '../../../../server/model/rest/CRUD';
+import { UserProperty } from '../user/model/UserProperty';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -295,7 +296,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 ArticleProperty.SUBJECT
                             ]
                         )
-                    ],
+                    ], false
                 ), null, false, false, null
             ),
             false, true, 'kix-icon-faq', false, false, true, ['DynamicFields.AffectedAsset']
@@ -475,6 +476,10 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 new FilterCriteria(
                                     KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
                                     FilterType.AND, 1
+                                ),
+                                new FilterCriteria(
+                                    UserProperty.IS_AGENT, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
                                 )
                             ], undefined, undefined, undefined, undefined,
                             [
@@ -499,6 +504,10 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             [
                                 new FilterCriteria(
                                     KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                ),
+                                new FilterCriteria(
+                                    UserProperty.IS_AGENT, SearchOperator.EQUALS, FilterDataType.NUMERIC,
                                     FilterType.AND, 1
                                 )
                             ], undefined, undefined, undefined, undefined,

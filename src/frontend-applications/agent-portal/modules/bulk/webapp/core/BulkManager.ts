@@ -59,7 +59,8 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
     }
 
     public async validate(): Promise<ValidationResult[]> {
-        const dfValues = this.values.filter((v) => KIXObjectService.getDynamicFieldName(v.property));
+        let dfValues = this.values.filter((v) => KIXObjectService.getDynamicFieldName(v.property));
+        dfValues = dfValues.filter((v) => v.operator !== PropertyOperator.CLEAR);
         let validationResult: ValidationResult[] = [];
         for (const v of dfValues) {
             const result = await DynamicFieldFormUtil.getInstance().validateDFValue(
@@ -82,7 +83,7 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
 
     public async prepareParameter(): Promise<Array<[string, any]>> {
         const edTableValues = await this.getEditableValues();
-        if (edTableValues.some((v) => !v.valid)) {
+        if (edTableValues.some((v) => !v.valid && v.operator !== PropertyOperator.CLEAR)) {
             return;
         }
 

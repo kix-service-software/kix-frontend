@@ -10,7 +10,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <li.tree-node
     class={
         active: component.isNodeActive() | component.hasActiveChild(),
-        "show-as-invalid": !state.node.selectable
+        "show-as-invalid": !state.node.selectable || state.node.showAsInvalid
     }
     id=state.nodeId
     key=state.nodeId>

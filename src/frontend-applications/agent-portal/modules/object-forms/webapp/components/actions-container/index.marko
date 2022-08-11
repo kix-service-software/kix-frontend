@@ -1,0 +1,33 @@
+<!--
+Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<if(state.prepared && Array.isArray(state.visibleActions) && state.visibleActions.length > 0)>
+   <div.d-flex.flex-row-reverse.actions-wrapper class={"right-action-margin": state.isSelectInput}>
+      <ul.list-group.list-group-horizontal.mt-1.actions-wrapper-visible>
+         <if(Array.isArray(state.expandableActions) && state.expandableActions.length > 0)>
+            <li.actions-wrapper-expandable>
+               <ul.list-group.list-group-horizontal>
+                  <for|action| of=state.expandableActions>
+                     <li.list-group-item.ps-2.pe-2.pt-0.pb-0.mb-1.ms-1.border class={"active": action.isActive()} on-click("actionClicked", action)>
+                        <icon icon=action.icon withoutStyle=true/>
+                        <translation-string pattern=action.text/>
+                     </li>
+                  </for>
+               </ul>
+            </li>
+         </if>
+         <for|action| of=state.visibleActions>
+            <li.list-group-item.ps-2.pe-2.pt-0.pb-0.mb-1.ms-1.border class={"active": action.isActive()} on-click("actionClicked", action)>
+               <icon icon=action.icon withoutStyle=true/>
+               <translation-string pattern=action.text/>
+            </li>
+         </for>
+      </ul>
+   </div>
+</if>
