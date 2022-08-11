@@ -78,14 +78,14 @@ export class JobFilterTableContentProviderService {
         displayKey: string, criterion: any, job: Job
     ): Promise<[string, any, Array<string | ObjectIcon>, string]> {
         const isArticleProperty = job.Type === JobTypes.TICKET ? this.isArticleProperty(displayKey) : false;
-        displayKey = await LabelService.getInstance().getPropertyText(
+        const displayName = await LabelService.getInstance().getPropertyText(
             displayKey, isArticleProperty ? KIXObjectType.ARTICLE : KIXObjectType.TICKET
         );
 
         const relativeDateTimeOperators = SearchDefinition.getRelativeDateTimeOperators();
         if (relativeDateTimeOperators.includes(criterion.Operator as SearchOperator)) {
             const valueList = await this.getRelativedateTimeValues(criterion.Value);
-            return [displayKey, valueList, null, null];
+            return [displayName, valueList, null, null];
         } else if (KIXObjectService.getDynamicFieldName(displayKey)) {
             const dfValues = await this.getDFValues(
                 displayKey, criterion.Value, job.Type as any
@@ -93,13 +93,13 @@ export class JobFilterTableContentProviderService {
             displayKey = await LabelService.getInstance().getPropertyText(
                 displayKey, KIXObjectType.TICKET
             );
-            return [displayKey, dfValues[0], null, dfValues[1]];
+            return [displayName, dfValues[0], null, dfValues[1]];
         } else {
             const displayValuesAndIcons = await this.getValue(
                 displayKey, criterion.Value,
                 isArticleProperty ? KIXObjectType.ARTICLE : KIXObjectType.TICKET
             );
-            return [displayKey, displayValuesAndIcons[0], displayValuesAndIcons[1], null];
+            return [displayName, displayValuesAndIcons[0], displayValuesAndIcons[1], null];
         }
     }
 
@@ -183,13 +183,12 @@ export class JobFilterTableContentProviderService {
         let displayValues: string[] = [];
         let displayString: string = '';
         if (dfName && value) {
-            const preparedValue = await LabelService.getInstance().getDFDisplayValues(
-                objectType,
-                new DynamicFieldValue({
-                    Name: dfName,
-                    Value: Array.isArray(value) ? value : [value]
-                } as DynamicFieldValue)
-            );
+
+            const val = Array.isArray(value) ? value : [value];
+            const preDFValue = { Name: dfName, Value: val, PreparedValue: val } as DynamicFieldValue;
+            const dfValue = new DynamicFieldValue(preDFValue);
+
+            const preparedValue = await LabelService.getInstance().getDFDisplayValues(objectType, dfValue);
             displayValues = preparedValue ? preparedValue[0] : Array.isArray(value) ? value : [value];
             displayString = preparedValue ? preparedValue[1] : '';
         }

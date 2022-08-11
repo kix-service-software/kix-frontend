@@ -382,7 +382,7 @@ export class ObjectFormValue<T = any> {
         if (Array.isArray(this.value) && Array.isArray(value)) {
             isSameValue = this.value.length === value.length;
             if (isSameValue) {
-                isSameValue = this.value.every((v) => value.some((val) => v.toString() === val.toString()));
+                isSameValue = this.value.every((v) => value.some((val) => v?.toString() === val?.toString()));
             }
         } else {
             isSameValue = this.value === value;

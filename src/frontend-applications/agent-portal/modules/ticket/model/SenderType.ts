@@ -33,4 +33,8 @@ export class SenderType extends KIXObject {
         return this.ID === senderType.ID;
     }
 
+    public toString(): string {
+        return this.Name;
+    }
+
 }
