@@ -75,4 +75,8 @@ export class DynamicFieldChecklistFormValue extends ObjectFormValue<CheckListIte
             console.error(e);
         }
     }
+
+    protected isSameValue(value: any): boolean {
+        return false;
+    }
 }
