@@ -48,6 +48,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         this.article = input.article;
+        this.state.selectedCompactView = input.selectedCompactView;
+        this.state.expanded = input.collapseAll ? false : input.expanded || this.state.expanded;
+        if (this.state.expanded) {
+            this.setArticleSeen(undefined, true);
+        }
+        this.state.compactViewExpanded = this.state.selectedCompactView ? this.state.expanded : false;
 
         // on update, some article was already loaded
         if (this.state.article && this.state.article.ArticleID !== this.article.ArticleID) {
@@ -305,8 +311,20 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.images = (await Promise.all(attachmentPromises)).filter((i) => i);
     }
 
-    public toggleArticle(): void {
+    public toggleArticleListView(event: any): void {
+        event.stopPropagation();
+        event.preventDefault();
         this.state.expanded = !this.state.expanded;
+        if (this.state.expanded) {
+            this.setArticleSeen(undefined, true);
+        }
+    }
+
+    public toggleArticleCompactView(): void {
+        if (this.state.selectedCompactView) {
+            this.state.compactViewExpanded = !this.state.compactViewExpanded;
+            this.state.expanded = this.state.compactViewExpanded;
+        }
         if (this.state.expanded) {
             this.setArticleSeen(undefined, true);
         }
