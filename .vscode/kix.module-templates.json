@@ -32,27 +32,22 @@
                     "",
                     "class Extension extends KIXExtension implements IKIXModuleExtension {",
                     "",
-                    "   public id = '{{name}}-module';",
+                    "   public id = 'kix-module-{{name}}';",
                     "",
                     "   public applications: string[] = ['agent-portal'];",
                     "",
-                    "   public external: boolean = false; // true if it is a plugin module",
-                    "",
-                    "   // if plugin",
-                    "   // public pluginId: string = '<PLUGIN_NAME>';",
+                    "   public external: boolean = false;",
                     "",
                     "   public webDependencies: string[] = [",
                     "       './{{name}}/webapp'",
-                    "       // if plugin",
-                    "       // './<PLUGIN_NAME>/{{name}}/webapp'",
                     "   ];",
                     "",
                     "   public initComponents: UIComponent[] = [",
-                    "       new UIComponent('UIModule', '/{{name}}-module$0/webapp/core/{{pascal classNamePrefix}}UIModule', [])",
+                    "       new UIComponent('UIModule', '/kix-module-{{name}}$0/webapp/core/{{pascal classNamePrefix}}UIModule', [])",
                     "   ];",
                     "",
                     "   public uiComponents: UIComponent[] = [",
-                    "       // new UIComponent('your-component', '/{{kebab-name}}-module$0/webapp/components/your-component', []),",
+                    "       // new UIComponent('your-component', '/kix-module-{{name}}$0/webapp/components/your-component', []),",
                     "   ];",
                     "",
                     "}",
@@ -100,6 +95,132 @@
                     "{",
                     "   \"taglibImports\": [",
                     "       \"../../base-components/marko.json\"",
+                    "   ]",
+                    "}"
+                ]
+            },
+            {
+                "name": "webapp/components/readme.md",
+                "content": [
+                    "# UI Components",
+                    "Add your ui components in this folder."
+                ]
+            },
+            {
+                "name": "server/readme.md",
+                "content": [
+                    "# Server Code",
+                    "Add your server side code here."
+                ]
+            },
+            {
+                "name": "model/readme.md",
+                "content": [
+                    "# Model Code",
+                    "Add your data model here."
+                ]
+            }
+        ]
+    },
+    "plugin-ui-module": {
+        "displayName": "Plugin - UI Module",
+        "defaultPath": "src/",
+        "folder": "{{name}}",
+        "questions": {
+            "pluginName": "Plugin Name",
+            "name": "UI Module Name",
+            "classNamePrefix": "Common Class Prefix"
+        },
+        "files": [
+            {
+                "name": "package.json",
+                "content": [
+                    "{",
+                    "   \"name\": \"{{kebab pluginName}}-module-{{name}}\",",
+                    "   \"extensions\": {",
+                    "       \"kix:modules\": {",
+                    "           \"kix-module-{{name}}-module\": {",
+                    "               \"module\": \"kix-module.extension\"",
+                    "           }",
+                    "       }",
+                    "   }",
+                    "}"
+                ]
+            },
+            {
+                "name": "kix-module.extension.ts",
+                "content": [
+                    "import { KIXExtension } from '../../../server/model/KIXExtension';",
+                    "import { IKIXModuleExtension } from '../../../frontend-applications/agent-portal/model/IKIXModuleExtension';",
+                    "import { UIComponent } from '../../../frontend-applications/agent-portal/model/UIComponent';",
+                    "",
+                    "class Extension extends KIXExtension implements IKIXModuleExtension {",
+                    "",
+                    "   public id = '{{kebab pluginName}}-module-{{name}}';",
+                    "",
+                    "   public applications: string[] = ['agent-portal'];",
+                    "",
+                    "   public external: boolean = true;",
+                    "",
+                    "   public pluginId: string = '{{pluginName}}';",
+                    "",
+                    "   public webDependencies: string[] = [",
+                    "       './{{pluginName}}/{{name}}/webapp'",
+                    "   ];",
+                    "",
+                    "   public initComponents: UIComponent[] = [",
+                    "       new UIComponent('UIModule', '/{{kebab pluginName}}-module-{{name}}$0/webapp/core/{{pascal classNamePrefix}}UIModule', [])",
+                    "   ];",
+                    "",
+                    "   public uiComponents: UIComponent[] = [",
+                    "       // new UIComponent('your-component', '/{{kebab pluginName}}-module-{{name}}$0/webapp/components/your-component', []),",
+                    "   ];",
+                    "",
+                    "}",
+                    "",
+                    "module.exports = (data, host, options): Extension => {",
+                    "   return new Extension();",
+                    "};"
+                ]
+            },
+            {
+                "name": "webapp/core/{{pascal classNamePrefix}}UIModule.ts",
+                "content": [
+                    "import { IUIModule } from '../../../../../frontend-applications/agent-portal/model/IUIModule';",
+                    "",
+                    "export class UIModule implements IUIModule {",
+                    "",
+                    "   public name: string = '{{pascal classNamePrefix}}UIModule';",
+                    "",
+                    "   public priority: number = 5000;",
+                    "",
+                    "   public async register(): Promise<void> {",
+                    "       // register some module stuff, e.g. Context, LabelProvider, TableFactory, Actions, ...",
+                    "   }",
+                    "",
+                    "   public async unRegister(): Promise<void> {",
+                    "       throw new Error('Method not implemented.');",
+                    "   }",
+                    "",
+                    "}"
+                ]
+            },
+            {
+                "name": "webapp/browser.json",
+                "content": [
+                    "{",
+                    "   \"dependencies\": [",
+                    "       \"require ./core/{{pascal classNamePrefix}}UIModule\"",
+                    "   ]",
+                    "}"
+                ]
+            },
+            {
+                "name": "webapp/marko.json",
+                "content": [
+                    "{",
+                    "   \"taglibImports\": [",
+                    "       \"../../../../frontend-applications/agent-portal/modules/base-components/marko.json\"",
                     "   ]",
                     "}"
                 ]
@@ -188,6 +309,81 @@
                 "name": "ComponentState.ts",
                 "content": [
                     "import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';",
+                    "",
+                    "export class ComponentState extends AbstractComponentState {",
+                    "",
+                    "   public constructor(",
+                    "       public title: string = '{{name}} Component'",
+                    "   ) {",
+                    "       super();",
+                    "   }",
+                    "",
+                    "}"
+                ]
+            },
+            {
+                "name": "index.marko",
+                "content": [
+                    "<div.{{name}}-container>",
+                    "   <h1>${state.title}</h1>",
+                    "</div>"
+                ]
+            },
+            {
+                "name": "style.less",
+                "content": [
+                    ".{{name}}-container {",
+                    "   margin: 1rem;",
+                    "}"
+                ]
+            }
+        ]
+    },
+    "plugin-ui-component": {
+        "displayName": "Plugin - UI Component",
+        "defaultPath": "src/",
+        "folder": "{{name}}",
+        "questions": {
+            "name": "UI Component Name"
+        },
+        "files": [
+            {
+                "name": "component.ts",
+                "content": [
+                    "import { ComponentState } from './ComponentState';",
+                    "import { AbstractMarkoComponent } from '../../../../../../frontend-applications/agent-portal/modules/base-components/webapp/core/AbstractMarkoComponent';",
+                    "import { ContextService } from '../../../../../../frontend-applications/agent-portal/modules/base-components/webapp/core/ContextService';",
+                    "import { Context } from '../../../../../../frontend-applications/agent-portal/model/Context';",
+                    "",
+                    "export class Component extends AbstractMarkoComponent<ComponentState> {",
+                    "",
+                    "   private context: Context;",
+                    "",
+                    "   public onCreate(): void {",
+                    "       this.state = new ComponentState();",
+                    "   }",
+                    "",
+                    "   public onInput(input: any): void {",
+                    "       return;",
+                    "   }",
+                    "",
+                    "   public async onMount(): Promise<void> {",
+                    "       this.context = ContextService.getInstance().getActiveContext();",
+                    "   }",
+                    "",
+                    "   public onDestroy(): void {",
+                    "       return;",
+                    "   }",
+                    "",
+                    "}",
+                    "",
+                    "module.exports = Component;"
+                ]
+            },
+            {
+                "name": "ComponentState.ts",
+                "content": [
+                    "import { AbstractComponentState } from '../../../../../../frontend-applications/agent-portal/modules/base-components/webapp/core/AbstractComponentState';",
                     "",
                     "export class ComponentState extends AbstractComponentState {",
                     "",
