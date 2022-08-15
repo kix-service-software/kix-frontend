@@ -42,7 +42,8 @@ export class TableConfiguration implements IConfiguration {
         public additionalTableObjectsHandler: AdditionalTableObjectsHandlerConfiguration[] = [],
         public intersection: boolean = true,
         public searchId: string = null,
-        public specificLoadingOptions?: KIXObjectSpecificLoadingOptions
+        public specificLoadingOptions?: KIXObjectSpecificLoadingOptions,
+        public valid: boolean = true,
     ) {
 
         if (!headerHeight) {

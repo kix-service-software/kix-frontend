@@ -49,6 +49,8 @@ export class ResolverUtil {
             ...configurations.filter((c) => !ids.some((cid) => cid === c.id))
         ];
 
+        newConfigurations = newConfigurations.filter((c) => c.valid === true);
+
         return newConfigurations;
 
     }

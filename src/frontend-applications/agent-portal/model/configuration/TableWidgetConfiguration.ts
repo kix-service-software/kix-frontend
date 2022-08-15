@@ -31,7 +31,8 @@ export class TableWidgetConfiguration implements IConfiguration {
         public predefinedTableFilters: KIXObjectPropertyFilter[] = [],
         public cache: boolean = false,
         public resetFilterOnReload: boolean = true,
-        public configuration: IConfiguration = tableConfiguration
+        public configuration: IConfiguration = tableConfiguration,
+        public valid: boolean = true,
     ) { }
 
 }

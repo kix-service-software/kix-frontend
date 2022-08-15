@@ -17,6 +17,7 @@ export class SliderWidgetConfiguration implements IConfiguration {
         public id: string,
         public name: string,
         public type: string | ConfigurationType,
-        public sliderList: SliderContent[] = []
+        public sliderList: SliderContent[] = [],
+        public valid: boolean = true,
     ) { }
 }

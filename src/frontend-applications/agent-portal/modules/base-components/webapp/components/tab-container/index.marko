@@ -22,8 +22,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <li
                             title=component.getTitle(tab)
                             class={
-                                                        active: component.isActiveTab(tab.instanceId)
-                                                    }
+                                active: component.isActiveTab(tab.instanceId)
+                            }
                             on-click("tabClicked", tab, false)>
                             <if(component.getIcon(tab))>
                                 <icon icon=component.getIcon(tab) showUnknown=false/>
