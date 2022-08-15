@@ -94,7 +94,8 @@ export class WebformService {
             id: 'kix-customer-portal-light-webforms',
             name: 'customer portal light webforms configuration',
             type: 'Webform',
-            webforms
+            webforms,
+            valid: true
         };
 
         await ModuleConfigurationService.getInstance().saveConfiguration(

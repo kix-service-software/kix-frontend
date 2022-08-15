@@ -56,7 +56,7 @@ class TabLaneComponent implements IEventSubscriber {
         this.contextListenerId = IdService.generateDateBasedId('tab-container');
         this.contextServiceListenerId = IdService.generateDateBasedId('tab-container');
 
-        this.state.tabWidgets = input.tabWidgets ? input.tabWidgets : [];
+        this.state.tabWidgets = input.tabWidgets ? input.tabWidgets.filter((widget) => widget.configuration) : [];
         this.initialTabId = input.tabId;
         this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
         this.state.contextType = input.contextType;

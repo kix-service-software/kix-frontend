@@ -23,7 +23,8 @@ export class TicketChartWidgetConfiguration implements IConfiguration {
         public property: TicketProperty,
         public subConfigurationDefinition?: ConfigurationDefinition,
         public configuration?: ChartComponentConfiguration,
-        public loadingOptions?: KIXObjectLoadingOptions
+        public loadingOptions?: KIXObjectLoadingOptions,
+        public valid: boolean = true,
     ) { }
 
 }

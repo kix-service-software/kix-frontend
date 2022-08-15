@@ -31,7 +31,8 @@ export class WidgetConfiguration implements IConfiguration {
         public contextDependent: boolean = false,
         public contextObjectDependent: boolean = false,
         public formDependent: boolean = false,
-        public formDependencyProperties: string[] = []
+        public formDependencyProperties: string[] = [],
+        public valid: boolean = true,
     ) { }
 
 }
