@@ -23,6 +23,19 @@
       gap: 1.5rem;
 
       .filter-action {
+         display: flex;
+         align-items: center;
+         flex-direction: row;
+
+         .date-icon {
+            padding: 0.5rem 0.75rem;
+            color: @secondary-0;
+
+            &:hover {
+               color: black;
+            }
+         }
+
          >[type="checkbox"] {
             position: relative;
             left: 15px;
@@ -31,8 +44,26 @@
             -webkit-appearance: none;
          }
 
+         .date-filter-label {
+            margin-right: 0.3rem;
+            margin-left: 0.1rem;
+
+            &:hover {
+               cursor: pointer;
+            }
+
+            &.selected {
+               font-weight: bold;
+            }
+         }
+
+
          label {
             .shorten-text();
+         }
+
+         .date-input {
+            max-width: 9rem;
          }
 
          >[type="checkbox"]+label::before {
