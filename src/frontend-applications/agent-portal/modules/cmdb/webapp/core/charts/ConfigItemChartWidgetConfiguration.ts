@@ -22,6 +22,7 @@ export class ConfigItemChartWidgetConfiguration implements IConfiguration {
         public property: ConfigItemProperty,
         public subConfigurationDefinition?: ConfigurationDefinition,
         public configuration?: ChartComponentConfiguration,
+        public valid: boolean = true,
     ) { }
 
 }

@@ -25,7 +25,8 @@ export class MainMenuConfiguration implements IConfiguration {
         showText: boolean = false,
         public id: string = 'application-main-menu',
         public name: string = 'Main Menu',
-        public type: ConfigurationType = ConfigurationType.MainMenu
+        public type: ConfigurationType = ConfigurationType.MainMenu,
+        public valid: boolean = true,
     ) {
         this.primaryMenuEntryConfigurations = primaryConfiguration;
         this.secondaryMenuEntryConfigurations = secondaryConfiguration;

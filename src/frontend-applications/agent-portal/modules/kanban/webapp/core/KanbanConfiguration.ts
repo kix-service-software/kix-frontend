@@ -18,7 +18,8 @@ export class KanbanConfiguration implements IConfiguration {
         public name: string,
         public type: string | ConfigurationType = ConfigurationType.Kanban,
         public cardProperties: string[],
-        public columns: KanbanColumn[]
+        public columns: KanbanColumn[],
+        public valid: boolean = true,
     ) { }
 
 }

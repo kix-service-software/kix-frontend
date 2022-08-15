@@ -20,6 +20,7 @@ export class AdditionalTableObjectsHandlerConfiguration implements IConfiguratio
         public handlerId: string,
         public handlerConfiguration?: any,
         public dependencyProperties: string[] = [],
+        public valid: boolean = true,
     ) {
         this.type = ConfigurationType.AdditionalTableObjectsHandler;
     }

@@ -21,7 +21,8 @@ export class ObjectInformationWidgetConfiguration implements IConfiguration {
         public objectType: KIXObjectType | string,
         public properties: string[] = [],
         public displayFlatList: boolean = false,
-        public routingConfigurations: Array<[string, RoutingConfiguration]> = null
+        public routingConfigurations: Array<[string, RoutingConfiguration]> = null,
+        public valid: boolean = true,
     ) { }
 
 }
