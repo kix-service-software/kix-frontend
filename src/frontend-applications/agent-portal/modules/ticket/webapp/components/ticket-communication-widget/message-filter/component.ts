@@ -9,9 +9,11 @@
 
 import { Context } from '../../../../../../model/Context';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { SortUtil } from '../../../../../../model/SortUtil';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ClientStorageService } from '../../../../../base-components/webapp/core/ClientStorageService';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
+import { TimeoutTimer } from '../../../../../base-components/webapp/core/TimeoutTimer';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { Article } from '../../../../model/Article';
 import { ComponentState } from './ComponentState';
@@ -20,9 +22,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private context: Context;
     private filterTimeout: any;
+    private timoutTimer: TimeoutTimer;
 
     public onCreate(): void {
         this.state = new ComponentState();
+        this.timoutTimer = new TimeoutTimer();
     }
 
     public onInput(input: any): void {
@@ -47,6 +51,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         });
 
         this.state.searchPlaceholder = await TranslationService.translate('Search');
+        this.state.translations = await TranslationService.createTranslationObject(['Translatable#Before', 'Translatable#After']);
 
         this.getSettings();
         this.filter();
@@ -62,6 +67,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     if (typeof settingsObject === 'object') {
                         this.state.filterAttachment = settingsObject.filterAttachment;
                         this.state.filterExternal = settingsObject.filterExternal;
+                        this.state.filterInternal = settingsObject.filterInternal;
                         this.state.filterCustomer = settingsObject.filterCustomer;
                         this.state.filterUnread = settingsObject.filterUnread;
                         this.state.filterValue = settingsObject.filterValue;
@@ -94,6 +100,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.filterAttachment = !this.state.filterAttachment;
         } else if (type === 'external') {
             this.state.filterExternal = !this.state.filterExternal;
+        } else if (type === 'internal') {
+            this.state.filterInternal = !this.state.filterInternal;
         } else if (type === 'customer') {
             this.state.filterCustomer = !this.state.filterCustomer;
         } else if (type === 'unread') {
@@ -111,6 +119,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         if (this.state.filterExternal) {
             articles = articles.filter((a) => a.SenderType === 'external');
+        }
+
+        if (this.state.filterInternal) {
+            articles = articles.filter((a) => a.SenderType !== 'external');
         }
 
         if (this.state.filterCustomer) {
@@ -131,6 +143,18 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             });
         }
 
+        if (this.state.selectedDate) {
+            this.state.isFilterDateBefore ?
+                articles = articles.filter((a) => {
+                    const result = SortUtil.compareDate(a.ChangeTime, this.state.selectedDate);
+                    return result <= 0;
+                }) :
+                articles = articles.filter((a) => {
+                    const result = SortUtil.compareDate(a.ChangeTime, this.state.selectedDate);
+                    return result >= 0;
+                });
+        }
+
         this.setSettings();
         this.context.setFilteredObjectList(KIXObjectType.ARTICLE, articles);
     }
@@ -141,12 +165,27 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             const settingsObject = {
                 filterAttachment: this.state.filterAttachment,
                 filterExternal: this.state.filterExternal,
+                filterInternal: this.state.filterInternal,
                 filterCustomer: this.state.filterCustomer,
                 filterUnread: this.state.filterUnread,
                 filterValue: this.state.filterValue
             };
             ClientStorageService.setOption(`${ticketId}-communication-settings`, JSON.stringify(settingsObject));
         }
+    }
+
+    public selectDateOrder(): void {
+        this.state.isFilterDateBefore = !this.state.isFilterDateBefore;
+        this.filter();
+    }
+
+    public dateChanged(event: any): void {
+        this.timoutTimer.restartTimer(() => this.setDateChanged(event));
+    }
+
+    private setDateChanged(event: any): void {
+        this.state.selectedDate = event.target.value;
+        this.filter();
     }
 }
 
