@@ -149,8 +149,12 @@ export abstract class SearchContext extends Context {
         return this.searchCategory;
     }
 
-    public setSearchResult(objects: KIXObject[]): void {
+    public async setSearchResult(objects: KIXObject[]): Promise<void> {
         this.searchCache.result = objects;
+        const categories = await this.getSearchResultCategories();
+        if (Array.isArray(categories) && categories.length) {
+            this.searchCategory = categories[0];
+        }
         this.setObjectList(this.searchCache.objectType, objects);
     }
 
