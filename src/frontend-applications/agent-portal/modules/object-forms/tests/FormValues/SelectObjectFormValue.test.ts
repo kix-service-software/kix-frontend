@@ -64,7 +64,7 @@ describe('SelectObjectFormValue', () => {
         });
 
         it('showInvalidNodes should be true', () => {
-            expect(formValue.showInvalidNodes).true;
+            expect(formValue.showInvalidNodes).false;
         });
 
         it('isInvalidClickable should be false', () => {
@@ -159,7 +159,7 @@ describe('SelectObjectFormValue', () => {
         });
 
         it('showInvalidNodes should be true', () => {
-            expect(formValue.showInvalidNodes).true;
+            expect(formValue.showInvalidNodes).false;
         });
 
         it('isInvalidClickable should be false', () => {
