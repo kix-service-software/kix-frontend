@@ -37,7 +37,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
     public specificLoadingOptions: KIXObjectSpecificLoadingOptions;
     public uniqueNodes: boolean = true;
     public objectIds: number[];
-    public showInvalidNodes: boolean = true;
+    public showInvalidNodes: boolean = false;
     public isInvalidClickable: boolean = false;
     public useTextAsId: boolean = false;
     public multiselect: boolean = false;

@@ -82,9 +82,7 @@ export class QueueService extends KIXObjectService<Queue> {
     ): Promise<TreeNode[]> {
         const nodes = [];
         if (queues && !!queues.length) {
-            if (!showInvalid) {
-                queues = queues.filter((q) => q.ValidID === 1);
-            } else if (!invalidClickable) {
+            if (!invalidClickable || !showInvalid) {
                 queues = queues.filter((q) => q.ValidID === 1 || this.hasValidDescendants(q.SubQueues));
             }
 
