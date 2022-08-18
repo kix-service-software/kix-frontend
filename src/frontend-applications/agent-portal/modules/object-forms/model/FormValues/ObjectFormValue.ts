@@ -150,8 +150,8 @@ export class ObjectFormValue<T = any> {
                 new FormValueBinding(this, FormValueProperty.ENABLED, object, property),
                 new FormValueBinding(this, FormValueProperty.COUNT_MAX, object, property),
                 new FormValueBinding(this, FormValueProperty.REGEX, object, property),
-                new FormValueBinding(this, FormValueProperty.REGEX_ERROR_MESSAGE, object, property)
-                // new FormValueBinding(this, FormValueProperty.COUNT_MIN, object, property),
+                new FormValueBinding(this, FormValueProperty.REGEX_ERROR_MESSAGE, object, property),
+                new FormValueBinding(this, FormValueProperty.FORM_VALUES, object, property)
             );
 
             this.addPropertyBinding(FormValueProperty.VALUE, async () => {
@@ -382,7 +382,7 @@ export class ObjectFormValue<T = any> {
         if (Array.isArray(this.value) && Array.isArray(value)) {
             isSameValue = this.value.length === value.length;
             if (isSameValue) {
-                isSameValue = this.value.every((v) => value.some((val) => v.toString() === val.toString()));
+                isSameValue = this.value.every((v) => value.some((val) => v?.toString() === val?.toString()));
             }
         } else {
             isSameValue = this.value === value;

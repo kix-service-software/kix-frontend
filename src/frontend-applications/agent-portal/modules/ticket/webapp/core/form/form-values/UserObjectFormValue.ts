@@ -35,10 +35,6 @@ export class UserObjectFormValue extends SelectObjectFormValue {
         this.objectType = KIXObjectType.USER;
         this.isAutoComplete = true;
         this.autoCompleteConfiguration = new AutoCompleteConfiguration();
-
-        if (this.property === TicketProperty.OWNER_ID) {
-            this.value = null;
-        }
     }
 
 
