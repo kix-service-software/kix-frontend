@@ -60,8 +60,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(),
-            eventPublished: (): void => {
-                this.state.prepared = false;
+            eventPublished: (finished?: boolean): void => {
+                this.state.prepared = Boolean(finished);
             }
         };
         EventService.getInstance().subscribe(GraphEvents.GRAPH_LOADING, this.subscriber);

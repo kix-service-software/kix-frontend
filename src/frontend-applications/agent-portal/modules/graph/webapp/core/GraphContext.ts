@@ -113,6 +113,8 @@ export class GraphContext extends Context {
                         (l) => l.objectChanged(null, graphInstance, KIXObjectType.GRAPH_INSTANCE)
                     );
                 }, 100);
+            } else {
+                EventService.getInstance().publish(GraphEvents.GRAPH_LOADING, true);
             }
 
             return graphInstance as any;
