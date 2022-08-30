@@ -155,19 +155,66 @@ export class QueueService extends KIXObjectService<Queue> {
     }
 
     public async getQueuesHierarchy(withData: boolean = true): Promise<Queue[]> {
-        const loadingOptions = new KIXObjectLoadingOptions(
-            [
-                new FilterCriteria(
-                    QueueProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, null
-                )
-            ],
-            null, null,
-            withData ? [QueueProperty.SUB_QUEUES, 'TicketStats'] : [QueueProperty.SUB_QUEUES],
-            [QueueProperty.SUB_QUEUES],
-            withData ? [['TicketStats.StateType', 'Open']] : undefined
-        );
+        let queueTree: Queue[] = [];
+        const loadingOptions = new KIXObjectLoadingOptions();
+        if (withData) {
+            loadingOptions.includes = ['TicketStats'];
+            loadingOptions.query = [['TicketStats.StateType', 'Open']];
+        }
 
-        return await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, null, loadingOptions);
+        const loadedQueues = await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, null, loadingOptions)
+            .catch((): Queue[] => []);
+        if (loadedQueues?.length) {
+            const queues = loadedQueues.map((q) => new Queue(q));
+
+            for (const queue of queues) {
+                if (queue.ParentID) {
+                    const parent = queues.find((q) => q.QueueID === queue.ParentID);
+                    if (parent) {
+                        if (!Array.isArray(parent.SubQueues)) {
+                            parent.SubQueues = [];
+                        }
+
+                        parent.SubQueues.push(queue);
+                    } else {
+                        // mark this queue, so that we can build the pseudo structure later
+                        queue.ParentID = -1;
+                    }
+                }
+            }
+
+            const pseudoQueues = queues.filter((q) => q.ParentID === -1);
+            for (const queue of pseudoQueues) {
+                this.buildPseudoQueueStructure(queue.Fullname, queue, queues);
+            }
+
+            queueTree = queues.filter((q) => !q.ParentID);
+        }
+
+        return queueTree;
+    }
+
+    private buildPseudoQueueStructure(fullName: string, queue: Queue, queues: Queue[]): void {
+        const names = fullName.split('::').filter((n) => n !== queue.Name);
+        if (names.length && names[0] !== '') {
+            const queueName = names[0];
+            let parent = queues.find((q) => q.Name === queueName);
+            if (!parent) {
+                parent = new Queue();
+                parent.QueueID = -1;
+                parent.Name = queueName;
+                parent.ValidID = 2;
+                parent.SubQueues = [];
+                parent.Fullname = fullName;
+                queues.push(parent);
+            }
+
+            const newFullname = names.filter((n) => n !== names[0]).join('::');
+            this.buildPseudoQueueStructure(newFullname, queue, parent.SubQueues);
+        } else {
+            queues.push(queue);
+        }
+
     }
 
     public async getTreeNodes(
