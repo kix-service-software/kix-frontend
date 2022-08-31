@@ -309,7 +309,6 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                 case TicketProperty.ATTACHMENT_NAME:
                 case KIXObjectProperty.DYNAMIC_FIELDS:
                 case TicketProperty.LAST_CHANGE_TIME:
-                case TicketProperty.LINK:
                 case TicketProperty.LINKED_AS:
                 case TicketProperty.TICKET_FLAG:
                 case TicketProperty.WATCHERS:

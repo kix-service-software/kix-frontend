@@ -35,11 +35,13 @@ export class TicketBulkManager extends BulkManager {
 
     public objectType: KIXObjectType = KIXObjectType.TICKET;
 
-    public reset(): void {
-        super.reset(false);
+    public reset(notify?: boolean): void {
+        super.reset(notify);
         this.values.push(new ObjectPropertyValue(TicketProperty.QUEUE_ID, PropertyOperator.CHANGE, null));
         this.values.push(new ObjectPropertyValue(TicketProperty.TYPE_ID, PropertyOperator.CHANGE, null));
-        this.notifyListeners();
+        if (notify || typeof notify === 'undefined') {
+            this.notifyListeners();
+        }
     }
 
     public async getOperations(property: string): Promise<PropertyOperator[]> {

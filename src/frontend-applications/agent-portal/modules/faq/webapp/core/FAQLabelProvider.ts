@@ -94,9 +94,6 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
             case FAQArticleProperty.LANGUAGE:
                 displayValue = 'Translatable#Language';
                 break;
-            case FAQArticleProperty.LINK:
-                displayValue = 'Translatable#Links';
-                break;
             case FAQArticleProperty.NUMBER:
                 const hookConfig: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
                     KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.FAQ_HOOK], null, null, true

@@ -80,11 +80,7 @@ export class LinkManager extends AbstractDynamicFormManager {
             const linkTypes = await LinkService.getLinkTypes(this.targetObjectType, v.property);
             const linkType = linkTypes.find((lt) => lt.TargetName === v.operator || lt.SourceName === v.operator);
 
-            let isSource = linkType.Source === v.property;
-
-            if (linkType.Source === linkType.Target) {
-                isSource = linkType.Pointed === 1;
-            }
+            const isSource = linkType.SourceName === v.operator;
 
             const objectIds = Array.isArray(v.value) ? v.value : [v.value];
 
