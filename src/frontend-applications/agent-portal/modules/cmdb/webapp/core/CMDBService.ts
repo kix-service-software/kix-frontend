@@ -330,7 +330,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 p[0] === VersionProperty.DEPL_STATE_ID ||
                 p[0] === VersionProperty.INCI_STATE_ID ||
                 p[0] === ConfigItemProperty.NAME ||
-                p[0] === ConfigItemProperty.LINKS
+                p[0] === KIXObjectProperty.LINKS
             ) {
                 newParameter.push(p);
             } else {

@@ -179,7 +179,7 @@ export class TicketAPIService extends KIXObjectAPIService {
             });
 
             await this.createLinks(
-                token, clientRequestId, ticketId, this.getParameterValue(ticketParameter, TicketProperty.LINK)
+                token, clientRequestId, ticketId, this.getParameterValue(ticketParameter, KIXObjectProperty.LINKS)
             );
 
             return ticketId;
@@ -313,8 +313,6 @@ export class TicketAPIService extends KIXObjectAPIService {
         }
         return result;
     }
-
-
 
     public async updateObject(
         token: string, clientRequestId: string, objectType: KIXObjectType,

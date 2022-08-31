@@ -16,6 +16,7 @@ import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/Da
 import { Attachment } from '../../../../model/kix/Attachment';
 import { BrowserUtil } from '../../../../modules/base-components/webapp/core/BrowserUtil';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 
 export class CreateConfigItemVersionUtil {
 
@@ -43,7 +44,7 @@ export class CreateConfigItemVersionUtil {
                 case ConfigItemProperty.CUR_INCI_STATE_ID:
                     parameter.push([VersionProperty.INCI_STATE_ID, value]);
                     break;
-                case ConfigItemProperty.LINKS:
+                case KIXObjectProperty.LINKS:
                 case ConfigItemProperty.CLASS_ID:
                     continue;
                 default:

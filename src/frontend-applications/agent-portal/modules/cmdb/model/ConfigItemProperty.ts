@@ -21,7 +21,6 @@ export enum ConfigItemProperty {
     CREATE_BY = 'CreateBy',
     LAST_VERSION_ID = 'LastVersionID',
     CREATE_TIME = 'CreateTime',
-    LINKS = 'Links',
     IMAGES = 'Images',
     VERSION = 'Version',
     VERSIONS = 'Versions',
