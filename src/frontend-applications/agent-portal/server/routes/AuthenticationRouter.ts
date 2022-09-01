@@ -63,48 +63,81 @@ export class AuthenticationRouter extends KIXRouter {
     public async login(req: Request, res: Response): Promise<void> {
         if (this.isUnsupportedBrowser(req)) {
             res.redirect('/static/html/unsupported-browser/index.html');
+        }
+        else if (!req.cookies.authNegotiationDone) {
+            res.cookie('authNegotiationDone', true, { httpOnly: true });
+            res.setHeader('WWW-Authenticate', 'Negotiate');
+            res.status(401);
+            res.send(`<!DOCTYPE html>
+            <html lang="en">
+                <head>
+                    <title>KIX Agent Portal</title>
+                    <meta http-equiv="refresh" content="3; URL=/">
+                </head>
+                <body></body>
+            </html>`);
         } else {
+            const authorization = req.headers['authorization'];
+            if (typeof authorization === 'string' && authorization.split(' ')[0] === 'Negotiate') {
+                // already negotiated (SSO)
+                const negotiationToken = authorization.split(' ')[1];
+                const token = await AuthenticationService.getInstance().login(
+                    null, null, negotiationToken, null, null, false);
+                res.cookie('token', token);
+                res.clearCookie('authNegotiationDone');
+                res.status(200);
+                res.send(`<!DOCTYPE html>
+                <html lang="en">
+                    <head>
+                        <title>KIX Agent Portal</title>
+                        <meta http-equiv="refresh" content="3; URL=/">
+                    </head>
+                    <body></body>
+                </html>`);
+            }
+            else {
+                res.clearCookie('token');
+                res.clearCookie('authNegotiationDone');
+                const applications = await PluginService.getInstance().getExtensions<IMarkoApplication>(
+                    AgentPortalExtensions.MARKO_APPLICATION
+                );
 
-            res.clearCookie('token');
-            const applications = await PluginService.getInstance().getExtensions<IMarkoApplication>(
-                AgentPortalExtensions.MARKO_APPLICATION
-            );
+                const app = applications.find((a) => a.name === 'authentication-login');
 
-            const app = applications.find((a) => a.name === 'authentication-login');
+                if (app) {
+                    try {
+                        const folder = app.internal ? 'modules' : 'plugins';
+                        const templatePath = path.join(__dirname, '..', '..', folder, app.name, app.path);
 
-            if (app) {
-                try {
-                    const folder = app.internal ? 'modules' : 'plugins';
-                    const templatePath = path.join(__dirname, '..', '..', folder, app.name, app.path);
+                        const template = require(templatePath).default;
+                        this.setFrontendSocketUrl(res);
 
-                    const template = require(templatePath).default;
-                    this.setFrontendSocketUrl(res);
+                        const logout = req.query.logout !== undefined;
 
-                    const logout = req.query.logout !== undefined;
+                        const releaseInfo = await ReleaseInfoUtil.getInstance().getReleaseInfo();
 
-                    const releaseInfo = await ReleaseInfoUtil.getInstance().getReleaseInfo();
+                        const imprintLink = await this.getImprintLink()
+                            .catch((e) => '');
 
-                    const imprintLink = await this.getImprintLink()
-                        .catch((e) => '');
+                        let redirectUrl = '/';
+                        if (req.url !== '/auth') {
+                            redirectUrl = req.url;
+                        }
 
-                    let redirectUrl = '/';
-                    if (req.url !== '/auth') {
-                        redirectUrl = req.url;
+                        const favIcon = await this.getIcon('agent-portal-icon');
+                        const logo = await this.getIcon('agent-portal-logo');
+
+                        (res as any).marko(template, {
+                            login: true, logout, releaseInfo, imprintLink, redirectUrl, favIcon, logo
+                        });
+                    } catch (error) {
+                        console.error(error);
+                        LoggingService.getInstance().error(error);
+                        res.status(404).send();
                     }
-
-                    const favIcon = await this.getIcon('agent-portal-icon');
-                    const logo = await this.getIcon('agent-portal-logo');
-
-                    (res as any).marko(template, {
-                        login: true, logout, releaseInfo, imprintLink, redirectUrl, favIcon, logo
-                    });
-                } catch (error) {
-                    console.error(error);
-                    LoggingService.getInstance().error(error);
+                } else {
                     res.status(404).send();
                 }
-            } else {
-                res.status(404).send();
             }
         }
     }
