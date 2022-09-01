@@ -38,7 +38,7 @@ export class AuthenticationSocketClient extends SocketClient {
     }
 
     public async login(
-        userName: string, password: string, redirectUrl: string, fakeLogin?: boolean
+        userName: string, password: string, negotiateToken: string, redirectUrl: string, fakeLogin?: boolean
     ): Promise<boolean> {
         this.checkSocketConnection();
 
@@ -70,7 +70,8 @@ export class AuthenticationSocketClient extends SocketClient {
             });
 
             const request = new LoginRequest(
-                userName, password, redirectUrl, requestId, ClientStorageService.getClientRequestId()
+                userName, password, negotiateToken, redirectUrl, requestId,
+                ClientStorageService.getClientRequestId()
             );
             this.socket.emit(AuthenticationEvent.LOGIN, request);
         });

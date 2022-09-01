@@ -76,7 +76,7 @@ export class AgentService extends KIXObjectService<User> {
     }
 
     public async login(userName: string, password: string, redirectUrl: string): Promise<boolean> {
-        return await AuthenticationSocketClient.getInstance().login(userName, password, redirectUrl);
+        return await AuthenticationSocketClient.getInstance().login(userName, password, null, redirectUrl);
     }
 
     public async getPersonalSettings(): Promise<PersonalSetting[]> {
@@ -111,7 +111,7 @@ export class AgentService extends KIXObjectService<User> {
 
     public async checkPassword(password: string): Promise<boolean> {
         const user = await this.getCurrentUser();
-        return await AuthenticationSocketClient.getInstance().login(user.UserLogin, password, null, true);
+        return await AuthenticationSocketClient.getInstance().login(user.UserLogin, password, null, null, true);
     }
 
     public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
