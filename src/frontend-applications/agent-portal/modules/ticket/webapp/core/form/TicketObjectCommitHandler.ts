@@ -12,12 +12,17 @@ import { Attachment } from '../../../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { ObjectFormValueMapper } from '../../../../object-forms/model/ObjectFormValueMapper';
 import { ObjectCommitHandler } from '../../../../object-forms/webapp/core/ObjectCommitHandler';
 import { Channel } from '../../../model/Channel';
 import { Queue } from '../../../model/Queue';
 import { Ticket } from '../../../model/Ticket';
 
 export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
+
+    public constructor(protected objectValueMapper: ObjectFormValueMapper) {
+        super(objectValueMapper, KIXObjectType.TICKET);
+    }
 
     public async prepareObject(ticket: Ticket, forCommit: boolean = true): Promise<Ticket> {
         const newTicket = await super.prepareObject(ticket, forCommit);
