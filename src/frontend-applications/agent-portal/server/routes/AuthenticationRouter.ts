@@ -64,7 +64,7 @@ export class AuthenticationRouter extends KIXRouter {
         if (this.isUnsupportedBrowser(req)) {
             res.redirect('/static/html/unsupported-browser/index.html');
         }
-        else if (!req.cookies.authNegotiationDone) {
+        else if (!req.cookies.authNegotiationDone && !req.cookies.authNoSSO) {
             res.cookie('authNegotiationDone', true, { httpOnly: true });
             res.setHeader('WWW-Authenticate', 'Negotiate');
             res.status(401);
@@ -98,6 +98,7 @@ export class AuthenticationRouter extends KIXRouter {
             else {
                 res.clearCookie('token');
                 res.clearCookie('authNegotiationDone');
+                res.cookie('authNoSSO', true, { httpOnly: true });
                 const applications = await PluginService.getInstance().getExtensions<IMarkoApplication>(
                     AgentPortalExtensions.MARKO_APPLICATION
                 );
