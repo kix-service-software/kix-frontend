@@ -27,7 +27,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
     public async prepareObject(ticket: Ticket, forCommit: boolean = true): Promise<Ticket> {
         const newTicket = await super.prepareObject(ticket, forCommit);
 
-        await this.prepareArticles(newTicket, forCommit);
+        await this.prepareArticles(newTicket, forCommit, ticket.QueueID);
         this.prepareTitle(newTicket);
         this.prepareTicket(newTicket);
         this.prepareSpecificAttributes(newTicket);
@@ -35,7 +35,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         return newTicket;
     }
 
-    private async prepareArticles(ticket: Ticket, forCommit: boolean): Promise<void> {
+    private async prepareArticles(ticket: Ticket, forCommit: boolean, orgTicketQueueID: number): Promise<void> {
         if (ticket.Articles?.length) {
             ticket.Articles = ticket.Articles.filter((a) => a.ChannelID);
 
@@ -69,7 +69,9 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                         article.Attachments = await this.prepareAttachments(article.Attachments);
                     }
 
-                    article.Body = await this.addQueueSignature(ticket.QueueID, article.Body, article.ChannelID);
+                    article.Body = await this.addQueueSignature(
+                        ticket.QueueID || orgTicketQueueID, article.Body, article.ChannelID
+                    );
                 } else {
                     article.Attachments = null;
                 }
