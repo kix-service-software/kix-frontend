@@ -342,7 +342,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    public toggleAttachments(): void {
+    public toggleAttachments(e: any): void {
+        e.stopPropagation();
         this.state.showAllAttachments = !this.state.showAllAttachments;
         this.filterAttachments();
     }
