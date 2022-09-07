@@ -14,7 +14,6 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { ConfigItemClass } from '../../../model/ConfigItemClass';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { ConfigItemFormFactory } from '../../core';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
@@ -26,10 +25,13 @@ import { FilterType } from '../../../../../model/FilterType';
 import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { DataType } from '../../../../../model/DataType';
+import { NewConfigItemDialogContext } from '../../core';
 
 export class Component {
 
     private state: ComponentState;
+
+    private context: NewConfigItemDialogContext;
 
     public listenerId: string;
 
@@ -41,8 +43,8 @@ export class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = await context.getWidgetConfiguration(this.state.instanceId);
+        this.context = ContextService.getInstance().getActiveContext<NewConfigItemDialogContext>();
+        this.state.widgetConfiguration = await this.context.getWidgetConfiguration(this.state.instanceId);
 
         const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria(
@@ -54,8 +56,8 @@ export class Component {
         ).catch((): ConfigItemClass[] => []);
         this.state.nodes = await this.prepareTreeNodes(ciClasses);
 
-        const formInstance = await context.getFormManager().getFormInstance();
-        const classId = context.getAdditionalInformation(ConfigItemProperty.CLASS_ID);
+        const formInstance = await this.context.getFormManager().getFormInstance();
+        const classId = this.context.getAdditionalInformation(ConfigItemProperty.CLASS_ID);
         if (classId) {
             this.activeNodeChanged(this.state.nodes.find((n) => n.id === classId));
         } else if (!formInstance && this.state.nodes?.length) {
@@ -85,7 +87,7 @@ export class Component {
 
     public async activeNodeChanged(node: TreeNode): Promise<void> {
         this.state.activeNode = node;
-        ConfigItemFormFactory.getInstance().createAndProvideForm(node.id);
+        this.context?.setClassId(node?.id);
     }
 
     public async filter(textFilterValue?: string): Promise<void> {
