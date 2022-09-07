@@ -17,6 +17,8 @@ export enum MailFilterProperty {
 
     MATCH = 'Match',
 
-    SET = 'Set'
+    SET = 'Set',
+
+    VALID_ID = 'ValidID'
 
 }
