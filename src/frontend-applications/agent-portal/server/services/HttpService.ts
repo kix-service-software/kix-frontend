@@ -195,7 +195,7 @@ export class HttpService {
         options.url = this.buildRequestUrl(resource);
         options.headers = {
             'Authorization': 'Token ' + backendToken,
-            'KIX-Request-ID': clientRequestId
+            'KIX-Request-ID': clientRequestId ? clientRequestId : ''
         };
         options.maxBodyLength = Infinity;
         options.maxContentLength = Infinity;

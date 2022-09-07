@@ -22,4 +22,9 @@ export abstract class ObjectCommitHandlerExtension<T extends KIXObject = KIXObje
         return;
     }
 
+
+    public async postCommitHandling(objectId: number | string): Promise<void> {
+        return;
+    }
+
 }
