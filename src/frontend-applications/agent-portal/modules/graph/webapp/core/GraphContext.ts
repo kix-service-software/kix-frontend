@@ -66,6 +66,7 @@ export class GraphContext extends Context {
 
     public async destroy(): Promise<void> {
         super.destroy();
+        this.removeCachedGraph();
         EventService.getInstance().unsubscribe(ApplicationEvent.CACHE_KEYS_DELETED, this.subscriber);
     }
 
@@ -163,11 +164,15 @@ export class GraphContext extends Context {
     }
 
     public setGraphOptions(graphContextOptions: GraphContextOption[]): void {
-        BrowserCacheService.getInstance().deleteKeys(KIXObjectType.GRAPH);
-        BrowserCacheService.getInstance().deleteKeys(KIXObjectType.GRAPH_INSTANCE);
+        this.removeCachedGraph();
         this.setAdditionalInformation(GraphContextOptions.GRAPH_OPTIONS, graphContextOptions);
         this.getObject(KIXObjectType.GRAPH_INSTANCE);
         ContextService.getInstance().setDocumentHistory(false, this, this, null);
+    }
+
+    private removeCachedGraph(): void {
+        BrowserCacheService.getInstance().deleteKeys(KIXObjectType.GRAPH);
+        BrowserCacheService.getInstance().deleteKeys(KIXObjectType.GRAPH_INSTANCE);
     }
 
 }

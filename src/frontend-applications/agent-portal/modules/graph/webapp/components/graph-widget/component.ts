@@ -90,6 +90,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 setTimeout(() => this.d3Graph.createGraph('#graphdiv'), 250);
             }, 50);
         }
+
     }
 
     private async setSimulationMode(): Promise<void> {
@@ -110,6 +111,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private removeD3Graph(): void {
         d3.select('#chartdiv').selectAll('svg').remove();
+        this.d3Graph.removeListener();
     }
 }
 module.exports = Component;
