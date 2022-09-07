@@ -119,7 +119,7 @@ export class WebformService {
                 const parameter = this.prepareParameter(request, form);
 
                 const token = await AuthenticationService.getInstance().login(
-                    form.userLogin, form.webformUserPassword,
+                    form.userLogin, form.webformUserPassword, null,
                     IdService.generateDateBasedId('web-form-login'), 'WebformService', false
                 ).catch((error) => null);
 

@@ -23,11 +23,13 @@ export class ObjectCommitHandler<T extends KIXObject = KIXObject> {
     public extensions: ObjectCommitHandlerExtension[] = [];
     protected kixObjectType: KIXObjectType | string = null;
 
-    public constructor(protected objectValueMapper: ObjectFormValueMapper) {
-        const extensions = ObjectFormRegistry.getInstance().getObjectCommitHandlerExtensions(this.kixObjectType);
+    public constructor(protected objectValueMapper: ObjectFormValueMapper, kixObjectType?: KIXObjectType) {
+        if (kixObjectType) {
+            const extensions = ObjectFormRegistry.getInstance().getObjectCommitHandlerExtensions(kixObjectType);
 
-        for (const mapperExtension of extensions) {
-            this.extensions.push(new mapperExtension(objectValueMapper));
+            for (const mapperExtension of extensions) {
+                this.extensions.push(new mapperExtension(objectValueMapper));
+            }
         }
     }
 
@@ -40,6 +42,9 @@ export class ObjectCommitHandler<T extends KIXObject = KIXObject> {
     public async commitObject(): Promise<number | string> {
         const newObject = await this.prepareObject(this.objectValueMapper.object as any);
         const id = await ObjectCommitSocketClient.getInstance().commitObject(newObject);
+        for (const extension of this.extensions) {
+            await extension.postCommitHandling(id);
+        }
         return id;
     }
 

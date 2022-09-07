@@ -14,11 +14,13 @@ export class UserLogin {
     public UserLogin: string;
     public Password: string;
     public UserType: UserType;
+    public NegotiateToken: string;
 
-    public constructor(userName: string, password: string, userType: UserType) {
+    public constructor(userName: string, password: string, userType: UserType, negotiateToken: string) {
         this.UserLogin = userName;
         this.Password = password;
         this.UserType = userType;
+        this.NegotiateToken = negotiateToken;
     }
 
 }

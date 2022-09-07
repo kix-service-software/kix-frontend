@@ -12,6 +12,7 @@ import { Attachment } from '../../../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { ObjectFormValueMapper } from '../../../../object-forms/model/ObjectFormValueMapper';
 import { ObjectCommitHandler } from '../../../../object-forms/webapp/core/ObjectCommitHandler';
 import { Channel } from '../../../model/Channel';
 import { Queue } from '../../../model/Queue';
@@ -19,10 +20,14 @@ import { Ticket } from '../../../model/Ticket';
 
 export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
 
+    public constructor(protected objectValueMapper: ObjectFormValueMapper) {
+        super(objectValueMapper, KIXObjectType.TICKET);
+    }
+
     public async prepareObject(ticket: Ticket, forCommit: boolean = true): Promise<Ticket> {
         const newTicket = await super.prepareObject(ticket, forCommit);
 
-        await this.prepareArticles(newTicket, forCommit);
+        await this.prepareArticles(newTicket, forCommit, ticket.QueueID);
         this.prepareTitle(newTicket);
         this.prepareTicket(newTicket);
         this.prepareSpecificAttributes(newTicket);
@@ -30,7 +35,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         return newTicket;
     }
 
-    private async prepareArticles(ticket: Ticket, forCommit: boolean): Promise<void> {
+    private async prepareArticles(ticket: Ticket, forCommit: boolean, orgTicketQueueID: number): Promise<void> {
         if (ticket.Articles?.length) {
             ticket.Articles = ticket.Articles.filter((a) => a.ChannelID);
 
@@ -64,7 +69,9 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                         article.Attachments = await this.prepareAttachments(article.Attachments);
                     }
 
-                    article.Body = await this.addQueueSignature(ticket.QueueID, article.Body, article.ChannelID);
+                    article.Body = await this.addQueueSignature(
+                        ticket.QueueID || orgTicketQueueID, article.Body, article.ChannelID
+                    );
                 } else {
                     article.Attachments = null;
                 }
