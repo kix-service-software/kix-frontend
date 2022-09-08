@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2022-08-31 10:18+0000\n"
-"Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
+"PO-Revision-Date: 2022-09-08 12:18+0000\n"
+"Last-Translator: fkrahl <Frank.Krahl@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
 "Language: de\n"
@@ -87,7 +87,7 @@ msgid "Add Column(s)"
 msgstr "Spalte(n) hinzufügen"
 
 msgid "Add email account for incoming mails"
-msgstr "E-Mail Konto für eingehende E-Mails einrichten"
+msgstr "E-Mail-Konto für eingehende E-Mails einrichten"
 
 msgid "Add initial table"
 msgstr "Tabelle hinzufügen"
@@ -102,7 +102,7 @@ msgid "add notes here"
 msgstr "Notizen hinzufügen"
 
 msgid "Address successfully removed."
-msgstr "E-Mail Adresse(n) wurde(n) erfolgreich gelöscht."
+msgstr "E-Mail-Adresse(n) wurde(n) erfolgreich gelöscht."
 
 msgid "Add Table Widget"
 msgstr "Tabellenwidget hinzufügen"
@@ -593,10 +593,10 @@ msgid "Communication"
 msgstr "Kommunikation"
 
 msgid "Communication: Email: Email Addresses"
-msgstr "Kommunikation: E-Mail: E-Mail Adressen"
+msgstr "Kommunikation: E-Mail: E-Mail-Adressen"
 
 msgid "Communication: Email: Email Filters"
-msgstr "Kommunikation: E-Mail: E-Mail Filter"
+msgstr "Kommunikation: E-Mail: E-Mail-Filter"
 
 msgid "Communication: Email: Inbox"
 msgstr "Kommunikation: E-Mail: Posteingang"
@@ -755,7 +755,7 @@ msgid "Created with User"
 msgstr "Erstellt mit dem Nutzer"
 
 msgid "Create Email Account"
-msgstr "Emailkonto Erstellen"
+msgstr "E-Mail-Konto erstellen"
 
 msgid "Create Links"
 msgstr "Verknüpfung wird angelegt"
@@ -987,7 +987,7 @@ msgid "Edit Email Address"
 msgstr "Emailadresse Bearbeiten"
 
 msgid "Edit Email Filter"
-msgstr "E-Mail Filter bearbeiten"
+msgstr "E-Mail-Filter bearbeiten"
 
 msgid "Edit FAQ"
 msgstr "FAQ bearbeiten"
@@ -1083,34 +1083,34 @@ msgid "Email"
 msgstr "E-Mail"
 
 msgid "Email Account"
-msgstr "E-Mail Konto"
+msgstr "E-Mail-Konto"
 
 msgid "Email Accounts"
-msgstr "E-Mail Konten"
+msgstr "E-Mail-Konten"
 
 msgid "Email Address"
-msgstr "E-Mail Adresse"
+msgstr "E-Mail-Adresse"
 
 msgid "Email Address Details"
 msgstr "Emailadressdetails"
 
 msgid "Email Addresses"
-msgstr "E-Mail Adressen"
+msgstr "E-Mail-Adressen"
 
 msgid "Email Filter"
-msgstr "E-Mail Filter"
+msgstr "E-Mail-Filter"
 
 msgid "Email Filter Information"
-msgstr "E-Mail Filter-Informationen"
+msgstr "E-Mail-Filter-Informationen"
 
 msgid "Email Filters"
-msgstr "E-Mail Filter"
+msgstr "E-Mail-Filter"
 
 msgid "Email Header"
-msgstr "E-Mail Header"
+msgstr "E-Mail-Header"
 
 msgid "Email Information"
-msgstr "E-Mail Informationen"
+msgstr "E-Mail-Informationen"
 
 msgid "Empty Result Hint"
 msgstr "Anzeigetext leeres Ergebnis"
@@ -3010,7 +3010,7 @@ msgid "Input"
 msgstr "Eingabe"
 
 msgid "Inserted email address is invalid"
-msgstr "Die eingegebene E-Mail Adresse ist ungültig"
+msgstr "Die eingegebene E-Mail-Adresse ist ungültig"
 
 msgid "Inserted email address must not be a system address ({0})."
 msgstr "Die eingegebene E-Mail-Adresse darf keine Systemadresse sein ({0})."
@@ -3196,7 +3196,7 @@ msgid "Mail Account Details"
 msgstr "Mailkonto Details"
 
 msgid "Mail Accounts successfully removed."
-msgstr "E-Mail Konten wurden erfolgreich gelöscht."
+msgstr "E-Mail-Konten wurden erfolgreich gelöscht."
 
 msgid "Mail Account successfully fetched."
 msgstr "E-Mail-Konto wurde erfolgreich abgerufen."
@@ -3346,7 +3346,7 @@ msgid "New Email Address"
 msgstr "Neue Emailadresse"
 
 msgid "New Email Filter"
-msgstr "Neuer E-Mail Filter"
+msgstr "Neuer E-Mail-Filter"
 
 msgid "Newest first"
 msgstr "neueste zuerst"
@@ -4058,7 +4058,7 @@ msgid "Remove Jobs"
 msgstr "Jobs Entfernen"
 
 msgid "Remove Mail Accounts"
-msgstr "E-Mail Konten löschen"
+msgstr "E-Mail-Konten löschen"
 
 msgid "Remove Notifications"
 msgstr "Benachrichtigungen löschen"
@@ -4366,10 +4366,10 @@ msgid "Send to these agents"
 msgstr "Senden an Agenten"
 
 msgid "Set Email Header"
-msgstr "E-Mail Header setzen"
+msgstr "E-Mail-Header setzen"
 
 msgid "Set Email Headers"
-msgstr "E-Mail Header setzen"
+msgstr "E-Mail-Header setzen"
 
 msgid "Set Password for admin"
 msgstr "Passwort für admin setzen"
@@ -4379,9 +4379,9 @@ msgstr "Setup Assistent"
 
 msgid "setup_assistant_add_mail_account_text"
 msgstr ""
-"Richten Sie ein E-Mail Konto ein, von dem Sie E-Mails abrufen möchten. "
-"Weitere Konten können im Admin-Bereich \"Kommunikation/E-Mail/E-Mail Konten"
-"\" hinzugefügt werden. Bitte beachten Sie, dass E-Mails unabhängig vom "
+"Richten Sie ein E-Mail-Konto ein, von dem Sie E-Mails abrufen möchten. "
+"Weitere Konten können im Admin-Bereich \"Kommunikation/E-Mail/E-Mail-Konten\""
+" hinzugefügt werden. Bitte beachten Sie, dass E-Mails unabhängig vom "
 "gewählten Kontentyp aus dem Postfach abgeholt und gelöscht werden!"
 
 msgid "setup_assistant_change_admin_password_text"
@@ -4404,7 +4404,7 @@ msgstr ""
 
 msgid "setup_assistant_sending_email_text"
 msgstr ""
-"Richten Sie den E-Mail Server ein, über den E-Mails versendet werden sollen."
+"Richten Sie den E-Mail-Server ein, über den E-Mails versendet werden sollen."
 
 msgid "setup_assistant_system_settings_text"
 msgstr ""
@@ -4424,7 +4424,7 @@ msgstr ""
 "im Abschnitt „Ersteinrichtigung“."
 
 msgid "Setup email server"
-msgstr "E-Mail Server einrichten"
+msgstr "E-Mail-Server einrichten"
 
 msgid "setupt_assistant_my-organisation_text"
 msgstr ""
