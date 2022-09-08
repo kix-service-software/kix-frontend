@@ -126,15 +126,9 @@ export class LabelService {
         }
 
         // check local cache
-
-        if (!this.displayValueCache.has(object.KIXObjectType)) {
-            this.displayValueCache.set(object.KIXObjectType, new Map());
-        }
-
-        const propertiesMap = this.displayValueCache.get(object.KIXObjectType);
-        if (!propertiesMap.has(property)) {
-            propertiesMap.set(property, new Map());
-        }
+        const cachedValueMap = this.getCachedValueMap<string>(
+            object.KIXObjectType, property
+        );
 
         const objectValue = object[property];
         // handle complex value for "cache"
@@ -146,8 +140,8 @@ export class LabelService {
         }
         // if we have already a display value for this property then return directly
         // FIXME: check against ObjectProperty or something similar if property is supported (KIX2018-6164)?
-        if (typeof objectValue !== 'undefined' && propertiesMap.get(property).has(valueString)) {
-            return propertiesMap.get(property).get(valueString);
+        if (typeof objectValue !== 'undefined' && cachedValueMap?.has(valueString)) {
+            return cachedValueMap.get(valueString);
         }
 
         const key = `${object.KIXObjectType}-${property}-`
@@ -162,6 +156,21 @@ export class LabelService {
         );
         this.requestDisplayValuePromises.set(key, requestPromise);
         return requestPromise;
+    }
+
+    private getCachedValueMap<T>(
+        kixObjectType: KIXObjectType | string, property: string,
+        cache: Map<KIXObjectType | string, Map<string, Map<any, any>>> = this.displayValueCache
+    ): Map<any, T> {
+        if (!cache.has(kixObjectType)) {
+            cache.set(kixObjectType, new Map());
+        }
+
+        const propertiesMap = cache.get(kixObjectType);
+        if (!propertiesMap.has(property)) {
+            propertiesMap.set(property, new Map());
+        }
+        return propertiesMap.get(property);
     }
 
     private createRequestDisplayValuePromise<T extends KIXObject>(
@@ -179,7 +188,10 @@ export class LabelService {
             if (!displayValue) {
                 displayValue = await labelProvider?.getDisplayText(object, property, defaultValue, translatable, short);
             }
-            this.displayValueCache.get(object.KIXObjectType).get(property).set(valueString, displayValue);
+
+            const cachedValueMap = this.getCachedValueMap<string>(object.KIXObjectType, property);
+            cachedValueMap?.set(valueString, displayValue);
+
             this.requestDisplayValuePromises.delete(key);
             resolve(displayValue);
         });
@@ -198,15 +210,9 @@ export class LabelService {
             return displayIcons;
         }
 
-        // check local cache
-        if (!this.displayIconCache.has(object.KIXObjectType)) {
-            this.displayIconCache.set(object.KIXObjectType, new Map());
-        }
-
-        const propertiesMap = this.displayIconCache.get(object.KIXObjectType);
-        if (!propertiesMap.has(property)) {
-            propertiesMap.set(property, new Map());
-        }
+        const cachedValueMap = this.getCachedValueMap<Array<ObjectIcon | string>>(
+            object.KIXObjectType, property, this.displayIconCache
+        );
 
         const objectValue = object[property];
         // handle complex value for "cache"
@@ -218,8 +224,8 @@ export class LabelService {
         }
         // if we have already a display value for this property then return directly
         // FIXME: check against ObjectProperty or something similar if property is supported (KIX2018-6164)?
-        if (typeof objectValue !== 'undefined' && propertiesMap.get(property).has(valueString)) {
-            return propertiesMap.get(property).get(valueString);
+        if (typeof objectValue !== 'undefined' && cachedValueMap?.has(valueString)) {
+            return cachedValueMap.get(valueString);
         }
 
         const key = `${object.KIXObjectType}-${property}-`
@@ -255,7 +261,12 @@ export class LabelService {
                 if (!displayIcons) {
                     displayIcons = await labelProvider.getIcons(object, property, value, forTable);
                 }
-                this.displayIconCache.get(object.KIXObjectType).get(property).set(valueString, displayIcons);
+
+                const cachedValueMap = this.getCachedValueMap<Array<ObjectIcon | string>>(
+                    object.KIXObjectType, property, this.displayIconCache
+                );
+
+                cachedValueMap?.set(valueString, displayIcons);
             }
             this.requestIconPromises.delete(key);
             resolve(displayIcons);
