@@ -97,7 +97,7 @@ export class TicketSearchDefinition extends SearchDefinition {
             criteria.push(
                 new FilterCriteria(
                     TicketProperty.STATE_TYPE, SearchOperator.IN,
-                    FilterDataType.STRING, FilterType.AND, 'Open'
+                    FilterDataType.STRING, FilterType.AND, ['Open']
                 )
             );
         }
