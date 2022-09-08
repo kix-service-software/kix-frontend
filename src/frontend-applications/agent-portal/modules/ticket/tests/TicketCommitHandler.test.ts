@@ -9,7 +9,11 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectService } from '../../base-components/webapp/core/KIXObjectService';
 import { Article } from '../model/Article';
+import { Channel } from '../model/Channel';
+import { Queue } from '../model/Queue';
 import { Ticket } from '../model/Ticket';
 import { TicketProperty } from '../model/TicketProperty';
 import { TicketObjectCommitHandler } from '../webapp/core/form/TicketObjectCommitHandler';
@@ -89,6 +93,67 @@ describe('ObjectCommitHandler', () => {
         it('Ticket should not have articles property', () => {
             expect(ticket.Articles).not.exist;
         });
+    });
+
+    describe('Add queue signature to email article', () => {
+        let ticket: Ticket;
+        let orgLoadObjectsFunction: any;
+        const signature: string = '<p>This is the signature</p>';
+        const testRegex: RegExp = new RegExp(`.*${signature}.*`);
+
+        before(async () => {
+            orgLoadObjectsFunction = KIXObjectService.loadObjects;
+            KIXObjectService.loadObjects = async <T>(objectType: KIXObjectType | string, objectIds?: Array<number | string>): Promise<T> => {
+                let objects;
+                if (objectType === KIXObjectType.CHANNEL) {
+                    const isEmail = objectIds && objectIds[0] === 2;
+                    objects = [
+                        new Channel({
+                            ID: isEmail ? 2 : 1,
+                            Name: isEmail ? "email" : 'note'
+                        } as Channel)
+                    ];
+                } else if (objectType === KIXObjectType.QUEUE) {
+                    objects = [
+                        new Queue({
+                            QueueID: 1,
+                            Name: 'Test team', Fullname: 'Test team',
+                            Signature: signature
+                        } as Queue)
+                    ];
+                }
+                return objects;
+            };
+
+            ticket = new Ticket();
+            ticket.QueueID = 1;
+
+            const emailArticle = new Article(null, ticket);
+            emailArticle.ChannelID = 2;
+            emailArticle.Body = 'test body';
+            const noteArticle = new Article(null, ticket);
+            noteArticle.ChannelID = 1;
+            noteArticle.Body = 'test body';
+            ticket.Articles = [emailArticle, noteArticle];
+
+            const commitHandler = new TicketObjectCommitHandler(null);
+            ticket = await commitHandler.prepareObject(ticket, true);
+        });
+
+        it('Ticket should have one article with a signature and one without', () => {
+            expect(ticket.Articles).exist;
+            expect(Array.isArray(ticket.Articles), 'Ticket should have some 2 articles').true;
+
+            expect(ticket.Articles[0].ChannelID).equal(2);
+            expect(Boolean(ticket.Articles[0].Body.match(testRegex)), 'First article (email) should have the signature attached').true;
+
+            expect(ticket.Articles[1].ChannelID).equal(1);
+            expect(Boolean(ticket.Articles[1].Body.match(testRegex)), 'Second article (note) should NOT have the signature attached').false;
+        });
+
+        after(() => {
+            KIXObjectService.loadObjects = orgLoadObjectsFunction;
+        })
     });
 
 });
