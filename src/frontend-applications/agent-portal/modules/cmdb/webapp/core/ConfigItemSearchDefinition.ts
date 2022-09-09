@@ -130,6 +130,9 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                     newCriteria.push(searchCriteria);
                     break;
                 case VersionProperty.NUMBER:
+                    searchCriteria.type = FilterDataType.STRING;
+                    newCriteria.push(searchCriteria);
+                break;
                 case KIXObjectProperty.CHANGE_BY:
                 case KIXObjectProperty.CREATE_BY:
                     searchCriteria.type = FilterDataType.NUMERIC;
