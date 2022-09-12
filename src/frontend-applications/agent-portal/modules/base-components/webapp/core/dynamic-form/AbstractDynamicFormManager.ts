@@ -193,7 +193,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return;
     }
 
-    public reset(notify: boolean = true): void {
+    public reset(notify: boolean = true, force: boolean = false): void {
         this.values = [];
         if (notify) {
             this.notifyListeners();

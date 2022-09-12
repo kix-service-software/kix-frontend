@@ -19,6 +19,8 @@ import { ValidationSeverity } from '../../../base-components/webapp/core/Validat
 import { ValidationResult } from '../../../base-components/webapp/core/ValidationResult';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { BulkDialogContext } from './BulkDialogContext';
 
 export abstract class BulkManager extends AbstractDynamicFormManager {
 
@@ -130,4 +132,15 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
 
         return parameter;
     }
+
+    public reset(notify?: boolean, force: boolean = false): void | boolean {
+        if (force) {
+            super.reset();
+            return;
+        }
+        if (ContextService.getInstance().hasContextInstance(BulkDialogContext.CONTEXT_ID)
+            && this.values.length > 1) return true;
+        super.reset(notify);
+    }
+
 }
