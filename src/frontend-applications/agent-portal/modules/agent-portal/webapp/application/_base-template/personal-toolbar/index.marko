@@ -7,10 +7,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<if(state.show)>
-    <div.kix-toolbar>
-        <div.toolbar-group>
-            <personal-bookmarks/>
+<div.kix-toolbar>
+    <div.toolbar-group>
+        <personal-bookmarks/>
+        <if(state.showTicketActions)>
             <div
                 title=(state.translations["Translatable#Personal Kanban Board"])
                 on-click("showKanban")
@@ -47,35 +47,33 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <else>${state.ownedTicketsCount}</else>
                 </div>
             </div>
-        </div>
-        <if(state.toolbarGroups.length)>
-            <for|group| of=state.toolbarGroups>
-                <div.toolbar-group>
-                    <for|action| of=group>
-                        <div
-                            title=action.title
-                            on-click("actionClicked", action)
-                        >
-                            <div.action-icon>
-                                <icon icon=action.icon showUnknown/>
-                            </div>
-                            <if(action.infoIcon)>
-                                <span.kix-icon-i-orange.new-icon>
-                                    <span.path1/>
-                                    <span.path2/>
-                                </span>
-                            </if>
-                            <div.action-text>
-                                <if(state.isMobile)>
-                                    ${action.title + " (" + action.count + ")"}
-                                </if>
-                                <else>${action.count}</else>
-                            </div>
-                        </div>
-                    </for>
-                </div>
-            </for>
         </if>
-        <div.toolbar-group><personal-notifications/></div>
     </div>
-</if>
+    <if(state.toolbarGroups.length && state.showTicketActions)>
+        <for|group| of=state.toolbarGroups>
+            <div.toolbar-group>
+                <for|action| of=group>
+                    <div title=action.title on-click("actionClicked", action)>
+                        <div.action-icon>
+                            <icon icon=action.icon showUnknown/>
+                        </div>
+                        <if(action.infoIcon)>
+                            <span.kix-icon-i-orange.new-icon>
+                                <span.path1/>
+                                <span.path2/>
+                            </span>
+                        </if>
+                        <div.action-text>
+                            <if(state.isMobile)>
+                                ${action.title + " (" + action.count + ")"}
+                            </if>
+                            <else>${action.count}</else>
+                        </div>
+                    </div>
+                </for>
+            </div>
+        </for>
+    </if>
+
+    <div.toolbar-group><personal-notifications/></div>
+</div>
