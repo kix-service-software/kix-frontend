@@ -62,7 +62,7 @@ class Component {
 
             // reset only on startup
             if (!bulkManager.getValues().length) {
-                bulkManager.reset(false);
+                bulkManager.reset(false, true);
             }
 
             this.state.bulkManager = bulkManager;

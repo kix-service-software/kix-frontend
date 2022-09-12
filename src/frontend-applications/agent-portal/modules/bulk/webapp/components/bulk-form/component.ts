@@ -18,7 +18,7 @@ import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
-import { BulkDialogContext } from '../../core';
+import { BulkDialogContext, BulkService } from '../../core';
 import { ValidationResult } from '../../../../base-components/webapp/core/ValidationResult';
 import { ComponentContent } from '../../../../base-components/webapp/core/ComponentContent';
 import { OverlayService } from '../../../../base-components/webapp/core/OverlayService';
@@ -32,6 +32,7 @@ import { ValueState } from '../../../../table/model/ValueState';
 import { TableFactoryService } from '../../../../table/webapp/core/factory/TableFactoryService';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { Table } from '../../../../table/model/Table';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 class Component {
 
@@ -60,7 +61,19 @@ class Component {
             this.setCanRun();
         });
 
-        this.state.linkManager = new LinkManager(this.state.bulkManager?.objectType);
+        const bulkService = BulkService.getInstance();
+
+        const linkManager = bulkService.getLinkManager(KIXObjectType.LINK);
+        if (!linkManager) {
+            this.state.linkManager = new LinkManager(this.state.bulkManager?.objectType);
+            bulkService.registerLinkManager(this.state.linkManager);
+        } else {
+            if (!linkManager.getValues().length) {
+                linkManager.reset(false, true);
+            }
+            this.state.linkManager = linkManager;
+        }
+
 
         this.state.linkManager?.registerListener('bulk-dialog--link-listener', async () => {
             this.setCanRun();
@@ -68,6 +81,7 @@ class Component {
     }
 
     public onDestroy(): void {
+        this.state.linkManager.reset();
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
@@ -80,13 +94,13 @@ class Component {
     }
 
     public async reset(): Promise<void> {
-        this.state.bulkManager?.reset();
+        this.state.bulkManager?.reset(true, true);
         const dynamicFormComponent = (this as any).getComponent(this.state.componentId);
         if (dynamicFormComponent) {
             dynamicFormComponent.updateValues();
         }
 
-        this.state.linkManager?.reset();
+        this.state.linkManager?.reset(true, true);
         const linkFormComponent = (this as any).getComponent(this.state.componentId + 'LinkManager');
         if (linkFormComponent) {
             linkFormComponent.updateValues();

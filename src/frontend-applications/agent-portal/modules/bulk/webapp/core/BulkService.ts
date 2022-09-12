@@ -10,6 +10,7 @@
 import { BulkManager } from './BulkManager';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { LinkManager } from '../../../links/webapp/core/LinkManager';
 
 export class BulkService {
 
@@ -25,6 +26,7 @@ export class BulkService {
     private constructor() { }
 
     private bulkManager: BulkManager[] = [];
+    private linkManager: LinkManager[] = [];
 
     public registerBulkManager(bulkmanager: BulkManager): void {
         this.bulkManager.push(bulkmanager);
@@ -44,6 +46,21 @@ export class BulkService {
 
     public hasBulkManager(objectType: KIXObjectType | string): boolean {
         return this.getBulkManager(objectType) !== undefined;
+    }
+
+    public registerLinkManager(linkManager: LinkManager): void {
+        this.linkManager.push(linkManager);
+    }
+
+    public getLinkManager(objectType: KIXObjectType | string): LinkManager {
+        return this.linkManager.find((lm) => lm.objectType === objectType);
+    }
+
+    public removeLinkManager(linkManager: LinkManager): void {
+        const index = this.linkManager.indexOf(linkManager);
+        if (index !== -1) {
+            this.linkManager.splice(index, 1);
+        }
     }
 
 }
