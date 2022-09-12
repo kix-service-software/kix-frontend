@@ -561,7 +561,6 @@ export class TicketAPIService extends KIXObjectAPIService {
                     FilterDataType.STRING, FilterType.OR, `${primary.value}`
                 ),
             ];
-            console.table(primarySearch);
             searchCriteria = [...searchCriteria, ...primarySearch];
         }
 
@@ -614,7 +613,7 @@ export class TicketAPIService extends KIXObjectAPIService {
             searchCriteria.push(
                 new FilterCriteria(
                     TicketProperty.STATE_TYPE, SearchOperator.IN,
-                    FilterDataType.STRING, FilterType.AND, 'Open'
+                    FilterDataType.STRING, FilterType.AND, ['Open']
                 )
             );
         }
