@@ -17,7 +17,9 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 import { SortUtil } from '../../../../model/SortUtil';
-import { ObjectReferenceUtil } from '../../../base-components/webapp/components/object-reference-input/ObjectReferenceUtil';
+import {
+    ObjectReferenceUtil
+} from '../../../base-components/webapp/components/object-reference-input/ObjectReferenceUtil';
 import { IKIXObjectService } from '../../../base-components/webapp/core/IKIXObjectService';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
@@ -295,7 +297,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         }
 
         for (const node of nodes) {
-            if (!newValue.some((v) => v === node.id)) {
+            if (!newValue.some((v) => v.toString() === node.id.toString())) {
                 newValue.push(node.id);
             }
         }
@@ -491,7 +493,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
     public removeValue(value: string | number): void {
         if (value && this.multiselect && Array.isArray(this.value)) {
-            const index = this.value.findIndex((v) => v === value);
+            const index = this.value.findIndex((v: string | number) => v.toString() === value.toString());
             if (index !== -1) {
                 this.value.splice(index, 1);
             }

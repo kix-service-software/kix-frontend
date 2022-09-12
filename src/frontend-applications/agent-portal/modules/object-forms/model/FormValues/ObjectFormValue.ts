@@ -119,7 +119,9 @@ export class ObjectFormValue<T = any> {
             const iter = this.initialState.keys();
             let key = iter.next();
             while (key?.value) {
-                this[key.value] = this.initialState.get(key.value);
+                if (this[key.value] !== this.initialState.get(key.value)) {
+                    this[key.value] = this.initialState.get(key.value);
+                }
                 key = iter.next();
             }
         }
