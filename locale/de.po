@@ -179,6 +179,9 @@ msgstr "Betroffene Services"
 msgid "after"
 msgstr "nach/größer als"
 
+msgid "After"
+msgstr ""
+
 msgid "Age"
 msgstr "Alter"
 
@@ -367,6 +370,9 @@ msgstr "Team/Queue zuordnen"
 msgid "At least {0} values must be selected"
 msgstr "Es müssen mindestens {0} Werte ausgewählt werden."
 
+msgid "At least one link could not be saved."
+msgstr ""
+
 msgid "At least one of the fields To, Cc or Bcc must contain an entry."
 msgstr ""
 "Mindestens eins der Felder 'An', 'Cc' oder 'Bcc' muss einen Eintrag "
@@ -419,6 +425,9 @@ msgstr "Bcc"
 
 msgid "before"
 msgstr "vor/kleiner als"
+
+msgid "Before"
+msgstr ""
 
 msgid "Begin of Business Day"
 msgstr "Beginn Servicezeit (\"Business Day\")"
@@ -499,6 +508,9 @@ msgstr "Checklisteneintrag"
 msgid "Checklists"
 msgstr "Checklisten"
 
+msgid "Child Tickets"
+msgstr ""
+
 msgid "Choose a command"
 msgstr "Wählen Sie ein Kommando"
 
@@ -571,6 +583,9 @@ msgstr "KNR"
 msgid "Code"
 msgstr "Code"
 
+msgid "Collapse all"
+msgstr ""
+
 msgid ": (colon)"
 msgstr ": (Doppelpunkt)"
 
@@ -615,6 +630,9 @@ msgstr "Kommunikation: Webformular"
 
 msgid "Community"
 msgstr "Community"
+
+msgid "Compact View"
+msgstr ""
 
 msgid "Compare"
 msgstr "Vergleichen"
@@ -3210,9 +3228,6 @@ msgstr "Mailfilter Details"
 msgid "Manuals"
 msgstr "Handbücher"
 
-msgid "Mark all as read"
-msgstr "als gelesen markieren"
-
 msgid "Marked all articles as read."
 msgstr "Alle Artikel als gelesen markieren."
 
@@ -3780,6 +3795,15 @@ msgstr "Wartend"
 msgid "Pending date is not in the future."
 msgstr "\"Warten bis\"-Datum liegt nicht in der Zukunft."
 
+msgid "Pending Time has invalid date!"
+msgstr ""
+
+msgid "Pending Time has to be in future!"
+msgstr ""
+
+msgid "Pending Time is required!"
+msgstr ""
+
 msgid "Pending until"
 msgstr "Warten bis"
 
@@ -3867,6 +3891,9 @@ msgstr "Ticket für den Druck vorbereiten"
 
 msgid "Preview"
 msgstr "Vorschau"
+
+msgid "Preview List"
+msgstr ""
 
 msgid "previous"
 msgstr "zurück"
@@ -3984,6 +4011,9 @@ msgstr "Bewertung"
 
 msgid "Read"
 msgstr "Lesen"
+
+msgid "Read all"
+msgstr ""
 
 msgid "Readonly"
 msgstr "Nur Lesen"
@@ -4456,9 +4486,6 @@ msgstr "Anzeige Agenteneinstellung"
 msgid "Show in Customer Portal"
 msgstr "Im Kundenportal anzeigen"
 
-msgid "Show less"
-msgstr ""
-
 msgid "Show title in form"
 msgstr "Titel im Formular anzeigen"
 
@@ -4586,6 +4613,9 @@ msgid "Street"
 msgstr "Straße"
 
 msgid "Sub"
+msgstr ""
+
+msgid "Sub Category"
 msgstr ""
 
 msgid "Subject"
@@ -5205,6 +5235,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Mark all as read"
+#~ msgstr "als gelesen markieren"
 
 #~ msgid ""
 #~ "A list of RegEx which are applied to values entered before submitting if "

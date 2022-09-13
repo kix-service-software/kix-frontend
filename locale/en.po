@@ -179,6 +179,9 @@ msgstr ""
 msgid "after"
 msgstr "after/greater than"
 
+msgid "After"
+msgstr ""
+
 msgid "Age"
 msgstr ""
 
@@ -357,6 +360,9 @@ msgstr "Assign Team / Queue"
 msgid "At least {0} values must be selected"
 msgstr ""
 
+msgid "At least one link could not be saved."
+msgstr ""
+
 msgid "At least one of the fields To, Cc or Bcc must contain an entry."
 msgstr ""
 
@@ -407,6 +413,9 @@ msgstr ""
 
 msgid "before"
 msgstr "before/less than"
+
+msgid "Before"
+msgstr ""
 
 msgid "Begin of Business Day"
 msgstr ""
@@ -486,6 +495,9 @@ msgstr ""
 msgid "Checklists"
 msgstr ""
 
+msgid "Child Tickets"
+msgstr ""
+
 msgid "Choose a command"
 msgstr ""
 
@@ -558,6 +570,9 @@ msgstr ""
 msgid "Code"
 msgstr ""
 
+msgid "Collapse all"
+msgstr ""
+
 msgid ": (colon)"
 msgstr ""
 
@@ -601,6 +616,9 @@ msgid "Communication: Webform"
 msgstr ""
 
 msgid "Community"
+msgstr ""
+
+msgid "Compact View"
 msgstr ""
 
 msgid "Compare"
@@ -3023,9 +3041,6 @@ msgstr ""
 msgid "Manuals"
 msgstr ""
 
-msgid "Mark all as read"
-msgstr ""
-
 msgid "Marked all articles as read."
 msgstr ""
 
@@ -3593,6 +3608,15 @@ msgstr ""
 msgid "Pending date is not in the future."
 msgstr ""
 
+msgid "Pending Time has invalid date!"
+msgstr ""
+
+msgid "Pending Time has to be in future!"
+msgstr ""
+
+msgid "Pending Time is required!"
+msgstr ""
+
 msgid "Pending until"
 msgstr ""
 
@@ -3678,6 +3702,9 @@ msgid "Prepare Ticket for print"
 msgstr ""
 
 msgid "Preview"
+msgstr ""
+
+msgid "Preview List"
 msgstr ""
 
 msgid "previous"
@@ -3792,6 +3819,9 @@ msgid "Rating"
 msgstr ""
 
 msgid "Read"
+msgstr ""
+
+msgid "Read all"
 msgstr ""
 
 msgid "Readonly"
@@ -4261,9 +4291,6 @@ msgstr ""
 msgid "Show in Customer Portal"
 msgstr "Show in Customer Portal"
 
-msgid "Show less"
-msgstr ""
-
 msgid "Show title in form"
 msgstr ""
 
@@ -4391,6 +4418,9 @@ msgid "Street"
 msgstr ""
 
 msgid "Sub"
+msgstr ""
+
+msgid "Sub Category"
 msgstr ""
 
 msgid "Subject"
