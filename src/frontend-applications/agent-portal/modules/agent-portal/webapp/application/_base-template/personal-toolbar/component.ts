@@ -33,22 +33,23 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        this.subscriber = {
+            eventSubscriberId: 'personal-toolbar-subscriber',
+            eventPublished: (): void => {
+                this.initTicketActions();
+            }
+        };
+
         const permissions = [new UIComponentPermission('tickets', [CRUD.READ])];
         if (await AuthenticationSocketClient.getInstance().checkPermissions(permissions)) {
-            this.state.show = true;
-            this.initActions();
-
-            this.subscriber = {
-                eventSubscriberId: 'personal-toolbar-subscriber',
-                eventPublished: (): void => {
-                    this.initActions();
-                }
-            };
+            this.state.showTicketActions = true;
+            this.initTicketActions();
 
             EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
             EventService.getInstance().subscribe(ApplicationEvent.OBJECT_CREATED, this.subscriber);
-            EventService.getInstance().subscribe(ApplicationEvent.REFRESH_TOOLBAR, this.subscriber);
         }
+
+        EventService.getInstance().subscribe(ApplicationEvent.REFRESH_TOOLBAR, this.subscriber);
 
         window.addEventListener('resize', this.resizeHandling.bind(this), false);
         this.resizeHandling();
@@ -68,7 +69,7 @@ class Component {
         this.state.isMobile = Boolean(window.innerWidth <= KIXStyle.MOBILE_BREAKPOINT);
     }
 
-    private async initActions(): Promise<void> {
+    private async initTicketActions(): Promise<void> {
         const user = await AgentService.getInstance().getCurrentUser();
         this.state.ownedTicketsCount = user.Tickets.Owned.length;
 

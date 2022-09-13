@@ -24,19 +24,21 @@ import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { TicketService } from '.';
-import { BulkManager } from '../../../bulk/webapp/core';
+import { BulkDialogContext, BulkManager } from '../../../bulk/webapp/core';
 import { UserProperty } from '../../../user/model/UserProperty';
 import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
 import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
 import { ValidationResult } from '../../../base-components/webapp/core/ValidationResult';
 import { ValidationSeverity } from '../../../base-components/webapp/core/ValidationSeverity';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
 
 export class TicketBulkManager extends BulkManager {
 
     public objectType: KIXObjectType = KIXObjectType.TICKET;
 
-    public reset(notify?: boolean): void {
-        super.reset(notify);
+    public reset(notify?: boolean, force: boolean = false): void {
+        const skipAddingEmptyValues = super.reset(notify, force);
+        if (skipAddingEmptyValues) return;
         this.values.push(new ObjectPropertyValue(TicketProperty.QUEUE_ID, PropertyOperator.CHANGE, null));
         this.values.push(new ObjectPropertyValue(TicketProperty.TYPE_ID, PropertyOperator.CHANGE, null));
         if (notify || typeof notify === 'undefined') {

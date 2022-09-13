@@ -1,0 +1,20 @@
+{
+    "name": "kix-module-plugin",
+    "extensions": {
+        "kix:services": {
+            "plugins-service": {
+                "module": "service.extension"
+            }
+        },
+        "kix:modules": {
+            "plugins-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:admin-module": {
+            "plugins-admin-module": {
+                "module": "admin-module.extension"
+            }
+        }
+    }
+}
