@@ -1,0 +1,49 @@
+/**
+ * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+.markdown-view {
+    background-color: white;
+    padding: 10px;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        margin: 2.5rem auto 0.5rem auto;
+        font-size: 1.6rem;
+        font-weight: bold;
+    }
+
+    p {
+        margin-top: 1.5rem;
+    }
+
+    ul,
+    ol {
+        display: block;
+        list-style: disc outside none;
+        margin: 1em 0;
+        padding: 0 0 0 30px;
+    }
+
+    ol {
+        list-style-type: decimal;
+    }
+
+    li {
+        display: list-item;
+
+        >ul {
+            margin: 0.2rem 0;
+        }
+    }
+
+}

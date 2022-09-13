@@ -70,6 +70,7 @@
         "lasso-minify": "^1.0.4",
         "lasso-minify-css": "^1.1.4",
         "leaflet.markercluster": "^1.5.1",
+        "marked": "^4.0.19",
         "marko": "^5.17.5",
         "marko-loader": "^1.5.0",
         "md5": "^2.3.0",

@@ -27,6 +27,7 @@ export class Component implements IImageDialogListener {
         this.state = new ComponentState();
     }
 
+
     public async onMount(): Promise<void> {
         EventService.getInstance().subscribe(ImageViewerEvent.OPEN_VIEWER, {
             eventSubscriberId: 'image-viewer',

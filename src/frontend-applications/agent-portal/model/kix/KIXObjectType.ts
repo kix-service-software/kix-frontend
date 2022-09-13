@@ -125,6 +125,12 @@ export enum KIXObjectType {
 
     QUEUE = 'Queue',
 
+    PLUGIN = 'Plugin',
+
+    PLUGIN_ACTION = 'PluginAction',
+
+    PLUGIN_README = 'PluginReadme',
+
     REPORT = 'Report',
 
     REPORT_DEFINITION = 'ReportDefinition',
