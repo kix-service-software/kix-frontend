@@ -314,6 +314,7 @@ class EditorComponent {
     private instanceExists(): boolean {
         return Boolean(CKEDITOR?.instances && CKEDITOR.instances[this.state.id]);
     }
+
 }
 
 module.exports = EditorComponent;

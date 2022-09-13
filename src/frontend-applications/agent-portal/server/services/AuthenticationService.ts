@@ -176,9 +176,10 @@ export class AuthenticationService {
     }
 
     public async login(
-        user: string, password: string, clientRequestId: string, remoteAddress: string, fakeLogin?: boolean
+        user: string, password: string, negotiateToken: string, clientRequestId: string,
+        remoteAddress: string, fakeLogin?: boolean
     ): Promise<string> {
-        const userLogin = new UserLogin(user, password, UserType.AGENT);
+        const userLogin = new UserLogin(user, password, UserType.AGENT, negotiateToken);
         const response = await HttpService.getInstance().post<LoginResponse>(
             'auth', userLogin, null, clientRequestId, undefined, false
         );

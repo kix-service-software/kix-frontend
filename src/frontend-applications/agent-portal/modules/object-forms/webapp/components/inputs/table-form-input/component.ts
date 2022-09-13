@@ -42,7 +42,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.bindingIds.push(
             this.formValue.addPropertyBinding(FormValueProperty.VALUE, (formValue: ObjectFormValue) => {
-                this.state.value = formValue.value;
+                this.state.value = this.createNewTable(formValue.value);
             })
         );
 
@@ -50,7 +50,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.state.value = this.formValue?.value;
+        if (this.formValue) {
+            this.state.value = this.createNewTable(this.formValue.value);
+        }
 
         this.state.columns = this.formValue?.columns;
 
@@ -62,6 +64,21 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.hasAction = this.formValue.minRowCount !== this.formValue.maxRowCount;
 
         this.state.prepared = true;
+    }
+
+    // create new, to not use ref, else "isNotSame" check will fail in ObjectFormValue (setFormValue)
+    private createNewTable(value): Array<Array<any>> {
+        const newTable = [];
+        if (Array.isArray(value)) {
+            value.forEach((r) => {
+                if (Array.isArray(r)) {
+                    const newRow = [];
+                    r.forEach((c) => newRow.push(c));
+                    newTable.push(newRow);
+                }
+            });
+        }
+        return newTable;
     }
 
     public async onDestroy(): Promise<void> {

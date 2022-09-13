@@ -17,6 +17,7 @@ export class HelpWidgetConfiguration implements IConfiguration {
         public name: string,
         public type: string | ConfigurationType,
         public helpText: string,
-        public links: Array<[string, string]>
+        public links: Array<[string, string]>,
+        public valid: boolean = true,
     ) { }
 }

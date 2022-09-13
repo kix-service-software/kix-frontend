@@ -115,10 +115,12 @@ export class ContextNamespace extends SocketNameSpace {
                     )
                 ], null, 0);
 
-                const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+                let options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
                     serverConfig.BACKEND_API_TOKEN, 'ContextConfiguration', KIXObjectType.SYS_CONFIG_OPTION, null,
                     loadingOptions, null
                 ).catch((): SysConfigOption[] => []);
+
+                options = options.filter((o) => o.ValidID === null || o.ValidID === undefined || o.ValidID === 1);
 
                 const contextOptions = options.filter((c) => c.ContextMetadata === 'Context');
 
@@ -128,16 +130,18 @@ export class ContextNamespace extends SocketNameSpace {
                 for (const contextOption of contextOptions) {
 
                     if (contextOption.Value) {
-                        const newConfig = await ContextConfigurationResolver.getInstance().resolve(
-                            serverConfig.BACKEND_API_TOKEN,
-                            JSON.parse(contextOption.Value) as ContextConfiguration,
-                            options
-                        );
-
-                        if (CacheService.getInstance().hasCacheBackend()) {
-                            await CacheService.getInstance().set(newConfig.contextId, newConfig, 'ContextConfiguration');
-                        } else {
-                            this.configCache.set(newConfig.contextId, newConfig);
+                        const contextConfig = JSON.parse(contextOption.Value) as ContextConfiguration;
+                        if (contextConfig.valid) {
+                            const newConfig = await ContextConfigurationResolver.getInstance().resolve(
+                                serverConfig.BACKEND_API_TOKEN,
+                                contextConfig,
+                                options
+                            );
+                            if (CacheService.getInstance().hasCacheBackend()) {
+                                await CacheService.getInstance().set(newConfig.contextId, newConfig, 'ContextConfiguration');
+                            } else {
+                                this.configCache.set(newConfig.contextId, newConfig);
+                            }
                         }
                     }
                 }

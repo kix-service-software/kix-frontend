@@ -27,6 +27,7 @@ import { FilterDataType } from '../../../model/FilterDataType';
 import { FilterType } from '../../../model/FilterType';
 import { SearchProperty } from '../../search/model/SearchProperty';
 import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
+import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 
 
 export class FAQService extends KIXObjectAPIService {
@@ -166,7 +167,7 @@ export class FAQService extends KIXObjectAPIService {
     private async createFAQArticle(
         token: string, clientRequestId: string, parameter: Array<[string, any]>
     ): Promise<number> {
-        const createParameter = parameter.filter((p) => p[0] !== FAQArticleProperty.LINK);
+        const createParameter = parameter.filter((p) => p[0] !== KIXObjectProperty.LINKS);
 
         const id = await super.executeUpdateOrCreateRequest(
             token, clientRequestId, createParameter, this.RESOURCE_URI, this.objectType, 'FAQArticleID', true
@@ -176,7 +177,7 @@ export class FAQService extends KIXObjectAPIService {
         });
 
         await this.createLinks(
-            token, clientRequestId, id, this.getParameterValue(parameter, FAQArticleProperty.LINK)
+            token, clientRequestId, id, this.getParameterValue(parameter, KIXObjectProperty.LINKS)
         );
 
         return id;
@@ -186,7 +187,7 @@ export class FAQService extends KIXObjectAPIService {
         token: string, clientRequestId: string, parameter: Array<[string, any]>, objectId: number
     ): Promise<number> {
         const updateParameter = parameter.filter(
-            (p) => p[0] !== FAQArticleProperty.LINK && p[0] !== FAQArticleProperty.ATTACHMENTS
+            (p) => p[0] !== KIXObjectProperty.LINKS && p[0] !== FAQArticleProperty.ATTACHMENTS
         );
 
         const uri = this.buildUri(this.RESOURCE_URI, objectId);

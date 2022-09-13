@@ -91,6 +91,7 @@ export class CMDBContext extends Context {
     public async setCIClass(classId: number, history: boolean = true): Promise<void> {
         if (!this.classId || this.classId !== classId) {
             this.classId = classId;
+            this.setAdditionalInformation(ConfigItemProperty.CLASS_ID, classId);
             this.loadConfigItems();
 
             EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
@@ -191,13 +192,14 @@ export class CMDBContext extends Context {
 
     public async addStorableAdditionalInformation(contextPreference: ContextPreference): Promise<void> {
         super.addStorableAdditionalInformation(contextPreference);
-        contextPreference['CLASS_ID'] = this.classId;
+        contextPreference['CLASS_ID'] = this.getAdditionalInformation(ConfigItemProperty.CLASS_ID);
         contextPreference['FILTER_VALUE'] = this.filterValue;
     }
 
     public async loadAdditionalInformation(contextPreference: ContextPreference): Promise<void> {
         super.loadAdditionalInformation(contextPreference);
         this.classId = contextPreference['CLASS_ID'];
+        this.setAdditionalInformation(ConfigItemProperty.CLASS_ID, this.classId);
         this.filterValue = contextPreference['FILTER_VALUE'];
     }
 

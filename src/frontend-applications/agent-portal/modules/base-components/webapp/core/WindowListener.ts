@@ -34,7 +34,7 @@ export class WindowListener {
     public logout(): void {
         this.removeBrowserListener();
         window.onbeforeunload = (): void => null;
-        window.location.replace('/auth');
+        window.location.replace('/auth/logout');
     }
 
 }

@@ -10,12 +10,9 @@
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
-import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
-import { SysConfigOption } from '../../../../sysconfig/model/SysConfigOption';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { SysConfigKey } from '../../../../sysconfig/model/SysConfigKey';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { TimeoutTimer } from '../../../../base-components/webapp/core/TimeoutTimer';
+import { TicketService } from '../../core';
 
 class Component extends FormInputComponent<Date, ComponentState> {
 
@@ -43,17 +40,7 @@ class Component extends FormInputComponent<Date, ComponentState> {
         if (value.value) {
             date = new Date(value.value);
         } else {
-            let offset = 86400;
-
-            const offsetConfig = await KIXObjectService.loadObjects<SysConfigOption>(
-                KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_FRONTEND_PENDING_DIFF_TIME], null, null, true
-            ).catch((error): SysConfigOption[] => []);
-
-            if (Array.isArray(offsetConfig) && offsetConfig[0].Value) {
-                offset = offsetConfig[0].Value;
-            }
-
-            date.setSeconds(date.getSeconds() + Number(offset));
+            date = await TicketService.getPendingDateDiff();
         }
 
         this.state.selectedDate = DateTimeUtil.getKIXDateString(date);

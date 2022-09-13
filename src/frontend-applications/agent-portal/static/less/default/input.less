@@ -92,7 +92,9 @@ textarea.input-style {
         border-bottom-left-radius: @border-radius;
         border-bottom-right-radius: @border-radius;
         display: grid;
-        min-width: @button-min-width + 2rem;
+        min-width: 100%;
+        max-width: 50rem;
+        width: max-content;
 
         >input {
             margin-bottom: @margin-small;

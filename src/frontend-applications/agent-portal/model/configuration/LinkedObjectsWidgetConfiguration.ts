@@ -17,7 +17,8 @@ export class LinkedObjectsWidgetConfiguration implements IConfiguration {
         public id: string,
         public name: string,
         public type: string | ConfigurationType,
-        public linkedObjectTypes: Array<[string, KIXObjectType]>
+        public linkedObjectTypes: Array<[string, KIXObjectType]>,
+        public valid: boolean = true,
     ) { }
 
 }

@@ -16,17 +16,22 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
       <div.communication-container>
          <div.communication-header>
             <message-filter/>
-            <div.read-action class={active:state.activeUnreadAction} on-click("readAll")>
-               <span.fas.fa-book-open/>
-               <translation-string pattern="Translatable#Mark all as read"/>
+            <div.icons-wrapper>
+               <i.fas.fa-check-double title=state.translations["Translatable#Read all"] class={active:state.activeUnreadAction} on-click("readAll")></i>
+               <i.fas.fa-angle-double-up title=state.translations["Translatable#Collapse all"] on-click("collapseAll")></i>
+               <i.fas.fa-comment title=state.translations["Translatable#Preview List"] class={'selected':!state.selectedCompactView} on-click("selectNormalDisplay")></i>
+               <i.fas.fa-list-ul title=state.translations["Translatable#Compact View"] class={'selected':state.selectedCompactView} on-click("selectListDisplay")></i>
             </div>
          </div>
          <div.communication-list>
             <if(state.articles)>
-               <for|article| of=state.articles>
+               <for|article, index| of=state.articles>
                   <message-content
                      article=article
                      articleCountNumber=article.countNumber
+                     selectedCompactView=state.selectedCompactView
+                     collapseAll=state.collapseAll
+                     expanded=index===0?true:false
                      key="article-" + article.ArticleID
                   />
                </for>

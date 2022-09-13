@@ -20,7 +20,8 @@ export class FormPageConfiguration implements IConfiguration {
         public singleFormGroupOpen: boolean = false,
         public showSingleGroup: boolean = false,
         public groups: FormGroupConfiguration[] = [],
-        public type: ConfigurationType = ConfigurationType.FormPage
+        public type: ConfigurationType = ConfigurationType.FormPage,
+        public valid: boolean = true,
     ) { }
 
 }

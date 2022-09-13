@@ -35,6 +35,8 @@ import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyVa
 import { ValidationSeverity } from '../ValidationSeverity';
 import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
 import { DynamicFieldFormUtil } from '../DynamicFieldFormUtil';
+import { ContextService } from '../ContextService';
+import { ContextMode } from '../../../../../model/ContextMode';
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 
@@ -147,7 +149,12 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
                         df.FieldType === DynamicFieldTypes.TICKET_REFERENCE
                         && !await this.checkReadPermissions('/tickets')
                     ) { continue; }
-                    const label = await TranslationService.translate(df.Label);
+                    let label = await TranslationService.translate(df.Label);
+                    const context = ContextService.getInstance().getActiveContext();
+                    if (context?.descriptor.contextMode === ContextMode.CREATE_ADMIN ||
+                        context?.descriptor.contextMode === ContextMode.EDIT_ADMIN) {
+                        label = `${df.Name} (${label})`;
+                    }
                     properties.push([`${KIXObjectProperty.DYNAMIC_FIELDS}.${df.Name}`, label]);
                 }
             }
@@ -186,7 +193,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return;
     }
 
-    public reset(notify: boolean = true): void {
+    public reset(notify: boolean = true, force: boolean = false): void {
         this.values = [];
         if (notify) {
             this.notifyListeners();

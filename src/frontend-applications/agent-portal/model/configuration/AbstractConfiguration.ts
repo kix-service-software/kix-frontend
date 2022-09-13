@@ -18,7 +18,8 @@ export abstract class AbstractConfiguration implements IConfiguration {
         public name: string = id,
         public type: string = null,
         public subConfigurationDefinition?: ConfigurationDefinition,
-        public configuration?: IConfiguration
+        public configuration?: IConfiguration,
+        public valid: boolean = true,
     ) { }
 
 }

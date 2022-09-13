@@ -511,6 +511,17 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     ): Promise<TreeNode[]> {
         const nodes: TreeNode[] = [];
         if (objects && !!objects.length) {
+
+            objects = objects.filter((o) => {
+                const valid = showInvalid || typeof o.ValidID === 'undefined' || o.ValidID === 1;
+                let match = true;
+                if (Array.isArray(filterIds) && filterIds.length) {
+                    match = !filterIds.some((id) => id?.toString() === o.ObjectId?.toString());
+                }
+
+                return valid && match;
+            });
+
             for (const o of objects) {
                 const label = await LabelService.getInstance().getObjectText(o, null, null, translatable);
                 const icon = LabelService.getInstance().getObjectIcon(o);

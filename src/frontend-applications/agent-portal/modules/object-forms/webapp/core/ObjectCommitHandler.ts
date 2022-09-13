@@ -23,11 +23,13 @@ export class ObjectCommitHandler<T extends KIXObject = KIXObject> {
     public extensions: ObjectCommitHandlerExtension[] = [];
     protected kixObjectType: KIXObjectType | string = null;
 
-    public constructor(protected objectValueMapper: ObjectFormValueMapper) {
-        const extensions = ObjectFormRegistry.getInstance().getObjectCommitHandlerExtensions(this.kixObjectType);
+    public constructor(protected objectValueMapper: ObjectFormValueMapper, kixObjectType?: KIXObjectType) {
+        if (kixObjectType) {
+            const extensions = ObjectFormRegistry.getInstance().getObjectCommitHandlerExtensions(kixObjectType);
 
-        for (const mapperExtension of extensions) {
-            this.extensions.push(new mapperExtension(objectValueMapper));
+            for (const mapperExtension of extensions) {
+                this.extensions.push(new mapperExtension(objectValueMapper));
+            }
         }
     }
 
@@ -40,6 +42,9 @@ export class ObjectCommitHandler<T extends KIXObject = KIXObject> {
     public async commitObject(): Promise<number | string> {
         const newObject = await this.prepareObject(this.objectValueMapper.object as any);
         const id = await ObjectCommitSocketClient.getInstance().commitObject(newObject);
+        for (const extension of this.extensions) {
+            await extension.postCommitHandling(id);
+        }
         return id;
     }
 
@@ -67,15 +72,33 @@ export class ObjectCommitHandler<T extends KIXObject = KIXObject> {
         return newObject;
     }
 
-    protected cloneObject(object: T): T {
+    protected cloneObject(object: T, level: number = 0): T {
+        level++;
+
+        if (level === 3 || object === null || typeof object === 'undefined') {
+            return object;
+        }
+
         // create new object (do not change original)
         const newObject: T = {} as T;
         for (const key of Object.getOwnPropertyNames(object)) {
-            if (typeof object[key] !== 'undefined') {
-                if (Array.isArray(object[key])) {
-                    newObject[key] = [...object[key]];
+            const objectValue = object[key];
+
+            if (typeof objectValue !== 'undefined') {
+                if (Array.isArray(objectValue)) {
+                    const newArray = [];
+                    for (const arrVal of objectValue) {
+                        let newVal = arrVal;
+                        if (typeof arrVal === 'object') {
+                            newVal = this.cloneObject(arrVal, level);
+                        }
+                        newArray.push(newVal);
+                    }
+                    newObject[key] = newArray;
+                } else if (typeof objectValue === 'object') {
+                    newObject[key] = this.cloneObject(objectValue, level);
                 } else {
-                    newObject[key] = object[key];
+                    newObject[key] = objectValue;
                 }
             }
         }

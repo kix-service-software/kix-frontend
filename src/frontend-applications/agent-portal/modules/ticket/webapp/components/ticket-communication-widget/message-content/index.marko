@@ -7,7 +7,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.message-content-container class={unread: state.article && state.article.isUnread()}>
+<div.message-content-container class={
+      unread: state.article && state.article.isUnread(),
+      'compact-view-message-content-container': state.selectedCompactView
+   }>
    <if(state.show && state.article)>
       <div.left-avatar>
          <if(state.isExternal)>
@@ -20,59 +23,69 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <div.speech-bubble style=`background-color: ${state.backgroundColor};`></div>
          </if>
       </div>
-      <div.message style=`background-color: ${state.backgroundColor};`>
-         <div.header>
+      <div.message style=`background-color: ${state.backgroundColor};` on-click("toggleArticleCompactView")>
+         <div.header class={'list-view': state.selectedCompactView && !state.compactViewExpanded}>
             <message-header
                 article=state.article
                 articleCountNumber=input.articleCountNumber
                 fromDisplayName=state.fromDisplayName
             />
          </div>
-         <if(state.expanded)>
-            <div.receiver-list>
-               <if(state.articleTo)>
-                  <div.receiver><span.title><translation-string pattern="Translatable#To"/>:</span><span>${state.articleTo}</span></div>
-               </if>
-               <if(state.articleCc)>
-                  <div.receiver><span.title><translation-string pattern="Translatable#Cc"/>:</span><span>${state.articleCc}</span></div>
-               </if>
-            </div>
-            <div.message-body>
-               <div.show-message.hide-top on-click("toggleArticle")>
-                  <translation-string pattern="Translatable#Hide Message"/>
+         <if(!state.selectedCompactView || state.compactViewExpanded)>
+            <if(state.expanded)>
+               <div.receiver-list>
+                  <if(state.articleTo)>
+                     <div.receiver><span.title><translation-string pattern="Translatable#To"/>:</span><span>${state.articleTo}</span></div>
+                  </if>
+                  <if(state.articleCc)>
+                     <div.receiver><span.title><translation-string pattern="Translatable#Cc"/>:</span><span>${state.articleCc}</span></div>
+                  </if>
                </div>
-               <ticket-article-content article=state.article/>
-               <div.show-message on-click("toggleArticle")>
-                  <translation-string pattern="Translatable#Hide Message"/>
+               <div.message-body>
+                  <div.show-message.hide-top on-click("toggleArticleListView")>
+                     <translation-string pattern="Translatable#Hide Message"/>
+                  </div>
+                  <ticket-article-content article=state.article/>
+                  <div.show-message on-click("toggleArticleListView")>
+                     <translation-string pattern="Translatable#Hide Message"/>
+                  </div>
+               </div>
+            </if>
+            <else>
+               <div.message-body-short>
+                  <div.short-message>${state.shortMessage}</div>
+                  <div.show-message on-click("toggleArticleListView")>
+                     <translation-string pattern="Translatable#Show all"/>
+                  </div>
+               </div>
+            </else>
+            <div.message-footer>
+               <div.attachments-control>
+                  <div.attachments-list>
+                     <if(Array.isArray(state.articleAttachments))>
+                        <for|attachment| of=state.articleAttachments>
+                           <ticket-article-attachment
+                              article=state.article
+                              attachment=attachment
+                              images=state.images
+                           />
+                        </for>
+                     </if>
+                  </div>
+                  <if(state.hasInlineAttachments)>
+                     <a.attachmentsToggle on-click("toggleAttachments")>
+                        <translation-string
+                           pattern=`Translatable#${state.showAllAttachments ? 'Hide inline attachments' : 'Show all attachments'}`/>
+                     </a>
+                  </if>
+               </div>
+               <div.actions-list style=`background-color: ${state.backgroundColor};`>
+                  <if(state.actions && state.actions.length)>
+                     <action-list list=state.actions/>
+                  </if>
                </div>
             </div>
          </if>
-         <else>
-            <div.message-body-short>
-               <div.short-message>${state.shortMessage}</div>
-               <div.show-message on-click("toggleArticle")>
-                  <translation-string pattern="Translatable#Show all"/>
-               </div>
-            </div>
-         </else>
-         <div.message-footer>
-            <div.attachments-list>
-               <if(Array.isArray(state.articleAttachments))>
-                  <for|attachment| of=state.articleAttachments>
-                     <ticket-article-attachment
-                        article=state.article
-                        attachment=attachment
-                        images=state.images
-                     />
-                  </for>
-               </if>
-            </div>
-            <div.actions-list style=`background-color: ${state.backgroundColor};`>
-               <if(state.actions && state.actions.length)>
-                  <action-list list=state.actions/>
-               </if>
-            </div>
-         </div>
       </div>
       <div.right-avatar>
          <if(!state.isExternal)>

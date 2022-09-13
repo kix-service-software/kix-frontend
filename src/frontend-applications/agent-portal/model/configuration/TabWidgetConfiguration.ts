@@ -16,7 +16,8 @@ export class TabWidgetConfiguration implements IConfiguration {
         public id: string,
         public name: string,
         public type: string | ConfigurationType,
-        public widgets: string[] = []
+        public widgets: string[] = [],
+        public valid: boolean = true,
     ) { }
 
 }

@@ -27,6 +27,7 @@ import { TicketService } from '../../core';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
+    private readonly displayView = 'selectedListView';
     private context: Context;
     private sortOrder: string;
 
@@ -61,15 +62,17 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         });
 
         const user = await AgentService.getInstance().getCurrentUser();
-        const preference = user?.Preferences ? user.Preferences.find(
+        const article_preference = user?.Preferences ? user.Preferences.find(
             (p) => p.ID === PersonalSettingsProperty.ARTICLE_SORT_ORDER
         ) : null;
-        this.sortOrder = preference?.Value;
-
-        this.state.translations = await TranslationService.createTranslationObject(['Translatable#Go to top']);
-
-        // enable read action if necessary
-        this.enableReadAction();
+        this.sortOrder = article_preference?.Value;
+        const list_view_preference = user?.Preferences ? user.Preferences.find(
+            (p) => p.ID === PersonalSettingsProperty.MESSAGE_COMPACT_VIEW
+        ) : null;
+        this.state.selectedCompactView = list_view_preference?.Value === 'Compact';
+        this.state.translations = await TranslationService.createTranslationObject(
+            ['Translatable#Go to top', 'Translatable#Read all', 'Translatable#Collapse all',
+                'Translatable#Preview List', 'Translatable#Compact View']);
     }
 
     private async setArticles(): Promise<void> {
@@ -78,6 +81,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async enableReadAction(): Promise<void> {
+        // enable read action
         const allArticles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || [];
         if (allArticles.length) {
             this.state.activeUnreadAction = allArticles.some((a) => a.isUnread());
@@ -97,9 +101,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         allArticles.forEach((a, index) => {
             a['countNumber'] = sortOrder === SortOrder.UP ? index + 1 : allArticles.length - index;
-        });
+        }
+        );
 
         this.state.articles = allArticles.filter((a) => filteredArticles.find((fa) => a.ArticleID === fa.ArticleID));
+
+        this.enableReadAction();
 
         // change widget title
         const articleLengthText = (filteredArticles?.length < allArticles?.length ? filteredArticles.length +
@@ -131,6 +138,21 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 BrowserUtil.openSuccessOverlay('Translatable#Marked all articles as read.');
             }, 50);
         }
+    }
+
+    public selectNormalDisplay(): void {
+        AgentService.getInstance().setPreferences([[PersonalSettingsProperty.MESSAGE_COMPACT_VIEW, 'List']]);
+        this.state.selectedCompactView = false;
+    }
+
+    public selectListDisplay(): void {
+        AgentService.getInstance().setPreferences([[PersonalSettingsProperty.MESSAGE_COMPACT_VIEW, 'Compact']]);
+        this.state.selectedCompactView = true;
+    }
+
+    public collapseAll(): void {
+        this.state.collapseAll = true;
+        (this as any).setStateDirty('collapseAll');
     }
 }
 

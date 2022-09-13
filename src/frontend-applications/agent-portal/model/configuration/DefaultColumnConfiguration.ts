@@ -32,7 +32,8 @@ export class DefaultColumnConfiguration implements IColumnConfiguration {
         public defaultText: string = null,
         public translatable: boolean = true,
         public titleTranslatable: boolean = true,
-        public useObjectServiceForFilter: boolean = false
+        public useObjectServiceForFilter: boolean = false,
+        public valid: boolean = true,
     ) {
     }
 }

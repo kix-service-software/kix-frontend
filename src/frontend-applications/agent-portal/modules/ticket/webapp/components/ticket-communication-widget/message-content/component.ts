@@ -48,6 +48,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         this.article = input.article;
+        this.state.selectedCompactView = input.selectedCompactView;
+        this.state.expanded = input.collapseAll ? false : input.expanded || this.state.expanded;
+        if (this.state.expanded) {
+            this.setArticleSeen(undefined, true);
+        }
+        this.state.compactViewExpanded = this.state.selectedCompactView ? this.state.expanded : false;
 
         // on update, some article was already loaded
         if (this.state.article && this.state.article.ArticleID !== this.article.ArticleID) {
@@ -252,10 +258,24 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private prepareAttachments(): void {
+        this.filterAttachments();
+        this.hasInlineAttachments();
+        this.prepareImages(this.state.articleAttachments);
+    }
+
+    private hasInlineAttachments(): void {
+        this.state.hasInlineAttachments =
+            (this.state.article?.Attachments || []).some((a) => a.Disposition === 'inline' && a.ContentID);
+    }
+
+    private filterAttachments(): void {
         const attachments = (this.state.article?.Attachments || []).filter(
-            (a) => !a.Filename.match(/^file-(1|2)$/)
+            (a) => !a.Filename.match(/^file-(1|2)$/) &&
+                this.state.showAllAttachments ? true : a.Disposition !== 'inline'
         );
         attachments.sort((a, b) => {
+            if (!this.state.showAllAttachments) return SortUtil.compareString(a.Filename, b.Filename);
+
             let result = -1;
             if (a.Disposition === b.Disposition) {
                 result = SortUtil.compareString(a.Filename, b.Filename);
@@ -264,7 +284,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             }
             return result;
         });
-        this.prepareImages(attachments);
         this.state.articleAttachments = attachments;
     }
 
@@ -292,8 +311,20 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.images = (await Promise.all(attachmentPromises)).filter((i) => i);
     }
 
-    public toggleArticle(): void {
+    public toggleArticleListView(event: any): void {
+        event.stopPropagation();
+        event.preventDefault();
         this.state.expanded = !this.state.expanded;
+        if (this.state.expanded) {
+            this.setArticleSeen(undefined, true);
+        }
+    }
+
+    public toggleArticleCompactView(): void {
+        if (this.state.selectedCompactView) {
+            this.state.compactViewExpanded = !this.state.compactViewExpanded;
+            this.state.expanded = this.state.compactViewExpanded;
+        }
         if (this.state.expanded) {
             this.setArticleSeen(undefined, true);
         }
@@ -309,6 +340,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             await this.loadArticle(silent, true);
             this.context.reloadObjectList(KIXObjectType.ARTICLE);
         }
+    }
+
+    public toggleAttachments(e: any): void {
+        e.stopPropagation();
+        this.state.showAllAttachments = !this.state.showAllAttachments;
+        this.filterAttachments();
     }
 }
 

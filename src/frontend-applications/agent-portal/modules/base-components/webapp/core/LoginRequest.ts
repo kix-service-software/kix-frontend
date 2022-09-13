@@ -12,6 +12,7 @@ export class LoginRequest {
     public constructor(
         public userName: string,
         public password: string,
+        public negotiateToken: string,
         public redirectUrl: string,
         public requestId: string,
         public clientRequestId: string

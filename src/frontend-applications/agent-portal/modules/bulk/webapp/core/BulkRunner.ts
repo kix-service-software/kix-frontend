@@ -8,12 +8,15 @@
  */
 
 import { KIXObject } from '../../../../model/kix/KIXObject';
-import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
+import { IKIXObjectService } from '../../../base-components/webapp/core/IKIXObjectService';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
+import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
+import { LinkObject } from '../../../links/model/LinkObject';
 import { CreateLinkDescription } from '../../../links/server/api/CreateLinkDescription';
+import { CreateLinkObjectOptions } from '../../../links/server/api/CreateLinkObjectOptions';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class BulkRunner {
@@ -43,31 +46,45 @@ export class BulkRunner {
         const objectTimes: number[] = [];
 
         for (const object of objects) {
-
-            if (Array.isArray(linkDescriptions) && linkDescriptions.length) {
-                parameter.push([KIXObjectProperty.LINKS, linkDescriptions]);
-            }
-
             const start = Date.now();
             let end: number;
-            await KIXObjectService.updateObject(objectType, parameter, object.ObjectId, false)
-                .then(() => {
-                    finishedObjects.push(object);
+            let updateOK: boolean = true;
+            if (parameter?.length) {
+                await KIXObjectService.updateObject(objectType, parameter, object.ObjectId, false)
+                    .catch(async (error) => {
+                        updateOK = false;
+                        errorObjects.push(object);
+                        const errorText = await TranslationService.translate('Translatable#An error occurred.');
+                        BrowserUtil.toggleLoadingShield('BULK_SHIELD', true, errorText);
+                        end = Date.now();
+                        await this.handleObjectEditError(
+                            object, (finishedObjects.length + errorObjects.length), objects.length, cancelBulk
+                        );
+                    });
+            }
 
-                })
-                .catch(async (error) => {
-                    errorObjects.push(object);
-
-                    const errorText = await TranslationService.translate('Translatable#An error occurred.');
-                    BrowserUtil.toggleLoadingShield('BULK_SHIELD', true, errorText);
-                    end = Date.now();
-                    await this.handleObjectEditError(
-                        object, (finishedObjects.length + errorObjects.length), objects.length, cancelBulk
-                    );
-                });
+            if (updateOK && Array.isArray(linkDescriptions) && linkDescriptions.length) {
+                const linkPromises = BulkRunner.createLinks(linkDescriptions, object);
+                await Promise.all(linkPromises)
+                    .catch(async (error) => {
+                        updateOK = false;
+                        errorObjects.push(object);
+                        const errorText = await TranslationService.translate('Translatable#An error occurred.');
+                        BrowserUtil.toggleLoadingShield('BULK_SHIELD', true, errorText);
+                        end = Date.now();
+                        await this.handleObjectEditError(
+                            object, (finishedObjects.length + errorObjects.length), objects.length, cancelBulk,
+                            'Translatable#At least one link could not be saved.'
+                        );
+                    });
+            }
 
             if (cancelBulkProcess) {
                 break;
+            }
+
+            if (updateOK) {
+                finishedObjects.push(object);
             }
 
             if (!end) {
@@ -80,6 +97,28 @@ export class BulkRunner {
         }
 
         return [finishedObjects, errorObjects];
+    }
+
+    private static createLinks(linkDescriptions: CreateLinkDescription<KIXObject>[], object: KIXObject): any[] {
+        const linkPromises: any[] = [];
+        const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.LINK_OBJECT);
+        linkDescriptions.forEach(async (ld) => {
+            const newLinkObject = new LinkObject({
+                linkedObjectKey: ld.linkableObject.ObjectId,
+                linkedObjectType: ld.linkableObject.KIXObjectType ||
+                    object.KIXObjectType !== ld.linkTypeDescription.linkType.Source ?
+                    ld.linkTypeDescription.linkType.Source
+                    : ld.linkTypeDescription.linkType.Target,
+                linkType: ld.linkTypeDescription.linkType,
+                isSource: ld.linkTypeDescription.asSource
+            } as LinkObject);
+            linkPromises.push(service.createObject(
+                KIXObjectType.LINK_OBJECT,
+                newLinkObject,
+                new CreateLinkObjectOptions(object)
+            ));
+        });
+        return linkPromises;
     }
 
     private static async setLoadingInformation(
@@ -99,14 +138,14 @@ export class BulkRunner {
     }
 
     private static handleObjectEditError(
-        object: KIXObject, finishedCount: number, objectCount: number, cancelBulk: () => void
+        object: KIXObject, finishedCount: number, objectCount: number, cancelBulk: () => void, errorMessage?: string
     ): Promise<void> {
         return new Promise(async (resolve, reject) => {
             const oName = await LabelService.getInstance().getObjectName(object?.KIXObjectType);
             const identifier = await LabelService.getInstance().getObjectText(object);
 
             const confirmText = await TranslationService.translate(
-                'Translatable#Changes cannot be saved. How do you want to proceed?'
+                errorMessage || 'Translatable#Changes cannot be saved. How do you want to proceed?'
             );
 
             const cancelButton = await TranslationService.translate('Translatable#Cancel');
@@ -115,7 +154,7 @@ export class BulkRunner {
                 `${finishedCount}/${objectCount}`,
                 `${oName} ${identifier}: ` + confirmText,
                 () => resolve(),
-                cancelBulk,
+                () => { cancelBulk; resolve(); },
                 [ignoreButton, cancelButton],
                 undefined, undefined, true
             );

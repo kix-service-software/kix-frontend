@@ -13,6 +13,7 @@ import { Ticket } from '../../../../model/Ticket';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { ChannelFormValue } from './ChannelFormValue';
 import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectFormValueMapper';
+import { FormContext } from '../../../../../../model/configuration/FormContext';
 
 export class ArticleFormValue extends ObjectFormValue<Article[]> {
 
@@ -24,9 +25,16 @@ export class ArticleFormValue extends ObjectFormValue<Article[]> {
     ) {
         super(property, null, objectValueMapper, parent);
 
-        ticket.Articles = [];
+        let article: Article;
 
-        const article = new Article(null, ticket);
+        const hasArticles = ticket.Articles?.length > 0;
+        if (hasArticles) {
+            article = ticket.Articles.find((a) => !a.ArticleID);
+        } else {
+            ticket.Articles = [];
+            article = new Article(null, ticket);
+        }
+
         ticket.Articles.push(article);
 
         this.object = article;

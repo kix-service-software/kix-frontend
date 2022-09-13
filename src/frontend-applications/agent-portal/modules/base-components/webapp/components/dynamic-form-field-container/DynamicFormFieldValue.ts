@@ -109,7 +109,7 @@ export class DynamicFormFieldValue {
         TreeService.getInstance().registerTreeHandler('operation-' + this.id, this.operationTreeHandler);
 
         this.valueTreeHandler = new TreeHandler();
-        TreeService.getInstance().registerTreeHandler('value-' + this.id, this.valueTreeHandler);
+        TreeService.getInstance().registerTreeHandler('value-' + this.id, this.valueTreeHandler, true);
 
         this.relativeTimeUnitTreeHandler = new TreeHandler([], null, null, false);
         TreeService.getInstance().registerTreeHandler('relativeTimeUnit-' + this.id, this.relativeTimeUnitTreeHandler);

@@ -10,7 +10,7 @@
 import { AbstractDynamicFormManager } from '../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager';
 import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { LinkService, LinkUtil } from '.';
+import { LinkService } from '.';
 import { InputFieldTypes } from '../../../base-components/webapp/core/InputFieldTypes';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
@@ -18,7 +18,8 @@ import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { CreateLinkDescription } from '../../server/api/CreateLinkDescription';
 import { LinkTypeDescription } from '../../model/LinkTypeDescription';
-import { KIXObject } from '../../../../model/kix/KIXObject';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { BulkDialogContext, BulkService } from '../../../bulk/webapp/core';
 
 export class LinkManager extends AbstractDynamicFormManager {
 
@@ -80,11 +81,7 @@ export class LinkManager extends AbstractDynamicFormManager {
             const linkTypes = await LinkService.getLinkTypes(this.targetObjectType, v.property);
             const linkType = linkTypes.find((lt) => lt.TargetName === v.operator || lt.SourceName === v.operator);
 
-            let isSource = linkType.Source === v.property;
-
-            if (linkType.Source === linkType.Target) {
-                isSource = linkType.Pointed === 1;
-            }
+            const isSource = linkType.SourceName === v.operator;
 
             const objectIds = Array.isArray(v.value) ? v.value : [v.value];
 
@@ -97,6 +94,17 @@ export class LinkManager extends AbstractDynamicFormManager {
         }
 
         return linkDescriptions;
+    }
+
+    public reset(notify?: boolean, force: boolean = false): void {
+        if (force) {
+            super.reset(notify);
+            return;
+        }
+        if (ContextService.getInstance().hasContextInstance(BulkDialogContext.CONTEXT_ID)
+            && this.values.length > 1) return;
+        super.reset(notify);
+        BulkService.getInstance().removeLinkManager(this);
     }
 
 }

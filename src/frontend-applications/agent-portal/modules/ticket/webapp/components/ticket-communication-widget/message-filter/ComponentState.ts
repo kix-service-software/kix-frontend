@@ -15,9 +15,12 @@ export class ComponentState extends AbstractComponentState {
         public filterValue: string = '',
         public filterAttachment: boolean = false,
         public filterExternal: boolean = false,
+        public filterInternal: boolean = false,
         public filterCustomer: boolean = false,
         public filterUnread: boolean = false,
-        public searchPlaceholder: string = 'Search'
+        public isFilterDateBefore: boolean = true,
+        public selectedDate: string = '',
+        public searchPlaceholder: string = 'Search',
     ) {
         super();
     }

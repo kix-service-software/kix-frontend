@@ -37,6 +37,7 @@ import { TicketHistory } from '../model/TicketHistory';
 import { RequestObject } from '../../../../../server/model/rest/RequestObject';
 import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
 import { CreateTicketWatcherOptions } from '../model/CreateTicketWatcherOptions';
+import { KIXObject } from '../../../model/kix/KIXObject';
 
 export class TicketAPIService extends KIXObjectAPIService {
 
@@ -108,6 +109,10 @@ export class TicketAPIService extends KIXObjectAPIService {
             objects = await super.load(
                 token, KIXObjectType.SENDER_TYPE, uri, null, null, 'SenderType', clientRequestId, SenderType
             );
+
+            if (Array.isArray(objectIds) && objectIds.length) {
+                objects = objects.filter((o) => objectIds.some((oid) => oid === o.ID));
+            }
         } else if (objectType === KIXObjectType.TICKET_LOCK) {
             const uri = this.buildUri('system', 'ticket', 'locks');
             objects = await super.load(
@@ -174,7 +179,7 @@ export class TicketAPIService extends KIXObjectAPIService {
             });
 
             await this.createLinks(
-                token, clientRequestId, ticketId, this.getParameterValue(ticketParameter, TicketProperty.LINK)
+                token, clientRequestId, ticketId, this.getParameterValue(ticketParameter, KIXObjectProperty.LINKS)
             );
 
             return ticketId;
@@ -308,8 +313,6 @@ export class TicketAPIService extends KIXObjectAPIService {
         }
         return result;
     }
-
-
 
     public async updateObject(
         token: string, clientRequestId: string, objectType: KIXObjectType,
@@ -558,7 +561,6 @@ export class TicketAPIService extends KIXObjectAPIService {
                     FilterDataType.STRING, FilterType.OR, `${primary.value}`
                 ),
             ];
-            console.table(primarySearch);
             searchCriteria = [...searchCriteria, ...primarySearch];
         }
 
@@ -611,7 +613,7 @@ export class TicketAPIService extends KIXObjectAPIService {
             searchCriteria.push(
                 new FilterCriteria(
                     TicketProperty.STATE_TYPE, SearchOperator.IN,
-                    FilterDataType.STRING, FilterType.AND, 'Open'
+                    FilterDataType.STRING, FilterType.AND, ['Open']
                 )
             );
         }
@@ -669,6 +671,15 @@ export class TicketAPIService extends KIXObjectAPIService {
                 FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             )
         ];
+    }
+
+    protected getObjectClass(objectType: KIXObjectType | string): new (object: KIXObject) => KIXObject {
+        let objectClass;
+
+        if (objectType === KIXObjectType.SENDER_TYPE) {
+            objectClass = SenderType;
+        }
+        return objectClass;
     }
 
 }
