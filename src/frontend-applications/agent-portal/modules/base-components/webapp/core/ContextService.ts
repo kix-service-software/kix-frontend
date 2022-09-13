@@ -114,7 +114,7 @@ export class ContextService {
             );
 
             if (this.isStorableDialogContext(context)) {
-                this.updateStorage(context?.instanceId);
+                await this.updateStorage(context?.instanceId);
             }
         } else if (urlParams) {
             await context.update(urlParams);
