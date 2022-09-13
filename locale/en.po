@@ -3608,6 +3608,9 @@ msgstr ""
 msgid "Pending date is not in the future."
 msgstr ""
 
+msgid "Pending time"
+msgstr ""
+
 msgid "Pending Time has invalid date!"
 msgstr ""
 
@@ -3678,6 +3681,12 @@ msgid "Please logout and login again with the new user."
 msgstr ""
 
 msgid "Please select a contact"
+msgstr ""
+
+msgid "Plugin"
+msgstr ""
+
+msgid "Plugins"
 msgstr ""
 
 msgid "Port"
@@ -4493,6 +4502,9 @@ msgid "System: Dynamic Fields"
 msgstr ""
 
 msgid "System: Logs"
+msgstr ""
+
+msgid "System: Plugins"
 msgstr ""
 
 msgid "System Settings"

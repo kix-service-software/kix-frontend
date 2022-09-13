@@ -3795,6 +3795,9 @@ msgstr "Wartend"
 msgid "Pending date is not in the future."
 msgstr "\"Warten bis\"-Datum liegt nicht in der Zukunft."
 
+msgid "Pending time"
+msgstr ""
+
 msgid "Pending Time has invalid date!"
 msgstr ""
 
@@ -3867,6 +3870,12 @@ msgstr "Bitte abmelden und mit dem neuen Nutzer wieder anmelden."
 
 msgid "Please select a contact"
 msgstr "Wählen Sie bitte einen Kontakt."
+
+msgid "Plugin"
+msgstr ""
+
+msgid "Plugins"
+msgstr ""
 
 msgid "Port"
 msgstr "Port"
@@ -4689,6 +4698,9 @@ msgstr "System: Dynamische Felder"
 
 msgid "System: Logs"
 msgstr "System: Logs"
+
+msgid "System: Plugins"
+msgstr ""
 
 msgid "System Settings"
 msgstr "Systemeinstellungen"
