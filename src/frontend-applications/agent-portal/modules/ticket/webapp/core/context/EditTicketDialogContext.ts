@@ -28,7 +28,7 @@ export class EditTicketDialogContext extends Context {
     private organisation: Organisation;
 
     public async initContext(): Promise<void> {
-        await this.loadTicket();
+        await this.getObject();
 
         let formId = this.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
         if (!formId) {
