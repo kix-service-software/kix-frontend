@@ -1377,6 +1377,9 @@ msgstr ""
 msgid "From external"
 msgstr ""
 
+msgid "From internal"
+msgstr ""
+
 msgid "Frontend"
 msgstr ""
 
@@ -4257,6 +4260,9 @@ msgstr ""
 
 msgid "Show in Customer Portal"
 msgstr "Show in Customer Portal"
+
+msgid "Show less"
+msgstr ""
 
 msgid "Show title in form"
 msgstr ""

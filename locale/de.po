@@ -1396,6 +1396,9 @@ msgstr "Von"
 msgid "From external"
 msgstr "von extern"
 
+msgid "From internal"
+msgstr ""
+
 msgid "Frontend"
 msgstr "Frontend"
 
@@ -4380,8 +4383,8 @@ msgstr "Setup Assistent"
 msgid "setup_assistant_add_mail_account_text"
 msgstr ""
 "Richten Sie ein E-Mail-Konto ein, von dem Sie E-Mails abrufen möchten. "
-"Weitere Konten können im Admin-Bereich \"Kommunikation/E-Mail/E-Mail-Konten\""
-" hinzugefügt werden. Bitte beachten Sie, dass E-Mails unabhängig vom "
+"Weitere Konten können im Admin-Bereich \"Kommunikation/E-Mail/E-Mail-Konten"
+"\" hinzugefügt werden. Bitte beachten Sie, dass E-Mails unabhängig vom "
 "gewählten Kontentyp aus dem Postfach abgeholt und gelöscht werden!"
 
 msgid "setup_assistant_change_admin_password_text"
@@ -4452,6 +4455,9 @@ msgstr "Anzeige Agenteneinstellung"
 
 msgid "Show in Customer Portal"
 msgstr "Im Kundenportal anzeigen"
+
+msgid "Show less"
+msgstr ""
 
 msgid "Show title in form"
 msgstr "Titel im Formular anzeigen"
