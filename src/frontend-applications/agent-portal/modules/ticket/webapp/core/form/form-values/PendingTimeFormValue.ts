@@ -25,6 +25,8 @@ export class PendingTimeFormValue extends DateTimeFormValue {
     ) {
         super(property, ticket, objectValueMapper, parent);
 
+        this.label = 'Translatable#Pending time';
+
         ticket.addBinding(TicketProperty.STATE_ID, async (value: number) => {
             const isPending = await TicketService.isPendingState(value);
             this.enabled = isPending;
