@@ -117,9 +117,7 @@ export class TicketDetailsContext extends Context {
     private async loadArticles(force?: boolean): Promise<Article[]> {
         const articles: Article[] = await KIXObjectService.loadObjects<Article>(
             KIXObjectType.ARTICLE, null,
-            new KIXObjectLoadingOptions(
-                null, 'Article.IncomingTime', null, [ArticleProperty.FLAGS]
-            ),
+            new KIXObjectLoadingOptions(null, 'Article.IncomingTime'),
             new ArticleLoadingOptions(this.objectId)
         ).catch(() => [] as Article[]) || [];
 

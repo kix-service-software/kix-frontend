@@ -109,8 +109,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.enableReadAction();
 
         // change widget title
-        const articleLengthText = (filteredArticles?.length < allArticles?.length ? filteredArticles.length +
-            '/' : '') + allArticles?.length;
+        const preCountText = (filteredArticles?.length < allArticles?.length ? filteredArticles.length + '/' : '');
+        const articleLengthText = preCountText + allArticles?.length;
+
         const title = await TranslationService.translate(this.state.widgetConfiguration?.title);
         this.state.widgetTitle = `${title} (${articleLengthText})`;
     }

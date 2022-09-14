@@ -35,7 +35,9 @@ export class ComponentState extends AbstractComponentState {
         public selectedCompactView: boolean = false,
         public fromDisplayName: string = '',
         public showAllAttachments: boolean = false,
-        public hasInlineAttachments: boolean = false
+        public hasInlineAttachments: boolean = false,
+        public loadingContent: boolean = false,
+        public showContent: boolean = false
     ) {
         super();
     }
