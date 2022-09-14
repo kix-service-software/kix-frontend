@@ -41,7 +41,7 @@ class Component {
             }
         }
 
-        this.state.isExternalUrl = this.state.url.toLowerCase().startsWith('http');
+        this.state.isExternalUrl = this.state.url?.toLowerCase().startsWith('http');
 
         this.state.loading = false;
     }
