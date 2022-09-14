@@ -60,6 +60,7 @@ import { Error } from '../../../../../../server/model/Error';
 import { Contact } from '../../../customer/model/Contact';
 import { ContactProperty } from '../../../customer/model/ContactProperty';
 import { TicketHistory } from '../../model/TicketHistory';
+import { ArticleColorsConfiguration } from '../../model/ArticleColorsConfiguration';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -72,6 +73,8 @@ export class TicketService extends KIXObjectService<Ticket> {
 
         return TicketService.INSTANCE;
     }
+
+    private articleColorConfiguration: any;
 
     private constructor() {
         super(KIXObjectType.TICKET);
@@ -661,5 +664,53 @@ export class TicketService extends KIXObjectService<Ticket> {
         }
 
         return contact;
+    }
+
+    public static async getPendingDateDiff(date: Date = new Date()): Promise<Date> {
+        let offset = 86400;
+
+        const offsetConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_FRONTEND_PENDING_DIFF_TIME], null, null, true
+        ).catch((error): SysConfigOption[] => []);
+
+        if (offsetConfig?.length && offsetConfig[0].Value) {
+            offset = offsetConfig[0].Value;
+        }
+
+        date.setSeconds(date.getSeconds() + Number(offset));
+
+        return date;
+    }
+
+    public async getChannelColor(channel: string): Promise<string> {
+        if (!this.articleColorConfiguration) {
+            const options = await KIXObjectService.loadObjects<SysConfigOption>(
+                KIXObjectType.SYS_CONFIG_OPTION, [ArticleColorsConfiguration.CONFIGURATION_ID]
+            ).catch((): SysConfigOption[] => []);
+
+            if (Array.isArray(options) && options.length) {
+                try {
+                    this.articleColorConfiguration = JSON.parse(options[0].Value);
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        }
+
+        return this.articleColorConfiguration
+            ? this.articleColorConfiguration[channel] || this.getFallbackColor(channel)
+            : this.getFallbackColor(channel);
+    }
+
+    private getFallbackColor(channel: string): string {
+        let color = '#fff';
+
+        if (channel === 'note') {
+            color = '#fbf7e2';
+        } else if (channel === 'email') {
+            color = '#e1eaeb';
+        }
+
+        return color;
     }
 }

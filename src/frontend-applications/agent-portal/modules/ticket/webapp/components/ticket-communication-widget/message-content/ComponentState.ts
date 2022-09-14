@@ -31,7 +31,9 @@ export class ComponentState extends AbstractComponentState {
         public show: boolean = false,
         public loading: boolean = false,
         public backgroundColor: string = '#fff',
-        public fromDisplayName: string = ''
+        public fromDisplayName: string = '',
+        public loadingContent: boolean = false,
+        public showContent: boolean = false
     ) {
         super();
     }

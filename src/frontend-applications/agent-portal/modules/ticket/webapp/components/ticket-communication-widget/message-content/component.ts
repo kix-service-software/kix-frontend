@@ -21,12 +21,10 @@ import { DisplayImageDescription } from '../../../../../base-components/webapp/c
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { IContextListener } from '../../../../../base-components/webapp/core/IContextListener';
 import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
-import { KIXModulesSocketClient } from '../../../../../base-components/webapp/core/KIXModulesSocketClient';
+import { KIXModulesService } from '../../../../../base-components/webapp/core/KIXModulesService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { LabelService } from '../../../../../base-components/webapp/core/LabelService';
-import { SysConfigOption } from '../../../../../sysconfig/model/SysConfigOption';
 import { Article } from '../../../../model/Article';
-import { ArticleColorsConfiguration } from '../../../../model/ArticleColorsConfiguration';
 import { ArticleLoadingOptions } from '../../../../model/ArticleLoadingOptions';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
 import { TicketService } from '../../../core';
@@ -138,6 +136,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         await this.prepareActions();
+        // await this.prepareImages(this.state.articleAttachments);
         this.prepareAttachments();
         await this.prepareArticleData();
         this.state.loading = false;
@@ -163,10 +162,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(): Promise<void> {
         const actions = await this.context.getAdditionalActions(this.state.article) || [];
 
-        const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
-        if (!releaseInfo?.plugins?.some((p) => p.product === 'KIXPro')) {
+        const hasKIXPro = await KIXModulesService.getInstance().hasPlugin('KIXPro');
+        if (!hasKIXPro) {
             const startActions = ['article-reply-action', 'article-forward-action'];
-            const actionInstance = await ActionFactory.getInstance().generateActions(startActions, this.state.article);
+            const actionInstance = await ActionFactory.getInstance().generateActions(
+                startActions, this.state.article
+            );
             actions.push(...actionInstance);
         }
 
@@ -205,31 +206,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         if (this.state.article) {
-            this.state.articleTo = await LabelService.getInstance().getDisplayText(
-                this.state.article, ArticleProperty.TO, undefined, undefined, false
-            );
-            this.state.articleCc = await LabelService.getInstance().getDisplayText(
-                this.state.article, ArticleProperty.CC, undefined, undefined, false
-            );
-
-            const options = await KIXObjectService.loadObjects<SysConfigOption>(
-                KIXObjectType.SYS_CONFIG_OPTION, [ArticleColorsConfiguration.CONFIGURATION_ID]
-            ).catch((): SysConfigOption[] => []);
-
-            if (Array.isArray(options) && options.length) {
-                try {
-                    const colorConfig = JSON.parse(options[0].Value);
-                    this.state.backgroundColor = colorConfig && colorConfig[this.state.article.Channel] ?
-                        colorConfig[this.state.article.Channel] : this.getFallbackColor();
-                } catch (error) {
-                    console.error(error);
-                    this.state.backgroundColor = this.getFallbackColor();
-                }
-            } else {
-                // no option means no specific color
-                this.state.backgroundColor = '#fff';
-            }
-
+            this.state.backgroundColor = await TicketService.getInstance().getChannelColor(this.state.article.Channel);
         }
 
         this.eventSubscriber = {
@@ -246,15 +223,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().subscribe('TOGGLE_ARTICLE', this.eventSubscriber);
     }
 
-    private getFallbackColor(): string {
-        return this.state.article.Channel === 'note' ? '#fbf7e2'
-            : this.state.article.Channel === 'email' ? '#e1eaeb' : '#fff';
-    }
-
     private prepareAttachments(): void {
-        const attachments = (this.state.article?.Attachments || []).filter(
-            (a) => !a.Filename.match(/^file-(1|2)$/)
-        );
+        let attachments = (this.state.article?.Attachments || []);
+        attachments = attachments.filter((a) => !a.Filename.match(/^file-(1|2)$/) && a.Disposition !== 'inline');
+
         attachments.sort((a, b) => {
             let result = -1;
             if (a.Disposition === b.Disposition) {
@@ -264,8 +236,30 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             }
             return result;
         });
-        this.prepareImages(attachments);
         this.state.articleAttachments = attachments;
+    }
+
+    public toggleArticle(): void {
+        this.state.expanded = !this.state.expanded;
+        this.toggleArticleContent(this.state.expanded);
+    }
+
+    private async toggleArticleContent(expanded: boolean): Promise<void> {
+        if (expanded) {
+            this.state.loadingContent = true;
+
+            this.state.articleTo = await LabelService.getInstance().getDisplayText(
+                this.state.article, ArticleProperty.TO, undefined, undefined, false
+            );
+            this.state.articleCc = await LabelService.getInstance().getDisplayText(
+                this.state.article, ArticleProperty.CC, undefined, undefined, false
+            );
+
+            await this.setArticleSeen(undefined, true);
+
+            this.state.loadingContent = false;
+            this.state.showContent = true;
+        }
     }
 
     private async prepareImages(attachments: Attachment[]): Promise<void> {
@@ -292,12 +286,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.images = (await Promise.all(attachmentPromises)).filter((i) => i);
     }
 
-    public toggleArticle(): void {
-        this.state.expanded = !this.state.expanded;
-        if (this.state.expanded) {
-            this.setArticleSeen(undefined, true);
-        }
-    }
 
     private async setArticleSeen(
         article: Article = this.state.article || this.article, silent?: boolean

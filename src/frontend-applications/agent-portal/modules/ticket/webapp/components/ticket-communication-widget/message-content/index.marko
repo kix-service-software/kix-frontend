@@ -28,7 +28,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 fromDisplayName=state.fromDisplayName
             />
          </div>
-         <if(state.expanded)>
+         <if(state.expanded && state.showContent)>
             <div.receiver-list>
                <if(state.articleTo)>
                   <div.receiver><span.title><translation-string pattern="Translatable#To"/>:</span><span>${state.articleTo}</span></div>
@@ -47,6 +47,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                </div>
             </div>
          </if>
+         <else-if(state.loadingContent)>
+            <loading-spinner/>
+         </else-if>
          <else>
             <div.message-body-short>
                <div.short-message>${state.shortMessage}</div>
