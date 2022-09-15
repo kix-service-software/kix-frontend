@@ -48,8 +48,12 @@ export class NewConfigItemDialogContext extends Context {
 
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
         await super.initContext(urlParams);
-        const previousContext = ContextService.getInstance().getActiveContext();
-        const classId = previousContext?.getAdditionalInformation(ConfigItemProperty.CLASS_ID);
+        let classId = this.getAdditionalInformation(ConfigItemProperty.CLASS_ID);
+        if (!classId) {
+            const previousContext = ContextService.getInstance().getActiveContext();
+            classId = previousContext?.getAdditionalInformation(ConfigItemProperty.CLASS_ID);
+        }
+
         this.setAdditionalInformation(ConfigItemProperty.CLASS_ID, classId);
     }
 
