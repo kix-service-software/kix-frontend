@@ -19,6 +19,7 @@ import { Contact } from '../../../../customer/model/Contact';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 import { FormService } from '../../../../base-components/webapp/core/FormService';
 import { FormContext } from '../../../../../model/configuration/FormContext';
+import { KIXModulesSocketClient } from '../../../../base-components/webapp/core/KIXModulesSocketClient';
 
 export class EditTicketDialogContext extends Context {
 
@@ -30,11 +31,16 @@ export class EditTicketDialogContext extends Context {
     public async initContext(): Promise<void> {
         await this.getObject();
 
-        let formId = this.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
-        if (!formId) {
-            formId = await FormService.getInstance().getFormIdByContext(FormContext.EDIT, KIXObjectType.TICKET);
+        const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+        const kixPro = releaseInfo?.plugins?.some((p) => p.product === 'KIXPro');
+
+        if (!kixPro) {
+            let formId = this.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
+            if (!formId) {
+                formId = await FormService.getInstance().getFormIdByContext(FormContext.EDIT, KIXObjectType.TICKET);
+            }
+            this.getFormManager().setFormId(formId, null, true);
         }
-        this.getFormManager().setFormId(formId, null, true);
 
         await super.initContext();
     }
