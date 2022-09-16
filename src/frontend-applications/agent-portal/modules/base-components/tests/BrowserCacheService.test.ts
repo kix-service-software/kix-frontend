@@ -14,6 +14,7 @@ import chaiAsPromised = require('chai-as-promised');
 import { BrowserCacheService } from '../webapp/core/CacheService';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { BackendNotification } from '../../../model/BackendNotification';
+import { RequestMethod } from '../../../../../server/model/rest/RequestMethod';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -236,7 +237,7 @@ describe('BrowserCacheService', () => {
                 expect(prefixes.find((p) => p === KIXObjectType.QUEUE)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.CURRENT_USER)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.ARTICLE)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.ROLE)).exist;
+                expect(prefixes.find((p) => p === 'OPTION_REQUEST')).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.TICKET_HISTORY)).exist;
             });
 
