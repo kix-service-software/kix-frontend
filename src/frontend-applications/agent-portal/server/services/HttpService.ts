@@ -152,7 +152,7 @@ export class HttpService {
     }
 
     public async options(
-        token: string, resource: string, content: any, clientRequestId: string
+        token: string, resource: string, content: any, clientRequestId: string, collection: boolean
     ): Promise<OptionsResponse> {
         const options: AxiosRequestConfig = {
             method: RequestMethod.OPTIONS,
@@ -160,7 +160,8 @@ export class HttpService {
         };
 
         const cacheKey = token + resource;
-        let headers = await CacheService.getInstance().get(cacheKey, RequestMethod.OPTIONS);
+        const cacheType = collection ? 'OPTION_COLLECTION' : RequestMethod.OPTIONS;
+        let headers = await CacheService.getInstance().get(cacheKey, cacheType);
         if (!headers) {
             if (!this.requestPromises.has(cacheKey)) {
                 this.requestPromises.set(
@@ -173,7 +174,7 @@ export class HttpService {
 
             const request = this.requestPromises.get(cacheKey);
             headers = await request;
-            await CacheService.getInstance().set(cacheKey, headers, RequestMethod.OPTIONS);
+            await CacheService.getInstance().set(cacheKey, headers, cacheType);
             this.requestPromises.delete(cacheKey);
         }
 

@@ -155,9 +155,7 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
                 cacheKeyPrefixes.push(KIXObjectType.ARTICLE);
                 cacheKeyPrefixes.push(KIXObjectType.TICKET_HISTORY);
-                // needed for permission checks of objectactions (UIObjectActions/AuthenticationSocketClient)
-                // - check new after ticket update
-                cacheKeyPrefixes.push(KIXObjectType.ROLE);
+                cacheKeyPrefixes.push('OPTION_REQUEST');
                 break;
             case KIXObjectType.FAQ_VOTE:
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
