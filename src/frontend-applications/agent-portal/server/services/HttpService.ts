@@ -305,43 +305,54 @@ export class HttpService {
             return user;
         }
 
-        const options: AxiosRequestConfig = {
-            method: RequestMethod.GET,
-            params: {
-                'include': 'Tickets,Preferences,RoleIDs,Contact',
-                'Tickets.StateType': 'Open'
-            }
-        };
+        const requestKey = `${KIXObjectType.CURRENT_USER}-${token}`;
+        if (this.requestPromises.has(requestKey)) {
+            return this.requestPromises.get(requestKey);
+        }
 
-        const uri = 'session/user';
-        options.url = this.buildRequestUrl(uri);
-        options.headers = {
-            'Authorization': 'Token ' + backendToken,
-            'KIX-Request-ID': ''
-        };
-
-        // start profiling
-        const profileTaskId = ProfilingService.getInstance().start(
-            'HttpService', options.method + ' ' + uri, { data: [options] }
-        );
-
-        const response = await this.axios(options)
-            .catch((error: AxiosError) => {
-                LoggingService.getInstance().error(
-                    `Error during HTTP (${uri}) ${options.method} request.`, error
-                );
-                ProfilingService.getInstance().stop(profileTaskId, { data: ['Error'] });
-                if (error.response?.status === 403) {
-                    throw new PermissionError(this.createError(error), uri, options.method);
-                } else {
-                    throw this.createError(error);
+        const requestPromise = new Promise<User>(async (resolve, reject) => {
+            const options: AxiosRequestConfig = {
+                method: RequestMethod.GET,
+                params: {
+                    'include': 'Tickets,Preferences,RoleIDs,Contact',
+                    'Tickets.StateType': 'Open'
                 }
-            });
+            };
 
-        await CacheService.getInstance().set(backendToken, response.data['User'], KIXObjectType.CURRENT_USER);
-        ProfilingService.getInstance().stop(profileTaskId, { data: [response.data] });
+            const uri = 'session/user';
+            options.url = this.buildRequestUrl(uri);
+            options.headers = {
+                'Authorization': 'Token ' + backendToken,
+                'KIX-Request-ID': ''
+            };
 
-        return response.data['User'];
+            // start profiling
+            const profileTaskId = ProfilingService.getInstance().start(
+                'HttpService', options.method + ' ' + uri, { data: [options] }
+            );
+
+            const response = await this.axios(options)
+                .catch((error: AxiosError) => {
+                    LoggingService.getInstance().error(
+                        `Error during HTTP (${uri}) ${options.method} request.`, error
+                    );
+                    ProfilingService.getInstance().stop(profileTaskId, { data: ['Error'] });
+                    if (error.response?.status === 403) {
+                        throw new PermissionError(this.createError(error), uri, options.method);
+                    } else {
+                        throw this.createError(error);
+                    }
+                });
+
+            await CacheService.getInstance().set(backendToken, response.data['User'], KIXObjectType.CURRENT_USER);
+            ProfilingService.getInstance().stop(profileTaskId, { data: [response.data] });
+
+            resolve(response.data['User']);
+        });
+
+        this.requestPromises.set(requestKey, requestPromise);
+
+        return requestPromise;
     }
 
     public getPendingRequestCount(): number {
