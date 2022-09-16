@@ -16,11 +16,9 @@ import { KIXObjectService } from '../../../../../modules/base-components/webapp/
 import { BreadcrumbInformation } from '../../../../../model/BreadcrumbInformation';
 import { TicketContext } from './TicketContext';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
-import { TicketProperty } from '../../../model/TicketProperty';
 import { Article } from '../../../model/Article';
 import { ArticleLoadingOptions } from '../../../model/ArticleLoadingOptions';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
-import { ArticleProperty } from '../../../model/ArticleProperty';
 import { TicketHistory } from '../../../model/TicketHistory';
 
 export class TicketDetailsContext extends Context {

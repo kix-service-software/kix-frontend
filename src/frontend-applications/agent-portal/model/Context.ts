@@ -117,7 +117,8 @@ export abstract class Context {
                             const objectReloadRequired = this.descriptor.contextMode === ContextMode.DETAILS
                                 && this.descriptor.kixObjectTypes?.some((t) => t === data.objectType);
 
-                            if (objectReloadRequired) {
+                            const activeContext = ContextService.getInstance().getActiveContext();
+                            if (objectReloadRequired && activeContext.instanceId === this.instanceId) {
                                 await this.getObject(data.objectType, true);
                             }
 
