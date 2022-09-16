@@ -131,7 +131,9 @@ export class ContextNamespace extends SocketNameSpace {
 
                     if (contextOption.Value) {
                         const contextConfig = JSON.parse(contextOption.Value) as ContextConfiguration;
-                        if (contextConfig.valid) {
+
+                        const hasValid = contextConfig.valid !== null && typeof contextConfig.valid !== 'undefined';
+                        if (!hasValid || contextConfig.valid) {
                             const newConfig = await ContextConfigurationResolver.getInstance().resolve(
                                 serverConfig.BACKEND_API_TOKEN,
                                 contextConfig,
