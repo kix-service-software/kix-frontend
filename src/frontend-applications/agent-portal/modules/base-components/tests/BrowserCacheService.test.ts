@@ -206,11 +206,12 @@ describe('BrowserCacheService', () => {
                 const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.QUEUE);
                 expect(prefixes).exist;
                 expect(prefixes).an('array');
-                expect(prefixes.length).equals(3);
+                expect(prefixes.length).equals(4);
 
                 expect(prefixes.find((p) => p === KIXObjectType.QUEUE)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.OBJECT_ICON)).exist;
+                expect(prefixes.find((p) => p === 'QUEUE_HIERARCHY')).exist;
             });
 
             it('should resolve the namespace for Priority', () => {
@@ -234,7 +235,7 @@ describe('BrowserCacheService', () => {
                 expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.ORGANISATION)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.CONTACT)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.QUEUE)).exist;
+                expect(prefixes.find((p) => p === 'QUEUE_HIERARCHY')).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.CURRENT_USER)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.ARTICLE)).exist;
                 expect(prefixes.find((p) => p === 'OPTION_REQUEST')).exist;
