@@ -16,10 +16,6 @@ import { KIXObjectSpecificLoadingOptions } from '../../../../../model/KIXObjectS
 import { QueueProperty } from '../../../model/QueueProperty';
 import { TreeNode, TreeNodeProperty } from '../../../../base-components/webapp/core/tree';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { FilterCriteria } from '../../../../../model/FilterCriteria';
-import { SearchOperator } from '../../../../search/model/SearchOperator';
-import { FilterDataType } from '../../../../../model/FilterDataType';
-import { FilterType } from '../../../../../model/FilterType';
 import { FollowUpType } from '../../../model/FollowUpType';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { DataType } from '../../../../../model/DataType';
@@ -161,6 +157,8 @@ export class QueueService extends KIXObjectService<Queue> {
             loadingOptions.includes = ['TicketStats'];
             loadingOptions.query = [['TicketStats.StateType', 'Open']];
         }
+
+        loadingOptions.cacheType = 'QUEUE_HIERARCHY';
 
         const loadedQueues = await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, null, loadingOptions)
             .catch((): Queue[] => []);

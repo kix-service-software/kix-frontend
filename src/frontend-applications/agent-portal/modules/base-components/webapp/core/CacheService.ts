@@ -151,10 +151,10 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
                 cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
-                cacheKeyPrefixes.push(KIXObjectType.QUEUE);
                 cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
                 cacheKeyPrefixes.push(KIXObjectType.ARTICLE);
                 cacheKeyPrefixes.push(KIXObjectType.TICKET_HISTORY);
+                cacheKeyPrefixes.push('QUEUE_HIERARCHY');
                 cacheKeyPrefixes.push('OPTION_REQUEST');
                 break;
             case KIXObjectType.FAQ_VOTE:
@@ -212,6 +212,10 @@ export class BrowserCacheService {
                 this.clear();
                 break;
             case KIXObjectType.QUEUE:
+                cacheKeyPrefixes.push('QUEUE_HIERARCHY');
+                cacheKeyPrefixes.push(KIXObjectType.TICKET);
+                cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
+                break;
             case KIXObjectType.TICKET_PRIORITY:
             case KIXObjectType.TICKET_STATE:
             case KIXObjectType.TICKET_TYPE:

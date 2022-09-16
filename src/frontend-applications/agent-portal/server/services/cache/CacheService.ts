@@ -153,7 +153,6 @@ export class CacheService {
                 types.push(KIXObjectType.ARTICLE);
                 types.push(KIXObjectType.ORGANISATION);
                 types.push(KIXObjectType.CONTACT);
-                types.push(KIXObjectType.QUEUE);
                 types.push(KIXObjectType.CURRENT_USER);
                 types.push(KIXObjectType.TICKET_HISTORY);
                 // needed for permission checks of objectactions (HttpService) - check new after ticket update
@@ -236,6 +235,9 @@ export class CacheService {
                 types.push(KIXObjectType.REPORT_DEFINITION);
                 break;
             case KIXObjectType.QUEUE:
+                types.push('QUEUE_HIERARCHY');
+                types.push(KIXObjectType.TICKET);
+                break;
             case KIXObjectType.TICKET_STATE:
             case KIXObjectType.TICKET_TYPE:
             case KIXObjectType.TICKET_PRIORITY:
