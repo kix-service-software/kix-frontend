@@ -125,11 +125,16 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                     const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
                     for (const column of columns) {
 
-                        // ignore dynamic fields, they will be added in prepareSpecificValues
-                        if (!column.property?.startsWith(`${KIXObjectProperty.DYNAMIC_FIELDS}.`)) {
-                            const tableValue = new TableValue(column.property, o[column.property], null, null, null);
-                            values.push(tableValue);
+                        let tableValue: TableValue;
+                        if (column.property?.startsWith(`${KIXObjectProperty.DYNAMIC_FIELDS}.`)) {
+                            const dfName = KIXObjectService.getDynamicFieldName(column.property);
+                            const dfv = o[KIXObjectProperty.DYNAMIC_FIELDS].find((dfv) => dfv.Name === dfName);
+                            tableValue = new TableValue(column.property, dfv?.Value, dfv?.DisplayValue?.toString());
+                        } else {
+                            tableValue = new TableValue(column.property, o[column.property], null, null, null);
+
                         }
+                        values.push(tableValue);
                     }
                     await this.prepareSpecificValues(values, o);
                     const rowObject = new RowObject<T>(values, o);
@@ -148,15 +153,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     }
 
     protected async prepareSpecificValues(values: TableValue[], object: T): Promise<void> {
-        if (Array.isArray(object[KIXObjectProperty.DYNAMIC_FIELDS])) {
-            for (const dfv of object[KIXObjectProperty.DYNAMIC_FIELDS] as DynamicFieldValue[]) {
-                values.push(new TableValue(
-                    `${KIXObjectProperty.DYNAMIC_FIELDS}.${dfv.Name}`,
-                    dfv.Value,
-                    dfv.DisplayValue?.toString()
-                ));
-            }
-        }
+        return;
     }
 
     protected hasChildRows(rowObject: RowObject): boolean {
