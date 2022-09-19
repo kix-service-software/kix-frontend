@@ -146,15 +146,18 @@ class Component {
                 objectChanged: (): void => { return; },
                 objectListChanged: (objectType: KIXObjectType | string): void => {
                     if (objectType === this.objectType) {
-                        if (settings?.resetFilterOnReload) {
-                            this.state.table?.resetFilter();
-                            const filterComponent = (this as any).getComponent('table-widget-filter');
-                            filterComponent?.reset();
-                        } else if (this.state.table) {
-                            this.state.filterValue = this.state.table.getFilterValue();
-                        }
+                        const activeContext = ContextService.getInstance().getActiveContext();
+                        if (this.context.instanceId === activeContext.instanceId) {
+                            if (settings?.resetFilterOnReload) {
+                                this.state.table?.resetFilter();
+                                const filterComponent = (this as any).getComponent('table-widget-filter');
+                                filterComponent?.reset();
+                            } else if (this.state.table) {
+                                this.state.filterValue = this.state.table.getFilterValue();
+                            }
 
-                        this.prepareTitle();
+                            this.prepareTitle();
+                        }
                     }
                 },
                 sidebarRightToggled: (): void => { return; },
