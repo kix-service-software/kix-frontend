@@ -160,7 +160,10 @@ export class HttpService {
         };
 
         const cacheKey = token + resource;
-        const cacheType = collection ? 'OPTION_COLLECTION' : RequestMethod.OPTIONS;
+        const cacheType = collection !== null && typeof collection !== 'undefined' && collection
+            ? 'OPTION_COLLECTION'
+            : RequestMethod.OPTIONS;
+
         let headers = await CacheService.getInstance().get(cacheKey, cacheType);
         if (!headers) {
             if (!this.requestPromises.has(cacheKey)) {
