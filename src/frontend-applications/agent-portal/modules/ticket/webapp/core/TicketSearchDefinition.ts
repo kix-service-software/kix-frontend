@@ -50,7 +50,7 @@ export class TicketSearchDefinition extends SearchDefinition {
 
     public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {
         return new KIXObjectLoadingOptions(
-            null, null, null, [TicketProperty.WATCHERS]
+            null, null, null
         );
     }
 

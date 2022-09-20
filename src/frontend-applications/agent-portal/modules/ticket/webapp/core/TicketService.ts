@@ -375,13 +375,8 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     public async checkFilterValue(ticket: Ticket, criteria: UIFilterCriterion): Promise<boolean> {
-        if (criteria.property === TicketProperty.WATCHERS && ticket.Watchers) {
-            let value = criteria.value;
-            if (criteria.value === KIXObjectType.CURRENT_USER) {
-                const currentUser = await AgentService.getInstance().getCurrentUser();
-                value = currentUser.UserID;
-            }
-            return ticket.Watchers.some((w) => w.UserID === value);
+        if (criteria.property === TicketProperty.WATCHERS) {
+            return ticket.WatcherID > 0;
         }
         return true;
     }

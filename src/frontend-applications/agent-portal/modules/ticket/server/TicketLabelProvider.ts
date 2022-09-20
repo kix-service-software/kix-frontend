@@ -148,12 +148,9 @@ export class TicketLabelProvider {
                 }
                 break;
             case TicketProperty.WATCHERS:
-                if (Array.isArray(objectValue) && objectValue.length) {
-                    const currentUser = await UserService.getInstance().getUserByToken(token);
-                    displayValue = objectValue.some((w) => w.UserID === currentUser.UserID)
-                        ? 'Translatable#Watched'
-                        : '';
-                }
+                displayValue = ticket.WatcherID > 0
+                    ? 'Translatable#Watched'
+                    : '';
                 break;
             case TicketProperty.AGE:
                 displayValue = DateTimeAPIUtil.calculateTimeInterval(Number(objectValue));
@@ -238,11 +235,8 @@ export class TicketLabelProvider {
                     : icons = ['kix-icon-lock-open'];
                 break;
             case TicketProperty.WATCHERS:
-                if (Array.isArray(object[TicketProperty.WATCHERS])) {
-                    const user = await UserService.getInstance().getUserByToken(token);
-                    if (object[TicketProperty.WATCHERS].some((w) => w.UserID === user.UserID)) {
-                        icons = ['kix-icon-eye'];
-                    }
+                if ((object as Ticket).WatcherID > 0) {
+                    icons = ['kix-icon-eye'];
                 }
                 break;
             case TicketProperty.ARTICLES:

@@ -557,11 +557,8 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                     : icons.push('kix-icon-lock-open');
                 break;
             case TicketProperty.WATCHERS:
-                if (ticket && ticket.Watchers) {
-                    const user = await AgentService.getInstance().getCurrentUser();
-                    if (ticket.Watchers.some((w) => w.UserID === user.UserID)) {
-                        icons.push('kix-icon-eye');
-                    }
+                if (ticket.WatcherID > 0) {
+                    icons.push('kix-icon-eye');
                 }
                 break;
             default:
