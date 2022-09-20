@@ -160,7 +160,7 @@ export class HttpService {
         };
 
         const cacheKey = token + resource;
-        const cacheType = collection !== null && typeof collection !== 'undefined' && collection
+        const cacheType = collection === null || typeof collection === 'undefined' || collection
             ? 'OPTION_COLLECTION'
             : RequestMethod.OPTIONS;
 
