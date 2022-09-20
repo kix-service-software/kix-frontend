@@ -14,6 +14,7 @@ import { IColumnConfiguration } from '../../../../../model/configuration/IColumn
 import { Column } from '../../../model/Column';
 import { Row } from '../../../model/Row';
 import { Table } from '../../../model/Table';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 
 export abstract class ExtendedTableFactory {
 
@@ -45,6 +46,10 @@ export abstract class ExtendedTableFactory {
         rows: Array<Row>, column: Column<any>
     ): Array<[T, number]> {
         return null;
+    }
+
+    public async prepareTableLoadingOptions(loadingOptions: KIXObjectLoadingOptions, table: Table): Promise<void> {
+        return;
     }
 
 }

@@ -83,7 +83,7 @@ export class TicketDetailsContext extends Context {
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null,
             [
-                'StateType', 'ObjectActions', KIXObjectProperty.DYNAMIC_FIELDS
+                'StateType', 'ObjectActions', 'SLACriteria', KIXObjectProperty.DYNAMIC_FIELDS
             ]
         );
 

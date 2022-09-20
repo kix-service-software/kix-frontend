@@ -80,7 +80,7 @@ export class TicketAPIService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.TICKET) {
 
-            const includes = [TicketProperty.STATE_TYPE, KIXObjectType.CONTACT, KIXObjectProperty.DYNAMIC_FIELDS];
+            const includes = [TicketProperty.STATE_TYPE];
             const expands = [];
 
             if (!loadingOptions) {

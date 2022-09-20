@@ -22,6 +22,7 @@ import { ITableContentProvider } from '../../model/ITableContentProvider';
 import { RowObject } from '../../model/RowObject';
 import { Table } from '../../model/Table';
 import { TableValue } from '../../model/TableValue';
+import { TableFactoryService } from './factory/TableFactoryService';
 
 
 export class TableContentProvider<T = any> implements ITableContentProvider<T> {
@@ -201,6 +202,22 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             }
             loadingOptions.query = preparedQuery;
         }
+
+        const hasDFInclude = loadingOptions?.includes?.some((i) => i === KIXObjectProperty.DYNAMIC_FIELDS);
+
+        const tableColumns = this.table?.getTableConfiguration()?.tableColumns || [];
+        const hasDFColumn = tableColumns?.some((tc) => KIXObjectService.getDynamicFieldName(tc.property));
+
+        if (!hasDFInclude && hasDFColumn) {
+            if (Array.isArray(loadingOptions.includes)) {
+                loadingOptions.includes.push(KIXObjectProperty.DYNAMIC_FIELDS);
+            } else {
+                loadingOptions.includes = [KIXObjectProperty.DYNAMIC_FIELDS];
+            }
+        }
+
+        await TableFactoryService.getInstance().prepareTableLoadingOptions(loadingOptions, this.table);
+
         return loadingOptions;
     }
 }
