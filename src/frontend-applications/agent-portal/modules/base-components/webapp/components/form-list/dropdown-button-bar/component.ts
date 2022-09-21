@@ -50,6 +50,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }, 50);
     }
 
+    public toggleSelectAllCheckbox(event: any): void {
+        const checkBox = (this as any).getEl('selectAllCheckbox');
+        if (checkBox) {
+            checkBox.checked = !checkBox.checked;
+            this.selectAll(event);
+        }
+    }
+
     private setCheckState(): void {
         const checkBox = (this as any).getEl('selectAllCheckbox');
         if (checkBox && this.treeHandler) {
