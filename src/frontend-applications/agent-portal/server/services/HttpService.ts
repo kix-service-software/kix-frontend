@@ -285,7 +285,7 @@ export class HttpService {
         let cacheId = token;
         if (!useToken) {
             const user = await this.getUserByToken(token);
-            cacheId = user.UserID.toString();
+            cacheId = user.RoleIDs?.sort().join(';');
         }
         const ordered = {};
 
