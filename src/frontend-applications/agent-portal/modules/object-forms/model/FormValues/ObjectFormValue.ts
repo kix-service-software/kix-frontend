@@ -309,7 +309,7 @@ export class ObjectFormValue<T = any> {
             if (this.value.length) {
                 for (const v of this.value) {
                     if (this.canAddValue(this.instanceId)) {
-                        await this.addFormValue(this.instanceId);
+                        await this.addFormValue(this.instanceId, v);
 
                         const formValue = this.formValues[this.formValues.length - 1];
                         if (formValue) {
@@ -330,7 +330,7 @@ export class ObjectFormValue<T = any> {
     protected async addDefaultFormValues(): Promise<void> {
         const startIndex = this.formValues?.length || 0;
         for (let i = startIndex; i < this.countDefault; i++) {
-            await this.addFormValue(null);
+            await this.addFormValue(null, null);
         }
     }
 
@@ -464,7 +464,7 @@ export class ObjectFormValue<T = any> {
         return false;
     }
 
-    public async addFormValue(instanceId: string): Promise<void> {
+    public async addFormValue(instanceId: string, value: any): Promise<void> {
         await this.setVisibilityAndComponent();
     }
 
