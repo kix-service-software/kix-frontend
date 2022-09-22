@@ -159,7 +159,10 @@ export class HttpService {
             data: content
         };
 
-        const cacheKey = token + resource;
+        const user = await this.getUserByToken(token);
+        const cacheId = user.RoleIDs?.sort().join(';');
+
+        const cacheKey = cacheId + resource;
         const cacheType = collection === null || typeof collection === 'undefined' || collection
             ? 'OPTION_COLLECTION'
             : RequestMethod.OPTIONS;
