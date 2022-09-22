@@ -8,6 +8,7 @@
  */
 
 import { AutoCompleteConfiguration } from '../../../../../model/configuration/AutoCompleteConfiguration';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
@@ -91,6 +92,16 @@ export class DynamicFieldCIReferenceFormValue extends SelectObjectFormValue<numb
         }
 
         await super.initFormValue();
+    }
+
+    public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
+
+        // define select counts here, too (but not exclusive),
+        // to init mulitselect correctly (for preset values by placeholders)
+        const dynamicField = await KIXObjectService.loadDynamicField(this.dfName);
+        this.minSelectCount = Number(dynamicField?.Config?.CountMin) || 0;
+        this.maxSelectCount = Number(dynamicField?.Config?.CountMax) || 1;
+        super.initFormValueByField(field);
     }
 
 }
