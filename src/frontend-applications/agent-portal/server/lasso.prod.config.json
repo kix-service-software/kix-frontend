@@ -19,12 +19,10 @@
                         "keep_classnames": false,
                         "keep_fnames": false
                     }
-                },
-                "cssMinify": {
-                    "enable": true
                 }
             }
-        }
+        },
+        "lasso-clean-css"
     ],
     "outputDir": "dist/frontend-applications/agent-portal/static",
     "bundleReadTimeout": 200000
