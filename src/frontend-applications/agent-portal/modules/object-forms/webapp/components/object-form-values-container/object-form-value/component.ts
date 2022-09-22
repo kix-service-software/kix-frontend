@@ -105,8 +105,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 FormValueProperty.VISIBLE, (formValue: ObjectFormValue) => {
                     this.state.visible = formValue.visible;
                     if (this.state.visible && this.state.formValue.isCountHandler) {
-                        this.setCanAdd();
-                        this.setCanRemove();
+                        this.setButtonsAndVisibility();
                     }
                 }
             )
@@ -163,7 +162,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async addValue(): Promise<void> {
-        await this.state.formValue?.addFormValue(this.state.formValue.instanceId);
+        await this.state.formValue?.addFormValue(this.state.formValue.instanceId, null);
         this.setButtonsAndVisibility();
         (this as any).setStateDirty();
     }
