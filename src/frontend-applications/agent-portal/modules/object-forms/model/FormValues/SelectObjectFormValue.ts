@@ -161,6 +161,11 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
     }
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
+
+        // handle select count here, too (but not exclusive),
+        // to init mulitselect correctly (for preset values by placeholders)
+        this.multiselect = this.maxSelectCount < 0 || this.maxSelectCount > 1;
+
         if (field) {
             // map deprecated input components
             switch (this.inputComponentId) {
@@ -286,18 +291,20 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         const newValue = [];
         if (Array.isArray(this.value)) {
             for (const v of this.value) {
-                if (TreeUtil.findNode(tree, v)) {
-                    if (selectedIds.some((id) => id.toString() === v.toString())) {
+                if (typeof v !== 'undefined' && v !== null) {
+                    if (TreeUtil.findNode(tree, v)) {
+                        if (selectedIds.some((id) => id.toString() === v.toString())) {
+                            newValue.push(v);
+                        }
+                    } else if (this.multiselect) {
                         newValue.push(v);
                     }
-                } else if (this.multiselect) {
-                    newValue.push(v);
                 }
             }
         }
 
         for (const node of nodes) {
-            if (!newValue.some((v) => v.toString() === node.id.toString())) {
+            if (!newValue.some((v) => v.toString() === node?.id?.toString())) {
                 newValue.push(node.id);
             }
         }
