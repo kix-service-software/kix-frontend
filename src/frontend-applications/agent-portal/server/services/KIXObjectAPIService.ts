@@ -460,7 +460,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         if (searchCriteria.length) {
             const hasEmptyINSearch = searchCriteria.some(
                 (c) => c.operator === SearchOperator.IN && c.filterType === FilterType.AND
-                    && (Array.isArray(c.value) && !c.value.length)
+                    && (c.value === null || (Array.isArray(c.value) && !c.value.length))
             );
 
             if (hasEmptyINSearch) {
