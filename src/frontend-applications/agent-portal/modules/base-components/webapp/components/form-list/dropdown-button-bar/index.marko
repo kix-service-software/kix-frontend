@@ -8,9 +8,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <div.button-bar key="buttonbar">
-    <span on-click("selectAll")>
-        <input.select-all-Checkbox type="checkbox" key="selectAllCheckbox"/>
-        <translation-string pattern="Translatable#Select all"/>
+    <span>
+        <input.select-all-Checkbox type="checkbox" key="selectAllCheckbox" on-change("selectAll")/>
+        <span on-click("toggleSelectAllCheckbox")>
+            <translation-string pattern="Translatable#Select all"/>
+        </span>
     </span>
     <button.kix-button.submit-button
         type="button"
