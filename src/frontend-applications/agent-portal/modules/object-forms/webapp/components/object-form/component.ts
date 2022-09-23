@@ -19,6 +19,7 @@ import { ObjectFormHandler } from '../../core/ObjectFormHandler';
 import { ObjectFormEvent } from '../../../model/ObjectFormEvent';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
+import { ObjectFormValue } from '../../../model/FormValues/ObjectFormValue';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -105,7 +106,27 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 await BrowserUtil.openSuccessOverlay('Translatable#Success');
             }
         } catch (e) {
-            setTimeout(() => this.state.prepared = true, 100);
+            this.state.prepared = true;
+
+            setTimeout(() => {
+                const invalidFormValue = this.getFirstInvlaidFOrmValue(this.formhandler.getFormValues());
+                EventService.getInstance().publish(ObjectFormEvent.SCROLL_TO_FORM_VALUE, invalidFormValue?.instanceId);
+            }, 25);
+        }
+    }
+
+    private getFirstInvlaidFOrmValue(formValues: ObjectFormValue[]): ObjectFormValue {
+        for (const fv of formValues) {
+            if (!fv.valid) {
+                return fv;
+            }
+
+            if (fv.formValues?.length) {
+                const subFV = this.getFirstInvlaidFOrmValue(fv.formValues);
+                if (subFV) {
+                    return subFV;
+                }
+            }
         }
     }
 

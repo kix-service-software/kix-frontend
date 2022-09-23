@@ -33,6 +33,7 @@ import { TableFactoryService } from '../../core/factory/TableFactoryService';
 import { Context } from '../../../../../model/Context';
 import { FormValueProperty } from '../../../../object-forms/model/FormValueProperty';
 import { ObjectFormValue } from '../../../../object-forms/model/FormValues/ObjectFormValue';
+import { ObjectFormEvent } from '../../../../object-forms/model/ObjectFormEvent';
 
 class Component {
 
@@ -176,37 +177,45 @@ class Component {
         if (this.state.widgetConfiguration.formDependent) {
 
             const formHandler = await this.context.getFormManager().getObjectFormHandler();
-
-            const properties = this.state.widgetConfiguration.formDependencyProperties;
-            if (Array.isArray(properties)) {
-                const relevantHandlerConfigIds = this.getRelevantHandlerConfigIds(properties);
-
-                for (const p of properties) {
-                    const formValue = formHandler?.objectFormValueMapper?.findFormValue(p);
-                    formValue?.addPropertyBinding(FormValueProperty.VALUE, (value: ObjectFormValue) => {
-                        this.state.table?.reload(null, null, relevantHandlerConfigIds);
-                    });
+            const formDependencyProperties = [...this.state.widgetConfiguration.formDependencyProperties || []];
+            const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
+            const tableConfiguration = settings?.configuration as TableConfiguration;
+            const relevantHandlerIds = this.addAdditionalDependenciesAndGetRelevantHandlerIds(
+                formDependencyProperties, tableConfiguration
+            );
+            if (formDependencyProperties.length) {
+                for (const property of formDependencyProperties) {
+                    const formValue = formHandler?.objectFormValueMapper?.findFormValue(property);
+                    if (formValue) {
+                        formValue?.addPropertyBinding(FormValueProperty.VALUE, (value: ObjectFormValue) => {
+                            this.state.table?.reload(null, null, relevantHandlerIds);
+                        });
+                    }
                 }
             }
         }
     }
 
-    private getRelevantHandlerConfigIds(properties: string[]): string[] {
-        const relevantHandlerIds = [];
-        const settings = this.state.widgetConfiguration.configuration as TableWidgetConfiguration;
-        const tableConfiguration = settings?.configuration as TableConfiguration;
-        if (Array.isArray(tableConfiguration?.additionalTableObjectsHandler)) {
+    private addAdditionalDependenciesAndGetRelevantHandlerIds(
+        properties: string[], tableConfiguration: TableConfiguration
+    ): string[] {
+        const handlerIds = [];
+        if (
+            Array.isArray(tableConfiguration?.additionalTableObjectsHandler)
+            && tableConfiguration?.additionalTableObjectsHandler.length
+        ) {
             tableConfiguration.additionalTableObjectsHandler.forEach((handlerConfig) => {
-                if (
-                    !handlerConfig.dependencyProperties
-                    || !handlerConfig.dependencyProperties.length
-                    || handlerConfig.dependencyProperties.some((dp) => properties.some((p) => p === dp))
-                ) {
-                    relevantHandlerIds.push(handlerConfig.id);
+                if (handlerConfig.dependencyProperties?.length) {
+                    handlerConfig.dependencyProperties.forEach((dp) => {
+                        if (!properties.some((p) => p === dp)) {
+                            properties.push(dp);
+                        }
+                    });
                 }
+                handlerIds.push(handlerConfig.id);
             });
         }
-        return relevantHandlerIds;
+        return handlerIds;
     }
 
     public onDestroy(): void {

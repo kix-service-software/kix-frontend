@@ -13,7 +13,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
    contentActions=state.actions
 >
    <@content>
-      <div.communication-container>
+      <div.communication-container#communication-top>
          <div.communication-header>
             <message-filter/>
             <div.icons-wrapper>
@@ -36,7 +36,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                   />
                </for>
             </if>
-            <a href="#pageTop" class="top" title=state.translations["Translatable#Go to top"]>
+            <a.top title=state.translations["Translatable#Go to top"] on-click("scrollToTop")>
                <i.fa.fa-arrow-up.move-up />
             </a>
          </div>

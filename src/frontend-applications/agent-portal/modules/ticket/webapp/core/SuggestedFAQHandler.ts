@@ -27,6 +27,8 @@ import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
+import { ObjectFormHandler } from '../../../object-forms/webapp/core/ObjectFormHandler';
+import { ObjectFormValue } from '../../../object-forms/model/FormValues/ObjectFormValue';
 
 export class SuggestedFAQHandler implements IAdditionalTableObjectsHandler {
 
@@ -42,9 +44,10 @@ export class SuggestedFAQHandler implements IAdditionalTableObjectsHandler {
         if (handlerConfig && Array.isArray(handlerConfig.dependencyProperties)) {
             const context = ContextService.getInstance().getActiveContext();
             const ticket = await context.getObject<Ticket>();
+            const formHandler = await context.getFormManager().getObjectFormHandler();
             const formId = context.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
             const formInstance = formId ? await context?.getFormManager()?.getFormInstance() : null;
-            const filter: FilterCriteria[] = await this.getFilter(handlerConfig, ticket, formInstance);
+            const filter: FilterCriteria[] = await this.getFilter(handlerConfig, ticket, formInstance, formHandler);
 
             if (filter && filter.length) {
                 if (
@@ -71,7 +74,8 @@ export class SuggestedFAQHandler implements IAdditionalTableObjectsHandler {
     }
 
     private async getFilter(
-        handlerConfig: AdditionalTableObjectsHandlerConfiguration, ticket: Ticket, formInstance?: FormInstance
+        handlerConfig: AdditionalTableObjectsHandlerConfiguration,
+        ticket: Ticket, formInstance?: FormInstance, formHandler?: ObjectFormHandler
     ): Promise<FilterCriteria[]> {
         let filter: FilterCriteria[] = [];
 
@@ -81,34 +85,47 @@ export class SuggestedFAQHandler implements IAdditionalTableObjectsHandler {
                 && handlerConfig.handlerConfiguration.minLenght
                 ? handlerConfig.handlerConfiguration.minLenght : 3;
             const stopWords = await this.getStopWords();
-
-            for (const p of handlerConfig.dependencyProperties) {
-                const formField = formInstance ? formInstance.getFormFieldByProperty(p) : null;
-                if (formField) {
-                    const value = await formInstance.getFormFieldValueByProperty(p);
-                    if (value && value.value && typeof value.value === 'string') {
-                        const searchWords = value.value.replace(/;/g, '').split(' ');
-                        filter = await this.buildFilterForSearchWords(
-                            searchWords, service, minLength, stopWords
-                        );
+            if (handlerConfig.dependencyProperties?.length) {
+                for (const p of handlerConfig.dependencyProperties) {
+                    const formField = formInstance ? formInstance.getFormFieldByProperty(p) : null;
+                    if (formField) {
+                        const value = await formInstance.getFormFieldValueByProperty(p);
+                        if (value && value.value && typeof value.value === 'string') {
+                            filter = await this.setFilter(filter, value.value, service, minLength, stopWords);
+                        }
+                    } else if (ticket && ticket[p] && typeof ticket[p] === 'string') {
+                        filter = await this.setFilter(filter, ticket[p], service, minLength, stopWords);
+                    } else if (formHandler) {
+                        const formValue = formHandler.getObjectFormCreator().findFormValue(p);
+                        if (formValue && formValue.value && typeof formValue.value === 'string') {
+                            filter = await this.setFilter(filter, formValue.value, service, minLength, stopWords);
+                        }
                     }
-                } else if (ticket && ticket[p] && typeof ticket[p] === 'string') {
-                    const searchWords = ticket[p].replace(/;/g, '').split(' ');
-                    filter = await this.buildFilterForSearchWords(
-                        searchWords, service, minLength, stopWords
-                    );
                 }
             }
         }
         return filter;
     }
 
+    private async setFilter(
+        filter: FilterCriteria[],
+        value: string,
+        service: IKIXObjectService,
+        minLength: any, stopWords:
+            string[]): Promise<FilterCriteria[]> {
+        const searchWords = value.replace(/;/g, '').split(' ');
+        filter = await this.buildFilterForSearchWords(
+            searchWords, service, minLength, stopWords
+        );
+        return filter;
+    }
+
     private async buildFilterForSearchWords(
-        searchWords: string[], service: IKIXObjectService, minLenght: number, stopWords: string[]
+        searchWords: string[], service: IKIXObjectService, minLength: number, stopWords: string[]
     ): Promise<FilterCriteria[]> {
         let filter = [];
         for (const w of searchWords) {
-            if (w.length >= minLenght && !stopWords.some((sw) => sw === w)) {
+            if (w.length >= minLength && !stopWords.some((sw) => sw === w)) {
                 const fullTextFilter = await service.prepareFullTextFilter(w);
                 filter = [
                     ...filter,

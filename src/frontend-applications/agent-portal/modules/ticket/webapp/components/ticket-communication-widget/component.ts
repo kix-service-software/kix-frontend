@@ -155,6 +155,16 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.collapseAll = true;
         (this as any).setStateDirty('collapseAll');
     }
+
+    public scrollToTop(event: any): void {
+        event.stopPropagation();
+        event.preventDefault();
+
+        const element: HTMLElement = document.getElementById('communication-top');
+        if (element) {
+            element.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'smooth' });
+        }
+    }
 }
 
 module.exports = Component;

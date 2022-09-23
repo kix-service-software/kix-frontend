@@ -24,7 +24,7 @@ export class TicketDialogUtil {
     public static async createTicket(
         ticketId?: number, articleId?: number, icon?: ObjectIcon | string, text?: string,
         additionalInformation: Array<[string, any]> = [],
-    ): Promise<void> {
+    ): Promise<Context> {
         const context = ContextService.getInstance().getActiveContext();
 
         if (context) {
@@ -53,6 +53,8 @@ export class TicketDialogUtil {
         );
         newContext.setIcon(icon);
         newContext.setDisplayText(text);
+
+        return newContext;
     }
 
     public static async editTicket(
