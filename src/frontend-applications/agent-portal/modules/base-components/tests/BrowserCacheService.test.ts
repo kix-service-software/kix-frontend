@@ -233,8 +233,8 @@ describe('BrowserCacheService', () => {
 
                 expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.ORGANISATION)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.CONTACT)).exist;
+                expect(prefixes.find((p) => p === 'ORGANISATION_TICKET_STATS')).exist;
+                expect(prefixes.find((p) => p === 'CONTACT_TICKET_STATS')).exist;
                 expect(prefixes.find((p) => p === 'QUEUE_HIERARCHY')).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.CURRENT_USER)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.ARTICLE)).exist;
