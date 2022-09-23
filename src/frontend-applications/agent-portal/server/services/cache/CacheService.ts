@@ -181,6 +181,7 @@ export class CacheService {
                 types.push(KIXObjectType.CONTACT);
                 break;
             case KIXObjectType.USER:
+                types.push(`${KIXObjectType.USER}-DISPLAY_VALUE`);
                 types.push(KIXObjectType.ROLE);
                 types.push(KIXObjectType.CONTACT);
                 types.push(KIXObjectType.REPORT_DEFINITION);

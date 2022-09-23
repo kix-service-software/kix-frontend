@@ -70,8 +70,9 @@ export class UserService extends KIXObjectAPIService {
         let displayValue = '';
 
         if (objectType === KIXObjectType.USER) {
+            const cacheType = `${objectType}-DISPLAY_VALUE`;
             const cacheKey = `${objectType}-${objectId}-displayvalue`;
-            displayValue = await CacheService.getInstance().get(cacheKey, objectType);
+            displayValue = await CacheService.getInstance().get(cacheKey, cacheType);
             if (!displayValue && objectId) {
                 const loadingOptions = new KIXObjectLoadingOptions();
                 loadingOptions.includes = [UserProperty.CONTACT];
@@ -84,7 +85,7 @@ export class UserService extends KIXObjectAPIService {
                 if (users?.length) {
                     const user = new User(users[0]);
                     displayValue = user.toString();
-                    await CacheService.getInstance().set(cacheKey, displayValue, objectType);
+                    await CacheService.getInstance().set(cacheKey, displayValue, cacheType);
                 }
             }
         } else {
