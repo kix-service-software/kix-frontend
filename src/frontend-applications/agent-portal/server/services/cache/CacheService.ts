@@ -151,8 +151,8 @@ export class CacheService {
             case KIXObjectType.TICKET:
                 types.push(KIXObjectType.CONFIG_ITEM);
                 types.push(KIXObjectType.ARTICLE);
-                types.push(KIXObjectType.ORGANISATION);
-                types.push(KIXObjectType.CONTACT);
+                types.push('ORGANISATION_TICKET_STATS');
+                types.push('CONTACT_TICKET_STATS');
                 types.push(KIXObjectType.CURRENT_USER);
                 types.push(KIXObjectType.TICKET_HISTORY);
                 // needed for permission checks of objectactions (HttpService) - check new after ticket update

@@ -267,7 +267,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             KIXObjectType.CONTACT,
             new KIXObjectLoadingOptions(
                 null, null, null,
-                [ContactProperty.TICKET_STATS, ContactProperty.USER], null
+                [ContactProperty.TICKET_STATS, ContactProperty.USER], null, null,
+                'CONTACT_TICKET_STATS'
             ), null, null,
             [
                 'organisation-details-assigned-contacts-firstname',

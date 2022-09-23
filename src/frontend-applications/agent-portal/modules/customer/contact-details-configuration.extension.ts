@@ -336,7 +336,10 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         const tableConfig = new TableConfiguration(
             'contact-details-assigned-organisations-table', 'Assigned Organisations', ConfigurationType.Table,
             KIXObjectType.ORGANISATION,
-            new KIXObjectLoadingOptions(null, null, null, [OrganisationProperty.TICKET_STATS], null),
+            new KIXObjectLoadingOptions(
+                null, null, null, [OrganisationProperty.TICKET_STATS],
+                null, null, 'ORGANISATION_TICKET_STATS'
+            ),
             null, [],
             [
                 'contact-details-assigned-organisation-number',
