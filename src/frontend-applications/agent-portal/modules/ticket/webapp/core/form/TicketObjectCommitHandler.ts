@@ -176,7 +176,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         if ((ticket.ContactID as any) === '') {
             ticket.ContactID = null;
         }
-        if (ticket['TimeUnit'] && ticket.Articles.length) {
+        if (ticket['TimeUnit'] && ticket.Articles?.length) {
             ticket.Articles[0]['TimeUnit'] = ticket['TimeUnit'];
             delete ticket['TimeUnit'];
         }
