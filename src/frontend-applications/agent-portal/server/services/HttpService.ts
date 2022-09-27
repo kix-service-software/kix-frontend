@@ -38,12 +38,14 @@ export class HttpService {
 
     private axios: AxiosAdapter;
     private apiURL: string;
+    private isClusterEnabled: boolean = false;
     private backendCertificate: any;
     private requestPromises: Map<string, Promise<any>> = new Map();
 
     private constructor() {
         const serverConfig: IServerConfiguration = ConfigurationService.getInstance().getServerConfiguration();
         this.apiURL = serverConfig?.BACKEND_API_URL;
+        this.isClusterEnabled = serverConfig.CLUSTER_ENABLED;
         this.axios = require('axios');
 
         const certPath = ConfigurationService.getInstance().certDirectory + '/backend.pem';
@@ -85,20 +87,52 @@ export class HttpService {
             return this.requestPromises.get(requestKey);
         }
 
+
+        let semaphor;
+        const semaphorKey = cacheKey ? `SEMAPHOR-${cacheKey}` : requestKey;
+        if (this.isClusterEnabled && useCache) {
+            semaphor = await CacheService.getInstance().get(semaphorKey, semaphorKey);
+
+            if (semaphor) {
+                const cachedObject = await CacheService.getInstance().waitFor(cacheKey, cacheKeyPrefix);
+                if (cachedObject) {
+                    return cachedObject;
+                }
+
+                semaphor = null;
+            }
+        }
+
         const requestPromise = this.executeRequest<T>(resource, token, clientRequestId, options);
         this.requestPromises.set(requestKey, requestPromise);
+
+        if (this.isClusterEnabled && useCache) {
+            await CacheService.getInstance().set(semaphorKey, 1, semaphorKey);
+        }
 
         RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size, true);
 
         const response = await requestPromise.catch((error): any => {
             this.requestPromises.delete(requestKey);
             RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size);
+
+            if (this.isClusterEnabled && useCache) {
+                CacheService.getInstance().deleteKeys(semaphorKey);
+            }
+
             throw error;
         });
+
+        if (this.isClusterEnabled && useCache) {
+            await CacheService.getInstance().deleteKeys(semaphorKey);
+        }
+
         if (useCache) {
             CacheService.getInstance().set(cacheKey, response, cacheKeyPrefix);
         }
+
         this.requestPromises.delete(requestKey);
+
         RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size);
 
         return response;

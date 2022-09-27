@@ -40,8 +40,8 @@ export class ModuleConfigurationService {
 
     private constructor() { }
 
-    private forms: string[] = [];
-    private formIDsWithContext: Array<[FormContext, KIXObjectType | string, string]> = [];
+    private forms: string[];
+    private formIDsWithContext: Array<[FormContext, KIXObjectType | string, string]>;
 
     public async saveConfiguration(
         token: string, configuration: IConfiguration, accessLevel: SysConfigAccessLevel = SysConfigAccessLevel.INTERNAL
@@ -144,13 +144,31 @@ export class ModuleConfigurationService {
         await CacheService.getInstance().deleteKeys('ModuleConfigurationService');
     }
 
+    public async applyFormConfigurationsToCache(): Promise<void> {
+        await CacheService.getInstance().set('FORM_IDS', this.forms);
+        await CacheService.getInstance().set('FORM_IDS_WITH_CONTEXT', this.formIDsWithContext);
+        CacheService.getInstance().adddIgnorePrefixes(['FORM_IDS', 'FORM_IDS_WITH_CONTEXT']);
+    }
+
     public registerFormId(formId: string): void {
+        if (!this.forms) {
+            this.forms = [];
+        }
+
         if (!this.forms.some((fid) => fid === formId)) {
             this.forms.push(formId);
         }
     }
 
     public registerForm(formContext: FormContext[], formObject: KIXObjectType | string, formId: string): void {
+        if (!this.forms) {
+            this.forms = [];
+        }
+
+        if (!this.formIDsWithContext) {
+            this.formIDsWithContext = [];
+        }
+
         if (!this.forms.some((fid) => fid === formId)) {
             this.forms.push(formId);
         }
@@ -171,9 +189,12 @@ export class ModuleConfigurationService {
         });
     }
 
-    public getRegisteredForms(token: string): FormConfiguration[] {
+    public async getRegisteredForms(token: string): Promise<FormConfiguration[]> {
+        const cachedFormIds = await CacheService.getInstance().get('FORM_IDS');
+        const forms = cachedFormIds || [];
+
         const result = [];
-        for (const formId of this.forms) {
+        for (const formId of forms) {
             const form = this.loadConfiguration(token, formId);
             if (form) {
                 result.push(form);
@@ -183,8 +204,11 @@ export class ModuleConfigurationService {
         return result;
     }
 
-    public getFormIDsWithContext(): Array<[FormContext, KIXObjectType | string, string]> {
-        return this.formIDsWithContext;
+    public async getFormIDsWithContext(): Promise<Array<[FormContext, KIXObjectType | string, string]>> {
+        const cachedForms = await CacheService.getInstance().get('FORM_IDS_WITH_CONTEXT');
+        const formIDsWithContext = cachedForms || [];
+
+        return formIDsWithContext;
     }
 
     public async cleanUp(token: string): Promise<void> {

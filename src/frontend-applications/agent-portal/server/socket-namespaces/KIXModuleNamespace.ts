@@ -161,7 +161,7 @@ export class KIXModuleNamespace extends SocketNameSpace {
     private async loadFormConfigurationsByContext(
         data: LoadFormConfigurationsRequest
     ): Promise<SocketResponse> {
-        const formIdsWithContext = ModuleConfigurationService.getInstance().getFormIDsWithContext();
+        const formIdsWithContext = await ModuleConfigurationService.getInstance().getFormIDsWithContext();
         return new SocketResponse(
             KIXModulesEvent.LOAD_FORM_CONFIGURATIONS_BY_CONTEXT_FINISHED,
             new LoadFormConfigurationsResponse(data.requestId, formIdsWithContext)

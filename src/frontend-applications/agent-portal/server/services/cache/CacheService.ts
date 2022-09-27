@@ -113,6 +113,10 @@ export class CacheService {
         ProfilingService.getInstance().stop(profileTaskId);
     }
 
+    public async waitFor(key: string, cacheType: string): Promise<any> {
+        return this.getCacheBackendInstance()?.waitFor(key, cacheType);
+    }
+
     private async getCacheKeyPrefixes(objectNamespace: string): Promise<string[]> {
         let types: string[] = [];
         if (objectNamespace && objectNamespace.indexOf('.') !== -1) {

@@ -30,6 +30,7 @@ import { SocketService } from '../frontend-applications/agent-portal/server/serv
 import { PluginService } from './services/PluginService';
 import { Server } from '../frontend-applications/agent-portal/server/Server';
 import { AuthenticationService } from '../frontend-applications/agent-portal/server/services/AuthenticationService';
+import { CacheService } from '../frontend-applications/agent-portal/server/services/cache';
 
 const path = require('path');
 

@@ -128,6 +128,19 @@ export class RedisCache implements ICache {
         await this.delAsync(`${this.KIX_CACHE_PREFIX}::${type}`).catch(() => this.checkConnection());
     }
 
+    public async waitFor(key: string, cacheType: string): Promise<any> {
+        let cachedObject: any;
+        while (!cachedObject) {
+            const promise = new Promise<boolean>((resolve, reject) => {
+                setTimeout(async () => {
+                    const result = await this.get(cacheType, key);
+                    resolve(result);
+                }, 50);
+            });
+            cachedObject = await promise;
+        }
+    }
+
     private checkConnection(): void {
         if (!this.redisClient || !this.redisClient?.connected) {
             LoggingService.getInstance().info('REDIS quit');
@@ -180,4 +193,5 @@ export class RedisCache implements ICache {
 
         return found;
     }
+
 }
