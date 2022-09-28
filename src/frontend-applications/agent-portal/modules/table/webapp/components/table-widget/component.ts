@@ -33,7 +33,6 @@ import { TableFactoryService } from '../../core/factory/TableFactoryService';
 import { Context } from '../../../../../model/Context';
 import { FormValueProperty } from '../../../../object-forms/model/FormValueProperty';
 import { ObjectFormValue } from '../../../../object-forms/model/FormValues/ObjectFormValue';
-import { ObjectFormEvent } from '../../../../object-forms/model/ObjectFormEvent';
 
 class Component {
 

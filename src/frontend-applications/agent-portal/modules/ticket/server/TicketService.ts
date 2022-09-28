@@ -100,6 +100,8 @@ export class TicketAPIService extends KIXObjectAPIService {
                 }
             }
 
+            loadingOptions.query.push(['NoDynamicFieldDisplayValues', 'CheckList,ITSMConfigItemReference,TicketReference']);
+
             objects = await super.load(
                 token, KIXObjectType.TICKET, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.TICKET,
                 clientRequestId, Ticket
