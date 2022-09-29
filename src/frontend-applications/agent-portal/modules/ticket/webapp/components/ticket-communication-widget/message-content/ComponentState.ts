@@ -20,6 +20,7 @@ export class ComponentState extends AbstractComponentState {
         public title: string = 'message-content Component',
         public article: Article = null,
         public expanded: boolean = false,
+        public compactViewExpanded: boolean = false,
         public actions: AbstractAction[] = [],
         public isExternal: boolean = false,
         public contactIcon: ObjectIcon | string = null,
@@ -31,7 +32,10 @@ export class ComponentState extends AbstractComponentState {
         public show: boolean = false,
         public loading: boolean = false,
         public backgroundColor: string = '#fff',
-        public fromDisplayName: string = ''
+        public selectedCompactView: boolean = false,
+        public fromDisplayName: string = '',
+        public showAllAttachments: boolean = false,
+        public hasInlineAttachments: boolean = false
     ) {
         super();
     }

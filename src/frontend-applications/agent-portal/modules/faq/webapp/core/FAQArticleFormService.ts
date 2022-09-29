@@ -17,6 +17,7 @@ import { Attachment } from '../../../../model/kix/Attachment';
 import { BrowserUtil } from '../../../../modules/base-components/webapp/core/BrowserUtil';
 import { FAQArticleHandler } from './FAQArticleHandler';
 import { FormContext } from '../../../../model/configuration/FormContext';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 
 export class FAQArticleFormService extends KIXObjectFormService {
 
@@ -71,7 +72,7 @@ export class FAQArticleFormService extends KIXObjectFormService {
             case FAQArticleProperty.CATEGORY_ID:
                 hasPermissions = await this.checkPermissions('system/faq/categories');
                 break;
-            case FAQArticleProperty.LINK:
+            case KIXObjectProperty.LINKS:
                 hasPermissions = await this.checkPermissions('links', [CRUD.CREATE]);
                 break;
             default:

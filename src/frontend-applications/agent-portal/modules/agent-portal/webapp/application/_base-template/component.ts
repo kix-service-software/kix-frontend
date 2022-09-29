@@ -45,6 +45,9 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+
+        // set base for relative links
+        this.setBaseLink();
         const start = Date.now();
 
         this.state.loading = true;
@@ -124,6 +127,17 @@ class Component {
         const end = Date.now();
 
         console.debug(`mount base template: ${(end - start) / 1000} sec.`);
+    }
+
+    private setBaseLink(): void {
+        if (window?.location?.origin) {
+            const head = document.getElementsByTagName('head');
+            if (head && head[0]) {
+                const base = document.createElement('base');
+                base.href = window?.location?.origin;
+                head[0].appendChild(base);
+            }
+        }
     }
 
     public onDestroy(): void {

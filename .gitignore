@@ -25,3 +25,7 @@ src/plugins/*
 !src/plugins/.gitkeep
 
 data/*_ContextList.json
+
+#ignore IntelliJ IDEA project files
+.idea
+*.iml

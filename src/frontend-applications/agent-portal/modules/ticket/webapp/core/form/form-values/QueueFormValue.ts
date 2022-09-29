@@ -15,6 +15,7 @@ import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadin
 import { SelectObjectFormValue } from '../../../../../object-forms/model/FormValues/SelectObjectFormValue';
 import { SearchOperator } from '../../../../../search/model/SearchOperator';
 import { QueueProperty } from '../../../../model/QueueProperty';
+import { QueueService } from '../../admin';
 
 export class QueueFormValue extends SelectObjectFormValue<number> {
 
@@ -27,12 +28,6 @@ export class QueueFormValue extends SelectObjectFormValue<number> {
             this.loadingOptions.filter = [];
         }
 
-        this.loadingOptions.filter.push(
-            new FilterCriteria(
-                QueueProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, null
-            )
-        );
-
         if (!Array.isArray(this.loadingOptions.includes)) {
             this.loadingOptions.includes = [];
         }
@@ -41,13 +36,16 @@ export class QueueFormValue extends SelectObjectFormValue<number> {
             this.loadingOptions.expands = [];
         }
 
-        this.loadingOptions.includes.push(QueueProperty.SUB_QUEUES);
-        this.loadingOptions.expands.push(QueueProperty.SUB_QUEUES);
-
         this.structureOption = true;
         this.objectType = KIXObjectType.QUEUE;
 
         await super.initFormValue();
     }
 
+    public async loadSelectableValues(): Promise<void> {
+        if (this.enabled) {
+            const queues = await QueueService.getInstance().getQueuesHierarchy();
+            await this.prepareSelectableNodes(queues);
+        }
+    }
 }

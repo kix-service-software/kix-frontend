@@ -25,7 +25,8 @@ export class ReportChartWidgetConfiguration implements IConfiguration {
         public reportDefinitionId?: number,
         public reportOutputFormat?: string,
         public formatConfiguration?: FormatConfiguration,
-        public useReportTitle: boolean = true
+        public useReportTitle: boolean = true,
+        public valid: boolean = true,
     ) { }
 
 }

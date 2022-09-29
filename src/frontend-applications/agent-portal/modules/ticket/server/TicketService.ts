@@ -179,7 +179,7 @@ export class TicketAPIService extends KIXObjectAPIService {
             });
 
             await this.createLinks(
-                token, clientRequestId, ticketId, this.getParameterValue(ticketParameter, TicketProperty.LINK)
+                token, clientRequestId, ticketId, this.getParameterValue(ticketParameter, KIXObjectProperty.LINKS)
             );
 
             return ticketId;
@@ -313,8 +313,6 @@ export class TicketAPIService extends KIXObjectAPIService {
         }
         return result;
     }
-
-
 
     public async updateObject(
         token: string, clientRequestId: string, objectType: KIXObjectType,
@@ -563,7 +561,6 @@ export class TicketAPIService extends KIXObjectAPIService {
                     FilterDataType.STRING, FilterType.OR, `${primary.value}`
                 ),
             ];
-            console.table(primarySearch);
             searchCriteria = [...searchCriteria, ...primarySearch];
         }
 
@@ -616,7 +613,7 @@ export class TicketAPIService extends KIXObjectAPIService {
             searchCriteria.push(
                 new FilterCriteria(
                     TicketProperty.STATE_TYPE, SearchOperator.IN,
-                    FilterDataType.STRING, FilterType.AND, 'Open'
+                    FilterDataType.STRING, FilterType.AND, ['Open']
                 )
             );
         }

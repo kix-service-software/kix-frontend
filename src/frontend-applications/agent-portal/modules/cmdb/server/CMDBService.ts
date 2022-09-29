@@ -44,6 +44,7 @@ import { Version } from '../model/Version';
 import { SearchProperty } from '../../search/model/SearchProperty';
 import { GeneralCatalogItemProperty } from '../../general-catalog/model/GeneralCatalogItemProperty';
 import { ConfigItemClass } from '../model/ConfigItemClass';
+import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 
 
 export class CMDBAPIService extends KIXObjectAPIService {
@@ -286,14 +287,14 @@ export class CMDBAPIService extends KIXObjectAPIService {
                     this.objectType
                 );
 
-            const links = this.getParameterValue(parameter, ConfigItemProperty.LINKS);
+            const links = this.getParameterValue(parameter, KIXObjectProperty.LINKS);
             if (links && links.length) {
                 await this.createLinks(token, clientRequestId, Number(options.configItemId), links);
             }
 
             return response.VersionID;
         } else {
-            const createConfigItem = new CreateConfigItem(parameter.filter((p) => p[0] !== ConfigItemProperty.LINKS));
+            const createConfigItem = new CreateConfigItem(parameter.filter((p) => p[0] !== KIXObjectProperty.LINKS));
             const uri = this.buildUri('cmdb', 'configitems');
             const response = await this.sendCreateRequest<CreateConfigItemResponse, CreateConfigItemRequest>(
                 token, clientRequestId, uri, new CreateConfigItemRequest(createConfigItem), this.objectType
@@ -304,7 +305,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
 
             const configItemId = response.ConfigItemID;
 
-            const links = this.getParameterValue(parameter, ConfigItemProperty.LINKS);
+            const links = this.getParameterValue(parameter, KIXObjectProperty.LINKS);
             if (links && links.length) {
                 await this.createLinks(token, clientRequestId, Number(configItemId), links);
             }

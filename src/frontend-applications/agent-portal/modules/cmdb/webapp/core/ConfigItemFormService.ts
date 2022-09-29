@@ -324,7 +324,7 @@ export class ConfigItemFormService extends KIXObjectFormService {
                             }
                         }
                         break;
-                    case ConfigItemProperty.LINKS:
+                    case KIXObjectProperty.LINKS:
                         parameterResult.push([property, value]);
                         break;
                     default:

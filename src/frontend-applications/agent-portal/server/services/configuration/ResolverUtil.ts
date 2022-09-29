@@ -49,6 +49,10 @@ export class ResolverUtil {
             ...configurations.filter((c) => !ids.some((cid) => cid === c.id))
         ];
 
+        // some user created config does not have a valid property but should not be ignored now,
+        // so no valid property at all is assumed as valid, too (KIX2018-8156)
+        newConfigurations = newConfigurations.filter((c) => typeof c.valid === 'undefined' || c.valid === true);
+
         return newConfigurations;
 
     }

@@ -9,11 +9,20 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <if(!state.loading)>
     <if(state.url)>
-        <a href=state.url on-click("linkClicked")>
-            <if(input.content)>
-                <${input.content}/>
-            </if>
-        </a>
+        <if(!state.isExternalUrl)>
+            <a href=state.url on-click("linkClicked")>
+                <if(input.content)>
+                    <${input.content}/>
+                </if>
+            </a>
+        </if>
+        <else>
+            <a href=state.url target="_blank">
+                <if(input.content)>
+                    <${input.content}/>
+                </if>
+            </a>
+        </else>
     </if>
     <else-if(input.content)>
         <div on-click("linkClicked")>

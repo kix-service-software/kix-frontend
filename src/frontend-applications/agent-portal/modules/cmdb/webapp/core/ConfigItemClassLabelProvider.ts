@@ -27,7 +27,7 @@ export class ConfigItemClassLabelProvider extends LabelProvider<ConfigItemClass>
                 displayValue = 'Translatable#Name';
                 break;
             case ConfigItemClassProperty.ID:
-                displayValue = 'Translatable#Icon';
+                displayValue = 'Translatable#ID';
                 break;
             default:
                 displayValue = await super.getPropertyText(property, short, translatable);

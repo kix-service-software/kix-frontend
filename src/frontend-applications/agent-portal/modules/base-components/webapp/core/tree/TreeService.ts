@@ -24,7 +24,11 @@ export class TreeService {
 
     private handler: Map<string, TreeHandler> = new Map();
 
-    public registerTreeHandler(id: string, handler: TreeHandler): void {
+    public registerTreeHandler(id: string, handler: TreeHandler, skipIfhandlerExistsWithTree: boolean = false): void {
+        if (skipIfhandlerExistsWithTree) {
+            const existing = this.getTreeHandler(id);
+            if (existing && existing.getTreeLength() > 0) return;
+        }
         this.handler.set(id, handler);
     }
 

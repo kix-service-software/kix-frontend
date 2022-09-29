@@ -17,6 +17,7 @@ export class ComponentState {
         public objectId: string | number = null,
         public object: KIXObject = null,
         public url: string = null,
+        public isExternalUrl: boolean = false,
         public loading: boolean = false
     ) { }
 

@@ -45,6 +45,7 @@ import { TicketSearchContext } from './webapp/core';
 import { ConfigItemProperty } from '../cmdb/model/ConfigItemProperty';
 import { SortOrder } from '../../model/SortOrder';
 import { ArticleColorsConfiguration } from './model/ArticleColorsConfiguration';
+import { DataType } from '../../model/DataType';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -418,12 +419,178 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(ticketHistoryWidget);
 
+        const parentChildrenTickets = new WidgetConfiguration('ticket-details-parent-child-widget', 'Child Tickets', ConfigurationType.Widget,
+            'table-widget', 'Translatable#Child Tickets', [], null, new TableWidgetConfiguration(
+                'ticket-details-parent-child-table-widget', 'Child Tickets', ConfigurationType.TableWidget, 'Ticket',
+                null, null, new TableConfiguration(
+                    'ticket-details-parent-child-table-config', 'Child Tickets', ConfigurationType.Table, 'Ticket',
+                    {
+                        'filter': [
+                            {
+                                'property': 'TicketID',
+                                'operator': 'IN',
+                                'type': FilterDataType.NUMERIC,
+                                'filterType': FilterType.OR,
+                                'value': '<KIX_TICKET_DynamicField_ChildTickets_ObjectValue>'
+                            },
+                            {
+                                'property': 'DynamicFields.ParentTickets',
+                                'operator': 'EQ',
+                                'type': FilterDataType.NUMERIC,
+                                'filterType': FilterType.OR,
+                                'value': '<KIX_TICKET_TicketID>'
+                            }
+                        ]
+                    },
+                    10,
+                    [
+                        {
+                            'id': null,
+                            'name': null,
+                            'type': null,
+                            'property': 'PriorityID',
+                            'showText': false,
+                            'showIcon': true,
+                            'showColumnTitle': true,
+                            'showColumnIcon': false,
+                            'size': 50,
+                            'sortable': true,
+                            'filterable': true,
+                            'hasListFilter': true,
+                            'dataType': DataType.STRING,
+                            'resizable': true,
+                            'componentId': null,
+                            'defaultText': null,
+                            'translatable': true,
+                            'titleTranslatable': true,
+                            'useObjectServiceForFilter': false,
+                            'valid': true,
+                        },
+                        {
+                            'id': null,
+                            'name': null,
+                            'type': null,
+                            'property': 'TicketNumber',
+                            'showText': true,
+                            'showIcon': false,
+                            'showColumnTitle': true,
+                            'showColumnIcon': false,
+                            'size': 200,
+                            'sortable': true,
+                            'filterable': true,
+                            'hasListFilter': false,
+                            'dataType': DataType.STRING,
+                            'resizable': true,
+                            'componentId': null,
+                            'defaultText': null,
+                            'translatable': true,
+                            'titleTranslatable': true,
+                            'useObjectServiceForFilter': false,
+                            'valid': true,
+                        },
+                        {
+                            'id': null,
+                            'name': null,
+                            'type': null,
+                            'property': 'Title',
+                            'showText': true,
+                            'showIcon': false,
+                            'showColumnTitle': true,
+                            'showColumnIcon': false,
+                            'size': 320,
+                            'sortable': true,
+                            'filterable': true,
+                            'hasListFilter': false,
+                            'dataType': DataType.STRING,
+                            'resizable': true,
+                            'componentId': null,
+                            'defaultText': null,
+                            'translatable': true,
+                            'titleTranslatable': true,
+                            'useObjectServiceForFilter': false,
+                            'valid': true,
+                        },
+                        {
+                            'id': null,
+                            'name': null,
+                            'type': null,
+                            'property': 'TypeID',
+                            'showText': false,
+                            'showIcon': true,
+                            'showColumnTitle': true,
+                            'showColumnIcon': false,
+                            'size': 50,
+                            'sortable': true,
+                            'filterable': true,
+                            'hasListFilter': true,
+                            'dataType': DataType.STRING,
+                            'resizable': true,
+                            'componentId': null,
+                            'defaultText': null,
+                            'translatable': true,
+                            'titleTranslatable': true,
+                            'useObjectServiceForFilter': false,
+                            'valid': true,
+                        },
+                        {
+                            'id': null,
+                            'name': null,
+                            'type': null,
+                            'property': 'StateID',
+                            'showText': true,
+                            'showIcon': true,
+                            'showColumnTitle': true,
+                            'showColumnIcon': false,
+                            'size': 320,
+                            'sortable': true,
+                            'filterable': true,
+                            'hasListFilter': true,
+                            'dataType': DataType.STRING,
+                            'resizable': true,
+                            'componentId': null,
+                            'defaultText': null,
+                            'translatable': true,
+                            'titleTranslatable': true,
+                            'useObjectServiceForFilter': false,
+                            'valid': true,
+                        },
+                        {
+                            'id': null,
+                            'name': null,
+                            'type': null,
+                            'property': 'OwnerID',
+                            'showText': true,
+                            'showIcon': false,
+                            'showColumnTitle': true,
+                            'showColumnIcon': false,
+                            'size': 300,
+                            'sortable': true,
+                            'filterable': true,
+                            'hasListFilter': false,
+                            'dataType': DataType.STRING,
+                            'resizable': true,
+                            'componentId': null,
+                            'defaultText': null,
+                            'translatable': true,
+                            'titleTranslatable': true,
+                            'useObjectServiceForFilter': false,
+                            'valid': true,
+                        },
+                    ],
+                    null, false, false, null, null, 1.75, 1.75, 'Translatable#0 data sets found.', null, false
+                ), null, false, false, null, false, true
+            ),
+            false, false, 'kix-icon-ticket', false, true, false, [], false,
+        );
+        configurations.push(parentChildrenTickets);
+
         const tabSettings = new TabWidgetConfiguration(
             'ticket-details-tab-widget-config', 'Tab Widget Config', ConfigurationType.TabWidget,
             [
                 'ticket-details-info-card',
                 'ticket-details-linked-objects-widget',
-                'ticket-details-history-widget'
+                'ticket-details-history-widget',
+                'ticket-details-parent-child-widget',
             ]
         );
         configurations.push(tabSettings);
@@ -812,7 +979,10 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     ),
                     new ConfiguredWidget(
                         'ticket-details-history-widget', 'ticket-details-history-widget', null
-                    )
+                    ),
+                    new ConfiguredWidget(
+                        'ticket-details-parent-child-widget', 'ticket-details-parent-child-widget', null,
+                    ),
                 ]
             )
         );

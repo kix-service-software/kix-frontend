@@ -29,7 +29,9 @@ import { TranslationService } from '../../../../modules/translation/webapp/core/
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { OrganisationPlaceholderHandler } from '../../../customer/webapp/core/OrganisationPlaceholderHandler';
 import { ContactPlaceholderHandler } from '../../../customer/webapp/core/ContactPlaceholderHandler';
-import { DynamicFieldValuePlaceholderHandler } from '../../../dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler';
+import {
+    DynamicFieldValuePlaceholderHandler
+} from '../../../dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler';
 import { AbstractPlaceholderHandler } from '../../../../modules/base-components/webapp/core/AbstractPlaceholderHandler';
 import { Article } from '../../model/Article';
 import { ArticleLoadingOptions } from '../../model/ArticleLoadingOptions';
@@ -275,6 +277,9 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
 
         if (normalTicketAttribut && this.isKnownProperty(attribute)) {
             switch (attribute) {
+                case 'ID':
+                    result = ticket[TicketProperty.TICKET_ID] ? ticket[TicketProperty.TICKET_ID].toString() : '';
+                    break;
                 case TicketProperty.STATE_ID:
                 case TicketProperty.QUEUE_ID:
                 case TicketProperty.PRIORITY_ID:
@@ -309,7 +314,6 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                 case TicketProperty.ATTACHMENT_NAME:
                 case KIXObjectProperty.DYNAMIC_FIELDS:
                 case TicketProperty.LAST_CHANGE_TIME:
-                case TicketProperty.LINK:
                 case TicketProperty.LINKED_AS:
                 case TicketProperty.TICKET_FLAG:
                 case TicketProperty.WATCHERS:
@@ -334,7 +338,8 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
             ...Object.keys(TicketProperty).map((p) => TicketProperty[p]),
             ...Object.keys(KIXObjectProperty).map((p) => KIXObjectProperty[p]),
             ...Object.keys(ArticleProperty).map((p) => ArticleProperty[p]),
-            ...Object.keys(this.relevantIdAttribut)
+            ...Object.keys(this.relevantIdAttribut),
+            'ID'
         ];
         return knownProperties.some((p) => p === property);
     }
@@ -376,7 +381,6 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
 
     private ignoreProperty(property: string): boolean {
         switch (property) {
-            case TicketProperty.TICKET_ID:
             case TicketProperty.UNSEEN:
             case KIXObjectProperty.OBJECT_ID:
             case KIXObjectProperty.OBJECT_TYPE:

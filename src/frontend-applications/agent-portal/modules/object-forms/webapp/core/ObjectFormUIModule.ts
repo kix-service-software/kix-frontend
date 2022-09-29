@@ -15,6 +15,7 @@ import { RequiredFormValueValidator } from './validation/validator/RequiredFormV
 import { SelectionFormValueValidator } from './validation/validator/SelectionFormValueValidator';
 import { RegexFormValueValidator } from './validation/validator/RegexFormValueValidator';
 import { DynamicFieldTableValidator } from './validation/validator/dynamic-fields/DynamicFieldTableValidator';
+import { DynamicFieldChecklistValidator } from './validation/validator/dynamic-fields/DynamicFieldChecklistValidator';
 
 export class UIModule implements IUIModule {
 
@@ -29,6 +30,7 @@ export class UIModule implements IUIModule {
         ObjectFormRegistry.getInstance().registerObjectFormValueValidator(PossibleValuesValidator);
         ObjectFormRegistry.getInstance().registerObjectFormValueValidator(RegexFormValueValidator);
         ObjectFormRegistry.getInstance().registerObjectFormValueValidator(DynamicFieldTableValidator);
+        ObjectFormRegistry.getInstance().registerObjectFormValueValidator(DynamicFieldChecklistValidator);
     }
 
     public async unRegister(): Promise<void> {
