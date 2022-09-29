@@ -39,6 +39,7 @@ export class DynamicFieldFormValueCountHandler {
         if (formValue.isCountHandler) {
             const dfValue = new DynamicFieldValue();
             dfValue.Value = value;
+            dfValue.Name = (formValue as any).dfName;
             (formValue as any).dfValues.push(dfValue);
 
             const parent = formValue.parent as DynamicFieldObjectFormValue;
