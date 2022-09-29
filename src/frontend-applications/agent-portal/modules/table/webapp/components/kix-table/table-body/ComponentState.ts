@@ -13,8 +13,7 @@ import { Row } from '../../../../model/Row';
 export class ComponentState {
 
     public constructor(
-        public rows: Row[] = [],
-        public ready: boolean = false,
+        public rows: Row[] = null,
         public loading: boolean = false,
         public rowKey: string = IdService.generateDateBasedId()
     ) { }
