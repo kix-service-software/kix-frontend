@@ -159,7 +159,7 @@ export abstract class Context {
     public async postInit(): Promise<void> {
         const formId = this.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
         if (formId && !this.formManager.formId) {
-            this.formManager.setFormId(formId);
+            await this.formManager.setFormId(formId);
         }
     }
 
