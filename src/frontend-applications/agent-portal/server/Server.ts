@@ -68,6 +68,13 @@ export class Server implements IServer {
             process.exit(1);
         });
 
+        process.on('exit', () => {
+            LoggingService.getInstance().warning('Exit NodeJS process');
+            const error = new Error().stack;
+            LoggingService.getInstance().error('Exit NodeJS process', error);
+            console.trace('');
+        });
+
         LoggingService.getInstance().info(`Initialize ${serviceExtensions.length} service extensions`);
         for (const extension of serviceExtensions) {
             await extension.initServices();
