@@ -62,6 +62,12 @@ export class Server implements IServer {
             // throw reason;
         });
 
+        process.on('uncaughtException', (err) => {
+            LoggingService.getInstance().error('An unhandledRejection occured:', err);
+            console.log(`Uncaught Exception: ${err?.message}`);
+            process.exit(1);
+        });
+
         LoggingService.getInstance().info(`Initialize ${serviceExtensions.length} service extensions`);
         for (const extension of serviceExtensions) {
             await extension.initServices();
