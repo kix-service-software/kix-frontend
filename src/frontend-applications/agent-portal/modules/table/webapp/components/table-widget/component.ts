@@ -105,11 +105,9 @@ class Component {
 
                             setTimeout(() => this.state.loading = false, 100);
                         } else {
-                            if (eventId === TableEvent.TABLE_READY) {
-                                if (this.state.table.isFiltered()) {
-                                    this.state.filterCount = this.state.table.getRowCount();
-                                    this.state.filterValue = this.state.table.getFilterValue();
-                                }
+                            if (eventId === TableEvent.TABLE_READY && this.state.table.isFiltered()) {
+                                this.state.filterCount = this.state.table.getRowCount();
+                                this.state.filterValue = this.state.table.getFilterValue();
                                 this.prepareTitle();
                             }
                             WidgetService.getInstance().updateActions(this.state.instanceId);
