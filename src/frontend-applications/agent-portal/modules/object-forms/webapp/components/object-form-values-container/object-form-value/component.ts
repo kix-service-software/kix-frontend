@@ -104,9 +104,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.formValue?.addPropertyBinding(
                 FormValueProperty.VISIBLE, (formValue: ObjectFormValue) => {
                     this.state.visible = formValue.visible;
-                    if (this.state.visible && this.state.formValue.isCountHandler) {
-                        this.setButtonsAndVisibility();
-                    }
                 }
             )
         );
