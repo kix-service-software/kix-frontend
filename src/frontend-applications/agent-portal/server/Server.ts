@@ -62,12 +62,6 @@ export class Server implements IServer {
             // throw reason;
         });
 
-        process.on('uncaughtException', (err) => {
-            LoggingService.getInstance().error('An unhandledRejection occured:', err);
-            console.log(`Uncaught Exception: ${err?.message}`);
-            process.exit(1);
-        });
-
         process.on('exit', () => {
             LoggingService.getInstance().warning('Exit NodeJS process');
             const error = new Error().stack;
