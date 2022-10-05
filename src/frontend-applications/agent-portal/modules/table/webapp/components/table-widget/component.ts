@@ -125,8 +125,8 @@ class Component {
             EventService.getInstance().subscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
 
             this.prepareHeader();
-            this.prepareActions();
             await this.prepareTable();
+            this.prepareActions();
             this.prepareTitle();
 
             this.prepareContextDependency(settings);

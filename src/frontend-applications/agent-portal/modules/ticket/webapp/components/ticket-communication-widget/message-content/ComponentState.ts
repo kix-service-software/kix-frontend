@@ -32,7 +32,7 @@ export class ComponentState extends AbstractComponentState {
         public show: boolean = false,
         public loading: boolean = false,
         public backgroundColor: string = '#fff',
-        public selectedCompactView: boolean = false,
+        public selectedCompactView: boolean = true,
         public fromDisplayName: string = '',
         public showAllAttachments: boolean = false,
         public hasInlineAttachments: boolean = false,

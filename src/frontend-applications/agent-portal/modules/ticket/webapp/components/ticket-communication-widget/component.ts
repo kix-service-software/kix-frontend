@@ -62,14 +62,17 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         });
 
         const user = await AgentService.getInstance().getCurrentUser();
-        const article_preference = user?.Preferences ? user.Preferences.find(
+
+        const articlePreference = user?.Preferences ? user.Preferences.find(
             (p) => p.ID === PersonalSettingsProperty.ARTICLE_SORT_ORDER
         ) : null;
-        this.sortOrder = article_preference?.Value;
-        const list_view_preference = user?.Preferences ? user.Preferences.find(
+        this.sortOrder = articlePreference?.Value;
+
+        const listViewPreference = user?.Preferences ? user.Preferences.find(
             (p) => p.ID === PersonalSettingsProperty.MESSAGE_COMPACT_VIEW
         ) : null;
-        this.state.selectedCompactView = list_view_preference?.Value === 'Compact';
+        this.state.selectedCompactView = !listViewPreference?.Value || listViewPreference?.Value === 'Compact';
+
         this.state.translations = await TranslationService.createTranslationObject(
             ['Translatable#Go to top', 'Translatable#Read all', 'Translatable#Collapse all',
                 'Translatable#Preview List', 'Translatable#Compact View']);

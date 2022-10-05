@@ -47,7 +47,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public onInput(input: any): void {
         this.article = input.article;
         this.state.article = this.article;
-        this.state.selectedCompactView = input.selectedCompactView;
+        this.state.selectedCompactView = typeof input.selectedCompactView !== 'undefined' ? input.selectedCompactView : true;
         this.state.expanded = input.collapseAll ? false : input.expanded || this.state.expanded;
 
         this.state.compactViewExpanded = this.state.selectedCompactView ? this.state.expanded : false;
