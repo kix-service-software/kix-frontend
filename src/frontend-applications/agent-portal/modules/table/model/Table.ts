@@ -43,6 +43,7 @@ import { TableEventData } from './TableEventData';
 import { ContextService } from '../../base-components/webapp/core/ContextService';
 import { ContextMode } from '../../../model/ContextMode';
 import { SearchCache } from '../../search/model/SearchCache';
+import { DataType } from '../../../model/DataType';
 
 export class Table implements Table {
 
@@ -622,19 +623,17 @@ export class Table implements Table {
         if (column) {
             column.setSortOrder(sortOrder);
 
+            const dataType = column.getColumnConfiguration().dataType || DataType.STRING;
+
             if (this.filteredRows) {
-                this.filteredRows = TableSortUtil.sort(
-                    this.filteredRows, columnId, sortOrder, column.getColumnConfiguration().dataType
-                );
+                this.filteredRows = TableSortUtil.sort(this.filteredRows, columnId, sortOrder, dataType);
                 for (const row of this.filteredRows) {
-                    row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType);
+                    row.sortChildren(columnId, sortOrder, dataType);
                 }
             } else {
-                this.rows = TableSortUtil.sort(
-                    this.rows, columnId, sortOrder, column.getColumnConfiguration().dataType
-                );
+                this.rows = TableSortUtil.sort(this.rows, columnId, sortOrder, dataType);
                 for (const row of this.rows) {
-                    row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType);
+                    row.sortChildren(columnId, sortOrder, dataType);
                 }
             }
 
