@@ -111,7 +111,6 @@ class Component {
                                     this.state.filterValue = this.state.table.getFilterValue();
                                 }
                                 this.prepareTitle();
-                                this.prepareActions();
                             }
                             WidgetService.getInstance().updateActions(this.state.instanceId);
                         }
@@ -128,7 +127,9 @@ class Component {
             EventService.getInstance().subscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
 
             this.prepareHeader();
-            this.prepareTable().then(() => this.prepareTitle());
+            this.prepareActions();
+            await this.prepareTable();
+            this.prepareTitle();
 
             this.prepareContextDependency(settings);
             this.prepareFormDependency();
