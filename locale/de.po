@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2022-09-08 12:18+0000\n"
-"Last-Translator: fkrahl <Frank.Krahl@cape-it.de>\n"
+"PO-Revision-Date: 2022-10-04 12:18+0000\n"
+"Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
 "Language: de\n"
@@ -180,7 +180,7 @@ msgid "after"
 msgstr "nach/größer als"
 
 msgid "After"
-msgstr ""
+msgstr "Nach"
 
 msgid "Age"
 msgstr "Alter"
@@ -371,7 +371,7 @@ msgid "At least {0} values must be selected"
 msgstr "Es müssen mindestens {0} Werte ausgewählt werden."
 
 msgid "At least one link could not be saved."
-msgstr ""
+msgstr "Mindestens eine Verknüpfung konnte nicht gespeichert werden."
 
 msgid "At least one of the fields To, Cc or Bcc must contain an entry."
 msgstr ""
@@ -427,7 +427,7 @@ msgid "before"
 msgstr "vor/kleiner als"
 
 msgid "Before"
-msgstr ""
+msgstr "Bevor"
 
 msgid "Begin of Business Day"
 msgstr "Beginn Servicezeit (\"Business Day\")"
@@ -509,7 +509,7 @@ msgid "Checklists"
 msgstr "Checklisten"
 
 msgid "Child Tickets"
-msgstr ""
+msgstr "Kindtickets"
 
 msgid "Choose a command"
 msgstr "Wählen Sie ein Kommando"
@@ -584,7 +584,7 @@ msgid "Code"
 msgstr "Code"
 
 msgid "Collapse all"
-msgstr ""
+msgstr "Alle einklappen"
 
 msgid ": (colon)"
 msgstr ": (Doppelpunkt)"
@@ -632,7 +632,7 @@ msgid "Community"
 msgstr "Community"
 
 msgid "Compact View"
-msgstr ""
+msgstr "Kompaktdarstellung"
 
 msgid "Compare"
 msgstr "Vergleichen"
@@ -1415,7 +1415,7 @@ msgid "From external"
 msgstr "von extern"
 
 msgid "From internal"
-msgstr ""
+msgstr "von intern"
 
 msgid "Frontend"
 msgstr "Frontend"
@@ -3796,16 +3796,16 @@ msgid "Pending date is not in the future."
 msgstr "\"Warten bis\"-Datum liegt nicht in der Zukunft."
 
 msgid "Pending time"
-msgstr ""
+msgstr "Wartezeit"
 
 msgid "Pending Time has invalid date!"
-msgstr ""
+msgstr "Wartezeit hat ungültigen Wert!"
 
 msgid "Pending Time has to be in future!"
-msgstr ""
+msgstr "Der Wartezeitpunkt muss in der Zukunft liegen!"
 
 msgid "Pending Time is required!"
-msgstr ""
+msgstr "Es muss ein Wartezeitpunkt angegeben werden!"
 
 msgid "Pending until"
 msgstr "Warten bis"
@@ -3872,10 +3872,10 @@ msgid "Please select a contact"
 msgstr "Wählen Sie bitte einen Kontakt."
 
 msgid "Plugin"
-msgstr ""
+msgstr "Plugin"
 
 msgid "Plugins"
-msgstr ""
+msgstr "Plugins"
 
 msgid "Port"
 msgstr "Port"
@@ -3902,7 +3902,7 @@ msgid "Preview"
 msgstr "Vorschau"
 
 msgid "Preview List"
-msgstr ""
+msgstr "Vorschauliste"
 
 msgid "previous"
 msgstr "zurück"
@@ -4625,7 +4625,7 @@ msgid "Sub"
 msgstr ""
 
 msgid "Sub Category"
-msgstr ""
+msgstr "Unterkategorie"
 
 msgid "Subject"
 msgstr "Betreff"

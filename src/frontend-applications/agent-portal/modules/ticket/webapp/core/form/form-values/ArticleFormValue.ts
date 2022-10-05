@@ -13,7 +13,6 @@ import { Ticket } from '../../../../model/Ticket';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { ChannelFormValue } from './ChannelFormValue';
 import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectFormValueMapper';
-import { FormContext } from '../../../../../../model/configuration/FormContext';
 
 export class ArticleFormValue extends ObjectFormValue<Article[]> {
 
