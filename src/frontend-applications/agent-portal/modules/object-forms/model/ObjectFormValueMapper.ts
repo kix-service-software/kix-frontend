@@ -89,7 +89,10 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
 
     public async mapFormValues(object: T): Promise<void> {
         this.object = object;
+        const startMapObjectValues = Date.now();
         await this.mapObjectValues(object);
+        const endMapObjectValues = Date.now();
+        console.debug(`Map Object Values: ${(endMapObjectValues - startMapObjectValues)}ms`);
 
         if (Array.isArray(this.form?.pages)) {
             for (const p of this.form?.pages) {
@@ -105,13 +108,22 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
 
         this.fieldOrder = [...this.formFieldOrder];
 
-        await this.initFormValues();
+        const startInitFormValues = Date.now();
+        await Promise.all(this.initFormValues());
+        const endInitFormValues = Date.now();
+        console.debug(`Init Form Values: ${endInitFormValues - startInitFormValues}ms`);
 
         for (const mapperExtension of this.extensions) {
+            const startExtension = Date.now();
             await mapperExtension.postMapFormValues(object);
+            const endExtension = Date.now();
+            console.debug(`Post Map Extension (${mapperExtension?.constructor?.name}): ${endExtension - startExtension}ms`);
         }
 
+        const startCounter = Date.now();
         await this.handleCountValues();
+        const endCounter = Date.now();
+        console.debug(`Handle Count Values: ${endCounter - startCounter}ms`);
 
         this.setInitialFormValueState();
 
@@ -133,14 +145,18 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         }
     }
 
-    protected async initFormValues(formValues = this.formValues): Promise<void> {
+    protected initFormValues(formValues = this.formValues): Array<Promise<void>> {
+        const promises = [];
         for (const fv of formValues) {
-            await fv.initFormValue();
+
+            promises.push(fv.initFormValue());
 
             if (fv.formValues?.length) {
-                await this.initFormValues(fv.formValues);
+                promises.push(...this.initFormValues(fv.formValues));
             }
         }
+
+        return promises;
     }
 
     protected setInitialFormValueState(formValues: ObjectFormValue[] = this.formValues): void {

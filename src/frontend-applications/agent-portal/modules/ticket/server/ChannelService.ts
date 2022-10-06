@@ -46,9 +46,13 @@ export class ChannelAPIService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.CHANNEL) {
             objects = await super.load<Channel>(
-                token, KIXObjectType.CHANNEL, this.RESOURCE_URI, loadingOptions, objectIds, 'Channel',
-                clientRequestId, Channel
+                token, KIXObjectType.CHANNEL, this.RESOURCE_URI, null, objectIds,
+                KIXObjectType.CHANNEL, clientRequestId, Channel
             );
+
+            if (objectIds && objectIds.length) {
+                objects = objects.filter((t) => objectIds.some((oid) => oid === t.ID));
+            }
         }
 
         return objects;
