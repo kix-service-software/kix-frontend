@@ -83,9 +83,15 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
         this.formSubscriber = {
             eventSubscriberId: this.state.field?.instanceId,
-            eventPublished: (data: any, eventId: string): void => {
+            eventPublished: async (data: any, eventId: string): Promise<void> => {
                 if (data.formField && data.formField.instanceId === this.state.field?.instanceId) {
-                    this.load(false);
+                    this.state.prepared = false;
+                    if (eventId === FormEvent.RELOAD_INPUT_VALUES) {
+                        // reload options - they could have changed
+                        this.setOptions();
+                    }
+                    await this.load(false);
+                    this.state.prepared = true;
                 } else if (
                     this.uniqueNodes && eventId === FormEvent.VALUES_CHANGED &&
                     data && (data as FormValuesChangedEventData).changedValues?.length
