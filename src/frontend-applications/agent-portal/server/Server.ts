@@ -29,6 +29,7 @@ import { IServer } from '../../../server/model/IServer';
 import { IServiceExtension } from './extensions/IServiceExtension';
 import { MainMenuNamespace } from '../modules/agent-portal/server/MainMenuNamespace';
 import { MarkoService } from './services/MarkoService';
+import { SysConfigService } from '../modules/sysconfig/server/SysConfigService';
 
 export class Server implements IServer {
 
@@ -86,6 +87,7 @@ export class Server implements IServer {
         });
 
         MainMenuNamespace.getInstance().createDefaultConfiguration(this.serverConfig.BACKEND_API_TOKEN);
+        SysConfigService.getInstance().preloadOptions();
         await this.initializeApplication();
     }
 

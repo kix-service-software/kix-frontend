@@ -205,7 +205,11 @@ export class ModuleConfigurationService {
     }
 
     public async getFormIDsWithContext(): Promise<Array<[FormContext, KIXObjectType | string, string]>> {
-        const cachedForms = await CacheService.getInstance().get('FORM_IDS_WITH_CONTEXT');
+        let cachedForms = await CacheService.getInstance().get('FORM_IDS_WITH_CONTEXT');
+        if (!cachedForms) {
+            await this.applyFormConfigurationsToCache();
+            cachedForms = await CacheService.getInstance().get('FORM_IDS_WITH_CONTEXT');
+        }
         const formIDsWithContext = cachedForms || [];
 
         return formIDsWithContext;
