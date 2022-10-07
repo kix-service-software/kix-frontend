@@ -387,13 +387,17 @@ export class HttpService {
 
             await CacheService.getInstance().set(backendToken, response.data['User'], KIXObjectType.CURRENT_USER);
             ProfilingService.getInstance().stop(profileTaskId, { data: [response.data] });
-
+            this.requestPromises.delete(requestKey);
             resolve(response.data['User']);
         });
 
         this.requestPromises.set(requestKey, requestPromise);
 
-        return requestPromise;
+        const loadedUser = await requestPromise.catch(() => {
+            this.requestPromises.delete(requestKey);
+            return null;
+        });
+        return loadedUser;
     }
 
     public getPendingRequestCount(): number {
