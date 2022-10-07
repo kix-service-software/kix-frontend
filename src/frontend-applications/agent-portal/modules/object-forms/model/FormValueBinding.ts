@@ -51,6 +51,10 @@ export class FormValueBinding {
     }
 
     private async valueSetter(val: any): Promise<void> {
+        // no change needed (prevent possible circles)
+        if (this.value === val) {
+            return;
+        }
         this.value = val;
 
         if (this.property === FormValueProperty.VALUE) {
