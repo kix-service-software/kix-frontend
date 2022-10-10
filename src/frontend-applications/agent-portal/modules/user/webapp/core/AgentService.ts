@@ -83,8 +83,8 @@ export class AgentService extends KIXObjectService<User> {
         return await AgentSocketClient.getInstance().getPersonalSettings();
     }
 
-    public getCurrentUser(): Promise<User> {
-        return AgentSocketClient.getInstance().getCurrentUser();
+    public getCurrentUser(withStats?: boolean): Promise<User> {
+        return AgentSocketClient.getInstance().getCurrentUser(withStats);
     }
 
     public async setPreferencesByForm(): Promise<void> {

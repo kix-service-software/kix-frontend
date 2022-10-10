@@ -24,6 +24,7 @@ import { SetPreferencesRequest } from '../../../../modules/base-components/webap
 import { SetPreferencesResponse } from '../../../../modules/base-components/webapp/core/SetPreferencesResponse';
 import { BrowserCacheService } from '../../../../modules/base-components/webapp/core/CacheService';
 import { PersonalSettingsProperty } from '../../model/PersonalSettingsProperty';
+import { BackendNotification } from '../../../../model/BackendNotification';
 
 export class AgentSocketClient extends SocketClient {
 
@@ -41,19 +42,22 @@ export class AgentSocketClient extends SocketClient {
         super('agent');
     }
 
-    public async getCurrentUser(): Promise<User> {
+    public async getCurrentUser(withStats: boolean): Promise<User> {
         let currentUserRequestPromise;
-        if (BrowserCacheService.getInstance().has(KIXObjectType.CURRENT_USER, KIXObjectType.CURRENT_USER)) {
-            currentUserRequestPromise = BrowserCacheService.getInstance().get(
-                KIXObjectType.CURRENT_USER, KIXObjectType.CURRENT_USER
-            );
+        const cacheType = withStats
+            ? `${KIXObjectType.CURRENT_USER}_STATS`
+            : KIXObjectType.CURRENT_USER;
+
+        if (BrowserCacheService.getInstance().has(cacheType, cacheType)) {
+            currentUserRequestPromise = BrowserCacheService.getInstance().get(cacheType, cacheType);
         }
 
         if (!currentUserRequestPromise) {
             const requestId = IdService.generateDateBasedId();
             const currentUserRequest = new GetCurrentUserRequest(
                 requestId,
-                ClientStorageService.getClientRequestId()
+                ClientStorageService.getClientRequestId(),
+                withStats
             );
 
             const socketTimeout = ClientStorageService.getSocketTimeout();
@@ -87,7 +91,7 @@ export class AgentSocketClient extends SocketClient {
         }
 
         BrowserCacheService.getInstance().set(
-            KIXObjectType.CURRENT_USER, currentUserRequestPromise, KIXObjectType.CURRENT_USER
+            cacheType, currentUserRequestPromise, cacheType
         );
 
         return currentUserRequestPromise;
@@ -179,5 +183,15 @@ export class AgentSocketClient extends SocketClient {
 
             this.socket.emit(AgentEvent.SET_PREFERENCES, preferencesRequest);
         });
+    }
+
+    public handleNotifications(event: BackendNotification): void {
+        const isOwnerEvent = event.Namespace.startsWith('Ticket.Owner');
+        const isResponsibleEvent = event.Namespace.startsWith('Ticket.responsible');
+        const isLockEvent = event.Namespace.startsWith('Ticket.Lock');
+
+        if (isOwnerEvent || isResponsibleEvent || isLockEvent) {
+            BrowserCacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS`);
+        }
     }
 }

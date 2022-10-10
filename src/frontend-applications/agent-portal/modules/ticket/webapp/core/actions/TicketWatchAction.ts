@@ -82,6 +82,7 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
         }
 
         setTimeout(async () => {
+            BrowserCacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS`);
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
 
             if (successHint) {

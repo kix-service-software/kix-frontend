@@ -28,6 +28,7 @@ import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { CacheService } from '../../../server/services/cache';
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
+import { AuthenticationService } from '../../../server/services/AuthenticationService';
 
 export class UserService extends KIXObjectAPIService {
 
@@ -354,6 +355,11 @@ export class UserService extends KIXObjectAPIService {
                 });
             }
         }
+
+        const backendToken = AuthenticationService.getInstance().getBackendToken(token);
+        const cacheUserId = AuthenticationService.getInstance().decodeToken(backendToken)?.UserID;
+        await CacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_${cacheUserId}`);
+
         if (errors.length) {
             throw new Error(errors[0].Code, errors.map((e) => e.Message).join('\n'), errors[0].StatusCode);
         }

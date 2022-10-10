@@ -338,12 +338,20 @@ export class HttpService {
         return key;
     }
 
-    public async getUserByToken(token: string): Promise<User> {
+    public async getUserByToken(token: string, withStats?: boolean): Promise<User> {
         const backendToken = AuthenticationService.getInstance().getBackendToken(token);
 
-        const user = await CacheService.getInstance().get(backendToken, KIXObjectType.CURRENT_USER);
-        if (user) {
-            return user;
+        const userId = AuthenticationService.getInstance().decodeToken(backendToken)?.UserID;
+
+        const cacheType = withStats
+            ? `${KIXObjectType.CURRENT_USER}_STATS_${userId}`
+            : `${KIXObjectType.CURRENT_USER}_${userId}`;
+
+        if (userId) {
+            const user = await CacheService.getInstance().get(backendToken, cacheType);
+            if (user) {
+                return user;
+            }
         }
 
         const requestKey = `${KIXObjectType.CURRENT_USER}-${token}`;
@@ -352,13 +360,20 @@ export class HttpService {
         }
 
         const requestPromise = new Promise<User>(async (resolve, reject) => {
-            const options: AxiosRequestConfig = {
-                method: RequestMethod.GET,
-                params: {
+            let params = {};
+
+            if (withStats) {
+                params = {
                     'include': 'Tickets,Preferences,RoleIDs,Contact',
                     'Tickets.StateType': 'Open'
-                }
-            };
+                };
+            } else {
+                params = {
+                    'include': 'Preferences,RoleIDs,Contact'
+                };
+            }
+
+            const options: AxiosRequestConfig = { method: RequestMethod.GET, params };
 
             const uri = 'session/user';
             options.url = this.buildRequestUrl(uri);
@@ -385,7 +400,7 @@ export class HttpService {
                     }
                 });
 
-            await CacheService.getInstance().set(backendToken, response.data['User'], KIXObjectType.CURRENT_USER);
+            await CacheService.getInstance().set(backendToken, response.data['User'], cacheType);
             ProfilingService.getInstance().stop(profileTaskId, { data: [response.data] });
             this.requestPromises.delete(requestKey);
             resolve(response.data['User']);

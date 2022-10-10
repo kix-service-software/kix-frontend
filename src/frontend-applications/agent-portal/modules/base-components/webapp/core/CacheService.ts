@@ -141,17 +141,10 @@ export class BrowserCacheService {
         }
 
         switch (cacheKeyPrefixes[0]) {
-            case KIXObjectType.ARTICLE:
-            case KIXObjectType.WATCHER:
-            case KIXObjectType.DYNAMIC_FIELD:
-                cacheKeyPrefixes.push(KIXObjectType.TICKET);
-                cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
-                break;
             case KIXObjectType.TICKET:
                 cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
                 cacheKeyPrefixes.push('ORGANISATION_TICKET_STATS');
                 cacheKeyPrefixes.push('CONTACT_TICKET_STATS');
-                cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
                 cacheKeyPrefixes.push(KIXObjectType.ARTICLE);
                 cacheKeyPrefixes.push(KIXObjectType.TICKET_HISTORY);
                 cacheKeyPrefixes.push('QUEUE_HIERARCHY');

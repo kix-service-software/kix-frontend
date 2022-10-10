@@ -76,16 +76,55 @@ export class CacheService {
     }
 
     public async updateCaches(events: BackendNotification[]): Promise<void> {
+        const promises = [];
         for (const event of events) {
             if (event.Event === 'CLEAR_CACHE') {
                 LoggingService.getInstance().debug('Backend Notification: ' + JSON.stringify(event));
-                await this.clearCache();
+                promises.push(this.clearCache());
             } else if (!event.Namespace) {
                 LoggingService.getInstance().warning('Ignore Backend Notification (missing Namespace in event)', event);
+            } else if (this.isUserStatsAffected(event.Namespace)) {
+                promises.push(this.handleUserStatsCache(event));
+            } else if (event.Namespace.startsWith('User.UserPreference')) {
+                promises.push(this.handleUserPreferencesCache(event));
             } else if (!event.Namespace.startsWith(KIXObjectType.TRANSLATION_PATTERN)) {
                 LoggingService.getInstance().debug('Backend Notification: ' + JSON.stringify(event));
-                await this.deleteKeys(event.Namespace);
+                promises.push(this.deleteKeys(event.Namespace));
             }
+        }
+
+        await Promise.all(promises);
+    }
+
+    private isUserStatsAffected(namespace: string): boolean {
+        const isOwnerEvent = namespace.startsWith('Ticket.Owner');
+        const isResponsibleEvent = namespace.startsWith('Ticket.responsible');
+        const isLockEvent = namespace.startsWith('Ticket.Lock');
+
+        return isOwnerEvent || isResponsibleEvent || isLockEvent;
+    }
+
+    private async handleUserStatsCache(event: BackendNotification): Promise<void> {
+        const isOwnerEvent = event.Namespace.startsWith('Ticket.Owner');
+        const isResponsibleEvent = event.Namespace.startsWith('Ticket.responsible');
+        const isLockEvent = event.Namespace.startsWith('Ticket.Lock');
+
+        const ids = event.ObjectID?.split('::');
+
+        if (ids?.length === 3) {
+            if (isOwnerEvent || isResponsibleEvent) {
+                await this.deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS_${ids[1]}`);
+                await this.deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS_${ids[2]}`);
+            } else if (isLockEvent) {
+                await this.deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS_${ids[2]}`);
+            }
+        }
+    }
+
+    private async handleUserPreferencesCache(event: BackendNotification): Promise<void> {
+        const ids = event.ObjectID?.split('::');
+        if (ids?.length === 2) {
+            await this.deleteKeys(`${KIXObjectType.CURRENT_USER}_${ids[0]}`);
         }
     }
 

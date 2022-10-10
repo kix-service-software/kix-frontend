@@ -27,7 +27,7 @@ export class NotificationHandler {
     }
 
     private static async checkForPermissionUpdate(events: BackendNotification[]): Promise<void> {
-        const user = await AgentSocketClient.getInstance().getCurrentUser();
+        const user = await AgentSocketClient.getInstance().getCurrentUser(false);
 
         let userIsAffacted = events
             .filter((e) => e.ObjectID && e.Namespace === `${KIXObjectType.ROLE}.${KIXObjectType.USER}`)
@@ -60,6 +60,8 @@ export class NotificationHandler {
             if (!this.updates.some((u) => u[0] === objectType && u[1] === eventObjectId)) {
                 this.updates.push([objectType, eventObjectId]);
             }
+
+            AgentSocketClient.getInstance().handleNotifications(e);
         }
 
         if (this.updateTimeout) {
@@ -67,12 +69,6 @@ export class NotificationHandler {
         }
 
         this.updateTimeout = setTimeout(() => {
-            ContextService.getInstance().notifyUpdates(this.updates);
-
-            if (this.updates?.some((u) => u[0] === KIXObjectType.TICKET)) {
-                EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
-            }
-
             ContextService.getInstance().notifyUpdates(this.updates);
 
             if (this.updates?.some((u) => u[0] === KIXObjectType.TICKET)) {
