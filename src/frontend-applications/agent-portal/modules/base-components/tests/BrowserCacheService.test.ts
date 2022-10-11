@@ -229,40 +229,16 @@ describe('BrowserCacheService', () => {
                 const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.TICKET);
                 expect(prefixes).exist;
                 expect(prefixes).an('array');
-                expect(prefixes.length).equals(9);
+                expect(prefixes.length).equals(8);
 
                 expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
                 expect(prefixes.find((p) => p === 'ORGANISATION_TICKET_STATS')).exist;
                 expect(prefixes.find((p) => p === 'CONTACT_TICKET_STATS')).exist;
                 expect(prefixes.find((p) => p === 'QUEUE_HIERARCHY')).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.CURRENT_USER)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.ARTICLE)).exist;
                 expect(prefixes.find((p) => p === 'OPTION_REQUEST')).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.TICKET_HISTORY)).exist;
-            });
-
-            it('should resolve the namespace for Article', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.ARTICLE);
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(3);
-
-                expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.ARTICLE)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.CURRENT_USER)).exist;
-            });
-
-            it('should resolve the namespace for Watcher', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.WATCHER);
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(3);
-
-                expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.WATCHER)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.CURRENT_USER)).exist;
-
             });
 
         });
