@@ -195,13 +195,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public removeValue(node: TreeNode, event: any): void {
         this.stopPropagation(event);
-
-        const tree = this.formValue?.treeHandler?.getTree() || [];
-        if (TreeUtil.findNode(tree, node.id)) {
-            this.formValue?.treeHandler?.setSelection([node], false, false, true, true);
-        } else {
-            this.formValue.removeValue(node.id);
-        }
+        this.formValue.removeValue(node.id);
     }
 
     public clearValue(event: any): void {

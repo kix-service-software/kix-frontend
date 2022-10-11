@@ -11,8 +11,8 @@ import { IUIModule } from '../../../../model/IUIModule';
 import { PlaceholderService } from '../../../../modules/base-components/webapp/core/PlaceholderService';
 import {
     TicketService, TicketTypeService, TicketStateService,
-    TicketPriorityService, QueueService, TicketFormService, ArticleFormService, PendingTimeValidator,
-    EmailRecipientValidator, TicketSearchDefinition, TicketHistoryLabelProvider, TicketTypeLabelProvider,
+    TicketPriorityService, QueueService, TicketFormService, ArticleFormService,
+    TicketSearchDefinition, TicketHistoryLabelProvider, TicketTypeLabelProvider,
     TicketPriorityLabelProvider, TicketStateLabelProvider, TicketStateTypeLabelProvider, QueueLabelProvider,
     TicketTableCSSHandler, ArticleTableCSSHandler,
     ArticleZipAttachmentDownloadAction, TicketSearchAction, ShowUserTicketsAction,
@@ -20,7 +20,6 @@ import {
 } from '.';
 import { TicketTableFactory } from './table/TicketTableFactory';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
-import { FormValidationService } from '../../../../modules/base-components/webapp/core/FormValidationService';
 import { SearchService } from '../../../search/webapp/core';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { ArticleTableFactory } from './table/ArticleTableFactory';
@@ -82,9 +81,6 @@ export class UIModule implements IUIModule {
         ServiceRegistry.registerServiceInstance(TicketFormService.getInstance());
         ServiceRegistry.registerServiceInstance(ArticleFormService.getInstance());
         ServiceRegistry.registerServiceInstance(ChannelService.getInstance());
-
-        FormValidationService.getInstance().registerValidator(new PendingTimeValidator());
-        FormValidationService.getInstance().registerValidator(new EmailRecipientValidator());
 
         SearchService.getInstance().registerSearchDefinition(new TicketSearchDefinition());
 

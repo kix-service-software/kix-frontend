@@ -19,9 +19,9 @@ export class RequiredFormValueValidator extends ObjectFormValueValidator {
         if (formValue.required) {
             const hasValue = typeof formValue.value !== 'undefined' && formValue.value !== null && formValue.value !==
                 '';
-            const hasArrayValue = (Array.isArray(formValue.value) && formValue.value.length);
+            const isArrayValueWithoutContent = (Array.isArray(formValue.value) && !formValue.value.length);
 
-            if (!hasValue && !hasArrayValue) {
+            if (!hasValue || isArrayValueWithoutContent) {
                 result.push(
                     await ObjectFormValueValidator.createValidationError(
                         'Translatable#Required field {0} has no value.', formValue.label
