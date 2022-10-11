@@ -190,14 +190,12 @@ export class CacheService {
             case KIXObjectType.ARTICLE:
             case KIXObjectType.DYNAMIC_FIELD:
                 types.push(KIXObjectType.TICKET);
-                types.push(KIXObjectType.CURRENT_USER);
                 break;
             case KIXObjectType.TICKET:
                 types.push(KIXObjectType.CONFIG_ITEM);
                 types.push(KIXObjectType.ARTICLE);
                 types.push('ORGANISATION_TICKET_STATS');
                 types.push('CONTACT_TICKET_STATS');
-                types.push(KIXObjectType.CURRENT_USER);
                 types.push(KIXObjectType.TICKET_HISTORY);
                 // needed for permission checks of objectactions (HttpService) - check new after ticket update
                 types.push(RequestMethod.OPTIONS);
@@ -221,7 +219,6 @@ export class CacheService {
             case KIXObjectType.PERSONAL_SETTINGS:
             case KIXObjectType.USER_PREFERENCE:
                 types.push(KIXObjectType.USER);
-                types.push(KIXObjectType.CURRENT_USER);
                 types.push(KIXObjectType.CONTACT);
                 break;
             case KIXObjectType.USER:
