@@ -92,360 +92,360 @@ describe('BrowserCacheService', () => {
 
     });
 
-    describe('Get correct cache key prefix for namespace (cache dependencies)', () => {
-
-        describe('CMDB Namespace', () => {
-
-            it('should resolve the namespace for CMDB.ConfigItem', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('CMDB.ConfigItem');
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(4);
-
-                expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM_CLASS)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.GRAPH)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.GRAPH_INSTANCE)).exist;
-            });
-
-            it('should resolve the namespace for CMDB.ConfigItemVersion', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('CMDB.ConfigItemVersion');
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(6);
-
-                expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM_VERSION)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.GRAPH)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.GRAPH_INSTANCE)).exist;
-            });
-
-            it('should resolve the namespace for CMDB.Class', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('CMDB.Class');
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(2);
-
-                expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM_CLASS)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.OBJECT_ICON)).exist;
-            });
-
-            it('should resolve the namespace for CMDB.Definition', () => {
-                const prefixes: Array<KIXObjectType | string> = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('CMDB.Definition');
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(4);
-
-                expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM_CLASS)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.GRAPH)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.GRAPH_INSTANCE)).exist;
-            });
-
-        });
-
-        describe('FAQ Namespace', () => {
-
-            it('should resolve the namespace for FAQ.FAQArticle', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('FAQ.FAQArticle');
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(4);
-
-                expect(prefixes.find((p) => p === KIXObjectType.FAQ_ARTICLE)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.FAQ_CATEGORY)).exist;
-            });
-
-            it('should resolve the namespace for FAQ.FAQVote', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('FAQ.FAQVote');
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(4);
-
-                expect(prefixes.find((p) => p === KIXObjectType.FAQ_ARTICLE)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.FAQ_VOTE)).exist;
-            });
-
-            it('should resolve the namespace for FAQ.FAQCategory', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('FAQ.FAQCategory');
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(4);
-
-                expect(prefixes.find((p) => p === KIXObjectType.FAQ_CATEGORY)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.OBJECT_ICON)).exist;
-            });
-
-        });
-
-        describe('Ticket Namespace', () => {
-
-            it('should resolve the namespace for State', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('State');
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(3);
-
-                expect(prefixes.find((p) => p === KIXObjectType.TICKET_STATE)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.OBJECT_ICON)).exist;
-            });
-
-            it('should resolve the namespace for Type', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('Type');
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(3);
-
-                expect(prefixes.find((p) => p === KIXObjectType.TICKET_TYPE)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.OBJECT_ICON)).exist;
-            });
-
-            it('should resolve the namespace for Queue', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.QUEUE);
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(4);
-
-                expect(prefixes.find((p) => p === KIXObjectType.QUEUE)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.OBJECT_ICON)).exist;
-                expect(prefixes.find((p) => p === 'QUEUE_HIERARCHY')).exist;
-            });
-
-            it('should resolve the namespace for Priority', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.TICKET_PRIORITY);
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(3);
-
-                expect(prefixes.find((p) => p === KIXObjectType.TICKET_PRIORITY)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.OBJECT_ICON)).exist;
-            });
-
-            it('should resolve the namespace for Ticket', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.TICKET);
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(8);
-
-                expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
-                expect(prefixes.find((p) => p === 'ORGANISATION_TICKET_STATS')).exist;
-                expect(prefixes.find((p) => p === 'CONTACT_TICKET_STATS')).exist;
-                expect(prefixes.find((p) => p === 'QUEUE_HIERARCHY')).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.ARTICLE)).exist;
-                expect(prefixes.find((p) => p === 'OPTION_REQUEST')).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.TICKET_HISTORY)).exist;
-            });
-
-        });
-
-        describe('Link Namespace', () => {
-
-            it('should resolve the namespace for Link', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.LINK);
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(8);
-
-                expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.FAQ_ARTICLE)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.LINK)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.LINK_OBJECT)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.GRAPH)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.GRAPH_INSTANCE)).exist;
-            });
-
-            it('should resolve the namespace for LINK_OBJECT', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.LINK_OBJECT);
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(8);
-
-                expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.FAQ_ARTICLE)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.LINK)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.LINK_OBJECT)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.GRAPH)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.GRAPH_INSTANCE)).exist;
-            });
-        });
-
-        describe('Translation Namespace', () => {
-
-            it('should resolve the namespace for Translation', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.TRANSLATION);
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(4);
-
-                expect(prefixes.find((p) => p === KIXObjectType.TRANSLATION)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.TRANSLATION_LANGUAGE)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.TRANSLATION_PATTERN)).exist;
-            });
-
-            it('should resolve the namespace for TranslationLanguage', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.TRANSLATION_LANGUAGE);
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(4);
-
-                expect(prefixes.find((p) => p === KIXObjectType.TRANSLATION)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.TRANSLATION_LANGUAGE)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.TRANSLATION_PATTERN)).exist;
-            });
-
-            it('should resolve the namespace for TranslationPattern', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.TRANSLATION_PATTERN);
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(4);
-
-                expect(prefixes.find((p) => p === KIXObjectType.TRANSLATION)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.TRANSLATION_LANGUAGE)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.TRANSLATION_PATTERN)).exist;
-            });
-
-        });
-
-        describe('General Catalog Namespace', () => {
-
-            it('should resolve the namespace for GeneralCatalogItem', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.GENERAL_CATALOG_ITEM);
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(3);
-
-                expect(prefixes.find((p) => p === KIXObjectType.GENERAL_CATALOG_ITEM)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.GENERAL_CATALOG_CLASS)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.OBJECT_ICON)).exist;
-            });
-
-        });
-
-        describe('Sysconfig Namespace', () => {
-
-            it('should resolve the namespace for SysconfigOption', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.SYS_CONFIG_OPTION);
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(4);
-
-                expect(prefixes.find((p) => p === KIXObjectType.SYS_CONFIG_OPTION)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.REPORT_DEFINITION)).exist;
-            });
-
-            it('should resolve the namespace for SysconfigOptionDefinition', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION);
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(3);
-
-                expect(prefixes.find((p) => p === KIXObjectType.SYS_CONFIG_OPTION)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION)).exist;
-            });
-
-        });
-
-        describe('Contact Namespace', () => {
-
-            it('should resolve the namespace for Contact', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.CONTACT);
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(6);
-
-                expect(prefixes.find((p) => p === KIXObjectType.CONTACT)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.ORGANISATION)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.USER)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.OBJECT_ICON)).exist;
-            });
-
-        });
-
-        describe('User Namespace', () => {
-
-            it('should resolve the namespace for User', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.USER);
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(4);
-
-                expect(prefixes.find((p) => p === KIXObjectType.USER)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.ROLE)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.CONTACT)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.REPORT_DEFINITION)).exist;
-            });
-
-        });
-
-        describe('Personal Settings Namespace', () => {
-
-            it('should resolve the namespace for PersonalSettings', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.PERSONAL_SETTINGS);
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(4);
-
-                expect(prefixes.find((p) => p === KIXObjectType.USER)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.CURRENT_USER)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.PERSONAL_SETTINGS)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.CONTACT)).exist;
-            });
-
-            it('should resolve the namespace for UserPreferences', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.USER_PREFERENCE);
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(4);
-
-                expect(prefixes.find((p) => p === KIXObjectType.USER)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.CURRENT_USER)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.USER_PREFERENCE)).exist;
-                expect(prefixes.find((p) => p === KIXObjectType.CONTACT)).exist;
-            });
-
-        });
-
-        describe('Role/Permission Settings Namespace', () => {
-
-            it('should clear the cache for Role', () => {
-                (BrowserCacheService.getInstance() as any).clear = () => {
-                    expect(true).true;
-                };
-
-                (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.ROLE);
-            });
-
-            it('should clear the cache for Permission', () => {
-                (BrowserCacheService.getInstance() as any).clear = () => {
-                    expect(true).true;
-                };
-                (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.PERMISSION);
-            });
-        });
-
-        describe('Handle Unknown Namespace', () => {
-
-            it('should resolve the namespace for unknown', () => {
-                const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('Unknown.TestNamespace');
-                expect(prefixes).exist;
-                expect(prefixes).an('array');
-                expect(prefixes.length).equals(1);
-
-                expect(prefixes.find((p) => p === 'Unknown')).exist;
-            });
-
-        });
-
-    });
+    // describe('Get correct cache key prefix for namespace (cache dependencies)', () => {
+
+    //     describe('CMDB Namespace', () => {
+
+    //         it('should resolve the namespace for CMDB.ConfigItem', () => {
+    //             const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('CMDB.ConfigItem');
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(4);
+
+    //             expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM_CLASS)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.GRAPH)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.GRAPH_INSTANCE)).exist;
+    //         });
+
+    //         it('should resolve the namespace for CMDB.ConfigItemVersion', () => {
+    //             const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('CMDB.ConfigItemVersion');
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(6);
+
+    //             expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM_VERSION)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.GRAPH)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.GRAPH_INSTANCE)).exist;
+    //         });
+
+    //         it('should resolve the namespace for CMDB.Class', () => {
+    //             const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('CMDB.Class');
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(2);
+
+    //             expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM_CLASS)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.OBJECT_ICON)).exist;
+    //         });
+
+    //         it('should resolve the namespace for CMDB.Definition', () => {
+    //             const prefixes: Array<KIXObjectType | string> = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('CMDB.Definition');
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(4);
+
+    //             expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM_CLASS)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.GRAPH)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.GRAPH_INSTANCE)).exist;
+    //         });
+
+    //     });
+
+    //     describe('FAQ Namespace', () => {
+
+    //         it('should resolve the namespace for FAQ.FAQArticle', () => {
+    //             const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('FAQ.FAQArticle');
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(4);
+
+    //             expect(prefixes.find((p) => p === KIXObjectType.FAQ_ARTICLE)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.FAQ_CATEGORY)).exist;
+    //         });
+
+    //         it('should resolve the namespace for FAQ.FAQVote', () => {
+    //             const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('FAQ.FAQVote');
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(4);
+
+    //             expect(prefixes.find((p) => p === KIXObjectType.FAQ_ARTICLE)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.FAQ_VOTE)).exist;
+    //         });
+
+    //         it('should resolve the namespace for FAQ.FAQCategory', () => {
+    //             const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('FAQ.FAQCategory');
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(4);
+
+    //             expect(prefixes.find((p) => p === KIXObjectType.FAQ_CATEGORY)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.OBJECT_ICON)).exist;
+    //         });
+
+    //     });
+
+    //     describe('Ticket Namespace', () => {
+
+    //         it('should resolve the namespace for State', () => {
+    //             const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('State');
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(3);
+
+    //             expect(prefixes.find((p) => p === KIXObjectType.TICKET_STATE)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.OBJECT_ICON)).exist;
+    //         });
+
+    //         it('should resolve the namespace for Type', () => {
+    //             const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('Type');
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(3);
+
+    //             expect(prefixes.find((p) => p === KIXObjectType.TICKET_TYPE)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.OBJECT_ICON)).exist;
+    //         });
+
+    //         it('should resolve the namespace for Queue', () => {
+    //             const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.QUEUE);
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(4);
+
+    //             expect(prefixes.find((p) => p === KIXObjectType.QUEUE)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.OBJECT_ICON)).exist;
+    //             expect(prefixes.find((p) => p === 'QUEUE_HIERARCHY')).exist;
+    //         });
+
+    //         it('should resolve the namespace for Priority', () => {
+    //             const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.TICKET_PRIORITY);
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(3);
+
+    //             expect(prefixes.find((p) => p === KIXObjectType.TICKET_PRIORITY)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.OBJECT_ICON)).exist;
+    //         });
+
+    //         it('should resolve the namespace for Ticket', () => {
+    //             const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.TICKET);
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(8);
+
+    //             expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
+    //             expect(prefixes.find((p) => p === 'ORGANISATION_TICKET_STATS')).exist;
+    //             expect(prefixes.find((p) => p === 'CONTACT_TICKET_STATS')).exist;
+    //             expect(prefixes.find((p) => p === 'QUEUE_HIERARCHY')).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.ARTICLE)).exist;
+    //             expect(prefixes.find((p) => p === 'OPTION_REQUEST')).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.TICKET_HISTORY)).exist;
+    //         });
+
+    //     });
+
+    //     describe('Link Namespace', () => {
+
+    //         it('should resolve the namespace for Link', () => {
+    //             const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.LINK);
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(8);
+
+    //             expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.FAQ_ARTICLE)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.LINK)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.LINK_OBJECT)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.GRAPH)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.GRAPH_INSTANCE)).exist;
+    //         });
+
+    //         it('should resolve the namespace for LINK_OBJECT', () => {
+    //             const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.LINK_OBJECT);
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(8);
+
+    //             expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.CONFIG_ITEM)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.FAQ_ARTICLE)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.LINK)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.LINK_OBJECT)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.GRAPH)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.GRAPH_INSTANCE)).exist;
+    //         });
+    //     });
+
+    //     describe('Translation Namespace', () => {
+
+    //         it('should resolve the namespace for Translation', () => {
+    //             const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.TRANSLATION);
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(4);
+
+    //             expect(prefixes.find((p) => p === KIXObjectType.TRANSLATION)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.TRANSLATION_LANGUAGE)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.TRANSLATION_PATTERN)).exist;
+    //         });
+
+    //         it('should resolve the namespace for TranslationLanguage', () => {
+    //             const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.TRANSLATION_LANGUAGE);
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(4);
+
+    //             expect(prefixes.find((p) => p === KIXObjectType.TRANSLATION)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.TRANSLATION_LANGUAGE)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.TRANSLATION_PATTERN)).exist;
+    //         });
+
+    //         it('should resolve the namespace for TranslationPattern', () => {
+    //             const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.TRANSLATION_PATTERN);
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(4);
+
+    //             expect(prefixes.find((p) => p === KIXObjectType.TRANSLATION)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.TRANSLATION_LANGUAGE)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.TRANSLATION_PATTERN)).exist;
+    //         });
+
+    //     });
+
+    //     describe('General Catalog Namespace', () => {
+
+    //         it('should resolve the namespace for GeneralCatalogItem', () => {
+    //             const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.GENERAL_CATALOG_ITEM);
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(3);
+
+    //             expect(prefixes.find((p) => p === KIXObjectType.GENERAL_CATALOG_ITEM)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.GENERAL_CATALOG_CLASS)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.OBJECT_ICON)).exist;
+    //         });
+
+    //     });
+
+    //     describe('Sysconfig Namespace', () => {
+
+    //         it('should resolve the namespace for SysconfigOption', () => {
+    //             const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.SYS_CONFIG_OPTION);
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(4);
+
+    //             expect(prefixes.find((p) => p === KIXObjectType.SYS_CONFIG_OPTION)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.REPORT_DEFINITION)).exist;
+    //         });
+
+    //         it('should resolve the namespace for SysconfigOptionDefinition', () => {
+    //             const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION);
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(3);
+
+    //             expect(prefixes.find((p) => p === KIXObjectType.SYS_CONFIG_OPTION)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION)).exist;
+    //         });
+
+    //     });
+
+    //     describe('Contact Namespace', () => {
+
+    //         it('should resolve the namespace for Contact', () => {
+    //             const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.CONTACT);
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(6);
+
+    //             expect(prefixes.find((p) => p === KIXObjectType.CONTACT)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.ORGANISATION)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.USER)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.OBJECT_ICON)).exist;
+    //         });
+
+    //     });
+
+    //     describe('User Namespace', () => {
+
+    //         it('should resolve the namespace for User', () => {
+    //             const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.USER);
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(4);
+
+    //             expect(prefixes.find((p) => p === KIXObjectType.USER)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.ROLE)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.CONTACT)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.REPORT_DEFINITION)).exist;
+    //         });
+
+    //     });
+
+    //     describe('Personal Settings Namespace', () => {
+
+    //         it('should resolve the namespace for PersonalSettings', () => {
+    //             const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.PERSONAL_SETTINGS);
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(4);
+
+    //             expect(prefixes.find((p) => p === KIXObjectType.USER)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.CURRENT_USER)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.PERSONAL_SETTINGS)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.CONTACT)).exist;
+    //         });
+
+    //         it('should resolve the namespace for UserPreferences', () => {
+    //             const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.USER_PREFERENCE);
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(4);
+
+    //             expect(prefixes.find((p) => p === KIXObjectType.USER)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.CURRENT_USER)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.USER_PREFERENCE)).exist;
+    //             expect(prefixes.find((p) => p === KIXObjectType.CONTACT)).exist;
+    //         });
+
+    //     });
+
+    //     describe('Role/Permission Settings Namespace', () => {
+
+    //         it('should clear the cache for Role', () => {
+    //             (BrowserCacheService.getInstance() as any).clear = () => {
+    //                 expect(true).true;
+    //             };
+
+    //             (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.ROLE);
+    //         });
+
+    //         it('should clear the cache for Permission', () => {
+    //             (BrowserCacheService.getInstance() as any).clear = () => {
+    //                 expect(true).true;
+    //             };
+    //             (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.PERMISSION);
+    //         });
+    //     });
+
+    //     describe('Handle Unknown Namespace', () => {
+
+    //         it('should resolve the namespace for unknown', () => {
+    //             const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('Unknown.TestNamespace');
+    //             expect(prefixes).exist;
+    //             expect(prefixes).an('array');
+    //             expect(prefixes.length).equals(1);
+
+    //             expect(prefixes.find((p) => p === 'Unknown')).exist;
+    //         });
+
+    //     });
+
+    // });
 
     describe('Update Caches', () => {
 
