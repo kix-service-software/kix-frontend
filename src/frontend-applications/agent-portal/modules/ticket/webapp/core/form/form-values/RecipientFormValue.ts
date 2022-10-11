@@ -130,7 +130,7 @@ export class RecipientFormValue extends SelectObjectFormValue {
                 }
             }
         } catch (error) {
-            console.error(error);
+            emailAddresses.push(value);
         }
         return emailAddresses;
     }

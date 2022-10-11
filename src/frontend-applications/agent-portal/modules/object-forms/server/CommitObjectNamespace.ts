@@ -18,7 +18,6 @@ import { SocketResponse } from '../../base-components/webapp/core/SocketResponse
 import { KIXObjectEvent } from '../../base-components/webapp/core/KIXObjectEvent';
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { SocketErrorResponse } from '../../base-components/webapp/core/SocketErrorResponse';
-import { KIXObject } from '../../../model/kix/KIXObject';
 
 export class CommitObjectNamespace extends SocketNameSpace {
 

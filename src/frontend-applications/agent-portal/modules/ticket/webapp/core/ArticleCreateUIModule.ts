@@ -8,12 +8,13 @@
  */
 
 import { IUIModule } from '../../../../model/IUIModule';
-import { FormValidationService } from '../../../../modules/base-components/webapp/core/FormValidationService';
 import {
-    EmailRecipientValidator, TicketFormService, ArticleNewAction,
+    TicketFormService, ArticleNewAction,
     ArticleReplyAction, ArticleForwardAction, ArticleGetPlainAction
 } from '.';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
+import { ObjectFormRegistry } from '../../../object-forms/webapp/core/ObjectFormRegistry';
+import { EmailRecipientValidator } from './form/form-values/validators/EmailRecipientValidator';
 
 export class UIModule implements IUIModule {
 
@@ -26,8 +27,7 @@ export class UIModule implements IUIModule {
     }
 
     public async register(): Promise<void> {
-        FormValidationService.getInstance().registerValidator(new EmailRecipientValidator());
-
+        ObjectFormRegistry.getInstance().registerObjectFormValueValidator(EmailRecipientValidator);
         TicketFormService.getInstance();
 
         this.registerTicketActions();
