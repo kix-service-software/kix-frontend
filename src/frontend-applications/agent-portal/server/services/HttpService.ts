@@ -364,7 +364,7 @@ export class HttpService {
 
             if (withStats) {
                 params = {
-                    'include': 'Tickets,Preferences,RoleIDs,Contact',
+                    'include': 'Tickets',
                     'Tickets.StateType': 'Open'
                 };
             } else {
@@ -384,7 +384,7 @@ export class HttpService {
 
             // start profiling
             const profileTaskId = ProfilingService.getInstance().start(
-                'HttpService', options.method + ' ' + uri, { data: [options] }
+                'HttpService', options.method + '\t' + uri + '\t' + JSON.stringify(params), { data: [options] }
             );
 
             const response = await this.axios(options)

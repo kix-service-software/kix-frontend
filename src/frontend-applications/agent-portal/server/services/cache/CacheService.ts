@@ -135,11 +135,7 @@ export class CacheService {
 
         // start profiling
         const profileTaskId = ProfilingService.getInstance().start(
-            'CacheService',
-            'deleteKeys',
-            {
-                data: [type]
-            }
+            'CacheService', 'deleteKeys\t' + type, { data: [type] }
         );
 
         let prefixes = await this.getCacheKeyPrefixes(type);
@@ -186,13 +182,7 @@ export class CacheService {
         }
 
         switch (types[0]) {
-            case KIXObjectType.WATCHER:
-            case KIXObjectType.ARTICLE:
-            case KIXObjectType.DYNAMIC_FIELD:
-                types.push(KIXObjectType.TICKET);
-                break;
             case KIXObjectType.TICKET:
-                types.push(KIXObjectType.CONFIG_ITEM);
                 types.push(KIXObjectType.ARTICLE);
                 types.push('ORGANISATION_TICKET_STATS');
                 types.push('CONTACT_TICKET_STATS');
@@ -212,8 +202,6 @@ export class CacheService {
             case KIXObjectType.CONFIG_ITEM:
             case KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION:
                 types.push(KIXObjectType.CONFIG_ITEM_CLASS);
-                types.push(KIXObjectType.ORGANISATION);
-                types.push(KIXObjectType.CONTACT);
                 types.push(KIXObjectType.GRAPH);
                 break;
             case KIXObjectType.PERSONAL_SETTINGS:
@@ -227,6 +215,11 @@ export class CacheService {
                 types.push(KIXObjectType.CONTACT);
                 types.push(KIXObjectType.REPORT_DEFINITION);
                 break;
+            case KIXObjectType.TICKET_PRIORITY:
+            case KIXObjectType.TICKET_STATE:
+            case KIXObjectType.TICKET_TYPE:
+                types.push(KIXObjectType.OBJECT_ICON);
+                break;
             case KIXObjectType.LINK:
             case KIXObjectType.LINK_OBJECT:
                 types.push(KIXObjectType.TICKET);
@@ -237,17 +230,11 @@ export class CacheService {
                 types.push(KIXObjectType.GRAPH);
                 break;
             case KIXObjectType.ORGANISATION:
-                types.push(KIXObjectType.CONTACT);
-                types.push(KIXObjectType.TICKET);
                 types.push(KIXObjectType.OBJECT_ICON);
-                types.push(KIXObjectType.CONFIG_ITEM);
                 break;
             case KIXObjectType.CONTACT:
-                types.push(KIXObjectType.ORGANISATION);
-                types.push(KIXObjectType.TICKET);
                 types.push(KIXObjectType.USER);
                 types.push(KIXObjectType.OBJECT_ICON);
-                types.push(KIXObjectType.CONFIG_ITEM);
                 break;
             case KIXObjectType.PERMISSION:
             case KIXObjectType.ROLE:
@@ -263,8 +250,6 @@ export class CacheService {
                 break;
             case KIXObjectType.CONFIG_ITEM_VERSION:
                 types.push(KIXObjectType.CONFIG_ITEM);
-                types.push(KIXObjectType.ORGANISATION);
-                types.push(KIXObjectType.CONTACT);
                 types.push(KIXObjectType.GRAPH);
                 break;
             case KIXObjectType.SYS_CONFIG_OPTION_DEFINITION:
@@ -278,12 +263,6 @@ export class CacheService {
                 break;
             case KIXObjectType.QUEUE:
                 types.push('QUEUE_HIERARCHY');
-                types.push(KIXObjectType.TICKET);
-                break;
-            case KIXObjectType.TICKET_STATE:
-            case KIXObjectType.TICKET_TYPE:
-            case KIXObjectType.TICKET_PRIORITY:
-                types.push(KIXObjectType.TICKET);
                 break;
             case KIXObjectType.GENERAL_CATALOG_ITEM:
                 types.push(KIXObjectType.GENERAL_CATALOG_CLASS);

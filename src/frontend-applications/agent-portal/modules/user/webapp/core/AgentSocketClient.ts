@@ -25,6 +25,8 @@ import { SetPreferencesResponse } from '../../../../modules/base-components/weba
 import { BrowserCacheService } from '../../../../modules/base-components/webapp/core/CacheService';
 import { PersonalSettingsProperty } from '../../model/PersonalSettingsProperty';
 import { BackendNotification } from '../../../../model/BackendNotification';
+import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
+import { EventService } from '../../../base-components/webapp/core/EventService';
 
 export class AgentSocketClient extends SocketClient {
 
@@ -200,8 +202,10 @@ export class AgentSocketClient extends SocketClient {
             const id2Match = ids[2].toString() === this.userId?.toString();
             if (isOwnerEvent && (id1Match || id2Match)) {
                 BrowserCacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS`);
+                EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
             } else if ((isLockEvent || isWatchEvent) && id2Match) {
                 BrowserCacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS`);
+                EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
             }
         }
     }
