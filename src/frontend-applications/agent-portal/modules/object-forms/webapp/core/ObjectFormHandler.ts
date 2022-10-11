@@ -36,7 +36,7 @@ export class ObjectFormHandler<T extends KIXObject = any> {
         this.objectFormValidator?.destroy();
     }
 
-    public async loadForm(): Promise<void> {
+    public async loadForm(createNewInstance?: boolean): Promise<void> {
         this.form = this.context.getFormManager().getForm();
         FormFactory.initForm(this.form);
 
@@ -51,7 +51,7 @@ export class ObjectFormHandler<T extends KIXObject = any> {
             this.objectFormValueMapper.setFormConfiguration(this.form);
 
             const formObject = await this.context.getObject(
-                this.form?.objectType || this.context.descriptor.kixObjectTypes[0], true
+                this.form?.objectType || this.context.descriptor.kixObjectTypes[0], createNewInstance
             );
             await this.objectFormValueMapper.mapFormValues(formObject);
 
@@ -77,6 +77,7 @@ export class ObjectFormHandler<T extends KIXObject = any> {
 
     public async commit(): Promise<string | number> {
 
+        this.objectFormValidator.enabled = true;
         const valid = await this.objectFormValidator.validateForm();
         if (!valid) {
             const validationResults = this.objectFormValueMapper.getValidationResults();

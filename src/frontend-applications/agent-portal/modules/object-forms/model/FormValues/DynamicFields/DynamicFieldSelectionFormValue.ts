@@ -60,6 +60,16 @@ export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string
         return super.initFormValue();
     }
 
+    public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
+
+        // define select counts here, too (but not exclusive),
+        // to init mulitselect correctly (for preset values by placeholders)
+        const dynamicField = await KIXObjectService.loadDynamicField(this.dfName);
+        this.minSelectCount = Number(dynamicField?.Config?.CountMin) || 0;
+        this.maxSelectCount = Number(dynamicField?.Config?.CountMax) || 1;
+        super.initFormValueByField(field);
+    }
+
     public async loadSelectableValues(): Promise<void> {
         const dynamicField = await KIXObjectService.loadDynamicField(this.object?.Name);
         const possibleValues = dynamicField?.Config?.PossibleValues;

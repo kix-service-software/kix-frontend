@@ -24,19 +24,26 @@ import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { TicketService } from '.';
-import { BulkManager } from '../../../bulk/webapp/core';
+import { BulkDialogContext, BulkManager } from '../../../bulk/webapp/core';
 import { UserProperty } from '../../../user/model/UserProperty';
 import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
+import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
+import { ValidationResult } from '../../../base-components/webapp/core/ValidationResult';
+import { ValidationSeverity } from '../../../base-components/webapp/core/ValidationSeverity';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
 
 export class TicketBulkManager extends BulkManager {
 
     public objectType: KIXObjectType = KIXObjectType.TICKET;
 
-    public reset(): void {
-        super.reset(false);
+    public reset(notify?: boolean, force: boolean = false): void {
+        const skipAddingEmptyValues = super.reset(notify, force);
+        if (skipAddingEmptyValues) return;
         this.values.push(new ObjectPropertyValue(TicketProperty.QUEUE_ID, PropertyOperator.CHANGE, null));
         this.values.push(new ObjectPropertyValue(TicketProperty.TYPE_ID, PropertyOperator.CHANGE, null));
-        this.notifyListeners();
+        if (notify || typeof notify === 'undefined') {
+            this.notifyListeners();
+        }
     }
 
     public async getOperations(property: string): Promise<PropertyOperator[]> {
@@ -270,11 +277,17 @@ export class TicketBulkManager extends BulkManager {
         if (stateValue && stateValue.value) {
             const stateValueForUse = Array.isArray(stateValue.value) ? stateValue.value[0] : stateValue.value;
             const pendingState = stateValueForUse
-                ? await TicketService.isPendingState(Number(stateValueForUse)) : null;
+                ? await TicketService.isPendingState(Number(stateValueForUse))
+                : null;
+
             if (pendingState) {
                 const pendingValueIndex = this.values.findIndex((bv) => bv.property === TicketProperty.PENDING_TIME);
+
+                const pendingDate = await TicketService.getPendingDateDiff();
                 const value = new ObjectPropertyValue(
-                    TicketProperty.PENDING_TIME, PropertyOperator.CHANGE, null, [], false, true, null, true, true
+                    TicketProperty.PENDING_TIME, PropertyOperator.CHANGE,
+                    DateTimeUtil.getKIXDateTimeString(pendingDate),
+                    [], false, true, null, true, true
                 );
                 if (pendingValueIndex === -1) {
                     const index = this.values.findIndex((bv) => bv.property === TicketProperty.STATE_ID);
@@ -293,5 +306,39 @@ export class TicketBulkManager extends BulkManager {
         if (value) {
             await this.removeValue(value);
         }
+    }
+
+    public async validate(): Promise<ValidationResult[]> {
+        const validationResult = await super.validate();
+
+        const result = [];
+        const pendingValue = this.values.find((v) => v.property === TicketProperty.PENDING_TIME);
+        if (pendingValue) {
+            if (pendingValue.value) {
+                const pendingDate = new Date(pendingValue.value);
+                if (isNaN(pendingDate.getTime())) {
+                    result.push(
+                        new ValidationResult(
+                            ValidationSeverity.ERROR, 'Translatable#Pending Time has invalid date!'
+                        )
+                    );
+                } else if (pendingDate < new Date()) {
+                    result.push(
+                        new ValidationResult(
+                            ValidationSeverity.ERROR, 'Translatable#Pending Time has to be in future!'
+                        )
+                    );
+                }
+            } else {
+                result.push(
+                    new ValidationResult(ValidationSeverity.ERROR, 'Translatable#Pending Time is required!')
+                );
+            }
+
+            pendingValue.valid = !result.some((r) => r.severity === ValidationSeverity.ERROR);
+        }
+
+        validationResult.push(...result);
+        return validationResult;
     }
 }

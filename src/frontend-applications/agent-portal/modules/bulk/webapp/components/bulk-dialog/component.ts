@@ -59,7 +59,12 @@ class Component {
             const objectType = objects[0].KIXObjectType;
             BulkService.getInstance().initBulkManager(objectType, objects);
             const bulkManager = BulkService.getInstance().getBulkManager(objectType);
-            bulkManager.reset(false);
+
+            // reset only on startup
+            if (!bulkManager.getValues().length) {
+                bulkManager.reset(false, true);
+            }
+
             this.state.bulkManager = bulkManager;
 
             const objectName = await LabelService.getInstance().getObjectName(objectType, true);

@@ -21,6 +21,7 @@ import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
 import { ConfigItemClass } from '../../../model/ConfigItemClass';
 import { ConfigItemFormFactory } from '../ConfigItemFormFactory';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 export class NewConfigItemDialogContext extends Context {
 
@@ -45,13 +46,26 @@ export class NewConfigItemDialogContext extends Context {
         return object;
     }
 
+    public async initContext(urlParams?: URLSearchParams): Promise<void> {
+        await super.initContext(urlParams);
+        let classId = this.getAdditionalInformation(ConfigItemProperty.CLASS_ID);
+        if (!classId) {
+            const previousContext = ContextService.getInstance().getActiveContext();
+            classId = previousContext?.getAdditionalInformation(ConfigItemProperty.CLASS_ID);
+        }
+
+        this.setAdditionalInformation(ConfigItemProperty.CLASS_ID, classId);
+    }
+
     public async postInit(): Promise<void> {
         await super.postInit();
 
-        if (!await this.getFormManager().getFormId()) {
+        const formId = await this.getFormManager().getFormId();
+
+        if (!formId) {
             const classId = this.getAdditionalInformation(ConfigItemProperty.CLASS_ID) || await this.getFirstClass();
             if (classId) {
-                ConfigItemFormFactory.getInstance().createAndProvideForm(classId, this);
+                this.setClassId(classId);
             }
         }
     }
@@ -67,6 +81,10 @@ export class NewConfigItemDialogContext extends Context {
         ).catch((): ConfigItemClass[] => []);
 
         return ciClasses?.length ? ciClasses[0].ID : null;
+    }
+
+    public setClassId(classId: number): void {
+        ConfigItemFormFactory.getInstance().createAndProvideForm(classId, this);
     }
 
 }

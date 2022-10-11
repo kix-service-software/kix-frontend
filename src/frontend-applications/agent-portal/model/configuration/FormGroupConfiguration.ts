@@ -20,7 +20,8 @@ export class FormGroupConfiguration implements IConfiguration {
         public separatorString: string = null,
         public formFields: FormFieldConfiguration[] = [],
         public draggableFields: boolean = false,
-        public type: ConfigurationType = ConfigurationType.FormGroup
+        public type: ConfigurationType = ConfigurationType.FormGroup,
+        public valid: boolean = true,
     ) { }
 
 }

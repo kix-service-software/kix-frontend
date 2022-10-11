@@ -7,4 +7,10 @@
  * --
  */
 
-export * from './validators';
+export enum PluginReadmeProperty {
+
+    LANGUAGE = 'Language',
+
+    CONTENT = 'Content',
+
+}

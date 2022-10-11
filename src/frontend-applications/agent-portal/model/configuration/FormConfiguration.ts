@@ -26,6 +26,7 @@ export class FormConfiguration implements IConfiguration {
         public autoCompleteConfiguration: AutoCompleteConfiguration = new AutoCompleteConfiguration(),
         public pages: FormPageConfiguration[] = [],
         public type: ConfigurationType = ConfigurationType.Form,
+        public valid: boolean = true,
     ) { }
 
 }

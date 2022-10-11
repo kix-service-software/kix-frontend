@@ -191,7 +191,8 @@ export class ClientRegistrationService extends KIXObjectAPIService {
                     Context: 'kix18-web-frontend',
                     ContextMetadata: c.type,
                     Type: 'String',
-                    IsRequired: 0
+                    IsRequired: 0,
+                    ValidID: c.valid ? 1 : 2,
                 };
                 return definition;
             });

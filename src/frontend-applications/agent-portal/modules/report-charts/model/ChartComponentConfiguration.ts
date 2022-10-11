@@ -17,7 +17,8 @@ export class ChartComponentConfiguration implements IConfiguration {
         public id: string,
         public name: string,
         public type: ConfigurationType | string,
-        public chartConfiguration: ChartConfiguration
+        public chartConfiguration: ChartConfiguration,
+        public valid: boolean = true,
     ) { }
 
 }

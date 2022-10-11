@@ -17,7 +17,9 @@ export class ComponentState extends WidgetComponentState {
         public widgetTitle: string = '',
         public newestArticleId: number = null,
         public expanded: boolean = false,
-        public activeUnreadAction: boolean = false
+        public activeUnreadAction: boolean = false,
+        public selectedCompactView: boolean = false,
+        public collapseAll: boolean = false
     ) {
         super();
     }

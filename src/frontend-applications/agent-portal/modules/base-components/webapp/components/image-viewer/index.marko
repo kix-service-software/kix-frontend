@@ -20,30 +20,37 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <div.image-container>
                 <div.previous-image
                     on-click("previousImage")
-                    title=state.translations["Translatable#Previous Image"]>
+                    title=(state.translations["Translatable#Previous Image"])
+                >
                     <span.kix-icon-circle-prior/>
                 </div>
                 <div.image>
                     <if(state.image)>
                         <a
-                            href=state.image.content
-                            download=state.image.title
+                            href=(state.image.content)
+                            download=(state.image.title)
                             title=(
                                 state.translations["Translatable#Download"] +
                                 " (" +
                                 state.image.title +
                                 ")"
-                            )>
-                            <img alt=state.image.title src=state.image.content/>
+                            )
+                        >
+                            <img
+                                alt=(state.image.title)
+                                src=(state.image.content)
+                            >
                         </a>
                     </if>
                 </div>
                 <div.next-image
                     on-click("nextImage")
-                    title=state.translations["Translatable#Next Image"]>
+                    title=(state.translations["Translatable#Next Image"])
+                >
                     <span.kix-icon-circle-next/>
                 </div>
             </div>
         </div>
+        <div.markdown-container/>
     </div>
 </if>

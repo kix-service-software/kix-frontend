@@ -107,6 +107,9 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
             case 'LinkedAs':
                 displayValue = 'Translatable#Linked as';
                 break;
+            case KIXObjectProperty.LINKS:
+                displayValue = 'Translatable#Links';
+                break;
             default:
                 const dfName = KIXObjectService.getDynamicFieldName(property);
                 if (dfName) {

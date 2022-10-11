@@ -7,5 +7,10 @@
  * --
  */
 
-export { PendingTimeValidator } from './PendingTimeValidator';
-export { EmailRecipientValidator } from './EmailRecipientValidator';
+export class ComponentState {
+
+    public constructor(
+        public content: string = '',
+    ) { }
+
+}

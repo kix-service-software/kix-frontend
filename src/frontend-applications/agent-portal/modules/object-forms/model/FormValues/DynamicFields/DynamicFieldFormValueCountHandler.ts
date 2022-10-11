@@ -33,9 +33,13 @@ export class DynamicFieldFormValueCountHandler {
         return canAdd;
     }
 
-    public static async addFormValue(formValue: ObjectFormValue, instanceId: string): Promise<void> {
+    public static async addFormValue(
+        formValue: ObjectFormValue, instanceId: string, value: any
+    ): Promise<void> {
         if (formValue.isCountHandler) {
             const dfValue = new DynamicFieldValue();
+            dfValue.Value = value;
+            dfValue.Name = (formValue as any).dfName;
             (formValue as any).dfValues.push(dfValue);
 
             const parent = formValue.parent as DynamicFieldObjectFormValue;
@@ -55,7 +59,7 @@ export class DynamicFieldFormValueCountHandler {
 
             (formValue as any).setDFValue();
         } else {
-            await formValue.parent.addFormValue(instanceId);
+            await formValue.parent.addFormValue(instanceId, value);
         }
     }
 
@@ -90,7 +94,7 @@ export class DynamicFieldFormValueCountHandler {
         }
     }
 
-    public static setDFValue(formValue: ObjectFormValue): void {
+    public static setDFValue(formValue: ObjectFormValue, cb?: (value: any) => Promise<void>): void {
         const value = [];
         const dfValues = (formValue as any).dfValues;
         if (Array.isArray(dfValues)) {
@@ -105,7 +109,23 @@ export class DynamicFieldFormValueCountHandler {
             }
         }
 
-        formValue.setFormValue(value);
+        if (cb) {
+            cb(value);
+        } else {
+            formValue.setFormValue(value);
+        }
+    }
+
+    public static async setFormValue(
+        value: any, force: boolean, formValue: ObjectFormValue, instanceId: string
+    ): Promise<void> {
+        if (formValue.isCountHandler) {
+            if (formValue.canAddValue(formValue.instanceId)) {
+                await formValue.addFormValue(formValue.instanceId, value);
+            } else {
+                formValue.formValues[formValue.formValues.length - 1]?.setFormValue(value, force);
+            }
+        }
     }
 
 }

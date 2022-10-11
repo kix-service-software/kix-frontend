@@ -14,7 +14,7 @@ export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public toolbarGroups: ToolbarAction[][] = [],
-        public show: boolean = false,
+        public showTicketActions: boolean = false,
         public ownedTicketsCount: number = 0,
         public isMobile: boolean = false
     ) {

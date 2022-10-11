@@ -72,14 +72,16 @@ export class ContextFormManager {
         }
     }
 
-    public async setFormId(formId: string, kixObject?: KIXObject, useObjectForms?: boolean): Promise<void> {
+    public async setFormId(
+        formId: string, kixObject?: KIXObject, useObjectForms?: boolean, createNewInstance: boolean = true
+    ): Promise<void> {
         this.useObjectForms = useObjectForms;
 
         if (this.formId !== formId) {
             this.formId = formId;
 
             if (this.useObjectForms) {
-                await this.getObjectFormHandler(true);
+                await this.getObjectFormHandler(createNewInstance);
             } else {
                 await this.getFormInstance(true, undefined, kixObject);
             }
@@ -93,16 +95,16 @@ export class ContextFormManager {
         }
 
         if (this.formId && (!this.createObjectHandlerPromise || createNewInstance)) {
-            this.createObjectHandlerPromise = this.createObjectFormhandler();
+            this.createObjectHandlerPromise = this.createObjectFormhandler(createNewInstance);
         }
         return this.createObjectHandlerPromise;
     }
 
-    private async createObjectFormhandler(): Promise<ObjectFormHandler> {
+    private async createObjectFormhandler(createNewInstance: boolean): Promise<ObjectFormHandler> {
         this.form = await FormService.getInstance().getForm(this.formId);
 
         const objectFormHandler = new ObjectFormHandler(this.context);
-        await objectFormHandler.loadForm();
+        await objectFormHandler.loadForm(createNewInstance);
 
         EventService.getInstance().publish(FormEvent.OBJECT_FORM_HANDLER_CHANGED, this.context);
         return objectFormHandler;

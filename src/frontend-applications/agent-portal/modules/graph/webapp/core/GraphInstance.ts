@@ -30,6 +30,7 @@ export abstract class GraphInstance<N extends GraphD3Node = GraphD3Node, L exten
     protected node;
     protected edgepaths;
     protected edgelabels;
+    protected resizeListener = null;
 
     public constructor(public graph: Graph<O>, public rootObjectId: string | number) {
         this.instanceId = IdService.generateDateBasedId();
@@ -43,36 +44,53 @@ export abstract class GraphInstance<N extends GraphD3Node = GraphD3Node, L exten
         return [new GraphOption('MaxDepth', 'Translatable#Max Depth', depthNodes, true, false)];
     }
 
-    public async createGraph(
-        containerId: string, width: string = '100%', height: string = '1200'
-    ): Promise<void> {
+    public async createGraph(containerId: string): Promise<void> {
         this.nodes = await this.createD3Nodes(this.graph);
         this.links = await this.createD3Links(this.graph, this.nodes);
 
         if (Array.isArray(this.nodes) && Array.isArray(this.links)) {
             const svg = d3.select(containerId)
                 .append('svg')
-                .attr('width', width)
-                .attr('height', height);
+                .attr('viewBox', '0 0 1400 860')
+                .call(d3.zoom()
+                    .scaleExtent([0.2, 2.5])
+                    .on('zoom', (e) => {
+                        g.attr('transform', e.transform);
+                    })
+                );
+            const g = svg.append('g').attr('cursor', 'grab');
 
             const containerElement = document.querySelector(containerId);
             const clientWidth = containerElement.clientWidth;
             const clientHeight = containerElement.clientHeight;
-
             this.simulation = d3.forceSimulation()
                 .force('charge', d3.forceManyBody())
                 .force('collision', d3.forceCollide().radius((d) => 80))
                 .force('center', d3.forceCenter(clientWidth / 2, clientHeight / 2))
                 .force('link', d3.forceLink().id((d) => d.id).distance(200).strength(1));
 
-
-            await this.createLink(svg);
-            this.node = await this.createNode(svg);
+            await this.resizeCanvas(svg, containerId);
+            this.resizeListener = window.addEventListener('resize',
+                async () => await this.resizeCanvas(svg, containerId));
+            await this.createLink(g);
+            this.node = await this.createNode(g);
 
             this.simulation.nodes(this.nodes).on('tick', this.ticked.bind(this));
             this.simulation.force('link').links(this.links);
         }
 
+    }
+
+    public removeListener(): void {
+        this.resizeListener = null;
+    }
+
+    private async resizeCanvas(svg: any, containerId: any): Promise<void> {
+        const containerElement = document.querySelector(containerId);
+        const clientWidth = containerElement.clientWidth;
+        const clientHeight = containerElement.clientHeight;
+        svg.attr('viewBox', null);
+        svg.attr('viewBox', `0 0 ${clientWidth} ${clientHeight}`);
     }
 
     protected async createD3Nodes(graph: Graph): Promise<N[]> {
@@ -100,15 +118,13 @@ export abstract class GraphInstance<N extends GraphD3Node = GraphD3Node, L exten
             }
         }
 
-
-
         return links as L[];
     }
 
-    protected async createNode(svg: any): Promise<any> {
-        const node = svg.selectAll('.node')
+    protected async createNode(g: any): Promise<any> {
+        const node = g.selectAll('.node')
             .data(this.nodes)
-            .enter().append('g')
+            .join('g')
             .attr('class', 'node')
             .call(d3.drag()
                 .on('start', (event, d) => {
@@ -145,7 +161,6 @@ export abstract class GraphInstance<N extends GraphD3Node = GraphD3Node, L exten
             .style('fill', (d) => this.getNodeColor(d) || '#5b5b5b')
             .style('display', (d) => this.isRootNode(d) ? 'block' : 'none');
 
-
         node.append('text')
             .attr('dy', 5)
             .attr('dx', 35)
@@ -153,12 +168,11 @@ export abstract class GraphInstance<N extends GraphD3Node = GraphD3Node, L exten
             .style('font-size', '12px')
             .style('font-weight', 'bold')
             .style('fill', (d) => this.getNodeColor(d));
-
         return node;
     }
 
-    protected async createLink(svg: any): Promise<any> {
-        const defs = svg.append('defs');
+    protected async createLink(g: any): Promise<any> {
+        const defs = g.append('defs');
 
         defs.append('marker')
             .attrs({
@@ -190,15 +204,14 @@ export abstract class GraphInstance<N extends GraphD3Node = GraphD3Node, L exten
             .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
             .attr('fill', (d) => this.getLinkColor(d) || '#5b5b5b');
 
-        this.edgepaths = await this.createEdgePaths(svg);
-        this.edgelabels = await this.createEdgeLabels(svg);
+        this.edgepaths = await this.createEdgePaths(g);
+        this.edgelabels = await this.createEdgeLabels(g);
     }
 
-    protected async createEdgePaths(svg: any): Promise<any> {
-        return svg.selectAll('.edgepath')
+    protected async createEdgePaths(g: any): Promise<any> {
+        return g.selectAll('.edgepath')
             .data(this.links)
-            .enter()
-            .append('path')
+            .join('path')
             .attrs({
                 'class': 'edgepath',
                 'fill-opacity': 0,
@@ -211,11 +224,10 @@ export abstract class GraphInstance<N extends GraphD3Node = GraphD3Node, L exten
             .style('pointer-events', 'none');
     }
 
-    protected async createEdgeLabels(svg: any): Promise<any> {
-        const edgelabels = svg.selectAll('.edgelabel')
+    protected async createEdgeLabels(g: any): Promise<any> {
+        const edgelabels = g.selectAll('.edgelabel')
             .data(this.links)
-            .enter()
-            .append('text')
+            .join('text')
             .style('pointer-events', 'none')
             .style('font-size', '12px')
             .attr('fill', (d) => this.getLinkColor(d) || '#5b5b5b')
@@ -248,7 +260,8 @@ export abstract class GraphInstance<N extends GraphD3Node = GraphD3Node, L exten
                 dr = Math.sqrt(dx * dx + dy * dy);
                 dr = dr / (1 + (1 / d.linknum) * (d.linkindex - 1));
             }
-            return 'M' + d.source.x + ',' + d.source.y + 'A' + dr + ',' + dr + ' 0 0 1,' + d.target.x + ',' + d.target.y;
+            return 'M' + d.source.x + ',' + d.source.y + 'A' + dr + ',' + dr +
+                ' 0 0 1,' + d.target.x + ',' + d.target.y;
         });
 
         this.edgelabels.attr('transform', function (d) {

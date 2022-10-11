@@ -34,6 +34,9 @@ export class FAQCategoryLabelProvider extends LabelProvider<FAQCategory> {
             case FAQCategoryProperty.PARENT_ID:
                 displayValue = 'Translatable#Parent Category';
                 break;
+            case FAQCategoryProperty.SUB_CATEGORIES:
+                displayValue = 'Translatable#Sub Category';
+                break;
             case FAQCategoryProperty.ID:
                 displayValue = 'Translatable#Id';
                 break;

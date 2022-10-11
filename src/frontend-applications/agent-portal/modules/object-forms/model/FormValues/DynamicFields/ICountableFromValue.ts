@@ -17,7 +17,7 @@ export interface ICountableFormValue {
 
     canAddValue(instanceId: string): boolean;
 
-    addFormValue(instanceId: string): Promise<void>;
+    addFormValue(instanceId: string, value: any): Promise<void>;
 
     canRemoveValue(instanceId: string): boolean;
 

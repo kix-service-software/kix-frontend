@@ -12,14 +12,18 @@ import { FormFieldOption } from '../../../../../../model/configuration/FormField
 import { FilterCriteria } from '../../../../../../model/FilterCriteria';
 import { FilterDataType } from '../../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../../model/FilterType';
+import { KIXObject } from '../../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
+import { FormInstance } from '../../../../../base-components/webapp/core/FormInstance';
+import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { ObjectReferenceOptions } from '../../../../../base-components/webapp/core/ObjectReferenceOptions';
 import { JobTypes } from '../../../../../job/model/JobTypes';
 import { MacroAction } from '../../../../../job/model/MacroAction';
 import { MacroActionTypeOption } from '../../../../../job/model/MacroActionTypeOption';
 import { ExtendedJobFormManager } from '../../../../../job/webapp/core/ExtendedJobFormManager';
 import { SearchOperator } from '../../../../../search/model/SearchOperator';
+import { Queue } from '../../../../model/Queue';
 import { QueueProperty } from '../../../../model/QueueProperty';
 
 export class TeamSet extends ExtendedJobFormManager {
@@ -71,5 +75,27 @@ export class TeamSet extends ExtendedJobFormManager {
         field.options.push(new FormFieldOption(ObjectReferenceOptions.MULTISELECT, multiselect));
         field.options.push(new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, autocomplete));
         field.options.push(new FormFieldOption(ObjectReferenceOptions.FREETEXT, freeText));
+    }
+
+    public async postPrepareOptionValue(actionType: string, optionName: string,
+        value: any, parameter: any, field: FormFieldConfiguration,
+        formInstance: FormInstance): Promise<any> {
+        if (actionType === 'TeamSet' && optionName === 'Team' && value && !isNaN(value)) {
+            const object = await this.loadObject<Queue>(KIXObjectType.QUEUE, value);
+            if (object) {
+                const queueName = object.Fullname;
+                return queueName;
+            }
+        }
+    }
+
+    private async loadObject<T extends KIXObject>(objectType: KIXObjectType, id: number): Promise<T> {
+        let object: T;
+        const objects = await KIXObjectService.loadObjects<T>(objectType, [id]);
+        if (Array.isArray(objects) && objects.length) {
+            object = objects[0];
+        }
+
+        return object;
     }
 }
