@@ -38,6 +38,8 @@ export class AgentSocketClient extends SocketClient {
         return AgentSocketClient.INSTANCE;
     }
 
+    private userId: number;
+
     public constructor() {
         super('agent');
     }
@@ -72,6 +74,7 @@ export class AgentSocketClient extends SocketClient {
                         AgentEvent.GET_CURRENT_USER_FINISHED, async (result: GetCurrentUserResponse) => {
                             if (result.requestId === requestId) {
                                 window.clearTimeout(timeout);
+                                this.userId = result.currentUser.UserID;
                                 resolve(new User(result.currentUser));
                             }
                         });
@@ -187,11 +190,19 @@ export class AgentSocketClient extends SocketClient {
 
     public handleNotifications(event: BackendNotification): void {
         const isOwnerEvent = event.Namespace.startsWith('Ticket.Owner');
-        const isResponsibleEvent = event.Namespace.startsWith('Ticket.responsible');
         const isLockEvent = event.Namespace.startsWith('Ticket.Lock');
+        const isWatchEvent = event.Namespace.startsWith('Watcher');
 
-        if (isOwnerEvent || isResponsibleEvent || isLockEvent) {
-            BrowserCacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS`);
+        const ids = event.ObjectID?.split('::') || [];
+
+        if (ids?.length === 3) {
+            const id1Match = ids[1].toString() === this.userId?.toString();
+            const id2Match = ids[2].toString() === this.userId?.toString();
+            if (isOwnerEvent && (id1Match || id2Match)) {
+                BrowserCacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS`);
+            } else if ((isLockEvent || isWatchEvent) && id2Match) {
+                BrowserCacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS`);
+            }
         }
     }
 }
