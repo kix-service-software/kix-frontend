@@ -15,6 +15,7 @@ import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldVal
 import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { ObjectFormValueMapper } from '../ObjectFormValueMapper';
+import { DynamicFieldAffectedAssetFormValue } from './DynamicFields/DynamicFieldAffectedAssetFormValue';
 import { DynamicFieldChecklistFormValue } from './DynamicFields/DynamicFieldChecklistFormValue';
 import { DynamicFieldCIReferenceFormValue } from './DynamicFields/DynamicFieldCIReferenceFormValue';
 import { DynamicFieldDateTimeFormValue } from './DynamicFields/DynamicFieldDateTimeFormValue';
@@ -124,9 +125,13 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
                     );
                     break;
                 case DynamicFieldTypes.CI_REFERENCE:
-                    formValue = new DynamicFieldCIReferenceFormValue(
-                        'Value', dynamicFieldValue, this.objectValueMapper, this, dfName
-                    );
+                    dfName === 'AffectedAsset' ?
+                        formValue = new DynamicFieldAffectedAssetFormValue(
+                            'Value', dynamicFieldValue, this.objectValueMapper, this, dfName
+                        ) :
+                        formValue = new DynamicFieldCIReferenceFormValue(
+                            'Value', dynamicFieldValue, this.objectValueMapper, this, dfName
+                        );
                     break;
                 case DynamicFieldTypes.TABLE:
                     formValue = new DynamicFieldTableFormValue(
