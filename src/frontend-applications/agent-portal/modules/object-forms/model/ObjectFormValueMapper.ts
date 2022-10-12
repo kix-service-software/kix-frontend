@@ -385,7 +385,6 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                     if (formValue.enabled === instruction.Disable) {
                         formValue.enabled = false;
                         formValue.visible = false;
-                        await formValue.setFormValue(null, true);
                     }
                 }
 
