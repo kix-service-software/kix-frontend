@@ -426,9 +426,9 @@ export class TicketAPIService extends KIXObjectAPIService {
             }
         }
 
-        article.ContentType = 'text/html; charset=utf8';
+        article.ContentType = 'text/html; charset=utf-8';
         article.MimeType = 'text/html';
-        article.Charset = 'utf8';
+        article.Charset = 'utf-8';
     }
 
     public async deleteObject(
