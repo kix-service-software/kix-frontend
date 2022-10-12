@@ -60,6 +60,7 @@ import { Error } from '../../../../../../server/model/Error';
 import { Contact } from '../../../customer/model/Contact';
 import { ContactProperty } from '../../../customer/model/ContactProperty';
 import { TicketHistory } from '../../model/TicketHistory';
+import { ArticleLoadingOptions } from '../../model/ArticleLoadingOptions';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -438,8 +439,8 @@ export class TicketService extends KIXObjectService<Ticket> {
     public async getPreparedArticleBodyContent(
         article: Article, removeInlineImages: boolean = false
     ): Promise<[string, InlineContent[]]> {
+        article = await this.getArticleWithAttachments(article);
         if (article.bodyAttachment) {
-
             const attachmentWithContent = await this.loadArticleAttachment(
                 article.TicketID, article.ArticleID, article.bodyAttachment.ID
             );
@@ -489,6 +490,20 @@ export class TicketService extends KIXObjectService<Ticket> {
             const body = article.Body.replace(/(\r\n|\n\r|\n|\r)/g, '<br>');
             return [body, null];
         }
+    }
+
+    private async getArticleWithAttachments(article: Article): Promise<Article> {
+        if (!article.bodyAttachment && !article.Attachments?.length) {
+            const articles = await KIXObjectService.loadObjects<Article>(
+                KIXObjectType.ARTICLE, [article.ArticleID],
+                new KIXObjectLoadingOptions(null, null, null, [ArticleProperty.ATTACHMENTS]),
+                new ArticleLoadingOptions(article.TicketID)
+            );
+            if (articles.length && articles[0]) {
+                article = articles[0];
+            }
+        }
+        return article;
     }
 
     protected getResource(objectType: KIXObjectType): string {
