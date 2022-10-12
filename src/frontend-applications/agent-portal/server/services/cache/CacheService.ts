@@ -202,6 +202,9 @@ export class CacheService {
                 types.push(KIXObjectType.OBJECT_ICON);
                 break;
             case KIXObjectType.CONFIG_ITEM:
+                types.push(`${KIXObjectType.CONFIG_ITEM_CLASS}_STATS`);
+                types.push(KIXObjectType.GRAPH);
+                break;
             case KIXObjectType.CONFIG_ITEM_CLASS:
             case KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION:
                 types.push(`${KIXObjectType.CONFIG_ITEM_CLASS}_STATS`);
