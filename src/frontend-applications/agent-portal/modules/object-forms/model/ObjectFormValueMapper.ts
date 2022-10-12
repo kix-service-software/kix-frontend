@@ -15,6 +15,7 @@ import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { ClientStorageService } from '../../base-components/webapp/core/ClientStorageService';
+import { DynamicFieldFormUtil } from '../../base-components/webapp/core/DynamicFieldFormUtil';
 import { EventService } from '../../base-components/webapp/core/EventService';
 import { ValidationResult } from '../../base-components/webapp/core/ValidationResult';
 import { DynamicFormFieldOption } from '../../dynamic-fields/webapp/core';
@@ -198,7 +199,6 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                 await mapperExtension.initFormValueByField(field, formValue);
             }
         }
-
         await formValue?.initFormValueByField(field);
     }
 
