@@ -49,8 +49,7 @@ export class ObjectFormValue<T = any> {
     public countMin: number = 1;
     public countMax: number = 1;
 
-    public regex: string;
-    public regExErrorMessage: string;
+    public regExList: Array<{ regEx: string, errorMessage: string }>;
 
     public inputComponentId = 'text-form-input';
 
@@ -85,8 +84,7 @@ export class ObjectFormValue<T = any> {
         this.initialState.set('possibleValues', Array.isArray(this.possibleValues) ? [...this.possibleValues] : null);
         this.initialState.set('forbiddenValues', Array.isArray(this.forbiddenValues) ? [...this.forbiddenValues] : null);
         this.initialState.set('readonly', this.readonly);
-        this.initialState.set('regex', this.regex);
-        this.initialState.set('regExErrorMessage', this.regExErrorMessage);
+        this.initialState.set('regExList', this.regExList);
         this.initialState.set('required', this.required);
         this.initialState.set('visible', this.visible);
     }
@@ -151,8 +149,7 @@ export class ObjectFormValue<T = any> {
                 new FormValueBinding(this, FormValueProperty.VISIBLE, object, property),
                 new FormValueBinding(this, FormValueProperty.ENABLED, object, property),
                 new FormValueBinding(this, FormValueProperty.COUNT_MAX, object, property),
-                new FormValueBinding(this, FormValueProperty.REGEX, object, property),
-                new FormValueBinding(this, FormValueProperty.REGEX_ERROR_MESSAGE, object, property),
+                new FormValueBinding(this, FormValueProperty.REG_EX_LIST, object, property),
                 new FormValueBinding(this, FormValueProperty.FORM_VALUES, object, property)
             );
 
@@ -168,21 +165,13 @@ export class ObjectFormValue<T = any> {
                 }
             });
 
-            this.addPropertyBinding(FormValueProperty.REGEX, () => {
+            this.addPropertyBinding(FormValueProperty.REG_EX_LIST, () => {
                 if (this.isCountHandler && Array.isArray(this.formValues)) {
                     for (const formValue of this.formValues) {
-                        formValue.regex = this.regex;
+                        formValue.regExList = this.regExList;
                     }
-                } else if (this.regex) {
+                } else if (this.regExList?.length) {
                     this.objectValueMapper?.validateFormValue(this, true);
-                }
-            });
-
-            this.addPropertyBinding(FormValueProperty.REGEX, () => {
-                if (this.isCountHandler && Array.isArray(this.formValues)) {
-                    for (const formValue of this.formValues) {
-                        formValue.regExErrorMessage = this.regExErrorMessage;
-                    }
                 }
             });
         }

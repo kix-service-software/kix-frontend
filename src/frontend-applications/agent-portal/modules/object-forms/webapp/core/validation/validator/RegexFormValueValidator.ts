@@ -17,11 +17,13 @@ export class RegexFormValueValidator extends ObjectFormValueValidator {
     public async validate(formValue: ObjectFormValue<any>): Promise<ValidationResult[]> {
         const result = [];
 
-        if (!formValue?.isCountHandler && formValue?.value && formValue?.regex) {
-            const regex = new RegExp(formValue.regex);
-            if (!regex.test(formValue.value)) {
-                result.push(new ValidationResult(ValidationSeverity.ERROR, formValue.regExErrorMessage));
-            }
+        if (!formValue?.isCountHandler && formValue?.value && formValue?.regExList?.length) {
+            formValue.regExList.forEach((regExItem) => {
+                const regex = new RegExp(regExItem.regEx);
+                if (!regex.test(formValue.value)) {
+                    result.push(new ValidationResult(ValidationSeverity.ERROR, regExItem.errorMessage));
+                }
+            });
         }
 
         return result;
