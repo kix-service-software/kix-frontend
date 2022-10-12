@@ -408,8 +408,12 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                 }
 
                 if (instructionProperty === InstructionProperty.VALIDATION) {
-                    formValue.regExErrorMessage = instruction.Validation.RegExErrorMessage;
-                    formValue.regex = instruction.Validation.RegEx;
+                    formValue.regExList = [
+                        {
+                            errorMessage: instruction.Validation.RegExErrorMessage,
+                            regEx: instruction.Validation.RegEx
+                        }
+                    ];
                 }
 
             }
