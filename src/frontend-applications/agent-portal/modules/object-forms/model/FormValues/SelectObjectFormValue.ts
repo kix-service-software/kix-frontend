@@ -161,6 +161,11 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
     }
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
+
+        // handle select count here, too (but not exclusive),
+        // to init mulitselect correctly (for preset values by placeholders)
+        this.multiselect = this.maxSelectCount < 0 || this.maxSelectCount > 1;
+
         if (field) {
             // map deprecated input components
             switch (this.inputComponentId) {
@@ -277,7 +282,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         await this.loadSelectableValues();
     }
 
-    protected setSelectedNodes(nodes: TreeNode[] = []): void {
+    protected async setSelectedNodes(nodes: TreeNode[] = []): Promise<void> {
         const tree = this.treeHandler.getTree();
 
         const selectedNodes = this.treeHandler?.getSelection(this.treeHandler?.getTree()) || [];
@@ -286,23 +291,25 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         const newValue = [];
         if (Array.isArray(this.value)) {
             for (const v of this.value) {
-                if (TreeUtil.findNode(tree, v)) {
-                    if (selectedIds.some((id) => id.toString() === v.toString())) {
+                if (typeof v !== 'undefined' && v !== null) {
+                    if (TreeUtil.findNode(tree, v)) {
+                        if (selectedIds.some((id) => id.toString() === v.toString())) {
+                            newValue.push(v);
+                        }
+                    } else if (this.multiselect) {
                         newValue.push(v);
                     }
-                } else if (this.multiselect) {
-                    newValue.push(v);
                 }
             }
         }
 
         for (const node of nodes) {
-            if (!newValue.some((v) => v.toString() === node.id.toString())) {
+            if (!newValue.some((v) => v.toString() === node?.id?.toString())) {
                 newValue.push(node.id);
             }
         }
 
-        this.setFormValue(newValue.length ? newValue as any : null);
+        return this.setFormValue(newValue.length ? newValue as any : null);
     }
 
     public async loadSelectableValues(): Promise<void> {
@@ -491,15 +498,25 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         this.selectedNodes = selectedNodes.sort((a, b) => a.id - b.id);
     }
 
-    public removeValue(value: string | number): void {
+    public async removeValue(value: string | number): Promise<void> {
         if (value && this.multiselect && Array.isArray(this.value)) {
             const index = this.value.findIndex((v: string | number) => v.toString() === value.toString());
             if (index !== -1) {
-                this.value.splice(index, 1);
+                // set current value to trigger binding
+                const newValue = [...this.value];
+                newValue.splice(index, 1);
+                await this.setFormValue(newValue);
             }
-            this.setSelectedNodes([]);
+
+            // remove node from treeHandler
+            const selectedNodes = this.treeHandler.getSelectedNodes();
+            const selectNode = selectedNodes?.find((n) => n.id === value);
+            if (selectNode) {
+                this.treeHandler?.setSelection([selectNode], false, true, true, true);
+            }
+
         } else {
-            this.setFormValue(null);
+            await this.setFormValue(null);
             this.treeHandler?.selectNone();
         }
     }

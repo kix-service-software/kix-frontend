@@ -95,6 +95,10 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
     private async getDFDisplayValue(
         object: KIXObject, dfValue: DynamicFieldValue, dfOptions: string = ''
     ): Promise<string | any> {
+        if (dfValue && (typeof dfValue.Value === 'undefined' || dfValue.Value === null)) {
+            dfValue.Value = [];
+        }
+
         for (const extendedHandler of this.extendedPlaceholderHandler) {
             const value = await extendedHandler.getDFDisplayValue(object, dfValue, dfOptions);
             if (value) {

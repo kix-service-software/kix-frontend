@@ -133,9 +133,9 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue implements 
         return DynamicFieldFormValueCountHandler.canAddValue(this, instanceId);
     }
 
-    public async addFormValue(instanceId: string): Promise<void> {
-        await DynamicFieldFormValueCountHandler.addFormValue(this, instanceId);
-        await super.addFormValue(instanceId);
+    public async addFormValue(instanceId: string, value: any): Promise<void> {
+        await DynamicFieldFormValueCountHandler.addFormValue(this, instanceId, value);
+        await super.addFormValue(instanceId, value);
     }
 
     public canRemoveValue(instanceId: string): boolean {
@@ -148,13 +148,21 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue implements 
     }
 
     public setDFValue(): void {
-        DynamicFieldFormValueCountHandler.setDFValue(this);
+        DynamicFieldFormValueCountHandler.setDFValue(this, super.setFormValue.bind(this));
     }
 
     private addBindings(): void {
         this.bindingIds.push(
             this.addPropertyBinding(FormValueProperty.COUNT_MAX, (value: ObjectFormValue) => this._countMax())
         );
+    }
+
+    public async setFormValue(value: any, force?: boolean): Promise<void> {
+        if (this.isCountHandler) {
+            await DynamicFieldFormValueCountHandler.setFormValue(value, force, this, this.instanceId);
+        } else {
+            await super.setFormValue(value, force);
+        }
     }
 
 }

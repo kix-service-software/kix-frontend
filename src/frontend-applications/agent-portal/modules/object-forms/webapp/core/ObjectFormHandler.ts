@@ -77,6 +77,7 @@ export class ObjectFormHandler<T extends KIXObject = any> {
 
     public async commit(): Promise<string | number> {
 
+        this.objectFormValidator.enabled = true;
         const valid = await this.objectFormValidator.validateForm();
         if (!valid) {
             const validationResults = this.objectFormValueMapper.getValidationResults();

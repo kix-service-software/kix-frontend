@@ -7,15 +7,15 @@
  * --
  */
 
-import { SearchService } from '../../../search/webapp/core';
-import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { SearchProperty } from '../../../search/model/SearchProperty';
-import { AbstractJobFormManager } from '../../../job/webapp/core/AbstractJobFormManager';
-import { TicketSearchFormManager } from './TicketSearchFormManager';
-import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
-import { JobProperty } from '../../../job/model/JobProperty';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { JobProperty } from '../../../job/model/JobProperty';
+import { AbstractJobFormManager } from '../../../job/webapp/core/AbstractJobFormManager';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { SearchProperty } from '../../../search/model/SearchProperty';
+import { SearchService } from '../../../search/webapp/core';
+import { TicketSearchFormManager } from './TicketSearchFormManager';
 
 export class TicketJobFormManager extends AbstractJobFormManager {
 
@@ -61,13 +61,7 @@ class TicketJobFilterFormManager extends TicketSearchFormManager {
 
     // TODO: extend Operators, remove if Operators are not limited anymore (Ticket.ts -> SEARCH_PROPERTIES)
     public async getOperations(property: string): Promise<Array<string | SearchOperator>> {
-        const operations: Array<string | SearchOperator> = await super.getOperations(property);
-
-        if (operations.some((o) => o === SearchOperator.IN) && !operations.some((o) => o === SearchOperator.EQUALS)) {
-            operations.push(SearchOperator.EQUALS);
-        }
-
-        return operations;
+        return await super.getOperations(property);
     }
 
 }

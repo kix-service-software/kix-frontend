@@ -11,7 +11,6 @@ export * from './admin';
 export * from './actions';
 export * from './context';
 export * from './table';
-export * from './form';
 export * from './charts';
 export { ArticleLabelProvider } from './ArticleLabelProvider';
 export { TicketHistoryLabelProvider } from './TicketHistoryLabelProvider';

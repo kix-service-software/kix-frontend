@@ -253,7 +253,7 @@ export class ObjectFormValue<T = any> {
         }
     }
 
-    private async handlePlaceholders(value: any): Promise<any> {
+    protected async handlePlaceholders(value: any): Promise<any> {
         if (value) {
 
             const placeholderObject = this.objectValueMapper?.sourceObject || this.objectValueMapper?.object;
@@ -278,7 +278,13 @@ export class ObjectFormValue<T = any> {
                 });
 
                 let newValue = await Promise.all(newValuePromises);
-                newValue = newValue.filter((v) => v !== '' && v !== null && typeof v !== 'undefined' && !Array.isArray(v));
+
+                // values like [ [1,2], [3,4] ] are not usable, flatten them ([1,2,3,4]) to one level depth
+                // could be, because given value is something like [ '<KIX_TICKET_DynamicField_DFName_ObjectValue> ' ]
+                // so result would be an array
+                newValue = newValue.flat();
+
+                newValue = newValue.filter((v) => v !== '' && v !== null && typeof v !== 'undefined');
                 value = newValue as any;
             }
         }
@@ -309,7 +315,7 @@ export class ObjectFormValue<T = any> {
             if (this.value.length) {
                 for (const v of this.value) {
                     if (this.canAddValue(this.instanceId)) {
-                        await this.addFormValue(this.instanceId);
+                        await this.addFormValue(this.instanceId, v);
 
                         const formValue = this.formValues[this.formValues.length - 1];
                         if (formValue) {
@@ -330,7 +336,7 @@ export class ObjectFormValue<T = any> {
     protected async addDefaultFormValues(): Promise<void> {
         const startIndex = this.formValues?.length || 0;
         for (let i = startIndex; i < this.countDefault; i++) {
-            await this.addFormValue(null);
+            await this.addFormValue(null, null);
         }
     }
 
@@ -464,7 +470,7 @@ export class ObjectFormValue<T = any> {
         return false;
     }
 
-    public async addFormValue(instanceId: string): Promise<void> {
+    public async addFormValue(instanceId: string, value: any): Promise<void> {
         await this.setVisibilityAndComponent();
     }
 

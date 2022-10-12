@@ -374,6 +374,8 @@ export class TicketAPIService extends KIXObjectAPIService {
                         token, clientRequestId, uri, { Article: article }, KIXObjectType.ARTICLE, true
                     ).catch((error: Error) => {
                         LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                        // TODO: exetend error handling if more than one article will be created?
+                        throw new Error(error.Code, error.Message);
                     });
                 }
             }

@@ -7,17 +7,23 @@
  * --
  */
 
+import { IdService } from '../../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
+import { EventService } from '../../../../../base-components/webapp/core/EventService';
+import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { KIXModulesService } from '../../../../../base-components/webapp/core/KIXModulesService';
 import { ValidationSeverity } from '../../../../../base-components/webapp/core/ValidationSeverity';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { FormValueProperty } from '../../../../model/FormValueProperty';
 import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
+import { ObjectFormEvent } from '../../../../model/ObjectFormEvent';
 import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private bindingIds: string[];
+    private subscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -99,8 +105,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 FormValueProperty.VISIBLE, (formValue: ObjectFormValue) => {
                     this.state.visible = formValue.visible;
                     if (this.state.visible && this.state.formValue.isCountHandler) {
-                        this.setCanAdd();
-                        this.setCanRemove();
+                        // prevent formValue update, the current update triggered this,
+                        // the formValue already have this value
+                        this.setButtonsAndVisibility(false);
                     }
                 }
             )
@@ -130,11 +137,26 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(this.state.formValue?.instanceId),
+            eventPublished: (instanceId: string): void => {
+                if (this.state.formValue?.instanceId === instanceId) {
+                    const element = (this as any).getEl();
+                    if (element) {
+                        BrowserUtil.scrollIntoViewIfNeeded(element);
+                    }
+                }
+            }
+        };
+        EventService.getInstance().subscribe(ObjectFormEvent.SCROLL_TO_FORM_VALUE, this.subscriber);
+
         this.state.prepared = true;
     }
 
     public onDestroy(): void {
         this.state.formValue?.removePropertyBinding(this.bindingIds);
+        EventService.getInstance().unsubscribe(ObjectFormEvent.SCROLL_TO_FORM_VALUE, this.subscriber);
     }
 
     public setCanAdd(): void {
@@ -142,7 +164,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async addValue(): Promise<void> {
-        await this.state.formValue?.addFormValue(this.state.formValue.instanceId);
+        await this.state.formValue?.addFormValue(this.state.formValue.instanceId, null);
         this.setButtonsAndVisibility();
         (this as any).setStateDirty();
     }
@@ -156,8 +178,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         (this as any).setStateDirty();
     }
 
-    private async setButtonsAndVisibility(): Promise<void> {
-        await this.state.formValue.setVisibilityAndComponent();
+    private async setButtonsAndVisibility(updateValue: boolean = true): Promise<void> {
+        if (updateValue) {
+            await this.state.formValue.setVisibilityAndComponent();
+        }
         this.setCanAdd();
         this.setCanRemove();
     }

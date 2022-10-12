@@ -79,7 +79,10 @@ export class FormValidationService {
     public isValidEmail(email: string): boolean {
         let isValidEmail: boolean = true;
         try {
-            addrparser.parse(email.trim().toLowerCase());
+            const addresses = addrparser.parse(email.trim().toLowerCase());
+            if (!addresses[0].host().match(/^.+?\..+$/)) {
+                throw new Error();
+            }
         } catch {
             isValidEmail = false;
         }
