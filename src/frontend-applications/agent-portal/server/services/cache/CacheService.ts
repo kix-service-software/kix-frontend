@@ -89,7 +89,7 @@ export class CacheService {
             } else if (event.Namespace.startsWith('User.UserPreference')) {
                 promises.push(this.handleUserPreferencesCache(event));
             } else if (!event.Namespace.startsWith(KIXObjectType.TRANSLATION_PATTERN)) {
-                LoggingService.getInstance().debug('Backend Notification: ' + JSON.stringify(event));
+                LoggingService.getInstance().debug('\tBackend Notification: ' + JSON.stringify(event));
                 promises.push(this.deleteKeys(event.Namespace));
             }
         }
@@ -133,16 +133,15 @@ export class CacheService {
         if (!type || type.length === 0)
             return;
 
-        // start profiling
-        const profileTaskId = ProfilingService.getInstance().start(
-            'CacheService', 'deleteKeys\t' + type, { data: [type] }
-        );
-
         let prefixes = await this.getCacheKeyPrefixes(type);
         if (!force) {
             prefixes = prefixes.filter((p) => !this.ignorePrefixes.some((ip) => ip === p));
         }
 
+        // start profiling
+        const profileTaskId = ProfilingService.getInstance().start(
+            'CacheService', 'deleteKeys\t' + type, { data: prefixes }
+        );
         for (const prefix of prefixes) {
             await this.getCacheBackendInstance()?.deleteAll(prefix);
         }
@@ -155,7 +154,10 @@ export class CacheService {
 
     private async getCacheKeyPrefixes(objectNamespace: string): Promise<string[]> {
         let types: string[] = [];
-        if (objectNamespace && objectNamespace.indexOf('.') !== -1) {
+
+        if (objectNamespace === 'DynamicField.Value') {
+            return [];
+        } else if (objectNamespace && objectNamespace.indexOf('.') !== -1) {
             const namespace = objectNamespace.split('.');
             if (namespace[0] === 'CMDB') {
                 types.push(namespace[1]);
@@ -200,8 +202,10 @@ export class CacheService {
                 types.push(KIXObjectType.OBJECT_ICON);
                 break;
             case KIXObjectType.CONFIG_ITEM:
+            case KIXObjectType.CONFIG_ITEM_CLASS:
             case KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION:
-                types.push(KIXObjectType.CONFIG_ITEM_CLASS);
+                types.push(`${KIXObjectType.CONFIG_ITEM_CLASS}_STATS`);
+                types.push(`${KIXObjectType.CONFIG_ITEM_CLASS}_DEFINITION`);
                 types.push(KIXObjectType.GRAPH);
                 break;
             case KIXObjectType.PERSONAL_SETTINGS:

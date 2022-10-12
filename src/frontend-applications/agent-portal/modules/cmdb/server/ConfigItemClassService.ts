@@ -24,6 +24,7 @@ import { UpdateConfigItemClassResponse } from './api/UpdateConfigItemClassRespon
 import { UpdateConfigItemClassRequest } from './api/UpdateConfigItemClassRequest';
 import { Error } from '../../../../../server/model/Error';
 import { ConfigItemClass } from '../model/ConfigItemClass';
+import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 
 
 export class ConfigItemAPIClassService extends KIXObjectAPIService {
@@ -50,17 +51,59 @@ export class ConfigItemAPIClassService extends KIXObjectAPIService {
         return kixObjectType === KIXObjectType.CONFIG_ITEM_CLASS;
     }
 
+    public async preloadObjects(token: string): Promise<void> {
+        const promises = [];
+
+        const loadingOptions = new KIXObjectLoadingOptions();
+        loadingOptions.includes = ['ConfigItemStats'];
+        loadingOptions.cacheType = `${KIXObjectType.CONFIG_ITEM_CLASS}_STATS`;
+        promises.push(
+            await this.loadObjects<ConfigItemClass>(
+                token, '', KIXObjectType.CONFIG_ITEM_CLASS, null, loadingOptions, null
+            )
+        );
+
+        promises.push(
+            await this.loadObjects<ConfigItemClass>(
+                token, '', KIXObjectType.CONFIG_ITEM_CLASS, null, loadingOptions, null
+            )
+        );
+
+        await Promise.all(promises);
+    }
+
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<T[]> {
         let objects = [];
 
-        if (objectType === KIXObjectType.CONFIG_ITEM_CLASS) {
+        const cacheTypes = [
+            `${KIXObjectType.CONFIG_ITEM_CLASS}_STATS`,
+            `${KIXObjectType.CONFIG_ITEM_CLASS}_DEFINITION`
+        ];
+
+        if (cacheTypes.some((ct) => ct === (loadingOptions?.cacheType))) {
             objects = await super.load(
                 token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'ConfigItemClass',
                 clientRequestId, ConfigItemClass
             );
+        } else {
+            objects = await super.load(
+                token, objectType, this.RESOURCE_URI, null, null, 'ConfigItemClass',
+                clientRequestId, ConfigItemClass
+            );
+
+            const hasValidFilter = loadingOptions?.filter?.length === 1 &&
+                loadingOptions.filter[0].property === KIXObjectProperty.VALID_ID;
+
+            if (hasValidFilter) {
+                objects = objects.filter((o) => o.ValidID === loadingOptions.filter[0].value);
+            }
+
+            if (objectIds && objectIds.length) {
+                objects = objects.filter((t) => objectIds.some((oid) => oid === t.ID));
+            }
         }
 
         return objects;

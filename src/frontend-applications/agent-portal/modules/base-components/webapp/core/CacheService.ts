@@ -159,8 +159,10 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
                 break;
             case KIXObjectType.CONFIG_ITEM:
+            case KIXObjectType.CONFIG_ITEM_CLASS:
             case KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION:
-                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM_CLASS);
+                cacheKeyPrefixes.push(`${KIXObjectType.CONFIG_ITEM_CLASS}_STATS`);
+                cacheKeyPrefixes.push(`${KIXObjectType.CONFIG_ITEM_CLASS}_DEFINITION`);
                 cacheKeyPrefixes.push(KIXObjectType.GRAPH);
                 cacheKeyPrefixes.push(KIXObjectType.GRAPH_INSTANCE);
                 break;
@@ -200,9 +202,6 @@ export class BrowserCacheService {
             case KIXObjectType.TICKET_PRIORITY:
             case KIXObjectType.TICKET_STATE:
             case KIXObjectType.TICKET_TYPE:
-                cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
-                break;
-            case KIXObjectType.CONFIG_ITEM_CLASS:
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
                 break;
             case KIXObjectType.TRANSLATION_PATTERN:
