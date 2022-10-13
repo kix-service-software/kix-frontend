@@ -7,7 +7,7 @@
  * --
  */
 
-import { SearchDefinition, SearchResultCategory } from '../../../search/webapp/core';
+import { SearchDefinition } from '../../../search/webapp/core';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ConfigItemSearchFormManager } from './ConfigItemSearchFormManager';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
@@ -68,22 +68,6 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         );
     }
 
-    public async getSearchResultCategories(): Promise<SearchResultCategory[]> {
-        const categories: SearchResultCategory[] = [];
-
-        if (await this.checkReadPermissions('tickets')) {
-            categories.push(
-                new SearchResultCategory('Translatable#Tickets', KIXObjectType.TICKET)
-            );
-        }
-        if (await this.checkReadPermissions('faq/articles')) {
-            categories.push(
-                new SearchResultCategory('FAQs', KIXObjectType.FAQ_ARTICLE)
-            );
-        }
-        return [new SearchResultCategory('Config Items', KIXObjectType.CONFIG_ITEM, categories)];
-    }
-
     public async prepareFormFilterCriteria(
         criteria: FilterCriteria[], forSearch: boolean = true
     ): Promise<FilterCriteria[]> {
@@ -132,7 +116,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 case VersionProperty.NUMBER:
                     searchCriteria.type = FilterDataType.STRING;
                     newCriteria.push(searchCriteria);
-                break;
+                    break;
                 case KIXObjectProperty.CHANGE_BY:
                 case KIXObjectProperty.CREATE_BY:
                     searchCriteria.type = FilterDataType.NUMERIC;

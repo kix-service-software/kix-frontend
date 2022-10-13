@@ -7,10 +7,9 @@
  * --
  */
 
-import { SearchExtension } from '../search/SearchExtension';
 import { OrganisationSearchContext } from './webapp/core/context/OrganisationSearchContext';
 
-export class Extension extends SearchExtension {
+export class Extension {
 
     public getModuleId(): string {
         return OrganisationSearchContext.CONTEXT_ID;

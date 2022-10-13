@@ -17,9 +17,8 @@ import { SearchProperty } from '../search/model/SearchProperty';
 import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 import { FAQArticleProperty } from './model/FAQArticleProperty';
 import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
-import { SearchExtension } from '../search/SearchExtension';
 
-export class Extension extends SearchExtension {
+export class Extension {
 
     public getModuleId(): string {
         return FAQArticleSearchContext.CONTEXT_ID;

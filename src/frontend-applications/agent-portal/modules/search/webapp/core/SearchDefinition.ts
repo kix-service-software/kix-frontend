@@ -8,7 +8,6 @@
  */
 
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { SearchResultCategory } from './SearchResultCategory';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { TreeNode } from '../../../base-components/webapp/core/tree';
@@ -51,10 +50,6 @@ export abstract class SearchDefinition {
 
     public async getProperties(parameter?: Array<[string, any]>): Promise<Array<[string, string]>> {
         return await this.formManager.getProperties();
-    }
-
-    public async getSearchResultCategories(): Promise<SearchResultCategory[]> {
-        return [];
     }
 
     protected readPermissions: Map<string, boolean> = new Map();

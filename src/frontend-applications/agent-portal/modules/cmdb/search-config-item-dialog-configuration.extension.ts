@@ -8,9 +8,8 @@
  */
 
 import { ConfigItemSearchContext } from './webapp/core';
-import { SearchExtension } from '../search/SearchExtension';
 
-export class Extension extends SearchExtension {
+export class Extension {
 
     public getModuleId(): string {
         return ConfigItemSearchContext.CONTEXT_ID;

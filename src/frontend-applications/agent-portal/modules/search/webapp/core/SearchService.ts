@@ -10,7 +10,6 @@
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { SearchDefinition } from './SearchDefinition';
-import { SearchResultCategory } from './SearchResultCategory';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { SearchOperator } from '../../model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';

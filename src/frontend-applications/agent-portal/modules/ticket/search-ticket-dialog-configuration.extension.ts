@@ -15,9 +15,8 @@ import { FormContext } from '../../model/configuration/FormContext';
 import { SearchProperty } from '../search/model/SearchProperty';
 import { TicketProperty } from './model/TicketProperty';
 import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
-import { SearchExtension } from '../search/SearchExtension';
 
-export class Extension extends SearchExtension {
+export class Extension {
 
     public getModuleId(): string {
         return TicketSearchContext.CONTEXT_ID;

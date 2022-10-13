@@ -7,7 +7,6 @@
  * --
  */
 
-import { SearchResultCategory } from '../../../search/webapp/core/SearchResultCategory';
 import { SearchDefinition } from '../../../search/webapp/core/SearchDefinition';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TicketSearchFormManager } from './TicketSearchFormManager';
@@ -52,23 +51,6 @@ export class TicketSearchDefinition extends SearchDefinition {
         return new KIXObjectLoadingOptions(
             null, null, null
         );
-    }
-
-    public async getSearchResultCategories(): Promise<SearchResultCategory[]> {
-        const categories: SearchResultCategory[] = [];
-
-        if (await this.checkReadPermissions('contacts')) {
-            categories.push(
-                new SearchResultCategory('Translatable#Contacts', KIXObjectType.CONTACT)
-            );
-        }
-        if (await this.checkReadPermissions('organisations')) {
-            categories.push(
-                new SearchResultCategory('Translatable#Organisations', KIXObjectType.ORGANISATION)
-            );
-        }
-
-        return [new SearchResultCategory('Translatable#Tickets', KIXObjectType.TICKET, categories)];
     }
 
     public async prepareFormFilterCriteria(
