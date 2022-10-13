@@ -157,6 +157,8 @@ export class CacheService {
 
         if (objectNamespace === 'DynamicField.Value') {
             return [];
+        } if (objectNamespace === 'Ticket.History') {
+            return [KIXObjectType.TICKET_HISTORY];
         } else if (objectNamespace && objectNamespace.indexOf('.') !== -1) {
             const namespace = objectNamespace.split('.');
             if (namespace[0] === 'CMDB') {
