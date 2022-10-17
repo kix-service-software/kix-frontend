@@ -36,7 +36,8 @@ class ArticleAttachmentComponent {
         this.images = Array.isArray(input.images) ? input.images : [];
     }
 
-    public async download(): Promise<void> {
+    public async download(event: any): Promise<void> {
+        event.stopPropagation();
         if (this.state.article && this.state.attachment) {
 
             if (this.images && this.images.some((i) => i.imageId === this.state.attachment.ID)) {
