@@ -221,7 +221,10 @@ export class SearchService {
         const searchDefinition = this.getSearchDefinition(objectType);
         searchDefinition?.appendFullTextCriteria(searchCache.criteria);
 
-        await this.setSearchContext(searchCache?.objectType);
+        // prepare url params (init context with search)
+        const cache = JSON.stringify({ ...searchCache, result: [] });
+        const searchString = `search=${encodeURIComponent(cache)}`;
+        await this.setSearchContext(searchCache?.objectType, new URLSearchParams(searchString));
         const objects = await this.searchObjects(searchCache);
         return (objects as any);
     }
@@ -382,12 +385,16 @@ export class SearchService {
         return await this.searchObjects(searchCache, context);
     }
 
-    private async setSearchContext(objectType: KIXObjectType | string): Promise<SearchContext> {
+    private async setSearchContext(
+        objectType: KIXObjectType | string, urlParams?: URLSearchParams
+    ): Promise<SearchContext> {
         let context: SearchContext;
         const descriptors = ContextService.getInstance().getContextDescriptors(ContextMode.SEARCH);
         if (Array.isArray(descriptors)) {
             const descriptor = descriptors.find((d) => d.kixObjectTypes[0] === objectType);
-            context = await ContextService.getInstance().setActiveContext(descriptor?.contextId) as SearchContext;
+            context = await ContextService.getInstance().setActiveContext(
+                descriptor?.contextId, undefined, urlParams
+            ) as SearchContext;
         }
 
         return context;
