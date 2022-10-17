@@ -70,6 +70,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async attachmentsClicked(event?: any): Promise<void> {
+        if (event) {
+            event.stopPropagation();
+        }
         if (this.state.article) {
             const attachment = await TicketService.getInstance().loadArticleZipAttachment(
                 this.state.article.TicketID, this.state.article.ArticleID
