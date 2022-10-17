@@ -55,7 +55,7 @@ body>.kix-form-container.kix-style>.kix-form-header>h2 {
 
 body>.kix-form-container>.kix-form-header>.kix-form-close {
     position: absolute;
-    top: 0.25rem;
+    top: 0.5rem;
     right: 0.5rem;
     cursor: pointer;
     height: 1rem;
@@ -96,12 +96,14 @@ body>.kix-form-container>.kix-form-content {
 body>.kix-form-container>.kix-form-content>.kix-form-input {
     margin-bottom: 0.5rem;
     width: 100%;
+    display: flex;
+    align-items: center;
 }
 
 body>.kix-form-container>.kix-form-content>.kix-form-input>label {
     font-weight: bold;
     display: inline-block;
-    width: 23%;
+    min-width: 23%;
     margin-right: 2%;
     white-space: nowrap;
     overflow: hidden;
@@ -109,13 +111,13 @@ body>.kix-form-container>.kix-form-content>.kix-form-input>label {
 }
 
 /* kix style */
-body>.kix-form-container>.kix-form-content>.kix-form-input>label {
+/*body>.kix-form-container>.kix-form-content>.kix-form-input>label {
     text-align: end;
-}
+}*/
 
-body>.kix-form-container>.kix-form-content>.kix-form-input>label.kix-form-message-label {
+/*body>.kix-form-container>.kix-form-content>.kix-form-input>label.kix-form-message-label {
     vertical-align: top;
-}
+}*/
 
 body>.kix-form-container>.kix-form-content>.kix-form-input:not(.kix-form-attachments)>label::before {
     content: '* ';
@@ -130,9 +132,8 @@ body>.kix-form-container>.kix-form-content>.kix-form-input>input {
 }
 
 body>.kix-form-container>.kix-form-content>.kix-form-input>textarea {
-    max-width: 74%;
-    min-width: 74%;
-    width: 74%;
+    min-width: 70%;
+    width: inherit;
     height: 7rem;
 }
 
@@ -221,11 +222,15 @@ body>.kix-form-container>.kix-form-content>.kix-form-buttons>button:last-child {
 /* kix style */
 body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button:first-child {
     border-color: #e31e24;
+    display: flex;
+    align-items: center;
 }
 
 /* kix style */
 body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button:last-child {
     border-color: #82c826;
+    display: flex;
+    align-items: center;
 }
 
 /* kix style */
@@ -263,14 +268,14 @@ body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button>sp
 
 /* kix style */
 body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button:first-child>span:first-child::before {
-    top: 0.55rem;
+    top: 0.6rem;
     left: 0.25rem;
     transform: rotate(45deg);
 }
 
 /* kix style */
 body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button:first-child>span:first-child::after {
-    top: 0.55rem;
+    top: 0.6rem;
     left: 0.25rem;
     transform: rotate(-45deg);
 }
