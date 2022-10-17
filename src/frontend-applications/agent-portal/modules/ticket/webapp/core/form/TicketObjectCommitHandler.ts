@@ -28,7 +28,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         const newTicket = await super.prepareObject(ticket, forCommit);
 
         await this.prepareArticles(newTicket, forCommit, ticket.QueueID);
-        this.prepareTitle(newTicket);
+        await this.prepareTitle(newTicket);
         this.prepareTicket(newTicket);
         this.prepareSpecificAttributes(newTicket);
 
@@ -133,9 +133,12 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         return attachments;
     }
 
-    private prepareTitle(ticket: Ticket): void {
+    protected async prepareTitle(ticket: Ticket): Promise<void> {
         if (!ticket.Title && this.objectValueMapper?.formContext === FormContext.NEW) {
-            ticket.Title = new Date().toLocaleDateString();
+            await super.prepareTitle(ticket);
+            if (!ticket.Title) {
+                ticket.Title = new Date().toLocaleDateString();
+            }
             if (ticket.Articles?.length) {
                 const article = ticket.Articles.find((a) => !a.ArticleID);
                 ticket.Title = article?.Subject || ticket.Title;
