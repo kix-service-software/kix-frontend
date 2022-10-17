@@ -58,6 +58,8 @@ export class ObjectFormValue<T = any> {
 
     public isSortable: boolean = true;
 
+    public isSetInBackground: boolean = false;
+
     protected initialState: Map<string, any> = new Map();
 
     public constructor(
@@ -214,6 +216,7 @@ export class ObjectFormValue<T = any> {
         this.visible = field.visible;
         this.readonly = field.readonly;
         this.required = field.required;
+        this.isSetInBackground = field.options.some((o) => o.option === 'set hidden') || this.parent?.isSetInBackground;
 
         if (field?.property !== KIXObjectProperty.DYNAMIC_FIELDS) {
             this.label = field.label;
@@ -240,6 +243,8 @@ export class ObjectFormValue<T = any> {
                 this.property, this.object?.KIXObjectType
             );
         }
+        this.isSetInBackground =
+            this.parent?.isCountHandler && this.parent?.isSetInBackground || this.isSetInBackground;
     }
 
     protected async handlePlaceholders(value: any): Promise<any> {
