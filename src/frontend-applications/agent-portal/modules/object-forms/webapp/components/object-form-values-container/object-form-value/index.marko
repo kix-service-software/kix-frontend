@@ -46,7 +46,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <${state.inputTemplate} formValue=state.formValue/>
                   </if>
                   <else>
-                     <text-form-input formVaue=state.formValue/>
+                     <text-form-input formValue=state.formValue/>
                   </else>
                </div>
                <div.col-1.col-sm-1.p-0.ps-2>
@@ -69,7 +69,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                </div>
             </if>
             <if(state.validationErrors.length)>
-               <div.col-sm-10.offset-sm-2>
+               <div.col-sm-10.offset-sm-2.validation-errors>
                   <for|validationError| of=state.validationErrors>
                      <span.text-danger>
                         ${validationError.message}

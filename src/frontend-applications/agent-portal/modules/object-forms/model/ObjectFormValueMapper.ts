@@ -15,6 +15,7 @@ import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { ClientStorageService } from '../../base-components/webapp/core/ClientStorageService';
+import { DynamicFieldFormUtil } from '../../base-components/webapp/core/DynamicFieldFormUtil';
 import { EventService } from '../../base-components/webapp/core/EventService';
 import { ValidationResult } from '../../base-components/webapp/core/ValidationResult';
 import { DynamicFormFieldOption } from '../../dynamic-fields/webapp/core';
@@ -214,7 +215,6 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                 await mapperExtension.initFormValueByField(field, formValue);
             }
         }
-
         await formValue?.initFormValueByField(field);
     }
 
@@ -370,24 +370,46 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                 if (instructionProperty === InstructionProperty.SHOW) {
                     if (formValue.visible !== instruction.Show) {
                         formValue.visible = instruction.Show;
+                        if (formValue.isCountHandler && formValue.formValues && formValue.formValues.length > 0) {
+                            formValue.visible = false;
+                            formValue.formValues.forEach((fv) => {
+                                fv.visible = instruction.Show;
+                            });
+                        }
                     }
                 }
 
                 if (instructionProperty === InstructionProperty.HIDE) {
                     if (formValue.visible === instruction.Hide) {
                         formValue.visible = !instruction.Hide;
+                        if (formValue.isCountHandler && formValue.formValues && formValue.formValues.length > 0) {
+                            formValue.visible = false;
+                            formValue.formValues.forEach((fv) => {
+                                fv.visible = !instruction.Hide;
+                            });
+                        }
                     }
                 }
 
                 if (instructionProperty === InstructionProperty.REQUIRED) {
                     if (formValue.required !== instruction.Required) {
                         formValue.required = instruction.Required;
+                        if (formValue.isCountHandler && formValue.formValues && formValue.formValues.length > 0) {
+                            formValue.formValues.forEach((fv) => {
+                                fv.required = instruction.Required;
+                            });
+                        }
                     }
                 }
 
                 if (instructionProperty === InstructionProperty.OPTIONAL) {
                     if (formValue.required === instruction.Optional) {
                         formValue.required = !instruction.Optional;
+                        if (formValue.isCountHandler && formValue.formValues && formValue.formValues.length > 0) {
+                            formValue.formValues.forEach((fv) => {
+                                fv.required = !instruction.Optional;
+                            });
+                        }
                     }
                 }
 
@@ -401,7 +423,6 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                     if (formValue.enabled === instruction.Disable) {
                         formValue.enabled = false;
                         formValue.visible = false;
-                        await formValue.setFormValue(null, true);
                     }
                 }
 
@@ -424,8 +445,12 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                 }
 
                 if (instructionProperty === InstructionProperty.VALIDATION) {
-                    formValue.regExErrorMessage = instruction.Validation.RegExErrorMessage;
-                    formValue.regex = instruction.Validation.RegEx;
+                    formValue.regExList = [
+                        {
+                            errorMessage: instruction.Validation.RegExErrorMessage,
+                            regEx: instruction.Validation.RegEx
+                        }
+                    ];
                 }
 
             }

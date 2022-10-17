@@ -479,6 +479,8 @@ export class TicketAPIService extends KIXObjectAPIService {
                         token, clientRequestId, uri, { Article: article }, KIXObjectType.ARTICLE, true
                     ).catch((error: Error) => {
                         LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                        // TODO: exetend error handling if more than one article will be created?
+                        throw new Error(error.Code, error.Message);
                     });
                 }
             }
@@ -529,9 +531,9 @@ export class TicketAPIService extends KIXObjectAPIService {
             }
         }
 
-        article.ContentType = 'text/html; charset=utf8';
+        article.ContentType = 'text/html; charset=utf-8';
         article.MimeType = 'text/html';
-        article.Charset = 'utf8';
+        article.Charset = 'utf-8';
     }
 
     public async deleteObject(

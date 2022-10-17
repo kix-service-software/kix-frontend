@@ -236,9 +236,7 @@ export class TreeHandler {
                 const selection = [];
                 this.selectedNodes.forEach((n) => {
                     const exists = selection.some((sn) => sn.id === n.id);
-                    if (!filterSelection && !exists) {
-                        selection.push(n);
-                    } else if (filterSelection && !exists) {
+                    if (filterSelection && !exists) {
                         const existingNode = TreeUtil.findNode(this.tree, n.id);
                         if (existingNode) {
                             selection.push(n);

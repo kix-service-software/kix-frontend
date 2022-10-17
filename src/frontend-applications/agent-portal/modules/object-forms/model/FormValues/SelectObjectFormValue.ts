@@ -282,7 +282,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         await this.loadSelectableValues();
     }
 
-    protected setSelectedNodes(nodes: TreeNode[] = []): void {
+    protected async setSelectedNodes(nodes: TreeNode[] = []): Promise<void> {
         const tree = this.treeHandler.getTree();
 
         const selectedNodes = this.treeHandler?.getSelection(this.treeHandler?.getTree()) || [];
@@ -309,7 +309,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             }
         }
 
-        this.setFormValue(newValue.length ? newValue as any : null);
+        return this.setFormValue(newValue.length ? newValue as any : null);
     }
 
     public async loadSelectableValues(): Promise<void> {
@@ -498,15 +498,25 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         this.selectedNodes = selectedNodes.sort((a, b) => a.id - b.id);
     }
 
-    public removeValue(value: string | number): void {
+    public async removeValue(value: string | number): Promise<void> {
         if (value && this.multiselect && Array.isArray(this.value)) {
             const index = this.value.findIndex((v: string | number) => v.toString() === value.toString());
             if (index !== -1) {
-                this.value.splice(index, 1);
+                // set current value to trigger binding
+                const newValue = [...this.value];
+                newValue.splice(index, 1);
+                await this.setFormValue(newValue);
             }
-            this.setSelectedNodes([]);
+
+            // remove node from treeHandler
+            const selectedNodes = this.treeHandler.getSelectedNodes();
+            const selectNode = selectedNodes?.find((n) => n.id === value);
+            if (selectNode) {
+                this.treeHandler?.setSelection([selectNode], false, true, true, true);
+            }
+
         } else {
-            this.setFormValue(null);
+            await this.setFormValue(null);
             this.treeHandler?.selectNone();
         }
     }

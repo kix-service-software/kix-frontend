@@ -368,7 +368,7 @@ export class ContextService {
             contextId, objectId, additionalInformation, urlParams
         );
         if (context) {
-            this.setContextByInstanceId(context.instanceId, objectId, history);
+            await this.setContextByInstanceId(context.instanceId, objectId, history);
         }
 
         if (typeof window !== 'undefined') {

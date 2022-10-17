@@ -123,8 +123,8 @@ export class RoutingService {
         return routed;
     }
 
-    private handleURLParams(params: URLSearchParams, contextId?: string): Promise<boolean> {
-        return new Promise<boolean>(async (resolve, reject) => {
+    private async handleURLParams(params: URLSearchParams, contextId?: string): Promise<boolean> {
+        const result = await new Promise<boolean>(async (resolve, reject) => {
             if (params.has('new')) {
 
                 const contextDescriptors = ContextService.getInstance().getContextDescriptors(
@@ -151,6 +151,6 @@ export class RoutingService {
                 resolve(false);
             }
         });
-
+        return result;
     }
 }
