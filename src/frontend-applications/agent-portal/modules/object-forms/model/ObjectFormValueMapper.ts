@@ -354,24 +354,46 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                 if (instructionProperty === InstructionProperty.SHOW) {
                     if (formValue.visible !== instruction.Show) {
                         formValue.visible = instruction.Show;
+                        if (formValue.isCountHandler && formValue.formValues && formValue.formValues.length > 0) {
+                            formValue.visible = false;
+                            formValue.formValues.forEach((fv) => {
+                                fv.visible = instruction.Show;
+                            });
+                        }
                     }
                 }
 
                 if (instructionProperty === InstructionProperty.HIDE) {
                     if (formValue.visible === instruction.Hide) {
                         formValue.visible = !instruction.Hide;
+                        if (formValue.isCountHandler && formValue.formValues && formValue.formValues.length > 0) {
+                            formValue.visible = false;
+                            formValue.formValues.forEach((fv) => {
+                                fv.visible = !instruction.Hide;
+                            });
+                        }
                     }
                 }
 
                 if (instructionProperty === InstructionProperty.REQUIRED) {
                     if (formValue.required !== instruction.Required) {
                         formValue.required = instruction.Required;
+                        if (formValue.isCountHandler && formValue.formValues && formValue.formValues.length > 0) {
+                            formValue.formValues.forEach((fv) => {
+                                fv.required = instruction.Required;
+                            });
+                        }
                     }
                 }
 
                 if (instructionProperty === InstructionProperty.OPTIONAL) {
                     if (formValue.required === instruction.Optional) {
                         formValue.required = !instruction.Optional;
+                        if (formValue.isCountHandler && formValue.formValues && formValue.formValues.length > 0) {
+                            formValue.formValues.forEach((fv) => {
+                                fv.required = !instruction.Optional;
+                            });
+                        }
                     }
                 }
 
