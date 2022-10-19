@@ -8,8 +8,8 @@
  */
 
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { AbstractAction } from '../../../base-components/webapp/core/AbstractAction';
 import { FormValueAction } from '../../model/FormValues/FormValueAction';
 import { ObjectFormValue } from '../../model/FormValues/ObjectFormValue';
 import { ObjectFormValueMapper } from '../../model/ObjectFormValueMapper';
@@ -140,13 +140,17 @@ export class ObjectFormRegistry {
         formValue: ObjectFormValue, objectValueMapper: ObjectFormValueMapper
     ): Promise<FormValueAction[]> {
         const actions: FormValueAction[] = [];
-        if (this.formValueActions.has(formValue?.property)) {
-            const actionClasses = this.formValueActions.get(formValue?.property);
-            for (const ac of actionClasses) {
-                const action = new ac(formValue, objectValueMapper);
-                await action.initAction();
-                actions.push(action);
-            }
+
+        const actionClasses = formValue.getValueActionClasses() || [];
+        const isDynamicField = formValue?.property === 'Value' && formValue?.parent?.property === KIXObjectProperty.DYNAMIC_FIELDS;
+        if (!isDynamicField && this.formValueActions.has(formValue?.property)) {
+            actionClasses.push(...this.formValueActions.get(formValue.property));
+        }
+
+        for (const ac of actionClasses) {
+            const action = new ac(formValue, objectValueMapper);
+            await action.initAction();
+            actions.push(action);
         }
 
         return actions;
