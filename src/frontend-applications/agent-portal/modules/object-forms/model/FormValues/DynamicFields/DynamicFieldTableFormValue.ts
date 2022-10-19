@@ -9,7 +9,10 @@
 
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';
+import { TableAddFormValueAction } from '../actions/TableAddFormValueAction';
+import { TableRemoveFormValueAction } from '../actions/TableRemoveFormValueAction';
 import { ObjectFormValueMapper } from '../../ObjectFormValueMapper';
+import { FormValueAction } from '../FormValueAction';
 import { ObjectFormValue } from '../ObjectFormValue';
 
 export class DynamicFieldTableFormValue extends ObjectFormValue<Array<string[]>> {
@@ -31,6 +34,12 @@ export class DynamicFieldTableFormValue extends ObjectFormValue<Array<string[]>>
         super(property, object, objectValueMapper, parent);
 
         this.inputComponentId = 'table-form-input';
+    }
+
+    public getValueActionClasses(): Array<new (
+        formValue: ObjectFormValue, objectValueMapper: ObjectFormValueMapper
+    ) => FormValueAction> {
+        return [TableAddFormValueAction, TableRemoveFormValueAction];
     }
 
     public findFormValue(property: string): ObjectFormValue {

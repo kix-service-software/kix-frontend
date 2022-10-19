@@ -515,4 +515,10 @@ export class ObjectFormValue<T = any> {
         }
     }*/
 
+    public getValueActionClasses(): Array<new (
+        formValue: ObjectFormValue, objectValueMapper: ObjectFormValueMapper
+    ) => FormValueAction> {
+        return;
+    }
+
 }
