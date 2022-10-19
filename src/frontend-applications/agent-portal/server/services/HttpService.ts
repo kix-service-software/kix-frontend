@@ -94,6 +94,7 @@ export class HttpService {
             semaphor = await CacheService.getInstance().get(semaphorKey, semaphorKey);
 
             if (semaphor) {
+                LoggingService.getInstance().debug('\tSEMAPHOR\t' + semaphorKey + '\tWAITFOR');
                 const cachedObject = await CacheService.getInstance().waitFor(cacheKey, cacheKeyPrefix);
                 if (cachedObject) {
                     return cachedObject;
@@ -107,6 +108,7 @@ export class HttpService {
         this.requestPromises.set(requestKey, requestPromise);
 
         if (this.isClusterEnabled && useCache) {
+            LoggingService.getInstance().debug('\tSEMAPHOR\t' + semaphorKey + '\tSET');
             await CacheService.getInstance().set(semaphorKey, 1, semaphorKey);
         }
 
@@ -117,17 +119,19 @@ export class HttpService {
             RequestCounter.getInstance().setPendingHTTPRequestCount(this.requestPromises.size);
 
             if (this.isClusterEnabled && useCache) {
+                LoggingService.getInstance().debug('\tSEMAPHOR\t' + semaphorKey + '\tDELETE');
                 CacheService.getInstance().deleteKeys(semaphorKey);
             }
 
             throw error;
         });
 
-        if (this.isClusterEnabled && useCache) {
-            await CacheService.getInstance().deleteKeys(semaphorKey);
-        }
-
         if (useCache) {
+            if (this.isClusterEnabled) {
+                LoggingService.getInstance().debug('\tSEMAPHOR\t' + semaphorKey + '\tDELETE');
+                await CacheService.getInstance().deleteKeys(semaphorKey);
+            }
+
             CacheService.getInstance().set(cacheKey, response, cacheKeyPrefix);
         }
 

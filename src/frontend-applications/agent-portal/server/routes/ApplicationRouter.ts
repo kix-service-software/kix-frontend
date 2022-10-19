@@ -93,7 +93,7 @@ export class ApplicationRouter extends KIXRouter {
             res.redirect('/static/html/update-info/index.html');
         } else {
             this.setFrontendSocketUrl(res);
-            this.clearRequireCache('../applications/_app');
+            // this.clearRequireCache('../applications/_app');
             const token: string = req.cookies.token;
 
             const socketTimeout = await this.getSocketTimeout();

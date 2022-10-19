@@ -17,7 +17,7 @@ export class RedisCache implements ICache {
 
     private static INSTANCE: RedisCache;
 
-    private KIX_CACHE_PREFIX = 'KIXWebAPP';
+    private KIX_CACHE_PREFIX = 'AgentPortal';
 
     public static getInstance(): RedisCache {
         if (!RedisCache.INSTANCE) {
@@ -130,7 +130,9 @@ export class RedisCache implements ICache {
 
     public async waitFor(key: string, cacheType: string): Promise<any> {
         let cachedObject: any;
-        while (!cachedObject) {
+        let retryCount = 0;
+        while (!cachedObject && retryCount < 30) {
+            retryCount++;
             const promise = new Promise<boolean>((resolve, reject) => {
                 setTimeout(async () => {
                     const result = await this.get(cacheType, key);
@@ -139,6 +141,8 @@ export class RedisCache implements ICache {
             });
             cachedObject = await promise;
         }
+
+        return cachedObject;
     }
 
     private checkConnection(): void {
