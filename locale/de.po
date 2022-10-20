@@ -59,6 +59,9 @@ msgstr "Zugriff verweigert"
 msgid "Access Level"
 msgstr "Zugriffsebene"
 
+msgid "Accounted Time"
+msgstr ""
+
 msgid "Accounted Time: {0}"
 msgstr "Zeitbuchung: {0}"
 
@@ -124,7 +127,8 @@ msgstr ""
 "Wenn angegeben, stehen nur Assets in diesen Verwendungsstatus zur Auswahl."
 
 msgid "Admin_DynamicField_Config_CIRef_IncidentStates"
-msgstr "Wenn angegeben, stehen nur Assets in diesen Vorfallsstatus zur Auswahl."
+msgstr ""
+"Wenn angegeben, stehen nur Assets in diesen Vorfallsstatus zur Auswahl."
 
 msgid "Admin_DynamicField_Config_CountDefault"
 msgstr ""
@@ -384,11 +388,6 @@ msgstr "Es müssen mindestens {0} Werte ausgewählt werden."
 
 msgid "At least one link could not be saved."
 msgstr "Mindestens eine Verknüpfung konnte nicht gespeichert werden."
-
-msgid "At least one of the fields To, Cc or Bcc must contain an entry."
-msgstr ""
-"Mindestens eins der Felder 'An', 'Cc' oder 'Bcc' muss einen Eintrag "
-"enthalten."
 
 msgid "Attachment Name"
 msgstr "Name des Anhangs"
@@ -1012,6 +1011,9 @@ msgstr "Dynamisches Feld bearbeiten"
 
 msgid "edited"
 msgstr "bearbeitet"
+
+msgid "edited at {0} by {1}"
+msgstr ""
 
 msgid "Edit Email Address"
 msgstr "Emailadresse Bearbeiten"
@@ -3022,6 +3024,9 @@ msgstr "Vorfallsstatus"
 msgid "Include this code into the <head> area of your webpage."
 msgstr "Binden Sie diesen Code in den <head>-Bereich Ihrer Webseite ein."
 
+msgid "Incoming Time"
+msgstr ""
+
 msgid ""
 "Incorrect data mapping. Length of dataset properties is different from value "
 "properties."
@@ -4337,9 +4342,6 @@ msgstr "der letzten"
 msgid "SEARCH_OPERATOR_WITHIN_NEXT"
 msgstr "der nächsten"
 
-msgid "Search Results"
-msgstr "Suchergebnisse"
-
 msgid "Search Results ({0})"
 msgstr "Suchergebnisse ({0})"
 
@@ -5261,6 +5263,14 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "At least one of the fields To, Cc or Bcc must contain an entry."
+#~ msgstr ""
+#~ "Mindestens eins der Felder 'An', 'Cc' oder 'Bcc' muss einen Eintrag "
+#~ "enthalten."
+
+#~ msgid "Search Results"
+#~ msgstr "Suchergebnisse"
 
 #~ msgid "Mark all as read"
 #~ msgstr "als gelesen markieren"
