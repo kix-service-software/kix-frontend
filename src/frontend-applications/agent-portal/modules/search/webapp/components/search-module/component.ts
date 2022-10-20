@@ -10,94 +10,39 @@
 import { ConfigurationType } from '../../../../../model/configuration/ConfigurationType';
 import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
-import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
-import { Table } from '../../../../table/model/Table';
-import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
-import { SearchContext, SearchResultCategory, SearchService } from '../../core';
+import { SearchContext } from '../../core';
 import { ComponentState } from './ComponentState';
-import { SortOrder } from '../../../../../model/SortOrder';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
-
-    private resultWidgets: Array<[string, KIXObjectType | string, WidgetConfiguration, string, string | ObjectIcon]>
-        = [];
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        this.resultWidgets = [];
         const context = ContextService.getInstance().getActiveContext<SearchContext>();
-        context.registerListener('search-module', {
-            objectListChanged: async (objectType: KIXObjectType | string, objectList: KIXObject[]) => {
-                const resultWidget = this.resultWidgets.find((rw) => rw[1] === objectType);
-                if (resultWidget) {
-                    const title = await this.getTitle(objectType);
-                    resultWidget[3] = `${title} (${objectList?.length})`;
-                }
+        const searchCache = context.getSearchCache();
 
-                this.state.resultWidget = resultWidget;
+        this.state.icon = LabelService.getInstance().getObjectIconForType(searchCache.objectType);
+        this.state.title = await this.getTitle(searchCache.objectType);
 
-                setTimeout(async () => {
-                    if (objectType === context?.getSearchCache()?.objectType) {
-                        const searchDefinition = SearchService.getInstance().getSearchDefinition(objectType);
-                        const columns = await searchDefinition?.getTableColumnConfigurations(context?.getSearchCache());
+        const widgetConfiguration = new WidgetConfiguration(
+            'search-result-widget-' + searchCache.name, searchCache.name, ConfigurationType.TableWidget,
+            'table-widget', searchCache.name, ['bulk-action', 'csv-export-action'], null,
+            new TableWidgetConfiguration('', '', null, searchCache.objectType),
+            false, false, this.state.icon, true
+        );
 
-                        const tableWidget = (this as any).getComponent('search-result-table-' + objectType);
-                        const table: Table = tableWidget?.getTable();
-                        table?.removeAdditonalColumns();
-                        await table?.addAdditionalColumns(columns);
+        this.state.instanceId = `search-table-${searchCache.objectType}`;
+        this.state.objectType = searchCache.objectType;
+        this.state.configuration = widgetConfiguration;
 
-                        table?.sort(
-                            context?.getSearchCache().sortAttribute,
-                            context.getSearchCache().sortDescanding ? SortOrder.DOWN : SortOrder.UP
-                        );
-                    }
-                }, 50);
-            },
-            additionalInformationChanged: () => null,
-            filteredObjectListChanged: () => null,
-            objectChanged: () => null,
-            scrollInformationChanged: () => null,
-            sidebarLeftToggled: () => null,
-            sidebarRightToggled: () => null,
-        });
-
-        const categories = await context.getSearchResultCategories();
-        await this.createTableWidgets(categories);
-
-        const category = context.getSearchResultCategory();
-        this.state.resultWidget = this.resultWidgets.find((rw) => rw[1] === category?.objectType);
-    }
-
-    private async createTableWidgets(categories: SearchResultCategory[]): Promise<void> {
-        for (const category of categories) {
-
-            const icon = LabelService.getInstance().getObjectIconForType(category.objectType);
-
-            const widgetConfiguration = new WidgetConfiguration(
-                'search-result-widget-' + category.label, category.label, ConfigurationType.TableWidget,
-                'table-widget', category.label, ['bulk-action', 'csv-export-action'], null,
-                new TableWidgetConfiguration('', '', null, category.objectType),
-                false, false, icon, true
-            );
-
-            const title = await this.getTitle(category.objectType);
-
-            this.resultWidgets.push(
-                [`search-table-${category.objectType}`, category.objectType, widgetConfiguration, title, icon]
-            );
-
-            if (Array.isArray(category.children) && category.children.length) {
-                await this.createTableWidgets(category.children);
-            }
-        }
+        this.state.prepared = true;
     }
 
     private async getTitle(objectType: KIXObjectType | string): Promise<string> {

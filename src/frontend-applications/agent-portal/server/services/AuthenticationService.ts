@@ -63,8 +63,8 @@ export class AuthenticationService {
         return decoded && decoded.backendToken ? decoded.backendToken : null;
     }
 
-    private decodeToken(token: string): FrontendToken {
-        return jwt.decode(token, this.tokenSecret);
+    public decodeToken(token: string, secret: string = this.tokenSecret): any {
+        return jwt.decode(token, secret);
     }
 
     public async validateToken(token: string, remoteAddress: string, clientRequestId: string): Promise<boolean> {

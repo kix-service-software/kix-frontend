@@ -103,10 +103,15 @@ export class ContextFormManager {
     private async createObjectFormhandler(createNewInstance: boolean): Promise<ObjectFormHandler> {
         this.form = await FormService.getInstance().getForm(this.formId);
 
+        const start = Date.now();
+
         const objectFormHandler = new ObjectFormHandler(this.context);
         await objectFormHandler.loadForm(createNewInstance);
 
         EventService.getInstance().publish(FormEvent.OBJECT_FORM_HANDLER_CHANGED, this.context);
+
+        const end = Date.now();
+        console.debug(`ObjectFormHandler created: ${(end - start)}ms`);
         return objectFormHandler;
     }
 

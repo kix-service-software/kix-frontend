@@ -69,7 +69,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         if (this.organisation) {
             this.canOrganisationUpdate = await AuthenticationSocketClient.getInstance().checkPermissions([
-                new UIComponentPermission(`organisations/${this.organisation.ID}`, [CRUD.UPDATE])
+                new UIComponentPermission(`organisations/${this.organisation.ID}`, [CRUD.UPDATE], true, null, false)
             ]);
         } else {
             this.canOrganisationUpdate = false;

@@ -30,6 +30,9 @@ export class UIModule implements IUIModule {
     }
 
     public async register(): Promise<void> {
+        // FIXME: switch validator for new object form handling
+        // FormValidationService.getInstance().registerValidator(new PendingTimeValidator());
+
         this.registerContexts();
         this.registerTicketActions();
     }

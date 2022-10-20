@@ -138,22 +138,26 @@ export class MarkoService {
     }
 
     private async buildApplication(template: any, app: IMarkoApplication): Promise<void> {
-        const profileTaskId = ProfilingService.getInstance().start('MarkoService', `Build App ${app.name}`);
+        try {
+            const profileTaskId = ProfilingService.getInstance().start('MarkoService', `Build App ${app.name}`);
 
-        const startBuild = Date.now();
-        await template.render({}).catch((error) => {
-            ProfilingService.getInstance().stop(profileTaskId, { data: [`[MARKO] ERROR - App Build for ${app.name}`] });
+            const startBuild = Date.now();
+            await template.render({}).catch((error) => {
+                ProfilingService.getInstance().stop(profileTaskId, { data: [`[MARKO] ERROR - App Build for ${app.name}`] });
+                LoggingService.getInstance().error(error);
+            });
+            const endBuild = Date.now();
+
+            const index = this.appNames.findIndex((a) => a === app.name);
+            if (index !== -1) {
+                this.appNames.splice(index, 1);
+            }
+
+            LoggingService.getInstance().info(`[MARKO] Finished - App Build for ${app.name} in ${(endBuild - startBuild) / 1000}s.`);
+            ProfilingService.getInstance().stop(profileTaskId);
+        } catch (error) {
             LoggingService.getInstance().error(error);
-        });
-        const endBuild = Date.now();
-
-        const index = this.appNames.findIndex((a) => a === app.name);
-        if (index !== -1) {
-            this.appNames.splice(index, 1);
         }
-
-        LoggingService.getInstance().info(`[MARKO] Finished - App Build for ${app.name} in ${(endBuild - startBuild) / 1000}s.`);
-        ProfilingService.getInstance().stop(profileTaskId);
     }
 
     public async appIsReady(): Promise<boolean> {

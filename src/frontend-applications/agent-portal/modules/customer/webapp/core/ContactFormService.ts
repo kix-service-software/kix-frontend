@@ -41,7 +41,6 @@ import { Role } from '../../../user/model/Role';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 import { PersonalSettingsFormService } from '../../../user/webapp/core/PersonalSettingsFormService';
 import { IdService } from '../../../../model/IdService';
-import { AgentService } from '../../../user/webapp/core/AgentService';
 
 export class ContactFormService extends KIXObjectFormService {
 
@@ -155,18 +154,14 @@ export class ContactFormService extends KIXObjectFormService {
     private async loadContact(userId: number): Promise<Contact> {
         let contact: Contact;
         if (userId) {
-            const contacts = await KIXObjectService.loadObjects<Contact>(
-                KIXObjectType.CONTACT, null,
-                new KIXObjectLoadingOptions(
-                    [
-                        new FilterCriteria(
-                            ContactProperty.ASSIGNED_USER_ID, SearchOperator.EQUALS,
-                            FilterDataType.NUMERIC, FilterType.AND, userId
-                        )
-                    ]
-                ), null, true
-            ).catch(() => [] as Contact[]);
-            contact = contacts && contacts.length ? contacts[0] : null;
+            const loadingOptions = new KIXObjectLoadingOptions();
+            loadingOptions.includes = [KIXObjectType.CONTACT];
+
+            const user = await KIXObjectService.loadObjects<User>(
+                KIXObjectType.USER, [userId], loadingOptions, null, true
+            ).catch((): User[] => []);
+
+            contact = user?.length ? user[0].Contact : null;
         }
         return contact;
     }

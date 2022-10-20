@@ -13,6 +13,9 @@ import { KIXObjectService } from '../../../../../modules/base-components/webapp/
 import { Ticket } from '../../../model/Ticket';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 export class TicketListContext extends Context {
 
@@ -35,11 +38,64 @@ export class TicketListContext extends Context {
             KIXObjectType.TICKET, this.ticketIds, loadingOptions, null, false
         ).catch((error) => []);
 
+        await this.getUrl();
         this.setObjectList(KIXObjectType.TICKET, tickets);
     }
 
     public async reloadObjectList(objectType: KIXObjectType | string, silent: boolean = false): Promise<void> {
         this.loadTickets(this.ticketIds, this.text);
+    }
+
+    public async update(urlParams: URLSearchParams): Promise<void> {
+        await this.handleURLParams(urlParams);
+    }
+
+    private async handleURLParams(urlParams: URLSearchParams): Promise<void> {
+        if (urlParams) {
+            await this.getActionAndSetData(decodeURIComponent(urlParams.has('list') ? urlParams.get('list') : null));
+        }
+    }
+
+    public async getUrl(): Promise<string> {
+        let url: string = '';
+        if (Array.isArray(this.descriptor.urlPaths) && this.descriptor.urlPaths.length) {
+            url = this.descriptor.urlPaths[0];
+            const params = [];
+            if (this.text) {
+                params.push(`list=${encodeURIComponent(this.text)}`);
+            }
+
+            if (params.length) {
+                url += `?${params.join('&')}`;
+            }
+        }
+        return url;
+    }
+
+    public async setTicketList(title: string, history: boolean = true): Promise<void> {
+        if (!this.text || this.text !== title) {
+            this.text = title;
+
+            EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
+
+            if (history) {
+                ContextService.getInstance().setDocumentHistory(true, this, this, null);
+            }
+
+            const isStored = await ContextService.getInstance().isContextStored(this.instanceId);
+            if (isStored) {
+                ContextService.getInstance().updateStorage(this.instanceId);
+            }
+        }
+    }
+
+    private async getActionAndSetData(key: string): Promise<void> {
+        const action = ContextService.getInstance().getToolbarAction(key);
+        if (!action) return;
+        this.setDisplayText(action.title);
+        await this.setTicketList(action.title);
+        this.setIcon(action.icon);
+        await this.loadTickets(action.actionData, action?.title);
     }
 
 }

@@ -138,14 +138,15 @@ export class LabelService {
             valueString = (Array.isArray(defaultValue) || typeof defaultValue === 'object') ?
                 JSON.stringify(defaultValue) : defaultValue;
         }
+        valueString += translatable ? '-1' : '-0';
+
         // if we have already a display value for this property then return directly
         // FIXME: check against ObjectProperty or something similar if property is supported (KIX2018-6164)?
         if (typeof objectValue !== 'undefined' && cachedValueMap?.has(valueString)) {
             return cachedValueMap.get(valueString);
         }
 
-        const key = `${object.KIXObjectType}-${property}-`
-            + `${valueString}-${translatable ? '1' : '0'}`;
+        const key = `${object.KIXObjectType}-${property}-${valueString}`;
         // FIXME: check against ObjectProperty or something similar if property is supported (KIX2018-6164)?
         if (typeof objectValue !== 'undefined' && this.requestDisplayValuePromises.has(key)) {
             return this.requestDisplayValuePromises.get(key);
@@ -222,14 +223,14 @@ export class LabelService {
             valueString = (Array.isArray(value) || typeof value === 'object') ?
                 JSON.stringify(value) : value;
         }
+        valueString += forTable ? '-1' : '-0';
         // if we have already a display value for this property then return directly
         // FIXME: check against ObjectProperty or something similar if property is supported (KIX2018-6164)?
         if (typeof objectValue !== 'undefined' && cachedValueMap?.has(valueString)) {
             return cachedValueMap.get(valueString);
         }
 
-        const key = `${object.KIXObjectType}-${property}-`
-            + `${valueString}-${forTable ? '1' : '0'}`;
+        const key = `${object.KIXObjectType}-${property}-${valueString}`;
         // FIXME: check against ObjectProperty or something similar if property is supported (KIX2018-6164)?
         if (typeof objectValue !== 'undefined' && this.requestIconPromises.has(key)) {
             return this.requestIconPromises.get(key);

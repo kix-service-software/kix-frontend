@@ -11,6 +11,7 @@ import { FormContext } from '../../../../../model/configuration/FormContext';
 import { Attachment } from '../../../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { ObjectFormValueMapper } from '../../../../object-forms/model/ObjectFormValueMapper';
 import { ObjectCommitHandler } from '../../../../object-forms/webapp/core/ObjectCommitHandler';
@@ -28,7 +29,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         const newTicket = await super.prepareObject(ticket, forCommit);
 
         await this.prepareArticles(newTicket, forCommit, ticket.QueueID);
-        this.prepareTitle(newTicket);
+        await this.prepareTitle(newTicket);
         this.prepareTicket(newTicket);
         this.prepareSpecificAttributes(newTicket);
 
@@ -45,7 +46,6 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                 delete article.Comment;
                 delete article.CreatedBy;
                 delete article.Flags;
-                delete article.IncomingTime;
                 delete article.Links;
                 delete article.Plain;
                 delete article.References;
@@ -65,6 +65,10 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                 delete article.ValidID;
 
                 if (forCommit) {
+                    // FIXME: array handling
+                    const context = ContextService.getInstance().getActiveContext();
+                    article.ArticleID = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
+
                     if (article.Attachments?.length) {
                         article.Attachments = await this.prepareAttachments(article.Attachments);
                     }
@@ -133,9 +137,12 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         return attachments;
     }
 
-    private prepareTitle(ticket: Ticket): void {
+    protected async prepareTitle(ticket: Ticket): Promise<void> {
         if (!ticket.Title && this.objectValueMapper?.formContext === FormContext.NEW) {
-            ticket.Title = new Date().toLocaleDateString();
+            await super.prepareTitle(ticket);
+            if (!ticket.Title) {
+                ticket.Title = new Date().toLocaleDateString();
+            }
             if (ticket.Articles?.length) {
                 const article = ticket.Articles.find((a) => !a.ArticleID);
                 ticket.Title = article?.Subject || ticket.Title;

@@ -18,6 +18,7 @@ import { Error } from '../../../../../server/model/Error';
 import { Queue } from '../model/Queue';
 import { FollowUpType } from '../model/FollowUpType';
 import { KIXObject } from '../../../model/kix/KIXObject';
+import { CacheService } from '../../../server/services/cache';
 
 export class QueueAPIService extends KIXObjectAPIService {
 
@@ -37,6 +38,7 @@ export class QueueAPIService extends KIXObjectAPIService {
     private constructor() {
         super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
+        CacheService.getInstance().addDependencies(KIXObjectType.TICKET, ['QUEUE_HIERARCHY']);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {

@@ -47,10 +47,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </else>
             </div>
         </if>
-        <div.sidebar-widgets-container class={
-            "show-object":
-                state.sidebars && !state.loading && state.showSidebarArea
-        }>
+        <div.sidebar-widgets-container>
             <if(state.showSidebarArea || state.isMobile)>
                 <for|sidebar| of=state.sidebars>
                     <div.sidebar-widget-container key=("sidebar-" + sidebar[2])>

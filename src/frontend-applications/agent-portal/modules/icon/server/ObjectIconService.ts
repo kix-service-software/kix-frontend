@@ -21,6 +21,7 @@ import { UpdateObjectIcon } from './UpdateObjectIcon';
 import { UpdateObjectIconResponse } from './UpdateObjectIconResponse';
 import { UpdateObjectIconRequest } from './UpdateObjectIconRequest';
 import { Error } from '../../../../../server/model/Error';
+import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
 
 export class ObjectIconService extends KIXObjectAPIService {
 
@@ -75,8 +76,9 @@ export class ObjectIconService extends KIXObjectAPIService {
     }
 
     public async getObjectIcons(token: string): Promise<ObjectIcon[]> {
+        const config = ConfigurationService.getInstance().getServerConfiguration();
         return await super.load<ObjectIcon>(
-            token, KIXObjectType.OBJECT_ICON, this.RESOURCE_URI, null, null, 'ObjectIcon',
+            config?.BACKEND_API_TOKEN, KIXObjectType.OBJECT_ICON, this.RESOURCE_URI, null, null, 'ObjectIcon',
             'ObjectIconService', ObjectIcon
         );
     }

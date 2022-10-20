@@ -10,14 +10,15 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <div.search-dashboard>
     <search-criteria-widget key=state.componentKey/>
     <div.search-result-widget>
-        <if(state.resultWidget)>
+        <if(state.prepared)>
             <table-widget
-                key=("search-result-table-" + state.resultWidget[1])
-                instanceId=state.resultWidget[0]
+                key="search-result-table-" + state.objectType
+                instanceId=state.instanceId
                 useContext=false
-                widgetConfiguration=state.resultWidget[2]
-                title=state.resultWidget[3]
-                icon=state.resultWidget[4]/>
+                widgetConfiguration=state.configuration
+                title=state.title
+                icon=state.icon
+            />
         </if>
     </div>
 </div>

@@ -33,9 +33,10 @@ export class ShowUserTicketsAction extends AbstractAction {
 
         const ticketIds = this.data as number[];
         const context = ContextService.getInstance().getActiveContext() as TicketListContext;
-        await context.loadTickets(ticketIds, this.text);
         context.setDisplayText(this.text);
+        await context.setTicketList(this.text);
         context.setIcon(this.icon);
+        await context.loadTickets(ticketIds, this.text);
     }
 
 }

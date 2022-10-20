@@ -7,13 +7,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.show-object
+<div
     class=component.getWidgetClasses()
     data-widgettype=state.widgetType
     data-instanceid=state.instanceId
     data-configurationtype=(state.widgetConfiguration ? state.widgetConfiguration.type : "")
     data-widgetid=(state.widgetConfiguration ? state.widgetConfiguration.widgetid : "")>
-    <div.widget-header.show-object
+    <div.widget-header
         class={
             minimizable: state.minimizable
         }

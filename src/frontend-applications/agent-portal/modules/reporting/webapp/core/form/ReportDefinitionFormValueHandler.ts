@@ -96,39 +96,42 @@ export class ReportDefinitionFormValueHandler extends FormFieldValueHandler {
     private async handleReferencesValue(
         field: FormFieldConfiguration, value: FormFieldValue<string>, formInstance: FormInstance
     ): Promise<void> {
-
         let possibleValuesField = field.parent.children.find(
             (f) => f.property === ReportParameterProperty.POSSIBLE_VALUES
         );
         possibleValuesField = formInstance.getFormField(possibleValuesField?.instanceId);
 
-        const multipleField = field.parent.children.find((f) => f.property === ReportParameterProperty.MULTIPLE);
-        const multipleValue = formInstance.getFormFieldValue(multipleField?.instanceId);
-
-        const parameter = new ReportParameter();
-        parameter.References = value.value;
-        parameter.Multiple = multipleValue
-            ? (multipleValue.value ? 1 : 0)
-            : 0;
-
         if (possibleValuesField) {
+            const multipleField = field.parent.children.find((f) => f.property === ReportParameterProperty.MULTIPLE);
+            const multipleValue = formInstance.getFormFieldValue(multipleField?.instanceId);
+
+            const parameter = new ReportParameter();
+            parameter.References = value.value;
+            parameter.Multiple = multipleValue
+                ? (multipleValue.value ? 1 : 0)
+                : 0;
+
             await ReportingFormUtil.setInputComponent(possibleValuesField, parameter, false, true);
+
+            setTimeout(async () => {
+                const defaultField = field.parent.children.find((f) => f.property === ReportParameterProperty.DEFAULT);
+                if (defaultField) {
+                    // reset also default field
+                    defaultField.options = [];
+                    await formInstance.provideFormFieldValues([[defaultField.instanceId, null]], null);
+                    EventService.getInstance().publish(
+                        FormEvent.RELOAD_INPUT_VALUES, { formInstance, formField: defaultField }
+                    );
+                }
+
+                if (possibleValuesField) {
+                    await formInstance.provideFormFieldValues([[possibleValuesField.instanceId, null]], null);
+                    EventService.getInstance().publish(
+                        FormEvent.RELOAD_INPUT_VALUES, { formInstance, formField: possibleValuesField }
+                    );
+                }
+            }, 20);
         }
-
-        setTimeout(async () => {
-            const defaultField = field.parent.children.find((f) => f.property === ReportParameterProperty.DEFAULT);
-            if (defaultField) {
-                await formInstance.provideFormFieldValues([[defaultField.instanceId, null]], null);
-            }
-
-            if (possibleValuesField) {
-                await formInstance.provideFormFieldValues([[possibleValuesField.instanceId, null]], null);
-            }
-
-            EventService.getInstance().publish(
-                FormEvent.RELOAD_INPUT_VALUES, { formInstance, formField: possibleValuesField }
-            );
-        }, 20);
     }
 
     private async prepareDefaultInput(

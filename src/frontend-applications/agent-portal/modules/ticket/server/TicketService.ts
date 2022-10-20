@@ -38,6 +38,16 @@ import { RequestObject } from '../../../../../server/model/rest/RequestObject';
 import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
 import { CreateTicketWatcherOptions } from '../model/CreateTicketWatcherOptions';
 import { KIXObject } from '../../../model/kix/KIXObject';
+import { TicketTypeAPIService } from './TicketTypeService';
+import { TicketStateAPIService } from './TicketStateService';
+import { TicketPriorityAPIService } from './TicketPriorityService';
+import { ChannelAPIService } from './ChannelService';
+import { TextModuleAPIService } from '../../textmodule/server/TextModuleService';
+import { QueueAPIService } from './QueueService';
+import { QueueProperty } from '../model/QueueProperty';
+import { DynamicFieldAPIService } from '../../dynamic-fields/server/DynamicFieldService';
+import { SysConfigService } from '../../sysconfig/server/SysConfigService';
+import { SysConfigKey } from '../../sysconfig/model/SysConfigKey';
 
 export class TicketAPIService extends KIXObjectAPIService {
 
@@ -72,6 +82,95 @@ export class TicketAPIService extends KIXObjectAPIService {
             || kixObjectType === KIXObjectType.TICKET_HISTORY;
     }
 
+    public async preloadObjects(token: string): Promise<void> {
+        const promises = [];
+        promises.push(
+            TicketTypeAPIService.getInstance().loadObjects(
+                token, 'TicketServicePreload', KIXObjectType.TICKET_TYPE, null, null, null
+            )
+        );
+        promises.push(
+            TicketStateAPIService.getInstance().loadObjects(
+                token, 'TicketServicePreload', KIXObjectType.TICKET_STATE, null, null, null
+            )
+        );
+        promises.push(
+            TicketStateAPIService.getInstance().loadObjects(
+                token, 'TicketServicePreload', KIXObjectType.TICKET_STATE_TYPE, null, null, null
+            )
+        );
+        promises.push(
+            TicketPriorityAPIService.getInstance().loadObjects(
+                token, 'TicketServicePreload', KIXObjectType.TICKET_PRIORITY, null, null, null
+            )
+        );
+        promises.push(
+            ChannelAPIService.getInstance().loadObjects(
+                token, 'TicketServicePreload', KIXObjectType.CHANNEL, null, null, null
+            )
+        );
+
+        promises.push(
+            TextModuleAPIService.getInstance().loadObjects(
+                token, 'TicketServicePreload', KIXObjectType.TEXT_MODULE, null, null, null
+            )
+        );
+
+        const loadingOptions = new KIXObjectLoadingOptions();
+        loadingOptions.includes = ['TicketStats'];
+        loadingOptions.query = [['TicketStats.StateType', 'Open']];
+        loadingOptions.cacheType = 'QUEUE_HIERARCHY';
+        promises.push(
+            QueueAPIService.getInstance().loadObjects(
+                token, 'TicketServicePreload', KIXObjectType.QUEUE, null, loadingOptions, null
+            )
+        );
+
+        promises.push(DynamicFieldAPIService.getInstance().preloadObjects(token));
+
+
+        promises.push(
+            SysConfigService.getInstance().loadObjects(
+                token, 'TicketServicePreload', KIXObjectType.SYS_CONFIG_OPTION,
+                [SysConfigKey.TICKET_SEARCH_INDEX_STOPWORDS + '###en'], null, null
+            )
+        );
+
+        promises.push(
+            SysConfigService.getInstance().loadObjects(
+                token, 'TicketServicePreload', KIXObjectType.SYS_CONFIG_OPTION,
+                [SysConfigKey.TICKET_SEARCH_INDEX_STOPWORDS + '###de'], null, null
+            )
+        );
+
+        promises.push(
+            SysConfigService.getInstance().loadObjects(
+                token, 'TicketServicePreload', KIXObjectType.SYS_CONFIG_OPTION,
+                [SysConfigKey.CONFIG_ITEM_HOOK], null, null
+            )
+        );
+
+        promises.push(
+            SysConfigService.getInstance().loadObjects(
+                token, 'TicketServicePreload', KIXObjectType.SYS_CONFIG_OPTION,
+                [SysConfigKey.TICKET_HOOK], null, null
+            )
+        );
+
+        promises.push(
+            SysConfigService.getInstance().loadObjects(
+                token, 'TicketServicePreload', KIXObjectType.SYS_CONFIG_OPTION,
+                [SysConfigKey.TICKET_HOOK_DIVIDER], null, null
+            )
+        );
+
+        for (const extendedService of this.extendedServices) {
+            promises.push(extendedService.preloadObjects(token));
+        }
+
+        await Promise.all(promises);
+    }
+
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
@@ -80,7 +179,7 @@ export class TicketAPIService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.TICKET) {
 
-            const includes = [TicketProperty.STATE_TYPE, KIXObjectType.CONTACT, KIXObjectProperty.DYNAMIC_FIELDS];
+            const includes = [TicketProperty.STATE_TYPE];
             const expands = [];
 
             if (!loadingOptions) {
@@ -99,6 +198,12 @@ export class TicketAPIService extends KIXObjectAPIService {
                     loadingOptions.expands = expands;
                 }
             }
+
+            if (!loadingOptions.query) {
+                loadingOptions.query = [];
+            }
+            loadingOptions.query.push(['NoDynamicFieldDisplayValues', 'CheckList,ITSMConfigItemReference,TicketReference']);
+
 
             objects = await super.load(
                 token, KIXObjectType.TICKET, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.TICKET,
@@ -368,14 +473,23 @@ export class TicketAPIService extends KIXObjectAPIService {
 
         if (!create && articles?.length && ticket.TicketID) {
             for (const article of articles) {
+                let uri, articleCreate;
                 if (!article.ArticleID) {
-                    const uri = this.buildUri(this.RESOURCE_URI, ticket.TicketID, 'articles');
-                    await this.sendRequest(
-                        token, clientRequestId, uri, { Article: article }, KIXObjectType.ARTICLE, true
-                    ).catch((error: Error) => {
-                        LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                    });
+                    articleCreate = true;
+                    uri = this.buildUri(this.RESOURCE_URI, ticket.TicketID, 'articles');
                 }
+                else {
+                    articleCreate = false;
+                    uri = this.buildUri(this.RESOURCE_URI, ticket.TicketID, 'articles', article.ArticleID);
+                }
+
+                await this.sendRequest(
+                    token, clientRequestId, uri, { Article: article }, KIXObjectType.ARTICLE, articleCreate
+                ).catch((error: Error) => {
+                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                    // TODO: exetend error handling if more than one article will be created?
+                    throw new Error(error.Code, error.Message);
+                });
             }
         }
 
@@ -424,9 +538,9 @@ export class TicketAPIService extends KIXObjectAPIService {
             }
         }
 
-        article.ContentType = 'text/html; charset=utf8';
+        article.ContentType = 'text/html; charset=utf-8';
         article.MimeType = 'text/html';
-        article.Charset = 'utf8';
+        article.Charset = 'utf-8';
     }
 
     public async deleteObject(

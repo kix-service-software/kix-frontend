@@ -359,9 +359,10 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
     ): Promise<string[]> {
         let values = fieldValue.PreparedValue;
 
-        if (!values && field.Config && field.Config.PossibleValues && Array.isArray(fieldValue.Value)) {
+        // backend prepared values are not translated
+        const translate = Boolean(field.Config.TranslatableValues);
+        if (translate || (!values && field.Config && field.Config.PossibleValues && Array.isArray(fieldValue.Value))) {
             const valuesPromises = [];
-            const translate = Boolean(field.Config.TranslatableValues);
             for (const v of fieldValue.Value) {
                 if (field.Config.PossibleValues[v]) {
                     if (translate) {

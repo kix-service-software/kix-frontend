@@ -39,13 +39,17 @@ export class DynamicFieldFormValueCountHandler {
         if (formValue.isCountHandler) {
             const dfValue = new DynamicFieldValue();
             dfValue.Value = value;
+            dfValue.Name = (formValue as any).dfName;
             (formValue as any).dfValues.push(dfValue);
 
             const parent = formValue.parent as DynamicFieldObjectFormValue;
             const fv = await parent.createFormValue((formValue as any).dfName, dfValue, false);
             fv.parent = formValue;
             fv.enabled = formValue.enabled;
-            fv.visible = true;
+            fv.isSetInBackground = formValue.isSetInBackground;
+            if (!fv.isSetInBackground) {
+                fv.visible = true;
+            }
             fv.isSortable = false;
             fv.readonly = formValue.readonly;
             fv.required = formValue.required;
@@ -55,7 +59,7 @@ export class DynamicFieldFormValueCountHandler {
             fv.addPropertyBinding(FormValueProperty.VALUE, () => {
                 (formValue as any).setDFValue();
             });
-
+            fv.setInitialState();
             (formValue as any).setDFValue();
         } else {
             await formValue.parent.addFormValue(instanceId, value);

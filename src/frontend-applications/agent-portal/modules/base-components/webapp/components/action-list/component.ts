@@ -132,7 +132,8 @@ export class Component implements IActionListener {
         return Number(browserFontSizeSetting.replace('px', ''));
     }
 
-    public toggleListExpansion(): any {
+    public toggleListExpansion(event: any): any {
+        event.stopPropagation();
         this.state.showListExpansion = !this.state.showListExpansion;
         this.state.keepShow = !this.state.keepShow;
     }

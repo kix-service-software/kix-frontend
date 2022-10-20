@@ -28,6 +28,7 @@ import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { CacheService } from '../../../server/services/cache';
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
+import { AuthenticationService } from '../../../server/services/AuthenticationService';
 
 export class UserService extends KIXObjectAPIService {
 
@@ -70,8 +71,9 @@ export class UserService extends KIXObjectAPIService {
         let displayValue = '';
 
         if (objectType === KIXObjectType.USER) {
+            const cacheType = `${objectType}-DISPLAY_VALUE`;
             const cacheKey = `${objectType}-${objectId}-displayvalue`;
-            displayValue = await CacheService.getInstance().get(cacheKey, objectType);
+            displayValue = await CacheService.getInstance().get(cacheKey, cacheType);
             if (!displayValue && objectId) {
                 const loadingOptions = new KIXObjectLoadingOptions();
                 loadingOptions.includes = [UserProperty.CONTACT];
@@ -84,7 +86,7 @@ export class UserService extends KIXObjectAPIService {
                 if (users?.length) {
                     const user = new User(users[0]);
                     displayValue = user.toString();
-                    await CacheService.getInstance().set(cacheKey, displayValue, objectType);
+                    await CacheService.getInstance().set(cacheKey, displayValue, cacheType);
                 }
             }
         } else {
@@ -353,6 +355,11 @@ export class UserService extends KIXObjectAPIService {
                 });
             }
         }
+
+        const backendToken = AuthenticationService.getInstance().getBackendToken(token);
+        const cacheUserId = AuthenticationService.getInstance().decodeToken(backendToken)?.UserID;
+        await CacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_${cacheUserId}`);
+
         if (errors.length) {
             throw new Error(errors[0].Code, errors.map((e) => e.Message).join('\n'), errors[0].StatusCode);
         }

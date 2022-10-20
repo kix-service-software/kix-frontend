@@ -10,10 +10,8 @@
 import { IUIModule } from '../../../../model/IUIModule';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import {
-    TicketFormService, TicketBulkManager, PendingTimeValidator, EmailRecipientValidator,
-    EditTicketDialogContext, TicketEditAction
+    TicketFormService, TicketBulkManager, EditTicketDialogContext, TicketEditAction
 } from '.';
-import { FormValidationService } from '../../../../modules/base-components/webapp/core/FormValidationService';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextType } from '../../../../model/ContextType';
@@ -47,8 +45,8 @@ export class UIModule implements IUIModule {
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(TicketFormService.getInstance());
 
-        FormValidationService.getInstance().registerValidator(new PendingTimeValidator());
-        FormValidationService.getInstance().registerValidator(new EmailRecipientValidator());
+        // FIXME: switch validator for new object form handling
+        // FormValidationService.getInstance().registerValidator(new PendingTimeValidator());
 
         BulkService.getInstance().registerBulkManager(new TicketBulkManager());
 

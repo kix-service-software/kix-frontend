@@ -74,7 +74,7 @@ describe('FormValue Binding', () => {
 
         it('Should have binding for form value properties', () => {
             expect(formValue['bindings']).an('array');
-            expect(formValue['bindings'].length).equals(12);
+            expect(formValue['bindings'].length).equals(11);
         });
 
         it('Should have binding for PossibleValues', () => {
@@ -130,6 +130,7 @@ describe('FormValue Binding', () => {
             object = new TestFormObject();
             formValue = new ObjectFormValue('testProperty1', object, objectFormValueMapper, null);
 
+            // "reset"
             formValue.addPropertyBinding(FormValueProperty.REQUIRED, () => null);
             formValue.addPropertyBinding(FormValueProperty.VALID, () => null);
             formValue.addPropertyBinding(FormValueProperty.VALIDATION_RESULTS, () => null);
@@ -137,7 +138,7 @@ describe('FormValue Binding', () => {
             formValue.addPropertyBinding(FormValueProperty.VISIBLE, () => null);
         });
 
-        it('PossibleValues Binding- should call the callback if value is changed', (done) => {
+        it('PossibleValues Binding - should call the callback if value is changed', (done) => {
             formValue.addPropertyBinding(FormValueProperty.POSSIBLE_VALUES, (formValue: ObjectFormValue) => {
                 expect(formValue.possibleValues).an('array');
                 expect(formValue.possibleValues.length).equals(3);
@@ -147,7 +148,7 @@ describe('FormValue Binding', () => {
             formValue.possibleValues = [1, 2, 3];
         });
 
-        it('ReadOnly Binding- should call the callback if value is changed', (done) => {
+        it('ReadOnly Binding - should call the callback if value is changed', (done) => {
             formValue.addPropertyBinding(FormValueProperty.READ_ONLY, (formValue: ObjectFormValue) => {
                 expect(formValue.readonly).true;
                 done();
@@ -156,7 +157,7 @@ describe('FormValue Binding', () => {
             formValue.readonly = true;
         });
 
-        it('Required Binding- should call the callback if value is changed', (done) => {
+        it('Required Binding - should call the callback if value is changed', (done) => {
             formValue.addPropertyBinding(FormValueProperty.REQUIRED, (formValue: ObjectFormValue) => {
                 expect(formValue.required).true;
                 done();
@@ -165,16 +166,17 @@ describe('FormValue Binding', () => {
             formValue.required = true;
         });
 
-        it('Valid Binding- should call the callback if value is changed', (done) => {
+        it('Valid Binding - should call the callback if value is changed', (done) => {
             formValue.addPropertyBinding(FormValueProperty.VALID, (formValue: ObjectFormValue) => {
-                expect(formValue.valid).true;
+                expect(formValue.valid).false;
                 done();
             });
 
-            formValue.valid = true;
+            // initial it is true
+            formValue.valid = false;
         });
 
-        it('ValidationResults Binding- should call the callback if value is changed', (done) => {
+        it('ValidationResults Binding - should call the callback if value is changed', (done) => {
             formValue.addPropertyBinding(FormValueProperty.VALIDATION_RESULTS, (formValue: ObjectFormValue) => {
                 expect(formValue.validationResults).an('array');
                 expect(formValue.validationResults.length).equals(2);
@@ -187,7 +189,7 @@ describe('FormValue Binding', () => {
             ];
         });
 
-        it('Value Binding- should call the callback if value is changed', (done) => {
+        it('Value Binding - should call the callback if value is changed', (done) => {
             formValue.addPropertyBinding(FormValueProperty.VALUE, (formValue: ObjectFormValue) => {
                 expect(formValue.value).equals('testValue');
                 done();
@@ -196,9 +198,9 @@ describe('FormValue Binding', () => {
             formValue.value = 'testValue';
         });
 
-        it('Visible Binding- should call the callback if value is changed', (done) => {
+        it('Visible Binding - should call the callback if value is changed', (done) => {
             formValue.addPropertyBinding(FormValueProperty.VISIBLE, (formValue: ObjectFormValue) => {
-                expect(formValue.valid).true;
+                expect(formValue.visible).true;
                 done();
             });
 

@@ -9,38 +9,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <div.form-control.table-form-input class={readonly: state.readonly}>
     <if(state.prepared)>
-        <if(!state.required)>
-            <div.df-table-buttons>
-                <if(!state.readonly)>
-                    <if(state.value)>
-                        <button.btn.btn-sm.btn-labeled.btn-danger
-                            type="button"
-                            title=(
-                                state.translations["Translatable#Remove table"]
-                            )
-                            on-click("removeTable")
-                        >
-                            <i.fas.fa-times.p-1/>
-                            <translation-string pattern="Translatable#Remove table"/>
-                        </button>
-                    </if>
-                    <else>
-                        <button.kix-button.submit-button
-                            type="button"
-                            on-click("addInitialTable")
-                            title=(
-                                state.translations[
-                                    "Translatable#Add initial table"
-                                ]
-                            )
-                        >
-                            <span.kix-icon-check/>
-                            <translation-string pattern="Translatable#Add initial table"/>
-                        </button>
-                    </else>
-                </if>
-            </div>
-        </if>
         <div.df-table-input-container.table-container>
             <table.table.table-striped class={"table-hover": !state.readonly }>
                 <thead>
@@ -70,13 +38,26 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                                 rowIndex,
                                                 colIndex,
                                             )
-                                        >
+                                        />
                                     </td>
                                 </for>
                                 <if(state.hasAction && !state.readonly)>
-                                    <td.content-cell>
+                                    <td.df-table-buttons>
+                                        <if(component.canAdd(rowIndex))>
+                                            <button.button.btn.btn-sm.btn-outline-secondary.me-1
+                                                type="button"
+                                                title=(
+                                                    state.translations[
+                                                        "Translatable#Add"
+                                                    ]
+                                                )
+                                                on-click("tableRowAdded")
+                                            >
+                                                <i.fas.fa-plus-circle/>
+                                            </button>
+                                        </if>
                                         <if(component.canRemove(rowIndex))>
-                                            <button.button.btn.btn-sm.btn-secondary
+                                            <button.button.btn.btn-sm.btn-outline-secondary
                                                 type="button"
                                                 title=(
                                                     state.translations[
@@ -88,20 +69,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                                     rowIndex,
                                                 )
                                             >
-                                                <i.fas.fa-minus/>
-                                            </button>
-                                        </if>
-                                        <if(component.canAdd(rowIndex))>
-                                            <button.button.btn.btn-sm.btn-secondary.ms-1
-                                                type="button"
-                                                title=(
-                                                    state.translations[
-                                                        "Translatable#Add"
-                                                    ]
-                                                )
-                                                on-click("tableRowAdded")
-                                            >
-                                                <i.fas.fa-plus/>
+                                                <i.fas.fa-minus-circle/>
                                             </button>
                                         </if>
                                     </td>

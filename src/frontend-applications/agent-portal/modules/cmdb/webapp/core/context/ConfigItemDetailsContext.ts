@@ -51,7 +51,7 @@ export class ConfigItemDetailsContext extends Context {
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null,
             [
-                'Versions', 'Links', 'History', VersionProperty.DEFINITION,
+                'Versions', 'History', VersionProperty.DEFINITION,
                 VersionProperty.DATA, VersionProperty.PREPARED_DATA
             ],
             ['Links']

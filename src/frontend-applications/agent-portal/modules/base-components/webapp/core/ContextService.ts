@@ -30,6 +30,7 @@ import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsPr
 import { ContextConfiguration } from '../../../../model/configuration/ContextConfiguration';
 import { AdditionalContextInformation } from './AdditionalContextInformation';
 import { ApplicationEvent } from './ApplicationEvent';
+import { ToolbarAction } from '../../../agent-portal/webapp/application/_base-template/personal-toolbar/ToolbarAction';
 
 export class ContextService {
 
@@ -56,6 +57,8 @@ export class ContextService {
 
     private storedContexts: ContextPreference[];
     private storageProcessQueue: Array<Promise<boolean>> = [];
+
+    private toolbarActions: Map<string, ToolbarAction> = new Map();
 
     public registerContext(contextDescriptor: ContextDescriptor): void {
         if (!this.contextDescriptorList.some((d) => d.contextId === contextDescriptor.contextId)) {
@@ -368,7 +371,7 @@ export class ContextService {
             contextId, objectId, additionalInformation, urlParams
         );
         if (context) {
-            this.setContextByInstanceId(context.instanceId, objectId, history);
+            await this.setContextByInstanceId(context.instanceId, objectId, history);
         }
 
         if (typeof window !== 'undefined') {
@@ -726,6 +729,16 @@ export class ContextService {
                 context.setConfiguration(configuration);
             }
         }
+    }
+
+    public registerToolbarActions(actions: ToolbarAction[]): void {
+        actions.forEach((a) => {
+            this.toolbarActions.set(a.title, a);
+        });
+    }
+
+    public getToolbarAction(key: string): ToolbarAction {
+        return this.toolbarActions.get(key);
     }
 
 }

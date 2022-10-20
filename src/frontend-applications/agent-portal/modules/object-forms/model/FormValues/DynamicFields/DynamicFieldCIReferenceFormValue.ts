@@ -22,7 +22,7 @@ import { ObjectFormValueMapper } from '../../ObjectFormValueMapper';
 import { ObjectFormValue } from '../ObjectFormValue';
 import { SelectObjectFormValue } from '../SelectObjectFormValue';
 
-export class DynamicFieldCIReferenceFormValue extends SelectObjectFormValue<number> {
+export class DynamicFieldCIReferenceFormValue<T = number> extends SelectObjectFormValue<T> {
 
 
     public constructor(

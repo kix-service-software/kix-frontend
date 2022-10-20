@@ -22,12 +22,15 @@ import { IKIXModuleExtension } from '../../model/IKIXModuleExtension';
 import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
 import { UIComponent } from '../../model/UIComponent';
 import { PermissionService } from '../services/PermissionService';
+import { ConfigurationService } from '../../../../server/services/ConfigurationService';
 
 export class ApplicationRouter extends KIXRouter {
 
     private static INSTANCE: ApplicationRouter;
 
     private update: boolean = false;
+    private socketTimeout: number;
+    private socketTimeoutRequest: Promise<number>;
 
     public static getInstance(): ApplicationRouter {
         if (!ApplicationRouter.INSTANCE) {
@@ -90,11 +93,10 @@ export class ApplicationRouter extends KIXRouter {
             res.redirect('/static/html/update-info/index.html');
         } else {
             this.setFrontendSocketUrl(res);
-            this.clearRequireCache('../applications/_app');
+            // this.clearRequireCache('../applications/_app');
             const token: string = req.cookies.token;
-            const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
-                token, '', KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.BROWSER_SOCKET_TIMEOUT_CONFIG], null, null
-            ).catch((): SysConfigOption[] => []);
+
+            const socketTimeout = await this.getSocketTimeout();
 
             const favIcon = await this.getIcon('agent-portal-icon');
 
@@ -113,7 +115,7 @@ export class ApplicationRouter extends KIXRouter {
             const uiModules = await Promise.all(createPromises);
 
             (res as any).marko(template, {
-                socketTimeout: options && options.length ? options[0].Value : 30000,
+                socketTimeout,
                 favIcon,
                 modules: uiModules
             });
@@ -163,5 +165,28 @@ export class ApplicationRouter extends KIXRouter {
 
     public setUpdate(update: boolean): void {
         this.update = update;
+    }
+
+    private async getSocketTimeout(): Promise<number> {
+        if (!this.socketTimeout) {
+            if (!this.socketTimeoutRequest) {
+                this.socketTimeoutRequest = new Promise<number>(async (resolve, reject) => {
+                    const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+                    const backendToken = serverConfig.BACKEND_API_TOKEN;
+
+                    const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+                        backendToken, 'ApplicationRouter', KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.BROWSER_SOCKET_TIMEOUT_CONFIG],
+                        null, null
+                    ).catch((): SysConfigOption[] => []);
+
+                    resolve(options?.length ? Number(options[0].Value) : null);
+                });
+            }
+
+            const socketTimeout = await this.socketTimeoutRequest;
+            this.socketTimeout = socketTimeout || 30000;
+        }
+
+        return this.socketTimeout;
     }
 }

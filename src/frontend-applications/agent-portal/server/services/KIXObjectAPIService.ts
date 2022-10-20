@@ -104,7 +104,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             const success = await this.buildFilter(loadingOptions.filter, responseProperty, query, token);
 
             if (!success) {
-                LoggingService.getInstance().warning('Invalid api filter.', loadingOptions.filter);
+                LoggingService.getInstance().warning('Invalid api filter.', JSON.stringify(loadingOptions.filter));
                 return [];
             }
 
@@ -120,7 +120,9 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             uri = this.buildUri(baseUri, objectIds.join(','));
         }
 
-        const response = await this.getObjectByUri(token, uri, clientRequestId, query, objectType, useCache);
+        const cacheType = loadingOptions?.cacheType || objectType;
+
+        const response = await this.getObjectByUri(token, uri, clientRequestId, query, cacheType, useCache);
 
         const responseObject = response[responseProperty];
 
@@ -198,25 +200,29 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                 query = { ...query, sort: loadingOptions.sortOrder };
             }
 
-            let additionalIncludes = [];
+            let additionalIncludes: string[] = [];
             this.extendedServices.forEach(
                 (s) => additionalIncludes = [...additionalIncludes, ...s.getAdditionalIncludes(objectType)]
             );
 
-            if (loadingOptions.includes) {
+            if (loadingOptions.includes?.length) {
                 loadingOptions.includes = [...loadingOptions.includes, ...additionalIncludes];
-                query = { ...query, include: loadingOptions.includes.join(',') };
-            } else {
+            } else if (additionalIncludes?.length) {
                 loadingOptions.includes = additionalIncludes;
             }
 
-            if (loadingOptions.expands) {
+            if (loadingOptions.includes?.length) {
+                query = { ...query, include: loadingOptions.includes.join(',') };
+            }
+
+            if (loadingOptions.expands?.length) {
                 query = { ...query, expand: loadingOptions.expands.join(',') };
             }
 
             if (loadingOptions.query) {
                 loadingOptions.query.forEach((q) => query[q[0]] = Array.isArray(q[1]) ? JSON.stringify(q[1]) : q[1]);
             }
+
         }
 
         return query;

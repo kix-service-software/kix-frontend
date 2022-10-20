@@ -13,6 +13,7 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { SysConfigKey } from '../../model/SysConfigKey';
 import { SysConfigOptionDefinition } from '../../model/SysConfigOptionDefinition';
 import { AgentPortalConfiguation } from '../../../../model/configuration/AgentPortalConfiguation';
+import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
 
 export class SysConfigService extends KIXObjectService<SysConfigOption> {
 

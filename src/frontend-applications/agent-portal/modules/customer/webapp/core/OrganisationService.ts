@@ -56,6 +56,10 @@ export class OrganisationService extends KIXObjectService<Organisation> {
 
         const preload = await this.shouldPreload(KIXObjectType.ORGANISATION);
 
+        if (loadingOptions?.includes?.some((i) => i === OrganisationProperty.TICKET_STATS)) {
+            loadingOptions.cacheType = 'ORGANISATION_TICKET_STATS';
+        }
+
         if (loadingOptions || !preload) {
             objects = await super.loadObjects<Organisation>(KIXObjectType.ORGANISATION, objectIds, loadingOptions);
         } else {

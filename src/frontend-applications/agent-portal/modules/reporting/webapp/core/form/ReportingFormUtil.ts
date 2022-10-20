@@ -14,10 +14,7 @@ import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOp
 import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { DynamicFieldFormUtil } from '../../../../base-components/webapp/core/DynamicFieldFormUtil';
-import { KIXObjectFormService } from '../../../../base-components/webapp/core/KIXObjectFormService';
 import { ObjectReferenceOptions } from '../../../../base-components/webapp/core/ObjectReferenceOptions';
-import { ServiceRegistry } from '../../../../base-components/webapp/core/ServiceRegistry';
-import { ServiceType } from '../../../../base-components/webapp/core/ServiceType';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
 import { ReportParameter } from '../../../model/ReportParamater';
@@ -38,8 +35,6 @@ export class ReportingFormUtil {
         if (!field) {
             return;
         }
-
-        const fieldLabel = field.label;
 
         field.options = [];
 
