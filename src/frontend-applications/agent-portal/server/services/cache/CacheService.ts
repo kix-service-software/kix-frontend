@@ -240,10 +240,12 @@ export class CacheService {
                 break;
             case KIXObjectType.ORGANISATION:
                 types.push(KIXObjectType.OBJECT_ICON);
+                types.push('ORGANISATION_TICKET_STATS');
                 break;
             case KIXObjectType.CONTACT:
                 types.push(KIXObjectType.USER);
                 types.push(KIXObjectType.OBJECT_ICON);
+                types.push('CONTACT_TICKET_STATS');
                 break;
             case KIXObjectType.PERMISSION:
             case KIXObjectType.ROLE:
