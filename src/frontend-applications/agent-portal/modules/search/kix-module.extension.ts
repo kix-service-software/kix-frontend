@@ -32,7 +32,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
 
     public uiComponents: UIComponent[] = [
         new UIComponent('search', '/kix-module-search$0/webapp/components/search-module', []),
-        new UIComponent('search-result-explorer', '/kix-module-search$0/webapp/components/search-result-explorer', []),
         new UIComponent(
             'save-search-template-overlay', '/kix-module-search$0/webapp/components/save-search-template-overlay', []
         )

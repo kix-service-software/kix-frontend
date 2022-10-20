@@ -82,6 +82,8 @@ export class Article extends KIXObject {
 
     public Plain: string = null;
 
+    public Unseen: number = 0;
+
     // UI Properties
 
     public senderType: SenderType = null;
@@ -131,6 +133,7 @@ export class Article extends KIXObject {
             this.ChangedBy = article.ChangedBy;
             this.CreatedBy = article.CreatedBy;
             this.Plain = article.Plain;
+            this.Unseen = Number(article.Unseen);
 
             this.bodyAttachment = article.bodyAttachment;
 

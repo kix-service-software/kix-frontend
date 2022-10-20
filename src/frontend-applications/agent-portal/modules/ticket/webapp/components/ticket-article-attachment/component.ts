@@ -38,6 +38,8 @@ class ArticleAttachmentComponent {
 
     public async download(event: any): Promise<void> {
         event.stopPropagation();
+        event.preventDefault();
+
         if (this.state.article && this.state.attachment) {
 
             if (this.images && this.images.some((i) => i.imageId === this.state.attachment.ID)) {

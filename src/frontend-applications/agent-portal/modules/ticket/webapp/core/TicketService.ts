@@ -31,7 +31,6 @@ import { TicketPriority } from '../../model/TicketPriority';
 import { TicketState } from '../../model/TicketState';
 import { User } from '../../../user/model/User';
 import { UIFilterCriterion } from '../../../../model/UIFilterCriterion';
-import { AgentService } from '../../../user/webapp/core/AgentService';
 import { StateType } from '../../model/StateType';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { Article } from '../../model/Article';
@@ -60,6 +59,7 @@ import { Error } from '../../../../../../server/model/Error';
 import { Contact } from '../../../customer/model/Contact';
 import { ContactProperty } from '../../../customer/model/ContactProperty';
 import { TicketHistory } from '../../model/TicketHistory';
+import { ArticleColorsConfiguration } from '../../model/ArticleColorsConfiguration';
 import { ArticleLoadingOptions } from '../../model/ArticleLoadingOptions';
 
 export class TicketService extends KIXObjectService<Ticket> {
@@ -73,6 +73,8 @@ export class TicketService extends KIXObjectService<Ticket> {
 
         return TicketService.INSTANCE;
     }
+
+    private articleColorConfiguration: any;
 
     private constructor() {
         super(KIXObjectType.TICKET);
@@ -373,13 +375,8 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     public async checkFilterValue(ticket: Ticket, criteria: UIFilterCriterion): Promise<boolean> {
-        if (criteria.property === TicketProperty.WATCHERS && ticket.Watchers) {
-            let value = criteria.value;
-            if (criteria.value === KIXObjectType.CURRENT_USER) {
-                const currentUser = await AgentService.getInstance().getCurrentUser();
-                value = currentUser.UserID;
-            }
-            return ticket.Watchers.some((w) => w.UserID === value);
+        if (criteria.property === TicketProperty.WATCHERS) {
+            return ticket.WatcherID > 0;
         }
         return true;
     }
@@ -692,5 +689,37 @@ export class TicketService extends KIXObjectService<Ticket> {
         date.setSeconds(date.getSeconds() + Number(offset));
 
         return date;
+    }
+
+    public async getChannelColor(channel: string): Promise<string> {
+        if (!this.articleColorConfiguration) {
+            const options = await KIXObjectService.loadObjects<SysConfigOption>(
+                KIXObjectType.SYS_CONFIG_OPTION, [ArticleColorsConfiguration.CONFIGURATION_ID]
+            ).catch((): SysConfigOption[] => []);
+
+            if (Array.isArray(options) && options.length) {
+                try {
+                    this.articleColorConfiguration = JSON.parse(options[0].Value);
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        }
+
+        return this.articleColorConfiguration
+            ? this.articleColorConfiguration[channel] || this.getFallbackColor(channel)
+            : this.getFallbackColor(channel);
+    }
+
+    private getFallbackColor(channel: string): string {
+        let color = '#fff';
+
+        if (channel === 'note') {
+            color = '#fbf7e2';
+        } else if (channel === 'email') {
+            color = '#e1eaeb';
+        }
+
+        return color;
     }
 }

@@ -53,7 +53,11 @@ export class ObjectFormHandler<T extends KIXObject = any> {
             const formObject = await this.context.getObject(
                 this.form?.objectType || this.context.descriptor.kixObjectTypes[0], createNewInstance
             );
+
+            const start = Date.now();
             await this.objectFormValueMapper.mapFormValues(formObject);
+            const end = Date.now();
+            console.debug(`Map Form Values Finished: ${(end - start)}ms`);
 
             this.objectFormValidator = new ObjectFormValidator(this.objectFormValueMapper);
         }

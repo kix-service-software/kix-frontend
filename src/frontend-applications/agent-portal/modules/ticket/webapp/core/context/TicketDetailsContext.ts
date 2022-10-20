@@ -16,11 +16,9 @@ import { KIXObjectService } from '../../../../../modules/base-components/webapp/
 import { BreadcrumbInformation } from '../../../../../model/BreadcrumbInformation';
 import { TicketContext } from './TicketContext';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
-import { TicketProperty } from '../../../model/TicketProperty';
 import { Article } from '../../../model/Article';
 import { ArticleLoadingOptions } from '../../../model/ArticleLoadingOptions';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
-import { ArticleProperty } from '../../../model/ArticleProperty';
 import { TicketHistory } from '../../../model/TicketHistory';
 
 export class TicketDetailsContext extends Context {
@@ -85,10 +83,7 @@ export class TicketDetailsContext extends Context {
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null,
             [
-                'StateType', 'ObjectActions',
-                KIXObjectProperty.DYNAMIC_FIELDS,
-                TicketProperty.WATCHERS,
-                KIXObjectProperty.LINKS
+                'StateType', 'ObjectActions', 'SLACriteria', KIXObjectProperty.DYNAMIC_FIELDS
             ]
         );
 
@@ -117,12 +112,10 @@ export class TicketDetailsContext extends Context {
     private async loadArticles(force?: boolean): Promise<Article[]> {
         const loadingOptions = new KIXObjectLoadingOptions();
         loadingOptions.sortOrder = 'Article.IncomingTime';
-        loadingOptions.includes = [ArticleProperty.FLAGS];
         loadingOptions.limit = 0;
 
         const articles: Article[] = await KIXObjectService.loadObjects<Article>(
-            KIXObjectType.ARTICLE, null, loadingOptions,
-            new ArticleLoadingOptions(this.objectId)
+            KIXObjectType.ARTICLE, null, loadingOptions, new ArticleLoadingOptions(this.objectId)
         ).catch(() => [] as Article[]) || [];
 
         return articles;

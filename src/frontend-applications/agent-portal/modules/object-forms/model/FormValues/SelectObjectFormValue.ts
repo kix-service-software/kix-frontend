@@ -135,8 +135,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         }
         this.treeHandler?.setMultiSelect(this.multiselect);
 
-        await this.loadSelectableValues();
-        await this.loadSelectedValues();
+        this.loadSelectableValues();
+        this.loadSelectedValues();
 
         this.addPropertyBinding('multiselect', (value: SelectObjectFormValue) => {
             if (!this.multiselect && Array.isArray(this.value) && this.value.length > 1) {

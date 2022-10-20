@@ -15,9 +15,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         title=state.activeTabTitle>
         <@headercontent>
             <if(state.prepared)>
-                <ul.tab-list class={
-                    "show-object": state.tabWidgets
-                }>
+                <ul.tab-list>
                     <for|tab| of=state.tabWidgets>
                         <li
                             title=component.getTitle(tab)
@@ -39,8 +37,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <@content>
             <div.tab-sidebar-grid class={
                 "has-sidebar": state.hasSidebars,
-                "show-sidebar": state.showSidebar,
-                "show-object": state.activeTab
+                "show-sidebar": state.showSidebar
             }>
                 <div.tab-content>
                     <if(state.activeTab)>

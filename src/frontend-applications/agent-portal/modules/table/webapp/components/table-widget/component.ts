@@ -33,7 +33,6 @@ import { TableFactoryService } from '../../core/factory/TableFactoryService';
 import { Context } from '../../../../../model/Context';
 import { FormValueProperty } from '../../../../object-forms/model/FormValueProperty';
 import { ObjectFormValue } from '../../../../object-forms/model/FormValues/ObjectFormValue';
-import { ObjectFormEvent } from '../../../../object-forms/model/ObjectFormEvent';
 
 class Component {
 
@@ -106,13 +105,10 @@ class Component {
 
                             setTimeout(() => this.state.loading = false, 100);
                         } else {
-                            if (eventId === TableEvent.TABLE_READY) {
-                                if (this.state.table.isFiltered()) {
-                                    this.state.filterCount = this.state.table.getRowCount();
-                                    this.state.filterValue = this.state.table.getFilterValue();
-                                }
+                            if (eventId === TableEvent.TABLE_READY && this.state.table.isFiltered()) {
+                                this.state.filterCount = this.state.table.getRowCount();
+                                this.state.filterValue = this.state.table.getFilterValue();
                                 this.prepareTitle();
-                                this.prepareActions();
                             }
                             WidgetService.getInstance().updateActions(this.state.instanceId);
                         }
@@ -129,7 +125,9 @@ class Component {
             EventService.getInstance().subscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
 
             this.prepareHeader();
-            this.prepareTable().then(() => this.prepareTitle());
+            await this.prepareTable();
+            this.prepareActions();
+            this.prepareTitle();
 
             this.prepareContextDependency(settings);
             this.prepareFormDependency();
@@ -147,15 +145,18 @@ class Component {
                 objectChanged: (): void => { return; },
                 objectListChanged: (objectType: KIXObjectType | string): void => {
                     if (objectType === this.objectType) {
-                        if (settings?.resetFilterOnReload) {
-                            this.state.table?.resetFilter();
-                            const filterComponent = (this as any).getComponent('table-widget-filter');
-                            filterComponent?.reset();
-                        } else if (this.state.table) {
-                            this.state.filterValue = this.state.table.getFilterValue();
-                        }
+                        const activeContext = ContextService.getInstance().getActiveContext();
+                        if (this.context.instanceId === activeContext.instanceId) {
+                            if (settings?.resetFilterOnReload) {
+                                this.state.table?.resetFilter();
+                                const filterComponent = (this as any).getComponent('table-widget-filter');
+                                filterComponent?.reset();
+                            } else if (this.state.table) {
+                                this.state.filterValue = this.state.table.getFilterValue();
+                            }
 
-                        this.prepareTitle();
+                            this.prepareTitle();
+                        }
                     }
                 },
                 sidebarRightToggled: (): void => { return; },

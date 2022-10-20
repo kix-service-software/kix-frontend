@@ -138,6 +138,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             new ConfigurationDefinition('ticket-dashboard-chart-priorities', ConfigurationType.ChartWidget),
             null, false, true, null, true
         );
+        chartPrioritiesConfig.valid = false;
         configurations.push(chartPrioritiesConfig);
 
         const chartConfig2 = new ChartComponentConfiguration(
@@ -184,6 +185,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             new ConfigurationDefinition('ticket-dashboard-chart-states', ConfigurationType.ChartWidget),
             null, false, true, null, true
         );
+        chartStatesConfig.valid = false;
         configurations.push(chartStatesConfig);
 
         const chartConfig3 = new ChartComponentConfiguration(
@@ -224,6 +226,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             new ConfigurationDefinition('ticket-dashboard-chart-new', ConfigurationType.ChartWidget),
             null, false, true, null, true
         );
+        chartNewConfig.valid = false;
         configurations.push(chartNewConfig);
 
         const tableConfig = new TableConfiguration(

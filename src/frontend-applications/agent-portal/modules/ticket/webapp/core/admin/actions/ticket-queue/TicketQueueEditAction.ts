@@ -27,7 +27,7 @@ export class TicketQueueEditAction extends AbstractAction {
         const objectId = context.getObjectId();
 
         const permissions = [
-            new UIComponentPermission(`system/ticket/queues/${objectId}`, [CRUD.UPDATE], false, 'Object')
+            new UIComponentPermission(`system/ticket/queues/${objectId}`, [CRUD.UPDATE], false, 'Object', false)
         ];
 
         show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);

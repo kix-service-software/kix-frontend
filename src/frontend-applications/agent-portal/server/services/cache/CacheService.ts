@@ -76,16 +76,56 @@ export class CacheService {
     }
 
     public async updateCaches(events: BackendNotification[]): Promise<void> {
+        const promises = [];
         for (const event of events) {
             if (event.Event === 'CLEAR_CACHE') {
-                LoggingService.getInstance().debug('Backend Notification: ' + JSON.stringify(event));
-                await this.clearCache();
+                // TODO: Is it really necessary to clear the whole cache if the BE told it to us?
+                // LoggingService.getInstance().debug('Backend Notification: ' + JSON.stringify(event));
+                // promises.push(this.clearCache());
             } else if (!event.Namespace) {
                 LoggingService.getInstance().warning('Ignore Backend Notification (missing Namespace in event)', event);
+            } else if (this.isUserStatsAffected(event.Namespace)) {
+                promises.push(this.handleUserStatsCache(event));
+            } else if (event.Namespace.startsWith('User.UserPreference')) {
+                promises.push(this.handleUserPreferencesCache(event));
             } else if (!event.Namespace.startsWith(KIXObjectType.TRANSLATION_PATTERN)) {
-                LoggingService.getInstance().debug('Backend Notification: ' + JSON.stringify(event));
-                await this.deleteKeys(event.Namespace);
+                LoggingService.getInstance().debug('\tBackend Notification: ' + JSON.stringify(event));
+                promises.push(this.deleteKeys(event.Namespace));
             }
+        }
+
+        await Promise.all(promises);
+    }
+
+    private isUserStatsAffected(namespace: string): boolean {
+        const isOwnerEvent = namespace.startsWith('Ticket.Owner');
+        const isLockEvent = namespace.startsWith('Ticket.Lock');
+        const isWatcherEvent = namespace.startsWith('Watcher');
+
+        return isOwnerEvent || isLockEvent || isWatcherEvent;
+    }
+
+    private async handleUserStatsCache(event: BackendNotification): Promise<void> {
+        const isOwnerEvent = event.Namespace.startsWith('Ticket.Owner');
+        const isLockEvent = event.Namespace.startsWith('Ticket.Lock');
+        const isWatcherEvent = event.Namespace.startsWith('Watcher');
+
+        const ids = event.ObjectID?.split('::');
+
+        if (ids?.length === 3) {
+            if (isOwnerEvent) {
+                await this.deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS_${ids[1]}`);
+                await this.deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS_${ids[2]}`);
+            } else if (isLockEvent || isWatcherEvent) {
+                await this.deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS_${ids[2]}`);
+            }
+        }
+    }
+
+    private async handleUserPreferencesCache(event: BackendNotification): Promise<void> {
+        const ids = event.ObjectID?.split('::');
+        if (ids?.length === 2) {
+            await this.deleteKeys(`${KIXObjectType.CURRENT_USER}_${ids[0]}`);
         }
     }
 
@@ -93,29 +133,33 @@ export class CacheService {
         if (!type || type.length === 0)
             return;
 
-        // start profiling
-        const profileTaskId = ProfilingService.getInstance().start(
-            'CacheService',
-            'deleteKeys',
-            {
-                data: [type]
-            }
-        );
-
         let prefixes = await this.getCacheKeyPrefixes(type);
         if (!force) {
             prefixes = prefixes.filter((p) => !this.ignorePrefixes.some((ip) => ip === p));
         }
 
+        // start profiling
+        const profileTaskId = ProfilingService.getInstance().start(
+            'CacheService', 'deleteKeys\t' + type, { data: prefixes }
+        );
         for (const prefix of prefixes) {
             await this.getCacheBackendInstance()?.deleteAll(prefix);
         }
         ProfilingService.getInstance().stop(profileTaskId);
     }
 
+    public async waitFor(key: string, cacheType: string): Promise<any> {
+        return this.getCacheBackendInstance()?.waitFor(key, cacheType);
+    }
+
     private async getCacheKeyPrefixes(objectNamespace: string): Promise<string[]> {
         let types: string[] = [];
-        if (objectNamespace && objectNamespace.indexOf('.') !== -1) {
+
+        if (objectNamespace === 'DynamicField.Value') {
+            return [];
+        } if (objectNamespace === 'Ticket.History') {
+            return [KIXObjectType.TICKET_HISTORY];
+        } else if (objectNamespace && objectNamespace.indexOf('.') !== -1) {
             const namespace = objectNamespace.split('.');
             if (namespace[0] === 'CMDB') {
                 types.push(namespace[1]);
@@ -142,19 +186,10 @@ export class CacheService {
         }
 
         switch (types[0]) {
-            case KIXObjectType.WATCHER:
-            case KIXObjectType.ARTICLE:
-            case KIXObjectType.DYNAMIC_FIELD:
-                types.push(KIXObjectType.TICKET);
-                types.push(KIXObjectType.CURRENT_USER);
-                break;
             case KIXObjectType.TICKET:
-                types.push(KIXObjectType.CONFIG_ITEM);
                 types.push(KIXObjectType.ARTICLE);
-                types.push(KIXObjectType.ORGANISATION);
-                types.push(KIXObjectType.CONTACT);
-                types.push(KIXObjectType.QUEUE);
-                types.push(KIXObjectType.CURRENT_USER);
+                types.push('ORGANISATION_TICKET_STATS');
+                types.push('CONTACT_TICKET_STATS');
                 types.push(KIXObjectType.TICKET_HISTORY);
                 // needed for permission checks of objectactions (HttpService) - check new after ticket update
                 types.push(RequestMethod.OPTIONS);
@@ -169,22 +204,31 @@ export class CacheService {
                 types.push(KIXObjectType.OBJECT_ICON);
                 break;
             case KIXObjectType.CONFIG_ITEM:
+                types.push(`${KIXObjectType.CONFIG_ITEM_CLASS}_STATS`);
+                types.push(KIXObjectType.GRAPH);
+                types.push(KIXObjectType.CONFIG_ITEM_VERSION);
+                break;
+            case KIXObjectType.CONFIG_ITEM_CLASS:
             case KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION:
-                types.push(KIXObjectType.CONFIG_ITEM_CLASS);
-                types.push(KIXObjectType.ORGANISATION);
-                types.push(KIXObjectType.CONTACT);
+                types.push(`${KIXObjectType.CONFIG_ITEM_CLASS}_STATS`);
+                types.push(`${KIXObjectType.CONFIG_ITEM_CLASS}_DEFINITION`);
                 types.push(KIXObjectType.GRAPH);
                 break;
             case KIXObjectType.PERSONAL_SETTINGS:
             case KIXObjectType.USER_PREFERENCE:
                 types.push(KIXObjectType.USER);
-                types.push(KIXObjectType.CURRENT_USER);
                 types.push(KIXObjectType.CONTACT);
                 break;
             case KIXObjectType.USER:
+                types.push(`${KIXObjectType.USER}-DISPLAY_VALUE`);
                 types.push(KIXObjectType.ROLE);
                 types.push(KIXObjectType.CONTACT);
                 types.push(KIXObjectType.REPORT_DEFINITION);
+                break;
+            case KIXObjectType.TICKET_PRIORITY:
+            case KIXObjectType.TICKET_STATE:
+            case KIXObjectType.TICKET_TYPE:
+                types.push(KIXObjectType.OBJECT_ICON);
                 break;
             case KIXObjectType.LINK:
             case KIXObjectType.LINK_OBJECT:
@@ -196,17 +240,13 @@ export class CacheService {
                 types.push(KIXObjectType.GRAPH);
                 break;
             case KIXObjectType.ORGANISATION:
-                types.push(KIXObjectType.CONTACT);
-                types.push(KIXObjectType.TICKET);
                 types.push(KIXObjectType.OBJECT_ICON);
-                types.push(KIXObjectType.CONFIG_ITEM);
+                types.push('ORGANISATION_TICKET_STATS');
                 break;
             case KIXObjectType.CONTACT:
-                types.push(KIXObjectType.ORGANISATION);
-                types.push(KIXObjectType.TICKET);
                 types.push(KIXObjectType.USER);
                 types.push(KIXObjectType.OBJECT_ICON);
-                types.push(KIXObjectType.CONFIG_ITEM);
+                types.push('CONTACT_TICKET_STATS');
                 break;
             case KIXObjectType.PERMISSION:
             case KIXObjectType.ROLE:
@@ -222,8 +262,6 @@ export class CacheService {
                 break;
             case KIXObjectType.CONFIG_ITEM_VERSION:
                 types.push(KIXObjectType.CONFIG_ITEM);
-                types.push(KIXObjectType.ORGANISATION);
-                types.push(KIXObjectType.CONTACT);
                 types.push(KIXObjectType.GRAPH);
                 break;
             case KIXObjectType.SYS_CONFIG_OPTION_DEFINITION:
@@ -236,10 +274,7 @@ export class CacheService {
                 types.push(KIXObjectType.REPORT_DEFINITION);
                 break;
             case KIXObjectType.QUEUE:
-            case KIXObjectType.TICKET_STATE:
-            case KIXObjectType.TICKET_TYPE:
-            case KIXObjectType.TICKET_PRIORITY:
-                types.push(KIXObjectType.TICKET);
+                types.push('QUEUE_HIERARCHY');
                 break;
             case KIXObjectType.GENERAL_CATALOG_ITEM:
                 types.push(KIXObjectType.GENERAL_CATALOG_CLASS);

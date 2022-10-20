@@ -19,6 +19,7 @@ import { ContextService } from '../../../../base-components/webapp/core/ContextS
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { Table } from '../../../model/Table';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 
 export class TableFactoryService {
 
@@ -136,5 +137,10 @@ export class TableFactoryService {
     public getDefaultColumnConfiguration(objectType: KIXObjectType | string, property: string): IColumnConfiguration {
         const factory = this.factories.find((f) => f.objectType === objectType);
         return factory ? factory.getDefaultColumnConfiguration(property) : null;
+    }
+
+    public async prepareTableLoadingOptions(loadingOptions: KIXObjectLoadingOptions, table: Table): Promise<void> {
+        const factory = this.factories.find((f) => f.objectType === table.getObjectType());
+        await factory.prepareTableLoadingOptions(loadingOptions, table);
     }
 }

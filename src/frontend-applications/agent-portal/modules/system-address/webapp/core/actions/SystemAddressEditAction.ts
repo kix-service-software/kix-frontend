@@ -28,7 +28,7 @@ export class SystemAddressEditAction extends AbstractAction {
 
         const permissions = [
             new UIComponentPermission(
-                `system/communication/systemaddresses/${objectId}`, [CRUD.UPDATE], false, 'Object'
+                `system/communication/systemaddresses/${objectId}`, [CRUD.UPDATE], false, 'Object', false
             )
         ];
 

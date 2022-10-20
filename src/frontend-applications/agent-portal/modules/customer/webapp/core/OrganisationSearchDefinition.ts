@@ -8,7 +8,7 @@
  */
 
 import { OrganisationSearchFormManager } from './OrganisationSearchFormManager';
-import { SearchDefinition, SearchResultCategory } from '../../../search/webapp/core';
+import { SearchDefinition } from '../../../search/webapp/core';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
@@ -38,23 +38,6 @@ export class OrganisationSearchDefinition extends SearchDefinition {
             }
         };
         return formManager;
-    }
-
-    public async getSearchResultCategories(): Promise<SearchResultCategory[]> {
-        const categories: SearchResultCategory[] = [];
-
-        if (await this.checkReadPermissions('contacts')) {
-            categories.push(
-                new SearchResultCategory('Translatable#Contacts', KIXObjectType.CONTACT)
-            );
-        }
-        if (await this.checkReadPermissions('tickets')) {
-            categories.push(
-                new SearchResultCategory('Translatable#Tickets', KIXObjectType.TICKET)
-            );
-        }
-
-        return [new SearchResultCategory('Translatable#Organisations', KIXObjectType.ORGANISATION, categories)];
     }
 
     public async getLoadingOptions(

@@ -14,8 +14,6 @@ import { TicketProperty } from '../../model/TicketProperty';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { Queue } from '../../model/Queue';
 import { TicketState } from '../../model/TicketState';
-import { TicketPriority } from '../../model/TicketPriority';
-import { TicketType } from '../../model/TicketType';
 import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
 import { User } from '../../../user/model/User';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
@@ -25,7 +23,6 @@ import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { UserProperty } from '../../../user/model/UserProperty';
-import { StateType } from '../../model/StateType';
 import { QueueProperty } from '../../model/QueueProperty';
 import { AgentService } from '../../../user/webapp/core/AgentService';
 import { Article } from '../../model/Article';
@@ -557,11 +554,8 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                     : icons.push('kix-icon-lock-open');
                 break;
             case TicketProperty.WATCHERS:
-                if (ticket && ticket.Watchers) {
-                    const user = await AgentService.getInstance().getCurrentUser();
-                    if (ticket.Watchers.some((w) => w.UserID === user.UserID)) {
-                        icons.push('kix-icon-eye');
-                    }
+                if (ticket.WatcherID > 0) {
+                    icons.push('kix-icon-eye');
                 }
                 break;
             default:

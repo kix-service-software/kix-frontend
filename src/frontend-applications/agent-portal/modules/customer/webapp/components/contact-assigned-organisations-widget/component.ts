@@ -69,9 +69,9 @@ class Component {
     }
 
     private async prepareTable(): Promise<void> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, [
-            ContactProperty.TICKET_STATS
-        ]);
+        const loadingOptions = new KIXObjectLoadingOptions(
+            null, null, null, [ContactProperty.TICKET_STATS], null, null, 'CONTACT_TICKET_STATS'
+        );
         const contacts = await KIXObjectService.loadObjects<Contact>(
             KIXObjectType.CONTACT, [this.state.contact.ID], loadingOptions
         );

@@ -59,6 +59,10 @@ export class ContactService extends KIXObjectService<Contact> {
 
         const preload = await this.shouldPreload(KIXObjectType.CONTACT);
 
+        if (loadingOptions?.includes?.some((i) => i === ContactProperty.TICKET_STATS)) {
+            loadingOptions.cacheType = 'CONTACT_TICKET_STATS';
+        }
+
         if (loadingOptions || !preload) {
             objects = await super.loadObjects<Contact>(KIXObjectType.CONTACT, objectIds, loadingOptions);
         } else {

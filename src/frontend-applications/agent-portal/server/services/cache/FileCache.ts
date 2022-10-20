@@ -39,6 +39,10 @@ export class FileCache implements ICache {
         }
     }
 
+    public async waitFor(key: string, cacheType: string): Promise<void> {
+        return;
+    }
+
     public async clear(ignoreTypes: string[] = []): Promise<void> {
         LoggingService.getInstance().info('Clear Cache: (ignore) ' + ignoreTypes.join(', '));
         let types;

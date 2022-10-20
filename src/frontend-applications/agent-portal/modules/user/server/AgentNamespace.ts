@@ -27,6 +27,7 @@ import { AgentEvent } from '../webapp/core/AgentEvent';
 import { Socket } from 'socket.io';
 import { CacheService } from '../../../server/services/cache';
 import { PersonalSettingsProperty } from '../model/PersonalSettingsProperty';
+import { HttpService } from '../../../server/services/HttpService';
 
 export class AgentNamespace extends SocketNameSpace {
 
@@ -97,7 +98,7 @@ export class AgentNamespace extends SocketNameSpace {
         const token = parsedCookie ? parsedCookie.token : '';
 
         let response: SocketResponse;
-        const user = await UserService.getInstance().getUserByToken(token).catch((error) => {
+        const user = await HttpService.getInstance().getUserByToken(token, data.withStats).catch((error) => {
             response = new SocketResponse(SocketEvent.ERROR, error);
             return null;
         });

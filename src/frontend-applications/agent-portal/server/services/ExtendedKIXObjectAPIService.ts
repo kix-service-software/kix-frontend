@@ -23,6 +23,10 @@ export abstract class ExtendedKIXObjectAPIService implements IKIXObjectService {
         return false;
     }
 
+    public async preloadObjects(token: string): Promise<void> {
+        return;
+    }
+
     public async loadDisplayValue(objectType: string, objectId: string | number): Promise<string> {
         return '';
     }

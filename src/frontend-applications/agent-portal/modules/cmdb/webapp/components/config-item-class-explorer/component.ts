@@ -34,11 +34,14 @@ export class Component {
 
     public onCreate(input: any): void {
         this.state = new ComponentState(input.instanceId);
-        this.listenerId = IdService.generateDateBasedId('search-result-explorer-');
+        this.listenerId = IdService.generateDateBasedId('config-item-class-explorer-');
     }
 
     public async onMount(): Promise<void> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, ['ConfigItemStats']);
+        const loadingOptions = new KIXObjectLoadingOptions();
+        loadingOptions.includes = ['ConfigItemStats'];
+        loadingOptions.cacheType = `${KIXObjectType.CONFIG_ITEM_CLASS}_STATS`;
+
         const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
             KIXObjectType.CONFIG_ITEM_CLASS, null, loadingOptions, null, false
         );

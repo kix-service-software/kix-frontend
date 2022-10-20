@@ -29,6 +29,7 @@ import { IServer } from '../../../server/model/IServer';
 import { IServiceExtension } from './extensions/IServiceExtension';
 import { MainMenuNamespace } from '../modules/agent-portal/server/MainMenuNamespace';
 import { MarkoService } from './services/MarkoService';
+import { SysConfigService } from '../modules/sysconfig/server/SysConfigService';
 
 export class Server implements IServer {
 
@@ -62,6 +63,13 @@ export class Server implements IServer {
             // throw reason;
         });
 
+        process.on('exit', () => {
+            LoggingService.getInstance().warning('Exit NodeJS process');
+            const error = new Error().stack;
+            LoggingService.getInstance().error('Exit NodeJS process', error);
+            console.trace('');
+        });
+
         LoggingService.getInstance().info(`Initialize ${serviceExtensions.length} service extensions`);
         for (const extension of serviceExtensions) {
             await extension.initServices();
@@ -79,6 +87,7 @@ export class Server implements IServer {
         });
 
         MainMenuNamespace.getInstance().createDefaultConfiguration(this.serverConfig.BACKEND_API_TOKEN);
+        SysConfigService.getInstance().preloadOptions();
         await this.initializeApplication();
     }
 

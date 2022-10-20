@@ -51,8 +51,7 @@ export class FAQDetailsContext extends Context {
     private async loadFAQArticle(): Promise<FAQArticle> {
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null,
-            ['Attachments', 'Votes', 'Links', 'History'],
-            ['Links']
+            ['Attachments', 'Votes', 'History']
         );
 
         return await this.loadDetailsObject<FAQArticle>(KIXObjectType.FAQ_ARTICLE, loadingOptions);

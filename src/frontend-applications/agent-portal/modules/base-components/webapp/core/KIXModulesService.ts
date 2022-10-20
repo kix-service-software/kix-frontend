@@ -9,6 +9,8 @@
 
 import { ConfigurationType } from '../../../../model/configuration/ConfigurationType';
 import { IKIXModuleExtension } from '../../../../model/IKIXModuleExtension';
+import { ReleaseInfo } from '../../../../model/ReleaseInfo';
+import { KIXModulesSocketClient } from './KIXModulesSocketClient';
 
 export class KIXModulesService {
 
@@ -28,6 +30,8 @@ export class KIXModulesService {
     private tags: Map<string, string>;
 
     private configurationComponents: Map<ConfigurationType | string, string> = new Map();
+
+    private releaseInfo: ReleaseInfo;
 
     public init(modules: IKIXModuleExtension[]): void {
         this.tags = new Map();
@@ -65,4 +69,10 @@ export class KIXModulesService {
         return this.getComponentTemplate(componentId);
     }
 
+    public async hasPlugin(name: string): Promise<boolean> {
+        if (!this.releaseInfo) {
+            this.releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+        }
+        return this.releaseInfo?.plugins?.some((p) => p.product === name);
+    }
 }

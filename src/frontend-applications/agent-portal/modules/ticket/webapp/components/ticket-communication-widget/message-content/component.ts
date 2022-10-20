@@ -9,7 +9,6 @@
 
 import { Context } from '../../../../../../model/Context';
 import { IdService } from '../../../../../../model/IdService';
-import { Attachment } from '../../../../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { SortUtil } from '../../../../../../model/SortUtil';
@@ -21,12 +20,10 @@ import { DisplayImageDescription } from '../../../../../base-components/webapp/c
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { IContextListener } from '../../../../../base-components/webapp/core/IContextListener';
 import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
-import { KIXModulesSocketClient } from '../../../../../base-components/webapp/core/KIXModulesSocketClient';
+import { KIXModulesService } from '../../../../../base-components/webapp/core/KIXModulesService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { LabelService } from '../../../../../base-components/webapp/core/LabelService';
-import { SysConfigOption } from '../../../../../sysconfig/model/SysConfigOption';
 import { Article } from '../../../../model/Article';
-import { ArticleColorsConfiguration } from '../../../../model/ArticleColorsConfiguration';
 import { ArticleLoadingOptions } from '../../../../model/ArticleLoadingOptions';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
 import { TicketService } from '../../../core';
@@ -39,6 +36,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private contextListener: IContextListener;
     private contextListenerId: string;
     private article: Article;
+    private articleLoaded: boolean = false;
 
     private observer: IntersectionObserver;
 
@@ -48,13 +46,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         this.article = input.article;
-        this.state.selectedCompactView = input.selectedCompactView;
+        this.state.article = this.article;
+        this.state.selectedCompactView = typeof input.selectedCompactView !== 'undefined' ? input.selectedCompactView : true;
         this.state.expanded = input.collapseAll ? false : input.expanded || this.state.expanded;
-        if (this.state.expanded) {
-            this.setArticleSeen(undefined, true);
-        }
-        this.state.compactViewExpanded = this.state.selectedCompactView ? this.state.expanded : false;
 
+        this.state.compactViewExpanded = this.state.selectedCompactView ? this.state.expanded : false;
         // on update, some article was already loaded
         if (this.state.article && this.state.article.ArticleID !== this.article.ArticleID) {
             this.loadArticle(undefined, true);
@@ -122,38 +118,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             && 'intersectionRatio' in IntersectionObserverEntry.prototype;
     }
 
-    private async loadArticle(silent: boolean = false, force?: boolean): Promise<void> {
-        this.state.loading = !silent;
-
-        if (!this.state.article || force) {
-            const loadingOptions = new KIXObjectLoadingOptions(
-                null, null, null,
-                [
-                    ArticleProperty.PLAIN, ArticleProperty.FLAGS,
-                    ArticleProperty.ATTACHMENTS, 'ObjectActions'
-                ]
-            );
-            const articles = await KIXObjectService.loadObjects<Article>(
-                KIXObjectType.ARTICLE, [this.article.ArticleID], loadingOptions,
-                new ArticleLoadingOptions(this.article.TicketID)
-            );
-
-            if (articles?.length) {
-                this.state.article = articles[0];
-            }
-        }
-
-        await this.prepareActions();
-        this.prepareAttachments();
-        await this.prepareArticleData();
-        this.state.loading = false;
-        this.state.show = true;
-    }
-
     private intersectionCallback(entries, observer): void {
-        entries.forEach((entry) => {
+        entries.forEach(async (entry) => {
             if (entry.isIntersecting && entry.intersectionRatio > 0) {
-                this.loadArticle();
+                await this.loadArticle();
+                if (this.state.expanded) {
+                    this.toggleArticleContent();
+                }
                 this.observer.disconnect();
             }
         });
@@ -169,10 +140,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareActions(): Promise<void> {
         const actions = await this.context.getAdditionalActions(this.state.article) || [];
 
-        const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
-        if (!releaseInfo?.plugins?.some((p) => p.product === 'KIXPro')) {
+        const hasKIXPro = await KIXModulesService.getInstance().hasPlugin('KIXPro');
+        if (!hasKIXPro) {
             const startActions = ['article-reply-action', 'article-forward-action'];
-            const actionInstance = await ActionFactory.getInstance().generateActions(startActions, this.state.article);
+            const actionInstance = await ActionFactory.getInstance().generateActions(
+                startActions, this.state.article
+            );
             actions.push(...actionInstance);
         }
 
@@ -211,31 +184,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         if (this.state.article) {
-            this.state.articleTo = await LabelService.getInstance().getDisplayText(
-                this.state.article, ArticleProperty.TO, undefined, undefined, false
-            );
-            this.state.articleCc = await LabelService.getInstance().getDisplayText(
-                this.state.article, ArticleProperty.CC, undefined, undefined, false
-            );
-
-            const options = await KIXObjectService.loadObjects<SysConfigOption>(
-                KIXObjectType.SYS_CONFIG_OPTION, [ArticleColorsConfiguration.CONFIGURATION_ID]
-            ).catch((): SysConfigOption[] => []);
-
-            if (Array.isArray(options) && options.length) {
-                try {
-                    const colorConfig = JSON.parse(options[0].Value);
-                    this.state.backgroundColor = colorConfig && colorConfig[this.state.article.Channel] ?
-                        colorConfig[this.state.article.Channel] : this.getFallbackColor();
-                } catch (error) {
-                    console.error(error);
-                    this.state.backgroundColor = this.getFallbackColor();
-                }
-            } else {
-                // no option means no specific color
-                this.state.backgroundColor = '#fff';
-            }
-
+            this.state.backgroundColor = await TicketService.getInstance().getChannelColor(this.state.article.Channel);
         }
 
         this.eventSubscriber = {
@@ -252,27 +201,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().subscribe('TOGGLE_ARTICLE', this.eventSubscriber);
     }
 
-    private getFallbackColor(): string {
-        return this.state.article.Channel === 'note' ? '#fbf7e2'
-            : this.state.article.Channel === 'email' ? '#e1eaeb' : '#fff';
-    }
-
-    private prepareAttachments(): void {
-        this.filterAttachments();
-        this.hasInlineAttachments();
-        this.prepareImages(this.state.articleAttachments);
-    }
-
-    private hasInlineAttachments(): void {
-        this.state.hasInlineAttachments =
-            (this.state.article?.Attachments || []).some((a) => a.Disposition === 'inline' && a.ContentID);
-    }
-
     private filterAttachments(): void {
-        const attachments = (this.state.article?.Attachments || []).filter(
+        let attachments = (this.state.article?.Attachments || []);
+
+        attachments = attachments.filter(
             (a) => !a.Filename.match(/^file-(1|2)$/) &&
-                this.state.showAllAttachments ? true : a.Disposition !== 'inline'
+                (this.state.showAllAttachments || a.Disposition !== 'inline')
         );
+
         attachments.sort((a, b) => {
             if (!this.state.showAllAttachments) return SortUtil.compareString(a.Filename, b.Filename);
 
@@ -287,9 +223,58 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.articleAttachments = attachments;
     }
 
-    private async prepareImages(attachments: Attachment[]): Promise<void> {
+    public toggleArticleListView(event: any): void {
+        event.stopPropagation();
+        event.preventDefault();
+        this.state.expanded = !this.state.expanded;
+        this.toggleArticleContent();
+    }
+
+    public async toggleArticleCompactView(): Promise<void> {
+        if (this.state.selectedCompactView) {
+            this.state.compactViewExpanded = !this.state.compactViewExpanded;
+            this.state.expanded = this.state.compactViewExpanded;
+            await this.loadArticle();
+            this.toggleArticleContent();
+        }
+    }
+
+    private async toggleArticleContent(): Promise<void> {
+        if (this.state.expanded) {
+            this.state.loadingContent = true;
+
+            this.prepareAttachments();
+
+            if (this.state.compactViewExpanded) {
+                await this.prepareImages();
+            }
+
+            this.state.articleTo = await LabelService.getInstance().getDisplayText(
+                this.state.article, ArticleProperty.TO, undefined, undefined, false
+            );
+            this.state.articleCc = await LabelService.getInstance().getDisplayText(
+                this.state.article, ArticleProperty.CC, undefined, undefined, false
+            );
+
+            await this.setArticleSeen(undefined, true);
+
+            this.state.loadingContent = false;
+            this.state.showContent = true;
+        }
+    }
+
+    private prepareAttachments(): void {
+        if (!this.state.selectedCompactView || this.state.compactViewExpanded) {
+            this.filterAttachments();
+
+            const attachments = this.state.article?.Attachments || [];
+            this.state.hasInlineAttachments = attachments.some((a) => a.Disposition === 'inline' && a.ContentID);
+        }
+    }
+
+    private async prepareImages(): Promise<void> {
         const attachmentPromises: Array<Promise<DisplayImageDescription>> = [];
-        const imageAttachments = attachments.filter((a) => a.ContentType.match(/^image\//));
+        const imageAttachments = this.state.articleAttachments.filter((a) => a.ContentType.match(/^image\//));
         if (imageAttachments && imageAttachments.length) {
             for (const imageAttachment of imageAttachments) {
                 attachmentPromises.push(new Promise<DisplayImageDescription>(async (resolve, reject) => {
@@ -311,25 +296,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.images = (await Promise.all(attachmentPromises)).filter((i) => i);
     }
 
-    public toggleArticleListView(event: any): void {
-        event.stopPropagation();
-        event.preventDefault();
-        this.state.expanded = !this.state.expanded;
-        if (this.state.expanded) {
-            this.setArticleSeen(undefined, true);
-        }
-    }
-
-    public toggleArticleCompactView(): void {
-        if (this.state.selectedCompactView) {
-            this.state.compactViewExpanded = !this.state.compactViewExpanded;
-            this.state.expanded = this.state.compactViewExpanded;
-        }
-        if (this.state.expanded) {
-            this.setArticleSeen(undefined, true);
-        }
-    }
-
     private async setArticleSeen(
         article: Article = this.state.article || this.article, silent?: boolean
     ): Promise<void> {
@@ -346,6 +312,41 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         e.stopPropagation();
         this.state.showAllAttachments = !this.state.showAllAttachments;
         this.filterAttachments();
+    }
+
+    private async loadArticle(silent: boolean = false, force?: boolean): Promise<void> {
+        if (!this.state.selectedCompactView || this.state.compactViewExpanded) {
+            this.state.loading = !silent;
+
+            if (!this.articleLoaded || force) {
+                const loadingOptions = new KIXObjectLoadingOptions(
+                    null, null, null,
+                    [
+                        ArticleProperty.PLAIN, ArticleProperty.ATTACHMENTS, 'ObjectActions'
+                    ]
+                );
+                const articles = await KIXObjectService.loadObjects<Article>(
+                    KIXObjectType.ARTICLE, [this.article.ArticleID], loadingOptions,
+                    new ArticleLoadingOptions(this.article.TicketID)
+                );
+
+                if (articles?.length) {
+                    this.state.article = articles[0];
+                    this.articleLoaded = true;
+                }
+            }
+
+            await this.prepareActions();
+            this.prepareAttachments();
+            if (!this.state.selectedCompactView) {
+                await this.prepareImages();
+            }
+        }
+
+        await this.prepareArticleData();
+
+        this.state.loading = false;
+        this.state.show = true;
     }
 }
 

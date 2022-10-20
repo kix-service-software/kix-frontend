@@ -70,7 +70,7 @@ class Component {
     }
 
     private async initTicketActions(): Promise<void> {
-        const user = await AgentService.getInstance().getCurrentUser();
+        const user = await AgentService.getInstance().getCurrentUser(true);
         this.state.ownedTicketsCount = user.Tickets.Owned.length;
 
         this.state.translations = await TranslationService.createTranslationObject([

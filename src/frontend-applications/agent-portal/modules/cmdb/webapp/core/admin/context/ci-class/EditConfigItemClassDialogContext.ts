@@ -24,7 +24,9 @@ export class EditConfigItemClassDialogContext extends Context {
         let object;
         const classId = this.getObjectId();
         if (classId) {
-            const loadingOptions = new KIXObjectLoadingOptions(null, null, null, ['CurrentDefinition']);
+            const loadingOptions = new KIXObjectLoadingOptions();
+            loadingOptions.includes = ['CurrentDefinition'];
+            loadingOptions.cacheType = `${KIXObjectType.CONFIG_ITEM_CLASS}_DEFINITION`;
 
             const objects = await KIXObjectService.loadObjects<ConfigItemClass>(
                 KIXObjectType.CONFIG_ITEM_CLASS, [classId], loadingOptions

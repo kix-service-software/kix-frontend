@@ -67,7 +67,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
                     ),
                     stateTypeFilterCriteria
-                ], 'Ticket.-Age:numeric', 100, [TicketProperty.WATCHERS]
+                ], 'Ticket.-Age:numeric', 100
             ), null, null, null, true, true, new ToggleOptions('ticket-article-details', 'article', [], true)
         );
         configurations.push(tableMyOpenTicketsConfiguration);
@@ -98,7 +98,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         TicketProperty.STATE_ID, SearchOperator.EQUALS,
                         FilterDataType.NUMERIC, FilterType.OR, 1
                     )
-                ], 'Ticket.-Age:numeric', 100, [TicketProperty.WATCHERS]
+                ], 'Ticket.-Age:numeric', 100
             ),
             null,
             [
