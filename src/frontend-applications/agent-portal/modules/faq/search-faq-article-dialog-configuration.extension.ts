@@ -17,11 +17,27 @@ import { SearchProperty } from '../search/model/SearchProperty';
 import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 import { FAQArticleProperty } from './model/FAQArticleProperty';
 import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
 
-export class Extension {
+export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return FAQArticleSearchContext.CONTEXT_ID;
+    }
+
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
+
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'Search', ConfigurationType.Context, this.getModuleId(), [], []
+            )
+        );
+
+        return configurations;
     }
 
     public async getFormConfigurations(): Promise<IConfiguration[]> {

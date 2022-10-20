@@ -150,7 +150,7 @@ class LinkDialogComponent {
                 : null;
 
             const objects = await SearchService.getInstance().executeSearch(
-                formInstance, excludeObjects
+                formInstance, excludeObjects, 150, true
             );
 
             context.setObjectList(formInstance.getObjectType(), objects);

@@ -11,7 +11,6 @@ import { SearchDefinition } from '../../../search/webapp/core/SearchDefinition';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TicketSearchFormManager } from './TicketSearchFormManager';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
-import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { TicketProperty } from '../../model/TicketProperty';
 import { SearchOperator } from '../../../search/model/SearchOperator';
@@ -45,12 +44,6 @@ export class TicketSearchDefinition extends SearchDefinition {
             }
         };
         return formManager;
-    }
-
-    public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(
-            null, null, null
-        );
     }
 
     public async prepareFormFilterCriteria(

@@ -49,24 +49,28 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         criteria: FilterCriteria[], limit: number, sortAttribute?: string, sortDescanding?: boolean
     ): Promise<KIXObjectLoadingOptions> {
         const loadingOptions = await super.getLoadingOptions(criteria, limit, sortAttribute, sortDescanding);
-        loadingOptions.includes = [
-            VersionProperty.DATA, VersionProperty.PREPARED_DATA,
-            KIXObjectProperty.LINKS, ConfigItemProperty.CURRENT_VERSION
-        ];
-        loadingOptions.expands = [VersionProperty.DATA, VersionProperty.PREPARED_DATA, KIXObjectProperty.LINKS];
+
+        if (!loadingOptions.includes) {
+            loadingOptions.includes = [];
+        }
+        if (!loadingOptions.expands) {
+            loadingOptions.expands = [];
+        }
+
+        if (loadingOptions.filter?.some((f) => f.property === 'CurrentVersion.Name')) {
+            loadingOptions.includes.push(ConfigItemProperty.CURRENT_VERSION);
+        }
+
+        if (loadingOptions.filter?.some((f) => f.property.startsWith('CurrentVersion.Data'))) {
+            loadingOptions.includes.push(
+                ConfigItemProperty.CURRENT_VERSION, VersionProperty.DATA, VersionProperty.PREPARED_DATA
+            );
+            loadingOptions.expands.push(VersionProperty.DATA, VersionProperty.PREPARED_DATA);
+        }
+
         return loadingOptions;
     }
 
-    public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(
-            null, null, null,
-            [
-                VersionProperty.DATA, VersionProperty.PREPARED_DATA,
-                KIXObjectProperty.LINKS, ConfigItemProperty.CURRENT_VERSION
-            ],
-            [VersionProperty.DATA, VersionProperty.PREPARED_DATA, KIXObjectProperty.LINKS]
-        );
-    }
 
     public async prepareFormFilterCriteria(
         criteria: FilterCriteria[], forSearch: boolean = true

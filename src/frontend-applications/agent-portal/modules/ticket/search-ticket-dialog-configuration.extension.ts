@@ -15,12 +15,29 @@ import { FormContext } from '../../model/configuration/FormContext';
 import { SearchProperty } from '../search/model/SearchProperty';
 import { TicketProperty } from './model/TicketProperty';
 import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
 
-export class Extension {
+export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return TicketSearchContext.CONTEXT_ID;
     }
+
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
+
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'Search', ConfigurationType.Context, this.getModuleId(), [], []
+            )
+        );
+
+        return configurations;
+    }
+
 
     public async getFormConfigurations(): Promise<IConfiguration[]> {
         const configurations = [];

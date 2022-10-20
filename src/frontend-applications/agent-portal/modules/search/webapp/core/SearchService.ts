@@ -39,6 +39,7 @@ import { EventService } from '../../../base-components/webapp/core/EventService'
 import { OverlayService } from '../../../base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../base-components/webapp/core/OverlayType';
 import { StringContent } from '../../../base-components/webapp/core/StringContent';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 
 export class SearchService {
 
@@ -77,7 +78,8 @@ export class SearchService {
     }
 
     public async executeSearch<T extends KIXObject = KIXObject>(
-        formInstance: FormInstance, excludeObjects: KIXObject[] = []
+        formInstance: FormInstance, excludeObjects: KIXObject[] = [], limit?: number,
+        includeLinks?: boolean
     ): Promise<T[]> {
         const formObjectType = formInstance.getObjectType();
         const searchDefinition = this.getSearchDefinition(formObjectType);
@@ -121,7 +123,19 @@ export class SearchService {
             }
         });
 
-        const loadingOptions = await searchDefinition.getLoadingOptions(criteria, null);
+        const loadingOptions = await searchDefinition.getLoadingOptions(criteria, limit);
+
+        if (includeLinks) {
+            if (!loadingOptions.includes) {
+                loadingOptions.includes = [];
+            }
+            if (!loadingOptions.expands) {
+                loadingOptions.expands = [];
+            }
+            loadingOptions.includes.push(KIXObjectProperty.LINKS);
+            loadingOptions.expands.push(KIXObjectProperty.LINKS);
+        }
+
         const objects = await KIXObjectService.loadObjects(formObjectType, null, loadingOptions, null, false);
         return (objects as any);
     }

@@ -94,8 +94,9 @@ export class HttpService {
             semaphor = await CacheService.getInstance().get(semaphorKey, semaphorKey);
 
             if (semaphor) {
-                LoggingService.getInstance().debug('\tSEMAPHOR\t' + semaphorKey + '\tWAITFOR');
+                LoggingService.getInstance().debug('\tSEMAPHOR\tStart\t' + semaphorKey + '\tWAITFOR');
                 const cachedObject = await CacheService.getInstance().waitFor(cacheKey, cacheKeyPrefix);
+                LoggingService.getInstance().debug('\tSEMAPHOR\tStop\t' + semaphorKey + '\tWAITFOR');
                 if (cachedObject) {
                     return cachedObject;
                 }

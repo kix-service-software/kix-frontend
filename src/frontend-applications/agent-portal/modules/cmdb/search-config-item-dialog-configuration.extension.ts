@@ -7,12 +7,33 @@
  * --
  */
 
+import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
 import { ConfigItemSearchContext } from './webapp/core';
 
-export class Extension {
+export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return ConfigItemSearchContext.CONTEXT_ID;
+    }
+
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
+
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'Search', ConfigurationType.Context, this.getModuleId(), [], []
+            )
+        );
+
+        return configurations;
+    }
+
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        return [];
     }
 
 }

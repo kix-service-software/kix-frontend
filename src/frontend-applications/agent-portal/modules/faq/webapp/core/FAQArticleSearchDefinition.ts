@@ -37,11 +37,6 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
         return loadingOptions;
     }
 
-    public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(
-            null, null, null, [KIXObjectProperty.LINKS, FAQArticleProperty.VOTES], [KIXObjectProperty.LINKS]
-        );
-    }
 
     public async prepareFormFilterCriteria(
         criteria: FilterCriteria[], forSearch: boolean = true

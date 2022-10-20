@@ -284,7 +284,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
             const response
                 = await this.sendCreateRequest<CreateConfigItemVersionResponse, CreateConfigItemVersionRequest>(
                     token, clientRequestId, uri, new CreateConfigItemVersionRequest(createConfigItemVersion),
-                    this.objectType
+                    KIXObjectType.CONFIG_ITEM_VERSION
                 );
 
             const links = this.getParameterValue(parameter, KIXObjectProperty.LINKS);

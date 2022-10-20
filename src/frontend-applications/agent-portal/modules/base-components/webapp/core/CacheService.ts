@@ -165,6 +165,7 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(`${KIXObjectType.CONFIG_ITEM_CLASS}_DEFINITION`);
                 cacheKeyPrefixes.push(KIXObjectType.GRAPH);
                 cacheKeyPrefixes.push(KIXObjectType.GRAPH_INSTANCE);
+                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM_VERSION);
                 break;
             case KIXObjectType.PERSONAL_SETTINGS:
             case KIXObjectType.USER_PREFERENCE:

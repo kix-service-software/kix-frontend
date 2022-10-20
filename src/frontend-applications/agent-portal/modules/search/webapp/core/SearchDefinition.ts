@@ -117,10 +117,6 @@ export abstract class SearchDefinition {
         return sortOrder;
     }
 
-    public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {
-        return null;
-    }
-
     public async prepareFormFilterCriteria(
         criteria: FilterCriteria[], forSearch: boolean = true
     ): Promise<FilterCriteria[]> {

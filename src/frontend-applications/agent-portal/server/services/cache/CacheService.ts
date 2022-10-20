@@ -206,6 +206,7 @@ export class CacheService {
             case KIXObjectType.CONFIG_ITEM:
                 types.push(`${KIXObjectType.CONFIG_ITEM_CLASS}_STATS`);
                 types.push(KIXObjectType.GRAPH);
+                types.push(KIXObjectType.CONFIG_ITEM_VERSION);
                 break;
             case KIXObjectType.CONFIG_ITEM_CLASS:
             case KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION:
