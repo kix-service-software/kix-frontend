@@ -115,11 +115,13 @@ export class TicketDetailsContext extends Context {
     }
 
     private async loadArticles(force?: boolean): Promise<Article[]> {
+        const loadingOptions = new KIXObjectLoadingOptions();
+        loadingOptions.sortOrder = 'Article.IncomingTime';
+        loadingOptions.includes = [ArticleProperty.FLAGS];
+        loadingOptions.limit = 0;
+
         const articles: Article[] = await KIXObjectService.loadObjects<Article>(
-            KIXObjectType.ARTICLE, null,
-            new KIXObjectLoadingOptions(
-                null, 'Article.IncomingTime', null, [ArticleProperty.FLAGS]
-            ),
+            KIXObjectType.ARTICLE, null, loadingOptions,
             new ArticleLoadingOptions(this.objectId)
         ).catch(() => [] as Article[]) || [];
 
