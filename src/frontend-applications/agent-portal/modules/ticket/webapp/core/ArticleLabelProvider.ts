@@ -61,7 +61,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                 displayValue = 'Translatable#Subject';
                 break;
             case ArticleProperty.INCOMING_TIME:
-                displayValue = 'Translatable#Created at';
+                displayValue = 'Translatable#Incoming Time';
                 break;
             case ArticleProperty.ATTACHMENTS:
                 displayValue = 'Translatable#Attachments';

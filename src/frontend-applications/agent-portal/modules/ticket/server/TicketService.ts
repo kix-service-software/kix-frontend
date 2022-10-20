@@ -368,16 +368,23 @@ export class TicketAPIService extends KIXObjectAPIService {
 
         if (!create && articles?.length && ticket.TicketID) {
             for (const article of articles) {
+                let uri, articleCreate;
                 if (!article.ArticleID) {
-                    const uri = this.buildUri(this.RESOURCE_URI, ticket.TicketID, 'articles');
-                    await this.sendRequest(
-                        token, clientRequestId, uri, { Article: article }, KIXObjectType.ARTICLE, true
-                    ).catch((error: Error) => {
-                        LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                        // TODO: exetend error handling if more than one article will be created?
-                        throw new Error(error.Code, error.Message);
-                    });
+                    articleCreate = true;
+                    uri = this.buildUri(this.RESOURCE_URI, ticket.TicketID, 'articles');
                 }
+                else {
+                    articleCreate = false;
+                    uri = this.buildUri(this.RESOURCE_URI, ticket.TicketID, 'articles', article.ArticleID);
+                }
+
+                await this.sendRequest(
+                    token, clientRequestId, uri, { Article: article }, KIXObjectType.ARTICLE, articleCreate
+                ).catch((error: Error) => {
+                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                    // TODO: exetend error handling if more than one article will be created?
+                    throw new Error(error.Code, error.Message);
+                });
             }
         }
 

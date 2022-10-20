@@ -36,7 +36,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </div>
          </if>
          <if(state.createTimeString)>
-            <span>${state.createTimeString}</span>
+            <span title=state.changeTitle>
+               ${state.createTimeString}${state.changeTitle ? " (" + state.translations["Translatable#edited"] + ")" : ""}
+            </span>
          </if>
       </div>
       <div.header-from title=(state.translations["Translatable#From"])>
@@ -45,7 +47,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <span.fw-bold> | ${input.fromDisplayName}</span>
          </if>
       </div>
-      <div.accounted-time title=(state.translations["Translatable#Created at"])>
+      <div.accounted-time title=(
+         state.translations["Translatable#Accounted Time"]
+      )>
          <if(state.timeUnits)>
             <translation-string
                pattern="Translatable#Accounted Time: {0}"

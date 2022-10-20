@@ -19,7 +19,8 @@ export class ComponentState extends AbstractComponentState {
         public channelIcon: ObjectIcon | string = null,
         public createTimeString: string = null,
         public channelTooltip: string = '',
-        public timeUnits: string = null
+        public timeUnits: string = null,
+        public changeTitle: string = null
     ) {
         super();
     }
