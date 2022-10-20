@@ -23,6 +23,7 @@ import { Channel } from '../../../../model/Channel';
 import { ArticleAttachmentFormValue } from './ArticleAttachmentFormValue';
 import { CustomerVisibleFormValue } from './CustomerVisibleFormValue';
 import { FromObjectFormValue } from './FromObjectFormValue';
+import { IncomingTimeFormValue } from './IncomingTimeFormValue';
 import { RecipientFormValue } from './RecipientFormValue';
 
 export class ChannelFormValue extends SelectObjectFormValue<number> {
@@ -113,6 +114,9 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                 case ArticleProperty.ATTACHMENTS:
                     formValue = new ArticleAttachmentFormValue(property, article, this.objectValueMapper, this);
                     break;
+                case ArticleProperty.INCOMING_TIME:
+                    formValue = new IncomingTimeFormValue(property, article, this.objectValueMapper, this);
+                    break;
                 default:
             }
 
@@ -144,6 +148,8 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             const channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL, [channelId])
                 .catch((): Channel[] => []);
             const channel = Array.isArray(channels) && channels.length ? channels[0] : null;
+            const context = this.objectValueMapper.objectFormHandler.context;
+            const articleUpdateID = await context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
 
             const noteFields = [
                 ArticleProperty.CUSTOMER_VISIBLE, ArticleProperty.SUBJECT,
@@ -157,6 +163,11 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                 ArticleProperty.TO
             ];
 
+            if (articleUpdateID) {
+                noteFields.push(ArticleProperty.INCOMING_TIME);
+                mailFields.push(ArticleProperty.INCOMING_TIME);
+            }
+
             let submitPattern = 'Translatable#Save';
             if (channel?.Name === 'note') {
                 this.disableChannelFormValues(allFields.filter((p) => !noteFields.includes(p)));
@@ -167,7 +178,6 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                 submitPattern = 'Translatable#Send';
             }
 
-            const context = this.objectValueMapper.objectFormHandler.context;
             context.setAdditionalInformation(AdditionalContextInformation.DIALOG_SUBMIT_BUTTON_TEXT, submitPattern);
         } else {
             this.disableChannelFormValues(allFields);

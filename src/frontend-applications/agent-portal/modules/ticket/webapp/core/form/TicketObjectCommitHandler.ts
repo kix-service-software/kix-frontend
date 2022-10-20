@@ -11,6 +11,7 @@ import { FormContext } from '../../../../../model/configuration/FormContext';
 import { Attachment } from '../../../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { ObjectFormValueMapper } from '../../../../object-forms/model/ObjectFormValueMapper';
 import { ObjectCommitHandler } from '../../../../object-forms/webapp/core/ObjectCommitHandler';
@@ -45,7 +46,6 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                 delete article.Comment;
                 delete article.CreatedBy;
                 delete article.Flags;
-                delete article.IncomingTime;
                 delete article.Links;
                 delete article.Plain;
                 delete article.References;
@@ -65,6 +65,10 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                 delete article.ValidID;
 
                 if (forCommit) {
+                    // FIXME: array handling
+                    const context = ContextService.getInstance().getActiveContext();
+                    article.ArticleID = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
+
                     if (article.Attachments?.length) {
                         article.Attachments = await this.prepareAttachments(article.Attachments);
                     }
