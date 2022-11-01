@@ -52,7 +52,7 @@ export class FormValueBinding {
 
     private async valueSetter(val: any): Promise<void> {
         // no change needed (prevent possible circles)
-        if (this.value === val) {
+        if (this.isSameValue(val)) {
             return;
         }
         this.value = val;
@@ -87,6 +87,21 @@ export class FormValueBinding {
                 this.elementBindings.splice(index, 1);
             }
         }
+    }
+
+    protected isSameValue(value: any): boolean {
+        let isSameValue = false;
+
+        if (Array.isArray(this.value) && Array.isArray(value)) {
+            isSameValue = this.value.length === value.length;
+            if (isSameValue) {
+                isSameValue = this.value.every((v) => value.every((val) => v?.toString() === val?.toString()));
+            }
+        } else {
+            isSameValue = this.value === value;
+        }
+
+        return isSameValue;
     }
 
 }
