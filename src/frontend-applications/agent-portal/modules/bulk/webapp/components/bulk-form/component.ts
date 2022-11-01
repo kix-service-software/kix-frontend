@@ -51,7 +51,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        this.createTable();
+        await this.createTable();
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Cancel', 'Translatable#Reset data',
             'Translatable#Execute now', 'Translatable#Attributes to be edited'
@@ -83,14 +83,12 @@ class Component {
     public onDestroy(): void {
         this.state.linkManager.reset();
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
     }
 
     private async setCanRun(): Promise<void> {
         const hasDefinedValues = await this.state.bulkManager?.hasDefinedValues();
         const hasDefinedLinks = await this.state.linkManager?.hasDefinedValues();
-        this.state.canRun = (hasDefinedValues || hasDefinedLinks) && !!this.state.bulkManager?.objects?.length;
+        this.state.canRun = (hasDefinedValues || hasDefinedLinks) && !!this.state.bulkManager?.selectedObjects?.length;
     }
 
     public async reset(): Promise<void> {
@@ -134,30 +132,30 @@ class Component {
                     eventSubscriberId: 'bulk-table-listener',
                     eventPublished: async (data: TableEventData, eventId: string): Promise<void> => {
                         if (data && data.tableId === table.getTableId()) {
-                            if (eventId === TableEvent.TABLE_INITIALIZED) {
-                                table?.selectAll();
-                            }
-
-                            const rows = this.state.table?.getSelectedRows();
-                            const objects = rows?.map((r) => r.getRowObject().getObject());
-                            if (this.state.bulkManager) {
-                                this.state.bulkManager.objects = objects;
-                                this.setCanRun();
-                            }
-                            await this.prepareTitle();
+                            this.mapTableRows();
                         }
                     }
                 };
 
                 EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
-                EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
-                EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
 
                 await table.initialize();
+                table.selectAll();
 
                 this.state.table = table;
+
+                this.mapTableRows();
             }
         }
+    }
+
+    private mapTableRows(): void {
+        const rows = this.state.table?.getSelectedRows();
+        const objects = rows?.map((r) => r.getRowObject().getObject());
+        if (this.state.bulkManager) {
+            this.state.bulkManager.selectedObjects = objects;
+        }
+        this.setCanRun();
     }
 
     private async prepareTitle(): Promise<void> {
@@ -180,7 +178,7 @@ class Component {
         if (validationResult.some((r) => r.severity === ValidationSeverity.ERROR)) {
             this.showValidationError(validationResult.filter((r) => r.severity === ValidationSeverity.ERROR));
         } else {
-            const objects = this.state.bulkManager?.objects;
+            const objects = this.state.bulkManager?.selectedObjects;
             const editableValues = await this.state.bulkManager?.getEditableValues();
 
             const title = await TranslationService.translate('Translatable#Execute now?');
@@ -219,7 +217,7 @@ class Component {
         const linkDescriptions = await this.state.linkManager?.prepareLinkDesriptions();
 
         const result = await BulkRunner.run(
-            this.state.bulkManager.objects, this.state.bulkManager.objectType, parameter, linkDescriptions
+            this.state.bulkManager.selectedObjects, this.state.bulkManager.objectType, parameter, linkDescriptions
         );
 
         let successObjects = [];

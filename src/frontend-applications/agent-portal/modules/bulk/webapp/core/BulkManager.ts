@@ -26,6 +26,7 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
 
     public abstract objectType: KIXObjectType | string;
     public objects: KIXObject[] = [];
+    public selectedObjects: KIXObject[] = [];
 
     private bulkRun: boolean = false;
 
