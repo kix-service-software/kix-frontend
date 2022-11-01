@@ -61,6 +61,7 @@ export class AuthenticationRouter extends KIXRouter {
     }
 
     public async login(req: Request, res: Response): Promise<void> {
+
         if (this.isUnsupportedBrowser(req)) {
             res.redirect('/static/html/unsupported-browser/index.html');
         }
@@ -77,25 +78,40 @@ export class AuthenticationRouter extends KIXRouter {
                 <body></body>
             </html>`);
         } else {
+            let ssoSuccess = false;
+
             const authorization = req.headers['authorization'];
             if (typeof authorization === 'string' && authorization.split(' ')[0] === 'Negotiate') {
                 // already negotiated (SSO)
                 const negotiationToken = authorization.split(' ')[1];
+
+                let success = true;
                 const token = await AuthenticationService.getInstance().login(
-                    null, null, negotiationToken, null, null, false);
-                res.cookie('token', token);
-                res.clearCookie('authNegotiationDone');
-                res.status(200);
-                res.send(`<!DOCTYPE html>
-                <html lang="en">
-                    <head>
-                        <title>KIX Agent Portal</title>
-                        <meta http-equiv="refresh" content="3; URL=/">
-                    </head>
-                    <body></body>
-                </html>`);
+                    null, null, negotiationToken, null, null, false
+                ).catch((e) => {
+                    LoggingService.getInstance().error('Error when trying to login with negotiate token (SSO)');
+                    success = false;
+                });
+
+                if (success) {
+                    ssoSuccess = success;
+                    res.cookie('token', token);
+                    res.clearCookie('authNegotiationDone');
+                    res.status(200);
+                    res.send(
+                        `<!DOCTYPE html>
+                        <html lang="en">
+                            <head>
+                                <title>KIX Agent Portal</title>
+                                <meta http-equiv="refresh" content="3; URL=/">
+                            </head>
+                            <body></body>
+                        </html>`
+                    );
+                }
             }
-            else {
+
+            if (!ssoSuccess) {
                 res.clearCookie('token');
                 res.clearCookie('authNegotiationDone');
                 res.cookie('authNoSSO', true, { httpOnly: true });
