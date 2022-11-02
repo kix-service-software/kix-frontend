@@ -649,6 +649,13 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             }
         });
 
+        // make sure EQ has single value
+        prepareCriteria.forEach((pc) => {
+            if (pc.operator === SearchOperator.EQUALS && Array.isArray(pc.value)) {
+                pc.value = pc.value[0];
+            }
+        });
+
         const andFilter = prepareCriteria.filter((f) => f.filterType === FilterType.AND).map((f) => {
             return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
         });
