@@ -51,6 +51,26 @@ export class RecipientFormValue extends SelectObjectFormValue {
         this.loadingOptions = new KIXObjectLoadingOptions(null, null, 10);
     }
 
+    protected async handlePlaceholders(value: any): Promise<any> {
+        value = await super.handlePlaceholders(value);
+
+        if (value) {
+            const emailValues: [Contact[], string[], string[]] = await this.getEmailValues(value);
+
+            const emails = [...emailValues[0].map((c) => c.Email), ...emailValues[1]];
+            const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
+                KIXObjectType.SYSTEM_ADDRESS
+            );
+
+            // remove system addresses (maybe prior From value by placeholder)
+            value = emails.filter((email) => {
+                !systemAddresses.some((sa) => sa.Name === email);
+            });
+        }
+
+        return value;
+    }
+
     protected async prepareSelectableNodes(objects: Contact[]): Promise<void> {
         const nodes: TreeNode[] = await this.getContactNodes(objects);
 
@@ -74,41 +94,18 @@ export class RecipientFormValue extends SelectObjectFormValue {
         const valueDefined = typeof this.value !== 'undefined' && this.value !== null;
 
         if (valueDefined && this.treeHandler) {
-            const contactValues: any[] = Array.isArray(this.value)
-                ? this.value.filter((v) => v !== null && typeof v !== 'undefined')
-                : typeof this.value === 'string' ? (this.value as string).split(/\s?,\s/) : [];
+            const emailValues: [Contact[], string[], string[]] = await this.getEmailValues(this.value);
 
-            const emailAddresses: string[] = [];
-            const contactIds: number[] = [];
-            const placeholders: string[] = [];
-            for (let value of contactValues) {
-                value = value.replace(/^(.*?),$/, '$1');
-
-                if (value.match(/(<|&lt;)KIX_/)) {
-                    placeholders.push(value);
-                } else if (isNaN(value)) {
-                    emailAddresses.push(...this.parseAddresses(value));
-                } else if (value !== null && value !== '') {
-                    contactIds.push(Number(value));
-                }
+            if (emailValues[0]) {
+                selectedNodes = await this.getContactNodes(emailValues[0]);
             }
 
-            if (contactIds?.length) {
-                const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, contactIds);
-                selectedNodes = await this.getContactNodes(contacts);
+            if (emailValues[1]) {
+                selectedNodes = await this.addEmailAddressNodes(emailValues[1], selectedNodes);
             }
 
-            if (emailAddresses?.length) {
-                selectedNodes = await this.addEmailAddressNodes(emailAddresses, selectedNodes);
-            }
-
-            const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
-                KIXObjectType.SYSTEM_ADDRESS
-            );
-
-            const filteredSystemNodes = selectedNodes.filter((n) => !systemAddresses.some((sa) => sa.Name === n.id));
-            const placeholderNodes = placeholders.map((n) => new TreeNode(n, n, 'kix-icon-man-bubble'));
-            selectedNodes = [...filteredSystemNodes, ...placeholderNodes];
+            const placeholderNodes = emailValues[2].map((n) => new TreeNode(n, n, 'kix-icon-man-bubble'));
+            selectedNodes = [...selectedNodes, ...placeholderNodes];
 
             this.treeHandler.setSelection(selectedNodes, true, true);
         } else {
@@ -116,6 +113,34 @@ export class RecipientFormValue extends SelectObjectFormValue {
         }
 
         this.selectedNodes = selectedNodes;
+    }
+
+    private async getEmailValues(value): Promise<[Contact[], string[], string[]]> {
+        const contactValues: any[] = Array.isArray(value)
+            ? value.filter((v) => v !== null && typeof v !== 'undefined')
+            : typeof value === 'string' ? (value as string).split(/\s?,\s/) : [];
+
+        const emailAddresses: string[] = [];
+        const contactIds: number[] = [];
+        const placeholders: string[] = [];
+        for (let value of contactValues) {
+            value = value.replace(/^(.*?),$/, '$1');
+
+            if (value.match(/(<|&lt;)KIX_/)) {
+                placeholders.push(value);
+            } else if (isNaN(value)) {
+                emailAddresses.push(...this.parseAddresses(value));
+            } else if (value !== null && value !== '') {
+                contactIds.push(Number(value));
+            }
+        }
+
+        let contacts: Contact[] = [];
+        if (contactIds?.length) {
+            contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, contactIds);
+        }
+
+        return [contacts, emailAddresses, placeholders];
     }
 
     private parseAddresses(value: string): string[] {
