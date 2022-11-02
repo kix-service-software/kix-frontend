@@ -257,6 +257,12 @@ export class TreeHandler {
             if (!silent) {
                 this.selectionListener.forEach((l) => l(this.getSelectedNodes()));
             }
+        } else if (this.selectedNodes?.length) {
+            this.selectedNodes = [];
+            this.listener.forEach((l) => l(this.getSelectedNodes()));
+            if (!silent) {
+                this.selectionListener.forEach((l) => l(this.getSelectedNodes()));
+            }
         }
     }
 
