@@ -104,13 +104,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <if(input.webform.useKIXCSS)>
                         <span class="kix-form-cancel-button-icon"/>
                     </if>
-                    <if(input.webform.useKIXCSS)>
-                        <span>
-                            ${input.translations["Translatable#Cancel"]
-                            ? input.translations["Translatable#Cancel"]
-                            : "Cancel"}
-                        </span>
-                    </if>
+                    <${input.webform.useKIXCSS ? "span" : null}>
+                        ${input.translations["Translatable#Cancel"]
+                        ? input.translations["Translatable#Cancel"]
+                        : "Cancel"}
+                    </>
                 </button>
                 <button.kix-button
                     id=("kix-form-submit-button-" + input.webform.ObjectId)
@@ -122,13 +120,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <if(input.webform.useKIXCSS)>
                         <span.kix-form-submit-button-icon/>
                     </if>
-                    <if(input.webform.useKIXCSS)>
-                        <span>
-                            ${input.translations[input.webform.saveLabel]
-                            ? input.translations[input.webform.saveLabel]
-                            : input.webform.saveLabel}
-                        </span>
-                    </if>
+                    <${input.webform.useKIXCSS ? "span" : null}>
+                        ${input.translations[input.webform.saveLabel]
+                        ? input.translations[input.webform.saveLabel]
+                        : input.webform.saveLabel}
+                    </>
                 </button>
             </div>
         </div>
