@@ -34,7 +34,9 @@ class Component {
             const prepareContent = await TicketService.getInstance().getPreparedArticleBodyContent(this.article);
             this.state.inlineContent = prepareContent[1];
             this.state.content = prepareContent[0];
-            this.state.plainText = this.article.Body;
+            if (this.article.ContentType.startsWith('text/plain') && !this.article.bodyAttachment) {
+                this.state.plainText = this.article.Body;
+            }
             this.state.show = true;
         }
     }
