@@ -7,6 +7,7 @@
  * --
  */
 
+import { DateTimeUtil } from '../../../../../base-components/webapp/core/DateTimeUtil';
 import { DateTimeFormValue } from '../../../../../object-forms/model/FormValues/DateTimeFormValue';
 
 export class IncomingTimeFormValue extends DateTimeFormValue {
@@ -19,8 +20,8 @@ export class IncomingTimeFormValue extends DateTimeFormValue {
     }
 
     public setObjectValue(value: any): Promise<void> {
-        if (value instanceof Date) {
-            value = (Date.parse(value.toString()) / 1000);
+        if (value) {
+            value = DateTimeUtil.getKIXDateTimeString(value, true);
         }
         return super.setObjectValue(value);
     }
