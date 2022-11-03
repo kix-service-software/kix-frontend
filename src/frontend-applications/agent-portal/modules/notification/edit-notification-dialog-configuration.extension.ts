@@ -80,7 +80,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 'Translatable#Show in agent preferences', NotificationProperty.DATA_VISIBLE_FOR_AGENT,
                 'checkbox-input', false,
                 'Translatable#Helptext_Admin_NotificationEdit_ShowPreferences', undefined,
-                new FormFieldValue(true)
+                new FormFieldValue(false)
             )
         );
         configurations.push(
