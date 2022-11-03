@@ -55,6 +55,7 @@ export class FormValueBinding {
         if (this.value === val) {
             return;
         }
+
         this.value = val;
 
         if (this.property === FormValueProperty.VALUE) {

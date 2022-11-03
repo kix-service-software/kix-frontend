@@ -75,6 +75,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         (this as any).setStateDirty('checklist');
         this.formValue.setFormValue(this.state.value);
+        this.setProgressValues();
     }
 
     private setProgressValues(): void {
