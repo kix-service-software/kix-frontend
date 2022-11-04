@@ -612,7 +612,7 @@ export class TicketAPIService extends KIXObjectAPIService {
 
         const response = await this.getObjectByUri(token, uri, 'TicketService', {
             include: 'Content'
-        });
+        }, KIXObjectType.ATTACHMENT);
         return response['Attachment'];
     }
 

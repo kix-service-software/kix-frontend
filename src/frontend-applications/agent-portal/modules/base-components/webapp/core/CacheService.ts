@@ -254,6 +254,10 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.REPORT);
                 cacheKeyPrefixes.push(KIXObjectType.REPORT_RESULT);
                 break;
+            case KIXObjectType.ARTICLE:
+                cacheKeyPrefixes.push(KIXObjectType.ATTACHMENT);
+                cacheKeyPrefixes.push('Ticket-Article-Attachment');
+                break;
             default:
         }
 

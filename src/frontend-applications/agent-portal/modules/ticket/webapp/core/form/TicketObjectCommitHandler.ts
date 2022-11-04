@@ -8,9 +8,12 @@
  */
 
 import { FormContext } from '../../../../../model/configuration/FormContext';
+import { Context } from '../../../../../model/Context';
 import { Attachment } from '../../../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { BrowserCacheService } from '../../../../base-components/webapp/core/CacheService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { ObjectFormValueMapper } from '../../../../object-forms/model/ObjectFormValueMapper';
@@ -187,5 +190,28 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
             ticket.Articles[0]['TimeUnit'] = ticket['TimeUnit'];
             delete ticket['TimeUnit'];
         }
+    }
+
+    public async commitObject(): Promise<string | number> {
+        let sourceContext: Context;
+
+        const id = await super.commitObject();
+
+        const context = ContextService.getInstance().getActiveContext();
+        const articleUpdateId = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
+
+        const sourceContextInformation = context?.getAdditionalInformation(AdditionalContextInformation.SOURCE_CONTEXT);
+        if (sourceContextInformation) {
+            sourceContext = ContextService.getInstance().getContext(sourceContextInformation?.instanceId);
+        }
+
+        if (
+            sourceContext
+            && articleUpdateId
+        ) {
+            BrowserCacheService.getInstance().deleteKeys(KIXObjectType.ARTICLE);
+            sourceContext.reloadObjectList(KIXObjectType.ARTICLE);
+        }
+        return id;
     }
 }
