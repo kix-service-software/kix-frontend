@@ -26,7 +26,6 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
-import { FormContext } from '../../../../../model/configuration/FormContext';
 
 export class TicketObjectFormValueMapper extends ObjectFormValueMapper<Ticket> {
 
