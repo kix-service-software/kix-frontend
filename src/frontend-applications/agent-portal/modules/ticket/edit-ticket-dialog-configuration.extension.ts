@@ -27,7 +27,6 @@ import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 import { SearchOperator } from '../search/model/SearchOperator';
 import { FilterDataType } from '../../model/FilterDataType';
 import { FilterType } from '../../model/FilterType';
-import { QueueProperty } from './model/QueueProperty';
 import { ArticleProperty } from './model/ArticleProperty';
 import { FormGroupConfiguration } from '../../model/configuration/FormGroupConfiguration';
 import { FormPageConfiguration } from '../../model/configuration/FormPageConfiguration';
@@ -433,20 +432,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 'Translatable#Helptext_Tickets_TicketCreate_Queue',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
-                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
-                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                        new KIXObjectLoadingOptions(
-                            [
-                                new FilterCriteria(
-                                    QueueProperty.PARENT_ID, SearchOperator.EQUALS,
-                                    FilterDataType.STRING, FilterType.AND, null
-                                )
-                            ],
-                            null, null,
-                            [QueueProperty.SUB_QUEUES],
-                            [QueueProperty.SUB_QUEUES]
-                        )
-                    )
+                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true)
                 ]
             )
         );

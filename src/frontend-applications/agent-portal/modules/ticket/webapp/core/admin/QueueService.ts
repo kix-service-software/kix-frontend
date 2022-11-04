@@ -78,6 +78,9 @@ export class QueueService extends KIXObjectService<Queue> {
     ): Promise<TreeNode[]> {
         const nodes = [];
         if (queues && !!queues.length) {
+
+            queues = await this.getQueuesHierarchy(false, queues);
+
             if (!invalidClickable || !showInvalid) {
                 queues = queues.filter((q) => q.ValidID === 1 || this.hasValidDescendants(q.SubQueues));
             }
@@ -87,32 +90,48 @@ export class QueueService extends KIXObjectService<Queue> {
             }
 
             for (const queue of queues) {
-                let ticketStats = null;
-                if (includeTicketStats) {
-                    ticketStats = await this.getTicketStats(queue);
-                }
-
-                const subTree = await this.prepareObjectTree(
-                    queue.SubQueues, showInvalid, invalidClickable, filterIds, translatable,
+                const subTree = await this.prepareQueueNode(
+                    queue, showInvalid, invalidClickable, filterIds, translatable,
                     useTextAsId, includeTicketStats
                 );
-
-                const icon = LabelService.getInstance().getObjectIcon(queue);
-                const label = await LabelService.getInstance().getObjectText(queue, false, useTextAsId);
-
-                const treeNode = new TreeNode(queue.QueueID, label, icon);
-                treeNode.children = subTree;
-                treeNode.properties = ticketStats;
-                treeNode.selectable = invalidClickable ? true : queue.ValidID === 1;
-                treeNode.showAsInvalid = queue.ValidID !== 1;
-
-                nodes.push(treeNode);
+                nodes.push(subTree);
             }
         }
 
         SortUtil.sortObjects(nodes, 'label', DataType.STRING);
 
         return nodes;
+    }
+
+    private async prepareQueueNode(
+        queue: Queue, showInvalid?: boolean, invalidClickable: boolean = false,
+        filterIds?: number[], translatable?: boolean, useTextAsId?: boolean, includeTicketStats: boolean = false
+    ): Promise<TreeNode> {
+        const icon = LabelService.getInstance().getObjectIcon(queue);
+        const label = await LabelService.getInstance().getObjectText(queue, false, useTextAsId);
+
+        let ticketStats = null;
+        if (includeTicketStats) {
+            ticketStats = await this.getTicketStats(queue);
+        }
+
+        const treeNode = new TreeNode(queue.QueueID, label, icon);
+        treeNode.properties = ticketStats;
+        treeNode.selectable = invalidClickable ? true : queue.ValidID === 1;
+        treeNode.showAsInvalid = queue.ValidID !== 1;
+
+        treeNode.children = [];
+        if (queue.SubQueues?.length) {
+            for (const subQueue of queue.SubQueues) {
+                const subNode = await this.prepareQueueNode(
+                    subQueue, showInvalid, invalidClickable, filterIds, translatable, useTextAsId, ticketStats
+                );
+                treeNode.children.push(subNode);
+            }
+        }
+
+
+        return treeNode;
     }
 
     private hasValidDescendants(queues: Queue[]): boolean {
@@ -150,20 +169,23 @@ export class QueueService extends KIXObjectService<Queue> {
         return properties;
     }
 
-    public async getQueuesHierarchy(withData: boolean = true): Promise<Queue[]> {
+    public async getQueuesHierarchy(withData: boolean = true, queues?: Queue[]): Promise<Queue[]> {
         let queueTree: Queue[] = [];
-        const loadingOptions = new KIXObjectLoadingOptions();
-        if (withData) {
-            loadingOptions.includes = ['TicketStats'];
-            loadingOptions.query = [['TicketStats.StateType', 'Open']];
+        if (!queues) {
+            const loadingOptions = new KIXObjectLoadingOptions();
+            if (withData) {
+                loadingOptions.includes = ['TicketStats'];
+                loadingOptions.query = [['TicketStats.StateType', 'Open']];
+            }
+
+            loadingOptions.cacheType = 'QUEUE_HIERARCHY';
+
+            queues = await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, null, loadingOptions)
+                .catch((): Queue[] => []);
         }
 
-        loadingOptions.cacheType = 'QUEUE_HIERARCHY';
-
-        const loadedQueues = await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, null, loadingOptions)
-            .catch((): Queue[] => []);
-        if (loadedQueues?.length) {
-            const queues = loadedQueues.map((q) => new Queue(q));
+        if (queues?.length) {
+            queues = queues.map((q) => new Queue(q));
 
             for (const queue of queues) {
                 if (queue.ParentID) {
