@@ -299,6 +299,9 @@ export class CacheService {
                 types.push(KIXObjectType.REPORT);
                 types.push(KIXObjectType.REPORT_RESULT);
                 break;
+            case KIXObjectType.ARTICLE:
+                types.push(KIXObjectType.ATTACHMENT);
+                break;
             default:
         }
 

@@ -38,8 +38,6 @@ export class TicketSocketClient extends SocketClient {
         super('tickets');
     }
 
-    private requestPromises: Map<string, Promise<any>> = new Map();
-
     public async loadArticleAttachment(ticketId: number, articleId: number, attachmentId: number): Promise<Attachment> {
         this.checkSocketConnection();
 
@@ -47,10 +45,6 @@ export class TicketSocketClient extends SocketClient {
 
         if (BrowserCacheService.getInstance().has(cacheKey, 'Ticket-Article-Attachment')) {
             return BrowserCacheService.getInstance().get(cacheKey, 'Ticket-Article-Attachment');
-        }
-
-        if (this.requestPromises.has(cacheKey)) {
-            return await this.requestPromises.get(cacheKey);
         }
 
         const socketTimeout = ClientStorageService.getSocketTimeout();
@@ -81,7 +75,7 @@ export class TicketSocketClient extends SocketClient {
             this.socket.emit(TicketEvent.LOAD_ARTICLE_ATTACHMENT, request);
         });
 
-        this.requestPromises.set(cacheKey, requestPromise);
+        BrowserCacheService.getInstance().set(cacheKey, requestPromise, 'Ticket-Article-Attachment');
         return await requestPromise;
     }
 

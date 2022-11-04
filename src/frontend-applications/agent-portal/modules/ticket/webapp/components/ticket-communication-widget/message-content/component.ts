@@ -45,6 +45,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
+        const oldChangeTime = this.article?.ChangeTime;
+        const currChangeTime = input.article?.ChangeTime;
         this.article = input.article;
         this.state.article = this.article;
         this.state.selectedCompactView = typeof input.selectedCompactView !== 'undefined' ? input.selectedCompactView : true;
@@ -54,6 +56,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         // on update, some article was already loaded
         if (this.state.article && this.state.article.ArticleID !== this.article.ArticleID) {
             this.loadArticle(undefined, true);
+        }
+
+        if (oldChangeTime !== currChangeTime) {
+            this.prepareArticleData();
         }
     }
 

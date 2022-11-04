@@ -22,7 +22,11 @@ class Component {
     }
 
     public onInput(input: any): void {
-        this.article = input.article;
+        if (this.article?.ChangeTime !== input.article?.ChangeTime) {
+            this.article = input.article;
+
+            this.prepareContent();
+        }
     }
 
     public onMount(): void {
