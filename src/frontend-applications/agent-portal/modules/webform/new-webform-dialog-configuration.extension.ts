@@ -25,7 +25,6 @@ import { ObjectReferenceOptions } from '../../modules/base-components/webapp/cor
 import { FormGroupConfiguration } from '../../model/configuration/FormGroupConfiguration';
 import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
 import { FilterCriteria } from '../../model/FilterCriteria';
-import { QueueProperty } from '../ticket/model/QueueProperty';
 import { SearchOperator } from '../search/model/SearchOperator';
 import { FilterDataType } from '../../model/FilterDataType';
 import { FilterType } from '../../model/FilterType';
@@ -188,17 +187,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
 
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
-                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
-                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                        new KIXObjectLoadingOptions(
-                            [
-                                new FilterCriteria(
-                                    QueueProperty.PARENT_ID, SearchOperator.EQUALS,
-                                    FilterDataType.STRING, FilterType.AND, null
-                                )
-                            ], undefined, undefined, [QueueProperty.SUB_QUEUES], [QueueProperty.SUB_QUEUES]
-                        )
-                    )
+                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true)
                 ]
             )
         );

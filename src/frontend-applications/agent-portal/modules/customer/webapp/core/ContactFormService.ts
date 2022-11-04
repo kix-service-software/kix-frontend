@@ -25,7 +25,6 @@ import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
-import { QueueProperty } from '../../../ticket/model/QueueProperty';
 import { NotificationProperty } from '../../../notification/model/NotificationProperty';
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
@@ -332,14 +331,6 @@ export class ContactFormService extends KIXObjectFormService {
                 new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
                 new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                 new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
-                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS, new KIXObjectLoadingOptions(
-                    [
-                        new FilterCriteria(
-                            QueueProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, null
-                        )
-                    ],
-                    undefined, undefined, [QueueProperty.SUB_QUEUES], [QueueProperty.SUB_QUEUES])
-                ),
                 new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true)
             ], value
         );

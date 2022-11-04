@@ -20,11 +20,6 @@ import { FormFieldConfiguration } from '../../model/configuration/FormFieldConfi
 import { QueueProperty } from './model/QueueProperty';
 import { FormFieldOption } from '../../model/configuration/FormFieldOption';
 import { ObjectReferenceOptions } from '../../modules/base-components/webapp/core/ObjectReferenceOptions';
-import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
-import { FilterCriteria } from '../../model/FilterCriteria';
-import { SearchOperator } from '../search/model/SearchOperator';
-import { FilterDataType } from '../../model/FilterDataType';
-import { FilterType } from '../../model/FilterType';
 import { FormFieldValue } from '../../model/configuration/FormFieldValue';
 import { NumberInputOptions } from '../../modules/base-components/webapp/core/NumberInputOptions';
 import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
@@ -91,19 +86,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 'Translatable#Helptext_Admin_Tickets_QueueCreate_ParentQueue', [
                 new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
                 new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
-                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                    new KIXObjectLoadingOptions(
-                        [
-                            new FilterCriteria(
-                                QueueProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING,
-                                FilterType.AND, null
-                            )
-                        ],
-                        null, null,
-                        [QueueProperty.SUB_QUEUES],
-                        [QueueProperty.SUB_QUEUES]
-                    )
-                ),
                 new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true)
             ]
             )
