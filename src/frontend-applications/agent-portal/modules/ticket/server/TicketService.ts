@@ -242,6 +242,12 @@ export class TicketAPIService extends KIXObjectAPIService {
                 const uri = this.buildUri(
                     this.RESOURCE_URI, objectIds[0], 'history'
                 );
+                // get unlimit/all history
+                if (!loadingOptions) {
+                    loadingOptions = new KIXObjectLoadingOptions(null, null, 0);
+                } else if (!loadingOptions.limit) {
+                    loadingOptions.limit = 0;
+                }
                 objects = await super.load(
                     token, KIXObjectType.TICKET_HISTORY, uri, loadingOptions, null, 'History',
                     clientRequestId, TicketHistory
