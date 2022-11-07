@@ -76,6 +76,7 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
                 KIXObjectType.WATCHER, [['UserID', currentUser.UserID]],
                 new CreateTicketWatcherOptions(this.data.TicketID, currentUser.UserID)
             );
+
             if (watcherId) {
                 successHint = 'Translatable#Ticket is being watched.';
             }
