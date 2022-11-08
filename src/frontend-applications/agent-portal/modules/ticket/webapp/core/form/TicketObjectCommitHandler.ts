@@ -11,6 +11,7 @@ import { FormContext } from '../../../../../model/configuration/FormContext';
 import { Context } from '../../../../../model/Context';
 import { Attachment } from '../../../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { BrowserCacheService } from '../../../../base-components/webapp/core/CacheService';
@@ -18,6 +19,9 @@ import { ContextService } from '../../../../base-components/webapp/core/ContextS
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { ObjectFormValueMapper } from '../../../../object-forms/model/ObjectFormValueMapper';
 import { ObjectCommitHandler } from '../../../../object-forms/webapp/core/ObjectCommitHandler';
+import { Article } from '../../../model/Article';
+import { ArticleLoadingOptions } from '../../../model/ArticleLoadingOptions';
+import { ArticleProperty } from '../../../model/ArticleProperty';
 import { Channel } from '../../../model/Channel';
 import { Queue } from '../../../model/Queue';
 import { Ticket } from '../../../model/Ticket';
@@ -79,6 +83,17 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                     article.Body = await this.addQueueSignature(
                         ticket.QueueID || orgTicketQueueID, article.Body, article.ChannelID
                     );
+
+                    const referencedArticleId = context?.getAdditionalInformation(
+                        ArticleProperty.REFERENCED_ARTICLE_ID
+                    );
+                    if (referencedArticleId) {
+                        const referencedArticle = await this.loadReferencedArticle(
+                            ticket.TicketID, referencedArticleId
+                        );
+                        article.InReplyTo = referencedArticle.MessageID?.toString();
+                        article.References = `${referencedArticle.References} ${referencedArticle.MessageID}`;
+                    }
                 } else {
                     article.Attachments = null;
                 }
@@ -214,4 +229,19 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         }
         return id;
     }
+
+    private async loadReferencedArticle(refTicketId: number, refArticleId: number): Promise<Article> {
+        let article: Article;
+        if (refArticleId && refTicketId) {
+            const articles = await KIXObjectService.loadObjects<Article>(
+                KIXObjectType.ARTICLE, [refArticleId], new KIXObjectLoadingOptions(
+                    null, null, null, [ArticleProperty.ATTACHMENTS]
+                ),
+                new ArticleLoadingOptions(refTicketId), true
+            ).catch(() => [] as Article[]);
+            article = articles.find((a) => a.ArticleID === refArticleId);
+        }
+        return article;
+    }
+
 }
