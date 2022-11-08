@@ -32,7 +32,7 @@ export class CustomerVisibleFormValue extends BooleanFormValue {
     public async initFormValue(): Promise<void> {
         await super.initFormValue();
         const context = ContextService.getInstance().getActiveContext();
-        const refArticleId = context?.getAdditionalInformation('REFERENCED_ARTICLE_ID');
+        const refArticleId = context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
         if (refArticleId) {
             const refTicketId = context?.getObjectId();
             const refArticle = await this.loadReferencedArticle(Number(refTicketId), refArticleId);
