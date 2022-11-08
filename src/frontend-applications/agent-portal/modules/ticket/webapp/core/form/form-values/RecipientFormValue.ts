@@ -25,6 +25,10 @@ import { FilterDataType } from '../../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../../model/FilterType';
 import { SystemAddress } from '../../../../../system-address/model/SystemAddress';
 import addrparser from 'address-rfc2822';
+import { ArticleProperty } from '../../../../model/ArticleProperty';
+import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
+import { Article } from '../../../../model/Article';
+import { ArticleLoadingOptions } from '../../../../model/ArticleLoadingOptions';
 
 export class RecipientFormValue extends SelectObjectFormValue {
 
@@ -49,6 +53,19 @@ export class RecipientFormValue extends SelectObjectFormValue {
         this.autoCompleteConfiguration = new AutoCompleteConfiguration(undefined, undefined, undefined, objectName);
 
         this.loadingOptions = new KIXObjectLoadingOptions(null, null, 10);
+
+
+        if (!this.value?.length && this.property === ArticleProperty.TO) {
+            const context = ContextService.getInstance().getActiveContext();
+            const refArticleId = context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
+            if (refArticleId) {
+                const refTicketId = context?.getObjectId();
+                const refArticle = await this.loadReferencedArticle(Number(refTicketId), refArticleId);
+                if (refArticle) {
+                    this.setFormValue([refArticle?.From]);
+                }
+            }
+        }
     }
 
     protected async handlePlaceholders(value: any): Promise<any> {
@@ -107,6 +124,7 @@ export class RecipientFormValue extends SelectObjectFormValue {
             const placeholderNodes = emailValues[2].map((n) => new TreeNode(n, n, 'kix-icon-man-bubble'));
             selectedNodes = [...selectedNodes, ...placeholderNodes];
 
+            this.value = selectedNodes.map((n) => n.id);
             this.treeHandler.setSelection(selectedNodes, true, true);
         } else {
             this.treeHandler?.selectNone(true);
@@ -223,6 +241,18 @@ export class RecipientFormValue extends SelectObjectFormValue {
         }
 
         await super.setObjectValue(recipientValue);
+    }
+
+    private async loadReferencedArticle(refTicketId: number, refArticleId: number): Promise<Article> {
+        let article: Article;
+        if (refArticleId && refTicketId) {
+            const articles = await KIXObjectService.loadObjects<Article>(
+                KIXObjectType.ARTICLE, [refArticleId], null,
+                new ArticleLoadingOptions(refTicketId), true
+            ).catch(() => [] as Article[]);
+            article = articles.find((a) => a.ArticleID === refArticleId);
+        }
+        return article;
     }
 
 }

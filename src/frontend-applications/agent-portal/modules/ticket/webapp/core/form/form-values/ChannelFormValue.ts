@@ -12,12 +12,14 @@ import { FormContext } from '../../../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
+import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { RichTextFormValue } from '../../../../../object-forms/model/FormValues/RichTextFormValue';
 import { SelectObjectFormValue } from '../../../../../object-forms/model/FormValues/SelectObjectFormValue';
 import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectFormValueMapper';
 import { Article } from '../../../../model/Article';
+import { ArticleLoadingOptions } from '../../../../model/ArticleLoadingOptions';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
 import { Channel } from '../../../../model/Channel';
 import { ArticleAttachmentFormValue } from './ArticleAttachmentFormValue';
@@ -54,6 +56,18 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
     public async initFormValue(): Promise<void> {
         await super.initFormValue();
+
+        if (!this.value) {
+            const context = ContextService.getInstance().getActiveContext();
+            const refArticleId = context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
+            if (refArticleId) {
+                const refTicketId = context?.getObjectId();
+                const refArticle = await this.loadReferencedArticle(Number(refTicketId), refArticleId);
+                if (refArticle) {
+                    this.value = refArticle?.ChannelID;
+                }
+            }
+        }
 
         if (!this.value && !this.noChannelSelectable && this.hasChannelField) {
             const selectableNodes = this.getSelectableTreeNodeValues();
@@ -227,6 +241,18 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
     public async reset(): Promise<void> {
         return;
+    }
+
+    private async loadReferencedArticle(refTicketId: number, refArticleId: number): Promise<Article> {
+        let article: Article;
+        if (refArticleId && refTicketId) {
+            const articles = await KIXObjectService.loadObjects<Article>(
+                KIXObjectType.ARTICLE, [refArticleId], null,
+                new ArticleLoadingOptions(refTicketId), true
+            ).catch(() => [] as Article[]);
+            article = articles.find((a) => a.ArticleID === refArticleId);
+        }
+        return article;
     }
 
 }
