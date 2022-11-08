@@ -53,7 +53,7 @@ export class ArticleAttachmentFormValue extends ObjectFormValue<string> {
 
         const context = ContextService.getInstance().getActiveContext();
         const useRefArticleAttachments = context?.getAdditionalInformation('USE_REFERENCED_ATTACHMENTS');
-        const refArticleId = context?.getAdditionalInformation('REFERENCED_ARTICLE_ID');
+        const refArticleId = context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
         if (useRefArticleAttachments && refArticleId) {
             const refTicketId = context?.getObjectId();
             const refArticle = await this.loadReferencedArticle(Number(refTicketId), refArticleId);
