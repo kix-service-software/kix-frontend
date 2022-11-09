@@ -201,7 +201,6 @@ export class SearchService {
                 contextService.setActiveContext(detailContextId.contextId, objects[0].ObjectId);
             }
         } else {
-            await ContextService.getInstance().removeContext(searchContext.instanceId);
             await SearchService.getInstance().executeFullTextSearch(
                 objectType, searchValue
             ).catch((error) => {
@@ -234,10 +233,6 @@ export class SearchService {
         const searchDefinition = this.getSearchDefinition(objectType);
         searchDefinition?.appendFullTextCriteria(searchCache.criteria);
 
-        // prepare url params (init context with search)
-        const cache = JSON.stringify({ ...searchCache, result: [] });
-        const searchString = `search=${encodeURIComponent(cache)}`;
-        await this.setSearchContext(searchCache?.objectType, new URLSearchParams(searchString));
         const objects = await this.searchObjects(searchCache);
         return (objects as any);
     }
