@@ -693,10 +693,10 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                         },
                                                         {
                                                             property: TicketProperty.STATE_TYPE,
-                                                            operator: SearchOperator.EQUALS,
+                                                            operator: SearchOperator.IN,
                                                             type: FilterDataType.STRING,
                                                             filterType: FilterType.AND,
-                                                            value: 'Open'
+                                                            value: ['Open']
                                                         }
                                                     ]
                                                 }
@@ -726,10 +726,10 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                         },
                                                         {
                                                             property: TicketProperty.STATE_TYPE,
-                                                            operator: SearchOperator.EQUALS,
+                                                            operator: SearchOperator.IN,
                                                             type: FilterDataType.STRING,
                                                             filterType: FilterType.AND,
-                                                            value: 'Open'
+                                                            value: ['Open']
                                                         }
                                                     ]
                                                 }
