@@ -41,7 +41,7 @@ export class ComponentState {
                         ], null, undefined,
                         [ImportExportTemplateProperty.RUNS, ImportExportTemplateProperty.OBJECT_DATA]
                     ),
-                    null, null, [], true, false, null, null,
+                    null, null, [], true, true, null, null,
                     TableHeaderHeight.LARGE, TableRowHeight.LARGE
                 )
             ), false, false, 'kix-icon-gears'
