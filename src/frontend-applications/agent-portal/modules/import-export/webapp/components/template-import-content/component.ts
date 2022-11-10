@@ -42,12 +42,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async prepareTable(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            context.setObjectList(
-                'RUNS_OF_TEMPLATE_' + this.state.template.ID, this.state.template.Runs ?
-                this.state.template.Runs.filter((r) => r.Type === ImportExportTemplateRunTypes.IMPORT)
-                    .map((r, i) => new ImportExportTemplateRun(r, ++i)) : []
-            );
+        if (context && Array.isArray(this.state.template.Runs)) {
+
+            const objects = this.state.template.Runs
+                .filter((r) => r.Type === ImportExportTemplateRunTypes.IMPORT)
+                .map((r, i) => new ImportExportTemplateRun(r, ++i));
+
+            context.setObjectList('RUNS_OF_TEMPLATE_' + this.state.template.ID, objects);
             const table = await TableFactoryService.getInstance().createTable(
                 'import-export-template-' + this.state.template.ID + '-runs',
                 KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN, null,
