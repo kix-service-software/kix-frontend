@@ -169,6 +169,8 @@ export class TreeUtil {
                 }
             }
         }
+
+        return null;
     }
 
     public static hasChildrenToShow(node: TreeNode, filterValue: string): boolean {
