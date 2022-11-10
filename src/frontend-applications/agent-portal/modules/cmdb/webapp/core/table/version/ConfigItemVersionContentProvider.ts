@@ -48,7 +48,7 @@ export class ConfigItemVersionContentProvider extends TableContentProvider<Versi
 
                     const versionNumber = (versions.length - i);
                     const createTime = await DateTimeUtil.getLocalDateTimeString(v.Definition.CreateTime);
-                    const currentVersion = v.isCurrentVersion ? '(' + translatedCurrentVersion + ')' : '';
+                    const currentVersion = v.IsLastVersion ? '(' + translatedCurrentVersion + ')' : '';
                     const currentVersionString = `${versionNumber} ${currentVersion}`;
 
                     const basedOnDefinitionString

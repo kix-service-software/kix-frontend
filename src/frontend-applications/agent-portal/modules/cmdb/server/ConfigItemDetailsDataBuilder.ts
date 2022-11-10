@@ -60,7 +60,7 @@ export class ConfigItemDetailsDataBuilder {
                 .filter((v) => versionIds.length === 0 || versionIds.includes(v.VersionID))
                 .sort((v1, v2) => v2.countNumber - v1.countNumber);
 
-            const currentVersion = versions.find((v) => v.isCurrentVersion);
+            const currentVersion = versions.find((v) => v.IsLastVersion);
             if (currentVersion) {
                 data['currentVersion'] = await this.getVersionProperties(token, currentVersion);
                 data['currentVersionPreparedData'] =
@@ -68,7 +68,7 @@ export class ConfigItemDetailsDataBuilder {
             }
 
             const nonCurrentVersions = versions
-                .filter((v) => !v.isCurrentVersion);
+                .filter((v) => !v.IsLastVersion);
 
             for (const version of nonCurrentVersions) {
                 data['nonCurrentVersions'].push(await this.getVersionProperties(token, version));
