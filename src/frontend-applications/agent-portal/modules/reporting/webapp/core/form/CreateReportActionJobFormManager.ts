@@ -124,7 +124,8 @@ export class CreateReportActionJobFormManager extends ExtendedJobFormManager {
         formInstance: FormInstance, parameterField: FormFieldConfiguration,
         definitionId: number, defaultParameters?: any
     ): Promise<void> {
-        if (definitionId && parameterField) {
+        // ignore variable/placeholder values (e.g. periodic job)
+        if (definitionId && !isNaN(definitionId) && parameterField) {
             const reportDefinitions = await KIXObjectService.loadObjects<ReportDefinition>(
                 KIXObjectType.REPORT_DEFINITION, [definitionId], null, null, true
             ).catch(() => []);
@@ -144,7 +145,8 @@ export class CreateReportActionJobFormManager extends ExtendedJobFormManager {
         formInstance: FormInstance, outputFormatField: FormFieldConfiguration, definitionId: number,
         outputFormat?: string
     ): Promise<void> {
-        if (definitionId && outputFormatField) {
+        // ignore variable/placeholder values (e.g. periodic job)
+        if (definitionId && !isNaN(definitionId) && outputFormatField) {
             const reportDefinitions = await KIXObjectService.loadObjects<ReportDefinition>(
                 KIXObjectType.REPORT_DEFINITION, [definitionId], null, null, true
             ).catch(() => []);
