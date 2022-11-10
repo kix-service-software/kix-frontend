@@ -17,9 +17,7 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 import { SortUtil } from '../../../../model/SortUtil';
-import {
-    ObjectReferenceUtil
-} from '../../../base-components/webapp/components/object-reference-input/ObjectReferenceUtil';
+import { ObjectReferenceUtil } from '../../../base-components/webapp/components/object-reference-input/ObjectReferenceUtil';
 import { IKIXObjectService } from '../../../base-components/webapp/core/IKIXObjectService';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
@@ -107,7 +105,16 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
     }
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {
+        if (!this.freeText) {
+            if (Array.isArray(value)) {
+                value = value.filter((v) => TreeUtil.findNode(this.treeHandler?.getTree(), v.toString()) !== null);
+            } else if (TreeUtil.findNode(this.treeHandler?.getTree(), value.toString()) === null) {
+                value = [];
+            }
+        }
+
         await super.setFormValue(value, force);
+
         if (!this.readonly) {
             await this.loadSelectedValues();
         }
