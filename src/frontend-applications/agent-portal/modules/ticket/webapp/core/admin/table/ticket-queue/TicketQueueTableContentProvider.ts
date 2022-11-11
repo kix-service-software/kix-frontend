@@ -13,6 +13,7 @@ import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoa
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { RowObject } from '../../../../../../table/model/RowObject';
 import { Table } from '../../../../../../table/model/Table';
+import { QueueService } from '../../QueueService';
 
 
 export class TicketQueueTableContentProvider extends TableContentProvider<Queue> {
@@ -24,6 +25,11 @@ export class TicketQueueTableContentProvider extends TableContentProvider<Queue>
         contextId?: string
     ) {
         super(KIXObjectType.QUEUE, table, objectIds, loadingOptions, contextId);
+    }
+
+    public async loadData(): Promise<Array<RowObject<Queue>>> {
+        const queues = await QueueService.getInstance().getQueuesHierarchy();
+        return await this.getRowObjects(queues);
     }
 
     protected hasChildRows(rowObject: RowObject<Queue>): boolean {

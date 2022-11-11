@@ -24,6 +24,7 @@ import { Server, Socket } from 'socket.io';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { TranslationAPIService } from '../../modules/translation/server/TranslationService';
 import { ObjectIconService } from '../../modules/icon/server/ObjectIconService';
+import { TicketAPIService } from '../../modules/ticket/server/TicketService';
 
 export class AuthenticationNamespace extends SocketNameSpace {
 
@@ -64,6 +65,7 @@ export class AuthenticationNamespace extends SocketNameSpace {
             .then(async (token: string) => {
                 await TranslationAPIService.getInstance().loadObjects(token, 'login', KIXObjectType.TRANSLATION, null, null, null);
                 await ObjectIconService.getInstance().getObjectIcons(token);
+                await TicketAPIService.getInstance().preloadObjects(token);
                 return new SocketResponse(
                     AuthenticationEvent.AUTHORIZED,
                     new AuthenticationResult(token, data.requestId, data.redirectUrl)

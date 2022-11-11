@@ -33,7 +33,6 @@ export abstract class SocketNameSpace implements ISocketNamespace {
         this.initialize();
         this.namespace = server.of('/' + this.getNamespace());
         this.namespace
-            .use(AuthenticationService.getInstance().isSocketAuthenticated.bind(AuthenticationService.getInstance()))
             .on(SocketEvent.CONNECTION, (client: Socket) => {
                 this.registerEvents(client);
             });
@@ -79,7 +78,7 @@ export abstract class SocketNameSpace implements ISocketNamespace {
                 }
             }
 
-            const message = `${this.getNamespace()} / ${event} ${JSON.stringify(logData)}`;
+            const message = event + '\t' + this.getNamespace() + '\t' + JSON.stringify(logData);
             const profileTaskId = ProfilingService.getInstance().start(
                 'SocketIO', message, { data: [data], requestId: data.clientRequestId }, false
             );

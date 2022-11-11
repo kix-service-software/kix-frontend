@@ -58,7 +58,7 @@ export class PermissionService {
             }
 
             const response = await HttpService.getInstance().options(
-                token, permission.target, object, clientRequestId
+                token, permission.target, object, clientRequestId, permission.collection
             ).catch((error) => {
                 console.error(error);
                 return null;

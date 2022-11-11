@@ -17,15 +17,14 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 import { SortUtil } from '../../../../model/SortUtil';
-import {
-    ObjectReferenceUtil
-} from '../../../base-components/webapp/components/object-reference-input/ObjectReferenceUtil';
+import { ObjectReferenceUtil } from '../../../base-components/webapp/components/object-reference-input/ObjectReferenceUtil';
 import { IKIXObjectService } from '../../../base-components/webapp/core/IKIXObjectService';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
 import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
 import { TreeHandler, TreeNode, TreeService, TreeUtil } from '../../../base-components/webapp/core/tree';
 import { FormValueBinding } from '../FormValueBinding';
+import { FormValueProperty } from '../FormValueProperty';
 import { ObjectFormValueMapper } from '../ObjectFormValueMapper';
 import { ObjectFormValue } from './ObjectFormValue';
 
@@ -73,6 +72,12 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             new FormValueBinding(this, 'selectedNodes', object, property),
             new FormValueBinding(this, 'multiselect', object, property),
         );
+
+        this.addPropertyBinding(FormValueProperty.ENABLED, (value: SelectObjectFormValue) => {
+            if (this.enabled) {
+                this.initFormValue();
+            }
+        });
     }
 
     public destroy(): void {
@@ -135,8 +140,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         }
         this.treeHandler?.setMultiSelect(this.multiselect);
 
-        await this.loadSelectableValues();
-        await this.loadSelectedValues();
+        this.loadSelectableValues();
+        this.loadSelectedValues();
 
         this.addPropertyBinding('multiselect', (value: SelectObjectFormValue) => {
             if (!this.multiselect && Array.isArray(this.value) && this.value.length > 1) {

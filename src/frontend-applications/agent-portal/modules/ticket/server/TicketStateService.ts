@@ -19,6 +19,7 @@ import { LoggingService } from '../../../../../server/services/LoggingService';
 import { Error } from '../../../../../server/model/Error';
 import { TicketStateType } from '../model/TicketStateType';
 import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 
 export class TicketStateAPIService extends KIXObjectAPIService {
 
@@ -61,12 +62,19 @@ export class TicketStateAPIService extends KIXObjectAPIService {
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<T[]> {
 
-        let objects = [];
+        let objects: Array<TicketState | TicketStateType> = [];
         if (objectType === KIXObjectType.TICKET_STATE) {
+            const hasValidFilter = loadingOptions?.filter?.length === 1 &&
+                loadingOptions.filter[0].property === KIXObjectProperty.VALID_ID;
+
             objects = await super.load<TicketState>(
-                token, KIXObjectType.TICKET_STATE, this.RESOURCE_URI, loadingOptions, null, 'TicketState',
-                clientRequestId, TicketState
+                token, KIXObjectType.TICKET_STATE, this.RESOURCE_URI, null, null,
+                KIXObjectType.TICKET_STATE, clientRequestId, TicketState
             );
+
+            if (hasValidFilter) {
+                objects = objects.filter((o) => o.ValidID === loadingOptions.filter[0].value);
+            }
 
             if (objectIds && objectIds.length) {
                 objects = objects.filter((t) => objectIds.some((oid) => oid === t.ID));
@@ -74,12 +82,12 @@ export class TicketStateAPIService extends KIXObjectAPIService {
         } else if (objectType === KIXObjectType.TICKET_STATE_TYPE) {
             const uri = this.buildUri(this.RESOURCE_URI, 'types');
             objects = await super.load<StateType>(
-                token, KIXObjectType.TICKET_STATE_TYPE, uri, loadingOptions, objectIds, 'StateType',
+                token, KIXObjectType.TICKET_STATE_TYPE, uri, loadingOptions, objectIds, KIXObjectType.TICKET_STATE_TYPE,
                 clientRequestId, StateType
             );
         }
 
-        return objects;
+        return objects as any[];
     }
 
     public async createObject(

@@ -15,18 +15,15 @@ import { SearchCache } from '../../model/SearchCache';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { IdService } from '../../../../model/IdService';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
-import { SearchResultCategory } from './SearchResultCategory';
 import { SearchSocketClient } from '.';
 import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { SearchEvent } from '../../model/SearchEvent';
 import { KIXObject } from '../../../../model/kix/KIXObject';
-import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 
 export abstract class SearchContext extends Context {
 
     protected searchCache: SearchCache;
-    protected searchCategory: SearchResultCategory;
 
     public getSearchCache(): SearchCache {
         return this.searchCache;
@@ -53,11 +50,6 @@ export abstract class SearchContext extends Context {
                 IdService.generateDateBasedId(), this.descriptor.contextId, this.descriptor.kixObjectTypes[0],
                 [], [], null
             );
-        }
-
-        const categories = await this.getSearchResultCategories();
-        if (Array.isArray(categories) && categories.length) {
-            this.searchCategory = categories[0];
         }
     }
 
@@ -102,17 +94,6 @@ export abstract class SearchContext extends Context {
         return title;
     }
 
-    public async getSearchResultCategories(searchCache?: SearchCache): Promise<SearchResultCategory[]> {
-        searchCache = searchCache || this.searchCache;
-
-        const searchDefinition = SearchService.getInstance().getSearchDefinition(searchCache.objectType);
-        let categories: SearchResultCategory[] = [];
-        if (searchDefinition) {
-            categories = await searchDefinition.getSearchResultCategories();
-        }
-        return categories;
-    }
-
     public async saveCache(name: string): Promise<void> {
         if (this.searchCache) {
             const search = SearchCache.create(this.searchCache);
@@ -135,39 +116,13 @@ export abstract class SearchContext extends Context {
         }
     }
 
-    public async setSearchResultCategory(category?: SearchResultCategory): Promise<void> {
-        this.searchCategory = category;
-
-        const searchDefinition = SearchService.getInstance().getSearchDefinition(category?.objectType);
-        const loadingOptions = searchDefinition?.getLoadingOptionsForResultList();
-        const objects = await KIXObjectService.loadObjects(category?.objectType, category?.objectIds, loadingOptions);
-
-        this.setObjectList(category?.objectType, objects);
-    }
-
-    public getSearchResultCategory(): SearchResultCategory {
-        return this.searchCategory;
-    }
-
     public async setSearchResult(objects: KIXObject[]): Promise<void> {
         this.searchCache.result = objects;
-        const categories = await this.getSearchResultCategories();
-        if (Array.isArray(categories) && categories.length) {
-            this.searchCategory = categories[0];
-        }
         this.setObjectList(this.searchCache.objectType, objects);
     }
 
     public resetSearch(): void {
         this.searchCache.reset();
-        const category = this.getSearchResultCategory();
-        this.setObjectList(category.objectType, []);
-        if (Array.isArray(category.children)) {
-            for (const subCategory of category.children) {
-                this.setObjectList(subCategory.objectType, []);
-            }
-        }
-
         EventService.getInstance().publish(SearchEvent.SEARCH_DELETED, this);
         ContextService.getInstance().setDocumentHistory(true, this, this, null);
     }

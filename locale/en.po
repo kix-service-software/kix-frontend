@@ -59,6 +59,9 @@ msgstr "Access denied"
 msgid "Access Level"
 msgstr "Access Level"
 
+msgid "Accounted Time"
+msgstr ""
+
 msgid "Accounted Time: {0}"
 msgstr "Accounted Time: {0}"
 
@@ -361,9 +364,6 @@ msgid "At least {0} values must be selected"
 msgstr ""
 
 msgid "At least one link could not be saved."
-msgstr ""
-
-msgid "At least one of the fields To, Cc or Bcc must contain an entry."
 msgstr ""
 
 msgid "Attachment Name"
@@ -984,6 +984,9 @@ msgid "Edit Dynamic Field"
 msgstr ""
 
 msgid "edited"
+msgstr ""
+
+msgid "edited at {0} by {1}"
 msgstr ""
 
 msgid "Edit Email Address"
@@ -2823,6 +2826,9 @@ msgstr ""
 msgid "Include this code into the <head> area of your webpage."
 msgstr ""
 
+msgid "Incoming Time"
+msgstr ""
+
 msgid ""
 "Incorrect data mapping. Length of dataset properties is different from value "
 "properties."
@@ -4129,9 +4135,6 @@ msgstr "the last"
 
 msgid "SEARCH_OPERATOR_WITHIN_NEXT"
 msgstr "the next"
-
-msgid "Search Results"
-msgstr ""
 
 msgid "Search Results ({0})"
 msgstr ""

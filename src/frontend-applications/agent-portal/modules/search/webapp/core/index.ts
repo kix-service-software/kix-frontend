@@ -10,7 +10,6 @@
 export { SearchContext } from './SearchContext';
 export { SearchDefinition } from './SearchDefinition';
 export { SearchOperatorUtil } from './SearchOperatorUtil';
-export { SearchResultCategory } from './SearchResultCategory';
 export { SearchService } from './SearchService';
 export { SearchSocketClient } from './SearchSocketClient';
 export { UIModule as SearchUIModule } from './SearchUIModule';

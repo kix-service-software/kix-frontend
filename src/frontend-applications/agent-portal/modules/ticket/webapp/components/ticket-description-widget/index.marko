@@ -10,27 +10,36 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <widget
     instanceId=state.instanceId
     title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
-    contentActions=state.actions>
+    contentActions=state.actions
+>
     <@content>
-        <div.description-container key="description-container" class={
-            "show-object": state.firstArticle
-        }>
+        <div.description-container key="description-container">
             <if(state.ticket && state.firstArticle)>
-                <widget instanceId="ticket-description-widget" title=state.translations["Translatable#Description"]>
+                <widget
+                    instanceId="ticket-description-widget"
+                    title=(state.translations["Translatable#Description"])
+                >
                     <@content>
                         <div.description-text-wrapper>
                             <ticket-article-content article=state.firstArticle/>
                         </div>
                         <div.description-attachments>
-                            <b><translation-string pattern="Translatable#Attachments"/>:</b>
+                            <b>
+                                <translation-string pattern="Translatable#Attachments"/>
+                                :
+                            </b>
                             <ticket-article-attachment-list article=state.firstArticle/>
                         </div>
                     </@content>
                 </widget>
                 <widget
                     instanceId="ticket-description-notes"
-                    title=state.translations["Translatable#Comment"]
-                    key=("Widget-ticket-description-notes" + state.ticket.TicketID)>
+                    title=(state.translations["Translatable#Comment"])
+                    key=(
+                        "Widget-ticket-description-notes" +
+                        state.ticket.TicketID
+                    )
+                >
                     <@content>
                         <div.ticket-notes>${state.ticketNotes}</div>
                     </@content>

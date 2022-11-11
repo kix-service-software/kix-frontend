@@ -27,11 +27,10 @@ import { KIXModulesService } from '../../../../base-components/webapp/core/KIXMo
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
-import { Contact } from '../../../../customer/model/Contact';
-import { ContactProperty } from '../../../../customer/model/ContactProperty';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
 import { Context } from '../../../../../model/Context';
 import Calendar from 'tui-calendar';
+import { User } from '../../../../user/model/User';
 
 declare const tui: any;
 
@@ -135,18 +134,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const userIds: Map<number, string> = new Map();
         for (const t of tickets) {
             if (!userIds.has(t.OwnerID)) {
-                const contacts = await KIXObjectService.loadObjects<Contact>(
-                    KIXObjectType.CONTACT, null,
-                    new KIXObjectLoadingOptions([
-                        new FilterCriteria(
-                            ContactProperty.ASSIGNED_USER_ID, SearchOperator.EQUALS,
-                            FilterDataType.NUMERIC, FilterType.AND, t.OwnerID
-                        )
-                    ])
-                );
+                const loadingOptions = new KIXObjectLoadingOptions();
+                loadingOptions.includes = [KIXObjectType.CONTACT];
 
-                const fullName = Array.isArray(contacts) && contacts.length
-                    ? contacts[0].Fullname
+                const user = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [t.OwnerID], loadingOptions
+                ).catch((): User[] => []);
+
+
+                const fullName = user?.length
+                    ? user[0].Contact?.Fullname
                     : t.OwnerID.toString();
 
                 userIds.set(t.OwnerID, fullName);

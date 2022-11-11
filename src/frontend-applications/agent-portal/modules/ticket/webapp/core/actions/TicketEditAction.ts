@@ -23,7 +23,7 @@ export class TicketEditAction extends AbstractAction<Ticket> {
         const objectId = context.getObjectId();
 
         const permissions = [
-            new UIComponentPermission(`tickets/${objectId}`, [CRUD.UPDATE], false, 'Object')
+            new UIComponentPermission(`tickets/${objectId}`, [CRUD.UPDATE], false, 'Object', false)
         ];
 
         show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);

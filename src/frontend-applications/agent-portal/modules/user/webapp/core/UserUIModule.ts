@@ -106,7 +106,7 @@ export class UIModule implements IUIModule {
             new SetupStep(
                 'Mail', 'Translatable#Admin Password', 'setup-admin-password',
                 [
-                    new UIComponentPermission('system/users/1', [CRUD.UPDATE])
+                    new UIComponentPermission('system/users/1', [CRUD.UPDATE], true, null, false)
                 ],
                 'Translatable#Set Password for admin', 'Translatable#setup_assistant_change_admin_password_text',
                 'kix-icon-admin', 20

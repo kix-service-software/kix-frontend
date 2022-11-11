@@ -28,7 +28,9 @@ export class MailAccountEditAction extends AbstractAction {
         const objectId = context.getObjectId();
 
         const permissions = [
-            new UIComponentPermission(`system/communication/mailaccounts/${objectId}`, [CRUD.UPDATE], false, 'Object')
+            new UIComponentPermission(
+                `system/communication/mailaccounts/${objectId}`, [CRUD.UPDATE], false, 'Object', false
+            )
         ];
 
         show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);

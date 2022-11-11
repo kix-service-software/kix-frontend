@@ -49,8 +49,8 @@ export class TextModuleAPIService extends KIXObjectAPIService {
         switch (objectType) {
             case KIXObjectType.TEXT_MODULE:
                 objects = await super.load<TextModule>(
-                    token, KIXObjectType.TEXT_MODULE, this.RESOURCE_URI, loadingOptions, objectIds, 'TextModule',
-                    clientRequestId, TextModule
+                    token, KIXObjectType.TEXT_MODULE, this.RESOURCE_URI, loadingOptions, objectIds,
+                    KIXObjectType.TEXT_MODULE, clientRequestId, TextModule
                 );
                 break;
             default:

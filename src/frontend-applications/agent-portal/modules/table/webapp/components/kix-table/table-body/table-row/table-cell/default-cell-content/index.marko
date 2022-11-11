@@ -24,8 +24,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </span>
     </if>
     <if(state.showText && state.cell.getValue())>
-        <span.text.cell-display-text class={
-            "show-object": state.cell.getValue().displayValue !== null
-        }>${state.cell.getValue().displayValue}</span>
+        <span.text.cell-display-text>${state.cell.getValue().displayValue}</span>
     </if>
 </div>

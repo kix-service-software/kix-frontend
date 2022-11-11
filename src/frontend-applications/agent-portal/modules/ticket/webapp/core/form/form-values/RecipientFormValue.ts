@@ -25,6 +25,10 @@ import { FilterDataType } from '../../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../../model/FilterType';
 import { SystemAddress } from '../../../../../system-address/model/SystemAddress';
 import addrparser from 'address-rfc2822';
+import { ArticleProperty } from '../../../../model/ArticleProperty';
+import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
+import { Article } from '../../../../model/Article';
+import { ArticleLoadingOptions } from '../../../../model/ArticleLoadingOptions';
 
 export class RecipientFormValue extends SelectObjectFormValue {
 
@@ -49,6 +53,39 @@ export class RecipientFormValue extends SelectObjectFormValue {
         this.autoCompleteConfiguration = new AutoCompleteConfiguration(undefined, undefined, undefined, objectName);
 
         this.loadingOptions = new KIXObjectLoadingOptions(null, null, 10);
+
+
+        if (!this.value?.length && this.property === ArticleProperty.TO) {
+            const context = ContextService.getInstance().getActiveContext();
+            const refArticleId = context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
+            if (refArticleId) {
+                const refTicketId = context?.getObjectId();
+                const refArticle = await this.loadReferencedArticle(Number(refTicketId), refArticleId);
+                if (refArticle) {
+                    this.setFormValue([refArticle?.From]);
+                }
+            }
+        }
+    }
+
+    protected async handlePlaceholders(value: any): Promise<any> {
+        value = await super.handlePlaceholders(value);
+
+        if (value) {
+            const emailValues: [Contact[], string[], string[]] = await this.getEmailValues(value);
+
+            const emails = [...emailValues[0].map((c) => c.Email), ...emailValues[1]];
+            const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
+                KIXObjectType.SYSTEM_ADDRESS
+            );
+
+            // remove system addresses (maybe prior From value by placeholder)
+            value = emails.filter((email) => {
+                !systemAddresses.some((sa) => sa.Name === email);
+            });
+        }
+
+        return value;
     }
 
     protected async prepareSelectableNodes(objects: Contact[]): Promise<void> {
@@ -74,48 +111,54 @@ export class RecipientFormValue extends SelectObjectFormValue {
         const valueDefined = typeof this.value !== 'undefined' && this.value !== null;
 
         if (valueDefined && this.treeHandler) {
-            const contactValues: any[] = Array.isArray(this.value)
-                ? this.value.filter((v) => v !== null && typeof v !== 'undefined')
-                : typeof this.value === 'string' ? (this.value as string).split(/\s?,\s/) : [];
+            const emailValues: [Contact[], string[], string[]] = await this.getEmailValues(this.value);
 
-            const emailAddresses: string[] = [];
-            const contactIds: number[] = [];
-            const placeholders: string[] = [];
-            for (let value of contactValues) {
-                value = value.replace(/^(.*?),$/, '$1');
-
-                if (value.match(/(<|&lt;)KIX_/)) {
-                    placeholders.push(value);
-                } else if (isNaN(value)) {
-                    emailAddresses.push(...this.parseAddresses(value));
-                } else if (value !== null && value !== '') {
-                    contactIds.push(Number(value));
-                }
+            if (emailValues[0]) {
+                selectedNodes = await this.getContactNodes(emailValues[0]);
             }
 
-            if (contactIds?.length) {
-                const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, contactIds);
-                selectedNodes = await this.getContactNodes(contacts);
+            if (emailValues[1]) {
+                selectedNodes = await this.addEmailAddressNodes(emailValues[1], selectedNodes);
             }
 
-            if (emailAddresses?.length) {
-                selectedNodes = await this.addEmailAddressNodes(emailAddresses, selectedNodes);
-            }
+            const placeholderNodes = emailValues[2].map((n) => new TreeNode(n, n, 'kix-icon-man-bubble'));
+            selectedNodes = [...selectedNodes, ...placeholderNodes];
 
-            const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
-                KIXObjectType.SYSTEM_ADDRESS
-            );
-
-            const filteredSystemNodes = selectedNodes.filter((n) => !systemAddresses.some((sa) => sa.Name === n.id));
-            const placeholderNodes = placeholders.map((n) => new TreeNode(n, n, 'kix-icon-man-bubble'));
-            selectedNodes = [...filteredSystemNodes, ...placeholderNodes];
-
+            this.value = selectedNodes.map((n) => n.id);
             this.treeHandler.setSelection(selectedNodes, true, true);
         } else {
             this.treeHandler?.selectNone(true);
         }
 
         this.selectedNodes = selectedNodes;
+    }
+
+    private async getEmailValues(value): Promise<[Contact[], string[], string[]]> {
+        const contactValues: any[] = Array.isArray(value)
+            ? value.filter((v) => v !== null && typeof v !== 'undefined')
+            : typeof value === 'string' ? (value as string).split(/\s?,\s/) : [];
+
+        const emailAddresses: string[] = [];
+        const contactIds: number[] = [];
+        const placeholders: string[] = [];
+        for (let value of contactValues) {
+            value = value.replace(/^(.*?),$/, '$1');
+
+            if (value.match(/(<|&lt;)KIX_/)) {
+                placeholders.push(value);
+            } else if (isNaN(value)) {
+                emailAddresses.push(...this.parseAddresses(value));
+            } else if (value !== null && value !== '') {
+                contactIds.push(Number(value));
+            }
+        }
+
+        let contacts: Contact[] = [];
+        if (contactIds?.length) {
+            contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, contactIds);
+        }
+
+        return [contacts, emailAddresses, placeholders];
     }
 
     private parseAddresses(value: string): string[] {
@@ -198,6 +241,18 @@ export class RecipientFormValue extends SelectObjectFormValue {
         }
 
         await super.setObjectValue(recipientValue);
+    }
+
+    private async loadReferencedArticle(refTicketId: number, refArticleId: number): Promise<Article> {
+        let article: Article;
+        if (refArticleId && refTicketId) {
+            const articles = await KIXObjectService.loadObjects<Article>(
+                KIXObjectType.ARTICLE, [refArticleId], null,
+                new ArticleLoadingOptions(refTicketId), true
+            ).catch(() => [] as Article[]);
+            article = articles.find((a) => a.ArticleID === refArticleId);
+        }
+        return article;
     }
 
 }

@@ -9,11 +9,14 @@
 
 import { Context } from '../../../../../../model/Context';
 import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
+import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { LabelService } from '../../../../../base-components/webapp/core/LabelService';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
+import { User } from '../../../../../user/model/User';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
 import { TicketService } from '../../../core';
 import { ComponentState } from './ComponentState';
@@ -50,8 +53,21 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             }
 
             this.state.createTimeString = await LabelService.getInstance().getDisplayText(
-                this.state.article, KIXObjectProperty.CREATE_TIME
+                this.state.article, ArticleProperty.INCOMING_TIME
             );
+
+            if (this.state.article.ChangeTime !== this.state.article.CreateTime) {
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [this.state.article.ChangedBy]
+                ).catch(() => [] as User[]);
+
+                const userLoging = users?.length ? users[0].UserLogin : '';
+
+                this.state.changeTitle = await LabelService.getInstance().getDisplayText(
+                    this.state.article, KIXObjectProperty.CHANGE_TIME
+                );
+                this.state.changeTitle = await TranslationService.translate('Translatable#edited at {0} by {1}', [this.state.changeTitle, userLoging]);
+            }
 
             // TODO: TimeUnit(s) is a article property in KIXPro (extension?)
             if (this.state.article && this.state.article['TimeUnit']) {
@@ -64,12 +80,15 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.translations = await TranslationService.createTranslationObject(
             [
                 'Translatable#Visible in customer portal', 'Translatable#Download all attachments',
-                'Translatable#Created at', 'Translatable#From'
+                'Translatable#Created at', 'Translatable#From', 'Translatable#edited'
             ]
         );
     }
 
     public async attachmentsClicked(event?: any): Promise<void> {
+        if (event) {
+            event.stopPropagation();
+        }
         if (this.state.article) {
             const attachment = await TicketService.getInstance().loadArticleZipAttachment(
                 this.state.article.TicketID, this.state.article.ArticleID

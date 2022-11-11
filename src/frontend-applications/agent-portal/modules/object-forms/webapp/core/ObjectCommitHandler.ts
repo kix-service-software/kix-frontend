@@ -72,6 +72,14 @@ export class ObjectCommitHandler<T extends KIXObject = KIXObject> {
         return newObject;
     }
 
+    protected async prepareTitle(object: T): Promise<void> {
+        if (this.extensions.length) {
+            for (const extension of this.extensions) {
+                await extension.prepareTitle(object);
+            }
+        }
+    }
+
     protected cloneObject(object: T, level: number = 0): T {
         level++;
 

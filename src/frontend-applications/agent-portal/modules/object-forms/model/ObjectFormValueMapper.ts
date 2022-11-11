@@ -15,6 +15,7 @@ import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { ClientStorageService } from '../../base-components/webapp/core/ClientStorageService';
+import { DynamicFieldFormUtil } from '../../base-components/webapp/core/DynamicFieldFormUtil';
 import { EventService } from '../../base-components/webapp/core/EventService';
 import { ValidationResult } from '../../base-components/webapp/core/ValidationResult';
 import { DynamicFormFieldOption } from '../../dynamic-fields/webapp/core';
@@ -89,7 +90,10 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
 
     public async mapFormValues(object: T): Promise<void> {
         this.object = object;
+        const startMapObjectValues = Date.now();
         await this.mapObjectValues(object);
+        const endMapObjectValues = Date.now();
+        console.debug(`Map Object Values: ${(endMapObjectValues - startMapObjectValues)}ms`);
 
         if (Array.isArray(this.form?.pages)) {
             for (const p of this.form?.pages) {
@@ -105,13 +109,22 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
 
         this.fieldOrder = [...this.formFieldOrder];
 
-        await this.initFormValues();
+        const startInitFormValues = Date.now();
+        await Promise.all(this.initFormValues());
+        const endInitFormValues = Date.now();
+        console.debug(`Init Form Values: ${endInitFormValues - startInitFormValues}ms`);
 
         for (const mapperExtension of this.extensions) {
+            const startExtension = Date.now();
             await mapperExtension.postMapFormValues(object);
+            const endExtension = Date.now();
+            console.debug(`Post Map Extension (${mapperExtension?.constructor?.name}): ${endExtension - startExtension}ms`);
         }
 
+        const startCounter = Date.now();
         await this.handleCountValues();
+        const endCounter = Date.now();
+        console.debug(`Handle Count Values: ${endCounter - startCounter}ms`);
 
         this.setInitialFormValueState();
 
@@ -133,14 +146,18 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         }
     }
 
-    protected async initFormValues(formValues = this.formValues): Promise<void> {
+    protected initFormValues(formValues = this.formValues): Array<Promise<void>> {
+        const promises = [];
         for (const fv of formValues) {
-            await fv.initFormValue();
+
+            promises.push(fv.initFormValue());
 
             if (fv.formValues?.length) {
-                await this.initFormValues(fv.formValues);
+                promises.push(...this.initFormValues(fv.formValues));
             }
         }
+
+        return promises;
     }
 
     protected setInitialFormValueState(formValues: ObjectFormValue[] = this.formValues): void {
@@ -198,7 +215,6 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                 await mapperExtension.initFormValueByField(field, formValue);
             }
         }
-
         await formValue?.initFormValueByField(field);
     }
 
@@ -354,24 +370,46 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                 if (instructionProperty === InstructionProperty.SHOW) {
                     if (formValue.visible !== instruction.Show) {
                         formValue.visible = instruction.Show;
+                        if (formValue.isCountHandler && formValue.formValues && formValue.formValues.length > 0) {
+                            formValue.visible = false;
+                            formValue.formValues.forEach((fv) => {
+                                fv.visible = instruction.Show;
+                            });
+                        }
                     }
                 }
 
                 if (instructionProperty === InstructionProperty.HIDE) {
                     if (formValue.visible === instruction.Hide) {
                         formValue.visible = !instruction.Hide;
+                        if (formValue.isCountHandler && formValue.formValues && formValue.formValues.length > 0) {
+                            formValue.visible = false;
+                            formValue.formValues.forEach((fv) => {
+                                fv.visible = !instruction.Hide;
+                            });
+                        }
                     }
                 }
 
                 if (instructionProperty === InstructionProperty.REQUIRED) {
                     if (formValue.required !== instruction.Required) {
                         formValue.required = instruction.Required;
+                        if (formValue.isCountHandler && formValue.formValues && formValue.formValues.length > 0) {
+                            formValue.formValues.forEach((fv) => {
+                                fv.required = instruction.Required;
+                            });
+                        }
                     }
                 }
 
                 if (instructionProperty === InstructionProperty.OPTIONAL) {
                     if (formValue.required === instruction.Optional) {
                         formValue.required = !instruction.Optional;
+                        if (formValue.isCountHandler && formValue.formValues && formValue.formValues.length > 0) {
+                            formValue.formValues.forEach((fv) => {
+                                fv.required = !instruction.Optional;
+                            });
+                        }
                     }
                 }
 
@@ -385,7 +423,6 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                     if (formValue.enabled === instruction.Disable) {
                         formValue.enabled = false;
                         formValue.visible = false;
-                        await formValue.setFormValue(null, true);
                     }
                 }
 
@@ -408,8 +445,12 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                 }
 
                 if (instructionProperty === InstructionProperty.VALIDATION) {
-                    formValue.regExErrorMessage = instruction.Validation.RegExErrorMessage;
-                    formValue.regex = instruction.Validation.RegEx;
+                    formValue.regExList = [
+                        {
+                            errorMessage: instruction.Validation.RegExErrorMessage,
+                            regEx: instruction.Validation.RegEx
+                        }
+                    ];
                 }
 
             }

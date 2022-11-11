@@ -156,9 +156,10 @@ export class ConfigItemFormFactory {
 
     public async addCIClassAttributesToForm(form: FormConfiguration, classId: number): Promise<void> {
         if (form.pages[0] && form.pages[0].groups[0] && classId) {
-            const loadingOptions = new KIXObjectLoadingOptions(
-                null, null, null, [ConfigItemClassProperty.CURRENT_DEFINITION]
-            );
+            const loadingOptions = new KIXObjectLoadingOptions();
+            loadingOptions.includes = [ConfigItemClassProperty.CURRENT_DEFINITION];
+            loadingOptions.cacheType = `${KIXObjectType.CONFIG_ITEM_CLASS}_DEFINITION`;
+
             const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
                 KIXObjectType.CONFIG_ITEM_CLASS, [classId], loadingOptions
             );

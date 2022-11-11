@@ -83,7 +83,7 @@ export class OrganisationAPIService extends KIXObjectAPIService {
                 );
             } else {
                 objects = await super.load(
-                    token, KIXObjectType.CONTACT, this.RESOURCE_URI, null, null, KIXObjectType.ORGANISATION,
+                    token, KIXObjectType.ORGANISATION, this.RESOURCE_URI, null, null, KIXObjectType.ORGANISATION,
                     clientRequestId, Organisation
                 );
 

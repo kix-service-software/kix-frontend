@@ -22,6 +22,7 @@ import { SearchOperator } from '../../search/model/SearchOperator';
 import { FilterDataType } from '../../../model/FilterDataType';
 import { FilterType } from '../../../model/FilterType';
 import { DynamicFieldType } from '../model/DynamicFieldType';
+import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 
 
 
@@ -48,6 +49,30 @@ export class DynamicFieldAPIService extends KIXObjectAPIService {
     public isServiceFor(type: KIXObjectType | string): boolean {
         return type === KIXObjectType.DYNAMIC_FIELD
             || type === KIXObjectType.DYNAMIC_FIELD_TYPE;
+    }
+
+    public async preloadObjects(token: string): Promise<void> {
+        const ticketDFLoadingOptions = new KIXObjectLoadingOptions();
+        ticketDFLoadingOptions.filter = [
+            new FilterCriteria(
+                DynamicFieldProperty.OBJECT_TYPE, SearchOperator.EQUALS, FilterDataType.STRING,
+                FilterType.AND, KIXObjectType.TICKET
+            ),
+            new FilterCriteria(
+                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                FilterType.AND, 1
+            )
+        ];
+
+        await this.loadObjects(
+            token, 'DynamicFieldAPIServicePreload', KIXObjectType.DYNAMIC_FIELD, null, ticketDFLoadingOptions, null
+        );
+
+        const configLoadingOptions = new KIXObjectLoadingOptions();
+        configLoadingOptions.includes = [DynamicFieldProperty.CONFIG];
+        await this.loadObjects(
+            token, 'DynamicFieldAPIServicePreload', KIXObjectType.DYNAMIC_FIELD, null, configLoadingOptions, null
+        );
     }
 
     public async loadObjects<T>(

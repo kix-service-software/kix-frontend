@@ -8,7 +8,7 @@
  */
 
 import { FAQArticleSearchFormManager } from './FAQArticleSearchFormManager';
-import { SearchDefinition, SearchResultCategory } from '../../../search/webapp/core';
+import { SearchDefinition } from '../../../search/webapp/core';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
@@ -37,28 +37,6 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
         return loadingOptions;
     }
 
-    public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(
-            null, null, null, [KIXObjectProperty.LINKS, FAQArticleProperty.VOTES], [KIXObjectProperty.LINKS]
-        );
-    }
-
-    public async getSearchResultCategories(): Promise<SearchResultCategory[]> {
-        const categories: SearchResultCategory[] = [];
-
-        if (await this.checkReadPermissions('tickets')) {
-            categories.push(
-                new SearchResultCategory('Translatable#Tickets', KIXObjectType.TICKET)
-            );
-        }
-        if (await this.checkReadPermissions('cmdb/configitems')) {
-            categories.push(
-                new SearchResultCategory('Translatable#Config Items', KIXObjectType.CONFIG_ITEM)
-            );
-        }
-
-        return [new SearchResultCategory('FAQ', KIXObjectType.FAQ_ARTICLE, categories)];
-    }
 
     public async prepareFormFilterCriteria(
         criteria: FilterCriteria[], forSearch: boolean = true

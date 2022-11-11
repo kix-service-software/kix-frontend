@@ -58,16 +58,22 @@ export class FilterUtil {
         let dfValue = null;
         const dfName = KIXObjectService.getDynamicFieldName(criterion.property);
         if (dfName) {
-            const objects = await KIXObjectService.loadObjects(
-                object.KIXObjectType, [object.ObjectId],
-                new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS])
-            );
-            if (Array.isArray(objects) && objects.length && Array.isArray(objects[0].DynamicFields)) {
-                const dynamicField = objects[0].DynamicFields.find((d) => d.Name === dfName);
-                if (dynamicField) {
-                    dfValue = dynamicField.Value;
+            if (!object?.DynamicFields || !object?.DynamicFields?.length) {
+                const objects = await KIXObjectService.loadObjects(
+                    object.KIXObjectType, [object.ObjectId],
+                    new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS])
+                ).catch(() => []);
+
+                if (objects?.length) {
+                    object = objects[0];
                 }
             }
+
+            const dynamicField = object?.DynamicFields?.find((d) => d.Name === dfName);
+            if (dynamicField) {
+                dfValue = dynamicField.Value;
+            }
+
         } else {
             dfValue = defaultValue;
         }

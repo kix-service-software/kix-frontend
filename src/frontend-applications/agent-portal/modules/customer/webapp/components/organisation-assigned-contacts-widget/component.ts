@@ -72,7 +72,7 @@ class Component {
 
             const loadingOptions = new KIXObjectLoadingOptions(null, null, null, [
                 OrganisationProperty.CONTACTS, OrganisationProperty.TICKET_STATS
-            ]);
+            ], null, null, 'ORGANISATION_TICKET_STATS');
             const organisations = await KIXObjectService.loadObjects<Organisation>(
                 KIXObjectType.ORGANISATION, [this.state.organisation.ID], loadingOptions, null, true, null, true
             );

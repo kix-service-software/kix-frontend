@@ -28,7 +28,7 @@ export class KIXObjectPlaceholderHandler extends AbstractPlaceholderHandler {
         if (object && this.isHandlerFor(objectString)) {
             const attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
             if (attribute && attribute === KIXObjectProperty.LINK_COUNT) {
-                result = object?.Links?.length.toString();
+                result = object?.LinkCount?.toString();
             }
         }
 

@@ -16,6 +16,7 @@ import { TranslationService } from '../../../../../../modules/translation/webapp
 import { AuthenticationSocketClient } from '../../../../../base-components/webapp/core/AuthenticationSocketClient';
 import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
 import { Article } from '../../../../model/Article';
+import { ArticleProperty } from '../../../../model/ArticleProperty';
 
 export class ArticleForwardAction extends AbstractAction<Article> {
 
@@ -72,7 +73,7 @@ export class ArticleForwardAction extends AbstractAction<Article> {
                 this.ticketId, undefined,
                 [
                     ['REFERENCED_SOURCE_OBJECT_ID', this.ticketId],
-                    ['REFERENCED_ARTICLE_ID', this.articleId],
+                    [ArticleProperty.REFERENCED_ARTICLE_ID, this.articleId],
                     ['ARTICLE_FORWARD', true],
                     [AdditionalContextInformation.FORM_ID, 'article-forward']
                 ]

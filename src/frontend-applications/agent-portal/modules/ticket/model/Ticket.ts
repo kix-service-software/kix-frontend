@@ -62,6 +62,8 @@ export class Ticket extends KIXObject {
 
     public Unseen: number;
 
+    public WatcherID: number;
+
     // Object References
 
     public StateType: string;
@@ -109,6 +111,7 @@ export class Ticket extends KIXObject {
 
             this.ObjectId = this.TicketID;
             this.Unseen = Number(ticket.Unseen);
+            this.WatcherID = Number(ticket.WatcherID);
             this.Articles = ticket.Articles
                 ? ticket.Articles.map((a) => new Article(a, this))
                 : [];

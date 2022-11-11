@@ -31,8 +31,6 @@ export enum FormValueProperty {
 
     COUNT_MIN = 'countMin',
 
-    REGEX = 'regex',
-
-    REGEX_ERROR_MESSAGE = 'regExErrorMessage'
+    REG_EX_LIST = 'regExList',
 
 }

@@ -24,6 +24,9 @@ import { SetPreferencesRequest } from '../../../../modules/base-components/webap
 import { SetPreferencesResponse } from '../../../../modules/base-components/webapp/core/SetPreferencesResponse';
 import { BrowserCacheService } from '../../../../modules/base-components/webapp/core/CacheService';
 import { PersonalSettingsProperty } from '../../model/PersonalSettingsProperty';
+import { BackendNotification } from '../../../../model/BackendNotification';
+import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
+import { EventService } from '../../../base-components/webapp/core/EventService';
 
 export class AgentSocketClient extends SocketClient {
 
@@ -37,23 +40,28 @@ export class AgentSocketClient extends SocketClient {
         return AgentSocketClient.INSTANCE;
     }
 
+    private userId: number;
+
     public constructor() {
         super('agent');
     }
 
-    public async getCurrentUser(): Promise<User> {
+    public async getCurrentUser(withStats: boolean): Promise<User> {
         let currentUserRequestPromise;
-        if (BrowserCacheService.getInstance().has(KIXObjectType.CURRENT_USER, KIXObjectType.CURRENT_USER)) {
-            currentUserRequestPromise = BrowserCacheService.getInstance().get(
-                KIXObjectType.CURRENT_USER, KIXObjectType.CURRENT_USER
-            );
+        const cacheType = withStats
+            ? `${KIXObjectType.CURRENT_USER}_STATS`
+            : KIXObjectType.CURRENT_USER;
+
+        if (BrowserCacheService.getInstance().has(cacheType, cacheType)) {
+            currentUserRequestPromise = BrowserCacheService.getInstance().get(cacheType, cacheType);
         }
 
         if (!currentUserRequestPromise) {
             const requestId = IdService.generateDateBasedId();
             const currentUserRequest = new GetCurrentUserRequest(
                 requestId,
-                ClientStorageService.getClientRequestId()
+                ClientStorageService.getClientRequestId(),
+                withStats
             );
 
             const socketTimeout = ClientStorageService.getSocketTimeout();
@@ -68,6 +76,7 @@ export class AgentSocketClient extends SocketClient {
                         AgentEvent.GET_CURRENT_USER_FINISHED, async (result: GetCurrentUserResponse) => {
                             if (result.requestId === requestId) {
                                 window.clearTimeout(timeout);
+                                this.userId = result.currentUser.UserID;
                                 resolve(new User(result.currentUser));
                             }
                         });
@@ -87,7 +96,7 @@ export class AgentSocketClient extends SocketClient {
         }
 
         BrowserCacheService.getInstance().set(
-            KIXObjectType.CURRENT_USER, currentUserRequestPromise, KIXObjectType.CURRENT_USER
+            cacheType, currentUserRequestPromise, cacheType
         );
 
         return currentUserRequestPromise;
@@ -179,5 +188,25 @@ export class AgentSocketClient extends SocketClient {
 
             this.socket.emit(AgentEvent.SET_PREFERENCES, preferencesRequest);
         });
+    }
+
+    public handleNotifications(event: BackendNotification): void {
+        const isOwnerEvent = event.Namespace.startsWith('Ticket.Owner');
+        const isLockEvent = event.Namespace.startsWith('Ticket.Lock');
+        const isWatchEvent = event.Namespace.startsWith('Watcher');
+
+        const ids = event.ObjectID?.split('::') || [];
+
+        if (ids?.length === 3) {
+            const id1Match = ids[1].toString() === this.userId?.toString();
+            const id2Match = ids[2].toString() === this.userId?.toString();
+            if (isOwnerEvent && (id1Match || id2Match)) {
+                BrowserCacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS`);
+                EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
+            } else if ((isLockEvent || isWatchEvent) && id2Match) {
+                BrowserCacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS`);
+                EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
+            }
+        }
     }
 }

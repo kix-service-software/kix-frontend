@@ -25,6 +25,7 @@ import { LabelService } from '../../../../base-components/webapp/core/LabelServi
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { ContextPreference } from '../../../../../model/ContextPreference';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
 export class TicketContext extends Context {
 
@@ -125,7 +126,7 @@ export class TicketContext extends Context {
         EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.TICKET);
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            [], null, null, [TicketProperty.STATE, TicketProperty.STATE_TYPE, TicketProperty.WATCHERS]
+            [], null, null, [KIXObjectProperty.DYNAMIC_FIELDS, TicketProperty.STATE_TYPE]
         );
 
         if (this.queueId) {
@@ -189,13 +190,6 @@ export class TicketContext extends Context {
         super.loadAdditionalInformation(contextPreference);
         this.queueId = contextPreference['QUEUE_ID'];
         this.filterValue = contextPreference['FILTER_VALUE'];
-    }
-
-    public deleteObjectList(objectType: KIXObjectType | string): void {
-        super.deleteObjectList(objectType);
-        if (objectType === KIXObjectType.TICKET) {
-            this.loadTickets();
-        }
     }
 
 }

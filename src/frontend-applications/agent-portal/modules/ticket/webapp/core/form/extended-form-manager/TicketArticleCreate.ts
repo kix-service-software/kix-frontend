@@ -9,22 +9,16 @@
 
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldOption } from '../../../../../../model/configuration/FormFieldOption';
-import { FilterCriteria } from '../../../../../../model/FilterCriteria';
-import { FilterDataType } from '../../../../../../model/FilterDataType';
-import { FilterType } from '../../../../../../model/FilterType';
 import { KIXObject } from '../../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
-import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { ObjectReferenceOptions } from '../../../../../base-components/webapp/core/ObjectReferenceOptions';
 import { JobTypes } from '../../../../../job/model/JobTypes';
 import { MacroAction } from '../../../../../job/model/MacroAction';
 import { MacroActionTypeOption } from '../../../../../job/model/MacroActionTypeOption';
 import { ExtendedJobFormManager } from '../../../../../job/webapp/core/ExtendedJobFormManager';
-import { SearchOperator } from '../../../../../search/model/SearchOperator';
 import { Channel } from '../../../../model/Channel';
 import { Queue } from '../../../../model/Queue';
-import { QueueProperty } from '../../../../model/QueueProperty';
 import { TicketPriority } from '../../../../model/TicketPriority';
 import { TicketState } from '../../../../model/TicketState';
 import { TicketType } from '../../../../model/TicketType';
@@ -106,21 +100,6 @@ export class TicketArticleCreate extends ExtendedJobFormManager {
                 this.setReferencedObjectOptions(field, KIXObjectType.QUEUE, false, true, false);
                 field.options.push(new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true));
                 field.options.push(new FormFieldOption(ObjectReferenceOptions.TEXT_AS_ID, true));
-                field.options.push(
-                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                        new KIXObjectLoadingOptions(
-                            [
-                                new FilterCriteria(
-                                    QueueProperty.PARENT_ID, SearchOperator.EQUALS,
-                                    FilterDataType.STRING, FilterType.AND, null
-                                )
-                            ],
-                            null, null,
-                            [QueueProperty.SUB_QUEUES],
-                            [QueueProperty.SUB_QUEUES]
-                        )
-                    )
-                );
                 return field;
             } else if (option.Name === 'Type') {
                 const field = this.getOptionField(

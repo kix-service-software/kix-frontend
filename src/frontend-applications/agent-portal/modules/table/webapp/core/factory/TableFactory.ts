@@ -21,6 +21,7 @@ import { TicketProperty } from '../../../../ticket/model/TicketProperty';
 import { Column } from '../../../model/Column';
 import { Row } from '../../../model/Row';
 import { Table } from '../../../model/Table';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 
 export abstract class TableFactory {
 
@@ -159,6 +160,14 @@ export abstract class TableFactory {
         }
 
         return columns;
+    }
+
+    public async prepareTableLoadingOptions(loadingOptions: KIXObjectLoadingOptions, table: Table): Promise<void> {
+        if (Array.isArray(this.extendedTableFactories)) {
+            for (const tf of this.extendedTableFactories) {
+                await tf.prepareTableLoadingOptions(loadingOptions, table);
+            }
+        }
     }
 
 }

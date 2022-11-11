@@ -18,8 +18,6 @@ import { LabelService } from '../../../base-components/webapp/core/LabelService'
 import { DynamicFieldType } from '../../model/DynamicFieldType';
 import { DynamicFieldProperty } from '../../model/DynamicFieldProperty';
 import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
-import { rejects } from 'assert';
-import { Resolver } from 'dns';
 import { Error } from '../../../../../../server/model/Error';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 

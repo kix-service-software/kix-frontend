@@ -70,7 +70,7 @@ class Component {
     }
 
     private async initTicketActions(): Promise<void> {
-        const user = await AgentService.getInstance().getCurrentUser();
+        const user = await AgentService.getInstance().getCurrentUser(true);
         this.state.ownedTicketsCount = user.Tickets.Owned.length;
 
         this.state.translations = await TranslationService.createTranslationObject([
@@ -122,7 +122,7 @@ class Component {
                 'kix-icon-lock-close', myLockedTickets, false, user.Tickets.OwnedAndLocked.length, actionId,
                 user.Tickets.OwnedAndLocked.map((id) => Number(id))
             ));
-
+            ContextService.getInstance().registerToolbarActions([...group1, ...group2, ...group3]);
             this.state.toolbarGroups = [group1, group2, group3];
         }
     }
