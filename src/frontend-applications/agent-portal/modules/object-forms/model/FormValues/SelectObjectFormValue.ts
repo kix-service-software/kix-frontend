@@ -24,6 +24,7 @@ import { ObjectReferenceOptions } from '../../../base-components/webapp/core/Obj
 import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
 import { TreeHandler, TreeNode, TreeService, TreeUtil } from '../../../base-components/webapp/core/tree';
 import { FormValueBinding } from '../FormValueBinding';
+import { FormValueProperty } from '../FormValueProperty';
 import { ObjectFormValueMapper } from '../ObjectFormValueMapper';
 import { ObjectFormValue } from './ObjectFormValue';
 
@@ -162,6 +163,10 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                     this.setFormValue(newValue, true);
                 }
             }
+        });
+
+        this.addPropertyBinding(FormValueProperty.ENABLED, (value: SelectObjectFormValue) => {
+            this.loadSelectableValues();
         });
 
         this.initialized = true;
