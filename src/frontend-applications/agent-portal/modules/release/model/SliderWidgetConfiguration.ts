@@ -13,6 +13,8 @@ import { ConfigurationType } from '../../../model/configuration/ConfigurationTyp
 
 export class SliderWidgetConfiguration implements IConfiguration {
 
+    public application: string = 'agent-portal';
+
     public constructor(
         public id: string,
         public name: string,

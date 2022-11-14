@@ -133,6 +133,58 @@
         },
         "files": [
             {
+                "name": "configuration/readme.md",
+                "content": [
+                    "# Configuration",
+                    "Add your configuration implementations here."
+                ]
+            },
+            {
+                "name": "configuration/configuration.extension.ts",
+                "content": [
+                    "import { IConfigurationExtension } from '../../../../frontend-applications/agent-portal/server/extensions/IConfigurationExtension';",
+                    "import { IConfiguration } from '../../../../frontend-applications/agent-portal/model/configuration/IConfiguration';",
+                    "import { ConfigurationType } from '../../../../frontend-applications/agent-portal/model/configuration/ConfigurationType';",
+                    "import { ContextConfiguration } from '../../../../frontend-applications/agent-portal/model/configuration/ContextConfiguration';",
+                    "import { KIXExtension } from '../../../../server/model/KIXExtension';",
+                    "",
+                    "class Extension extends KIXExtension implements IConfigurationExtension {",
+                    "",
+                    "   public pluginId: string = '{{pluginName}}';",
+                    "",
+                    "   public getModuleId(): string {",
+                    "       return 'CONTEXT_ID';",
+                    "   }",
+                    "",
+                    "   public async getDefaultConfiguration(): Promise<IConfiguration[]> {",
+                    "       const configurations: IConfiguration[] = [];",
+                    "",
+                    "       const contextConfig = new ContextConfiguration(",
+                    "           this.getModuleId(), '{{pluginName}} Config Title', ConfigurationType.Context,",
+                    "           this.getModuleId(), [],",
+                    "           [], [],",
+                    "           [],",
+                    "           [], [], [], []",
+                    "       );",
+                    "       contextConfig.application = '{{pluginName}}';",
+                    "",
+                    "       configurations.push(contextConfig);",
+                    "",
+                    "       return configurations;",
+                    "   }",
+                    "",
+                    "   public async getFormConfigurations(): Promise<IConfiguration[]> {",
+                    "       return [];",
+                    "   }",
+                    "",
+                    "}",
+                    "",
+                    "module.exports = (data, host, options): Extension => {",
+                    "   return new Extension();",
+                    "};"
+                ]
+            },
+            {
                 "name": "package.json",
                 "content": [
                     "{",
@@ -141,6 +193,11 @@
                     "       \"kix:modules\": {",
                     "           \"kix-module-{{name}}-module\": {",
                     "               \"module\": \"kix-module.extension\"",
+                    "           }",
+                    "       },",
+                    "       \"kix:configuration\": {",
+                    "           \"kix-{{name}}-configuration\": {",
+                    "               \"module\": \"configuration.extension\"",
                     "           }",
                     "       }",
                     "   }",
@@ -220,7 +277,7 @@
                 "content": [
                     "{",
                     "   \"taglibImports\": [",
-                    "       \"../../../../frontend-applications/agent-portal/modules/base-components/marko.json\"",
+                    "       \"../../common/webapp/marko.json\"",
                     "   ]",
                     "}"
                 ]

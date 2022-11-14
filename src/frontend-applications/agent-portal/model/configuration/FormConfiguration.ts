@@ -16,6 +16,8 @@ import { FormContext } from './FormContext';
 
 export class FormConfiguration implements IConfiguration {
 
+    public application: string = 'agent-portal';
+
     public constructor(
         public id: string,
         public name: string,

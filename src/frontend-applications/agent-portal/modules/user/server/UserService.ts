@@ -28,7 +28,7 @@ import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { CacheService } from '../../../server/services/cache';
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
-import { AuthenticationService } from '../../../server/services/AuthenticationService';
+import { AuthenticationService } from '../../../../../server/services/AuthenticationService';
 
 export class UserService extends KIXObjectAPIService {
 

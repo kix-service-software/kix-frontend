@@ -101,6 +101,19 @@ export class KIXObjectSocketClient extends SocketClient {
 
         const requestId = IdService.generateDateBasedId();
 
+        if (!loadingOptions) {
+            loadingOptions = new KIXObjectLoadingOptions();
+        }
+
+        if (!loadingOptions.query) {
+            loadingOptions.query = [];
+        }
+
+        const organisationId = ClientStorageService.getOption('RelevantOrganisationID');
+        if (organisationId) {
+            loadingOptions.query.push(['RelevantOrganisationID', organisationId]);
+        }
+
         const request = new LoadObjectsRequest(
             requestId, ClientStorageService.getClientRequestId(),
             kixObjectType, objectIds, loadingOptions, objectLoadingOptions

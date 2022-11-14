@@ -20,6 +20,7 @@ import { ProfilingService } from '../../../../server/services/ProfilingService';
 import { IMarkoApplication } from '../extensions/IMarkoApplication';
 import { IKIXModuleExtension } from '../../model/IKIXModuleExtension';
 import { ServerUtil } from '../../../../server/ServerUtil';
+import { ConfigurationService } from '../../../../server/services/ConfigurationService';
 
 export class MarkoService {
 
@@ -64,29 +65,60 @@ export class MarkoService {
 
     private async registerModules(applications: IMarkoApplication[], modules: IKIXModuleExtension[]): Promise<void> {
         for (const moduleExtension of modules) {
-            for (const app of moduleExtension.applications) {
 
-                const application = applications.find((a) => a.name === app);
-
-                if (application) {
-                    const folder = application.internal ? 'modules' : path.join('..', '..', 'plugins');
-                    const browserJsonPath = path.join(
-                        '..', '..', folder, application.name, application.path, 'browser.json'
-                    );
-
-                    const browserJSON = require(browserJsonPath);
-                    this.addMouldeDependencies(browserJSON, moduleExtension);
-
-                    await this.saveBrowserJSON(browserJSON, browserJsonPath);
-                    this.clearRequireCache(browserJsonPath);
+            if (moduleExtension.applications?.length) {
+                for (const app of moduleExtension.applications) {
+                    const application = applications.find((a) => a.name === app);
+                    if (application) {
+                        await this.registerApplicationModule(application, moduleExtension);
+                    }
+                }
+            } else {
+                for (const application of applications) {
+                    await this.registerApplicationModule(application, moduleExtension);
                 }
             }
         }
     }
 
-    public addMouldeDependencies(browserJSON: BrowserJSON, moduleExtension: IKIXModuleExtension): void {
-        const folder = moduleExtension.external ? path.join('..', '..', 'plugins') : 'modules';
-        const prePath = path.join('..', '..', '..', '..', folder);
+    private async registerApplicationModule(
+        application: IMarkoApplication, moduleExtension: IKIXModuleExtension
+    ): Promise<void> {
+        let folder = 'modules';
+        const rootPath = ['..', '..'];
+
+        if (!application.internal) {
+            folder = 'plugins';
+            rootPath.push('..', '..');
+        }
+
+        const browserJsonPath = path.join(
+            ...rootPath, folder, application.name, application.path, 'browser.json'
+        );
+
+        const browserJSON = require(browserJsonPath);
+        this.addMouldeDependencies(browserJSON, moduleExtension, application.internal);
+
+        await this.saveBrowserJSON(browserJSON, browserJsonPath);
+        this.clearRequireCache(browserJsonPath);
+    }
+
+
+    public addMouldeDependencies(
+        browserJSON: BrowserJSON, moduleExtension: IKIXModuleExtension, internalApp: boolean
+    ): void {
+        const folder = moduleExtension.external ? 'plugins' : 'modules';
+        const rootPath = ['..', '..', '..', '..'];
+
+        if (internalApp && moduleExtension.external) {
+            rootPath.push('..', '..');
+        } else if (!internalApp && !moduleExtension.external) {
+            rootPath.push('..', 'frontend-applications', 'agent-portal');
+        } else if (!internalApp) {
+            rootPath.push('..');
+        }
+
+        const prePath = path.join(...rootPath, folder);
         moduleExtension.webDependencies.forEach((d) => {
             const dependency = path.join(prePath, d);
             const exists = browserJSON.dependencies.find((dep) => dep === dependency);
@@ -118,17 +150,33 @@ export class MarkoService {
         this.appIsReady();
         lasso.clearCaches();
 
+        const config = ConfigurationService.getInstance().getServerConfiguration();
+        const applicationString = config?.BUILD_MARKO_APPLICATIONS;
+        if (applicationString) {
+            const applicationsToBuild = applicationString.split(',');
+            applications = applications.filter((a) => applicationsToBuild.some((ab) => ab === a.name));
+        }
+
         LoggingService.getInstance().info(`Build ${applications.length} marko applications`);
 
         const buildPromises = [];
         this.appNames = applications.map((a) => a.name);
-        for (const app of applications) {
-            LoggingService.getInstance().info(`[MARKO] Start - App Build ${app.name}`);
 
-            const folder = app.internal ? 'modules' : 'plugins';
-            const templatePath = path.join(__dirname, '..', '..', folder, app.name, app.path);
+        for (const application of applications) {
+            LoggingService.getInstance().info(`[MARKO] Start - App Build ${application.name}`);
+
+            let folder = 'modules';
+            const rootPath = ['..', '..'];
+
+            if (!application.internal) {
+                rootPath.push('..', '..');
+                folder = 'plugins';
+            }
+
+            const templatePath = path.join(__dirname, ...rootPath, folder, application.name, application.path);
+
             const template = require(templatePath).default;
-            buildPromises.push(this.buildApplication(template, app));
+            buildPromises.push(this.buildApplication(template, application));
         }
 
         await Promise.all(buildPromises);

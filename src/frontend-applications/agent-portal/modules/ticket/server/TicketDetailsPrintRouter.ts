@@ -10,7 +10,7 @@
 import { Request, Response } from 'express';
 import { KIXRouter } from '../../../server/routes/KIXRouter';
 import { TicketDetailsDataBuilder } from './TicketDetailsDataBuilder';
-import { AuthenticationService } from '../../../server/services/AuthenticationService';
+import { AuthenticationService } from '../../../../../server/services/AuthenticationService';
 
 export class TicketDetailsPrintRouter extends KIXRouter {
 

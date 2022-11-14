@@ -19,6 +19,7 @@ import { IdService } from '../../../../model/IdService';
 import { ISocketRequest } from './ISocketRequest';
 import { ISocketResponse } from './ISocketResponse';
 import { ContextPreference } from '../../../../model/ContextPreference';
+import { KIXModulesService } from './KIXModulesService';
 
 export class ContextSocketClient extends SocketClient {
 
@@ -59,7 +60,8 @@ export class ContextSocketClient extends SocketClient {
 
             this.socket.emit(
                 ContextEvent.LOAD_CONTEXT_CONFIGURATION, new LoadContextConfigurationRequest(
-                    requestId, ClientStorageService.getClientRequestId(), contextId
+                    requestId, ClientStorageService.getClientRequestId(), contextId,
+                    KIXModulesService.application
                 )
             );
 
@@ -73,7 +75,7 @@ export class ContextSocketClient extends SocketClient {
         });
     }
 
-    public async loadContextConfigurations(): Promise<ContextConfiguration[]> {
+    public async loadContextConfigurations(application: string): Promise<ContextConfiguration[]> {
         this.checkSocketConnection();
 
         const socketTimeout = ClientStorageService.getSocketTimeout();
@@ -94,9 +96,10 @@ export class ContextSocketClient extends SocketClient {
                 }
             );
 
-            const request: ISocketRequest = {
+            const request = {
                 requestId,
-                clientRequestId: ClientStorageService.getClientRequestId()
+                clientRequestId: ClientStorageService.getClientRequestId(),
+                application: application
             };
             this.socket.emit(ContextEvent.LOAD_CONTEXT_CONFIGURATIONS, request);
 

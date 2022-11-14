@@ -16,6 +16,8 @@ import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOp
 
 export class TicketChartWidgetConfiguration implements IConfiguration {
 
+    public application: string = 'agent-portal';
+
     public constructor(
         public id: string,
         public name: string,

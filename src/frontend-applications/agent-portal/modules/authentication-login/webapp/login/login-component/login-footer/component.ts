@@ -9,12 +9,12 @@
 
 import { ComponentState } from './ComponentState';
 import { ComponentInput } from './ComponentInput';
-import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
-import { SysConfigOption } from '../../../../sysconfig/model/SysConfigOption';
-import { SysConfigKey } from '../../../../sysconfig/model/SysConfigKey';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { KIXModulesSocketClient } from '../../../../../modules/base-components/webapp/core/KIXModulesSocketClient';
-import { ReleaseInfo } from '../../../../../model/ReleaseInfo';
+import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
+import { SysConfigOption } from '../../../../../sysconfig/model/SysConfigOption';
+import { SysConfigKey } from '../../../../../sysconfig/model/SysConfigKey';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { KIXModulesSocketClient } from '../../../../../base-components/webapp/core/KIXModulesSocketClient';
+import { ReleaseInfo } from '../../../../../../model/ReleaseInfo';
 
 class Component {
 

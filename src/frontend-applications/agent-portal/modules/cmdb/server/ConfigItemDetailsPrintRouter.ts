@@ -9,7 +9,7 @@
 
 import { Request, Response } from 'express';
 import { KIXRouter } from '../../../server/routes/KIXRouter';
-import { AuthenticationService } from '../../../server/services/AuthenticationService';
+import { AuthenticationService } from '../../../../../server/services/AuthenticationService';
 import { ConfigItemDetailsDataBuilder } from './ConfigItemDetailsDataBuilder';
 
 

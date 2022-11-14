@@ -10,6 +10,7 @@
 import { DataType } from '../../../model/DataType';
 import { SortOrder } from '../../../model/SortOrder';
 import { SortUtil } from '../../../model/SortUtil';
+import { UserType } from '../../user/model/UserType';
 import { PortalNotification } from '../model/PortalNotification';
 import { PortalNotificationNamespace } from './PortalNotificationNamespace';
 
@@ -52,12 +53,12 @@ export class PortalNotificationService {
         PortalNotificationNamespace.getInstance().broadcastUpdate(true);
     }
 
-    public getNotifications(): PortalNotification[] {
-        return this.notifications;
+    public getNotifications(userType: UserType = UserType.AGENT): PortalNotification[] {
+        return this.notifications.filter((n) => n.usageContext.some((uc) => uc === userType));
     }
 
-    public getPreLoginNotifications(): PortalNotification[] {
-        return this.preLoginNotifications;
+    public getPreLoginNotifications(userType: UserType = UserType.AGENT): PortalNotification[] {
+        return this.preLoginNotifications.filter((n) => n.usageContext.some((uc) => uc === userType));
     }
 
 

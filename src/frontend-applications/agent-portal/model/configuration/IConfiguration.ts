@@ -22,6 +22,8 @@ export interface IConfiguration {
 
     configuration?: IConfiguration;
 
+    application: string;
+
     valid: boolean;
 
 }

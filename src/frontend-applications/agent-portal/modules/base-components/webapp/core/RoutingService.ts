@@ -13,6 +13,7 @@ import { ContextService } from './ContextService';
 import { ActionFactory } from './ActionFactory';
 import { SetupService } from '../../../setup-assistant/webapp/core/SetupService';
 import { ContextMode } from '../../../../model/ContextMode';
+import { KIXModulesService } from './KIXModulesService';
 
 export class RoutingService {
 
@@ -30,7 +31,9 @@ export class RoutingService {
 
     private constructor() { }
 
-    public async routeToInitialContext(history: boolean = false, useURL: boolean = true): Promise<void> {
+    public async routeToInitialContext(
+        history: boolean = false, useURL: boolean = true, defaultContextId?: string
+    ): Promise<void> {
         await ContextService.getInstance().initUserContextInstances();
 
         let routed: boolean = false;
@@ -46,7 +49,7 @@ export class RoutingService {
             if (contextList.length) {
                 await ContextService.getInstance().setContextByInstanceId(contextList[0].instanceId);
             } else {
-                this.setHomeContextIfNeeded();
+                this.setHomeContextIfNeeded(defaultContextId);
             }
         }
     }
@@ -82,11 +85,11 @@ export class RoutingService {
         return !releaseInfoVisited || (buildNumber && releaseInfoVisited !== buildNumber.toString());
     }
 
-    private setHomeContextIfNeeded(): boolean {
+    private setHomeContextIfNeeded(defaultContextId: string = 'home'): boolean {
         let routed: boolean = false;
         const contextList = ContextService.getInstance().getContextInstances();
         if (Array.isArray(contextList) && !contextList.length) {
-            ContextService.getInstance().setActiveContext('home');
+            ContextService.getInstance().setActiveContext(defaultContextId);
             routed = true;
         }
 
@@ -97,7 +100,10 @@ export class RoutingService {
         let routed: boolean = false;
         const parsedUrl = new URL(window.location.href);
         const urlParams = parsedUrl.searchParams;
-        const path = parsedUrl.pathname === '/' ? [] : parsedUrl.pathname.split('/');
+
+        const prefixLength = KIXModulesService.urlPrefix.length;
+        const pathName = parsedUrl.pathname.substring(prefixLength + 1, parsedUrl.pathname.length);
+        const path = parsedUrl.pathname === '/' ? [] : pathName.split('/');
 
         let contextUrl: string;
         let objectId: string;

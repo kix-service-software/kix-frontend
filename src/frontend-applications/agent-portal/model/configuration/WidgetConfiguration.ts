@@ -16,6 +16,8 @@ export class WidgetConfiguration implements IConfiguration {
 
     public instanceId: string;
 
+    public application: string = 'agent-portal';
+
     public constructor(
         public id: string,
         public name: string,

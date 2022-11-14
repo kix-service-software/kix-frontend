@@ -8,8 +8,24 @@
  */
 
 // default "css"
+
+@mobile-breakpoint: 1140px; // have to be px (used for calculations)
+@sidebar-left-breakpoint: 1300px; // have to be px (used for calculations)
+@sidebar-right-breakpoint: 1600px; // have to be px (used for calculations)
+
 @border-radius: 3px;
 @shadow-color: @secondary-2;
+
+.show-object {
+    opacity: 1 !important;
+    transition: opacity .5s;
+}
+
+.shorten-text() {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 
 .shadow-1(@color: @shadow-color) {
     box-shadow: 2px 2px 2px 0 @color;
@@ -25,70 +41,6 @@
 
 .shadow-3(@color: @shadow-color) {
     box-shadow: 2px 2px 10px 3px @color;
-}
-
-html {
-    height: 100%;
-    box-sizing: border-box;
-    background-color: @secondary-5;
-    overflow-y: scroll;
-
-    body {
-        height: 100%;
-        box-sizing: border-box;
-        position: relative;
-    }
-}
-
-a,
-a:visited,
-a:link {
-    color: @primary-0;
-    text-decoration: none;
-
-    &:hover,
-    &:active {
-        color: @primary-2;
-        text-decoration: underline;
-    }
-}
-
-.show-object {
-    opacity: 1 !important;
-    transition: opacity .5s;
-}
-
-ul.menu {
-    >li {
-
-        >a,
-        >a:visited,
-        >a:link {
-            color: inherit;
-
-            &:hover,
-            &:active {
-                color: inherit;
-                text-decoration: none;
-            }
-        }
-    }
-}
-
-.vertical-align() {
-    display: block;
-    position: relative;
-    top: 50%;
-    -webkit-transform: perspective(1px) translateY(-50%);
-    -ms-transform: perspective(1px) translateY(-50%);
-    transform: perspective(1px) translateY(-50%);
-}
-
-.shield {
-    .full-size();
-    position: fixed;
-    background-color: @secondary-6;
-    opacity: 0.8;
 }
 
 .error {

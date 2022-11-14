@@ -81,64 +81,53 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         }
     }
 
-    private createArticleFormValues(article: Article): void {
+    protected createArticleFormValues(article: Article): void {
         for (const property in article) {
             if (!Object.prototype.hasOwnProperty.call(article, property)) {
                 continue;
             }
 
-            let formValue;
-            switch (property) {
-                case ArticleProperty.TO:
-                case ArticleProperty.CC:
-                case ArticleProperty.BCC:
-                    formValue = new RecipientFormValue(property, article, this.objectValueMapper, this);
-                    break;
-                case ArticleProperty.FROM:
-                    formValue = new FromObjectFormValue(property, article, this.objectValueMapper, this);
-                    break;
-                case ArticleProperty.CUSTOMER_VISIBLE:
-                    formValue = new CustomerVisibleFormValue(property, article, this.objectValueMapper, this);
-                    break;
-                case ArticleProperty.SUBJECT:
-                    formValue = new ObjectFormValue(property, article, this.objectValueMapper, this);
-                    formValue.required = true;
-                    break;
-                case ArticleProperty.BODY:
-                    formValue = new RichTextFormValue(
-                        property, article, this.objectValueMapper, this,
-                        [new AutocompleteOption(KIXObjectType.TEXT_MODULE, '::')]
-                    );
-                    formValue.required = true;
-                    break;
-                case ArticleProperty.ATTACHMENTS:
-                    formValue = new ArticleAttachmentFormValue(property, article, this.objectValueMapper, this);
-                    break;
-                case ArticleProperty.INCOMING_TIME:
-                    formValue = new IncomingTimeFormValue(property, article, this.objectValueMapper, this);
-                    break;
-                default:
-            }
+            this.createArticleFormValue(property, article);
 
-            if (formValue) {
-                formValue.visible = true;
-                formValue.isSortable = false;
-
-                // subject and body are always required (if enabled)
-                if (formValue.property === ArticleProperty.SUBJECT || formValue.property === ArticleProperty.BODY) {
-                    formValue.required = true;
-                }
-
-                // initial not visible (formActions should show them)
-                if (formValue.property === ArticleProperty.CC || formValue.property === ArticleProperty.BCC) {
-                    formValue.visible = false;
-                }
-                this.formValues.push(formValue);
-            }
         }
     }
 
-    private async setChannelFields(channelId: number): Promise<void> {
+    protected createArticleFormValue(property: string, article: Article): void {
+        let formValue;
+        switch (property) {
+            case ArticleProperty.TO:
+            case ArticleProperty.CC:
+            case ArticleProperty.BCC:
+                formValue = new RecipientFormValue(property, article, this.objectValueMapper, this);
+                break;
+            case ArticleProperty.FROM:
+                formValue = new FromObjectFormValue(property, article, this.objectValueMapper, this);
+                break;
+            case ArticleProperty.CUSTOMER_VISIBLE:
+                formValue = new CustomerVisibleFormValue(property, article, this.objectValueMapper, this);
+                break;
+            case ArticleProperty.SUBJECT:
+                formValue = new ObjectFormValue(property, article, this.objectValueMapper, this);
+                formValue.required = true;
+                break;
+            case ArticleProperty.BODY:
+                formValue = new RichTextFormValue(
+                    property, article, this.objectValueMapper, this,
+                    [new AutocompleteOption(KIXObjectType.TEXT_MODULE, '::')]
+                );
+                formValue.required = true;
+                break;
+            case ArticleProperty.ATTACHMENTS:
+                formValue = new ArticleAttachmentFormValue(property, article, this.objectValueMapper, this);
+                break;
+            case ArticleProperty.INCOMING_TIME:
+                formValue = new IncomingTimeFormValue(property, article, this.objectValueMapper, this);
+                break;
+            default:
+        }
+    }
+
+    protected async setChannelFields(channelId: number): Promise<void> {
         const allFields = [
             ArticleProperty.CUSTOMER_VISIBLE,
             ArticleProperty.FROM, ArticleProperty.TO, ArticleProperty.CC, ArticleProperty.BCC,
@@ -184,7 +173,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         }
     }
 
-    private enableChannelFormValues(channelName: string, properties: ArticleProperty[]): void {
+    protected enableChannelFormValues(channelName: string, properties: ArticleProperty[]): void {
         for (const property of properties) {
             const formValue = this.formValues.find((fv) => fv.property === property);
 
@@ -215,7 +204,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         }
     }
 
-    private disableChannelFormValues(properties: ArticleProperty[]): void {
+    protected disableChannelFormValues(properties: ArticleProperty[]): void {
         for (const property of properties) {
             const formValue = this.formValues.find((fv) => fv.property === property);
 

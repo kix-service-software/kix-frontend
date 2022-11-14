@@ -70,7 +70,8 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
     public async getAgentPortalConfiguration(): Promise<AgentPortalConfiguation> {
         let config: AgentPortalConfiguation;
 
-        const value = await this.getSysconfigOptionValue(AgentPortalConfiguation.CONFIGURATION_ID);
+        const value = await this.getSysconfigOptionValue(AgentPortalConfiguation.CONFIGURATION_ID)
+            .catch(() => null);
         if (value) {
             try {
                 config = JSON.parse(value);

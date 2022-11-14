@@ -68,7 +68,9 @@ export class AgentNamespace extends SocketNameSpace {
 
     private async setPreferences(data: SetPreferencesRequest, client: Socket): Promise<SocketResponse> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
-        const token = parsedCookie ? parsedCookie.token : '';
+
+        const tokenPrefix = client?.handshake?.headers?.tokenprefix || '';
+        const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
         const user = await UserService.getInstance().getUserByToken(token)
             .catch((): User => null);
@@ -95,7 +97,9 @@ export class AgentNamespace extends SocketNameSpace {
 
     private async getCurrentUser(data: GetCurrentUserRequest, client: Socket): Promise<SocketResponse> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
-        const token = parsedCookie ? parsedCookie.token : '';
+
+        const tokenPrefix = client?.handshake?.headers?.tokenprefix || '';
+        const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
         let response: SocketResponse;
         const user = await HttpService.getInstance().getUserByToken(token, data.withStats).catch((error) => {
