@@ -21,6 +21,8 @@ import { ToggleOptions } from '../../modules/table/model/ToggleOptions';
 
 export class TableConfiguration implements IConfiguration {
 
+    public application: string = 'agent-portal';
+
     public constructor(
         public id: string,
         public name: string,

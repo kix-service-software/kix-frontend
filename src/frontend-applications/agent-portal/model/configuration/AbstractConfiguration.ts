@@ -13,6 +13,8 @@ import { IConfiguration } from './IConfiguration';
 
 export abstract class AbstractConfiguration implements IConfiguration {
 
+    public application: string = 'agent-portal';
+
     public constructor(
         public id: string = IdService.generateDateBasedId(),
         public name: string = id,

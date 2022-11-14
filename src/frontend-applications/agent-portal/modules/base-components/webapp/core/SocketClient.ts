@@ -31,7 +31,10 @@ export abstract class SocketClient {
 
         const options = {
             withCredentials: true,
-            closeOnBeforeunload: false
+            closeOnBeforeunload: false,
+            extraHeaders: {
+                'tokenPrefix': ClientStorageService.tokenPrefix
+            }
         };
 
         this.socket = io(socketUrl + '/' + this.namespace, options);

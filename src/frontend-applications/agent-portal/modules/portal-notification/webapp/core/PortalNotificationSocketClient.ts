@@ -13,6 +13,7 @@ import { EventService } from '../../../base-components/webapp/core/EventService'
 import { SocketClient } from '../../../base-components/webapp/core/SocketClient';
 import { SocketErrorResponse } from '../../../base-components/webapp/core/SocketErrorResponse';
 import { SocketEvent } from '../../../base-components/webapp/core/SocketEvent';
+import { UserType } from '../../../user/model/UserType';
 import { PortalNotification } from '../../model/PortalNotification';
 import { PortalNotificationEvent } from '../../model/PortalNotificationEvent';
 
@@ -44,7 +45,7 @@ export class PortalNotificationSocketClient extends SocketClient {
         );
     }
 
-    public async loadPreLoginNotifications(): Promise<PortalNotification[]> {
+    public async loadPreLoginNotifications(userType: UserType = UserType.AGENT): Promise<PortalNotification[]> {
         this.checkSocketConnection();
 
         const socketTimeout = ClientStorageService.getSocketTimeout();
@@ -66,7 +67,7 @@ export class PortalNotificationSocketClient extends SocketClient {
             );
 
             this.socket.emit(
-                PortalNotificationEvent.GET_PRELOGIN_NOTIFICATIONS, { requestId }
+                PortalNotificationEvent.GET_PRELOGIN_NOTIFICATIONS, { requestId, userType }
             );
 
             this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
@@ -79,7 +80,7 @@ export class PortalNotificationSocketClient extends SocketClient {
         });
     }
 
-    public async loadNotifications(): Promise<PortalNotification[]> {
+    public async loadNotifications(userType: UserType = UserType.AGENT): Promise<PortalNotification[]> {
         this.checkSocketConnection();
 
         const socketTimeout = ClientStorageService.getSocketTimeout();
@@ -101,7 +102,7 @@ export class PortalNotificationSocketClient extends SocketClient {
             );
 
             this.socket.emit(
-                PortalNotificationEvent.GET_NOTIFICATIONS, { requestId }
+                PortalNotificationEvent.GET_NOTIFICATIONS, { requestId, userType }
             );
 
             this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {

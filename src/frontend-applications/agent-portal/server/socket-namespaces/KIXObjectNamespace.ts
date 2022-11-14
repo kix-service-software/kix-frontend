@@ -56,7 +56,9 @@ export class KIXObjectNamespace extends SocketNameSpace {
 
     private async loadObjects(data: LoadObjectsRequest, client: Socket): Promise<SocketResponse> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
-        const token = parsedCookie ? parsedCookie.token : '';
+
+        const tokenPrefix = client?.handshake?.headers?.tokenprefix || '';
+        const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
         const service = KIXObjectServiceRegistry.getServiceInstance(data.objectType);
         if (service) {
@@ -81,7 +83,9 @@ export class KIXObjectNamespace extends SocketNameSpace {
         data: CreateObjectRequest, client: Socket
     ): Promise<SocketResponse<CreateObjectResponse | SocketErrorResponse>> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
-        const token = parsedCookie ? parsedCookie.token : '';
+
+        const tokenPrefix = client?.handshake?.headers?.tokenprefix || '';
+        const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
         let response: SocketResponse<CreateObjectResponse | SocketErrorResponse>;
 
@@ -108,7 +112,9 @@ export class KIXObjectNamespace extends SocketNameSpace {
         data: UpdateObjectRequest, client: Socket
     ): Promise<SocketResponse<UpdateObjectResponse>> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
-        const token = parsedCookie ? parsedCookie.token : '';
+
+        const tokenPrefix = client?.handshake?.headers?.tokenprefix || '';
+        const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
         let response;
 
@@ -136,7 +142,9 @@ export class KIXObjectNamespace extends SocketNameSpace {
         data: DeleteObjectRequest, client: Socket
     ): Promise<SocketResponse<DeleteObjectResponse>> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
-        const token = parsedCookie ? parsedCookie.token : '';
+
+        const tokenPrefix = client?.handshake?.headers?.tokenprefix || '';
+        const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
         let response;
 

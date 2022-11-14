@@ -12,7 +12,7 @@ import { SocketEvent } from '../../modules/base-components/webapp/core/SocketEve
 import { AuthenticationEvent } from '../../modules/base-components/webapp/core/AuthenticationEvent';
 import { LoginRequest } from '../../modules/base-components/webapp/core/LoginRequest';
 import { SocketResponse } from '../../modules/base-components/webapp/core/SocketResponse';
-import { AuthenticationService } from '../services/AuthenticationService';
+import { AuthenticationService } from '../../../../server/services/AuthenticationService';
 import { AuthenticationResult } from '../../modules/base-components/webapp/core/AuthenticationResult';
 import { ISocketRequest } from '../../modules/base-components/webapp/core/ISocketRequest';
 import { SocketErrorResponse } from '../../modules/base-components/webapp/core/SocketErrorResponse';
@@ -61,11 +61,14 @@ export class AuthenticationNamespace extends SocketNameSpace {
 
     private async login(data: LoginRequest, client: Socket): Promise<SocketResponse> {
         const response = await AuthenticationService.getInstance()
-            .login(data.userName, data.password, data.negotiateToken, data.clientRequestId, client.handshake.address)
-            .then(async (token: string) => {
-                await TranslationAPIService.getInstance().loadObjects(token, 'login', KIXObjectType.TRANSLATION, null, null, null);
-                await ObjectIconService.getInstance().getObjectIcons(token);
-                await TicketAPIService.getInstance().preloadObjects(token);
+            .login(
+                data.userName, data.password, data.userType, data.negotiateToken,
+                data.clientRequestId, client.handshake.address
+            ).then(async (token: string) => {
+                await TranslationAPIService.getInstance().loadObjects(token, 'login', KIXObjectType.TRANSLATION, null, null, null)
+                    .catch(() => null);
+                await ObjectIconService.getInstance().getObjectIcons(token).catch(() => null);
+                await TicketAPIService.getInstance().preloadObjects(token).catch(() => null);
                 return new SocketResponse(
                     AuthenticationEvent.AUTHORIZED,
                     new AuthenticationResult(token, data.requestId, data.redirectUrl)
@@ -84,13 +87,15 @@ export class AuthenticationNamespace extends SocketNameSpace {
         let response: SocketResponse;
         if (socket?.handshake?.headers?.cookie) {
             const parsedCookie = socket ? cookie.parse(socket.handshake.headers.cookie) : null;
-            const token = parsedCookie ? parsedCookie.token : '';
+
+            const tokenPrefix = socket?.handshake?.headers?.tokenprefix || '';
+            const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
             await AuthenticationService.getInstance().logout(token).catch(
                 (error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error))
             );
 
-            const tokenCookie = cookie.serialize('token', '', { expires: new Date() });
+            const tokenCookie = cookie.serialize(`${tokenPrefix}token`, '', { expires: new Date() });
             socket.handshake.headers.cookie = tokenCookie;
 
             return new SocketResponse(
@@ -112,7 +117,9 @@ export class AuthenticationNamespace extends SocketNameSpace {
         let response: SocketResponse;
         if (socket?.handshake?.headers?.cookie) {
             const parsedCookie = socket ? cookie.parse(socket.handshake.headers.cookie) : null;
-            const token = parsedCookie ? parsedCookie.token : '';
+
+            const tokenPrefix = socket?.handshake?.headers?.tokenprefix || '';
+            const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
             const valid = await AuthenticationService.getInstance().validateToken(
                 token, socket.handshake.address, data.clientRequestId

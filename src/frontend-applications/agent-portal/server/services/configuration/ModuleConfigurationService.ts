@@ -102,7 +102,7 @@ export class ModuleConfigurationService {
                 [SysConfigOptionDefinitionProperty.NAME, configuration.id],
                 [SysConfigOptionDefinitionProperty.DESCRIPTION, name],
                 [SysConfigOptionDefinitionProperty.DEFAULT, JSON.stringify(configuration)],
-                [SysConfigOptionDefinitionProperty.CONTEXT, 'kix18-web-frontend'],
+                [SysConfigOptionDefinitionProperty.CONTEXT, 'agent-portal'],
                 [SysConfigOptionDefinitionProperty.CONTEXT_METADATA, configuration.type],
                 [SysConfigOptionDefinitionProperty.TYPE, 'String']
             ],
@@ -122,7 +122,7 @@ export class ModuleConfigurationService {
                 [SysConfigOptionDefinitionProperty.NAME, configuration.id],
                 [SysConfigOptionDefinitionProperty.DESCRIPTION, name],
                 [SysConfigOptionDefinitionProperty.DEFAULT, JSON.stringify(configuration)],
-                [SysConfigOptionDefinitionProperty.CONTEXT, 'kix18-web-frontend'],
+                [SysConfigOptionDefinitionProperty.CONTEXT, 'agent-portal'],
                 [SysConfigOptionDefinitionProperty.CONTEXT_METADATA, configuration.type],
                 [SysConfigOptionDefinitionProperty.TYPE, 'String'],
                 [SysConfigOptionDefinitionProperty.IS_REQUIRED, 0]

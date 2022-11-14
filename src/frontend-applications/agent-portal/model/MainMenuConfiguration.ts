@@ -19,6 +19,8 @@ export class MainMenuConfiguration implements IConfiguration {
 
     public showText: boolean;
 
+    public application: string = 'agent-portal';
+
     public constructor(
         primaryConfiguration: MenuEntry[],
         secondaryConfiguration: MenuEntry[],

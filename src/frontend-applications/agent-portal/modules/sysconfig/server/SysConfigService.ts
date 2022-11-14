@@ -194,7 +194,7 @@ export class SysConfigService extends KIXObjectAPIService {
     public async getAgentPortalConfiguration(token: string): Promise<AgentPortalConfiguation> {
         const configs = await this.loadObjects<SysConfigOption>(
             token, '', KIXObjectType.SYS_CONFIG_OPTION, [AgentPortalConfiguation.CONFIGURATION_ID], null, null
-        );
+        ).catch((): SysConfigOption[] => []);
 
         let config: AgentPortalConfiguation;
         if (Array.isArray(configs) && configs.length) {

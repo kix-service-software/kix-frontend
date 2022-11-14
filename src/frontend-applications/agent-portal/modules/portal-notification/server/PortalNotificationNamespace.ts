@@ -74,7 +74,7 @@ export class PortalNotificationNamespace extends SocketNameSpace {
     protected async getPreLoginNotifications(
         data: any, client: Socket
     ): Promise<SocketResponse<any | SocketErrorResponse>> {
-        const notifications = PortalNotificationService.getInstance().getPreLoginNotifications() || [];
+        const notifications = PortalNotificationService.getInstance().getPreLoginNotifications(data.userType) || [];
         const response = { requestId: data.requestId, notifications };
         return new SocketResponse(PortalNotificationEvent.GET_PRELOGIN_NOTIFICATIONS_FINISHED, response);
     }
@@ -82,7 +82,7 @@ export class PortalNotificationNamespace extends SocketNameSpace {
     protected async getNotifications(
         data: any, client: Socket
     ): Promise<SocketResponse<any | SocketErrorResponse>> {
-        const notifications = PortalNotificationService.getInstance().getNotifications() || [];
+        const notifications = PortalNotificationService.getInstance().getNotifications(data.userType) || [];
         const response = { requestId: data.requestId, notifications };
         return new SocketResponse(PortalNotificationEvent.GET_NOTIFICATIONS_FINISHED, response);
     }

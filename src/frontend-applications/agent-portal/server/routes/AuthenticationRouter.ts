@@ -22,7 +22,8 @@ import { PluginService } from '../../../../server/services/PluginService';
 import { IMarkoApplication } from '../extensions/IMarkoApplication';
 import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
 import { LoggingService } from '../../../../server/services/LoggingService';
-import { AuthenticationService } from '../services/AuthenticationService';
+import { AuthenticationService } from '../../../../server/services/AuthenticationService';
+import { UserType } from '../../modules/user/model/UserType';
 
 export class AuthenticationRouter extends KIXRouter {
 
@@ -82,7 +83,7 @@ export class AuthenticationRouter extends KIXRouter {
                 // already negotiated (SSO)
                 const negotiationToken = authorization.split(' ')[1];
                 const token = await AuthenticationService.getInstance().login(
-                    null, null, negotiationToken, null, null, false);
+                    null, null, UserType.AGENT, negotiationToken, null, null, false);
                 res.cookie('token', token);
                 res.clearCookie('authNegotiationDone');
                 res.status(200);

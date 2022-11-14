@@ -14,6 +14,8 @@ import { ConfiguredDialogWidget } from './ConfiguredDialogWidget';
 
 export class ContextConfiguration implements IConfiguration {
 
+        public application: string = 'agent-portal';
+
         public constructor(
                 public id: string,
                 public name: string,

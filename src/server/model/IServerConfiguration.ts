@@ -61,4 +61,6 @@ export interface IServerConfiguration {
 
     CLUSTER_ENABLED: boolean;
 
+    BUILD_MARKO_APPLICATIONS: string;
+
 }

@@ -39,38 +39,42 @@ export class TicketObjectFormValueMapper extends ObjectFormValueMapper<Ticket> {
                 continue;
             }
 
-            switch (property) {
-                case TicketProperty.TITLE:
-                    this.formValues.push(new ObjectFormValue(property, ticket, this, null));
-                    break;
-                case TicketProperty.OWNER_ID:
-                case TicketProperty.RESPONSIBLE_ID:
-                    this.formValues.push(new UserObjectFormValue(property, ticket, this, null));
-                    break;
-                case TicketProperty.CONTACT_ID:
-                    this.formValues.push(new ContactObjectFormValue(property, ticket, this, null));
-                    break;
-                case TicketProperty.QUEUE_ID:
-                    this.formValues.push(new QueueFormValue(property, ticket, this, null));
-                    break;
-                case TicketProperty.ORGANISATION_ID:
-                    this.formValues.push(new OrganisationObjectFormValue(property, ticket, this, null));
-                    break;
-                case TicketProperty.STATE_ID:
-                    this.formValues.push(new TicketStateFormValue(property, ticket, this, null));
-                    break;
-                case TicketProperty.ARTICLES:
-                    this.formValues.push(new ArticleFormValue(property, ticket, this, null));
-                    break;
-                case TicketProperty.TYPE_ID:
-                case TicketProperty.PRIORITY_ID:
-                    const selectFormValue = new SelectObjectFormValue(property, ticket, this, null);
-                    const objectType = await TicketService.getInstance().getObjectTypeForProperty(property);
-                    selectFormValue.objectType = objectType;
-                    this.formValues.push(selectFormValue);
-                    break;
-                default:
-            }
+            await this.mapTicketAttribute(property, ticket);
+        }
+    }
+
+    protected async mapTicketAttribute(property: string, ticket: Ticket): Promise<void> {
+        switch (property) {
+            case TicketProperty.TITLE:
+                this.formValues.push(new ObjectFormValue(property, ticket, this, null));
+                break;
+            case TicketProperty.OWNER_ID:
+            case TicketProperty.RESPONSIBLE_ID:
+                this.formValues.push(new UserObjectFormValue(property, ticket, this, null));
+                break;
+            case TicketProperty.CONTACT_ID:
+                this.formValues.push(new ContactObjectFormValue(property, ticket, this, null));
+                break;
+            case TicketProperty.QUEUE_ID:
+                this.formValues.push(new QueueFormValue(property, ticket, this, null));
+                break;
+            case TicketProperty.ORGANISATION_ID:
+                this.formValues.push(new OrganisationObjectFormValue(property, ticket, this, null));
+                break;
+            case TicketProperty.STATE_ID:
+                this.formValues.push(new TicketStateFormValue(property, ticket, this, null));
+                break;
+            case TicketProperty.ARTICLES:
+                this.formValues.push(new ArticleFormValue(property, ticket, this, null));
+                break;
+            case TicketProperty.TYPE_ID:
+            case TicketProperty.PRIORITY_ID:
+                const selectFormValue = new SelectObjectFormValue(property, ticket, this, null);
+                const objectType = await TicketService.getInstance().getObjectTypeForProperty(property);
+                selectFormValue.objectType = objectType;
+                this.formValues.push(selectFormValue);
+                break;
+            default:
         }
     }
 
@@ -104,7 +108,7 @@ export class TicketObjectFormValueMapper extends ObjectFormValueMapper<Ticket> {
         return articleProperty.some((p) => p === property);
     }
 
-    private async loadSourceObject(): Promise<void> {
+    protected async loadSourceObject(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         const sourceObjectId = context?.getAdditionalInformation('REFERENCED_SOURCE_OBJECT_ID');
         if (sourceObjectId) {

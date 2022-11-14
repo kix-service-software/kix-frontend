@@ -21,6 +21,7 @@ import { ISocketRequest } from '../../../../modules/base-components/webapp/core/
 import { DeleteSearchRequest } from '../../model/DeleteSearchRequest';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
+import { KIXModulesService } from '../../../base-components/webapp/core/KIXModulesService';
 
 export class SearchSocketClient extends SocketClient {
 
