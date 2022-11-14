@@ -125,6 +125,23 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                 break;
             default:
         }
+
+        if (formValue) {
+            formValue.visible = true;
+            formValue.isSortable = false;
+
+            // subject and body are always required (if enabled)
+            if (formValue.property === ArticleProperty.SUBJECT || formValue.property === ArticleProperty.BODY) {
+                formValue.required = true;
+            }
+
+            // initial not visible (formActions should show them)
+            if (formValue.property === ArticleProperty.CC || formValue.property === ArticleProperty.BCC) {
+                formValue.visible = false;
+            }
+            this.formValues.push(formValue);
+        }
+
     }
 
     protected async setChannelFields(channelId: number): Promise<void> {
@@ -184,7 +201,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
             if (property === ArticleProperty.CC) {
                 const toValue = this.formValues.find((fv) => fv.property === ArticleProperty.TO);
-                if (!toValue.enabled && !isEdit) {
+                if (!toValue?.enabled && !isEdit) {
                     showCc = true;
                 }
             }

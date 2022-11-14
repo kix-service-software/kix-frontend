@@ -108,8 +108,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
     public async setFormValue(value: any, force?: boolean): Promise<void> {
         if (!this.freeText) {
             if (Array.isArray(value)) {
-                value = value.filter((v) => TreeUtil.findNode(this.treeHandler?.getTree(), v.toString()) !== null);
-            } else if (TreeUtil.findNode(this.treeHandler?.getTree(), value.toString()) === null) {
+                value = value?.filter((v) => TreeUtil.findNode(this.treeHandler?.getTree(), v.toString()) !== null);
+            } else if (TreeUtil.findNode(this.treeHandler?.getTree(), value?.toString()) === null) {
                 value = [];
             }
         }

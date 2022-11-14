@@ -55,7 +55,7 @@ export class ObjectFormHandler<T extends KIXObject = any> {
             );
 
             const start = Date.now();
-            await this.objectFormValueMapper.mapFormValues(formObject);
+            await this.objectFormValueMapper.mapFormValues(formObject).catch((e) => console.error(e));
             const end = Date.now();
             console.debug(`Map Form Values Finished: ${(end - start)}ms`);
 
