@@ -28,7 +28,6 @@ import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { ObjectFormHandler } from '../../../object-forms/webapp/core/ObjectFormHandler';
-import { ObjectFormValue } from '../../../object-forms/model/FormValues/ObjectFormValue';
 
 export class SuggestedFAQHandler implements IAdditionalTableObjectsHandler {
 
@@ -108,15 +107,13 @@ export class SuggestedFAQHandler implements IAdditionalTableObjectsHandler {
     }
 
     private async setFilter(
-        filter: FilterCriteria[],
-        value: string,
-        service: IKIXObjectService,
-        minLength: any, stopWords:
-            string[]): Promise<FilterCriteria[]> {
-        const searchWords = value.replace(/;/g, '').split(' ');
-        filter = await this.buildFilterForSearchWords(
-            searchWords, service, minLength, stopWords
-        );
+        filter: FilterCriteria[], value: string, service: IKIXObjectService, minLength: any, stopWords: string[]
+    ): Promise<FilterCriteria[]> {
+        const searchWords = value
+            .replace(/;/g, '')
+            .replace(/\\/g, ' ')
+            .split(' ');
+        filter = await this.buildFilterForSearchWords(searchWords, service, minLength, stopWords);
         return filter;
     }
 
@@ -143,9 +140,9 @@ export class SuggestedFAQHandler implements IAdditionalTableObjectsHandler {
         const key = SysConfigKey.TICKET_SEARCH_INDEX_STOPWORDS + '###' + language;
         const sysconfigOptions = await KIXObjectService.loadObjects<SysConfigOption>(
             KIXObjectType.SYS_CONFIG_OPTION, [key]
-        ).catch((): SysConfigOption[] => null);
+        ).catch((): SysConfigOption[] => []);
 
-        if (sysconfigOptions && sysconfigOptions.length) {
+        if (sysconfigOptions?.length) {
             stopWords = sysconfigOptions[0].Value;
         }
 
