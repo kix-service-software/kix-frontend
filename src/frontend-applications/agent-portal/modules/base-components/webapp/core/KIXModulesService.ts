@@ -119,4 +119,11 @@ export class KIXModulesService {
         }
         return this.releaseInfo?.plugins?.some((p) => p.product === name);
     }
+
+    public async getBackenTimezoneOffset(): Promise<number> {
+        if (!this.releaseInfo) {
+            this.releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+        }
+        return this.releaseInfo?.backendSystemInfo?.TimeZoneOffset;
+    }
 }

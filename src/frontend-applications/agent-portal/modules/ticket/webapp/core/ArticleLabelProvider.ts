@@ -20,6 +20,7 @@ import { Channel } from '../../model/Channel';
 import { SenderType } from '../../model/SenderType';
 import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { KIXModulesService } from '../../../base-components/webapp/core/KIXModulesService';
 
 
 export class ArticleLabelProvider extends LabelProvider<Article> {
@@ -136,6 +137,12 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                     translatable = false;
                 }
                 break;
+            case ArticleProperty.INCOMING_TIME:
+                if (article) {
+                    const date = new Date(Number(article.IncomingTime) * 1000);
+                    displayValue = await DateTimeUtil.getLocalDateTimeString(date.getTime());
+                }
+                break;
             default:
                 displayValue = await super.getDisplayText(article, property, defaultValue, translatable);
         }
@@ -171,9 +178,8 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                 break;
             case ArticleProperty.INCOMING_TIME:
                 if (displayValue) {
-                    displayValue = translatable
-                        ? await DateTimeUtil.getLocalDateTimeString(Number(displayValue) * 1000)
-                        : Number(displayValue) * 1000;
+                    const date = new Date(Number(displayValue) * 1000);
+                    displayValue = await DateTimeUtil.getLocalDateTimeString(date.getMilliseconds());
                 }
                 break;
             case ArticleProperty.ATTACHMENTS:
