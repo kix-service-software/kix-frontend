@@ -95,13 +95,13 @@ export class ReportObjectCreator {
                         }
                     }
                 }
-            } else if (parameter.DataType === 'DATE') {
+            } else if (parameter.DataType === 'DATE' && value) {
                 value = DateTimeUtil.getKIXDateString(value);
             }
-            else if (parameter.DataType === 'DATETIME') {
+            else if (parameter.DataType === 'DATETIME' && value) {
                 value = DateTimeUtil.getKIXDateTimeString(value);
             }
-            else if (parameter.DataType === 'TIME') {
+            else if (parameter.DataType === 'TIME' && value) {
                 value = DateTimeUtil.getKIXTimeString(value);
             }
         }
