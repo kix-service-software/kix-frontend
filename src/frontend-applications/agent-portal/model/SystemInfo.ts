@@ -20,4 +20,8 @@ export class SystemInfo {
     public BuildNumber: number;
 
     public PatchNumber: number;
+
+    public TimeZone: string;
+
+    public TimeZoneOffset: number;
 }
