@@ -38,7 +38,7 @@ export class Component {
 
     public onCreate(input: any): void {
         this.state = new ComponentState(input.instanceId);
-        this.listenerId = IdService.generateDateBasedId('search-result-explorer-');
+        this.listenerId = IdService.generateDateBasedId('faq-category-explorer-');
     }
 
     public onInput(input: any): void {

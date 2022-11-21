@@ -88,6 +88,10 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         this.state.prepared = true;
     }
 
+    public async setPossibleValue(): Promise<void> {
+        return this.load(true);
+    }
+
     public async onDestroy(): Promise<void> {
         super.onDestroy();
         TreeService.getInstance().removeTreeHandler(this.state.treeId);
@@ -96,7 +100,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         }
     }
 
-    public async load(): Promise<void> {
+    public async load(filterSelection?: boolean): Promise<void> {
         let nodes = [];
         if (this.state.field && this.state.field?.options && !!this.state.field?.options) {
             const translatableOption = this.state.field?.options.find(
@@ -114,7 +118,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
             const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
             if (treeHandler) {
-                treeHandler.setTree(nodes, null, true);
+                treeHandler.setTree(nodes, null, true, filterSelection);
             }
         }
     }

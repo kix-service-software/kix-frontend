@@ -25,7 +25,6 @@ import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
-import { QueueProperty } from '../../../ticket/model/QueueProperty';
 import { NotificationProperty } from '../../../notification/model/NotificationProperty';
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
@@ -41,7 +40,6 @@ import { Role } from '../../../user/model/Role';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 import { PersonalSettingsFormService } from '../../../user/webapp/core/PersonalSettingsFormService';
 import { IdService } from '../../../../model/IdService';
-import { AgentService } from '../../../user/webapp/core/AgentService';
 
 export class ContactFormService extends KIXObjectFormService {
 
@@ -155,18 +153,14 @@ export class ContactFormService extends KIXObjectFormService {
     private async loadContact(userId: number): Promise<Contact> {
         let contact: Contact;
         if (userId) {
-            const contacts = await KIXObjectService.loadObjects<Contact>(
-                KIXObjectType.CONTACT, null,
-                new KIXObjectLoadingOptions(
-                    [
-                        new FilterCriteria(
-                            ContactProperty.ASSIGNED_USER_ID, SearchOperator.EQUALS,
-                            FilterDataType.NUMERIC, FilterType.AND, userId
-                        )
-                    ]
-                ), null, true
-            ).catch(() => [] as Contact[]);
-            contact = contacts && contacts.length ? contacts[0] : null;
+            const loadingOptions = new KIXObjectLoadingOptions();
+            loadingOptions.includes = [KIXObjectType.CONTACT];
+
+            const user = await KIXObjectService.loadObjects<User>(
+                KIXObjectType.USER, [userId], loadingOptions, null, true
+            ).catch((): User[] => []);
+
+            contact = user?.length ? user[0].Contact : null;
         }
         return contact;
     }
@@ -337,14 +331,6 @@ export class ContactFormService extends KIXObjectFormService {
                 new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
                 new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                 new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
-                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS, new KIXObjectLoadingOptions(
-                    [
-                        new FilterCriteria(
-                            QueueProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, null
-                        )
-                    ],
-                    undefined, undefined, [QueueProperty.SUB_QUEUES], [QueueProperty.SUB_QUEUES])
-                ),
                 new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true)
             ], value
         );

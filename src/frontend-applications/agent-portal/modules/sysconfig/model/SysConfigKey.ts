@@ -71,6 +71,10 @@ export enum SysConfigKey {
 
     FQDN = 'FQDN',
 
-    GENERAL_CATALOG_PREFERENCES = 'GeneralCatalogPreferences'
+    GENERAL_CATALOG_PREFERENCES = 'GeneralCatalogPreferences',
+
+    FRONTEND_RICHTEXT_DEFAULT_CSS = 'Frontend::RichText::DefaultCSS',
+
+    TICKET_FRONTEND_NEED_ACCOUNTED_TIME = 'Ticket::Frontend::NeedAccountedTime'
 
 }

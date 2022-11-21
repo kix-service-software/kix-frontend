@@ -43,6 +43,7 @@ import { TableEventData } from './TableEventData';
 import { ContextService } from '../../base-components/webapp/core/ContextService';
 import { ContextMode } from '../../../model/ContextMode';
 import { SearchCache } from '../../search/model/SearchCache';
+import { DataType } from '../../../model/DataType';
 
 export class Table implements Table {
 
@@ -188,32 +189,26 @@ export class Table implements Table {
 
             await this.initDisplayRows();
 
-            setTimeout(async () => {
-                if (this.sortColumnId && this.sortOrder) {
-                    await this.sort(this.sortColumnId, this.sortOrder);
+            if (this.sortColumnId && this.sortOrder) {
+                await this.sort(this.sortColumnId, this.sortOrder, true);
+            }
+
+            if (this.filterValue || this.filterCriteria?.length || this.columns.some((c) => c.isFiltered())) {
+                if (this.filterValue) {
+                    await this.initDisplayRows(true);
                 }
+                await this.filter(true);
+            }
 
-                if (this.filterValue || this.filterCriteria?.length || this.columns.some((c) => c.isFiltered())) {
-                    if (this.filterValue) {
-                        await this.initDisplayRows(true);
-                    }
-                    await this.filter();
-                }
+            this.toggleFirstRow();
 
-                this.toggleFirstRow();
-            }, 250);
-
-            setTimeout(() => {
-                setTimeout(async () => {
-                    EventService.getInstance().publish(
-                        TableEvent.TABLE_INITIALIZED,
-                        new TableEventData(this.getTableId())
-                    );
-                    EventService.getInstance().publish(
-                        TableEvent.TABLE_READY, new TableEventData(this.getTableId())
-                    );
-                }, 50);
-            }, 20);
+            EventService.getInstance().publish(
+                TableEvent.TABLE_INITIALIZED,
+                new TableEventData(this.getTableId())
+            );
+            EventService.getInstance().publish(
+                TableEvent.TABLE_READY, new TableEventData(this.getTableId())
+            );
 
             this.subscriber = {
                 eventSubscriberId: this.getTableId(),
@@ -565,7 +560,7 @@ export class Table implements Table {
         this.saveTableState();
     }
 
-    public async filter(): Promise<void> {
+    public async filter(silent?: boolean): Promise<void> {
         if (this.isFilterDefined(this.filterValue, this.filterCriteria)) {
             this.filteredRows = [];
             const rows = [...this.rows];
@@ -615,7 +610,7 @@ export class Table implements Table {
         return (value && value !== '') || (criteria && criteria.length !== 0);
     }
 
-    public async sort(columnId: string, sortOrder: SortOrder): Promise<void> {
+    public async sort(columnId: string, sortOrder: SortOrder, silent?: boolean): Promise<void> {
         this.sortColumnId = columnId;
         this.sortOrder = sortOrder;
 
@@ -628,28 +623,28 @@ export class Table implements Table {
         if (column) {
             column.setSortOrder(sortOrder);
 
+            const dataType = column.getColumnConfiguration().dataType || DataType.STRING;
+
             if (this.filteredRows) {
-                this.filteredRows = TableSortUtil.sort(
-                    this.filteredRows, columnId, sortOrder, column.getColumnConfiguration().dataType
-                );
+                this.filteredRows = TableSortUtil.sort(this.filteredRows, columnId, sortOrder, dataType);
                 for (const row of this.filteredRows) {
-                    row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType);
+                    row.sortChildren(columnId, sortOrder, dataType);
                 }
             } else {
-                this.rows = TableSortUtil.sort(
-                    this.rows, columnId, sortOrder, column.getColumnConfiguration().dataType
-                );
+                this.rows = TableSortUtil.sort(this.rows, columnId, sortOrder, dataType);
                 for (const row of this.rows) {
-                    row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType);
+                    row.sortChildren(columnId, sortOrder, dataType);
                 }
             }
 
             await this.initDisplayRows();
 
-            EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
-            EventService.getInstance().publish(
-                TableEvent.SORTED, new TableEventData(this.getTableId(), null, columnId)
-            );
+            if (!silent) {
+                EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
+                EventService.getInstance().publish(
+                    TableEvent.SORTED, new TableEventData(this.getTableId(), null, columnId)
+                );
+            }
         }
     }
 

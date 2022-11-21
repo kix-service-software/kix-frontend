@@ -110,7 +110,7 @@ export class FormService {
 
     public async getFormIdByContext(formContext: FormContext, formObject: KIXObjectType | string): Promise<string> {
         let formId;
-        if (!this.formIDsWithContext) {
+        if (!this.formIDsWithContext?.length) {
             await this.loadFormConfigurations();
         }
 

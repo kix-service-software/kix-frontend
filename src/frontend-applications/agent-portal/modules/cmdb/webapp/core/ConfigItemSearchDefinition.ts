@@ -7,7 +7,7 @@
  * --
  */
 
-import { SearchDefinition, SearchResultCategory } from '../../../search/webapp/core';
+import { SearchDefinition } from '../../../search/webapp/core';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ConfigItemSearchFormManager } from './ConfigItemSearchFormManager';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
@@ -49,40 +49,28 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         criteria: FilterCriteria[], limit: number, sortAttribute?: string, sortDescanding?: boolean
     ): Promise<KIXObjectLoadingOptions> {
         const loadingOptions = await super.getLoadingOptions(criteria, limit, sortAttribute, sortDescanding);
-        loadingOptions.includes = [
-            VersionProperty.DATA, VersionProperty.PREPARED_DATA,
-            KIXObjectProperty.LINKS, ConfigItemProperty.CURRENT_VERSION
-        ];
-        loadingOptions.expands = [VersionProperty.DATA, VersionProperty.PREPARED_DATA, KIXObjectProperty.LINKS];
+
+        if (!loadingOptions.includes) {
+            loadingOptions.includes = [];
+        }
+        if (!loadingOptions.expands) {
+            loadingOptions.expands = [];
+        }
+
+        if (loadingOptions.filter?.some((f) => f.property === 'CurrentVersion.Name')) {
+            loadingOptions.includes.push(ConfigItemProperty.CURRENT_VERSION);
+        }
+
+        if (loadingOptions.filter?.some((f) => f.property.startsWith('CurrentVersion.Data'))) {
+            loadingOptions.includes.push(
+                ConfigItemProperty.CURRENT_VERSION, VersionProperty.DATA, VersionProperty.PREPARED_DATA
+            );
+            loadingOptions.expands.push(VersionProperty.DATA, VersionProperty.PREPARED_DATA);
+        }
+
         return loadingOptions;
     }
 
-    public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(
-            null, null, null,
-            [
-                VersionProperty.DATA, VersionProperty.PREPARED_DATA,
-                KIXObjectProperty.LINKS, ConfigItemProperty.CURRENT_VERSION
-            ],
-            [VersionProperty.DATA, VersionProperty.PREPARED_DATA, KIXObjectProperty.LINKS]
-        );
-    }
-
-    public async getSearchResultCategories(): Promise<SearchResultCategory[]> {
-        const categories: SearchResultCategory[] = [];
-
-        if (await this.checkReadPermissions('tickets')) {
-            categories.push(
-                new SearchResultCategory('Translatable#Tickets', KIXObjectType.TICKET)
-            );
-        }
-        if (await this.checkReadPermissions('faq/articles')) {
-            categories.push(
-                new SearchResultCategory('FAQs', KIXObjectType.FAQ_ARTICLE)
-            );
-        }
-        return [new SearchResultCategory('Config Items', KIXObjectType.CONFIG_ITEM, categories)];
-    }
 
     public async prepareFormFilterCriteria(
         criteria: FilterCriteria[], forSearch: boolean = true
@@ -132,7 +120,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 case VersionProperty.NUMBER:
                     searchCriteria.type = FilterDataType.STRING;
                     newCriteria.push(searchCriteria);
-                break;
+                    break;
                 case KIXObjectProperty.CHANGE_BY:
                 case KIXObjectProperty.CREATE_BY:
                     searchCriteria.type = FilterDataType.NUMERIC;

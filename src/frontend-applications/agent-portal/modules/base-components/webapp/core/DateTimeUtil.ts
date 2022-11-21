@@ -81,39 +81,59 @@ export class DateTimeUtil {
         return isNegative ? '- ' + ageResult : ageResult;
     }
 
-    public static getKIXDateTimeString(date: Date | string): string {
+    public static getKIXDateTimeString(date: Date | string, asUTC: boolean = false): string {
         if (typeof date === 'string') {
             date = new Date(date);
         }
-        return `${DateTimeUtil.getKIXDateString(date)} ${DateTimeUtil.getKIXTimeString(date, false)}`;
+        return `${DateTimeUtil.getKIXDateString(date, asUTC)} ${DateTimeUtil.getKIXTimeString(date, false, null, asUTC)}`;
     }
 
-    public static getKIXDateString(date: Date): string {
-        let kixDateString;
+    public static getKIXDateString(date: Date, asUTC: boolean = false): string {
+        let kixDateString, year, month, day;
         if (date) {
             if (typeof date === 'string') {
                 date = new Date(date);
             }
-            const year = date.getFullYear();
-            const month = DateTimeUtil.padZero(date.getMonth() + 1);
-            const day = DateTimeUtil.padZero(date.getDate());
+
+            if (asUTC) {
+                year = date.getUTCFullYear();
+                month = DateTimeUtil.padZero(date.getUTCMonth() + 1);
+                day = DateTimeUtil.padZero(date.getUTCDate());
+            }
+            else {
+                year = date.getFullYear();
+                month = DateTimeUtil.padZero(date.getMonth() + 1);
+                day = DateTimeUtil.padZero(date.getDate());
+            }
+
             kixDateString = `${year}-${month}-${day}`;
         }
         return kixDateString;
     }
 
-    public static getKIXTimeString(date: Date, short: boolean = true, roundHalfHour?: boolean): string {
-        let kixTimeString;
+    public static getKIXTimeString(
+        date: Date, short: boolean = true, roundHalfHour?: boolean, asUTC: boolean = false
+    ): string {
+        let kixTimeString, hours, minutes, seconds;
         if (date) {
             if (typeof date === 'string') {
                 date = new Date(date);
             }
-            const hours = DateTimeUtil.padZero(date.getHours());
-            let minutes = DateTimeUtil.padZero(date.getMinutes());
+
+            if (asUTC) {
+                hours = DateTimeUtil.padZero(date.getUTCHours());
+                minutes = DateTimeUtil.padZero(date.getUTCMinutes());
+                seconds = DateTimeUtil.padZero(date.getUTCSeconds());
+            }
+            else {
+                hours = DateTimeUtil.padZero(date.getHours());
+                minutes = DateTimeUtil.padZero(date.getMinutes());
+                seconds = DateTimeUtil.padZero(date.getSeconds());
+            }
+
             if (roundHalfHour) {
                 minutes = Number(minutes) <= 15 || Number(minutes) >= 30 ? '00' : '30';
             }
-            const seconds = DateTimeUtil.padZero(date.getSeconds());
             kixTimeString = `${hours}:${minutes}`;
             if (!short) {
                 kixTimeString += `:${seconds}`;

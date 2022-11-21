@@ -73,7 +73,7 @@ export class ProfilingService {
                 + '\t' + RequestCounter.getInstance().getTotalHttpRequestCount() + ''
                 + '\t' + RequestCounter.getInstance().getPendingHTTPRequestCount() + ''
                 + '\t-'
-                + '\t' + task.inputDataSize + ' bytes'
+                + '\t' + task.inputDataSize + ''
                 + '\t' + task.message
             );
         }
@@ -101,8 +101,8 @@ export class ProfilingService {
                 + '\t' + RequestCounter.getInstance().getPendingSocketRequestCount() + ''
                 + '\t' + RequestCounter.getInstance().getTotalHttpRequestCount() + ''
                 + '\t' + RequestCounter.getInstance().getPendingHTTPRequestCount() + ''
-                + '\t' + task.duration + ' ms'
-                + '\t' + task.outputDataSize + ' bytes'
+                + '\t' + task.duration + ''
+                + '\t' + task.outputDataSize + ''
                 + '\t' + task.message
             );
         }

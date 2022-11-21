@@ -231,7 +231,7 @@ describe('Placeholder replacement for article', () => {
             let orgFunction;
             before(async () => {
                 const newArticleContext = new newArticlePlaceholderDialogContext();
-                newArticleContext.setAdditionalInformation('REFERENCED_ARTICLE_ID', ticket.Articles[5].ArticleID);
+                newArticleContext.setAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID, ticket.Articles[5].ArticleID);
                 orgFunction = ContextService.getInstance().getActiveContext;
                 ContextService.getInstance().getActiveContext = <T extends Context>(): T => {
                     return newArticleContext as any;

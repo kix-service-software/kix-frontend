@@ -21,4 +21,6 @@ export interface ICache {
 
     deleteAll(type: string): Promise<void>;
 
+    waitFor(key: string, cacheType: string): Promise<any>;
+
 }

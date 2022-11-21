@@ -46,6 +46,11 @@ export class DynamicFieldTextAreaFormValue extends ObjectFormValue<string> imple
         this.countDefault = Number(config?.CountDefault) || 0;
         this.countMax = Number(config?.CountMax) || 0;
         this.countMin = Number(config?.CountMin) || 0;
+
+        this.regExList = config?.RegExList?.map(
+            (ri) => { return { regEx: ri.Value, errorMessage: ri.ErrorMessage }; }
+        ) || [];
+
         await super.initFormValue();
 
         this.value = this.object[this.property];

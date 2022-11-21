@@ -31,6 +31,7 @@ import { IConfigurationExtension } from '../extensions/IConfigurationExtension';
 import { IFormConfigurationExtension } from '../extensions/IFormConfigurationExtension';
 import { IModifyConfigurationExtension } from '../extensions/IModifyConfigurationExtension';
 import { Error } from '../../../../server/model/Error';
+import { ModuleConfigurationService } from './configuration/ModuleConfigurationService';
 
 export class ClientRegistrationService extends KIXObjectAPIService {
 
@@ -175,6 +176,8 @@ export class ClientRegistrationService extends KIXObjectAPIService {
                     ...defaultConfigurations
                 ];
             }
+
+            await ModuleConfigurationService.getInstance().applyFormConfigurationsToCache();
 
             await this.extendFormConfigurations(configurations);
             configurations = await this.handleConfigurationExtensions(configurations);

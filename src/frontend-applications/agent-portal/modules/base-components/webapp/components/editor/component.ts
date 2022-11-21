@@ -18,6 +18,8 @@ import { BrowserUtil } from '../../core/BrowserUtil';
 import { KIXObjectService } from '../../core/KIXObjectService';
 import { SysConfigOption } from '../../../../sysconfig/model/SysConfigOption';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { SysConfigService } from '../../../../sysconfig/webapp/core';
+import { SysConfigKey } from '../../../../sysconfig/model/SysConfigKey';
 
 declare let CKEDITOR: any;
 
@@ -122,33 +124,27 @@ class EditorComponent {
             }
 
             CKEDITOR.on('instanceCreated', async function () {
-                const options = await KIXObjectService.loadObjects<SysConfigOption>(
-                    KIXObjectType.SYS_CONFIG_OPTION, ['Frontend::RichText::DefaultCSS']
+                const configValue = await SysConfigService.getInstance().getSysconfigOptionValue(
+                    SysConfigKey.FRONTEND_RICHTEXT_DEFAULT_CSS
                 );
 
-                if (
-                    Array.isArray(options)
-                    && options.length
-                    && options[0].Value !== null
-                ) {
-                    let defaultCSS = '';
-                    let jsonOptions: any[];
-                    try {
-                        jsonOptions = JSON.parse(options[0].Value);
-                    } catch (e) {
-                        jsonOptions = [];
+                let defaultCSS = '';
+                let jsonOptions: any[];
+                try {
+                    jsonOptions = JSON.parse(configValue);
+                } catch (e) {
+                    jsonOptions = [];
+                }
+                for (const css of jsonOptions) {
+                    if (
+                        css?.Selector
+                        && css?.Value
+                    ) {
+                        defaultCSS += css.Selector + '{' + css.Value + '}';
                     }
-                    for (const css of jsonOptions) {
-                        if (
-                            css?.Selector
-                            && css?.Value
-                        ) {
-                            defaultCSS += css.Selector + '{' + css.Value + '}';
-                        }
-                    }
-                    if (defaultCSS) {
-                        CKEDITOR.addCss(defaultCSS);
-                    }
+                }
+                if (defaultCSS) {
+                    CKEDITOR.addCss(defaultCSS);
                 }
             });
 

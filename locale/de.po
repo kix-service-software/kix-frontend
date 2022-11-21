@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2022-09-28 09:18+0000\n"
-"Last-Translator: fwichmann <Felix.Wichmann@cape-it.de>\n"
+"PO-Revision-Date: 2022-10-24 11:18+0000\n"
+"Last-Translator: fkrahl <Frank.Krahl@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
 "Language: de\n"
@@ -58,6 +58,9 @@ msgstr "Zugriff verweigert"
 
 msgid "Access Level"
 msgstr "Zugriffsebene"
+
+msgid "Accounted Time"
+msgstr ""
 
 msgid "Accounted Time: {0}"
 msgstr "Zeitbuchung: {0}"
@@ -121,33 +124,46 @@ msgstr "Admin: {0}"
 
 msgid "Admin_DynamicField_Config_CIRef_DeploymentStates"
 msgstr ""
+"Wenn angegeben, stehen nur Assets in diesen Verwendungsstatus zur Auswahl."
 
 msgid "Admin_DynamicField_Config_CIRef_IncidentStates"
 msgstr ""
+"Wenn angegeben, stehen nur Assets in diesen Vorfallsstatus zur Auswahl."
 
 msgid "Admin_DynamicField_Config_CountDefault"
 msgstr ""
+"Definiert wieviele Eingabeslots angezeigt werden wenn noch gar keine Angabe "
+"vorliegt."
 
 msgid "Admin_DynamicField_Config_CountMax"
 msgstr ""
+"Definiert wieviele Eingabeslots oder Auswahlwerte maximal ausgefüllt bzw. "
+"ausgewählt werden dürfen."
 
 msgid "Admin_DynamicField_Config_CountMin"
 msgstr ""
+"Definiert wieviele Auswahlwerte mindestens ausgewählt bzw. wieviele Eingaben "
+"mindestens getätigt sein müssen."
 
 msgid "Admin_DynamicField_Config_ItemSeparator"
 msgstr ""
+"Bei Platzhaltersetzung werden die Einzelwerte des Feldes mittels dieser "
+"Separatorzeichenkette verbunden."
 
 msgid "Admin_DynamicField_Config_RegexList"
 msgstr ""
+"Liste von Reg. Ausdrücken die vor Speicherung von Eingaben in dem Feld "
+"geprüft werden. Eingaben müssen den reg. Ausdrücken entsprechen um "
+"akzeptiert zu werden."
 
 msgid "Admin_DynamicField_Config_Table_RowsInit"
-msgstr ""
+msgstr "Initial angezeigte Anzahl von Zeilen der Tabelle."
 
 msgid "Admin_DynamicField_Config_Table_RowsMax"
-msgstr ""
+msgstr "Maximale Anzahl von Zeilen in der Tabelle."
 
 msgid "Admin_DynamicField_Config_Table_RowsMin"
-msgstr ""
+msgstr "Minimal vorhandene Anzahl von Zeilen in der Tabelle."
 
 msgid "Admin_DynamicField_Config_Value"
 msgstr ""
@@ -180,7 +196,7 @@ msgid "after"
 msgstr "nach/größer als"
 
 msgid "After"
-msgstr ""
+msgstr "Nach"
 
 msgid "Age"
 msgstr "Alter"
@@ -371,12 +387,7 @@ msgid "At least {0} values must be selected"
 msgstr "Es müssen mindestens {0} Werte ausgewählt werden."
 
 msgid "At least one link could not be saved."
-msgstr ""
-
-msgid "At least one of the fields To, Cc or Bcc must contain an entry."
-msgstr ""
-"Mindestens eins der Felder 'An', 'Cc' oder 'Bcc' muss einen Eintrag "
-"enthalten."
+msgstr "Mindestens eine Verknüpfung konnte nicht gespeichert werden."
 
 msgid "Attachment Name"
 msgstr "Name des Anhangs"
@@ -427,7 +438,7 @@ msgid "before"
 msgstr "vor/kleiner als"
 
 msgid "Before"
-msgstr ""
+msgstr "Bevor"
 
 msgid "Begin of Business Day"
 msgstr "Beginn Servicezeit (\"Business Day\")"
@@ -509,7 +520,7 @@ msgid "Checklists"
 msgstr "Checklisten"
 
 msgid "Child Tickets"
-msgstr ""
+msgstr "Kindtickets"
 
 msgid "Choose a command"
 msgstr "Wählen Sie ein Kommando"
@@ -584,7 +595,7 @@ msgid "Code"
 msgstr "Code"
 
 msgid "Collapse all"
-msgstr ""
+msgstr "Alle einklappen"
 
 msgid ": (colon)"
 msgstr ": (Doppelpunkt)"
@@ -632,7 +643,7 @@ msgid "Community"
 msgstr "Community"
 
 msgid "Compact View"
-msgstr ""
+msgstr "Kompaktdarstellung"
 
 msgid "Compare"
 msgstr "Vergleichen"
@@ -1000,6 +1011,9 @@ msgstr "Dynamisches Feld bearbeiten"
 
 msgid "edited"
 msgstr "bearbeitet"
+
+msgid "edited at {0} by {1}"
+msgstr ""
 
 msgid "Edit Email Address"
 msgstr "Emailadresse Bearbeiten"
@@ -3010,10 +3024,15 @@ msgstr "Vorfallsstatus"
 msgid "Include this code into the <head> area of your webpage."
 msgstr "Binden Sie diesen Code in den <head>-Bereich Ihrer Webseite ein."
 
+msgid "Incoming Time"
+msgstr ""
+
 msgid ""
 "Incorrect data mapping. Length of dataset properties is different from value "
 "properties."
 msgstr ""
+"Falsche Datenzuordnung. Länge der Dataset-Eigenschaften differiert von den "
+"Wert-Eigenschaften."
 
 msgid "Incorrectly processed lines"
 msgstr "Fehlerhaft verarbeitete Zeilen"
@@ -3796,16 +3815,16 @@ msgid "Pending date is not in the future."
 msgstr "\"Warten bis\"-Datum liegt nicht in der Zukunft."
 
 msgid "Pending time"
-msgstr ""
+msgstr "Wartezeit"
 
 msgid "Pending Time has invalid date!"
-msgstr ""
+msgstr "Wartezeit hat ungültigen Wert!"
 
 msgid "Pending Time has to be in future!"
-msgstr ""
+msgstr "Der Wartezeitpunkt muss in der Zukunft liegen!"
 
 msgid "Pending Time is required!"
-msgstr ""
+msgstr "Es muss ein Wartezeitpunkt angegeben werden!"
 
 msgid "Pending until"
 msgstr "Warten bis"
@@ -3872,10 +3891,10 @@ msgid "Please select a contact"
 msgstr "Wählen Sie bitte einen Kontakt."
 
 msgid "Plugin"
-msgstr ""
+msgstr "Plugin"
 
 msgid "Plugins"
-msgstr ""
+msgstr "Plugins"
 
 msgid "Port"
 msgstr "Port"
@@ -3902,7 +3921,7 @@ msgid "Preview"
 msgstr "Vorschau"
 
 msgid "Preview List"
-msgstr ""
+msgstr "Vorschauliste"
 
 msgid "previous"
 msgstr "zurück"
@@ -4022,7 +4041,7 @@ msgid "Read"
 msgstr "Lesen"
 
 msgid "Read all"
-msgstr ""
+msgstr "alle gelesen"
 
 msgid "Readonly"
 msgstr "Nur Lesen"
@@ -4323,9 +4342,6 @@ msgstr "der letzten"
 msgid "SEARCH_OPERATOR_WITHIN_NEXT"
 msgstr "der nächsten"
 
-msgid "Search Results"
-msgstr "Suchergebnisse"
-
 msgid "Search Results ({0})"
 msgstr "Suchergebnisse ({0})"
 
@@ -4625,7 +4641,7 @@ msgid "Sub"
 msgstr ""
 
 msgid "Sub Category"
-msgstr ""
+msgstr "Unterkategorie"
 
 msgid "Subject"
 msgstr "Betreff"
@@ -5247,6 +5263,14 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "At least one of the fields To, Cc or Bcc must contain an entry."
+#~ msgstr ""
+#~ "Mindestens eins der Felder 'An', 'Cc' oder 'Bcc' muss einen Eintrag "
+#~ "enthalten."
+
+#~ msgid "Search Results"
+#~ msgstr "Suchergebnisse"
 
 #~ msgid "Mark all as read"
 #~ msgstr "als gelesen markieren"

@@ -334,7 +334,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.systemAddress = systemAddress[0];
                 this.canUpdateSystemAddress = await AuthenticationSocketClient.getInstance().checkPermissions([
                     new UIComponentPermission(
-                        `system/communication/systemaddresses/${this.systemAddress.ID}`, [CRUD.UPDATE]
+                        `system/communication/systemaddresses/${this.systemAddress.ID}`, [CRUD.UPDATE],
+                        true, null, false
                     )
                 ]);
             }

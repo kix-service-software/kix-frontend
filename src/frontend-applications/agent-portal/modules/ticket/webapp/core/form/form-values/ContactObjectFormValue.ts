@@ -8,11 +8,13 @@
  */
 
 import { AutoCompleteConfiguration } from '../../../../../../model/configuration/AutoCompleteConfiguration';
+import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { FilterCriteria } from '../../../../../../model/FilterCriteria';
 import { FilterDataType } from '../../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../../model/FilterType';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
+import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { FormValidationService } from '../../../../../base-components/webapp/core/FormValidationService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { TreeNode, TreeUtil } from '../../../../../base-components/webapp/core/tree';
@@ -106,6 +108,15 @@ export class ContactObjectFormValue extends SelectObjectFormValue {
         }
 
         return contactId;
+    }
+
+    public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
+        super.initFormValueByField(field);
+        const context = ContextService.getInstance().getActiveContext();
+        const contact = context.getAdditionalInformation(KIXObjectType.CONTACT);
+        if (contact) {
+            this.setFormValue(contact.ID);
+        }
     }
 
 }

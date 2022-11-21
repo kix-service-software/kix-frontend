@@ -38,7 +38,6 @@ import { SearchProperty } from '../search/model/SearchProperty';
 import { FormFieldOption } from '../../model/configuration/FormFieldOption';
 import { ObjectReferenceOptions } from '../../modules/base-components/webapp/core/ObjectReferenceOptions';
 import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
-import { QueueProperty } from './model/QueueProperty';
 import { FormGroupConfiguration } from '../../model/configuration/FormGroupConfiguration';
 import { FormPageConfiguration } from '../../model/configuration/FormPageConfiguration';
 import { FormConfiguration } from '../../model/configuration/FormConfiguration';
@@ -138,6 +137,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             new ConfigurationDefinition('ticket-dashboard-chart-priorities', ConfigurationType.ChartWidget),
             null, false, true, null, true
         );
+        chartPrioritiesConfig.valid = false;
         configurations.push(chartPrioritiesConfig);
 
         const chartConfig2 = new ChartComponentConfiguration(
@@ -184,6 +184,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             new ConfigurationDefinition('ticket-dashboard-chart-states', ConfigurationType.ChartWidget),
             null, false, true, null, true
         );
+        chartStatesConfig.valid = false;
         configurations.push(chartStatesConfig);
 
         const chartConfig3 = new ChartComponentConfiguration(
@@ -224,6 +225,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             new ConfigurationDefinition('ticket-dashboard-chart-new', ConfigurationType.ChartWidget),
             null, false, true, null, true
         );
+        chartNewConfig.valid = false;
         configurations.push(chartNewConfig);
 
         const tableConfig = new TableConfiguration(
@@ -345,23 +347,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                     new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
-                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                        new KIXObjectLoadingOptions(
-                            [
-                                new FilterCriteria(
-                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                    FilterType.AND, 1
-                                ),
-                                new FilterCriteria(
-                                    QueueProperty.PARENT_ID, SearchOperator.EQUALS,
-                                    FilterDataType.STRING, FilterType.AND, null
-                                )
-                            ],
-                            null, null,
-                            [QueueProperty.SUB_QUEUES],
-                            [QueueProperty.SUB_QUEUES]
-                        )
-                    )
                 ]
             )
         );

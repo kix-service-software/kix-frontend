@@ -22,6 +22,8 @@ import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecific
 import { SysConfigKey } from '../model/SysConfigKey';
 import { FilterCriteria } from '../../../model/FilterCriteria';
 import { AgentPortalConfiguation } from '../../../model/configuration/AgentPortalConfiguation';
+import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
+import { LogLevel } from '../../../../../server/model/LogLevel';
 
 export class SysConfigService extends KIXObjectAPIService {
 
@@ -38,6 +40,22 @@ export class SysConfigService extends KIXObjectAPIService {
 
     public objectType: KIXObjectType | string = KIXObjectType.SYS_CONFIG_OPTION;
 
+    private preloadOptionKeys: string[] = [
+        SysConfigKey.FRONTEND_RICHTEXT_DEFAULT_CSS,
+        SysConfigKey.TICKET_FRONTEND_PENDING_DIFF_TIME,
+        SysConfigKey.TICKET_FRONTEND_NEED_ACCOUNTED_TIME,
+        SysConfigKey.DEFAULT_USED_LANGUAGES,
+        SysConfigKey.DEFAULT_LANGUAGE,
+        SysConfigKey.IMPRINT_LINK,
+        SysConfigKey.USER_MANUAL,
+        SysConfigKey.ADMIN_MANUAL,
+        SysConfigKey.KIX_PRODUCT,
+        SysConfigKey.KIX_VERSION,
+        SysConfigKey.MAX_ALLOWED_SIZE
+    ];
+
+    private optionCache: Map<string, SysConfigOption> = new Map();
+
     private constructor() {
         super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
@@ -48,27 +66,58 @@ export class SysConfigService extends KIXObjectAPIService {
             || kixObjectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION;
     }
 
+    public async preloadOptions(): Promise<void> {
+        const config = ConfigurationService.getInstance().getServerConfiguration();
+        LoggingService.getInstance().info('Preload SysconfigOptions');
+        if (config.LOG_LEVEL === LogLevel.DEBUG) {
+            for (const o of this.preloadOptionKeys) {
+                LoggingService.getInstance().debug(o);
+            }
+        }
+
+        LoggingService.getInstance().info('Preload SysconfigOptions');
+        this.optionCache.clear();
+
+        const loadingOptions = new KIXObjectLoadingOptions();
+        loadingOptions.cacheType = `Preload::${KIXObjectType.SYS_CONFIG_OPTION}`;
+        const options = await this.loadObjects<SysConfigOption>(
+            config?.BACKEND_API_TOKEN, 'SysConfigServicePreload', KIXObjectType.SYS_CONFIG_OPTION, this.preloadOptionKeys,
+            loadingOptions, null
+        ).catch((): SysConfigOption[] => []);
+
+        for (const option of options) {
+            this.optionCache.set(option.Name, option);
+        }
+    }
+
     public async loadObjects<O>(
-        token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: Array<number | string>,
+        token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: Array<string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<O[]> {
         let objects = [];
 
         if (objectType === KIXObjectType.SYS_CONFIG_OPTION) {
-            objects = await super.load<SysConfigOption>(
-                token, KIXObjectType.SYS_CONFIG_OPTION, this.RESOURCE_URI, loadingOptions, objectIds, 'SysConfigOption',
-                clientRequestId, SysConfigOption
-            );
+
+            if (objectIds?.length === 1 && this.optionCache.has(objectIds[0])) {
+                objects = [this.optionCache.get(objectIds[0])];
+            } else {
+                objects = await super.load<SysConfigOption>(
+                    token, KIXObjectType.SYS_CONFIG_OPTION, this.RESOURCE_URI, loadingOptions, objectIds,
+                    KIXObjectType.SYS_CONFIG_OPTION, clientRequestId, SysConfigOption
+                );
+            }
         } else if (objectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION) {
             const uri = this.buildUri(this.RESOURCE_URI, 'definitions');
             objects = await super.load<SysConfigOptionDefinition>(
                 token, KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, uri,
-                loadingOptions, objectIds, 'SysConfigOptionDefinition', clientRequestId, SysConfigOptionDefinition
+                loadingOptions, objectIds, KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
+                clientRequestId, SysConfigOptionDefinition
             );
         }
 
         return objects;
     }
+
     public async updateObject(
         token: string, clientRequestId: string, objectType: KIXObjectType | string,
         parameter: Array<[string, any]>, objectId: string

@@ -129,8 +129,10 @@ export class ContextNamespace extends SocketNameSpace {
 
                 for (const contextOption of contextOptions) {
 
+                    LoggingService.getInstance().debug(`Sysconfig Option: ${contextOption.Name} (${contextOption.ValidID})`);
                     if (contextOption.Value) {
                         const contextConfig = JSON.parse(contextOption.Value) as ContextConfiguration;
+                        LoggingService.getInstance().debug('Sysconfig Option: ' + contextOption.Name);
 
                         const hasValid = contextConfig.valid !== null && typeof contextConfig.valid !== 'undefined';
                         if (!hasValid || contextConfig.valid) {

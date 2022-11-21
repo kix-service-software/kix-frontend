@@ -125,7 +125,7 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
                 organisationId = contact.PrimaryOrganisationID;
 
                 // current value is acceptable - do not changed
-                if (this.value && this.possibleValues.some((pv) => pv.toString() === this.value.toString())) {
+                if (this.value && this.possibleValues?.some((pv) => pv.toString() === this.value.toString())) {
                     return;
                 }
             }

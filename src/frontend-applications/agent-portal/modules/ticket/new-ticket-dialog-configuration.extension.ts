@@ -49,7 +49,6 @@ import { ObjectIcon } from '../icon/model/ObjectIcon';
 import { SearchOperator } from '../search/model/SearchOperator';
 import { UserProperty } from '../user/model/UserProperty';
 import { ArticleProperty } from './model/ArticleProperty';
-import { QueueProperty } from './model/QueueProperty';
 import { TicketProperty } from './model/TicketProperty';
 import { NewTicketDialogContext, TicketSearchContext } from './webapp/core';
 
@@ -495,20 +494,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
 
-                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
-                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                        new KIXObjectLoadingOptions(
-                            [
-                                new FilterCriteria(
-                                    QueueProperty.PARENT_ID, SearchOperator.EQUALS,
-                                    FilterDataType.STRING, FilterType.AND, null
-                                )
-                            ],
-                            null, null,
-                            [QueueProperty.SUB_QUEUES],
-                            [QueueProperty.SUB_QUEUES]
-                        )
-                    )
+                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true)
                 ]
             )
         );

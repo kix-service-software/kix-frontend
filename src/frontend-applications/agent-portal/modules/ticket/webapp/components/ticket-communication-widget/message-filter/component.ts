@@ -146,11 +146,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (this.state.selectedDate) {
             this.state.isFilterDateBefore ?
                 articles = articles.filter((a) => {
-                    const result = SortUtil.compareDate(a.ChangeTime, this.state.selectedDate);
+                    const incomingTime = new Date(Number(a.IncomingTime * 1000)).toString();
+                    const result = SortUtil.compareDate(incomingTime, this.state.selectedDate);
                     return result <= 0;
                 }) :
                 articles = articles.filter((a) => {
-                    const result = SortUtil.compareDate(a.ChangeTime, this.state.selectedDate);
+                    const incomingTime = new Date(Number(a.IncomingTime * 1000)).toString();
+                    const result = SortUtil.compareDate(incomingTime, this.state.selectedDate);
                     return result >= 0;
                 });
         }

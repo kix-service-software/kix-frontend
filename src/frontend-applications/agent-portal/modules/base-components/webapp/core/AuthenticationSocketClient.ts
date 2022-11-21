@@ -142,7 +142,7 @@ export class AuthenticationSocketClient extends SocketClient {
         let requestPromise = BrowserCacheService.getInstance().get(key);
         if (!requestPromise) {
             requestPromise = this.createPermissionRequest(permissions);
-            BrowserCacheService.getInstance().set(key, requestPromise, KIXObjectType.ROLE);
+            BrowserCacheService.getInstance().set(key, requestPromise, 'OPTION_REQUEST');
         }
 
         return requestPromise;

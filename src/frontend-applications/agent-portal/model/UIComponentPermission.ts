@@ -17,7 +17,8 @@ export class UIComponentPermission {
         public target: string,
         public permissions: CRUD[] = [],
         public OR: boolean = false,
-        public object?: any
+        public object?: any,
+        public collection: boolean = true
     ) {
         permissions.forEach((p) => this.value = this.value | p);
     }

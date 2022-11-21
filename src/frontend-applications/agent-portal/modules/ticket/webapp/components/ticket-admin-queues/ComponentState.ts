@@ -13,11 +13,6 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { QueueProperty } from '../../../model/QueueProperty';
 import { SortOrder } from '../../../../../model/SortOrder';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
-import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
-import { FilterCriteria } from '../../../../../model/FilterCriteria';
-import { SearchOperator } from '../../../../search/model/SearchOperator';
-import { FilterDataType } from '../../../../../model/FilterDataType';
-import { FilterType } from '../../../../../model/FilterType';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
 
@@ -35,16 +30,8 @@ export class ComponentState {
                 null, null, null,
                 KIXObjectType.QUEUE, [QueueProperty.NAME, SortOrder.UP], null,
                 new TableConfiguration(null, null, null,
-                    KIXObjectType.QUEUE,
-                    new KIXObjectLoadingOptions(
-                        [
-                            new FilterCriteria(
-                                QueueProperty.PARENT_ID, SearchOperator.EQUALS,
-                                FilterDataType.NUMERIC, FilterType.AND, null
-                            ),
-                        ], null, null,
-                        [QueueProperty.SUB_QUEUES], [QueueProperty.SUB_QUEUES]
-                    ), null, null, [], true, null, null, null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
+                    KIXObjectType.QUEUE, null, null, null, [], true, null, null, null,
+                    TableHeaderHeight.LARGE, TableRowHeight.LARGE
                 )
             ),
             false, false, 'kix-icon-gears')

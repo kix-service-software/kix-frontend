@@ -12,17 +12,20 @@ import { FormContext } from '../../../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { AdditionalContextInformation } from '../../../../../base-components/webapp/core/AdditionalContextInformation';
+import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { RichTextFormValue } from '../../../../../object-forms/model/FormValues/RichTextFormValue';
 import { SelectObjectFormValue } from '../../../../../object-forms/model/FormValues/SelectObjectFormValue';
 import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectFormValueMapper';
 import { Article } from '../../../../model/Article';
+import { ArticleLoadingOptions } from '../../../../model/ArticleLoadingOptions';
 import { ArticleProperty } from '../../../../model/ArticleProperty';
 import { Channel } from '../../../../model/Channel';
 import { ArticleAttachmentFormValue } from './ArticleAttachmentFormValue';
 import { CustomerVisibleFormValue } from './CustomerVisibleFormValue';
 import { FromObjectFormValue } from './FromObjectFormValue';
+import { IncomingTimeFormValue } from './IncomingTimeFormValue';
 import { RecipientFormValue } from './RecipientFormValue';
 
 export class ChannelFormValue extends SelectObjectFormValue<number> {
@@ -53,6 +56,18 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
     public async initFormValue(): Promise<void> {
         await super.initFormValue();
+
+        if (!this.value) {
+            const context = ContextService.getInstance().getActiveContext();
+            const refArticleId = context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
+            if (refArticleId) {
+                const refTicketId = context?.getObjectId();
+                const refArticle = await this.loadReferencedArticle(Number(refTicketId), refArticleId);
+                if (refArticle) {
+                    this.value = refArticle?.ChannelID;
+                }
+            }
+        }
 
         if (!this.value && !this.noChannelSelectable && this.hasChannelField) {
             const selectableNodes = this.getSelectableTreeNodeValues();
@@ -113,6 +128,9 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                 case ArticleProperty.ATTACHMENTS:
                     formValue = new ArticleAttachmentFormValue(property, article, this.objectValueMapper, this);
                     break;
+                case ArticleProperty.INCOMING_TIME:
+                    formValue = new IncomingTimeFormValue(property, article, this.objectValueMapper, this);
+                    break;
                 default:
             }
 
@@ -144,6 +162,8 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             const channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL, [channelId])
                 .catch((): Channel[] => []);
             const channel = Array.isArray(channels) && channels.length ? channels[0] : null;
+            const context = this.objectValueMapper.objectFormHandler.context;
+            const articleUpdateID = await context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
 
             const noteFields = [
                 ArticleProperty.CUSTOMER_VISIBLE, ArticleProperty.SUBJECT,
@@ -157,6 +177,11 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                 ArticleProperty.TO
             ];
 
+            if (articleUpdateID) {
+                noteFields.push(ArticleProperty.INCOMING_TIME);
+                mailFields.push(ArticleProperty.INCOMING_TIME);
+            }
+
             let submitPattern = 'Translatable#Save';
             if (channel?.Name === 'note') {
                 this.disableChannelFormValues(allFields.filter((p) => !noteFields.includes(p)));
@@ -167,7 +192,6 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                 submitPattern = 'Translatable#Send';
             }
 
-            const context = this.objectValueMapper.objectFormHandler.context;
             context.setAdditionalInformation(AdditionalContextInformation.DIALOG_SUBMIT_BUTTON_TEXT, submitPattern);
         } else {
             this.disableChannelFormValues(allFields);
@@ -217,6 +241,18 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
     public async reset(): Promise<void> {
         return;
+    }
+
+    private async loadReferencedArticle(refTicketId: number, refArticleId: number): Promise<Article> {
+        let article: Article;
+        if (refArticleId && refTicketId) {
+            const articles = await KIXObjectService.loadObjects<Article>(
+                KIXObjectType.ARTICLE, [refArticleId], null,
+                new ArticleLoadingOptions(refTicketId), true
+            ).catch(() => [] as Article[]);
+            article = articles.find((a) => a.ArticleID === refArticleId);
+        }
+        return article;
     }
 
 }

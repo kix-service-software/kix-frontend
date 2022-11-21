@@ -8,12 +8,20 @@
  */
 
 import { FormContext } from '../../../../../model/configuration/FormContext';
+import { Context } from '../../../../../model/Context';
 import { Attachment } from '../../../../../model/kix/Attachment';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { BrowserCacheService } from '../../../../base-components/webapp/core/CacheService';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { ObjectFormValueMapper } from '../../../../object-forms/model/ObjectFormValueMapper';
 import { ObjectCommitHandler } from '../../../../object-forms/webapp/core/ObjectCommitHandler';
+import { Article } from '../../../model/Article';
+import { ArticleLoadingOptions } from '../../../model/ArticleLoadingOptions';
+import { ArticleProperty } from '../../../model/ArticleProperty';
 import { Channel } from '../../../model/Channel';
 import { Queue } from '../../../model/Queue';
 import { Ticket } from '../../../model/Ticket';
@@ -28,7 +36,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         const newTicket = await super.prepareObject(ticket, forCommit);
 
         await this.prepareArticles(newTicket, forCommit, ticket.QueueID);
-        this.prepareTitle(newTicket);
+        await this.prepareTitle(newTicket);
         this.prepareTicket(newTicket);
         this.prepareSpecificAttributes(newTicket);
 
@@ -45,7 +53,6 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                 delete article.Comment;
                 delete article.CreatedBy;
                 delete article.Flags;
-                delete article.IncomingTime;
                 delete article.Links;
                 delete article.Plain;
                 delete article.References;
@@ -65,6 +72,10 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                 delete article.ValidID;
 
                 if (forCommit) {
+                    // FIXME: array handling
+                    const context = ContextService.getInstance().getActiveContext();
+                    article.ArticleID = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
+
                     if (article.Attachments?.length) {
                         article.Attachments = await this.prepareAttachments(article.Attachments);
                     }
@@ -72,6 +83,19 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                     article.Body = await this.addQueueSignature(
                         ticket.QueueID || orgTicketQueueID, article.Body, article.ChannelID
                     );
+
+                    const referencedArticleId = context?.getAdditionalInformation(
+                        ArticleProperty.REFERENCED_ARTICLE_ID
+                    );
+                    if (referencedArticleId) {
+                        const referencedArticle = await this.loadReferencedArticle(
+                            ticket.TicketID, referencedArticleId
+                        );
+                        if (referencedArticle) {
+                            article.InReplyTo = referencedArticle.MessageID?.toString();
+                            article.References = `${referencedArticle.References} ${referencedArticle.MessageID}`;
+                        }
+                    }
                 } else {
                     article.Attachments = null;
                 }
@@ -133,9 +157,12 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         return attachments;
     }
 
-    private prepareTitle(ticket: Ticket): void {
+    protected async prepareTitle(ticket: Ticket): Promise<void> {
         if (!ticket.Title && this.objectValueMapper?.formContext === FormContext.NEW) {
-            ticket.Title = new Date().toLocaleDateString();
+            await super.prepareTitle(ticket);
+            if (!ticket.Title) {
+                ticket.Title = new Date().toLocaleDateString();
+            }
             if (ticket.Articles?.length) {
                 const article = ticket.Articles.find((a) => !a.ArticleID);
                 ticket.Title = article?.Subject || ticket.Title;
@@ -181,4 +208,43 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
             delete ticket['TimeUnit'];
         }
     }
+
+    public async commitObject(): Promise<string | number> {
+        let sourceContext: Context;
+
+        const id = await super.commitObject();
+
+        const context = ContextService.getInstance().getActiveContext();
+        const articleUpdateId = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
+
+        const sourceContextInformation = context?.getAdditionalInformation(AdditionalContextInformation.SOURCE_CONTEXT);
+        if (sourceContextInformation) {
+            sourceContext = ContextService.getInstance().getContext(sourceContextInformation?.instanceId);
+        }
+
+        if (
+            sourceContext
+            && articleUpdateId
+        ) {
+            BrowserCacheService.getInstance().deleteKeys(KIXObjectType.ARTICLE);
+            sourceContext.reloadObjectList(KIXObjectType.ARTICLE);
+        }
+        return id;
+    }
+
+    private async loadReferencedArticle(refTicketId: number, refArticleId: number): Promise<Article> {
+        let article: Article;
+
+        if (refArticleId && refTicketId) {
+            const articles = await KIXObjectService.loadObjects<Article>(
+                KIXObjectType.ARTICLE, [refArticleId], new KIXObjectLoadingOptions(
+                    null, null, null, [ArticleProperty.ATTACHMENTS]
+                ),
+                new ArticleLoadingOptions(refTicketId), true
+            ).catch(() => [] as Article[]);
+            article = articles.find((a) => a.ArticleID === refArticleId);
+        }
+        return article;
+    }
+
 }

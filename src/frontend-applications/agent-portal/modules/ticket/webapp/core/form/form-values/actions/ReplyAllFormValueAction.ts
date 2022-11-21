@@ -27,7 +27,7 @@ export class ReplyAllFormValueAction extends FormValueAction {
         this.text = 'Translatable#Reply All';
         this.icon = 'kix-icon-mail-answerall-outline';
         const context = ContextService.getInstance().getActiveContext();
-        this.referencedArticleId = context?.getAdditionalInformation('REFERENCED_ARTICLE_ID');
+        this.referencedArticleId = context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
     }
 
     public async canShow(): Promise<boolean> {

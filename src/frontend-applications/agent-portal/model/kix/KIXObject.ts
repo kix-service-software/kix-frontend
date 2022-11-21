@@ -45,6 +45,8 @@ export abstract class KIXObject extends BindableObject {
 
     public DynamicFields: DynamicFieldValue[] = [];
 
+    public LinkCount: number = 0;
+
     public constructor(object?: KIXObject) {
         super();
         this.displayValues = [];

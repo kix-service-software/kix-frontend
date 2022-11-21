@@ -175,21 +175,23 @@ export class FormInstance {
     }
 
     public async removeFormField(formField: FormFieldConfiguration): Promise<void> {
-        const fields: FormFieldConfiguration[] = this.getFields(formField);
+        if (formField) {
+            const fields: FormFieldConfiguration[] = this.getFields(formField);
 
-        if (Array.isArray(fields)) {
-            const index = fields.findIndex((c) => c.instanceId === formField.instanceId);
-            if (index !== -1) {
-                fields.splice(index, 1);
-                this.deleteFieldValues(formField);
-                const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
-                    this.form.objectType, ServiceType.FORM
-                );
-                if (service) {
-                    await service.updateFields(fields, this);
+            if (Array.isArray(fields)) {
+                const index = fields.findIndex((c) => c.instanceId === formField?.instanceId);
+                if (index !== -1) {
+                    fields.splice(index, 1);
+                    this.deleteFieldValues(formField);
+                    const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
+                        this.form.objectType, ServiceType.FORM
+                    );
+                    if (service) {
+                        await service.updateFields(fields, this);
+                    }
+
+                    EventService.getInstance().publish(FormEvent.FIELD_REMOVED, { formInstance: this, formField });
                 }
-
-                EventService.getInstance().publish(FormEvent.FIELD_REMOVED, { formInstance: this, formField });
             }
         }
     }
@@ -275,19 +277,22 @@ export class FormInstance {
 
     public getFields(formField: FormFieldConfiguration): FormFieldConfiguration[] {
         let fields: FormFieldConfiguration[];
-        if (formField.parent) {
-            const parent = this.getFormField(formField.parent.instanceId);
-            fields = parent.children;
-        } else {
-            for (const page of this.form.pages) {
-                for (const group of page.groups) {
-                    fields = this.findFormFieldList(group.formFields, formField.instanceId);
+
+        if (formField) {
+            if (formField?.parent) {
+                const parent = this.getFormField(formField?.parent.instanceId);
+                fields = parent.children;
+            } else {
+                for (const page of this.form.pages) {
+                    for (const group of page.groups) {
+                        fields = this.findFormFieldList(group.formFields, formField?.instanceId);
+                        if (fields) {
+                            break;
+                        }
+                    }
                     if (fields) {
                         break;
                     }
-                }
-                if (fields) {
-                    break;
                 }
             }
         }

@@ -108,15 +108,16 @@ export class KIXObjectSocketClient extends SocketClient {
 
         let requestPromise: Promise<T[]>;
         if (cache) {
-            const cacheKey = JSON.stringify({ kixObjectType, objectIds, loadingOptions, objectLoadingOptions });
+            const cacheType = loadingOptions?.cacheType || kixObjectType;
+            const cacheKey = JSON.stringify({ cacheType, objectIds, loadingOptions, objectLoadingOptions });
 
-            requestPromise = BrowserCacheService.getInstance().get(cacheKey, kixObjectType);
+            requestPromise = BrowserCacheService.getInstance().get(cacheKey, cacheType);
             if (!requestPromise) {
                 requestPromise = this.createLoadRequestPromise<T>(request, objectConstructors, timeout, silent);
-                BrowserCacheService.getInstance().set(cacheKey, requestPromise, kixObjectType);
+                BrowserCacheService.getInstance().set(cacheKey, requestPromise, cacheType);
 
                 requestPromise.catch((error) => {
-                    BrowserCacheService.getInstance().delete(cacheKey, kixObjectType);
+                    BrowserCacheService.getInstance().delete(cacheKey, cacheType);
                 });
             }
             return requestPromise;

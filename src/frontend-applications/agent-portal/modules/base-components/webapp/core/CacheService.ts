@@ -141,23 +141,13 @@ export class BrowserCacheService {
         }
 
         switch (cacheKeyPrefixes[0]) {
-            case KIXObjectType.ARTICLE:
-            case KIXObjectType.WATCHER:
-            case KIXObjectType.DYNAMIC_FIELD:
-                cacheKeyPrefixes.push(KIXObjectType.TICKET);
-                cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
-                break;
             case KIXObjectType.TICKET:
-                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
-                cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
-                cacheKeyPrefixes.push(KIXObjectType.CONTACT);
-                cacheKeyPrefixes.push(KIXObjectType.QUEUE);
-                cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
+                cacheKeyPrefixes.push('ORGANISATION_TICKET_STATS');
+                cacheKeyPrefixes.push('CONTACT_TICKET_STATS');
                 cacheKeyPrefixes.push(KIXObjectType.ARTICLE);
                 cacheKeyPrefixes.push(KIXObjectType.TICKET_HISTORY);
-                // needed for permission checks of objectactions (UIObjectActions/AuthenticationSocketClient)
-                // - check new after ticket update
-                cacheKeyPrefixes.push(KIXObjectType.ROLE);
+                cacheKeyPrefixes.push('QUEUE_HIERARCHY');
+                cacheKeyPrefixes.push('OPTION_REQUEST');
                 break;
             case KIXObjectType.FAQ_VOTE:
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
@@ -169,20 +159,20 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
                 break;
             case KIXObjectType.CONFIG_ITEM:
+            case KIXObjectType.CONFIG_ITEM_CLASS:
             case KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION:
-                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM_CLASS);
+                cacheKeyPrefixes.push(`${KIXObjectType.CONFIG_ITEM_CLASS}_STATS`);
+                cacheKeyPrefixes.push(`${KIXObjectType.CONFIG_ITEM_CLASS}_DEFINITION`);
                 cacheKeyPrefixes.push(KIXObjectType.GRAPH);
                 cacheKeyPrefixes.push(KIXObjectType.GRAPH_INSTANCE);
+                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM_VERSION);
                 break;
             case KIXObjectType.PERSONAL_SETTINGS:
             case KIXObjectType.USER_PREFERENCE:
                 cacheKeyPrefixes.push(KIXObjectType.USER);
-                cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
-                cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 break;
             case KIXObjectType.USER:
                 cacheKeyPrefixes.push(KIXObjectType.ROLE);
-                cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 cacheKeyPrefixes.push(KIXObjectType.REPORT_DEFINITION);
                 break;
             case KIXObjectType.LINK:
@@ -196,17 +186,12 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.GRAPH_INSTANCE);
                 break;
             case KIXObjectType.ORGANISATION:
-                cacheKeyPrefixes.push(KIXObjectType.CONTACT);
-                cacheKeyPrefixes.push(KIXObjectType.TICKET);
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
-                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
+                cacheKeyPrefixes.push('ORGANISATION_TICKET_STATS');
                 break;
             case KIXObjectType.CONTACT:
-                cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
-                cacheKeyPrefixes.push(KIXObjectType.TICKET);
-                cacheKeyPrefixes.push(KIXObjectType.USER);
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
-                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
+                cacheKeyPrefixes.push('CONTACT_TICKET_STATS');
                 break;
             case KIXObjectType.PERMISSION:
             case KIXObjectType.ROLE:
@@ -214,13 +199,12 @@ export class BrowserCacheService {
                 this.clear();
                 break;
             case KIXObjectType.QUEUE:
+                cacheKeyPrefixes.push('QUEUE_HIERARCHY');
+                cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
+                break;
             case KIXObjectType.TICKET_PRIORITY:
             case KIXObjectType.TICKET_STATE:
             case KIXObjectType.TICKET_TYPE:
-                cacheKeyPrefixes.push(KIXObjectType.TICKET);
-                cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
-                break;
-            case KIXObjectType.CONFIG_ITEM_CLASS:
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
                 break;
             case KIXObjectType.TRANSLATION_PATTERN:
@@ -232,8 +216,6 @@ export class BrowserCacheService {
                 break;
             case KIXObjectType.CONFIG_ITEM_VERSION:
                 cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
-                cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
-                cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 cacheKeyPrefixes.push(KIXObjectType.GRAPH);
                 cacheKeyPrefixes.push(KIXObjectType.GRAPH_INSTANCE);
                 break;
@@ -271,6 +253,13 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.REPORT_DEFINITION);
                 cacheKeyPrefixes.push(KIXObjectType.REPORT);
                 cacheKeyPrefixes.push(KIXObjectType.REPORT_RESULT);
+                break;
+            case KIXObjectType.WATCHER:
+                cacheKeyPrefixes.push(KIXObjectType.TICKET);
+                break;
+            case KIXObjectType.ARTICLE:
+                cacheKeyPrefixes.push(KIXObjectType.ATTACHMENT);
+                cacheKeyPrefixes.push('Ticket-Article-Attachment');
                 break;
             default:
         }
