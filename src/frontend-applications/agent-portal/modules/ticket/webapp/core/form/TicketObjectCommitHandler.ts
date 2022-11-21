@@ -91,8 +91,10 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                         const referencedArticle = await this.loadReferencedArticle(
                             ticket.TicketID, referencedArticleId
                         );
-                        article.InReplyTo = referencedArticle.MessageID?.toString();
-                        article.References = `${referencedArticle.References} ${referencedArticle.MessageID}`;
+                        if (referencedArticle) {
+                            article.InReplyTo = referencedArticle.MessageID?.toString();
+                            article.References = `${referencedArticle.References} ${referencedArticle.MessageID}`;
+                        }
                     }
                 } else {
                     article.Attachments = null;
@@ -232,6 +234,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
 
     private async loadReferencedArticle(refTicketId: number, refArticleId: number): Promise<Article> {
         let article: Article;
+
         if (refArticleId && refTicketId) {
             const articles = await KIXObjectService.loadObjects<Article>(
                 KIXObjectType.ARTICLE, [refArticleId], new KIXObjectLoadingOptions(
