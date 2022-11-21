@@ -120,6 +120,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                                 {
                                     text: 'Translatable#Related Assets',
                                     textStyle: 'font-weight:bold;margin-bottom:0.5rem',
+                                    detailViewWidthFactor: '1',
                                     icon: 'kix-icon-ci',
                                     componentId: 'dynamic-field-value',
                                     componentData: {

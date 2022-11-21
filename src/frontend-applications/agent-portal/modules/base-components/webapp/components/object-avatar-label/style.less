@@ -9,14 +9,14 @@
 
 .user-avatar-label {
     display: grid;
-    grid-template-columns: minmax(0, 4rem) auto;
+    grid-template-columns: 4rem auto;
     align-content: center;
 
     .user-avatar-icon {
         grid-column: 1;
         grid-row: 1 /span 2;
         align-self: center;
-        justify-self: center;
+        justify-self: start;
 
         font-size: 3rem;
         height: 3rem;
@@ -31,6 +31,8 @@
 
     .user-avatar-text {
         align-self: start;
+        max-height: 10rem;
+        overflow: auto;
     }
 
     .user-avatar-description {

@@ -94,12 +94,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    public async search(): Promise<void> {
+    public search(): void {
         this.state.filterValue = this.filterValue;
         const context = ContextService.getInstance().getActiveContext();
         if (context instanceof AdminContext) {
             context.setFilterValue(this.state.filterValue);
-            await this.state.table.reload(true);
+            this.state.table.reload(true);
         }
     }
 
@@ -140,14 +140,7 @@ class UserContentProvider extends TableContentProvider {
 
         const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
         for (const column of columns) {
-            let objectValue = user[column.property];
-            if (objectValue === null || objectValue === undefined) {
-                objectValue = user['User' + column.property];
-            }
-            const tableValue = new TableValue(column.property, objectValue);
-            if (tableValue.displayValue === null || tableValue.displayValue === undefined) {
-                tableValue.displayValue = objectValue;
-            }
+            const tableValue = new TableValue(column.property, user[column.property]);
             values.push(tableValue);
         }
 

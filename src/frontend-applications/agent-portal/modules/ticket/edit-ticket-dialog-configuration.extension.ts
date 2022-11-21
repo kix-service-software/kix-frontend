@@ -132,7 +132,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     null, null, null,
                                     'kix-icon-ticket', null,
                                     'Translatable#Open Tickets of Contact',
-                                    null, null, null,
+                                    null, null, '1', null,
                                     new RoutingConfiguration(
                                         TicketSearchContext.CONTEXT_ID, null,
                                         ContextMode.SEARCH, null, null, null, null, null,
@@ -166,7 +166,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     null, null, null,
                                     'kix-icon-ticket', null,
                                     'Translatable#Open Tickets of Organisation',
-                                    null, null, null,
+                                    null, null, '1', null,
                                     new RoutingConfiguration(
                                         TicketSearchContext.CONTEXT_ID, null,
                                         ContextMode.SEARCH,

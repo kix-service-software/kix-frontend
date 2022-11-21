@@ -28,8 +28,11 @@ class Component {
 
     private context: Context;
 
+    private valueDataMap: Map<string, boolean>;
+
     public onCreate(): void {
         this.state = new ComponentState();
+        this.valueDataMap = new Map<string, boolean>();
     }
 
     public onInput(input: any): void {
@@ -79,6 +82,7 @@ class Component {
     }
 
     private async prepareInformation(rows: InformationRowConfiguration[], object: KIXObject): Promise<void> {
+        this.state.valuesReady = false;
         const information: InformationRowConfiguration[] = [];
         if (Array.isArray(rows)) {
             for (const row of rows) {
@@ -97,6 +101,7 @@ class Component {
                                 const infoValue = await this.createInfoValue(v, object);
                                 if (infoValue) {
                                     group.push(infoValue);
+                                    this.setDataMapValue([infoValue.componentData.property, true]);
                                 }
                             }
 
@@ -118,6 +123,71 @@ class Component {
         }
 
         this.state.information = information;
+        this.state.valuesReady = true;
+    }
+
+    public setDataMapValue(data: Array<any>): void {
+        const previousValue = this.valueDataMap.get(data[0]);
+        if (previousValue !== data[1]) {
+            this.state.valuesReady = false;
+            this.valueDataMap.set(data[0], data[1]);
+            this.state.valuesReady = true;
+        }
+    }
+
+    public hasValue(group: InformationConfiguration[]): boolean {
+        if (group.some((value) => this.valueDataMap.get(value.componentData.property))) {
+            return true;
+        }
+        return false;
+    }
+
+    public hasRowValue(row: InformationRowConfiguration): boolean {
+        let hasValue = false;
+        row.values.forEach((value) => {
+            hasValue = this.hasValue(value);
+            if (hasValue) {
+                return true;
+            }
+        });
+        return hasValue;
+    }
+
+    public getCustomRowStyle(index: number): string {
+        const basicColumnWidth = 15;
+        const row = this.state.information[index] as InformationRowConfiguration;
+        if (!this.hasRowValue(row) || this.isRowWithCreatedBy(index)) return null;
+        let style = 'grid-auto-columns:';
+        row.values.forEach((value, index) => {
+            if (this.hasValue(value)) {
+                const largestFactor = this.getLargestWidthFactor(value);
+                style += ` ${largestFactor * basicColumnWidth + (largestFactor - 1)}rem`;
+                if (index === row.values.length - 1) {
+                    style += ';';
+                }
+            }
+        });
+        return style;
+    }
+
+    private getLargestWidthFactor(group: InformationConfiguration[]): number {
+        let largestFactor = 1;
+        group.forEach((value) => {
+            if (value.detailViewWidthFactor) {
+                let widthFactor: number;
+                try {
+                    widthFactor = Number.parseInt(value.detailViewWidthFactor);
+                } catch (e) {
+                    widthFactor = 1;
+                }
+                if (widthFactor > 4) widthFactor = 4;
+                if (widthFactor < 1) widthFactor = 1;
+                if (widthFactor > largestFactor) {
+                    largestFactor = widthFactor;
+                }
+            }
+        });
+        return largestFactor;
     }
 
     private async createInfoValue(
@@ -139,6 +209,7 @@ class Component {
             value.text,
             value.textPlaceholder,
             value.textStyle,
+            value.detailViewWidthFactor,
             value.linkSrc,
             value.routingConfiguration,
             value.routingObjectId,
@@ -176,6 +247,15 @@ class Component {
         }
 
         return infoValue;
+    }
+
+    public isRowWithCreatedBy(index: number): boolean {
+        const row = this.state.information[index] as InformationRowConfiguration;
+        return row.values.some((group) => group && group.some(
+            (value) => value && value.textPlaceholder && value.textPlaceholder.some(
+                (placeholder) => placeholder && placeholder === '<KIX_TICKET_CreateBy>'
+            )
+        ));
     }
 }
 
