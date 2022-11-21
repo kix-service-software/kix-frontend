@@ -409,7 +409,7 @@ export class ObjectFormValue<T = any> {
             }
 
             for (const pv of values) {
-                if (!this.possibleValues.some((v) => v?.toString() === pv?.toString())) {
+                if (!this.possibleValues?.some((v) => v?.toString() === pv?.toString())) {
                     this.possibleValues.push(pv);
                 }
             }
