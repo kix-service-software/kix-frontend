@@ -47,6 +47,7 @@ export class InformationConfiguration {
         public text?: string,
         public textPlaceholder?: string[],
         public textStyle?: string,
+        public detailViewWidthFactor?: string,
         public linkSrc?: string,
         public routingConfiguration?: RoutingConfiguration,
         public routingObjectId?: string,
