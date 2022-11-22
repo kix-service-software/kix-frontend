@@ -72,6 +72,12 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             new FormValueBinding(this, 'selectedNodes', object, property),
             new FormValueBinding(this, 'multiselect', object, property),
         );
+
+        this.addPropertyBinding(FormValueProperty.ENABLED, (value: SelectObjectFormValue) => {
+            if (this.enabled) {
+                this.initFormValue();
+            }
+        });
     }
 
     public destroy(): void {

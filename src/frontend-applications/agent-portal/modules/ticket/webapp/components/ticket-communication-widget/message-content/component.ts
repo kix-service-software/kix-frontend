@@ -45,14 +45,35 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
-        this.article = input.article;
-        this.state.article = this.article;
-        this.state.selectedCompactView = typeof input.selectedCompactView !== 'undefined' ? input.selectedCompactView : true;
-        this.state.expanded = input.collapseAll ? false : input.expanded || this.state.expanded;
+        this.update(input);
+    }
 
-        this.state.compactViewExpanded = this.state.selectedCompactView ? this.state.expanded : false;
+    private async update(input: any): Promise<void> {
+        const oldChangeTime = this.article?.ChangeTime;
+        const currChangeTime = input.article?.ChangeTime;
+        this.article = input.article;
+
         // on update, some article was already loaded
         if (this.state.article && this.state.article.ArticleID !== this.article.ArticleID) {
+            await this.loadArticle(undefined, true);
+        } else {
+            this.state.article = this.article;
+            if (oldChangeTime !== currChangeTime) {
+                this.prepareArticleData();
+            }
+        }
+
+        if (input.collapseAll) {
+            this.state.expanded = false;
+        } else if (input.expanded && !this.state.expanded) {
+            // expand if now necessary
+            this.toggleArticleListView();
+        }
+        this.state.selectedCompactView = typeof input.selectedCompactView !== 'undefined' ? input.selectedCompactView : true;
+        this.state.compactViewExpanded = this.state.selectedCompactView ? this.state.expanded : false;
+
+        // load article and prepare actions if not done yet
+        if (this.state.expanded && !this.state.article['ObjectActions']?.length) {
             this.loadArticle(undefined, true);
         }
     }
@@ -66,11 +87,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             sidebarLeftToggled: (): void => { return; },
             filteredObjectListChanged: (): void => { return; },
             objectChanged: (): void => { return; },
-            objectListChanged: (objectType: KIXObjectType): void => {
-                if (objectType === KIXObjectType.ARTICLE && this.state.article) {
-                    this.loadArticle(undefined, true);
-                }
-            },
+            objectListChanged: (): void => { return; },
             sidebarRightToggled: (): void => { return; },
             scrollInformationChanged: (objectType: KIXObjectType | string, objectId: string | number): void => {
                 if (
@@ -138,6 +155,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async prepareActions(): Promise<void> {
+        if (!this.context) {
+            this.context = ContextService.getInstance().getActiveContext();
+        }
         const actions = await this.context.getAdditionalActions(this.state.article) || [];
 
         const hasKIXPro = await KIXModulesService.getInstance().hasPlugin('KIXPro');
@@ -223,9 +243,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.articleAttachments = attachments;
     }
 
-    public toggleArticleListView(event: any): void {
-        event.stopPropagation();
-        event.preventDefault();
+    public toggleArticleListView(event?: any): void {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
         this.state.expanded = !this.state.expanded;
         this.toggleArticleContent();
     }
@@ -303,7 +325,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             await TicketService.getInstance().setArticleSeenFlag(
                 article.TicketID, article.ArticleID
             );
-            await this.loadArticle(silent, true);
             this.context.reloadObjectList(KIXObjectType.ARTICLE);
         }
     }

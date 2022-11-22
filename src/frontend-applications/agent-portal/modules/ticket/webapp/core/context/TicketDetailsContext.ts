@@ -105,7 +105,9 @@ export class TicketDetailsContext extends Context {
 
     public async reloadObjectList(objectType: KIXObjectType | string, silent: boolean = false): Promise<void> {
         if (objectType === KIXObjectType.ARTICLE) {
-            await this.loadArticles(true);
+
+            // just trigger objectListChanged event
+            this.setObjectList(KIXObjectType.ARTICLE, null);
         }
     }
 

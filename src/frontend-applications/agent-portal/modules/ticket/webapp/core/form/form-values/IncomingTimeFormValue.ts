@@ -42,19 +42,9 @@ export class IncomingTimeFormValue extends DateTimeFormValue {
         return super.setFormValue(value, force);
     }
 
-    public async setObjectValue(value: any): Promise<void> {
-        const beOffset = await KIXModulesService.getInstance().getBackenTimezoneOffset();
-        const date = new Date();
-        const localeOffset = date.getTimezoneOffset() * 60;
-
-        const asUTC = Math.abs(beOffset) !== Math.abs(localeOffset);
-
-        if (value instanceof Date) {
-            value = DateTimeUtil.getKIXDateTimeString(value, asUTC);
-        } else if (!isNaN(value)) {
-            value = DateTimeUtil.getKIXDateTimeString(new Date(value), asUTC);
-        } else if (typeof value === 'string') {
-            value = DateTimeUtil.getKIXDateTimeString(value, asUTC);
+    public setObjectValue(value: any): Promise<void> {
+        if (value) {
+            value = DateTimeUtil.getKIXDateTimeString(value, true);
         }
         return super.setObjectValue(value);
     }

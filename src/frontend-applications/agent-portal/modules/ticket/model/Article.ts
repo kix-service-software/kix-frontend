@@ -187,8 +187,9 @@ export class Article extends KIXObject {
             return !this.Flags.some(
                 (af) => typeof af === 'object' && af.Name.toLocaleLowerCase() === 'seen' && af.Value === '1'
             );
+        } else {
+            return Boolean(Number(this.Unseen));
         }
-        return false;
     }
 
     public isUnsent(): boolean {

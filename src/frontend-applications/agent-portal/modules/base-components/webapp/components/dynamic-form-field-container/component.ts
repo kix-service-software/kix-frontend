@@ -23,7 +23,6 @@ class Component {
     private state: ComponentState;
     private manager: IDynamicFormManager;
     private provideTimeout: any;
-    private addEmptyValueTimeout: any;
 
     private advancedOptionsMap: Map<string, boolean>;
     private optionEditor: Map<string, any>;
@@ -82,7 +81,7 @@ class Component {
             }
         });
 
-        this.addEmptyValue();
+        await this.addEmptyValue();
 
         if (this.manager.uniqueProperties) {
             this.state.dynamicValues.forEach((dv) => dv.updateProperties());
@@ -126,7 +125,7 @@ class Component {
 
             this.state.hasAdditionalOptions = this.manager.hasAdditionalOptions();
 
-            this.addEmptyValue();
+            await this.addEmptyValue();
         }
     }
 
@@ -276,23 +275,17 @@ class Component {
         await this.updateValues();
     }
 
-    private addEmptyValue(): void {
-        if (this.addEmptyValueTimeout) {
-            window.clearTimeout(this.addEmptyValueTimeout);
+    private async addEmptyValue(): Promise<void> {
+        const canAddEmptyValue = await this.manager.shouldAddEmptyField();
+        const hasEmptyValue = this.state.dynamicValues.some((sv) => sv.getValue().property === null);
+
+        if (canAddEmptyValue && !hasEmptyValue) {
+            const emptyField = new DynamicFormFieldValue(this.manager);
+            await emptyField.init();
+            this.state.dynamicValues.push(emptyField);
         }
 
-        this.addEmptyValueTimeout = setTimeout(async () => {
-            const canAddEmptyValue = await this.manager.shouldAddEmptyField();
-            const hasEmptyValue = this.state.dynamicValues.some((sv) => sv.getValue().property === null);
-
-            if (canAddEmptyValue && !hasEmptyValue) {
-                const emptyField = new DynamicFormFieldValue(this.manager);
-                await emptyField.init();
-                this.state.dynamicValues.push(emptyField);
-            }
-
-            (this as any).setStateDirty('dynamicValues');
-        }, 15);
+        (this as any).setStateDirty('dynamicValues');
     }
 
     public showValueInput(value: DynamicFormFieldValue): boolean {

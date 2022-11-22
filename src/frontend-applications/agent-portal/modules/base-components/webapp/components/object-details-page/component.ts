@@ -93,6 +93,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             );
         } else {
             this.state.title = await this.context.getDisplayText();
+            this.context.setDisplayText(this.state.title);
         }
     }
 

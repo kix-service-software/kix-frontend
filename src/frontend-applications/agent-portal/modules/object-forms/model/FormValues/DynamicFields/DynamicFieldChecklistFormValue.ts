@@ -70,7 +70,8 @@ export class DynamicFieldChecklistFormValue extends ObjectFormValue<CheckListIte
             } else {
                 newValue = value;
             }
-            super.setFormValue(newValue, force);
+            await super.setFormValue(newValue, force);
+            await this.setObjectValue(newValue);
         } catch (e) {
             console.error(e);
         }

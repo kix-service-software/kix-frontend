@@ -30,7 +30,10 @@ export class EditTicketDialogContext extends Context {
 
     public async initContext(): Promise<void> {
         await this.getObject();
+        await super.initContext();
+    }
 
+    public async postInit(): Promise<void> {
         const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
         const kixPro = releaseInfo?.plugins?.some((p) => p.product === 'KIXPro');
 
@@ -41,8 +44,6 @@ export class EditTicketDialogContext extends Context {
             }
             this.getFormManager().setFormId(formId, null, true);
         }
-
-        await super.initContext();
     }
 
     private async loadTicket(): Promise<void> {

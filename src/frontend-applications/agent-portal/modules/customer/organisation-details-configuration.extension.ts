@@ -64,7 +64,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentId: 'icon',
                                     componentData: {
                                         icon: new ObjectIcon(
-                                            null, KIXObjectType.ORGANISATION, '<KIX_ORG_ID>', null, null, 'kix-icon-man-house'
+                                            null, KIXObjectType.ORGANISATION, '<KIX_ORGANISATION_ID>', null, null, 'kix-icon-man-house'
                                         ),
                                         style: 'width: 5rem;height:5rem;font-size:5rem;'
                                     }

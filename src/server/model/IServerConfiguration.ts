@@ -63,4 +63,6 @@ export interface IServerConfiguration {
 
     BUILD_MARKO_APPLICATIONS: string;
 
+    SSO_ENABLED: boolean;
+
 }
