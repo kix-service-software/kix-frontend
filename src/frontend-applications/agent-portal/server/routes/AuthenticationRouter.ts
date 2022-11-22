@@ -23,6 +23,7 @@ import { IMarkoApplication } from '../extensions/IMarkoApplication';
 import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
 import { LoggingService } from '../../../../server/services/LoggingService';
 import { AuthenticationService } from '../../../../server/services/AuthenticationService';
+import { UserType } from '../../modules/user/model/UserType';
 
 export class AuthenticationRouter extends KIXRouter {
 
@@ -92,7 +93,7 @@ export class AuthenticationRouter extends KIXRouter {
 
                     let success = true;
                     const token = await AuthenticationService.getInstance().login(
-                        null, null, negotiationToken, null, null, false
+                        null, null, UserType.AGENT, negotiationToken, null, null, false
                     ).catch((e) => {
                         LoggingService.getInstance().error('Error when trying to login with negotiate token (SSO)');
                         success = false;
