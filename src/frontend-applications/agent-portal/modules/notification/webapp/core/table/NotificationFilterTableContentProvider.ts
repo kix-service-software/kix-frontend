@@ -93,11 +93,11 @@ export class NotificationFilterTableContentProvider extends TableContentProvider
             return [valueList, null, null];
         } else if (KIXObjectService.getDynamicFieldName(displayKey)) {
             return await this.getDFValues(
-                displayKey, criterion.Value, KIXObjectType.TICKET
+                criterion.Field, criterion.Value, KIXObjectType.TICKET
             );
         } else {
             return await this.getValue(
-                displayKey, criterion.Value,
+                criterion.Field, criterion.Value,
                 isArticleProperty ? KIXObjectType.ARTICLE : KIXObjectType.TICKET
             );
         }
