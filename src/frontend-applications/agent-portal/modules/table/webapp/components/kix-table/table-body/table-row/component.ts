@@ -8,8 +8,10 @@
  */
 
 import { AbstractMarkoComponent } from '../../../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { ContextService } from '../../../../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../../../../base-components/webapp/core/IEventSubscriber';
+import { RoutingService } from '../../../../../../base-components/webapp/core/RoutingService';
 import { Cell } from '../../../../../model/Cell';
 import { Column } from '../../../../../model/Column';
 import { TableEvent } from '../../../../../model/TableEvent';
@@ -198,8 +200,17 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     public rowClicked(event): void {
         const config = this.state.row.getTable().getTableConfiguration();
-        if (!config.routingConfiguration && config.toggle) {
+        if (!config?.routingConfiguration && config?.toggle) {
             this.toggleRow(event);
+        }
+
+        if (config.routingConfiguration) {
+            const object = this.state.row?.getRowObject()?.getObject();
+            let objectId;
+            if (object) {
+                objectId = object[config?.routingConfiguration?.objectIdProperty];
+            }
+            RoutingService.getInstance().routeTo(config?.routingConfiguration, objectId);
         }
 
         EventService.getInstance().publish(
