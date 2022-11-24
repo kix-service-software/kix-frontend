@@ -14,6 +14,8 @@ import { ActionFactory } from './ActionFactory';
 import { SetupService } from '../../../setup-assistant/webapp/core/SetupService';
 import { ContextMode } from '../../../../model/ContextMode';
 import { KIXModulesService } from './KIXModulesService';
+import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
+import { BrowserUtil } from './BrowserUtil';
 
 export class RoutingService {
 
@@ -51,6 +53,26 @@ export class RoutingService {
             } else {
                 this.setHomeContextIfNeeded(defaultContextId);
             }
+        }
+    }
+
+    public async routeTo(routingConfiguration: RoutingConfiguration, objectId: string | number): Promise<void> {
+        if (routingConfiguration) {
+            const urlParams = routingConfiguration?.params;
+            let urlSearchParams;
+            if (Array.isArray(urlParams) && urlParams.length) {
+                const encodedParams = [];
+                for (const p of urlParams) {
+                    const value = await BrowserUtil.prepareUrlParameterValue(p[1]);
+                    encodedParams.push([p[0], value]);
+                }
+                urlSearchParams = new URLSearchParams(encodedParams);
+            }
+
+            ContextService.getInstance().setActiveContext(
+                routingConfiguration?.contextId, objectId, urlSearchParams,
+                routingConfiguration?.additionalInformation
+            );
         }
     }
 
