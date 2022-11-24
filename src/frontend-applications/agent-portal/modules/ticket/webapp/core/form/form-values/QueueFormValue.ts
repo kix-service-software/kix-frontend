@@ -7,15 +7,9 @@
  * --
  */
 
-import { FilterCriteria } from '../../../../../../model/FilterCriteria';
-import { FilterDataType } from '../../../../../../model/FilterDataType';
-import { FilterType } from '../../../../../../model/FilterType';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { SelectObjectFormValue } from '../../../../../object-forms/model/FormValues/SelectObjectFormValue';
-import { SearchOperator } from '../../../../../search/model/SearchOperator';
-import { QueueProperty } from '../../../../model/QueueProperty';
-import { QueueService } from '../../admin';
 
 export class QueueFormValue extends SelectObjectFormValue<number> {
 
@@ -42,10 +36,4 @@ export class QueueFormValue extends SelectObjectFormValue<number> {
         await super.initFormValue();
     }
 
-    public async loadSelectableValues(): Promise<void> {
-        if (this.enabled) {
-            const queues = await QueueService.getInstance().getQueuesHierarchy();
-            await this.prepareSelectableNodes(queues);
-        }
-    }
 }
