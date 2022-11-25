@@ -118,13 +118,40 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             } else if (TreeUtil.findNode(this.treeHandler?.getTree(), value?.toString()) === null) {
                 value = [];
             }
+        } else if (this.multiselect) {
+            value = this.removeEmptyValues(value);
         }
 
-        await super.setFormValue(value, force);
+        if ((Array.isArray(value) && value.length > 0 || value && !Array.isArray(value)) &&
+            this.value !== value ||
+            force) {
+            await super.setFormValue(value, force);
+        }
 
         if (!this.readonly) {
             await this.loadSelectedValues();
         }
+    }
+
+    public removeEmptyValues(value: any): Array<any> {
+        if (Array.isArray(value) && value.length > 0) {
+            const newValue = [];
+            value.forEach((val) => {
+                if (typeof val === 'string') val = val.trim();
+                if (val && !this.isWildCardValue(val)) {
+                    newValue.push(val);
+                }
+            });
+            return newValue;
+        } else if (value === '') {
+            return [];
+        }
+    }
+
+    private isWildCardValue(value: any): boolean {
+        if (typeof value !== 'string') return false;
+        if (value.includes('*')) return true;
+        return false;
     }
 
     public async setObjectValue(value: any): Promise<void> {
