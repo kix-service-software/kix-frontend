@@ -14,7 +14,7 @@ import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../../model/KIXObjectSpecificLoadingOptions';
 import { QueueProperty } from '../../../model/QueueProperty';
-import { TreeNode, TreeNodeProperty } from '../../../../base-components/webapp/core/tree';
+import { TreeNode, TreeNodeProperty, TreeUtil } from '../../../../base-components/webapp/core/tree';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FollowUpType } from '../../../model/FollowUpType';
 import { SortUtil } from '../../../../../model/SortUtil';
@@ -98,7 +98,7 @@ export class QueueService extends KIXObjectService<Queue> {
             }
         }
 
-        SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+        TreeUtil.sortTree(nodes);
 
         return nodes;
     }
