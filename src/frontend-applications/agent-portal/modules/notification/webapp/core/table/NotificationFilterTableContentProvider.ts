@@ -97,7 +97,7 @@ export class NotificationFilterTableContentProvider extends TableContentProvider
             );
         } else {
             return await this.getValue(
-                displayKey, criterion.Value,
+                criterion.Field, criterion.Value,
                 isArticleProperty ? KIXObjectType.ARTICLE : KIXObjectType.TICKET
             );
         }
