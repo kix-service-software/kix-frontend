@@ -115,7 +115,9 @@ class UserContentProvider extends TableContentProvider {
         const rowObjects = [];
         if (this.component.filterValue && this.component.filterValue !== '') {
             const filter = await AgentService.getInstance().prepareFullTextFilter(this.component.filterValue);
-            const loadingOptions = new KIXObjectLoadingOptions(filter, null, null, [UserProperty.PREFERENCES]);
+            const loadingOptions = new KIXObjectLoadingOptions(
+                filter, null, null, [UserProperty.PREFERENCES, UserProperty.CONTACT]
+            );
 
             const users = await KIXObjectService.loadObjects<User>(
                 KIXObjectType.USER, null, loadingOptions
