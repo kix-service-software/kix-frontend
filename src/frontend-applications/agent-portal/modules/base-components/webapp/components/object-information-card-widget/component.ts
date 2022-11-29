@@ -83,6 +83,7 @@ class Component {
 
     private async prepareInformation(rows: InformationRowConfiguration[], object: KIXObject): Promise<void> {
         this.state.valuesReady = false;
+        this.state.hasComponentValues = false;
         const information: InformationRowConfiguration[] = [];
         if (Array.isArray(rows)) {
             for (const row of rows) {
@@ -218,6 +219,7 @@ class Component {
         );
 
         if (infoValue.componentId) {
+            this.state.hasComponentValues = true;
             this.state.templates[infoValue.componentId] = await KIXModulesService.getComponentTemplate(
                 infoValue.componentId
             );

@@ -17,7 +17,8 @@ export class ComponentState extends WidgetComponentState {
         public avatar: Array<ObjectIcon | string> = [],
         public information: InformationRowConfiguration[] = [],
         public templates: any = {},
-        public valuesReady: boolean = false
+        public valuesReady: boolean = false,
+        public hasComponentValues: boolean = false
     ) {
         super();
     }
