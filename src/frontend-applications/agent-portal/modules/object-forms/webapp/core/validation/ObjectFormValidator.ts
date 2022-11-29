@@ -64,8 +64,9 @@ export class ObjectFormValidator {
         let valid = true;
 
         if (this.enabled && this.objectFormValueMapper?.initialized) {
-            await this.validateFormValues(this.objectFormValueMapper?.getFormValues());
-            valid = this.isFormValid(this.objectFormValueMapper?.getFormValues());
+            const formValues = this.objectFormValueMapper?.getFormValues();
+            await this.validateFormValues(formValues);
+            valid = this.isFormValid(formValues);
         }
 
         return valid;
@@ -86,7 +87,7 @@ export class ObjectFormValidator {
 
     public async validate(formValue: ObjectFormValue, force?: boolean): Promise<void> {
         if ((this.enabled || force) && this.objectFormValueMapper?.initialized && !formValue?.isCountHandler) {
-            this.validateFormValue(formValue);
+            await this.validateFormValue(formValue);
         } else if (!this.validationQueue.some((fv) => fv.instanceId === formValue.instanceId)) {
             this.validationQueue.push(formValue);
         }
