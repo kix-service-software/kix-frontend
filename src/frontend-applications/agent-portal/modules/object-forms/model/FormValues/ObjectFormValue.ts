@@ -208,7 +208,7 @@ export class ObjectFormValue<T = any> {
             this.setFormValue(value);
         }
 
-        if (field.empty) {
+        if (field.empty && !this.value) {
             this.setFormValue(null);
         }
 

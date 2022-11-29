@@ -8,6 +8,7 @@
  */
 
 import { AutoCompleteConfiguration } from '../../../../model/configuration/AutoCompleteConfiguration';
+import { FormContext } from '../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldOption } from '../../../../model/configuration/FormFieldOption';
 import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
@@ -111,11 +112,11 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         await this.loadSelectedValues();
     }
 
-    public async setFormValue(value: any, force?: boolean): Promise<void> {
+    public async setFormValue(value: any, force?: boolean, isInit: boolean = false): Promise<void> {
         if (!this.freeText) {
             if (Array.isArray(value)) {
                 value = value?.filter((v) => TreeUtil.findNode(this.treeHandler?.getTree(), v.toString()) !== null);
-            } else if (TreeUtil.findNode(this.treeHandler?.getTree(), value?.toString()) === null) {
+            } else if (!isInit && TreeUtil.findNode(this.treeHandler?.getTree(), value?.toString()) === null) {
                 value = [];
             }
         }
@@ -149,8 +150,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         }
         this.treeHandler?.setMultiSelect(this.multiselect);
 
-        this.loadSelectableValues();
-        this.loadSelectedValues();
+        await this.loadSelectableValues();
+        await this.loadSelectedValues();
 
         this.addPropertyBinding('multiselect', (value: SelectObjectFormValue) => {
             if (!this.multiselect && Array.isArray(this.value) && this.value.length > 1) {

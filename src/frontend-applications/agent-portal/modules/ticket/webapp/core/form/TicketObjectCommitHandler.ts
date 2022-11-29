@@ -46,7 +46,10 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
     private async prepareArticles(ticket: Ticket, forCommit: boolean, orgTicketQueueID: number): Promise<void> {
         if (ticket.Articles?.length) {
             ticket.Articles = ticket.Articles.filter((a) => a.ChannelID);
-
+            /**
+             * Here starts the error for the attachments
+             * not being in the commitment for the other browser
+            */
             for (const article of ticket.Articles) {
                 delete article.ticket;
                 delete article.ChangedBy;
