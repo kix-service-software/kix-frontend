@@ -41,7 +41,7 @@
 
     .info-rows {
         display: grid;
-        grid-template-columns: 1fr 5fr;
+        grid-template-columns: auto 5fr;
         grid-row-gap: 1rem;
 
         .info-row-title {
@@ -103,8 +103,19 @@
 
                 .info-value {
                     display: grid;
-                    grid-template-columns: 4rem auto;
                     align-items: center;
+
+                    &:not(.no-component-values) {
+                        grid-template-columns: 4rem auto;
+                    }
+
+                    &.no-component-values {
+                        grid-template-columns: fit-content(1.5rem) auto;
+
+                        &.with-icon {
+                            column-gap: @margin-small;
+                        }
+                    }
 
                     .icon {
                         font-size: 1.5rem;

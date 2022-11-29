@@ -66,7 +66,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                             </div>
                                         </if>
                                         <else-if(info.preparedText)>
-                                            <div.info-value>
+                                            <div.info-value class={"no-component-values": !state.hasComponentValues, "with-icon": info.icon}>
                                                 <div style=info.iconStyle title=info.preparedText>
                                                     <icon icon=info.icon/>
                                                 </div>

@@ -131,8 +131,8 @@ export class RoutingService {
         let objectId: string;
 
         if (path.length > 1) {
-            contextUrl = path[1];
-            objectId = path[2];
+            contextUrl = path[0];
+            objectId = path[1];
         }
 
         if (contextUrl && contextUrl !== '') {
