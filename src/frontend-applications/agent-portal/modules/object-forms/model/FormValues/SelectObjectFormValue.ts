@@ -113,24 +113,28 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
     }
 
     public async setFormValue(value: any, force?: boolean, isInit: boolean = false): Promise<void> {
-        if (!this.freeText) {
-            if (Array.isArray(value)) {
-                value = value?.filter((v) => TreeUtil.findNode(this.treeHandler?.getTree(), v.toString()) !== null);
-            } else if (!isInit && TreeUtil.findNode(this.treeHandler?.getTree(), value?.toString()) === null) {
-                value = [];
-            }
-        } else if (this.multiselect) {
-            value = this.removeEmptyValues(value);
-        }
-
-        if ((Array.isArray(value) && value.length > 0 || value && !Array.isArray(value)) &&
-            this.value !== value ||
-            force) {
+        if (force) {
             await super.setFormValue(value, force);
-        }
+        } else {
+            if (!this.freeText) {
+                if (Array.isArray(value)) {
+                    value = value?.filter((v) => TreeUtil.findNode(this.treeHandler?.getTree(), v.toString()) !== null);
+                } else if (!isInit && TreeUtil.findNode(this.treeHandler?.getTree(), value?.toString()) === null) {
+                    value = [];
+                }
+            } else if (this.multiselect) {
+                value = this.removeEmptyValues(value);
+            }
 
-        if (!this.readonly) {
-            await this.loadSelectedValues();
+            if ((Array.isArray(value) && value.length > 0 || value && !Array.isArray(value)) &&
+                this.value !== value ||
+                force) {
+                await super.setFormValue(value, force);
+            }
+
+            if (!this.readonly) {
+                await this.loadSelectedValues();
+            }
         }
     }
 

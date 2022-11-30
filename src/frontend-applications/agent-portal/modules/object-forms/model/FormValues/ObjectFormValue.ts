@@ -205,11 +205,11 @@ export class ObjectFormValue<T = any> {
         const isEdit = this.objectValueMapper.formContext === FormContext.EDIT;
         if ((!this.value || isEdit) && field.defaultValue?.value && !field.empty) {
             const value = await this.handlePlaceholders(field.defaultValue?.value);
-            this.setFormValue(value);
+            this.setFormValue(value, true);
         }
 
         if (field.empty && !this.value) {
-            this.setFormValue(null);
+            this.setFormValue(null, true);
         }
 
         this.enabled = true;
