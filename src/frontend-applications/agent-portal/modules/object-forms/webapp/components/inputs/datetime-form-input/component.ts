@@ -97,6 +97,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private setValue(): void {
         let date: Date;
 
+        const hasValue = this.formValue.value !== null || this.formValue.value !== undefined;
         const isDate = this.formValue.inputType === InputFieldTypes.DATE;
         const isDateTime = this.formValue.inputType === InputFieldTypes.DATE_TIME;
 
@@ -111,7 +112,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             }
         }
 
-        if (isDate || (isDateTime && this.timeValueChanged)) {
+        if (isDate || (isDateTime && (this.timeValueChanged || hasValue))) {
             const value = date ? DateTimeUtil.getKIXDateTimeString(date) : null;
             this.formValue.setFormValue(value);
 
