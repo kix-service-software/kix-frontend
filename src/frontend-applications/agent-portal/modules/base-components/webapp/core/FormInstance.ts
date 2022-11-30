@@ -511,9 +511,9 @@ export class FormInstance {
     private findFormFieldsByProperty(
         fields: FormFieldConfiguration[] = [], property: string
     ): FormFieldConfiguration[] {
-        let resultFields = fields.filter((f) => f.property === property);
+        let resultFields = fields?.filter((f) => f.property === property) || [];
 
-        if (!resultFields) {
+        if (!resultFields?.length) {
             const dfName = KIXObjectService.getDynamicFieldName(property);
             if (dfName) {
                 const dfFields = resultFields.filter((f) => f.property === KIXObjectProperty.DYNAMIC_FIELDS).find(
@@ -527,12 +527,10 @@ export class FormInstance {
             }
         }
 
-        if (!resultFields) {
-            for (const f of resultFields) {
-                const subFields = f.children && f.children.length
-                    ? this.findFormFieldByProperty(f.children, property)
-                    : null;
-                if (Array.isArray(subFields)) {
+        if (!resultFields?.length) {
+            for (const f of fields) {
+                const subFields = this.findFormFieldsByProperty(f.children, property);
+                if (subFields?.length) {
                     resultFields = [...resultFields, ...subFields];
                     break;
                 }
