@@ -7,7 +7,6 @@
  * --
  */
 
-import { IdService } from '../../../../../model/IdService';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
 import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -20,7 +19,7 @@ import { TableRowHeight } from '../../../../../model/configuration/TableRowHeigh
 export class ComponentState {
 
     public constructor(
-        public instanceId: string = IdService.generateDateBasedId('admin-jobs-list'),
+        public instanceId: string = 'admin-jobs-list',
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
             null, null, null,
             'table-widget', 'Translatable#Automation: Jobs', ['job-create-action', 'job-table-delete', 'csv-export-action'], null,
