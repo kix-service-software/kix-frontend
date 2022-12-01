@@ -12,6 +12,7 @@ import { SearchService } from '../../../../search/webapp/core';
 import { AbstractDynamicFormManager } from '../../../../base-components/webapp/core/dynamic-form';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { SearchProperty } from '../../../../search/model/SearchProperty';
+import { TicketSearchFormManager } from '../../../../ticket/webapp/core/TicketSearchFormManager';
 
 export class ComponentState extends FormInputComponentState {
 
@@ -22,6 +23,8 @@ export class ComponentState extends FormInputComponentState {
         super();
         const searchDefinition = SearchService.getInstance().getSearchDefinition(KIXObjectType.TICKET);
         this.manager = searchDefinition.createFormManager([SearchProperty.FULLTEXT], false);
+        // do not mark viewable states as required
+        (this.manager as TicketSearchFormManager).handleViewableStateType = false;
     }
 
 }
