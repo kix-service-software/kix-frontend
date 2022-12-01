@@ -122,6 +122,7 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_CATEGORY);
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_VOTE);
+                cacheKeyPrefixes.push(KIXObjectType.FAQ_KEYWORD);
             } else {
                 cacheKeyPrefixes.push(namespace[0]);
             }
@@ -154,6 +155,7 @@ export class BrowserCacheService {
                 break;
             case KIXObjectType.FAQ_ARTICLE:
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_CATEGORY);
+                cacheKeyPrefixes.push(KIXObjectType.FAQ_KEYWORD);
                 break;
             case KIXObjectType.FAQ_CATEGORY:
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
