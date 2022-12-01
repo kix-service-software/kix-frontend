@@ -152,24 +152,27 @@ export class ReportDefintionObjectCreator {
             dataSourceConfig['OutputHandler'] = JSON.parse(outputHandlerValue.value);
         }
 
-        const dbmsValue = await formInstance.getFormFieldValueByProperty<string>('DBMS');
-        if (dbmsValue && dbmsValue.value) {
-            const formField = formInstance.getFormFieldByProperty('DBMS');
-            if (formField && Array.isArray(formField.children)) {
-                for (const parameterField of formField.children) {
+        const sqlParameter = {};
+
+        const dbmsFields = formInstance.getFormFieldsByProperty('DBMS');
+        for (const field of dbmsFields) {
+
+            const dbmsValue = formInstance.getFormFieldValue<string>(field.instanceId);
+            if (dbmsValue && dbmsValue.value) {
+                for (const parameterField of field.children) {
                     const formValue = formInstance.getFormFieldValue<string>(parameterField.instanceId);
                     const dsValue = {};
                     dsValue[dbmsValue.value] = formValue.value;
 
                     if (parameterField.property === 'SQL') {
                         const value = Buffer.from(formValue.value, 'binary').toString('base64');
-                        dsValue[dbmsValue.value] = `base64(${value})`;
+                        sqlParameter[dbmsValue.value] = `base64(${value})`;
                     }
-
-                    dataSourceConfig[parameterField.property] = dsValue;
                 }
             }
         }
+
+        dataSourceConfig['SQL'] = sqlParameter;
 
         return dataSourceConfig;
     }
