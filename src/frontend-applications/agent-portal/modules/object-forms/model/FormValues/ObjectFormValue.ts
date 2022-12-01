@@ -203,13 +203,12 @@ export class ObjectFormValue<T = any> {
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
         const isEdit = this.objectValueMapper.formContext === FormContext.EDIT;
-        if ((!this.value || isEdit) && field.defaultValue?.value && !field.empty) {
+
+        if (field.empty) {
+            this.setFormValue(null, true);
+        } else if ((!this.value || isEdit) && field.defaultValue?.value && !field.empty) {
             const value = await this.handlePlaceholders(field.defaultValue?.value);
             this.setFormValue(value, true);
-        }
-
-        if (field.empty && !this.value) {
-            this.setFormValue(null, true);
         }
 
         this.enabled = true;
