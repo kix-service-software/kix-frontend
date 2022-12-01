@@ -269,7 +269,7 @@ export class FAQService extends KIXObjectAPIService {
 
     public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         const filterCriteria = criteria.filter(
-            (f) => f.property !== SearchProperty.PRIMARY
+            (f) => f.property !== SearchProperty.PRIMARY && !f.property.match(/Field\d/)
         );
         return filterCriteria;
     }
@@ -299,56 +299,7 @@ export class FAQService extends KIXObjectAPIService {
             criteria = [...criteria, ...primarySearch];
         }
 
-        const fulltextFilter = criteria.filter((f) => f.property === SearchProperty.FULLTEXT);
-        for (const fulltext of fulltextFilter) {
-            const fulltextSearch = this.getFulltextSearch(fulltext);
-            criteria = [...criteria, ...fulltextSearch];
-        }
-
-        return criteria.filter(
-            (f) => f.property !== FAQArticleProperty.CUSTOMER_VISIBLE
-        );
-    }
-
-    private getFulltextSearch(fulltextFilter: FilterCriteria): FilterCriteria[] {
-        return [
-            new FilterCriteria(
-                FAQArticleProperty.NUMBER, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR,
-                `*${fulltextFilter.value}*`
-            ),
-            new FilterCriteria(
-                FAQArticleProperty.TITLE, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR,
-                `*${fulltextFilter.value}*`
-            ),
-            new FilterCriteria(
-                FAQArticleProperty.KEYWORDS, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR,
-                `*${fulltextFilter.value}*`
-            ),
-            new FilterCriteria(
-                FAQArticleProperty.FIELD_1, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR,
-                `*${fulltextFilter.value}*`
-            ),
-            new FilterCriteria(
-                FAQArticleProperty.FIELD_2, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR,
-                `*${fulltextFilter.value}*`
-            ),
-            new FilterCriteria(
-                FAQArticleProperty.FIELD_3, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR,
-                `*${fulltextFilter.value}*`
-            ),
-            new FilterCriteria(
-                FAQArticleProperty.FIELD_4, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR,
-                `*${fulltextFilter.value}*`
-            ),
-            new FilterCriteria(
-                FAQArticleProperty.FIELD_5, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR,
-                `*${fulltextFilter.value}*`
-            ),
-            new FilterCriteria(
-                FAQArticleProperty.FIELD_6, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR,
-                `*${fulltextFilter.value}*`
-            )
-        ];
+        return criteria;
     }
 
 }
