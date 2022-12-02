@@ -364,12 +364,12 @@ describe('SelectObjectFormValue', () => {
             const object = new TestFormObject();
 
             formValue = new SelectObjectFormValue('testProperty1', object, objectFormValueMapper, null);
-            formValue.initFormValue();
+            await formValue.initFormValue();
 
             const values = ['', null, undefined, 3, '*asd', 'something', '7', '***', 8, '        '];
             formValue.multiselect = true;
             formValue.freeText = true;
-            formValue.setFormValue(values);
+            await formValue.setFormValue(values);
         });
 
         it('Should have length 4', () => {
