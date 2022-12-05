@@ -81,7 +81,8 @@ export class TicketAPIService extends KIXObjectAPIService {
             || kixObjectType === KIXObjectType.SENDER_TYPE
             || kixObjectType === KIXObjectType.TICKET_LOCK
             || kixObjectType === KIXObjectType.WATCHER
-            || kixObjectType === KIXObjectType.TICKET_HISTORY;
+            || kixObjectType === KIXObjectType.TICKET_HISTORY
+            || kixObjectType === KIXObjectType.HTML_TO_PDF;
     }
 
     public async preloadObjects(token: string): Promise<void> {
@@ -303,6 +304,13 @@ export class TicketAPIService extends KIXObjectAPIService {
                     clientRequestId, TicketHistory
                 );
             }
+        }
+        else if (objectType === KIXObjectType.HTML_TO_PDF) {
+            const uri = this.buildUri('system', 'htmltopdf', 'convert');
+            objects = await super.load(
+                token, KIXObjectType.HTML_TO_PDF, uri, loadingOptions, null, KIXObjectType.HTML_TO_PDF,
+                null, null, false
+            );
         }
 
         return objects;
