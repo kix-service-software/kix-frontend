@@ -69,13 +69,6 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             }
         }
 
-        if (!this.value && !this.noChannelSelectable && this.hasChannelField) {
-            const selectableNodes = this.getSelectableTreeNodeValues();
-            const selectableNode = selectableNodes.filter((n) => n.id === 1);
-            const selection = selectableNode ? selectableNode : [];
-            this.treeHandler.setSelection(selection);
-        }
-
         await this.setChannelFields(this.value);
     }
 

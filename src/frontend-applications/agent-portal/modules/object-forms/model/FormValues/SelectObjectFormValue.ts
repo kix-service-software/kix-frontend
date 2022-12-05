@@ -112,25 +112,24 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         await this.loadSelectedValues();
     }
 
-    public async setFormValue(value: any, force?: boolean, isInit: boolean = false): Promise<void> {
+    public async setFormValue(value: any, force?: boolean): Promise<void> {
         if (force) {
             await super.setFormValue(value, force);
         } else {
             if (!this.freeText) {
                 if (Array.isArray(value)) {
                     value = value?.filter((v) => TreeUtil.findNode(this.treeHandler?.getTree(), v.toString()) !== null);
-                } else if (!isInit && TreeUtil.findNode(this.treeHandler?.getTree(), value?.toString()) === null) {
-                    value = [];
+                } else if (value !== null) {
+                    const node = TreeUtil.findNode(this.treeHandler?.getTree(), value?.toString());
+                    if (!node) {
+                        value = [];
+                    }
                 }
             } else if (this.multiselect) {
                 value = this.removeEmptyValues(value);
             }
 
-            if ((Array.isArray(value) && value.length > 0 || value && !Array.isArray(value)) &&
-                this.value !== value ||
-                force) {
-                await super.setFormValue(value, force);
-            }
+            await super.setFormValue(value, force);
 
             if (!this.readonly) {
                 await this.loadSelectedValues();
@@ -139,24 +138,22 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
     }
 
     public removeEmptyValues(value: any): Array<any> {
-        if (Array.isArray(value) && value.length > 0) {
+        if (Array.isArray(value) && value?.length > 0) {
             const newValue = [];
-            value.forEach((val) => {
-                if (typeof val === 'string') val = val.trim();
-                if (val && !this.isWildCardValue(val)) {
+            for (let val of value) {
+                if (typeof val === 'string') {
+                    val = val.trim();
+                }
+
+                const isWildCardValue = typeof val === 'string' && val?.includes('*');
+                if (val && !isWildCardValue) {
                     newValue.push(val);
                 }
-            });
+            }
             return newValue;
         } else if (value === '') {
             return [];
         }
-    }
-
-    private isWildCardValue(value: any): boolean {
-        if (typeof value !== 'string') return false;
-        if (value.includes('*')) return true;
-        return false;
     }
 
     public async setObjectValue(value: any): Promise<void> {

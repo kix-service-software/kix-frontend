@@ -85,7 +85,7 @@ export class UserObjectFormValue extends SelectObjectFormValue {
         if (this.object && this.property) {
             const userId = this.object[this.property];
             if (userId) {
-                await this.setFormValue(userId, false, true);
+                await this.setFormValue(userId, true);
             }
         }
     }
