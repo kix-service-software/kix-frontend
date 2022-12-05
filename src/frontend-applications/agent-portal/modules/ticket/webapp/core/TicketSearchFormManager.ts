@@ -34,6 +34,9 @@ export class TicketSearchFormManager extends SearchFormManager {
 
     public objectType: KIXObjectType = KIXObjectType.TICKET;
 
+    // mark viewable states as required
+    public handleViewableStateType: boolean = true;
+
     public constructor(
         public ignorePropertiesFixed: string[] = [],
         private validDynamicFields: boolean = true
@@ -235,7 +238,7 @@ export class TicketSearchFormManager extends SearchFormManager {
     }
 
     public async setValue(newValue: ObjectPropertyValue, silent?: boolean): Promise<void> {
-        if (newValue.property === TicketProperty.STATE_TYPE) {
+        if (newValue.property === TicketProperty.STATE_TYPE && this.handleViewableStateType) {
             newValue.readonly = false;
             newValue.required = true;
             newValue.changeable = false;
