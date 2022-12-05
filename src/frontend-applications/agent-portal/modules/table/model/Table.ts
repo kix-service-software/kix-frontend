@@ -738,7 +738,10 @@ export class Table implements Table {
             if (keepSelection) {
                 selectedRows = this.getSelectedRows(true);
             }
+            await this.prepareAdditionalSearchColumns();
+
             await this.loadRowData(relevantHandlerConfigIds);
+
             if (this.columns && !!this.columns.length) {
                 this.columns.forEach((c) =>
                     this.rows.forEach((r) => {

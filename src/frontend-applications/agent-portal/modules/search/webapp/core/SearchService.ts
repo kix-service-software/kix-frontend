@@ -53,7 +53,8 @@ export class SearchService {
         return SearchService.INSTANCE;
     }
 
-    private constructor() { }
+    private constructor() {
+    }
 
     private formSearches: Map<KIXObjectType | string, (formId: string) => Promise<any[]>> = new Map();
     private formTableConfigs: Map<KIXObjectType | string, Table> = new Map();
@@ -162,6 +163,18 @@ export class SearchService {
         const loadingOptions = await searchDefinition.getLoadingOptions(
             preparedCriteria, searchCache.limit, searchCache.sortAttribute, searchCache.sortDescanding
         );
+
+        const hastDFInCriteria = preparedCriteria.some((criteria) => criteria.property.startsWith('DynamicFields.'));
+        if (hastDFInCriteria) {
+            if (Array.isArray(loadingOptions.includes)) {
+                loadingOptions.includes.push(KIXObjectProperty.DYNAMIC_FIELDS);
+            }
+            else {
+                loadingOptions.includes = [KIXObjectProperty.DYNAMIC_FIELDS];
+            }
+
+        }
+
         const objects = await KIXObjectService.loadObjects(
             searchCache.objectType, null, loadingOptions, null, false
         );
@@ -211,7 +224,7 @@ export class SearchService {
             });
 
             EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: false, hint: '' }
+                ApplicationEvent.APP_LOADING, {loading: false, hint: ''}
             );
         }
 
@@ -313,11 +326,11 @@ export class SearchService {
                         }
                         prepareCriteria.push(new FilterCriteria(
                             c.property, SearchOperator.GREATER_THAN_OR_EQUAL, c.type, c.filterType,
-                            `${c.value[0]}${c.value[1]}${c.value[2]}`
+                            `${ c.value[0] }${ c.value[1] }${ c.value[2] }`
                         ));
                         prepareCriteria.push(new FilterCriteria(
                             c.property, SearchOperator.LESS_THAN_OR_EQUAL, c.type, c.filterType,
-                            `${c.value[3]}${c.value[4]}${c.value[5]}`
+                            `${ c.value[3] }${ c.value[4] }${ c.value[5] }`
                         ));
                     }
                     break;
@@ -351,7 +364,7 @@ export class SearchService {
         const search = await SearchSocketClient.getInstance().loadSearch();
         search.sort((s1, s2) => SortUtil.compareString(s1.name, s2.name));
         const bookmarks = search.map((s) => new Bookmark(
-            s.name, this.getSearchIcon(s.objectType), 'load-search-action', { id: s.id, name: s.name })
+            s.name, this.getSearchIcon(s.objectType), 'load-search-action', {id: s.id, name: s.name})
         );
 
         if (publish) {
