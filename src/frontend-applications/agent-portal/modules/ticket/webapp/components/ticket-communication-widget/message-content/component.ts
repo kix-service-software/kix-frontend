@@ -173,6 +173,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             actions.push(...plainTextAction);
         }
 
+        const printAction = await ActionFactory.getInstance().generateActions(['article-print-action'], this.state.article);
+        if (printAction?.length) {
+            printAction[0].setData(this.state.article);
+            actions.push(...printAction);
+        }
+
         const filteredActions = [];
         for (const a of actions) {
             if (await a.canShow()) {

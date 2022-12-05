@@ -10,7 +10,8 @@
 import { IUIModule } from '../../../../model/IUIModule';
 import {
     TicketFormService, ArticleNewAction,
-    ArticleReplyAction, ArticleForwardAction, ArticleGetPlainAction
+    ArticleReplyAction, ArticleForwardAction, ArticleGetPlainAction,
+    ArticlePrintAction
 } from '.';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
 import { ObjectFormRegistry } from '../../../object-forms/webapp/core/ObjectFormRegistry';
@@ -39,5 +40,6 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('article-reply-action', ArticleReplyAction);
         ActionFactory.getInstance().registerAction('article-forward-action', ArticleForwardAction);
         ActionFactory.getInstance().registerAction('article-get-plain-action', ArticleGetPlainAction);
+        ActionFactory.getInstance().registerAction('article-print-action', ArticlePrintAction);
     }
 }

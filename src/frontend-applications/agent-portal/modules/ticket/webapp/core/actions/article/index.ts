@@ -12,3 +12,4 @@ export { ArticleReplyAction } from './ArticleReplyAction';
 export { ArticleForwardAction } from './ArticleForwardAction';
 export { ArticleZipAttachmentDownloadAction } from './ArticleZipAttachmentDownloadAction';
 export { ArticleGetPlainAction } from './ArticleGetPlainAction';
+export { ArticlePrintAction } from './ArticlePrintAction';
