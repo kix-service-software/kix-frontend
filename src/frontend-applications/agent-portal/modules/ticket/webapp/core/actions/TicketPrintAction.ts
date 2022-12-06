@@ -9,8 +9,14 @@
 
 import { AbstractAction } from '../../../../base-components/webapp/core/AbstractAction';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
+import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { AgentService } from '../../../../user/webapp/core/AgentService';
 
 export class TicketPrintAction extends AbstractAction {
 
@@ -21,31 +27,49 @@ export class TicketPrintAction extends AbstractAction {
         this.icon = 'kix-icon-print';
     }
 
+
+    public async canShow(): Promise<boolean> {
+        let show = false;
+        const context = ContextService.getInstance().getActiveContext();
+        const objectId = context.getObjectId();
+
+        const permissions = [
+            new UIComponentPermission(`tickets/${objectId}`, [CRUD.READ])
+        ];
+
+        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        return show;
+    }
+
     public async run(event: any): Promise<void> {
 
         const context = ContextService.getInstance().getActiveContext();
 
         if (context) {
-            const ticketId = context.getObjectId();
-            const printFrame: any = document.createElement('iframe');
-            printFrame.src = `/tickets/${ticketId}/print`;
-            document.body.appendChild(printFrame);
+            BrowserUtil.openInfoOverlay('Translatable#Prepare Ticket for print');
 
-            EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Prepare Ticket for print' }
+            const currentUser = await AgentService.getInstance().getCurrentUser();
+            const ticketId = context.getObjectId();
+            const file = await KIXObjectService.loadObjects(
+                KIXObjectType.HTML_TO_PDF, null,
+                new KIXObjectLoadingOptions(
+                    null, null, null, null, null,
+                    [
+                        ['TemplateName', 'Ticket'],
+                        ['IdentifierType', 'IDKey'],
+                        ['IdentifierIDorNumber', ticketId.toString()],
+                        ['UserID', currentUser.UserID.toString()],
+                        ['Filename', 'Ticket_<KIX_TICKET_TicketNumber>_<TIME_YYMMDD_hhmm>']
+                    ]
+                ), null, null, false
             );
 
-            printFrame.onload = (): void => {
-                setTimeout(() => {
-                    window.frames[window.frames.length - 1].focus();
-                    window.frames[window.frames.length - 1].print();
-                    document.body.removeChild(printFrame);
-                    EventService.getInstance().publish(
-                        ApplicationEvent.APP_LOADING, { loading: false }
-                    );
-                }, 5000);
-            };
+            if (file && file[0]) {
+                BrowserUtil.openSuccessOverlay('Translatable#Ticket has printed');
+                BrowserUtil.startBrowserDownload(
+                    file[0]['Filename'], file[0]['Content'], file[0]['ContentType'], true
+                );
+            }
         }
     }
-
 }

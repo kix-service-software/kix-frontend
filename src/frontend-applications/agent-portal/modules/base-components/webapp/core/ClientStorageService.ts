@@ -11,6 +11,8 @@ import md5 from 'md5';
 
 export class ClientStorageService {
 
+    public static tokenPrefix = '';
+
     public static setSocketTimeout(timeout: number): void {
         if (!isNaN(timeout)) {
             this.setOption('SocketTimeout', timeout.toString());

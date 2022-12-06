@@ -61,7 +61,7 @@ class Component {
 
     private async prepareVersion(): Promise<void> {
         if (this.state.version) {
-            this.state.preparedData = await this.addStateData(this.state.version);
+            this.state.preparedData = await this.addCommonData(this.state.version);
             this.state.preparedData = this.state.preparedData.concat(this.state.version.PreparedData);
             this.setVersion();
         }
@@ -74,15 +74,22 @@ class Component {
         }
     }
 
-    private async addStateData(version: Version): Promise<PreparedData[]> {
+    private async addCommonData(version: Version): Promise<PreparedData[]> {
         const preparedDataArray: PreparedData[] = [];
+
+        const nameHash = new PreparedData();
+        nameHash.Key = 'VersionName';
+        nameHash.Label = 'Translatable#Name';
+        nameHash.DisplayValue = version.Name;
+
+        preparedDataArray.push(nameHash);
 
         const deplStateHash = new PreparedData();
         deplStateHash.Key = version.DeplState;
-        deplStateHash.Label = version.isCurrentVersion
+        deplStateHash.Label = version.IsLastVersion
             ? 'Translatable#Current deployment state'
             : 'Translatable#Deployment state';
-        deplStateHash.DisplayValue = version.isCurrentVersion
+        deplStateHash.DisplayValue = version.IsLastVersion
             ? version.CurDeplState
             : version.DeplState;
 

@@ -79,7 +79,7 @@ export class ConfigItem extends KIXObject {
             this.CreateBy = configItem.CreateBy;
             this.LastVersionID = configItem.LastVersionID;
             this.CreateTime = configItem.CreateTime;
-            this.CurrentVersion = configItem.CurrentVersion;
+            this.CurrentVersion = configItem.CurrentVersion ? new Version(configItem.CurrentVersion) : null;
 
             this.LinkTypeName = configItem.LinkTypeName;
             this.CurInciState = configItem.CurInciState;
@@ -95,14 +95,6 @@ export class ConfigItem extends KIXObject {
             this.History.sort((a, b) => b.HistoryEntryID - a.HistoryEntryID);
 
             this.Versions = configItem.Versions ? configItem.Versions.map((v) => new Version(v)) : [];
-
-            if (this.CurrentVersion) {
-                this.CurrentVersion.isCurrentVersion = true;
-                const currentVersion = this.Versions.find((v) => v.VersionID === this.CurrentVersion.VersionID);
-                if (currentVersion) {
-                    currentVersion.isCurrentVersion = true;
-                }
-            }
         }
     }
 

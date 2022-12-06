@@ -14,7 +14,7 @@ import { KIXIntegrationRouter } from './KIXIntegrationRouter';
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { CreateWebformTicketRequest } from '../model/CreateWebformTicketRequest';
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
-import { AuthenticationService } from '../../../server/services/AuthenticationService';
+import { AuthenticationService } from '../../../../../server/services/AuthenticationService';
 import { IdService } from '../../../model/IdService';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { TicketProperty } from '../../ticket/model/TicketProperty';
@@ -29,6 +29,7 @@ import { TranslationAPIService } from '../../translation/server/TranslationServi
 
 import addrparser from 'address-rfc2822';
 import { SysConfigAccessLevel } from '../../sysconfig/model/SysConfigAccessLevel';
+import { UserType } from '../../user/model/UserType';
 
 export class WebformService {
 
@@ -95,6 +96,7 @@ export class WebformService {
             name: 'customer portal light webforms configuration',
             type: 'Webform',
             webforms,
+            application: 'agent-portal',
             valid: true
         };
 
@@ -119,7 +121,7 @@ export class WebformService {
                 const parameter = this.prepareParameter(request, form);
 
                 const token = await AuthenticationService.getInstance().login(
-                    form.userLogin, form.webformUserPassword, null,
+                    form.userLogin, form.webformUserPassword, UserType.AGENT, null,
                     IdService.generateDateBasedId('web-form-login'), 'WebformService', false
                 ).catch((error) => null);
 

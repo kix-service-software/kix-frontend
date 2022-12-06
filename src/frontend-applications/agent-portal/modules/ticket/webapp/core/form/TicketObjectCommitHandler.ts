@@ -46,7 +46,10 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
     private async prepareArticles(ticket: Ticket, forCommit: boolean, orgTicketQueueID: number): Promise<void> {
         if (ticket.Articles?.length) {
             ticket.Articles = ticket.Articles.filter((a) => a.ChannelID);
-
+            /**
+             * Here starts the error for the attachments
+             * not being in the commitment for the other browser
+            */
             for (const article of ticket.Articles) {
                 delete article.ticket;
                 delete article.ChangedBy;
@@ -91,8 +94,10 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                         const referencedArticle = await this.loadReferencedArticle(
                             ticket.TicketID, referencedArticleId
                         );
-                        article.InReplyTo = referencedArticle.MessageID?.toString();
-                        article.References = `${referencedArticle.References} ${referencedArticle.MessageID}`;
+                        if (referencedArticle) {
+                            article.InReplyTo = referencedArticle.MessageID?.toString();
+                            article.References = `${referencedArticle.References} ${referencedArticle.MessageID}`;
+                        }
                     }
                 } else {
                     article.Attachments = null;
@@ -232,6 +237,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
 
     private async loadReferencedArticle(refTicketId: number, refArticleId: number): Promise<Article> {
         let article: Article;
+
         if (refArticleId && refTicketId) {
             const articles = await KIXObjectService.loadObjects<Article>(
                 KIXObjectType.ARTICLE, [refArticleId], new KIXObjectLoadingOptions(

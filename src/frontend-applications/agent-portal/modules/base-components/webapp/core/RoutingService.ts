@@ -13,6 +13,9 @@ import { ContextService } from './ContextService';
 import { ActionFactory } from './ActionFactory';
 import { SetupService } from '../../../setup-assistant/webapp/core/SetupService';
 import { ContextMode } from '../../../../model/ContextMode';
+import { KIXModulesService } from './KIXModulesService';
+import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
+import { BrowserUtil } from './BrowserUtil';
 
 export class RoutingService {
 
@@ -30,7 +33,9 @@ export class RoutingService {
 
     private constructor() { }
 
-    public async routeToInitialContext(history: boolean = false, useURL: boolean = true): Promise<void> {
+    public async routeToInitialContext(
+        history: boolean = false, useURL: boolean = true, defaultContextId?: string
+    ): Promise<void> {
         await ContextService.getInstance().initUserContextInstances();
 
         let routed: boolean = false;
@@ -46,8 +51,28 @@ export class RoutingService {
             if (contextList.length) {
                 await ContextService.getInstance().setContextByInstanceId(contextList[0].instanceId);
             } else {
-                this.setHomeContextIfNeeded();
+                this.setHomeContextIfNeeded(defaultContextId);
             }
+        }
+    }
+
+    public async routeTo(routingConfiguration: RoutingConfiguration, objectId: string | number): Promise<void> {
+        if (routingConfiguration) {
+            const urlParams = routingConfiguration?.params;
+            let urlSearchParams;
+            if (Array.isArray(urlParams) && urlParams.length) {
+                const encodedParams = [];
+                for (const p of urlParams) {
+                    const value = await BrowserUtil.prepareUrlParameterValue(p[1]);
+                    encodedParams.push([p[0], value]);
+                }
+                urlSearchParams = new URLSearchParams(encodedParams);
+            }
+
+            ContextService.getInstance().setActiveContext(
+                routingConfiguration?.contextId, objectId, urlSearchParams,
+                routingConfiguration?.additionalInformation
+            );
         }
     }
 
@@ -82,11 +107,11 @@ export class RoutingService {
         return !releaseInfoVisited || (buildNumber && releaseInfoVisited !== buildNumber.toString());
     }
 
-    private setHomeContextIfNeeded(): boolean {
+    private setHomeContextIfNeeded(defaultContextId: string = 'home'): boolean {
         let routed: boolean = false;
         const contextList = ContextService.getInstance().getContextInstances();
         if (Array.isArray(contextList) && !contextList.length) {
-            ContextService.getInstance().setActiveContext('home');
+            ContextService.getInstance().setActiveContext(defaultContextId);
             routed = true;
         }
 
@@ -97,14 +122,17 @@ export class RoutingService {
         let routed: boolean = false;
         const parsedUrl = new URL(window.location.href);
         const urlParams = parsedUrl.searchParams;
-        const path = parsedUrl.pathname === '/' ? [] : parsedUrl.pathname.split('/');
+
+        const prefixLength = KIXModulesService.urlPrefix.length;
+        const pathName = parsedUrl.pathname.substring(prefixLength + 1, parsedUrl.pathname.length);
+        const path = parsedUrl.pathname === '/' ? [] : pathName.split('/');
 
         let contextUrl: string;
         let objectId: string;
 
         if (path.length > 1) {
-            contextUrl = path[1];
-            objectId = path[2];
+            contextUrl = path[0];
+            objectId = path[1];
         }
 
         if (contextUrl && contextUrl !== '') {

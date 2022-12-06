@@ -118,7 +118,6 @@
         "require ./ServiceType",
         "require ./SetPreferencesRequest",
         "require ./SetPreferencesResponse",
-        "require ./SocketAuthenticationError",
         "require ./SocketClient",
         "require ./SocketErrorResponse",
         "require ./SocketEvent",

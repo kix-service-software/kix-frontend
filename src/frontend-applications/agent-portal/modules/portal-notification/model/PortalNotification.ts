@@ -23,7 +23,8 @@ export class PortalNotification {
         public preLogin: boolean = false,
         public teaserText: string = '',
         public fullText: string = '',
-        public keywords: string = ''
+        public keywords: string = '',
+        public usageContext: string[] = []
     ) {
         switch (type) {
             case PortalNotificationType.ADVICE:

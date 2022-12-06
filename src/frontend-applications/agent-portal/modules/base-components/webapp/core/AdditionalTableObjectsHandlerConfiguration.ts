@@ -14,6 +14,8 @@ export class AdditionalTableObjectsHandlerConfiguration implements IConfiguratio
 
     public type;
 
+    public application: string = 'agent-portal';
+
     public constructor(
         public id: string,
         public name: string,

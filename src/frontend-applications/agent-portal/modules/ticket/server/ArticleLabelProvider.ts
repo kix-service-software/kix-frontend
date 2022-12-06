@@ -58,7 +58,9 @@ export class ArticleLabelProvider {
                 }
                 break;
             case ArticleProperty.INCOMING_TIME:
-                displayValue = await DateTimeAPIUtil.getLocalDateTimeString(token, Number(displayValue) * 1000);
+                const date = new Date(1970, 0, 1);
+                date.setSeconds(date.getSeconds() + Number(displayValue));
+                displayValue = await DateTimeAPIUtil.getLocalDateTimeString(token, date.getTime());
                 break;
             case ArticleProperty.CHANNEL_ID:
             case ArticleProperty.CHANNEL:

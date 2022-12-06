@@ -55,7 +55,7 @@ export class ObjectFormHandler<T extends KIXObject = any> {
             );
 
             const start = Date.now();
-            await this.objectFormValueMapper.mapFormValues(formObject);
+            await this.objectFormValueMapper.mapFormValues(formObject).catch((e) => console.error(e));
             const end = Date.now();
             console.debug(`Map Form Values Finished: ${(end - start)}ms`);
 
@@ -81,7 +81,7 @@ export class ObjectFormHandler<T extends KIXObject = any> {
 
     public async commit(): Promise<string | number> {
 
-        this.objectFormValidator.enabled = true;
+        this.objectFormValidator.enable();
         const valid = await this.objectFormValidator.validateForm();
         if (!valid) {
             const validationResults = this.objectFormValueMapper.getValidationResults();
@@ -120,10 +120,10 @@ export class ObjectFormHandler<T extends KIXObject = any> {
     }
 
     public enableValidation(): void {
-        this.objectFormValidator.enabled = true;
+        this.objectFormValidator.enable();
     }
 
     public disableValidation(): void {
-        this.objectFormValidator.enabled = false;
+        this.objectFormValidator.disable();
     }
 }

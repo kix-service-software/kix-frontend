@@ -73,6 +73,10 @@ export enum KIXObjectType {
 
     GRAPH_INSTANCE = 'GraphInstance',
 
+    HTML_TO_PDF = 'HTMLToPDF',
+
+    HTML_TO_PDF_TEMPLATE = 'HTMLToPDFTemplate',
+
     IMPORT_EXPORT_TEMPLATE = 'ImportExportTemplate',
 
     IMPORT_EXPORT_TEMPLATE_RUN = 'ImportExportTemplateRun',

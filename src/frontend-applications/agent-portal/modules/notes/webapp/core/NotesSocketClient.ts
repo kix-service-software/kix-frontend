@@ -17,6 +17,7 @@ import { SocketErrorResponse } from '../../../../modules/base-components/webapp/
 import { ISocketRequest } from '../../../../modules/base-components/webapp/core/ISocketRequest';
 import { SaveNotesRequest } from '../../model/SaveNotesRequest';
 import { ISocketResponse } from '../../../../modules/base-components/webapp/core/ISocketResponse';
+import { KIXModulesService } from '../../../base-components/webapp/core/KIXModulesService';
 
 export class NotesSocketClient extends SocketClient {
 

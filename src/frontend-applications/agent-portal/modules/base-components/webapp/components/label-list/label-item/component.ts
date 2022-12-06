@@ -34,11 +34,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public labelClicked(event: any): void {
         if (this.state.showToggle) {
             this.state.toggled = !this.state.toggled;
+            event.stopPropagation();
+            event.preventDefault();
         } else {
             this.state.toggled = false;
         }
-        event.stopPropagation();
-        event.preventDefault();
         (this as any).emit('labelClicked', this.state.label);
     }
 

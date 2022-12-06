@@ -9,7 +9,7 @@
 
 import fs from 'fs';
 
-import { AuthenticationService } from './AuthenticationService';
+import { AuthenticationService } from '../../../../server/services/AuthenticationService';
 import { IServerConfiguration } from '../../../../server/model/IServerConfiguration';
 import { ConfigurationService } from '../../../../server/services/ConfigurationService';
 import { RequestMethod } from '../../../../server/model/rest/RequestMethod';
@@ -22,7 +22,7 @@ import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { User } from '../../modules/user/model/User';
 import { PermissionError } from '../../modules/user/model/PermissionError';
 import { AxiosAdapter, AxiosError, AxiosRequestConfig } from 'axios';
-import { SocketAuthenticationError } from '../../modules/base-components/webapp/core/SocketAuthenticationError';
+import { SocketAuthenticationError } from '../../../../server/model/SocketAuthenticationError';
 import { RequestCounter } from '../../../../server/services/RequestCounter';
 
 export class HttpService {

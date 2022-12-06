@@ -278,31 +278,31 @@ describe('Browser / Components / Tree', () => {
 
         it('Should find the node on first level.', () => {
             const node = TreeUtil.findNode(tree, 'Junk');
-            expect(node).not.undefined;
+            expect(node).exist;
             expect(node.id).equals('Junk');
         });
 
         it('Should find the node on second level.', () => {
             const node = TreeUtil.findNode(tree, 'Test 1.2');
-            expect(node).not.undefined;
+            expect(node).exist;
             expect(node.id).equals('Test 1.2');
         });
 
         it('Should find the node on third level.', () => {
             const node = TreeUtil.findNode(tree, 'Test 1.2.2');
-            expect(node).not.undefined;
+            expect(node).exist;
             expect(node.id).equals('Test 1.2.2');
         });
 
         it('Should find the node on fourth level.', () => {
             const node = TreeUtil.findNode(tree, 'Test 1.2.2.2');
-            expect(node).not.undefined;
+            expect(node).exist;
             expect(node.id).equals('Test 1.2.2.2');
         });
 
         it('Should not find a node for a invalid id.', () => {
             const node = TreeUtil.findNode(tree, 'invalid');
-            expect(node).undefined;
+            expect(node).not.exist;
         });
 
     });

@@ -14,7 +14,7 @@ import { KIXExtension } from '../../../../server/model/KIXExtension';
 class Extension extends KIXExtension implements IMarkoApplication {
 
     public name: string = 'authentication-login';
-    public path: string = 'login';
+    public path: string = 'webapp/login';
     public internal: boolean = true;
 
 }

@@ -21,6 +21,8 @@ import { RowObject } from '../../../../../table/model/RowObject';
 import { Table } from '../../../../../table/model/Table';
 import { TableValue } from '../../../../../table/model/TableValue';
 import { ValueState } from '../../../../../table/model/ValueState';
+import { VersionProperty } from '../../../../model/VersionProperty';
+import { LabelService } from '../../../../../base-components/webapp/core/LabelService';
 
 export class CompareConfigItemVersionTableContentProvider extends TableContentProvider<Version> {
 
@@ -66,7 +68,36 @@ export class CompareConfigItemVersionTableContentProvider extends TableContentPr
             rowObjects = await this.createRows(checkVersions, attributes, []);
         }
 
+        await this.addCommonProperties(versions, rowObjects);
+
         return rowObjects;
+    }
+
+    private async addCommonProperties(versions: Version[], rowObjects: RowObject<any>[]): Promise<void> {
+        const nameProperty = await LabelService.getInstance().getPropertyText(
+            VersionProperty.NAME, KIXObjectType.CONFIG_ITEM_VERSION
+        );
+        const nameValues: TableValue[] = [new TableValue('CONFIG_ITEM_ATTRIBUTE', 'Name', nameProperty)];
+        const deplStateProperty = await LabelService.getInstance().getPropertyText(
+            VersionProperty.DEPL_STATE_ID, KIXObjectType.CONFIG_ITEM_VERSION
+        );
+        const deplStateValues: TableValue[] = [
+            new TableValue('CONFIG_ITEM_ATTRIBUTE', 'DeplState', deplStateProperty)
+        ];
+        for (let i = versions.length; i--; 1) {
+            const nameValue = new TableValue(versions[i].VersionID.toString(), versions[i].Name, versions[i].Name);
+            const deplStateName = await TranslationService.translate(versions[i].DeplState);
+            const deplStateValue = new TableValue(
+                versions[i].VersionID.toString(), versions[i].DeplStateID, deplStateName
+            );
+            if (versions[i - 1]) {
+                nameValue.state = this.getValueState(versions[i].Name, versions[i - 1].Name);
+                deplStateValue.state = this.getValueState(versions[i].DeplState, versions[i - 1].DeplState);
+            }
+            nameValues.push(nameValue);
+            deplStateValues.push(deplStateValue);
+        }
+        rowObjects.unshift(new RowObject(nameValues), new RowObject(deplStateValues));
     }
 
     private async createRows(

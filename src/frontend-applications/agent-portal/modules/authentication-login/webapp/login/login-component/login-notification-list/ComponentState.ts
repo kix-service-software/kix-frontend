@@ -7,8 +7,8 @@
  * --
  */
 
-import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
-import { PortalNotification } from '../../../../portal-notification/model/PortalNotification';
+import { AbstractComponentState } from '../../../../../base-components/webapp/core/AbstractComponentState';
+import { PortalNotification } from '../../../../../portal-notification/model/PortalNotification';
 
 export class ComponentState extends AbstractComponentState {
 

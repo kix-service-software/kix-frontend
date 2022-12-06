@@ -7,7 +7,7 @@
  * --
  */
 
-import { PortalNotification } from '../../../portal-notification/model/PortalNotification';
+import { PortalNotification } from '../../../../portal-notification/model/PortalNotification';
 
 export class ComponentState {
 

@@ -15,7 +15,6 @@ import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { ClientStorageService } from '../../base-components/webapp/core/ClientStorageService';
-import { DynamicFieldFormUtil } from '../../base-components/webapp/core/DynamicFieldFormUtil';
 import { EventService } from '../../base-components/webapp/core/EventService';
 import { ValidationResult } from '../../base-components/webapp/core/ValidationResult';
 import { DynamicFormFieldOption } from '../../dynamic-fields/webapp/core';
@@ -298,8 +297,7 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
             console.debug(result);
         }
 
-        const instructionProperties = result?.propertyInstructions.map((i) => i.property);
-        await this.resetFormValues(undefined, instructionProperties);
+        await this.resetFormValues();
 
         this.setFieldOrder(result?.InputOrder);
 

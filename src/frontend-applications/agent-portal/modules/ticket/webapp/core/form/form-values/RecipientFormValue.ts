@@ -29,6 +29,8 @@ import { ArticleProperty } from '../../../../model/ArticleProperty';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { Article } from '../../../../model/Article';
 import { ArticleLoadingOptions } from '../../../../model/ArticleLoadingOptions';
+import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
+import { FormContext } from '../../../../../../model/configuration/FormContext';
 
 export class RecipientFormValue extends SelectObjectFormValue {
 
@@ -39,21 +41,20 @@ export class RecipientFormValue extends SelectObjectFormValue {
     ) {
         super(property, object, objectValueMapper, parent);
         this.maxSelectCount = -1;
+        this.freeText = true;
+        this.objectType = KIXObjectType.CONTACT;
+        this.isAutoComplete = true;
+        this.multiselect = true;
+        this.autoCompleteConfiguration = new AutoCompleteConfiguration(undefined, undefined, undefined, 'Contact');
     }
 
     public async initFormValue(): Promise<void> {
         await super.initFormValue();
 
-        this.freeText = true;
-        this.objectType = KIXObjectType.CONTACT;
-        this.isAutoComplete = true;
-        this.multiselect = true;
-
         const objectName = await LabelService.getInstance().getObjectName(KIXObjectType.CONTACT, true, false);
         this.autoCompleteConfiguration = new AutoCompleteConfiguration(undefined, undefined, undefined, objectName);
 
         this.loadingOptions = new KIXObjectLoadingOptions(null, null, 10);
-
 
         if (!this.value?.length && this.property === ArticleProperty.TO) {
             const context = ContextService.getInstance().getActiveContext();
@@ -80,9 +81,7 @@ export class RecipientFormValue extends SelectObjectFormValue {
             );
 
             // remove system addresses (maybe prior From value by placeholder)
-            value = emails.filter((email) => {
-                !systemAddresses.some((sa) => sa.Name === email);
-            });
+            value = emails.filter((email) => !systemAddresses.some((sa) => sa.Name === email));
         }
 
         return value;
@@ -253,6 +252,18 @@ export class RecipientFormValue extends SelectObjectFormValue {
             article = articles.find((a) => a.ArticleID === refArticleId);
         }
         return article;
+    }
+
+    public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
+        const isEdit = this.objectValueMapper.formContext === FormContext.EDIT;
+        if ((!this.value || isEdit) && field.defaultValue?.value && !field.empty) {
+            const value = await this.handlePlaceholders(field.defaultValue?.value);
+            this.setFormValue(value);
+        }
+
+        if (field.empty) {
+            this.setFormValue(null);
+        }
     }
 
 }

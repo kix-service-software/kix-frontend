@@ -7,18 +7,24 @@
  * --
  */
 
+import { Context } from '../../../../../../model/Context';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { DateTimeUtil } from '../../../../../base-components/webapp/core/DateTimeUtil';
 import { InputFieldTypes } from '../../../../../base-components/webapp/core/InputFieldTypes';
 import { FormValueProperty } from '../../../../model/FormValueProperty';
 import { DateTimeFormValue } from '../../../../model/FormValues/DateTimeFormValue';
 import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
+import { ObjectFormHandler } from '../../../core/ObjectFormHandler';
 import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private bindingIds: string[];
     private formValue: DateTimeFormValue;
+    private context: Context;
+    private formHandler: ObjectFormHandler;
+    private timeValueChanged: boolean;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -45,16 +51,27 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        this.timeValueChanged = false;
+        this.context = ContextService.getInstance().getActiveContext();
+        this.formHandler = await this.context.getFormManager().getObjectFormHandler();
         this.state.inputType = this.formValue?.inputType || InputFieldTypes.DATE;
-        this.state.dateValue = DateTimeUtil.getKIXDateString(new Date(this.formValue.value?.toString()));
 
-        if (this.state.inputType === InputFieldTypes.DATE_TIME) {
-            this.state.timeValue = DateTimeUtil.getKIXTimeString(new Date(this.formValue.value?.toString()));
+        if (this.formValue.value) {
+            this.state.dateValue = DateTimeUtil.getKIXDateString(new Date(this.formValue.value?.toString()));
+
+            if (this.state.inputType === InputFieldTypes.DATE_TIME) {
+                this.state.timeValue = DateTimeUtil.getKIXTimeString(new Date(this.formValue.value?.toString()));
+            }
         }
-        this.state.minDate = this.formValue.minDate ?
-            DateTimeUtil.getKIXDateString(new Date(this.formValue.minDate)) : null;
-        this.state.maxDate = this.formValue.maxDate ?
-            DateTimeUtil.getKIXDateString(new Date(this.formValue.maxDate)) : null;
+
+        if (this.formValue.minDate) {
+            this.state.minDate = DateTimeUtil.getKIXDateString(new Date(this.formValue.minDate));
+        }
+
+        if (this.formValue.maxDate) {
+            this.state.maxDate = DateTimeUtil.getKIXDateString(new Date(this.formValue.maxDate));
+        }
+
         this.state.prepared = true;
     }
 
@@ -73,21 +90,36 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (event) {
             this.state.timeValue = event?.target?.value ? event.target.value : null;
             this.setValue();
+            this.timeValueChanged = true;
         }
     }
 
     private setValue(): void {
-        const dateValue = this.state.dateValue || '2000-01-01';
+        let date: Date;
 
-        const time = (this.state.timeValue ? ` ${this.state.timeValue}` : '');
-        const date = new Date(dateValue + time);
+        const hasValue = this.formValue.value !== null || this.formValue.value !== undefined;
+        const isDate = this.formValue.inputType === InputFieldTypes.DATE;
+        const isDateTime = this.formValue.inputType === InputFieldTypes.DATE_TIME;
 
-        if (date && this.formValue.inputType === InputFieldTypes.DATE) {
+        if (isDate && this.state.dateValue) {
+            date = new Date(this.state.dateValue);
             date.setHours(0, 0, 0, 0);
+        } else if (isDateTime) {
+            const dateTimeString = `${this.state.dateValue} ${this.state.timeValue}`;
+            const timestamp = Date.parse(dateTimeString);
+            if (!isNaN(timestamp)) {
+                date = new Date(dateTimeString);
+            }
         }
 
-        const value = DateTimeUtil.getKIXDateTimeString(date);
-        this.formValue.setFormValue(value);
+        if (isDate || (isDateTime && (this.timeValueChanged || hasValue))) {
+            const value = date ? DateTimeUtil.getKIXDateTimeString(date) : null;
+            this.formValue.setFormValue(value);
+
+            if (!value) {
+                this.formHandler.objectFormValidator?.validate(this.formValue, true);
+            }
+        }
     }
 
     public async focusLost(event?: any): Promise<void> {

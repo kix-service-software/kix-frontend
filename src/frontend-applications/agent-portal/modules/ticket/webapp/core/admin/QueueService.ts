@@ -14,7 +14,7 @@ import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../../model/KIXObjectSpecificLoadingOptions';
 import { QueueProperty } from '../../../model/QueueProperty';
-import { TreeNode, TreeNodeProperty } from '../../../../base-components/webapp/core/tree';
+import { TreeNode, TreeNodeProperty, TreeUtil } from '../../../../base-components/webapp/core/tree';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FollowUpType } from '../../../model/FollowUpType';
 import { SortUtil } from '../../../../../model/SortUtil';
@@ -82,7 +82,7 @@ export class QueueService extends KIXObjectService<Queue> {
             queues = await this.getQueuesHierarchy(false, queues);
 
             if (!invalidClickable || !showInvalid) {
-                queues = queues.filter((q) => q.ValidID === 1 || this.hasValidDescendants(q.SubQueues));
+                queues = queues.filter(this.filterQueue.bind(this));
             }
 
             if (filterIds && filterIds.length) {
@@ -98,9 +98,19 @@ export class QueueService extends KIXObjectService<Queue> {
             }
         }
 
-        SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+        TreeUtil.sortTree(nodes);
 
         return nodes;
+    }
+
+    private filterQueue(queue: Queue): boolean {
+        const result = queue.ValidID === 1 || this.hasValidDescendants(queue.SubQueues);
+
+        if (queue.SubQueues?.length) {
+            queue.SubQueues = queue.SubQueues.filter(this.filterQueue.bind(this));
+        }
+
+        return result;
     }
 
     private async prepareQueueNode(

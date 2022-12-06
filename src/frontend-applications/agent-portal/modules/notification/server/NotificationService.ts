@@ -20,7 +20,6 @@ import { Notification } from '../model/Notification';
 import { NotificationProperty } from '../model/NotificationProperty';
 import { NotificationMessage } from '../model/NotificationMessage';
 
-
 export class NotificationAPIService extends KIXObjectAPIService {
 
     private static INSTANCE: NotificationAPIService;
@@ -117,12 +116,16 @@ export class NotificationAPIService extends KIXObjectAPIService {
             } else if (p[0] === NotificationProperty.FILTER) {
                 if (Array.isArray(p[1])) {
                     const filter = this.prepareObjectFilter(p[1]);
+                    // FIXME: prepare also some ticket specifics (use of TicketAPIService => prepareAPISearch?)
                     newParameter.push([NotificationProperty.FILTER, filter]);
                 }
             } else {
                 // handle Data properties
                 if (Array.isArray(p[1])) {
-                    dataProperties[p[0]] = p[1].filter((v) => v !== null);
+                    const arrayValue = p[1].filter((v) => v !== null);
+                    if (arrayValue?.length) {
+                        dataProperties[p[0]] = arrayValue;
+                    }
                 } else if (typeof p[1] !== 'undefined' && p[1] !== null) {
                     dataProperties[p[0]] = [p[1]];
                 }

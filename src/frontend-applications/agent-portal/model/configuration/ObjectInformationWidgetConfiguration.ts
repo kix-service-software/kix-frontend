@@ -14,6 +14,8 @@ import { RoutingConfiguration } from './RoutingConfiguration';
 
 export class ObjectInformationWidgetConfiguration implements IConfiguration {
 
+    public application: string = 'agent-portal';
+
     public constructor(
         public id: string,
         public name: string,

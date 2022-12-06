@@ -183,7 +183,15 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 {
                                     componentId: 'object-avatar-label',
                                     componentData: {
-                                        property: TicketProperty.RESPONSIBLE_ID
+                                        property: TicketProperty.QUEUE_ID
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: TicketProperty.LOCK_ID
                                     }
                                 }
                             ],
@@ -192,15 +200,33 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: TicketProperty.OWNER_ID
-                                    }
+                                    },
+                                    conditions: [
+                                        {
+                                            property: TicketProperty.OWNER_ID,
+                                            operator: SearchOperator.NOT_EQUALS,
+                                            value: 1,
+                                            useObjectService: false,
+                                            useDisplayValue: false
+                                        }
+                                    ]
                                 }
                             ],
                             [
                                 {
                                     componentId: 'object-avatar-label',
                                     componentData: {
-                                        property: TicketProperty.QUEUE_ID
-                                    }
+                                        property: TicketProperty.RESPONSIBLE_ID
+                                    },
+                                    conditions: [
+                                        {
+                                            property: TicketProperty.RESPONSIBLE_ID,
+                                            operator: SearchOperator.NOT_EQUALS,
+                                            value: 1,
+                                            useObjectService: false,
+                                            useDisplayValue: false
+                                        }
+                                    ]
                                 }
                             ]
                         ],
@@ -465,6 +491,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             'titleTranslatable': true,
                             'useObjectServiceForFilter': false,
                             'valid': true,
+                            'application': 'agent-portal'
                         },
                         {
                             'id': null,
@@ -487,6 +514,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             'titleTranslatable': true,
                             'useObjectServiceForFilter': false,
                             'valid': true,
+                            'application': 'agent-portal'
                         },
                         {
                             'id': null,
@@ -509,6 +537,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             'titleTranslatable': true,
                             'useObjectServiceForFilter': false,
                             'valid': true,
+                            'application': 'agent-portal'
                         },
                         {
                             'id': null,
@@ -531,6 +560,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             'titleTranslatable': true,
                             'useObjectServiceForFilter': false,
                             'valid': true,
+                            'application': 'agent-portal'
                         },
                         {
                             'id': null,
@@ -553,6 +583,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             'titleTranslatable': true,
                             'useObjectServiceForFilter': false,
                             'valid': true,
+                            'application': 'agent-portal'
                         },
                         {
                             'id': null,
@@ -575,6 +606,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             'titleTranslatable': true,
                             'useObjectServiceForFilter': false,
                             'valid': true,
+                            'application': 'agent-portal'
                         },
                     ],
                     null, false, false, null, null, 1.75, 1.75, 'Translatable#0 data sets found.', null, false
@@ -693,10 +725,10 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                         },
                                                         {
                                                             property: TicketProperty.STATE_TYPE,
-                                                            operator: SearchOperator.EQUALS,
+                                                            operator: SearchOperator.IN,
                                                             type: FilterDataType.STRING,
                                                             filterType: FilterType.AND,
-                                                            value: 'Open'
+                                                            value: ['Open']
                                                         }
                                                     ]
                                                 }
@@ -726,10 +758,10 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                                         },
                                                         {
                                                             property: TicketProperty.STATE_TYPE,
-                                                            operator: SearchOperator.EQUALS,
+                                                            operator: SearchOperator.IN,
                                                             type: FilterDataType.STRING,
                                                             filterType: FilterType.AND,
-                                                            value: 'Open'
+                                                            value: ['Open']
                                                         }
                                                     ]
                                                 }

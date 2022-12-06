@@ -120,7 +120,6 @@
         "gulp-less": "5.0.0",
         "gulp-sourcemaps": "^3.0.0",
         "gulp-typescript": "^6.0.0-alpha.1",
-        "gulp-uglify-es": "^3.0.0",
         "license-checker": "^25.0.1",
         "mocha": "^9.0.3",
         "mocha-junit-reporter": "2.0.0",
@@ -129,7 +128,6 @@
         "raml2html": "7.8.0",
         "source-map-support": "^0.5.19",
         "ts-node": "^10.1.0",
-        "typescript": "4.3.5",
-        "uglify-es": "3.3.9"
+        "typescript": "4.3.5"
     }
 }

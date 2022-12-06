@@ -91,7 +91,10 @@ class Component {
                     }
 
                     if (data?.tableId === this.state.table?.getTableId()) {
-                        if (eventId === TableEvent.RELOAD) {
+                        const isdependent = this.state.widgetConfiguration.contextDependent;
+                        if (eventId === TableEvent.COLUMN_FILTERED && isdependent) {
+                            this.setFilteredObjectListToContext();
+                        } else if (eventId === TableEvent.RELOAD) {
                             this.state.loading = true;
                         } else if (eventId === TableEvent.RELOADED) {
                             if (settings && settings.resetFilterOnReload) {
@@ -166,6 +169,8 @@ class Component {
                 additionalInformationChanged: (): void => { return; }
             };
 
+            EventService.getInstance().subscribe(TableEvent.COLUMN_FILTERED, this.subscriber);
+
             const context = ContextService.getInstance().getActiveContext();
             context.registerListener('table-widget-' + this.state.instanceId, this.contextListener);
         }
@@ -226,6 +231,7 @@ class Component {
         EventService.getInstance().unsubscribe(TableEvent.RELOADED, this.subscriber);
         EventService.getInstance().unsubscribe(TableEvent.RELOAD, this.subscriber);
         EventService.getInstance().unsubscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
+        EventService.getInstance().unsubscribe(TableEvent.COLUMN_FILTERED, this.subscriber);
 
         const context = ContextService.getInstance().getActiveContext();
         if (context) {
@@ -327,6 +333,10 @@ class Component {
                 this.state.predefinedFilterName = null;
                 ClientStorageService.deleteState(`${this.state.table.getTableId()}-predefinedfilter`);
             }
+
+            if (this.state.widgetConfiguration?.contextDependent) {
+                this.setFilteredObjectListToContext();
+            }
         }
     }
 
@@ -348,6 +358,11 @@ class Component {
 
     public getTable(): Table {
         return this.state.table;
+    }
+
+    private setFilteredObjectListToContext(): void {
+        const filteredObjects = this.state.table?.getRows()?.map((r) => r.getRowObject()?.getObject());
+        this.context?.setFilteredObjectList(this.state.table.getObjectType(), filteredObjects);
     }
 
 }

@@ -31,50 +31,20 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         this.state.article = input.article;
+
+        if (this.state.article?.ChangeTime !== input.article?.ChangeTime) {
+            this.updateArticleData();
+        }
+
+        const attachments = this.state.article?.Attachments || [];
+        this.state.attachmentCount = attachments.filter((a) => !a.Filename.match(/^file-(1|2)$/)).length;
     }
 
     public async onMount(): Promise<void> {
         this.context = ContextService.getInstance().getActiveContext();
 
         if (this.state.article) {
-            const attachments = this.state.article.Attachments || [];
-            this.state.attachmentCount = attachments.filter((a) => !a.Filename.match(/^file-(1|2)$/)).length;
-
-            this.state.channelTooltip = await LabelService.getInstance().getDisplayText(
-                this.state.article, ArticleProperty.CHANNEL_ID
-            );
-            if (this.state.article.isUnsent()) {
-                this.state.channelTooltip += ` (${this.state.article.getUnsentError()})`;
-            }
-
-            const icons = await LabelService.getInstance().getIcons(this.state.article, ArticleProperty.CHANNEL_ID);
-            if (icons?.length) {
-                this.state.channelIcon = icons[0];
-            }
-
-            this.state.createTimeString = await LabelService.getInstance().getDisplayText(
-                this.state.article, ArticleProperty.INCOMING_TIME
-            );
-
-            if (this.state.article.ChangeTime !== this.state.article.CreateTime) {
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [this.state.article.ChangedBy]
-                ).catch(() => [] as User[]);
-
-                const userLoging = users?.length ? users[0].UserLogin : '';
-
-                this.state.changeTitle = await LabelService.getInstance().getDisplayText(
-                    this.state.article, KIXObjectProperty.CHANGE_TIME
-                );
-                this.state.changeTitle = await TranslationService.translate('Translatable#edited at {0} by {1}', [this.state.changeTitle, userLoging]);
-            }
-
-            // TODO: TimeUnit(s) is a article property in KIXPro (extension?)
-            if (this.state.article && this.state.article['TimeUnit']) {
-                this.state.timeUnits = await LabelService.getInstance().getDisplayText(
-                    this.state.article, 'TimeUnits'
-                );
-            }
+            this.updateArticleData();
         }
 
         this.state.translations = await TranslationService.createTranslationObject(
@@ -83,6 +53,45 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 'Translatable#Created at', 'Translatable#From', 'Translatable#edited'
             ]
         );
+    }
+
+    private async updateArticleData(): Promise<void> {
+
+        this.state.channelTooltip = await LabelService.getInstance().getDisplayText(
+            this.state.article, ArticleProperty.CHANNEL_ID
+        );
+        if (this.state.article.isUnsent()) {
+            this.state.channelTooltip += ` (${this.state.article.getUnsentError()})`;
+        }
+
+        const icons = await LabelService.getInstance().getIcons(this.state.article, ArticleProperty.CHANNEL_ID);
+        if (icons?.length) {
+            this.state.channelIcon = icons[0];
+        }
+
+        this.state.createTimeString = await LabelService.getInstance().getDisplayText(
+            this.state.article, ArticleProperty.INCOMING_TIME
+        );
+
+        if (this.state.article.ChangeTime !== this.state.article.CreateTime) {
+            const users = await KIXObjectService.loadObjects<User>(
+                KIXObjectType.USER, [this.state.article.ChangedBy]
+            ).catch(() => [] as User[]);
+
+            const userLoging = users?.length ? users[0].UserLogin : '';
+
+            this.state.changeTitle = await LabelService.getInstance().getDisplayText(
+                this.state.article, KIXObjectProperty.CHANGE_TIME
+            );
+            this.state.changeTitle = await TranslationService.translate('Translatable#edited at {0} by {1}', [this.state.changeTitle, userLoging]);
+        }
+
+        // TODO: TimeUnit(s) is a article property in KIXPro (extension?)
+        if (this.state.article && this.state.article['TimeUnit']) {
+            this.state.timeUnits = await LabelService.getInstance().getDisplayText(
+                this.state.article, 'TimeUnits'
+            );
+        }
     }
 
     public async attachmentsClicked(event?: any): Promise<void> {
