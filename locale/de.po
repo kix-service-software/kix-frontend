@@ -317,6 +317,9 @@ msgstr "Erstellzeitpunkt des Artikels"
 msgid "Article Data"
 msgstr "Artikeldaten"
 
+msgid "Article has printed"
+msgstr ""
+
 msgid "Article Id"
 msgstr "Artikel ID"
 
@@ -2940,6 +2943,9 @@ msgstr "Ausblenden"
 msgid "Hide Message"
 msgstr "Artikeltext ausblenden"
 
+msgid "Hint"
+msgstr ""
+
 msgid "History"
 msgstr "Historie"
 
@@ -3908,6 +3914,9 @@ msgstr "Adresse"
 msgid "Preferences"
 msgstr "Persönliche Einstellungen"
 
+msgid "Prepare Article for print"
+msgstr ""
+
 msgid "Prepare asset for print"
 msgstr "Bereite Assetdaten zum Druck auf"
 
@@ -4868,6 +4877,9 @@ msgstr "Ticketdaten"
 
 msgid "Ticket Flags"
 msgstr "Ticket Kennzeichnung"
+
+msgid "Ticket has printed"
+msgstr ""
 
 msgid "Ticket History"
 msgstr "Ticket Historie"
