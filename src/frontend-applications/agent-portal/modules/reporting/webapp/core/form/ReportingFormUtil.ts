@@ -45,7 +45,8 @@ export class ReportingFormUtil {
 
                 if (object === 'DynamicField') {
                     await this.prepareDynamicFieldInput(
-                        field, parts[1], Boolean(parameter.Multiple), parameter.PossibleValues, objectType
+                        field, parts[1], typeof multiple === 'boolean' ? multiple : Boolean(parameter.Multiple),
+                        parameter.PossibleValues, objectType, filterPossibleValues
                     );
                 } else {
 
@@ -54,7 +55,7 @@ export class ReportingFormUtil {
                     field.options.push(new FormFieldOption(ObjectReferenceOptions.OBJECT, object));
                     field.options.push(new FormFieldOption(
                         ObjectReferenceOptions.MULTISELECT,
-                        multiple ? multiple : Boolean(parameter.Multiple))
+                        typeof multiple === 'boolean' ? multiple : Boolean(parameter.Multiple))
                     );
                     field.options.push(new FormFieldOption(FormFieldOptions.SHOW_INVALID, false));
 
@@ -100,7 +101,7 @@ export class ReportingFormUtil {
 
     private static async prepareDynamicFieldInput(
         field: FormFieldConfiguration, dfName: string, multiple: boolean, possibleValues?: string[] | number[],
-        objectType: KIXObjectType = KIXObjectType.REPORT_DEFINITION
+        objectType: KIXObjectType = KIXObjectType.REPORT_DEFINITION, filterPossibleValues?: boolean
     ): Promise<void> {
         field.options.push(new FormFieldOption(DynamicFormFieldOption.FIELD_NAME, dfName));
         await DynamicFieldFormUtil.getInstance().createDynamicFormField(field);
@@ -132,9 +133,11 @@ export class ReportingFormUtil {
                     }
                 }
 
-                field.options.push(
-                    new FormFieldOption(ObjectReferenceOptions.OBJECT_IDS, possibleValues)
-                );
+                if (filterPossibleValues) {
+                    field.options.push(
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT_IDS, possibleValues)
+                    );
+                }
             }
         }
     }

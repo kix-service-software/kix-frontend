@@ -423,10 +423,6 @@ export class ReportDefinitionFormCreator {
         const referencesField = new FormFieldConfiguration(
             'report-parameter-references', 'Translatable#References', ReportParameterProperty.REFERENCES, null,
             false, 'Translatable#Helptext_Reporting_ReportCreate_ParameterReferences',
-            // [
-            //     new FormFieldOption(DefaultSelectInputFormOption.NODES, this.getReferenceNodes()),
-            //     new FormFieldOption(ObjectReferenceOptions.FREETEXT, true)
-            // ]
         );
         referencesField.instanceId = IdService.generateDateBasedId();
         referencesField.defaultValue = parameter ? new FormFieldValue(parameter.References) : null;
