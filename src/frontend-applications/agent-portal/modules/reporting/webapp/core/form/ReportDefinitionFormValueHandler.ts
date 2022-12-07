@@ -71,29 +71,29 @@ export class ReportDefinitionFormValueHandler extends FormFieldValueHandler {
             const referencesValue = changedFieldValues.find(
                 (cv) => cv[0] && cv[0].property === ReportParameterProperty.REFERENCES
             );
-            if (referencesValue && referencesValue[1].value) {
-                await this.handleReferencesValue(referencesValue[0], referencesValue[1], formInstance);
+            if (referencesValue && referencesValue[1]) {
+                await this.adjustPossibleValuesField(referencesValue[0], referencesValue[1], formInstance);
             }
 
             const possibleValuesValue = changedFieldValues.find(
                 (cv) => cv[0] && cv[0].property === ReportParameterProperty.POSSIBLE_VALUES
             );
-            if (possibleValuesValue && possibleValuesValue[1].value) {
-                await this.prepareDefaultInput(possibleValuesValue[0], possibleValuesValue[1], formInstance);
+            if (possibleValuesValue && possibleValuesValue[1]) {
+                await this.adjustDefaultField(possibleValuesValue[0], possibleValuesValue[1], formInstance);
             }
 
             const multipleValue = changedFieldValues.find(
                 (cv) => cv[0] && cv[0].property === ReportParameterProperty.MULTIPLE
             );
-            if (multipleValue && multipleValue[1].value) {
-                await this.prepareDefaultInput(multipleValue[0], multipleValue[1], formInstance);
+            if (multipleValue && multipleValue[1]) {
+                await this.adjustDefaultField(multipleValue[0], multipleValue[1], formInstance);
             }
 
             this.timeout = null;
         }, 750);
     }
 
-    private async handleReferencesValue(
+    private async adjustPossibleValuesField(
         field: FormFieldConfiguration, value: FormFieldValue<string>, formInstance: FormInstance
     ): Promise<void> {
         let possibleValuesField = field.parent.children.find(
@@ -102,21 +102,16 @@ export class ReportDefinitionFormValueHandler extends FormFieldValueHandler {
         possibleValuesField = formInstance.getFormField(possibleValuesField?.instanceId);
 
         if (possibleValuesField) {
-            const multipleField = field.parent.children.find((f) => f.property === ReportParameterProperty.MULTIPLE);
-            const multipleValue = formInstance.getFormFieldValue(multipleField?.instanceId);
-
             const parameter = new ReportParameter();
             parameter.References = value.value;
-            parameter.Multiple = multipleValue
-                ? (multipleValue.value ? 1 : 0)
-                : 0;
+            parameter.Multiple = 1;
 
             await ReportingFormUtil.setInputComponent(possibleValuesField, parameter, false, true);
 
             setTimeout(async () => {
+                // reset also default field
                 const defaultField = field.parent.children.find((f) => f.property === ReportParameterProperty.DEFAULT);
                 if (defaultField) {
-                    // reset also default field
                     defaultField.options = [];
                     await formInstance.provideFormFieldValues([[defaultField.instanceId, null]], null);
                     EventService.getInstance().publish(
@@ -134,7 +129,7 @@ export class ReportDefinitionFormValueHandler extends FormFieldValueHandler {
         }
     }
 
-    private async prepareDefaultInput(
+    private async adjustDefaultField(
         field: FormFieldConfiguration, value: FormFieldValue<string>, formInstance: FormInstance, keepValue?: boolean
     ): Promise<void> {
         let defaultField = field.parent.children.find((f) => f.property === ReportParameterProperty.DEFAULT);
@@ -166,7 +161,25 @@ export class ReportDefinitionFormValueHandler extends FormFieldValueHandler {
                 }
             }
 
-            const existingValue = formInstance.getFormFieldValue(defaultField.instanceId);
+            const existingValue = formInstance.getFormFieldValue<any[]>(defaultField.instanceId);
+
+            // only use possible values
+            if (parameter.PossibleValues) {
+                if (Array.isArray(existingValue?.value)) {
+                    existingValue.value = existingValue.value.filter(
+                        (v) => parameter.PossibleValues.some((pv) => pv === v)
+                    );
+                } else if (
+                    existingValue?.value && !parameter.PossibleValues.some((pv) => pv === existingValue?.value)
+                ) {
+                    existingValue.value = null;
+                }
+            }
+
+            // reduce if necessary
+            if (!parameter.Multiple && Array.isArray(existingValue?.value) && existingValue.value.length > 1) {
+                existingValue.value = [existingValue.value[0]];
+            }
 
             await ReportingFormUtil.setInputComponent(defaultField, parameter);
             setTimeout(async () => {
