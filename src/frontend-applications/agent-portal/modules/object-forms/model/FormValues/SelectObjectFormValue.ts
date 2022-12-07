@@ -123,7 +123,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         if (force) {
             await super.setFormValue(value, force);
         } else {
-            if (!this.freeText) {
+            if (!this.freeText && !this.isAutoComplete) {
                 if (Array.isArray(value)) {
                     value = value?.filter((v) => TreeUtil.findNode(this.treeHandler?.getTree(), v.toString()) !== null);
                 } else if (value !== null) {
