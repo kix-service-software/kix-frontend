@@ -158,6 +158,9 @@ msgstr ""
 msgid "Admin_DynamicFieldDateTime_DefaultValue_Description"
 msgstr ""
 
+msgid "Admin_DynamicField_Edit_Name_Hint"
+msgstr ""
+
 msgid "Administration"
 msgstr ""
 
