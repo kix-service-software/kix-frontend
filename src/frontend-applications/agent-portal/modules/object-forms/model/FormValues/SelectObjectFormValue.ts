@@ -79,6 +79,13 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                 this.initFormValue();
             }
         });
+
+        this.addPropertyBinding(FormValueProperty.POSSIBLE_VALUES, (value: SelectObjectFormValue) => {
+            if (this.isAutoComplete && this.possibleValues?.length) {
+                this.isAutoComplete = false;
+                this.loadSelectableValues();
+            }
+        });
     }
 
     public destroy(): void {
@@ -364,14 +371,10 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         if (this.enabled) {
             if (this.isAutoComplete) {
                 objects = await this.searchObjects();
+            } else if (this.possibleValues) {
+                objects = await KIXObjectService.loadObjects(this.objectType, this.possibleValues, this.loadingOptions);
             } else {
                 objects = await KIXObjectService.loadObjects(this.objectType, null, this.loadingOptions);
-            }
-
-            if (Array.isArray(this.possibleValues)) {
-                objects = objects.filter(
-                    (o) => this.possibleValues.some((pv) => pv.toString() === o.ObjectId.toString())
-                );
             }
 
             if (Array.isArray(this.forbiddenValues)) {
