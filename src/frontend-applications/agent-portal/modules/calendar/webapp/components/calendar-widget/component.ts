@@ -68,6 +68,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         filteredObjectListChanged: async () => {
                             const tickets = await this.loadTickets();
                             this.updateCalendarSchedules(tickets);
+                            this.createCalendar(tickets);
                         },
                         objectChanged: () => null,
                         objectListChanged: () => null,
