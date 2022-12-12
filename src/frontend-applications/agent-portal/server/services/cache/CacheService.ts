@@ -168,10 +168,12 @@ export class CacheService {
                 types.push(KIXObjectType.FAQ_ARTICLE);
                 types.push(KIXObjectType.FAQ_VOTE);
                 types.push(KIXObjectType.FAQ_KEYWORD);
-            }
-            else if (namespace[0] === 'Ticket') {
+            } else if (namespace[0] === 'Ticket') {
                 types.push(namespace[0]);
                 types.push(namespace[1]);
+                if (namespace[2]) {
+                    types.push(namespace[2]);
+                }
             } else {
                 types.push(namespace[0]);
             }
