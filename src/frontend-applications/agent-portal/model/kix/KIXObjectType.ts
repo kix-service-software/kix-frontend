@@ -11,7 +11,7 @@ export enum KIXObjectType {
 
     ANY = 'ANY',
 
-    ATTACHMENT = 'ATTACHMENT',
+    ATTACHMENT = 'Attachment',
 
     ARTICLE = 'Article',
 
