@@ -252,7 +252,7 @@ export class TreeHandler {
                 this.selectedNodes = selection;
             }
 
-            // sort to keep always same order (is impotant in report jobs (output formats))
+            // sort to keep always same order (is important in report jobs (output formats))
             this.selectedNodes = SortUtil.sortObjects(this.selectedNodes, 'label');
 
             this.listener.forEach((l) => l(this.getSelectedNodes()));
