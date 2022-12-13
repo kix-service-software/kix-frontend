@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2022-12-07 13:18+0000\n"
+"PO-Revision-Date: 2022-12-13 11:18+0000\n"
 "Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
@@ -3110,10 +3110,10 @@ msgid "Keywords"
 msgstr "Schlagworte"
 
 msgid "KIX"
-msgstr ""
+msgstr "KIX"
 
 msgid "KIX Forum"
-msgstr ""
+msgstr "KIX Forum"
 
 msgid "Knowledge Database"
 msgstr "Wissensdatenbank"
@@ -3230,7 +3230,7 @@ msgid "Login Name"
 msgstr "Nutzername"
 
 msgid "Log Level"
-msgstr ""
+msgstr "Log Level"
 
 msgid "Logout"
 msgstr "Abmelden"
@@ -3993,7 +3993,7 @@ msgid "Queues"
 msgstr "Teams"
 
 msgid "Quick Start Guide"
-msgstr ""
+msgstr "Quick Start Guide"
 
 msgid "QuickstartGuide_Text_End"
 msgstr "Nun sind Sie bereit, mit KIX 18 zu starten. Viel Freude!"
@@ -4251,7 +4251,7 @@ msgid "Results"
 msgstr "Ergebnisse"
 
 msgid "Richtext"
-msgstr ""
+msgstr "Richtext"
 
 msgid "Role"
 msgstr "Rolle"
@@ -4584,7 +4584,7 @@ msgid "Split Option"
 msgstr "Trennoptionen"
 
 msgid "SSP"
-msgstr ""
+msgstr "SSP"
 
 msgid "Standard"
 msgstr "Standard"
@@ -5265,7 +5265,7 @@ msgid "Your rating"
 msgstr "Ihre Bewertung"
 
 msgid "Youtube"
-msgstr ""
+msgstr "Youtube"
 
 msgid "You will edit {0} attributes for {1} {2}. Execute now?"
 msgstr "Sie ändern {0} Attribute an {1} {2}. Jetzt starten?"
