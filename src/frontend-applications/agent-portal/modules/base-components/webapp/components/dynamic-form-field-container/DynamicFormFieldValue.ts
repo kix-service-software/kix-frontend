@@ -100,7 +100,7 @@ export class DynamicFormFieldValue {
     ) {
 
         if (!id) {
-            this.id = this.value.id;
+            this.id = IdService.generateDateBasedId(this.value.id);
         }
         this.propertyTreeHandler = new TreeHandler([], null, null, false);
         TreeService.getInstance().registerTreeHandler('property-' + this.id, this.propertyTreeHandler);
