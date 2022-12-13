@@ -502,7 +502,9 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             new FormFieldConfiguration(
                 'ticket-new-form-field-channel',
                 'Translatable#Channel', ArticleProperty.CHANNEL_ID, 'channel-input', true,
-                'Translatable#Helptext_Tickets_TicketCreate_Channel'
+                'Translatable#Helptext_Tickets_TicketCreate_Channel',
+                [],
+                new FormFieldValue(1, true)
             )
         );
 
