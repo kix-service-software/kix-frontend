@@ -62,7 +62,7 @@ class Component extends FormInputComponent<any[], ComponentState> {
                                         crudValue,
                                         v.value && (v.value as PermissionFormData).Comment,
                                         null,
-                                        typeof v.id !== 'undefined' && v.id !== null ? Number(v.id) : null
+                                        !isNaN(Number(v.id)) ? Number(v.id) : null
                                     )
                                 );
                             }
@@ -94,7 +94,7 @@ class Component extends FormInputComponent<any[], ComponentState> {
                 permissionManager.setValue(
                     new ObjectPropertyValue(
                         permission.TypeID.toString(), permission.Target, this.getPermissionFormData(permission), [],
-                        false, true, null, null, null, permission.ID.toString()
+                        false, true, null, null, null, permission.ID?.toString()
                     )
                 );
                 permissionDescriptions.push(
