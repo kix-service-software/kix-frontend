@@ -41,7 +41,13 @@ export class ContactObjectFormValue extends SelectObjectFormValue {
 
     public async initFormValue(): Promise<void> {
         this.freeText = true;
-        super.initFormValue();
+        await super.initFormValue();
+
+        const context = ContextService.getInstance().getActiveContext();
+        const contact = context?.getAdditionalInformation(KIXObjectType.CONTACT);
+        if (contact) {
+            this.setFormValue(contact.ID);
+        }
     }
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {
@@ -109,14 +115,4 @@ export class ContactObjectFormValue extends SelectObjectFormValue {
 
         return contactId;
     }
-
-    public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
-        super.initFormValueByField(field);
-        const context = ContextService.getInstance().getActiveContext();
-        const contact = context.getAdditionalInformation(KIXObjectType.CONTACT);
-        if (contact) {
-            this.setFormValue(contact.ID);
-        }
-    }
-
 }

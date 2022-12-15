@@ -37,7 +37,7 @@ export class NewTicketDialogContext extends Context {
 
         if (!kixPro) {
             const formId = await FormService.getInstance().getFormIdByContext(FormContext.NEW, KIXObjectType.TICKET);
-            this.getFormManager().setFormId(formId, null, true);
+            this.getFormManager().setFormId(formId, null, true, false);
         }
 
         await super.initContext(urlParams);

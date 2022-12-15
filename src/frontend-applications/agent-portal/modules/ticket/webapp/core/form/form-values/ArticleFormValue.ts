@@ -31,10 +31,12 @@ export class ArticleFormValue extends ObjectFormValue<Article[]> {
             article = ticket.Articles.find((a) => !a.ArticleID);
         } else {
             ticket.Articles = [];
-            article = new Article(null, ticket);
         }
 
-        ticket.Articles.push(article);
+        if (!article) {
+            article = new Article(null, ticket);
+            ticket.Articles.push(article);
+        }
 
         this.object = article;
         this.createBindings(property, article);
