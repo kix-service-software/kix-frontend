@@ -30,4 +30,9 @@ export class TicketStateFormValue extends SelectObjectFormValue {
         this.formValues.push(new PendingTimeFormValue(TicketProperty.PENDING_TIME, ticket, objectValueMapper, this));
     }
 
+    public async initFormValue(): Promise<void> {
+        this.forbiddenValues = [6, 7];
+        await super.initFormValue();
+    }
+
 }
