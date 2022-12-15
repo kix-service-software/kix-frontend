@@ -55,7 +55,9 @@ export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string
 
         this.translatable = Boolean(Number(dynamicField?.Config?.TranslatableValues)) || false;
 
-        await this.setPossibleValuesFromDynamicField();
+        if (!this.possibleValues || !this.possibleValues?.length) {
+            await this.setPossibleValuesFromDynamicField();
+        }
 
         return super.initFormValue();
     }
