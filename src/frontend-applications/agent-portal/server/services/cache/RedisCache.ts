@@ -62,7 +62,9 @@ export class RedisCache implements ICache {
         keys = keys.filter((k) => !ignoreKeyPrefixes.some((p) => k.startsWith(`${this.KIX_CACHE_PREFIX}::${p}`)));
 
         const deletePromises = [];
-        keys.forEach((key) => deletePromises.push(this.delete(null, key)));
+        for (const key of keys) {
+            this.redisClient.del(key);
+        }
 
         await Promise.all(deletePromises);
     }
