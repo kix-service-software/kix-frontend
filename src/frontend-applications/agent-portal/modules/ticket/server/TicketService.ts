@@ -727,7 +727,7 @@ export class TicketAPIService extends KIXObjectAPIService {
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         let searchCriteria = criteria.filter((f) =>
             Ticket.SEARCH_PROPERTIES.some((sp) => sp.Property === f.property)
-            && f.operator !== SearchOperator.NOT_EQUALS
+            && (f.operator !== SearchOperator.NOT_EQUALS || f.property === TicketProperty.TYPE_ID)
         );
 
         await this.setUserID(searchCriteria, token);
