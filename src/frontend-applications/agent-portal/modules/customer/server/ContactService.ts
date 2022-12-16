@@ -303,11 +303,14 @@ export class ContactAPIService extends KIXObjectAPIService {
     }
 
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        let searchCriteria = criteria.filter(
-            (f) => f.property !== ContactProperty.PRIMARY_ORGANISATION_ID
-                && f.property !== KIXObjectProperty.VALID_ID
-                && f.property !== SearchProperty.PRIMARY
-                && (f.operator !== SearchOperator.IN || f.property === ContactProperty.EMAIL)
+        let searchCriteria = criteria.filter((f) =>
+            f.property !== ContactProperty.PRIMARY_ORGANISATION_ID &&
+            f.property !== SearchProperty.PRIMARY &&
+            (
+                f.operator !== SearchOperator.IN ||
+                f.property === ContactProperty.EMAIL ||
+                f.property === KIXObjectProperty.VALID_ID
+            )
         );
 
         const primary = criteria.find((f) => f.property === SearchProperty.PRIMARY);
