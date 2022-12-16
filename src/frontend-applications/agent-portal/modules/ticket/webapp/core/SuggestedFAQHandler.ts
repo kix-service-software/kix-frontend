@@ -44,9 +44,7 @@ export class SuggestedFAQHandler implements IAdditionalTableObjectsHandler {
             const context = ContextService.getInstance().getActiveContext();
             const ticket = await context.getObject<Ticket>();
             const formHandler = await context.getFormManager().getObjectFormHandler();
-            const formId = context.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
-            const formInstance = formId ? await context?.getFormManager()?.getFormInstance() : null;
-            const filter: FilterCriteria[] = await this.getFilter(handlerConfig, ticket, formInstance, formHandler);
+            const filter: FilterCriteria[] = await this.getFilter(handlerConfig, ticket, formHandler);
 
             if (filter && filter.length) {
                 if (
@@ -74,7 +72,7 @@ export class SuggestedFAQHandler implements IAdditionalTableObjectsHandler {
 
     private async getFilter(
         handlerConfig: AdditionalTableObjectsHandlerConfiguration,
-        ticket: Ticket, formInstance?: FormInstance, formHandler?: ObjectFormHandler
+        ticket: Ticket, formHandler?: ObjectFormHandler
     ): Promise<FilterCriteria[]> {
         let filter: FilterCriteria[] = [];
 
@@ -86,13 +84,7 @@ export class SuggestedFAQHandler implements IAdditionalTableObjectsHandler {
             const stopWords = await this.getStopWords();
             if (handlerConfig.dependencyProperties?.length) {
                 for (const p of handlerConfig.dependencyProperties) {
-                    const formField = formInstance ? formInstance.getFormFieldByProperty(p) : null;
-                    if (formField) {
-                        const value = await formInstance.getFormFieldValueByProperty(p);
-                        if (value && value.value && typeof value.value === 'string') {
-                            filter = await this.setFilter(filter, value.value, service, minLength, stopWords);
-                        }
-                    } else if (ticket && ticket[p] && typeof ticket[p] === 'string') {
+                    if (ticket && ticket[p] && typeof ticket[p] === 'string') {
                         filter = await this.setFilter(filter, ticket[p], service, minLength, stopWords);
                     } else if (formHandler) {
                         const formValue = formHandler.getObjectFormCreator().findFormValue(p);
