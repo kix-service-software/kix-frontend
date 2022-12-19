@@ -217,7 +217,7 @@ export class ConfigItemClassAttributeUtil {
         return false;
     }
 
-    public static getAttribute(attributes: AttributeDefinition[], key: string): AttributeDefinition {
+    public static getAttribute(attributes: AttributeDefinition[] = [], key: string): AttributeDefinition {
         for (const attribute of attributes) {
             if (attribute.Key === key) {
                 return attribute;
