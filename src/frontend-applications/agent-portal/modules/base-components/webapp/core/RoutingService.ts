@@ -130,7 +130,7 @@ export class RoutingService {
         let contextUrl: string;
         let objectId: string;
 
-        if (path.length > 1) {
+        if (path.length) {
             contextUrl = path[0];
             objectId = path[1];
         }
