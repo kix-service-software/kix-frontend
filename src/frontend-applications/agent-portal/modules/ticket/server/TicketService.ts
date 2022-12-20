@@ -50,6 +50,7 @@ import { SysConfigKey } from '../../sysconfig/model/SysConfigKey';
 import { UIComponentPermission } from '../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../server/model/rest/CRUD';
 import { PermissionService } from '../../../server/services/PermissionService';
+import { SysConfigOption } from '../../sysconfig/model/SysConfigOption';
 
 export class TicketAPIService extends KIXObjectAPIService {
 
@@ -726,7 +727,7 @@ export class TicketAPIService extends KIXObjectAPIService {
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         let searchCriteria = criteria.filter((f) =>
             Ticket.SEARCH_PROPERTIES.some((sp) => sp.Property === f.property)
-            && f.operator !== SearchOperator.NOT_EQUALS
+            && (f.operator !== SearchOperator.NOT_EQUALS || f.property === TicketProperty.TYPE_ID)
         );
 
         await this.setUserID(searchCriteria, token);
@@ -774,6 +775,18 @@ export class TicketAPIService extends KIXObjectAPIService {
             && lockCriteria.operator === SearchOperator.EQUALS
         ) {
             lockCriteria.value = lockCriteria.value[0];
+        }
+
+        const ticketNumberCriterion = searchCriteria.find((c) => c.property === TicketProperty.TICKET_NUMBER);
+        if (ticketNumberCriterion) {
+            const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+                token, 'TicketService', KIXObjectType.SYS_CONFIG_OPTION,
+                [SysConfigKey.TICKET_HOOK, SysConfigKey.TICKET_HOOK_DIVIDER], null, null
+            );
+
+            for (const o of options) {
+                ticketNumberCriterion.value = ticketNumberCriterion.value?.toString()?.replace(o.Value, '');
+            }
         }
 
         const hasStateSearch = searchCriteria.some((c) =>

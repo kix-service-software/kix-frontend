@@ -107,30 +107,33 @@ export class AuthenticationService {
 
     public async isAuthenticated(req: Request, res: Response, next: () => void): Promise<void> {
         const token: string = req.cookies.token;
-        if (token) {
-            const remoteAddress = req.headers['x-forwarded-for'] ||
-                req.socket.remoteAddress ||
-                (req.socket ? req.socket.remoteAddress : null);
 
-            this.validateToken(
-                token,
-                Array.isArray(remoteAddress) ? remoteAddress[0] : remoteAddress,
-                'AuthenticationService'
-            ).then((valid) => {
-                if (valid) {
-                    res.cookie('token', token, { httpOnly: true });
-                    next();
-                } else {
-                    res.clearCookie('token');
-                    res.redirect('/auth');
-                }
-            }).catch((error) => {
-                res.clearCookie('token');
-                res.redirect('/auth');
-            });
-        } else {
+        let redirect = true;
+
+        if (token) {
+            let remoteAddress = req.headers['x-forwarded-for'] || req.socket?.remoteAddress;
+            remoteAddress = Array.isArray(remoteAddress) ? remoteAddress[0] : remoteAddress;
+
+            const valid = await this.validateToken(token, remoteAddress, 'AuthenticationService')
+                .catch((error) => false);
+
+            if (valid) {
+                redirect = false;
+                res.cookie('token', token, { httpOnly: true });
+                next();
+            }
+        }
+
+        if (redirect) {
             res.clearCookie('token');
-            res.redirect('/auth');
+
+            let query = '';
+            if (!req.url?.startsWith('auth')) {
+                const url = encodeURIComponent(req.url);
+                query = `?redirectUrl=${url}`;
+            }
+
+            res.redirect(`/auth${query}`);
         }
     }
 

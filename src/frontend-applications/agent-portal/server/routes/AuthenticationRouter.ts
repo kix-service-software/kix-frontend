@@ -113,19 +113,15 @@ export class AuthenticationRouter extends KIXRouter {
                             <body></body>
                         </html>`
                         );
-                    } else {
-                        this.routeToLoginPage(res, req);
                     }
-                } else {
-                    this.routeToLoginPage(res, req);
                 }
             }
-        } else {
-            this.routeToLoginPage(res, req);
         }
+
+        this.routeToLoginPage(req, res);
     }
 
-    private async routeToLoginPage(res: Response, req: Request): Promise<void> {
+    private async routeToLoginPage(req: Request, res: Response): Promise<void> {
         res.clearCookie('token');
         res.clearCookie('authNegotiationDone');
         res.cookie('authNoSSO', true, { httpOnly: true });
@@ -150,10 +146,8 @@ export class AuthenticationRouter extends KIXRouter {
                 const imprintLink = await this.getImprintLink()
                     .catch((e) => '');
 
-                let redirectUrl = '/';
-                if (req.url !== '/auth') {
-                    redirectUrl = req.url;
-                }
+                const url = req.query['redirectUrl']?.toString();
+                const redirectUrl = decodeURIComponent(url) || '/';
 
                 const favIcon = await this.getIcon('agent-portal-icon');
                 const logo = await this.getIcon('agent-portal-logo');

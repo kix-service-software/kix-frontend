@@ -27,6 +27,9 @@ export class NotificationRouter extends KIXRouter {
         return NotificationRouter.INSTANCE;
     }
 
+    private notificationTimeout: any;
+    private notificationsQueue: BackendNotification[] = [];
+
     private constructor() {
         super();
     }
@@ -50,18 +53,33 @@ export class NotificationRouter extends KIXRouter {
 
     private async handleRequest(req: Request, res: Response): Promise<void> {
         if (Array.isArray(req.body)) {
-            const objectEvents: BackendNotification[] = req.body;
-            CacheService.getInstance().updateCaches(objectEvents)
-                .then(() => {
-                    SocketService.getInstance().broadcast(NotificationEvent.UPDATE_EVENTS, objectEvents);
-                }).catch((error) => {
-                    LoggingService.getInstance().error(error);
-                });
+            if (this.notificationTimeout) {
+                clearTimeout(this.notificationTimeout);
+            }
 
-            this.notificationListener.forEach((l) => l(objectEvents));
+            const objectEvents: BackendNotification[] = req.body;
+            for (const event of objectEvents) {
+                const hasEvent = this.notificationsQueue.some(
+                    (e) => e.Namespace === event.Namespace && e.ObjectID === event.ObjectID
+                );
+                if (!hasEvent) {
+                    this.notificationsQueue.push(event);
+                }
+            }
+
+            this.notificationTimeout = setTimeout(() => this.handleNotifications(), 500);
         }
 
         res.status(201).send();
+    }
+
+    private async handleNotifications(): Promise<void> {
+        await CacheService.getInstance().updateCaches(this.notificationsQueue)
+            .catch((error) => LoggingService.getInstance().error(error));
+
+        SocketService.getInstance().broadcast(NotificationEvent.UPDATE_EVENTS, this.notificationsQueue);
+        this.notificationListener.forEach((l) => l(this.notificationsQueue));
+        this.notificationsQueue = [];
     }
 
 
