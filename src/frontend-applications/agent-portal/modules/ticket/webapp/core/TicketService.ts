@@ -139,7 +139,8 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     public async setArticleSeenFlag(ticketId: number, articleId: number): Promise<void> {
-        await TicketSocketClient.getInstance().setArticleSeenFlag(ticketId, articleId);
+        await TicketSocketClient.getInstance().setArticleSeenFlag(ticketId, articleId)
+            .catch((error) => console.error(error));
         EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
     }
 
