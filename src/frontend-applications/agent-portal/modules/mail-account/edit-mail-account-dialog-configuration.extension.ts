@@ -110,19 +110,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
                     new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
-                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                        new KIXObjectLoadingOptions(
-                            [
-                                new FilterCriteria(
-                                    'ParentID', SearchOperator.EQUALS, FilterDataType.STRING,
-                                    FilterType.AND, null
-                                )
-                            ],
-                            null, null,
-                            ['SubQueues'],
-                            ['SubQueues']
-                        )
-                    ),
                     new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true),
                     new FormFieldOption(ObjectReferenceOptions.ADDITIONAL_NODES, [
                         new TreeNode(DispatchingType.FRONTEND_KEY_DEFAULT, 'Translatable#Default'),
