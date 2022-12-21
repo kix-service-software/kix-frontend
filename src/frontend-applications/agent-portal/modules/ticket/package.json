@@ -21,11 +21,6 @@
                 "module": "menu.extension"
             }
         },
-        "kix:router": {
-            "ticket-print-router": {
-                "module": "router.extension"
-            }
-        },
         "kix:configuration": {
             "ticket-configuration": {
                 "module": "configuration.extension"

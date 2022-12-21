@@ -36,6 +36,8 @@ class Component extends FormInputComponent<any, ComponentState> {
                 ignoreProperties = ignoreOption.value;
             }
             this.state.manager = searchDefinition.createFormManager(ignoreProperties);
+            // do not mark viewable states as required
+            this.state.manager['handleViewableStateType'] = false;
 
             this.state.manager.reset();
             this.state.manager.init();

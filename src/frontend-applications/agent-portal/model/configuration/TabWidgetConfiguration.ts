@@ -12,6 +12,8 @@ import { ConfigurationType } from './ConfigurationType';
 
 export class TabWidgetConfiguration implements IConfiguration {
 
+    public application: string = 'agent-portal';
+
     public constructor(
         public id: string,
         public name: string,

@@ -77,8 +77,10 @@ export class ObjectIconService extends KIXObjectAPIService {
 
     public async getObjectIcons(token: string): Promise<ObjectIcon[]> {
         const config = ConfigurationService.getInstance().getServerConfiguration();
+        // unlimit search, else it could possible not found if default limit is too low
+        const loadingOptions = new KIXObjectLoadingOptions(null, null, 0);
         return await super.load<ObjectIcon>(
-            config?.BACKEND_API_TOKEN, KIXObjectType.OBJECT_ICON, this.RESOURCE_URI, null, null, 'ObjectIcon',
+            config?.BACKEND_API_TOKEN, KIXObjectType.OBJECT_ICON, this.RESOURCE_URI, loadingOptions, null, 'ObjectIcon',
             'ObjectIconService', ObjectIcon
         );
     }

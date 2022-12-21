@@ -16,7 +16,7 @@ import { ObjectFormValueMapper } from '../../ObjectFormValueMapper';
 import { ObjectFormValue } from '../ObjectFormValue';
 import { SelectObjectFormValue } from '../SelectObjectFormValue';
 
-export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string> {
+export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string[]> {
 
     public constructor(
         public property: string,
@@ -55,7 +55,9 @@ export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string
 
         this.translatable = Boolean(Number(dynamicField?.Config?.TranslatableValues)) || false;
 
-        await this.setPossibleValuesFromDynamicField();
+        if (!this.possibleValues || !this.possibleValues?.length) {
+            await this.setPossibleValuesFromDynamicField();
+        }
 
         return super.initFormValue();
     }
@@ -88,6 +90,9 @@ export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string
 
     public async loadSelectedValues(): Promise<void> {
         const selectedNodes: TreeNode[] = [];
+        if (this.value && !Array.isArray(this.value)) {
+            this.value = [this.value];
+        }
         if (this.value?.length) {
             const dynamicField = await KIXObjectService.loadDynamicField(this.object?.Name);
             const possibleValues = dynamicField?.Config?.PossibleValues;

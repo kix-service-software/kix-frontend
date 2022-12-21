@@ -13,6 +13,8 @@ import { DataType } from '../DataType';
 
 export class DefaultColumnConfiguration implements IColumnConfiguration {
 
+    public application: string = 'agent-portal';
+
     public constructor(
         public id: string,
         public name: string,

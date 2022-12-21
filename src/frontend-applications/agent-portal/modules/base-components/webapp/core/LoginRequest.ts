@@ -7,15 +7,18 @@
  * --
  */
 
+import { UserType } from '../../../user/model/UserType';
+
 export class LoginRequest {
 
-    public constructor(
-        public userName: string,
-        public password: string,
-        public negotiateToken: string,
-        public redirectUrl: string,
-        public requestId: string,
-        public clientRequestId: string
-    ) { }
+        public constructor(
+                public userName: string,
+                public password: string,
+                public userType: UserType,
+                public negotiateToken: string,
+                public redirectUrl: string,
+                public requestId: string,
+                public clientRequestId: string
+        ) { }
 
 }

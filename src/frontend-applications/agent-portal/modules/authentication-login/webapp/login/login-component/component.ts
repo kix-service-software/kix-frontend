@@ -9,11 +9,11 @@
 
 import { ComponentState } from './ComponentState';
 import * as Bowser from 'bowser';
-import { AgentService } from '../../../user/webapp/core/AgentService';
-import { PortalNotificationService } from '../../../portal-notification/webapp/core/PortalNotificationService';
-import { EventService } from '../../../base-components/webapp/core/EventService';
-import { PortalNotificationEvent } from '../../../portal-notification/model/PortalNotificationEvent';
-import { IEventSubscriber } from '../../../base-components/webapp/core/IEventSubscriber';
+import { AgentService } from '../../../../user/webapp/core/AgentService';
+import { PortalNotificationService } from '../../../../portal-notification/webapp/core/PortalNotificationService';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { PortalNotificationEvent } from '../../../../portal-notification/model/PortalNotificationEvent';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 
 declare const window: Window;
 

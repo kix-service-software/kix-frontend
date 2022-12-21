@@ -21,6 +21,7 @@ import { CreateObjectResponse } from '../../../../modules/base-components/webapp
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXModulesService } from '../../../base-components/webapp/core/KIXModulesService';
 
 export class WebformSocketClient extends SocketClient {
 

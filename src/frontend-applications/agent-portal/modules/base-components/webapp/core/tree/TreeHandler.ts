@@ -230,6 +230,8 @@ export class TreeHandler {
                 if (selectionChanged) {
                     this.tidyUpSelectedNodes(nodes, selected);
                 }
+            } else if (selected && filterSelection) {
+                this.selectedNodes = [];
             }
 
             if (filterSelection) {
@@ -250,7 +252,7 @@ export class TreeHandler {
                 this.selectedNodes = selection;
             }
 
-            // sort to keep always same order (is impotant in report jobs (output formats))
+            // sort to keep always same order (is important in report jobs (output formats))
             this.selectedNodes = SortUtil.sortObjects(this.selectedNodes, 'label');
 
             this.listener.forEach((l) => l(this.getSelectedNodes()));

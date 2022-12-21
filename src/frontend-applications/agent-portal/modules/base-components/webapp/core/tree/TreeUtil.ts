@@ -169,6 +169,8 @@ export class TreeUtil {
                 }
             }
         }
+
+        return null;
     }
 
     public static hasChildrenToShow(node: TreeNode, filterValue: string): boolean {
@@ -257,6 +259,15 @@ export class TreeUtil {
                 return a.label.localeCompare(b.label);
             }
         });
+    }
+
+    public static sortTree(tree: TreeNode[]): void {
+        tree.sort((a, b) => a.label.localeCompare(b.label));
+        for (const n of tree) {
+            if (n.children?.length) {
+                this.sortTree(n.children);
+            }
+        }
     }
 
 }

@@ -10,7 +10,6 @@
 const gulp = require('gulp');
 const path = require('path');
 const clean = require('gulp-clean');
-const uglify = require('gulp-uglify-es').default;
 const license = require('gulp-header-license');
 const fs = require('fs');
 const { series, parallel } = require('gulp');
@@ -117,16 +116,6 @@ function copyPlugins() {
         .pipe(gulp.dest('dist/plugins'));
 }
 
-function uglifyCode() {
-    return gulp.src("dist/**/*.js")
-        .pipe(uglify({
-            ecma: 6,
-            keep_classnames: false,
-            keep_fnames: false,
-        }))
-        .pipe(gulp.dest("dist/"));
-}
-
 function buildAgentPortalApp(cb) {
     gulp
         .src(['./src/frontend-applications/agent-portal/package.json'])
@@ -163,16 +152,21 @@ function buildAgentPortalApp(cb) {
     cb();
 }
 
-const build = series(
+let build = series(
     cleanUp,
-    parallel(licenseHeaderTS, licenseHeaderMarko, licenseHeaderLess, licenseHeaderTests, licenseHeaderCucumber),
     lint,
     compileSrc,
     parallel(copyPlugins, buildAgentPortalApp)
 );
 
-if (process.env.NODE_ENV === "production") {
-    build.apply(uglifyCode);
+if (process.env.NODE_ENV === "development") {
+    build = series(
+        cleanUp,
+        parallel(licenseHeaderTS, licenseHeaderMarko, licenseHeaderLess, licenseHeaderTests, licenseHeaderCucumber),
+        lint,
+        compileSrc,
+        parallel(copyPlugins, buildAgentPortalApp)
+    );
 }
 
 exports.default = build;

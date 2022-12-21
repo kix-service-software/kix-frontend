@@ -53,7 +53,8 @@ export class SearchService {
         return SearchService.INSTANCE;
     }
 
-    private constructor() { }
+    private constructor() {
+    }
 
     private formSearches: Map<KIXObjectType | string, (formId: string) => Promise<any[]>> = new Map();
     private formTableConfigs: Map<KIXObjectType | string, Table> = new Map();
@@ -148,7 +149,8 @@ export class SearchService {
 
     public async searchObjects(
         searchCache: SearchCache,
-        context: SearchContext = ContextService.getInstance().getActiveContext<SearchContext>()
+        context: SearchContext = ContextService.getInstance().getActiveContext<SearchContext>(),
+        additionalIncludes: string[] = []
     ): Promise<KIXObject[]> {
         if (!searchCache) {
             throw new Error('No search available');
@@ -162,6 +164,26 @@ export class SearchService {
         const loadingOptions = await searchDefinition.getLoadingOptions(
             preparedCriteria, searchCache.limit, searchCache.sortAttribute, searchCache.sortDescanding
         );
+
+        const hastDFInCriteria = preparedCriteria.some((criteria) => criteria.property.startsWith('DynamicFields.'));
+        if (hastDFInCriteria) {
+            if (Array.isArray(loadingOptions.includes)) {
+                loadingOptions.includes.push(KIXObjectProperty.DYNAMIC_FIELDS);
+            }
+            else {
+                loadingOptions.includes = [KIXObjectProperty.DYNAMIC_FIELDS];
+            }
+        }
+
+        if (additionalIncludes?.length) {
+            if (Array.isArray(loadingOptions.includes)) {
+                loadingOptions.includes.push(...additionalIncludes);
+            }
+            else {
+                loadingOptions.includes = additionalIncludes;
+            }
+        }
+
         const objects = await KIXObjectService.loadObjects(
             searchCache.objectType, null, loadingOptions, null, false
         );
@@ -378,7 +400,8 @@ export class SearchService {
     }
 
     public async executeSearchCache(
-        id?: string, name?: string, cache?: SearchCache, context?: SearchContext, setSearchContext?: boolean
+        id?: string, name?: string, cache?: SearchCache, context?: SearchContext, setSearchContext?: boolean,
+        additionalIncludes: string[] = []
     ): Promise<KIXObject[]> {
         const search = await SearchSocketClient.getInstance().loadSearch();
         let searchCache = cache || search.find((s) => s.id === id);
@@ -390,7 +413,7 @@ export class SearchService {
             context = await this.setSearchContext(searchCache?.objectType);
         }
 
-        return await this.searchObjects(searchCache, context);
+        return await this.searchObjects(searchCache, context, additionalIncludes);
     }
 
     private async setSearchContext(

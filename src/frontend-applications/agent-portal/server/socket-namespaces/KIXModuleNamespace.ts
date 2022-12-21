@@ -117,7 +117,7 @@ export class KIXModuleNamespace extends SocketNameSpace {
                 const loadingOptions = new KIXObjectLoadingOptions([
                     new FilterCriteria(
                         SysConfigOptionProperty.CONTEXT, SearchOperator.EQUALS, FilterDataType.STRING,
-                        FilterType.AND, 'kix18-web-frontend'
+                        FilterType.AND, 'agent-portal'
                     )
                 ], null, 0);
 

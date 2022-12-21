@@ -36,6 +36,9 @@ import cookie from 'cookie';
 import { User } from '../../modules/user/model/User';
 import { ContextPreference } from '../../model/ContextPreference';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { PluginService } from '../../../../server/services/PluginService';
+import { IMarkoApplication } from '../extensions/IMarkoApplication';
+import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
 
 export class ContextNamespace extends SocketNameSpace {
 
@@ -53,7 +56,7 @@ export class ContextNamespace extends SocketNameSpace {
     }
 
     private rebuildPromise: Promise<void>;
-    private configCache: Map<string, IConfiguration> = new Map();
+    private configCache: Map<string, Map<string, IConfiguration>> = new Map();
 
     protected getNamespace(): string {
         return 'context';
@@ -100,54 +103,12 @@ export class ContextNamespace extends SocketNameSpace {
         if (!this.rebuildPromise) {
             // eslint-disable-next-line no-async-promise-executor
             this.rebuildPromise = new Promise<void>(async (resolve, reject) => {
-                if (CacheService.getInstance().hasCacheBackend()) {
-                    await CacheService.getInstance().deleteKeys('ContextConfiguration', true);
-                } else {
-                    this.configCache.clear();
-                }
+                const applications = await PluginService.getInstance().getExtensions<IMarkoApplication>(
+                    AgentPortalExtensions.MARKO_APPLICATION
+                );
 
-                const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-
-                const loadingOptions = new KIXObjectLoadingOptions([
-                    new FilterCriteria(
-                        SysConfigOptionProperty.CONTEXT, SearchOperator.EQUALS, FilterDataType.STRING,
-                        FilterType.AND, 'kix18-web-frontend'
-                    )
-                ], null, 0);
-
-                let options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
-                    serverConfig.BACKEND_API_TOKEN, 'ContextConfiguration', KIXObjectType.SYS_CONFIG_OPTION, null,
-                    loadingOptions, null
-                ).catch((): SysConfigOption[] => []);
-
-                options = options.filter((o) => o.ValidID === null || o.ValidID === undefined || o.ValidID === 1);
-
-                const contextOptions = options.filter((c) => c.ContextMetadata === 'Context');
-
-
-                LoggingService.getInstance().info(`Build ${contextOptions.length} context configurations.`);
-
-                for (const contextOption of contextOptions) {
-
-                    LoggingService.getInstance().debug(`Sysconfig Option: ${contextOption.Name} (${contextOption.ValidID})`);
-                    if (contextOption.Value) {
-                        const contextConfig = JSON.parse(contextOption.Value) as ContextConfiguration;
-                        LoggingService.getInstance().debug('Sysconfig Option: ' + contextOption.Name);
-
-                        const hasValid = contextConfig.valid !== null && typeof contextConfig.valid !== 'undefined';
-                        if (!hasValid || contextConfig.valid) {
-                            const newConfig = await ContextConfigurationResolver.getInstance().resolve(
-                                serverConfig.BACKEND_API_TOKEN,
-                                contextConfig,
-                                options
-                            );
-                            if (CacheService.getInstance().hasCacheBackend()) {
-                                await CacheService.getInstance().set(newConfig.contextId, newConfig, 'ContextConfiguration');
-                            } else {
-                                this.configCache.set(newConfig.contextId, newConfig);
-                            }
-                        }
-                    }
+                for (const application of applications) {
+                    await this.rebuildApplicationConfigurations(application);
                 }
 
                 this.rebuildPromise = null;
@@ -158,17 +119,69 @@ export class ContextNamespace extends SocketNameSpace {
         return this.rebuildPromise;
     }
 
+    private async rebuildApplicationConfigurations(application: IMarkoApplication): Promise<void> {
+        const hasCacheBackend = CacheService.getInstance().hasCacheBackend();
+        if (hasCacheBackend) {
+            await CacheService.getInstance().deleteKeys(`${application.name}ContextConfiguration`, true);
+        } else {
+            this.configCache.clear();
+        }
+
+        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+
+        const loadingOptions = new KIXObjectLoadingOptions([
+            new FilterCriteria(
+                SysConfigOptionProperty.CONTEXT, SearchOperator.EQUALS, FilterDataType.STRING,
+                FilterType.OR, application.name
+            )
+        ], null, 0);
+
+        const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+            serverConfig.BACKEND_API_TOKEN, 'ContextConfiguration', KIXObjectType.SYS_CONFIG_OPTION, null,
+            loadingOptions, null
+        ).catch((): SysConfigOption[] => []);
+
+        const contextOptions = options.filter((c) => c.ContextMetadata === 'Context');
+
+        LoggingService.getInstance().info(`${application.name}: Build ${contextOptions.length} context configurations.`);
+
+        if (!hasCacheBackend && !this.configCache.has(application.name)) {
+            this.configCache.set(application.name, new Map());
+        }
+
+        for (const contextOption of contextOptions) {
+
+            if (contextOption.Value) {
+                const newConfig = await ContextConfigurationResolver.getInstance().resolve(
+                    serverConfig.BACKEND_API_TOKEN,
+                    JSON.parse(contextOption.Value) as ContextConfiguration,
+                    options
+                );
+
+                if (hasCacheBackend) {
+                    await CacheService.getInstance().set(
+                        newConfig.contextId, newConfig, `${application.name}ContextConfiguration`
+                    );
+                } else {
+                    this.configCache.get(application.name).set(newConfig.contextId, newConfig);
+                }
+            }
+        }
+    }
+
     protected async loadContextConfiguration(
-        data: LoadContextConfigurationRequest, client: Socket)
-        : Promise<SocketResponse<LoadContextConfigurationResponse<any> | SocketErrorResponse>> {
+        data: LoadContextConfigurationRequest, client: Socket
+    ): Promise<SocketResponse<LoadContextConfigurationResponse<any> | SocketErrorResponse>> {
+        const cacheType = `${data.application}ContextConfiguration`;
+
         let configuration = CacheService.getInstance().hasCacheBackend()
-            ? await CacheService.getInstance().get(data.contextId, 'ContextConfiguration')
+            ? await CacheService.getInstance().get(data.contextId, cacheType)
             : this.configCache.get(data.contextId);
 
         if (!configuration) {
             await this.rebuildConfigCache();
             configuration = CacheService.getInstance().hasCacheBackend()
-                ? await CacheService.getInstance().get(data.contextId, 'ContextConfiguration')
+                ? await CacheService.getInstance().get(data.contextId, cacheType)
                 : this.configCache.get(data.contextId);
         }
 
@@ -183,7 +196,7 @@ export class ContextNamespace extends SocketNameSpace {
     }
 
     protected async loadContextConfigurations(
-        data: ISocketRequest
+        data: any
     ): Promise<SocketResponse<ISocketResponse | SocketErrorResponse>> {
         const configurations = [];
 
@@ -192,7 +205,7 @@ export class ContextNamespace extends SocketNameSpace {
         const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria(
                 SysConfigOptionProperty.CONTEXT, SearchOperator.EQUALS, FilterDataType.STRING,
-                FilterType.AND, 'kix18-web-frontend'
+                FilterType.AND, data.application
             )
         ]);
 
@@ -203,8 +216,9 @@ export class ContextNamespace extends SocketNameSpace {
 
         const contextOptions = options.filter((c) => c.ContextMetadata === 'Context');
 
+        const cacheType = `${data.application}ContextConfiguration`;
         for (const contextOption of contextOptions) {
-            const configuration = await CacheService.getInstance().get(contextOption.Name, 'ContextConfiguration');
+            const configuration = await CacheService.getInstance().get(contextOption.Name, cacheType);
 
             if (configuration) {
                 configurations.push(configuration);
@@ -220,7 +234,9 @@ export class ContextNamespace extends SocketNameSpace {
 
     protected async loadStoreContexts(data: any, client: Socket): Promise<SocketResponse<any | SocketErrorResponse>> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
-        const token = parsedCookie ? parsedCookie.token : '';
+
+        const tokenPrefix = client?.handshake?.headers?.tokenprefix || '';
+        const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
         let contextList: ContextPreference[] = [];
         const user = await UserService.getInstance().getUserByToken(token).catch((): User => null);

@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2022-10-24 11:18+0000\n"
-"Last-Translator: fkrahl <Frank.Krahl@cape-it.de>\n"
+"PO-Revision-Date: 2022-12-21 10:18+0000\n"
+"Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
 "Language: de\n"
@@ -60,7 +60,7 @@ msgid "Access Level"
 msgstr "Zugriffsebene"
 
 msgid "Accounted Time"
-msgstr ""
+msgstr "Zeitbuchung"
 
 msgid "Accounted Time: {0}"
 msgstr "Zeitbuchung: {0}"
@@ -167,9 +167,22 @@ msgstr "Minimal vorhandene Anzahl von Zeilen in der Tabelle."
 
 msgid "Admin_DynamicField_Config_Value"
 msgstr ""
+"Vorgabewert wird verwendet um das Feld bei erstmaliger Anzeige zu "
+"initialisieren; bei Textfeldern der zu setzende Inhalt; bei Selection-"
+"Feldern der Key des zu setzendes Wertes; bei Date-/Time-Feldern der Offset "
+"zum Zeitpunkt der Feldanzeige (0=jetzt; 3600=jetzt+1h, leer=keine "
+"Initialisierung); bei Asset-Referenzen die ID des Assets."
 
 msgid "Admin_DynamicFieldDateTime_DefaultValue_Description"
 msgstr ""
+"Vorgabewert wird verwendet um das Feld bei erstmaliger Anzeige zu "
+"initialisieren; Angabe erfolgt als Offset zum Zeitpunkt der Feldanzeige "
+"(0=jetzt; 3600=jetzt+1h, leer=keine Initialisierung)."
+
+msgid "Admin_DynamicField_Edit_Name_Hint"
+msgstr ""
+"Bei Änderung des Feldnamens werden abhängige Konfigurationen NICHT "
+"automatisch aktualisiert!"
 
 msgid "Administration"
 msgstr "Administration"
@@ -316,6 +329,9 @@ msgstr "Erstellzeitpunkt des Artikels"
 
 msgid "Article Data"
 msgstr "Artikeldaten"
+
+msgid "Article has printed"
+msgstr "Artikel wurde gedruckt"
 
 msgid "Article Id"
 msgstr "Artikel ID"
@@ -1013,7 +1029,7 @@ msgid "edited"
 msgstr "bearbeitet"
 
 msgid "edited at {0} by {1}"
-msgstr ""
+msgstr "bearbeitet am {0} durch {1}"
 
 msgid "Edit Email Address"
 msgstr "Emailadresse Bearbeiten"
@@ -2940,6 +2956,9 @@ msgstr "Ausblenden"
 msgid "Hide Message"
 msgstr "Artikeltext ausblenden"
 
+msgid "Hint"
+msgstr "Hinweis"
+
 msgid "History"
 msgstr "Historie"
 
@@ -3025,7 +3044,7 @@ msgid "Include this code into the <head> area of your webpage."
 msgstr "Binden Sie diesen Code in den <head>-Bereich Ihrer Webseite ein."
 
 msgid "Incoming Time"
-msgstr ""
+msgstr "Eingangszeit"
 
 msgid ""
 "Incorrect data mapping. Length of dataset properties is different from value "
@@ -3101,10 +3120,10 @@ msgid "Keywords"
 msgstr "Schlagworte"
 
 msgid "KIX"
-msgstr ""
+msgstr "KIX"
 
 msgid "KIX Forum"
-msgstr ""
+msgstr "KIX Forum"
 
 msgid "Knowledge Database"
 msgstr "Wissensdatenbank"
@@ -3221,7 +3240,7 @@ msgid "Login Name"
 msgstr "Nutzername"
 
 msgid "Log Level"
-msgstr ""
+msgstr "Log Level"
 
 msgid "Logout"
 msgstr "Abmelden"
@@ -3908,6 +3927,9 @@ msgstr "Adresse"
 msgid "Preferences"
 msgstr "Persönliche Einstellungen"
 
+msgid "Prepare Article for print"
+msgstr "Artikel für Druck vorbereiten"
+
 msgid "Prepare asset for print"
 msgstr "Bereite Assetdaten zum Druck auf"
 
@@ -3981,7 +4003,7 @@ msgid "Queues"
 msgstr "Teams"
 
 msgid "Quick Start Guide"
-msgstr ""
+msgstr "Quick Start Guide"
 
 msgid "QuickstartGuide_Text_End"
 msgstr "Nun sind Sie bereit, mit KIX 18 zu starten. Viel Freude!"
@@ -4239,7 +4261,7 @@ msgid "Results"
 msgstr "Ergebnisse"
 
 msgid "Richtext"
-msgstr ""
+msgstr "Richtext"
 
 msgid "Role"
 msgstr "Rolle"
@@ -4479,7 +4501,7 @@ msgid "setup_assistant_welcome_text"
 msgstr ""
 "Bitte führen Sie die folgenden Schritte aus, um die Grundeinstellungen für "
 "KIX zu setzen. Nähere Informationen dazu finden Sie auch im Admin-Handbuch "
-"im Abschnitt „Ersteinrichtigung“."
+"im Abschnitt „Ersteinrichtung“."
 
 msgid "Setup email server"
 msgstr "E-Mail-Server einrichten"
@@ -4572,7 +4594,7 @@ msgid "Split Option"
 msgstr "Trennoptionen"
 
 msgid "SSP"
-msgstr ""
+msgstr "SSP"
 
 msgid "Standard"
 msgstr "Standard"
@@ -4869,6 +4891,9 @@ msgstr "Ticketdaten"
 msgid "Ticket Flags"
 msgstr "Ticket Kennzeichnung"
 
+msgid "Ticket has printed"
+msgstr "Ticket wurde gedruckt"
+
 msgid "Ticket History"
 msgstr "Ticket Historie"
 
@@ -4947,7 +4972,7 @@ msgid "Title"
 msgstr "Titel"
 
 msgid "to"
-msgstr ""
+msgstr "bis"
 
 msgid "To"
 msgstr "To"
@@ -5250,7 +5275,7 @@ msgid "Your rating"
 msgstr "Ihre Bewertung"
 
 msgid "Youtube"
-msgstr ""
+msgstr "Youtube"
 
 msgid "You will edit {0} attributes for {1} {2}. Execute now?"
 msgstr "Sie ändern {0} Attribute an {1} {2}. Jetzt starten?"

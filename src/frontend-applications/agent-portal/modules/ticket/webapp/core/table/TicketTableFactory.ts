@@ -167,4 +167,19 @@ export class TicketTableFactory extends TableFactory {
         ];
     }
 
+    public getDefaultColumnConfiguration(property: string, translatable?: boolean): IColumnConfiguration {
+        let config: IColumnConfiguration;
+        if (property === TicketProperty.PENDING_TIME) {
+            config = new DefaultColumnConfiguration(null, null, null,
+                TicketProperty.PENDING_TIME, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
+            );
+        }
+
+        if (!config) {
+            config = super.getDefaultColumnConfiguration(property, translatable);
+        }
+
+        return config;
+    }
+
 }

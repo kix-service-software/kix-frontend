@@ -7,10 +7,32 @@
  * --
  */
 
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
+import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { DateTimeUtil } from '../../../../../base-components/webapp/core/DateTimeUtil';
+import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { DateTimeFormValue } from '../../../../../object-forms/model/FormValues/DateTimeFormValue';
+import { Article } from '../../../../model/Article';
+import { ArticleLoadingOptions } from '../../../../model/ArticleLoadingOptions';
+import { ArticleProperty } from '../../../../model/ArticleProperty';
 
 export class IncomingTimeFormValue extends DateTimeFormValue {
+
+    public async initFormValue(): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
+        let value: Date;
+        const refArticleId = context?.getAdditionalInformation('ARTICLE_UPDATE_ID');
+        if (refArticleId) {
+            const refTicketId = context?.getObjectId();
+            const refArticle = await this.loadReferencedArticle(Number(refTicketId), refArticleId);
+            if (refArticle) {
+                const date = new Date(Number(refArticle.IncomingTime) * 1000);
+                value = date;
+            }
+        }
+        return super.setFormValue(value);
+    }
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {
         if (!isNaN(value)) {
@@ -21,9 +43,23 @@ export class IncomingTimeFormValue extends DateTimeFormValue {
 
     public setObjectValue(value: any): Promise<void> {
         if (value) {
-            value = DateTimeUtil.getKIXDateTimeString(value, true);
+            value = DateTimeUtil.getKIXDateTimeString(value);
         }
         return super.setObjectValue(value);
+    }
+
+    private async loadReferencedArticle(refTicketId: number, refArticleId: number): Promise<Article> {
+        let article: Article;
+        if (refArticleId && refTicketId) {
+            const articles = await KIXObjectService.loadObjects<Article>(
+                KIXObjectType.ARTICLE, [refArticleId], new KIXObjectLoadingOptions(
+                    null, null, null, [ArticleProperty.ATTACHMENTS]
+                ),
+                new ArticleLoadingOptions(refTicketId), true
+            ).catch(() => [] as Article[]);
+            article = articles.find((a) => a.ArticleID === refArticleId);
+        }
+        return article;
     }
 
 }

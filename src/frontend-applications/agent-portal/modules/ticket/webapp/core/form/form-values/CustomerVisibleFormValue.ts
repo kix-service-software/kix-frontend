@@ -40,6 +40,7 @@ export class CustomerVisibleFormValue extends BooleanFormValue {
                 this.value = refArticle?.CustomerVisible;
             }
         }
+
         const ticket = this.objectValueMapper?.object ? this.objectValueMapper.object as Ticket : null;
         if (ticket?.Articles?.length) {
             this.ticketBindingIds.push(

@@ -10,7 +10,7 @@
 import { Request, Response } from 'express';
 import { KIXRouter } from './KIXRouter';
 
-import { AuthenticationService } from '../services/AuthenticationService';
+import { AuthenticationService } from '../../../../server/services/AuthenticationService';
 
 import path from 'path';
 import { SysConfigService } from '../../modules/sysconfig/server/SysConfigService';

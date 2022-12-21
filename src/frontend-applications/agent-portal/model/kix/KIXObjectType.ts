@@ -11,7 +11,7 @@ export enum KIXObjectType {
 
     ANY = 'ANY',
 
-    ATTACHMENT = 'ATTACHMENT',
+    ATTACHMENT = 'Attachment',
 
     ARTICLE = 'Article',
 
@@ -72,6 +72,10 @@ export enum KIXObjectType {
     GRAPH = 'Graph',
 
     GRAPH_INSTANCE = 'GraphInstance',
+
+    HTML_TO_PDF = 'HTMLToPDF',
+
+    HTML_TO_PDF_TEMPLATE = 'HTMLToPDFTemplate',
 
     IMPORT_EXPORT_TEMPLATE = 'ImportExportTemplate',
 

@@ -22,7 +22,9 @@ export class ObjectFormValidator {
     private validators: ObjectFormValueValidator[];
     private subscriber: IEventSubscriber;
 
-    public enabled: boolean = true;
+    private enabled: boolean = true;
+
+    private validationQueue: ObjectFormValue[] = [];
 
     public constructor(private objectFormValueMapper: ObjectFormValueMapper) {
         this.validators = ObjectFormRegistry.getInstance().createValidators();
@@ -44,12 +46,27 @@ export class ObjectFormValidator {
         EventService.getInstance().subscribe(ObjectFormEvent.OBJECT_FORM_VALUE_CHANGED, this.subscriber);
     }
 
+    public enable(): void {
+        this.enabled = true;
+
+        for (const fv of this.validationQueue) {
+            this.validate(fv);
+        }
+
+        this.validationQueue = [];
+    }
+
+    public disable(): void {
+        this.enabled = false;
+    }
+
     public async validateForm(): Promise<boolean> {
         let valid = true;
 
         if (this.enabled && this.objectFormValueMapper?.initialized) {
-            await this.validateFormValues(this.objectFormValueMapper?.getFormValues());
-            valid = this.isFormValid(this.objectFormValueMapper?.getFormValues());
+            const formValues = this.objectFormValueMapper?.getFormValues();
+            await this.validateFormValues(formValues);
+            valid = this.isFormValid(formValues);
         }
 
         return valid;
@@ -70,15 +87,21 @@ export class ObjectFormValidator {
 
     public async validate(formValue: ObjectFormValue, force?: boolean): Promise<void> {
         if ((this.enabled || force) && this.objectFormValueMapper?.initialized && !formValue?.isCountHandler) {
-            const result: ValidationResult[] = [];
-            if (formValue.enabled) {
-                for (const validator of this.validators) {
-                    const validationResult = await validator.validate(formValue);
-                    result.push(...validationResult);
-                }
-            }
-            formValue.setValidationResult(result);
+            await this.validateFormValue(formValue);
+        } else if (!this.validationQueue.some((fv) => fv.instanceId === formValue.instanceId)) {
+            this.validationQueue.push(formValue);
         }
+    }
+
+    private async validateFormValue(formValue: ObjectFormValue): Promise<void> {
+        const result: ValidationResult[] = [];
+        if (formValue.enabled) {
+            for (const validator of this.validators) {
+                const validationResult = await validator.validate(formValue);
+                result.push(...validationResult);
+            }
+        }
+        formValue.setValidationResult(result);
     }
 
     public isFormValid(formValues: ObjectFormValue[]): boolean {

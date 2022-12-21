@@ -123,7 +123,7 @@ class ProfileTask {
         public id, public category: string, public message: string, inputData: ProfilingData
     ) {
         this.startTime = new Date().getTime();
-        this.message = this.message.replace(new RegExp('"Content":".*="'), '"Content":"..."');
+        this.message = this.message.replace(new RegExp('"Content":".*=?(\\n)?"'), '"Content":"..."');
         this.clientRequestId = '<none>';
 
         if (inputData) {

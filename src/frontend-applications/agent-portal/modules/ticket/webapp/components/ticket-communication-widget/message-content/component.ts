@@ -56,11 +56,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         // on update, some article was already loaded
         if (this.state.article && this.state.article.ArticleID !== this.article.ArticleID) {
             await this.loadArticle(undefined, true);
-        } else {
+        } else if (oldChangeTime !== currChangeTime) {
             this.state.article = this.article;
-            if (oldChangeTime !== currChangeTime) {
-                this.prepareArticleData();
-            }
+            this.prepareArticleData();
         }
 
         if (input.collapseAll) {
@@ -173,6 +171,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (plainTextAction?.length) {
             plainTextAction[0].setData(this.state.article);
             actions.push(...plainTextAction);
+        }
+
+        const printAction = await ActionFactory.getInstance().generateActions(['article-print-action'], this.state.article);
+        if (printAction?.length) {
+            printAction[0].setData(this.state.article);
+            actions.push(...printAction);
         }
 
         const filteredActions = [];

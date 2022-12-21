@@ -159,7 +159,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public setTableHeight(): void {
-        this.state.tableHeight = 'unset';
+        this.state.tableHeight = '100%';
         const tableConfiguration = this.state.table?.getTableConfiguration();
 
         if (tableConfiguration?.displayLimit) {

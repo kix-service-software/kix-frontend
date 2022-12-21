@@ -25,6 +25,8 @@ export enum AdditionalContextInformation {
 
     FORM_CONFIGURATION = 'FORM_CONFIGURATION',
 
-    LOADING = 'LOADING'
+    LOADING = 'LOADING',
+
+    INCLUDES = 'INCLUDES'
 
 }

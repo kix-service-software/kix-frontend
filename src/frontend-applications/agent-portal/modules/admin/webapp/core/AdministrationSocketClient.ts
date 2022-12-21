@@ -17,6 +17,7 @@ import { SocketErrorResponse } from '../../../../modules/base-components/webapp/
 import { ISocketRequest } from '../../../../modules/base-components/webapp/core/ISocketRequest';
 import { ClientStorageService } from '../../../../modules/base-components/webapp/core/ClientStorageService';
 import { AdminModule } from '../../model/AdminModule';
+import { KIXModulesService } from '../../../base-components/webapp/core/KIXModulesService';
 
 export class AdministrationSocketClient extends SocketClient {
 

@@ -40,7 +40,7 @@ export class Version extends KIXObject {
     public CurInciStateType: string;
     public Data: any;
     public PreparedData: PreparedData[] = [];
-    public isCurrentVersion: boolean = false;
+    public IsLastVersion: boolean = false;
     public countNumber: number;
     public Definition: ConfigItemClassDefinition;
 
@@ -70,7 +70,7 @@ export class Version extends KIXObject {
             this.CurInciStateType = version.CurInciStateType;
             this.Data = version.Data;
             this.PreparedData = version.PreparedData;
-            this.isCurrentVersion = version.isCurrentVersion;
+            this.IsLastVersion = Boolean(version.IsLastVersion);
             this.countNumber = version.countNumber;
             this.Definition = version.Definition;
         }

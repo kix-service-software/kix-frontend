@@ -122,6 +122,13 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_CATEGORY);
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_VOTE);
+                cacheKeyPrefixes.push(KIXObjectType.FAQ_KEYWORD);
+            } else if (namespace[0] === 'Ticket') {
+                cacheKeyPrefixes.push(namespace[0]);
+                cacheKeyPrefixes.push(namespace[1]);
+                if (namespace[2]) {
+                    cacheKeyPrefixes.push(namespace[2]);
+                }
             } else {
                 cacheKeyPrefixes.push(namespace[0]);
             }
@@ -154,6 +161,7 @@ export class BrowserCacheService {
                 break;
             case KIXObjectType.FAQ_ARTICLE:
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_CATEGORY);
+                cacheKeyPrefixes.push(KIXObjectType.FAQ_KEYWORD);
                 break;
             case KIXObjectType.FAQ_CATEGORY:
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
@@ -259,7 +267,6 @@ export class BrowserCacheService {
                 break;
             case KIXObjectType.ARTICLE:
                 cacheKeyPrefixes.push(KIXObjectType.ATTACHMENT);
-                cacheKeyPrefixes.push('Ticket-Article-Attachment');
                 break;
             default:
         }

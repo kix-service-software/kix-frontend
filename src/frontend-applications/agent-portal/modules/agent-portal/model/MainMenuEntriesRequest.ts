@@ -13,7 +13,8 @@ export class MainMenuEntriesRequest implements ISocketRequest {
 
     public constructor(
         public requestId: string,
-        public clientRequestId: string
+        public clientRequestId: string,
+        public tokenPrefrix: string = ''
     ) { }
 
 }
