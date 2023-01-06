@@ -370,9 +370,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         this.specificLoadingOptions = specificLoadingOptions?.value;
 
         const objectIdOption = this.state.field?.options?.find((o) => o.option === ObjectReferenceOptions.OBJECT_IDS);
-        this.objectIds = objectIdOption && Array.isArray(objectIdOption.value) && objectIdOption.value.length
-            ? objectIdOption.value
-            : null;
+        this.objectIds = objectIdOption?.value;
 
         if (this.state.field?.countMax && this.state.field?.countMax > 1) {
             const uniqueOption = this.state.field?.options?.find((o) => o.option === ObjectReferenceOptions.UNIQUE);
