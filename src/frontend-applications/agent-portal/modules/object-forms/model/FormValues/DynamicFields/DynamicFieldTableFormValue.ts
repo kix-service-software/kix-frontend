@@ -75,7 +75,7 @@ export class DynamicFieldTableFormValue extends ObjectFormValue<Array<string[]>>
         if (!this.value) {
             this.addInitialTable();
         } else if (typeof this.value === 'string') {
-            this.setFormValue(this.value);
+            this.setFormValue(this.value, true);
         }
     }
 

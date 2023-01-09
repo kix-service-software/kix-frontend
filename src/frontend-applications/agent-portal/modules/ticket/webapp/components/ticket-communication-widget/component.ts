@@ -156,7 +156,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public collapseAll(): void {
         this.state.collapseAll = true;
-        (this as any).setStateDirty('collapseAll');
+        setTimeout(() => {
+            this.state.collapseAll = false;
+        }, 100);
     }
 
     public scrollToTop(event: any): void {

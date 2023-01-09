@@ -87,7 +87,7 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
                     this.treeHandler.setTree(nodes);
                 }
             } else if (typeof contactId === 'string') {
-                const node = new TreeNode(contactId, contactId.toString());
+                const node = new TreeNode(contactId, contactId?.toString());
                 this.possibleValues = [contactId];
                 this.treeHandler.setTree([node]);
             } else {
@@ -125,7 +125,7 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
                 organisationId = contact.PrimaryOrganisationID;
 
                 // current value is acceptable - do not changed
-                if (this.value && this.possibleValues?.some((pv) => pv.toString() === this.value.toString())) {
+                if (this.value && this.possibleValues?.some((pv) => pv?.toString() === this.value?.toString())) {
                     return;
                 }
             }

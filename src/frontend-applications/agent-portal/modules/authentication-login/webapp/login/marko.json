@@ -1,11 +1,10 @@
 {
     "taglibImports": [
         "@lasso/marko-taglib/marko.json",
-        "../../base-components/marko.json"
+        "../../../base-components/marko.json"
     ],
     "tags-dir": [
         "./",
-        "login-component",
-        "../../base-components"
+        "login-component"
     ]
 }

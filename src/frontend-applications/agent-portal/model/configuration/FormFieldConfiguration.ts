@@ -18,6 +18,8 @@ export class FormFieldConfiguration implements IConfiguration {
 
     public parent: FormFieldConfiguration;
 
+    public application: string = 'agent-portal';
+
     public constructor(
         public id: string,
         public label: string,

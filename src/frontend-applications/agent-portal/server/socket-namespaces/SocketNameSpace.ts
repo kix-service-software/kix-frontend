@@ -8,7 +8,7 @@
  */
 
 import { ISocketNamespace } from './ISocketNamespace';
-import { AuthenticationService } from '../services/AuthenticationService';
+import { AuthenticationService } from '../../../../server/services/AuthenticationService';
 import { SocketEvent } from '../../modules/base-components/webapp/core/SocketEvent';
 import { ISocketRequest } from '../../modules/base-components/webapp/core/ISocketRequest';
 import { ProfilingService } from '../../../../server/services/ProfilingService';
@@ -16,7 +16,7 @@ import { SocketResponse } from '../../modules/base-components/webapp/core/Socket
 import { ConfigurationService } from '../../../../server/services/ConfigurationService';
 import { LoggingService } from '../../../../server/services/LoggingService';
 import { Namespace, Server, Socket } from 'socket.io';
-import { SocketAuthenticationError } from '../../modules/base-components/webapp/core/SocketAuthenticationError';
+import { SocketAuthenticationError } from '../../../../server/model/SocketAuthenticationError';
 import { PermissionError } from '../../modules/user/model/PermissionError';
 import { SocketErrorResponse } from '../../modules/base-components/webapp/core/SocketErrorResponse';
 import { RequestCounter } from '../../../../server/services/RequestCounter';

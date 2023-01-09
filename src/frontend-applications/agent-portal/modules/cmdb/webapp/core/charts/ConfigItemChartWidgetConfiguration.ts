@@ -15,6 +15,8 @@ import { ChartComponentConfiguration } from '../../../../report-charts/model/Cha
 
 export class ConfigItemChartWidgetConfiguration implements IConfiguration {
 
+    public application: string = 'agent-portal';
+
     public constructor(
         public id: string,
         public name: string,

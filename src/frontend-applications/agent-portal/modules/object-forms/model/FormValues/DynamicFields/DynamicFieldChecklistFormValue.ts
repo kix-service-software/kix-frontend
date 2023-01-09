@@ -48,9 +48,9 @@ export class DynamicFieldChecklistFormValue extends ObjectFormValue<CheckListIte
         }
 
         if (!this.value && config?.DefaultValue) {
-            this.setFormValue(config?.DefaultValue);
+            this.setFormValue(config?.DefaultValue, true);
         } else if (typeof this.value === 'string') {
-            this.setFormValue(this.value);
+            this.setFormValue(this.value, true);
         }
     }
 
@@ -70,6 +70,7 @@ export class DynamicFieldChecklistFormValue extends ObjectFormValue<CheckListIte
             } else {
                 newValue = value;
             }
+
             await super.setFormValue(newValue, force);
             await this.setObjectValue(newValue);
         } catch (e) {

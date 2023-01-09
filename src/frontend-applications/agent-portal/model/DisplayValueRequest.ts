@@ -16,6 +16,7 @@ export class DisplayValueRequest implements ISocketRequest {
         public requestId: string,
         public clientRequestId: string,
         public objectType: KIXObjectType | string,
-        public objectId: string | number
+        public objectId: string | number,
+        public tokenPrefrix: string = ''
     ) { }
 }

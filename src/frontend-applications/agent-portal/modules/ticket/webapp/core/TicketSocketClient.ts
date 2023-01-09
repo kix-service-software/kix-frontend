@@ -43,8 +43,8 @@ export class TicketSocketClient extends SocketClient {
 
         const cacheKey = `${ticketId}-${articleId}-${attachmentId}`;
 
-        if (BrowserCacheService.getInstance().has(cacheKey, 'Ticket-Article-Attachment')) {
-            return BrowserCacheService.getInstance().get(cacheKey, 'Ticket-Article-Attachment');
+        if (BrowserCacheService.getInstance().has(cacheKey, KIXObjectType.ATTACHMENT)) {
+            return BrowserCacheService.getInstance().get(cacheKey, KIXObjectType.ATTACHMENT);
         }
 
         const socketTimeout = ClientStorageService.getSocketTimeout();
@@ -75,7 +75,7 @@ export class TicketSocketClient extends SocketClient {
             this.socket.emit(TicketEvent.LOAD_ARTICLE_ATTACHMENT, request);
         });
 
-        BrowserCacheService.getInstance().set(cacheKey, requestPromise, 'Ticket-Article-Attachment');
+        BrowserCacheService.getInstance().set(cacheKey, requestPromise, KIXObjectType.ATTACHMENT);
         return await requestPromise;
     }
 

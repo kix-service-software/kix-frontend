@@ -395,13 +395,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (schedule) {
             const template = KIXModulesService.getComponentTemplate('calendar-schedule-details');
 
+            const loadingOptions = new KIXObjectLoadingOptions();
+            loadingOptions.includes = [KIXObjectProperty.DYNAMIC_FIELDS];
+
             const tickets = await KIXObjectService.loadObjects<Ticket>(
-                KIXObjectType.TICKET, [schedule.raw.TicketID]
+                KIXObjectType.TICKET, [schedule.raw.TicketID], loadingOptions
             );
 
             if (tickets && tickets.length) {
                 const content = template?.default?.renderSync({
-                    ticket: tickets[0], calendarConfig: this.calendarConfig,
+                    ticket: tickets[0],
+                    calendarConfig: this.calendarConfig,
                     isPending: isNaN(Number(schedule.id))
                 });
 

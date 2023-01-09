@@ -19,6 +19,8 @@ export enum OverlayType {
 
     HINT_TOAST = 'HINT_TOAST',
 
+    INFO_TOAST = 'INFO_TOAST',
+
     CONTENT_OVERLAY = 'CONTENT_OVERLAY',
 
     CONFIRM = 'CONFIRM',

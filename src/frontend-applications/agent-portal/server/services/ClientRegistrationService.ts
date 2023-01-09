@@ -191,7 +191,7 @@ export class ClientRegistrationService extends KIXObjectAPIService {
                     Name: c.id,
                     Description: name,
                     Default: JSON.stringify(c),
-                    Context: 'kix18-web-frontend',
+                    Context: c.application || 'kix-frontend-unknown',
                     ContextMetadata: c.type,
                     Type: 'String',
                     IsRequired: 0,
@@ -205,7 +205,7 @@ export class ClientRegistrationService extends KIXObjectAPIService {
                 Name: SysConfigKey.BROWSER_SOCKET_TIMEOUT_CONFIG,
                 Description: 'Timeout (in ms) configuration for socket requests.',
                 Default: '30000',
-                Context: 'kix18-web-frontend',
+                Context: 'agent-portal',
                 ContextMetadata: 'agent-portal-configuration',
                 Type: 'String',
                 IsRequired: 0
@@ -217,7 +217,7 @@ export class ClientRegistrationService extends KIXObjectAPIService {
                 Name: SysConfigKey.SETUP_ASSISTANT_STATE,
                 Description: 'The state of the setup steps for the agent portal setup assistant.',
                 Default: JSON.stringify([]),
-                Context: 'kix18-web-frontend',
+                Context: 'agent-portal',
                 ContextMetadata: 'agent-portal-configuration',
                 Type: 'String',
                 IsRequired: 0

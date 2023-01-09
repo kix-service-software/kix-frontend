@@ -355,4 +355,30 @@ describe('SelectObjectFormValue', () => {
         });
     });
 
+    describe('Multiselect + FreeText: Filter selected values', () => {
+
+        let formValue: SelectObjectFormValue;
+
+        before(async () => {
+            const objectFormValueMapper = new TestObjectValueMapper();
+            const object = new TestFormObject();
+
+            formValue = new SelectObjectFormValue('testProperty1', object, objectFormValueMapper, null);
+            await formValue.initFormValue();
+
+            const values = ['', null, undefined, 3, '*asd', 'something', '7', '***', 8, '        '];
+            formValue.multiselect = true;
+            formValue.freeText = true;
+            await formValue.setFormValue(values);
+        });
+
+        it('Should have length 4', () => {
+            expect(formValue.value.length).equals(4);
+        });
+
+        it('Should only have valid values', () => {
+            expect(formValue.value).to.deep.equal([3, 'something', '7', 8]);
+        });
+    });
+
 });

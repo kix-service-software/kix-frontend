@@ -259,6 +259,8 @@ class OverlayComponent {
                 return 'toast-overlay success-toast';
             case OverlayType.HINT_TOAST:
                 return 'toast-overlay reload-toast';
+            case OverlayType.INFO_TOAST:
+                return 'toast-overlay info-toast';
             case OverlayType.ERROR_TOAST:
                 return 'toast-overlay error-toast';
             case OverlayType.CONTENT_OVERLAY:
@@ -306,7 +308,8 @@ class OverlayComponent {
     }
 
     public isToast(): boolean {
-        return this.state.type === OverlayType.SUCCESS_TOAST;
+        return this.state.type === OverlayType.SUCCESS_TOAST
+            || this.state.type === OverlayType.INFO_TOAST;
     }
 
     public canResize(): boolean {

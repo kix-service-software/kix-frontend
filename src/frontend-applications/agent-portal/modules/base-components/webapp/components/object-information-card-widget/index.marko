@@ -24,67 +24,77 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </for>
                 </if>
             </div>
-            <div.info-rows>
-                <for|row| of=state.information>
-                    <if(row.title)>
-                        <div.info-row-title class={
+            <if(state.valuesReady)>
+                <div.info-rows>
+                    <for|row, index| of=state.information>
+                        <if(row.title)>
+                            <div.info-row-title class={
+                                "no-value": !component.hasRowValue(row),
+                                separator: row.separator
+                            }>
+                                <translation-string pattern=row.title/>
+                            </div>
+                        </if>
+                        <div.info-row-content class={
+                            "no-title": !row.title,
+                            "no-value": !component.hasRowValue(row),
+                            "created-by-row": component.isRowWithCreatedBy(index),
                             separator: row.separator
-                        }>
-                            <translation-string pattern=row.title/>
-                        </div>
-                    </if>
-                    <div.info-row-content class={
-                        "no-title": !row.title,
-                        separator: row.separator
-                    }>
-                        <for|group| of=row.values>
-                            <div.info-group>
-                                <for|info| of=group>
-                                    <if(info.componentId)>
-                                        <div>
-                                            <div style=info.textStyle>${info.preparedText}</div>
-                                            <div.component-value>
-                                                <link-target
-                                                    routingConfiguration=info.routingConfiguration
-                                                    objectId=info.routingObjectId>
-                                                    <@content>
-                                                        <${state.templates[
-                                                            info.componentId
-                                                        ]} ...info.componentData/>
-                                                    </@content>
-                                                </link-target>
-                                            </div>
-                                        </div>
-                                    </if>
-                                    <else-if(info.preparedText)>
-                                        <div.info-value>
-                                            <div style=info.iconStyle title=info.preparedText>
-                                                <icon icon=info.icon/>
-                                            </div>
-                                            <span style=info.textStyle title=info.preparedText>
-                                                <if(info.routingConfiguration)>
+                        } style=component.getCustomRowStyle(index)
+                        >
+                            <for|group, groupIndex| of=row.values>
+                                <div.info-group class={
+                                    "no-value": !component.hasValue(group),
+                                    "only-icon": group.length === 1 && group[0].componentId === 'icon',
+                                    "me-2": groupIndex === row.values.length - 1
+                                }>
+                                    <for|info| of=group>
+                                        <if(info.componentId)>
+                                            <div>
+                                                <div style=info.textStyle>${info.preparedText}</div>
+                                                <div.component-value>
                                                     <link-target
                                                         routingConfiguration=info.routingConfiguration
                                                         objectId=info.routingObjectId>
-                                                        <@content>${info.preparedText}</@content>
+                                                        <@content>
+                                                            <${state.templates[
+                                                                info.componentId
+                                                            ]} ...info.componentData on-setDataMapValue('setDataMapValue')/>
+                                                        </@content>
                                                     </link-target>
-                                                </if>
-                                                <else-if(
-                                                    info.linkSrc &&
-                                                    info.preparedLinkSrc
-                                                )>
-                                                    <a href=info.preparedLinkSrc target="_blank">${info.preparedText}</a>
-                                                </else-if>
-                                                <else>${info.preparedText}</else>
-                                            </span>
-                                        </div>
-                                    </else-if>
-                                </for>
-                            </div>
-                        </for>
-                    </div>
-                </for>
-            </div>
+                                                </div>
+                                            </div>
+                                        </if>
+                                        <else-if(info.preparedText)>
+                                            <div.info-value class={"no-component-values": !state.hasComponentValues, "with-icon": info.icon}>
+                                                <div style=info.iconStyle title=info.preparedText>
+                                                    <icon icon=info.icon/>
+                                                </div>
+                                                <span style=info.textStyle title=info.preparedText>
+                                                    <if(info.routingConfiguration)>
+                                                        <link-target
+                                                            routingConfiguration=info.routingConfiguration
+                                                            objectId=info.routingObjectId>
+                                                            <@content>${info.preparedText}</@content>
+                                                        </link-target>
+                                                    </if>
+                                                    <else-if(
+                                                        info.linkSrc &&
+                                                        info.preparedLinkSrc
+                                                    )>
+                                                        <a href=info.preparedLinkSrc target="_blank">${info.preparedText}</a>
+                                                    </else-if>
+                                                    <else>${info.preparedText}</else>
+                                                </span>
+                                            </div>
+                                        </else-if>
+                                    </for>
+                                </div>
+                            </for>
+                        </div>
+                    </for>
+                </div>
+            </if>
         </div>
     </@content>
 </widget>

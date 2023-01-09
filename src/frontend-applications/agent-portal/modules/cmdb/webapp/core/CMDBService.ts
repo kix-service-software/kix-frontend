@@ -338,6 +338,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 const loadingOptions = new KIXObjectLoadingOptions(
                     null, null, null, [ConfigItemClassProperty.CURRENT_DEFINITION]
                 );
+                loadingOptions.cacheType = `${KIXObjectType.CONFIG_ITEM_CLASS}_DEFINITION`;
 
                 const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
                     KIXObjectType.CONFIG_ITEM_CLASS, [configItem?.ClassID], loadingOptions
@@ -378,8 +379,8 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
             for (let i = 0; i < propertyIndex; ++i) {
                 const key = pathArray[i];
 
-                const attribute = await ConfigItemClassAttributeUtil.getAttribute(
-                    ciClass.CurrentDefinition.Definition, key
+                const attribute = ConfigItemClassAttributeUtil.getAttribute(
+                    ciClass?.CurrentDefinition?.Definition, key
                 );
 
                 let subStructure = obj[key];

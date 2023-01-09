@@ -18,6 +18,8 @@ export class ReportChartWidgetConfiguration implements IConfiguration {
     public type: string = ConfigurationType.ChartWidget;
     public subConfigurationDefinition?: ConfigurationDefinition;
 
+    public application: string = 'agent-portal';
+
     public constructor(
         public id: string,
         public name: string,

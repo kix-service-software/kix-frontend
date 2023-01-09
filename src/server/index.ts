@@ -29,7 +29,7 @@ import { MarkoService } from '../frontend-applications/agent-portal/server/servi
 import { SocketService } from '../frontend-applications/agent-portal/server/services/SocketService';
 import { PluginService } from './services/PluginService';
 import { Server } from '../frontend-applications/agent-portal/server/Server';
-import { AuthenticationService } from '../frontend-applications/agent-portal/server/services/AuthenticationService';
+import { AuthenticationService } from './services/AuthenticationService';
 
 const path = require('path');
 

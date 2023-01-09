@@ -32,12 +32,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.update();
+        await this.update();
     }
 
     private async update(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         const contextObject = await context.getObject();
+        let hasValue = false;
         if (contextObject) {
             if (this.property) {
 
@@ -53,6 +54,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.description = await LabelService.getInstance().getPropertyText(
                     this.property, contextObject.KIXObjectType
                 );
+
+                hasValue = this.state.displayText && this.state.displayText.length > 0 ||
+                    icons && icons.length > 0;
             } else {
                 this.state.displayText = await PlaceholderService.getInstance().replacePlaceholders(
                     this.text, contextObject
@@ -61,8 +65,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.description = await PlaceholderService.getInstance().replacePlaceholders(
                     this.description, contextObject
                 );
+                hasValue = this.state.displayText && this.state.displayText.length > 0;
             }
         }
+        if (!hasValue) {
+            this.updateParent(this.property, hasValue);
+        }
+    }
+
+    private updateParent(property: string, hasValue: boolean): void {
+        (this as any).emit('setDataMapValue', [property, hasValue]);
     }
 }
 

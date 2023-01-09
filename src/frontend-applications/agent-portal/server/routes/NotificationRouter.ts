@@ -9,7 +9,7 @@
 
 import { Request, Response } from 'express';
 import { KIXRouter } from './KIXRouter';
-import { AuthenticationService } from '../services/AuthenticationService';
+import { AuthenticationService } from '../../../../server/services/AuthenticationService';
 import { CacheService } from '../services/cache';
 import { NotificationEvent } from '../../model/NotificationEvent';
 import { BackendNotification } from '../../model/BackendNotification';

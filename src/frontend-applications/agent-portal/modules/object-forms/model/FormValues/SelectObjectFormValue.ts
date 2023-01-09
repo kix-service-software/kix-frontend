@@ -8,6 +8,7 @@
  */
 
 import { AutoCompleteConfiguration } from '../../../../model/configuration/AutoCompleteConfiguration';
+import { FormContext } from '../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldOption } from '../../../../model/configuration/FormFieldOption';
 import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
@@ -78,6 +79,13 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                 this.initFormValue();
             }
         });
+
+        this.addPropertyBinding(FormValueProperty.POSSIBLE_VALUES, (value: SelectObjectFormValue) => {
+            if (this.isAutoComplete && this.possibleValues?.length) {
+                this.isAutoComplete = false;
+                this.loadSelectableValues();
+            }
+        });
     }
 
     public destroy(): void {
@@ -112,9 +120,46 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
     }
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {
-        await super.setFormValue(value, force);
-        if (!this.readonly) {
-            await this.loadSelectedValues();
+        if (force) {
+            await super.setFormValue(value, force);
+        } else {
+            if (!this.freeText && !this.isAutoComplete) {
+                if (Array.isArray(value)) {
+                    value = value?.filter((v) => TreeUtil.findNode(this.treeHandler?.getTree(), v.toString()) !== null);
+                } else if (value !== null) {
+                    const node = TreeUtil.findNode(this.treeHandler?.getTree(), value?.toString());
+                    if (!node) {
+                        value = [];
+                    }
+                }
+            } else if (this.multiselect) {
+                value = this.removeEmptyValues(value);
+            }
+
+            await super.setFormValue(value, force);
+
+            if (!this.readonly) {
+                await this.loadSelectedValues();
+            }
+        }
+    }
+
+    public removeEmptyValues(value: any): Array<any> {
+        if (Array.isArray(value) && value?.length > 0) {
+            const newValue = [];
+            for (let val of value) {
+                if (typeof val === 'string') {
+                    val = val.trim();
+                }
+
+                const isWildCardValue = typeof val === 'string' && val?.includes('*');
+                if (val && !isWildCardValue) {
+                    newValue.push(val);
+                }
+            }
+            return newValue;
+        } else if (value === '') {
+            return [];
         }
     }
 
@@ -140,8 +185,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         }
         this.treeHandler?.setMultiSelect(this.multiselect);
 
-        this.loadSelectableValues();
-        this.loadSelectedValues();
+        await this.loadSelectableValues();
+        await this.loadSelectedValues();
 
         this.addPropertyBinding('multiselect', (value: SelectObjectFormValue) => {
             if (!this.multiselect && Array.isArray(this.value) && this.value.length > 1) {
@@ -160,6 +205,10 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                     this.setFormValue(newValue, true);
                 }
             }
+        });
+
+        this.addPropertyBinding(FormValueProperty.ENABLED, (value: SelectObjectFormValue) => {
+            this.loadSelectableValues();
         });
 
         this.initialized = true;
@@ -322,14 +371,10 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         if (this.enabled) {
             if (this.isAutoComplete) {
                 objects = await this.searchObjects();
+            } else if (this.possibleValues) {
+                objects = await KIXObjectService.loadObjects(this.objectType, this.possibleValues, this.loadingOptions);
             } else {
                 objects = await KIXObjectService.loadObjects(this.objectType, null, this.loadingOptions);
-            }
-
-            if (Array.isArray(this.possibleValues)) {
-                objects = objects.filter(
-                    (o) => this.possibleValues.some((pv) => pv.toString() === o.ObjectId.toString())
-                );
             }
 
             if (Array.isArray(this.forbiddenValues)) {

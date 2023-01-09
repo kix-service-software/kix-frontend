@@ -18,6 +18,8 @@ export class ArticleColorsConfiguration implements IConfiguration {
     public type: string = 'ArticleColorsConfiguration';
     public valid: boolean = true;
 
+    public application: string = 'agent-portal';
+
     public constructor(
         public note: string = '#fbf7e2',
         public email: string = '#e1eaeb'

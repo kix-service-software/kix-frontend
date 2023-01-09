@@ -133,10 +133,6 @@ export class Component {
 
     public async filter(textFilterValue?: string): Promise<void> {
         this.state.filterValue = textFilterValue;
-        const context = ContextService.getInstance().getActiveContext();
-        if (context instanceof CMDBContext) {
-            context.setFilterValue(this.state.filterValue);
-        }
     }
 
 }

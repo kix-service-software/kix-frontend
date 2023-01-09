@@ -21,7 +21,6 @@ import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectF
 import { SearchOperator } from '../../../../../search/model/SearchOperator';
 import { UserProperty } from '../../../../../user/model/UserProperty';
 import { Ticket } from '../../../../model/Ticket';
-import { TicketProperty } from '../../../../model/TicketProperty';
 
 export class UserObjectFormValue extends SelectObjectFormValue {
 
@@ -39,7 +38,7 @@ export class UserObjectFormValue extends SelectObjectFormValue {
 
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
-        super.initFormValueByField(field);
+        await super.initFormValueByField(field);
 
         // add default loading options for (agent) users
         const filter: FilterCriteria[] = [
@@ -78,6 +77,16 @@ export class UserObjectFormValue extends SelectObjectFormValue {
             });
         } else {
             this.loadingOptions.query = query;
+        }
+    }
+
+    public async initFormValue(): Promise<void> {
+        await super.initFormValue();
+        if (this.object && this.property) {
+            const userId = this.object[this.property];
+            if (userId) {
+                await this.setFormValue(userId, true);
+            }
         }
     }
 

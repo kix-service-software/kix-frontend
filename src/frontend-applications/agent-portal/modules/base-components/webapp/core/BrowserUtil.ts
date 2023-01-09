@@ -44,6 +44,13 @@ export class BrowserUtil {
         }, 500);
     }
 
+    public static async openInfoOverlay(message: string): Promise<void> {
+        setTimeout(() => {
+            const content = new ComponentContent('toast', new ToastContent('kix-icon-info', message));
+            OverlayService.getInstance().openOverlay(OverlayType.INFO_TOAST, null, content, 'Translatable#Hint');
+        }, 500);
+    }
+
     public static async openConfirmOverlay(
         title: string = 'Sure?', confirmText: string = 'Are you sure?',
         confirmCallback: () => void = null, cancelCallback: () => void = null,

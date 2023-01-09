@@ -15,7 +15,7 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
 
     public id = 'kix-module-object-forms';
 
-    public applications: string[] = ['agent-portal'];
+    public applications: string[] = [];
 
     public external: boolean = false; // true if it is a plugin module
 

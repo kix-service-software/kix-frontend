@@ -7,13 +7,21 @@
  * --
  */
 
+import { CRUD } from '../../../../../../../../../server/model/rest/CRUD';
 import { IdService } from '../../../../../../../model/IdService';
+import { UIComponentPermission } from '../../../../../../../model/UIComponentPermission';
+import { AuthenticationSocketClient } from '../../../../../../base-components/webapp/core/AuthenticationSocketClient';
 import { ContextService } from '../../../../../../base-components/webapp/core/ContextService';
 import { NewContactDialogContext } from '../../../../../../customer/webapp/core/context/NewContactDialogContext';
 import { FormValueAction } from '../../../../../../object-forms/model/FormValues/FormValueAction';
 import { TicketProperty } from '../../../../../model/TicketProperty';
 
 export class CreateContactFormValueAction extends FormValueAction {
+
+    public permissions = [
+        new UIComponentPermission('system/users', [CRUD.CREATE]),
+        new UIComponentPermission('contacts', [CRUD.CREATE])
+    ];
 
     private contextListenerId: string = IdService.generateDateBasedId('CreateContactFormValueAction');
 
@@ -24,7 +32,8 @@ export class CreateContactFormValueAction extends FormValueAction {
 
     public async canShow(): Promise<boolean> {
         const contactValue = this.objectValueMapper?.findFormValue(TicketProperty.CONTACT_ID);
-        return contactValue?.enabled && contactValue?.visible && !contactValue?.readonly;
+        const hasPermissions = await this.hasPermissions();
+        return contactValue?.enabled && contactValue?.visible && !contactValue?.readonly && hasPermissions;
     }
 
     public canRun(): boolean {
@@ -59,6 +68,10 @@ export class CreateContactFormValueAction extends FormValueAction {
         if (formValue) {
             formValue.setFormValue(contactId);
         }
+    }
+
+    private async hasPermissions(): Promise<boolean> {
+        return await AuthenticationSocketClient.getInstance().checkPermissions(this.permissions);
     }
 
 }

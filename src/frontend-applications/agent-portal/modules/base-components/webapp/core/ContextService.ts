@@ -30,6 +30,7 @@ import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsPr
 import { ContextConfiguration } from '../../../../model/configuration/ContextConfiguration';
 import { AdditionalContextInformation } from './AdditionalContextInformation';
 import { ApplicationEvent } from './ApplicationEvent';
+import { KIXModulesService } from './KIXModulesService';
 import { ToolbarAction } from '../../../agent-portal/webapp/application/_base-template/personal-toolbar/ToolbarAction';
 
 export class ContextService {
@@ -57,6 +58,8 @@ export class ContextService {
 
     private storedContexts: ContextPreference[];
     private storageProcessQueue: Array<Promise<boolean>> = [];
+
+    public DEFAULT_FALLBACK_CONTEXT: string = 'home';
 
     private toolbarActions: Map<string, ToolbarAction> = new Map();
 
@@ -170,10 +173,10 @@ export class ContextService {
 
     public async removeContext(
         instanceId: string, targetContextId?: string, targetObjectId?: string | number,
-        switchToTarget: boolean = true, silent?: boolean
+        switchToTarget: boolean = true, silent?: boolean, force?: boolean
     ): Promise<boolean> {
         let removed = false;
-        if (this.canRemove(instanceId)) {
+        if (force || this.canRemove(instanceId)) {
             const confirmed = await this.checkDialogConfirmation(instanceId, silent);
 
             if (confirmed) {
@@ -232,10 +235,10 @@ export class ContextService {
         for (const c of [...this.contextInstances]) {
             await this.removeContext(c.instanceId, null, null, false, silent);
         }
-        this.switchToTargetContext(null, 'home');
+        this.switchToTargetContext(null, this.DEFAULT_FALLBACK_CONTEXT);
     }
 
-    private checkDialogConfirmation(contextInstanceId: string, silent?: boolean): Promise<boolean> {
+    public checkDialogConfirmation(contextInstanceId: string, silent?: boolean): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
             const context = this.contextInstances.find((ci) => ci.instanceId === contextInstanceId);
             if (context?.descriptor?.contextType === ContextType.DIALOG) {
@@ -263,7 +266,7 @@ export class ContextService {
         let canRemove = true;
         if (this.contextInstances.length === 1) {
             const context = this.getContext(instanceId);
-            canRemove = context.contextId !== 'home';
+            canRemove = context.contextId !== this.DEFAULT_FALLBACK_CONTEXT;
         }
         return canRemove;
     }
@@ -281,14 +284,14 @@ export class ContextService {
                 this.contextInstances[this.contextInstances.length - 1].instanceId
             );
         } else {
-            this.setActiveContext('home');
+            this.setActiveContext(this.DEFAULT_FALLBACK_CONTEXT);
         }
     }
 
     public async toggleActiveContext(
         targetContextId?: string, targetObjectId?: string | number, silent?: boolean
     ): Promise<void> {
-        await this.removeContext(this.activeContext?.instanceId, targetContextId, targetObjectId, true, silent);
+        await this.removeContext(this.activeContext?.instanceId, targetContextId, targetObjectId, true, silent, true);
     }
 
     public async setContextByUrl(
@@ -395,12 +398,20 @@ export class ContextService {
             url = encodeURI(url);
             // extended params should already be encoded
             url = await context.addExtendedUrlParams(url);
+
+            const prefix = KIXModulesService.urlPrefix || '';
+            if (prefix) {
+                url = `/${prefix}/${url}`;
+            } else {
+                url = `/${url}`;
+            }
+
             const state = new BrowserHistoryState(context.contextId, objectId);
             if (oldContext) {
-                window.history.pushState(state, displayText, '/' + url);
+                window.history.pushState(state, displayText, url);
                 ContextHistory.getInstance().addHistoryEntry(oldContext);
             } else if (replaceHistory) {
-                window.history.replaceState(state, displayText, '/' + url);
+                window.history.replaceState(state, displayText, url);
             }
         }
 

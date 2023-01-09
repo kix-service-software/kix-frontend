@@ -17,9 +17,8 @@ import { ISocketResponse } from './ISocketResponse';
 import { PermissionCheckRequest } from './PermissionCheckRequest';
 import { IdService } from '../../../../model/IdService';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
-
 import { BrowserCacheService } from './CacheService';
-import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { UserType } from '../../../user/model/UserType';
 
 export class AuthenticationSocketClient extends SocketClient {
 
@@ -38,7 +37,8 @@ export class AuthenticationSocketClient extends SocketClient {
     }
 
     public async login(
-        userName: string, password: string, negotiateToken: string, redirectUrl: string, fakeLogin?: boolean
+        userName: string, password: string, negotiateToken: string, redirectUrl: string,
+        fakeLogin?: boolean, userType = UserType.AGENT
     ): Promise<boolean> {
         this.checkSocketConnection();
 
@@ -55,7 +55,7 @@ export class AuthenticationSocketClient extends SocketClient {
                 if (result.requestId === requestId) {
                     window.clearTimeout(timeout);
                     if (!fakeLogin) {
-                        document.cookie = 'token=' + result.token;
+                        document.cookie = ClientStorageService.tokenPrefix + 'token=' + result.token;
                         window.location.replace(result.redirectUrl);
                     }
                     resolve(true);
@@ -70,7 +70,7 @@ export class AuthenticationSocketClient extends SocketClient {
             });
 
             const request = new LoginRequest(
-                userName, password, negotiateToken, redirectUrl, requestId,
+                userName, password, userType, negotiateToken, redirectUrl, requestId,
                 ClientStorageService.getClientRequestId()
             );
             this.socket.emit(AuthenticationEvent.LOGIN, request);
@@ -97,7 +97,7 @@ export class AuthenticationSocketClient extends SocketClient {
 
             const request: ISocketRequest = {
                 requestId,
-                clientRequestId: ClientStorageService.getClientRequestId(),
+                clientRequestId: ClientStorageService.getClientRequestId()
             };
             this.socket.emit(AuthenticationEvent.LOGOUT, request);
         });
@@ -185,7 +185,8 @@ export class AuthenticationSocketClient extends SocketClient {
             const request = new PermissionCheckRequest(
                 requestId,
                 ClientStorageService.getClientRequestId(),
-                permissions
+                permissions,
+                undefined
             );
             this.socket.emit(AuthenticationEvent.PERMISSION_CHECK, request);
         });

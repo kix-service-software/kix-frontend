@@ -9,6 +9,7 @@
 
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import dateFormat from 'dateformat';
+import { KIXModulesService } from './KIXModulesService';
 
 export class DateTimeUtil {
 
@@ -34,13 +35,19 @@ export class DateTimeUtil {
         return string;
     }
 
-    public static async getLocalDateTimeString(value: any, language?: string): Promise<string> {
+    public static async getLocalDateTimeString(value: any, language?: string, useOffset?: boolean): Promise<string> {
         let string = '';
         if (value) {
             if (typeof value === 'string') {
                 value = value.replace(/-/g, '/');
             }
             const date = new Date(value);
+
+            if (useOffset) {
+                const offset = await KIXModulesService.getInstance().getBackenTimezoneOffset();
+                date.setSeconds(date.getSeconds() + offset);
+            }
+
             const options = {
                 day: '2-digit',
                 month: '2-digit',
@@ -85,6 +92,7 @@ export class DateTimeUtil {
         if (typeof date === 'string') {
             date = new Date(date);
         }
+
         return `${DateTimeUtil.getKIXDateString(date, asUTC)} ${DateTimeUtil.getKIXTimeString(date, false, null, asUTC)}`;
     }
 

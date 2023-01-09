@@ -165,7 +165,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     'object-avatar-label',
                                     {
                                         property: ContactProperty.EMAIL
-                                    }
+                                    }, null, null, '', '', null, '', '2'
                                 )
                             ]
                         ], null, null, true

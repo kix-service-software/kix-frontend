@@ -83,9 +83,18 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue implements 
                 this.setDatesLimit(config);
         }
 
-        if (config?.DefaultValue && config?.DefaultValue !== '0') {
+        const isDefaultValueDefined = config?.DefaultValue !== ''
+            && config?.DefaultValue !== null
+            && typeof config?.DefaultValue !== 'undefined';
+
+        let offset = null;
+        if (isDefaultValueDefined) {
+            offset = Number(config?.DefaultValue) >= 0 ? Number(config?.DefaultValue) : null;
+        }
+
+        if (!this.value && offset !== null) {
             const date = new Date();
-            date.setSeconds(date.getSeconds() + config.DefaultValue);
+            date.setSeconds(date.getSeconds() + offset);
             this.value = DateTimeUtil.getKIXDateTimeString(date);
         }
     }

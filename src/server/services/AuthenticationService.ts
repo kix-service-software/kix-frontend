@@ -10,19 +10,19 @@
 /* eslint-disable max-classes-per-file */
 
 import { Request, Response } from 'express';
-import { ConfigurationService } from '../../../../server/services/ConfigurationService';
-import { HttpService } from './HttpService';
+import { ConfigurationService } from './ConfigurationService';
+import { HttpService } from '../../frontend-applications/agent-portal/server/services/HttpService';
 import { SessionResponse } from '../model/SessionResponse';
 import { LoginResponse } from '../model/LoginResponse';
-import { SocketAuthenticationError } from '../../modules/base-components/webapp/core/SocketAuthenticationError';
-import { UserLogin } from '../../modules/user/model/UserLogin';
-import { UserType } from '../../modules/user/model/UserType';
+import { SocketAuthenticationError } from '../model/SocketAuthenticationError';
+import { UserLogin } from '../../frontend-applications/agent-portal/modules/user/model/UserLogin';
+import { UserType } from '../../frontend-applications/agent-portal/modules/user/model/UserType';
 
 import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 import { Socket } from 'socket.io';
-import { LoggingService } from '../../../../server/services/LoggingService';
-import { CacheService } from './cache';
+import { LoggingService } from './LoggingService';
+import { CacheService } from '../../frontend-applications/agent-portal/server/services/cache';
 
 export class AuthenticationService {
 
@@ -153,7 +153,10 @@ export class AuthenticationService {
     public async isSocketAuthenticated(socket: Socket, next: (err?: any) => void): Promise<void> {
         if (socket?.handshake?.headers?.cookie) {
             const parsedCookie = cookie.parse(socket.handshake.headers.cookie);
-            const token = parsedCookie.token;
+
+            const tokenPrefix = socket?.handshake?.headers?.tokenprefix || '';
+            const token = parsedCookie[`${tokenPrefix}token`];
+
             if (token) {
                 const valid = await this.validateToken(
                     token, socket.handshake.address, 'AuthenticationService'
@@ -176,10 +179,10 @@ export class AuthenticationService {
     }
 
     public async login(
-        user: string, password: string, negotiateToken: string, clientRequestId: string,
-        remoteAddress: string, fakeLogin?: boolean
+        user: string, password: string, userType: UserType, negotiateToken: string,
+        clientRequestId: string, remoteAddress: string, fakeLogin?: boolean
     ): Promise<string> {
-        const userLogin = new UserLogin(user, password, UserType.AGENT, negotiateToken);
+        const userLogin = new UserLogin(user, password, userType, negotiateToken);
         const response = await HttpService.getInstance().post<LoginResponse>(
             'auth', userLogin, null, clientRequestId, undefined, false
         );
@@ -191,11 +194,4 @@ export class AuthenticationService {
         await HttpService.getInstance().delete(['session'], token, null).catch((error) => null);
         return true;
     }
-}
-
-class FrontendToken {
-    public userLogin: string;
-    public remoteAddress: string;
-    public backendToken: string;
-    public created: number;
 }

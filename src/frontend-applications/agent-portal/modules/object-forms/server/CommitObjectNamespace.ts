@@ -44,7 +44,9 @@ export class CommitObjectNamespace extends SocketNameSpace {
 
     private async commitObject(data: CommitObjectRequest, client: Socket): Promise<SocketResponse> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
-        const token = parsedCookie ? parsedCookie.token : '';
+
+        const tokenPrefix = client?.handshake?.headers?.tokenprefix || '';
+        const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
         const object = data.object;
 

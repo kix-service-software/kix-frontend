@@ -7,7 +7,7 @@
  * --
  */
 
-import { ReleaseInfo } from '../../../../../model/ReleaseInfo';
+import { ReleaseInfo } from '../../../../../../model/ReleaseInfo';
 
 export class ComponentState {
 

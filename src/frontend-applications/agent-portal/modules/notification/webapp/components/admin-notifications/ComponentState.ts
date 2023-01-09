@@ -7,7 +7,6 @@
  * --
  */
 
-import { IdService } from '../../../../../model/IdService';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
 import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -21,7 +20,7 @@ import { TableRowHeight } from '../../../../../model/configuration/TableRowHeigh
 export class ComponentState {
 
     public constructor(
-        public instanceId: string = IdService.generateDateBasedId('admin-notifications-list'),
+        public instanceId: string = 'admin-notifications-list',
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
             null, null, null,
             'table-widget', 'Translatable#Automation: Notifications', ['notification-create', 'notification-table-delete', 'csv-export-action'],

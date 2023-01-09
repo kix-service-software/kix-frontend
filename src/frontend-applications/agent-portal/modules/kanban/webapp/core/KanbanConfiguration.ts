@@ -13,6 +13,8 @@ import { KanbanColumn } from './KanbanColumn';
 
 export class KanbanConfiguration implements IConfiguration {
 
+    public application: string = 'agent-portal';
+
     public constructor(
         public id: string,
         public name: string,

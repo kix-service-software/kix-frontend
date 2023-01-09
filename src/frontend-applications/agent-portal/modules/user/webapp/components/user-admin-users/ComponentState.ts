@@ -7,14 +7,13 @@
  * --
  */
 
-import { IdService } from '../../../../../model/IdService';
 import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 import { Table } from '../../../../table/model/Table';
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public instanceId: string = IdService.generateDateBasedId('user-admin-users'),
+        public instanceId: string = 'user-admin-users',
         public table: Table = null,
         public prepared: boolean = false,
         public title: string = 'User Management: Users (0)',

@@ -7,8 +7,8 @@
  * --
  */
 
-import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { PortalNotification } from '../../../../portal-notification/model/PortalNotification';
+import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { PortalNotification } from '../../../../../portal-notification/model/PortalNotification';
 import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
