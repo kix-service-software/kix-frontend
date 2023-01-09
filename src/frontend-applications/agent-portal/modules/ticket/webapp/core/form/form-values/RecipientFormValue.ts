@@ -32,7 +32,7 @@ import { ArticleLoadingOptions } from '../../../../model/ArticleLoadingOptions';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { FormContext } from '../../../../../../model/configuration/FormContext';
 
-export class RecipientFormValue extends SelectObjectFormValue {
+export class RecipientFormValue extends SelectObjectFormValue<any> {
 
     public constructor(public property: string,
         object: any,
@@ -130,6 +130,11 @@ export class RecipientFormValue extends SelectObjectFormValue {
         }
 
         this.selectedNodes = selectedNodes;
+    }
+
+    protected async searchObjects(): Promise<Contact[]> {
+        const contacts = await super.searchObjects();
+        return contacts.filter((c) => c.ValidID === 1);
     }
 
     private async getEmailValues(value): Promise<[Contact[], string[], string[]]> {

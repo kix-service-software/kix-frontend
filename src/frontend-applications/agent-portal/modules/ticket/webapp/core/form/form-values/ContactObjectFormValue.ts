@@ -8,7 +8,6 @@
  */
 
 import { AutoCompleteConfiguration } from '../../../../../../model/configuration/AutoCompleteConfiguration';
-import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { FilterCriteria } from '../../../../../../model/FilterCriteria';
 import { FilterDataType } from '../../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../../model/FilterType';
