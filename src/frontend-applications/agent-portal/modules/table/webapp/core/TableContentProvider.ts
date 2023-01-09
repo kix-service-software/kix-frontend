@@ -97,7 +97,11 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         if (this.objects) {
             objects = this.objects;
         } else if (this.table.getTableConfiguration().searchId) {
-            objects = await SearchService.getInstance().executeSearchCache(this.table.getTableConfiguration().searchId);
+            const hasDFColumn = this.hasDFColumnConfigured();
+            const includes = hasDFColumn ? [KIXObjectProperty.DYNAMIC_FIELDS] : [];
+            objects = await SearchService.getInstance().executeSearchCache(
+                this.table.getTableConfiguration().searchId, undefined, undefined, undefined, undefined, includes
+            );
         } else if (this.contextId && !this.objectIds) {
             const context = ContextService.getInstance().getActiveContext();
             objects = context ? await context.getObjectList(this.objectType) : [];
@@ -205,10 +209,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
         const hasDFInclude = loadingOptions?.includes?.some((i) => i === KIXObjectProperty.DYNAMIC_FIELDS);
 
-        const tableColumns = this.table?.getTableConfiguration()?.tableColumns || [];
-        const hasDFColumn = tableColumns?.some((tc) => KIXObjectService.getDynamicFieldName(tc.property));
-
-        if (!hasDFInclude && hasDFColumn) {
+        if (!hasDFInclude && this.hasDFColumnConfigured()) {
             if (Array.isArray(loadingOptions.includes)) {
                 loadingOptions.includes.push(KIXObjectProperty.DYNAMIC_FIELDS);
             } else {
@@ -219,5 +220,11 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         await TableFactoryService.getInstance().prepareTableLoadingOptions(loadingOptions, this.table);
 
         return loadingOptions;
+    }
+
+    private hasDFColumnConfigured(): boolean {
+        const tableColumns = this.table?.getTableConfiguration()?.tableColumns || [];
+        const hasDFColumn = tableColumns?.some((tc) => KIXObjectService.getDynamicFieldName(tc.property));
+        return hasDFColumn;
     }
 }

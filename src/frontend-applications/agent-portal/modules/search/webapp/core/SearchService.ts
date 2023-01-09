@@ -149,7 +149,8 @@ export class SearchService {
 
     public async searchObjects(
         searchCache: SearchCache,
-        context: SearchContext = ContextService.getInstance().getActiveContext<SearchContext>()
+        context: SearchContext = ContextService.getInstance().getActiveContext<SearchContext>(),
+        additionalIncludes: string[] = []
     ): Promise<KIXObject[]> {
         if (!searchCache) {
             throw new Error('No search available');
@@ -172,7 +173,15 @@ export class SearchService {
             else {
                 loadingOptions.includes = [KIXObjectProperty.DYNAMIC_FIELDS];
             }
+        }
 
+        if (additionalIncludes?.length) {
+            if (Array.isArray(loadingOptions.includes)) {
+                loadingOptions.includes.push(...additionalIncludes);
+            }
+            else {
+                loadingOptions.includes = additionalIncludes;
+            }
         }
 
         const objects = await KIXObjectService.loadObjects(
@@ -224,7 +233,7 @@ export class SearchService {
             });
 
             EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, {loading: false, hint: ''}
+                ApplicationEvent.APP_LOADING, { loading: false, hint: '' }
             );
         }
 
@@ -326,11 +335,11 @@ export class SearchService {
                         }
                         prepareCriteria.push(new FilterCriteria(
                             c.property, SearchOperator.GREATER_THAN_OR_EQUAL, c.type, c.filterType,
-                            `${ c.value[0] }${ c.value[1] }${ c.value[2] }`
+                            `${c.value[0]}${c.value[1]}${c.value[2]}`
                         ));
                         prepareCriteria.push(new FilterCriteria(
                             c.property, SearchOperator.LESS_THAN_OR_EQUAL, c.type, c.filterType,
-                            `${ c.value[3] }${ c.value[4] }${ c.value[5] }`
+                            `${c.value[3]}${c.value[4]}${c.value[5]}`
                         ));
                     }
                     break;
@@ -364,7 +373,7 @@ export class SearchService {
         const search = await SearchSocketClient.getInstance().loadSearch();
         search.sort((s1, s2) => SortUtil.compareString(s1.name, s2.name));
         const bookmarks = search.map((s) => new Bookmark(
-            s.name, this.getSearchIcon(s.objectType), 'load-search-action', {id: s.id, name: s.name})
+            s.name, this.getSearchIcon(s.objectType), 'load-search-action', { id: s.id, name: s.name })
         );
 
         if (publish) {
@@ -391,7 +400,8 @@ export class SearchService {
     }
 
     public async executeSearchCache(
-        id?: string, name?: string, cache?: SearchCache, context?: SearchContext, setSearchContext?: boolean
+        id?: string, name?: string, cache?: SearchCache, context?: SearchContext, setSearchContext?: boolean,
+        additionalIncludes: string[] = []
     ): Promise<KIXObject[]> {
         const search = await SearchSocketClient.getInstance().loadSearch();
         let searchCache = cache || search.find((s) => s.id === id);
@@ -403,7 +413,7 @@ export class SearchService {
             context = await this.setSearchContext(searchCache?.objectType);
         }
 
-        return await this.searchObjects(searchCache, context);
+        return await this.searchObjects(searchCache, context, additionalIncludes);
     }
 
     private async setSearchContext(

@@ -89,6 +89,10 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     if (eventId === FormEvent.RELOAD_INPUT_VALUES) {
                         // reload options - they could have changed
                         this.setOptions();
+                        const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
+                        if (treeHandler) {
+                            treeHandler.setMultiSelect(this.state.multiselect);
+                        }
                     }
                     await this.load(false);
                     this.state.prepared = true;
@@ -398,6 +402,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     ? autocompleteOption.value
                     : new AutoCompleteConfiguration();
             }
+        } else {
+            this.autocomplete = false;
+            this.state.autoCompleteConfiguration = null;
         }
 
         const isMultiselectOption = this.state.field?.options?.find(

@@ -11,7 +11,6 @@ import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { DateTimeUtil } from '../../../../../base-components/webapp/core/DateTimeUtil';
-import { KIXModulesService } from '../../../../../base-components/webapp/core/KIXModulesService';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { DateTimeFormValue } from '../../../../../object-forms/model/FormValues/DateTimeFormValue';
 import { Article } from '../../../../model/Article';
@@ -44,7 +43,7 @@ export class IncomingTimeFormValue extends DateTimeFormValue {
 
     public setObjectValue(value: any): Promise<void> {
         if (value) {
-            value = DateTimeUtil.getKIXDateTimeString(value, true);
+            value = DateTimeUtil.getKIXDateTimeString(value);
         }
         return super.setObjectValue(value);
     }

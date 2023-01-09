@@ -110,6 +110,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async labelClicked(label: Label, event: any): Promise<void> {
 
+        event?.stopPropagation();
+        event?.preventDefault();
+
         const dialogNeeded = await ReportService.getInstance().hasRequiredParamatersWithoutDefaults(this.definition);
 
         // do nothing if definition is invalid
