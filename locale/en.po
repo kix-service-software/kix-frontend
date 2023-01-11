@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2022-07-27 10:32+0000\n"
+"PO-Revision-Date: 2022-12-21 10:18+0000\n"
 "Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
 "Language-Team: English <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/en/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.14\n"
 
 msgid "', "
 msgstr ""
@@ -154,9 +154,22 @@ msgstr ""
 
 msgid "Admin_DynamicField_Config_Value"
 msgstr ""
+"Default value is used to initialize the field when first displayed; for text "
+"fields, the content to be set; for selection fields, the key of the value to "
+"be set; for date/time fields, the offset at the time the field is displayed "
+"(0=now; 3600=now+1h, blank=no initialization); for asset references, the ID "
+"of the asset."
 
 msgid "Admin_DynamicFieldDateTime_DefaultValue_Description"
 msgstr ""
+"Default value is used to initialize the field when first displayed; It is "
+"specified as an offset at the time the field is displayed (0=now; 3600=now+"
+"1h, blank=no initialization)."
+
+msgid "Admin_DynamicField_Edit_Name_Hint"
+msgstr ""
+"If the field name is changed, dependent configurations are NOT automatically "
+"updated!"
 
 msgid "Administration"
 msgstr ""
@@ -293,6 +306,9 @@ msgstr ""
 
 msgid "Article Data"
 msgstr ""
+
+msgid "Article has printed"
+msgstr "Article has been printed"
 
 msgid "Article Id"
 msgstr ""
@@ -2742,6 +2758,9 @@ msgstr ""
 msgid "Hide Message"
 msgstr ""
 
+msgid "Hint"
+msgstr ""
+
 msgid "History"
 msgstr ""
 
@@ -3707,6 +3726,9 @@ msgstr ""
 msgid "Preferences"
 msgstr ""
 
+msgid "Prepare Article for print"
+msgstr ""
+
 msgid "Prepare asset for print"
 msgstr ""
 
@@ -4645,6 +4667,9 @@ msgstr ""
 
 msgid "Ticket Flags"
 msgstr ""
+
+msgid "Ticket has printed"
+msgstr "Ticket has been printed"
 
 msgid "Ticket History"
 msgstr ""

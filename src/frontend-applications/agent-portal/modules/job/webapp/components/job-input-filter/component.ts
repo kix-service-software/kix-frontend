@@ -21,6 +21,7 @@ import { FormValuesChangedEventData } from '../../../../base-components/webapp/c
 import { SearchService } from '../../../../search/webapp/core';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { TreeService } from '../../../../base-components/webapp/core/tree';
 
 class Component extends FormInputComponent<any, ComponentState> {
 
@@ -77,7 +78,8 @@ class Component extends FormInputComponent<any, ComponentState> {
                     let filterValues: FilterCriteria[] = [];
                     if (await this.state.manager.hasDefinedValues()) {
                         const values = await this.state.manager.getEditableValues();
-                        const searchDefinition = SearchService.getInstance().getSearchDefinition(KIXObjectType.TICKET);
+                        const searchDefinition =
+                            SearchService.getInstance().getSearchDefinition(this.state.manager.objectType);
                         filterValues = values.map((v) => searchDefinition.getFilterCriteria(v));
                     }
                     super.provideValue(filterValues, true);
@@ -89,6 +91,9 @@ class Component extends FormInputComponent<any, ComponentState> {
     public async onDestroy(): Promise<void> {
         if (this.state.manager) {
             this.state.manager.unregisterListener(this.listenerId);
+            this.state.manager.getValues().forEach((v) =>
+                TreeService.getInstance().removeTreeHandler('value-' + v.id)
+            );
             this.state.manager.reset(false);
         }
         EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);

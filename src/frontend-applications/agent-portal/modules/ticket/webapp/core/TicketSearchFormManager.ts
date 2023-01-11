@@ -239,11 +239,15 @@ export class TicketSearchFormManager extends SearchFormManager {
 
     public async setValue(newValue: ObjectPropertyValue, silent?: boolean): Promise<void> {
         if (newValue.property === TicketProperty.STATE_TYPE && this.handleViewableStateType) {
-            newValue.readonly = false;
-            newValue.required = true;
-            newValue.changeable = false;
-            if (!newValue.value) {
-                newValue.value = ['Open'];
+
+            const stateValue = this.values.find((v) => v.property === TicketProperty.STATE_ID);
+            if (!stateValue) {
+                newValue.readonly = false;
+                newValue.required = false;
+                newValue.changeable = false;
+                if (!newValue.value) {
+                    newValue.value = ['Open'];
+                }
             }
         }
 

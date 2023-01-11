@@ -39,7 +39,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         } else {
             this.state.toggled = false;
         }
-        (this as any).emit('labelClicked', this.state.label);
+        (this as any).emit('labelClicked', this.state.label, event);
     }
 
     public removeLabel(event: any): void {

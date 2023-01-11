@@ -195,7 +195,7 @@ export class AgentSocketClient extends SocketClient {
         const isLockEvent = event.Namespace.startsWith('Ticket.Lock');
         const isWatchEvent = event.Namespace.startsWith('Watcher');
 
-        const ids = event.ObjectID?.split('::') || [];
+        const ids = event.ObjectID?.toString().split('::') || [];
 
         if (ids?.length === 3) {
             const id1Match = ids[1].toString() === this.userId?.toString();

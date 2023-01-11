@@ -139,7 +139,8 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     public async setArticleSeenFlag(ticketId: number, articleId: number): Promise<void> {
-        await TicketSocketClient.getInstance().setArticleSeenFlag(ticketId, articleId);
+        await TicketSocketClient.getInstance().setArticleSeenFlag(ticketId, articleId)
+            .catch((error) => console.error(error));
         EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
     }
 
@@ -353,6 +354,16 @@ export class TicketService extends KIXObjectService<Ticket> {
             case ArticleProperty.TO:
             case ArticleProperty.CC:
             case ArticleProperty.BCC:
+                if (filterIds) {
+                    const contactIds = filterIds.filter((id) => !isNaN(Number(id))).map((id) => Number(id));
+                    const mailAddresses = filterIds.filter((id) => typeof id === 'string');
+                    const contacts = await KIXObjectService.loadObjects(
+                        KIXObjectType.CONTACT, contactIds, null, null, true
+                    );
+                    nodes = await KIXObjectService.prepareTree(contacts);
+                    nodes.push(...mailAddresses.map((ma) => new TreeNode(ma?.toString(), ma?.toString())));
+                }
+                break;
             case TicketProperty.CONTACT_ID:
                 if (Array.isArray(filterIds)) {
                     const contactIds = filterIds.filter((id) => !isNaN(Number(id))).map((id) => Number(id));

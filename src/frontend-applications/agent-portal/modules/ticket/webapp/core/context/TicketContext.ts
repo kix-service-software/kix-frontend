@@ -26,6 +26,7 @@ import { TranslationService } from '../../../../translation/webapp/core/Translat
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { ContextPreference } from '../../../../../model/ContextPreference';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 
 export class TicketContext extends Context {
 
@@ -163,6 +164,9 @@ export class TicketContext extends Context {
                 TicketProperty.STATE_TYPE, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
             ));
         }
+
+        const additionalIncludes = this.getAdditionalInformation(AdditionalContextInformation.INCLUDES);
+        loadingOptions.includes.push(...additionalIncludes);
 
         const tickets = await KIXObjectService.loadObjects(
             KIXObjectType.TICKET, null, loadingOptions, null, false

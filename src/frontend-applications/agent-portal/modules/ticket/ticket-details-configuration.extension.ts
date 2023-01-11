@@ -160,6 +160,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             [
                                 {
                                     componentId: 'dynamic-field-value',
+                                    detailViewWidthFactor: '4',
                                     componentData: {
                                         name: 'WorkOrder'
                                     },

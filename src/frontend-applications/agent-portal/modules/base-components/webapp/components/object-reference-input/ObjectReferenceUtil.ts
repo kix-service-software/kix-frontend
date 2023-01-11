@@ -33,11 +33,6 @@ export class ObjectReferenceUtil {
         limit: number, searchValue: string, options: FormFieldOption[] = []
     ): Promise<KIXObject[]> {
         let objects: KIXObject[] = [];
-        const objectOption = options.find((o) => o.option === ObjectReferenceOptions.OBJECT);
-        const objectIdOption = options.find((o) => o.option === ObjectReferenceOptions.OBJECT_IDS);
-        const objectIds = objectIdOption && Array.isArray(objectIdOption.value) && objectIdOption.value.length
-            ? objectIdOption.value
-            : null;
 
         const autocompleteOption = options.find(
             (o) => o.option === ObjectReferenceOptions.AUTOCOMPLETE
@@ -54,8 +49,14 @@ export class ObjectReferenceUtil {
             }
         }
 
+        const objectOption = options.find((o) => o.option === ObjectReferenceOptions.OBJECT);
         if (objectOption && autocomplete) {
             const objectType = objectOption.value as KIXObjectType;
+
+            const objectIdOption = options.find((o) => o.option === ObjectReferenceOptions.OBJECT_IDS);
+            const objectIds = objectIdOption && Array.isArray(objectIdOption.value) && objectIdOption.value.length
+                ? objectIdOption.value
+                : null;
 
             const fieldLoadingOptions = options.find(
                 (o) => o.option === ObjectReferenceOptions.LOADINGOPTIONS
@@ -83,9 +84,15 @@ export class ObjectReferenceUtil {
             loadingOptions.limit = autoCompleteConfiguration.limit;
 
             const preparedOptions = await this.prepareLoadingOptions(loadingOptions, searchValue);
+
+            // use ids only if no filter given => filter with ids afterwards
+            // TODO: use ids as additional filter/search to prevent missing results because of limit
             objects = await KIXObjectService.loadObjects<KIXObject>(
-                objectType, objectIds, preparedOptions, specificLoadingOptions?.value, false
+                objectType, filter ? null : objectIds, preparedOptions, specificLoadingOptions?.value, false
             );
+            if (filter && objectIds) {
+                objects = objects.filter((o) => objectIds.some((oid) => oid.toString() === o.ObjectId.toString()));
+            }
         }
 
         return objects;

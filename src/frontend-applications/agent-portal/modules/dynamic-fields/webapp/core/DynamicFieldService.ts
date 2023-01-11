@@ -76,7 +76,7 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
         if (dfName && dfName[1] !== dynamicField.Name) {
             const askForUpdatePromise = new Promise<number>((resolve, reject) => {
                 BrowserUtil.openConfirmOverlay(
-                    'Translatable#Warning', 'Admin_DynamicField_Edit_Name_Hint',
+                    'Translatable#Warning', 'Translatable#Admin_DynamicField_Edit_Name_Hint',
                     async () => {
                         const id = await super.updateObject(
                             objectType, parameter, objectId, cacheKeyPrefix, silent

@@ -23,6 +23,7 @@ import { ContextService } from '../../../../base-components/webapp/core/ContextS
 import { ContextType } from '../../../../../model/ContextType';
 import { SearchService } from '../../../../search/webapp/core';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { IdService } from '../../../../../model/IdService';
 
 class Component extends FormInputComponent<FilterCriteria[], ComponentState> {
 
@@ -39,7 +40,7 @@ class Component extends FormInputComponent<FilterCriteria[], ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.listenerId = 'notification-input-filter-manager-listener';
+        this.listenerId = IdService.generateDateBasedId('notification-input-filter-manager-listener');
         await this.setManager();
         await super.onMount();
 
@@ -185,20 +186,18 @@ class Component extends FormInputComponent<FilterCriteria[], ComponentState> {
             }
         }
 
+        const property = fromBackend ? criteria.Field : criteria.property;
         const filterValue = new ObjectPropertyValue(
-            fromBackend ? criteria.Field : criteria.property,
+            property,
             fromBackend ? criteria.Operator : criteria.operator,
             fromBackend ? criteria.Value : criteria.value,
             [], false, true, objectType, null, null,
-            fromBackend ? criteria.Field : criteria.property
+            IdService.generateDateBasedId(property)
         );
-        if (
-            fromBackend
-            && (
-                filterValue.property === ArticleProperty.CHANNEL_ID
-                || filterValue.property === ArticleProperty.SENDER_TYPE_ID
-            )
-        ) {
+
+        const isArticleProperty = filterValue.property === ArticleProperty.CHANNEL_ID
+            || filterValue.property === ArticleProperty.SENDER_TYPE_ID;
+        if (fromBackend && isArticleProperty) {
             filterValue.required = true;
         }
         this.state.manager.setValue(filterValue);

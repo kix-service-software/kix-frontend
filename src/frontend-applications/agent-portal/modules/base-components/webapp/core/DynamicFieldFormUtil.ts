@@ -221,9 +221,11 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
 
         field.options = this.getCIReferenceFieldOptions(dynamicField, field);
 
-        field.defaultValue = new FormFieldValue(
-            dynamicField.Config.DefaultValue ? JSON.parse(dynamicField.Config.DefaultValue) : null
-        );
+        if (!field.defaultValue?.value) {
+            field.defaultValue = new FormFieldValue(
+                dynamicField.Config.DefaultValue ? JSON.parse(dynamicField.Config.DefaultValue) : null
+            );
+        }
 
         field.countDefault = 1;
         field.countMax = 1;
