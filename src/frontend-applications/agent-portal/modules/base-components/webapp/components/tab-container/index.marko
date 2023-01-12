@@ -22,7 +22,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             class={
                                 active: component.isActiveTab(tab.instanceId)
                             }
-                            on-click("tabClicked", tab, false)>
+                            on-click("tabClicked", tab)>
                             <if(component.getIcon(tab))>
                                 <icon icon=component.getIcon(tab) showUnknown=false/>
                             </if>
