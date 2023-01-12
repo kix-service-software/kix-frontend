@@ -182,7 +182,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                                         'article-forward-to',
                                         'Translatable#To', ArticleProperty.TO, undefined, true,
                                         'Translatable#Helptext_Tickets_ArticleCreate_ReceiverTo', null,
-                                        new FormFieldValue('<KIX_ARTICLE_From>')
                                     ),
                                     new FormFieldConfiguration(
                                         'article-forward-subject',
