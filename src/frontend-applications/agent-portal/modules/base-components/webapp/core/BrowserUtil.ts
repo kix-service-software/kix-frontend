@@ -405,4 +405,24 @@ export class BrowserUtil {
         };
     }
 
+    // use timeout to:
+    //   1) enable multi click selection (e.g. hole word by double click)
+    //   2) return false if selection is removed by single click
+    private static clickTimeout;
+    public static isTextSelected(): Promise<boolean> {
+        return new Promise<boolean>((resolve) => {
+            if (this.clickTimeout) {
+                clearTimeout(this.clickTimeout);
+            }
+            this.clickTimeout = setTimeout(async () => {
+                this.clickTimeout = undefined;
+                // ingore click if text is selected
+                if (window.getSelection()?.type === 'Range') {
+                    resolve(true);
+                }
+                resolve(false);
+            }, 175);
+        });
+    }
+
 }

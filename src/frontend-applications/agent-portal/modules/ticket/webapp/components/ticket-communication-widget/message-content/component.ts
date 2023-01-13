@@ -257,7 +257,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async toggleArticleCompactView(): Promise<void> {
-        if (this.state.selectedCompactView) {
+        if (!await BrowserUtil.isTextSelected() && this.state.selectedCompactView) {
             this.state.compactViewExpanded = !this.state.compactViewExpanded;
             this.state.expanded = this.state.compactViewExpanded;
             await this.loadArticle();
