@@ -71,6 +71,11 @@ export class Row {
         return this.rowObject;
     }
 
+    public setRowObject<T = any>(rowObject: RowObject): void {
+        this.rowObject = rowObject;
+        this.updateValues();
+    }
+
     public getChildren(): Row[] {
         return this.filteredChildren ? this.filteredChildren : this.children;
     }
