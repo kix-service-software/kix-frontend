@@ -37,7 +37,8 @@ export class ComponentState extends AbstractComponentState {
         public showAllAttachments: boolean = false,
         public hasInlineAttachments: boolean = false,
         public loadingContent: boolean = false,
-        public showContent: boolean = false
+        public showContent: boolean = false,
+        public unseen: number = 1
     ) {
         super();
     }

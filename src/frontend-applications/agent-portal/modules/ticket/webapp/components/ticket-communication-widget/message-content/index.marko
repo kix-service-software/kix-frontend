@@ -8,7 +8,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <div.message-content-container class={
-      unread: state.article && state.article.Unseen === 1,
+      unread: state.article && state.unseen === 1,
       'compact-view-message-content-container': state.selectedCompactView
    }>
    <if(state.show && state.article)>
@@ -27,7 +27,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
          <div.header class={'list-view': state.selectedCompactView && !state.compactViewExpanded}>
             <message-header
                 article=state.article
-                articleCountNumber=input.articleCountNumber
                 fromDisplayName=state.fromDisplayName
             />
          </div>

@@ -29,10 +29,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.timoutTimer = new TimeoutTimer();
     }
 
-    public onInput(input: any): void {
-        return;
-    }
-
     public async onMount(): Promise<void> {
         this.context = ContextService.getInstance().getActiveContext();
 
@@ -54,7 +50,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.translations = await TranslationService.createTranslationObject(['Translatable#Before', 'Translatable#After']);
 
         this.getSettings();
-        this.filter();
     }
 
     private getSettings(): void {
@@ -71,6 +66,17 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                         this.state.filterCustomer = settingsObject.filterCustomer;
                         this.state.filterUnread = settingsObject.filterUnread;
                         this.state.filterValue = settingsObject.filterValue;
+                    }
+
+                    const hasFilter = this.state.filterAttachment
+                        || this.state.filterExternal
+                        || this.state.filterInternal
+                        || this.state.filterCustomer
+                        || this.state.filterUnread
+                        || this.state.filterValue;
+
+                    if (hasFilter) {
+                        this.filter();
                     }
                 } catch (error) {
                     console.error(error);
@@ -113,24 +119,31 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private async filter(): Promise<void> {
         let articles = [...await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || []];
 
+        let isFiltered = false;
+
         if (this.state.filterAttachment) {
             articles = articles.filter((a) => Array.isArray(a.Attachments) && a.Attachments.length);
+            isFiltered = true;
         }
 
         if (this.state.filterExternal) {
             articles = articles.filter((a) => a.SenderType === 'external');
+            isFiltered = true;
         }
 
         if (this.state.filterInternal) {
             articles = articles.filter((a) => a.SenderType !== 'external');
+            isFiltered = true;
         }
 
         if (this.state.filterCustomer) {
             articles = articles.filter((a) => a.CustomerVisible);
+            isFiltered = true;
         }
 
         if (this.state.filterUnread) {
             articles = articles.filter((a) => a.isUnread());
+            isFiltered = true;
         }
 
         if (this.state.filterValue && this.state.filterValue !== '') {
@@ -141,6 +154,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     a.Cc.match(new RegExp(this.state.filterValue, 'ig')) ||
                     a.From.match(new RegExp(this.state.filterValue, 'ig'));
             });
+            isFiltered = true;
         }
 
         if (this.state.selectedDate) {
@@ -155,10 +169,15 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     const result = SortUtil.compareDate(incomingTime, this.state.selectedDate);
                     return result >= 0;
                 });
+            isFiltered = true;
         }
 
         this.setSettings();
-        this.context.setFilteredObjectList(KIXObjectType.ARTICLE, articles);
+
+        const filteredArticles = this.context.getFilteredObjectList(KIXObjectType.ARTICLE);
+        if (Array.isArray(filteredArticles)) {
+            this.context.setFilteredObjectList(KIXObjectType.ARTICLE, isFiltered ? articles : null);
+        }
     }
 
     private setSettings(): void {
