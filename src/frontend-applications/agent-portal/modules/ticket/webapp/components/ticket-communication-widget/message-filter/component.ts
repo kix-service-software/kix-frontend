@@ -175,7 +175,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.setSettings();
 
         const filteredArticles = this.context.getFilteredObjectList(KIXObjectType.ARTICLE);
-        if (Array.isArray(filteredArticles)) {
+        if (isFiltered || (!isFiltered && Array.isArray(filteredArticles))) {
             this.context.setFilteredObjectList(KIXObjectType.ARTICLE, isFiltered ? articles : null);
         }
     }
