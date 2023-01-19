@@ -276,6 +276,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.article, ArticleProperty.CC, undefined, undefined, false
             );
 
+            await this.loadArticle();
             await this.setArticleSeen(undefined, true);
 
             this.state.unseen = 0;
