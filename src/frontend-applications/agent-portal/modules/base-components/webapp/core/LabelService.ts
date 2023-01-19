@@ -549,9 +549,13 @@ export class LabelService {
             fieldValue.ID ? Number(fieldValue.ID) : null
         ) : null;
         if (dynamicField) {
-            return (this.objectLabelProvider.find(
-                (lp) => lp.isLabelProviderForDFType(dynamicField.FieldType)
-            ) as LabelProvider);
+            let labelProvider = this.objectLabelProvider.find((lp) =>
+                lp.isLabelProviderForDFType(dynamicField.FieldType));
+            if (!labelProvider) {
+                labelProvider = this.objectLabelProvider.find((lp) =>
+                    lp.isLabelProviderForDFType(KIXObjectType.DYNAMIC_FIELD));
+            }
+            return (labelProvider as LabelProvider);
         }
         return;
     }
