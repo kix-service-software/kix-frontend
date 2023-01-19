@@ -165,7 +165,7 @@ export class TicketContext extends Context {
             ));
         }
 
-        const additionalIncludes = this.getAdditionalInformation(AdditionalContextInformation.INCLUDES);
+        const additionalIncludes = this.getAdditionalInformation(AdditionalContextInformation.INCLUDES) || [];
         loadingOptions.includes.push(...additionalIncludes);
 
         const tickets = await KIXObjectService.loadObjects(
