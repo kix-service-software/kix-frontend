@@ -205,18 +205,28 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             const showFormValue = property !== ArticleProperty.TO || isEdit;
 
             let showCc = false;
+            let showBcc = false;
 
             if (property === ArticleProperty.CC) {
                 const toValue = this.formValues.find((fv) => fv.property === ArticleProperty.TO);
-                if (!toValue?.enabled && !isEdit) {
+                if (
+                    (!toValue?.enabled && !isEdit)
+                    || (toValue?.enabled && formValue?.value && isEdit)
+                ) {
                     showCc = true;
+                }
+            }
+            if (property === ArticleProperty.BCC) {
+                const toValue = this.formValues.find((fv) => fv.property === ArticleProperty.TO);
+                if (toValue?.enabled && formValue?.value && isEdit) {
+                    showBcc = true;
                 }
             }
 
             if (formValue && showFormValue) {
                 formValue.enabled = this.enabled;
 
-                if (showCc) {
+                if (showCc || showBcc) {
                     formValue.visible = true;
                 }
 
