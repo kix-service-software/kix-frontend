@@ -16,10 +16,7 @@ import { IdService } from '../../../../../model/IdService';
 import { ObjectInformationCardConfiguration } from './ObjectInformationCardConfiguration';
 import { Context } from '../../../../../model/Context';
 import { ObjectInformationCardDataHandler } from '../../core/ObjectInformationCardDataHandler';
-<<<<<<< HEAD
 import { KIXModulesService } from '../../core/KIXModulesService';
-=======
->>>>>>> origin/rel-18_FEATURE
 
 class Component {
 
