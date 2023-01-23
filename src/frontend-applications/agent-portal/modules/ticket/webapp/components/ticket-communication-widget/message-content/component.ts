@@ -71,7 +71,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.compactViewExpanded = this.state.selectedCompactView ? this.state.expanded : false;
 
         // load article and prepare actions if not done yet
-        if (this.state.expanded && !this.state.article['ObjectActions']?.length) {
+        if (!this.state.article['ObjectActions']?.length) {
             this.loadArticle(undefined, true);
         }
     }
@@ -257,7 +257,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async toggleArticleCompactView(): Promise<void> {
-        if (this.state.selectedCompactView) {
+        if (!await BrowserUtil.isTextSelected() && this.state.selectedCompactView) {
             this.state.compactViewExpanded = !this.state.compactViewExpanded;
             this.state.expanded = this.state.compactViewExpanded;
             await this.loadArticle();
@@ -340,32 +340,30 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async loadArticle(silent: boolean = false, force?: boolean): Promise<void> {
-        if (!this.state.selectedCompactView || this.state.compactViewExpanded) {
-            this.state.loading = !silent;
+        this.state.loading = !silent;
 
-            if (!this.articleLoaded || force) {
-                const loadingOptions = new KIXObjectLoadingOptions(
-                    null, null, null,
-                    [
-                        ArticleProperty.PLAIN, ArticleProperty.ATTACHMENTS, 'ObjectActions'
-                    ]
-                );
-                const articles = await KIXObjectService.loadObjects<Article>(
-                    KIXObjectType.ARTICLE, [this.article.ArticleID], loadingOptions,
-                    new ArticleLoadingOptions(this.article.TicketID)
-                );
+        if (!this.articleLoaded || force) {
+            const loadingOptions = new KIXObjectLoadingOptions(
+                null, null, null,
+                [
+                    ArticleProperty.PLAIN, ArticleProperty.ATTACHMENTS, 'ObjectActions'
+                ]
+            );
+            const articles = await KIXObjectService.loadObjects<Article>(
+                KIXObjectType.ARTICLE, [this.article.ArticleID], loadingOptions,
+                new ArticleLoadingOptions(this.article.TicketID)
+            );
 
-                if (articles?.length) {
-                    this.state.article = articles[0];
-                    this.articleLoaded = true;
-                }
+            if (articles?.length) {
+                this.state.article = articles[0];
+                this.articleLoaded = true;
             }
+        }
 
-            await this.prepareActions();
-            this.prepareAttachments();
-            if (!this.state.selectedCompactView) {
-                await this.prepareImages();
-            }
+        await this.prepareActions();
+        this.prepareAttachments();
+        if (!this.state.selectedCompactView) {
+            await this.prepareImages();
         }
 
         await this.prepareArticleData();

@@ -95,19 +95,19 @@ class WidgetComponent implements IEventSubscriber {
         EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_TITLE, this);
     }
 
-    public minimizeWidget(force: boolean = false, event: any): void {
-        if (event && event.preventDefault) {
+    public async minimizeWidget(force: boolean = false, event: any): Promise<void> {
+        if (event?.preventDefault) {
             event.preventDefault();
         }
 
-        if (this.state.minimizable) {
+        if (this.state.minimizable && (!await BrowserUtil.isTextSelected() || !event)) {
             if (
                 force
                 || (
-                    (event.target.tagName === 'DIV'
+                    (event?.target.tagName === 'DIV'
                         || event.target.tagName === 'SPAN'
                         || event.target.tagName === 'UL')
-                    && (event.target.classList.contains('widget-header')
+                    && (event?.target.classList.contains('widget-header')
                         || event.target.classList.contains('header-left')
                         || event.target.classList.contains('header-right')
                         || event.target.classList.contains('tab-list'))
