@@ -125,7 +125,7 @@ export class RoutingService {
 
         const prefixLength = KIXModulesService.urlPrefix.length;
         const pathName = parsedUrl.pathname.substring(prefixLength + 1, parsedUrl.pathname.length);
-        const path = parsedUrl.pathname === '/' ? [] : pathName.split('/');
+        const path = parsedUrl.pathname === '/' ? [] : this.removeEmptyPaths(pathName.split('/'));
 
         let contextUrl: string;
         let objectId: string;
@@ -149,6 +149,15 @@ export class RoutingService {
         }
 
         return routed;
+    }
+
+    private removeEmptyPaths(path: string[]): string[] {
+        path.forEach((p, i) => {
+            if (!p) {
+                path.splice(i, 1);
+            }
+        });
+        return path;
     }
 
     private async handleURLParams(params: URLSearchParams, contextId?: string): Promise<boolean> {
