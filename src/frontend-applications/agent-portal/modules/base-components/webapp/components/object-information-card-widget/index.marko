@@ -57,9 +57,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                                         routingConfiguration=info.routingConfiguration
                                                         objectId=info.routingObjectId>
                                                         <@content>
-                                                            <${state.templates[
-                                                                info.componentId
-                                                            ]} ...info.componentData on-setDataMapValue('setDataMapValue')/>
+                                                            <${component.getTemplate(info.componentId)} ...info.componentData on-setDataMapValue('setDataMapValue')/>
                                                         </@content>
                                                     </link-target>
                                                 </div>

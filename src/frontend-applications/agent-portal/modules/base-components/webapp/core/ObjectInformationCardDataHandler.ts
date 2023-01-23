@@ -7,44 +7,27 @@
  * --
  */
 
-import { WidgetConfiguration } from '../../../../model/configuration/WidgetConfiguration';
-import { Context } from '../../../../model/Context';
 import { KIXObject } from '../../../../model/kix/KIXObject';
-import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { InformationConfiguration, InformationRowConfiguration, ObjectInformationCardConfiguration } from '../components/object-information-card-widget/ObjectInformationCardConfiguration';
 import { FilterUtil } from './FilterUtil';
-import { KIXModulesService } from './KIXModulesService';
 import { PlaceholderService } from './PlaceholderService';
 
 export class ObjectInformationCardDataHandler {
 
     constructor() { }
 
-    public async initWidgetConfiguration(context: Context, instanceId: string): Promise<InitWidgetData> {
-        const widgetConfiguration = context
-            ? await context.getWidgetConfiguration(instanceId)
-            : undefined;
+    public static async prepareInformation(
+        config: ObjectInformationCardConfiguration, object: KIXObject
+    ): Promise<InformationRowConfiguration[]> {
 
-        let avatar: Array<ObjectIcon | string>;
-        if (widgetConfiguration?.configuration) {
-            const config = widgetConfiguration.configuration as ObjectInformationCardConfiguration;
-            if (Array.isArray(config.avatar)) {
-                avatar = config.avatar;
-            } else if (config.avatar) {
-                avatar = [config.avatar];
-            }
+        if (!Array.isArray(config.avatar) && config.avatar) {
+            config.avatar = [config.avatar];
         }
-        return new InitWidgetData(widgetConfiguration, avatar);
-    }
 
-    public async prepareInformation(
-        rows: InformationRowConfiguration[],
-        object: KIXObject)
-        : Promise<InformationRowConfiguration[]> {
         const information: InformationRowConfiguration[] = [];
-        if (Array.isArray(rows)) {
-            for (const row of rows) {
+        if (config?.rows?.length) {
+            for (const row of config.rows) {
                 if (Array.isArray(row.values)) {
                     const infoRow: InformationRowConfiguration = {
                         title: row.title,
@@ -83,7 +66,7 @@ export class ObjectInformationCardDataHandler {
         return information;
     }
 
-    private async createInfoValue(
+    private static async createInfoValue(
         value: InformationConfiguration, object: KIXObject
     ): Promise<InformationConfiguration> {
         if (Array.isArray(value.conditions)) {
@@ -136,33 +119,10 @@ export class ObjectInformationCardDataHandler {
         return infoValue;
     }
 
-    public hasComponentValues(information: InformationRowConfiguration[]): boolean {
+    public static hasComponentValues(information: InformationRowConfiguration[]): boolean {
         return information.some((row) => row.values.some((group) => group.some((v) => v.componentId)));
     }
 
-    public async setTemplateIds(information: InformationRowConfiguration[]): Promise<any> {
-        const templates = {};
-        for (const row of information) {
-            for (const group of row.values) {
-                for (const infoValue of group) {
-                    if (infoValue.componentId) {
-                        templates[infoValue.componentId] = await KIXModulesService.getComponentTemplate(
-                            infoValue.componentId
-                        );
-                    }
-                }
-            }
-        }
-        return templates;
-    }
-
-}
-
-export class InitWidgetData {
-    constructor(
-        public widgetConfiguration: WidgetConfiguration,
-        public avatar: Array<ObjectIcon | string>,
-    ) { }
 }
 
 export class InfoValue {

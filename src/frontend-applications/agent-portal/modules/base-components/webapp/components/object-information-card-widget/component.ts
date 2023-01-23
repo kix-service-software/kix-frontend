@@ -16,6 +16,7 @@ import { IdService } from '../../../../../model/IdService';
 import { ObjectInformationCardConfiguration } from './ObjectInformationCardConfiguration';
 import { Context } from '../../../../../model/Context';
 import { ObjectInformationCardDataHandler } from '../../core/ObjectInformationCardDataHandler';
+import { KIXModulesService } from '../../core/KIXModulesService';
 
 class Component {
 
@@ -56,6 +57,10 @@ class Component {
             additionalInformationChanged: (): void => { return; }
         });
 
+        this.state.widgetConfiguration = this.context
+            ? await this.context.getWidgetConfiguration(this.state.instanceId)
+            : undefined;
+
         this.initWidget();
     }
 
@@ -64,29 +69,20 @@ class Component {
     }
 
     private async initWidget(): Promise<void> {
-        this.state.widgetConfiguration = this.context
-            ? await this.context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
-
         const object = await this.context.getObject();
-        const initData =
-            await this.objectInformationCardDataHandler.initWidgetConfiguration(
-                this.context, this.state.instanceId
-            );
-        const config = initData.widgetConfiguration.configuration as ObjectInformationCardConfiguration;
-        this.state.avatar = initData.avatar;
-        await this.prepareInformation(config.rows, object);
+        const config = this.state.widgetConfiguration?.configuration as ObjectInformationCardConfiguration;
+        await this.prepareInformation(config, object);
+        this.state.avatar = (config.avatar as any)?.length ? config.avatar[0] : null;
     }
 
-    private async prepareInformation(rows: InformationRowConfiguration[], object: KIXObject): Promise<void> {
+    private async prepareInformation(config: ObjectInformationCardConfiguration, object: KIXObject): Promise<void> {
         this.state.valuesReady = false;
         this.state.hasComponentValues = false;
-        this.state.information = await this.objectInformationCardDataHandler.prepareInformation(rows, object);
-        const hasComponentValues = this.objectInformationCardDataHandler.hasComponentValues(this.state.information);
+        this.state.information = await ObjectInformationCardDataHandler.prepareInformation(config, object);
+        const hasComponentValues = ObjectInformationCardDataHandler.hasComponentValues(this.state.information);
         if (hasComponentValues) {
             this.state.hasComponentValues = true;
         }
-        this.state.templates = await this.objectInformationCardDataHandler.setTemplateIds(rows);
         this.setDataMapValues(this.state.information);
         this.state.valuesReady = true;
     }
@@ -169,6 +165,10 @@ class Component {
                 (placeholder) => placeholder && placeholder === '<KIX_TICKET_CreateBy>'
             )
         ));
+    }
+
+    public getTemplate(componentId: string): any {
+        return KIXModulesService.getComponentTemplate(componentId);
     }
 }
 
