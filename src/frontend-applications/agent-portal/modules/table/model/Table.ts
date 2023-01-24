@@ -145,6 +145,10 @@ export class Table implements Table {
         this.contentProvider = contentProvider;
     }
 
+    public getContentProvider(): ITableContentProvider {
+        return this.contentProvider;
+    }
+
     public setColumnConfiguration(columnConfiguration: IColumnConfiguration[]): void {
         this.columnConfigurations = columnConfiguration;
     }
@@ -792,6 +796,15 @@ export class Table implements Table {
     public isFiltered(): boolean {
         return this.isFilterDefined(this.filterValue, this.filterCriteria) ||
             this.getColumns().some((c) => c.isFiltered());
+    }
+
+    public setRowObject(row: Row, rowObject: RowObject): void {
+        row.setRowObject(rowObject);
+        row.initializeDisplayValues();
+        EventService.getInstance().publish(
+            TableEvent.ROW_VALUE_CHANGED,
+            new TableEventData(this.getTableId(), row.getRowId())
+        );
     }
 
     public updateRowObject(object: KIXObject): void {

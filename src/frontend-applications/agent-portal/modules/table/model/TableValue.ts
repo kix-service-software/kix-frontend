@@ -18,42 +18,42 @@ import { ValueState } from './ValueState';
 
 export class TableValue {
 
-  public constructor(
-    public property: string,
-    public objectValue: any,
-    public displayValue: string = null,
-    public state: ValueState = ValueState.NONE,
-    public displayIcons: Array<ObjectIcon | string> = null,
-    public instanceId = IdService.generateDateBasedId('TableValue')
-  ) { }
+    public constructor(
+        public property: string,
+        public objectValue: any,
+        public displayValue: string = null,
+        public state: ValueState = ValueState.NONE,
+        public displayIcons: Array<ObjectIcon | string> = null,
+        public instanceId = IdService.generateDateBasedId('TableValue')
+    ) { }
 
-  public async initDisplayValue(cell: Cell): Promise<void> {
-    await this.initDisplayText(cell);
-    await this.initDisplayIcons(cell);
+    public async initDisplayValue(cell: Cell): Promise<void> {
+        await this.initDisplayText(cell);
+        await this.initDisplayIcons(cell);
 
-    EventService.getInstance().publish(TableEvent.DISPLAY_VALUE_CHANGED, this.instanceId);
-  }
-
-  public async initDisplayText(cell: Cell): Promise<void> {
-    const object = cell.getRow().getRowObject<KIXObject>().getObject();
-
-    if (!this.displayValue && object) {
-      this.displayValue = await LabelService.getInstance().getDisplayText(
-        object, this.property, object[this.property], cell.getColumnConfiguration()?.translatable
-      );
-    }
-  }
-
-  public async initDisplayIcons(cell: Cell): Promise<void> {
-    const object = cell.getRow().getRowObject<KIXObject>().getObject();
-
-    if (!this.displayIcons && cell?.getColumnConfiguration()?.showIcon && object) {
-      this.displayIcons = await LabelService.getInstance().getIcons(
-        object, this.property, object[this.property], true
-      );
+        EventService.getInstance().publish(TableEvent.DISPLAY_VALUE_CHANGED, this.instanceId);
     }
 
-    EventService.getInstance().publish(TableEvent.DISPLAY_VALUE_CHANGED, this.instanceId);
-  }
+    public async initDisplayText(cell: Cell): Promise<void> {
+        const object = cell.getRow().getRowObject<KIXObject>().getObject();
+
+        if (!this.displayValue && object) {
+            this.displayValue = await LabelService.getInstance().getDisplayText(
+                object, this.property, object[this.property], cell.getColumnConfiguration()?.translatable
+            );
+        }
+    }
+
+    public async initDisplayIcons(cell: Cell): Promise<void> {
+        const object = cell.getRow().getRowObject<KIXObject>().getObject();
+
+        if (!this.displayIcons && cell?.getColumnConfiguration()?.showIcon && object) {
+            this.displayIcons = await LabelService.getInstance().getIcons(
+                object, this.property, object[this.property], true
+            );
+        }
+
+        EventService.getInstance().publish(TableEvent.DISPLAY_VALUE_CHANGED, this.instanceId);
+    }
 
 }
