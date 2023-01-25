@@ -15,6 +15,7 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { IdService } from '../../../../../model/IdService';
 import { ObjectInformationCardConfiguration } from './ObjectInformationCardConfiguration';
 import { Context } from '../../../../../model/Context';
+import { WidgetService } from '../../core/WidgetService';
 import { ObjectInformationCardDataHandler } from '../../core/ObjectInformationCardDataHandler';
 import { KIXModulesService } from '../../core/KIXModulesService';
 
@@ -28,12 +29,9 @@ class Component {
 
     private valueDataMap: Map<string, boolean>;
 
-    private objectInformationCardDataHandler: ObjectInformationCardDataHandler;
-
     public onCreate(): void {
         this.state = new ComponentState();
         this.valueDataMap = new Map<string, boolean>();
-        this.objectInformationCardDataHandler = new ObjectInformationCardDataHandler();
     }
 
     public onInput(input: any): void {
@@ -91,7 +89,9 @@ class Component {
         information.forEach((row) => {
             row.values.forEach((group) => {
                 group.forEach((infoValue) => {
-                    const data = [infoValue.componentData.property, true];
+                    let data = [];
+                    if (this.state.widgetType === 2) data = [infoValue.text, true];
+                    else data = [infoValue.componentData.property, true];
                     const previousValue = this.valueDataMap.get(data[0]);
                     if (previousValue !== data[1]) {
                         this.state.valuesReady = false;
@@ -104,8 +104,15 @@ class Component {
     }
 
     public hasValue(group: InformationConfiguration[]): boolean {
-        if (group.some((value) => this.valueDataMap.get(value.componentData.property))) {
-            return true;
+        if (this.state.widgetType === 2) {
+            if (group.some((value) => this.valueDataMap.get(value.text))) {
+                return true;
+            }
+        }
+        else {
+            if (group.some((value) => this.valueDataMap.get(value.componentData.property))) {
+                return true;
+            }
         }
         return false;
     }
