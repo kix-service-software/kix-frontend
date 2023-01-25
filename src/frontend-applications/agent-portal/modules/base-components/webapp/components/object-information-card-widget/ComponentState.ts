@@ -7,6 +7,7 @@
  * --
  */
 
+import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { WidgetComponentState } from '../../../../../modules/base-components/webapp/core/WidgetComponentState';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { InformationRowConfiguration } from './ObjectInformationCardConfiguration';
@@ -18,7 +19,8 @@ export class ComponentState extends WidgetComponentState {
         public information: InformationRowConfiguration[] = [],
         public templates: any = {},
         public valuesReady: boolean = false,
-        public hasComponentValues: boolean = false
+        public hasComponentValues: boolean = false,
+        public widgetType: WidgetType = null,
     ) {
         super();
     }
