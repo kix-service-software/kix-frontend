@@ -48,6 +48,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
     public structureOption: boolean = true;
     public fieldOptions: FormFieldOption[];
     public hasFilter: boolean = true;
+    public isEmpty: boolean = false;
 
     public minSelectCount: number;
     public maxSelectCount: number;
@@ -315,6 +316,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                 (o) => o.option === ObjectReferenceOptions.USE_OBJECT_SERVICE
             );
             this.structureOption = !structureOption || Boolean(structureOption?.value);
+
+            this.isEmpty = field?.empty || false;
         }
 
         // INFO: do not init treehandler here bacause it will set selected nodes and

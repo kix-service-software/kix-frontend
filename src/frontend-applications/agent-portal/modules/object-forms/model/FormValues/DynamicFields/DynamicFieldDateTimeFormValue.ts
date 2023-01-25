@@ -92,7 +92,7 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue implements 
             offset = Number(config?.DefaultValue) >= 0 ? Number(config?.DefaultValue) : null;
         }
 
-        if (!this.value && offset !== null) {
+        if (!this.value && offset !== null && !this.isEmpty) {
             const date = new Date();
             date.setSeconds(date.getSeconds() + offset);
             this.value = DateTimeUtil.getKIXDateTimeString(date);
