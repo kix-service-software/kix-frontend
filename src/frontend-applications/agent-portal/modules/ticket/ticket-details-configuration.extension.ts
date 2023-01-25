@@ -315,6 +315,24 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         )
                                     ]
                                 }
+                            ],
+                            [
+                                {
+                                    text: 'Translatable#Merged into the Ticket',
+                                    textStyle: 'font-weight:bold;margin-bottom:0.5rem',
+                                    icon: 'kix-icon-ticket',
+                                    componentId: 'dynamic-field-value',
+                                    componentData: {
+                                        name: 'MergeToTicket'
+                                    },
+                                    conditions: [
+                                        new UIFilterCriterion(
+                                            'DynamicFields.MergeToTicket',
+                                            SearchOperator.NOT_EQUALS,
+                                            null
+                                        )
+                                    ]
+                                }
                             ]
                         ]
                     }, {
