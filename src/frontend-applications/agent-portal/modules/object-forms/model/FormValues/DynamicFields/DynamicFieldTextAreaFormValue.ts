@@ -7,6 +7,7 @@
  * --
  */
 
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';
 import { FormValueProperty } from '../../FormValueProperty';
@@ -18,6 +19,7 @@ import { ICountableFormValue } from './ICountableFromValue';
 export class DynamicFieldTextAreaFormValue extends ObjectFormValue<string> implements ICountableFormValue {
 
     public dfValues: DynamicFieldValue[] = [];
+    public isEmpty: boolean = false;
 
     public constructor(
         public property: string,
@@ -50,10 +52,30 @@ export class DynamicFieldTextAreaFormValue extends ObjectFormValue<string> imple
         this.regExList = config?.RegExList?.map(
             (ri) => { return { regEx: ri.Value, errorMessage: ri.ErrorMessage }; }
         ) || [];
+        this.setValueByDefault(config);
 
         await super.initFormValue();
 
         this.value = this.object[this.property];
+    }
+
+    private setValueByDefault(config: any): void {
+        const isDefaultValueDefined = config?.DefaultValue !== ''
+            && config?.DefaultValue !== null
+            && typeof config?.DefaultValue !== 'undefined';
+
+        let defaultValue = null;
+        if (isDefaultValueDefined) {
+            defaultValue = config?.DefaultValue;
+        }
+
+        if (
+            !this.value
+            && defaultValue !== null
+            && !this.isEmpty
+        ) {
+            this.value = defaultValue;
+        }
     }
 
     public canAddValue(instanceId: string): boolean {
@@ -91,4 +113,9 @@ export class DynamicFieldTextAreaFormValue extends ObjectFormValue<string> imple
         }
     }
 
+    public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
+
+        this.isEmpty = field?.empty || false;
+        super.initFormValueByField(field);
+    }
 }

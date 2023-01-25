@@ -18,6 +18,7 @@ export class DateTimeFormValue extends ObjectFormValue<string> {
     public inputType: InputFieldTypes = InputFieldTypes.DATE_TIME;
     public minDate: string;
     public maxDate: string;
+    public isEmpty: boolean;
 
     public constructor(
         public property: string,
@@ -42,6 +43,8 @@ export class DateTimeFormValue extends ObjectFormValue<string> {
 
         const maxDateOption = field?.options.find((o) => o.option === FormFieldOptions.MAX_DATE);
         this.maxDate = maxDateOption ? maxDateOption.value : null;
+
+        this.isEmpty = field?.empty || false;
     }
 
 }
