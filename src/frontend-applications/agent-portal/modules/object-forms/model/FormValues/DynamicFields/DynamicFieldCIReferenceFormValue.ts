@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -90,8 +90,28 @@ export class DynamicFieldCIReferenceFormValue<T = number> extends SelectObjectFo
         if (!this.autoCompleteConfiguration) {
             this.autoCompleteConfiguration = new AutoCompleteConfiguration();
         }
+        this.setValueByDefault(dynamicField.Config);
 
         await super.initFormValue();
+    }
+
+    private setValueByDefault(config: any): void {
+        const isDefaultValueDefined = config?.DefaultValue !== ''
+            && config?.DefaultValue !== null
+            && typeof config?.DefaultValue !== 'undefined';
+
+        let defaultValue = null;
+        if (isDefaultValueDefined) {
+            defaultValue = config?.DefaultValue;
+        }
+
+        if (
+            !this.value
+            && defaultValue !== null
+            && !this.isEmpty
+        ) {
+            this.value = defaultValue;
+        }
     }
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
