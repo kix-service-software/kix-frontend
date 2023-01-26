@@ -54,7 +54,9 @@ export class TicketNamespace extends SocketNameSpace {
         data: LoadArticleAttachmentRequest, client: Socket
     ): Promise<SocketResponse> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
-        const token = parsedCookie ? parsedCookie.token : '';
+
+        const tokenPrefix = client?.handshake?.headers?.tokenprefix || '';
+        const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
         const response = await TicketAPIService.getInstance().loadArticleAttachment(
             token, data.ticketId, data.articleId, data.attachmentId
@@ -72,7 +74,9 @@ export class TicketNamespace extends SocketNameSpace {
         data: LoadArticleZipAttachmentRequest, client: Socket
     ): Promise<SocketResponse> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
-        const token = parsedCookie ? parsedCookie.token : '';
+
+        const tokenPrefix = client?.handshake?.headers?.tokenprefix || '';
+        const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
         const response = await TicketAPIService.getInstance().loadArticleZipAttachment(
             token, data.ticketId, data.articleId
@@ -90,7 +94,9 @@ export class TicketNamespace extends SocketNameSpace {
         data: SetArticleSeenFlagRequest, client: Socket
     ): Promise<SocketResponse> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
-        const token = parsedCookie ? parsedCookie.token : '';
+
+        const tokenPrefix = client?.handshake?.headers?.tokenprefix || '';
+        const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
         const response = await TicketAPIService.getInstance().setArticleSeenFlag(
             token, null, data.ticketId, data.articleId
