@@ -7,21 +7,17 @@
  * --
  */
 
-import { AgentService } from '../../../user/webapp/core/AgentService';
-import { KIXModulesSocketClient } from './KIXModulesSocketClient';
 import { ContextService } from './ContextService';
 import { ActionFactory } from './ActionFactory';
-import { SetupService } from '../../../setup-assistant/webapp/core/SetupService';
 import { ContextMode } from '../../../../model/ContextMode';
 import { KIXModulesService } from './KIXModulesService';
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
 import { BrowserUtil } from './BrowserUtil';
+import { AdditionalRoutingHandler } from './AdditionalRoutingHandler';
 
 export class RoutingService {
 
     private static INSTANCE: RoutingService = null;
-
-    private VISITED_KEY = 'KIXWebFrontendVisitedVersion';
 
     public static getInstance(): RoutingService {
         if (!RoutingService.INSTANCE) {
@@ -33,6 +29,12 @@ export class RoutingService {
 
     private constructor() { }
 
+    private additionalRoutingHandler: AdditionalRoutingHandler[] = [];
+
+    public registerRoutingHandler(routingHandler: AdditionalRoutingHandler): void {
+        this.additionalRoutingHandler.push(routingHandler);
+    }
+
     public async routeToInitialContext(
         history: boolean = false, useURL: boolean = true, defaultContextId?: string
     ): Promise<void> {
@@ -43,8 +45,10 @@ export class RoutingService {
             routed = await this.routeToURL(history);
         }
 
-        routed = await this.setReleaseContext() || routed;
-        routed = await SetupService.getInstance().setSetupAssistentIfNeeded() || routed;
+        const routingHandler = this.additionalRoutingHandler.sort((a, b) => a.priority - b.priority);
+        for (const handler of routingHandler) {
+            routed = await handler.handleRouting() || routed;
+        }
 
         if (!routed) {
             const contextList = ContextService.getInstance().getContextInstances();
@@ -74,37 +78,6 @@ export class RoutingService {
                 routingConfiguration?.additionalInformation
             );
         }
-    }
-
-    private async setReleaseContext(): Promise<boolean> {
-        let routed: boolean = false;
-
-        const needReleaseInfo = await this.isReleaseInfoNeeded();
-        if (needReleaseInfo) {
-            await ContextService.getInstance().setActiveContext('release');
-
-            const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
-            const buildNumber = releaseInfo ? releaseInfo.buildNumber : null;
-            AgentService.getInstance().setPreferences([
-                [this.VISITED_KEY, buildNumber.toString()]
-            ]);
-            routed = true;
-        }
-
-        return routed;
-    }
-
-    private async isReleaseInfoNeeded(): Promise<boolean> {
-        let releaseInfoVisited: string;
-        const currentUser = await AgentService.getInstance().getCurrentUser();
-        if (currentUser && currentUser.Preferences) {
-            const vistedVersion = currentUser.Preferences.find((p) => p.ID === this.VISITED_KEY);
-            releaseInfoVisited = vistedVersion ? vistedVersion.Value : null;
-        }
-
-        const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
-        const buildNumber = releaseInfo ? releaseInfo.buildNumber : null;
-        return !releaseInfoVisited || (buildNumber && releaseInfoVisited !== buildNumber.toString());
     }
 
     private setHomeContextIfNeeded(defaultContextId: string = 'home'): boolean {
