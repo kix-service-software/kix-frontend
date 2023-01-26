@@ -79,9 +79,8 @@ export class CacheService {
         const promises = [];
         for (const event of events) {
             if (event.Event === 'CLEAR_CACHE') {
-                // TODO: Is it really necessary to clear the whole cache if the BE told it to us?
-                // LoggingService.getInstance().debug('Backend Notification: ' + JSON.stringify(event));
-                // promises.push(this.clearCache());
+                LoggingService.getInstance().debug('Backend Notification: ' + JSON.stringify(event));
+                promises.push(this.clearCache());
             } else if (!event.Namespace) {
                 LoggingService.getInstance().warning('Ignore Backend Notification (missing Namespace in event)', event);
             } else if (this.isUserStatsAffected(event.Namespace)) {
