@@ -61,17 +61,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.prepareArticleData();
         }
 
-        if (input.collapseAll) {
-            this.state.expanded = false;
-        } else if (input.expanded && !this.state.expanded) {
-            // expand if now necessary
-            this.toggleArticleListView();
-        }
         this.state.selectedCompactView = typeof input.selectedCompactView !== 'undefined' ? input.selectedCompactView : true;
-        this.state.compactViewExpanded = this.state.selectedCompactView ? this.state.expanded : false;
 
         // load article and prepare actions if not done yet
-        if (!this.state.article['ObjectActions']?.length) {
+        if ((!this.state.selectedCompactView || this.state.expanded) && !this.state.article['ObjectActions']?.length) {
             this.loadArticle(undefined, true);
         }
     }
@@ -79,6 +72,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         this.context = ContextService.getInstance().getActiveContext();
         this.prepareObserver();
+
+        this.state.unseen = this.state.article.Unseen;
 
         this.contextListenerId = IdService.generateDateBasedId('message-content-' + this.article?.ArticleID);
         this.contextListener = {
@@ -214,11 +209,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.eventSubscriber = {
             eventSubscriberId: 'message-content-' + this.state.article?.ArticleID,
             eventPublished: (data: any, eventId: string): void => {
-                if (eventId === 'TOGGLE_ARTICLE') {
-                    this.state.expanded = data;
-                    if (this.state.expanded) {
-                        this.setArticleSeen();
-                    }
+                if (eventId === 'TOGGLE_ARTICLE' && data.articleId === this.article.ArticleID) {
+                    this.state.expanded = data.expanded;
+                    this.state.compactViewExpanded = this.state.selectedCompactView ? this.state.expanded : false;
+                    this.toggleArticleContent();
                 }
             }
         };
@@ -282,7 +276,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.article, ArticleProperty.CC, undefined, undefined, false
             );
 
+            await this.loadArticle();
             await this.setArticleSeen(undefined, true);
+
+            this.state.unseen = 0;
 
             this.state.loadingContent = false;
             this.state.showContent = true;
@@ -340,19 +337,29 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async loadArticle(silent: boolean = false, force?: boolean): Promise<void> {
-        this.state.loading = !silent;
+        if (!this.state.selectedCompactView || this.state.compactViewExpanded) {
+            this.state.loading = !silent;
 
-        if (!this.articleLoaded || force) {
-            const loadingOptions = new KIXObjectLoadingOptions(
-                null, null, null,
-                [
-                    ArticleProperty.PLAIN, ArticleProperty.ATTACHMENTS, 'ObjectActions'
-                ]
-            );
-            const articles = await KIXObjectService.loadObjects<Article>(
-                KIXObjectType.ARTICLE, [this.article.ArticleID], loadingOptions,
-                new ArticleLoadingOptions(this.article.TicketID)
-            );
+            let articles = [];
+            if (!this.articleLoaded || force) {
+                const loadingOptions = new KIXObjectLoadingOptions(
+                    null, null, null,
+                    [
+                        ArticleProperty.PLAIN, ArticleProperty.ATTACHMENTS, 'ObjectActions'
+                    ]
+                );
+                articles = await KIXObjectService.loadObjects<Article>(
+                    KIXObjectType.ARTICLE, [this.article.ArticleID], loadingOptions,
+                    new ArticleLoadingOptions(this.article.TicketID)
+                );
+
+                if (articles?.length) {
+                    const countNumber = this.state.article['countNumber'];
+                    this.state.article = articles[0];
+                    this.state.article['countNumber'] = countNumber;
+                    this.articleLoaded = true;
+                }
+            }
 
             if (articles?.length) {
                 this.state.article = articles[0];
