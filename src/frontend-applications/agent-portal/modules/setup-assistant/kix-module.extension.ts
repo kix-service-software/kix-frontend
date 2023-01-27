@@ -22,7 +22,11 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
 
     public external: boolean = false;
 
-    public initComponents: UIComponent[] = [];
+    public initComponents: UIComponent[] = [
+        new UIComponent(
+            'SetupUIModule', '/kix-module-setup-assistant$0/webapp/core/SetupUIModule', []
+        )
+    ];
 
     public uiComponents: UIComponent[] = [
         new UIComponent(

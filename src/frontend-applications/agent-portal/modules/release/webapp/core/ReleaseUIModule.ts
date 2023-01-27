@@ -14,6 +14,8 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { RoutingService } from '../../../base-components/webapp/core/RoutingService';
+import { ReleaseRoutingHandler } from './ReleaseRoutingHandler';
 
 export class UIModule implements IUIModule {
 
@@ -22,6 +24,9 @@ export class UIModule implements IUIModule {
     public name: string = 'ReleaseUIModule';
 
     public async register(): Promise<void> {
+
+        RoutingService.getInstance().registerRoutingHandler(new ReleaseRoutingHandler());
+
         const releaseContext = new ContextDescriptor(
             ReleaseContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'release-module', ['release'], ReleaseContext
