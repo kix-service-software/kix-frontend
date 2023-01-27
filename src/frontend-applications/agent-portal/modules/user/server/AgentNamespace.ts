@@ -28,6 +28,8 @@ import { Socket } from 'socket.io';
 import { CacheService } from '../../../server/services/cache';
 import { PersonalSettingsProperty } from '../model/PersonalSettingsProperty';
 import { HttpService } from '../../../server/services/HttpService';
+import { AuthenticationService } from '../../../../../server/services/AuthenticationService';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
 export class AgentNamespace extends SocketNameSpace {
 
@@ -52,6 +54,7 @@ export class AgentNamespace extends SocketNameSpace {
         this.registerEventHandler(client, AgentEvent.GET_PERSONAL_SETTINGS, this.getPersonalSettings.bind(this));
         this.registerEventHandler(client, AgentEvent.SET_PREFERENCES, this.setPreferences.bind(this));
         this.registerEventHandler(client, AgentEvent.GET_CURRENT_USER, this.getCurrentUser.bind(this));
+        this.registerEventHandler(client, AgentEvent.CLEAR_CURRENT_USER_CACHE, this.clearCurrentUserCache.bind(this));
     }
 
     private async getPersonalSettings(data: ISocketRequest, client: Socket): Promise<SocketResponse> {
@@ -112,6 +115,24 @@ export class AgentNamespace extends SocketNameSpace {
                 AgentEvent.GET_CURRENT_USER_FINISHED, new GetCurrentUserResponse(data.requestId, user)
             );
         }
+        return response;
+    }
+
+    private async clearCurrentUserCache(data: ISocketRequest, client: Socket): Promise<SocketResponse> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+
+        const tokenPrefix = client?.handshake?.headers?.tokenprefix || '';
+        const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
+
+        const backendToken = AuthenticationService.getInstance().getBackendToken(token);
+        const userId = AuthenticationService.getInstance().decodeToken(backendToken)?.UserID;
+
+        CacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS_${userId}`);
+
+        const response = new SocketResponse(
+            AgentEvent.CLEAR_CURRENT_USER_CACHE_FINISHED, { requestId: data.requestId }
+        );
+
         return response;
     }
 }
