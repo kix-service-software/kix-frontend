@@ -9,7 +9,8 @@
                 "LASSO_TIMEOUT": "200000",
                 "SHOW_MODULE_COMPLAINS": "1",
                 "NODE_OPTIONS": "--inspect",
-                "ENABLE_PROFILING": "true"
+                "ENABLE_PROFILING": "true",
+                "BUILD_MARKO_APPLICATIONS": "SSP"
             },
             "name": "KIX",
             "program": "${workspaceFolder}/src/server/index.ts",

@@ -345,7 +345,6 @@ export class HttpService {
 
     public async getUserByToken(token: string, withStats?: boolean): Promise<User> {
         const backendToken = AuthenticationService.getInstance().getBackendToken(token);
-
         const userId = AuthenticationService.getInstance().decodeToken(backendToken)?.UserID;
 
         const cacheType = withStats

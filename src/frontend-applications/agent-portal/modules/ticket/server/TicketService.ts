@@ -51,6 +51,7 @@ import { UIComponentPermission } from '../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../server/model/rest/CRUD';
 import { PermissionService } from '../../../server/services/PermissionService';
 import { SysConfigOption } from '../../sysconfig/model/SysConfigOption';
+import { AuthenticationService } from '../../../../../server/services/AuthenticationService';
 
 export class TicketAPIService extends KIXObjectAPIService {
 
@@ -498,7 +499,7 @@ export class TicketAPIService extends KIXObjectAPIService {
                 throw new Error(error.Code, error.Message);
             });
         }
-
+        this.deleteUserCache(token);
         return objectId;
     }
 
@@ -697,6 +698,8 @@ export class TicketAPIService extends KIXObjectAPIService {
             throw new Error(error.Code, error.Message);
         });
 
+        this.deleteUserCache(undefined, userId);
+
         return watcherId;
     }
 
@@ -704,6 +707,7 @@ export class TicketAPIService extends KIXObjectAPIService {
         token: string, clientRequestId: string, watcherId: number
     ): Promise<Error[]> {
         const uri = this.buildUri('watchers', watcherId);
+        this.deleteUserCache(token);
         return await this.sendDeleteRequest<void>(token, clientRequestId, [uri], this.objectType);
     }
 
@@ -871,6 +875,15 @@ export class TicketAPIService extends KIXObjectAPIService {
             objectClass = SenderType;
         }
         return objectClass;
+    }
+
+    private deleteUserCache(token?: string, userId?: number): void {
+        if (token) {
+            const backendToken = AuthenticationService.getInstance().getBackendToken(token);
+            userId = AuthenticationService.getInstance().decodeToken(backendToken)?.UserID;
+        }
+        CacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS_${userId}`);
+        CacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_${userId}`);
     }
 
 }

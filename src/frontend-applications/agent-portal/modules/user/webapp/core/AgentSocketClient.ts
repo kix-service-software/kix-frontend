@@ -27,6 +27,7 @@ import { PersonalSettingsProperty } from '../../model/PersonalSettingsProperty';
 import { BackendNotification } from '../../../../model/BackendNotification';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
 import { EventService } from '../../../base-components/webapp/core/EventService';
+import { ISocketResponse } from '../../../base-components/webapp/core/ISocketResponse';
 
 export class AgentSocketClient extends SocketClient {
 
@@ -208,5 +209,44 @@ export class AgentSocketClient extends SocketClient {
                 EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
             }
         }
+    }
+
+    public async clearCurrentUserCache(): Promise<void> {
+        const requestId = IdService.generateDateBasedId();
+        const currentUserRequest: ISocketRequest = {
+            clientRequestId: ClientStorageService.getClientRequestId(),
+            requestId
+        };
+
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+        const clearCurrentUserCacheRequestPromise = new Promise<void>((resolve, reject) => {
+
+            if (this.socket) {
+                const timeout = window.setTimeout(() => {
+                    reject('Timeout: ' + AgentEvent.CLEAR_CURRENT_USER_CACHE);
+                }, socketTimeout);
+
+                this.socket.on(
+                    AgentEvent.CLEAR_CURRENT_USER_CACHE_FINISHED, async (result: ISocketResponse) => {
+                        if (result.requestId === requestId) {
+                            window.clearTimeout(timeout);
+                            resolve();
+                        }
+                    });
+
+                this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                    window.clearTimeout(timeout);
+                    console.error('Socket Error: getCurrentUser');
+                    console.error(error.error);
+                    reject(error.error);
+                });
+
+                this.socket.emit(AgentEvent.CLEAR_CURRENT_USER_CACHE, currentUserRequest);
+            } else {
+                resolve(null);
+            }
+        });
+
+        return clearCurrentUserCacheRequestPromise;
     }
 }
