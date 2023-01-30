@@ -12,7 +12,8 @@ export class LoadArticleZipAttachmentRequest {
     public constructor(
         public requestId: string,
         public ticketId: number,
-        public articleId: number
+        public articleId: number,
+        public relevantOrganisationId?: number
     ) { }
 
 }

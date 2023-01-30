@@ -60,7 +60,7 @@ export class TicketNamespace extends SocketNameSpace {
         const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
         const response = await TicketAPIService.getInstance().loadArticleAttachment(
-            token, data.ticketId, data.articleId, data.attachmentId
+            token, data.ticketId, data.articleId, data.attachmentId, data.relevantOrganisationId
         ).then((attachment) =>
             new SocketResponse(
                 TicketEvent.ARTICLE_ATTACHMENT_LOADED,
@@ -80,7 +80,7 @@ export class TicketNamespace extends SocketNameSpace {
         const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
         const response = await TicketAPIService.getInstance().loadArticleZipAttachment(
-            token, data.ticketId, data.articleId
+            token, data.ticketId, data.articleId, data.relevantOrganisationId
         ).then((attachment) =>
             new SocketResponse(
                 TicketEvent.ARTICLE_ZIP_ATTACHMENT_LOADED,

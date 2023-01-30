@@ -51,7 +51,10 @@ export class TicketSocketClient extends SocketClient {
 
         const requestPromise = new Promise<Attachment>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();
-            const request = new LoadArticleAttachmentRequest(requestId, ticketId, articleId, attachmentId);
+            const organisationId = ClientStorageService.getOption('RelevantOrganisationID');
+            const request = new LoadArticleAttachmentRequest(
+                requestId, ticketId, articleId, attachmentId, Number(organisationId)
+            );
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + TicketEvent.LOAD_ARTICLE_ATTACHMENT);
@@ -85,7 +88,10 @@ export class TicketSocketClient extends SocketClient {
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<Attachment>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();
-            const request = new LoadArticleZipAttachmentRequest(requestId, ticketId, articleId);
+            const organisationId = ClientStorageService.getOption('RelevantOrganisationID');
+            const request = new LoadArticleZipAttachmentRequest(
+                requestId, ticketId, articleId, Number(organisationId)
+            );
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + TicketEvent.LOAD_ARTICLE_ZIP_ATTACHMENT);

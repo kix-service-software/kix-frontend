@@ -619,7 +619,8 @@ export class TicketAPIService extends KIXObjectAPIService {
     }
 
     public async loadArticleAttachment(
-        token: string, ticketId: number, articleId: number, attachmentId: number
+        token: string, ticketId: number, articleId: number, attachmentId: number,
+        relevantOrganisationId?: number
     ): Promise<Attachment> {
 
         const uri = this.buildUri(
@@ -627,18 +628,22 @@ export class TicketAPIService extends KIXObjectAPIService {
         );
 
         const response = await this.getObjectByUri(token, uri, 'TicketService', {
-            include: 'Content'
+            include: 'Content',
+            RelevantOrganisationID: relevantOrganisationId
         }, KIXObjectType.ATTACHMENT);
         return response['Attachment'];
     }
 
-    public async loadArticleZipAttachment(token: string, ticketId: number, articleId: number): Promise<Attachment> {
+    public async loadArticleZipAttachment(
+        token: string, ticketId: number, articleId: number, relevantOrganisationId?: number
+    ): Promise<Attachment> {
         const uri = this.buildUri(
             this.RESOURCE_URI, ticketId, 'articles', articleId, 'attachments', 'zip'
         );
 
         const response = await this.getObjectByUri(token, uri, 'TicketService', {
-            include: 'Content'
+            include: 'Content',
+            RelevantOrganisationID: relevantOrganisationId
         });
         return response['Attachment'];
     }
