@@ -85,6 +85,11 @@ export class CacheService {
                 LoggingService.getInstance().warning('Ignore Backend Notification (missing Namespace in event)', event);
             } else if (this.isUserStatsAffected(event.Namespace)) {
                 promises.push(this.handleUserStatsCache(event));
+
+                // update regular caches also
+                if (event.Event === 'UPDATE') {
+                    promises.push(this.deleteKeys(event.Namespace));
+                }
             } else if (event.Namespace.startsWith('User.UserPreference')) {
                 promises.push(this.handleUserPreferencesCache(event));
             } else if (!event.Namespace.startsWith(KIXObjectType.TRANSLATION_PATTERN)) {
