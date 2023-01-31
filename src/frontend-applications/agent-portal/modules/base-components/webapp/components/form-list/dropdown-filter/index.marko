@@ -7,7 +7,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<if(state.freeText || component.hasManyNodes() || state.autocompleteConfiguration)>
+<if(
+    state.freeText ||
+    component.hasManyNodes() ||
+    state.autocompleteConfiguration,
+)>
     <input.input-style
         type="text"
         placeholder=state.placeholder
@@ -16,16 +20,19 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         on-keyup("keyup")
         on-keydown("keydown")
         on-focus("stopEvent")
-        onblur("stopEvent") no-update/>
+        onblur("stopEvent")
+        no-update
+    >
     <if(state.loading)>
-        <div.form-list-loading>
-            <loading-spinner/>
-        </div>
+        <div.form-list-loading><loading-spinner/></div>
     </if>
-    <if(state.autocompleteConfiguration && (!state.tree || state.tree.length === 0))>
+    <if(
+        state.autocompleteConfiguration &&
+        (!state.tree || state.tree.length === 0),
+    )>
         <div.form-list-autocomplete-no-results>
             <span>${state.autocompleteNotFoundText}</span>
         </div>
     </if>
 </if>
-<input.hidden-input type="text" key="hidden-filter-input" on-keydown("keydown")/>
+<input.d-none type="text" key="hidden-filter-input" on-keydown("keydown")>
