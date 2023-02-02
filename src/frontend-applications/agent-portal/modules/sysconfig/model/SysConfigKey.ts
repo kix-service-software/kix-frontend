@@ -75,6 +75,12 @@ export enum SysConfigKey {
 
     FRONTEND_RICHTEXT_DEFAULT_CSS = 'Frontend::RichText::DefaultCSS',
 
-    TICKET_FRONTEND_NEED_ACCOUNTED_TIME = 'Ticket::Frontend::NeedAccountedTime'
+    TICKET_FRONTEND_NEED_ACCOUNTED_TIME = 'Ticket::Frontend::NeedAccountedTime',
+
+    TICKET_STATE_DEFAULT = 'Ticket::State::Default',
+
+    TICKET_PRIORITY_DEFAULT = 'Ticket::Priority::Default',
+
+    TICKET_QUEUE_DEFAULT = 'Ticket::Queue::Default'
 
 }

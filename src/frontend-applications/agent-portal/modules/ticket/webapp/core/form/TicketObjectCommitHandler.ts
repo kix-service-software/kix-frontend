@@ -164,7 +164,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         if (!ticket.Title && this.objectValueMapper?.formContext === FormContext.NEW) {
             await super.prepareTitle(ticket);
             if (!ticket.Title) {
-                ticket.Title = new Date().toLocaleDateString();
+                ticket.Title = '<KIX_DATEUTILS_Now_DateTime>';
             }
             if (ticket.Articles?.length) {
                 const article = ticket.Articles.find((a) => !a.ArticleID);
