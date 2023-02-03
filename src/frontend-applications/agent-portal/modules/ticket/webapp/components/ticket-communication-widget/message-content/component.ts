@@ -326,7 +326,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             await TicketService.getInstance().setArticleSeenFlag(
                 article.TicketID, article.ArticleID
             );
-            this.context.reloadObjectList(KIXObjectType.ARTICLE);
+            this.context.reloadObjectList(KIXObjectType.ARTICLE, true);
         }
     }
 

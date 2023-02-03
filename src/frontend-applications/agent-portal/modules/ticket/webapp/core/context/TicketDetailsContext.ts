@@ -107,7 +107,9 @@ export class TicketDetailsContext extends Context {
         if (objectType === KIXObjectType.ARTICLE) {
 
             // just trigger objectListChanged event
-            this.setObjectList(KIXObjectType.ARTICLE, null);
+            if (!silent) {
+                this.setObjectList(KIXObjectType.ARTICLE, null);
+            }
         }
     }
 
