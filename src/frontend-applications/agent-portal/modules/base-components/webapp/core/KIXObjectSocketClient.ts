@@ -313,8 +313,11 @@ export class KIXObjectSocketClient extends SocketClient {
             this.socket.on(SocketEvent.PERMISSION_ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestObject.requestId) {
                     window.clearTimeout(timeout);
-                    console.error('No permissions');
-                    console.error(error.error);
+                    if (!silent) {
+                        console.error('No permissions');
+                        console.error(error.error);
+                    }
+
                     const permissionError = error.error as PermissionError;
                     reject(new PermissionError(permissionError, permissionError.resource, permissionError.method));
                 }
