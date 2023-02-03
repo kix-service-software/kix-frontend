@@ -66,6 +66,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
+    public inputClicked(event: any): void {
+        event.stopPropagation();
+        event.preventDefault();
+    }
+
     public async closeOverlay(save: boolean = false): Promise<void> {
         if (save) {
             if (!this.state.name) {
