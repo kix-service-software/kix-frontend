@@ -54,8 +54,6 @@ export class SysConfigService extends KIXObjectAPIService {
         SysConfigKey.MAX_ALLOWED_SIZE
     ];
 
-    private optionCache: Map<string, SysConfigOption> = new Map();
-
     private constructor() {
         super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
@@ -76,17 +74,11 @@ export class SysConfigService extends KIXObjectAPIService {
         }
 
         LoggingService.getInstance().info('Preload SysconfigOptions');
-        this.optionCache.clear();
 
-        const loadingOptions = new KIXObjectLoadingOptions();
-        loadingOptions.cacheType = `Preload::${KIXObjectType.SYS_CONFIG_OPTION}`;
-        const options = await this.loadObjects<SysConfigOption>(
-            config?.BACKEND_API_TOKEN, 'SysConfigServicePreload', KIXObjectType.SYS_CONFIG_OPTION, this.preloadOptionKeys,
-            loadingOptions, null
-        ).catch((): SysConfigOption[] => []);
-
-        for (const option of options) {
-            this.optionCache.set(option.Name, option);
+        for (const key of this.preloadOptionKeys) {
+            await this.loadObjects<SysConfigOption>(
+                config?.BACKEND_API_TOKEN, 'SysConfigServicePreload', KIXObjectType.SYS_CONFIG_OPTION, [key], null, null
+            ).catch((): SysConfigOption[] => []);
         }
     }
 
@@ -97,15 +89,10 @@ export class SysConfigService extends KIXObjectAPIService {
         let objects = [];
 
         if (objectType === KIXObjectType.SYS_CONFIG_OPTION) {
-
-            if (objectIds?.length === 1 && this.optionCache.has(objectIds[0])) {
-                objects = [this.optionCache.get(objectIds[0])];
-            } else {
-                objects = await super.load<SysConfigOption>(
-                    token, KIXObjectType.SYS_CONFIG_OPTION, this.RESOURCE_URI, loadingOptions, objectIds,
-                    KIXObjectType.SYS_CONFIG_OPTION, clientRequestId, SysConfigOption
-                );
-            }
+            objects = await super.load<SysConfigOption>(
+                token, KIXObjectType.SYS_CONFIG_OPTION, this.RESOURCE_URI, loadingOptions, objectIds,
+                KIXObjectType.SYS_CONFIG_OPTION, clientRequestId, SysConfigOption
+            );
         } else if (objectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION) {
             const uri = this.buildUri(this.RESOURCE_URI, 'definitions');
             objects = await super.load<SysConfigOptionDefinition>(
