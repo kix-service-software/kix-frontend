@@ -109,7 +109,7 @@ export class RoutingService {
         }
 
         if (contextUrl && contextUrl !== '') {
-            routed = await this.handleURLParams(urlParams, contextUrl);
+            routed = await this.handleURLParams(urlParams, contextUrl, history);
 
             if (!routed) {
                 const context = await ContextService.getInstance().setContextByUrl(
@@ -133,7 +133,9 @@ export class RoutingService {
         return path;
     }
 
-    private async handleURLParams(params: URLSearchParams, contextId?: string): Promise<boolean> {
+    private async handleURLParams(
+        params: URLSearchParams, contextId?: string, history: boolean = true
+    ): Promise<boolean> {
         const result = await new Promise<boolean>(async (resolve, reject) => {
             if (params.has('new')) {
 
@@ -145,7 +147,9 @@ export class RoutingService {
                     (c) => c.urlPaths.some((url) => url === contextId)
                 );
 
-                await ContextService.getInstance().setActiveContext(contextDescriptor?.contextId, null, params);
+                await ContextService.getInstance().setActiveContext(
+                    contextDescriptor?.contextId, null, params, [], history
+                );
 
                 resolve(true);
             } else if (params.has('actionId')) {
