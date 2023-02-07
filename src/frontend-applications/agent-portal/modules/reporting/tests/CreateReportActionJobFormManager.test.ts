@@ -258,7 +258,7 @@ describe('CreateReportActionJobFormManager', () => {
             });
 
             it('Should have the correct input component', () => {
-                expect(field.inputComponent).equals('default-select-input');
+                expect(field.inputComponent).equals('object-reference-input');
             });
 
             it('Should be configured asStructure=true', () => {
@@ -493,7 +493,7 @@ describe('CreateReportActionJobFormManager', () => {
             });
 
             it('Should have the correct input component', () => {
-                expect(field.inputComponent).equals('default-select-input');
+                expect(field.inputComponent).equals('object-reference-input');
             });
 
             it('Should be configured asStructure=false', () => {
