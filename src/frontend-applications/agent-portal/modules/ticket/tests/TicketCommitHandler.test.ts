@@ -137,7 +137,7 @@ describe('ObjectCommitHandler', () => {
             ticket.Articles = [emailArticle, noteArticle];
 
             const commitHandler = new TicketObjectCommitHandler(null);
-            ticket = await commitHandler.prepareObject(ticket, true);
+            ticket = await commitHandler.prepareObject(ticket, null, true);
         });
 
         it('Ticket should have one article with a signature and one without', () => {

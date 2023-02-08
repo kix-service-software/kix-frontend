@@ -10,6 +10,7 @@
 import { FormContext } from '../../../../../model/configuration/FormContext';
 import { Context } from '../../../../../model/Context';
 import { Attachment } from '../../../../../model/kix/Attachment';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
@@ -17,6 +18,7 @@ import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil
 import { BrowserCacheService } from '../../../../base-components/webapp/core/CacheService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { ObjectFormValue } from '../../../../object-forms/model/FormValues/ObjectFormValue';
 import { ObjectFormValueMapper } from '../../../../object-forms/model/ObjectFormValueMapper';
 import { ObjectCommitHandler } from '../../../../object-forms/webapp/core/ObjectCommitHandler';
 import { Article } from '../../../model/Article';
@@ -25,6 +27,7 @@ import { ArticleProperty } from '../../../model/ArticleProperty';
 import { Channel } from '../../../model/Channel';
 import { Queue } from '../../../model/Queue';
 import { Ticket } from '../../../model/Ticket';
+import { TicketProperty } from '../../../model/TicketProperty';
 
 export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
 
@@ -32,8 +35,10 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         super(objectValueMapper, KIXObjectType.TICKET);
     }
 
-    public async prepareObject(ticket: Ticket, forCommit: boolean = true): Promise<Ticket> {
-        const newTicket = await super.prepareObject(ticket, forCommit);
+    public async prepareObject(
+        ticket: Ticket, objectValueMapper?: ObjectFormValueMapper, forCommit: boolean = true
+    ): Promise<Ticket> {
+        const newTicket = await super.prepareObject(ticket, objectValueMapper, forCommit);
 
         await this.prepareArticles(newTicket, forCommit, ticket.QueueID);
         await this.prepareTitle(newTicket);
@@ -41,6 +46,23 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         this.prepareSpecificAttributes(newTicket);
 
         return newTicket;
+    }
+
+    protected removeDisabledProperties(newObject: KIXObject, formValues?: ObjectFormValue<any>[]): void {
+        super.removeDisabledProperties(newObject, formValues);
+
+        if (Array.isArray(formValues)) {
+            for (const k in TicketProperty) {
+                if (TicketProperty[k]) {
+                    const property = TicketProperty[k];
+                    const ignore = property === TicketProperty.TICKET_ID;
+                    const hasValue = formValues.some((fv) => fv.property === property && fv.enabled);
+                    if (!ignore && !hasValue) {
+                        delete newObject[property];
+                    }
+                }
+            }
+        }
     }
 
     private async prepareArticles(ticket: Ticket, forCommit: boolean, orgTicketQueueID: number): Promise<void> {
