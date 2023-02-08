@@ -62,7 +62,7 @@ export class ObjectCommitHandler<T extends KIXObject = KIXObject> {
         this.deleteCommonProperties(newObject, forCommit);
         this.prepareDynamicFields(newObject, forCommit);
         if (forCommit) {
-            this.removeDisabledProperties(newObject, objectValueMapper.getFormValues());
+            this.removeDisabledProperties(newObject, objectValueMapper?.getFormValues());
         }
 
         if (this.extensions.length) {
