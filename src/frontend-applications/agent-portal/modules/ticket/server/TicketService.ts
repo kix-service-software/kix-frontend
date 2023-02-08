@@ -530,9 +530,6 @@ export class TicketAPIService extends KIXObjectAPIService {
             delete ticket.DynamicFields;
         }
 
-        delete ticket.TicketID;
-        delete ticket.KIXObjectType;
-
         const response = await this.sendRequest(
             token, clientRequestId, uri, content, KIXObjectType.TICKET, create
         ).catch((error: Error) => {
