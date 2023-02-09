@@ -142,6 +142,10 @@ export abstract class SearchDefinition {
             }
         }
 
+        for (const definition of this.extendedDefinitions) {
+            await definition.prepareFormFilterCriteria(filteredCriteria, forSearch);
+        }
+
         return filteredCriteria;
     }
 
