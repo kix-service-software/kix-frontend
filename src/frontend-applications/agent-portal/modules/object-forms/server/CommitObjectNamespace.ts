@@ -52,7 +52,7 @@ export class CommitObjectNamespace extends SocketNameSpace {
 
         const service = KIXObjectServiceRegistry.getServiceInstance(object?.KIXObjectType);
         if (service) {
-            const id = await service.commitObject(token, data.clientRequestId, object);
+            const id = await service.commitObject(token, data.clientRequestId, object, data.relevantOrganisationId);
             const objectResponse = new CommitObjectResponse(data.requestId, id);
             return new SocketResponse(CommitObjectEvent.COMMIT_OBJECT_FINISHED, objectResponse);
         } else {

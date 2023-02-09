@@ -184,7 +184,9 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         throw new Error('', 'Method updateObject not implemented.');
     }
 
-    public async commitObject(token: string, clientRequestId: string, object: KIXObject): Promise<number | string> {
+    public async commitObject(
+        token: string, clientRequestId: string, object: KIXObject, relevantOrganisationId: number
+    ): Promise<number | string> {
         throw new Error('', 'Method commitObject not implemented.');
     }
 
@@ -268,12 +270,14 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
     protected sendRequest(
         token: string, clientRequestId: string, uri: string, content: any,
-        cacheKeyPrefix: string, create: boolean = false
+        cacheKeyPrefix: string, create: boolean = false, relevantOrganisationId?: number
     ): Promise<any> {
         if (create) {
-            return this.httpService.post(uri, content, token, clientRequestId, cacheKeyPrefix);
+            return this.httpService.post(
+                uri, content, token, clientRequestId, cacheKeyPrefix, undefined, relevantOrganisationId
+            );
         } else {
-            return this.httpService.patch(uri, content, token, clientRequestId, cacheKeyPrefix);
+            return this.httpService.patch(uri, content, token, clientRequestId, cacheKeyPrefix, relevantOrganisationId);
         }
     }
 
@@ -284,9 +288,10 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     }
 
     protected sendUpdateRequest<R, C>(
-        token: string, clientRequestId: string, uri: string, content: C, cacheKeyPrefix: string
+        token: string, clientRequestId: string, uri: string, content: C, cacheKeyPrefix: string,
+        relevantOrganisationId?: number
     ): Promise<R> {
-        return this.httpService.patch<R>(uri, content, token, clientRequestId, cacheKeyPrefix);
+        return this.httpService.patch<R>(uri, content, token, clientRequestId, cacheKeyPrefix, relevantOrganisationId);
     }
 
     protected sendDeleteRequest<R>(

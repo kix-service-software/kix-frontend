@@ -503,7 +503,9 @@ export class TicketAPIService extends KIXObjectAPIService {
         return objectId;
     }
 
-    public async commitObject(token: string, clientRequestId: string, ticket: Ticket): Promise<number | string> {
+    public async commitObject(
+        token: string, clientRequestId: string, ticket: Ticket, relevantOrganisationId: number
+    ): Promise<number | string> {
 
         const content = { Ticket: ticket };
         const create = !(ticket.TicketID > 0);
@@ -531,7 +533,7 @@ export class TicketAPIService extends KIXObjectAPIService {
         }
 
         const response = await this.sendRequest(
-            token, clientRequestId, uri, content, KIXObjectType.TICKET, create
+            token, clientRequestId, uri, content, KIXObjectType.TICKET, create, relevantOrganisationId
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
@@ -550,7 +552,8 @@ export class TicketAPIService extends KIXObjectAPIService {
                 }
 
                 await this.sendRequest(
-                    token, clientRequestId, uri, { Article: article }, KIXObjectType.ARTICLE, articleCreate
+                    token, clientRequestId, uri, { Article: article }, KIXObjectType.ARTICLE, articleCreate,
+                    relevantOrganisationId
                 ).catch((error: Error) => {
                     LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                     // TODO: exetend error handling if more than one article will be created?
