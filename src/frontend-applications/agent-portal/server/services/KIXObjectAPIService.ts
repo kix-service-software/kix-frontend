@@ -35,6 +35,7 @@ import { SearchProperty } from '../../modules/search/model/SearchProperty';
 import { SearchOperator } from '../../modules/search/model/SearchOperator';
 import { SortUtil } from '../../model/SortUtil';
 import { ConfigurationService } from '../../../../server/services/ConfigurationService';
+import { FilterDataType } from '../../model/FilterDataType';
 
 export abstract class KIXObjectAPIService implements IKIXObjectService {
 
@@ -519,10 +520,13 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                     case SearchOperator.BETWEEN:
                         if (Array.isArray(c.value) && c.value[0] && c.value[1]) {
                             // switch if necessary
-                            if (SortUtil.compareDate(c.value[0].toString(), c.value[1].toString()) > 0) {
-                                const oldStartDate = c.value[0];
+                            const switchValue = c.type === FilterDataType.NUMERIC ?
+                                Boolean(SortUtil.compareNumber(c.value[0], c.value[1]) > 0) :
+                                Boolean(SortUtil.compareDate(c.value[0].toString(), c.value[1].toString()) > 0);
+                            if (switchValue) {
+                                const oldStartValue = c.value[0];
                                 c.value[0] = c.value[1];
-                                c.value[1] = oldStartDate;
+                                c.value[1] = oldStartValue;
                             }
                             prepareCriteria.push(new FilterCriteria(
                                 c.property, SearchOperator.GREATER_THAN_OR_EQUAL, c.type, c.filterType, c.value[0]

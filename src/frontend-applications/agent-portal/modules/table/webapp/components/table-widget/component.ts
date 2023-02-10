@@ -136,7 +136,7 @@ class Component {
             await this.prepareTable();
             this.prepareActions();
             this.prepareTitle();
-
+            this.state.filterValue = this.state.table.getFilterValue();
             this.prepareContextDependency(settings);
             this.prepareFormDependency();
         }

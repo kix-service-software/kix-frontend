@@ -70,7 +70,7 @@ export class SortUtil {
     }
 
     public static compareNumber(
-        a: number, b: number, sortOrder: SortOrder = SortOrder.UP, notNumberBefore: boolean = true
+        a: any, b: any, sortOrder: SortOrder = SortOrder.UP, notNumberBefore: boolean = true
     ): number {
         let sort = 0;
         if (typeof a !== 'number') {
