@@ -167,6 +167,11 @@ export class CacheService {
             const namespace = objectNamespace.split('.');
             if (namespace[0] === 'CMDB') {
                 types.push(namespace[1]);
+                // remove orga and contact caches because of assigned configitems list
+                if (namespace[2] && namespace[2] === 'Version') {
+                    types.push(KIXObjectType.ORGANISATION);
+                    types.push(KIXObjectType.CONTACT);
+                }
             } else if (namespace[0] === 'FAQ') {
                 types.push(KIXObjectType.FAQ_CATEGORY);
                 types.push(KIXObjectType.FAQ_ARTICLE);
@@ -275,6 +280,9 @@ export class CacheService {
             case KIXObjectType.CONFIG_ITEM_VERSION:
                 types.push(KIXObjectType.CONFIG_ITEM);
                 types.push(KIXObjectType.GRAPH);
+                // remove orga and contact caches because of assigned configitems list
+                types.push(KIXObjectType.ORGANISATION);
+                types.push(KIXObjectType.CONTACT);
                 break;
             case KIXObjectType.SYS_CONFIG_OPTION_DEFINITION:
                 types.push(KIXObjectType.SYS_CONFIG_OPTION);
