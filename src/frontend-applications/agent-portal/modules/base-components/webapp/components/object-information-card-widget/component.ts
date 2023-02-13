@@ -89,18 +89,22 @@ class Component {
         information.forEach((row) => {
             row.values.forEach((group) => {
                 group.forEach((infoValue) => {
-                    let data = [];
-                    if (this.state.widgetType === 2) data = [infoValue.text, true];
-                    else data = [infoValue.componentData.property, true];
-                    const previousValue = this.valueDataMap.get(data[0]);
-                    if (previousValue !== data[1]) {
-                        this.state.valuesReady = false;
-                        this.valueDataMap.set(data[0], data[1]);
-                        this.state.valuesReady = true;
-                    }
+                    const data: [string, boolean] = (this.state.widgetType === 2) ? [infoValue.text, true] :
+                        [infoValue.componentData.property, true];
+                    this.setDataMapValue(data);
                 });
             });
         });
+    }
+
+    // function also needed for object-avatar-label
+    public setDataMapValue(value: [string, boolean]): void {
+        const previousValue = this.valueDataMap.get(value[0]);
+        if (previousValue !== value[1]) {
+            this.state.valuesReady = false;
+            this.valueDataMap.set(value[0], value[1]);
+            this.state.valuesReady = true;
+        }
     }
 
     public hasValue(group: InformationConfiguration[]): boolean {

@@ -118,6 +118,10 @@ export class BrowserCacheService {
             const namespace = objectNamespace.split('.');
             if (namespace[0] === 'CMDB') {
                 cacheKeyPrefixes.push(namespace[1]);
+                if (namespace[2] && namespace[2] === 'Version') {
+                    cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
+                    cacheKeyPrefixes.push(KIXObjectType.CONTACT);
+                }
             } else if (namespace[0] === 'FAQ') {
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_CATEGORY);
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
@@ -226,6 +230,9 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
                 cacheKeyPrefixes.push(KIXObjectType.GRAPH);
                 cacheKeyPrefixes.push(KIXObjectType.GRAPH_INSTANCE);
+                // remove orga and contact caches because of assigned configitems list
+                cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
+                cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 break;
             case KIXObjectType.GENERAL_CATALOG_ITEM:
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
