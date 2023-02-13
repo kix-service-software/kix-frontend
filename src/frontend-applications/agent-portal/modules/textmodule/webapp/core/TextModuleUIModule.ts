@@ -55,7 +55,7 @@ export class UIModule implements IUIModule {
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
             false, 'object-dialog', ['text-modules'], NewTextModuleDialogContext,
             [
-                new UIComponentPermission('system/communication/systemaddresses', [CRUD.CREATE])
+                new UIComponentPermission('system/textmodules', [CRUD.CREATE])
             ],
             'Translatable#New Textmodule', 'kix-icon-gear'
         );
@@ -65,7 +65,7 @@ export class UIModule implements IUIModule {
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
             false, 'object-dialog', ['text-modules'], EditTextModuleDialogContext,
             [
-                new UIComponentPermission('system/communication/systemaddresses', [CRUD.CREATE])
+                new UIComponentPermission('system/textmodules', [CRUD.CREATE])
             ],
             'Translatable#Edit Textmodule', 'kix-icon-gear'
         );
