@@ -40,7 +40,7 @@ export class ObjectCommitHandler<T extends KIXObject = KIXObject> {
     }
 
     public async commitObject(): Promise<number | string> {
-        const newObject = await this.prepareObject(this.objectValueMapper.object as any);
+        const newObject = await this.prepareObject(this.objectValueMapper.object as any, this.objectValueMapper);
         const id = await ObjectCommitSocketClient.getInstance().commitObject(newObject);
         for (const extension of this.extensions) {
             await extension.postCommitHandling(id);
@@ -54,13 +54,15 @@ export class ObjectCommitHandler<T extends KIXObject = KIXObject> {
         this.extensions.push(extension);
     }
 
-    public async prepareObject(object: T, forCommit: boolean = true): Promise<T> {
+    public async prepareObject(
+        object: T, objectValueMapper?: ObjectFormValueMapper, forCommit: boolean = true
+    ): Promise<T> {
         const newObject = this.cloneObject(object);
 
         this.deleteCommonProperties(newObject, forCommit);
         this.prepareDynamicFields(newObject, forCommit);
         if (forCommit) {
-            this.removeDisabledProperties(newObject);
+            this.removeDisabledProperties(newObject, objectValueMapper?.getFormValues());
         }
 
         if (this.extensions.length) {

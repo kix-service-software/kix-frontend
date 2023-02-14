@@ -145,11 +145,12 @@ export class HttpService {
 
     public async post<T>(
         resource: string, content: any, token: string, clientRequestId: string, cacheKeyPrefix: string = '',
-        logError: boolean = true
+        logError: boolean = true, relevantOrganisationId?: number
     ): Promise<T> {
         const options: AxiosRequestConfig = {
             method: RequestMethod.POST,
-            data: content
+            data: content,
+            params: { RelevantOrganisationID: relevantOrganisationId }
         };
 
         const response = await this.executeRequest<T>(resource, token, clientRequestId, options, logError);
@@ -158,12 +159,16 @@ export class HttpService {
     }
 
     public async patch<T>(
-        resource: string, content: any, token: string, clientRequestId: string, cacheKeyPrefix: string = ''
+        resource: string, content: any, token: string, clientRequestId: string, cacheKeyPrefix: string = '',
+        relevantOrganisationId: number
     ): Promise<T> {
         const options: AxiosRequestConfig = {
             method: RequestMethod.PATCH,
-            data: content
+            data: content,
+            params: { RelevantOrganisationID: relevantOrganisationId }
         };
+
+
 
         const response = await this.executeRequest<T>(resource, token, clientRequestId, options);
         await CacheService.getInstance().deleteKeys(cacheKeyPrefix);

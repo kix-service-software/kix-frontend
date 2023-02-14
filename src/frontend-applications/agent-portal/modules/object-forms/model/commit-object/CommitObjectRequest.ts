@@ -15,7 +15,8 @@ export class CommitObjectRequest<T = KIXObject> implements ISocketRequest {
     public constructor(
         public requestId: string,
         public clientRequestId: string,
-        public object: T
+        public object: T,
+        public relevantOrganisationId?: number
     ) { }
 
 }

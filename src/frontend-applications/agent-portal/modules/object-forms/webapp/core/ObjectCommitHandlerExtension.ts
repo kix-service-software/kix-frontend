@@ -18,7 +18,9 @@ export abstract class ObjectCommitHandlerExtension<T extends KIXObject = KIXObje
         return;
     }
 
-    public async prepareObject(object: T): Promise<void> {
+    public async prepareObject(
+        object: T, objectValueMapper?: ObjectFormValueMapper, forCommit?: boolean
+    ): Promise<void> {
         return;
     }
 
