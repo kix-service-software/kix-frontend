@@ -134,8 +134,8 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                             const articleId = dialogContext.getAdditionalInformation(
                                 ArticleProperty.REFERENCED_ARTICLE_ID
                             );
+                            let referencedArticle;
                             if (articleId) {
-                                let referencedArticle;
                                 const articles = await this.getArticles(ticket, Number(articleId));
                                 if (articles && articles.length) {
                                     referencedArticle = articles[0];

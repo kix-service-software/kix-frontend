@@ -92,7 +92,7 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                     case ArticleProperty.CC:
                     case ArticleProperty.BCC:
                         result = await LabelService.getInstance().getDisplayText(
-                            article, attribute, undefined, false
+                            article, attribute, undefined, undefined, false
                         );
                         break;
                     case 'REPLYRECIPIENT':

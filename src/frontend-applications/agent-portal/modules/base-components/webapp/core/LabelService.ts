@@ -139,6 +139,7 @@ export class LabelService {
                 JSON.stringify(defaultValue) : defaultValue;
         }
         valueString += translatable ? '-1' : '-0';
+        valueString += short ? '-1' : '-0';
 
         // if we have already a display value for this property then return directly
         // FIXME: check against ObjectProperty or something similar if property is supported (KIX2018-6164)?
