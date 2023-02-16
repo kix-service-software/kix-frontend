@@ -3120,6 +3120,9 @@ msgstr ""
 msgid "Multiple"
 msgstr ""
 
+msgid "My Articles"
+msgstr ""
+
 msgid "My locked tickets"
 msgstr ""
 

@@ -18,6 +18,7 @@ export class ComponentState extends AbstractComponentState {
         public filterInternal: boolean = false,
         public filterCustomer: boolean = false,
         public filterUnread: boolean = false,
+        public filterMyArticles: boolean = false,
         public isFilterDateBefore: boolean = true,
         public selectedDate: string = '',
         public searchPlaceholder: string = 'Search',
