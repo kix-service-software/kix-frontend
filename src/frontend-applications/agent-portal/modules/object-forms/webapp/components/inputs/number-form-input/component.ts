@@ -39,7 +39,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.bindingIds.push(
             this.formValue?.addPropertyBinding(
                 FormValueProperty.VALUE, async (formValue: ObjectFormValue) => {
-                    this.state.value = formValue.value;
+                    this.state.value = Number(formValue.value);
                 }
             )
         );
@@ -50,7 +50,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             })
         );
 
-        this.state.value = this.formValue?.value;
+        this.state.value = Number(this.formValue?.value);
         this.state.readonly = this.formValue?.readonly;
     }
 
