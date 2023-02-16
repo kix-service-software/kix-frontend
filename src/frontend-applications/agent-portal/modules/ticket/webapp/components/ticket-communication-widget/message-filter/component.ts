@@ -15,6 +15,7 @@ import { ClientStorageService } from '../../../../../base-components/webapp/core
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { TimeoutTimer } from '../../../../../base-components/webapp/core/TimeoutTimer';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
+import { AgentService } from '../../../../../user/webapp/core/AgentService';
 import { Article } from '../../../../model/Article';
 import { ComponentState } from './ComponentState';
 
@@ -112,6 +113,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.filterCustomer = !this.state.filterCustomer;
         } else if (type === 'unread') {
             this.state.filterUnread = !this.state.filterUnread;
+        } else if (type === 'myArticles') {
+            this.state.filterMyArticles = !this.state.filterMyArticles;
         }
         this.filter();
     }
@@ -143,6 +146,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         if (this.state.filterUnread) {
             articles = articles.filter((a) => a.isUnread());
+            isFiltered = true;
+        }
+
+        if (this.state.filterMyArticles) {
+            const currentUser = await AgentService.getInstance().getCurrentUser();
+            articles = articles.filter((a) => a.CreatedBy === currentUser.UserID);
             isFiltered = true;
         }
 

@@ -3320,6 +3320,9 @@ msgstr "vor mehr als"
 msgid "Multiple"
 msgstr "Mehrfach"
 
+msgid "My Articles"
+msgstr "Meine Artikel"
+
 msgid "My locked tickets"
 msgstr "Meine gesperrten Tickets"
 
