@@ -56,9 +56,9 @@ class LinkDialogComponent {
     }
 
     public onInput(input: any): void {
-        this.state.linkDescriptions = !this.state.linkDescriptions
-            ? input.linkDescriptions || []
-            : this.state.linkDescriptions;
+        if (!this.state.linkDescriptions || this.state.linkDescriptions.length === 0) {
+            this.state.linkDescriptions = input.linkDescriptions || [];
+        }
         this.newLinks = [];
         this.objectType = input.objectType;
         this.rootObject = input.rootObject;
@@ -188,7 +188,7 @@ class LinkDialogComponent {
                 if (data && data.tableId === table.getTableId()) {
                     if (eventId === TableEvent.TABLE_READY) {
                         this.setLinkedAsValues(table, this.state.linkDescriptions);
-                        this.markNotSelectableRows();
+                        setTimeout(() => this.markNotSelectableRows(), 50);
                     }
                     this.selectedObjects = table.getSelectedRows().map((r) => r.getRowObject().getObject());
                     this.setSubmitState();
