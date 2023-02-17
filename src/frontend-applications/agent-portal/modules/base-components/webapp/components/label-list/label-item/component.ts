@@ -45,7 +45,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public removeLabel(event: any): void {
         event.stopPropagation();
         event.preventDefault();
-        (this as any).emit('removeLabel', this.state.label);
+        (this as any).emit('removeLabel', this.state.label, event);
     }
 }
 
