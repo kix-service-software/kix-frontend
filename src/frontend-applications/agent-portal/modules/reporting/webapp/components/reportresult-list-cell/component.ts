@@ -42,8 +42,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async download(label: Label, event: any): Promise<void> {
 
-        event.stopPropagation();
-        event.preventDefault();
+        event?.stopPropagation();
+        event?.preventDefault();
 
         const context: ReportingContext = ContextService.getInstance().getActiveContext();
         const reportResult: ReportResult = (label.object as ReportResult);

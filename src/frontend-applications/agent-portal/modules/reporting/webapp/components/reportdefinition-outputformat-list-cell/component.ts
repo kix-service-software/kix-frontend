@@ -131,7 +131,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 new ConfirmOverlayContent(
                     question,
                     this.createReport.bind(this, label),
-                    () => ReportDefinitionDialogUtil.openCreateReportDialog(this.definition)
+                    () => ReportDefinitionDialogUtil.openCreateReportDialog(this.definition, label?.id?.toString())
                 )
             );
 
