@@ -478,7 +478,7 @@ export class Ticket extends KIXObject {
             InputType: InputFieldTypes.DROPDOWN
         },
         {
-            Property: TicketProperty.WATCH_USER_ID,
+            Property: TicketProperty.WATCHER_USER_ID,
             Operations: [SearchOperator.IN],
             DataType: FilterDataType.NUMERIC,
             InputType: InputFieldTypes.DROPDOWN

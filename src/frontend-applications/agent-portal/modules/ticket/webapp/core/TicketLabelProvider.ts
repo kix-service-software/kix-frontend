@@ -282,7 +282,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.ATTACHMENT_NAME:
                 displayValue = 'Translatable#Attachment Name';
                 break;
-            case TicketProperty.WATCH_USER_ID:
+            case TicketProperty.WATCHER_USER_ID:
                 displayValue = 'Translatable#Watch User';
                 break;
             default:

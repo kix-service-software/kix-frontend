@@ -285,7 +285,7 @@ export class TicketService extends KIXObjectService<Ticket> {
                 nodes.push(new TreeNode(1, unlocked, 'kix-icon-lock-open'));
                 nodes.push(new TreeNode(2, locked, 'kix-icon-lock-close'));
                 break;
-            case TicketProperty.WATCH_USER_ID:
+            case TicketProperty.WATCHER_USER_ID:
             case TicketProperty.CREATED_USER_ID:
             case TicketProperty.RESPONSIBLE_ID:
             case TicketProperty.OWNER_ID:
