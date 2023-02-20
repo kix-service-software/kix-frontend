@@ -14,7 +14,6 @@ import { FilterType } from '../../../../../model/FilterType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
-import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { ImportRunner } from '../../../../import/webapp/core/ImportRunner';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
@@ -29,6 +28,10 @@ import { OrganisationProperty } from '../../../model/OrganisationProperty';
 export class ContactImportRunner extends ImportRunner {
 
     public objectType: KIXObjectType = KIXObjectType.CONTACT;
+
+    protected getKnownProperties(): string[] {
+        return Object.values(ContactProperty);
+    }
 
     protected async prepareParameter(object: Contact): Promise<Array<[string, any]>> {
         const parameter = await super.prepareParameter(object);

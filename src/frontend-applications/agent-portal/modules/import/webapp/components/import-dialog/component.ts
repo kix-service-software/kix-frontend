@@ -108,9 +108,11 @@ class Component {
                         ? textSeparatorValue.value[0]
                         : null;
 
-                    await this.importRunner?.loadObjectsFromCSV(
-                        source.value[0], characterSet, valueSeparator, textSeparator
-                    );
+                    if (source.value[0]) {
+                        await this.importRunner?.loadObjectsFromCSV(
+                            source.value[0], characterSet, valueSeparator, textSeparator
+                        );
+                    }
 
                     const errors = this.importRunner?.getErrors();
                     if (Array.isArray(errors) && errors.length) {

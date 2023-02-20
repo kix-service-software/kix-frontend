@@ -131,10 +131,23 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                     for (const column of columns) {
 
                         let tableValue: TableValue;
-                        if (column.property?.startsWith(`${KIXObjectProperty.DYNAMIC_FIELDS}.`)) {
-                            const dfName = KIXObjectService.getDynamicFieldName(column.property);
-                            const dfv = o[KIXObjectProperty.DYNAMIC_FIELDS].find((dfv) => dfv.Name === dfName);
+                        const dfName = KIXObjectService.getDynamicFieldName(column.property);
+                        if (dfName) {
+                            const dfv: DynamicFieldValue = o[KIXObjectProperty.DYNAMIC_FIELDS].find(
+                                (dfv) => dfv.Name === dfName
+                            );
                             tableValue = new TableValue(column.property, dfv?.Value, dfv?.DisplayValue?.toString());
+                            tableValue.displayValueList = dfv?.PreparedValue;
+
+                            // split display value on reference fields,
+                            // because they often use some short value (ValueLookup) as prepared value
+                            // TODO: use correct display string of referenced object type
+                            const dynamicField = await KIXObjectService.loadDynamicField(dfName);
+                            if (dfv?.DisplayValue && dynamicField && dynamicField.FieldType.match(/Reference$/)) {
+                                tableValue.displayValueList = dynamicField.Config?.ItemSeparator ?
+                                    dfv.DisplayValue.split(dynamicField.Config.ItemSeparator) :
+                                    null;
+                            }
                         } else {
                             tableValue = new TableValue(column.property, o[column.property], null, null, null);
 

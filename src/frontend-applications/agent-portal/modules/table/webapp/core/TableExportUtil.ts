@@ -7,7 +7,9 @@
  * --
  */
 
+import { SortUtil } from '../../../../model/SortUtil';
 import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { Table } from '../../model/Table';
 
@@ -34,17 +36,26 @@ export class TableExportUtil {
         const columns = table.getColumns();
         const columnTitles: string[] = [];
 
-        const columnIds = sortColumns ? [...columns.map((c) => c.getColumnId()), ...additionalColumns].sort()
+        const columnIds = sortColumns ?
+            [...columns.map((c) => c.getColumnId()), ...additionalColumns].sort(
+                this.sortProperties.bind(useColumnDisplayString)
+            )
             : [...columns.map((c) => c.getColumnId()), ...additionalColumns];
 
+        // add dynamic field key column for import purpose
+        if (!useValueDisplayString) {
+            const dfColumnIds = columnIds.filter((cid) => cid.match(/^DynamicField/));
+            columnIds.push(...dfColumnIds.map((cid) => `${cid}_key`));
+        }
+
         for (const c of columnIds) {
-            let value = c;
+            let columnTitle = c;
             if (objectType) {
-                value = await LabelService.getInstance().getExportPropertyText(
-                    value, objectType, useColumnDisplayString
+                columnTitle = await LabelService.getInstance().getExportPropertyText(
+                    columnTitle, objectType, useColumnDisplayString
                 );
             }
-            columnTitles.push(`"${this.escapeText(value.trim())}"`);
+            columnTitles.push(`"${this.escapeText(columnTitle.trim())}"`);
         }
 
         let csvString = columnTitles.join(';') + '\n';
@@ -67,10 +78,9 @@ export class TableExportUtil {
                     );
                 } else {
                     const rowObject = row.getRowObject().getObject();
-                    const value = await LabelService.getInstance().getExportPropertyValue(
-                        cId, objectType, rowObject ? rowObject[cId] : ''
+                    displayValue = await LabelService.getInstance().getExportPropertyValue(
+                        cId, objectType, rowObject ? rowObject[cId] : '', rowObject
                     );
-                    displayValue = value;
                 }
                 values.push(`"${this.escapeText(displayValue)}"`);
             }
@@ -85,6 +95,16 @@ export class TableExportUtil {
         }
         text = text.toString().replace(/\"/g, '""');
         return text;
+    }
+
+    private static sortProperties(a: string, b: string, useColumnDisplayString: boolean): number {
+        if (useColumnDisplayString) {
+            return SortUtil.compareString(a, b);
+        } else {
+            const dfa = KIXObjectService.getDynamicFieldName(a);
+            const dfb = KIXObjectService.getDynamicFieldName(b);
+            return SortUtil.compareString(dfa || a, dfb || b);
+        }
     }
 
 }

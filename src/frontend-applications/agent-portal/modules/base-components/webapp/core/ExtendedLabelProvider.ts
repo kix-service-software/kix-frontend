@@ -50,7 +50,7 @@ export abstract class ExtendedLabelProvider<T extends KIXObject = KIXObject> imp
         return null;
     }
 
-    public getExportPropertyValue(property: string, value: any): Promise<any> {
+    public getExportPropertyValue(property: string, value: any, object?: T): Promise<any> {
         return null;
     }
 
