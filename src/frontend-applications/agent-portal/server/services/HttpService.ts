@@ -378,7 +378,7 @@ export class HttpService {
                 };
             } else {
                 params = {
-                    'include': 'Preferences,RoleIDs,Contact'
+                    'include': 'Preferences,RoleIDs,Contact,DynamicFields'
                 };
             }
 
