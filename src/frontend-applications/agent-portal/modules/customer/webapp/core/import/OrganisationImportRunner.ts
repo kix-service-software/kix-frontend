@@ -23,6 +23,10 @@ export class OrganisationImportRunner extends ImportRunner {
 
     public objectType: KIXObjectType = KIXObjectType.ORGANISATION;
 
+    protected getKnownProperties(): string[] {
+        return Object.values(OrganisationProperty);
+    }
+
     public async getRequiredProperties(): Promise<string[]> {
         return [OrganisationProperty.NUMBER];
     }

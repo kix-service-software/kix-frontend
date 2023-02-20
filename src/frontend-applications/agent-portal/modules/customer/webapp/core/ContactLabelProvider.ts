@@ -162,12 +162,12 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
         return userProperties.some((p) => p === property);
     }
 
-    public async getExportPropertyValue(property: string, value: any): Promise<any> {
+    public async getExportPropertyValue(property: string, value: any, object?: any): Promise<any> {
         let newValue = value;
         switch (property) {
             case ContactProperty.PRIMARY_ORGANISATION_NUMBER:
-                if (value && typeof value === 'object') {
-                    const orgId = value[ContactProperty.PRIMARY_ORGANISATION_ID];
+                if (object) {
+                    const orgId = object[ContactProperty.PRIMARY_ORGANISATION_ID];
                     if (orgId) {
                         const primaryOrganisations = await KIXObjectService.loadObjects<Organisation>(
                             KIXObjectType.ORGANISATION, [orgId], null, null, true
@@ -179,7 +179,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 }
                 break;
             default:
-                newValue = await super.getExportPropertyValue(property, value);
+                newValue = await super.getExportPropertyValue(property, value, object);
         }
         return newValue;
     }

@@ -445,19 +445,19 @@ export class LabelService {
     }
 
     public async getExportPropertyValue(
-        property: string, objectType: KIXObjectType | string, value: any
+        property: string, objectType: KIXObjectType | string, value: any, object?: any
     ): Promise<string> {
         const labelProvider = this.getLabelProviderForType(objectType);
 
         if (labelProvider) {
             for (const extendedLabelProvider of (labelProvider as LabelProvider).getExtendedLabelProvider()) {
-                const result = await extendedLabelProvider.getExportPropertyValue(property, value);
+                const result = await extendedLabelProvider.getExportPropertyValue(property, value, object);
                 if (result) {
                     return result;
                 }
             }
 
-            return await labelProvider.getExportPropertyValue(property, value);
+            return await labelProvider.getExportPropertyValue(property, value, object);
         }
         return null;
     }

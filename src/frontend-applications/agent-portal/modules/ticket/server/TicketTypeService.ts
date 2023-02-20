@@ -18,6 +18,7 @@ import { Error } from '../../../../../server/model/Error';
 import { TicketType } from '../model/TicketType';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
+import { TicketTypeProperty } from '../model/TicketTypeProperty';
 
 export class TicketTypeAPIService extends KIXObjectAPIService {
 
@@ -56,14 +57,18 @@ export class TicketTypeAPIService extends KIXObjectAPIService {
         if (objectType === KIXObjectType.TICKET_TYPE) {
             const hasValidFilter = loadingOptions?.filter?.length === 1 &&
                 loadingOptions.filter[0].property === KIXObjectProperty.VALID_ID;
+            const hasNameFilter = loadingOptions?.filter?.length === 1 &&
+                loadingOptions.filter[0].property === TicketTypeProperty.NAME;
 
             objects = await super.load<TicketType>(
                 token, KIXObjectType.TICKET_TYPE, this.RESOURCE_URI, null, null,
                 KIXObjectType.TICKET_TYPE, clientRequestId, TicketType
-            );
+            ).catch(() => [] as TicketType[]);
 
             if (hasValidFilter) {
                 objects = objects.filter((o) => o.ValidID === loadingOptions.filter[0].value);
+            } else if (hasNameFilter) {
+                objects = objects.filter((o) => o.Name === loadingOptions.filter[0].value);
             }
 
             if (objectIds && objectIds.length) {

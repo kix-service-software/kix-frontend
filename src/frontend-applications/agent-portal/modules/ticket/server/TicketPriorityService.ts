@@ -18,6 +18,7 @@ import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIServic
 import { Error } from '../../../../../server/model/Error';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
+import { TicketPriorityProperty } from '../model/TicketPriorityProperty';
 
 export class TicketPriorityAPIService extends KIXObjectAPIService {
 
@@ -56,6 +57,8 @@ export class TicketPriorityAPIService extends KIXObjectAPIService {
         if (objectType === KIXObjectType.TICKET_PRIORITY) {
             const hasValidFilter = loadingOptions?.filter?.length === 1 &&
                 loadingOptions.filter[0].property === KIXObjectProperty.VALID_ID;
+            const hasNameFilter = loadingOptions?.filter?.length === 1 &&
+                loadingOptions.filter[0].property === TicketPriorityProperty.NAME;
 
             objects = await super.load<TicketPriority>(
                 token, KIXObjectType.TICKET_PRIORITY, this.RESOURCE_URI, null, null,
@@ -64,6 +67,8 @@ export class TicketPriorityAPIService extends KIXObjectAPIService {
 
             if (hasValidFilter) {
                 objects = objects.filter((o) => o.ValidID === loadingOptions.filter[0].value);
+            } else if (hasNameFilter) {
+                objects = objects.filter((o) => o.Name === loadingOptions.filter[0].value);
             }
 
             if (objectIds && objectIds.length) {
