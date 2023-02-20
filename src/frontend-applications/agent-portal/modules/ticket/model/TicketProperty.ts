@@ -45,7 +45,7 @@ export enum TicketProperty {
 
     TICKET_NOTES = 'TicketNotes',
 
-    WATCH_USER_ID = 'WatchUserID',
+    WATCHER_USER_ID = 'WatcherUserID',
 
     CLOSE_TIME = 'CloseTime',
 
