@@ -25,7 +25,8 @@ export class TableValue {
         public state: ValueState = ValueState.NONE,
         public displayIcons: Array<ObjectIcon | string> = null,
         public instanceId = IdService.generateDateBasedId('TableValue'),
-        public displayValueList: string[] = null
+        public displayValueList: string[] = null,
+        public displayClasses: Array<string[]> = null
     ) { }
 
     public async initDisplayValue(cell: Cell): Promise<void> {
