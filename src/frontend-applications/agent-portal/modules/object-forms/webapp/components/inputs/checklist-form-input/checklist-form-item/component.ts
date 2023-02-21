@@ -26,12 +26,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.nodes = [
             new TreeNode('OK', 'OK', 'kix-icon-check'),
             new TreeNode('NOK', 'NOK', 'kix-icon-exclamation'),
-            new TreeNode('PENDING', 'PENDING', 'kix-icon-time-wait'),
+            new TreeNode('pending', 'pending', 'kix-icon-time-wait'),
             new TreeNode('n.a.', 'n.a.', 'kix-icon-unknown'),
             new TreeNode('-', '-')
         ];
 
-        this.state.selectedNode = this.state.nodes.find((n) => n.id === this.state.item?.value && n.id !== '-');
+        this.state.selectedNode = this.state.nodes.find((n) => n.id.toLowerCase() === this.state.item?.value.toLowerCase() && n.id !== '-');
 
         this.state.prepared = true;
     }
