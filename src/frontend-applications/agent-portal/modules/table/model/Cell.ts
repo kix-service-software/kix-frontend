@@ -15,8 +15,6 @@ import { TableValue } from './TableValue';
 
 export class Cell {
 
-    private loadingPromise: Promise<string>;
-
     public constructor(
         private row: Row,
         private tableValue: TableValue

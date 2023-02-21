@@ -49,7 +49,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         values = values.map((v, index) => new Label(
             null, v,
             icons[index] ? icons[index] : null,
-            v, null, v, false
+            v, null, v, false,
+            undefined, undefined,
+            value.displayClasses ? value.displayClasses[index] : null
         ));
         if (sort) {
             values = SortUtil.sortObjects(values, 'text', DataType.STRING);
