@@ -90,11 +90,11 @@ class DynamicFieldChecklistTableContentProvider extends TableContentProvider {
             values.push(new TableValue('title', item.title, item.title));
 
             const icons = [];
-            if (item.value === 'OK') {
+            if (item.value.toLocaleLowerCase() === 'ok') {
                 icons.push('kix-icon-check');
-            } else if (item.value === 'NOK') {
+            } else if (item.value.toLocaleLowerCase() === 'nok') {
                 icons.push('kix-icon-exclamation');
-            } else if (item.value === 'PENDING') {
+            } else if (item.value.toLocaleLowerCase() === 'pending') {
                 icons.push('kix-icon-time-wait');
             } else if (item.value === 'n.a.') {
                 icons.push('kix-icon-unknown');
