@@ -8,7 +8,7 @@
  */
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
-import { AgentPortalConfiguation as AgentPortalConfiguration } from '../../model/configuration/AgentPortalConfiguation';
+import { AgentPortalConfiguration as AgentPortalConfiguration } from '../../model/configuration/AgentPortalConfiguration';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
 

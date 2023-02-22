@@ -7,23 +7,23 @@
  * --
  */
 
-import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
-import { KIXObjectType } from '../../../model/kix/KIXObjectType';
-import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
-import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
-import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
-import { SysConfigOption } from '../model/SysConfigOption';
-import { SysConfigOptionDefinition } from '../model/SysConfigOptionDefinition';
-import { LoggingService } from '../../../../../server/services/LoggingService';
 import { Error } from '../../../../../server/model/Error';
-import { ModuleConfigurationService } from '../../../server/services/configuration/ModuleConfigurationService';
+import { LogLevel } from '../../../../../server/model/LogLevel';
+import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { AgentPortalConfiguration } from '../../../model/configuration/AgentPortalConfiguration';
+import { FilterCriteria } from '../../../model/FilterCriteria';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
 import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { ModuleConfigurationService } from '../../../server/services/configuration/ModuleConfigurationService';
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
 import { SysConfigKey } from '../model/SysConfigKey';
-import { FilterCriteria } from '../../../model/FilterCriteria';
-import { AgentPortalConfiguation } from '../../../model/configuration/AgentPortalConfiguation';
-import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
-import { LogLevel } from '../../../../../server/model/LogLevel';
+import { SysConfigOption } from '../model/SysConfigOption';
+import { SysConfigOptionDefinition } from '../model/SysConfigOptionDefinition';
 
 export class SysConfigService extends KIXObjectAPIService {
 
@@ -178,12 +178,12 @@ export class SysConfigService extends KIXObjectAPIService {
         return [];
     }
 
-    public async getAgentPortalConfiguration(token: string): Promise<AgentPortalConfiguation> {
+    public async getAgentPortalConfiguration(token: string): Promise<AgentPortalConfiguration> {
         const configs = await this.loadObjects<SysConfigOption>(
-            token, '', KIXObjectType.SYS_CONFIG_OPTION, [AgentPortalConfiguation.CONFIGURATION_ID], null, null
+            token, '', KIXObjectType.SYS_CONFIG_OPTION, [AgentPortalConfiguration.CONFIGURATION_ID], null, null
         ).catch((): SysConfigOption[] => []);
 
-        let config: AgentPortalConfiguation;
+        let config: AgentPortalConfiguration;
         if (Array.isArray(configs) && configs.length) {
             try {
                 config = JSON.parse(configs[0].Value);
