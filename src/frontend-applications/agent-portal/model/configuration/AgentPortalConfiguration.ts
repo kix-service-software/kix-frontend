@@ -10,7 +10,7 @@
 import { KIXObjectType } from '../kix/KIXObjectType';
 import { IConfiguration } from './IConfiguration';
 
-export class AgentPortalConfiguation implements IConfiguration {
+export class AgentPortalConfiguration implements IConfiguration {
 
     public static CONFIGURATION_ID = 'agent-portal-configuration';
 
@@ -18,7 +18,7 @@ export class AgentPortalConfiguation implements IConfiguration {
 
     public constructor(
         public preloadObjects: Array<KIXObjectType | string> = [],
-        public id: string = AgentPortalConfiguation.CONFIGURATION_ID,
+        public id: string = AgentPortalConfiguration.CONFIGURATION_ID,
         public name: string = 'Agent Portal Configuration',
         public type: string = 'Agent Portal',
         public valid: boolean = true,

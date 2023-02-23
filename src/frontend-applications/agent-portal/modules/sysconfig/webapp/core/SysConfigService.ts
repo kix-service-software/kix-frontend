@@ -7,13 +7,12 @@
  * --
  */
 
-import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
-import { SysConfigOption } from '../../model/SysConfigOption';
+import { AgentPortalConfiguration } from '../../../../model/configuration/AgentPortalConfiguration';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { SysConfigKey } from '../../model/SysConfigKey';
+import { SysConfigOption } from '../../model/SysConfigOption';
 import { SysConfigOptionDefinition } from '../../model/SysConfigOptionDefinition';
-import { AgentPortalConfiguation } from '../../../../model/configuration/AgentPortalConfiguation';
-import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
 
 export class SysConfigService extends KIXObjectService<SysConfigOption> {
 
@@ -53,7 +52,7 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
         return stateTypes && !!stateTypes.length ? stateTypes : ['new', 'open', 'pending reminder', 'pending auto'];
     }
 
-    public async getSysconfigOptionValue<T = string>(key: string): Promise<T> {
+    public async getSysConfigOptionValue<T = string>(key: string): Promise<T> {
         const config: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
             KIXObjectType.SYS_CONFIG_OPTION, [key]
         ).catch((error): SysConfigOption[] => []);
@@ -67,10 +66,10 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
         return value;
     }
 
-    public async getAgentPortalConfiguration(): Promise<AgentPortalConfiguation> {
-        let config: AgentPortalConfiguation;
+    public async getAgentPortalConfiguration(): Promise<AgentPortalConfiguration> {
+        let config: AgentPortalConfiguration;
 
-        const value = await this.getSysconfigOptionValue(AgentPortalConfiguation.CONFIGURATION_ID)
+        const value = await this.getSysConfigOptionValue(AgentPortalConfiguration.CONFIGURATION_ID)
             .catch(() => null);
         if (value) {
             try {
