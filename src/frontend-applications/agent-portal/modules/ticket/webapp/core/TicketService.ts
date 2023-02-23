@@ -647,8 +647,38 @@ export class TicketService extends KIXObjectService<Ticket> {
     public async getObjectProperties(objectType: KIXObjectType): Promise<string[]> {
         const superProperties = await super.getObjectProperties(objectType);
         const objectProperties: string[] = [];
+
+        const ignoreProperties = [
+            TicketProperty.STATE_TYPE,
+            TicketProperty.STATE_TYPE_ID,
+            TicketProperty.CREATED_PRIORITY_ID,
+            TicketProperty.CREATED_QUEUE_ID,
+            TicketProperty.CREATED_STATE_ID,
+            TicketProperty.CREATED_TIME_UNIX,
+            TicketProperty.CREATED_TYPE_ID,
+            TicketProperty.CREATED_USER_ID,
+            TicketProperty.ARTICLES,
+            TicketProperty.ARTICLE_CREATE_TIME,
+            TicketProperty.CHANGE_TIME,
+            TicketProperty.LAST_CHANGE_TIME,
+            TicketProperty.LINKED_AS,
+            TicketProperty.TICKET_NOTES,
+            TicketProperty.ARCHIVE_FLAG,
+            TicketProperty.WATCHER_USER_ID,
+            TicketProperty.HISTORY,
+            TicketProperty.LINK,
+            TicketProperty.TICKET_FLAG,
+            TicketProperty.ARTICLE_FLAG,
+            TicketProperty.PENDING_TIME_UNIX,
+            TicketProperty.UNTIL_TIME,
+            TicketProperty.CLOSE_TIME,
+            TicketProperty.CREATE_TIME,
+            TicketProperty.ATTACHMENT_NAME,
+            TicketProperty.STATE
+        ];
+
         for (const property in TicketProperty) {
-            if (TicketProperty[property]) {
+            if (TicketProperty[property] && !ignoreProperties.some((p) => p === TicketProperty[property])) {
                 objectProperties.push(TicketProperty[property]);
             }
         }
