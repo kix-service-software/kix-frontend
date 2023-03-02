@@ -22,6 +22,7 @@ import { IColumnConfiguration } from '../../../../../model/configuration/IColumn
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
 import { SearchCache } from '../../../../search/model/SearchCache';
 import { OrganisationDetailsContext } from '../context/OrganisationDetailsContext';
+import { DataType } from '../../../../../model/DataType';
 
 export class OrganisationTableFactory extends TableFactory {
 
@@ -69,17 +70,19 @@ export class OrganisationTableFactory extends TableFactory {
     }
 
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        let config;
+        let config: IColumnConfiguration;
         switch (property) {
             case OrganisationProperty.NUMBER:
                 config = new DefaultColumnConfiguration(
                     null, null, null, property, true, false, true, false, 230, true, true
                 );
+                config.translatable = false;
                 break;
             case OrganisationProperty.NAME:
                 config = new DefaultColumnConfiguration(
                     null, null, null, property, true, false, true, false, 350, true, true
                 );
+                config.translatable = false;
                 break;
             case KIXObjectProperty.VALID_ID:
                 config = new DefaultColumnConfiguration(

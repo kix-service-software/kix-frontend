@@ -109,7 +109,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
                 ),
                 new DefaultColumnConfiguration(null, null, null,
-                    TicketProperty.TITLE, true, false, true, true, 463, true, true
+                    TicketProperty.TITLE, true, false, true, true, 463, true, true, false, DataType.STRING,
+                    true, null, null, false
                 ),
                 new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.QUEUE_ID, true, false, true, true, 175, true, true, true

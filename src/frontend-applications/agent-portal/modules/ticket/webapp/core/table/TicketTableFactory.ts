@@ -127,13 +127,18 @@ export class TicketTableFactory extends TableFactory {
                     TicketProperty.WATCHERS, false, true, false, false, 41, true, false, false, DataType.STRING, false
                 ),
                 new DefaultColumnConfiguration(
-                    null, null, null, TicketProperty.TICKET_NUMBER, true, false, true, false, 135, true, true),
+                    null, null, null, TicketProperty.TICKET_NUMBER, true, false, true, false, 135, true, true
+                ),
                 new DefaultColumnConfiguration(
-                    null, null, null, TicketProperty.TITLE, true, false, true, false, 260, true, true),
+                    null, null, null, TicketProperty.TITLE, true, false, true, false, 260, true, true, false,
+                    DataType.STRING, true, null, null, false
+                ),
                 new DefaultColumnConfiguration(
-                    null, null, null, TicketProperty.STATE_ID, true, true, true, false, 150, true, true, true),
+                    null, null, null, TicketProperty.STATE_ID, true, true, true, false, 150, true, true, true
+                ),
                 new DefaultColumnConfiguration(
-                    null, null, null, TicketProperty.LOCK_ID, false, true, false, false, 41, true, true, true),
+                    null, null, null, TicketProperty.LOCK_ID, false, true, false, false, 41, true, true, true
+                ),
                 new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.QUEUE_ID, true, false, true, false, 100, true, true, true
                 ),
