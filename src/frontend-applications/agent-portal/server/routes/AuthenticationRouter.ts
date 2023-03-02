@@ -86,25 +86,36 @@ export class AuthenticationRouter extends KIXRouter {
                     </html>`
                 );
             } else {
+                let authType = '';
+                let negotiationToken = '';
                 const authorization = req.headers['authorization'];
                 if (typeof authorization === 'string' && authorization.split(' ')[0] === 'Negotiate') {
                     // already negotiated (SSO)
-                    const negotiationToken = authorization.split(' ')[1];
+                    negotiationToken = authorization.split(' ')[1];
+                    authType = 'negotiate token (SSO)';
+                }
 
-                    let success = true;
-                    const token = await AuthenticationService.getInstance().login(
-                        null, null, UserType.AGENT, negotiationToken, null, null, false
-                    ).catch((e) => {
-                        LoggingService.getInstance().error('Error when trying to login with negotiate token (SSO)');
-                        success = false;
-                    });
+                let user = '';
+                if (req.headers['x-kix-user'] && typeof req.headers['x-kix-user'] === 'string') {
+                    // login with trusted header
+                    user = req.headers['x-kix-user'];
+                    authType = 'trusted HTTP header';
+                }
 
-                    if (success) {
-                        res.cookie('token', token);
-                        res.clearCookie('authNegotiationDone');
-                        res.status(200);
-                        res.send(
-                            `<!DOCTYPE html>
+                let success = true;
+                const token = await AuthenticationService.getInstance().login(
+                    user, null, UserType.AGENT, negotiationToken, null, null, false
+                ).catch((e) => {
+                    LoggingService.getInstance().error('Error when trying to login with ' + authType);
+                    success = false;
+                });
+
+                if (success) {
+                    res.cookie('token', token);
+                    res.clearCookie('authNegotiationDone');
+                    res.status(200);
+                    res.send(
+                        `<!DOCTYPE html>
                         <html lang="en">
                             <head>
                                 <title>KIX Agent Portal</title>
@@ -112,8 +123,7 @@ export class AuthenticationRouter extends KIXRouter {
                             </head>
                             <body></body>
                         </html>`
-                        );
-                    }
+                    );
                 }
             }
         }
