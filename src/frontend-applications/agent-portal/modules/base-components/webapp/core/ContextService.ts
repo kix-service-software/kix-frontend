@@ -117,7 +117,7 @@ export class ContextService {
         if (!context || allowMultiple) {
             context = await this.createContextInstance(
                 contextId, objectId, undefined, urlParams, additionalInformation
-            );
+            ).catch((): Context => null);
 
             if (this.isStorableDialogContext(context)) {
                 await this.updateStorage(context?.instanceId);
@@ -165,7 +165,8 @@ export class ContextService {
             (c) => c.instanceId === instanceId || c.equals(contextId, objectId)
         );
         if (!context) {
-            context = await this.createContextInstance(contextId, objectId, instanceId, null, null, contextPreference);
+            context = await this.createContextInstance(
+                contextId, objectId, instanceId, null, null, contextPreference).catch((): Context => null);
         }
 
         return context;
@@ -470,45 +471,24 @@ export class ContextService {
     ): Promise<Context> {
         objectId = objectId?.toString();
         const promiseKey = JSON.stringify({ contextId, objectId });
+
         if (!this.contextCreatePromises.has(promiseKey)) {
             this.contextCreatePromises.set(
-                promiseKey, this.createPromise(contextId, objectId, instanceId)
+                promiseKey, this.createPromise(
+                    promiseKey, contextId, objectId, instanceId,
+                    urlParams, additionalInformation, contextPreference
+                )
             );
         }
 
-        const contextPromise = this.contextCreatePromises.get(promiseKey);
-        const newContext = await contextPromise.catch((): Context => null);
-
-        this.contextCreatePromises.delete(promiseKey);
-
-        if (newContext) {
-            const index = this.activeContextIndex >= 0
-                ? this.activeContextIndex
-                : this.contextInstances.length - 1;
-            this.contextInstances.splice(index + 1, 0, newContext);
-
-            // TODO: create tests for: additional infos and preferences known prior or in init
-            // add information prior init, some extensions may need them in init
-            if (additionalInformation) {
-                additionalInformation.forEach((ai) => newContext.setAdditionalInformation(ai[0], ai[1]));
-            }
-            if (contextPreference) {
-                await newContext.getStorageManager()?.loadStoredValues(contextPreference);
-            }
-
-            await newContext.initContext(urlParams).catch((e) => {
-                console.error(e);
-                this.removeContext(instanceId);
-            });
-
-            EventService.getInstance().publish(ContextEvents.CONTEXT_CREATED, newContext);
-        }
-
-        return newContext;
+        return this.contextCreatePromises.get(promiseKey);
     }
 
     private createPromise(
-        contextId: string, objectId?: string | number, instanceId?: string
+        promiseKey: string, contextId: string, objectId?: string | number, instanceId?: string,
+        urlParams?: URLSearchParams,
+        additionalInformation: Array<[string, any]> = [],
+        contextPreference?: ContextPreference
     ): Promise<Context> {
         return new Promise<Context>(async (resolve, reject) => {
             const descriptor = this.contextDescriptorList.find((cd) => cd.contextId === contextId);
@@ -535,10 +515,27 @@ export class ContextService {
                                 instanceId: previousContext.instanceId
                             });
                         }
+                        if (additionalInformation) {
+                            additionalInformation.forEach((ai) => context.setAdditionalInformation(ai[0], ai[1]));
+                        }
+                        if (contextPreference) {
+                            await context.getStorageManager()?.loadStoredValues(contextPreference);
+                        }
+                        if (urlParams) {
+                            await context.initContext(urlParams).catch((e) => {
+                                console.error(e);
+                                this.removeContext(instanceId);
+                            });
+                        }
+                        const index = this.activeContextIndex >= 0
+                            ? this.activeContextIndex
+                            : this.contextInstances.length - 1;
+                        this.contextInstances.splice(index + 1, 0, context);
+                        EventService.getInstance().publish(ContextEvents.CONTEXT_CREATED, context);
                     }
                 }
             }
-
+            this.contextCreatePromises.delete(promiseKey);
             resolve(context);
         });
     }
