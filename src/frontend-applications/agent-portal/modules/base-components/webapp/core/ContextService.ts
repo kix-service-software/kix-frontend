@@ -521,12 +521,13 @@ export class ContextService {
                         if (contextPreference) {
                             await context.getStorageManager()?.loadStoredValues(contextPreference);
                         }
-                        if (urlParams) {
-                            await context.initContext(urlParams).catch((e) => {
-                                console.error(e);
-                                this.removeContext(instanceId);
-                            });
-                        }
+
+                        await context.initContext(urlParams).catch((e) => {
+                            console.error(e);
+                            this.removeContext(instanceId);
+                        });
+
+
                         const index = this.activeContextIndex >= 0
                             ? this.activeContextIndex
                             : this.contextInstances.length - 1;
