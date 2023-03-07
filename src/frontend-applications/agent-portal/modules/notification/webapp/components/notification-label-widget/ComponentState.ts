@@ -18,7 +18,8 @@ export class ComponentState extends WidgetComponentState {
         public actions: AbstractAction[] = [],
         public properties: string[] = [],
         public labelProvider: NotificationLabelProvider = null,
-        public notification: Notification = null
+        public notification: Notification = null,
+        public prepared: boolean = false
     ) {
         super();
     }
