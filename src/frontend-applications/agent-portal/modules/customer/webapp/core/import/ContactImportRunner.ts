@@ -132,6 +132,14 @@ export class ContactImportRunner extends ImportRunner {
                 new FilterCriteria(
                     ContactProperty.EMAIL, SearchOperator.EQUALS,
                     FilterDataType.STRING, FilterType.AND, contact.Email
+                ),
+                new FilterCriteria(
+                    ContactProperty.FIRSTNAME, SearchOperator.EQUALS,
+                    FilterDataType.STRING, FilterType.AND, contact.Firstname
+                ),
+                new FilterCriteria(
+                    ContactProperty.LASTNAME, SearchOperator.EQUALS,
+                    FilterDataType.STRING, FilterType.AND, contact.Lastname
                 )
             ];
             const loadingOptions = new KIXObjectLoadingOptions(filter);
