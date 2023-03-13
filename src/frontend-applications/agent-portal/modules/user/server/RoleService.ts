@@ -26,6 +26,7 @@ import { FilterCriteria } from '../../../model/FilterCriteria';
 import { SearchOperator } from '../../search/model/SearchOperator';
 import { FilterDataType } from '../../../model/FilterDataType';
 import { FilterType } from '../../../model/FilterType';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 
 export class RoleService extends KIXObjectAPIService {
@@ -59,23 +60,23 @@ export class RoleService extends KIXObjectAPIService {
     public async loadObjects<T extends KIXObject = any>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
+    ): Promise<ObjectResponse<T>> {
 
-        let objects = [];
+        let objectResponse = new ObjectResponse();
         if (objectType === KIXObjectType.ROLE) {
-            objects = await super.load(
+            objectResponse = await super.load(
                 token, this.objectType, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.ROLE,
                 clientRequestId, Role
             );
         } else if (objectType === KIXObjectType.PERMISSION_TYPE) {
             const uri = this.buildUri(this.RESOURCE_URI, 'permissiontypes');
-            objects = await super.load(
+            objectResponse = await super.load(
                 token, KIXObjectType.PERMISSION_TYPE, uri, loadingOptions, objectIds, KIXObjectType.PERMISSION_TYPE,
                 clientRequestId, PermissionType
             );
         }
 
-        return objects;
+        return objectResponse as ObjectResponse<T>;
     }
 
     public async createObject(
@@ -85,11 +86,14 @@ export class RoleService extends KIXObjectAPIService {
         const createParameter = parameter.filter((p) => p[0] !== RoleProperty.PERMISSIONS);
 
         const permissionParameter = createParameter.find((p) => p[0] === RoleProperty.CONFIGURED_PERMISSIONS);
-        if (permissionParameter) {
-            permissionParameter[1].forEach((pd: CreatePermissionDescription) => {
-                delete (pd.ID);
-                delete (pd.RoleID);
-            });
+        if (permissionParameter && Array.isArray(permissionParameter[1])) {
+            const typeIds = await this.getPermissionTypeId('Base::', token, true);
+            permissionParameter[1]
+                .filter((pd: CreatePermissionDescription) => !typeIds.some((tid) => tid === pd.TypeID))
+                .forEach((pd: CreatePermissionDescription) => {
+                    delete (pd.ID);
+                    delete (pd.RoleID);
+                });
         }
 
         const id = await super.executeUpdateOrCreateRequest(
@@ -185,6 +189,10 @@ export class RoleService extends KIXObjectAPIService {
         if (!permissionDescs) {
             permissionDescs = [];
         }
+
+        const typeIds = await this.getPermissionTypeId('Base::', token, true);
+        permissionDescs = permissionDescs.filter((pd) => !typeIds.some((tid) => tid === pd.TypeID));
+
         if (roleId) {
             const promises = [
                 this.createPermissions(
@@ -229,12 +237,12 @@ export class RoleService extends KIXObjectAPIService {
         token: string, clientRequestId: string, roleId: number,
         existingPermissions: Permission[], permissionDescs: CreatePermissionDescription[] = []
     ): Promise<void> {
-
-        const permissionsToAdd = permissionDescs.filter(
-            (pd) => !existingPermissions.some(
-                (ep) => ep.RoleID === roleId && ep.Target === pd.Target && ep.TypeID === pd.TypeID
-            )
-        );
+        const permissionsToAdd = permissionDescs
+            .filter((pd) => {
+                return !existingPermissions.some(
+                    (ep) => ep.RoleID === roleId && ep.Target === pd.Target && ep.TypeID === pd.TypeID
+                );
+            });
 
         const requestPromises = [];
         const uri = this.buildUri(this.RESOURCE_URI, roleId, 'permissions');
@@ -249,7 +257,7 @@ export class RoleService extends KIXObjectAPIService {
         await Promise.all(requestPromises);
     }
 
-    private async updatePermissions(
+    public async updatePermissions(
         token: string, clientRequestId: string, roleId: number,
         existingPermissions: Permission[], permissionDescs: CreatePermissionDescription[]
     ): Promise<void> {
@@ -311,22 +319,22 @@ export class RoleService extends KIXObjectAPIService {
         }
     }
 
-    public async getPermissionTypeId(name: string, token: string): Promise<number> {
-        let permissionTypeId = 1;
-        const loadingOptions = new KIXObjectLoadingOptions([
-            new FilterCriteria('Name', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, name)
-        ]);
-        const permissionTypes = await this.loadObjects<PermissionType>(
-            token, 'RoleService', KIXObjectType.PERMISSION_TYPE, null, loadingOptions, null
-        ).catch((error): PermissionType[] => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            return [];
-        });
-        if (permissionTypes && permissionTypes.length === 1) {
-            permissionTypeId = permissionTypes[0].ID;
-        }
+    public async getPermissionTypeId(name: string, token: string, useContains?: boolean): Promise<number[]> {
+        const searchOperator = useContains ? SearchOperator.CONTAINS : SearchOperator.EQUALS;
 
-        return permissionTypeId;
+        const loadingOptions = new KIXObjectLoadingOptions([
+            new FilterCriteria('Name', searchOperator, FilterDataType.STRING, FilterType.AND, name)
+        ]);
+        const objectResponse = await this.loadObjects<PermissionType>(
+            token, 'RoleService', KIXObjectType.PERMISSION_TYPE, null, loadingOptions, null
+        ).catch((error): ObjectResponse<PermissionType> => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            return new ObjectResponse();
+        });
+
+        const permissionTypes = objectResponse?.objects || [];
+
+        return permissionTypes?.length ? permissionTypes.map((pd) => pd.ID) : [];
     }
 
 }

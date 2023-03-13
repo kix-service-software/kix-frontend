@@ -22,6 +22,7 @@ import { ModuleConfigurationService } from '../../../server/services/configurati
 import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
 import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
 import { SysConfigKey } from '../model/SysConfigKey';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { SysConfigOption } from '../model/SysConfigOption';
 import { SysConfigOptionDefinition } from '../model/SysConfigOptionDefinition';
 
@@ -85,24 +86,24 @@ export class SysConfigService extends KIXObjectAPIService {
     public async loadObjects<O>(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: Array<string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<O[]> {
-        let objects = [];
+    ): Promise<ObjectResponse<O>> {
+        let objectResponse = new ObjectResponse();
 
         if (objectType === KIXObjectType.SYS_CONFIG_OPTION) {
-            objects = await super.load<SysConfigOption>(
+            objectResponse = await super.load<SysConfigOption>(
                 token, KIXObjectType.SYS_CONFIG_OPTION, this.RESOURCE_URI, loadingOptions, objectIds,
                 KIXObjectType.SYS_CONFIG_OPTION, clientRequestId, SysConfigOption
             );
         } else if (objectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION) {
             const uri = this.buildUri(this.RESOURCE_URI, 'definitions');
-            objects = await super.load<SysConfigOptionDefinition>(
+            objectResponse = await super.load<SysConfigOptionDefinition>(
                 token, KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, uri,
                 loadingOptions, objectIds, KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
                 clientRequestId, SysConfigOptionDefinition
             );
         }
 
-        return objects;
+        return objectResponse as ObjectResponse<O>;
     }
 
     public async updateObject(
@@ -165,10 +166,11 @@ export class SysConfigService extends KIXObjectAPIService {
     }
 
     public async getTicketViewableStateTypes(token: string): Promise<string[]> {
-        const viewableStateTypes = await this.loadObjects<SysConfigOption>(
+        const objectResponse = await this.loadObjects<SysConfigOption>(
             token, '', KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_VIEWABLE_STATE_TYPE], null, null
-        ).catch(() => [] as SysConfigOption[]);
+        ).catch(() => new ObjectResponse<SysConfigOption>());
 
+        const viewableStateTypes = objectResponse?.objects;
         const stateTypes: string[] = viewableStateTypes && viewableStateTypes.length ? viewableStateTypes[0].Value : [];
 
         return stateTypes && !!stateTypes.length ? stateTypes : ['new', 'open', 'pending reminder', 'pending auto'];
@@ -183,7 +185,7 @@ export class SysConfigService extends KIXObjectAPIService {
             token, '', KIXObjectType.SYS_CONFIG_OPTION, [AgentPortalConfiguration.CONFIGURATION_ID], null, null
         ).catch((): SysConfigOption[] => []);
 
-        let config: AgentPortalConfiguration;
+        let config: AgentPortalConfiguration = new AgentPortalConfiguration();
         if (Array.isArray(configs) && configs.length) {
             try {
                 config = JSON.parse(configs[0].Value);

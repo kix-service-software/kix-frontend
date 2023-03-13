@@ -30,6 +30,7 @@ import { TranslationAPIService } from '../../translation/server/TranslationServi
 import addrparser from 'address-rfc2822';
 import { SysConfigAccessLevel } from '../../sysconfig/model/SysConfigAccessLevel';
 import { UserType } from '../../user/model/UserType';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class WebformService {
 
@@ -255,10 +256,12 @@ export class WebformService {
         let maxSize = 1000 * 1000 * 24; // 24 MB
         const config = ConfigurationService.getInstance().getServerConfiguration();
         if (config && config.BACKEND_API_TOKEN) {
-            const maxSizeOptions = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+            const objectResponse = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
                 config.BACKEND_API_TOKEN, IdService.generateDateBasedId('webform-service-'),
                 KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.MAX_ALLOWED_SIZE], null, null
-            ).catch((error) => [] as SysConfigOption[]);
+            ).catch((error) => new ObjectResponse<SysConfigOption>());
+
+            const maxSizeOptions = objectResponse?.objects || [];
             if (maxSizeOptions && !!maxSizeOptions.length && maxSizeOptions[0].Value) {
                 maxSize = maxSizeOptions[0].Value;
             }

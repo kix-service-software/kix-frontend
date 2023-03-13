@@ -8,7 +8,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <div.table-container
-    style=("height:" + state.tableHeight)
+    style="height:" + state.tableHeight
     key=(
         state.table ? state.table.getTableId() + "table-container" : "no-table"
     )
@@ -19,7 +19,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <thead><table-head-row table=state.table/></thead>
             <table-body
                 table=state.table
-                key=(state.table.getTableId() + "table-body")
+                key=state.table.getTableId() + "table-body"
             />
         </table>
     </if>

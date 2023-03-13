@@ -39,6 +39,7 @@ import { ConfigurationService } from '../../../../server/services/ConfigurationS
 import { ReportingAPIService } from '../reporting/server/ReportingService';
 import { ReportDefinition } from '../reporting/model/ReportDefinition';
 import { ReportDefinitionProperty } from '../reporting/model/ReportDefinitionProperty';
+import { ObjectResponse } from '../../server/services/ObjectResponse';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -53,22 +54,26 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             TicketProperty.STATE_TYPE, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
         );
 
+        const openTicketsLoadingOptions = new KIXObjectLoadingOptions();
+        openTicketsLoadingOptions.filter = [
+            new FilterCriteria(
+                TicketProperty.OWNER_ID, SearchOperator.EQUALS,
+                FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
+            ),
+            new FilterCriteria(
+                TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS,
+                FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
+            ),
+            stateTypeFilterCriteria
+        ];
+        openTicketsLoadingOptions.sortOrder = 'Ticket.-Age:numeric';
+        openTicketsLoadingOptions.limit = 10;
+        openTicketsLoadingOptions.searchLimit = 100;
+
         const tableMyOpenTicketsConfiguration = new TableConfiguration(
             'home-dashboard-ticket-table-myOpenTickets', 'Translatable#My Open Tickets Table', ConfigurationType.Table,
-            KIXObjectType.TICKET,
-            new KIXObjectLoadingOptions(
-                [
-                    new FilterCriteria(
-                        TicketProperty.OWNER_ID, SearchOperator.EQUALS,
-                        FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
-                    ),
-                    new FilterCriteria(
-                        TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS,
-                        FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
-                    ),
-                    stateTypeFilterCriteria
-                ], 'Ticket.-Age:numeric', 100
-            ), null, null, null, true, true, new ToggleOptions('ticket-article-details', 'article', [], true)
+            KIXObjectType.TICKET, openTicketsLoadingOptions, null, null, null, true, true,
+            new ToggleOptions('ticket-article-details', 'article', [], true)
         );
         configurations.push(tableMyOpenTicketsConfiguration);
 
@@ -89,17 +94,19 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(myOpenTicketsWidget);
 
+        const newTicketsLoadingOptions = new KIXObjectLoadingOptions();
+        newTicketsLoadingOptions.filter = [
+            new FilterCriteria(
+                TicketProperty.STATE_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.OR, 1
+            )
+        ];
+        newTicketsLoadingOptions.sortOrder = 'Ticket.-Age:numeric';
+        newTicketsLoadingOptions.limit = 10;
+        newTicketsLoadingOptions.searchLimit = 100;
+
         const newTicketsTableConfig = new TableConfiguration(
             'home-dashboard-ticket-table-new', 'Translatable#New Tickets Table', ConfigurationType.Table,
-            KIXObjectType.TICKET,
-            new KIXObjectLoadingOptions(
-                [
-                    new FilterCriteria(
-                        TicketProperty.STATE_ID, SearchOperator.EQUALS,
-                        FilterDataType.NUMERIC, FilterType.OR, 1
-                    )
-                ], 'Ticket.-Age:numeric', 100
-            ),
+            KIXObjectType.TICKET, newTicketsLoadingOptions,
             null,
             [
                 new DefaultColumnConfiguration(null, null, null,
@@ -280,15 +287,16 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
     private async getReportId(name: string): Promise<number> {
         const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        const reportDefinitions = await ReportingAPIService.getInstance().loadObjects<ReportDefinition>(
+        const objectResponse = await ReportingAPIService.getInstance().loadObjects<ReportDefinition>(
             serverConfig?.BACKEND_API_TOKEN, 'home-configuration', KIXObjectType.REPORT_DEFINITION, null,
             new KIXObjectLoadingOptions([
                 new FilterCriteria(
                     ReportDefinitionProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, name
                 )
             ]), null
-        ).catch((): ReportDefinition[] => []);
+        ).catch(() => new ObjectResponse<ReportDefinition>());
 
+        const reportDefinitions = objectResponse?.objects || [];
         return reportDefinitions?.length ? reportDefinitions[0].ID : null;
     }
 

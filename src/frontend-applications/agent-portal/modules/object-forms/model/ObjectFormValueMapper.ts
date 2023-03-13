@@ -79,14 +79,6 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         }
     }
 
-    protected async resetFormValues(
-        formValues: ObjectFormValue[] = this.formValues, ignoreProperties: string[] = []
-    ): Promise<void> {
-        for (const value of formValues) {
-            await value.reset(ignoreProperties);
-        }
-    }
-
     public async mapFormValues(object: T): Promise<void> {
         this.object = object;
         const startMapObjectValues = Date.now();
@@ -297,7 +289,8 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
             console.debug(result);
         }
 
-        await this.resetFormValues();
+        const ignoreProperties = result?.propertyInstructions.map((pi) => pi.property);
+        await this.resetFormValues(undefined, ignoreProperties);
 
         this.setFieldOrder(result?.InputOrder);
 
@@ -308,6 +301,14 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         if (debugRules) {
             console.debug('FormValues after applyPropertyInstructions:');
             console.debug(this.formValues);
+        }
+    }
+
+    protected async resetFormValues(
+        formValues: ObjectFormValue[] = this.formValues, ignoreProperties: string[] = []
+    ): Promise<void> {
+        for (const value of formValues) {
+            await value.reset(ignoreProperties);
         }
     }
 
@@ -437,9 +438,11 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                 }
 
                 if (instructionProperty === InstructionProperty.COUNT_MAX) {
-                    formValue.countMax = Number(instruction.CountMax) > 0
-                        ? Number(instruction.CountMax)
-                        : 1;
+                    if (formValue.countMax !== instruction.CountMax) {
+                        formValue.countMax = Number(instruction.CountMax) > 0
+                            ? Number(instruction.CountMax)
+                            : 1;
+                    }
                 }
 
                 if (instructionProperty === InstructionProperty.VALIDATION) {

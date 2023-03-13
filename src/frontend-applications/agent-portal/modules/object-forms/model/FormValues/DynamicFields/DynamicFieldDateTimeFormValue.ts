@@ -162,7 +162,12 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue implements 
 
     private addBindings(): void {
         this.bindingIds.push(
-            this.addPropertyBinding(FormValueProperty.COUNT_MAX, (value: ObjectFormValue) => this._countMax())
+            this.addPropertyBinding(FormValueProperty.COUNT_MAX, (value: ObjectFormValue) => this._countMax()),
+            this.addPropertyBinding(FormValueProperty.ENABLED, async (value: ObjectFormValue) => {
+                if (this.enabled) {
+                    await this.initCountValues();
+                }
+            })
         );
     }
 

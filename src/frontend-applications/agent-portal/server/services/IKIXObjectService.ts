@@ -15,6 +15,7 @@ import { KIXObjectSpecificLoadingOptions } from '../../model/KIXObjectSpecificLo
 import { KIXObjectSpecificCreateOptions } from '../../model/KIXObjectSpecificCreateOptions';
 import { KIXObjectSpecificDeleteOptions } from '../../model/KIXObjectSpecificDeleteOptions';
 import { Error } from '../../../../server/model/Error';
+import { ObjectResponse } from './ObjectResponse';
 
 export interface IKIXObjectService extends IService {
 
@@ -23,7 +24,7 @@ export interface IKIXObjectService extends IService {
     loadObjects<T extends KIXObject = any>(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]>;
+    ): Promise<ObjectResponse<T>>;
 
     createObject(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, parameter: Array<[string, string]>,

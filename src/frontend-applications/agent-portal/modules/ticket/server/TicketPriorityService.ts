@@ -18,6 +18,7 @@ import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIServic
 import { Error } from '../../../../../server/model/Error';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { TicketPriorityProperty } from '../model/TicketPriorityProperty';
 
 export class TicketPriorityAPIService extends KIXObjectAPIService {
@@ -51,32 +52,38 @@ export class TicketPriorityAPIService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
+    ): Promise<ObjectResponse<T>> {
 
-        let objects = [];
+        let objectResponse = new ObjectResponse<TicketPriority>();
         if (objectType === KIXObjectType.TICKET_PRIORITY) {
             const hasValidFilter = loadingOptions?.filter?.length === 1 &&
                 loadingOptions.filter[0].property === KIXObjectProperty.VALID_ID;
             const hasNameFilter = loadingOptions?.filter?.length === 1 &&
                 loadingOptions.filter[0].property === TicketPriorityProperty.NAME;
 
-            objects = await super.load<TicketPriority>(
+            objectResponse = await super.load<TicketPriority>(
                 token, KIXObjectType.TICKET_PRIORITY, this.RESOURCE_URI, null, null,
                 KIXObjectType.TICKET_PRIORITY, clientRequestId, TicketPriority
             );
 
             if (hasValidFilter) {
-                objects = objects.filter((o) => o.ValidID === loadingOptions.filter[0].value);
+                objectResponse.objects = objectResponse.objects.filter(
+                    (o) => o.ValidID === loadingOptions.filter[0].value
+                );
             } else if (hasNameFilter) {
-                objects = objects.filter((o) => o.Name === loadingOptions.filter[0].value);
+                objectResponse.objects = objectResponse.objects.filter(
+                    (o) => o.Name === loadingOptions.filter[0].value
+                );
             }
 
             if (objectIds && objectIds.length) {
-                objects = objects.filter((t) => objectIds.some((oid) => oid === t.ID));
+                objectResponse.objects = objectResponse?.objects?.filter(
+                    (t) => objectIds.some((oid) => oid === t.ID)
+                );
             }
         }
 
-        return objects;
+        return objectResponse as any;
     }
 
     public async createObject(

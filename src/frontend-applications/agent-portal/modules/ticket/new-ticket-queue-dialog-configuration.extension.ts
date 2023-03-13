@@ -29,7 +29,6 @@ import { FormConfiguration } from '../../model/configuration/FormConfiguration';
 import { FormContext } from '../../model/configuration/FormContext';
 import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
 import { FormFieldOptions } from '../../model/configuration/FormFieldOptions';
-
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
@@ -135,6 +134,14 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             )
         );
 
+        // configurations.push(
+        //     new FormFieldConfiguration(
+        //         'queue-new-form-field-permissions',
+        //         'Translatable#Assigned Roles', QueueProperty.PERMISSIONS,
+        //         'base-permission-input', true, 'Translatable#Helptext_Admin_Tickets_QueueCreate_Permission'
+        //     )
+        // );
+
         configurations.push(
             new FormGroupConfiguration(
                 'queue-new-form-group-informations', 'Translatable#Queue Information',
@@ -175,12 +182,22 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             )
         );
 
+        // configurations.push(
+        //     new FormGroupConfiguration(
+        //         'queue-new-form-group-permissions', 'Translatable#Permissions',
+        //         [
+        //             'queue-new-form-field-permissions',
+        //         ]
+        //     )
+        // );
+
         configurations.push(
             new FormPageConfiguration(
                 'queue-new-form-page', 'Translatable#New Queue',
                 [
                     'queue-new-form-group-informations',
-                    'queue-new-form-group-signatrue'
+                    'queue-new-form-group-signatrue',
+                    // 'queue-new-form-group-permissions'
                 ]
             )
         );

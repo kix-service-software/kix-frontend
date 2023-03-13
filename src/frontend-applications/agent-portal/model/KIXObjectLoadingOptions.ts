@@ -18,7 +18,8 @@ export class KIXObjectLoadingOptions {
         public includes?: string[],
         public expands?: string[],
         public query?: Array<[string, string]>,
-        public cacheType?: string
+        public cacheType?: string,
+        public searchLimit?: number
     ) { }
 
 }

@@ -19,6 +19,7 @@ import { DynamicFieldAPIService } from '../../dynamic-fields/server/DynamicField
 import { DateTimeAPIUtil } from '../../../server/services/DateTimeAPIUtil';
 import { TranslationAPIService } from '../../translation/server/TranslationService';
 import { CMDBAPIService } from '../../cmdb/server/CMDBService';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class TicketDetailsDFDataBuilder {
     public static async getDFDisplayValues(
@@ -138,14 +139,15 @@ export class TicketDetailsDFDataBuilder {
             } else {
                 values = fieldValue.Value;
             }
-            const configItems = await CMDBAPIService.getInstance().loadObjects<ConfigItem>(
+            const objectResponse = await CMDBAPIService.getInstance().loadObjects<ConfigItem>(
                 token, '',
                 KIXObjectType.CONFIG_ITEM, values,
                 new KIXObjectLoadingOptions(
                     null, null, null, [ConfigItemProperty.CURRENT_VERSION]
                 ), null
-            ).catch(() => [] as ConfigItem[]);
+            ).catch(() => new ObjectResponse<ConfigItem>());
 
+            const configItems = objectResponse?.objects || [];
             values = configItems.map((ci) => '#' + ci.Number + ' - ' + ci.Name);
         }
         return values || [];

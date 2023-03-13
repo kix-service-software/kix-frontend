@@ -49,7 +49,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async init(table: Table): Promise<void> {
         this.eventSubscriberId = table.getTableId();
 
-        await table.initialize();
+        await table.initialize(false);
         this.setTableHeight();
     }
 
@@ -62,11 +62,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     if (eventId === TableEvent.REFRESH) {
                         //await this.provideContextContent();
                         this.setTableHeight();
-
-                        EventService.getInstance().publish(
-                            TableEvent.TABLE_READY,
-                            new TableEventData(this.state.table.getTableId())
-                        );
                     }
 
                     if (eventId === TableEvent.RERENDER_TABLE) {

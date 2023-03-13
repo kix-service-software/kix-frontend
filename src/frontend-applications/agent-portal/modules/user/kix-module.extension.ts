@@ -65,6 +65,11 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             '/kix-module-user$0/webapp/components/setup-admin-password',
             []
         ),
+        new UIComponent(
+            'base-permission-input',
+            '/kix-module-user$0/webapp/components/base-permission-input',
+            []
+        ),
         new UIComponent('user-token-input', '/kix-module-user$0/webapp/components/user-token-input', [])
     ];
 

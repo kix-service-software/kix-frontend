@@ -81,9 +81,10 @@ export class FAQContext extends Context {
     public async setFAQCategoryId(categoryId: number, history: boolean = true): Promise<void> {
         if (!this.categoryId || this.categoryId !== categoryId) {
             this.categoryId = categoryId;
-            await this.loadFAQArticles();
 
             EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
+
+            await this.loadFAQArticles();
 
             if (history) {
                 ContextService.getInstance().setDocumentHistory(true, this, this, null);
@@ -96,15 +97,19 @@ export class FAQContext extends Context {
         }
     }
 
-    private async loadFAQArticles(): Promise<void> {
-        const loadingOptions = new KIXObjectLoadingOptions(
-            [
-                new FilterCriteria(
-                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                    FilterType.AND, 1
-                )
-            ], null, 1000, [FAQArticleProperty.VOTES], [FAQArticleProperty.VOTES]
-        );
+    private async loadFAQArticles(limit: number = 20): Promise<void> {
+        const loadingOptions = new KIXObjectLoadingOptions();
+        loadingOptions.limit = limit;
+
+        loadingOptions.filter = [
+            new FilterCriteria(
+                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                FilterType.AND, 1
+            )
+        ];
+        loadingOptions.includes = [FAQArticleProperty.VOTES];
+        loadingOptions.expands = [FAQArticleProperty.VOTES];
+
         if (this.categoryId) {
             loadingOptions.filter.push(
                 new FilterCriteria(
@@ -115,14 +120,16 @@ export class FAQContext extends Context {
         }
 
         const faqArticles = await KIXObjectService.loadObjects(
-            KIXObjectType.FAQ_ARTICLE, null, loadingOptions, null, false
+            KIXObjectType.FAQ_ARTICLE, null, loadingOptions, null, false, undefined, undefined, this.contextId
         ).catch((error) => []);
         this.setObjectList(KIXObjectType.FAQ_ARTICLE, faqArticles);
     }
 
-    public reloadObjectList(objectType: KIXObjectType | string): Promise<void> {
+    public reloadObjectList(
+        objectType: KIXObjectType | string, silent: boolean = false, limit?: number
+    ): Promise<void> {
         if (objectType === KIXObjectType.FAQ_ARTICLE) {
-            return this.loadFAQArticles();
+            return this.loadFAQArticles(limit);
         }
     }
 

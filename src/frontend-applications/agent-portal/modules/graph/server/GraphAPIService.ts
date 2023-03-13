@@ -13,6 +13,7 @@ import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServ
 import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
 import { GraphLoadingOptions } from '../model/GraphLoadingOptions';
 import { Graph } from '../model/Graph';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 
 export class GraphAPIService extends KIXObjectAPIService {
@@ -42,7 +43,7 @@ export class GraphAPIService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, graphLoadingOptions: GraphLoadingOptions
-    ): Promise<T[]> {
+    ): Promise<ObjectResponse<T>> {
         let graph: Graph;
 
         if (objectType === KIXObjectType.GRAPH && graphLoadingOptions) {
@@ -67,7 +68,7 @@ export class GraphAPIService extends KIXObjectAPIService {
             graph = response[KIXObjectType.GRAPH];
         }
 
-        return [graph as any];
+        return new ObjectResponse<T>([graph as any], 1);
     }
 
 }

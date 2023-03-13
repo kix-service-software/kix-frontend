@@ -7,19 +7,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<if(state.show)>
-    <if(state.loading)>
-        <chart-placeholder/>
-    </if>
-    <else>
-        <widget instanceId=state.instanceId title=state.title>
-            <@content>
-                <div.chart-container>
-                    <if(state.chartConfig)>
-                        <chart config=state.chartConfig/>
-                    </if>
-                </div>
-            </@content>
-        </widget>
-    </else>
-</if>
+<widget instanceId=state.instanceId title=state.title>
+    <@content>
+        <div.chart-container>
+            <if(state.chartConfig)>
+                <chart config=state.chartConfig/>
+            </if>
+        </div>
+    </@content>
+</widget>

@@ -12,16 +12,17 @@ import { IConfiguration } from './IConfiguration';
 
 export class AgentPortalConfiguration implements IConfiguration {
 
-    public static CONFIGURATION_ID = 'agent-portal-configuration';
+        public static CONFIGURATION_ID = 'agent-portal-configuration';
 
-    public application: string = 'agent-portal';
+        public application: string = 'agent-portal';
 
-    public constructor(
-        public preloadObjects: Array<KIXObjectType | string> = [],
-        public id: string = AgentPortalConfiguration.CONFIGURATION_ID,
-        public name: string = 'Agent Portal Configuration',
-        public type: string = 'Agent Portal',
-        public valid: boolean = true,
-    ) { }
+        public constructor(
+                public preloadObjects: Array<KIXObjectType | string> = [],
+                public defaultPageSize: number = 20,
+                public id: string = AgentPortalConfiguration.CONFIGURATION_ID,
+                public name: string = 'Agent Portal Configuration',
+                public type: string = 'Agent Portal',
+                public valid: boolean = true,
+        ) { }
 
 }

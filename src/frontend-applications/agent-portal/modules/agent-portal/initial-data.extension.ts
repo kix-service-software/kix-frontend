@@ -31,9 +31,11 @@ class Extension extends KIXExtension implements IInitialDataExtension {
 
     private async setObjectIcon(serverConfig: IServerConfiguration, name: string, path: string): Promise<void> {
         const iconLoadingOptions = new ObjectIconLoadingOptions(name, name);
-        const icons = await ObjectIconService.getInstance().loadObjects(
+        const objectResponse = await ObjectIconService.getInstance().loadObjects(
             serverConfig.BACKEND_API_TOKEN, '', KIXObjectType.OBJECT_ICON, null, null, iconLoadingOptions
         );
+
+        const icons = objectResponse?.objects || [];
 
         if (!icons || !icons.length) {
             try {

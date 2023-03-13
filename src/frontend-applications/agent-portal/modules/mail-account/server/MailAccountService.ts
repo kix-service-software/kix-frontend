@@ -18,6 +18,7 @@ import { LoggingService } from '../../../../../server/services/LoggingService';
 import { MailAccountProperty } from '../model/MailAccountProperty';
 import { DispatchingType } from '../model/DispatchingType';
 import { Error } from '../../../../../server/model/Error';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class MailAccountService extends KIXObjectAPIService {
 
@@ -47,23 +48,23 @@ export class MailAccountService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
+    ): Promise<ObjectResponse<T>> {
 
-        let objects = [];
+        let objectResponse = new ObjectResponse();
         if (objectType === KIXObjectType.MAIL_ACCOUNT) {
             const uri = this.buildUri('system', 'communication', 'mailaccounts');
-            objects = await super.load<MailAccount>(
+            objectResponse = await super.load<MailAccount>(
                 token, KIXObjectType.MAIL_ACCOUNT, uri, loadingOptions, objectIds, 'MailAccount',
                 clientRequestId, MailAccount
             );
         } else if (objectType === KIXObjectType.MAIL_ACCOUNT_TYPE) {
             const uri = this.buildUri('system', 'communication', 'mailaccounts', 'types');
-            objects = await super.load<string>(
+            objectResponse = await super.load<string>(
                 token, KIXObjectType.MAIL_ACCOUNT_TYPE, uri, null, null, 'MailAccountType', clientRequestId
             );
         }
 
-        return objects;
+        return objectResponse as ObjectResponse<T>;
     }
 
     public async createObject(

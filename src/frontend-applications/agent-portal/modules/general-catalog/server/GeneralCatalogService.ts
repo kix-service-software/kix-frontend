@@ -16,6 +16,7 @@ import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecific
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { Error } from '../../../../../server/model/Error';
 import { GeneralCatalogItem } from '../model/GeneralCatalogItem';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class GeneralCatalogService extends KIXObjectAPIService {
 
@@ -46,25 +47,25 @@ export class GeneralCatalogService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
-        let objects = [];
+    ): Promise<ObjectResponse<T>> {
+        let objectResponse = new ObjectResponse();
 
         if (objectType === KIXObjectType.GENERAL_CATALOG_ITEM) {
-            objects = await super.load(
+            objectResponse = await super.load(
                 token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'GeneralCatalogItem',
                 clientRequestId, GeneralCatalogItem
             );
         } else if (objectType === KIXObjectType.GENERAL_CATALOG_CLASS) {
             const uri = this.buildUri('system', 'generalcatalog', 'classes');
-            objects = await super.load<string>(
+            objectResponse = await super.load<string>(
                 token, KIXObjectType.GENERAL_CATALOG_CLASS, uri, null, null, 'GeneralCatalogClass', clientRequestId
             );
             if (objectIds) {
-                objects = objects.filter((o) => objectIds.some((oi) => oi === o));
+                objectResponse.objects = objectResponse.objects?.filter((o) => objectIds.some((oi) => oi === o));
             }
         }
 
-        return objects;
+        return objectResponse as ObjectResponse<T>;
     }
 
     public async createObject(

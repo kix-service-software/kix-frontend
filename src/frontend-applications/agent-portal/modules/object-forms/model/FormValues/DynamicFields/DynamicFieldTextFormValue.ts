@@ -102,6 +102,12 @@ export class DynamicFieldTextFormValue extends ObjectFormValue<string | string[]
     private addBindings(): void {
         this.addPropertyBinding(FormValueProperty.COUNT_MAX, (value: ObjectFormValue) => this._countMax());
         // this.addPropertyBinding(FormValueProperty.COUNT_MIN, (value: ObjectFormValue) => this._countMin());
+
+        this.addPropertyBinding(FormValueProperty.ENABLED, async (value: ObjectFormValue) => {
+            if (this.enabled) {
+                await this.initCountValues();
+            }
+        });
     }
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {

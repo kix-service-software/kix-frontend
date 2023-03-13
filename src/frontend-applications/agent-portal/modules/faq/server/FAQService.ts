@@ -28,6 +28,7 @@ import { FilterType } from '../../../model/FilterType';
 import { SearchProperty } from '../../search/model/SearchProperty';
 import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 
 export class FAQService extends KIXObjectAPIService {
@@ -62,38 +63,39 @@ export class FAQService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
-        let objects = [];
+    ): Promise<ObjectResponse<T>> {
+        let objectResponse = new ObjectResponse();
 
         switch (objectType) {
             case KIXObjectType.FAQ_ARTICLE:
-                objects = await super.load(
+                objectResponse = await super.load(
                     token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'FAQArticle',
                     clientRequestId, FAQArticle
                 );
                 break;
             case KIXObjectType.FAQ_CATEGORY:
                 const categoryUri = this.buildUri('system', 'faq', 'categories');
-                objects = await super.load(
+                objectResponse = await super.load(
                     token, objectType, categoryUri, loadingOptions, objectIds, 'FAQCategory',
                     clientRequestId, FAQCategory
                 );
                 break;
             case KIXObjectType.FAQ_ARTICLE_ATTACHMENT:
-                objects = await this.loadAttachment(
+                const attachment = await this.loadAttachment(
                     token, loadingOptions, (objectLoadingOptions as FAQArticleAttachmentLoadingOptions)
                 );
+                objectResponse = new ObjectResponse([attachment], 1);
                 break;
             case KIXObjectType.FAQ_KEYWORD:
                 const uri = this.buildUri(this.RESOURCE_URI, 'keywords');
-                objects = await super.load<string>(
+                objectResponse = await super.load<string>(
                     token, KIXObjectType.FAQ_KEYWORD, uri, null, null, 'FAQKeyword', clientRequestId
                 );
                 break;
             default:
         }
 
-        return objects;
+        return objectResponse as ObjectResponse<T>;
     }
 
     public createObject(
@@ -133,10 +135,11 @@ export class FAQService extends KIXObjectAPIService {
     ): Promise<void> {
         const uri = this.buildUri(this.RESOURCE_URI, objectId, 'attachments');
 
-        const existingAttachments = await super.load<Attachment>(
+        const objectResponse = await super.load<Attachment>(
             token, KIXObjectType.FAQ_ARTICLE_ATTACHMENT, uri, null, null, 'Attachment', clientRequestId, Attachment
         );
 
+        const existingAttachments = objectResponse.objects || [];
         const deletableAttachments = existingAttachments
             ? existingAttachments.filter((a) => a.Disposition !== 'inline' && !attachments.some((at) => at.ID === a.ID))
             : [];
@@ -257,10 +260,10 @@ export class FAQService extends KIXObjectAPIService {
                 'attachments', objectLoadingOptions.attachmentId
             );
 
-            const attachments = await super.load<Attachment>(
+            const objectResponse = await super.load<Attachment>(
                 token, null, uri, loadingOptions, null, 'Attachment', 'FAQService', Attachment
             );
-            return attachments;
+            return objectResponse.objects || [];
         } else {
             const error = 'No FAQArticleAttachmentLoadingOptions given.';
             throw error;

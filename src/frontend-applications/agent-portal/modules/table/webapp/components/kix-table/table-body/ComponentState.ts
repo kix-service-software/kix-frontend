@@ -14,7 +14,9 @@ export class ComponentState {
 
     public constructor(
         public rows: Row[] = null,
-        public loading: boolean = false,
-        public rowKey: string = IdService.generateDateBasedId()
+        public loadMore: boolean = false,
+        public rowKey: string = IdService.generateDateBasedId(),
+        public loadMoreButtonId: string = IdService.generateDateBasedId('load-more-button'),
+        public canLoadMore: boolean = false
     ) { }
 }

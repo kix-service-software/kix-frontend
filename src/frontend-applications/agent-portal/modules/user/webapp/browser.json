@@ -1,5 +1,6 @@
 {
     "dependencies": [
+        "require ./components/base-permission-input",
         "require ./components/user-admin-roles",
         "require ./components/user-admin-users",
         "require ./components/user-assigned-roles-widget",

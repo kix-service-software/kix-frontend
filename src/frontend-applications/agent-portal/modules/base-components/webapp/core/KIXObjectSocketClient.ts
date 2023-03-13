@@ -39,6 +39,7 @@ import { PortalNotification } from '../../../portal-notification/model/PortalNot
 import { PortalNotificationType } from '../../../portal-notification/model/PortalNotificationType';
 import { DisplayValueRequest } from '../../../../model/DisplayValueRequest';
 import { DisplayValueResponse } from '../../../../model/DisplayValueResponse';
+import { ObjectResponse } from '../../../../server/services/ObjectResponse';
 
 export class KIXObjectSocketClient extends SocketClient {
 
@@ -52,8 +53,14 @@ export class KIXObjectSocketClient extends SocketClient {
         return KIXObjectSocketClient.INSTANCE;
     }
 
+    private collectionsCounts: Map<string, number> = new Map();
+
     private constructor() {
         super('kixobjects');
+    }
+
+    public getCollectionsCount(collectionId: string): number {
+        return this.collectionsCounts.get(collectionId);
     }
 
     public async loadDisplayValue(
@@ -95,7 +102,7 @@ export class KIXObjectSocketClient extends SocketClient {
         kixObjectType: KIXObjectType | string, objectConstructors: Array<new (object?: T) => T>,
         objectIds: Array<string | number> = null, loadingOptions: KIXObjectLoadingOptions = null,
         objectLoadingOptions: KIXObjectSpecificLoadingOptions = null, cache: boolean = true, timeout?: number,
-        silent?: boolean
+        silent?: boolean, collectionId?: string
     ): Promise<T[]> {
         this.checkSocketConnection();
 
@@ -119,31 +126,39 @@ export class KIXObjectSocketClient extends SocketClient {
             kixObjectType, objectIds, loadingOptions, objectLoadingOptions
         );
 
-        let requestPromise: Promise<T[]>;
+        let requestPromise: Promise<LoadObjectsResponse<T>>;
         if (cache) {
             const cacheType = loadingOptions?.cacheType || kixObjectType;
             const cacheKey = JSON.stringify({ cacheType, objectIds, loadingOptions, objectLoadingOptions });
 
             requestPromise = BrowserCacheService.getInstance().get(cacheKey, cacheType);
             if (!requestPromise) {
-                requestPromise = this.createLoadRequestPromise<T>(request, objectConstructors, timeout, silent);
+                requestPromise = this.createLoadRequestPromise<T>(
+                    request, objectConstructors, timeout, silent
+                );
                 BrowserCacheService.getInstance().set(cacheKey, requestPromise, cacheType);
 
                 requestPromise.catch((error) => {
                     BrowserCacheService.getInstance().delete(cacheKey, cacheType);
                 });
             }
-            return requestPromise;
+        } else {
+            requestPromise = this.createLoadRequestPromise<T>(request, objectConstructors, timeout, silent);
         }
 
-        requestPromise = this.createLoadRequestPromise<T>(request, objectConstructors, timeout, silent);
-        return requestPromise;
+        const response = await requestPromise;
+
+        if (collectionId) {
+            this.collectionsCounts.set(collectionId, Number(response.totalCount));
+        }
+
+        return response.objects;
     }
 
     private async createLoadRequestPromise<T extends KIXObject>(
         request: LoadObjectsRequest, objectConstructors: Array<new (object?: T) => T>, timeout?: number,
         silent?: boolean
-    ): Promise<T[]> {
+    ): Promise<LoadObjectsResponse<T>> {
         const response = await this.sendRequest<LoadObjectsResponse<T>>(
             request, KIXObjectEvent.LOAD_OBJECTS, KIXObjectEvent.LOAD_OBJECTS_FINISHED, timeout, silent
         ).catch((error): LoadObjectsResponse<T> => {
@@ -154,10 +169,9 @@ export class KIXObjectSocketClient extends SocketClient {
             }
         });
 
-        let objects = response.objects;
         if (objectConstructors && objectConstructors.length) {
             const newObjects = [];
-            for (const obj of objects) {
+            for (const obj of response.objects) {
                 let object = obj;
                 for (const objectConstructor of objectConstructors) {
                     try {
@@ -177,9 +191,10 @@ export class KIXObjectSocketClient extends SocketClient {
                 newObjects.push(object);
             }
 
-            objects = newObjects;
+            response.objects = newObjects;
         }
-        return objects;
+
+        return response;
     }
 
     public async createObject(

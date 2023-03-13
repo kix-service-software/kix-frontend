@@ -112,7 +112,12 @@ export class RedisCache implements ICache {
 
     public async set(type: string, key: string, value: any): Promise<void> {
         if (typeof value === 'object') {
-            value = JSON.stringify(value);
+            try {
+                value = JSON.stringify(value);
+            } catch (e) {
+                LoggingService.getInstance().error(`Error set cache for type: ${type} and key: ${key}`);
+                LoggingService.getInstance().debug(e);
+            }
         }
 
         await this.hsetAsync(`${this.KIX_CACHE_PREFIX}::${type}`, key, value)

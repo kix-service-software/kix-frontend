@@ -40,7 +40,6 @@ class Component {
             : undefined;
 
         if (this.state.widgetConfiguration) {
-            this.state.show = true;
             this.state.title = this.state.widgetConfiguration.title;
             this.ticketChartConfiguration =
                 this.state.widgetConfiguration.configuration as TicketChartWidgetConfiguration;
@@ -69,7 +68,7 @@ class Component {
                     eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
                     eventPublished: (data: any, eventId: string): void => {
                         if (eventId === ContextUIEvent.RELOAD_OBJECTS && data === KIXObjectType.TICKET) {
-                            this.state.loading = true;
+                            // this.state.loading = true;
                         }
                     }
                 };
@@ -120,7 +119,6 @@ class Component {
         this.ticketChartConfiguration.configuration.chartConfiguration.data.labels = labels;
         this.ticketChartConfiguration.configuration.chartConfiguration.data.datasets[0].data = newData;
         this.state.chartConfig = this.ticketChartConfiguration.configuration.chartConfiguration;
-        this.state.loading = false;
     }
 
 }

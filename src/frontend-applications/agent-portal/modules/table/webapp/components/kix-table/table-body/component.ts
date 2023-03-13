@@ -8,6 +8,7 @@
  */
 
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { Table } from '../../../../model/Table';
@@ -41,7 +42,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public async onMount(): Promise<void> {
-
         EventService.getInstance().subscribe(TableEvent.REFRESH, this);
         EventService.getInstance().subscribe(TableEvent.RERENDER_TABLE, this);
         EventService.getInstance().subscribe(TableEvent.SORTED, this);
@@ -51,33 +51,13 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         EventService.getInstance().subscribe(TableEvent.RELOADED, this);
 
         this.state.rows = this.table.getRows();
+        this.prepareLoadMore();
     }
 
     public async eventPublished(data: TableEventData, eventId: string, subscriberId?: string): Promise<void> {
         if (this.table && data.tableId === this.table.getTableId()) {
-            if (eventId === TableEvent.RELOAD) {
-                this.state.loading = true;
-            } else if (eventId === TableEvent.RELOADED) {
-                if (this.table.isFiltered()) {
-                    this.table.filter();
-                }
-                this.state.rows = this.table.getRows();
-                this.state.loading = false;
-            } else {
-                const rows = this.table.getRows();
-                if (this.table.getTableConfiguration().displayLimit) {
-                    const promises = [];
-                    for (let i = 0; i < this.table.getTableConfiguration().displayLimit; i++) {
-                        if (rows[i]) {
-                            promises.push(rows[i].initializeDisplayValues());
-                        }
-                    }
-
-                    await Promise.all(promises);
-                }
-
-                this.state.rows = rows;
-            }
+            this.state.rows = this.table.getRows();
+            this.prepareLoadMore();
         }
     }
 
@@ -87,7 +67,14 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         EventService.getInstance().unsubscribe(TableEvent.SORTED, this);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_FILTERED, this);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this);
+        EventService.getInstance().unsubscribe(TableEvent.RELOAD, this);
+        EventService.getInstance().unsubscribe(TableEvent.RELOADED, this);
     }
+
+    private prepareLoadMore(): void {
+        this.state.canLoadMore = this.table?.getRows(true)?.length < this.table?.getContentProvider()?.totalCount;
+    }
+
 
     public getFullColumnLength(): number {
         let columnLength = this.columnLength + 1;
@@ -106,6 +93,19 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     public getRowHeight(): string {
         return (this.table ? this.table.getTableConfiguration().rowHeight : 1.75) + 'rem';
+    }
+
+    public async loadMore(): Promise<void> {
+        this.state.loadMore = true;
+        await this.table?.loadMore();
+        this.state.loadMore = false;
+
+        setTimeout(() => {
+            const loadMoreButton = document.getElementById(this.state.loadMoreButtonId);
+            if (loadMoreButton) {
+                BrowserUtil.scrollIntoViewIfNeeded(loadMoreButton);
+            }
+        }, 20);
     }
 }
 

@@ -16,6 +16,7 @@ import { KIXObjectSpecificDeleteOptions } from '../../model/KIXObjectSpecificDel
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { Error } from '../../../../server/model/Error';
 import { FilterCriteria } from '../../model/FilterCriteria';
+import { ObjectResponse } from './ObjectResponse';
 
 export abstract class ExtendedKIXObjectAPIService implements IKIXObjectService {
 
@@ -34,8 +35,8 @@ export abstract class ExtendedKIXObjectAPIService implements IKIXObjectService {
     public async loadObjects<T extends KIXObject = any>(
         token: string, clientRequestId: string, objectType: string, objectIds: Array<string | number>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
-        return [];
+    ): Promise<ObjectResponse<T>> {
+        return new ObjectResponse();
     }
 
     public createObject(

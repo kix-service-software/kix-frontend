@@ -22,8 +22,9 @@ import { KIXObjectService } from '../../base-components/webapp/core/KIXObjectSer
 import { TableEvent } from './TableEvent';
 import { TableSortUtil } from '../webapp/core/TableSortUtil';
 import { TableEventData } from './TableEventData';
+import { BindableObject } from '../../../model/BindableObject';
 
-export class Row {
+export class Row extends BindableObject {
 
     private id: string;
     private cells: Cell[] = [];
@@ -36,6 +37,7 @@ export class Row {
     public filterMatch: boolean = true;
 
     public constructor(private table: Table, private rowObject?: RowObject) {
+        super();
         const objectId = rowObject?.getObject()?.ObjectId || IdService.generateDateBasedId();
         this.id = `${table.getTableId()}-row-${objectId}`;
 
@@ -43,6 +45,10 @@ export class Row {
             rowObject.getValues().forEach((v) => this.cells.push(new Cell(this, v)));
             this.createChildren(rowObject.getChildren());
         }
+    }
+
+    public static getRowId(tableId: string, objectId: string): string {
+        return `${tableId}-row-${objectId}`;
     }
 
     private createChildren(children: RowObject[]): void {

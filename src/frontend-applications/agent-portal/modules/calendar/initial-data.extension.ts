@@ -36,10 +36,12 @@ class Extension extends KIXExtension implements IInitialDataExtension {
             )
         ];
 
-        const fields = await DynamicFieldAPIService.getInstance().loadObjects<DynamicField>(
+        const objectResponse = await DynamicFieldAPIService.getInstance().loadObjects<DynamicField>(
             serverConfig.BACKEND_API_TOKEN, 'calendar-initial-data',
             KIXObjectType.DYNAMIC_FIELD, null, new KIXObjectLoadingOptions(filter), null
         );
+
+        const fields = objectResponse?.objects || [];
 
         if (fields) {
             const config = {

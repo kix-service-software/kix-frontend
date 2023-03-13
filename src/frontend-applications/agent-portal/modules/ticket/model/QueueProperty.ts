@@ -31,6 +31,8 @@ export enum QueueProperty {
 
     SUB_QUEUES = 'SubQueues',
 
+    PERMISSIONS = 'Permissions',
+
     // UI properties
     VALID = 'Valid',
     PARENT = 'Parent',

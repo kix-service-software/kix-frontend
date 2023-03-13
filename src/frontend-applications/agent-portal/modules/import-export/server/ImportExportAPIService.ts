@@ -20,6 +20,7 @@ import { CreateImportExportTemplateRunOptions } from '../model/CreateImportExpor
 import { ImportExportTemplateRunProperty } from '../model/ImportExportTemplateRunProperty';
 import { ImportExportTemplateRunTypes } from '../model/ImportExportTemplateRunTypes';
 import { ImportExportTemplateRunPostResult } from '../model/ImportExportTemplateRunPostResult';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class ImportExportAPIService extends KIXObjectAPIService {
 
@@ -49,17 +50,17 @@ export class ImportExportAPIService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
+    ): Promise<ObjectResponse<T>> {
 
-        let objects = [];
+        let objectResponse = new ObjectResponse();
         if (objectType === KIXObjectType.IMPORT_EXPORT_TEMPLATE) {
-            objects = await super.load<ImportExportTemplate>(
+            objectResponse = await super.load<ImportExportTemplate>(
                 token, KIXObjectType.IMPORT_EXPORT_TEMPLATE, this.RESOURCE_URI, loadingOptions, objectIds,
                 'ImportExportTemplate', clientRequestId, ImportExportTemplate
             );
         }
 
-        return objects;
+        return objectResponse as ObjectResponse<T>;
     }
 
     public async createObject(

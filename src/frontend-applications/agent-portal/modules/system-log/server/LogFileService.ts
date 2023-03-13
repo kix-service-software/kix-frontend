@@ -15,6 +15,7 @@ import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecifi
 import { LogFile } from '../model/LogFile';
 import { LogTier } from '../model/LogTier';
 import { LoggingService } from '../../../../../server/services/LoggingService';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class LogFileService extends KIXObjectAPIService {
 
@@ -43,22 +44,22 @@ export class LogFileService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
+    ): Promise<ObjectResponse<T>> {
 
-        let objects: LogFile[] = [];
+        let objectResponse = new ObjectResponse<LogFile>();
 
         if (objectType === KIXObjectType.LOG_FILE) {
             if (!Array.isArray(objectIds)) {
-                objects = await super.load<LogFile>(
+                objectResponse = await super.load<LogFile>(
                     token, KIXObjectType.LOG_FILE, this.RESOURCE_URI, loadingOptions, objectIds, 'LogFile',
                     clientRequestId, LogFile, false
                 );
 
-                objects.forEach((lf) => lf.tier = LogTier.BACKEND);
+                objectResponse.objects?.forEach((lf) => lf.tier = LogTier.BACKEND);
 
                 const feLogFiles = await LoggingService.getInstance().getLogFiles();
-                objects = [
-                    ...objects,
+                objectResponse.objects = [
+                    ...objectResponse.objects,
                     ...feLogFiles
                 ];
             } else {
@@ -71,19 +72,19 @@ export class LogFileService extends KIXObjectAPIService {
                         tailParameter ? Number(tailParameter[1]) : null,
                         logLevelParameter ? logLevelParameter[1].split(',') : []
                     );
-                    objects.push(logFile);
+                    objectResponse.objects.push(logFile);
                 } else {
-                    objects = await super.load<LogFile>(
+                    objectResponse = await super.load<LogFile>(
                         token, KIXObjectType.LOG_FILE, this.RESOURCE_URI, loadingOptions, objectIds,
                         'LogFile', clientRequestId, LogFile, false
                     );
 
-                    objects.forEach((lf) => lf.tier = LogTier.BACKEND);
+                    objectResponse.objects.forEach((lf) => lf.tier = LogTier.BACKEND);
                 }
             }
         }
 
-        return objects as any[];
+        return objectResponse as any;
     }
 
 }

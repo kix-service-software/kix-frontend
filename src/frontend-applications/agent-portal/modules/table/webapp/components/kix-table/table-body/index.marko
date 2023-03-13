@@ -10,12 +10,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <tbody class={
     "with-toggle": component.toggleEnabled,
 }>
-    <if(state.loading)>
-        <tr.empty-row style="height: " + component.getRowHeight()>
-            <td colspan=component.getFullColumnLength()><loading-spinner/></td>
-        </tr>
-    </if>
-    <else-if(state.rows)>
+
+    <if(Array.isArray(state.rows))>
         <if(!!state.rows.length)>
             <for|row| of=state.rows>
                 <table-row
@@ -28,13 +24,30 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     level=0
                 />
             </for>
+            <tr.empty-row id=state.loadMoreButtonId>
+                <if(state.canLoadMore)>
+                    <td colspan=component.getFullColumnLength()>
+                        <if(state.loadMore)>
+                            <loading-spinner/>
+                        </if>
+                        <else>
+                            <button.btn.btn-secondary.btn-sm.w-100.shadow-sm.text-white
+                                type="button"
+                                on-click("loadMore")
+                            >
+                                <translation-string pattern="Translatable#Load more"/>
+                            </button>
+                        </else>
+                    </td>
+                </if>
+            </tr>
         </if>
         <else>
-            <tr.empty-row style="height: " + component.getRowHeight()>
+            <tr.empty-row style=`height:${component.getRowHeight()}`>
                 <td colspan=component.getFullColumnLength()>
                     <translation-string pattern=component.getEmptyString()/>
                 </td>
             </tr>
         </else>
-    </else-if>
+    </if>
 </tbody>

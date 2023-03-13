@@ -92,9 +92,11 @@ export class CMDBContext extends Context {
         if (!this.classId || this.classId !== classId) {
             this.classId = classId;
             this.setAdditionalInformation(ConfigItemProperty.CLASS_ID, classId);
-            this.loadConfigItems();
 
             EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
+
+            this.loadConfigItems();
+
             if (history) {
                 ContextService.getInstance().setDocumentHistory(true, this, this, null);
             }
@@ -108,9 +110,11 @@ export class CMDBContext extends Context {
 
     public async setFilterValue(filterValue: string, history: boolean = true): Promise<void> {
         this.filterValue = filterValue;
-        this.loadConfigItems();
 
         EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
+
+        this.loadConfigItems();
+
         if (history) {
             ContextService.getInstance().setDocumentHistory(true, this, this, null);
         }
@@ -121,10 +125,11 @@ export class CMDBContext extends Context {
         }
     }
 
-    public async loadConfigItems(): Promise<void> {
+    public async loadConfigItems(limit: number = 20): Promise<void> {
         EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.CONFIG_ITEM);
 
         const loadingOptions = new KIXObjectLoadingOptions([]);
+        loadingOptions.limit = limit;
 
         const deploymentIds = await this.getDeploymentStateIds();
         loadingOptions.filter.push(
@@ -165,7 +170,7 @@ export class CMDBContext extends Context {
         }
 
         const configItems = await KIXObjectService.loadObjects(
-            KIXObjectType.CONFIG_ITEM, null, loadingOptions, null, false
+            KIXObjectType.CONFIG_ITEM, null, loadingOptions, null, false, undefined, undefined, this.contextId
         ).catch((error) => []);
 
         this.setObjectList(KIXObjectType.CONFIG_ITEM, configItems);
@@ -180,13 +185,15 @@ export class CMDBContext extends Context {
         return catalogItems.map((c) => c.ItemID);
     }
 
-    public async getObjectList<T = KIXObject>(objectType: KIXObjectType): Promise<T[]> {
-        return await super.getObjectList(objectType);
+    public async getObjectList<T = KIXObject>(objectType: KIXObjectType, limit: number = 20): Promise<T[]> {
+        return await super.getObjectList(objectType, limit);
     }
 
-    public reloadObjectList(objectType: KIXObjectType | string): Promise<void> {
+    public reloadObjectList(
+        objectType: KIXObjectType | string, silent: boolean = false, limit?: number
+    ): Promise<void> {
         if (objectType === KIXObjectType.CONFIG_ITEM) {
-            return this.loadConfigItems();
+            return this.loadConfigItems(limit);
         }
     }
 

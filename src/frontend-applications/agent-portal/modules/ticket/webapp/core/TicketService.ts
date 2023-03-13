@@ -98,20 +98,24 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     public async loadObjects<O extends KIXObject>(
-        objectType: KIXObjectType, objectIds: Array<string | number>,
-        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
+        objectType: KIXObjectType | string, objectIds: Array<string | number>,
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
+        cache: boolean = true, forceIds?: boolean, silent?: boolean, collectionId?: string
     ): Promise<O[]> {
         let objects: O[];
         let superLoad = false;
         if (objectType === KIXObjectType.SENDER_TYPE) {
-            objects = await super.loadObjects<O>(KIXObjectType.SENDER_TYPE, null, loadingOptions);
+            objects = await super.loadObjects<O>(
+                KIXObjectType.SENDER_TYPE, null, loadingOptions);
         } else if (objectType === KIXObjectType.TICKET_LOCK) {
             objects = await super.loadObjects<O>(KIXObjectType.TICKET_LOCK, null, loadingOptions);
         } else if (objectType === KIXObjectType.HTML_TO_PDF) {
             objects = await super.loadObjects<O>(objectType, null, loadingOptions, null, false);
         } else {
             superLoad = true;
-            objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
+            objects = await super.loadObjects<O>(
+                objectType, objectIds, loadingOptions, objectLoadingOptions, cache, forceIds, silent, collectionId
+            );
         }
 
         if (objectIds && !superLoad) {

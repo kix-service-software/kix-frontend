@@ -17,6 +17,7 @@ import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecific
 import { ConsoleExecuteResult } from '../model/ConsoleExecuteResult';
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { Error } from '../../../../../server/model/Error';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class ConsoleCommandService extends KIXObjectAPIService {
 
@@ -45,22 +46,24 @@ export class ConsoleCommandService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
+    ): Promise<ObjectResponse<T>> {
 
-        let objects = [];
+        let objectResponse = new ObjectResponse();
         if (objectType === KIXObjectType.CONSOLE_COMMAND) {
-            objects = await super.load<ConsoleCommand>(
+            objectResponse = await super.load<ConsoleCommand>(
                 token, KIXObjectType.CONSOLE_COMMAND, this.RESOURCE_URI, loadingOptions, objectIds, 'ConsoleCommand',
                 clientRequestId, ConsoleCommand
             );
 
             // ignore help and search script - not needed
-            if (Array.isArray(objects)) {
-                objects = objects.filter((c: ConsoleCommand) => !c.Command.match(/Console::Command::(?:Help|Search)/));
+            if (Array.isArray(objectResponse)) {
+                objectResponse.objects = objectResponse.objects?.filter(
+                    (c: ConsoleCommand) => !c.Command.match(/Console::Command::(?:Help|Search)/)
+                );
             }
         }
 
-        return objects;
+        return objectResponse as ObjectResponse<T>;
     }
 
     public async createObject(

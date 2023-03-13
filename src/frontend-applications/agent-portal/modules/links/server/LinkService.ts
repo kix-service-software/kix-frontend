@@ -20,6 +20,7 @@ import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecific
 import { CreateLinkObjectOptions } from './api/CreateLinkObjectOptions';
 import { LinkObjectProperty } from '../model/LinkObjectProperty';
 import { LinkType } from '../model/LinkType';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class LinkAPIService extends KIXObjectAPIService {
 
@@ -49,18 +50,18 @@ export class LinkAPIService extends KIXObjectAPIService {
     public async loadObjects<O>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<O[]> {
+    ): Promise<ObjectResponse<O>> {
 
-        let objects = [];
+        let objectResponse = new ObjectResponse();
 
         if (objectType === KIXObjectType.LINK_TYPE) {
             const baseUri = this.buildUri(this.RESOURCE_URI, 'types');
-            objects = await super.load(
+            objectResponse = await super.load(
                 token, KIXObjectType.LINK_TYPE, baseUri, loadingOptions, objectIds, 'LinkType', clientRequestId, LinkType
             );
         }
 
-        return objects;
+        return objectResponse as ObjectResponse<O>;
     }
 
     public async createLink(token: string, clientRequestId: string, createLink: CreateLink): Promise<number> {

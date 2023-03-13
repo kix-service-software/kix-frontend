@@ -85,36 +85,26 @@ class Component {
             this.subscriber = {
                 eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
                 eventPublished: async (data: any, eventId: string): Promise<void> => {
-                    if (eventId === ContextUIEvent.RELOAD_OBJECTS && data === this.state.table?.getObjectType()
-                    ) {
-                        this.state.loading = true;
-                    }
-
                     if (data?.tableId === this.state.table?.getTableId()) {
                         const isdependent = this.state.widgetConfiguration.contextDependent;
                         if (eventId === TableEvent.COLUMN_FILTERED && isdependent) {
                             this.setFilteredObjectListToContext();
-                        } else if (eventId === TableEvent.RELOAD) {
-                            this.state.loading = true;
                         } else if (eventId === TableEvent.RELOADED) {
                             if (settings && settings.resetFilterOnReload) {
                                 const filterComponent = (this as any).getComponent('table-widget-filter');
                                 if (filterComponent) {
                                     filterComponent.reset();
                                 }
-                            } else {
-                                this.state.table.filter();
                             }
 
-                            setTimeout(() => this.state.loading = false, 100);
+                            this.prepareTitle();
                         } else {
                             if (eventId === TableEvent.TABLE_READY) {
                                 if (this.state.table.isFiltered()) {
                                     this.state.filterCount = this.state.table.getRowCount();
                                     this.state.filterValue = this.state.table.getFilterValue();
                                     this.prepareTitle();
-                                }
-                                else {
+                                } else {
                                     this.state.filterCount = null;
                                 }
                             }
@@ -124,13 +114,9 @@ class Component {
                 }
             };
 
-            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_CREATED, this.subscriber);
-            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
             EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.subscriber);
             EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
             EventService.getInstance().subscribe(TableEvent.RELOADED, this.subscriber);
-            EventService.getInstance().subscribe(TableEvent.RELOAD, this.subscriber);
-            EventService.getInstance().subscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
 
             this.prepareHeader();
             await this.prepareTable();
@@ -155,12 +141,14 @@ class Component {
                     if (objectType === this.objectType) {
                         const activeContext = ContextService.getInstance().getActiveContext();
                         if (this.context.instanceId === activeContext.instanceId) {
-                            if (settings?.resetFilterOnReload) {
-                                this.state.table?.resetFilter();
-                                const filterComponent = (this as any).getComponent('table-widget-filter');
-                                filterComponent?.reset();
-                            } else if (this.state.table) {
-                                this.state.filterValue = this.state.table.getFilterValue();
+                            if (this.state.table.isFiltered()) {
+                                if (settings?.resetFilterOnReload) {
+                                    this.state.table?.resetFilter();
+                                    const filterComponent = (this as any).getComponent('table-widget-filter');
+                                    filterComponent?.reset();
+                                } else if (this.state.table) {
+                                    this.state.filterValue = this.state.table.getFilterValue();
+                                }
                             }
 
                             this.prepareTitle();
@@ -258,9 +246,16 @@ class Component {
         }
 
         this.prepareTitleTimeout = setTimeout(async () => {
-            let count = 0;
-            if (this.state.table) {
-                count = this.state.table.getRowCount(true);
+            let count = this.state.table?.getContentProvider()?.totalCount || 0;
+
+            if (!count) {
+                count = this.state.table?.getRowCount(true);
+            }
+
+            let countString = `${count}`;
+            const visibleRows = this.state.table?.getRowCount();
+            if (visibleRows < count) {
+                countString = `${visibleRows}/${count}`;
             }
 
             if (!this.configuredTitle) {
@@ -269,7 +264,7 @@ class Component {
                     title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : '';
                 }
                 title = await TranslationService.translate(title);
-                const countString = count > 0 ? ' (' + count + ')' : '';
+                countString = count > 0 ? ' (' + countString + ')' : '';
                 this.state.title = title + countString;
             }
         }, 200);
@@ -295,6 +290,7 @@ class Component {
             if (settings.sort) {
                 table?.sort(settings.sort[0], settings.sort[1]);
             }
+
             await table?.initialize();
 
             if (table?.getFilterCriteria()) {
@@ -324,8 +320,6 @@ class Component {
             this.state.filterValue = textFilterValue;
             const predefinedCriteria = filter ? filter.criteria : [];
             const newFilter = [...predefinedCriteria, ...this.additionalFilterCriteria];
-
-            await this.state.table.initDisplayRows(true);
 
             this.state.table.setFilter(textFilterValue, newFilter);
             await this.state.table.filter();
