@@ -18,6 +18,7 @@ import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil
 import { BrowserCacheService } from '../../../../base-components/webapp/core/CacheService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { PlaceholderService } from '../../../../base-components/webapp/core/PlaceholderService';
 import { ObjectFormValue } from '../../../../object-forms/model/FormValues/ObjectFormValue';
 import { ObjectFormValueMapper } from '../../../../object-forms/model/ObjectFormValueMapper';
 import { ObjectCommitHandler } from '../../../../object-forms/webapp/core/ObjectCommitHandler';
@@ -71,7 +72,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
             /**
              * Here starts the error for the attachments
              * not being in the commitment for the other browser
-            */
+             */
             for (const article of ticket.Articles) {
                 delete article.ticket;
                 delete article.ChangedBy;
@@ -105,9 +106,8 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                         article.Attachments = await this.prepareAttachments(article.Attachments);
                     }
 
-                    article.Body = await this.addQueueSignature(
-                        ticket.QueueID || orgTicketQueueID, article.Body, article.ChannelID
-                    );
+                    const ticketOrQueueId = ticket.QueueID ? ticket : orgTicketQueueID;
+                    article.Body = await this.addQueueSignature(ticketOrQueueId, article.Body, article.ChannelID);
 
                     const referencedArticleId = context?.getAdditionalInformation(
                         ArticleProperty.REFERENCED_ARTICLE_ID
@@ -118,7 +118,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                         );
                         if (referencedArticle) {
                             article.InReplyTo = referencedArticle.MessageID?.toString();
-                            article.References = `${referencedArticle.References} ${referencedArticle.MessageID}`;
+                            article.References = `${ referencedArticle.References } ${ referencedArticle.MessageID }`;
                         }
                     }
                 } else {
@@ -143,7 +143,8 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
     }
 
 
-    public async addQueueSignature(queueId: number, body: string, channelId: number): Promise<string> {
+    public async addQueueSignature(ticketOrQueueId: number | Ticket, body: string, channelId: number): Promise<string> {
+        const queueId = typeof ticketOrQueueId === 'number' ? ticketOrQueueId : ticketOrQueueId?.QueueID;
         if (channelId && queueId) {
             const channels = await KIXObjectService.loadObjects<Channel>(
                 KIXObjectType.CHANNEL, [channelId], null, null, true
@@ -154,7 +155,12 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                 );
                 const queue = queues && !!queues.length ? queues[0] : null;
                 if (queue && queue.Signature) {
-                    body += `\n\n${queue.Signature}`;
+                    const signature =
+                        await PlaceholderService.getInstance().replacePlaceholders(
+                            queue.Signature,
+                            (ticketOrQueueId instanceof Ticket ? ticketOrQueueId : undefined)
+                        );
+                    body += `\n\n${ signature }`;
                 }
             }
         }

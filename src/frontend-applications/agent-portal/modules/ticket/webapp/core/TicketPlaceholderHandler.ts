@@ -7,37 +7,35 @@
  * --
  */
 
-import { IPlaceholderHandler } from '../../../base-components/webapp/core/IPlaceholderHandler';
-import { Ticket } from '../../model/Ticket';
-import { PlaceholderService } from '../../../../modules/base-components/webapp/core/PlaceholderService';
-import { SortUtil } from '../../../../model/SortUtil';
-import { ArticleProperty } from '../../model/ArticleProperty';
 import { DataType } from '../../../../model/DataType';
-import { SortOrder } from '../../../../model/SortOrder';
-import { ArticlePlaceholderHandler } from './ArticlePlaceholderHandler';
-import { QueuePlaceholderHandler } from './QueuePlaceholderHandler';
-import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
-import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
-import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
-import { User } from '../../../user/model/User';
-import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { UserPlaceholderHandler } from '../../../user/webapp/core/UserPlaceholderHandler';
-import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
-import { TicketProperty } from '../../model/TicketProperty';
-import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
-import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
-import { OrganisationPlaceholderHandler } from '../../../customer/webapp/core/OrganisationPlaceholderHandler';
-import { ContactPlaceholderHandler } from '../../../customer/webapp/core/ContactPlaceholderHandler';
-import {
-    DynamicFieldValuePlaceholderHandler
-} from '../../../dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { SortOrder } from '../../../../model/SortOrder';
+import { SortUtil } from '../../../../model/SortUtil';
 import { AbstractPlaceholderHandler } from '../../../../modules/base-components/webapp/core/AbstractPlaceholderHandler';
-import { Article } from '../../model/Article';
-import { ArticleLoadingOptions } from '../../model/ArticleLoadingOptions';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { PlaceholderService } from '../../../../modules/base-components/webapp/core/PlaceholderService';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { IPlaceholderHandler } from '../../../base-components/webapp/core/IPlaceholderHandler';
 import { Contact } from '../../../customer/model/Contact';
 import { Organisation } from '../../../customer/model/Organisation';
+import { ContactPlaceholderHandler } from '../../../customer/webapp/core/ContactPlaceholderHandler';
+import { OrganisationPlaceholderHandler } from '../../../customer/webapp/core/OrganisationPlaceholderHandler';
+import { DynamicFieldValuePlaceholderHandler } from '../../../dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler';
+import { User } from '../../../user/model/User';
 import { UserProperty } from '../../../user/model/UserProperty';
+import { UserPlaceholderHandler } from '../../../user/webapp/core/UserPlaceholderHandler';
+import { Article } from '../../model/Article';
+import { ArticleLoadingOptions } from '../../model/ArticleLoadingOptions';
+import { ArticleProperty } from '../../model/ArticleProperty';
+import { Ticket } from '../../model/Ticket';
+import { TicketProperty } from '../../model/TicketProperty';
+import { ArticlePlaceholderHandler } from './ArticlePlaceholderHandler';
+import { QueuePlaceholderHandler } from './QueuePlaceholderHandler';
 
 export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
 
@@ -259,25 +257,25 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
         attribute: string, ticket?: Ticket, language?: string, placeholder?: string
     ): Promise<string> {
         let result = '';
-        let normalTicketAttribut: boolean = true;
+        let normalTicketAttribute: boolean = true;
         const optionsString: string = PlaceholderService.getInstance().getOptionsString(placeholder);
 
         if (
             PlaceholderService.getInstance().isDynamicFieldAttribute(attribute) && DynamicFieldValuePlaceholderHandler
         ) {
             result = await DynamicFieldValuePlaceholderHandler.getInstance().replaceDFValue(ticket, optionsString);
-            normalTicketAttribut = false;
+            normalTicketAttribute = false;
         } else if (this.extendedPlaceholderHandler.length && placeholder) {
             const handler = SortUtil.sortObjects(this.extendedPlaceholderHandler, 'handlerId').find(
                 (ph) => ph.isHandlerFor(placeholder)
             );
             if (handler) {
                 result = await handler.replace(placeholder, ticket, language);
-                normalTicketAttribut = false;
+                normalTicketAttribute = false;
             }
         }
 
-        if (normalTicketAttribut && this.isKnownProperty(attribute)) {
+        if (normalTicketAttribute && this.isKnownProperty(attribute)) {
             switch (attribute) {
                 case 'ID':
                     result = ticket[TicketProperty.TICKET_ID] ? ticket[TicketProperty.TICKET_ID].toString() : '';
