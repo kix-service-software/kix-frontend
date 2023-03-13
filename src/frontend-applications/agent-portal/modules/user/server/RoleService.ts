@@ -123,18 +123,20 @@ export class RoleService extends KIXObjectAPIService {
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, [RoleProperty.USER_IDS, RoleProperty.PERMISSIONS]
         );
-        const roles = await super.load<Role>(
+        const objectResponse = await super.load<Role>(
             token, this.objectType, this.RESOURCE_URI, loadingOptions, [id], KIXObjectType.ROLE,
             clientRequestId, Role
-        ).catch(() => [] as Role[]);
+        ).catch((): ObjectResponse<Role> => new ObjectResponse());
 
-        if (Array.isArray(roles) && roles[0]) {
+        if (objectResponse?.objects?.length) {
             const userIds = this.getParameterValue(parameter, RoleProperty.USER_IDS);
             const permissions = this.getParameterValue(parameter, RoleProperty.PERMISSIONS);
 
+            const role = objectResponse.objects[0];
+
             await Promise.all([
-                this.setUserIds(token, clientRequestId, Number(id), roles[0].UserIDs, userIds),
-                this.setPermissions(token, clientRequestId, Number(id), roles[0].Permissions, permissions)
+                this.setUserIds(token, clientRequestId, Number(id), role.UserIDs, userIds),
+                this.setPermissions(token, clientRequestId, Number(id), role.Permissions, permissions)
             ]);
         }
 
