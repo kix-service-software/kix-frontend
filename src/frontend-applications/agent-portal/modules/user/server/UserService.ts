@@ -29,6 +29,7 @@ import { KIXObject } from '../../../model/kix/KIXObject';
 import { CacheService } from '../../../server/services/cache';
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
 import { AuthenticationService } from '../../../../../server/services/AuthenticationService';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class UserService extends KIXObjectAPIService {
 
@@ -79,9 +80,11 @@ export class UserService extends KIXObjectAPIService {
                 loadingOptions.includes = [UserProperty.CONTACT];
 
                 const config = ConfigurationService.getInstance().getServerConfiguration();
-                const users = await this.loadObjects<User>(
+                const objectResponse = await this.loadObjects<User>(
                     config?.BACKEND_API_TOKEN, 'UserAPIService', objectType, [objectId], loadingOptions, null
                 );
+
+                const users = objectResponse?.objects || [];
 
                 if (users?.length) {
                     const user = new User(users[0]);
@@ -99,11 +102,11 @@ export class UserService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
+    ): Promise<ObjectResponse<T>> {
 
-        let objects = [];
+        let objectResponse = new ObjectResponse();
         if (objectType === KIXObjectType.USER) {
-            objects = await super.load(
+            objectResponse = await super.load(
                 token, KIXObjectType.USER, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.USER,
                 clientRequestId, User
             );
@@ -114,13 +117,13 @@ export class UserService extends KIXObjectAPIService {
                 uri = this.buildUri(this.RESOURCE_URI, preferenceOptions.userId, 'preferences');
             }
 
-            objects = await super.load(
+            objectResponse = await super.load(
                 token, KIXObjectType.USER_PREFERENCE, uri, loadingOptions, objectIds, KIXObjectType.USER_PREFERENCE,
                 clientRequestId, UserPreference
             );
         }
 
-        return objects;
+        return objectResponse as ObjectResponse<T>;
     }
 
     public getUserByToken(token: string): Promise<User> {
@@ -271,8 +274,9 @@ export class UserService extends KIXObjectAPIService {
         }
 
         const baseUri = this.buildUri(this.RESOURCE_URI, userId, 'roleids');
-        const existingRoleIds = await this.load<number>(token, null, baseUri, null, null, 'RoleIDs', clientReqeustId, null, false);
+        const objectResponse = await this.load<number>(token, null, baseUri, null, null, 'RoleIDs', clientReqeustId, null, false);
 
+        const existingRoleIds = objectResponse?.objects || [];
         const rolesToDelete = existingRoleIds ? existingRoleIds.filter((r) => !roleIds.some((rid) => rid === r)) : [];
         const rolesToCreate = existingRoleIds
             ? roleIds.filter((r) => !existingRoleIds.some((rid) => rid === r))
@@ -295,10 +299,12 @@ export class UserService extends KIXObjectAPIService {
     public async setPreferences(
         token: string, clientRequestId: string, parameter: Array<[string, any]>, userId?: number
     ): Promise<void> {
-        const currentPreferences = await this.loadObjects<UserPreference>(
+        const objectResponse = await this.loadObjects<UserPreference>(
             token, null, KIXObjectType.USER_PREFERENCE, null, null,
             userId ? new PreferencesLoadingOptions(userId) : null
         );
+        const currentPreferences = objectResponse?.objects || [];
+
         const errors: Error[] = [];
 
         const options = userId ? new SetPreferenceOptions(userId) : undefined;

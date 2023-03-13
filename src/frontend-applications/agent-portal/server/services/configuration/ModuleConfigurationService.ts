@@ -26,6 +26,7 @@ import { FormContext } from '../../../model/configuration/FormContext';
 import { FormConfiguration } from '../../../model/configuration/FormConfiguration';
 import { SysConfigAccessLevel } from '../../../modules/sysconfig/model/SysConfigAccessLevel';
 import { SysConfigOptionProperty } from '../../../modules/sysconfig/model/SysConfigOptionProperty';
+import { ObjectResponse } from '../ObjectResponse';
 
 export class ModuleConfigurationService {
 
@@ -64,10 +65,11 @@ export class ModuleConfigurationService {
     public async loadConfiguration<T extends IConfiguration>(token: string, id: string): Promise<T> {
         let configuration: T;
 
-        const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+        const objectResponse = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
             token, 'ModuleConfigurationService::SysConfigOption', KIXObjectType.SYS_CONFIG_OPTION, [id], null, null
-        ).catch(() => []);
+        ).catch(() => new ObjectResponse<SysConfigOption>());
 
+        const options = objectResponse?.objects || [];
         if (options && options.length && options[0].Value) {
             configuration = JSON.parse(options[0].Value);
         }
@@ -76,7 +78,7 @@ export class ModuleConfigurationService {
     }
 
     public async loadConfigurations<T extends IConfiguration>(token: string, ids: string[]): Promise<T[]> {
-        const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+        const objectResponse = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
             token, 'ModuleConfigurationService::SysConfigOption', KIXObjectType.SYS_CONFIG_OPTION, null,
             new KIXObjectLoadingOptions([
                 new FilterCriteria(
@@ -84,8 +86,9 @@ export class ModuleConfigurationService {
                     ids
                 )
             ]), null
-        ).catch((): SysConfigOption[] => []);
+        ).catch(() => new ObjectResponse<SysConfigOption>());
 
+        const options = objectResponse?.objects || [];
         const configurations = options.filter((o) => o.Value).map((o) => JSON.parse(o.Value));
         return configurations;
     }
@@ -243,11 +246,11 @@ export class ModuleConfigurationService {
             );
         }
 
-        const definitions = await SysConfigService.getInstance().loadObjects<SysConfigOptionDefinition>(
+        const objectResponse = await SysConfigService.getInstance().loadObjects<SysConfigOptionDefinition>(
             token, 'ModuleConfigurationService', KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, null, loadingOptions, null
         );
 
-        return definitions;
+        return objectResponse?.objects || [];
     }
 
 

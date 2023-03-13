@@ -17,6 +17,7 @@ import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecific
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { MailFilterProperty } from '../model/MailFilterProperty';
 import { Error } from '../../../../../server/model/Error';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class MailFilterAPIService extends KIXObjectAPIService {
 
@@ -45,17 +46,17 @@ export class MailFilterAPIService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
+    ): Promise<ObjectResponse<T>> {
 
-        let objects = [];
+        let objectResponse = new ObjectResponse();
         if (objectType === KIXObjectType.MAIL_FILTER) {
-            objects = await super.load<MailFilter>(
+            objectResponse = await super.load<MailFilter>(
                 token, KIXObjectType.MAIL_FILTER, this.RESOURCE_URI, loadingOptions, objectIds, 'MailFilter',
                 clientRequestId, MailFilter
             );
         }
 
-        return objects;
+        return objectResponse as ObjectResponse<T>;
     }
 
     public async createObject(

@@ -24,6 +24,7 @@ import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
 import { LoggingService } from '../../../../server/services/LoggingService';
 import { AuthenticationService } from '../../../../server/services/AuthenticationService';
 import { UserType } from '../../modules/user/model/UserType';
+import { ObjectResponse } from '../services/ObjectResponse';
 
 export class AuthenticationRouter extends KIXRouter {
 
@@ -191,19 +192,22 @@ export class AuthenticationRouter extends KIXRouter {
     private async getImprintLink(): Promise<string> {
         let imprintLink = '';
         const config = ConfigurationService.getInstance().getServerConfiguration();
-        const imprintConfig = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+        const objectResponse = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
             config.BACKEND_API_TOKEN, '', KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.IMPRINT_LINK],
             undefined, undefined
-        ).catch(() => []);
+        ).catch(() => new ObjectResponse<SysConfigOption>());
+
+        const imprintConfig = objectResponse?.objects || [];
 
         if (imprintConfig && imprintConfig.length) {
             const data = imprintConfig[0].Value;
 
-            const defaultLangConfig = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+            const response = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
                 config.BACKEND_API_TOKEN, '', KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.DEFAULT_LANGUAGE],
                 undefined, undefined
-            ).catch(() => []);
+            ).catch(() => new ObjectResponse<SysConfigOption>());
 
+            const defaultLangConfig = response?.objects || [];
             if (defaultLangConfig && defaultLangConfig.length) {
                 imprintLink = data[defaultLangConfig[0].Value];
             } else {

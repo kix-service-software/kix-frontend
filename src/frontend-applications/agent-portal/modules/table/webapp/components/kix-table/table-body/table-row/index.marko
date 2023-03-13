@@ -11,7 +11,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <tr
         id=state.row.getRowId()
         on-click("rowClicked")
-        style=("height: " + input.height)
+        style="height: " + input.height
         class=(state.show ? state.rowClasses : "")
     >
         <if(state.show)>
@@ -72,7 +72,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     height=input.height
                     selectionEnabled=input.selectionEnabled
                     toggleEnabled=input.toggleEnabled
-                    level=(input.level + 1)
+                    level=input.level + 1
                 />
             </for>
         </if>

@@ -292,10 +292,6 @@ export class ObjectFormValue<T = any> {
 
         this.inputComponentId = 'count-handler-form-input';
 
-        if (this.countMin > 0) {
-            this.required = true;
-        }
-
         if (!this.value) {
             await this.addDefaultFormValues();
         }

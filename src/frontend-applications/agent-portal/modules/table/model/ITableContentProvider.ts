@@ -12,6 +12,8 @@ import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
 export interface ITableContentProvider<T = any> {
 
+    totalCount: number;
+
     initialize(): Promise<void>;
 
     getObjectType(): KIXObjectType | string;
@@ -21,5 +23,7 @@ export interface ITableContentProvider<T = any> {
     getRowObjects(objects: T[]): Promise<RowObject[]>;
 
     destroy(): void;
+
+    loadMore(): Promise<void>;
 
 }

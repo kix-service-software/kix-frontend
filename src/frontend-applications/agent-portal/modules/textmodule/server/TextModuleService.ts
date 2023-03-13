@@ -15,6 +15,7 @@ import { LoggingService } from '../../../../../server/services/LoggingService';
 import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
 import { Error } from '../../../../../server/model/Error';
 import { TextModule } from '../model/TextModule';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class TextModuleAPIService extends KIXObjectAPIService {
 
@@ -43,19 +44,19 @@ export class TextModuleAPIService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
-        let objects = [];
+    ): Promise<ObjectResponse<T>> {
+        let objectResponse = new ObjectResponse();
 
         switch (objectType) {
             case KIXObjectType.TEXT_MODULE:
-                objects = await super.load<TextModule>(
+                objectResponse = await super.load<TextModule>(
                     token, KIXObjectType.TEXT_MODULE, this.RESOURCE_URI, loadingOptions, objectIds,
                     KIXObjectType.TEXT_MODULE, clientRequestId, TextModule
                 );
                 break;
             default:
         }
-        return objects;
+        return objectResponse as ObjectResponse<T>;
     }
 
     public createObject(

@@ -23,6 +23,7 @@ import cookie from 'cookie';
 import { Socket } from 'socket.io';
 import { LoggingService } from './LoggingService';
 import { CacheService } from '../../frontend-applications/agent-portal/server/services/cache';
+import { HTTPResponse } from '../../frontend-applications/agent-portal/server/services/HTTPResponse';
 
 export class AuthenticationService {
 
@@ -79,10 +80,10 @@ export class AuthenticationService {
         return new Promise<boolean>((resolve, reject) => {
             HttpService.getInstance().get<SessionResponse>(
                 'session', {}, token, clientRequestId, null, false
-            ).then((response: SessionResponse) => {
+            ).then((response: HTTPResponse<SessionResponse>) => {
                 resolve(
-                    typeof response !== 'undefined' && response !== null &&
-                    typeof response.Session !== 'undefined' && response.Session !== null
+                    typeof response?.responseData?.Session !== 'undefined' &&
+                    response?.responseData?.Session !== null
                 );
             }).catch((error) => {
                 resolve(false);

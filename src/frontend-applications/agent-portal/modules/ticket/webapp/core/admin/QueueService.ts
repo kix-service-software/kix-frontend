@@ -17,8 +17,6 @@ import { QueueProperty } from '../../../model/QueueProperty';
 import { TreeNode, TreeNodeProperty, TreeUtil } from '../../../../base-components/webapp/core/tree';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FollowUpType } from '../../../model/FollowUpType';
-import { SortUtil } from '../../../../../model/SortUtil';
-import { DataType } from '../../../../../model/DataType';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 
 export class QueueService extends KIXObjectService<Queue> {

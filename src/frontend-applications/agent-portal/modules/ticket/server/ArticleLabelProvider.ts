@@ -10,6 +10,7 @@
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { DateTimeAPIUtil } from '../../../server/services/DateTimeAPIUtil';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { ObjectIcon } from '../../icon/model/ObjectIcon';
 import { Article } from '../model/Article';
 import { ArticleProperty } from '../model/ArticleProperty';
@@ -65,10 +66,11 @@ export class ArticleLabelProvider {
             case ArticleProperty.CHANNEL_ID:
             case ArticleProperty.CHANNEL:
                 if (displayValue) {
-                    const channels = await ChannelAPIService.getInstance().loadObjects<Channel>(
+                    const objectResponse = await ChannelAPIService.getInstance().loadObjects<Channel>(
                         token, 'ArticleLabelProvider', KIXObjectType.CHANNEL, null, null, null
-                    ).catch(() => []);
+                    ).catch(() => new ObjectResponse<Channel>());
 
+                    const channels = objectResponse?.objects || [];
                     displayValue = channels.length ? channels[0].Name : displayValue;
                     if (displayValue === 'email') {
                         displayValue = 'Translatable#Email';
@@ -115,21 +117,23 @@ export class ArticleLabelProvider {
                 }
                 break;
             case ArticleProperty.CHANNEL_ID:
-                const channels = await ChannelAPIService.getInstance().loadObjects<Channel>(
+                const channelResponse = await ChannelAPIService.getInstance().loadObjects<Channel>(
                     token, 'ArticleLabelProvider', KIXObjectType.CHANNEL, [article.ChannelID], null, null
-                ).catch(() => []);
+                ).catch(() => new ObjectResponse<Channel>());
+                const channels = channelResponse?.objects || [];
                 if (channels.length && channels[0].Name === 'email') {
                     const mailIcon = article && article.isUnsent()
                         ? 'kix-icon-mail-warning'
                         : new ObjectIcon(null, 'Channel', article.ChannelID);
                     let directionIcon = 'kix-icon-arrow-receive';
 
-                    const senderTypes = await TicketAPIService.getInstance().loadObjects<SenderType>(
+                    const objectResponse = await TicketAPIService.getInstance().loadObjects<SenderType>(
                         token, 'ArticleLabelProvider', KIXObjectType.SENDER_TYPE, [article.SenderTypeID], null, null
-                    ).catch(() => []);
+                    ).catch(() => new ObjectResponse<SenderType>());
 
-                    const senderType = senderTypes.length ? senderTypes[0] : '';
-                    if (senderType.Name === 'agent') {
+                    const senderTypes = objectResponse?.objects || [];
+                    const senderType = senderTypes.length ? senderTypes[0] : null;
+                    if (senderType?.Name === 'agent') {
                         directionIcon = 'kix-icon-arrow-outward';
                     }
                     icons = [mailIcon, directionIcon];

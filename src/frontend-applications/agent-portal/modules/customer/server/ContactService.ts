@@ -34,6 +34,7 @@ import { SearchProperty } from '../../search/model/SearchProperty';
 import { CacheService } from '../../../server/services/cache';
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
 import { KIXObject } from '../../../model/kix/KIXObject';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class ContactAPIService extends KIXObjectAPIService {
 
@@ -81,10 +82,11 @@ export class ContactAPIService extends KIXObjectAPIService {
                 loadingOptions.includes = [ContactProperty.USER];
 
                 const config = ConfigurationService.getInstance().getServerConfiguration();
-                const contacts = await this.loadObjects<Contact>(
+                const objectResponse = await this.loadObjects<Contact>(
                     config?.BACKEND_API_TOKEN, 'ContactAPIService', objectType, [objectId], loadingOptions
                 );
 
+                const contacts = objectResponse?.objects || [];
                 if (contacts?.length) {
                     const contact = new Contact(contacts[0]);
                     displayValue = contact.toString();
@@ -99,31 +101,33 @@ export class ContactAPIService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType,
         objectIds: Array<number | string>, loadingOptions: KIXObjectLoadingOptions
-    ): Promise<T[]> {
-        let objects = [];
+    ): Promise<ObjectResponse<T>> {
+        let objectResponse = new ObjectResponse<Contact>();
 
         if (objectType === KIXObjectType.CONTACT) {
 
             const preload = await this.shouldPreload(token, KIXObjectType.CONTACT);
 
             if (loadingOptions || !preload) {
-                objects = await super.load<Contact>(
+                objectResponse = await super.load<Contact>(
                     token, KIXObjectType.CONTACT, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.CONTACT,
                     clientRequestId, Contact
                 );
             } else {
-                objects = await super.load(
+                objectResponse = await super.load(
                     token, KIXObjectType.CONTACT, this.RESOURCE_URI, null, null, KIXObjectType.CONTACT,
                     clientRequestId, Contact
                 );
 
                 if (Array.isArray(objectIds) && objectIds.length) {
-                    objects = objects.filter((o) => objectIds.some((oid) => Number(oid) === o.ID));
+                    objectResponse.objects = objectResponse.objects?.filter(
+                        (o) => objectIds.some((oid) => Number(oid) === o.ID)
+                    );
                 }
             }
         }
 
-        return objects;
+        return objectResponse as any;
     }
 
     public async createObject(

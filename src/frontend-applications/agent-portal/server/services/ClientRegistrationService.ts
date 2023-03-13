@@ -60,11 +60,11 @@ export class ClientRegistrationService extends KIXObjectAPIService {
         token: string, limit?: number, order?: SortOrder, changedAfter?: string, query?: any
     ): Promise<ClientRegistration[]> {
 
-        const response = await this.getObjects<ClientRegistrationsResponse>(
+        const httpResponse = await this.getObjects<ClientRegistrationsResponse>(
             token, limit, order, changedAfter, query
         );
 
-        return response.ClientRegistration;
+        return httpResponse?.responseData?.ClientRegistration;
     }
 
     public async submitClientRegistration(

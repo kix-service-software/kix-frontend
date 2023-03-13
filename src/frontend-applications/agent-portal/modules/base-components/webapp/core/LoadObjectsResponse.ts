@@ -14,7 +14,8 @@ export class LoadObjectsResponse<T extends KIXObject> implements ISocketResponse
 
     public constructor(
         public requestId: string,
-        public objects: T[]
+        public objects: T[],
+        public totalCount: number = 0
     ) { }
 
 }

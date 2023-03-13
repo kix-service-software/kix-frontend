@@ -36,11 +36,8 @@ export class TicketContext extends Context {
     public filterValue: string;
 
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
-        super.initContext();
-
-        if (this.queueId || this.filterValue) {
-            this.loadTickets();
-        }
+        await super.initContext();
+        await this.loadTickets();
     }
 
     public getIcon(): string {
@@ -92,9 +89,10 @@ export class TicketContext extends Context {
     public async setQueue(queueId: number, history: boolean = true): Promise<void> {
         if (!this.queueId || this.queueId !== queueId) {
             this.queueId = queueId;
-            this.loadTickets();
 
             EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
+
+            this.loadTickets();
 
             if (history) {
                 ContextService.getInstance().setDocumentHistory(true, this, this, null);
@@ -109,9 +107,9 @@ export class TicketContext extends Context {
 
     public async setFilterValue(filterValue: string, history: boolean = true): Promise<void> {
         this.filterValue = filterValue;
-        this.loadTickets();
-
         EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
+
+        this.loadTickets();
 
         if (history) {
             ContextService.getInstance().setDocumentHistory(true, this, this, null);
@@ -123,7 +121,7 @@ export class TicketContext extends Context {
         }
     }
 
-    private async loadTickets(silent: boolean = false): Promise<void> {
+    private async loadTickets(silent: boolean = false, limit: number = 20): Promise<void> {
         EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.TICKET);
 
         const loadingOptions = new KIXObjectLoadingOptions(
@@ -146,8 +144,9 @@ export class TicketContext extends Context {
             loadingOptions.filter.push(fulltextFilter);
         }
 
+        loadingOptions.limit = limit;
+
         if (!this.queueId) {
-            loadingOptions.limit = 100;
             loadingOptions.sortOrder = '-Ticket.Age:numeric';
 
             if (!this.filterValue) {
@@ -169,7 +168,7 @@ export class TicketContext extends Context {
         loadingOptions.includes.push(...additionalIncludes);
 
         const tickets = await KIXObjectService.loadObjects(
-            KIXObjectType.TICKET, null, loadingOptions, null, false
+            KIXObjectType.TICKET, null, loadingOptions, null, false, undefined, undefined, this.contextId
         ).catch((error) => []);
 
         this.setObjectList(KIXObjectType.TICKET, tickets, silent);
@@ -178,9 +177,9 @@ export class TicketContext extends Context {
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
     }
 
-    public reloadObjectList(objectType: KIXObjectType, silent: boolean = false): Promise<void> {
+    public reloadObjectList(objectType: KIXObjectType, silent: boolean = false, limit?: number): Promise<void> {
         if (objectType === KIXObjectType.TICKET) {
-            return this.loadTickets(silent);
+            return this.loadTickets(silent, limit);
         }
     }
 

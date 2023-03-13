@@ -16,6 +16,7 @@ import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecific
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
 import { Error } from '../../../../../server/model/Error';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class SystemAddressService extends KIXObjectAPIService {
 
@@ -44,17 +45,17 @@ export class SystemAddressService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
+    ): Promise<ObjectResponse<T>> {
 
-        let objects = [];
+        let objectResponse = new ObjectResponse();
         if (objectType === KIXObjectType.SYSTEM_ADDRESS) {
-            objects = await super.load<SystemAddress>(
+            objectResponse = await super.load<SystemAddress>(
                 token, KIXObjectType.SYSTEM_ADDRESS, this.RESOURCE_URI, loadingOptions, objectIds, 'SystemAddress',
                 clientRequestId, SystemAddress
             );
         }
 
-        return objects;
+        return objectResponse as ObjectResponse<T>;
     }
 
     public async createObject(

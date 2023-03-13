@@ -19,6 +19,7 @@ import { Error } from '../../../../../server/model/Error';
 import { OAuth2ProfileProperty } from '../model/OAuth2ProfileProperty';
 import { AuthURLLoadingOptions } from '../model/AuthURLLoadingOptions';
 import { CacheService } from '../../../server/services/cache';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class OAuth2APIService extends KIXObjectAPIService {
 
@@ -53,11 +54,11 @@ export class OAuth2APIService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
+    ): Promise<ObjectResponse<T>> {
 
-        let objects = [];
+        let objectResponse = new ObjectResponse();
         if (objectType === KIXObjectType.OAUTH2_PROFILE) {
-            objects = await super.load<OAuth2Profile>(
+            objectResponse = await super.load<OAuth2Profile>(
                 token, KIXObjectType.OAUTH2_PROFILE, this.RESOURCE_URI, loadingOptions, objectIds,
                 'Profile', clientRequestId, OAuth2Profile
             );
@@ -70,14 +71,14 @@ export class OAuth2APIService extends KIXObjectAPIService {
                 );
 
                 // get url never from cache (backend state handling)
-                objects = await super.load<string>(
+                objectResponse = await super.load<string>(
                     token, KIXObjectType.OAUTH2_PROFILE_AUTH_URL, uri, loadingOptions, objectIds,
                     'AuthURL', clientRequestId, undefined, false
                 );
             }
         }
 
-        return objects;
+        return objectResponse as ObjectResponse<T>;
     }
 
     public async createObject(

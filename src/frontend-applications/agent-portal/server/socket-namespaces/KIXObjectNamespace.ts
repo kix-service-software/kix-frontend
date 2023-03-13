@@ -62,14 +62,15 @@ export class KIXObjectNamespace extends SocketNameSpace {
 
         const service = KIXObjectServiceRegistry.getServiceInstance(data.objectType);
         if (service) {
-            const objects: any[] = await service.loadObjects(
+            const objectResponse = await service.loadObjects(
                 token, data.clientRequestId, data.objectType, data.objectIds,
                 data.loadingOptions, data.objectLoadingOptions
             );
-            const response = new SocketResponse(
-                KIXObjectEvent.LOAD_OBJECTS_FINISHED, new LoadObjectsResponse(data.requestId, objects)
+
+            const response = new LoadObjectsResponse(
+                data.requestId, objectResponse?.objects, objectResponse?.totalCount
             );
-            return (response);
+            return new SocketResponse(KIXObjectEvent.LOAD_OBJECTS_FINISHED, response);
         } else {
             const errorMessage = 'No API service registered for object type ' + data.objectType;
             LoggingService.getInstance().error(errorMessage);

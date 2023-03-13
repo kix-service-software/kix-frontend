@@ -51,6 +51,7 @@ import { UIComponentPermission } from '../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../server/model/rest/CRUD';
 import { PermissionService } from '../../../server/services/PermissionService';
 import { SysConfigOption } from '../../sysconfig/model/SysConfigOption';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { AuthenticationService } from '../../../../../server/services/AuthenticationService';
 
 export class TicketAPIService extends KIXObjectAPIService {
@@ -227,9 +228,9 @@ export class TicketAPIService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
+    ): Promise<ObjectResponse<T>> {
 
-        let objects = [];
+        let objectResponse = new ObjectResponse([], 0);
         if (objectType === KIXObjectType.TICKET) {
 
             const includes = [TicketProperty.STATE_TYPE];
@@ -258,22 +259,22 @@ export class TicketAPIService extends KIXObjectAPIService {
             loadingOptions.query.push(['NoDynamicFieldDisplayValues', 'CheckList,ITSMConfigItemReference,TicketReference']);
 
 
-            objects = await super.load(
+            objectResponse = await super.load(
                 token, KIXObjectType.TICKET, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.TICKET,
                 clientRequestId, Ticket
             );
         } else if (objectType === KIXObjectType.SENDER_TYPE) {
             const uri = this.buildUri('system', 'communication', 'sendertypes');
-            objects = await super.load(
+            objectResponse = await super.load(
                 token, KIXObjectType.SENDER_TYPE, uri, null, null, 'SenderType', clientRequestId, SenderType
             );
 
             if (Array.isArray(objectIds) && objectIds.length) {
-                objects = objects.filter((o) => objectIds.some((oid) => oid === o.ID));
+                objectResponse.objects = objectResponse?.objects.filter((o) => objectIds.some((oid) => oid === o.ID));
             }
         } else if (objectType === KIXObjectType.TICKET_LOCK) {
             const uri = this.buildUri('system', 'ticket', 'locks');
-            objects = await super.load(
+            objectResponse = await super.load(
                 token, KIXObjectType.TICKET_LOCK, uri, null, null, 'Lock', clientRequestId, TicketLock
             );
         } else if (objectType === KIXObjectType.ARTICLE) {
@@ -285,7 +286,7 @@ export class TicketAPIService extends KIXObjectAPIService {
                 const uri = this.buildUri(
                     this.RESOURCE_URI, (objectLoadingOptions as ArticleLoadingOptions).ticketId, 'articles'
                 );
-                objects = await super.load(
+                objectResponse = await super.load(
                     token, KIXObjectType.ARTICLE, uri, loadingOptions, objectIds, 'Article',
                     clientRequestId, Article
                 );
@@ -301,7 +302,7 @@ export class TicketAPIService extends KIXObjectAPIService {
                 } else if (!loadingOptions.limit) {
                     loadingOptions.limit = 0;
                 }
-                objects = await super.load(
+                objectResponse = await super.load(
                     token, KIXObjectType.TICKET_HISTORY, uri, loadingOptions, null, 'History',
                     clientRequestId, TicketHistory
                 );
@@ -309,13 +310,13 @@ export class TicketAPIService extends KIXObjectAPIService {
         }
         else if (objectType === KIXObjectType.HTML_TO_PDF) {
             const uri = this.buildUri('system', 'htmltopdf', 'convert');
-            objects = await super.load(
+            objectResponse = await super.load(
                 token, KIXObjectType.HTML_TO_PDF, uri, loadingOptions, null, KIXObjectType.HTML_TO_PDF,
                 null, null, false
             );
         }
 
-        return objects;
+        return objectResponse;
     }
 
     public async createObject(
@@ -384,10 +385,11 @@ export class TicketAPIService extends KIXObjectAPIService {
             let to = this.getParameterValue(parameter, ArticleProperty.TO);
             if (!to && contactId && senderType !== 3) {
                 if (!isNaN(contactId)) {
-                    const contacts = await super.load<Contact>(
+                    const objectResponse = await super.load<Contact>(
                         token, KIXObjectType.CONTACT, 'contacts', null, [contactId], 'Contact',
                         'TicketService', Contact
                     );
+                    const contacts = objectResponse?.objects;
                     if (contacts && contacts.length) {
                         to = contacts[0].Email;
                     }
@@ -581,10 +583,11 @@ export class TicketAPIService extends KIXObjectAPIService {
         }
 
         if (!article.To && ticket.ContactID && article.SenderTypeID !== 3) {
-            const contacts = await super.load<Contact>(
+            const objectResponse = await super.load<Contact>(
                 token, KIXObjectType.CONTACT, 'contacts', null, [ticket.ContactID], 'Contact', 'prepareArticle',
                 Contact
             );
+            const contacts = objectResponse?.objects;
             if (contacts && contacts.length) {
                 article.To = contacts[0].Email;
                 if (!article.To.match(/.+\s<.+>/)) {
@@ -630,11 +633,11 @@ export class TicketAPIService extends KIXObjectAPIService {
             this.RESOURCE_URI, ticketId, 'articles', articleId, 'attachments', attachmentId
         );
 
-        const response = await this.getObjectByUri(token, uri, 'TicketService', {
+        const response = await this.getObjectByUri<any>(token, uri, 'TicketService', {
             include: 'Content',
             RelevantOrganisationID: relevantOrganisationId
         }, KIXObjectType.ATTACHMENT);
-        return response['Attachment'];
+        return response?.responseData?.Attachment;
     }
 
     public async loadArticleZipAttachment(
@@ -644,11 +647,11 @@ export class TicketAPIService extends KIXObjectAPIService {
             this.RESOURCE_URI, ticketId, 'articles', articleId, 'attachments', 'zip'
         );
 
-        const response = await this.getObjectByUri(token, uri, 'TicketService', {
+        const response = await this.getObjectByUri<any>(token, uri, 'TicketService', {
             include: 'Content',
             RelevantOrganisationID: relevantOrganisationId
         });
-        return response['Attachment'];
+        return response?.responseData?.Attachment;
     }
 
     public async setArticleSeenFlag(
@@ -661,10 +664,11 @@ export class TicketAPIService extends KIXObjectAPIService {
             null, null, null, [ArticleProperty.FLAGS], [ArticleProperty.FLAGS]
         );
 
-        const articles = await super.load<Article>(
+        const objectResponse = await super.load<Article>(
             token, KIXObjectType.ARTICLE, baseUri, loadingOptions, null, 'Article',
             clientRequestId, Article
         );
+        const articles = objectResponse?.objects;
 
         const article = articles && articles.length ? articles[0] : null;
 
@@ -791,11 +795,12 @@ export class TicketAPIService extends KIXObjectAPIService {
 
         const ticketNumberCriterion = searchCriteria.find((c) => c.property === TicketProperty.TICKET_NUMBER);
         if (ticketNumberCriterion) {
-            const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+            const objectResponse = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
                 token, 'TicketService', KIXObjectType.SYS_CONFIG_OPTION,
                 [SysConfigKey.TICKET_HOOK, SysConfigKey.TICKET_HOOK_DIVIDER], null, null
             );
 
+            const options = objectResponse?.objects || [];
             for (const o of options) {
                 ticketNumberCriterion.value = ticketNumberCriterion.value?.toString()?.replace(o.Value, '');
             }

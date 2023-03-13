@@ -32,6 +32,7 @@ import { AdditionalContextInformation } from './AdditionalContextInformation';
 import { ApplicationEvent } from './ApplicationEvent';
 import { KIXModulesService } from './KIXModulesService';
 import { ToolbarAction } from '../../../agent-portal/webapp/application/_base-template/personal-toolbar/ToolbarAction';
+import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 
 export class ContextService {
 
@@ -689,6 +690,8 @@ export class ContextService {
         const context = ContextService.getInstance().getActiveContext();
         if (context) {
             const contextId = context.descriptor.contextId;
+
+            TableFactoryService.getInstance().deleteContextTables(context?.contextId);
 
             const currentUser = await AgentService.getInstance().getCurrentUser();
             const preference = currentUser.Preferences.find((p) => p.ID === 'ContextWidgetLists');

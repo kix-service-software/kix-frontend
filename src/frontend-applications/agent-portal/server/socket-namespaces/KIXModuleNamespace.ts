@@ -121,10 +121,12 @@ export class KIXModuleNamespace extends SocketNameSpace {
                     )
                 ], null, 0);
 
-                const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+                const objectResponse = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
                     serverConfig.BACKEND_API_TOKEN, 'FormConfiguration', KIXObjectType.SYS_CONFIG_OPTION, null,
                     loadingOptions, null
                 );
+
+                const options = objectResponse?.objects || [];
 
                 const formOptions = options.filter((c) => c.ContextMetadata === 'Form');
 

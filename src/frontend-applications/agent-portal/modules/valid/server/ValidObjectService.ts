@@ -13,6 +13,7 @@ import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
 import { ValidObject } from '../model/ValidObject';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class ValidObjectService extends KIXObjectAPIService {
 
@@ -41,17 +42,17 @@ export class ValidObjectService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
+    ): Promise<ObjectResponse<T>> {
 
-        let objects = [];
+        let objectResponse = new ObjectResponse();
         if (objectType === KIXObjectType.VALID_OBJECT) {
-            objects = await super.load<ValidObject>(
+            objectResponse = await super.load<ValidObject>(
                 token, KIXObjectType.VALID_OBJECT, this.RESOURCE_URI, loadingOptions, objectIds, 'Valid',
                 clientRequestId, ValidObject
             );
         }
 
-        return objects;
+        return objectResponse as ObjectResponse<T>;
     }
 
 }

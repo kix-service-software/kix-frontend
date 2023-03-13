@@ -167,9 +167,11 @@ describe('Table Selection Tests', () => {
     });
 
     describe('Select single row.', () => {
+
         before(async () => {
             table.setContentProvider(new TestTableContentProvider(10, 3));
         });
+
         beforeEach(async () => {
             table['initialized'] = false;
             await table.initialize();
@@ -197,6 +199,7 @@ describe('Table Selection Tests', () => {
         it('Should return true if row is selected (by object).', () => {
             const row = table.getRows()[0];
             expect(row).exist;
+            row.select(false);
             expect(row.isSelected()).is.false;
             table.selectRowByObject(row.getRowObject().getObject(), true);
             expect(row.isSelected()).is.true;
@@ -313,6 +316,7 @@ describe('Table Selection Tests', () => {
         it('Row should be not not selected anymore if row is set not selectable.', () => {
             const row = table.getRows()[0];
             expect(row).exist;
+            row.selectable(true);
             row.select();
             expect(row.isSelected()).is.true;
             row.selectable(false);

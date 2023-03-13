@@ -41,7 +41,8 @@ export class PermissionManager extends AbstractDynamicFormManager {
 
     public async getProperties(): Promise<Array<[string, string]>> {
         const types = [];
-        const permissionTypes = await KIXObjectService.loadObjects<PermissionType>(KIXObjectType.PERMISSION_TYPE);
+        let permissionTypes = await KIXObjectService.loadObjects<PermissionType>(KIXObjectType.PERMISSION_TYPE);
+        permissionTypes = permissionTypes.filter((t) => !t.Name.startsWith('Base::'));
         permissionTypes.forEach((t) => types.push([t.ID.toString(), t.Name]));
         return types;
     }

@@ -18,6 +18,6 @@ export class ComponentState {
         public selected: boolean = false,
         public selectable: boolean = true,
         public show: boolean = false,
-        public rowClasses: string[] = []
+        public rowClasses: string[] = [],
     ) { }
 }
