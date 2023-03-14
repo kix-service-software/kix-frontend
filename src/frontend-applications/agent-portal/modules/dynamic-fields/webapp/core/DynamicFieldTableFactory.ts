@@ -58,7 +58,7 @@ export class DynamicFieldTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(null, null, null,
-                KIXObjectType.DYNAMIC_FIELD, null, 20, tableColumns, [], true, false, null, null,
+                KIXObjectType.DYNAMIC_FIELD, null, null, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;

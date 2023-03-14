@@ -18,7 +18,7 @@ export class ComponentState {
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#System: Dynamic Fields',
             ['dynamic-field-create-action', 'csv-export-action'], null,
-            new TableWidgetConfiguration(null, null, null, KIXObjectType.DYNAMIC_FIELD, null, null),
+            new TableWidgetConfiguration(null, null, null, KIXObjectType.DYNAMIC_FIELD),
             false, false, 'kix-icon-gears'
         )
     ) { }
