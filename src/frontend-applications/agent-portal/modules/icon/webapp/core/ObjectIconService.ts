@@ -34,9 +34,13 @@ export class ObjectIconService extends KIXObjectService<ObjectIcon> {
 
     public async loadObjects<O extends KIXObject>(
         objectType: KIXObjectType | string, objectIds: Array<string | number>,
-        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: ObjectIconLoadingOptions
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: ObjectIconLoadingOptions,
+        cache: boolean = true, forceIds?: boolean, silent?: boolean, collectionId?: string
     ): Promise<O[]> {
-        let icons = await super.loadObjects<ObjectIcon>(KIXObjectType.OBJECT_ICON, null);
+        let icons = await super.loadObjects<ObjectIcon>(
+            KIXObjectType.OBJECT_ICON, undefined, undefined, undefined, undefined, undefined, undefined, collectionId
+        );
+
         if (objectLoadingOptions && objectLoadingOptions instanceof ObjectIconLoadingOptions) {
             const icon = icons.find(
                 (i) => {
