@@ -64,6 +64,39 @@ export class DateTimeUtil {
         return string;
     }
 
+    public static async getLocalDateTimeStringByTimeZone(
+        utcTime: any, timeZone: string, language?: string
+    ): Promise<string> {
+        let string = '';
+        if (utcTime) {
+            // use utc (timestamp) as local date to geht single values (year, month, ...) as they are
+            let UTCDate = new Date(utcTime);
+            UTCDate = new Date(Date.UTC(
+                UTCDate.getFullYear(),
+                UTCDate.getMonth(),
+                UTCDate.getDay(),
+                UTCDate.getHours(),
+                UTCDate.getMinutes(),
+                UTCDate.getSeconds()
+            ));
+
+            const userLanguage = await TranslationService.getUserLanguage();
+            const options = {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZone,
+                timeZoneName: 'longOffset'
+            } as any; // FIXME: use "any" or else will be an error:
+            // error TS2322: Type '"longOffset"' is not assignable to type '"long" | "short"'
+
+            string = UTCDate.toLocaleString(userLanguage, options);
+        }
+        return string;
+    }
+
     public static calculateTimeInterval(seconds: number, noDays?: boolean): string {
         let isNegative = false;
         if (seconds < 0) {
