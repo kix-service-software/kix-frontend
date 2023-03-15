@@ -31,15 +31,6 @@ export class NewTicketDialogContext extends Context {
         if (!this.getAdditionalInformation(AdditionalContextInformation.FORM_OBJECT)) {
             this.setNewTicketObject();
         }
-
-        const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
-        const kixPro = releaseInfo?.plugins?.some((p) => p.product === 'KIXPro');
-
-        if (!kixPro) {
-            const formId = await FormService.getInstance().getFormIdByContext(FormContext.NEW, KIXObjectType.TICKET);
-            this.getFormManager().setFormId(formId, null, true, false);
-        }
-
         await super.initContext(urlParams);
     }
 
@@ -126,6 +117,17 @@ export class NewTicketDialogContext extends Context {
         this.listeners.forEach((l) => l.objectChanged(
             contactId, this.contact, KIXObjectType.CONTACT
         ));
+    }
+
+    public async postInit(): Promise<void> {
+        const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+        const kixPro = releaseInfo?.plugins?.some((p) => p.product === 'KIXPro');
+
+        if (!kixPro) {
+            const formId = await FormService.getInstance().getFormIdByContext(FormContext.NEW, KIXObjectType.TICKET);
+            this.getFormManager().setFormId(formId, null, true, false);
+        }
+        await super.postInit();
     }
 
 
