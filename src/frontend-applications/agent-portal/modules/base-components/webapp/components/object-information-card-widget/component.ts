@@ -159,7 +159,7 @@ class Component {
                 } catch (e) {
                     widthFactor = 1;
                 }
-                if (widthFactor > 4) widthFactor = 4;
+                if (widthFactor > 23) widthFactor = 23;
                 if (widthFactor < 1) widthFactor = 1;
                 if (widthFactor > largestFactor) {
                     largestFactor = widthFactor;
