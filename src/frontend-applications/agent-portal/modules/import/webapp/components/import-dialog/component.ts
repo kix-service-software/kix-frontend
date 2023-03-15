@@ -251,7 +251,6 @@ class Component {
         const objectName = await LabelService.getInstance().getObjectName(
             this.state.importManager.objectType, true
         );
-        const objects = [...this.importRunner.getCSVObjects()];
         this.state.table.getRows().forEach((r) => r.setValueState(ValueState.NONE));
         this.finishedObjects = [];
         this.errorObjects = [];
@@ -260,7 +259,7 @@ class Component {
 
         const objectTimes: number[] = [];
 
-        for (const object of objects) {
+        for (const object of this.selectedObjects) {
             const start = Date.now();
             let end: number;
 
@@ -284,7 +283,7 @@ class Component {
             }
 
             objectTimes.push(end - start);
-            await this.setDialogLoadingInfo(objectTimes, objects.length);
+            await this.setDialogLoadingInfo(objectTimes, this.selectedObjects.length);
         }
 
         if (!this.errorObjects.length) {
@@ -302,7 +301,7 @@ class Component {
         const average = BrowserUtil.calculateAverage(times);
         const time = average * (objectsCount - this.finishedObjects.length - this.errorObjects.length);
         const finishCount = this.finishedObjects.length + this.errorObjects.length;
-        const totalCount = this.importRunner?.getCSVObjects()?.length;
+        const totalCount = this.selectedObjects.length;
         const loadingHint = await TranslationService.translate(
             'Translatable#{0}/{1} {2} imported', [finishCount, totalCount, objectName]
         );
