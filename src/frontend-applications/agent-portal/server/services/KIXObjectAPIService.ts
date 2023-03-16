@@ -157,7 +157,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
         if (icon && icon.Content) {
             icon.Object = objectType;
-            icon.ObjectID = response.responseData[responseProperty];
+            icon.ObjectID = response[responseProperty];
             if (create) {
                 await this.createIcon(token, clientRequestId, icon)
                     .catch(() => {
