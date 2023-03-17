@@ -459,8 +459,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     'contact-create-action'
                 ],
                 [
-                    'contact-edit-action', 'contact-duplicate-action', 'organisation-create-action',
-                    'ticket-create-action', 'config-item-create-action'
+                    'contact-edit-action', 'contact-duplicate-action', 'ticket-create-action'
                 ],
                 [],
                 [
