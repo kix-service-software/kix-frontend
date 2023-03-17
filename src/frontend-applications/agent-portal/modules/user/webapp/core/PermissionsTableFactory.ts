@@ -25,7 +25,6 @@ export class PermissionsTableFactory extends TableFactory {
 
     public isFactoryFor(objectType: KIXObjectType | string): boolean {
         return objectType === KIXObjectType.PERMISSION
-            || objectType === KIXObjectType.PERMISSION_DEPENDING_OBJECTS
             || objectType === KIXObjectType.ROLE_PERMISSION;
     }
 

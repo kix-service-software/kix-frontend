@@ -57,10 +57,6 @@ describe('ObjectCommitHandler', () => {
             expect(ticket.displayIcons).not.exist;
         });
 
-        it('should remove ConfiguredPermissions', () => {
-            expect(ticket.ConfiguredPermissions).not.exist;
-        });
-
         it('should remove DynamicFields if array is empty', () => {
             expect(ticket.DynamicFields).not.exist;
         });

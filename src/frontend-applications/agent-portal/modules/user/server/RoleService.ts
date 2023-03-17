@@ -85,17 +85,6 @@ export class RoleService extends KIXObjectAPIService {
     ): Promise<number> {
         const createParameter = parameter.filter((p) => p[0] !== RoleProperty.PERMISSIONS);
 
-        const permissionParameter = createParameter.find((p) => p[0] === RoleProperty.CONFIGURED_PERMISSIONS);
-        if (permissionParameter && Array.isArray(permissionParameter[1])) {
-            const typeIds = await this.getPermissionTypeId('Base::', token, true);
-            permissionParameter[1]
-                .filter((pd: CreatePermissionDescription) => !typeIds.some((tid) => tid === pd.TypeID))
-                .forEach((pd: CreatePermissionDescription) => {
-                    delete (pd.ID);
-                    delete (pd.RoleID);
-                });
-        }
-
         const id = await super.executeUpdateOrCreateRequest(
             token, clientRequestId, createParameter, this.RESOURCE_URI, this.objectType, 'RoleID', true
         );
@@ -129,10 +118,9 @@ export class RoleService extends KIXObjectAPIService {
         ).catch((): ObjectResponse<Role> => new ObjectResponse());
 
         if (objectResponse?.objects?.length) {
+            const role = objectResponse.objects[0];
             const userIds = this.getParameterValue(parameter, RoleProperty.USER_IDS);
             const permissions = this.getParameterValue(parameter, RoleProperty.PERMISSIONS);
-
-            const role = objectResponse.objects[0];
 
             await Promise.all([
                 this.setUserIds(token, clientRequestId, Number(id), role.UserIDs, userIds),
@@ -191,9 +179,6 @@ export class RoleService extends KIXObjectAPIService {
         if (!permissionDescs) {
             permissionDescs = [];
         }
-
-        const typeIds = await this.getPermissionTypeId('Base::', token, true);
-        permissionDescs = permissionDescs.filter((pd) => !typeIds.some((tid) => tid === pd.TypeID));
 
         if (roleId) {
             const promises = [

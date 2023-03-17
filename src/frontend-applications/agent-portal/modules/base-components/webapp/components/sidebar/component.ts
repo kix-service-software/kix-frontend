@@ -105,7 +105,11 @@ class Component {
             if (Array.isArray(sidebars)) {
                 for (const cw of sidebars) {
                     const template = await this.getSidebarTemplate(cw.instanceId);
-                    this.state.sidebars.push([cw.instanceId, template, IdService.generateDateBasedId(cw.instanceId)]);
+                    if (!this.state.sidebars.some((s) => s[0] === cw.instanceId)) {
+                        this.state.sidebars.push(
+                            [cw.instanceId, template, IdService.generateDateBasedId(cw.instanceId)]
+                        );
+                    }
                 }
             }
         }

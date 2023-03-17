@@ -19,16 +19,6 @@ import { LabelService } from '../../../../../modules/base-components/webapp/core
 import { IdService } from '../../../../../model/IdService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { FormInstance } from '../../../../base-components/webapp/core/FormInstance';
-import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
-import { FilterCriteria } from '../../../../../model/FilterCriteria';
-import { FilterDataType } from '../../../../../model/FilterDataType';
-import { FilterType } from '../../../../../model/FilterType';
-import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
-import { SearchOperator } from '../../../../search/model/SearchOperator';
-import { PermissionProperty } from '../../../../user/model/PermissionProperty';
-import { Role } from '../../../../user/model/Role';
-import { RoleProperty } from '../../../../user/model/RoleProperty';
-import { Permission } from '../../../../user/model/Permission';
 
 export class QueueFormService extends KIXObjectFormService {
 
@@ -55,9 +45,6 @@ export class QueueFormService extends KIXObjectFormService {
         formField: FormFieldConfiguration, formContext: FormContext
     ): Promise<any> {
         switch (property) {
-            case QueueProperty.PERMISSIONS:
-                value = await this.getPermissions(queue);
-                break;
             case QueueProperty.NAME:
                 if (formContext === FormContext.NEW && queue) {
                     value = await TranslationService.translate(
@@ -124,34 +111,5 @@ export class QueueFormService extends KIXObjectFormService {
             default:
         }
         return [[property, value]];
-    }
-
-    private async getPermissions(queue: Queue): Promise<Permission[]> {
-        const loadingOptions = new KIXObjectLoadingOptions(
-            [
-                new FilterCriteria(
-                    `${RoleProperty.PERMISSIONS}.${PermissionProperty.TARGET}`, SearchOperator.EQUALS,
-                    FilterDataType.STRING, FilterType.AND, `${queue.QueueID}`
-                ),
-                new FilterCriteria(
-                    `${RoleProperty.PERMISSIONS}.${PermissionProperty.TYPE_ID}`, SearchOperator.EQUALS,
-                    FilterDataType.NUMERIC, FilterType.AND, 4
-                )
-            ],
-            null, null, [RoleProperty.PERMISSIONS]
-        );
-        const roles = await KIXObjectService.loadObjects<Role>(KIXObjectType.ROLE, null, loadingOptions);
-
-        const permissions = [];
-
-        for (const role of roles) {
-            if (role?.Permissions?.length) {
-                const basePermissions = role.Permissions.filter(
-                    (p) => p.TypeID === 4 && p.Target.toString() === queue.QueueID.toString()
-                );
-                permissions.push(...basePermissions);
-            }
-        }
-        return permissions;
     }
 }

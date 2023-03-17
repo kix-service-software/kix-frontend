@@ -33,6 +33,8 @@ export enum QueueProperty {
 
     PERMISSIONS = 'Permissions',
 
+    ASSIGNED_PERMISSIONS = 'AssignedPermissions',
+
     // UI properties
     VALID = 'Valid',
     PARENT = 'Parent',

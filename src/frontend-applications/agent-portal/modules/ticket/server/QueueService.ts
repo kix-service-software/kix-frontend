@@ -19,13 +19,8 @@ import { Queue } from '../model/Queue';
 import { FollowUpType } from '../model/FollowUpType';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { CacheService } from '../../../server/services/cache';
-import { QueueProperty } from '../model/QueueProperty';
-import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
-import { RoleProperty } from '../../user/model/RoleProperty';
-import { Role } from '../../user/model/Role';
-import { RoleService } from '../../user/server/RoleService';
-import { CreatePermissionDescription } from '../../user/server/CreatePermissionDescription';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
+import { QueueProperty } from '../model/QueueProperty';
 
 export class QueueAPIService extends KIXObjectAPIService {
 
@@ -78,7 +73,7 @@ export class QueueAPIService extends KIXObjectAPIService {
 
             if (objectIds && objectIds.length) {
                 objectResponse.objects = objectResponse?.objects?.filter(
-                    (t: Queue) => objectIds.some((oid) => oid === t.QueueID)
+                    (t: Queue) => objectIds.some((oid) => Number(oid) === Number(t.QueueID))
                 );
             }
         } else if (objectType === KIXObjectType.FOLLOW_UP_TYPE) {
@@ -100,18 +95,19 @@ export class QueueAPIService extends KIXObjectAPIService {
         token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<number> {
-        const queueParameter = parameter.filter((p) => p[0] !== QueueProperty.PERMISSIONS);
+        const index = parameter.findIndex((p) => p[0] === QueueProperty.ASSIGNED_PERMISSIONS);
+        if (index !== -1) {
+            const permissions = parameter[index][1];
+            parameter.splice(index, 1);
+            parameter.push([QueueProperty.PERMISSIONS, permissions]);
+        }
+
         const id = await super.executeUpdateOrCreateRequest<number>(
-            token, clientRequestId, queueParameter, this.RESOURCE_URI, this.objectType, 'QueueID', true
+            token, clientRequestId, parameter, this.RESOURCE_URI, this.objectType, 'QueueID', true
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
         });
-
-        const permissionParameter = parameter.find((p) => p[0] === QueueProperty.PERMISSIONS);
-        if (permissionParameter) {
-            await this.updatePermissions(id, permissionParameter[1]).catch(() => null);
-        }
 
         return id;
     }
@@ -120,6 +116,13 @@ export class QueueAPIService extends KIXObjectAPIService {
         token: string, clientRequestId: string, objectType: KIXObjectType,
         parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
+        const index = parameter.findIndex((p) => p[0] === QueueProperty.ASSIGNED_PERMISSIONS);
+        if (index !== -1) {
+            const permissions = parameter[index][1];
+            parameter.splice(index, 1);
+            parameter.push([QueueProperty.PERMISSIONS, permissions]);
+        }
+
         const uri = this.buildUri(this.RESOURCE_URI, objectId);
         const id = await super.executeUpdateOrCreateRequest<number>(
             token, clientRequestId, parameter, uri, this.objectType, 'QueueID'
@@ -128,53 +131,7 @@ export class QueueAPIService extends KIXObjectAPIService {
             throw new Error(error.Code, error.Message);
         });
 
-        const permissionParameter = parameter.find((p) => p[0] === QueueProperty.PERMISSIONS);
-        if (permissionParameter) {
-            await this.updatePermissions(id, permissionParameter[1]).catch(() => null);
-        }
         return id;
-    }
-
-    private async updatePermissions(queueId: number, permissions: CreatePermissionDescription[] = []): Promise<void> {
-        const config = ConfigurationService.getInstance().getServerConfiguration();
-        const token = config.BACKEND_API_TOKEN;
-
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, [RoleProperty.PERMISSIONS]);
-        const objectResponse = await RoleService.getInstance().loadObjects<Role>(
-            token, 'QueueAPIService', KIXObjectType.ROLE, null, loadingOptions, null
-        ).catch((error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            return new ObjectResponse<Role>();
-        });
-        const roles = objectResponse?.objects || [];
-
-        const permissionTypeIds = await RoleService.getInstance().getPermissionTypeId('Base', token, true);
-        const permissionTypeId = permissionTypeIds?.length ? permissionTypeIds[0] : null;
-        const target = queueId?.toString();
-
-        // cleanup roles
-        for (const role of roles) {
-
-            const permission = role.Permissions?.find(
-                (p) => p.TypeID === permissionTypeId && p.Target === target
-            );
-
-            if (permission) {
-                await RoleService.getInstance().deletePermission(
-                    token, 'TemplateAPIService', role.ID, permission.ID
-                ).catch((error) => {
-                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                });
-            }
-        }
-
-        for (const permission of permissions) {
-            permission.Target = queueId?.toString();
-            permission.TypeID = permissionTypeId;
-            await RoleService.getInstance().createPermissions(
-                token, 'TemplateAPIService', permission.RoleID, [], [permission]
-            );
-        }
     }
 
 }

@@ -31,6 +31,4 @@ export enum RoleProperty {
 
     PERMISSIONS = 'Permissions',
 
-    CONFIGURED_PERMISSIONS = 'ConfiguredPermissions'
-
 }

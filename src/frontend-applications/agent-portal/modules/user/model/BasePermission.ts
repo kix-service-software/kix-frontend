@@ -13,6 +13,6 @@ export enum BasePermission {
 
     WRITE = 'WRITE',
 
-    READ_WRITE = 'READ_WRITE'
+    READ_WRITE = 'READ+WRITE'
 
 }

@@ -10,7 +10,6 @@
 import { AbstractDynamicFormManager } from '../../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
-import { DynamicFormOperationsType } from '../../../../base-components/webapp/core/dynamic-form/DynamicFormOperationsType';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { Role } from '../../../model/Role';
 import { BasePermission } from '../../../model/BasePermission';
