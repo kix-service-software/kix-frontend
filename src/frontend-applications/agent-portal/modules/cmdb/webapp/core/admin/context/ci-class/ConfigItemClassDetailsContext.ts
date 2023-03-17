@@ -54,7 +54,7 @@ export class ConfigItemClassDetailsContext extends Context {
 
     private async loadCIClass(): Promise<ConfigItemClass> {
         const loadingOptions = new KIXObjectLoadingOptions();
-        loadingOptions.includes = ['CurrentDefinition', 'Definitions', 'ConfiguredPermissions'];
+        loadingOptions.includes = ['CurrentDefinition', 'Definitions'];
         loadingOptions.cacheType = `${KIXObjectType.CONFIG_ITEM_CLASS}_DEFINITION`;
 
         return await this.loadDetailsObject<ConfigItemClass>(

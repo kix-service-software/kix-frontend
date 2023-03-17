@@ -134,13 +134,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             )
         );
 
-        // configurations.push(
-        //     new FormFieldConfiguration(
-        //         'queue-new-form-field-permissions',
-        //         'Translatable#Assigned Roles', QueueProperty.PERMISSIONS,
-        //         'base-permission-input', true, 'Translatable#Helptext_Admin_Tickets_QueueCreate_Permission'
-        //     )
-        // );
+        configurations.push(
+            new FormFieldConfiguration(
+                'queue-new-form-field-permissions',
+                'Translatable#Assigned Roles', QueueProperty.ASSIGNED_PERMISSIONS,
+                'base-permission-input', false, 'Translatable#Helptext_Admin_Tickets_QueueCreate_Permission'
+            )
+        );
 
         configurations.push(
             new FormGroupConfiguration(
@@ -192,12 +192,21 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         // );
 
         configurations.push(
+            new FormGroupConfiguration(
+                'queue-new-form-group-permissions', 'Translatable#Permissions',
+                [
+                    'queue-new-form-field-permissions',
+                ]
+            )
+        );
+
+        configurations.push(
             new FormPageConfiguration(
                 'queue-new-form-page', 'Translatable#New Queue',
                 [
                     'queue-new-form-group-informations',
                     'queue-new-form-group-signatrue',
-                    // 'queue-new-form-group-permissions'
+                    'queue-new-form-group-permissions'
                 ]
             )
         );

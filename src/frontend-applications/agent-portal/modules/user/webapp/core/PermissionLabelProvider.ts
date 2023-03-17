@@ -27,9 +27,7 @@ export class PermissionLabelProvider extends LabelProvider<Permission> {
     }
 
     public isLabelProviderForType(objectType: KIXObjectType | string): boolean {
-        return objectType === KIXObjectType.PERMISSION ||
-            objectType === KIXObjectType.ROLE_PERMISSION ||
-            objectType === KIXObjectType.PERMISSION_DEPENDING_OBJECTS;
+        return objectType === KIXObjectType.PERMISSION || objectType === KIXObjectType.ROLE_PERMISSION;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

@@ -202,20 +202,22 @@ export class ContextService {
                     }
                     const context = this.contextInstances.splice(index, 1)[0];
 
-                    const iter = this.serviceListener.values();
-                    let entry = iter.next();
-                    while (entry.value) {
-                        const listener = entry.value as IContextServiceListener;
-                        await listener.beforeDestroy(context);
-                        entry = iter.next();
-                    }
+                    if (context) {
+                        const iter = this.serviceListener.values();
+                        let entry = iter.next();
+                        while (entry.value) {
+                            const listener = entry.value as IContextServiceListener;
+                            await listener.beforeDestroy(context);
+                            entry = iter.next();
+                        }
 
-                    for (const extension of context?.contextExtensions) {
-                        await extension?.destroy(context);
-                    }
+                        for (const extension of context?.contextExtensions) {
+                            await extension?.destroy(context);
+                        }
 
-                    await context.destroy();
-                    EventService.getInstance().publish(ContextEvents.CONTEXT_REMOVED, context);
+                        await context?.destroy();
+                        EventService.getInstance().publish(ContextEvents.CONTEXT_REMOVED, context);
+                    }
 
                     this.activeContextIndex--;
 

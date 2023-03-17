@@ -8,7 +8,6 @@
  */
 
 import { KIXObjectType } from './KIXObjectType';
-import { ConfiguredPermissions } from '../ConfiguredPermissions';
 import { Link } from '../../modules/links/model/Link';
 import { DynamicFieldValue } from '../../modules/dynamic-fields/model/DynamicFieldValue';
 import { SearchOperator } from '../../modules/search/model/SearchOperator';
@@ -24,8 +23,6 @@ export abstract class KIXObject extends BindableObject {
     public abstract ObjectId: string | number;
 
     public abstract KIXObjectType: KIXObjectType | string;
-
-    public ConfiguredPermissions: ConfiguredPermissions;
 
     public Links: Link[] = [];
 

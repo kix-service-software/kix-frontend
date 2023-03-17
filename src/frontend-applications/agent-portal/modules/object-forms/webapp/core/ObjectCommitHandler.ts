@@ -120,7 +120,6 @@ export class ObjectCommitHandler<T extends KIXObject = KIXObject> {
         delete object['propertyBindings'];
         delete object['displayValues'];
         delete object['displayIcons'];
-        delete object['ConfiguredPermissions'];
         delete object.ChangeBy;
         delete object.ChangeTime;
         delete object.CreateBy;

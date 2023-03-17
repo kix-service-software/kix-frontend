@@ -10,15 +10,11 @@
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../base-components/webapp/core/FormInputComponent';
 import { IdService } from '../../../../../model/IdService';
-import { CreatePermissionDescription } from '../../../server/CreatePermissionDescription';
-import { PermissionFormData } from '../../../../base-components/webapp/core/PermissionFormData';
 import { IDynamicFormManager } from '../../../../base-components/webapp/core/dynamic-form';
-import { Permission } from '../../../model/Permission';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
-import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { BasePermission } from '../../../model/BasePermission';
 import { BasePermissionManager } from '../../core/admin/BasePermissionManager';
+import { PermissionDescription } from '../../../../../model/PermissionDescription';
 
 class Component extends FormInputComponent<any[],
     ComponentState> {
@@ -50,29 +46,19 @@ class Component extends FormInputComponent<any[],
                 }
 
                 this.permissionFormTimeout = setTimeout(async () => {
-                    const permissionDescriptions: CreatePermissionDescription[] = [];
+                    const permissionDescriptions: PermissionDescription[] = [];
 
                     if (await this.state.permissionManager.hasDefinedValues()) {
                         const values = await this.state.permissionManager.getEditableValues();
 
-                        values.forEach((v) => {
-                            let crudValue = CRUD.READ;
-                            if (v.operator === BasePermission.WRITE) {
-                                crudValue = CRUD.CREATE | CRUD.UPDATE | CRUD.DELETE;
-                            } else if (v.operator === BasePermission.READ_WRITE) {
-                                crudValue = CRUD.READ | CRUD.CREATE | CRUD.UPDATE | CRUD.DELETE;
-                            }
-
+                        for (const v of values) {
                             if (v.property && v.operator) {
-                                const permission = new CreatePermissionDescription(
-                                    null, '', 0, crudValue, null, Number(v.property),
-                                    typeof v.id !== 'undefined' && v.id !== null ? Number(v.id) : null
-                                );
+                                const roleId = Number(v.property);
+                                const permission = new PermissionDescription('Base', roleId, v.operator);
                                 permissionDescriptions.push(permission);
                             }
                         }
 
-                        );
                         super.provideValue(permissionDescriptions, true);
                     }
                 }, 200);
@@ -91,36 +77,20 @@ class Component extends FormInputComponent<any[],
     }
 
     public async setCurrentNode(permissionManager: IDynamicFormManager): Promise<void> {
-        const permissionDescriptions: CreatePermissionDescription[] = [];
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();
         const value = formInstance.getFormFieldValue<number>(this.state.field?.instanceId);
 
         if (value && Array.isArray(value.value)) {
-            const permissions = value.value as Permission[];
+            const permissions = value.value as PermissionDescription[];
             for (const permission of permissions) {
-                let operator;
-
-                if (permission.Value === CRUD.READ) {
-                    operator = BasePermission.READ;
-                } else if (permission.Value === (CRUD.CREATE | CRUD.UPDATE | CRUD.DELETE)) {
-                    operator = BasePermission.WRITE;
-                } else {
-                    operator = BasePermission.READ_WRITE;
-                }
+                const operator = permission.Permission;
 
                 const permissionValue = new ObjectPropertyValue(
                     permission.RoleID.toString(), operator, 0,
-                    [], false, true, null, null, null, permission.ID.toString()
+                    [], false, true, null, null, null, permission.RoleID.toString()
                 );
                 permissionManager.setValue(permissionValue);
-                permissionDescriptions.push(new CreatePermissionDescription(permission.TypeID,
-                    permission.Target,
-                    permission.IsRequired,
-                    permission.Value,
-                    permission.Comment,
-                    null,
-                    permission.ID));
             }
         }
     }

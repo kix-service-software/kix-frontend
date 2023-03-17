@@ -63,8 +63,7 @@ export class RoleDetailsContext extends Context {
 
     private async loadRole(changedProperties: string[] = [], cache: boolean = true): Promise<Role> {
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null,
-            [RoleProperty.USER_IDS, RoleProperty.PERMISSIONS, RoleProperty.CONFIGURED_PERMISSIONS]
+            null, null, null, [RoleProperty.USER_IDS, RoleProperty.PERMISSIONS]
         );
 
         return await this.loadDetailsObject<Role>(KIXObjectType.ROLE, loadingOptions);

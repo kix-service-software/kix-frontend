@@ -7,13 +7,14 @@
  * --
  */
 
-import { Permission } from '../modules/user/model/Permission';
-
-export class ConfiguredPermissions {
+export class PermissionDescription {
 
     public constructor(
-        public Assigned: Permission[] = [],
-        public DependingObjects: Permission[] = []
+        public Type: string,
+        public RoleID: number,
+        public Permission?: string,
+        public Condition?: string,
+        public Properties?: string
     ) { }
 
 }
