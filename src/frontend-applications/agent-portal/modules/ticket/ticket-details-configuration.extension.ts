@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -310,6 +310,24 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     conditions: [
                                         new UIFilterCriterion(
                                             'DynamicFields.AffectedServices',
+                                            SearchOperator.NOT_EQUALS,
+                                            null
+                                        )
+                                    ]
+                                }
+                            ],
+                            [
+                                {
+                                    text: 'Translatable#Merged into the Ticket',
+                                    textStyle: 'font-weight:bold;margin-bottom:0.5rem',
+                                    icon: 'kix-icon-ticket',
+                                    componentId: 'dynamic-field-value',
+                                    componentData: {
+                                        name: 'MergeToTicket'
+                                    },
+                                    conditions: [
+                                        new UIFilterCriterion(
+                                            'DynamicFields.MergeToTicket',
                                             SearchOperator.NOT_EQUALS,
                                             null
                                         )

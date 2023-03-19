@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -30,6 +30,7 @@ import { Role } from '../../user/model/Role';
 import { CreatePermissionDescription } from '../../user/server/CreatePermissionDescription';
 import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
 import { Permission } from '../../user/model/Permission';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class ReportingAPIService extends KIXObjectAPIService {
 
@@ -65,13 +66,13 @@ export class ReportingAPIService extends KIXObjectAPIService {
         token: string, clientRequestId: string, objectType: KIXObjectType,
         objectIds: string[], loadingOptions: KIXObjectLoadingOptions,
         objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
+    ): Promise<ObjectResponse<T>> {
 
-        let objects = [];
+        let objectResponse = new ObjectResponse();
 
         if (objectType === KIXObjectType.REPORT_DEFINITION) {
             const uri = this.buildUri(this.RESOURCE_URI, 'reportdefinitions');
-            objects = await super.load(
+            objectResponse = await super.load(
                 token, KIXObjectType.REPORT_DEFINITION, uri, loadingOptions, objectIds,
                 KIXObjectType.REPORT_DEFINITION, clientRequestId, ReportDefinition
             );
@@ -79,7 +80,7 @@ export class ReportingAPIService extends KIXObjectAPIService {
             const uri = this.buildUri(
                 this.RESOURCE_URI, 'reports'
             );
-            objects = await super.load(
+            objectResponse = await super.load(
                 token, KIXObjectType.REPORT, uri, loadingOptions, objectIds,
                 KIXObjectType.REPORT, clientRequestId, Report
             );
@@ -88,25 +89,25 @@ export class ReportingAPIService extends KIXObjectAPIService {
                 this.RESOURCE_URI, 'reports',
                 (objectLoadingOptions as ReportResultLoadingOptions).reportId, 'results'
             );
-            objects = await super.load(
+            objectResponse = await super.load(
                 token, KIXObjectType.REPORT_RESULT, uri, loadingOptions, objectIds,
                 KIXObjectType.REPORT_RESULT, clientRequestId, ReportResult
             );
         } else if (objectType === KIXObjectType.REPORT_DATA_SOURCE) {
             const uri = this.buildUri(this.RESOURCE_URI, 'datasources');
-            objects = await super.load(
+            objectResponse = await super.load(
                 token, KIXObjectType.REPORT_DATA_SOURCE, uri, loadingOptions, objectIds,
                 'DataSource', clientRequestId, DataSource
             );
         } else if (objectType === KIXObjectType.REPORT_OUTPUT_FORMAT) {
             const uri = this.buildUri(this.RESOURCE_URI, 'outputformats');
-            objects = await super.load(
+            objectResponse = await super.load(
                 token, KIXObjectType.REPORT_OUTPUT_FORMAT, uri, loadingOptions, objectIds,
                 KIXObjectType.REPORT_OUTPUT_FORMAT, clientRequestId, ReportOutputFormat
             );
         }
 
-        return objects;
+        return objectResponse as ObjectResponse<T>;
     }
 
     public async createObject(
@@ -217,18 +218,22 @@ export class ReportingAPIService extends KIXObjectAPIService {
         const token = config.BACKEND_API_TOKEN;
 
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, [RoleProperty.PERMISSIONS]);
-        const roles = await RoleService.getInstance().loadObjects<Role>(
+        const objectResponse = await RoleService.getInstance().loadObjects<Role>(
             token, 'ReportingService', KIXObjectType.ROLE, null, loadingOptions, null
-        ).catch((error): Role[] => {
+        ).catch((error) => {
             LoggingService.getInstance().error(
                 `Could not load assigned roles from report definition with id ${reportDefinitionId}`
             );
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            return [];
+            return new ObjectResponse<Role>();
         });
+        const roles = objectResponse?.objects || [];
 
-        const permissionRessourceTypeId = await RoleService.getInstance().getPermissionTypeId('Resource', token);
-        const permissionObjectTypeId = await RoleService.getInstance().getPermissionTypeId('Object', token);
+        const permissionRessourceTypeIds = await RoleService.getInstance().getPermissionTypeId('Resource', token);
+        const permissionRessourceTypeId = permissionRessourceTypeIds?.length ? permissionRessourceTypeIds[0] : null;
+
+        const permissionObjectTypeIds = await RoleService.getInstance().getPermissionTypeId('Object', token);
+        const permissionObjectTypeId = permissionObjectTypeIds?.length ? permissionObjectTypeIds[0] : null;
 
         const permissionsToCheck: Permission[] = [];
         const reportDefinitionPermission = new Permission();

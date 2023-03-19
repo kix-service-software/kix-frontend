@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -15,6 +15,7 @@ import { ClientStorageService } from '../../../../../base-components/webapp/core
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { TimeoutTimer } from '../../../../../base-components/webapp/core/TimeoutTimer';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
+import { AgentService } from '../../../../../user/webapp/core/AgentService';
 import { Article } from '../../../../model/Article';
 import { ComponentState } from './ComponentState';
 
@@ -27,10 +28,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public onCreate(): void {
         this.state = new ComponentState();
         this.timoutTimer = new TimeoutTimer();
-    }
-
-    public onInput(input: any): void {
-        return;
     }
 
     public async onMount(): Promise<void> {
@@ -54,7 +51,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.translations = await TranslationService.createTranslationObject(['Translatable#Before', 'Translatable#After']);
 
         this.getSettings();
-        this.filter();
     }
 
     private getSettings(): void {
@@ -71,6 +67,17 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                         this.state.filterCustomer = settingsObject.filterCustomer;
                         this.state.filterUnread = settingsObject.filterUnread;
                         this.state.filterValue = settingsObject.filterValue;
+                    }
+
+                    const hasFilter = this.state.filterAttachment
+                        || this.state.filterExternal
+                        || this.state.filterInternal
+                        || this.state.filterCustomer
+                        || this.state.filterUnread
+                        || this.state.filterValue;
+
+                    if (hasFilter) {
+                        this.filter();
                     }
                 } catch (error) {
                     console.error(error);
@@ -106,6 +113,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.filterCustomer = !this.state.filterCustomer;
         } else if (type === 'unread') {
             this.state.filterUnread = !this.state.filterUnread;
+        } else if (type === 'myArticles') {
+            this.state.filterMyArticles = !this.state.filterMyArticles;
         }
         this.filter();
     }
@@ -113,34 +122,48 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private async filter(): Promise<void> {
         let articles = [...await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || []];
 
+        let isFiltered = false;
+
         if (this.state.filterAttachment) {
             articles = articles.filter((a) => Array.isArray(a.Attachments) && a.Attachments.length);
+            isFiltered = true;
         }
 
         if (this.state.filterExternal) {
             articles = articles.filter((a) => a.SenderType === 'external');
+            isFiltered = true;
         }
 
         if (this.state.filterInternal) {
             articles = articles.filter((a) => a.SenderType !== 'external');
+            isFiltered = true;
         }
 
         if (this.state.filterCustomer) {
             articles = articles.filter((a) => a.CustomerVisible);
+            isFiltered = true;
         }
 
         if (this.state.filterUnread) {
             articles = articles.filter((a) => a.isUnread());
+            isFiltered = true;
+        }
+
+        if (this.state.filterMyArticles) {
+            const currentUser = await AgentService.getInstance().getCurrentUser();
+            articles = articles.filter((a) => a.CreatedBy === currentUser.UserID);
+            isFiltered = true;
         }
 
         if (this.state.filterValue && this.state.filterValue !== '') {
             articles = articles.filter((a) => {
-                return a.Body.match(new RegExp(this.state.filterValue, 'ig')) ||
-                    a.Subject.match(new RegExp(this.state.filterValue, 'ig')) ||
-                    a.To.match(new RegExp(this.state.filterValue, 'ig')) ||
-                    a.Cc.match(new RegExp(this.state.filterValue, 'ig')) ||
-                    a.From.match(new RegExp(this.state.filterValue, 'ig'));
+                return a.Body && a.Body.match(new RegExp(this.state.filterValue, 'ig')) ||
+                    a.Subject && a.Subject.match(new RegExp(this.state.filterValue, 'ig')) ||
+                    a.To && a.To.match(new RegExp(this.state.filterValue, 'ig')) ||
+                    a.Cc && a.Cc.match(new RegExp(this.state.filterValue, 'ig')) ||
+                    a.From && a.From.match(new RegExp(this.state.filterValue, 'ig'));
             });
+            isFiltered = true;
         }
 
         if (this.state.selectedDate) {
@@ -155,10 +178,15 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     const result = SortUtil.compareDate(incomingTime, this.state.selectedDate);
                     return result >= 0;
                 });
+            isFiltered = true;
         }
 
         this.setSettings();
-        this.context.setFilteredObjectList(KIXObjectType.ARTICLE, articles);
+
+        const filteredArticles = this.context.getFilteredObjectList(KIXObjectType.ARTICLE);
+        if (isFiltered || (!isFiltered && Array.isArray(filteredArticles))) {
+            this.context.setFilteredObjectList(KIXObjectType.ARTICLE, isFiltered ? articles : null);
+        }
     }
 
     private setSettings(): void {

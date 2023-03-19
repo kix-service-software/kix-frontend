@@ -1,6 +1,7 @@
 {
     "dependencies": [
         "require ./components/setup-assistant-overview",
-        "require ./core/SetupService"
+        "require ./core/SetupService",
+        "require ./core/SetupUIModule"
     ]
 }

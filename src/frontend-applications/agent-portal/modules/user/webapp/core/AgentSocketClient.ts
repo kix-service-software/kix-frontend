@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -27,6 +27,7 @@ import { PersonalSettingsProperty } from '../../model/PersonalSettingsProperty';
 import { BackendNotification } from '../../../../model/BackendNotification';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
 import { EventService } from '../../../base-components/webapp/core/EventService';
+import { ISocketResponse } from '../../../base-components/webapp/core/ISocketResponse';
 
 export class AgentSocketClient extends SocketClient {
 
@@ -208,5 +209,44 @@ export class AgentSocketClient extends SocketClient {
                 EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
             }
         }
+    }
+
+    public async clearCurrentUserCache(): Promise<void> {
+        const requestId = IdService.generateDateBasedId();
+        const currentUserRequest: ISocketRequest = {
+            clientRequestId: ClientStorageService.getClientRequestId(),
+            requestId
+        };
+
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+        const clearCurrentUserCacheRequestPromise = new Promise<void>((resolve, reject) => {
+
+            if (this.socket) {
+                const timeout = window.setTimeout(() => {
+                    reject('Timeout: ' + AgentEvent.CLEAR_CURRENT_USER_CACHE);
+                }, socketTimeout);
+
+                this.socket.on(
+                    AgentEvent.CLEAR_CURRENT_USER_CACHE_FINISHED, async (result: ISocketResponse) => {
+                        if (result.requestId === requestId) {
+                            window.clearTimeout(timeout);
+                            resolve();
+                        }
+                    });
+
+                this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                    window.clearTimeout(timeout);
+                    console.error('Socket Error: getCurrentUser');
+                    console.error(error.error);
+                    reject(error.error);
+                });
+
+                this.socket.emit(AgentEvent.CLEAR_CURRENT_USER_CACHE, currentUserRequest);
+            } else {
+                resolve(null);
+            }
+        });
+
+        return clearCurrentUserCacheRequestPromise;
     }
 }

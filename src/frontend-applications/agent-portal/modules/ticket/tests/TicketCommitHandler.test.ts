@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -55,10 +55,6 @@ describe('ObjectCommitHandler', () => {
 
         it('should remove displayIcons', () => {
             expect(ticket.displayIcons).not.exist;
-        });
-
-        it('should remove ConfiguredPermissions', () => {
-            expect(ticket.ConfiguredPermissions).not.exist;
         });
 
         it('should remove DynamicFields if array is empty', () => {
@@ -137,7 +133,7 @@ describe('ObjectCommitHandler', () => {
             ticket.Articles = [emailArticle, noteArticle];
 
             const commitHandler = new TicketObjectCommitHandler(null);
-            ticket = await commitHandler.prepareObject(ticket, true);
+            ticket = await commitHandler.prepareObject(ticket, null, true);
         });
 
         it('Ticket should have one article with a signature and one without', () => {

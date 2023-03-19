@@ -1,108 +1,116 @@
 <!--
-Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.message-content-container class={
-      unread: state.article && state.article.Unseen === 1,
-      'compact-view-message-content-container': state.selectedCompactView
-   }>
-   <if(state.show && state.article)>
-      <div.left-avatar>
-         <if(state.isExternal)>
-            <div.contact-avatar title=state.fromDisplayName>
-               <if(state.contactIcon)>
-                  <icon icon=state.contactIcon/>
-               </if>
-               <else><loading-spinner/></else>
-            </div>
-            <div.speech-bubble style=`background-color: ${state.backgroundColor};`></div>
-         </if>
-      </div>
-      <div.message style=`background-color: ${state.backgroundColor};` on-click("toggleArticleCompactView")>
-         <div.header class={'list-view': state.selectedCompactView && !state.compactViewExpanded}>
-            <message-header
-                article=state.article
-                articleCountNumber=input.articleCountNumber
-                fromDisplayName=state.fromDisplayName
-            />
-         </div>
-         <if(!state.selectedCompactView || state.compactViewExpanded)>
-            <if(state.expanded && state.showContent)>
-               <div.receiver-list>
-                  <if(state.articleTo)>
-                     <div.receiver><span.title><translation-string pattern="Translatable#To"/>:</span><span>${state.articleTo}</span></div>
-                  </if>
-                  <if(state.articleCc)>
-                     <div.receiver><span.title><translation-string pattern="Translatable#Cc"/>:</span><span>${state.articleCc}</span></div>
-                  </if>
-               </div>
-               <div.message-body>
-                  <div.show-message.hide-top on-click("toggleArticleListView")>
-                     <translation-string pattern="Translatable#Hide Message"/>
-                  </div>
-                  <ticket-article-content article=state.article/>
-                  <div.show-message on-click("toggleArticleListView")>
-                     <translation-string pattern="Translatable#Hide Message"/>
-                  </div>
-               </div>
+    unread: state.article && state.unseen === 1,
+    'compact-view-message-content-container': state.selectedCompactView
+}>
+    <if(state.show && state.article)>
+        <div.left-avatar>
+            <if(state.isExternal)>
+                <div.contact-avatar title=state.fromDisplayName>
+                    <if(state.contactIcon)>
+                        <icon icon=state.contactIcon/>
+                    </if>
+                    <else>
+                        <loading-spinner/>
+                    </else>
+                </div>
+                <div.speech-bubble style=`background-color: ${state.backgroundColor};`/>
             </if>
-            <else-if(state.loadingContent)>
-               <loading-spinner/>
-            </else-if>
-            <else>
-               <div.message-body-short>
-                  <div.short-message>${state.shortMessage}</div>
-                  <div.show-message on-click("toggleArticleListView")>
-                     <translation-string pattern="Translatable#Show all"/>
-                  </div>
-               </div>
-            </else>
-            <div.message-footer>
-               <div.attachments-control>
-                  <div.attachments-list>
-                     <if(Array.isArray(state.articleAttachments))>
-                        <for|attachment| of=state.articleAttachments>
-                           <ticket-article-attachment
-                              article=state.article
-                              attachment=attachment
-                              images=state.images
-                           />
-                        </for>
-                     </if>
-                  </div>
-                  <if(state.hasInlineAttachments)>
-                     <a.attachmentsToggle on-click("toggleAttachments")>
-                        <translation-string
-                           pattern=`Translatable#${state.showAllAttachments ? 'Hide inline attachments' : 'Show all attachments'}`/>
-                     </a>
-                  </if>
-               </div>
-               <div.actions-list style=`background-color: ${state.backgroundColor};`>
-                  <if(state.actions && state.actions.length)>
-                     <action-list list=state.actions/>
-                  </if>
-               </div>
+        </div>
+        <div.message style=`background-color: ${state.backgroundColor};` on-click('toggleArticleCompactView')>
+            <div.header class={
+                'list-view': state.selectedCompactView && !state.compactViewExpanded
+            }>
+                <message-header article=state.article fromDisplayName=state.fromDisplayName/>
             </div>
-         </if>
-      </div>
-      <div.right-avatar>
-         <if(!state.isExternal)>
-            <div.speech-bubble style=`background-color: ${state.backgroundColor};`></div>
-            <div.contact-avatar title=state.fromDisplayName>
-               <if(state.contactIcon)>
-                  <icon icon=state.contactIcon/>
-               </if>
-               <else><loading-spinner/></else>
-            </div>
-         </if>
-      </div>
-   </if>
-   <else-if(state.loading)>
-      <loading-spinner/>
-   </else-if>
+            <if(!state.selectedCompactView || state.compactViewExpanded)>
+                <if(state.expanded && state.showContent)>
+                    <div.receiver-list>
+                        <if(state.articleTo)>
+                            <div.receiver>
+                                <span.title>
+                                    <translation-string pattern='Translatable#To'/>:
+                                </span>
+                                <span>${state.articleTo}</span>
+                            </div>
+                        </if>
+                        <if(state.articleCc)>
+                            <div.receiver>
+                                <span.title>
+                                    <translation-string pattern='Translatable#Cc'/>:
+                                </span>
+                                <span>${state.articleCc}</span>
+                            </div>
+                        </if>
+                    </div>
+                    <div.message-body>
+                        <div.show-message.hide-top on-click('toggleArticleListView')>
+                            <translation-string pattern='Translatable#Hide Message'/>
+                        </div>
+                        <ticket-article-content article=state.article/>
+                        <div.show-message on-click('toggleArticleListView')>
+                            <translation-string pattern='Translatable#Hide Message'/>
+                        </div>
+                    </div>
+                </if>
+                <else-if(state.loadingContent)>
+                    <loading-spinner/>
+                </else-if>
+                <else>
+                    <div.message-body-short>
+                        <div.short-message>${state.shortMessage}</div>
+                        <div.show-message on-click('toggleArticleListView')>
+                            <translation-string pattern='Translatable#Show all'/>
+                        </div>
+                    </div>
+                </else>
+                <div.message-footer>
+                    <div.attachments-control>
+                        <div.attachments-list>
+                            <if(Array.isArray(state.articleAttachments))>
+                                <for|attachment| of=state.articleAttachments>
+                                    <ticket-article-attachment article=state.article attachment=attachment images=state.images/>
+                                </for>
+                            </if>
+                        </div>
+                        <if(state.hasInlineAttachments)>
+                            <a.attachmentsToggle on-click('toggleAttachments')>
+                                <translation-string pattern=`Translatable#${
+                                    state.showAllAttachments ? 'Hide inline attachments' : 'Show all attachments'
+                                }`/>
+                            </a>
+                        </if>
+                    </div>
+                    <div.actions-list style=`background-color: ${state.backgroundColor};`>
+                        <if(state.actions && state.actions.length)>
+                            <action-list list=state.actions/>
+                        </if>
+                    </div>
+                </div>
+            </if>
+        </div>
+        <div.right-avatar>
+            <if(!state.isExternal)>
+                <div.speech-bubble style=`background-color: ${state.backgroundColor};`/>
+                <div.contact-avatar title=state.fromDisplayName>
+                    <if(state.contactIcon)>
+                        <icon icon=state.contactIcon/>
+                    </if>
+                    <else>
+                        <loading-spinner/>
+                    </else>
+                </div>
+            </if>
+        </div>
+    </if>
+    <else-if(state.loading)>
+        <loading-spinner/>
+    </else-if>
 </div>

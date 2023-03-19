@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -92,7 +92,7 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue implements 
             offset = Number(config?.DefaultValue) >= 0 ? Number(config?.DefaultValue) : null;
         }
 
-        if (!this.value && offset !== null) {
+        if (!this.value && offset !== null && !this.isEmpty) {
             const date = new Date();
             date.setSeconds(date.getSeconds() + offset);
             this.value = DateTimeUtil.getKIXDateTimeString(date);
@@ -162,7 +162,12 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue implements 
 
     private addBindings(): void {
         this.bindingIds.push(
-            this.addPropertyBinding(FormValueProperty.COUNT_MAX, (value: ObjectFormValue) => this._countMax())
+            this.addPropertyBinding(FormValueProperty.COUNT_MAX, (value: ObjectFormValue) => this._countMax()),
+            this.addPropertyBinding(FormValueProperty.ENABLED, async (value: ObjectFormValue) => {
+                if (this.enabled) {
+                    await this.initCountValues();
+                }
+            })
         );
     }
 

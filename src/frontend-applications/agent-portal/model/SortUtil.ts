@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -70,7 +70,7 @@ export class SortUtil {
     }
 
     public static compareNumber(
-        a: number, b: number, sortOrder: SortOrder = SortOrder.UP, notNumberBefore: boolean = true
+        a: any, b: any, sortOrder: SortOrder = SortOrder.UP, notNumberBefore: boolean = true
     ): number {
         let sort = 0;
         if (typeof a !== 'number') {

@@ -1,45 +1,51 @@
 <!--
-Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<widget
-   instanceId=state.instanceId
-   title=state.widgetTitle
-   contentActions=state.actions
->
-   <@content>
-      <div.communication-container#communication-top>
-         <div.communication-header>
-            <message-filter/>
-            <div.icons-wrapper>
-               <i.fas.fa-check-double title=state.translations["Translatable#Read all"] class={active:state.activeUnreadAction} on-click("readAll")></i>
-               <i.fas.fa-angle-double-up title=state.translations["Translatable#Collapse all"] on-click("collapseAll")></i>
-               <i.fas.fa-comment title=state.translations["Translatable#Preview List"] class={'selected':!state.selectedCompactView} on-click("selectNormalDisplay")></i>
-               <i.fas.fa-list-ul title=state.translations["Translatable#Compact View"] class={'selected':state.selectedCompactView} on-click("selectListDisplay")></i>
+<widget instanceId=state.instanceId title=state.widgetTitle contentActions=state.actions>
+    <@content>
+        <div#communication-top.communication-container>
+            <div.communication-header>
+                <message-filter/>
+                <div.icons-wrapper>
+                    <i.fas.fa-check-double
+                        title=state.translations['Translatable#Read all']
+                        class={
+                            active: state.activeUnreadAction
+                        }
+                        on-click('readAll')/>   <i.fas.fa-angle-double-up
+                        title=state.translations['Translatable#Collapse all']
+                        on-click('collapseAll')/>   <i.fas.fa-comment
+                        title=state.translations['Translatable#Preview List']
+                        class={
+                            selected: !state.selectedCompactView
+                        }
+                        on-click('selectNormalDisplay')/>   <i.fas.fa-list-ul
+                        title=state.translations['Translatable#Compact View']
+                        class={
+                            selected: state.selectedCompactView
+                        }
+                        on-click('selectListDisplay')/>
+                </div>
             </div>
-         </div>
-         <div.communication-list>
-            <if(state.articles)>
-               <for|article, index| of=state.articles>
-                  <message-content
-                     article=article
-                     articleCountNumber=article.countNumber
-                     selectedCompactView=state.selectedCompactView
-                     collapseAll=state.collapseAll
-                     expanded=(index===0 ? true : false)
-                     key="article-" + article.ArticleID
-                  />
-               </for>
-            </if>
-            <a.top title=state.translations["Translatable#Go to top"] on-click("scrollToTop")>
-               <i.fa.fa-arrow-up.move-up />
-            </a>
-         </div>
-      </div>
-   </@content>
+            <div.communication-list>
+                <if(state.articles)>
+                    <for|article, index| of=state.articles>
+                        <message-content
+                            article=article
+                            articleCountNumber=article.countNumber
+                            selectedCompactView=state.selectedCompactView
+                            key=('article-' + article.ArticleID)/>
+                    </for>
+                </if>
+                <a.top title=state.translations['Translatable#Go to top'] on-click('scrollToTop')>
+                    <i.fa.fa-arrow-up.move-up/>
+                </a>
+            </div>
+        </div>
+    </@content>
 </widget>

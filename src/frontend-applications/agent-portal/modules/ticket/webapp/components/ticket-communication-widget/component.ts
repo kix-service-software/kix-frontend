@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -30,6 +30,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private readonly displayView = 'selectedListView';
     private context: Context;
     private sortOrder: string;
+    private loadTimeout: any;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -42,24 +43,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         this.context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = await this.context?.getWidgetConfiguration(this.state.instanceId);
-
-        this.context.registerListener('communication-widget', {
-            filteredObjectListChanged: (objectType: KIXObjectType) => {
-                if (objectType === KIXObjectType.ARTICLE) {
-                    this.setFilteredArticles();
-                }
-            },
-            objectListChanged: (objectType: KIXObjectType) => {
-                if (objectType === KIXObjectType.ARTICLE) {
-                    this.setArticles();
-                }
-            },
-            additionalInformationChanged: () => null,
-            objectChanged: () => null,
-            scrollInformationChanged: () => null,
-            sidebarLeftToggled: () => null,
-            sidebarRightToggled: () => null
-        });
 
         const user = await AgentService.getInstance().getCurrentUser();
 
@@ -76,11 +59,30 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.translations = await TranslationService.createTranslationObject(
             ['Translatable#Go to top', 'Translatable#Read all', 'Translatable#Collapse all',
                 'Translatable#Preview List', 'Translatable#Compact View']);
-    }
 
-    private async setArticles(): Promise<void> {
-        this.setFilteredArticles();
-        this.enableReadAction();
+        if (!this.state.articles?.length) {
+            await this.loadFilteredArticles();
+        }
+
+        setTimeout(() => {
+            this.context.registerListener('communication-widget', {
+                filteredObjectListChanged: (objectType: KIXObjectType) => {
+                    if (objectType === KIXObjectType.ARTICLE) {
+                        this.setFilteredArticles();
+                    }
+                },
+                objectListChanged: (objectType: KIXObjectType) => {
+                    // if (objectType === KIXObjectType.ARTICLE) {
+                    //     this.setFilteredArticles();
+                    // }
+                },
+                additionalInformationChanged: () => null,
+                objectChanged: () => null,
+                scrollInformationChanged: () => null,
+                sidebarLeftToggled: () => null,
+                sidebarRightToggled: () => null
+            });
+        }, 1000);
     }
 
     private async enableReadAction(): Promise<void> {
@@ -92,31 +94,47 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async setFilteredArticles(): Promise<void> {
-        const filteredArticles = this.context.getFilteredObjectList<Article>(KIXObjectType.ARTICLE) || [];
+        if (this.loadTimeout) {
+            window.clearTimeout(this.loadTimeout);
+        }
+
+        this.loadTimeout = setTimeout(() => this.loadFilteredArticles(), 250);
+    }
+
+    private async loadFilteredArticles(): Promise<void> {
+        let articles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || [];
+        const filteredArticles = this.context.getFilteredObjectList<Article>(KIXObjectType.ARTICLE) || articles;
 
         const sortOrder = this.sortOrder === 'newest' ? SortOrder.DOWN : SortOrder.UP;
 
-        let allArticles = await this.context?.getObjectList<Article>(KIXObjectType.ARTICLE) || [];
-
-        allArticles = SortUtil.sortObjects(
-            [...allArticles], ArticleProperty.INCOMING_TIME, DataType.INTEGER, sortOrder
+        articles = SortUtil.sortObjects(
+            [...articles], ArticleProperty.INCOMING_TIME, DataType.INTEGER, sortOrder
         );
 
-        allArticles.forEach((a, index) => {
-            a['countNumber'] = sortOrder === SortOrder.UP ? index + 1 : allArticles.length - index;
-        }
-        );
+        articles.forEach((a, index) => {
+            a['countNumber'] = sortOrder === SortOrder.UP
+                ? index + 1
+                : articles.length - index;
+        });
 
-        this.state.articles = allArticles.filter((a) => filteredArticles.find((fa) => a.ArticleID === fa.ArticleID));
+        this.state.articles = articles.filter((a) => filteredArticles.find((fa) => a.ArticleID === fa.ArticleID));
 
         this.enableReadAction();
 
         // change widget title
-        const preCountText = (filteredArticles?.length < allArticles?.length ? filteredArticles.length + '/' : '');
-        const articleLengthText = preCountText + allArticles?.length;
+        const preCountText = (filteredArticles?.length < articles?.length ? filteredArticles.length + '/' : '');
+        const articleLengthText = preCountText + articles?.length;
 
         const title = await TranslationService.translate(this.state.widgetConfiguration?.title);
         this.state.widgetTitle = `${title} (${articleLengthText})`;
+
+        if (this.state.articles?.length) {
+            setTimeout(() => {
+                EventService.getInstance().publish(
+                    'TOGGLE_ARTICLE', { articleId: this.state.articles[0].ArticleID, expanded: true }
+                );
+            }, 2000);
+        }
     }
 
     public onDestroy(): void {
@@ -134,6 +152,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             // FIXME: reload list (Ticket.Article.Flag updates are filtered from notification events)
             this.state.articles = [];
             await this.context.reloadObjectList(KIXObjectType.ARTICLE);
+            await this.loadFilteredArticles();
 
             setTimeout(() => {
                 EventService.getInstance().publish(
@@ -155,8 +174,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public collapseAll(): void {
-        this.state.collapseAll = true;
-        (this as any).setStateDirty('collapseAll');
+        for (const article of this.state.articles) {
+            EventService.getInstance().publish(
+                'TOGGLE_ARTICLE', { articleId: article.ArticleID, expanded: false }
+            );
+        }
     }
 
     public scrollToTop(event: any): void {

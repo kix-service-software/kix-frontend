@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -8,7 +8,7 @@
  */
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
-import { AgentPortalConfiguation as AgentPortalConfiguration } from '../../model/configuration/AgentPortalConfiguation';
+import { AgentPortalConfiguration as AgentPortalConfiguration } from '../../model/configuration/AgentPortalConfiguration';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
 

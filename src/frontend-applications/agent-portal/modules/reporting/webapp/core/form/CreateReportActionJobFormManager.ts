@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -145,15 +145,18 @@ export class CreateReportActionJobFormManager extends ExtendedJobFormManager {
         formInstance: FormInstance, outputFormatField: FormFieldConfiguration, definitionId: number,
         outputFormat?: string
     ): Promise<void> {
-        // ignore variable/placeholder values (e.g. periodic job)
-        if (definitionId && !isNaN(definitionId) && outputFormatField) {
-            const reportDefinitions = await KIXObjectService.loadObjects<ReportDefinition>(
-                KIXObjectType.REPORT_DEFINITION, [definitionId], null, null, true
-            ).catch(() => []);
+        if (definitionId && outputFormatField) {
+            let definition: ReportDefinition;
+            if (!isNaN(definitionId)) {
+                const reportDefinitions = await KIXObjectService.loadObjects<ReportDefinition>(
+                    KIXObjectType.REPORT_DEFINITION, [definitionId], null, null, true
+                ).catch(() => []);
 
-            const definition = reportDefinitions?.length ? reportDefinitions[0] : null;
+                definition = reportDefinitions?.length ? reportDefinitions[0] : null;
+            }
+
             const field = await ReportFormCreator.createOutputFormatField(definition, outputFormat);
-            outputFormatField.options = [...outputFormatField.options, ...field.options];
+            outputFormatField.options = field.options;
             outputFormatField.defaultValue = field.defaultValue;
             outputFormatField.asStructure = false;
 

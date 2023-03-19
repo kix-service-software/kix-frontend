@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -49,7 +49,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async init(table: Table): Promise<void> {
         this.eventSubscriberId = table.getTableId();
 
-        await table.initialize();
+        await table.initialize(false);
         this.setTableHeight();
     }
 
@@ -62,11 +62,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     if (eventId === TableEvent.REFRESH) {
                         //await this.provideContextContent();
                         this.setTableHeight();
-
-                        EventService.getInstance().publish(
-                            TableEvent.TABLE_READY,
-                            new TableEventData(this.state.table.getTableId())
-                        );
                     }
 
                     if (eventId === TableEvent.RERENDER_TABLE) {

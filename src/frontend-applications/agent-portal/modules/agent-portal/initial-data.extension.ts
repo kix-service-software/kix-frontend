@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -31,9 +31,11 @@ class Extension extends KIXExtension implements IInitialDataExtension {
 
     private async setObjectIcon(serverConfig: IServerConfiguration, name: string, path: string): Promise<void> {
         const iconLoadingOptions = new ObjectIconLoadingOptions(name, name);
-        const icons = await ObjectIconService.getInstance().loadObjects(
+        const objectResponse = await ObjectIconService.getInstance().loadObjects(
             serverConfig.BACKEND_API_TOKEN, '', KIXObjectType.OBJECT_ICON, null, null, iconLoadingOptions
         );
+
+        const icons = objectResponse?.objects || [];
 
         if (!icons || !icons.length) {
             try {

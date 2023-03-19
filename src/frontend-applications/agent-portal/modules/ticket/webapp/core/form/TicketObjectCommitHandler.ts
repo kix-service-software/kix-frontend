@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -10,6 +10,7 @@
 import { FormContext } from '../../../../../model/configuration/FormContext';
 import { Context } from '../../../../../model/Context';
 import { Attachment } from '../../../../../model/kix/Attachment';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
@@ -17,6 +18,8 @@ import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil
 import { BrowserCacheService } from '../../../../base-components/webapp/core/CacheService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { PlaceholderService } from '../../../../base-components/webapp/core/PlaceholderService';
+import { ObjectFormValue } from '../../../../object-forms/model/FormValues/ObjectFormValue';
 import { ObjectFormValueMapper } from '../../../../object-forms/model/ObjectFormValueMapper';
 import { ObjectCommitHandler } from '../../../../object-forms/webapp/core/ObjectCommitHandler';
 import { Article } from '../../../model/Article';
@@ -25,6 +28,7 @@ import { ArticleProperty } from '../../../model/ArticleProperty';
 import { Channel } from '../../../model/Channel';
 import { Queue } from '../../../model/Queue';
 import { Ticket } from '../../../model/Ticket';
+import { TicketProperty } from '../../../model/TicketProperty';
 
 export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
 
@@ -32,8 +36,10 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         super(objectValueMapper, KIXObjectType.TICKET);
     }
 
-    public async prepareObject(ticket: Ticket, forCommit: boolean = true): Promise<Ticket> {
-        const newTicket = await super.prepareObject(ticket, forCommit);
+    public async prepareObject(
+        ticket: Ticket, objectValueMapper?: ObjectFormValueMapper, forCommit: boolean = true
+    ): Promise<Ticket> {
+        const newTicket = await super.prepareObject(ticket, objectValueMapper, forCommit);
 
         await this.prepareArticles(newTicket, forCommit, ticket.QueueID);
         await this.prepareTitle(newTicket);
@@ -43,13 +49,30 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
         return newTicket;
     }
 
+    protected removeDisabledProperties(newObject: KIXObject, formValues?: ObjectFormValue<any>[]): void {
+        super.removeDisabledProperties(newObject, formValues);
+
+        if (Array.isArray(formValues)) {
+            for (const k in TicketProperty) {
+                if (TicketProperty[k]) {
+                    const property = TicketProperty[k];
+                    const ignore = property === TicketProperty.TICKET_ID;
+                    const hasValue = formValues.some((fv) => fv.property === property && fv.enabled);
+                    if (!ignore && !hasValue) {
+                        delete newObject[property];
+                    }
+                }
+            }
+        }
+    }
+
     private async prepareArticles(ticket: Ticket, forCommit: boolean, orgTicketQueueID: number): Promise<void> {
         if (ticket.Articles?.length) {
             ticket.Articles = ticket.Articles.filter((a) => a.ChannelID);
             /**
              * Here starts the error for the attachments
              * not being in the commitment for the other browser
-            */
+             */
             for (const article of ticket.Articles) {
                 delete article.ticket;
                 delete article.ChangedBy;
@@ -83,9 +106,8 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                         article.Attachments = await this.prepareAttachments(article.Attachments);
                     }
 
-                    article.Body = await this.addQueueSignature(
-                        ticket.QueueID || orgTicketQueueID, article.Body, article.ChannelID
-                    );
+                    const ticketOrQueueId = ticket.QueueID ? ticket : orgTicketQueueID;
+                    article.Body = await this.addQueueSignature(ticketOrQueueId, article.Body, article.ChannelID);
 
                     const referencedArticleId = context?.getAdditionalInformation(
                         ArticleProperty.REFERENCED_ARTICLE_ID
@@ -96,7 +118,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                         );
                         if (referencedArticle) {
                             article.InReplyTo = referencedArticle.MessageID?.toString();
-                            article.References = `${referencedArticle.References} ${referencedArticle.MessageID}`;
+                            article.References = `${ referencedArticle.References } ${ referencedArticle.MessageID }`;
                         }
                     }
                 } else {
@@ -121,7 +143,8 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
     }
 
 
-    public async addQueueSignature(queueId: number, body: string, channelId: number): Promise<string> {
+    public async addQueueSignature(ticketOrQueueId: number | Ticket, body: string, channelId: number): Promise<string> {
+        const queueId = typeof ticketOrQueueId === 'number' ? ticketOrQueueId : ticketOrQueueId?.QueueID;
         if (channelId && queueId) {
             const channels = await KIXObjectService.loadObjects<Channel>(
                 KIXObjectType.CHANNEL, [channelId], null, null, true
@@ -132,7 +155,12 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                 );
                 const queue = queues && !!queues.length ? queues[0] : null;
                 if (queue && queue.Signature) {
-                    body += `\n\n${queue.Signature}`;
+                    const signature =
+                        await PlaceholderService.getInstance().replacePlaceholders(
+                            queue.Signature,
+                            (ticketOrQueueId instanceof Ticket ? ticketOrQueueId : undefined)
+                        );
+                    body += `\n\n${ signature }`;
                 }
             }
         }
@@ -163,9 +191,11 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
     protected async prepareTitle(ticket: Ticket): Promise<void> {
         if (!ticket.Title && this.objectValueMapper?.formContext === FormContext.NEW) {
             await super.prepareTitle(ticket);
+
             if (!ticket.Title) {
                 ticket.Title = new Date().toLocaleDateString();
             }
+
             if (ticket.Articles?.length) {
                 const article = ticket.Articles.find((a) => !a.ArticleID);
                 ticket.Title = article?.Subject || ticket.Title;

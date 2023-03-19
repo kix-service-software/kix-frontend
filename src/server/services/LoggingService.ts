@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,18 +7,18 @@
  * --
  */
 
+import { rejects } from 'assert';
+import fs from 'fs';
+import path from 'path';
 /* eslint-disable no-console */
 import winston from 'winston';
-import path from 'path';
-import fs from 'fs';
-import { ServerUtil } from '../ServerUtil';
-import { ConfigurationService } from './ConfigurationService';
-import { LogLevel } from '../model/LogLevel';
-import { IServerConfiguration } from '../model/IServerConfiguration';
+import { Attachment } from '../../frontend-applications/agent-portal/model/kix/Attachment';
 import { LogFile } from '../../frontend-applications/agent-portal/modules/system-log/model/LogFile';
 import { LogTier } from '../../frontend-applications/agent-portal/modules/system-log/model/LogTier';
-import { Attachment } from '../../frontend-applications/agent-portal/model/kix/Attachment';
-import { rejects } from 'assert';
+import { IServerConfiguration } from '../model/IServerConfiguration';
+import { LogLevel } from '../model/LogLevel';
+import { ServerUtil } from '../ServerUtil';
+import { ConfigurationService } from './ConfigurationService';
 
 
 export class LoggingService {
@@ -202,7 +202,7 @@ export class LoggingService {
             DEBUG: 'debug',
         };
 
-        // create kix logger with comand line and file output
+        // create kix logger with command line and file output
         this.kixLogger = winston.createLogger({
             level: winstonLevels[LogLevel[this.defaultLevelNumber]],
             format: winston.format.combine(

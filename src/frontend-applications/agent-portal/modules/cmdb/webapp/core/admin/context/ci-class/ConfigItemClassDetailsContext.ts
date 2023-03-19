@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -54,7 +54,7 @@ export class ConfigItemClassDetailsContext extends Context {
 
     private async loadCIClass(): Promise<ConfigItemClass> {
         const loadingOptions = new KIXObjectLoadingOptions();
-        loadingOptions.includes = ['CurrentDefinition', 'Definitions', 'ConfiguredPermissions'];
+        loadingOptions.includes = ['CurrentDefinition', 'Definitions'];
         loadingOptions.cacheType = `${KIXObjectType.CONFIG_ITEM_CLASS}_DEFINITION`;
 
         return await this.loadDetailsObject<ConfigItemClass>(

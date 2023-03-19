@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -32,7 +32,7 @@ import { ArticleLoadingOptions } from '../../../../model/ArticleLoadingOptions';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { FormContext } from '../../../../../../model/configuration/FormContext';
 
-export class RecipientFormValue extends SelectObjectFormValue {
+export class RecipientFormValue extends SelectObjectFormValue<any> {
 
     public constructor(public property: string,
         object: any,
@@ -55,18 +55,6 @@ export class RecipientFormValue extends SelectObjectFormValue {
         this.autoCompleteConfiguration = new AutoCompleteConfiguration(undefined, undefined, undefined, objectName);
 
         this.loadingOptions = new KIXObjectLoadingOptions(null, null, 10);
-
-        if (!this.value?.length && this.property === ArticleProperty.TO) {
-            const context = ContextService.getInstance().getActiveContext();
-            const refArticleId = context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
-            if (refArticleId) {
-                const refTicketId = context?.getObjectId();
-                const refArticle = await this.loadReferencedArticle(Number(refTicketId), refArticleId);
-                if (refArticle) {
-                    this.setFormValue([refArticle?.From]);
-                }
-            }
-        }
     }
 
     protected async handlePlaceholders(value: any): Promise<any> {
@@ -130,6 +118,11 @@ export class RecipientFormValue extends SelectObjectFormValue {
         }
 
         this.selectedNodes = selectedNodes;
+    }
+
+    protected async searchObjects(): Promise<Contact[]> {
+        const contacts = await super.searchObjects();
+        return contacts.filter((c) => c.ValidID === 1);
     }
 
     private async getEmailValues(value): Promise<[Contact[], string[], string[]]> {
@@ -240,18 +233,6 @@ export class RecipientFormValue extends SelectObjectFormValue {
         }
 
         await super.setObjectValue(recipientValue);
-    }
-
-    private async loadReferencedArticle(refTicketId: number, refArticleId: number): Promise<Article> {
-        let article: Article;
-        if (refArticleId && refTicketId) {
-            const articles = await KIXObjectService.loadObjects<Article>(
-                KIXObjectType.ARTICLE, [refArticleId], null,
-                new ArticleLoadingOptions(refTicketId), true
-            ).catch(() => [] as Article[]);
-            article = articles.find((a) => a.ArticleID === refArticleId);
-        }
-        return article;
     }
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -11,14 +11,13 @@ import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { InformationRowConfiguration, InformationConfiguration } from './ObjectInformationCardConfiguration';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
-import { PlaceholderService } from '../../core/PlaceholderService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { IdService } from '../../../../../model/IdService';
-import { FilterUtil } from '../../core/FilterUtil';
-import { KIXModulesService } from '../../core/KIXModulesService';
-import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ObjectInformationCardConfiguration } from './ObjectInformationCardConfiguration';
 import { Context } from '../../../../../model/Context';
+import { WidgetService } from '../../core/WidgetService';
+import { ObjectInformationCardDataHandler } from '../../core/ObjectInformationCardDataHandler';
+import { KIXModulesService } from '../../core/KIXModulesService';
 
 class Component {
 
@@ -56,6 +55,10 @@ class Component {
             additionalInformationChanged: (): void => { return; }
         });
 
+        this.state.widgetConfiguration = this.context
+            ? await this.context.getWidgetConfiguration(this.state.instanceId)
+            : undefined;
+
         this.initWidget();
     }
 
@@ -64,81 +67,56 @@ class Component {
     }
 
     private async initWidget(): Promise<void> {
-        this.state.widgetConfiguration = this.context
-            ? await this.context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
-
         const object = await this.context.getObject();
-
-        if (this.state.widgetConfiguration?.configuration) {
-            const config = this.state.widgetConfiguration.configuration as ObjectInformationCardConfiguration;
-            if (Array.isArray(config.avatar)) {
-                this.state.avatar = config.avatar;
-            } else if (config.avatar) {
-                this.state.avatar = [config.avatar];
-            }
-            await this.prepareInformation(config.rows, object);
-        }
+        const config = this.state.widgetConfiguration?.configuration as ObjectInformationCardConfiguration;
+        await this.prepareInformation(config, object);
+        this.state.avatar = (config.avatar as any)?.length ? config.avatar[0] : null;
     }
 
-    private async prepareInformation(rows: InformationRowConfiguration[], object: KIXObject): Promise<void> {
+    private async prepareInformation(config: ObjectInformationCardConfiguration, object: KIXObject): Promise<void> {
         this.state.valuesReady = false;
         this.state.hasComponentValues = false;
-        const information: InformationRowConfiguration[] = [];
-        if (Array.isArray(rows)) {
-            for (const row of rows) {
-                if (Array.isArray(row.values)) {
-                    const infoRow: InformationRowConfiguration = {
-                        title: row.title,
-                        style: row.style,
-                        separator: row.separator,
-                        values: []
-                    };
-
-                    for (const value of row.values) {
-                        if (Array.isArray(value)) {
-                            const group: InformationConfiguration[] = [];
-                            for (const v of value) {
-                                const infoValue = await this.createInfoValue(v, object);
-                                if (infoValue) {
-                                    group.push(infoValue);
-                                    this.setDataMapValue([infoValue.componentData.property, true]);
-                                }
-                            }
-
-                            if (group.length) {
-                                infoRow.values.push(group);
-                            }
-                        } else {
-                            const infoValue = await this.createInfoValue(value, object);
-                            if (infoValue) {
-                                infoRow.values.push([infoValue]);
-                            }
-                        }
-                    }
-                    if (infoRow.values.length) {
-                        information.push(infoRow);
-                    }
-                }
-            }
+        this.state.information = await ObjectInformationCardDataHandler.prepareInformation(config, object);
+        const hasComponentValues = ObjectInformationCardDataHandler.hasComponentValues(this.state.information);
+        if (hasComponentValues) {
+            this.state.hasComponentValues = true;
         }
-
-        this.state.information = information;
+        this.setDataMapValues(this.state.information);
         this.state.valuesReady = true;
     }
 
-    public setDataMapValue(data: Array<any>): void {
-        const previousValue = this.valueDataMap.get(data[0]);
-        if (previousValue !== data[1]) {
+    private setDataMapValues(information: InformationRowConfiguration[]): void {
+        information.forEach((row) => {
+            row.values.forEach((group) => {
+                group.forEach((infoValue) => {
+                    const data: [string, boolean] = (this.state.widgetType === 2) ? [infoValue.text, true] :
+                        [infoValue.componentData.property, true];
+                    this.setDataMapValue(data);
+                });
+            });
+        });
+    }
+
+    // function also needed for object-avatar-label
+    public setDataMapValue(value: [string, boolean]): void {
+        const previousValue = this.valueDataMap.get(value[0]);
+        if (previousValue !== value[1]) {
             this.state.valuesReady = false;
-            this.valueDataMap.set(data[0], data[1]);
+            this.valueDataMap.set(value[0], value[1]);
             this.state.valuesReady = true;
         }
     }
 
     public hasValue(group: InformationConfiguration[]): boolean {
-        if (group.some((value) => this.valueDataMap.get(value.componentData.property))) {
-            return true;
+        if (this.state.widgetType === 2) {
+            if (group.some((value) => this.valueDataMap.get(value.text))) {
+                return true;
+            }
+        }
+        else {
+            if (group.some((value) => this.valueDataMap.get(value.componentData.property))) {
+                return true;
+            }
         }
         return false;
     }
@@ -181,7 +159,7 @@ class Component {
                 } catch (e) {
                     widthFactor = 1;
                 }
-                if (widthFactor > 4) widthFactor = 4;
+                if (widthFactor > 23) widthFactor = 23;
                 if (widthFactor < 1) widthFactor = 1;
                 if (widthFactor > largestFactor) {
                     largestFactor = widthFactor;
@@ -191,66 +169,6 @@ class Component {
         return largestFactor;
     }
 
-    private async createInfoValue(
-        value: InformationConfiguration, object: KIXObject
-    ): Promise<InformationConfiguration> {
-        if (Array.isArray(value.conditions)) {
-            const match = await FilterUtil.checkCriteriaByPropertyValue(value.conditions, object);
-            if (!match) {
-                return null;
-            }
-        }
-
-        const infoValue: InformationConfiguration = new InformationConfiguration(
-            value.componentId,
-            value.componentData ? value.componentData : {},
-            [],
-            value.icon,
-            null,
-            value.text,
-            value.textPlaceholder,
-            value.textStyle,
-            value.detailViewWidthFactor,
-            value.linkSrc,
-            value.routingConfiguration,
-            value.routingObjectId,
-            '',
-            ''
-        );
-
-        if (infoValue.componentId) {
-            this.state.hasComponentValues = true;
-            this.state.templates[infoValue.componentId] = await KIXModulesService.getComponentTemplate(
-                infoValue.componentId
-            );
-        }
-
-        const placeholders = [];
-        if (Array.isArray(value.textPlaceholder)) {
-            for (const placeholder of value.textPlaceholder) {
-                const placeholderValue = await PlaceholderService.getInstance().replacePlaceholders(
-                    placeholder, object
-                );
-                placeholders.push(placeholderValue);
-            }
-        }
-
-        let text = await PlaceholderService.getInstance().replacePlaceholders(value.text, object);
-        text = await TranslationService.translate(text, placeholders);
-        infoValue.preparedText = text;
-
-        const link = await PlaceholderService.getInstance().replacePlaceholders(value.linkSrc, object);
-        infoValue.preparedLinkSrc = link;
-
-        if (value.routingConfiguration) {
-            infoValue.routingObjectId = await PlaceholderService.getInstance().replacePlaceholders(
-                value.routingObjectId
-            );
-        }
-
-        return infoValue;
-    }
-
     public isRowWithCreatedBy(index: number): boolean {
         const row = this.state.information[index] as InformationRowConfiguration;
         return row.values.some((group) => group && group.some(
@@ -258,6 +176,10 @@ class Component {
                 (placeholder) => placeholder && placeholder === '<KIX_TICKET_CreateBy>'
             )
         ));
+    }
+
+    public getTemplate(componentId: string): any {
+        return KIXModulesService.getComponentTemplate(componentId);
     }
 }
 

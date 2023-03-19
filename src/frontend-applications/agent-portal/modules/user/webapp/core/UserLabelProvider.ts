@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -165,13 +165,13 @@ export class UserLabelProvider extends LabelProvider<User> {
             default:
                 if (this.isContactProperty(property) || property === 'ContactID') {
                     let contact = user.Contact;
-                    if (!contact) {
+                    if (!contact && user.UserID) {
                         const loadingOptions = new KIXObjectLoadingOptions();
                         loadingOptions.includes = [KIXObjectType.CONTACT];
-                        const user = await KIXObjectService.loadObjects<User>(
-                            KIXObjectType.USER, null, loadingOptions, null, true
+                        const userWithContact = await KIXObjectService.loadObjects<User>(
+                            KIXObjectType.USER, [user.UserID], loadingOptions, null, true
                         ).catch((): User[] => []);
-                        contact = user?.length ? user[0].Contact : null;
+                        contact = userWithContact?.length ? userWithContact[0].Contact : null;
                     }
 
                     if (contact) {

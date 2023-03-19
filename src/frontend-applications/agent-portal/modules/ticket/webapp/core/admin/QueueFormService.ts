@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -19,15 +19,6 @@ import { LabelService } from '../../../../../modules/base-components/webapp/core
 import { IdService } from '../../../../../model/IdService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { FormInstance } from '../../../../base-components/webapp/core/FormInstance';
-import { TicketProperty } from '../../../model/TicketProperty';
-import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
-import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
-import { FilterCriteria } from '../../../../../model/FilterCriteria';
-import { FilterDataType } from '../../../../../model/FilterDataType';
-import { FilterType } from '../../../../../model/FilterType';
-import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
-import { ObjectReferenceOptions } from '../../../../base-components/webapp/core/ObjectReferenceOptions';
-import { SearchOperator } from '../../../../search/model/SearchOperator';
 
 export class QueueFormService extends KIXObjectFormService {
 

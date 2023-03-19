@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -23,6 +23,7 @@ import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
 import { UIComponent } from '../../model/UIComponent';
 import { PermissionService } from '../services/PermissionService';
 import { ConfigurationService } from '../../../../server/services/ConfigurationService';
+import { ObjectResponse } from '../services/ObjectResponse';
 
 export class ApplicationRouter extends KIXRouter {
 
@@ -174,11 +175,12 @@ export class ApplicationRouter extends KIXRouter {
                     const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
                     const backendToken = serverConfig.BACKEND_API_TOKEN;
 
-                    const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+                    const objectResponse = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
                         backendToken, 'ApplicationRouter', KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.BROWSER_SOCKET_TIMEOUT_CONFIG],
                         null, null
-                    ).catch((): SysConfigOption[] => []);
+                    ).catch(() => new ObjectResponse<SysConfigOption>());
 
+                    const options = objectResponse?.objects || [];
                     resolve(options?.length ? Number(options[0].Value) : null);
                 });
             }

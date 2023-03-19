@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -35,6 +35,9 @@ import { SearchProperty } from '../../modules/search/model/SearchProperty';
 import { SearchOperator } from '../../modules/search/model/SearchOperator';
 import { SortUtil } from '../../model/SortUtil';
 import { ConfigurationService } from '../../../../server/services/ConfigurationService';
+import { HTTPResponse } from './HTTPResponse';
+import { ObjectResponse } from './ObjectResponse';
+import { FilterDataType } from '../../model/FilterDataType';
 
 export abstract class KIXObjectAPIService implements IKIXObjectService {
 
@@ -67,12 +70,12 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             if (!displayValue && objectId) {
 
                 const config = ConfigurationService.getInstance().getServerConfiguration();
-                const objects = await this.loadObjects(
+                const objectResponse = await this.loadObjects(
                     config?.BACKEND_API_TOKEN, 'KIXObjectAPIService', objectType, [objectId], null, null
                 );
 
-                if (objects?.length) {
-                    let object = objects[0];
+                if (objectResponse?.objects?.length) {
+                    let object = objectResponse.objects[0];
                     const objectClass = this.getObjectClass(objectType);
                     if (objectClass) {
                         object = new objectClass(object);
@@ -89,7 +92,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     public async loadObjects<O extends KIXObject = any>(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<O[]> {
+    ): Promise<ObjectResponse<O>> {
         throw new Error('-1', `Method loadObjects not implemented (${objectType})`);
     }
 
@@ -98,14 +101,14 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         objectIds: Array<number | string>, responseProperty: string, clientRequestId: string,
         objectConstructor?: new (object?: KIXObject) => O,
         useCache?: boolean
-    ): Promise<O[]> {
+    ): Promise<ObjectResponse<O>> {
         const query = this.prepareQuery(loadingOptions, objectType);
         if (loadingOptions && loadingOptions.filter && loadingOptions.filter.length) {
             const success = await this.buildFilter(loadingOptions.filter, responseProperty, query, token);
 
             if (!success) {
                 LoggingService.getInstance().warning('Invalid api filter.', JSON.stringify(loadingOptions.filter));
-                return [];
+                return new ObjectResponse([], 0);
             }
 
         }
@@ -115,7 +118,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         if (objectIds) {
             objectIds = objectIds.filter((id) => typeof id !== 'undefined' && id !== null && id.toString() !== '');
             if (objectIds.length === 0) {
-                return [];
+                return new ObjectResponse([], 0);
             }
             uri = this.buildUri(baseUri, objectIds.join(','));
         }
@@ -124,7 +127,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
         const response = await this.getObjectByUri(token, uri, clientRequestId, query, cacheType, useCache);
 
-        const responseObject = response[responseProperty];
+        const responseObject = response.responseData[responseProperty];
 
         objects = Array.isArray(responseObject)
             ? responseObject
@@ -133,7 +136,8 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         objects = objects.filter((o) => o !== null && typeof o !== 'undefined');
         // objects = objectConstructor ? objects.map((o) => new objectConstructor(o as KIXObject)) : objects;
 
-        return objects;
+        const totalCount = response.objectCounts[objectType?.toLocaleLowerCase()] || 0;
+        return new ObjectResponse<O>(objects, totalCount);
     }
 
     protected async executeUpdateOrCreateRequest<R = number>(
@@ -184,7 +188,9 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         throw new Error('', 'Method updateObject not implemented.');
     }
 
-    public async commitObject(token: string, clientRequestId: string, object: KIXObject): Promise<number | string> {
+    public async commitObject(
+        token: string, clientRequestId: string, object: KIXObject, relevantOrganisationId: number
+    ): Promise<number | string> {
         throw new Error('', 'Method commitObject not implemented.');
     }
 
@@ -193,11 +199,18 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
         if (loadingOptions) {
             if (loadingOptions.limit || loadingOptions.limit === 0) {
-                query = { ...query, limit: loadingOptions.limit, searchlimit: loadingOptions.limit };
+                query = {
+                    ...query,
+                    limit: loadingOptions.limit,
+                    searchlimit: loadingOptions.searchLimit
+                };
             }
 
             if (loadingOptions.sortOrder) {
-                query = { ...query, sort: loadingOptions.sortOrder };
+                query = {
+                    ...query,
+                    sort: loadingOptions.sortOrder
+                };
             }
 
             let additionalIncludes: string[] = [];
@@ -230,7 +243,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
     protected async getObjects<R>(
         token: string, limit?: number, order?: SortOrder, changedAfter?: string, query?: any
-    ): Promise<R> {
+    ): Promise<HTTPResponse<R>> {
         if (!query) {
             query = {};
         }
@@ -250,7 +263,9 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         return await this.httpService.get<R>(this.RESOURCE_URI, query, token, null, this.objectType);
     }
 
-    protected getObject<R>(token: string, objectId: number | string, clientRequestId: string, query?: any): Promise<R> {
+    protected getObject<R>(
+        token: string, objectId: number | string, clientRequestId: string, query?: any
+    ): Promise<HTTPResponse<R>> {
         const uri = this.buildUri(this.RESOURCE_URI, objectId);
         return this.getObjectByUri(token, uri, clientRequestId, query);
     }
@@ -258,7 +273,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     protected getObjectByUri<R>(
         token: string, uri: string, clientRequestId: string, query?: any, cacheKeyPrefix: string = this.objectType,
         useCache?: boolean
-    ): Promise<R> {
+    ): Promise<HTTPResponse<R>> {
         if (!query) {
             query = {};
         }
@@ -268,12 +283,14 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
     protected sendRequest(
         token: string, clientRequestId: string, uri: string, content: any,
-        cacheKeyPrefix: string, create: boolean = false
+        cacheKeyPrefix: string, create: boolean = false, relevantOrganisationId?: number
     ): Promise<any> {
         if (create) {
-            return this.httpService.post(uri, content, token, clientRequestId, cacheKeyPrefix);
+            return this.httpService.post(
+                uri, content, token, clientRequestId, cacheKeyPrefix, undefined, relevantOrganisationId
+            );
         } else {
-            return this.httpService.patch(uri, content, token, clientRequestId, cacheKeyPrefix);
+            return this.httpService.patch(uri, content, token, clientRequestId, cacheKeyPrefix, relevantOrganisationId);
         }
     }
 
@@ -284,9 +301,10 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     }
 
     protected sendUpdateRequest<R, C>(
-        token: string, clientRequestId: string, uri: string, content: C, cacheKeyPrefix: string
+        token: string, clientRequestId: string, uri: string, content: C, cacheKeyPrefix: string,
+        relevantOrganisationId?: number
     ): Promise<R> {
-        return this.httpService.patch<R>(uri, content, token, clientRequestId, cacheKeyPrefix);
+        return this.httpService.patch<R>(uri, content, token, clientRequestId, cacheKeyPrefix, relevantOrganisationId);
     }
 
     protected sendDeleteRequest<R>(
@@ -381,10 +399,13 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             const iconService = KIXObjectServiceRegistry.getServiceInstance(
                 KIXObjectType.OBJECT_ICON
             );
-            const icons = await iconService.loadObjects<ObjectIcon>(
+            const objectResponse = await iconService.loadObjects<ObjectIcon>(
                 token, clientRequestId, KIXObjectType.OBJECT_ICON, null, null,
                 new ObjectIconLoadingOptions(icon.Object, icon.ObjectID)
             );
+
+            const icons = objectResponse?.objects;
+
             if (icons && icons.length) {
                 await iconService.updateObject(
                     token, clientRequestId,
@@ -514,10 +535,13 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                     case SearchOperator.BETWEEN:
                         if (Array.isArray(c.value) && c.value[0] && c.value[1]) {
                             // switch if necessary
-                            if (SortUtil.compareDate(c.value[0].toString(), c.value[1].toString()) > 0) {
-                                const oldStartDate = c.value[0];
+                            const switchValue = c.type === FilterDataType.NUMERIC ?
+                                Boolean(SortUtil.compareNumber(c.value[0], c.value[1]) > 0) :
+                                Boolean(SortUtil.compareDate(c.value[0].toString(), c.value[1].toString()) > 0);
+                            if (switchValue) {
+                                const oldStartValue = c.value[0];
                                 c.value[0] = c.value[1];
-                                c.value[1] = oldStartDate;
+                                c.value[1] = oldStartValue;
                             }
                             prepareCriteria.push(new FilterCriteria(
                                 c.property, SearchOperator.GREATER_THAN_OR_EQUAL, c.type, c.filterType, c.value[0]

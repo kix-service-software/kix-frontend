@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -22,8 +22,9 @@ import { KIXObjectService } from '../../base-components/webapp/core/KIXObjectSer
 import { TableEvent } from './TableEvent';
 import { TableSortUtil } from '../webapp/core/TableSortUtil';
 import { TableEventData } from './TableEventData';
+import { BindableObject } from '../../../model/BindableObject';
 
-export class Row {
+export class Row extends BindableObject {
 
     private id: string;
     private cells: Cell[] = [];
@@ -36,6 +37,7 @@ export class Row {
     public filterMatch: boolean = true;
 
     public constructor(private table: Table, private rowObject?: RowObject) {
+        super();
         const objectId = rowObject?.getObject()?.ObjectId || IdService.generateDateBasedId();
         this.id = `${table.getTableId()}-row-${objectId}`;
 
@@ -43,6 +45,10 @@ export class Row {
             rowObject.getValues().forEach((v) => this.cells.push(new Cell(this, v)));
             this.createChildren(rowObject.getChildren());
         }
+    }
+
+    public static getRowId(tableId: string, objectId: string): string {
+        return `${tableId}-row-${objectId}`;
     }
 
     private createChildren(children: RowObject[]): void {
@@ -69,6 +75,11 @@ export class Row {
 
     public getRowObject<T = any>(): RowObject<T> {
         return this.rowObject;
+    }
+
+    public setRowObject<T = any>(rowObject: RowObject): void {
+        this.rowObject = rowObject;
+        this.updateValues();
     }
 
     public getChildren(): Row[] {

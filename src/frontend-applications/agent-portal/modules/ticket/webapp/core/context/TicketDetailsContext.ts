@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -20,6 +20,9 @@ import { Article } from '../../../model/Article';
 import { ArticleLoadingOptions } from '../../../model/ArticleLoadingOptions';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { TicketHistory } from '../../../model/TicketHistory';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 export class TicketDetailsContext extends Context {
 
@@ -43,6 +46,15 @@ export class TicketDetailsContext extends Context {
         }
 
         const ticket = await this.loadTicket(changedProperties);
+
+        if (!ticket) {
+            await ContextService.getInstance().toggleActiveContext(TicketContext.CONTEXT_ID);
+            setTimeout(async () => {
+                const error = await TranslationService.translate('Translatable#The requested ticket is not available due to restricted permissions.');
+                BrowserUtil.openErrorOverlay(error);
+            }, 500);
+            return object;
+        }
 
         if (objectType === KIXObjectType.TICKET) {
             object = ticket as any;
@@ -107,7 +119,9 @@ export class TicketDetailsContext extends Context {
         if (objectType === KIXObjectType.ARTICLE) {
 
             // just trigger objectListChanged event
-            this.setObjectList(KIXObjectType.ARTICLE, null);
+            if (!silent) {
+                this.setObjectList(KIXObjectType.ARTICLE, null);
+            }
         }
     }
 

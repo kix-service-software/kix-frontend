@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -62,7 +62,9 @@ export class RedisCache implements ICache {
         keys = keys.filter((k) => !ignoreKeyPrefixes.some((p) => k.startsWith(`${this.KIX_CACHE_PREFIX}::${p}`)));
 
         const deletePromises = [];
-        keys.forEach((key) => deletePromises.push(this.delete(null, key)));
+        for (const key of keys) {
+            this.redisClient.del(key);
+        }
 
         await Promise.all(deletePromises);
     }
@@ -110,7 +112,12 @@ export class RedisCache implements ICache {
 
     public async set(type: string, key: string, value: any): Promise<void> {
         if (typeof value === 'object') {
-            value = JSON.stringify(value);
+            try {
+                value = JSON.stringify(value);
+            } catch (e) {
+                LoggingService.getInstance().error(`Error set cache for type: ${type} and key: ${key}`);
+                LoggingService.getInstance().debug(e);
+            }
         }
 
         await this.hsetAsync(`${this.KIX_CACHE_PREFIX}::${type}`, key, value)

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -32,6 +32,7 @@ import { AdditionalContextInformation } from './AdditionalContextInformation';
 import { ApplicationEvent } from './ApplicationEvent';
 import { KIXModulesService } from './KIXModulesService';
 import { ToolbarAction } from '../../../agent-portal/webapp/application/_base-template/personal-toolbar/ToolbarAction';
+import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 
 export class ContextService {
 
@@ -117,7 +118,7 @@ export class ContextService {
         if (!context || allowMultiple) {
             context = await this.createContextInstance(
                 contextId, objectId, undefined, urlParams, additionalInformation
-            );
+            ).catch((): Context => null);
 
             if (this.isStorableDialogContext(context)) {
                 await this.updateStorage(context?.instanceId);
@@ -165,7 +166,8 @@ export class ContextService {
             (c) => c.instanceId === instanceId || c.equals(contextId, objectId)
         );
         if (!context) {
-            context = await this.createContextInstance(contextId, objectId, instanceId, null, null, contextPreference);
+            context = await this.createContextInstance(
+                contextId, objectId, instanceId, null, null, contextPreference).catch((): Context => null);
         }
 
         return context;
@@ -200,20 +202,22 @@ export class ContextService {
                     }
                     const context = this.contextInstances.splice(index, 1)[0];
 
-                    const iter = this.serviceListener.values();
-                    let entry = iter.next();
-                    while (entry.value) {
-                        const listener = entry.value as IContextServiceListener;
-                        await listener.beforeDestroy(context);
-                        entry = iter.next();
-                    }
+                    if (context) {
+                        const iter = this.serviceListener.values();
+                        let entry = iter.next();
+                        while (entry.value) {
+                            const listener = entry.value as IContextServiceListener;
+                            await listener.beforeDestroy(context);
+                            entry = iter.next();
+                        }
 
-                    for (const extension of context?.contextExtensions) {
-                        await extension?.destroy(context);
-                    }
+                        for (const extension of context?.contextExtensions) {
+                            await extension?.destroy(context);
+                        }
 
-                    await context.destroy();
-                    EventService.getInstance().publish(ContextEvents.CONTEXT_REMOVED, context);
+                        await context?.destroy();
+                        EventService.getInstance().publish(ContextEvents.CONTEXT_REMOVED, context);
+                    }
 
                     this.activeContextIndex--;
 
@@ -470,45 +474,24 @@ export class ContextService {
     ): Promise<Context> {
         objectId = objectId?.toString();
         const promiseKey = JSON.stringify({ contextId, objectId });
+
         if (!this.contextCreatePromises.has(promiseKey)) {
             this.contextCreatePromises.set(
-                promiseKey, this.createPromise(contextId, objectId, instanceId)
+                promiseKey, this.createPromise(
+                    promiseKey, contextId, objectId, instanceId,
+                    urlParams, additionalInformation, contextPreference
+                )
             );
         }
 
-        const contextPromise = this.contextCreatePromises.get(promiseKey);
-        const newContext = await contextPromise.catch((): Context => null);
-
-        this.contextCreatePromises.delete(promiseKey);
-
-        if (newContext) {
-            const index = this.activeContextIndex >= 0
-                ? this.activeContextIndex
-                : this.contextInstances.length - 1;
-            this.contextInstances.splice(index + 1, 0, newContext);
-
-            // TODO: create tests for: additional infos and preferences known prior or in init
-            // add information prior init, some extensions may need them in init
-            if (additionalInformation) {
-                additionalInformation.forEach((ai) => newContext.setAdditionalInformation(ai[0], ai[1]));
-            }
-            if (contextPreference) {
-                await newContext.getStorageManager()?.loadStoredValues(contextPreference);
-            }
-
-            await newContext.initContext(urlParams).catch((e) => {
-                console.error(e);
-                this.removeContext(instanceId);
-            });
-
-            EventService.getInstance().publish(ContextEvents.CONTEXT_CREATED, newContext);
-        }
-
-        return newContext;
+        return this.contextCreatePromises.get(promiseKey);
     }
 
     private createPromise(
-        contextId: string, objectId?: string | number, instanceId?: string
+        promiseKey: string, contextId: string, objectId?: string | number, instanceId?: string,
+        urlParams?: URLSearchParams,
+        additionalInformation: Array<[string, any]> = [],
+        contextPreference?: ContextPreference
     ): Promise<Context> {
         return new Promise<Context>(async (resolve, reject) => {
             const descriptor = this.contextDescriptorList.find((cd) => cd.contextId === contextId);
@@ -535,10 +518,28 @@ export class ContextService {
                                 instanceId: previousContext.instanceId
                             });
                         }
+                        if (additionalInformation) {
+                            additionalInformation.forEach((ai) => context.setAdditionalInformation(ai[0], ai[1]));
+                        }
+                        if (contextPreference) {
+                            await context.getStorageManager()?.loadStoredValues(contextPreference);
+                        }
+
+                        await context.initContext(urlParams).catch((e) => {
+                            console.error(e);
+                            this.removeContext(instanceId);
+                        });
+
+
+                        const index = this.activeContextIndex >= 0
+                            ? this.activeContextIndex
+                            : this.contextInstances.length - 1;
+                        this.contextInstances.splice(index + 1, 0, context);
+                        EventService.getInstance().publish(ContextEvents.CONTEXT_CREATED, context);
                     }
                 }
             }
-
+            this.contextCreatePromises.delete(promiseKey);
             resolve(context);
         });
     }
@@ -691,6 +692,8 @@ export class ContextService {
         const context = ContextService.getInstance().getActiveContext();
         if (context) {
             const contextId = context.descriptor.contextId;
+
+            TableFactoryService.getInstance().deleteContextTables(context?.contextId);
 
             const currentUser = await AgentService.getInstance().getCurrentUser();
             const preference = currentUser.Preferences.find((p) => p.ID === 'ContextWidgetLists');

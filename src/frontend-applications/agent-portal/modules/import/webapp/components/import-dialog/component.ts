@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -108,9 +108,11 @@ class Component {
                         ? textSeparatorValue.value[0]
                         : null;
 
-                    await this.importRunner?.loadObjectsFromCSV(
-                        source.value[0], characterSet, valueSeparator, textSeparator
-                    );
+                    if (source.value[0]) {
+                        await this.importRunner?.loadObjectsFromCSV(
+                            source.value[0], characterSet, valueSeparator, textSeparator
+                        );
+                    }
 
                     const errors = this.importRunner?.getErrors();
                     if (Array.isArray(errors) && errors.length) {
@@ -249,7 +251,6 @@ class Component {
         const objectName = await LabelService.getInstance().getObjectName(
             this.state.importManager.objectType, true
         );
-        const objects = [...this.importRunner.getCSVObjects()];
         this.state.table.getRows().forEach((r) => r.setValueState(ValueState.NONE));
         this.finishedObjects = [];
         this.errorObjects = [];
@@ -258,7 +259,7 @@ class Component {
 
         const objectTimes: number[] = [];
 
-        for (const object of objects) {
+        for (const object of this.selectedObjects) {
             const start = Date.now();
             let end: number;
 
@@ -282,7 +283,7 @@ class Component {
             }
 
             objectTimes.push(end - start);
-            await this.setDialogLoadingInfo(objectTimes, objects.length);
+            await this.setDialogLoadingInfo(objectTimes, this.selectedObjects.length);
         }
 
         if (!this.errorObjects.length) {
@@ -300,7 +301,7 @@ class Component {
         const average = BrowserUtil.calculateAverage(times);
         const time = average * (objectsCount - this.finishedObjects.length - this.errorObjects.length);
         const finishCount = this.finishedObjects.length + this.errorObjects.length;
-        const totalCount = this.importRunner?.getCSVObjects()?.length;
+        const totalCount = this.selectedObjects.length;
         const loadingHint = await TranslationService.translate(
             'Translatable#{0}/{1} {2} imported', [finishCount, totalCount, objectName]
         );
