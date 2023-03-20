@@ -1456,6 +1456,9 @@ msgstr "Vollständiger Name"
 msgid "Full Text"
 msgstr "Volltext"
 
+msgid "Further Information"
+msgstr ""
+
 msgid "General Catalog"
 msgstr "General Catalog"
 
@@ -3628,6 +3631,9 @@ msgstr "Nummer"
 
 msgid "Number of Actions"
 msgstr "Anzahl Aktionen"
+
+msgid "Number of Attachments"
+msgstr ""
 
 msgid "Number of Config Items"
 msgstr "Anzahl Assets"

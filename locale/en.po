@@ -163,8 +163,8 @@ msgstr ""
 msgid "Admin_DynamicFieldDateTime_DefaultValue_Description"
 msgstr ""
 "Default value is used to initialize the field when first displayed; It is "
-"specified as an offset at the time the field is displayed (0=now; 3600=now+"
-"1h, blank=no initialization)."
+"specified as an offset at the time the field is displayed (0=now; 3600=now"
+"+1h, blank=no initialization)."
 
 msgid "Admin_DynamicField_Edit_Name_Hint"
 msgstr ""
@@ -1424,6 +1424,9 @@ msgid "Fullname"
 msgstr ""
 
 msgid "Full Text"
+msgstr ""
+
+msgid "Further Information"
 msgstr ""
 
 msgid "General Catalog"
@@ -3427,6 +3430,9 @@ msgid "Number"
 msgstr ""
 
 msgid "Number of Actions"
+msgstr ""
+
+msgid "Number of Attachments"
 msgstr ""
 
 msgid "Number of Config Items"
