@@ -1456,9 +1456,6 @@ msgstr "Vollständiger Name"
 msgid "Full Text"
 msgstr "Volltext"
 
-msgid "Further Information"
-msgstr ""
-
 msgid "General Catalog"
 msgstr "General Catalog"
 
@@ -2115,6 +2112,9 @@ msgid "Helptext_Admin_Tickets_QueueCreate_ParentQueue"
 msgstr ""
 "Wenn Sie dieses Team einem bereits existierenden Team unterordnen wollen, "
 "wählen Sie das hier aus."
+
+msgid "Helptext_Admin_Tickets_QueueCreate_Permission"
+msgstr ""
 
 msgid "Helptext_Admin_Tickets_QueueCreate_SenderAddress."
 msgstr "Absenderadresse für E-Mails aus diesem Team"
@@ -3218,6 +3218,9 @@ msgstr "Verknüpfungstypen"
 msgid "Loading ..."
 msgstr "Lade ..."
 
+msgid "Load more"
+msgstr ""
+
 msgid "Localisation"
 msgstr "Lokalisierung"
 
@@ -3280,6 +3283,9 @@ msgstr "Max. Berichte"
 
 msgid "Menu"
 msgstr "Modulmenü"
+
+msgid "Merged into the Ticket"
+msgstr ""
 
 msgid "Message"
 msgstr "Nachricht"
@@ -3631,9 +3637,6 @@ msgstr "Nummer"
 
 msgid "Number of Actions"
 msgstr "Anzahl Aktionen"
-
-msgid "Number of Attachments"
-msgstr ""
 
 msgid "Number of Config Items"
 msgstr "Anzahl Assets"
@@ -4076,6 +4079,9 @@ msgstr "alle gelesen"
 
 msgid "Readonly"
 msgstr "Nur Lesen"
+
+msgid "Read & Write"
+msgstr ""
 
 msgid "Recently Closed"
 msgstr "Kürzlich Geschlossen"
@@ -4866,6 +4872,9 @@ msgstr ""
 "Es gibt offene Dialoge. Alle ggf. eingegebenen Daten gehen verloren. "
 "Fortfahren?"
 
+msgid "The requested ticket is not available due to restricted permissions."
+msgstr ""
+
 msgid ""
 "The value for the field is in the future! The date needs to be in the past!"
 msgstr ""
@@ -5246,6 +5255,9 @@ msgstr "In Bearbeitung (WIP)"
 
 msgid "Wrap Lines"
 msgstr "Zeilen umbrechen"
+
+msgid "Write"
+msgstr ""
 
 msgid "Year(s)"
 msgstr "Jahr(e)"

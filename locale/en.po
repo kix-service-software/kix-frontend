@@ -1426,9 +1426,6 @@ msgstr ""
 msgid "Full Text"
 msgstr ""
 
-msgid "Further Information"
-msgstr ""
-
 msgid "General Catalog"
 msgstr ""
 
@@ -2004,6 +2001,9 @@ msgid "Helptext_Admin_Tickets_QueueCreate_ParentQueue"
 msgstr ""
 "If you want to subordinate the new team to an already existing team, you can "
 "choose this here."
+
+msgid "Helptext_Admin_Tickets_QueueCreate_Permission"
+msgstr ""
 
 msgid "Helptext_Admin_Tickets_QueueCreate_SenderAddress."
 msgstr "Sender address for emails send by this team."
@@ -3018,6 +3018,9 @@ msgstr ""
 msgid "Loading ..."
 msgstr ""
 
+msgid "Load more"
+msgstr ""
+
 msgid "Localisation"
 msgstr ""
 
@@ -3079,6 +3082,9 @@ msgid "Max. Reports"
 msgstr ""
 
 msgid "Menu"
+msgstr ""
+
+msgid "Merged into the Ticket"
 msgstr ""
 
 msgid "Message"
@@ -3430,9 +3436,6 @@ msgid "Number"
 msgstr ""
 
 msgid "Number of Actions"
-msgstr ""
-
-msgid "Number of Attachments"
 msgstr ""
 
 msgid "Number of Config Items"
@@ -3871,6 +3874,9 @@ msgid "Read all"
 msgstr ""
 
 msgid "Readonly"
+msgstr ""
+
+msgid "Read & Write"
 msgstr ""
 
 msgid "Recently Closed"
@@ -4648,6 +4654,9 @@ msgid ""
 "There are open dialogs. Any data you may have entered will be lost. Continue?"
 msgstr ""
 
+msgid "The requested ticket is not available due to restricted permissions."
+msgstr ""
+
 msgid ""
 "The value for the field is in the future! The date needs to be in the past!"
 msgstr ""
@@ -5019,6 +5028,9 @@ msgid "Work in Progress"
 msgstr ""
 
 msgid "Wrap Lines"
+msgstr ""
+
+msgid "Write"
 msgstr ""
 
 msgid "Year(s)"
