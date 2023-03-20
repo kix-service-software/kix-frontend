@@ -212,6 +212,12 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return [];
     }
 
+    public async prepareLoadingOptions(
+        value: ObjectPropertyValue, loadingOptions: KIXObjectLoadingOptions
+    ): Promise<void> {
+        return;
+    }
+
     public async hasDefinedValues(): Promise<boolean> {
         const editableValues = await this.getEditableValues();
         return !!editableValues.length;

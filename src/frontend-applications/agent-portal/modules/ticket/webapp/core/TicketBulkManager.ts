@@ -23,14 +23,13 @@ import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
-import { TicketService } from '.';
-import { BulkDialogContext, BulkManager } from '../../../bulk/webapp/core';
+import { QueueService, TicketService } from '.';
+import { BulkManager } from '../../../bulk/webapp/core';
 import { UserProperty } from '../../../user/model/UserProperty';
 import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
 import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
 import { ValidationResult } from '../../../base-components/webapp/core/ValidationResult';
 import { ValidationSeverity } from '../../../base-components/webapp/core/ValidationSeverity';
-import { ContextService } from '../../../base-components/webapp/core/ContextService';
 
 export class TicketBulkManager extends BulkManager {
 
@@ -224,6 +223,10 @@ export class TicketBulkManager extends BulkManager {
                     property, false, false, undefined, loadingOptions
                 );
                 break;
+            case TicketProperty.QUEUE_ID:
+                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false, null, ['WRITE', 'READ']);
+                nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy);
+                break;
             default:
                 nodes = await TicketService.getInstance().getTreeNodes(property);
         }
@@ -341,4 +344,33 @@ export class TicketBulkManager extends BulkManager {
         validationResult.push(...result);
         return validationResult;
     }
+
+    public async prepareLoadingOptions(
+        value: ObjectPropertyValue, loadingOptions: KIXObjectLoadingOptions
+    ): Promise<void> {
+        if (value.property === TicketProperty.OWNER_ID || TicketProperty.RESPONSIBLE_ID) {
+
+            const queueValue = this.getValues()?.find((v) => v.property === TicketProperty.QUEUE_ID);
+            if (queueValue) {
+                const queueId = Array.isArray(queueValue.value)
+                    ? queueValue.value[0]
+                    : queueValue.value;
+
+                const requiredPermission = {
+                    Object: KIXObjectType.QUEUE,
+                    ObjectID: queueId,
+                    Permission: 'WRITE,READ'
+                };
+
+                const query: [string, string][] = [
+                    ['requiredPermission', JSON.stringify(requiredPermission)]
+                ];
+
+                loadingOptions.query = query;
+            } else {
+                loadingOptions.query = [];
+            }
+        }
+    }
+
 }

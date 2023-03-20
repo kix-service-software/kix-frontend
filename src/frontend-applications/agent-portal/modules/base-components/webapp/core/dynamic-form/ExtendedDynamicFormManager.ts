@@ -166,4 +166,10 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
     public async changeValueOrder(currentIndex: number, targetIndex: number): Promise<void> {
         return;
     }
+
+    public async prepareLoadingOptions(
+        value: ObjectPropertyValue, loadingOptions: KIXObjectLoadingOptions
+    ): Promise<void> {
+        return;
+    }
 }
