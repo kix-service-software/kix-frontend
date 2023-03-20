@@ -184,6 +184,10 @@ export class TicketSearchFormManager extends SearchFormManager {
                     new TreeNode(1, yes)
                 ];
                 break;
+            case TicketProperty.QUEUE_ID:
+                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false, null, ['READ']);
+                nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy);
+                break;
             default:
                 nodes = await super.getTreeNodes(property);
                 if (!nodes || !nodes.length) {
@@ -253,6 +257,5 @@ export class TicketSearchFormManager extends SearchFormManager {
 
         await super.setValue(newValue, silent);
     }
-
 
 }

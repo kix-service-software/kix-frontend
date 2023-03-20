@@ -99,4 +99,8 @@ export interface IDynamicFormManager {
     changeValueOrder(currentIndex: number, targetIndex: number): Promise<void>;
 
     valuesAreDraggable(): boolean;
+
+    prepareLoadingOptions(
+        value: ObjectPropertyValue, loadingOptions: KIXObjectLoadingOptions
+    ): Promise<void>;
 }

@@ -18,6 +18,7 @@ import { TreeNode, TreeNodeProperty, TreeUtil } from '../../../../base-component
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FollowUpType } from '../../../model/FollowUpType';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
+import { AgentSocketClient } from '../../../../user/webapp/core/AgentSocketClient';
 
 export class QueueService extends KIXObjectService<Queue> {
 
@@ -177,13 +178,26 @@ export class QueueService extends KIXObjectService<Queue> {
         return properties;
     }
 
-    public async getQueuesHierarchy(withData: boolean = true, queues?: Queue[]): Promise<Queue[]> {
+    public async getQueuesHierarchy(
+        withData: boolean = true, queues?: Queue[], permissions: string[] = []
+    ): Promise<Queue[]> {
         let queueTree: Queue[] = [];
         if (!queues) {
             const loadingOptions = new KIXObjectLoadingOptions();
+            loadingOptions.query = [];
             if (withData) {
                 loadingOptions.includes = ['TicketStats'];
-                loadingOptions.query = [['TicketStats.StateType', 'Open']];
+                loadingOptions.query.push(['TicketStats.StateType', 'Open']);
+            }
+
+            if (permissions?.length) {
+                const user = await AgentSocketClient.getInstance().getCurrentUser(false);
+                const requiredPermission = {
+                    Object: KIXObjectType.USER,
+                    ObjectID: user?.UserID,
+                    Permission: permissions.join(',')
+                };
+                loadingOptions.query.push(['requiredPermission', JSON.stringify(requiredPermission)]);
             }
 
             loadingOptions.cacheType = 'QUEUE_HIERARCHY';
