@@ -139,7 +139,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             new FormFieldConfiguration(
                 'queue-edit-form-field-permissions',
                 'Translatable#Assigned Roles', QueueProperty.ASSIGNED_PERMISSIONS,
-                'base-permission-input', true, 'Translatable#Helptext_Admin_Tickets_QueueCreate_Permission'
+                'base-permission-input', false, 'Translatable#Helptext_Admin_Tickets_QueueCreate_Permission'
             )
         );
 
