@@ -104,8 +104,11 @@ export class ApplicationRouter extends KIXRouter {
             const templatePath = path.join('..', '..', 'modules', 'agent-portal', 'webapp', 'application');
             const template = require(templatePath).default;
 
-            const modules = await PluginService.getInstance().getExtensions<IKIXModuleExtension>(
+            let modules = await PluginService.getInstance().getExtensions<IKIXModuleExtension>(
                 AgentPortalExtensions.MODULES
+            );
+            modules = modules.filter(
+                (m) => !m.applications.length || m.applications.some((a) => a === 'agent-portal')
             );
 
             const createPromises: Array<Promise<IKIXModuleExtension>> = [];
