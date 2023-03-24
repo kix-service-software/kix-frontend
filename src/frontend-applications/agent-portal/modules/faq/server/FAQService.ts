@@ -7,28 +7,28 @@
  * --
  */
 
-import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
-import { KIXObjectType } from '../../../model/kix/KIXObjectType';
-import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
-import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
-import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
-import { FAQArticleAttachmentLoadingOptions } from '../model/FAQArticleAttachmentLoadingOptions';
-import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
-import { CreateFAQVoteOptions } from '../model/CreateFAQVoteOptions';
-import { Attachment } from '../../../model/kix/Attachment';
-import { LoggingService } from '../../../../../server/services/LoggingService';
-import { FAQArticleProperty } from '../model/FAQArticleProperty';
 import { Error } from '../../../../../server/model/Error';
+import { LoggingService } from '../../../../../server/services/LoggingService';
 import { FilterCriteria } from '../../../model/FilterCriteria';
-import { FAQArticle } from '../model/FAQArticle';
-import { FAQCategory } from '../model/FAQCategory';
-import { SearchOperator } from '../../search/model/SearchOperator';
 import { FilterDataType } from '../../../model/FilterDataType';
 import { FilterType } from '../../../model/FilterType';
-import { SearchProperty } from '../../search/model/SearchProperty';
-import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
+import { Attachment } from '../../../model/kix/Attachment';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
+import { SearchOperator } from '../../search/model/SearchOperator';
+import { SearchProperty } from '../../search/model/SearchProperty';
+import { CreateFAQVoteOptions } from '../model/CreateFAQVoteOptions';
+import { FAQArticle } from '../model/FAQArticle';
+import { FAQArticleAttachmentLoadingOptions } from '../model/FAQArticleAttachmentLoadingOptions';
+import { FAQArticleProperty } from '../model/FAQArticleProperty';
+import { FAQCategory } from '../model/FAQCategory';
 
 
 export class FAQService extends KIXObjectAPIService {
@@ -84,7 +84,7 @@ export class FAQService extends KIXObjectAPIService {
                 const attachment = await this.loadAttachment(
                     token, loadingOptions, (objectLoadingOptions as FAQArticleAttachmentLoadingOptions)
                 );
-                objectResponse = new ObjectResponse([attachment], 1);
+                objectResponse = new ObjectResponse(attachment, 1);
                 break;
             case KIXObjectType.FAQ_KEYWORD:
                 const uri = this.buildUri(this.RESOURCE_URI, 'keywords');
