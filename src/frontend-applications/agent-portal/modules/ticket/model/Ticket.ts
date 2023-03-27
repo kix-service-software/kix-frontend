@@ -367,7 +367,7 @@ export class Ticket extends KIXObject {
             Property: TicketProperty.CREATED_USER_ID,
             Operations: [SearchOperator.IN],
             DataType: FilterDataType.NUMERIC,
-            InputType: InputFieldTypes.DROPDOWN
+            InputType: InputFieldTypes.OBJECT_REFERENCE
         },
         {
             Property: TicketProperty.CREATE_TIME,
@@ -481,7 +481,7 @@ export class Ticket extends KIXObject {
             Property: TicketProperty.WATCHER_USER_ID,
             Operations: [SearchOperator.IN],
             DataType: FilterDataType.NUMERIC,
-            InputType: InputFieldTypes.DROPDOWN
+            InputType: InputFieldTypes.OBJECT_REFERENCE
         },
         {
             Property: ArticleProperty.CHANNEL_ID,
