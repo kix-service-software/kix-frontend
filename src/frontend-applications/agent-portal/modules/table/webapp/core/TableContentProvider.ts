@@ -39,7 +39,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
     protected useCache: boolean = true;
 
-    protected usePaging: boolean = true;
+    public usePaging: boolean = true;
     protected currentPageIndex: number = 1;
 
     protected reloadInProgress: boolean = false;
@@ -136,8 +136,10 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     public async loadData(): Promise<Array<RowObject<T>>> {
         let objects = [];
 
-        const pageSize = this.loadingOptions?.limit || 20;
-        const currentLimit = this.currentPageIndex * pageSize;
+        const pageSize = this.loadingOptions?.limit;
+        const currentLimit = this.usePaging && pageSize
+            ? this.currentPageIndex * pageSize
+            : null;
 
         if (this.objects) {
             objects = this.objects;
@@ -164,7 +166,9 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                 forceIds, this.useCache, undefined, this.id
             );
 
-            this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(this.id);
+            if (currentLimit) {
+                this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(this.id);
+            }
         }
 
         if (!objects) {
