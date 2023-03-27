@@ -83,16 +83,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async ticketChanged(data: any, eventId: string): Promise<void> {
-        if (data.ticketId && Number(data.ticketId) === this.state.ticket.TicketID) {
-            const tickets = await KIXObjectService.loadObjects<Ticket>(
-                KIXObjectType.TICKET, [data.ticketId]
-            );
-
-            if (tickets && tickets.length) {
-                this.state.ticket = tickets[0];
-            }
-
+        if (Number(data.ticket?.TicketID) === this.state.ticket.TicketID) {
+            this.state.ticket = data.ticket;
+            this.state.update = true;
             await this.prepareAvatar();
+            setTimeout(() => this.state.update = false, 20);
         }
     }
 
