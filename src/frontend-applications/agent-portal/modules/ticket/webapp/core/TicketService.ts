@@ -299,16 +299,9 @@ export class TicketService extends KIXObjectService<Ticket> {
                     } else {
                         loadingOptions.includes = [UserProperty.CONTACT];
                     }
-
-                    if (Array.isArray(loadingOptions.query)) {
-                        loadingOptions.query.push(['requiredPermission', 'TicketRead,TicketCreate']);
-                    } else {
-                        loadingOptions.query = [['requiredPermission', 'TicketRead,TicketCreate']];
-                    }
                 } else {
                     loadingOptions = new KIXObjectLoadingOptions(
-                        null, null, null, [UserProperty.CONTACT], null,
-                        [['requiredPermission', 'TicketRead,TicketCreate']]
+                        null, null, null, [UserProperty.CONTACT], null
                     );
                 }
                 let users = await KIXObjectService.loadObjects<User>(

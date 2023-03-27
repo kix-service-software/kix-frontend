@@ -527,10 +527,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     UserProperty.IS_AGENT, SearchOperator.EQUALS, FilterDataType.NUMERIC,
                                     FilterType.AND, 1
                                 )
-                            ], undefined, undefined, undefined, undefined,
-                            [
-                                ['requiredPermission', 'TicketRead,TicketCreate']
-                            ]
+                            ], undefined, undefined, undefined, undefined
                         )
                     )
                 ]
