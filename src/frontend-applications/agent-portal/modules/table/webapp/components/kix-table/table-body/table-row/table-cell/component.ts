@@ -34,7 +34,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public onInput(input: any): void {
         this.column = input.column;
         this.cell = input.cell;
-        this.setValueStateClass();
+        this.initCellComponent();
     }
 
     public async onMount(): Promise<void> {
