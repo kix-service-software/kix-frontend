@@ -8,9 +8,23 @@
  */
 
 import { Context } from '../../../../../model/Context';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 
 export class NewWebformDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'new-webform-dialog-context';
+
+    public async getObject<O extends KIXObject>(
+        objectType: KIXObjectType | string = KIXObjectType.WEBFORM,
+        reload: boolean = false, changedProperties?: string[]
+    ): Promise<O> {
+        let object;
+        if (objectType === KIXObjectType.WEBFORM) {
+            object = this.getAdditionalInformation(AdditionalContextInformation.FORM_OBJECT);
+        }
+        return object;
+    }
 
 }
