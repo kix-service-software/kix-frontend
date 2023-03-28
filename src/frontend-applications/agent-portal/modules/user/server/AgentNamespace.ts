@@ -104,16 +104,19 @@ export class AgentNamespace extends SocketNameSpace {
         const tokenPrefix = client?.handshake?.headers?.tokenprefix || '';
         const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
-        let response: SocketResponse;
-        const user = await HttpService.getInstance().getUserByToken(token, data.withStats).catch((error) => {
-            response = new SocketResponse(SocketEvent.ERROR, error);
-            return null;
-        });
+        let response;
+        if (token) {
+            const user = await HttpService.getInstance().getUserByToken(token, data.withStats).catch((error) => {
+                response = new SocketResponse(SocketEvent.ERROR, error);
+            });
 
-        if (user) {
-            response = new SocketResponse(
-                AgentEvent.GET_CURRENT_USER_FINISHED, new GetCurrentUserResponse(data.requestId, user)
-            );
+            if (user) {
+                response = new SocketResponse(
+                    AgentEvent.GET_CURRENT_USER_FINISHED, new GetCurrentUserResponse(data.requestId, user)
+                );
+            }
+        } else {
+            response = new SocketResponse(SocketEvent.ERROR, 'User token required!');
         }
         return response;
     }

@@ -118,7 +118,12 @@ export class KIXObjectSocketClient extends SocketClient {
 
         const organisationId = ClientStorageService.getOption('RelevantOrganisationID');
         if (organisationId) {
-            loadingOptions.query.push(['RelevantOrganisationID', organisationId]);
+            const index = loadingOptions.query.findIndex((q) => q[0] === 'RelevantOrganisationID');
+            if (index !== -1) {
+                loadingOptions.query[index] = ['RelevantOrganisationID', organisationId];
+            } else {
+                loadingOptions.query.push(['RelevantOrganisationID', organisationId]);
+            }
         }
 
         const request = new LoadObjectsRequest(

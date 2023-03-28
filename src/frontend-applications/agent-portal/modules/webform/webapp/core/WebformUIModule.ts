@@ -9,10 +9,7 @@
 
 import { IUIModule } from '../../../../model/IUIModule';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
-import {
-    WebformCreateAction, WebformEditAction, WebformFormService,
-    WebformTableFactory, WebformLabelProvider, NewWebformDialogContext, WebformDetailsContext, EditWebformDialogContext
-} from '.';
+import { WebformCreateAction, WebformEditAction, WebformFormService, WebformTableFactory, WebformLabelProvider, NewWebformDialogContext, WebformDetailsContext, EditWebformDialogContext } from '.';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
@@ -24,6 +21,8 @@ import { ContextService } from '../../../../modules/base-components/webapp/core/
 import { WebformService } from './WebformService';
 import { WebformAcceptedDomainsValidator } from './WebformAcceptedDomainsValidator';
 import { FormValidationService } from '../../../base-components/webapp/core/FormValidationService';
+import { FormService } from '../../../base-components/webapp/core/FormService';
+import { WebformFormFieldValueHandler } from './WebformFormFieldValueHandler';
 
 export class UIModule implements IUIModule {
 
@@ -70,6 +69,7 @@ export class UIModule implements IUIModule {
         ContextService.getInstance().registerContext(editWebformDialogContext);
 
         FormValidationService.getInstance().registerValidator(new WebformAcceptedDomainsValidator());
+        FormService.getInstance().addFormFieldValueHandler(new WebformFormFieldValueHandler());
     }
 
 }

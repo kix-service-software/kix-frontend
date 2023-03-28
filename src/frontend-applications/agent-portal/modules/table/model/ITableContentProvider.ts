@@ -14,6 +14,8 @@ export interface ITableContentProvider<T = any> {
 
     totalCount: number;
 
+    usePaging: boolean;
+
     initialize(): Promise<void>;
 
     getObjectType(): KIXObjectType | string;

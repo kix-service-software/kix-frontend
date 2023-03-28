@@ -123,6 +123,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                     }
                 } else {
                     article.Attachments = null;
+                    article.Body = article.Body?.replace(/<(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+>/g, '');
                 }
 
                 if (Array.isArray(article.From)) {

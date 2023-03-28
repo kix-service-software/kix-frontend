@@ -31,9 +31,17 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public onInput(input: any): void {
+
         this.state.row = input.row;
 
         if (this.state.row) {
+            this.bindingIds = [];
+            this.bindingIds.push(
+                this.state.row.addBinding('selected', (selected: boolean) => this.state.selected = selected)
+            );
+            this.bindingIds.push(
+                this.state.row.addBinding('canBeSelected', (selectable: boolean) => this.state.selectable = selectable)
+            );
             this.state.selected = this.state.row.isSelected();
             this.state.selectable = this.state.row.isSelectable();
             this.state.open = this.state.row.isExpanded();
@@ -43,16 +51,8 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public async onMount(): Promise<void> {
-        this.bindingIds = [];
         if (this.state.row) {
             this.eventSubscriberId = this.state.row.getTable().getTableId() + '-' + this.state.row.getRowId();
-
-            this.bindingIds.push(
-                this.state.row.addBinding('selected', (selected: boolean) => this.state.selected = selected)
-            );
-            this.bindingIds.push(
-                this.state.row.addBinding('canBeSelected', (selectable: boolean) => this.state.selectable = selectable)
-            );
 
             EventService.getInstance().subscribe(TableEvent.ROW_TOGGLED, this);
             EventService.getInstance().subscribe(TableEvent.ROW_VALUE_STATE_CHANGED, this);

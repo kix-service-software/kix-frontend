@@ -36,7 +36,6 @@ export class DynamicFieldChecklistFormValue extends ObjectFormValue<CheckListIte
     }
 
     public async initFormValue(): Promise<void> {
-        await super.initCountValues();
         const dynamicField = await KIXObjectService.loadDynamicField(this.dfName);
         const config = dynamicField?.Config;
 

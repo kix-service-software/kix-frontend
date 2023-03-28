@@ -8,42 +8,56 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.ticket && state.prepared)>
-    <div.kix-kanban-item>
-        <div.kanban-item-header>
-            <div.kanban-item-title title=state.title>
-                <link-target routingConfiguration=state.routingConfiguration objectId=state.ticket.TicketID>
+    <div class="kix-kanban-item">
+        <div class="kanban-item-header">
+            <div title=state.title class="kanban-item-title">
+                <link-target
+                    routingConfiguration=state.routingConfiguration
+                    objectId=(state.ticket.TicketID)
+                >
                     <@content>${state.title}</@content>
                 </link-target>
             </div>
-            <div.kanban-item-sub-title title=state.organisation>${state.organisation}</div>
-            <div.kanban-item-description title=state.ticketNumber>
+            <div title=state.organisation class="kanban-item-sub-title">
+                ${state.organisation}
+            </div>
+            <div title=state.ticketNumber class="kanban-item-description">
                 <icon icon=state.icon/>
                 <span>${state.ticketNumber}</span>
             </div>
-            <div.kanban-item-avatar title=state.contactTooltip>
+            <div title=state.contactTooltip class="kanban-item-avatar">
                 <if(state.avatar)>
                     <icon icon=state.avatar/>
                 </if>
                 <else>
-                    <div.initials style=("background-color:" + state.userColor)>${state.initials}</div>
+                    <div
+                        style="background-color:" + state.userColor
+                        class="initials"
+                    >
+                        ${state.initials}
+                    </div>
                 </else>
             </div>
         </div>
-        <div.extra-content>
-            <if(state.expanded)>
+        <div class="extra-content">
+            <if(state.expanded && !state.update)>
                 <div class="kanban-item-details">
                     <for|property| of=state.properties>
-                        <object-property-label object=state.ticket property=property labelProvider=state.labelProvider/>
+                        <object-property-label
+                            object=state.ticket
+                            property=property
+                            labelProvider=state.labelProvider
+                        />
                     </for>
                 </div>
             </if>
-            <div.kanban-item-details-button on-click("expand")>
+            <div on-click("expand") class="kanban-item-details-button">
                 Details
                 <if(state.expanded)>
-                    <span.kix-icon-nook-up/>
+                    <span class="kix-icon-nook-up"/>
                 </if>
                 <else>
-                    <span.kix-icon-nook-down/>
+                    <span class="kix-icon-nook-down"/>
                 </else>
             </div>
         </div>
