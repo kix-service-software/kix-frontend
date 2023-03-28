@@ -108,6 +108,11 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             'actions-container',
             '/kix-module-object-forms$0/webapp/components/actions-container',
             []
+        ),
+        new UIComponent(
+            'add-remove-form-value-control',
+            '/kix-module-object-forms$0/webapp/components/inputs/add-remove-form-value-control',
+            []
         )
     ];
 

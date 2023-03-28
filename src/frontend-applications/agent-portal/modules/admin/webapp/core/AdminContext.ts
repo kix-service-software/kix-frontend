@@ -11,6 +11,7 @@ import { Context } from '../../../../model/Context';
 import { ContextEvents } from '../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { EventService } from '../../../base-components/webapp/core/EventService';
+import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { AdministrationSocketClient } from './AdministrationSocketClient';
 
@@ -36,6 +37,7 @@ export class AdminContext extends Context {
     }
 
     public async update(urlParams: URLSearchParams): Promise<void> {
+        TableFactoryService.getInstance().deleteContextTables(AdminContext.CONTEXT_ID);
         this.handleURLParams(urlParams);
     }
 
@@ -68,6 +70,9 @@ export class AdminContext extends Context {
 
     public async setAdminModule(adminModuleId: string, history: boolean = true): Promise<void> {
         if (!this.adminModuleId || this.adminModuleId !== adminModuleId) {
+
+            TableFactoryService.getInstance().deleteContextTables(AdminContext.CONTEXT_ID);
+
             this.adminModuleId = adminModuleId;
             this.filterValue = null;
 

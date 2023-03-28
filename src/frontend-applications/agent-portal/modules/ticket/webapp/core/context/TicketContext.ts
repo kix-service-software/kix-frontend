@@ -27,6 +27,8 @@ import { ContextEvents } from '../../../../base-components/webapp/core/ContextEv
 import { ContextPreference } from '../../../../../model/ContextPreference';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { IdService } from '../../../../../model/IdService';
 
 export class TicketContext extends Context {
 
@@ -35,9 +37,26 @@ export class TicketContext extends Context {
     public queueId: number;
     public filterValue: string;
 
+    private subscriber: IEventSubscriber;
+
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
         await super.initContext();
         await this.loadTickets();
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(TicketContext.CONTEXT_ID),
+            eventPublished: (data: Context, eventId: string): void => {
+                if (data.instanceId === this.instanceId) {
+                    this.loadTickets();
+                }
+            }
+        };
+
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
+    }
+
+    public async destroy(): Promise<void> {
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
     }
 
     public getIcon(): string {

@@ -29,7 +29,8 @@ export class ComponentState {
         public avatar: ObjectIcon | string = null,
         public initials: string = '',
         public contactTooltip: string = '',
-        public userColor: string = ''
+        public userColor: string = '',
+        public update: boolean = false
     ) { }
 
 }

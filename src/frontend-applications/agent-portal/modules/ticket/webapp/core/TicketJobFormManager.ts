@@ -78,7 +78,7 @@ class TicketJobFilterFormManager extends TicketSearchFormManager {
                 nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy);
                 break;
             default:
-                nodes = await super.getTreeNodes(property);
+                nodes = await super.getTreeNodes(property, objectIds);
         }
         return nodes;
     }

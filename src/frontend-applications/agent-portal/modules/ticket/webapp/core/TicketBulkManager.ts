@@ -214,10 +214,7 @@ export class TicketBulkManager extends BulkManager {
                             UserProperty.IS_AGENT, SearchOperator.EQUALS, FilterDataType.NUMERIC,
                             FilterType.AND, 1
                         )
-                    ], undefined, undefined, undefined, undefined,
-                    [
-                        ['requiredPermission', 'TicketRead,TicketCreate']
-                    ]
+                    ], undefined, undefined, undefined, undefined
                 );
                 nodes = await TicketService.getInstance().getTreeNodes(
                     property, false, false, undefined, loadingOptions

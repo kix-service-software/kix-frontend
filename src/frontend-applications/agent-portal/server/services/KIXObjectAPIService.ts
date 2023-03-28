@@ -102,7 +102,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         objectConstructor?: new (object?: KIXObject) => O,
         useCache?: boolean
     ): Promise<ObjectResponse<O>> {
-        const query = this.prepareQuery(loadingOptions, objectType);
+        const query = await this.prepareQuery(loadingOptions, objectType, token);
         if (loadingOptions && loadingOptions.filter && loadingOptions.filter.length) {
             const success = await this.buildFilter(loadingOptions.filter, responseProperty, query, token);
 
@@ -194,7 +194,9 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         throw new Error('', 'Method commitObject not implemented.');
     }
 
-    protected prepareQuery(loadingOptions: KIXObjectLoadingOptions, objectType: KIXObjectType | string): any {
+    protected async prepareQuery(
+        loadingOptions: KIXObjectLoadingOptions, objectType: KIXObjectType | string, token?: string
+    ): Promise<any> {
         let query = {};
 
         if (loadingOptions) {
@@ -234,6 +236,21 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
             if (loadingOptions.query) {
                 loadingOptions.query.forEach((q) => query[q[0]] = Array.isArray(q[1]) ? JSON.stringify(q[1]) : q[1]);
+            }
+
+            if (loadingOptions?.query?.length && token) {
+                const queryParam = loadingOptions.query.find((q) => q[0] === 'requiredPermission');
+                if (queryParam && queryParam[1]) {
+                    try {
+                        const requiredPermission = JSON.parse(queryParam[1]);
+                        if (requiredPermission.ObjectID === KIXObjectType.CURRENT_USER) {
+                            const user = await HttpService.getInstance().getUserByToken(token);
+                            requiredPermission.ObjectID = user?.UserID;
+                        }
+                    } catch (error) {
+                        LoggingService.getInstance().error('Error parsing requiredPermission.', error);
+                    }
+                }
             }
 
         }

@@ -4,6 +4,7 @@
         "require ./components/object-form",
         "require ./components/object-form-values-container",
         "require ./components/object-form-values-container/object-form-value",
+        "require ./components/object-form-values-container/add-remove-form-value-control",
         "require ./components/inputs/attachment-form-input",
         "require ./components/inputs/checkbox-form-input",
         "require ./components/inputs/checklist-form-input",

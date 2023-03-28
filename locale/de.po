@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2022-12-21 10:18+0000\n"
+"PO-Revision-Date: 2023-02-21 09:19+0000\n"
 "Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
@@ -2113,6 +2113,9 @@ msgstr ""
 "Wenn Sie dieses Team einem bereits existierenden Team unterordnen wollen, "
 "wählen Sie das hier aus."
 
+msgid "Helptext_Admin_Tickets_QueueCreate_Permission"
+msgstr ""
+
 msgid "Helptext_Admin_Tickets_QueueCreate_SenderAddress."
 msgstr "Absenderadresse für E-Mails aus diesem Team"
 
@@ -3215,6 +3218,9 @@ msgstr "Verknüpfungstypen"
 msgid "Loading ..."
 msgstr "Lade ..."
 
+msgid "Load more"
+msgstr ""
+
 msgid "Localisation"
 msgstr "Lokalisierung"
 
@@ -3277,6 +3283,9 @@ msgstr "Max. Berichte"
 
 msgid "Menu"
 msgstr "Modulmenü"
+
+msgid "Merged into the Ticket"
+msgstr ""
 
 msgid "Message"
 msgstr "Nachricht"
@@ -4071,6 +4080,9 @@ msgstr "alle gelesen"
 msgid "Readonly"
 msgstr "Nur Lesen"
 
+msgid "Read & Write"
+msgstr ""
+
 msgid "Recently Closed"
 msgstr "Kürzlich Geschlossen"
 
@@ -4860,6 +4872,9 @@ msgstr ""
 "Es gibt offene Dialoge. Alle ggf. eingegebenen Daten gehen verloren. "
 "Fortfahren?"
 
+msgid "The requested ticket is not available due to restricted permissions."
+msgstr ""
+
 msgid ""
 "The value for the field is in the future! The date needs to be in the past!"
 msgstr ""
@@ -4892,7 +4907,7 @@ msgid "Ticket Data"
 msgstr "Ticketdaten"
 
 msgid "Ticket Flags"
-msgstr "Ticket Kennzeichnung"
+msgstr "Ticket Flags"
 
 msgid "Ticket has printed"
 msgstr "Ticket wurde gedruckt"
@@ -5240,6 +5255,9 @@ msgstr "In Bearbeitung (WIP)"
 
 msgid "Wrap Lines"
 msgstr "Zeilen umbrechen"
+
+msgid "Write"
+msgstr ""
 
 msgid "Year(s)"
 msgstr "Jahr(e)"

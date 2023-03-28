@@ -83,6 +83,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             })
         );
 
+        this.bindingIds.push(
+            this.formValue.addPropertyBinding(FormValueProperty.VALUE, async (formValue: ObjectFormValue) => {
+                this.state.selectedNodes = await this.formValue.getSelectedTreeNodes();
+            })
+        );
+
         this.state.multiselect = this.formValue?.multiselect;
 
         this.state.autoComplete = this.formValue?.isAutoComplete;

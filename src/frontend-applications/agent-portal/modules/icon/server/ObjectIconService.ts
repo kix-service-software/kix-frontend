@@ -56,12 +56,10 @@ export class ObjectIconService extends KIXObjectAPIService {
         let objectResponse = new ObjectResponse<ObjectIcon>();
         if (objectType === KIXObjectType.OBJECT_ICON) {
             const objectIcons = await this.getObjectIcons(token);
-            objectResponse = new ObjectResponse<ObjectIcon>(objectIcons, objectIcons.length);
 
             if (objectIds && objectIds.length) {
-                objectResponse.objects = objectResponse.objects?.filter(
-                    (t) => objectIds.some((oid) => oid === t.ObjectId)
-                );
+                const filteredIcons = objectIcons?.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
+                objectResponse = new ObjectResponse(filteredIcons, filteredIcons.length);
             } else if (iconLoadingOptions?.object && iconLoadingOptions?.objectId) {
                 const icon = objectIcons.find(
                     (oi) => oi.Object === iconLoadingOptions.object
@@ -70,6 +68,8 @@ export class ObjectIconService extends KIXObjectAPIService {
                 if (icon) {
                     objectResponse = new ObjectResponse([icon], 1);
                 }
+            } else {
+                objectResponse = new ObjectResponse<ObjectIcon>(objectIcons, objectIcons.length);
             }
         }
 

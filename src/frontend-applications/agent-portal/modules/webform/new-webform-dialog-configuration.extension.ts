@@ -265,7 +265,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 'Translatable#Helptext_Admin_WebformCreateEdit_AssignedAgent',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
-
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
                     new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, false),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
@@ -277,7 +277,11 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                                 )
                             ], undefined, undefined, undefined, undefined,
                             [
-                                ['requiredPermission', 'TicketCreate']
+                                ['requiredPermission', JSON.stringify({
+                                    Object: KIXObjectType.QUEUE,
+                                    ObjectID: '<KIX_TICKET_QueueID>',
+                                    Permission: 'CREATE'
+                                })]
                             ]
                         )
                     )

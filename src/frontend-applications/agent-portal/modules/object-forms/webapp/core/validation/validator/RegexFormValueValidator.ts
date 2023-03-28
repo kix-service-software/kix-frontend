@@ -17,7 +17,7 @@ export class RegexFormValueValidator extends ObjectFormValueValidator {
     public async validate(formValue: ObjectFormValue<any>): Promise<ValidationResult[]> {
         const result = [];
 
-        if (!formValue?.isCountHandler && formValue?.value && formValue?.regExList?.length) {
+        if (formValue?.value && formValue?.regExList?.length) {
             formValue.regExList.forEach((regExItem) => {
                 const regex = new RegExp(regExItem.regEx);
                 if (!regex.test(formValue.value)) {

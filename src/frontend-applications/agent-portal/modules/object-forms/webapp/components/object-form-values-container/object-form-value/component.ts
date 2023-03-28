@@ -42,8 +42,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     this.state.formValue?.inputComponentId
                 );
             }
-        } else {
-            this.setButtonsAndVisibility();
         }
     }
 
@@ -104,11 +102,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.formValue?.addPropertyBinding(
                 FormValueProperty.VISIBLE, (formValue: ObjectFormValue) => {
                     this.state.visible = formValue.visible;
-                    if (this.state.visible && this.state.formValue.isCountHandler) {
-                        // prevent formValue update, the current update triggered this,
-                        // the formValue already have this value
-                        this.setButtonsAndVisibility(false);
-                    }
                 }
             )
         );
@@ -129,7 +122,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.hint = this.state.formValue?.hint;
         this.state.formValues = this.state.formValue?.formValues;
         this.state.label = await TranslationService.translate(this.state.formValue?.label);
-        await this.setButtonsAndVisibility();
 
         this.state.validationErrors = this.state.formValue.validationResults.filter(
             (vr) => vr.severity === ValidationSeverity.ERROR
@@ -137,7 +129,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId(this.state.formValue?.instanceId),
             eventPublished: (instanceId: string): void => {
@@ -158,34 +149,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.formValue?.removePropertyBinding(this.bindingIds);
         EventService.getInstance().unsubscribe(ObjectFormEvent.SCROLL_TO_FORM_VALUE, this.subscriber);
     }
-
-    public setCanAdd(): void {
-        this.state.canAdd = this.state.formValue?.canAddValue(this.state.formValue.instanceId);
-    }
-
-    public async addValue(): Promise<void> {
-        await this.state.formValue?.addFormValue(this.state.formValue.instanceId, null);
-        this.setButtonsAndVisibility();
-        (this as any).setStateDirty();
-    }
-
-    public setCanRemove(): void {
-        this.state.canRemove = this.state.formValue?.canRemoveValue(this.state.formValue.instanceId);
-    }
-
-    public async removeValue(): Promise<void> {
-        await this.state.formValue?.removeFormValue(this.state.formValue.instanceId);
-        (this as any).setStateDirty();
-    }
-
-    private async setButtonsAndVisibility(updateValue: boolean = true): Promise<void> {
-        if (updateValue) {
-            await this.state.formValue.setVisibilityAndComponent();
-        }
-        this.setCanAdd();
-        this.setCanRemove();
-    }
-
 
 }
 

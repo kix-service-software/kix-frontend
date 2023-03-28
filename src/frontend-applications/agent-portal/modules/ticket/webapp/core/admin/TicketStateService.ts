@@ -14,6 +14,11 @@ import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../../model/KIXObjectSpecificLoadingOptions';
 import { TicketStateType } from '../../../model/TicketStateType';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { TicketStateProperty } from '../../../model/TicketStateProperty';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../model/FilterType';
 
 export class TicketStateService extends KIXObjectService<TicketState> {
 
@@ -62,6 +67,23 @@ export class TicketStateService extends KIXObjectService<TicketState> {
         }
 
         return objects;
+    }
+
+    public async getStateID(stateName: string): Promise<number> {
+        let stateId: number;
+
+        const loadingOptions = new KIXObjectLoadingOptions([
+            new FilterCriteria(
+                TicketStateProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, stateName
+            )
+        ]);
+
+        const states = await this.loadObjects<TicketState>(KIXObjectType.TICKET_STATE, null, loadingOptions);
+        if (states?.length) {
+            stateId = states[0].ID;
+        }
+
+        return stateId;
     }
 
 }
