@@ -12,6 +12,7 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { FormValueProperty } from '../../FormValueProperty';
 import { ObjectFormValueMapper } from '../../ObjectFormValueMapper';
 import { ObjectFormValue } from '../ObjectFormValue';
 import { SelectObjectFormValue } from '../SelectObjectFormValue';
@@ -51,6 +52,8 @@ export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string
         }
 
         this.multiselect = this.maxSelectCount < 0 || this.maxSelectCount > 1;
+        this.setNewInitialState('maxSelectCount', this.maxSelectCount);
+
         this.treeHandler?.setMultiSelect(this.multiselect);
 
         this.translatable = Boolean(Number(dynamicField?.Config?.TranslatableValues)) || false;
@@ -167,8 +170,10 @@ export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string
         }
     }
 
-    public async reset(ignoreProperties: string[] = []): Promise<void> {
-        await super.reset(ignoreProperties);
+    public async reset(
+        ignoreProperties: string[] = [], ignoreFormValueProperties: string[] = [], ignoreFormValueReset: string[] = []
+    ): Promise<void> {
+        await super.reset(ignoreProperties, ignoreFormValueProperties, ignoreFormValueReset);
         await this.setPossibleValuesFromDynamicField();
     }
 

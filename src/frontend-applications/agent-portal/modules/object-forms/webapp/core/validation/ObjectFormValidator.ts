@@ -86,7 +86,7 @@ export class ObjectFormValidator {
     }
 
     public async validate(formValue: ObjectFormValue, force?: boolean): Promise<void> {
-        if ((this.enabled || force) && this.objectFormValueMapper?.initialized && !formValue?.isCountHandler) {
+        if ((this.enabled || force) && this.objectFormValueMapper?.initialized) {
             await this.validateFormValue(formValue);
         } else if (!this.validationQueue.some((fv) => fv.instanceId === formValue.instanceId)) {
             this.validationQueue.push(formValue);

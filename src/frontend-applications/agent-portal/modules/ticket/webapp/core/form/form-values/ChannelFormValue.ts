@@ -248,10 +248,6 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         }
     }
 
-    public async reset(): Promise<void> {
-        return;
-    }
-
     private async loadReferencedArticle(refTicketId: number, refArticleId: number): Promise<Article> {
         let article: Article;
         if (refArticleId && refTicketId) {

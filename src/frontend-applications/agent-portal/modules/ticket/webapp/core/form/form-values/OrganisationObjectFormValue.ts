@@ -162,8 +162,16 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
         this.treeHandler.setSelection([]);
     }
 
-    public setPossibleValues(): void {/* Do Nothing*/ }
-    public addPossibleValues(): void {/* Do Nothing*/ }
-    public removePossibleValues(): void {/* Do Nothing*/ }
+    public async setPossibleValues(): Promise<void> {
+        return;
+    }
+
+    public addPossibleValues(): void {
+        return;
+    }
+
+    public async removePossibleValues(): Promise<void> {
+        return;
+    }
 
 }

@@ -8,7 +8,6 @@
  */
 
 import { AutoCompleteConfiguration } from '../../../../model/configuration/AutoCompleteConfiguration';
-import { FormContext } from '../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldOption } from '../../../../model/configuration/FormFieldOption';
 import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
@@ -75,12 +74,6 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             new FormValueBinding(this, 'multiselect', object, property),
         );
 
-        this.addPropertyBinding(FormValueProperty.ENABLED, (value: SelectObjectFormValue) => {
-            if (this.enabled) {
-                this.initFormValue();
-            }
-        });
-
         this.addPropertyBinding(FormValueProperty.POSSIBLE_VALUES, (value: SelectObjectFormValue) => {
             if (this.isAutoComplete && this.possibleValues?.length) {
                 this.isAutoComplete = false;
@@ -114,8 +107,10 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         this.initialState.set('maxSelectCount', this.maxSelectCount);
     }
 
-    public async reset(ignoreProperties: string[] = []): Promise<void> {
-        await super.reset(ignoreProperties);
+    public async reset(
+        ignoreProperties: string[] = [], ignoreFormValueProperties: string[] = [], ignoreFormValueReset: string[] = []
+    ): Promise<void> {
+        await super.reset(ignoreProperties, ignoreFormValueProperties, ignoreFormValueReset);
         await this.loadSelectableValues();
         await this.loadSelectedValues();
     }
@@ -578,9 +573,10 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         this.treeHandler?.selectAll();
     }
 
-    public setPossibleValues(values: T[]): void {
-        super.setPossibleValues(values);
-        this.loadSelectableValues();
+    public async setPossibleValues(values: T[]): Promise<void> {
+        await super.setPossibleValues(values);
+        await this.loadSelectableValues();
+        await this.setSelectedNodes();
     }
 
     public addPossibleValues(values: T[]): void {
@@ -588,8 +584,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         this.loadSelectableValues();
     }
 
-    public removePossibleValues(values: T[]): void {
-        super.removePossibleValues(values);
-        this.loadSelectableValues();
+    public async removePossibleValues(values: T[]): Promise<void> {
+        await super.removePossibleValues(values);
+        await this.loadSelectableValues();
     }
 }
