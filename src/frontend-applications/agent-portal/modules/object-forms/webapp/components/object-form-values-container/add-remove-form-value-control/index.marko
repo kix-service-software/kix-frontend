@@ -1,0 +1,29 @@
+<!--
+Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<div.col-1.col-sm-1.p-0.ps-2>
+   <if(!state.readonly)>
+      <if(state.canAdd)>
+         <button.btn.btn-outline-secondary.me-1
+            type="button"
+            on-click("addValue")
+         >
+            <i.fas.fa-plus-circle/>
+         </button>
+      </if>
+      <if(state.canRemove)>
+         <button.btn.btn-outline-secondary
+            type="button"
+            on-click("removeValue")
+         >
+            <i.fas.fa-minus-circle/>
+         </button>
+      </if>
+   </if>
+</div>

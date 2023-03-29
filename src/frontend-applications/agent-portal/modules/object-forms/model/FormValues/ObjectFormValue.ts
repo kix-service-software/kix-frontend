@@ -21,7 +21,6 @@ import { ObjectFormRegistry } from '../../webapp/core/ObjectFormRegistry';
 import { FormValueBinding } from '../FormValueBinding';
 import { FormValueProperty } from '../FormValueProperty';
 import { ObjectFormValueMapper } from '../ObjectFormValueMapper';
-import { DynamicFieldFormValueCountHandler } from './DynamicFields/DynamicFieldFormValueCountHandler';
 import { FormValueAction } from './FormValueAction';
 
 
@@ -53,7 +52,6 @@ export class ObjectFormValue<T = any> {
 
     public inputComponentId = 'text-form-input';
 
-    public isCountHandler: boolean = false;
     public actions: FormValueAction[] = [];
 
     public isSortable: boolean = true;
@@ -81,7 +79,6 @@ export class ObjectFormValue<T = any> {
         this.initialState.set('countMin', this.countMin);
         this.initialState.set('enabled', this.enabled);
         this.initialState.set('hint', this.hint);
-        this.initialState.set('isCountHandler', this.isCountHandler);
         this.initialState.set('label', this.label);
         this.initialState.set('possibleValues', Array.isArray(this.possibleValues) ? [...this.possibleValues] : null);
         this.initialState.set('forbiddenValues', Array.isArray(this.forbiddenValues) ? [...this.forbiddenValues] : null);
@@ -109,26 +106,40 @@ export class ObjectFormValue<T = any> {
         }
     }
 
-    public async reset(ignoreProperties: string[] = []): Promise<void> {
-        let property = this.property;
-        if ((this as any).dfName) {
-            property = `DynamicFields.${(this as any).dfName}`;
-        }
+    public async reset(
+        ignoreProperties: string[] = [], ignoreFormValueProperties: string[] = [], ignoreFormValueReset: string[] = []
+    ): Promise<void> {
 
-        if (!ignoreProperties.some((p) => p === property)) {
-            const iter = this.initialState.keys();
-            let key = iter.next();
-            while (key?.value) {
-                if (this[key.value] !== this.initialState.get(key.value)) {
-                    this[key.value] = this.initialState.get(key.value);
+        if (!ignoreFormValueReset.some((i) => i === this.instanceId)) {
+            let property = this.property;
+            if ((this as any).dfName) {
+                property = `DynamicFields.${(this as any).dfName}`;
+            }
+
+            if (!ignoreProperties.some((p) => p === property)) {
+                const iter = this.initialState.keys();
+                let key = iter.next();
+                while (key?.value) {
+                    if (!ignoreFormValueProperties.some((p) => p === key.value)) {
+                        if (this[key.value] !== this.initialState.get(key.value)) {
+                            this[key.value] = this.initialState.get(key.value);
+
+                            // call disable if enabled is reseted
+                            if (key.value === FormValueProperty.ENABLED && !this.enabled) {
+                                await this.disable();
+                            }
+                        }
+                    }
+                    key = iter.next();
                 }
-                key = iter.next();
             }
         }
 
         if (this.formValues?.length) {
             for (const fv of this.formValues) {
-                await fv.reset(ignoreProperties);
+                if (!ignoreFormValueReset.some((i) => i === fv.instanceId)) {
+                    await fv.reset(ignoreProperties, ignoreFormValueProperties, ignoreFormValueReset);
+                }
             }
         }
     }
@@ -155,20 +166,8 @@ export class ObjectFormValue<T = any> {
                 new FormValueBinding(this, FormValueProperty.FORM_VALUES, object, property)
             );
 
-            this.addPropertyBinding(FormValueProperty.VALUE, async () => {
-                if (this.isCountHandler && !this.value) {
-                    if (Array.isArray(this.formValues)) {
-                        const formValues = [...this.formValues];
-                        for (const formValue of formValues) {
-                            await DynamicFieldFormValueCountHandler.removeFormValue(formValue, formValue.instanceId);
-                        }
-                    }
-                    this.initCountValues();
-                }
-            });
-
             this.addPropertyBinding(FormValueProperty.REG_EX_LIST, () => {
-                if (this.isCountHandler && Array.isArray(this.formValues)) {
+                if (Array.isArray(this.formValues)) {
                     for (const formValue of this.formValues) {
                         formValue.regExList = this.regExList;
                     }
@@ -197,6 +196,37 @@ export class ObjectFormValue<T = any> {
         if (this.formValues?.length) {
             for (const formValue of this.formValues) {
                 formValue.removePropertyBinding(bindingIds);
+            }
+        }
+    }
+
+    public async enable(): Promise<void> {
+        if (!this.enabled) {
+            this.enabled = true;
+            await this.initFormValue();
+        }
+    }
+
+    public async disable(): Promise<void> {
+        this.enabled = false;
+        this.visible = false;
+        this.value = null;
+    }
+
+    public async show(): Promise<void> {
+        if (!this.visible) {
+            this.visible = true;
+            if (this.formValues?.length > 0) {
+                this.formValues.forEach((fv) => fv.show());
+            }
+        }
+    }
+
+    public async hide(): Promise<void> {
+        if (this.visible) {
+            this.visible = false;
+            if (this.formValues?.length > 0) {
+                this.formValues.forEach((fv) => fv.hide());
             }
         }
     }
@@ -242,8 +272,6 @@ export class ObjectFormValue<T = any> {
                 this.property, this.object?.KIXObjectType
             );
         }
-        this.isSetInBackground =
-            this.parent?.isCountHandler && this.parent?.isSetInBackground || this.isSetInBackground;
     }
 
     protected async handlePlaceholders(value: any): Promise<any> {
@@ -283,62 +311,6 @@ export class ObjectFormValue<T = any> {
         }
 
         return value;
-    }
-
-    public async initCountValues(): Promise<void> {
-        this.setCountMinDefMax();
-        this.isCountHandler = this._isCounterHandler();
-        if (!this.isCountHandler) return;
-
-        this.inputComponentId = 'count-handler-form-input';
-
-        if (!this.value) {
-            await this.addDefaultFormValues();
-        }
-
-        if (this.value && !Array.isArray(this.value)) {
-            this.value = [this.value] as any;
-        }
-
-        if (Array.isArray(this.value)) {
-            if (this.value.length) {
-                for (const v of this.value) {
-                    if (this.canAddValue(this.instanceId)) {
-                        await this.addFormValue(this.instanceId, v);
-
-                        const formValue = this.formValues[this.formValues.length - 1];
-                        if (formValue) {
-                            formValue.value = v;
-                        }
-                    }
-                }
-
-                if (this.formValues.length < this.countDefault) {
-                    this.addDefaultFormValues();
-                }
-            } else {
-                await this.addDefaultFormValues();
-            }
-        }
-    }
-
-    protected async addDefaultFormValues(): Promise<void> {
-        const startIndex = this.formValues?.length || 0;
-        for (let i = startIndex; i < this.countDefault; i++) {
-            await this.addFormValue(null, null);
-        }
-    }
-
-    private setCountMinDefMax(): void {
-        if (this.countMax > 0 && this.countMin > this.countMax) this.countMin = this.countMax;
-        if (this.countMax > 0 && this.countDefault > this.countMax) this.countDefault = this.countMax;
-        if (this.countDefault < this.countMin) this.countDefault = this.countMin;
-    }
-
-    private _isCounterHandler(): boolean {
-        return this.countMin === 0 && this.countMax === 0 ||
-            this.countMin === 0 && this.countMax > 0 ||
-            this.countMin > 1 || this.countDefault > 1 || this.countMax > 1;
     }
 
     public findFormValue(property: string): ObjectFormValue {
@@ -392,9 +364,9 @@ export class ObjectFormValue<T = any> {
         this.setFormValue(null);
     }
 
-    public setPossibleValues(values: T[]): void {
+    public async setPossibleValues(values: T[]): Promise<void> {
         this.possibleValues = Array.isArray(values) ? values : values ? [values] : [];
-        this.applyPossibleValues();
+        await this.applyPossibleValues();
     }
 
     public addPossibleValues(values: T[]): void {
@@ -411,7 +383,7 @@ export class ObjectFormValue<T = any> {
         }
     }
 
-    public removePossibleValues(values: T[]): void {
+    public async removePossibleValues(values: T[]): Promise<void> {
         if (Array.isArray(this.forbiddenValues)) {
             for (const v of values) {
                 if (!this.forbiddenValues.some((fv) => fv.toString() === v.toString())) {
@@ -422,7 +394,7 @@ export class ObjectFormValue<T = any> {
             this.forbiddenValues = values;
         }
 
-        this.applyPossibleValues();
+        await this.applyPossibleValues();
     }
 
     public setValidationResult(validationResult: ValidationResult[] = []): void {
@@ -430,7 +402,7 @@ export class ObjectFormValue<T = any> {
         this.validationResults = validationResult;
     }
 
-    protected applyPossibleValues(): void {
+    protected async applyPossibleValues(): Promise<void> {
         let value: any = this.value;
         if (this.value && !Array.isArray(this.value)) {
             value = [this.value];
@@ -455,60 +427,9 @@ export class ObjectFormValue<T = any> {
         }
     }
 
-    public canAddValue(instanceId: string): boolean {
-        return false;
-    }
-
-    public async addFormValue(instanceId: string, value: any): Promise<void> {
-        await this.setVisibilityAndComponent();
-    }
-
-    public canRemoveValue(instanceId: string): boolean {
-        return false;
-    }
-
-    public async removeFormValue(instanceId: string): Promise<void> {
-        await this.setVisibilityAndComponent();
-    }
-
-    public async setVisibilityAndComponent(): Promise<void> {
-        if (this.isCountHandler) {
-            if (this.formValues && this.formValues.length > 0) {
-                this.setNewInitialState('visible', false);
-                this.visible = false;
-            } else {
-                this.inputComponentId = 'count-handler-form-input';
-                this.setNewInitialState('visible', true);
-                this.visible = true;
-            }
-        } else if (this.parent?.isCountHandler) {
-            await this.parent.setVisibilityAndComponent();
-        }
-    }
-
     public deleteObjectValue(object: KIXObject): void {
         delete object[this.property];
     }
-
-    protected _countMax(): void {
-        if (this.countMax < this.formValues.length) {
-            const difference = this.formValues.length - this.countMax;
-            for (let i = 0; i < difference; i++) {
-                const index = this.formValues.length - 1;
-                this.removeFormValue(this.formValues[index].instanceId);
-            }
-        }
-    }
-
-    // For countMin implementation
-    /*protected _countMin(): void {
-        if (this.countMin > this.formValues.length) {
-            const difference = this.countMin - this.formValues.length;
-            for (let i = 0; i < difference; i++) {
-                this.addFormValue(null);
-            }
-        }
-    }*/
 
     public getValueActionClasses(): Array<new (
         formValue: ObjectFormValue, objectValueMapper: ObjectFormValueMapper

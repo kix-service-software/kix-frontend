@@ -18,6 +18,7 @@ import { ObjectFormValueMapper } from '../ObjectFormValueMapper';
 import { DynamicFieldAffectedAssetFormValue } from './DynamicFields/DynamicFieldAffectedAssetFormValue';
 import { DynamicFieldChecklistFormValue } from './DynamicFields/DynamicFieldChecklistFormValue';
 import { DynamicFieldCIReferenceFormValue } from './DynamicFields/DynamicFieldCIReferenceFormValue';
+import { DynamicFieldCountableFormValue } from './DynamicFields/DynamicFieldCountableFormValue';
 import { DynamicFieldDateTimeFormValue } from './DynamicFields/DynamicFieldDateTimeFormValue';
 import { DynamicFieldSelectionFormValue } from './DynamicFields/DynamicFieldSelectionFormValue';
 import { DynamicFieldTableFormValue } from './DynamicFields/DynamicFieldTableFormValue';
@@ -100,27 +101,23 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
         if (!formValue) {
             switch (dynamicField?.FieldType) {
                 case DynamicFieldTypes.TEXT:
-                    formValue = new DynamicFieldTextFormValue(
-                        'Value', dynamicFieldValue, this.objectValueMapper, this, dfName
+                    formValue = new DynamicFieldCountableFormValue(
+                        'Value', dynamicFieldValue, this.objectValueMapper, this, dfName, DynamicFieldTextFormValue
                     );
                     break;
                 case DynamicFieldTypes.TEXT_AREA:
-                    formValue = new DynamicFieldTextAreaFormValue(
-                        'Value', dynamicFieldValue, this.objectValueMapper, this, dfName
+                    formValue = new DynamicFieldCountableFormValue(
+                        'Value', dynamicFieldValue, this.objectValueMapper, this, dfName, DynamicFieldTextAreaFormValue
+                    );
+                    break;
+                case DynamicFieldTypes.DATE:
+                case DynamicFieldTypes.DATE_TIME:
+                    formValue = new DynamicFieldCountableFormValue(
+                        'Value', dynamicFieldValue, this.objectValueMapper, this, dfName, DynamicFieldDateTimeFormValue
                     );
                     break;
                 case DynamicFieldTypes.SELECTION:
                     formValue = new DynamicFieldSelectionFormValue(
-                        'Value', dynamicFieldValue, this.objectValueMapper, this, dfName
-                    );
-                    break;
-                case DynamicFieldTypes.DATE:
-                    formValue = new DynamicFieldDateTimeFormValue(
-                        'Value', dynamicFieldValue, this.objectValueMapper, this, dfName
-                    );
-                    break;
-                case DynamicFieldTypes.DATE_TIME:
-                    formValue = new DynamicFieldDateTimeFormValue(
                         'Value', dynamicFieldValue, this.objectValueMapper, this, dfName
                     );
                     break;
@@ -161,11 +158,5 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
     public findFormValue(property: string): ObjectFormValue {
         const dfName = KIXObjectService.getDynamicFieldName(property);
         return super.findFormValue(dfName || property);
-    }
-
-    public async initCountValues(): Promise<void> {
-        for (const fv of this.formValues) {
-            await fv.initCountValues();
-        }
     }
 }
