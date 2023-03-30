@@ -44,7 +44,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
     protected reloadInProgress: boolean = false;
 
-    private id: string = IdService.generateDateBasedId('TableCOntentProvider');
+    private id: string = IdService.generateDateBasedId('TableContentProvider');
 
     public totalCount: number;
 
