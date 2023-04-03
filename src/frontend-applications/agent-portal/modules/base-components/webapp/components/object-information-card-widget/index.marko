@@ -16,13 +16,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <div.info-container>
             <div.info-avatar class={
                 "no-avatar":
-                    !Array.isArray(state.avatar) || !state.avatar.length
+                    !state.avatar || !Array.isArray(state.avatar) || !state.avatar.length
             }>
                 <if(Array.isArray(state.avatar) && state.avatar.length)>
                     <for|avatar| of=state.avatar>
                         <icon icon=avatar/>
                     </for>
                 </if>
+                <else-if(state.avatar && !Array.isArray(state.avatar))>
+                     <icon icon=avatar/>
+                </else-if>
             </div>
             <if(state.valuesReady)>
                 <div.info-rows>

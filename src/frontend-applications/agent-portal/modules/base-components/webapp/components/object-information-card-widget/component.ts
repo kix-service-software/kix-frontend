@@ -15,9 +15,9 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { IdService } from '../../../../../model/IdService';
 import { ObjectInformationCardConfiguration } from './ObjectInformationCardConfiguration';
 import { Context } from '../../../../../model/Context';
-import { WidgetService } from '../../core/WidgetService';
 import { ObjectInformationCardDataHandler } from '../../core/ObjectInformationCardDataHandler';
 import { KIXModulesService } from '../../core/KIXModulesService';
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 
 class Component {
 
@@ -70,7 +70,13 @@ class Component {
         const object = await this.context.getObject();
         const config = this.state.widgetConfiguration?.configuration as ObjectInformationCardConfiguration;
         await this.prepareInformation(config, object);
-        this.state.avatar = (config.avatar as any)?.length ? config.avatar[0] : null;
+        if (Array.isArray(config.avatar) && (config.avatar as Array<string | ObjectIcon>).length > 0) {
+            this.state.avatar = config.avatar;
+        } else if (config.avatar && typeof config.avatar === 'string') {
+            this.state.avatar.push(config.avatar);
+        } else if (config.avatar) {
+            this.state.avatar.push((config.avatar as ObjectIcon));
+        }
     }
 
     private async prepareInformation(config: ObjectInformationCardConfiguration, object: KIXObject): Promise<void> {
@@ -136,6 +142,9 @@ class Component {
         const basicColumnWidth = 15;
         const row = this.state.information[index] as InformationRowConfiguration;
         if (!this.hasRowValue(row) || this.isRowWithCreatedBy(index)) return null;
+        if (this.context.openSidebarWidgets.some((osw) => osw === this.state.instanceId)) {
+            return 'grid-auto-columns: 100%';
+        }
         let style = 'grid-auto-columns:';
         row.values.forEach((value, index) => {
             if (this.hasValue(value)) {
