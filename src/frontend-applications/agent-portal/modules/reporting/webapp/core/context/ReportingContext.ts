@@ -31,7 +31,7 @@ export class ReportingContext extends Context {
     public static CONTEXT_ID: string = 'reporting';
 
     public async update(urlParams: URLSearchParams): Promise<void> {
-        this.loadReportDefinitions();
+        await this.loadReportDefinitions();
     }
 
     public getIcon(): string {
