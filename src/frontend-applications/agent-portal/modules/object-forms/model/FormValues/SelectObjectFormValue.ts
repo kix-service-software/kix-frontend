@@ -111,8 +111,10 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         ignoreProperties: string[] = [], ignoreFormValueProperties: string[] = [], ignoreFormValueReset: string[] = []
     ): Promise<void> {
         await super.reset(ignoreProperties, ignoreFormValueProperties, ignoreFormValueReset);
-        await this.loadSelectableValues();
-        await this.loadSelectedValues();
+        if (this.enabled) {
+            await this.loadSelectableValues();
+            await this.loadSelectedValues();
+        }
     }
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {
@@ -169,6 +171,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
     public async initFormValue(): Promise<void> {
         this.multiselect = this.maxSelectCount < 0 || this.maxSelectCount > 1;
+        this.setNewInitialState('multiselect', this.multiselect);
 
         if (this.minSelectCount > 0) {
             this.required = true;
@@ -289,6 +292,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             if (countMaxOption?.value === 1) {
                 this.multiselect = false;
             }
+
+            this.setNewInitialState('multiselect', this.multiselect);
 
             const countMinOption = field?.options?.find(
                 (o) => o.option === ObjectReferenceOptions.COUNT_MIN
