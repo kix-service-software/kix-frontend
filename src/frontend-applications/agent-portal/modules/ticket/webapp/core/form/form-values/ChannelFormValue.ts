@@ -260,4 +260,10 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         return article;
     }
 
+    public async reset(
+        ignoreProperties?: string[], ignoreFormValueProperties?: string[], ignoreFormValueReset?: string[]
+    ): Promise<void> {
+        return;
+    }
+
 }
