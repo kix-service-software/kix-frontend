@@ -329,6 +329,10 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
             ignoreFormValueProperties.push(FormValueProperty.POSSIBLE_VALUES);
         }
 
+        if (order.some((i) => i === InstructionProperty.COUNT_MAX)) {
+            ignoreFormValueProperties.push(FormValueProperty.COUNT_MAX);
+        }
+
         return ignoreFormValueProperties;
     }
 

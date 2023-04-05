@@ -60,9 +60,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
          </if>
          <if(Array.isArray(state.formValues) && state.formValues.length)>
             <div class={
-               'ps-2': !state.formValue.isCountHandler && state.formValue.visible,
-               'ms-4': !state.formValue.isCountHandler && state.formValue.visible,
-               'border-start': !state.formValue.isCountHandler && state.formValue.visible
+               'ps-2': !state.formValue.IS_COUNTABLE && state.formValue.visible,
+               'ms-4': !state.formValue.IS_COUNTABLE && state.formValue.visible,
+               'border-start': !state.formValue.IS_COUNTABLE && state.formValue.visible
             }>
                <object-form-values-container formValues=state.formValues parent=state.formValue/>
             </div>

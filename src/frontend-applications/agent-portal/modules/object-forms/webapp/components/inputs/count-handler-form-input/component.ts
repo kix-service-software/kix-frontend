@@ -8,16 +8,25 @@
  */
 
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { DynamicFieldCountableFormValue } from '../../../../model/FormValues/DynamicFields/DynamicFieldCountableFormValue';
 import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
+
+    private formValue: DynamicFieldCountableFormValue;
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
-        return;
+        if (this.formValue?.instanceId !== input.formValue?.instanceId) {
+            this.formValue = input.formValue;
+        }
+    }
+
+    public addValue(): void {
+        this.formValue?.addFormValue(null, null);
     }
 
 }

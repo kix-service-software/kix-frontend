@@ -69,6 +69,11 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
                 await super.initFormValue();
 
                 this.initPromise = null;
+
+                this.visible = this.formValues.length === 0;
+
+                this.setNewInitialState(FormValueProperty.VISIBLE, this.visible);
+
                 resolve();
             });
         }
@@ -85,13 +90,11 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
 
         if (this.value?.length) {
             for (const v of this.value) {
-                if (this.canAddValue(this.instanceId)) {
-                    await this.addFormValue(this.instanceId, v);
+                await this.addFormValue(this.instanceId, v, true);
 
-                    const formValue = this.formValues[this.formValues.length - 1];
-                    if (formValue) {
-                        formValue.value = v;
-                    }
+                const formValue = this.formValues[this.formValues.length - 1];
+                if (formValue) {
+                    formValue.value = v;
                 }
             }
         }
@@ -140,8 +143,8 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
         return canAdd;
     }
 
-    public async addFormValue(instanceId: string, value: any): Promise<void> {
-        if (this.formValueConstructor && this.canAddValue(instanceId)) {
+    public async addFormValue(instanceId: string, value: any, force?: boolean): Promise<void> {
+        if (this.formValueConstructor && (this.canAddValue(instanceId) || force)) {
             const dfValue = new DynamicFieldValue();
             dfValue.Value = value;
             dfValue.Name = this.dfName;
@@ -158,6 +161,9 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
             fv.readonly = this.readonly;
             fv.required = this.required;
             fv.label = this.label;
+
+            (fv as any).IS_COUNTABLE = true;
+
             await fv.initFormValue();
             this.formValues = [...this.formValues, fv];
 
@@ -169,6 +175,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
             this.setDFValue();
 
             this.visible = this.formValues.length === 0;
+            this.setNewInitialState(FormValueProperty.VISIBLE, this.visible);
         }
     }
 
@@ -189,6 +196,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
 
         this.setDFValue();
         this.visible = this.formValues.length === 0;
+        this.setNewInitialState(FormValueProperty.VISIBLE, this.visible);
     }
 
     public setDFValue(): void {
