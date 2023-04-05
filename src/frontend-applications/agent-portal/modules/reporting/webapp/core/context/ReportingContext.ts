@@ -96,12 +96,20 @@ export class ReportingContext extends Context {
         return result;
     }
 
+    public async getObjectList<T = KIXObject>(objectType: string, limit?: number): Promise<T[]> {
+        if (objectType === KIXObjectType.REPORT) {
+            await this.loadReports();
+        }
+
+        return super.getObjectList(objectType, limit);
+    }
+
     public async reloadObjectList(objectType: KIXObjectType | string): Promise<void> {
         if (objectType === KIXObjectType.REPORT) {
             await this.loadReportDefinitions();
-            return this.loadReports();
+            await this.loadReports();
         } else if (objectType === KIXObjectType.REPORT_DEFINITION) {
-            return this.loadReportDefinitions();
+            await this.loadReportDefinitions();
         }
     }
 
