@@ -74,7 +74,7 @@ export class DateTimeUtil {
             UTCDate = new Date(Date.UTC(
                 UTCDate.getFullYear(),
                 UTCDate.getMonth(),
-                UTCDate.getDay(),
+                UTCDate.getDate(),
                 UTCDate.getHours(),
                 UTCDate.getMinutes(),
                 UTCDate.getSeconds()
