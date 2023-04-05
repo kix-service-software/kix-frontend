@@ -46,7 +46,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private getCountableFormValue(): DynamicFieldCountableFormValue {
         let formValue: DynamicFieldCountableFormValue = this.formValue;
-        if (!(formValue as any).IS_COUNTABLE) {
+        const isCountableValue = formValue instanceof DynamicFieldCountableFormValue;
+        if (!isCountableValue) {
             formValue = formValue?.parent as DynamicFieldCountableFormValue;
         }
 
