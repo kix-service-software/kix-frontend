@@ -30,7 +30,6 @@ import { TableFactoryService } from '../../../../table/webapp/core/factory/Table
 import { ImportConfig } from '../../../model/ImportConfig';
 import { ImportRunner } from '../../core/ImportRunner';
 import { ImportProperty } from '../../../model/ImportProperty';
-import { title } from 'process';
 import { ComponentContent } from '../../../../base-components/webapp/core/ComponentContent';
 import { OverlayService } from '../../../../base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../../base-components/webapp/core/OverlayType';
@@ -45,7 +44,6 @@ class Component {
     private cancelImportProcess: boolean;
     private errorObjects: KIXObject[];
     private finishedObjects: KIXObject[];
-    private selectedObjects: KIXObject[];
 
     private importFormTimeout;
     private formSubscriber: IEventSubscriber;
@@ -81,55 +79,7 @@ class Component {
                 if (this.importFormTimeout) {
                     clearTimeout(this.importFormTimeout);
                 }
-
-                this.importFormTimeout = setTimeout(async () => {
-                    this.importFormTimeout = null;
-                    const formInstance = await this.context?.getFormManager().getFormInstance();
-                    const source = await formInstance.getFormFieldValueByProperty(ImportProperty.SOURCE);
-
-                    const characterSetValue = await formInstance.getFormFieldValueByProperty<string[]>(
-                        ImportProperty.CHARACTER_SET
-                    );
-                    const characterSet = Array.isArray(characterSetValue.value) && characterSetValue.value.length
-                        ? characterSetValue.value[0]
-                        : null;
-
-                    const valueSeparatorValue = await formInstance.getFormFieldValueByProperty<string[]>(
-                        ImportProperty.VALUE_SEPARATOR
-                    );
-                    const valueSeparator = Array.isArray(valueSeparatorValue.value)
-                        ? valueSeparatorValue.value
-                        : [];
-
-                    const textSeparatorValue = await formInstance.getFormFieldValueByProperty<string[]>(
-                        ImportProperty.TEXT_SEPARATOR
-                    );
-                    const textSeparator = Array.isArray(textSeparatorValue.value) && textSeparatorValue.value.length
-                        ? textSeparatorValue.value[0]
-                        : null;
-
-                    if (source.value[0]) {
-                        await this.importRunner?.loadObjectsFromCSV(
-                            source.value[0], characterSet, valueSeparator, textSeparator
-                        );
-                    }
-
-                    const errors = this.importRunner?.getErrors();
-                    if (Array.isArray(errors) && errors.length) {
-                        OverlayService.getInstance().openOverlay(
-                            OverlayType.WARNING, null, new ComponentContent('list-with-title',
-                                {
-                                    title: 'Translatable#Error',
-                                    list: errors
-                                }
-                            ), 'Translatable#Error!', null, true
-                        );
-
-                    } else {
-                        this.createTable();
-                        this.context?.setObjectList(this.objectType, this.importRunner?.getCSVObjects());
-                    }
-                }, 100);
+                this.loadCSV();
             }
         };
         EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
@@ -152,39 +102,17 @@ class Component {
         this.tableSubscriber = {
             eventSubscriberId: 'import-table-listener',
             eventPublished: async (data: TableEventData, eventId: string): Promise<void> => {
-                if (data?.tableId === this.state.table?.getTableId()) {
-                    if (eventId === TableEvent.TABLE_INITIALIZED || eventId === TableEvent.TABLE_READY) {
-                        if (!this.selectedObjects || !this.selectedObjects.length) {
-                            this.state.table.selectAll();
-                        } else {
-                            const selectedObjects = [...this.selectedObjects];
-                            this.state.table.setRowSelectionByObject(selectedObjects);
-                        }
-                    }
-                    if (eventId === TableEvent.TABLE_READY) {
-                        this.state.table.setRowObjectValueState(this.errorObjects, ValueState.HIGHLIGHT_ERROR);
-                        this.state.table.setRowObjectValueState(
-                            this.finishedObjects, ValueState.HIGHLIGHT_SUCCESS
-                        );
-                    }
-
+                const isTable = data?.tableId === this.state.table?.getTableId();
+                if (isTable && eventId === TableEvent.ROW_SELECTION_CHANGED) {
                     const rows = this.state.table.getSelectedRows();
                     const objects = rows.map((r) => r.getRowObject().getObject());
-
-                    if (eventId === TableEvent.ROW_SELECTION_CHANGED) {
-                        this.selectedObjects = objects;
-                    }
-
                     this.state.importManager.objects = objects;
                     this.state.canRun = !!objects.length;
-                    this.prepareTableTitle();
                 }
             }
         };
 
         EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
-        EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
-        EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
     }
 
     private async createTable(): Promise<void> {
@@ -225,6 +153,64 @@ class Component {
         ContextService.getInstance().toggleActiveContext();
     }
 
+    private loadCSV(): void {
+        this.importFormTimeout = setTimeout(async () => {
+            this.importFormTimeout = null;
+
+            await this.loadObjectsFromCSV();
+
+            const errors = this.importRunner?.getErrors();
+            if (errors?.length) {
+                OverlayService.getInstance().openOverlay(
+                    OverlayType.WARNING, null, new ComponentContent('list-with-title',
+                        {
+                            title: 'Translatable#Error',
+                            list: errors
+                        }
+                    ), 'Translatable#Error!', null, true
+                );
+
+            } else {
+                this.context?.setObjectList(this.objectType, this.importRunner?.getCSVObjects());
+            }
+
+            await this.createTable();
+            this.prepareTableTitle();
+        }, 100);
+    }
+
+    private async loadObjectsFromCSV(): Promise<void> {
+        const formInstance = await this.context?.getFormManager().getFormInstance();
+        const source = await formInstance.getFormFieldValueByProperty(ImportProperty.SOURCE);
+
+        const characterSetValue = await formInstance.getFormFieldValueByProperty<string[]>(
+            ImportProperty.CHARACTER_SET
+        );
+        const characterSet = Array.isArray(characterSetValue.value) && characterSetValue.value.length
+            ? characterSetValue.value[0]
+            : null;
+
+        const valueSeparatorValue = await formInstance.getFormFieldValueByProperty<string[]>(
+            ImportProperty.VALUE_SEPARATOR
+        );
+        const valueSeparator = Array.isArray(valueSeparatorValue.value)
+            ? valueSeparatorValue.value
+            : [];
+
+        const textSeparatorValue = await formInstance.getFormFieldValueByProperty<string[]>(
+            ImportProperty.TEXT_SEPARATOR
+        );
+        const textSeparator = Array.isArray(textSeparatorValue.value) && textSeparatorValue.value.length
+            ? textSeparatorValue.value[0]
+            : null;
+
+        if (source.value[0]) {
+            await this.importRunner?.loadObjectsFromCSV(
+                source.value[0], characterSet, valueSeparator, textSeparator
+            );
+        }
+    }
+
     public async run(): Promise<void> {
         if (this.state.canRun) {
             this.cancelImportProcess = false;
@@ -252,6 +238,7 @@ class Component {
             this.state.importManager.objectType, true
         );
         this.state.table.getRows().forEach((r) => r.setValueState(ValueState.NONE));
+        const selectedRows = this.state.table.getSelectedRows();
         this.finishedObjects = [];
         this.errorObjects = [];
 
@@ -259,20 +246,22 @@ class Component {
 
         const objectTimes: number[] = [];
 
-        for (const object of this.selectedObjects) {
+        for (const row of selectedRows) {
             const start = Date.now();
             let end: number;
+
+            const object = row.getRowObject().getObject();
 
             const values = await this.state.importManager.getEditableValues();
             await this.importRunner?.execute(object, values)
                 .then(() => {
                     this.finishedObjects.push(object);
-                    this.state.table.selectRowByObject(object, false);
-                    this.state.table.setRowObjectValueState([object], ValueState.HIGHLIGHT_SUCCESS);
+                    row.select(false);
+                    row.setValueState(ValueState.HIGHLIGHT_SUCCESS);
                     end = Date.now();
                 }).catch(async (error) => {
                     this.errorObjects.push(object);
-                    this.state.table.setRowObjectValueState([object], ValueState.HIGHLIGHT_ERROR);
+                    row.setValueState(ValueState.HIGHLIGHT_ERROR);
                     BrowserUtil.toggleLoadingShield('APP_SHIELD', false, 'Translatable#An error occurred.');
                     end = Date.now();
                     await this.handleObjectEditError(object, error);
@@ -283,7 +272,7 @@ class Component {
             }
 
             objectTimes.push(end - start);
-            await this.setDialogLoadingInfo(objectTimes, this.selectedObjects.length);
+            await this.setDialogLoadingInfo(objectTimes, selectedRows.length);
         }
 
         if (!this.errorObjects.length) {
@@ -301,7 +290,7 @@ class Component {
         const average = BrowserUtil.calculateAverage(times);
         const time = average * (objectsCount - this.finishedObjects.length - this.errorObjects.length);
         const finishCount = this.finishedObjects.length + this.errorObjects.length;
-        const totalCount = this.selectedObjects.length;
+        const totalCount = objectsCount;
         const loadingHint = await TranslationService.translate(
             'Translatable#{0}/{1} {2} imported', [finishCount, totalCount, objectName]
         );

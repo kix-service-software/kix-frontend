@@ -13,4 +13,8 @@ export class ContactImportDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'contact-import-dialog-context';
 
+    public deleteObjectList(objectType: string): void {
+        return;
+    }
+
 }
