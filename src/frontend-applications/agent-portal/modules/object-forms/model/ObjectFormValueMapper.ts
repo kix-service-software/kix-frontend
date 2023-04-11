@@ -372,7 +372,7 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
 
                 if (instructionProperty === InstructionProperty.POSSIBLE_VALUES_ADD) {
                     formValue.resetProperty(instructionProperty);
-                    formValue.addPossibleValues(instruction.PossibleValuesAdd);
+                    await formValue.addPossibleValues(instruction.PossibleValuesAdd);
                 }
 
                 if (instructionProperty === InstructionProperty.POSSIBLE_VALUES_REMOVE) {

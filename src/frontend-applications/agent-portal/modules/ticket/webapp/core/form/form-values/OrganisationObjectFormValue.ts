@@ -166,7 +166,7 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
         return;
     }
 
-    public addPossibleValues(): void {
+    public async addPossibleValues(): Promise<void> {
         return;
     }
 

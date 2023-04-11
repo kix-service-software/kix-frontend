@@ -119,7 +119,9 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {
         if (force) {
-            await super.setFormValue(value, force);
+            if (value !== null && !Array.isArray(value)) {
+                value = [value];
+            }
         } else {
             if (!this.freeText && !this.isAutoComplete) {
                 if (Array.isArray(value)) {
@@ -133,12 +135,12 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             } else if (this.multiselect) {
                 value = this.removeEmptyValues(value);
             }
+        }
 
-            await super.setFormValue(value, force);
+        await super.setFormValue(value, force);
 
-            if (!this.readonly) {
-                await this.loadSelectedValues();
-            }
+        if (!this.readonly) {
+            await this.loadSelectedValues();
         }
     }
 
@@ -380,6 +382,14 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                 objects = await KIXObjectService.loadObjects(this.objectType, null, this.loadingOptions);
             }
 
+            if (Array.isArray(this.additionalValues)) {
+                const additionalObjects = await KIXObjectService.loadObjects(
+                    this.objectType, this.additionalValues, this.loadingOptions
+                ).catch(() => []);
+
+                objects.push(...additionalObjects);
+            }
+
             if (Array.isArray(this.forbiddenValues)) {
                 objects = objects.filter(
                     (o) => !this.forbiddenValues?.some((fv) => fv.toString() === o.ObjectId.toString())
@@ -410,6 +420,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                 nodes.filter((n) => n instanceof TreeNode);
             }
 
+            nodes = nodes.filter((node, index) => nodes.findIndex((n) => n.id === node.id) === index);
             SortUtil.sortObjects(nodes, 'label', DataType.STRING);
         }
 
@@ -543,6 +554,9 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                 selectedNodes = [...selectedNodes, ...freeTextNodes];
             }
 
+            selectedNodes = selectedNodes.filter(
+                (node, index) => selectedNodes.findIndex((n) => n.id === node.id) === index
+            );
             this.treeHandler?.setSelection(selectedNodes, true, true, undefined, true);
         } else {
             this.treeHandler?.selectNone(true);
@@ -584,8 +598,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         await this.setSelectedNodes();
     }
 
-    public addPossibleValues(values: T[]): void {
-        super.addPossibleValues(values);
+    public async addPossibleValues(values: T[]): Promise<void> {
+        await super.addPossibleValues(values);
         this.loadSelectableValues();
     }
 

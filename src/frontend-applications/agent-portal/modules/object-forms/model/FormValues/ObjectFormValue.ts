@@ -35,6 +35,7 @@ export class ObjectFormValue<T = any> {
     public label: string = this.property;
     public hint: string;
     public possibleValues: any[] = null;
+    public additionalValues: any[] = null;
     public forbiddenValues: any[] = null;
     public required: boolean = false;
     public readonly: boolean = false;
@@ -82,6 +83,7 @@ export class ObjectFormValue<T = any> {
         this.initialState.set('label', this.label);
         this.initialState.set('possibleValues', Array.isArray(this.possibleValues) ? [...this.possibleValues] : null);
         this.initialState.set('forbiddenValues', Array.isArray(this.forbiddenValues) ? [...this.forbiddenValues] : null);
+        this.initialState.set('additionalValues', Array.isArray(this.additionalValues) ? [...this.additionalValues] : null);
         this.initialState.set('readonly', this.readonly);
         this.initialState.set('regExList', this.regExList);
         this.initialState.set('required', this.required);
@@ -122,11 +124,15 @@ export class ObjectFormValue<T = any> {
                 while (key?.value) {
                     if (!ignoreFormValueProperties.some((p) => p === key.value)) {
                         if (this[key.value] !== this.initialState.get(key.value)) {
-                            this[key.value] = this.initialState.get(key.value);
-
-                            // call disable if enabled is reseted
-                            if (key.value === FormValueProperty.ENABLED && !this.enabled) {
-                                await this.disable();
+                            if (key.value === FormValueProperty.ENABLED) {
+                                // call disable if enabled is reseted
+                                if (this.enabled) {
+                                    await this.disable();
+                                } else {
+                                    await this.enable();
+                                }
+                            } else {
+                                this[key.value] = this.initialState.get(key.value);
                             }
                         }
                     }
@@ -369,18 +375,20 @@ export class ObjectFormValue<T = any> {
         await this.applyPossibleValues();
     }
 
-    public addPossibleValues(values: T[]): void {
+    public async addPossibleValues(values: T[]): Promise<void> {
         if (Array.isArray(values)) {
-            if (!Array.isArray(this.possibleValues)) {
-                this.possibleValues = [];
+            if (!Array.isArray(this.additionalValues)) {
+                this.additionalValues = [];
             }
 
-            for (const pv of values) {
-                if (!this.possibleValues?.some((v) => v?.toString() === pv?.toString())) {
-                    this.possibleValues.push(pv);
+            for (const av of values) {
+                if (!this.additionalValues?.some((v) => v?.toString() === av?.toString())) {
+                    this.additionalValues.push(av);
                 }
             }
         }
+
+        await this.applyPossibleValues();
     }
 
     public async removePossibleValues(values: T[]): Promise<void> {
@@ -408,12 +416,13 @@ export class ObjectFormValue<T = any> {
             value = [this.value];
         }
 
-        if (Array.isArray(value) && this.possibleValues) {
+        if (Array.isArray(value) && (this.possibleValues || this.forbiddenValues)) {
             const newValue = [];
             for (const v of value) {
                 const isPossible = this.possibleValues?.some((pv) => pv.toString() === v.toString());
+                const isAdditional = this.additionalValues?.some((pv) => pv.toString() === v.toString());
                 const isForbidden = this.forbiddenValues?.some((pv) => pv.toString() === v.toString());
-                if (isPossible && !isForbidden) {
+                if ((isPossible || isAdditional) && !isForbidden) {
                     newValue.push(v);
                 }
             }
