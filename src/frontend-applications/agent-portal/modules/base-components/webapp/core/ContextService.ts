@@ -222,7 +222,7 @@ export class ContextService {
                     this.activeContextIndex--;
 
                     if (switchToTarget) {
-                        this.switchToTargetContext(
+                        await this.switchToTargetContext(
                             sourceContext, targetContextId, targetObjectId, useSourceContext
                         );
                     }
@@ -239,7 +239,7 @@ export class ContextService {
         for (const c of [...this.contextInstances]) {
             await this.removeContext(c.instanceId, null, null, false, silent);
         }
-        this.switchToTargetContext(null, this.DEFAULT_FALLBACK_CONTEXT);
+        await this.switchToTargetContext(null, this.DEFAULT_FALLBACK_CONTEXT);
     }
 
     public checkDialogConfirmation(contextInstanceId: string, silent?: boolean): Promise<boolean> {
@@ -275,20 +275,20 @@ export class ContextService {
         return canRemove;
     }
 
-    private switchToTargetContext(
+    private async switchToTargetContext(
         sourceContext: any, targetContextId?: string, targetObjectId?: string | number, useSourceContext?: boolean
-    ): void {
+    ): Promise<void> {
         const context = this.contextInstances.find((c) => c.instanceId === sourceContext?.instanceId);
         if (!useSourceContext && targetContextId) {
-            this.setActiveContext(targetContextId, targetObjectId);
+            await this.setActiveContext(targetContextId, targetObjectId);
         } else if (context) {
-            this.setContextByInstanceId(sourceContext.instanceId);
+            await this.setContextByInstanceId(sourceContext.instanceId);
         } else if (this.contextInstances.length > 0) {
-            this.setContextByInstanceId(
+            await this.setContextByInstanceId(
                 this.contextInstances[this.contextInstances.length - 1].instanceId
             );
         } else {
-            this.setActiveContext(this.DEFAULT_FALLBACK_CONTEXT);
+            await this.setActiveContext(this.DEFAULT_FALLBACK_CONTEXT);
         }
     }
 
