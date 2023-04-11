@@ -293,13 +293,12 @@ export class Row extends BindableObject {
             if (!cell) {
                 this.cells.push(new Cell(this, new TableValue(c.getColumnId(), null)));
             }
-        }
-
-        );
+        });
     }
 
     public setValueState(state: ValueState): void {
         this.getRowObject().setValueState(state);
+        this.cells.forEach((c) => c.getValue().state = state);
         EventService.getInstance().publish(
             TableEvent.ROW_VALUE_STATE_CHANGED, new TableEventData(this.getTable().getTableId(), this.getRowId())
         );

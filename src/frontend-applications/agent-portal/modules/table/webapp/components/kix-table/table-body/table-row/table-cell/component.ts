@@ -44,6 +44,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 if (this.cell && data === this.cell.getValue().instanceId) {
                     (this as any).setStateDirty();
                     setTimeout(() => this.state.loading = false, 5);
+                } else if (eventId === TableEvent.ROW_VALUE_STATE_CHANGED) {
+                    this.setValueStateClass();
                 }
             }
         };
@@ -55,10 +57,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.loading = false;
 
         EventService.getInstance().subscribe(TableEvent.DISPLAY_VALUE_CHANGED, this.subscriber);
+        EventService.getInstance().subscribe(TableEvent.ROW_VALUE_STATE_CHANGED, this.subscriber);
     }
 
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(TableEvent.DISPLAY_VALUE_CHANGED, this.subscriber);
+        EventService.getInstance().unsubscribe(TableEvent.ROW_VALUE_STATE_CHANGED, this.subscriber);
     }
 
     private initCellComponent(): void {
