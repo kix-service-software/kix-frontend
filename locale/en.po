@@ -922,9 +922,6 @@ msgstr ""
 msgid "Dispatching"
 msgstr ""
 
-msgid "Display Limit"
-msgstr ""
-
 msgid "Display Name"
 msgstr ""
 
@@ -3615,6 +3612,9 @@ msgstr ""
 msgid "Owner"
 msgstr "Owner"
 
+msgid "Page Size"
+msgstr ""
+
 msgid "Paramater"
 msgstr ""
 
@@ -4167,6 +4167,9 @@ msgstr ""
 msgid "Search error!"
 msgstr ""
 
+msgid "Search Limit"
+msgstr ""
+
 msgid "SEARCH_OPERATOR_WITHIN_LAST"
 msgstr "the last"
 
@@ -4560,6 +4563,9 @@ msgid "Table Columns"
 msgstr ""
 
 msgid "Table Configuration"
+msgstr ""
+
+msgid "Table Height (Row Count)"
 msgstr ""
 
 msgid "Tables"
