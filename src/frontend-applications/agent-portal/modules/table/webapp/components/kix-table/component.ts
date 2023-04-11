@@ -167,8 +167,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 const headerRowHeight = this.browserFontSize * Number(tableConfiguration.headerHeight);
 
                 const rowHeight = this.browserFontSize * Number(tableConfiguration.rowHeight);
-                const lastRowHeight = this.hScrollWillBeVisible() ? rowHeight : rowHeight / 2;
-                let height = ((displayLimit * rowHeight) + headerRowHeight) + lastRowHeight;
+                let height = ((displayLimit * rowHeight) + headerRowHeight);
 
                 const expandedRowHeight = (31.5 + 10) / 2 * this.browserFontSize;
                 const expandedRowCount = rows.filter((r) => r.isExpanded()).length;
