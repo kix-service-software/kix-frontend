@@ -15,6 +15,7 @@ import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFi
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { ImportManager, ImportPropertyOperator } from '../../../../import/webapp/core';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { UserProperty } from '../../../../user/model/UserProperty';
 import { ContactProperty } from '../../../model/ContactProperty';
 import { ContactService } from '../ContactService';
@@ -53,6 +54,18 @@ export class ContactImportManager extends ImportManager {
                 ];
             default:
                 return super.getInputTypeOptions(property, operator);
+        }
+    }
+
+    public async isMultiselect(
+        property: string, operator: SearchOperator | string, forSearch?: boolean
+    ): Promise<boolean> {
+        switch (property) {
+            case ContactProperty.PRIMARY_ORGANISATION_ID:
+            case KIXObjectProperty.VALID_ID:
+                return false;
+            default:
+                return super.isMultiselect(property, operator, forSearch);
         }
     }
 
