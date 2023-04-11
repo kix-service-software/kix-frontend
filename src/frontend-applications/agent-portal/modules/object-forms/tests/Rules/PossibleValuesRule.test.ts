@@ -85,18 +85,18 @@ describe('Rule - PossibleValues / Add / Remove', () => {
         it('possible values should be added to defined form values', () => {
             const testProperty1 = objectFormValueMapper.findFormValue('testProperty1');
             expect(testProperty1).exist;
-            expect(testProperty1.possibleValues).an('array');
-            expect(testProperty1.possibleValues.length).equals(5);
+            expect(testProperty1.additionalValues).an('array');
+            expect(testProperty1.additionalValues.length).equals(2);
 
             const testProperty3 = objectFormValueMapper.findFormValue('testProperty3');
             expect(testProperty3).exist;
-            expect(testProperty3.possibleValues).an('array');
-            expect(testProperty3.possibleValues.length).equals(5);
+            expect(testProperty3.additionalValues).an('array');
+            expect(testProperty3.additionalValues.length).equals(2);
 
             const testProperty5 = objectFormValueMapper.findFormValue('testProperty5');
             expect(testProperty5).exist;
-            expect(testProperty5.possibleValues).an('array');
-            expect(testProperty5.possibleValues.length).equals(5);
+            expect(testProperty5.additionalValues).an('array');
+            expect(testProperty5.additionalValues.length).equals(2);
         });
 
         it('possible values should not be added to defined form values', () => {
@@ -133,28 +133,28 @@ describe('Rule - PossibleValues / Add / Remove', () => {
         it('possible values should be added to defined form values', () => {
             const testProperty1 = objectFormValueMapper.findFormValue('testProperty1');
             expect(testProperty1).exist;
-            expect(testProperty1.possibleValues).an('array');
-            expect(testProperty1.possibleValues.length).equals(2);
+            expect(testProperty1.additionalValues).an('array');
+            expect(testProperty1.additionalValues.length).equals(2);
 
             const testProperty3 = objectFormValueMapper.findFormValue('testProperty3');
             expect(testProperty3).exist;
-            expect(testProperty3.possibleValues).an('array');
-            expect(testProperty3.possibleValues.length).equals(2);
+            expect(testProperty3.additionalValues).an('array');
+            expect(testProperty3.additionalValues.length).equals(2);
 
             const testProperty5 = objectFormValueMapper.findFormValue('testProperty5');
             expect(testProperty5).exist;
-            expect(testProperty5.possibleValues).an('array');
-            expect(testProperty5.possibleValues.length).equals(2);
+            expect(testProperty5.additionalValues).an('array');
+            expect(testProperty5.additionalValues.length).equals(2);
         });
 
         it('possible values should not be added to defined form values', () => {
             const testProperty2 = objectFormValueMapper.findFormValue('testProperty2');
             expect(testProperty2).exist;
-            expect(testProperty2.possibleValues).not.exist;
+            expect(testProperty2.additionalValues).not.exist;
 
             const testProperty4 = objectFormValueMapper.findFormValue('testProperty4');
             expect(testProperty4).exist;
-            expect(testProperty4.possibleValues).not.exist;
+            expect(testProperty4.additionalValues).not.exist;
         });
 
     });
