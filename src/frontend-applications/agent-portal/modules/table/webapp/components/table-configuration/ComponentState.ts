@@ -13,7 +13,9 @@ import { AbstractComponentState } from '../../../../base-components/webapp/core/
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public configuration: TableConfiguration = null
+        public configuration: TableConfiguration = null,
+        public searchLimit: number = null,
+        public limit: number = null
     ) {
         super();
     }

@@ -13,7 +13,6 @@ import { FormService } from '../../../../../modules/base-components/webapp/core/
 import { FormConfiguration } from '../../../../../model/configuration/FormConfiguration';
 import { FormGroupConfiguration } from '../../../../../model/configuration/FormGroupConfiguration';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
-import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { FormContext } from '../../../../../model/configuration/FormContext';
 import { FormPageConfiguration } from '../../../../../model/configuration/FormPageConfiguration';

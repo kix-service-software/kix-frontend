@@ -7,6 +7,7 @@
  * --
  */
 
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
@@ -22,6 +23,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         this.state.configuration = { ...input.configuration };
+        this.state.searchLimit = this.state.configuration.loadingOptions?.searchLimit;
+        this.state.limit = this.state.configuration.loadingOptions?.limit;
     }
 
     public async onMount(): Promise<void> {
@@ -64,6 +67,26 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public displayLimitChanged(event: any): void {
         this.state.configuration.displayLimit = Number(event.target.value);
         this.emitConfigurationChanged();
+    }
+
+    public searchLimitChanged(event: any): void {
+        this.prepareLoadingOptions();
+        const searchLimit = Number(event.target.value);
+        this.state.configuration.loadingOptions.searchLimit = searchLimit > 0 ? searchLimit : null;
+        this.emitConfigurationChanged();
+    }
+
+    public limitChanged(event: any): void {
+        this.prepareLoadingOptions();
+        const limit = Number(event.target.value);
+        this.state.configuration.loadingOptions.limit = limit > 0 ? limit : null;
+        this.emitConfigurationChanged();
+    }
+
+    private prepareLoadingOptions(): void {
+        if (!this.state.configuration.loadingOptions) {
+            this.state.configuration.loadingOptions = new KIXObjectLoadingOptions();
+        }
     }
 
     public resultHintChanged(event: any): void {
