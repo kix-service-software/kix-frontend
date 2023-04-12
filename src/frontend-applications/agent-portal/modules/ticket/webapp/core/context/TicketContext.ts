@@ -37,6 +37,7 @@ export class TicketContext extends Context {
     public queueId: number;
     public filterValue: string;
 
+    private currentLimit: number = 20;
     private subscriber: IEventSubscriber;
 
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
@@ -47,7 +48,7 @@ export class TicketContext extends Context {
             eventSubscriberId: IdService.generateDateBasedId(TicketContext.CONTEXT_ID),
             eventPublished: (data: Context, eventId: string): void => {
                 if (data.instanceId === this.instanceId) {
-                    this.loadTickets();
+                    this.loadTickets(undefined, this.currentLimit);
                 }
             }
         };
@@ -198,6 +199,7 @@ export class TicketContext extends Context {
 
     public reloadObjectList(objectType: KIXObjectType, silent: boolean = false, limit?: number): Promise<void> {
         if (objectType === KIXObjectType.TICKET) {
+            this.currentLimit = limit;
             return this.loadTickets(silent, limit);
         }
     }
