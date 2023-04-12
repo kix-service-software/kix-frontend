@@ -26,6 +26,9 @@ import { ContextService } from '../../../../base-components/webapp/core/ContextS
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { ContextPreference } from '../../../../../model/ContextPreference';
+import { IdService } from '../../../../../model/IdService';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { TicketContext } from '../../../../ticket/webapp/core';
 
 export class CMDBContext extends Context {
 
@@ -34,12 +37,30 @@ export class CMDBContext extends Context {
     public classId: number;
     public filterValue: string;
 
+    private subscriber: IEventSubscriber;
+
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
         super.initContext();
 
         if (this.classId || this.filterValue) {
             this.loadConfigItems();
         }
+
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(TicketContext.CONTEXT_ID),
+            eventPublished: (data: Context, eventId: string): void => {
+                if (data.instanceId === this.instanceId) {
+                    this.loadConfigItems();
+                }
+            }
+        };
+
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
+    }
+
+    public async destroy(): Promise<void> {
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
     }
 
     public getIcon(): string {
