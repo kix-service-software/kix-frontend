@@ -8,56 +8,84 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.configuration)>
-    <div.table-configuration-container.table-container>
-        <h2.configuration-title>
+    <div class="table-configuration-container table-container">
+        <h2 class="configuration-title">
             <translation-string pattern="Translatable#Table Configuration"/>
         </h2>
-        <table.kix-table.configuration-table>
+        <table class="kix-table configuration-table">
             <thead>
                 <tr>
-                    <th.table-head-cell>
+                    <th class="table-head-cell">
                         <translation-string pattern="Translatable#Option"/>
                     </th>
-                    <th.table-head-cell>
+                    <th class="table-head-cell">
                         <translation-string pattern="Translatable#Value"/>
                     </th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td.content-cell>
-                        <translation-string pattern="Translatable#Display Limit"/>
+                    <td class="content-cell">
+                        <translation-string pattern="Translatable#Table Height (Row Count)"/>
                     </td>
-                    <td.content-cell>
-                        <input.input-style
+                    <td class="content-cell">
+                        <input
                             type="number"
                             value=(state.configuration.displayLimit)
                             on-change("displayLimitChanged")
+                            class="input-style"
+                        >
+                    </td>
+                </tr>
+                <tr>
+                    <td class="content-cell">
+                        <translation-string pattern="Translatable#Search Limit"/>
+                    </td>
+                    <td class="content-cell">
+                        <input
+                            type="number"
+                            value=state.searchLimit
+                            on-change("searchLimitChanged")
+                            class="input-style"
+                        >
+                    </td>
+                </tr>
+                <tr>
+                    <td class="content-cell">
+                        <translation-string pattern="Translatable#Page Size"/>
+                    </td>
+                    <td class="content-cell">
+                        <input
+                            type="number"
+                            value=state.limit
+                            on-change("limitChanged")
+                            class="input-style"
                         >
                     </td>
                 </tr>
                 <if(input.advancedSettings)>
                     <tr>
-                        <td.content-cell>
+                        <td class="content-cell">
                             <translation-string pattern="Translatable#Empty Result Hint"/>
                         </td>
-                        <td.content-cell>
-                            <input.input-style
+                        <td class="content-cell">
+                            <input
                                 type="text"
                                 value=(state.configuration.emptyResultHint)
                                 on-change("resultHintChanged")
+                                class="input-style"
                             >
                         </td>
                     </tr>
 
                     <tr>
-                        <td.content-cell>
+                        <td class="content-cell">
                             <translation-string pattern="Translatable#Fixed First Column"/>
                         </td>
-                        <td.content-cell on-click(
-                            "booleanValueChanged",
-                            "fixedFirstColumn",
-                        )>
+                        <td
+                            on-click("booleanValueChanged", "fixedFirstColumn")
+                            class="content-cell"
+                        >
                             <input
                                 type="checkbox"
                                 checked=(state.configuration.fixedFirstColumn)
@@ -66,13 +94,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </tr>
 
                     <tr>
-                        <td.content-cell>
+                        <td class="content-cell">
                             <translation-string pattern="Translatable#Row Selection"/>
                         </td>
-                        <td.content-cell on-click(
-                            "booleanValueChanged",
-                            "enableSelection",
-                        )>
+                        <td
+                            on-click("booleanValueChanged", "enableSelection")
+                            class="content-cell"
+                        >
                             <input
                                 type="checkbox"
                                 checked=(state.configuration.enableSelection)
@@ -81,10 +109,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </tr>
 
                     <tr>
-                        <td.content-cell>
+                        <td class="content-cell">
                             <translation-string pattern="Translatable#Small Rows"/>
                         </td>
-                        <td.content-cell on-click("rowHeightChanged")>
+                        <td on-click("rowHeightChanged") class="content-cell">
                             <input
                                 type="checkbox"
                                 checked=component.isSmallRows()
@@ -93,22 +121,24 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </tr>
 
                     <tr>
-                        <td.content-cell>
+                        <td class="content-cell">
                             <translation-string pattern="Translatable#Small Headers"/>
                         </td>
-                        <td.content-cell on-click("headerHeightChanged")>
+                        <td
+                            on-click("headerHeightChanged")
+                            class="content-cell"
+                        >
                             <input
                                 type="checkbox"
                                 checked=component.isSmallHeaders()
                             >
                         </td>
                     </tr>
-
                 </if>
             </tbody>
         </table>
     </div>
-    <div.table-configuration-container.table-container>
+    <div class="table-configuration-container table-container">
         <table-columns-configuration
             advancedSettings=input.advancedSettings
             columns=(state.configuration.tableColumns)

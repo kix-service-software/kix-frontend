@@ -173,8 +173,15 @@ export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string
     public async reset(
         ignoreProperties: string[] = [], ignoreFormValueProperties: string[] = [], ignoreFormValueReset: string[] = []
     ): Promise<void> {
-        await super.reset(ignoreProperties, ignoreFormValueProperties, ignoreFormValueReset);
         await this.setPossibleValuesFromDynamicField();
+
+        if (Array.isArray(ignoreFormValueProperties)) {
+            ignoreFormValueProperties.push(FormValueProperty.POSSIBLE_VALUES);
+        } else {
+            ignoreFormValueProperties = [FormValueProperty.POSSIBLE_VALUES];
+        }
+
+        await super.reset(ignoreProperties, ignoreFormValueProperties, ignoreFormValueReset);
     }
 
 }

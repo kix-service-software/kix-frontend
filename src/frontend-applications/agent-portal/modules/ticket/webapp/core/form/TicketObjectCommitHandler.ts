@@ -56,9 +56,14 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
             for (const k in TicketProperty) {
                 if (TicketProperty[k]) {
                     const property = TicketProperty[k];
-                    const ignore = property === TicketProperty.TICKET_ID;
+                    if (
+                        property === TicketProperty.TICKET_ID ||
+                        property === TicketProperty.PENDING_TIME
+                    ) {
+                        continue;
+                    }
                     const hasValue = formValues.some((fv) => fv.property === property && fv.enabled);
-                    if (!ignore && !hasValue) {
+                    if (!hasValue) {
                         delete newObject[property];
                     }
                 }
@@ -118,7 +123,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                         );
                         if (referencedArticle) {
                             article.InReplyTo = referencedArticle.MessageID?.toString();
-                            article.References = `${ referencedArticle.References } ${ referencedArticle.MessageID }`;
+                            article.References = `${referencedArticle.References} ${referencedArticle.MessageID}`;
                         }
                     }
                 } else {
@@ -161,7 +166,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
                             queue.Signature,
                             (ticketOrQueueId instanceof Ticket ? ticketOrQueueId : undefined)
                         );
-                    body += `\n\n${ signature }`;
+                    body += `\n\n${signature}`;
                 }
             }
         }

@@ -46,7 +46,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             false, false, this.state.icon, true
         );
 
-        this.state.instanceId = `search-table-${searchCache.objectType}`;
+        this.state.instanceId = IdService.generateDateBasedId(`search-table-${searchCache.objectType}`);
         this.state.objectType = searchCache.objectType;
         this.state.configuration = widgetConfiguration;
 

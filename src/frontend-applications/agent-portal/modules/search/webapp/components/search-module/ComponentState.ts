@@ -16,7 +16,7 @@ import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 export class ComponentState extends AbstractComponentState {
     public constructor(
         public componentKey: string = IdService.generateDateBasedId(),
-        public instanceId: string = null,
+        public instanceId: string = IdService.generateDateBasedId('search-widget'),
         public title: string = '',
         public icon: string | ObjectIcon = null,
         public configuration: WidgetConfiguration = null,

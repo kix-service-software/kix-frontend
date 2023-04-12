@@ -47,27 +47,32 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         const context: ReportingContext = ContextService.getInstance().getActiveContext();
         const reportResult: ReportResult = (label.object as ReportResult);
-        const report: Report = (await context.getObjectList(KIXObjectType.REPORT)).find(
-            (r) => r.ObjectId === reportResult.ReportID) as Report;
-        const reportDefinition: ReportDefinition = (await context.getObjectList(KIXObjectType.REPORT_DEFINITION)).find(
-            (rd) => rd.ObjectId === report.DefinitionID) as ReportDefinition;
 
-        const resultWithContent = await context.loadReportResultWithContent(reportResult.ReportID, reportResult.ID);
+        const reports = await context.getObjectList<Report>(KIXObjectType.REPORT);
+        const report: Report = reports?.find((r) => r.ObjectId === reportResult?.ReportID);
 
-        let fileExtension = mimeTypes.extension(reportResult.ContentType);
-        if (!fileExtension) {
-            const parts = reportResult.ContentType.split('/');
-            if (Array.isArray(parts) && parts.length > 1) {
-                fileExtension = parts[1];
+        if (report) {
+            const resultWithContent = await context.loadReportResultWithContent(reportResult.ReportID, reportResult.ID);
+
+            let fileExtension = mimeTypes.extension(reportResult.ContentType);
+            if (!fileExtension) {
+                const parts = reportResult.ContentType.split('/');
+                if (Array.isArray(parts) && parts.length > 1) {
+                    fileExtension = parts[1];
+                }
             }
+
+            const dateString = report.CreateTime?.replace(/-/g, '/');
+            const currentDate = DateTimeUtil.format(new Date(dateString), 'yyyy-mm-dd_HHMMss');
+
+            const definitions = context.getFilteredObjectList<ReportDefinition>(KIXObjectType.REPORT_DEFINITION);
+            const reportDefinition: ReportDefinition = definitions?.find((rd) => rd.ObjectId === report.DefinitionID);
+            const fileName = `${reportDefinition?.Name || 'unknown'}_${currentDate}.${fileExtension}`;
+
+            BrowserUtil.startBrowserDownload(fileName, resultWithContent.Content, resultWithContent.ContentType, true);
+        } else {
+            console.error(`No report with ID ${reportResult?.ReportID} found!`);
         }
-
-        const dateString = report.CreateTime?.replace(/-/g, '/');
-        const currentDate = DateTimeUtil.format(new Date(dateString), 'yyyy-mm-dd_HHMMss');
-        const fileName = `${reportDefinition.Name}_${currentDate}.${fileExtension}`;
-
-        BrowserUtil.startBrowserDownload(fileName, resultWithContent.Content,
-            resultWithContent.ContentType, true);
     }
 }
 

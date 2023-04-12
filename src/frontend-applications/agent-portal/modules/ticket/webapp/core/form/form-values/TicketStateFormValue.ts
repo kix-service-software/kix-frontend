@@ -32,7 +32,16 @@ export class TicketStateFormValue extends SelectObjectFormValue {
 
     public async initFormValue(): Promise<void> {
         this.forbiddenValues = [6, 7];
+        this.setNewInitialState('forbiddenValues', [6, 7]);
         await super.initFormValue();
+    }
+
+    public async reset(
+        ignoreProperties?: string[], ignoreFormValueProperties?: string[], ignoreFormValueReset?: string[]
+    ): Promise<void> {
+        this.forbiddenValues = [6, 7];
+        this.setNewInitialState('forbiddenValues', [6, 7]);
+        await super.reset(ignoreProperties, ignoreFormValueProperties, ignoreFormValueReset);
     }
 
 }

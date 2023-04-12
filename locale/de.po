@@ -946,9 +946,6 @@ msgstr "Detaillierte Suchergebnisse"
 msgid "Dispatching"
 msgstr "Verteilung"
 
-msgid "Display Limit"
-msgstr "Anzeigelimit"
-
 msgid "Display Name"
 msgstr "Anzeigename"
 
@@ -3815,6 +3812,9 @@ msgstr "in Bearbeitung durch mich"
 msgid "Owner"
 msgstr "Bearbeiter"
 
+msgid "Page Size"
+msgstr ""
+
 msgid "Paramater"
 msgstr "Parameter"
 
@@ -4373,6 +4373,9 @@ msgstr "Suche {0} wird gelöscht. Sind Sie sicher?"
 msgid "Search error!"
 msgstr "Fehler bei Suche!"
 
+msgid "Search Limit"
+msgstr ""
+
 msgid "SEARCH_OPERATOR_WITHIN_LAST"
 msgstr "der letzten"
 
@@ -4769,6 +4772,9 @@ msgstr "Tabellenspalten"
 
 msgid "Table Configuration"
 msgstr "Tabellenkonfiguration"
+
+msgid "Table Height (Row Count)"
+msgstr ""
 
 msgid "Tables"
 msgstr "Tabellen"
@@ -5309,6 +5315,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Display Limit"
+#~ msgstr "Anzeigelimit"
 
 #~ msgid "At least one of the fields To, Cc or Bcc must contain an entry."
 #~ msgstr ""

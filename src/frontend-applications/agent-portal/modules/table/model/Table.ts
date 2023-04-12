@@ -871,6 +871,7 @@ export class Table implements Table {
     }
 
     public async loadMore(): Promise<void> {
+        this.resetFilter();
         await this.contentProvider.loadMore();
     }
 

@@ -44,7 +44,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
     protected reloadInProgress: boolean = false;
 
-    private id: string = IdService.generateDateBasedId('TableCOntentProvider');
+    private id: string = IdService.generateDateBasedId('TableContentProvider');
 
     public totalCount: number;
 
@@ -147,7 +147,11 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             const hasDFColumn = this.hasDFColumnConfigured();
             const includes = hasDFColumn ? [KIXObjectProperty.DYNAMIC_FIELDS] : [];
             objects = await SearchService.getInstance().executeSearchCache(
-                this.table.getTableConfiguration().searchId, undefined, undefined, undefined, undefined, includes
+                this.table.getTableConfiguration().searchId, undefined, undefined, undefined, undefined,
+                includes, currentLimit, this.loadingOptions?.searchLimit
+            );
+            this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(
+                this.table.getTableConfiguration().searchId
             );
         } else if (this.contextId && !this.objectIds) {
             const context = ContextService.getInstance().getActiveContext();

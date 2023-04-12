@@ -150,7 +150,7 @@ export class SearchService {
     public async searchObjects(
         searchCache: SearchCache,
         context: SearchContext = ContextService.getInstance().getActiveContext<SearchContext>(),
-        additionalIncludes: string[] = []
+        additionalIncludes: string[] = [], limit?: number, searchLimit?: number
     ): Promise<KIXObject[]> {
         if (!searchCache) {
             throw new Error('No search available');
@@ -164,6 +164,14 @@ export class SearchService {
         const loadingOptions = await searchDefinition.getLoadingOptions(
             preparedCriteria, searchCache.limit, searchCache.sortAttribute, searchCache.sortDescanding
         );
+
+        if (limit) {
+            loadingOptions.limit = limit;
+        }
+
+        if (searchLimit) {
+            loadingOptions.searchLimit = searchLimit;
+        }
 
         const hastDFInCriteria = preparedCriteria.some((criteria) => criteria.property.startsWith('DynamicFields.'));
         if (hastDFInCriteria) {
@@ -185,7 +193,7 @@ export class SearchService {
         }
 
         const objects = await KIXObjectService.loadObjects(
-            searchCache.objectType, null, loadingOptions, null, false
+            searchCache.objectType, null, loadingOptions, null, false, undefined, undefined, searchCache.id
         );
 
         if (context instanceof SearchContext) {
@@ -404,7 +412,7 @@ export class SearchService {
 
     public async executeSearchCache(
         id?: string, name?: string, cache?: SearchCache, context?: SearchContext, setSearchContext?: boolean,
-        additionalIncludes: string[] = []
+        additionalIncludes: string[] = [], limit?: number, searchLimit?: number
     ): Promise<KIXObject[]> {
         const search = await SearchSocketClient.getInstance().loadSearch();
         let searchCache = cache || search.find((s) => s.id === id);
@@ -416,7 +424,7 @@ export class SearchService {
             context = await this.setSearchContext(searchCache?.objectType);
         }
 
-        return await this.searchObjects(searchCache, context, additionalIncludes);
+        return await this.searchObjects(searchCache, context, additionalIncludes, limit, searchLimit);
     }
 
     private async setSearchContext(
