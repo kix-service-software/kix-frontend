@@ -1,61 +1,42 @@
 <!--
-Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(state.article)>
-   <div.message-header-container>
-      <div.header-title>
-         [#${state.article.countNumber}] ${state.article.Subject}
-      </div>
-      <div.header-right>
-         <if(state.article.CustomerVisible)>
-            <icon
-               icon="kix-icon-men"
-               tooltip=(
-                  state.translations["Translatable#Visible in customer portal"]
-               )
-            />
-         </if>
-         <if(state.channelIcon)>
-            <icon icon=state.channelIcon tooltip=state.channelTooltip/>
-         </if>
-         <if(state.attachmentCount > 0)>
-            <div.zip-download
-               on-click("attachmentsClicked")
-               title=(
-                  state.translations["Translatable#Download all attachments"]
-               )
-            >
-               <span.kix-icon-attachement/>
-                (${state.attachmentCount})
-            </div>
-         </if>
-         <if(state.createTimeString)>
-            <span title=state.changeTitle>
-               ${state.createTimeString}${state.changeTitle ? " (" + state.translations["Translatable#edited"] + ")" : ""}
-            </span>
-         </if>
-      </div>
-      <div.header-from title=(state.translations["Translatable#From"])>
-         ${state.article.From}
-         <if(input.fromDisplayName)>
-            <span.fw-bold> | ${input.fromDisplayName}</span>
-         </if>
-      </div>
-      <div.accounted-time title=(
-         state.translations["Translatable#Accounted Time"]
-      )>
-         <if(state.timeUnits)>
-            <translation-string
-               pattern="Translatable#Accounted Time: {0}"
-               placeholders=[state.timeUnits]
-            />
-         </if>
-      </div>
-   </div>
+    <div.message-header-container>
+        <div.header-title>[#${state.article.countNumber}] ${state.article.Subject}</div>
+        <div.header-right>
+            <if(state.article.CustomerVisible)>
+                <icon icon='kix-icon-men' tooltip=state.translations['Translatable#Visible in customer portal']/>
+            </if>
+            <if(state.channelIcon)>
+                <icon icon=state.channelIcon tooltip=state.channelTooltip/>
+            </if>
+            <if(state.attachmentCount > 0)>
+                <div.zip-download on-click('attachmentsClicked') title=state.translations['Translatable#Download all attachments']>
+                    <span.kix-icon-attachement/>
+                    (${state.attachmentCount})
+                </div>
+            </if>
+            <if(state.createTimeString)>
+                <span title=state.changeTitle>
+                    ${state.createTimeString}${state.changeTitle ? ' (' + state.translations['Translatable#edited'] + ')' : ''}
+                </span>
+            </if>
+        </div>
+        <div.header-from title=state.translations['Translatable#From']>
+            ${state.article.From}<if(input.fromDisplayName)>
+                <span.fw-bold>| ${input.fromDisplayName}</span>
+            </if>
+        </div>
+        <div.accounted-time title=state.translations['Translatable#Accounted Time']>
+            <if(state.timeUnits)>
+                <translation-string pattern='Translatable#Accounted Time: {0}' placeholders=[state.timeUnits]/>
+            </if>
+        </div>
+    </div>
 </if>

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -374,9 +374,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         this.specificLoadingOptions = specificLoadingOptions?.value;
 
         const objectIdOption = this.state.field?.options?.find((o) => o.option === ObjectReferenceOptions.OBJECT_IDS);
-        this.objectIds = objectIdOption && Array.isArray(objectIdOption.value) && objectIdOption.value.length
-            ? objectIdOption.value
-            : null;
+        this.objectIds = objectIdOption?.value;
 
         if (this.state.field?.countMax && this.state.field?.countMax > 1) {
             const uniqueOption = this.state.field?.options?.find((o) => o.option === ObjectReferenceOptions.UNIQUE);

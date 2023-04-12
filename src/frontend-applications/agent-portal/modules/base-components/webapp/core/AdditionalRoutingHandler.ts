@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,13 +7,12 @@
  * --
  */
 
-import { Permission } from '../modules/user/model/Permission';
-
-export class ConfiguredPermissions {
+export abstract class AdditionalRoutingHandler {
 
     public constructor(
-        public Assigned: Permission[] = [],
-        public DependingObjects: Permission[] = []
+        public priority: number = 0
     ) { }
+
+    public abstract handleRouting(): Promise<boolean>;
 
 }

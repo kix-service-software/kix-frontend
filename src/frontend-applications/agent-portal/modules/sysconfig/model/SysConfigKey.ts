@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -75,6 +75,12 @@ export enum SysConfigKey {
 
     FRONTEND_RICHTEXT_DEFAULT_CSS = 'Frontend::RichText::DefaultCSS',
 
-    TICKET_FRONTEND_NEED_ACCOUNTED_TIME = 'Ticket::Frontend::NeedAccountedTime'
+    TICKET_FRONTEND_NEED_ACCOUNTED_TIME = 'Ticket::Frontend::NeedAccountedTime',
+
+    TICKET_STATE_DEFAULT = 'Ticket::State::Default',
+
+    TICKET_PRIORITY_DEFAULT = 'Ticket::Priority::Default',
+
+    TICKET_QUEUE_DEFAULT = 'Ticket::Queue::Default'
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -26,6 +26,7 @@ import { Context } from '../../../../../model/Context';
 import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
 import { ClientStorageService } from '../../core/ClientStorageService';
 import { PlaceholderService } from '../../core/PlaceholderService';
+import { BrowserUtil } from '../../core/BrowserUtil';
 
 class TabLaneComponent implements IEventSubscriber {
 
@@ -85,13 +86,13 @@ class TabLaneComponent implements IEventSubscriber {
             }
 
             if (tabId) {
-                await this.tabClicked(this.state.tabWidgets.find((tw) => tw.instanceId === tabId), true);
+                await this.setActiveTab(this.state.tabWidgets.find((tw) => tw.instanceId === tabId), true);
             }
             if (!this.state.activeTab && this.initialTabId) {
-                await this.tabClicked(this.state.tabWidgets.find((tw) => tw.instanceId === this.initialTabId), true);
+                await this.setActiveTab(this.state.tabWidgets.find((tw) => tw.instanceId === this.initialTabId), true);
             }
             if (!this.state.activeTab) {
-                await this.tabClicked(this.state.tabWidgets[0], true);
+                await this.setActiveTab(this.state.tabWidgets[0], true);
             }
         }
 
@@ -144,7 +145,14 @@ class TabLaneComponent implements IEventSubscriber {
         }
     }
 
-    public async tabClicked(tab: ConfiguredWidget, silent?: boolean): Promise<void> {
+    public async tabClicked(tab: ConfiguredWidget, event: any): Promise<void> {
+        event.stopPropagation();
+        if (!await BrowserUtil.isTextSelected()) {
+            this.setActiveTab(tab);
+        }
+    }
+
+    public async setActiveTab(tab: ConfiguredWidget, silent?: boolean): Promise<void> {
         this.state.activeTab = tab;
         this.state.activeTabTitle = this.state.activeTab && this.state.activeTab.configuration
             ? this.state.activeTab.configuration.title
@@ -222,7 +230,7 @@ class TabLaneComponent implements IEventSubscriber {
         if (eventId === TabContainerEvent.CHANGE_TAB) {
             const tab = this.state.tabWidgets.find((t) => t.configuration && t.configuration.widgetId === data.tabId);
             if (tab) {
-                this.tabClicked(tab);
+                this.setActiveTab(tab);
             }
         }
     }
@@ -260,7 +268,7 @@ class TabLaneComponent implements IEventSubscriber {
                     : this.state.tabWidgets[0];
             }
 
-            this.tabClicked(nextTab);
+            this.setActiveTab(nextTab);
         }
     }
 }

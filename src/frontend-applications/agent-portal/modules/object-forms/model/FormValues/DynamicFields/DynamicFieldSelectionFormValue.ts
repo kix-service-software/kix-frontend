@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -12,6 +12,7 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { FormValueProperty } from '../../FormValueProperty';
 import { ObjectFormValueMapper } from '../../ObjectFormValueMapper';
 import { ObjectFormValue } from '../ObjectFormValue';
 import { SelectObjectFormValue } from '../SelectObjectFormValue';
@@ -51,6 +52,8 @@ export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string
         }
 
         this.multiselect = this.maxSelectCount < 0 || this.maxSelectCount > 1;
+        this.setNewInitialState('maxSelectCount', this.maxSelectCount);
+
         this.treeHandler?.setMultiSelect(this.multiselect);
 
         this.translatable = Boolean(Number(dynamicField?.Config?.TranslatableValues)) || false;
@@ -58,8 +61,47 @@ export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string
         if (!this.possibleValues || !this.possibleValues?.length) {
             await this.setPossibleValuesFromDynamicField();
         }
+        this.setValueByDefault(dynamicField.Config);
 
-        return super.initFormValue();
+        await super.initFormValue();
+
+        this.value = this.object[this.property];
+    }
+
+    private setValueByDefault(config: any): void {
+        const isDefaultValueDefined = config?.DefaultValue !== ''
+            && config?.DefaultValue !== null
+            && typeof config?.DefaultValue !== 'undefined';
+
+        const isSeparatorDefined = config?.ItemSeparator !== ''
+            && config?.ItemSeparator !== null
+            && typeof config?.ItemSeparator !== 'undefined';
+
+        let defaultValue = null;
+        if (isDefaultValueDefined) {
+            defaultValue = config?.DefaultValue;
+        }
+
+        let separator = null;
+        if (isSeparatorDefined) {
+            separator = config?.ItemSeparator;
+        }
+
+        if (
+            !this.value
+            && defaultValue !== null
+            && !this.isEmpty
+        ) {
+            if (separator) {
+                this.value = [];
+                for (const item of defaultValue.split(separator)) {
+                    this.value.push(item);
+                }
+            }
+            else {
+                this.value = defaultValue;
+            }
+        }
     }
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
@@ -128,9 +170,18 @@ export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string
         }
     }
 
-    public async reset(ignoreProperties: string[] = []): Promise<void> {
-        await super.reset(ignoreProperties);
+    public async reset(
+        ignoreProperties: string[] = [], ignoreFormValueProperties: string[] = [], ignoreFormValueReset: string[] = []
+    ): Promise<void> {
         await this.setPossibleValuesFromDynamicField();
+
+        if (Array.isArray(ignoreFormValueProperties)) {
+            ignoreFormValueProperties.push(FormValueProperty.POSSIBLE_VALUES);
+        } else {
+            ignoreFormValueProperties = [FormValueProperty.POSSIBLE_VALUES];
+        }
+
+        await super.reset(ignoreProperties, ignoreFormValueProperties, ignoreFormValueReset);
     }
 
 }

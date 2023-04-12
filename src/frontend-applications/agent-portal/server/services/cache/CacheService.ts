@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -79,13 +79,17 @@ export class CacheService {
         const promises = [];
         for (const event of events) {
             if (event.Event === 'CLEAR_CACHE') {
-                // TODO: Is it really necessary to clear the whole cache if the BE told it to us?
-                // LoggingService.getInstance().debug('Backend Notification: ' + JSON.stringify(event));
-                // promises.push(this.clearCache());
+                LoggingService.getInstance().debug('Backend Notification: ' + JSON.stringify(event));
+                promises.push(this.clearCache());
             } else if (!event.Namespace) {
                 LoggingService.getInstance().warning('Ignore Backend Notification (missing Namespace in event)', event);
             } else if (this.isUserStatsAffected(event.Namespace)) {
                 promises.push(this.handleUserStatsCache(event));
+
+                // update regular caches also
+                if (event.Event === 'UPDATE') {
+                    promises.push(this.deleteKeys(event.Namespace));
+                }
             } else if (event.Namespace.startsWith('User.UserPreference')) {
                 promises.push(this.handleUserPreferencesCache(event));
             } else if (!event.Namespace.startsWith(KIXObjectType.TRANSLATION_PATTERN)) {
@@ -163,6 +167,11 @@ export class CacheService {
             const namespace = objectNamespace.split('.');
             if (namespace[0] === 'CMDB') {
                 types.push(namespace[1]);
+                // remove orga and contact caches because of assigned configitems list
+                if (namespace[2] && namespace[2] === 'Version') {
+                    types.push(KIXObjectType.ORGANISATION);
+                    types.push(KIXObjectType.CONTACT);
+                }
             } else if (namespace[0] === 'FAQ') {
                 types.push(KIXObjectType.FAQ_CATEGORY);
                 types.push(KIXObjectType.FAQ_ARTICLE);
@@ -271,6 +280,9 @@ export class CacheService {
             case KIXObjectType.CONFIG_ITEM_VERSION:
                 types.push(KIXObjectType.CONFIG_ITEM);
                 types.push(KIXObjectType.GRAPH);
+                // remove orga and contact caches because of assigned configitems list
+                types.push(KIXObjectType.ORGANISATION);
+                types.push(KIXObjectType.CONTACT);
                 break;
             case KIXObjectType.SYS_CONFIG_OPTION_DEFINITION:
                 types.push(KIXObjectType.SYS_CONFIG_OPTION);

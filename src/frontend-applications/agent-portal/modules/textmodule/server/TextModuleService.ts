@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -15,6 +15,7 @@ import { LoggingService } from '../../../../../server/services/LoggingService';
 import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
 import { Error } from '../../../../../server/model/Error';
 import { TextModule } from '../model/TextModule';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class TextModuleAPIService extends KIXObjectAPIService {
 
@@ -43,19 +44,19 @@ export class TextModuleAPIService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
-        let objects = [];
+    ): Promise<ObjectResponse<T>> {
+        let objectResponse = new ObjectResponse();
 
         switch (objectType) {
             case KIXObjectType.TEXT_MODULE:
-                objects = await super.load<TextModule>(
+                objectResponse = await super.load<TextModule>(
                     token, KIXObjectType.TEXT_MODULE, this.RESOURCE_URI, loadingOptions, objectIds,
                     KIXObjectType.TEXT_MODULE, clientRequestId, TextModule
                 );
                 break;
             default:
         }
-        return objects;
+        return objectResponse as ObjectResponse<T>;
     }
 
     public createObject(

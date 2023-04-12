@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -28,6 +28,20 @@ export class TicketStateFormValue extends SelectObjectFormValue {
         this.objectType = KIXObjectType.TICKET_STATE;
 
         this.formValues.push(new PendingTimeFormValue(TicketProperty.PENDING_TIME, ticket, objectValueMapper, this));
+    }
+
+    public async initFormValue(): Promise<void> {
+        this.forbiddenValues = [6, 7];
+        this.setNewInitialState('forbiddenValues', [6, 7]);
+        await super.initFormValue();
+    }
+
+    public async reset(
+        ignoreProperties?: string[], ignoreFormValueProperties?: string[], ignoreFormValueReset?: string[]
+    ): Promise<void> {
+        this.forbiddenValues = [6, 7];
+        this.setNewInitialState('forbiddenValues', [6, 7]);
+        await super.reset(ignoreProperties, ignoreFormValueProperties, ignoreFormValueReset);
     }
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -18,6 +18,7 @@ import { SortUtil } from '../../../model/SortUtil';
 import { ModuleConfigurationService } from '../../../server/services/configuration/ModuleConfigurationService';
 import { DateTimeAPIUtil } from '../../../server/services/DateTimeAPIUtil';
 import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { KIXObjectService } from '../../base-components/webapp/core/KIXObjectService';
 import { SysConfigKey } from '../../sysconfig/model/SysConfigKey';
 import { SysConfigOption } from '../../sysconfig/model/SysConfigOption';
@@ -91,7 +92,7 @@ export class ConfigItemDetailsDataBuilder {
         let ci: ConfigItem;
         if (token && configItemId) {
             const requestId = IdService.generateDateBasedId();
-            const configItems = await CMDBAPIService.getInstance().loadObjects<ConfigItem>(
+            const objectResponse = await CMDBAPIService.getInstance().loadObjects<ConfigItem>(
                 token, requestId, KIXObjectType.CONFIG_ITEM, [configItemId],
                 new KIXObjectLoadingOptions(null, null, null, [
                     ConfigItemProperty.CURRENT_VERSION,
@@ -99,7 +100,8 @@ export class ConfigItemDetailsDataBuilder {
                     VersionProperty.PREPARED_DATA
                 ]),
                 undefined
-            ).catch(() => [] as ConfigItem[]);
+            ).catch(() => new ObjectResponse<ConfigItem>());
+            const configItems = objectResponse?.objects || [];
             ci = configItems && configItems.length ? configItems[0] : null;
         }
         return ci;
@@ -241,10 +243,11 @@ export class ConfigItemDetailsDataBuilder {
             loadingOptions = new KIXObjectLoadingOptions(null, null, null, includes);
         }
 
-        const objects = await service.loadObjects(
+        const objectResponse = await service.loadObjects(
             token, '', objectType, [id], loadingOptions, null
-        ).catch((error) => []);
+        ).catch((error) => new ObjectResponse());
 
+        const objects = objectResponse?.objects || [];
         return objects && !!objects.length ? objects[0] : null;
     }
 

@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
@@ -7,35 +7,23 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 <!doctype html>
-<html lang="de">
+<html lang='de'>
     <head>
         <!-- TODO: <title> mit korrektem release -->
         <title>KIX 18</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset='UTF-8'/>
+        <meta name='viewport' content='width=device-width, initial-scale=1'/>
         <if(input.favIcon)>
             <link
-                rel="shortcut icon"
-                type=(input.favIcon.ContentType)
-                sizes="32x32"
-                href=(
-                    "data:" +
-                    input.favIcon.ContentType +
-                    ";base64," +
-                    input.favIcon.Content
-                )
-            >
+                rel='shortcut icon'
+                type=input.favIcon.ContentType
+                sizes='32x32'
+                href=('data:' + input.favIcon.ContentType + ';base64,' + input.favIcon.Content)/>
         </if>
         <else>
-            <link
-                rel="shortcut icon"
-                type="image/png"
-                sizes="32x32"
-                href="/static/img/kix_default.png"
-            >
+            <link rel='shortcut icon' type='image/png' sizes='32x32' href='/static/img/kix_default.png'/>
         </else>
-
-        <link rel="stylesheet" href="/static/font-awesome/css/all.min.css">
+        <link rel='stylesheet' href='/static/font-awesome/css/all.min.css'/>
         <!-- Muss aus der kix-font.less entfernt und hier eingefügt werden. -->
         <style>
             @font-face {font-family: "kix_font";
@@ -68,7 +56,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     </head>
     <body>
         <login-component ...input/>
-        <script src="/static/thirdparty/ckeditor-4.18.0/ckeditor.js"/>
+        <script src='/static/thirdparty/ckeditor-4.18.0/ckeditor.js'/>
         <lasso-body/>
     </body>
 </html>

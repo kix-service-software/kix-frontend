@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -10,11 +10,14 @@
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { JobProperty } from '../../../job/model/JobProperty';
 import { AbstractJobFormManager } from '../../../job/webapp/core/AbstractJobFormManager';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { SearchService } from '../../../search/webapp/core';
+import { TicketProperty } from '../../model/TicketProperty';
+import { QueueService } from './admin';
 import { TicketSearchFormManager } from './TicketSearchFormManager';
 
 export class TicketJobFormManager extends AbstractJobFormManager {
@@ -66,5 +69,19 @@ class TicketJobFilterFormManager extends TicketSearchFormManager {
     public async getOperations(property: string): Promise<Array<string | SearchOperator>> {
         return await super.getOperations(property);
     }
+
+    public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
+        let nodes = [];
+        switch (property) {
+            case TicketProperty.QUEUE_ID:
+                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false);
+                nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy);
+                break;
+            default:
+                nodes = await super.getTreeNodes(property, objectIds);
+        }
+        return nodes;
+    }
+
 
 }

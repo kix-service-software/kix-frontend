@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -63,6 +63,11 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent(
             'setup-admin-password',
             '/kix-module-user$0/webapp/components/setup-admin-password',
+            []
+        ),
+        new UIComponent(
+            'base-permission-input',
+            '/kix-module-user$0/webapp/components/base-permission-input',
             []
         ),
         new UIComponent('user-token-input', '/kix-module-user$0/webapp/components/user-token-input', [])

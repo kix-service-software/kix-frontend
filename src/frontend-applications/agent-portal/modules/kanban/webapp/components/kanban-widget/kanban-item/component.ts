@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -83,16 +83,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async ticketChanged(data: any, eventId: string): Promise<void> {
-        if (data.ticketId && Number(data.ticketId) === this.state.ticket.TicketID) {
-            const tickets = await KIXObjectService.loadObjects<Ticket>(
-                KIXObjectType.TICKET, [data.ticketId]
-            );
-
-            if (tickets && tickets.length) {
-                this.state.ticket = tickets[0];
-            }
-
+        if (Number(data.ticket?.TicketID) === this.state.ticket.TicketID) {
+            this.state.ticket = data.ticket;
+            this.state.update = true;
             await this.prepareAvatar();
+            setTimeout(() => this.state.update = false, 20);
         }
     }
 

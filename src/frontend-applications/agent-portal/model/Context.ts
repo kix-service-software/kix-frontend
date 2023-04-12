@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -299,14 +299,15 @@ export abstract class Context {
         return this.dialogSubscriberId;
     }
 
-    public async getObjectList<T = KIXObject>(objectType: KIXObjectType | string): Promise<T[]> {
+    public async getObjectList<T = KIXObject>(objectType: KIXObjectType | string, limit?: number): Promise<T[]> {
         if (!objectType) {
             const values = this.objectLists.values();
             const list = values.next();
             return list.value;
-        } else if (!this.objectLists.has(objectType)) {
-            await this.reloadObjectList(objectType);
         }
+
+        // await this.reloadObjectList(objectType, undefined, limit);
+
         return this.objectLists.get(objectType) as any[];
     }
 
@@ -639,7 +640,9 @@ export abstract class Context {
         this.listeners.forEach((l) => l.scrollInformationChanged(this.scrollInormation[0], this.scrollInormation[1]));
     }
 
-    public async reloadObjectList(objectType: KIXObjectType | string, silent: boolean = false): Promise<void> {
+    public async reloadObjectList(
+        objectType: KIXObjectType | string, silent: boolean = false, limit?: number
+    ): Promise<void> {
         return;
     }
 

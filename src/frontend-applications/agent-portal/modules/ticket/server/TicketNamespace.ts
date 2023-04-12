@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -22,6 +22,7 @@ import { CacheService } from '../../../server/services/cache';
 
 import cookie from 'cookie';
 import { Socket } from 'socket.io';
+import { AuthenticationService } from '../../../../../server/services/AuthenticationService';
 
 export class TicketNamespace extends SocketNameSpace {
 
@@ -54,10 +55,12 @@ export class TicketNamespace extends SocketNameSpace {
         data: LoadArticleAttachmentRequest, client: Socket
     ): Promise<SocketResponse> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
-        const token = parsedCookie ? parsedCookie.token : '';
+
+        const tokenPrefix = client?.handshake?.headers?.tokenprefix || '';
+        const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
         const response = await TicketAPIService.getInstance().loadArticleAttachment(
-            token, data.ticketId, data.articleId, data.attachmentId
+            token, data.ticketId, data.articleId, data.attachmentId, data.relevantOrganisationId
         ).then((attachment) =>
             new SocketResponse(
                 TicketEvent.ARTICLE_ATTACHMENT_LOADED,
@@ -72,10 +75,12 @@ export class TicketNamespace extends SocketNameSpace {
         data: LoadArticleZipAttachmentRequest, client: Socket
     ): Promise<SocketResponse> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
-        const token = parsedCookie ? parsedCookie.token : '';
+
+        const tokenPrefix = client?.handshake?.headers?.tokenprefix || '';
+        const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
         const response = await TicketAPIService.getInstance().loadArticleZipAttachment(
-            token, data.ticketId, data.articleId
+            token, data.ticketId, data.articleId, data.relevantOrganisationId
         ).then((attachment) =>
             new SocketResponse(
                 TicketEvent.ARTICLE_ZIP_ATTACHMENT_LOADED,
@@ -90,7 +95,9 @@ export class TicketNamespace extends SocketNameSpace {
         data: SetArticleSeenFlagRequest, client: Socket
     ): Promise<SocketResponse> {
         const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
-        const token = parsedCookie ? parsedCookie.token : '';
+
+        const tokenPrefix = client?.handshake?.headers?.tokenprefix || '';
+        const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
         const response = await TicketAPIService.getInstance().setArticleSeenFlag(
             token, null, data.ticketId, data.articleId
@@ -98,7 +105,10 @@ export class TicketNamespace extends SocketNameSpace {
             new SocketResponse(TicketEvent.SET_ARTICLE_SEEN_FLAG_DONE, { requestId: data.requestId })
         ).catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
 
-        CacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
+        const backendToken = AuthenticationService.getInstance().getBackendToken(token);
+        const userId = AuthenticationService.getInstance().decodeToken(backendToken)?.UserID;
+
+        CacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS_${userId}`);
         CacheService.getInstance().deleteKeys(KIXObjectType.TICKET);
 
         return response;

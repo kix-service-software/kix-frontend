@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -29,7 +29,6 @@ import { FormConfiguration } from '../../model/configuration/FormConfiguration';
 import { FormContext } from '../../model/configuration/FormContext';
 import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
 import { FormFieldOptions } from '../../model/configuration/FormFieldOptions';
-
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
@@ -137,6 +136,14 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         );
 
         configurations.push(
+            new FormFieldConfiguration(
+                'queue-edit-form-field-permissions',
+                'Translatable#Assigned Roles', QueueProperty.ASSIGNED_PERMISSIONS,
+                'base-permission-input', false, 'Translatable#Helptext_Admin_Tickets_QueueCreate_Permission'
+            )
+        );
+
+        configurations.push(
             new FormGroupConfiguration(
                 'queue-edit-form-group-informations', 'Translatable#Queue Information',
                 [
@@ -177,11 +184,21 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         );
 
         configurations.push(
+            new FormGroupConfiguration(
+                'queue-edit-form-group-permissions', 'Translatable#Permissions',
+                [
+                    'queue-edit-form-field-permissions'
+                ]
+            )
+        );
+
+        configurations.push(
             new FormPageConfiguration(
                 'queue-edit-form-page', 'Translatable#Edit Queue',
                 [
                     'queue-edit-form-group-informations',
-                    'queue-edit-form-group-signatrue'
+                    'queue-edit-form-group-signatrue',
+                    'queue-edit-form-group-permissions'
                 ]
             )
         );

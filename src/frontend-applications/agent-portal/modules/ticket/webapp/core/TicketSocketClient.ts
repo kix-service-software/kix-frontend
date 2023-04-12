@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -51,7 +51,10 @@ export class TicketSocketClient extends SocketClient {
 
         const requestPromise = new Promise<Attachment>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();
-            const request = new LoadArticleAttachmentRequest(requestId, ticketId, articleId, attachmentId);
+            const organisationId = ClientStorageService.getOption('RelevantOrganisationID');
+            const request = new LoadArticleAttachmentRequest(
+                requestId, ticketId, articleId, attachmentId, Number(organisationId)
+            );
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + TicketEvent.LOAD_ARTICLE_ATTACHMENT);
@@ -85,7 +88,10 @@ export class TicketSocketClient extends SocketClient {
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<Attachment>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();
-            const request = new LoadArticleZipAttachmentRequest(requestId, ticketId, articleId);
+            const organisationId = ClientStorageService.getOption('RelevantOrganisationID');
+            const request = new LoadArticleZipAttachmentRequest(
+                requestId, ticketId, articleId, Number(organisationId)
+            );
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + TicketEvent.LOAD_ARTICLE_ZIP_ATTACHMENT);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -60,11 +60,11 @@ export class ClientRegistrationService extends KIXObjectAPIService {
         token: string, limit?: number, order?: SortOrder, changedAfter?: string, query?: any
     ): Promise<ClientRegistration[]> {
 
-        const response = await this.getObjects<ClientRegistrationsResponse>(
+        const httpResponse = await this.getObjects<ClientRegistrationsResponse>(
             token, limit, order, changedAfter, query
         );
 
-        return response.ClientRegistration;
+        return httpResponse?.responseData?.ClientRegistration;
     }
 
     public async submitClientRegistration(

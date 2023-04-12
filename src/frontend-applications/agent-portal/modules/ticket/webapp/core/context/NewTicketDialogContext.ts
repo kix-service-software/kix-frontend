@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -31,15 +31,6 @@ export class NewTicketDialogContext extends Context {
         if (!this.getAdditionalInformation(AdditionalContextInformation.FORM_OBJECT)) {
             this.setNewTicketObject();
         }
-
-        const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
-        const kixPro = releaseInfo?.plugins?.some((p) => p.product === 'KIXPro');
-
-        if (!kixPro) {
-            const formId = await FormService.getInstance().getFormIdByContext(FormContext.NEW, KIXObjectType.TICKET);
-            this.getFormManager().setFormId(formId, null, true);
-        }
-
         await super.initContext(urlParams);
     }
 
@@ -126,6 +117,17 @@ export class NewTicketDialogContext extends Context {
         this.listeners.forEach((l) => l.objectChanged(
             contactId, this.contact, KIXObjectType.CONTACT
         ));
+    }
+
+    public async postInit(): Promise<void> {
+        const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+        const kixPro = releaseInfo?.plugins?.some((p) => p.product === 'KIXPro');
+
+        if (!kixPro) {
+            const formId = await FormService.getInstance().getFormIdByContext(FormContext.NEW, KIXObjectType.TICKET);
+            this.getFormManager().setFormId(formId, null, true, false);
+        }
+        await super.postInit();
     }
 
 

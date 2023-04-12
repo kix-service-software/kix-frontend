@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -46,7 +46,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             false, false, this.state.icon, true
         );
 
-        this.state.instanceId = `search-table-${searchCache.objectType}`;
+        this.state.instanceId = IdService.generateDateBasedId(`search-table-${searchCache.objectType}`);
         this.state.objectType = searchCache.objectType;
         this.state.configuration = widgetConfiguration;
 

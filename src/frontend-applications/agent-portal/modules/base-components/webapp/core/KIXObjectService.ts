@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -109,14 +109,14 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         objectType: KIXObjectType | string, objectIds?: Array<number | string>,
         loadingOptions?: KIXObjectLoadingOptions,
         objectLoadingOptions?: KIXObjectSpecificLoadingOptions, silent: boolean = false,
-        cache: boolean = true, forceIds?: boolean
+        cache: boolean = true, forceIds?: boolean, collectionId?: string
     ): Promise<T[]> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         let objects = [];
         if (service) {
             objects = await service.loadObjects(
                 objectType, objectIds ? [...objectIds] : null, loadingOptions, objectLoadingOptions, cache, forceIds,
-                silent
+                silent, collectionId
             ).catch((error: Error) => {
                 if (!silent) {
                     // TODO: Publish event to show an error dialog
@@ -142,7 +142,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     public async loadObjects<O extends KIXObject>(
         objectType: KIXObjectType | string, objectIds: Array<string | number>,
         loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
-        cache: boolean = true, forceIds?: boolean, silent?: boolean
+        cache: boolean = true, forceIds?: boolean, silent?: boolean, collectionId?: string
     ): Promise<O[]> {
         const objectConstructors = this.getObjectConstructors(objectType);
 
@@ -151,13 +151,13 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             if (objectIds.length) {
                 objects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
                     objectType, objectConstructors, objectIds, loadingOptions, objectLoadingOptions, cache,
-                    undefined, silent
+                    undefined, silent, collectionId
                 );
             }
         } else {
             objects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
                 objectType, objectConstructors, objectIds, loadingOptions, objectLoadingOptions, cache,
-                undefined, silent
+                undefined, silent, collectionId
             );
         }
         return objects;

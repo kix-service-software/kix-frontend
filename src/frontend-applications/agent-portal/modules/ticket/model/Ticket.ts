@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -367,7 +367,7 @@ export class Ticket extends KIXObject {
             Property: TicketProperty.CREATED_USER_ID,
             Operations: [SearchOperator.IN],
             DataType: FilterDataType.NUMERIC,
-            InputType: InputFieldTypes.DROPDOWN
+            InputType: InputFieldTypes.OBJECT_REFERENCE
         },
         {
             Property: TicketProperty.CREATE_TIME,
@@ -478,10 +478,10 @@ export class Ticket extends KIXObject {
             InputType: InputFieldTypes.DROPDOWN
         },
         {
-            Property: TicketProperty.WATCH_USER_ID,
+            Property: TicketProperty.WATCHER_USER_ID,
             Operations: [SearchOperator.IN],
             DataType: FilterDataType.NUMERIC,
-            InputType: InputFieldTypes.DROPDOWN
+            InputType: InputFieldTypes.OBJECT_REFERENCE
         },
         {
             Property: ArticleProperty.CHANNEL_ID,

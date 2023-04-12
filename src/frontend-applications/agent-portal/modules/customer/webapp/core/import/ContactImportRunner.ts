@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -14,7 +14,6 @@ import { FilterType } from '../../../../../model/FilterType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
-import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { ImportRunner } from '../../../../import/webapp/core/ImportRunner';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
@@ -29,6 +28,10 @@ import { OrganisationProperty } from '../../../model/OrganisationProperty';
 export class ContactImportRunner extends ImportRunner {
 
     public objectType: KIXObjectType = KIXObjectType.CONTACT;
+
+    protected getKnownProperties(): string[] {
+        return Object.values(ContactProperty);
+    }
 
     protected async prepareParameter(object: Contact): Promise<Array<[string, any]>> {
         const parameter = await super.prepareParameter(object);
@@ -129,6 +132,14 @@ export class ContactImportRunner extends ImportRunner {
                 new FilterCriteria(
                     ContactProperty.EMAIL, SearchOperator.EQUALS,
                     FilterDataType.STRING, FilterType.AND, contact.Email
+                ),
+                new FilterCriteria(
+                    ContactProperty.FIRSTNAME, SearchOperator.EQUALS,
+                    FilterDataType.STRING, FilterType.AND, contact.Firstname
+                ),
+                new FilterCriteria(
+                    ContactProperty.LASTNAME, SearchOperator.EQUALS,
+                    FilterDataType.STRING, FilterType.AND, contact.Lastname
                 )
             ];
             const loadingOptions = new KIXObjectLoadingOptions(filter);

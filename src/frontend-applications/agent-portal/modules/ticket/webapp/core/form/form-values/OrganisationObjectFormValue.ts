@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -162,8 +162,16 @@ export class OrganisationObjectFormValue extends SelectObjectFormValue<number | 
         this.treeHandler.setSelection([]);
     }
 
-    public setPossibleValues(): void {/* Do Nothing*/ }
-    public addPossibleValues(): void {/* Do Nothing*/ }
-    public removePossibleValues(): void {/* Do Nothing*/ }
+    public async setPossibleValues(): Promise<void> {
+        return;
+    }
+
+    public async addPossibleValues(): Promise<void> {
+        return;
+    }
+
+    public async removePossibleValues(): Promise<void> {
+        return;
+    }
 
 }

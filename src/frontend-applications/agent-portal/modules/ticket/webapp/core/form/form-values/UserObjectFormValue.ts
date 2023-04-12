@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -21,8 +21,11 @@ import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectF
 import { SearchOperator } from '../../../../../search/model/SearchOperator';
 import { UserProperty } from '../../../../../user/model/UserProperty';
 import { Ticket } from '../../../../model/Ticket';
+import { TicketProperty } from '../../../../model/TicketProperty';
 
 export class UserObjectFormValue extends SelectObjectFormValue {
+
+    private objectBindingIds: string[] = [];
 
     public constructor(
         property: string,
@@ -36,10 +39,32 @@ export class UserObjectFormValue extends SelectObjectFormValue {
         this.autoCompleteConfiguration = new AutoCompleteConfiguration();
     }
 
-
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
         await super.initFormValueByField(field);
+    }
 
+    public async initFormValue(): Promise<void> {
+        await super.initFormValue();
+        if (this.object && this.property) {
+            const userId = this.object[this.property];
+            if (userId) {
+                await this.setFormValue(userId, true);
+            }
+
+            if (this.objectValueMapper?.object) {
+                this.objectBindingIds = [
+                    this.objectValueMapper.object.addBinding(TicketProperty.QUEUE_ID, () => {
+                        this.setLoadingOptions();
+                        this.value = null;
+                    })
+                ];
+            }
+        }
+
+        this.setLoadingOptions();
+    }
+
+    public async setLoadingOptions(): Promise<void> {
         // add default loading options for (agent) users
         const filter: FilterCriteria[] = [
             new FilterCriteria(
@@ -51,8 +76,17 @@ export class UserObjectFormValue extends SelectObjectFormValue {
                 FilterType.AND, 1
             )
         ];
+
+        const ticket = this.objectValueMapper?.object as Ticket;
+
+        const requiredPermission = {
+            Object: KIXObjectType.QUEUE,
+            ObjectID: ticket?.QueueID,
+            Permission: 'WRITE,READ'
+        };
+
         const query: [string, string][] = [
-            ['requiredPermission', 'TicketRead,TicketCreate']
+            ['requiredPermission', JSON.stringify(requiredPermission)]
         ];
 
         if (!this.loadingOptions) {
@@ -69,25 +103,7 @@ export class UserObjectFormValue extends SelectObjectFormValue {
             this.loadingOptions.filter = filter;
         }
 
-        if (Array.isArray(this.loadingOptions.query)) {
-            query.forEach((q) => {
-                if (!this.loadingOptions.query.some((loq) => loq[0] === q[0])) {
-                    this.loadingOptions.query.push(q);
-                }
-            });
-        } else {
-            this.loadingOptions.query = query;
-        }
-    }
-
-    public async initFormValue(): Promise<void> {
-        await super.initFormValue();
-        if (this.object && this.property) {
-            const userId = this.object[this.property];
-            if (userId) {
-                await this.setFormValue(userId, true);
-            }
-        }
+        this.loadingOptions.query = query;
     }
 
 }

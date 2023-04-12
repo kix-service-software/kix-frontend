@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -18,6 +18,7 @@ export class DateTimeFormValue extends ObjectFormValue<string> {
     public inputType: InputFieldTypes = InputFieldTypes.DATE_TIME;
     public minDate: string;
     public maxDate: string;
+    public isEmpty: boolean;
 
     public constructor(
         public property: string,
@@ -42,6 +43,8 @@ export class DateTimeFormValue extends ObjectFormValue<string> {
 
         const maxDateOption = field?.options.find((o) => o.option === FormFieldOptions.MAX_DATE);
         this.maxDate = maxDateOption ? maxDateOption.value : null;
+
+        this.isEmpty = field?.empty || false;
     }
 
 }

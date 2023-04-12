@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -67,7 +67,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         sidebarLeftToggled: () => null,
                         filteredObjectListChanged: async () => {
                             const tickets = await this.loadTickets();
-                            this.updateCalendarSchedules(tickets);
+                            setTimeout(async () => {
+                                await this.createCalendar(tickets);
+                            }, 100);
                         },
                         objectChanged: () => null,
                         objectListChanged: () => null,
@@ -175,6 +177,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         }
 
+        this.clearSchedules();
+
+        if (this.calendar) {
+            this.calendar.destroy();
+            this.calendar = null;
+            const calendar = document.getElementById('calendar');
+            if (calendar) {
+                calendar.innerHTML = '';
+            }
+        }
+
         this.calendar = new Calendar('#calendar', {
             defaultView: 'month',
             useDetailPopup: true,
@@ -208,15 +221,22 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         });
     }
 
-    private async updateCalendarSchedules(tickets: Ticket[]): Promise<void> {
+    private clearSchedules(): void {
         this.state.loading = true;
 
         if (!Array.isArray(this.schedules)) {
             this.schedules = [];
         }
+        if (this.schedules.length > 0) {
+            this.schedules.forEach((s) => this.calendar?.deleteSchedule(s.id, s.calendarId));
+        }
 
-        this.schedules.forEach((s) => this.calendar?.deleteSchedule(s.id, s.calendarId));
+        this.calendar?.clear(true);
 
+        this.schedules = [];
+    }
+
+    private async updateCalendarSchedules(tickets: Ticket[]): Promise<void> {
         this.schedules = await this.createSchedules(tickets);
         this.calendar.createSchedules(this.schedules);
         this.state.loading = false;
