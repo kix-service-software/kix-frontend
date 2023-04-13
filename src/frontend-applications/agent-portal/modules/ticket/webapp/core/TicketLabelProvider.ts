@@ -417,7 +417,10 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             ticketHookDivider = dividerConfig[0].Value ? dividerConfig[0].Value : '';
         }
 
-        const text = `${ticketHook}${ticketHookDivider}${ticket?.TicketNumber} - ${ticket?.Title}`;
+        let text = '';
+        if (id) text += `${ticketHook}${ticketHookDivider}${ticket?.TicketNumber}`;
+        if (id && title && ticket?.Title) text += '-';
+        if (title && ticket?.Title) text += `${ticket.Title}`;
         return text;
     }
 

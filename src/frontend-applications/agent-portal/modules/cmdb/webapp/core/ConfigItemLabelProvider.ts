@@ -205,8 +205,9 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
             if (hookConfig && hookConfig.length) {
                 configItemHook = hookConfig[0].Value;
             }
-
-            returnString = `${configItemHook}${configItem.Number} - ${configItem.Name}`;
+            if (id) returnString += `${configItemHook}${configItem.Number}`;
+            if (id && name && configItem.Name) returnString += ' - ';
+            if (name && configItem.Name) returnString += `${configItem.Name}`;
         }
         return returnString;
     }
