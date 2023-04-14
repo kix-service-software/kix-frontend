@@ -174,7 +174,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
     }
 
     private async prepareAttachments(files: Array<Attachment | File>): Promise<Attachment[]> {
-        const attachments = [];
+        let attachments = null;
         for (let f of files) {
             if (f instanceof File) {
                 const attachment = new Attachment();
@@ -189,6 +189,11 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
             delete f.Comment;
             delete f.KIXObjectType;
             delete f.ID;
+
+            if (!attachments) {
+                attachments = [];
+            }
+
             attachments.push(f);
         }
         return attachments;
