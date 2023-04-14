@@ -24,6 +24,9 @@ import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil
 import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { TicketService } from '../../core';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { IdService } from '../../../../../model/IdService';
+import { BackendNotification } from '../../../../../model/BackendNotification';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -31,6 +34,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private context: Context;
     private sortOrder: string;
     private loadTimeout: any;
+    private subscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -63,6 +67,23 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (!this.state.articles?.length) {
             await this.loadFilteredArticles();
         }
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId('communication-widget'),
+            eventPublished: (data: BackendNotification, eventId: string): void => {
+                const isArticleDelete = data.Event === 'DELETE' && data.Namespace === 'Ticket.Article';
+                if (isArticleDelete) {
+                    const objectIds = data.ObjectID?.split('::');
+                    if (objectIds?.length === 2) {
+                        const hasArticle = this.state.articles.some((a) => a.ArticleID.toString() === objectIds[1]);
+                        if (hasArticle) {
+                            this.loadFilteredArticles();
+                        }
+                    }
+                }
+            }
+        };
+        EventService.getInstance().subscribe(ApplicationEvent.OBJECT_DELETED, this.subscriber);
 
         setTimeout(() => {
             this.context.registerListener('communication-widget', {
@@ -139,6 +160,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onDestroy(): void {
         this.context.unregisterListener('communication-widget');
+        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_DELETED, this.subscriber);
     }
 
     public async readAll(): Promise<void> {
