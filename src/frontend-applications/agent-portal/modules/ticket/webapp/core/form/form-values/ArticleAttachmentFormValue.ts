@@ -108,4 +108,12 @@ export class ArticleAttachmentFormValue extends ObjectFormValue<string> {
         }
         return attachmentsWithContent;
     }
+
+    public async setFormValue(value: any, force?: boolean): Promise<void> {
+        if (Array.isArray(value) && value.length === 0) {
+            value = null;
+        }
+
+        await super.setFormValue(value, force);
+    }
 }
