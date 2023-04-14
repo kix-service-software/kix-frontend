@@ -178,6 +178,7 @@ export class TreeHandler {
         }
         const treeSelection = this.getSelection(this.tree);
         this.setSelection(treeSelection, true, true, true, filterSelection);
+        this.expandSelection(this.tree);
 
         this.listener.forEach((l) => l(this.tree));
     }
