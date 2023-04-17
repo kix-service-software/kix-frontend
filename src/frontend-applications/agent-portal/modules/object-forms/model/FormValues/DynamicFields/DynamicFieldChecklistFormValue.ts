@@ -40,8 +40,8 @@ export class DynamicFieldChecklistFormValue extends ObjectFormValue<CheckListIte
         const config = dynamicField?.Config;
 
         const value = this.object[this.property];
-        if (Array.isArray(value) && value.length) {
-            this.value = value[0];
+        if (Array.isArray(value)) {
+            this.value = value.length ? value[0] : null;
         } else {
             this.value = value;
         }
