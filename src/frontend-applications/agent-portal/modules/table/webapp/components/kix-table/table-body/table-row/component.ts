@@ -31,10 +31,14 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public onInput(input: any): void {
+        if (this.bindingIds?.length) {
+            this.state.row?.removeBindings(this.bindingIds);
+        }
 
         this.state.row = input.row;
 
         if (this.state.row) {
+
             this.bindingIds = [];
             this.bindingIds.push(
                 this.state.row.addBinding('selected', (selected: boolean) => this.state.selected = selected)
