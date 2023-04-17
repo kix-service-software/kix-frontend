@@ -269,7 +269,7 @@ export class TreeHandler {
         }
     }
 
-    public expandSelection(tree: TreeNode[] = this.tree): boolean {
+    public expandSelection(tree: TreeNode[] = this.tree || []): boolean {
         let expand = false;
         for (const node of tree) {
             if (node.children) {
