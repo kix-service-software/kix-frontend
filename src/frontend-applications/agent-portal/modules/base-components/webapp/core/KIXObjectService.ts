@@ -726,31 +726,12 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             }
         } else {
             switch (property) {
-                case TicketProperty.OWNER_ID:
-                case TicketProperty.RESPONSIBLE_ID:
+                case KIXObjectProperty.CREATE_BY:
+                case KIXObjectProperty.CHANGE_BY:
                     objectType = KIXObjectType.USER;
                     break;
-                case TicketProperty.CONTACT_ID:
-                case ArticleProperty.TO:
-                case ArticleProperty.CC:
-                case ArticleProperty.BCC:
-                    objectType = KIXObjectType.CONTACT;
-                    break;
-                case TicketProperty.ORGANISATION_ID:
                 case ContactProperty.PRIMARY_ORGANISATION_ID:
                     objectType = KIXObjectType.ORGANISATION;
-                    break;
-                case TicketProperty.TYPE_ID:
-                    objectType = KIXObjectType.TICKET_TYPE;
-                    break;
-                case TicketProperty.QUEUE_ID:
-                    objectType = KIXObjectType.QUEUE;
-                    break;
-                case TicketProperty.PRIORITY_ID:
-                    objectType = KIXObjectType.TICKET_PRIORITY;
-                    break;
-                case TicketProperty.STATE_ID:
-                    objectType = KIXObjectType.TICKET_STATE;
                     break;
                 default:
             }
