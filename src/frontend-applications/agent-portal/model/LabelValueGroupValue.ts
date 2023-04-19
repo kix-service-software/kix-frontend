@@ -7,6 +7,7 @@
  * --
  */
 
+import { RoutingConfiguration } from './configuration/RoutingConfiguration';
 import { Attachment } from './kix/Attachment';
 
 export class LabelValueGroupValue {
@@ -15,6 +16,7 @@ export class LabelValueGroupValue {
         public value: string,
         public multiline: boolean = false,
         public attachment?: Attachment,
+        public routingConfiguration: RoutingConfiguration = null
     ) { }
 
 }
