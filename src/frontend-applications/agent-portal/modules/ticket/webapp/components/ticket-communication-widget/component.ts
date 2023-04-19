@@ -62,7 +62,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.state.translations = await TranslationService.createTranslationObject(
             ['Translatable#Go to top', 'Translatable#Read all', 'Translatable#Collapse all',
-                'Translatable#Preview List', 'Translatable#Compact View']);
+                'Translatable#Preview List', 'Translatable#Compact View', 'Translatable#Change sort direction']);
 
         if (!this.state.articles?.length) {
             await this.loadFilteredArticles();
@@ -211,6 +211,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (element) {
             element.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'smooth' });
         }
+    }
+
+    public changeSortDirection(): void {
+        if (this.sortOrder === 'newest') this.sortOrder = 'odlest';
+        else this.sortOrder = 'newest';
+        AgentService.getInstance().setPreferences([[PersonalSettingsProperty.ARTICLE_SORT_ORDER, this.sortOrder]]);
+        this.loadFilteredArticles();
     }
 }
 
