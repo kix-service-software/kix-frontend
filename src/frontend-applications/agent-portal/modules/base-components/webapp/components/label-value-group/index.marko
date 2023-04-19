@@ -31,7 +31,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             <if(group.value.multiline)>
                                 <pre>${group.value.value}</pre>
                             </if>
-                            <else>${group.value.value}</else>
+                            <else>
+                                <link-target routingConfiguration=group.value.routingConfiguration>
+                                    <@content>
+                                        ${group.value.value}
+                                    </@content>
+                                </link-target>
+                            </else>
                         </div>
                     </else>
                 </if>

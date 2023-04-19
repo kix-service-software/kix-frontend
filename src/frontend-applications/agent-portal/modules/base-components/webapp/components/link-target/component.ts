@@ -23,7 +23,7 @@ class Component {
 
     public onInput(input: ComponentState): void {
         this.state.routingConfiguration = input.routingConfiguration ? { ...input.routingConfiguration } : null;
-        this.state.objectId = input.objectId;
+        this.state.objectId = input.objectId || this.state.routingConfiguration?.replaceObjectId;
         this.state.object = input.object;
         this.setURL();
     }
