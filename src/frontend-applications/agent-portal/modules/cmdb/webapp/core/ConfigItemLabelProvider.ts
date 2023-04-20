@@ -25,6 +25,8 @@ import { LabelService } from '../../../base-components/webapp/core/LabelService'
 import { Label } from '../../../base-components/webapp/core/Label';
 import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
+import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 
 export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
@@ -194,22 +196,31 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
     }
 
     public async getObjectText(configItem: ConfigItem, id: boolean = true, name: boolean = true): Promise<string> {
-        let returnString = '';
+        let displayValue = '';
         if (configItem) {
-            let configItemHook: string = '';
 
-            const hookConfig: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
-                KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.CONFIG_ITEM_HOOK]
-            ).catch((error): SysConfigOption[] => []);
+            const pattern = await SysConfigService.getInstance().getDisplayValuePattern(KIXObjectType.CONFIG_ITEM);
 
-            if (hookConfig && hookConfig.length) {
-                configItemHook = hookConfig[0].Value;
+            if (pattern) {
+                displayValue = await PlaceholderService.getInstance().replacePlaceholders(pattern, configItem);
+            } else {
+
+                let configItemHook: string = '';
+
+                const hookConfig: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
+                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.CONFIG_ITEM_HOOK]
+                ).catch((error): SysConfigOption[] => []);
+
+                if (hookConfig && hookConfig.length) {
+                    configItemHook = hookConfig[0].Value;
+                }
+                if (id) displayValue += `${configItemHook}${configItem.Number}`;
+                if (id && name && configItem.Name) displayValue += ' - ';
+                if (name && configItem.Name) displayValue += `${configItem.Name}`;
             }
-            if (id) returnString += `${configItemHook}${configItem.Number}`;
-            if (id && name && configItem.Name) returnString += ' - ';
-            if (name && configItem.Name) returnString += `${configItem.Name}`;
         }
-        return returnString;
+
+        return displayValue;
     }
 
     public getObjectTypeIcon(): string | ObjectIcon {

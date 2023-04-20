@@ -27,6 +27,8 @@ import { QueueProperty } from '../../model/QueueProperty';
 import { AgentService } from '../../../user/webapp/core/AgentService';
 import { Article } from '../../model/Article';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
+import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 
 export class TicketLabelProvider extends LabelProvider<Ticket> {
 
@@ -398,30 +400,37 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
     public async getObjectText(
         ticket: Ticket, id: boolean = true, title: boolean = true, translatable: boolean = true
     ): Promise<string> {
-        let ticketHook: string = '';
-        let ticketHookDivider: string = '';
+        let displayValue: string = ticket?.Title;
 
-        const hookConfig = await KIXObjectService.loadObjects<SysConfigOption>(
-            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_HOOK]
-        ).catch((error): SysConfigOption[] => []);
+        const pattern = await SysConfigService.getInstance().getDisplayValuePattern(KIXObjectType.TICKET);
 
-        const dividerConfig = await KIXObjectService.loadObjects<SysConfigOption>(
-            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_HOOK_DIVIDER]
-        ).catch((error): SysConfigOption[] => []);
+        if (pattern && ticket) {
+            displayValue = await PlaceholderService.getInstance().replacePlaceholders(pattern, ticket);
+        } else {
+            let ticketHook: string = '';
+            let ticketHookDivider: string = '';
 
-        if (hookConfig.length) {
-            ticketHook = hookConfig[0].Value ? hookConfig[0].Value : '';
+            const hookConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_HOOK]
+            ).catch((error): SysConfigOption[] => []);
+
+            const dividerConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_HOOK_DIVIDER]
+            ).catch((error): SysConfigOption[] => []);
+
+            if (hookConfig.length) {
+                ticketHook = hookConfig[0].Value ? hookConfig[0].Value : '';
+            }
+
+            if (dividerConfig.length) {
+                ticketHookDivider = dividerConfig[0].Value ? dividerConfig[0].Value : '';
+            }
+
+            if (id) displayValue += `${ticketHook}${ticketHookDivider}${ticket?.TicketNumber}`;
+            if (id && title && ticket?.Title) displayValue += '-';
+            if (title && ticket?.Title) displayValue += `${ticket.Title}`;
         }
-
-        if (dividerConfig.length) {
-            ticketHookDivider = dividerConfig[0].Value ? dividerConfig[0].Value : '';
-        }
-
-        let text = '';
-        if (id) text += `${ticketHook}${ticketHookDivider}${ticket?.TicketNumber}`;
-        if (id && title && ticket?.Title) text += '-';
-        if (title && ticket?.Title) text += `${ticket.Title}`;
-        return text;
+        return displayValue;
     }
 
     public getObjectAdditionalText(ticket: Ticket, translatable: boolean = true): string {

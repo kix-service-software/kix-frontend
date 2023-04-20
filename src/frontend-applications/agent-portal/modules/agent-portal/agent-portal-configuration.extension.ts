@@ -8,7 +8,8 @@
  */
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
-import { AgentPortalConfiguration as AgentPortalConfiguration } from '../../model/configuration/AgentPortalConfiguration';
+import { AgentPortalConfiguration } from '../../model/configuration/AgentPortalConfiguration';
+import { DisplayValueConfiguration } from '../../model/configuration/DisplayValueConfiguration';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
 
@@ -19,7 +20,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
     }
 
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
-        return [new AgentPortalConfiguration()];
+        return [new AgentPortalConfiguration(), new DisplayValueConfiguration()];
     }
 
     public async getFormConfigurations(): Promise<IConfiguration[]> {

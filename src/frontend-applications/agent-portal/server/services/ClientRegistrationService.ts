@@ -187,7 +187,9 @@ export class ClientRegistrationService extends KIXObjectAPIService {
             const sysconfigOptionDefinitions = configurations.map((c) => {
                 const name = c.name ? c.name : c.id;
                 const definition: any = {
-                    AccessLevel: SysConfigAccessLevel.INTERNAL,
+                    AccessLevel: c.application === 'agent-portal'
+                        ? SysConfigAccessLevel.INTERNAL
+                        : SysConfigAccessLevel.EXTERNAL,
                     Name: c.id,
                     Description: name,
                     Default: JSON.stringify(c),
