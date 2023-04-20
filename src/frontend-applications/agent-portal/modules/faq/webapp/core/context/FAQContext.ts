@@ -120,7 +120,8 @@ export class FAQContext extends Context {
         }
 
         const faqArticles = await KIXObjectService.loadObjects(
-            KIXObjectType.FAQ_ARTICLE, null, loadingOptions, null, false, undefined, undefined, this.contextId
+            KIXObjectType.FAQ_ARTICLE, null, loadingOptions, null, false, undefined, undefined,
+            this.contextId + KIXObjectType.FAQ_ARTICLE
         ).catch((error) => []);
         this.setObjectList(KIXObjectType.FAQ_ARTICLE, faqArticles);
     }

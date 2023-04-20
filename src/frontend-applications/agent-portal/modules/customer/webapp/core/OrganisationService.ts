@@ -50,7 +50,7 @@ export class OrganisationService extends KIXObjectService<Organisation> {
     public async loadObjects<O extends KIXObject>(
         objectType: KIXObjectType | string, objectIds: Array<string | number>,
         loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
-        cache: boolean = true, forceIds?: boolean
+        cache: boolean = true, forceIds?: boolean, silent?: boolean, collectionId?: string
     ): Promise<O[]> {
         let objects: Organisation[];
 
@@ -61,10 +61,14 @@ export class OrganisationService extends KIXObjectService<Organisation> {
         }
 
         if (loadingOptions || !preload) {
-            objects = await super.loadObjects<Organisation>(KIXObjectType.ORGANISATION, objectIds, loadingOptions);
+            objects = await super.loadObjects<Organisation>(
+                KIXObjectType.ORGANISATION, objectIds, loadingOptions,
+                undefined, undefined, undefined, undefined, collectionId
+            );
         } else {
             objects = await super.loadObjects<Organisation>(
-                KIXObjectType.ORGANISATION, null, loadingOptions, objectLoadingOptions
+                KIXObjectType.ORGANISATION, null, loadingOptions, objectLoadingOptions,
+                undefined, undefined, undefined, collectionId
             );
             if (objectIds) {
                 objects = objects.filter((c) => objectIds.map((id) => Number(id)).some((oid) => c.ObjectId === oid));

@@ -52,7 +52,7 @@ export class ContactService extends KIXObjectService<Contact> {
     public async loadObjects<O extends KIXObject>(
         objectType: KIXObjectType | string, objectIds: Array<string | number>,
         loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
-        cache: boolean = true, forceIds?: boolean
+        cache: boolean = true, forceIds?: boolean, silent?: boolean, collectionId?: string
     ): Promise<O[]> {
 
         let objects: Contact[];
@@ -64,10 +64,14 @@ export class ContactService extends KIXObjectService<Contact> {
         }
 
         if (loadingOptions || !preload) {
-            objects = await super.loadObjects<Contact>(KIXObjectType.CONTACT, objectIds, loadingOptions);
+            objects = await super.loadObjects<Contact>(
+                KIXObjectType.CONTACT, objectIds, loadingOptions,
+                undefined, undefined, undefined, undefined, collectionId
+            );
         } else {
             objects = await super.loadObjects<Contact>(
-                KIXObjectType.CONTACT, null, loadingOptions, objectLoadingOptions
+                KIXObjectType.CONTACT, null, loadingOptions, objectLoadingOptions,
+                undefined, undefined, undefined, collectionId
             );
             if (objectIds) {
                 objects = objects.filter((c) => objectIds.map((id) => Number(id)).some((oid) => c.ObjectId === oid));

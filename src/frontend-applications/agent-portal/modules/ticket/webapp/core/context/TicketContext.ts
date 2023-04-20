@@ -188,7 +188,8 @@ export class TicketContext extends Context {
         loadingOptions.includes.push(...additionalIncludes);
 
         const tickets = await KIXObjectService.loadObjects(
-            KIXObjectType.TICKET, null, loadingOptions, null, false, undefined, undefined, this.contextId
+            KIXObjectType.TICKET, null, loadingOptions, null, false, undefined, undefined,
+            this.contextId + KIXObjectType.TICKET
         ).catch((error) => []);
 
         this.setObjectList(KIXObjectType.TICKET, tickets, silent);
