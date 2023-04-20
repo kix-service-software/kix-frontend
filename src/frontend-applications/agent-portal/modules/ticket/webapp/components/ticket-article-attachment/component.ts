@@ -31,7 +31,9 @@ class ArticleAttachmentComponent {
         this.state.article = input.article;
 
         if (this.state.attachment) {
-            this.state.icon = new ObjectIcon(null, 'MIMEType', this.state.attachment.ContentType);
+            const contentTypeParts = this.state.attachment.ContentType.split(/;\s*/);
+            const contentType = contentTypeParts[0];
+            this.state.icon = new ObjectIcon(null, 'MIMEType', contentType);
         }
         this.images = Array.isArray(input.images) ? input.images : [];
     }
