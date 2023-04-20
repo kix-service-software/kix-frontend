@@ -22,6 +22,8 @@ import { User } from '../../../user/model/User';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { SysConfigService } from '../../../sysconfig/webapp/core';
+import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 
 export class ContactLabelProvider extends LabelProvider<Contact> {
 
@@ -276,27 +278,33 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
     public async getObjectText(
         contact: Contact, id: boolean = false, name: boolean = false, translatable: boolean = true
     ): Promise<string> {
-        let returnString = '';
+        let displayValue = '';
         if (contact) {
-            const user = await this.getUserByContact(contact);
-            const idString = user ? user.UserLogin : contact.Email;
-            if (id) {
-                returnString = idString;
-            }
-            if (name) {
-                returnString = `${contact.Firstname} ${contact.Lastname}`;
-            }
-            if (id && name) {
-                returnString = `${contact.Firstname} ${contact.Lastname} (${idString})`;
-            }
-            if (!id && !name) {
-                returnString = `${contact.Firstname} ${contact.Lastname} (${idString})`;
+            const pattern = await SysConfigService.getInstance().getDisplayValuePattern(KIXObjectType.CONTACT);
+
+            if (pattern) {
+                displayValue = await PlaceholderService.getInstance().replacePlaceholders(pattern, contact);
+            } else {
+                const user = await this.getUserByContact(contact);
+                const idString = user ? user.UserLogin : contact.Email;
+                if (id) {
+                    displayValue = idString;
+                }
+                if (name) {
+                    displayValue = `${contact.Firstname} ${contact.Lastname}`;
+                }
+                if (id && name) {
+                    displayValue = `${contact.Firstname} ${contact.Lastname} (${idString})`;
+                }
+                if (!id && !name) {
+                    displayValue = `${contact.Firstname} ${contact.Lastname} (${idString})`;
+                }
             }
         } else {
             const contactLabel = await TranslationService.translate('Translatable#Contact');
-            returnString = contactLabel;
+            displayValue = contactLabel;
         }
-        return returnString;
+        return displayValue;
     }
 
     public getObjectTypeIcon(): string | ObjectIcon {

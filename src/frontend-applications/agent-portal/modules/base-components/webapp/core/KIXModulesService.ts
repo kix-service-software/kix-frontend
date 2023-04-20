@@ -8,6 +8,7 @@
  */
 
 import { ConfigurationType } from '../../../../model/configuration/ConfigurationType';
+import { DisplayValueConfiguration } from '../../../../model/configuration/DisplayValueConfiguration';
 import { IKIXModuleExtension } from '../../../../model/IKIXModuleExtension';
 import { IUIModule } from '../../../../model/IUIModule';
 import { ReleaseInfo } from '../../../../model/ReleaseInfo';
@@ -33,6 +34,8 @@ export class KIXModulesService {
     private configurationComponents: Map<ConfigurationType | string, string> = new Map();
 
     public static application = 'agent-portal';
+
+    public static displayValueConfigurationKey = DisplayValueConfiguration.CONFIGURATION_ID;
 
     public static urlPrefix = '';
 

@@ -21,6 +21,8 @@ import { LabelService } from '../../../base-components/webapp/core/LabelService'
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
+import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 
 
 export class UserLabelProvider extends LabelProvider<User> {
@@ -206,15 +208,21 @@ export class UserLabelProvider extends LabelProvider<User> {
     }
 
     public async getObjectText(user: User, id?: boolean, title?: boolean, translatable?: boolean): Promise<string> {
-        if (user.Contact) {
+        let displayValue = user?.UserLogin;
+
+        const pattern = await SysConfigService.getInstance().getDisplayValuePattern(KIXObjectType.USER);
+
+        if (pattern && user) {
+            displayValue = await PlaceholderService.getInstance().replacePlaceholders(pattern, user);
+        } else if (user.Contact) {
             const email = user.Contact ? ` (${user.Contact.Email})` : '';
             const base = user.Contact ? `${user.Contact.Firstname} ${user.Contact.Lastname}` : user.UserLogin;
-            return `${base}${email}`;
+            displayValue = `${base}${email}`;
         } else if (user['UserFirstname'] && user['UserLastname'] && user['UserEmail']) {
-            return `${user['UserLastname']}, ${user['UserFirstname']} (${user.UserLogin})`;
+            displayValue = `${user['UserLastname']}, ${user['UserFirstname']} (${user.UserLogin})`;
         }
 
-        return user.UserLogin;
+        return displayValue;
     }
 
     public getObjectTypeIcon(): string | ObjectIcon {

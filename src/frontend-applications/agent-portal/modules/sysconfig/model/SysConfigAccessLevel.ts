@@ -13,6 +13,8 @@ export enum SysConfigAccessLevel {
 
     INTERNAL = 'internal',
 
-    CONFIDENTIAL = 'confidential'
+    CONFIDENTIAL = 'confidential',
+
+    EXTERNAL = 'external'
 
 }
