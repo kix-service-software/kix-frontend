@@ -83,6 +83,7 @@ export class Article extends KIXObject {
     public Plain: string = null;
 
     public Unseen: number = 0;
+    public NotSentError: string = '';
 
     // UI Properties
 
@@ -134,6 +135,7 @@ export class Article extends KIXObject {
             this.CreatedBy = article.CreatedBy;
             this.Plain = article.Plain;
             this.Unseen = Number(article.Unseen);
+            this.NotSentError = article.NotSentError;
 
             this.bodyAttachment = article.bodyAttachment;
 
@@ -195,16 +197,18 @@ export class Article extends KIXObject {
     public isUnsent(): boolean {
         if (this.Flags) {
             return this.Flags.some((af) => typeof af === 'object' && af.Name.toLocaleLowerCase() === 'notsenterror');
+        } else {
+            return Boolean(this.NotSentError);
         }
-        return false;
     }
 
     public getUnsentError(): string {
-        const flag = this.Flags.find((af) => typeof af === 'object' && af.Name.toLocaleLowerCase() === 'notsenterror');
+        const flag = this.Flags?.find((af) => typeof af === 'object' && af.Name.toLocaleLowerCase() === 'notsenterror');
         if (flag) {
             return flag.Value;
+        } else {
+            return this.NotSentError;
         }
-        return '';
     }
 
     public equals(article: Article): boolean {
