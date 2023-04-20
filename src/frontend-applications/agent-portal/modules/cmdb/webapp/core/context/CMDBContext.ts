@@ -191,7 +191,8 @@ export class CMDBContext extends Context {
         }
 
         const configItems = await KIXObjectService.loadObjects(
-            KIXObjectType.CONFIG_ITEM, null, loadingOptions, null, false, undefined, undefined, this.contextId
+            KIXObjectType.CONFIG_ITEM, null, loadingOptions, null, false, undefined, undefined,
+            this.contextId + KIXObjectType.CONFIG_ITEM
         ).catch((error) => []);
 
         this.setObjectList(KIXObjectType.CONFIG_ITEM, configItems);
