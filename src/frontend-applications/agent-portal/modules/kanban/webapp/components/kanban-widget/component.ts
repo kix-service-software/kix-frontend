@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -29,6 +29,7 @@ import { TicketState } from '../../../../ticket/model/TicketState';
 import { TicketStateProperty } from '../../../../ticket/model/TicketStateProperty';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
 import { Ticket } from '../../../../ticket/model/Ticket';
+import { TicketStateService } from '../../../../ticket/webapp/core';
 
 declare const jKanban: any;
 
@@ -43,6 +44,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private isCreatingBoard: boolean;
 
+    private tickets: Ticket[] = [];
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -54,6 +57,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         if (context) {
+            await context.reloadObjectList(KIXObjectType.TICKET);
+
             this.widgetConfiguration = await context.getWidgetConfiguration(this.state.instanceId);
             if (this.widgetConfiguration && this.widgetConfiguration.configuration) {
                 this.kanbanConfig = (this.widgetConfiguration.configuration as KanbanConfiguration);
@@ -168,25 +173,32 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             dropEl: this.dropTicket.bind(this)
         });
 
+        this.tickets = [];
+
         setTimeout(async () => {
             if (Array.isArray(teamTickets)) {
                 teamTickets.forEach((t) => this.createItem(t));
+                this.tickets.push(...teamTickets);
             }
 
             if (Array.isArray(personalTickets)) {
                 personalTickets.forEach((t) => this.createItem(t));
+                this.tickets.push(...personalTickets);
             }
 
             if (Array.isArray(wipTickets)) {
                 wipTickets.forEach((t) => this.createItem(t));
+                this.tickets.push(...wipTickets);
             }
 
             if (Array.isArray(pendingTickets)) {
                 pendingTickets.forEach((t) => this.createItem(t));
+                this.tickets.push(...pendingTickets);
             }
 
             if (Array.isArray(closedTickets)) {
                 closedTickets.forEach((t) => this.createItem(t));
+                this.tickets.push(...closedTickets);
             }
 
             this.isCreatingBoard = false;
@@ -200,39 +212,48 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         const parameter = [];
 
-        const column = this.kanbanConfig.columns.find((c) => c.id === board);
-        parameter.push([TicketProperty.STATE, column.dropState]);
-
-        if (board === 'team-backlog') {
-            parameter.push([TicketProperty.OWNER_ID, 1]);
-            parameter.push([TicketProperty.LOCK_ID, 1]);
-        } else if (board === 'personal-backlog') {
-            parameter.push([TicketProperty.OWNER_ID, user.UserID]);
-        } else if (board === 'wip') {
-            parameter.push([TicketProperty.OWNER_ID, user.UserID]);
-        } else if (board === 'pending') {
-            const date = new Date();
-            date.setDate(date.getDate() + 1);
-            parameter.push([TicketProperty.PENDING_TIME, DateTimeUtil.getKIXDateTimeString(date)]);
-            parameter.push([TicketProperty.OWNER_ID, user.UserID]);
-        } else if (board === 'closed') {
-            parameter.push([TicketProperty.OWNER_ID, user.UserID]);
-        }
-
         const ticketId = el.dataset.ticketid;
-        await KIXObjectService.updateObject(KIXObjectType.TICKET, parameter, ticketId)
-            .catch(() => null);
 
-        if (this.widgetConfiguration.contextDependent) {
-            const context = ContextService.getInstance().getActiveContext();
-            if (context) {
-                context.reloadObjectList(KIXObjectType.TICKET, false);
+        const ticket = this.tickets.find((t) => Number(t.TicketID) === Number(ticketId));
+
+        if (ticket) {
+            const column = this.kanbanConfig.columns.find((c) => c.id === board);
+            parameter.push([TicketProperty.STATE, column.dropState]);
+
+            const stateId = await TicketStateService.getInstance().getStateID(column.dropState);
+            ticket.StateID = stateId;
+
+            if (board === 'team-backlog') {
+                parameter.push([TicketProperty.OWNER_ID, 1]);
+                parameter.push([TicketProperty.LOCK_ID, 1]);
+                ticket.OwnerID = 1;
+                ticket.LockID = 1;
+            } else if (board === 'personal-backlog') {
+                parameter.push([TicketProperty.OWNER_ID, user.UserID]);
+                ticket.OwnerID = user.UserID;
+            } else if (board === 'wip') {
+                parameter.push([TicketProperty.OWNER_ID, user.UserID]);
+                ticket.OwnerID = user.UserID;
+            } else if (board === 'pending') {
+                const date = new Date();
+                date.setDate(date.getDate() + 1);
+                const pendingTimeString = DateTimeUtil.getKIXDateTimeString(date);
+                parameter.push([TicketProperty.PENDING_TIME, pendingTimeString]);
+                parameter.push([TicketProperty.OWNER_ID, user.UserID]);
+                ticket.OwnerID = user.UserID;
+                ticket.PendingTime = pendingTimeString;
+            } else if (board === 'closed') {
+                parameter.push([TicketProperty.OWNER_ID, user.UserID]);
+                ticket.OwnerID = user.UserID;
             }
-        }
 
-        EventService.getInstance().publish(
-            KanbanEvent.TICKET_CHANGED, { ticketId }
-        );
+            EventService.getInstance().publish(
+                KanbanEvent.TICKET_CHANGED, { ticket }
+            );
+
+            await KIXObjectService.updateObject(KIXObjectType.TICKET, parameter, ticketId)
+                .catch(() => null);
+        }
     }
 
     private async createTicketBoard(

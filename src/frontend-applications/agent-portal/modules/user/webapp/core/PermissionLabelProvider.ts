@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -27,9 +27,7 @@ export class PermissionLabelProvider extends LabelProvider<Permission> {
     }
 
     public isLabelProviderForType(objectType: KIXObjectType | string): boolean {
-        return objectType === KIXObjectType.PERMISSION ||
-            objectType === KIXObjectType.ROLE_PERMISSION ||
-            objectType === KIXObjectType.PERMISSION_DEPENDING_OBJECTS;
+        return objectType === KIXObjectType.PERMISSION || objectType === KIXObjectType.ROLE_PERMISSION;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

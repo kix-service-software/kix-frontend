@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -13,6 +13,7 @@ import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServ
 import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
 import { Channel } from '../model/Channel';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class ChannelAPIService extends KIXObjectAPIService {
 
@@ -41,21 +42,21 @@ export class ChannelAPIService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
+    ): Promise<ObjectResponse<T>> {
 
-        let objects = [];
+        let objectResponse = new ObjectResponse<Channel>();
         if (objectType === KIXObjectType.CHANNEL) {
-            objects = await super.load<Channel>(
+            objectResponse = await super.load<Channel>(
                 token, KIXObjectType.CHANNEL, this.RESOURCE_URI, null, objectIds,
                 KIXObjectType.CHANNEL, clientRequestId, Channel
             );
 
             if (objectIds && objectIds.length) {
-                objects = objects.filter((t) => objectIds.some((oid) => oid === t.ID));
+                objectResponse.objects = objectResponse?.objects?.filter((t) => objectIds.some((oid) => oid === t.ID));
             }
         }
 
-        return objects;
+        return objectResponse as any;
     }
 
 }

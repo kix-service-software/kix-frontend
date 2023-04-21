@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,19 +7,16 @@
  * --
  */
 
-import { ComponentState } from './ComponentState';
-import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { IKIXObjectService } from '../../../../../modules/base-components/webapp/core/IKIXObjectService';
-import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { AutocompleteFormFieldOption } from '../../../../../model/AutocompleteFormFieldOption';
+import { IKIXObjectService } from '../../../../../modules/base-components/webapp/core/IKIXObjectService';
 import { PlaceholderService } from '../../../../../modules/base-components/webapp/core/PlaceholderService';
+import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { SysConfigKey } from '../../../../sysconfig/model/SysConfigKey';
+import { SysConfigService } from '../../../../sysconfig/webapp/core';
 import { TextModule } from '../../../../textmodule/model/TextModule';
 import { BrowserUtil } from '../../core/BrowserUtil';
-import { KIXObjectService } from '../../core/KIXObjectService';
-import { SysConfigOption } from '../../../../sysconfig/model/SysConfigOption';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { SysConfigService } from '../../../../sysconfig/webapp/core';
-import { SysConfigKey } from '../../../../sysconfig/model/SysConfigKey';
+import { ComponentState } from './ComponentState';
 
 declare let CKEDITOR: any;
 
@@ -124,7 +121,7 @@ class EditorComponent {
             }
 
             CKEDITOR.on('instanceCreated', async function () {
-                const configValue = await SysConfigService.getInstance().getSysconfigOptionValue(
+                const configValue = await SysConfigService.getInstance().getSysConfigOptionValue(
                     SysConfigKey.FRONTEND_RICHTEXT_DEFAULT_CSS
                 );
 

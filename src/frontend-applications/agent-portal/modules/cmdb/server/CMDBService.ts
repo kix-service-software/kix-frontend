@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -45,6 +45,8 @@ import { SearchProperty } from '../../search/model/SearchProperty';
 import { GeneralCatalogItemProperty } from '../../general-catalog/model/GeneralCatalogItemProperty';
 import { ConfigItemClass } from '../model/ConfigItemClass';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
+import { HTTPResponse } from '../../../server/services/HTTPResponse';
 
 
 export class CMDBAPIService extends KIXObjectAPIService {
@@ -84,22 +86,22 @@ export class CMDBAPIService extends KIXObjectAPIService {
                 FilterType.AND, 'postproductive')
         ], undefined, undefined, [GeneralCatalogItemProperty.PREFERENCES]);
 
-        const catalogItems = await this.loadObjects<GeneralCatalogItem>(
+        const objectResponse = await this.loadObjects<GeneralCatalogItem>(
             token, null, KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions, null
         );
 
-        return catalogItems;
+        return objectResponse.objects || [];
     }
 
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
-        let objects = [];
+    ): Promise<ObjectResponse<T>> {
+        let objectResponse = new ObjectResponse();
 
         switch (objectType) {
             case KIXObjectType.CONFIG_ITEM:
-                objects = await this.getConfigItems(token, objectIds, loadingOptions, clientRequestId);
+                objectResponse = await this.getConfigItems(token, objectIds, loadingOptions, clientRequestId);
                 break;
             case KIXObjectType.CONFIG_ITEM_VERSION:
                 if (objectLoadingOptions) {
@@ -109,70 +111,70 @@ export class CMDBAPIService extends KIXObjectAPIService {
                         (objectLoadingOptions as ConfigItemVersionLoadingOptions).configItemId,
                         'versions'
                     );
-                    objects = await super.load(
+                    objectResponse = await super.load(
                         token, KIXObjectType.CONFIG_ITEM_VERSION, uri, loadingOptions, objectIds, 'ConfigItemVersion',
                         clientRequestId, Version
                     );
                 }
                 break;
             case KIXObjectType.CONFIG_ITEM_IMAGE:
-                objects = await this.getImages(
+                const images = await this.getImages(
                     token, objectIds, loadingOptions,
                     objectLoadingOptions as ImagesLoadingOptions,
                     clientRequestId
                 );
+                objectResponse = new ObjectResponse(images, images.length);
                 break;
             case KIXObjectType.CONFIG_ITEM_ATTACHMENT:
-                objects = await this.getAttachments(
+                const attachments = await this.getAttachments(
                     token, objectIds, loadingOptions,
                     objectLoadingOptions as AttachmentLoadingOptions
                 );
+                objectResponse = new ObjectResponse(attachments, attachments.length);
                 break;
             default:
         }
-        return objects;
+        return objectResponse as ObjectResponse<T>;
     }
 
     private async getConfigItems(
         token: string, configItemIds: Array<number | string>, loadingOptions: KIXObjectLoadingOptions,
         clientRequestId: string
-    ): Promise<ConfigItem[]> {
+    ): Promise<ObjectResponse<ConfigItem>> {
         loadingOptions = loadingOptions || new KIXObjectLoadingOptions();
 
-        const query = this.prepareQuery(loadingOptions, KIXObjectType.CONFIG_ITEM);
+        const query = await this.prepareQuery(loadingOptions, KIXObjectType.CONFIG_ITEM);
 
-        let configItems: ConfigItem[] = [];
+        let httpResponse: HTTPResponse;
 
-        if (configItemIds) {
-            if (configItemIds.length) {
-                configItemIds = configItemIds.filter(
-                    (id) => typeof id !== 'undefined' && id.toString() !== '' && id !== null
-                );
+        if (configItemIds?.length) {
+            configItemIds = configItemIds.filter(
+                (id) => typeof id !== 'undefined' && id.toString() !== '' && id !== null
+            );
 
-                const uri = this.buildUri('cmdb', 'configitems', configItemIds.join(','));
-                const response = await this.getObjectByUri<ConfigItemResponse | ConfigItemsResponse>(
-                    token, uri, clientRequestId, query
-                );
-
-                if (configItemIds.length === 1) {
-                    configItems = [(response as ConfigItemResponse).ConfigItem];
-                } else {
-                    configItems = (response as ConfigItemsResponse).ConfigItem;
-                }
-            }
-
+            const uri = this.buildUri('cmdb', 'configitems', configItemIds.join(','));
+            httpResponse = await this.getObjectByUri<ConfigItemResponse | ConfigItemsResponse>(
+                token, uri, clientRequestId, query
+            );
         } else if (loadingOptions.filter) {
             await this.buildFilter(loadingOptions.filter, 'ConfigItem', query, token);
             const uri = this.buildUri('cmdb', 'configitems');
-            const response = await this.getObjectByUri<ConfigItemsResponse>(token, uri, clientRequestId, query);
-            configItems = response.ConfigItem;
+            httpResponse = await this.getObjectByUri<ConfigItemsResponse>(token, uri, clientRequestId, query);
         } else {
             const uri = this.buildUri('cmdb', 'configitems');
-            const response = await this.getObjectByUri<ConfigItemsResponse>(token, uri, clientRequestId, query);
-            configItems = response.ConfigItem;
+            httpResponse = await this.getObjectByUri<ConfigItemsResponse>(token, uri, clientRequestId, query);
         }
 
-        return configItems.map((ci) => new ConfigItem(ci));
+        const response = httpResponse.responseData;
+        const totalCount = httpResponse.objectCounts[KIXObjectType.CONFIG_ITEM?.toLocaleLowerCase()] || 0;
+        let configItems: ConfigItem[] = [];
+
+        if (configItemIds?.length === 1) {
+            configItems = [(response as ConfigItemResponse).ConfigItem];
+        } else {
+            configItems = (response as ConfigItemsResponse).ConfigItem;
+        }
+        return new ObjectResponse(configItems, totalCount);
     }
 
     private async getImages(
@@ -193,7 +195,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
             } else {
                 loadingOptions.includes = ['Content'];
             }
-            const query = this.prepareQuery(loadingOptions, KIXObjectType.CONFIG_ITEM_IMAGE);
+            const query = await this.prepareQuery(loadingOptions, KIXObjectType.CONFIG_ITEM_IMAGE);
 
             let images: ConfigItemImage[] = [];
 
@@ -203,10 +205,11 @@ export class CMDBAPIService extends KIXObjectAPIService {
                 );
 
                 const uri = this.buildUri('cmdb', subResource, imageIds.join(','));
-                const response = await this.getObjectByUri<ConfigItemImageResponse | ConfigItemImagesResponse>(
+                const httpResponse = await this.getObjectByUri<ConfigItemImageResponse | ConfigItemImagesResponse>(
                     token, uri, clientRequestId, query
                 );
 
+                const response = httpResponse.responseData;
                 if (imageIds.length === 1) {
                     images = [(response as ConfigItemImageResponse).Image];
                 } else {
@@ -219,13 +222,13 @@ export class CMDBAPIService extends KIXObjectAPIService {
                 const response = await this.getObjectByUri<ConfigItemImagesResponse>(
                     token, uri, clientRequestId, query
                 );
-                images = response.Image;
+                images = response.responseData?.Image;
             } else {
                 const uri = this.buildUri('cmdb', subResource);
                 const response = await this.getObjectByUri<ConfigItemImagesResponse>(
                     token, uri, clientRequestId, query
                 );
-                images = response.Image;
+                images = response.responseData?.Image;
             }
 
             return images.map((cii) => new ConfigItemImage(cii));
@@ -253,16 +256,15 @@ export class CMDBAPIService extends KIXObjectAPIService {
 
             loadingOptions = loadingOptions || new KIXObjectLoadingOptions();
 
-            const query = this.prepareQuery(loadingOptions, KIXObjectType.CONFIG_ITEM_ATTACHMENT);
+            const query = await this.prepareQuery(loadingOptions, KIXObjectType.CONFIG_ITEM_ATTACHMENT);
             attachmentIds = attachmentIds.filter(
                 (id) => typeof id !== 'undefined' && id.toString() !== '' && id !== null
             );
 
             const uri = this.buildUri('cmdb', subResource, attachmentIds.join(','));
-            const response = await this.getObjectByUri<ConfigItemAttachmentResponse | ConfigItemAttachmentsResponse>(
-                token, uri, query
-            );
+            const httpResponse = await this.getObjectByUri(token, uri, query);
 
+            const response = httpResponse.responseData;
             if (attachmentIds.length === 1) {
                 attachments = [(response as ConfigItemAttachmentResponse).Attachment];
             } else {
@@ -432,9 +434,11 @@ export class CMDBAPIService extends KIXObjectAPIService {
         if (classNames.length) {
             const service = KIXObjectServiceRegistry.getServiceInstance(KIXObjectType.CONFIG_ITEM_CLASS);
             if (service) {
-                const classes: ConfigItemClass[] = await service.loadObjects(
+                const objectResponse = await service.loadObjects(
                     token, null, KIXObjectType.CONFIG_ITEM_CLASS, null, null, null
-                ).catch(() => []);
+                ).catch(() => new ObjectResponse<ConfigItemClass>());
+
+                const classes = objectResponse?.objects || [];
                 if (classes.length) {
                     classNames.forEach((cn) => {
                         const relevantClass = classes.find((c) => c.Name === cn);

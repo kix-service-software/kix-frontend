@@ -26,6 +26,7 @@
         "require ./components/ticket-queue-explorer",
         "require ./components/ticket-communication-widget",
         "require ./components/ticket-communication-widget/message-content",
+        "require ./components/ticket-communication-widget/message-filter",
         "require ./core",
         "require ./core/TicketAdminUIModule",
         "require ./core/TicketCreateUIModule",

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -8,7 +8,6 @@
  */
 
 import { AutoCompleteConfiguration } from '../../../../model/configuration/AutoCompleteConfiguration';
-import { FormContext } from '../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldOption } from '../../../../model/configuration/FormFieldOption';
 import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
@@ -48,6 +47,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
     public structureOption: boolean = true;
     public fieldOptions: FormFieldOption[];
     public hasFilter: boolean = true;
+    public isEmpty: boolean = false;
 
     public minSelectCount: number;
     public maxSelectCount: number;
@@ -73,12 +73,6 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             new FormValueBinding(this, 'selectedNodes', object, property),
             new FormValueBinding(this, 'multiselect', object, property),
         );
-
-        this.addPropertyBinding(FormValueProperty.ENABLED, (value: SelectObjectFormValue) => {
-            if (this.enabled) {
-                this.initFormValue();
-            }
-        });
 
         this.addPropertyBinding(FormValueProperty.POSSIBLE_VALUES, (value: SelectObjectFormValue) => {
             if (this.isAutoComplete && this.possibleValues?.length) {
@@ -113,15 +107,21 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         this.initialState.set('maxSelectCount', this.maxSelectCount);
     }
 
-    public async reset(ignoreProperties: string[] = []): Promise<void> {
-        await super.reset(ignoreProperties);
-        await this.loadSelectableValues();
-        await this.loadSelectedValues();
+    public async reset(
+        ignoreProperties: string[] = [], ignoreFormValueProperties: string[] = [], ignoreFormValueReset: string[] = []
+    ): Promise<void> {
+        await super.reset(ignoreProperties, ignoreFormValueProperties, ignoreFormValueReset);
+        if (this.enabled) {
+            await this.loadSelectableValues();
+            await this.loadSelectedValues();
+        }
     }
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {
         if (force) {
-            await super.setFormValue(value, force);
+            if (value !== null && !Array.isArray(value)) {
+                value = [value];
+            }
         } else {
             if (!this.freeText && !this.isAutoComplete) {
                 if (Array.isArray(value)) {
@@ -135,12 +135,12 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             } else if (this.multiselect) {
                 value = this.removeEmptyValues(value);
             }
+        }
 
-            await super.setFormValue(value, force);
+        await super.setFormValue(value, force);
 
-            if (!this.readonly) {
-                await this.loadSelectedValues();
-            }
+        if (!this.readonly) {
+            await this.loadSelectedValues();
         }
     }
 
@@ -173,6 +173,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
     public async initFormValue(): Promise<void> {
         this.multiselect = this.maxSelectCount < 0 || this.maxSelectCount > 1;
+        this.setNewInitialState('multiselect', this.multiselect);
 
         if (this.minSelectCount > 0) {
             this.required = true;
@@ -294,6 +295,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                 this.multiselect = false;
             }
 
+            this.setNewInitialState('multiselect', this.multiselect);
+
             const countMinOption = field?.options?.find(
                 (o) => o.option === ObjectReferenceOptions.COUNT_MIN
             );
@@ -315,6 +318,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                 (o) => o.option === ObjectReferenceOptions.USE_OBJECT_SERVICE
             );
             this.structureOption = !structureOption || Boolean(structureOption?.value);
+
+            this.isEmpty = field?.empty || false;
         }
 
         // INFO: do not init treehandler here bacause it will set selected nodes and
@@ -377,6 +382,14 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                 objects = await KIXObjectService.loadObjects(this.objectType, null, this.loadingOptions);
             }
 
+            if (Array.isArray(this.additionalValues)) {
+                const additionalObjects = await KIXObjectService.loadObjects(
+                    this.objectType, this.additionalValues, this.loadingOptions
+                ).catch(() => []);
+
+                objects.push(...additionalObjects);
+            }
+
             if (Array.isArray(this.forbiddenValues)) {
                 objects = objects.filter(
                     (o) => !this.forbiddenValues?.some((fv) => fv.toString() === o.ObjectId.toString())
@@ -407,6 +420,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                 nodes.filter((n) => n instanceof TreeNode);
             }
 
+            nodes = nodes.filter((node, index) => nodes.findIndex((n) => n.id === node.id) === index);
             SortUtil.sortObjects(nodes, 'label', DataType.STRING);
         }
 
@@ -540,6 +554,9 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                 selectedNodes = [...selectedNodes, ...freeTextNodes];
             }
 
+            selectedNodes = selectedNodes.filter(
+                (node, index) => selectedNodes.findIndex((n) => n.id === node.id) === index
+            );
             this.treeHandler?.setSelection(selectedNodes, true, true, undefined, true);
         } else {
             this.treeHandler?.selectNone(true);
@@ -575,18 +592,19 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         this.treeHandler?.selectAll();
     }
 
-    public setPossibleValues(values: T[]): void {
-        super.setPossibleValues(values);
+    public async setPossibleValues(values: T[]): Promise<void> {
+        await super.setPossibleValues(values);
+        await this.loadSelectableValues();
+        await this.setSelectedNodes();
+    }
+
+    public async addPossibleValues(values: T[]): Promise<void> {
+        await super.addPossibleValues(values);
         this.loadSelectableValues();
     }
 
-    public addPossibleValues(values: T[]): void {
-        super.addPossibleValues(values);
-        this.loadSelectableValues();
-    }
-
-    public removePossibleValues(values: T[]): void {
-        super.removePossibleValues(values);
-        this.loadSelectableValues();
+    public async removePossibleValues(values: T[]): Promise<void> {
+        await super.removePossibleValues(values);
+        await this.loadSelectableValues();
     }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -205,18 +205,28 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             const showFormValue = property !== ArticleProperty.TO || isEdit;
 
             let showCc = false;
+            let showBcc = false;
 
             if (property === ArticleProperty.CC) {
                 const toValue = this.formValues.find((fv) => fv.property === ArticleProperty.TO);
-                if (!toValue?.enabled && !isEdit) {
+                if (
+                    (!toValue?.enabled && !isEdit)
+                    || (toValue?.enabled && formValue?.value && isEdit)
+                ) {
                     showCc = true;
+                }
+            }
+            if (property === ArticleProperty.BCC) {
+                const toValue = this.formValues.find((fv) => fv.property === ArticleProperty.TO);
+                if (toValue?.enabled && formValue?.value && isEdit) {
+                    showBcc = true;
                 }
             }
 
             if (formValue && showFormValue) {
                 formValue.enabled = this.enabled;
 
-                if (showCc) {
+                if (showCc || showBcc) {
                     formValue.visible = true;
                 }
 
@@ -238,10 +248,6 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         }
     }
 
-    public async reset(): Promise<void> {
-        return;
-    }
-
     private async loadReferencedArticle(refTicketId: number, refArticleId: number): Promise<Article> {
         let article: Article;
         if (refArticleId && refTicketId) {
@@ -252,6 +258,12 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             article = articles.find((a) => a.ArticleID === refArticleId);
         }
         return article;
+    }
+
+    public async reset(
+        ignoreProperties?: string[], ignoreFormValueProperties?: string[], ignoreFormValueReset?: string[]
+    ): Promise<void> {
+        return;
     }
 
 }

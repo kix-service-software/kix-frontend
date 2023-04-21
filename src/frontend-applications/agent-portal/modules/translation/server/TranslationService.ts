@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -27,6 +27,7 @@ import { UserService } from '../../user/server/UserService';
 import { PluginService } from '../../../../../server/services/PluginService';
 import { AgentPortalExtensions } from '../../../server/extensions/AgentPortalExtensions';
 import { ILocaleExtension } from '../../../model/ILocaleExtension';
+import { ObjectResponse } from '../../../server/services/ObjectResponse';
 
 export class TranslationAPIService extends KIXObjectAPIService {
 
@@ -55,23 +56,23 @@ export class TranslationAPIService extends KIXObjectAPIService {
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
-    ): Promise<T[]> {
+    ): Promise<ObjectResponse<T>> {
 
-        let objects = [];
+        let objectResponse = new ObjectResponse();
         if (objectType === KIXObjectType.TRANSLATION_PATTERN) {
             const uri = this.buildUri('system', this.RESOURCE_URI);
-            objects = await super.load<TranslationPattern>(
+            objectResponse = await super.load<TranslationPattern>(
                 token, objectType, uri, loadingOptions, objectIds, 'TranslationPattern',
                 clientRequestId, TranslationPattern
             );
         } else if (objectType === KIXObjectType.TRANSLATION) {
-            objects = await super.load<Translation>(
+            objectResponse = await super.load<Translation>(
                 token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'Translation',
                 clientRequestId, Translation
             );
         }
 
-        return objects;
+        return objectResponse as ObjectResponse<T>;
     }
 
     public async createObject(
@@ -128,10 +129,11 @@ export class TranslationAPIService extends KIXObjectAPIService {
             const loadingOptions = new KIXObjectLoadingOptions(
                 null, null, null, [TranslationPatternProperty.LANGUAGES]
             );
-            const translations = await super.load<TranslationPattern>(
+            const objectResponse = await super.load<TranslationPattern>(
                 token, KIXObjectType.TRANSLATION_PATTERN, uri, loadingOptions, null, 'TranslationPattern',
                 clientRequestId, TranslationPattern
             );
+            const translations = objectResponse?.objects || [];
             if (translations && translations.length) {
                 const languageParameter = parameter.filter((p) => p[0] !== TranslationPatternProperty.VALUE);
                 await this.createOrUpdateLanguages(
@@ -247,11 +249,13 @@ export class TranslationAPIService extends KIXObjectAPIService {
                 const config = ConfigurationService.getInstance().getServerConfiguration();
                 if (config && config.BACKEND_API_TOKEN) {
                     // const translations = await KIXObjectService.loadObjects<Translation>(KIXObjectType.TRANSLATION);
-                    const translations = await TranslationAPIService.getInstance().loadObjects<Translation>(
+                    const objectResponse = await TranslationAPIService.getInstance().loadObjects<Translation>(
                         config.BACKEND_API_TOKEN, IdService.generateDateBasedId('translation-service-'),
                         KIXObjectType.TRANSLATION, null, null, null
-                    ).catch(() => [] as Translation[]);
-                    const translation = translations.find((t) => t.Pattern === translationValue);
+                    ).catch(() => new ObjectResponse<Translation>());
+
+
+                    const translation = objectResponse?.objects?.find((t) => t.Pattern === translationValue);
 
                     if (translation) {
                         // language = language ? language : await this.getUserLanguage();

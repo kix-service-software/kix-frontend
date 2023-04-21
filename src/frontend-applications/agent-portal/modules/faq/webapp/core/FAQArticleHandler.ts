@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -82,7 +82,7 @@ export class FAQArticleHandler {
         if (Array.isArray(faqArticles) && faqArticles.length) {
             const faqArticle = faqArticles[0];
 
-            result = `<h1>${faqArticle.Title}</h1>`;
+            result = `<h1>${ faqArticle.Title }</h1>`;
 
             result += await this.getFieldValue(FAQArticleProperty.FIELD_1, faqArticle.Field1);
             result += await this.getFieldValue(FAQArticleProperty.FIELD_2, faqArticle.Field2);
@@ -101,7 +101,7 @@ export class FAQArticleHandler {
         if (await this.isPublicField(field) && value) {
             const fieldLabel = await this.getFieldLabel(field);
             if (fieldLabel) {
-                result += `<h2>${fieldLabel}</h2>`;
+                result += `<h2>${ fieldLabel }</h2>`;
             }
             result += value;
         }
@@ -120,11 +120,11 @@ export class FAQArticleHandler {
 
             if (Array.isArray(faqArticle.Attachments) && faqArticle.Attachments.length) {
                 result = await TranslationService.translate('Translatable#Attachments', []);
-                result = `<h2>${result} (${faqArticle.Attachments.length})</h2>`;
+                result = `<h2>${ result } (${ faqArticle.Attachments.length })</h2>`;
 
                 result += '<ul>';
                 faqArticle.Attachments.forEach((a) => {
-                    result += `<li>${a.Filename} (${a.Filesize})</li>`;
+                    result += `<li>${ a.Filename } (${ a.Filesize })</li>`;
                 });
                 result += '</ul>';
             }
@@ -137,7 +137,7 @@ export class FAQArticleHandler {
         let isPublic = false;
 
         const options = await KIXObjectService.loadObjects<SysConfigOption>(
-            KIXObjectType.SYS_CONFIG_OPTION, [`FAQ::Item::${field}`]
+            KIXObjectType.SYS_CONFIG_OPTION, [`FAQ::Item::${ field }`]
         );
 
         if (Array.isArray(options) && options.length) {
@@ -151,7 +151,7 @@ export class FAQArticleHandler {
         let label = '';
 
         const options = await KIXObjectService.loadObjects<SysConfigOption>(
-            KIXObjectType.SYS_CONFIG_OPTION, [`FAQ::Item::${field}`]
+            KIXObjectType.SYS_CONFIG_OPTION, [`FAQ::Item::${ field }`]
         );
 
         if (Array.isArray(options) && options.length) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -79,7 +79,23 @@ class Extension extends KIXExtension implements IPersonalSettingsExtension {
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
 
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
-                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true)
+                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
+                    new FormFieldOption(
+                        ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [], null, null, null, null,
+                            [
+                                [
+                                    'requiredPermission',
+                                    JSON.stringify({
+                                        Object: KIXObjectType.USER,
+                                        ObjectID: KIXObjectType.CURRENT_USER,
+                                        Permission: 'WRITE,READ'
+                                    })
+                                ]
+                            ]
+                        )
+                    )
                 ]
             ),
             new PersonalSetting(

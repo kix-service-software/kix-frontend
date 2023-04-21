@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -90,11 +90,11 @@ class DynamicFieldChecklistTableContentProvider extends TableContentProvider {
             values.push(new TableValue('title', item.title, item.title));
 
             const icons = [];
-            if (item.value === 'OK') {
+            if (item.value.toLocaleLowerCase() === 'ok') {
                 icons.push('kix-icon-check');
-            } else if (item.value === 'NOK') {
+            } else if (item.value.toLocaleLowerCase() === 'nok') {
                 icons.push('kix-icon-exclamation');
-            } else if (item.value === 'PENDING') {
+            } else if (item.value.toLocaleLowerCase() === 'pending') {
                 icons.push('kix-icon-time-wait');
             } else if (item.value === 'n.a.') {
                 icons.push('kix-icon-unknown');

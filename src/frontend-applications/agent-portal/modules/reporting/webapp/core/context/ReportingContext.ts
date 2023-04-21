@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -31,7 +31,7 @@ export class ReportingContext extends Context {
     public static CONTEXT_ID: string = 'reporting';
 
     public async update(urlParams: URLSearchParams): Promise<void> {
-        this.loadReportDefinitions();
+        await this.loadReportDefinitions();
     }
 
     public getIcon(): string {
@@ -96,12 +96,20 @@ export class ReportingContext extends Context {
         return result;
     }
 
+    public async getObjectList<T = KIXObject>(objectType: string, limit?: number): Promise<T[]> {
+        if (objectType === KIXObjectType.REPORT) {
+            await this.loadReports();
+        }
+
+        return super.getObjectList(objectType, limit);
+    }
+
     public async reloadObjectList(objectType: KIXObjectType | string): Promise<void> {
         if (objectType === KIXObjectType.REPORT) {
             await this.loadReportDefinitions();
-            return this.loadReports();
+            await this.loadReports();
         } else if (objectType === KIXObjectType.REPORT_DEFINITION) {
-            return this.loadReportDefinitions();
+            await this.loadReportDefinitions();
         }
     }
 

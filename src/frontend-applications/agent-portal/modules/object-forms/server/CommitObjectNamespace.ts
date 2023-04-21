@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -52,7 +52,7 @@ export class CommitObjectNamespace extends SocketNameSpace {
 
         const service = KIXObjectServiceRegistry.getServiceInstance(object?.KIXObjectType);
         if (service) {
-            const id = await service.commitObject(token, data.clientRequestId, object);
+            const id = await service.commitObject(token, data.clientRequestId, object, data.relevantOrganisationId);
             const objectResponse = new CommitObjectResponse(data.requestId, id);
             return new SocketResponse(CommitObjectEvent.COMMIT_OBJECT_FINISHED, objectResponse);
         } else {

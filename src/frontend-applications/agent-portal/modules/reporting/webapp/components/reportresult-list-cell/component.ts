@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -42,32 +42,37 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async download(label: Label, event: any): Promise<void> {
 
-        event.stopPropagation();
-        event.preventDefault();
+        event?.stopPropagation();
+        event?.preventDefault();
 
         const context: ReportingContext = ContextService.getInstance().getActiveContext();
         const reportResult: ReportResult = (label.object as ReportResult);
-        const report: Report = (await context.getObjectList(KIXObjectType.REPORT)).find(
-            (r) => r.ObjectId === reportResult.ReportID) as Report;
-        const reportDefinition: ReportDefinition = (await context.getObjectList(KIXObjectType.REPORT_DEFINITION)).find(
-            (rd) => rd.ObjectId === report.DefinitionID) as ReportDefinition;
 
-        const resultWithContent = await context.loadReportResultWithContent(reportResult.ReportID, reportResult.ID);
+        const reports = await context.getObjectList<Report>(KIXObjectType.REPORT);
+        const report: Report = reports?.find((r) => r.ObjectId === reportResult?.ReportID);
 
-        let fileExtension = mimeTypes.extension(reportResult.ContentType);
-        if (!fileExtension) {
-            const parts = reportResult.ContentType.split('/');
-            if (Array.isArray(parts) && parts.length > 1) {
-                fileExtension = parts[1];
+        if (report) {
+            const resultWithContent = await context.loadReportResultWithContent(reportResult.ReportID, reportResult.ID);
+
+            let fileExtension = mimeTypes.extension(reportResult.ContentType);
+            if (!fileExtension) {
+                const parts = reportResult.ContentType.split('/');
+                if (Array.isArray(parts) && parts.length > 1) {
+                    fileExtension = parts[1];
+                }
             }
+
+            const dateString = report.CreateTime?.replace(/-/g, '/');
+            const currentDate = DateTimeUtil.format(new Date(dateString), 'yyyy-mm-dd_HHMMss');
+
+            const definitions = context.getFilteredObjectList<ReportDefinition>(KIXObjectType.REPORT_DEFINITION);
+            const reportDefinition: ReportDefinition = definitions?.find((rd) => rd.ObjectId === report.DefinitionID);
+            const fileName = `${reportDefinition?.Name || 'unknown'}_${currentDate}.${fileExtension}`;
+
+            BrowserUtil.startBrowserDownload(fileName, resultWithContent.Content, resultWithContent.ContentType, true);
+        } else {
+            console.error(`No report with ID ${reportResult?.ReportID} found!`);
         }
-
-        const dateString = report.CreateTime?.replace(/-/g, '/');
-        const currentDate = DateTimeUtil.format(new Date(dateString), 'yyyy-mm-dd_HHMMss');
-        const fileName = `${reportDefinition.Name}_${currentDate}.${fileExtension}`;
-
-        BrowserUtil.startBrowserDownload(fileName, resultWithContent.Content,
-            resultWithContent.ContentType, true);
     }
 }
 

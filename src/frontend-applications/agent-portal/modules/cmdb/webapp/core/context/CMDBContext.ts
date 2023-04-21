@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -26,6 +26,9 @@ import { ContextService } from '../../../../base-components/webapp/core/ContextS
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { ContextPreference } from '../../../../../model/ContextPreference';
+import { IdService } from '../../../../../model/IdService';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { TicketContext } from '../../../../ticket/webapp/core';
 
 export class CMDBContext extends Context {
 
@@ -34,12 +37,30 @@ export class CMDBContext extends Context {
     public classId: number;
     public filterValue: string;
 
+    private subscriber: IEventSubscriber;
+
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
         super.initContext();
 
         if (this.classId || this.filterValue) {
             this.loadConfigItems();
         }
+
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(TicketContext.CONTEXT_ID),
+            eventPublished: (data: Context, eventId: string): void => {
+                if (data.instanceId === this.instanceId) {
+                    this.loadConfigItems();
+                }
+            }
+        };
+
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
+    }
+
+    public async destroy(): Promise<void> {
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
     }
 
     public getIcon(): string {
@@ -92,9 +113,11 @@ export class CMDBContext extends Context {
         if (!this.classId || this.classId !== classId) {
             this.classId = classId;
             this.setAdditionalInformation(ConfigItemProperty.CLASS_ID, classId);
-            this.loadConfigItems();
 
             EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
+
+            this.loadConfigItems();
+
             if (history) {
                 ContextService.getInstance().setDocumentHistory(true, this, this, null);
             }
@@ -108,9 +131,11 @@ export class CMDBContext extends Context {
 
     public async setFilterValue(filterValue: string, history: boolean = true): Promise<void> {
         this.filterValue = filterValue;
-        this.loadConfigItems();
 
         EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
+
+        this.loadConfigItems();
+
         if (history) {
             ContextService.getInstance().setDocumentHistory(true, this, this, null);
         }
@@ -121,10 +146,11 @@ export class CMDBContext extends Context {
         }
     }
 
-    public async loadConfigItems(): Promise<void> {
+    public async loadConfigItems(limit: number = 20): Promise<void> {
         EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.CONFIG_ITEM);
 
         const loadingOptions = new KIXObjectLoadingOptions([]);
+        loadingOptions.limit = limit;
 
         const deploymentIds = await this.getDeploymentStateIds();
         loadingOptions.filter.push(
@@ -165,7 +191,7 @@ export class CMDBContext extends Context {
         }
 
         const configItems = await KIXObjectService.loadObjects(
-            KIXObjectType.CONFIG_ITEM, null, loadingOptions, null, false
+            KIXObjectType.CONFIG_ITEM, null, loadingOptions, null, false, undefined, undefined, this.contextId
         ).catch((error) => []);
 
         this.setObjectList(KIXObjectType.CONFIG_ITEM, configItems);
@@ -180,13 +206,15 @@ export class CMDBContext extends Context {
         return catalogItems.map((c) => c.ItemID);
     }
 
-    public async getObjectList<T = KIXObject>(objectType: KIXObjectType): Promise<T[]> {
-        return await super.getObjectList(objectType);
+    public async getObjectList<T = KIXObject>(objectType: KIXObjectType, limit: number = 20): Promise<T[]> {
+        return await super.getObjectList(objectType, limit);
     }
 
-    public reloadObjectList(objectType: KIXObjectType | string): Promise<void> {
+    public reloadObjectList(
+        objectType: KIXObjectType | string, silent: boolean = false, limit?: number
+    ): Promise<void> {
         if (objectType === KIXObjectType.CONFIG_ITEM) {
-            return this.loadConfigItems();
+            return this.loadConfigItems(limit);
         }
     }
 

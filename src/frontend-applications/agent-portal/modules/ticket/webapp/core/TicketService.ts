@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -61,6 +61,7 @@ import { ContactProperty } from '../../../customer/model/ContactProperty';
 import { TicketHistory } from '../../model/TicketHistory';
 import { ArticleColorsConfiguration } from '../../model/ArticleColorsConfiguration';
 import { ArticleLoadingOptions } from '../../model/ArticleLoadingOptions';
+import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -97,20 +98,24 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     public async loadObjects<O extends KIXObject>(
-        objectType: KIXObjectType, objectIds: Array<string | number>,
-        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
+        objectType: KIXObjectType | string, objectIds: Array<string | number>,
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
+        cache: boolean = true, forceIds?: boolean, silent?: boolean, collectionId?: string
     ): Promise<O[]> {
         let objects: O[];
         let superLoad = false;
         if (objectType === KIXObjectType.SENDER_TYPE) {
-            objects = await super.loadObjects<O>(KIXObjectType.SENDER_TYPE, null, loadingOptions);
+            objects = await super.loadObjects<O>(
+                KIXObjectType.SENDER_TYPE, null, loadingOptions);
         } else if (objectType === KIXObjectType.TICKET_LOCK) {
             objects = await super.loadObjects<O>(KIXObjectType.TICKET_LOCK, null, loadingOptions);
         } else if (objectType === KIXObjectType.HTML_TO_PDF) {
             objects = await super.loadObjects<O>(objectType, null, loadingOptions, null, false);
         } else {
             superLoad = true;
-            objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
+            objects = await super.loadObjects<O>(
+                objectType, objectIds, loadingOptions, objectLoadingOptions, cache, forceIds, silent, collectionId
+            );
         }
 
         if (objectIds && !superLoad) {
@@ -139,11 +144,14 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     public async setArticleSeenFlag(ticketId: number, articleId: number): Promise<void> {
-        await TicketSocketClient.getInstance().setArticleSeenFlag(ticketId, articleId);
+        this.deleteUserCache();
+        await TicketSocketClient.getInstance().setArticleSeenFlag(ticketId, articleId)
+            .catch((error) => console.error(error));
         EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
     }
 
     public async markTicketAsSeen(ticketId: number): Promise<void> {
+        this.deleteUserCache();
         await KIXObjectService.updateObject(
             KIXObjectType.TICKET, [['MarkAsSeen', 1]], ticketId
         );
@@ -281,7 +289,7 @@ export class TicketService extends KIXObjectService<Ticket> {
                 nodes.push(new TreeNode(1, unlocked, 'kix-icon-lock-open'));
                 nodes.push(new TreeNode(2, locked, 'kix-icon-lock-close'));
                 break;
-            case TicketProperty.WATCH_USER_ID:
+            case TicketProperty.WATCHER_USER_ID:
             case TicketProperty.CREATED_USER_ID:
             case TicketProperty.RESPONSIBLE_ID:
             case TicketProperty.OWNER_ID:
@@ -291,16 +299,9 @@ export class TicketService extends KIXObjectService<Ticket> {
                     } else {
                         loadingOptions.includes = [UserProperty.CONTACT];
                     }
-
-                    if (Array.isArray(loadingOptions.query)) {
-                        loadingOptions.query.push(['requiredPermission', 'TicketRead,TicketCreate']);
-                    } else {
-                        loadingOptions.query = [['requiredPermission', 'TicketRead,TicketCreate']];
-                    }
                 } else {
                     loadingOptions = new KIXObjectLoadingOptions(
-                        null, null, null, [UserProperty.CONTACT], null,
-                        [['requiredPermission', 'TicketRead,TicketCreate']]
+                        null, null, null, [UserProperty.CONTACT], null
                     );
                 }
                 let users = await KIXObjectService.loadObjects<User>(
@@ -643,8 +644,38 @@ export class TicketService extends KIXObjectService<Ticket> {
     public async getObjectProperties(objectType: KIXObjectType): Promise<string[]> {
         const superProperties = await super.getObjectProperties(objectType);
         const objectProperties: string[] = [];
+
+        const ignoreProperties = [
+            TicketProperty.STATE_TYPE,
+            TicketProperty.STATE_TYPE_ID,
+            TicketProperty.CREATED_PRIORITY_ID,
+            TicketProperty.CREATED_QUEUE_ID,
+            TicketProperty.CREATED_STATE_ID,
+            TicketProperty.CREATED_TIME_UNIX,
+            TicketProperty.CREATED_TYPE_ID,
+            TicketProperty.CREATED_USER_ID,
+            TicketProperty.ARTICLES,
+            TicketProperty.ARTICLE_CREATE_TIME,
+            TicketProperty.CHANGE_TIME,
+            TicketProperty.LAST_CHANGE_TIME,
+            TicketProperty.LINKED_AS,
+            TicketProperty.TICKET_NOTES,
+            TicketProperty.ARCHIVE_FLAG,
+            TicketProperty.WATCHER_USER_ID,
+            TicketProperty.HISTORY,
+            TicketProperty.LINK,
+            TicketProperty.TICKET_FLAG,
+            TicketProperty.ARTICLE_FLAG,
+            TicketProperty.PENDING_TIME_UNIX,
+            TicketProperty.UNTIL_TIME,
+            TicketProperty.CLOSE_TIME,
+            TicketProperty.CREATE_TIME,
+            TicketProperty.ATTACHMENT_NAME,
+            TicketProperty.STATE
+        ];
+
         for (const property in TicketProperty) {
-            if (TicketProperty[property]) {
+            if (TicketProperty[property] && !ignoreProperties.some((p) => p === TicketProperty[property])) {
                 objectProperties.push(TicketProperty[property]);
             }
         }
@@ -734,5 +765,52 @@ export class TicketService extends KIXObjectService<Ticket> {
         }
 
         return color;
+    }
+
+    private deleteUserCache(): void {
+        BrowserCacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS`);
+    }
+
+
+    public async getObjectTypeForProperty(property: string): Promise<KIXObjectType | string> {
+        let objectType = await super.getObjectTypeForProperty(property);
+
+        if (objectType === this.objectType) {
+            switch (property) {
+                case TicketProperty.OWNER_ID:
+                case TicketProperty.RESPONSIBLE_ID:
+                case TicketProperty.CREATED_USER_ID:
+                case TicketProperty.WATCHER_USER_ID:
+                    objectType = KIXObjectType.USER;
+                    break;
+                case TicketProperty.CONTACT_ID:
+                case ArticleProperty.TO:
+                case ArticleProperty.CC:
+                case ArticleProperty.BCC:
+                    objectType = KIXObjectType.CONTACT;
+                    break;
+                case TicketProperty.ORGANISATION_ID:
+                    objectType = KIXObjectType.ORGANISATION;
+                    break;
+                case TicketProperty.TYPE_ID:
+                case TicketProperty.CREATED_TYPE_ID:
+                    objectType = KIXObjectType.TICKET_TYPE;
+                    break;
+                case TicketProperty.QUEUE_ID:
+                case TicketProperty.CREATED_QUEUE_ID:
+                    objectType = KIXObjectType.QUEUE;
+                    break;
+                case TicketProperty.PRIORITY_ID:
+                case TicketProperty.CREATED_PRIORITY_ID:
+                    objectType = KIXObjectType.TICKET_PRIORITY;
+                    break;
+                case TicketProperty.STATE_ID:
+                case TicketProperty.CREATED_STATE_ID:
+                    objectType = KIXObjectType.TICKET_STATE;
+                    break;
+                default:
+            }
+        }
+        return objectType;
     }
 }

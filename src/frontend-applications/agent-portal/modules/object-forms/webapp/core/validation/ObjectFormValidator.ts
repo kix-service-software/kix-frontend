@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -86,7 +86,7 @@ export class ObjectFormValidator {
     }
 
     public async validate(formValue: ObjectFormValue, force?: boolean): Promise<void> {
-        if ((this.enabled || force) && this.objectFormValueMapper?.initialized && !formValue?.isCountHandler) {
+        if ((this.enabled || force) && this.objectFormValueMapper?.initialized) {
             await this.validateFormValue(formValue);
         } else if (!this.validationQueue.some((fv) => fv.instanceId === formValue.instanceId)) {
             this.validationQueue.push(formValue);

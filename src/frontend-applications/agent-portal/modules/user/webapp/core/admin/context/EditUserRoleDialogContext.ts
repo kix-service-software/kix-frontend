@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -28,7 +28,7 @@ export class EditUserRoleDialogContext extends Context {
             if (roleId) {
                 const loadingOptions = new KIXObjectLoadingOptions(
                     null, null, null,
-                    [RoleProperty.USER_IDS, RoleProperty.PERMISSIONS, RoleProperty.CONFIGURED_PERMISSIONS]
+                    [RoleProperty.USER_IDS, RoleProperty.PERMISSIONS]
                 );
                 const objects = await KIXObjectService.loadObjects<Role>(KIXObjectType.ROLE, [roleId], loadingOptions);
                 object = objects && objects.length ? objects[0] : null;

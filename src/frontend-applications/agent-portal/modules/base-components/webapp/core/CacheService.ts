@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -118,6 +118,10 @@ export class BrowserCacheService {
             const namespace = objectNamespace.split('.');
             if (namespace[0] === 'CMDB') {
                 cacheKeyPrefixes.push(namespace[1]);
+                if (namespace[2] && namespace[2] === 'Version') {
+                    cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
+                    cacheKeyPrefixes.push(KIXObjectType.CONTACT);
+                }
             } else if (namespace[0] === 'FAQ') {
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_CATEGORY);
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
@@ -226,6 +230,9 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
                 cacheKeyPrefixes.push(KIXObjectType.GRAPH);
                 cacheKeyPrefixes.push(KIXObjectType.GRAPH_INSTANCE);
+                // remove orga and contact caches because of assigned configitems list
+                cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
+                cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 break;
             case KIXObjectType.GENERAL_CATALOG_ITEM:
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
@@ -267,6 +274,7 @@ export class BrowserCacheService {
                 break;
             case KIXObjectType.ARTICLE:
                 cacheKeyPrefixes.push(KIXObjectType.ATTACHMENT);
+                BrowserCacheService.getInstance().deleteKeys(`${KIXObjectType.CURRENT_USER}_STATS`);
                 break;
             default:
         }

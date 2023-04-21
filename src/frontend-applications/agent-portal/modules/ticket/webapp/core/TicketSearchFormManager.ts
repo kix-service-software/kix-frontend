@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -129,8 +129,6 @@ export class TicketSearchFormManager extends SearchFormManager {
 
     private isDropDown(property: string): boolean {
         return Ticket.SEARCH_PROPERTIES.some((p) => p.Property === property && p.InputType === InputFieldTypes.DROPDOWN)
-            || property === KIXObjectProperty.CREATE_BY
-            || property === KIXObjectProperty.CHANGE_BY
             || property === TicketProperty.STATE_TYPE
             || property === 'Queue.FollowUpID';
     }
@@ -183,6 +181,10 @@ export class TicketSearchFormManager extends SearchFormManager {
                     new TreeNode(0, no),
                     new TreeNode(1, yes)
                 ];
+                break;
+            case TicketProperty.QUEUE_ID:
+                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false, null, ['READ']);
+                nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy);
                 break;
             default:
                 nodes = await super.getTreeNodes(property);
@@ -239,16 +241,19 @@ export class TicketSearchFormManager extends SearchFormManager {
 
     public async setValue(newValue: ObjectPropertyValue, silent?: boolean): Promise<void> {
         if (newValue.property === TicketProperty.STATE_TYPE && this.handleViewableStateType) {
-            newValue.readonly = false;
-            newValue.required = true;
-            newValue.changeable = false;
-            if (!newValue.value) {
-                newValue.value = ['Open'];
+
+            const stateValue = this.values.find((v) => v.property === TicketProperty.STATE_ID);
+            if (!stateValue) {
+                newValue.readonly = false;
+                newValue.required = false;
+                newValue.changeable = false;
+                if (!newValue.value) {
+                    newValue.value = ['Open'];
+                }
             }
         }
 
         await super.setValue(newValue, silent);
     }
-
 
 }

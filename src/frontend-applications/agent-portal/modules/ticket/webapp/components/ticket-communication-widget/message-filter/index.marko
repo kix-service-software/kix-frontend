@@ -1,23 +1,18 @@
 <!--
-Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.message-filter-container>
-   <div.fulltext>
-      <input.input-style
-         value=state.filterValue
-         placeholder=state.searchPlaceholder + " ..."
-         on-keydown("keyDown")
-      >
-   </div>
-   <div.static-filter>
-      <!-- TODO: for performance reasons currently not active -->
-      <!-- <div.filter-action>
+    <div.fulltext>
+        <input.input-style value=state.filterValue placeholder=(state.searchPlaceholder + ' ...') on-keydown('keyDown')/>
+    </div>
+    <div.static-filter>
+        <!-- TODO: for performance reasons currently not active -->
+        <!-- <div.filter-action>
          <input#filter-with-attachments
             type="checkbox"
             checked=state.filterAttachment
@@ -27,58 +22,66 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <translation-string pattern="Translatable#With attachments"/>
          </label>
       </div> -->
-      <div.filter-action>
-         <input#filter-external
-            type="checkbox"
-            checked=state.filterExternal
-            on-click("filterChanged", "external")
-         >
-         <label for="filter-external">
-            <translation-string pattern="Translatable#From external"/>
-         </label>
-      </div>
-      <div.filter-action>
-         <input#filter-internal
-            type="checkbox"
-            checked=state.filterInternal
-            on-click("filterChanged", "internal")
-         >
-         <label for="filter-internal">
-            <translation-string pattern="Translatable#From internal"/>
-         </label>
-      </div>
-      <div.filter-action>
-         <input#filter-customer
-            type="checkbox"
-            checked=state.filterCustomer
-            on-click("filterChanged", "customer")
-         >
-         <label for="filter-customer">
-            <translation-string pattern="Translatable#Visible in Self Service Portal"/>
-         </label>
-      </div>
-      <div.filter-action>
-         <input#filter-unread
-            type="checkbox"
-            checked=state.filterUnread
-            on-click("filterChanged", "unread")
-         >
-         <label for="filter-unread">
-            <translation-string pattern="Translatable#Unread"/>
-         </label>
-      </div>
-      <div.filter-action>
-         <i.date-icon.fas class={
-            'fa-chevron-left' : state.isFilterDateBefore,
-            'fa-chevron-right' : !state.isFilterDateBefore
-         } title=state.translations[state.isFilterDateBefore ? "Translatable#Before" : "Translatable#After"]
-         on-click("selectDateOrder")></i>
-         <input.input-style.date-input
-            type="date"
-            pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
-            on-change("dateChanged")
-            value=state.selectedDate
-         >
-      </div>
-   </div>
+        <if(input.useExternal || typeof input.useExternal === 'undefined')>
+            <div.filter-action>
+                <input#filter-external type='checkbox' checked=state.filterExternal on-click('filterChanged', 'external')/>
+                <label for='filter-external'>
+                    <translation-string pattern='Translatable#From external'/>
+                </label>
+            </div>
+        </if>
+        <if(input.useInternal || typeof input.useInternal === 'undefined')>
+            <div.filter-action>
+                <input#filter-internal type='checkbox' checked=state.filterInternal on-click('filterChanged', 'internal')/>
+                <label for='filter-internal'>
+                    <translation-string pattern='Translatable#From internal'/>
+                </label>
+            </div>
+        </if>
+        <if(input.useCustomerPortal || typeof input.useCustomerPortal === 'undefined')>
+            <div.filter-action>
+                <input#filter-customer type='checkbox' checked=state.filterCustomer on-click('filterChanged', 'customer')/>
+                <label for='filter-customer'>
+                    <translation-string pattern='Translatable#Visible in Self Service Portal'/>
+                </label>
+            </div>
+        </if>
+        <if(input.useUnread || typeof input.useUnread === 'undefined')>
+            <div.filter-action>
+                <input#filter-unread type='checkbox' checked=state.filterUnread on-click('filterChanged', 'unread')/>
+                <label for='filter-unread'>
+                    <translation-string pattern='Translatable#Unread'/>
+                </label>
+            </div>
+        </if>
+        <if(input.useDate || typeof input.useDate === 'undefined')>
+            <div.filter-action>
+                <i.fas.me-3
+                    class={
+                        'fa-chevron-left': state.isFilterDateBefore,
+                        'fa-chevron-right': !state.isFilterDateBefore
+                    }
+                    title=state.translations[state.isFilterDateBefore ? 'Translatable#Before' : 'Translatable#After']
+                    on-click('selectDateOrder')/>
+                <input.input-style.date-input
+                    type='date'
+                    pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}'
+                    on-change('dateChanged')
+                    value=state.selectedDate/>
+            </div>
+        </if>
+        <if(input.useMyArticles)>
+            <div.filter-action.align-items-center>
+                <translation-string pattern='Translatable#All'/>
+                <div.form-check.d-flex.justify-content-center.form-switch.mx-1>
+                    <input#flexSwitchCheckDefault.form-check-input
+                        type='checkbox'
+                        role='switch'
+                        on-click('filterChanged', 'myArticles')
+                        checked=state.filterMyArticles/>
+                </div>
+                <translation-string pattern='Translatable#My Articles'/>
+            </div>
+        </if>
+    </div>
 </div>

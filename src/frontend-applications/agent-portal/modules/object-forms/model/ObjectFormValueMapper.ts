@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -79,14 +79,6 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         }
     }
 
-    protected async resetFormValues(
-        formValues: ObjectFormValue[] = this.formValues, ignoreProperties: string[] = []
-    ): Promise<void> {
-        for (const value of formValues) {
-            await value.reset(ignoreProperties);
-        }
-    }
-
     public async mapFormValues(object: T): Promise<void> {
         this.object = object;
         const startMapObjectValues = Date.now();
@@ -121,7 +113,6 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         }
 
         const startCounter = Date.now();
-        await this.handleCountValues();
         const endCounter = Date.now();
         console.debug(`Handle Count Values: ${endCounter - startCounter}ms`);
 
@@ -233,14 +224,6 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         return formValue;
     }
 
-    protected async handleCountValues(): Promise<void> {
-        for (const fv of this.formValues) {
-            if (fv.enabled || fv.property === KIXObjectProperty.DYNAMIC_FIELDS) {
-                await fv.initCountValues();
-            }
-        }
-    }
-
     public addFormValue(formValue: ObjectFormValue): void {
         this.formValues?.push(formValue);
     }
@@ -297,9 +280,9 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
             console.debug(result);
         }
 
-        await this.resetFormValues();
-
         this.setFieldOrder(result?.InputOrder);
+
+        await this.resetFormValues(this.formValues, result.propertyInstructions);
 
         for (const instruction of result.propertyInstructions) {
             await this.applyPropertyInstruction(instruction);
@@ -309,6 +292,48 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
             console.debug('FormValues after applyPropertyInstructions:');
             console.debug(this.formValues);
         }
+    }
+
+    protected async resetFormValues(
+        formValues: ObjectFormValue[] = this.formValues, instructions: PropertyInstruction[]
+    ): Promise<void> {
+
+        const ignoreFormValueReset: string[] = [];
+        for (const instruction of instructions) {
+            const formValue = this.findFormValue(instruction.property);
+            if (formValue) {
+                const ignoreFormValueProperties = this.prepareIgnoreFormValueProperties(instruction, formValue);
+                ignoreFormValueReset.push(formValue.instanceId);
+                await formValue.reset([], ignoreFormValueProperties);
+            }
+        }
+
+        for (const value of formValues) {
+            if (!ignoreFormValueReset.some((i) => i === value.instanceId)) {
+                await value.reset([], [], ignoreFormValueReset);
+            }
+        }
+    }
+
+    protected prepareIgnoreFormValueProperties(
+        instruction: PropertyInstruction, formValue: ObjectFormValue
+    ): string[] {
+        const ignoreFormValueProperties = [];
+        const order = instruction.instructionOrder;
+        if (order.some((i) => i === InstructionProperty.ENABLE) && formValue.enabled) {
+            instruction.instructionOrder = order.filter((i) => i !== InstructionProperty.ENABLE);
+            ignoreFormValueProperties.push(FormValueProperty.ENABLED);
+        }
+
+        if (order.some((i) => i === InstructionProperty.POSSIBLE_VALUES) && formValue.possibleValues) {
+            ignoreFormValueProperties.push(FormValueProperty.POSSIBLE_VALUES);
+        }
+
+        if (order.some((i) => i === InstructionProperty.COUNT_MAX)) {
+            ignoreFormValueProperties.push(FormValueProperty.COUNT_MAX);
+        }
+
+        return ignoreFormValueProperties;
     }
 
     public setFieldOrder(order: string[]): void {
@@ -329,20 +354,30 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         const formValue = this.findFormValue(instruction.property);
         if (formValue) {
 
-            for (const instructionProperty of instruction.instructionOrder) {
+            const instructions = instruction.instructionOrder.sort((a, b) => {
+                if (a === InstructionProperty.ENABLE) {
+                    return -1;
+                } else if (b === InstructionProperty.ENABLE) {
+                    return 1;
+                }
+
+                return 0;
+            });
+
+            for (const instructionProperty of instructions) {
                 if (instructionProperty === InstructionProperty.POSSIBLE_VALUES) {
                     formValue.resetProperty(instructionProperty);
-                    formValue.setPossibleValues(instruction.PossibleValues);
+                    await formValue.setPossibleValues(instruction.PossibleValues);
                 }
 
                 if (instructionProperty === InstructionProperty.POSSIBLE_VALUES_ADD) {
                     formValue.resetProperty(instructionProperty);
-                    formValue.addPossibleValues(instruction.PossibleValuesAdd);
+                    await formValue.addPossibleValues(instruction.PossibleValuesAdd);
                 }
 
                 if (instructionProperty === InstructionProperty.POSSIBLE_VALUES_REMOVE) {
                     formValue.resetProperty(instructionProperty);
-                    formValue.removePossibleValues(instruction.PossibleValuesRemove);
+                    await formValue.removePossibleValues(instruction.PossibleValuesRemove);
                 }
 
                 if (instructionProperty === InstructionProperty.CLEAR) {
@@ -366,33 +401,17 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                 }
 
                 if (instructionProperty === InstructionProperty.SHOW) {
-                    if (formValue.visible !== instruction.Show) {
-                        formValue.visible = instruction.Show;
-                        if (formValue.isCountHandler && formValue.formValues && formValue.formValues.length > 0) {
-                            formValue.visible = false;
-                            formValue.formValues.forEach((fv) => {
-                                fv.visible = instruction.Show;
-                            });
-                        }
-                    }
+                    await formValue.show();
                 }
 
                 if (instructionProperty === InstructionProperty.HIDE) {
-                    if (formValue.visible === instruction.Hide) {
-                        formValue.visible = !instruction.Hide;
-                        if (formValue.isCountHandler && formValue.formValues && formValue.formValues.length > 0) {
-                            formValue.visible = false;
-                            formValue.formValues.forEach((fv) => {
-                                fv.visible = !instruction.Hide;
-                            });
-                        }
-                    }
+                    await formValue.hide();
                 }
 
                 if (instructionProperty === InstructionProperty.REQUIRED) {
                     if (formValue.required !== instruction.Required) {
                         formValue.required = instruction.Required;
-                        if (formValue.isCountHandler && formValue.formValues && formValue.formValues.length > 0) {
+                        if (formValue.formValues && formValue.formValues.length > 0) {
                             formValue.formValues.forEach((fv) => {
                                 fv.required = instruction.Required;
                             });
@@ -403,7 +422,7 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                 if (instructionProperty === InstructionProperty.OPTIONAL) {
                     if (formValue.required === instruction.Optional) {
                         formValue.required = !instruction.Optional;
-                        if (formValue.isCountHandler && formValue.formValues && formValue.formValues.length > 0) {
+                        if (formValue.formValues && formValue.formValues.length > 0) {
                             formValue.formValues.forEach((fv) => {
                                 fv.required = !instruction.Optional;
                             });
@@ -413,14 +432,13 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
 
                 if (instructionProperty === InstructionProperty.ENABLE) {
                     if (formValue.enabled !== instruction.Enable) {
-                        formValue.enabled = true;
+                        await formValue.enable();
                     }
                 }
 
                 if (instructionProperty === InstructionProperty.DISABLE) {
                     if (formValue.enabled === instruction.Disable) {
-                        formValue.enabled = false;
-                        formValue.visible = false;
+                        await formValue.disable();
                     }
                 }
 
@@ -437,9 +455,11 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                 }
 
                 if (instructionProperty === InstructionProperty.COUNT_MAX) {
-                    formValue.countMax = Number(instruction.CountMax) > 0
-                        ? Number(instruction.CountMax)
-                        : 1;
+                    if (formValue.countMax !== instruction.CountMax) {
+                        formValue.countMax = Number(instruction.CountMax) > 0
+                            ? Number(instruction.CountMax)
+                            : 1;
+                    }
                 }
 
                 if (instructionProperty === InstructionProperty.VALIDATION) {

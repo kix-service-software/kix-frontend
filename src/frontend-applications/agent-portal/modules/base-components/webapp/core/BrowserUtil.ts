@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2022 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -403,6 +403,26 @@ export class BrowserUtil {
             }
             return value;
         };
+    }
+
+    // use timeout to:
+    //   1) enable multi click selection (e.g. hole word by double click)
+    //   2) return false if selection is removed by single click
+    private static clickTimeout;
+    public static isTextSelected(): Promise<boolean> {
+        return new Promise<boolean>((resolve) => {
+            if (this.clickTimeout) {
+                clearTimeout(this.clickTimeout);
+            }
+            this.clickTimeout = setTimeout(async () => {
+                this.clickTimeout = undefined;
+                // ingore click if text is selected
+                if (window.getSelection()?.type === 'Range') {
+                    resolve(true);
+                }
+                resolve(false);
+            }, 175);
+        });
     }
 
 }
