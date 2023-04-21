@@ -455,7 +455,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(this.objectType);
             const filter = service && this.searchValue
                 ? await service.prepareFullTextFilter(this.searchValue)
-                : null;
+                : [];
 
             let loadingOptions = new KIXObjectLoadingOptions();
 
@@ -471,9 +471,11 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
             loadingOptions = await ObjectReferenceUtil.prepareLoadingOptions(loadingOptions, this.searchValue);
 
-            objects = await service.loadObjects<KIXObject>(
-                this.objectType, null, loadingOptions, this.specificLoadingOptions, false
-            );
+            if (service) {
+                objects = await service.loadObjects<KIXObject>(
+                    this.objectType, null, loadingOptions, this.specificLoadingOptions, false
+                ).catch(() => []);
+            }
         }
 
         return objects;
