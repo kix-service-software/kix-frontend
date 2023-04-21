@@ -118,14 +118,18 @@ class Component {
             EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
             EventService.getInstance().subscribe(TableEvent.RELOADED, this.subscriber);
 
-            this.prepareHeader();
-            await this.prepareTable();
-            this.prepareActions();
-            this.prepareTitle();
+            await this.prepare();
             this.state.filterValue = this.state.table ? this.state.table.getFilterValue() : null;
             this.prepareContextDependency(settings);
             this.prepareFormDependency();
         }
+    }
+
+    private async prepare(): Promise<void> {
+        this.prepareHeader();
+        await this.prepareTable();
+        this.prepareActions();
+        this.prepareTitle();
     }
 
     private prepareContextDependency(settings: TableWidgetConfiguration): void {
@@ -137,7 +141,7 @@ class Component {
                 sidebarLeftToggled: (): void => { return; },
                 filteredObjectListChanged: (): void => { return; },
                 objectChanged: (): void => { return; },
-                objectListChanged: (objectType: KIXObjectType | string): void => {
+                objectListChanged: async (objectType: KIXObjectType | string): Promise<void> => {
                     if (objectType === this.objectType) {
                         const activeContext = ContextService.getInstance().getActiveContext();
                         if (this.context.instanceId === activeContext.instanceId) {
@@ -151,7 +155,7 @@ class Component {
                                 }
                             }
 
-                            this.prepareTitle();
+                            await this.prepare();
                         }
                     }
                 },
