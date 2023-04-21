@@ -291,8 +291,12 @@ class Component {
                 settings.shortTable, false, !settings.cache
             );
 
+            const tableState = table.loadTableState();
+
             if (settings.sort) {
-                table?.sort(settings.sort[0], settings.sort[1]);
+                const sortColumnId = tableState?.sortColumnId ?? settings.sort[0];
+                const sortOrder = tableState?.sortOrder ?? settings.sort[1];
+                table?.sort(sortColumnId, sortOrder);
             }
 
             await table?.initialize();
