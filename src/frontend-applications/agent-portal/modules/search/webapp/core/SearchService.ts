@@ -183,12 +183,17 @@ export class SearchService {
             }
         }
 
-        if (additionalIncludes?.length) {
+        additionalIncludes.push(...context.getAdditionalInformation('INCLUDES'));
+        const uniqueIncludes = additionalIncludes.filter((element, index) => {
+            return additionalIncludes.indexOf(element) === index;
+        });
+
+        if (uniqueIncludes?.length) {
             if (Array.isArray(loadingOptions.includes)) {
-                loadingOptions.includes.push(...additionalIncludes);
+                loadingOptions.includes.push(...uniqueIncludes);
             }
             else {
-                loadingOptions.includes = additionalIncludes;
+                loadingOptions.includes = uniqueIncludes;
             }
         }
 
