@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -12,7 +12,7 @@ const path = require('path');
 const clean = require('gulp-clean');
 const license = require('gulp-header-license');
 const fs = require('fs');
-const {series, parallel} = require('gulp');
+const { series, parallel } = require('gulp');
 
 const orgEnv = process.env.NODE_ENV;
 
@@ -21,42 +21,42 @@ console.log(`Node Version: ${process.version}`);
 function cleanUp(cb) {
     process.env.NODE_ENV = orgEnv;
     return gulp
-        .src(['dist'], {allowEmpty: true})
+        .src(['dist'], { allowEmpty: true })
         .pipe(clean());
 }
 
 function licenseHeaderTS() {
     const year = new Date().getFullYear();
     return gulp.src('src/**/*.ts')
-        .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8'), {year: year}))
+        .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8'), { year: year }))
         .pipe(gulp.dest('src/'));
 }
 
 function licenseHeaderMarko() {
     const year = new Date().getFullYear();
     return gulp.src('src/**/*.marko')
-        .pipe(license(fs.readFileSync('license-html-header.txt', 'utf8'), {year: year}))
+        .pipe(license(fs.readFileSync('license-html-header.txt', 'utf8'), { year: year }))
         .pipe(gulp.dest('src/'));
 }
 
 function licenseHeaderLess() {
     const year = new Date().getFullYear();
     return gulp.src(['src/**/*.less', '!src/frontend-applications/agent-portal/static/less/default/kix_font.less'])
-        .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8'), {year: year}))
+        .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8'), { year: year }))
         .pipe(gulp.dest('src/'));
 }
 
 function licenseHeaderTests() {
     const year = new Date().getFullYear();
     return gulp.src('tests/**/*.ts')
-        .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8'), {year: year}))
+        .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8'), { year: year }))
         .pipe(gulp.dest('tests/'));
 }
 
 function licenseHeaderCucumber() {
     const year = new Date().getFullYear();
     return gulp.src('features/**/*.feature')
-        .pipe(license(fs.readFileSync('license-feature-header.txt', 'utf8'), {year: year}))
+        .pipe(license(fs.readFileSync('license-feature-header.txt', 'utf8'), { year: year }))
         .pipe(gulp.dest('features/'));
 }
 
@@ -68,7 +68,7 @@ function lint() {
     return gulp.src(['src/**/*.ts'])
         // eslint() attaches the lint output to the "eslint" property
         // of the file object so it can be used by other modules.
-        .pipe(eslint({quiet: true}))
+        .pipe(eslint({ quiet: true }))
         // eslint.format() outputs the lint results to the console.
         // Alternatively use eslint.formatEach() (see Docs).
         .pipe(eslint.format())
