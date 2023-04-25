@@ -19,6 +19,8 @@ import { User } from '../../../../user/model/User';
 import { RowObject } from '../../../../table/model/RowObject';
 import { Table } from '../../../../table/model/Table';
 import { TableValue } from '../../../../table/model/TableValue';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { ContextMode } from '../../../../../model/ContextMode';
 
 export class ContactTableContentProvider extends TableContentProvider<Contact> {
 
@@ -62,6 +64,15 @@ export class ContactTableContentProvider extends TableContentProvider<Contact> {
                     value.objectValue = user[value.property];
                 } else if (value.property === UserProperty.IS_AGENT || value.property === UserProperty.IS_CUSTOMER) {
                     value.objectValue = 0;
+                }
+            } else if (value.property === ContactProperty.EMAIL) {
+                // show all email addresses in email columns (in search result table)
+                const context = ContextService.getInstance().getActiveContext();
+                if (context?.descriptor.contextMode === ContextMode.SEARCH) {
+                    value.displayValue = [
+                        contact.Email, contact.Email1, contact.Email2,
+                        contact.Email3, contact.Email4, contact.Email5
+                    ].filter((e) => e).join(', ');
                 }
             }
         }

@@ -48,6 +48,11 @@ export class ContactPlaceholderHandler extends AbstractPlaceholderHandler {
                     case ContactProperty.FIRSTNAME:
                     case ContactProperty.LASTNAME:
                     case ContactProperty.EMAIL:
+                    case ContactProperty.EMAIL1:
+                    case ContactProperty.EMAIL2:
+                    case ContactProperty.EMAIL3:
+                    case ContactProperty.EMAIL4:
+                    case ContactProperty.EMAIL5:
                     case ContactProperty.COMMENT:
                     case ContactProperty.TITLE:
                     case ContactProperty.STREET:

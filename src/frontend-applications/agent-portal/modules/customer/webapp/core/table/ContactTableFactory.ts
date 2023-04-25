@@ -25,6 +25,7 @@ import { UserProperty } from '../../../../user/model/UserProperty';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { SearchCache } from '../../../../search/model/SearchCache';
 import { ContactDetailsContext } from '../context/ContactDetailsContext';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 export class ContactTableFactory extends TableFactory {
 
@@ -91,6 +92,20 @@ export class ContactTableFactory extends TableFactory {
                 );
                 break;
             case ContactProperty.EMAIL:
+                let size = 175;
+                // show all email addresses in email columns (in search result table) - so more space is needed
+                const context = ContextService.getInstance().getActiveContext();
+                if (context?.descriptor.contextMode === ContextMode.SEARCH) {
+                    size = 300;
+                }
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, true, false, true, false, size, true, true);
+                break;
+            case ContactProperty.EMAIL1:
+            case ContactProperty.EMAIL2:
+            case ContactProperty.EMAIL3:
+            case ContactProperty.EMAIL4:
+            case ContactProperty.EMAIL5:
                 config = new DefaultColumnConfiguration(
                     null, null, null, property, true, false, true, false, 175, true, true);
                 break;

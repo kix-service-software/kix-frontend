@@ -140,7 +140,51 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 'contact-edit-form-field-email',
                 'Translatable#Email', ContactProperty.EMAIL, null, true,
                 'Translatable#Helptext_Customers_ContactCreate_Email',
-                null, null, null, null, null, null, null, null, null,
+                null, null, null,
+
+                [
+                    new FormFieldConfiguration(
+                        'contact-edit-form-field-email1',
+                        'Translatable#Email1', ContactProperty.EMAIL1, null, false,
+                        'Translatable#Helptext_Customers_ContactCreate_Email',
+                        null, null, null,
+                        null, null, null, null, null, null,
+                        FormValidationService.EMAIL_REGEX, FormValidationService.EMAIL_REGEX_ERROR_MESSAGE
+                    ),
+                    new FormFieldConfiguration(
+                        'contact-edit-form-field-email2',
+                        'Translatable#Email2', ContactProperty.EMAIL2, null, false,
+                        'Translatable#Helptext_Customers_ContactCreate_Email',
+                        null, null, null,
+                        null, null, null, null, null, null,
+                        FormValidationService.EMAIL_REGEX, FormValidationService.EMAIL_REGEX_ERROR_MESSAGE
+                    ),
+                    new FormFieldConfiguration(
+                        'contact-edit-form-field-email3',
+                        'Translatable#Email3', ContactProperty.EMAIL3, null, false,
+                        'Translatable#Helptext_Customers_ContactCreate_Email',
+                        null, null, null,
+                        null, null, null, null, null, null,
+                        FormValidationService.EMAIL_REGEX, FormValidationService.EMAIL_REGEX_ERROR_MESSAGE
+                    ),
+                    new FormFieldConfiguration(
+                        'contact-edit-form-field-email4',
+                        'Translatable#Email4', ContactProperty.EMAIL4, null, false,
+                        'Translatable#Helptext_Customers_ContactCreate_Email',
+                        null, null, null,
+                        null, null, null, null, null, null,
+                        FormValidationService.EMAIL_REGEX, FormValidationService.EMAIL_REGEX_ERROR_MESSAGE
+                    ),
+                    new FormFieldConfiguration(
+                        'contact-edit-form-field-email5',
+                        'Translatable#Email5', ContactProperty.EMAIL5, null, false,
+                        'Translatable#Helptext_Customers_ContactCreate_Email',
+                        null, null, null,
+                        null, null, null, null, null, null,
+                        FormValidationService.EMAIL_REGEX, FormValidationService.EMAIL_REGEX_ERROR_MESSAGE
+                    )
+                ],
+                null, null, null, null, null,
                 FormValidationService.EMAIL_REGEX, FormValidationService.EMAIL_REGEX_ERROR_MESSAGE
             )
         );
