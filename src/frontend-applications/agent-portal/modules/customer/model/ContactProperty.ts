@@ -31,6 +31,16 @@ export enum ContactProperty {
 
     EMAIL = 'Email',
 
+    EMAIL1 = 'Email1',
+
+    EMAIL2 = 'Email2',
+
+    EMAIL3 = 'Email3',
+
+    EMAIL4 = 'Email4',
+
+    EMAIL5 = 'Email5',
+
     FAX = 'Fax',
 
     MOBILE = 'Mobile',

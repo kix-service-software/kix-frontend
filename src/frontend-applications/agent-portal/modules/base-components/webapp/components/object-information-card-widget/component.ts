@@ -139,23 +139,25 @@ class Component {
     }
 
     public getCustomRowStyle(index: number): string {
-        const basicColumnWidth = 15;
         const row = this.state.information[index] as InformationRowConfiguration;
-        if (!this.hasRowValue(row) || this.isRowWithCreatedBy(index)) return null;
-        if (this.context.openSidebarWidgets.some((osw) => osw === this.state.instanceId)) {
-            return 'grid-auto-columns: 100%';
+        if (
+            !this.hasRowValue(row) || this.isRowWithCreatedBy(index) ||
+            this.context.openSidebarWidgets.some((osw) => osw === this.state.instanceId)
+        ) {
+            return;
         }
-        let style = 'grid-auto-columns:';
-        row.values.forEach((value, index) => {
+        const basicColumnWidth = 15;
+        let largestFactor = 1;
+        row.values.forEach((value) => {
             if (this.hasValue(value)) {
-                const largestFactor = this.getLargestWidthFactor(value);
-                style += ` ${largestFactor * basicColumnWidth + (largestFactor - 1)}rem`;
-                if (index === row.values.length - 1) {
-                    style += ';';
+                const newLargestFactor = this.getLargestWidthFactor(value);
+                if (newLargestFactor > largestFactor) {
+                    largestFactor = newLargestFactor;
                 }
             }
         });
-        return style;
+        const size = largestFactor * basicColumnWidth + (largestFactor - 1);
+        return `grid-template-columns: repeat(auto-fill,${size}rem)`;
     }
 
     private getLargestWidthFactor(group: InformationConfiguration[]): number {

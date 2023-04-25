@@ -438,6 +438,11 @@ export class ContactFormService extends KIXObjectFormService {
         const user = await this.loadAssignedUser(this.assignedUserId);
         switch (property) {
             case ContactProperty.EMAIL:
+            case ContactProperty.EMAIL1:
+            case ContactProperty.EMAIL2:
+            case ContactProperty.EMAIL3:
+            case ContactProperty.EMAIL4:
+            case ContactProperty.EMAIL5:
                 if (formContext === FormContext.NEW) {
                     value = null;
                 }
