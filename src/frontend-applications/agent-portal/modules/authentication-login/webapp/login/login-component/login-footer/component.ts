@@ -63,7 +63,7 @@ class Component {
 
     private initTranslations(): void {
         this.translations = new Map();
-        this.translations.set('A product by c.a.p.e. IT GmbH', 'Ein Produkt der c.a.p.e. IT GmbH');
+        this.translations.set('A product by KIX Service Software GmbH', 'Ein Produkt der KIX Service Software GmbH');
         this.translations.set('Imprint', 'Impressum');
     }
 

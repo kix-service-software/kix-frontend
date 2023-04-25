@@ -7,9 +7,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.login-footer>
+<div class="login-footer">
     <if(state.imprintLink)>
-        ${component.getString("A product by c.a.p.e. IT GmbH")} |
-        <a href=state.imprintLink target="_blank">${component.getString("Imprint")}</a>
+        ${component.getString("A product by KIX Service Software GmbH")}${" "}|${" "}
+        <a href=state.imprintLink target="_blank">
+            ${component.getString("Imprint")}
+        </a>
     </if>
 </div>
