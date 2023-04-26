@@ -37,12 +37,21 @@ export class TableValue {
     }
 
     public async initDisplayText(cell: Cell): Promise<void> {
-        const object = cell.getRow().getRowObject<KIXObject>().getObject();
-
-        if (!this.displayValue && object) {
-            this.displayValue = await LabelService.getInstance().getDisplayText(
-                object, this.property, object[this.property], cell.getColumnConfiguration()?.translatable
+        if (!this.displayValue) {
+            const rowObject = cell.getRow().getRowObject<KIXObject>();
+            const rowTableValue = rowObject.getValues().find(
+                (v) => v.property === cell.getProperty()
             );
+            if (rowTableValue?.displayValue) {
+                this.displayValue = rowTableValue.displayValue;
+            } else {
+                const object = rowObject.getObject();
+                if (!this.displayValue && object) {
+                    this.displayValue = await LabelService.getInstance().getDisplayText(
+                        object, this.property, object[this.property], cell.getColumnConfiguration()?.translatable
+                    );
+                }
+            }
         }
     }
 
