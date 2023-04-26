@@ -271,6 +271,7 @@ export class TreeHandler {
 
     public expandSelection(tree: TreeNode[] = this.tree): boolean {
         let expand = false;
+        if (!tree || tree.length === 0) return false;
         for (const node of tree) {
             if (node.children) {
                 const childSelected = this.expandSelection(node.children);
