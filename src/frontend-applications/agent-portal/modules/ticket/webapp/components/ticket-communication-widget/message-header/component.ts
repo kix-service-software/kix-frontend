@@ -56,18 +56,19 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async updateArticleData(): Promise<void> {
-
         this.state.channelTooltip = await LabelService.getInstance().getDisplayText(
             this.state.article, ArticleProperty.CHANNEL_ID
         );
+        let channelIcons = await LabelService.getInstance().getIcons(this.state.article, ArticleProperty.CHANNEL_ID);
+
         if (this.state.article.isUnsent()) {
             this.state.channelTooltip += ` (${this.state.article.getUnsentError()})`;
+            // get channel icon (not by LabelService because of special cache (unsent will be not considered))
+            const articleLabelProvider = LabelService.getInstance().getLabelProvider(this.state.article);
+            channelIcons = await articleLabelProvider.getIcons(this.state.article, ArticleProperty.CHANNEL_ID);
         }
 
-        const icons = await LabelService.getInstance().getIcons(this.state.article, ArticleProperty.CHANNEL_ID);
-        if (icons?.length) {
-            this.state.channelIcon = icons[0];
-        }
+        this.state.channelIcon = channelIcons?.length ? channelIcons[0] : null;
 
         this.state.createTimeString = await LabelService.getInstance().getDisplayText(
             this.state.article, ArticleProperty.INCOMING_TIME
