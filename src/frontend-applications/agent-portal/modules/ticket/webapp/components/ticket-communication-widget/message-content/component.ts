@@ -55,7 +55,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         // on update, some article was already loaded
         if (this.state.article && this.state.article.ArticleID !== this.article.ArticleID) {
-            await this.loadArticle(undefined, true);
+            await this.loadArticle(true);
         } else if (oldChangeTime !== currChangeTime) {
             this.state.article = this.article;
             this.prepareArticleData();
@@ -65,7 +65,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         // load article and prepare actions if not done yet
         if ((!this.state.selectedCompactView || this.state.expanded) && !this.state.article['ObjectActions']?.length) {
-            this.loadArticle(undefined, true);
+            this.loadArticle(true);
         }
     }
 
@@ -336,9 +336,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.filterAttachments();
     }
 
-    private async loadArticle(silent: boolean = false, force?: boolean): Promise<void> {
-        this.state.loading = !silent;
-
+    private async loadArticle(force?: boolean): Promise<void> {
         let articles = [];
         if (!this.articleLoaded || force) {
             const loadingOptions = new KIXObjectLoadingOptions(
@@ -373,7 +371,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         await this.prepareArticleData();
 
-        this.state.loading = false;
         this.state.show = true;
     }
 }

@@ -15,6 +15,6 @@ export class ComponentState {
         public content: string = null,
         public inlineContent: InlineContent[] = [],
         public plainText: string = null,
-        public show: boolean = false
+        public useReadonlyStyle: boolean = true
     ) { }
 }
