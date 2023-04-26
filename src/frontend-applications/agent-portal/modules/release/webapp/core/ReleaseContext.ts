@@ -8,6 +8,7 @@
  */
 
 import { Context } from '../../../../model/Context';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class ReleaseContext extends Context {
 
@@ -18,7 +19,7 @@ export class ReleaseContext extends Context {
     }
 
     public async getDisplayText(): Promise<string> {
-        return 'Release Informationen';
+        return await TranslationService.translate('Translatable#Welcome');
     }
 
 }
