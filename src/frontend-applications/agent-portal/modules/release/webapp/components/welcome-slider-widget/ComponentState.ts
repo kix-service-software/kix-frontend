@@ -17,9 +17,22 @@ export class ComponentState extends WidgetComponentState {
         public activeSliderIndex: number = 0,
         public activeSlider: SliderContent = null,
         public userString: string = '',
-        public changeSlider: boolean = false
+        public changeSlider: boolean = false,
+        public kixReleaseVersions: KIXReleaseVersion[] = [
+            new KIXReleaseVersion('v29 - tba (end of v29 regression phase)'),
+            new KIXReleaseVersion('v28 - Feature-Liste KIX18 v28', 'https://forum.kixdesk.com/index.php?topic=12020.0'),
+            new KIXReleaseVersion('v27 - Feature-Liste KIX18 v27 - Release navidad', 'https://forum.kixdesk.com/index.php?topic=11880.0'),
+            new KIXReleaseVersion('v26 - Feature Liste KIX18 v26', 'https://forum.kixdesk.com/index.php?topic=11811.0')
+        ]
     ) {
         super();
     }
 
+}
+
+export class KIXReleaseVersion {
+    public constructor(
+        public label: string,
+        public url: string = '',
+    ) { }
 }
