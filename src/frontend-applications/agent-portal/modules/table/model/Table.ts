@@ -342,6 +342,8 @@ export class Table implements Table {
         let row = existingRows.find((r) => r.getRowId() === rowId);
         if (!row) {
             row = new Row(this, tableObject);
+        } else if (tableObject) {
+            row.setRowObject(tableObject);
         }
 
         if (addRow) {
