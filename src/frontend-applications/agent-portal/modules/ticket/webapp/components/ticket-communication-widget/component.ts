@@ -154,7 +154,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 EventService.getInstance().publish(
                     'TOGGLE_ARTICLE', { articleId: this.state.articles[0].ArticleID, expanded: true }
                 );
-            }, 2000);
+            }, 10);
         }
     }
 

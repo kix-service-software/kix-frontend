@@ -77,7 +77,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <div.attachments-list>
                             <if(Array.isArray(state.articleAttachments))>
                                 <for|attachment| of=state.articleAttachments>
-                                    <ticket-article-attachment article=state.article attachment=attachment images=state.images/>
+                                    <ticket-article-attachment article=state.article attachment=attachment images=state.images useReadonlyStyle=false/>
                                 </for>
                             </if>
                         </div>
@@ -110,8 +110,5 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </div>
             </if>
         </div>
-    </if>
-    <else-if(state.loading)>
-        <loading-spinner/>
-    </else-if>
+    </if>   
 </div>
