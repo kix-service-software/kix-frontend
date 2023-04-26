@@ -29,10 +29,16 @@ export class SortUtil {
             case DataType.DATE:
             case DataType.DATE_TIME:
                 sort = SortUtil.compareDate(a[property], b[property], sortOrder);
+                if (sort === 0) {
+                    sort = SortUtil.compareObjectByObjectId(a, b, sortOrder);
+                }
                 break;
             case DataType.NUMBER:
             case DataType.INTEGER:
                 sort = SortUtil.compareNumber(a[property], b[property], sortOrder);
+                if (sort === 0) {
+                    sort = SortUtil.compareObjectByObjectId(a, b, sortOrder);
+                }
                 break;
             default:
                 sort = SortUtil.compareString(a[property], b[property], sortOrder);
@@ -95,6 +101,16 @@ export class SortUtil {
             sort = (dateA.getTime() - dateB.getTime());
         }
         return sortOrder === SortOrder.DOWN ? sort * (-1) : sort;
+    }
+
+    public static compareObjectByObjectId<T>(a: T, b: T, sortOrder: SortOrder): number {
+        let sort = 0;
+        if (a['ObjectId']) {
+            typeof a['ObjectId'] === 'number'
+                ? sort = SortUtil.compareNumber(a['ObjectId'], b['ObjectId'], sortOrder)
+                : sort = SortUtil.compareString(a['ObjectId'], b['ObjectId'], sortOrder);
+        }
+        return sort;
     }
 
 }
