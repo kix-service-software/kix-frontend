@@ -89,7 +89,8 @@ class WidgetComponent implements IEventSubscriber {
     }
 
     public async minimizeWidget(force: boolean = false, event: any): Promise<void> {
-        if (event?.preventDefault) {
+        if (event) {
+            event.stopPropagation();
             event.preventDefault();
         }
 

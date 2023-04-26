@@ -34,6 +34,10 @@ class ActionComponent {
     }
 
     public doAction(event: any): void {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
         this.state.action.run(event);
     }
 
