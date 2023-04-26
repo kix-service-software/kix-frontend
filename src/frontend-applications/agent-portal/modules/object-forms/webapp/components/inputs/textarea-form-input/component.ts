@@ -45,6 +45,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             })
         );
 
+        this.state.value = this.formValue?.value;
         this.state.readonly = this.formValue?.readonly;
     }
 
