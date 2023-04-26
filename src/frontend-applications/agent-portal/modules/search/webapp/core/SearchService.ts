@@ -182,11 +182,18 @@ export class SearchService {
                 loadingOptions.includes = [KIXObjectProperty.DYNAMIC_FIELDS];
             }
         }
+        const includes = context.getAdditionalInformation('INCLUDES');
+        if (includes && includes.length > 0) {
+            additionalIncludes.push(...includes);
+        }
 
-        additionalIncludes.push(...context.getAdditionalInformation('INCLUDES'));
-        const uniqueIncludes = additionalIncludes.filter((element, index) => {
-            return additionalIncludes.indexOf(element) === index;
-        });
+        let uniqueIncludes: any;
+
+        if (additionalIncludes && additionalIncludes.length > 0) {
+            uniqueIncludes = additionalIncludes.filter((element, index) => {
+                return additionalIncludes.indexOf(element) === index;
+            });
+        }
 
         if (uniqueIncludes?.length) {
             if (Array.isArray(loadingOptions.includes)) {
