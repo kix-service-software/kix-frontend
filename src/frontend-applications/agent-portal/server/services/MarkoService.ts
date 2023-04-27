@@ -204,6 +204,7 @@ export class MarkoService {
             LoggingService.getInstance().info(`[MARKO] Finished - App Build for ${app.name} in ${(endBuild - startBuild) / 1000}s.`);
             ProfilingService.getInstance().stop(profileTaskId);
         } catch (error) {
+            LoggingService.getInstance().error(`Error building wep application: ${app}`);
             LoggingService.getInstance().error(error);
         }
     }
