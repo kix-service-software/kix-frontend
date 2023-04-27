@@ -24,7 +24,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         this.parentFormValue = input.parent || null;
-        this.state.formValues = input.formValues;
+        this.state.formValues = input.formValues || [];
     }
 
     public async onMount(): Promise<void> {

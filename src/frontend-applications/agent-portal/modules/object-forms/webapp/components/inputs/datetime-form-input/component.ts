@@ -48,6 +48,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         );
 
         this.state.readonly = this.formValue?.readonly;
+
+        this.updateValue();
     }
 
     public async onMount(): Promise<void> {
@@ -56,13 +58,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.formHandler = await this.context.getFormManager().getObjectFormHandler();
         this.state.inputType = this.formValue?.inputType || InputFieldTypes.DATE;
 
-        if (this.formValue.value) {
-            this.state.dateValue = DateTimeUtil.getKIXDateString(new Date(this.formValue.value?.toString()));
-
-            if (this.state.inputType === InputFieldTypes.DATE_TIME) {
-                this.state.timeValue = DateTimeUtil.getKIXTimeString(new Date(this.formValue.value?.toString()));
-            }
-        }
+        this.updateValue();
 
         if (this.formValue.minDate) {
             this.state.minDate = DateTimeUtil.getKIXDateString(new Date(this.formValue.minDate));
@@ -73,6 +69,16 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         this.state.prepared = true;
+    }
+
+    private updateValue(): void {
+        if (this.formValue.value) {
+            this.state.dateValue = DateTimeUtil.getKIXDateString(new Date(this.formValue.value?.toString()));
+
+            if (this.state.inputType === InputFieldTypes.DATE_TIME) {
+                this.state.timeValue = DateTimeUtil.getKIXTimeString(new Date(this.formValue.value?.toString()));
+            }
+        }
     }
 
     public onDestroy(): void {
