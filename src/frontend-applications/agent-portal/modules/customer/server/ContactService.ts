@@ -24,7 +24,6 @@ import { Error } from '../../../../../server/model/Error';
 import { UserProperty } from '../../user/model/UserProperty';
 import { UserService } from '../../user/server/UserService';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
-import { PersonalSettingsProperty } from '../../user/model/PersonalSettingsProperty';
 import { Contact } from '../model/Contact';
 import { SearchOperator } from '../../search/model/SearchOperator';
 import { ObjectIcon } from '../../icon/model/ObjectIcon';
@@ -135,13 +134,9 @@ export class ContactAPIService extends KIXObjectAPIService {
     ): Promise<string> {
 
         const userParameter = this.getUserParameters(parameter);
+        this.prepareOrganisationIdsParameter(parameter);
 
-        const contactParameter = parameter.filter(
-            (p) => !userParameter.some((up) => up[0] === p[0]) || p[0] === KIXObjectProperty.VALID_ID
-        );
-        this.prepareOrganisationIdsParameter(contactParameter);
-
-        const createContact = new CreateContact(contactParameter);
+        const createContact = new CreateContact(parameter);
         const response = await this.sendCreateRequest<CreateContactResponse, CreateContactRequest>(
             token, clientRequestId, this.RESOURCE_URI, new CreateContactRequest(createContact),
             this.objectType
@@ -198,12 +193,16 @@ export class ContactAPIService extends KIXObjectAPIService {
         parameter.push([KIXObjectProperty.VALID_ID, validValue]);
 
         if (userId) {
+            const index = parameter.findIndex((p) => p[0] === 'RoleIDs');
+            if (index > -1)
+                parameter.splice(index, 1);
+
             await UserService.getInstance().updateObject(
                 token, clientRequestId, KIXObjectType.USER, parameter, userId
             ).catch((error) => {
                 throw new Error(error.Code, error.Message);
             });
-        } else if (isAgent || isCustomer) {
+        } else {
             userId = await UserService.getInstance().createObject(
                 token, clientRequestId, KIXObjectType.USER, parameter
             ).catch((error) => {
@@ -236,11 +235,8 @@ export class ContactAPIService extends KIXObjectAPIService {
             }
         }
 
-        const contactParameter = parameter.filter(
-            (p) => !userParameter.some((up) => up[0] === p[0]) || p[0] === KIXObjectProperty.VALID_ID
-        );
-        this.prepareOrganisationIdsParameter(contactParameter);
-        const updateContact = new UpdateContact(contactParameter);
+        this.prepareOrganisationIdsParameter(parameter);
+        const updateContact = new UpdateContact(parameter);
 
         const response = await this.sendUpdateRequest<UpdateContactResponse, UpdateContactRequest>(
             token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId), new UpdateContactRequest(updateContact),
@@ -264,18 +260,11 @@ export class ContactAPIService extends KIXObjectAPIService {
     }
 
     private getUserParameters(parameter: Array<[string, any]>): Array<[string, any]> {
-        return parameter.filter((p) =>
-            p[0] === UserProperty.USER_LOGIN ||
-            p[0] === UserProperty.USER_PASSWORD ||
-            p[0] === UserProperty.USER_COMMENT ||
-            p[0] === UserProperty.USER_ACCESS ||
-            p[0] === UserProperty.IS_AGENT ||
-            p[0] === UserProperty.IS_CUSTOMER ||
-            p[0] === UserProperty.ROLE_IDS ||
-            p[0] === PersonalSettingsProperty.MY_QUEUES ||
-            p[0] === PersonalSettingsProperty.NOTIFICATIONS ||
-            p[0] === PersonalSettingsProperty.USER_LANGUAGE
-        );
+        const userParameter = this.getParameterValue(parameter, 'User');
+        if (userParameter)
+            return Object.entries(userParameter);
+        else
+            return [];
     }
 
     private prepareOrganisationIdsParameter(parameter: Array<[string, any]>): void {
