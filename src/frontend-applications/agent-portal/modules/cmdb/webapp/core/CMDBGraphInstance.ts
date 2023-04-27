@@ -66,36 +66,38 @@ export class CMDBGraphInstance extends GraphInstance<CID3Node, CID3Link, ConfigI
     protected async createD3Nodes(graph: Graph<ConfigItem>): Promise<CID3Node[]> {
         const d3Nodes: CID3Node[] = [];
         for (const n of graph.Nodes) {
-            let bgColor = super.getNodeColor(null);
-            switch (n.Object.CurInciState) {
-                case 'Incident':
-                    bgColor = '#e31e24';
-                    break;
-                case 'Warning':
-                    bgColor = '#ef7f1A';
-                    break;
-                case 'Operational':
-                    bgColor = '#009846';
-                    break;
-                default:
-            }
+            if (n.Object.CurDeplStateType !== 'postproductive'){
+                let bgColor = super.getNodeColor(null);
+                switch (n.Object.CurInciState) {
+                    case 'Incident':
+                        bgColor = '#e31e24';
+                        break;
+                    case 'Warning':
+                        bgColor = '#ef7f1A';
+                        break;
+                    case 'Operational':
+                        bgColor = '#009846';
+                        break;
+                    default:
+                }
 
-            const node = new CID3Node(n.NodeID, n.Object.Name, n.Object.ClassID, bgColor);
-            if (!this.icons.has(n.Object.ClassID)) {
-                const loadingOptions = new ObjectIconLoadingOptions(
-                    KIXObjectType.GENERAL_CATALOG_ITEM, n.Object.ClassID
-                );
-                const icons = await KIXObjectService.loadObjects<ObjectIcon>(
-                    KIXObjectType.OBJECT_ICON, null, null, loadingOptions
-                );
-                if (Array.isArray(icons) && icons.length) {
-                    this.icons.set(n.Object.ClassID, icons[0]);
+                const node = new CID3Node(n.NodeID, n.Object.Name, n.Object.ClassID, bgColor);
+                if (!this.icons.has(n.Object.ClassID)) {
+                    const loadingOptions = new ObjectIconLoadingOptions(
+                        KIXObjectType.GENERAL_CATALOG_ITEM, n.Object.ClassID
+                    );
+                    const icons = await KIXObjectService.loadObjects<ObjectIcon>(
+                        KIXObjectType.OBJECT_ICON, null, null, loadingOptions
+                    );
+                    if (Array.isArray(icons) && icons.length) {
+                        this.icons.set(n.Object.ClassID, icons[0]);
+                        node.image = true;
+                    }
+                } else {
                     node.image = true;
                 }
-            } else {
-                node.image = true;
+                d3Nodes.push(node);
             }
-            d3Nodes.push(node);
         }
 
         return d3Nodes;
