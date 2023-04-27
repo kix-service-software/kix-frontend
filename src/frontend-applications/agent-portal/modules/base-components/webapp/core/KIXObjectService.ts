@@ -523,7 +523,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             });
 
             for (const o of objects) {
-                const label = await LabelService.getInstance().getObjectText(o, null, null, translatable);
+                const label = await LabelService.getInstance().getObjectText(o, true, true, translatable);
                 const icon = LabelService.getInstance().getObjectIcon(o);
                 nodes.push(new TreeNode(o.ObjectId, label, icon));
             }
