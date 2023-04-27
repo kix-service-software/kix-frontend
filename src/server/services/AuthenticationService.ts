@@ -183,14 +183,22 @@ export class AuthenticationService {
     }
 
     public async login(
-        user: string, password: string, userType: UserType, negotiateToken: string,
+        login: string, password: string, userType: UserType, negotiateToken: string,
         clientRequestId: string, remoteAddress: string, fakeLogin?: boolean
     ): Promise<string> {
-        const userLogin = new UserLogin(user, password, userType, negotiateToken);
+        const userLogin = new UserLogin(login, password, userType, negotiateToken);
         const response = await HttpService.getInstance().post<LoginResponse>(
             'auth', userLogin, null, clientRequestId, undefined, false
         );
-        const token = fakeLogin ? response.Token : this.createToken(user, response.Token, remoteAddress);
+        const token = fakeLogin ? response.Token : this.createToken(login, response.Token, remoteAddress);
+
+        const user = await HttpService.getInstance().getUserByToken(token);
+        if (!user?.Contact?.ID) {
+            await this.logout(token);
+            LoggingService.getInstance().error(`No contact available for user ${login}!`);
+            throw new SocketAuthenticationError('No contact available for user!');
+        }
+
         return token;
     }
 
