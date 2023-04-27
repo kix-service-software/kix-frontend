@@ -51,7 +51,8 @@ export class ContactImportRunner extends ImportRunner {
             existingUser = Array.isArray(result) && result.length > 0 ? result[0] : undefined;
 
             if (existingUser) {
-                if ((existingContact as Contact)?.AssignedUserID !== existingUser.UserID) {
+                if ((existingContact as Contact)?.AssignedUserID &&
+                    (existingContact as Contact)?.AssignedUserID !== existingUser.UserID) {
                     throw new Error(
                         null,
                         await TranslationService.translate('Translatable#User is already assigned'));
