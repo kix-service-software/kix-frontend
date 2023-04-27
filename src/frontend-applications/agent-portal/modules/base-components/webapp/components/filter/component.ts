@@ -126,7 +126,7 @@ class Component {
     public reset(): void {
         this.state.textFilterValue = null;
         this.currentFilterId = null;
-        this.treeHandler.setSelection(this.treeHandler.getSelectedNodes(), false);
+        this.treeHandler.selectNone();
     }
 
     private setFilterCount(filterCount: number = null): void {
