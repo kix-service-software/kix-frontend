@@ -8,12 +8,22 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.prepared)>
-   <textarea.form-control
-      type="text"
-      rows=5
-      value=state.value
-      on-keydown("valueChanged")
-      disabled=state.readonly
-      readonly=state.readonly
-   />
+   <if(!state.readonly)>
+      <textarea.form-control
+         type="text"
+         rows=5
+         value=state.value
+         on-keydown("valueChanged")
+      />
+   </if>
+   <else-if(state.readonly)>
+      <textarea.form-control
+         type="text"
+         rows=5
+         value=state.value
+         on-keydown("valueChanged")
+         disabled=state.readonly
+         readonly=state.readonly
+      />
+   </else-if>
 </if>

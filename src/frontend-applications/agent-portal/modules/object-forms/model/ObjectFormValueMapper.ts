@@ -391,12 +391,22 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                 if (instructionProperty === InstructionProperty.READ_ONLY) {
                     if (formValue.readonly !== instruction.ReadOnly) {
                         formValue.readonly = instruction.ReadOnly;
+                        if (formValue.formValues && formValue.formValues.length > 0) {
+                            formValue.formValues.forEach((fv) => {
+                                fv.readonly = instruction.ReadOnly;
+                            });
+                        }
                     }
                 }
 
                 if (instructionProperty === InstructionProperty.WRITEABLE) {
                     if (formValue.readonly === instruction.Writeable) {
                         formValue.readonly = !instruction.Writeable;
+                        if (formValue.formValues && formValue.formValues.length > 0) {
+                            formValue.formValues.forEach((fv) => {
+                                fv.readonly = !instruction.Writeable;
+                            });
+                        }
                     }
                 }
 
