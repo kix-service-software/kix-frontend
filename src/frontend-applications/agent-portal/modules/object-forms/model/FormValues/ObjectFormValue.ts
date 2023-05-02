@@ -372,7 +372,6 @@ export class ObjectFormValue<T = any> {
 
     public async setPossibleValues(values: T[]): Promise<void> {
         this.possibleValues = Array.isArray(values) ? values : values ? [values] : [];
-        await this.applyPossibleValues();
     }
 
     public async addPossibleValues(values: T[]): Promise<void> {
@@ -387,8 +386,6 @@ export class ObjectFormValue<T = any> {
                 }
             }
         }
-
-        await this.applyPossibleValues();
     }
 
     public async removePossibleValues(values: T[]): Promise<void> {
@@ -401,8 +398,6 @@ export class ObjectFormValue<T = any> {
         } else {
             this.forbiddenValues = values;
         }
-
-        await this.applyPossibleValues();
     }
 
     public setValidationResult(validationResult: ValidationResult[] = []): void {
@@ -444,6 +439,10 @@ export class ObjectFormValue<T = any> {
         formValue: ObjectFormValue, objectValueMapper: ObjectFormValueMapper
     ) => FormValueAction> {
         return;
+    }
+
+    public async update(): Promise<void> {
+        await this.applyPossibleValues();
     }
 
 }

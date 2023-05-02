@@ -503,8 +503,14 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             objectIds = objectIds.filter((id) => id !== null && typeof id !== 'undefined');
 
             if (Array.isArray(this.possibleValues)) {
+                const allowedValues = this.possibleValues;
+
+                if (this.additionalValues?.length) {
+                    allowedValues.push(...this.additionalValues);
+                }
+
                 objectIds = objectIds.filter(
-                    (id) => this.possibleValues.some((pv) => pv.toString() === id.toString())
+                    (id) => allowedValues.some((pv) => pv.toString() === id.toString())
                 );
             }
 
@@ -594,19 +600,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         this.treeHandler?.selectAll();
     }
 
-    public async setPossibleValues(values: T[]): Promise<void> {
-        await super.setPossibleValues(values);
+    public async update(): Promise<void> {
         await this.loadSelectableValues();
         await this.setSelectedNodes();
-    }
-
-    public async addPossibleValues(values: T[]): Promise<void> {
-        await super.addPossibleValues(values);
-        this.loadSelectableValues();
-    }
-
-    public async removePossibleValues(values: T[]): Promise<void> {
-        await super.removePossibleValues(values);
-        await this.loadSelectableValues();
     }
 }

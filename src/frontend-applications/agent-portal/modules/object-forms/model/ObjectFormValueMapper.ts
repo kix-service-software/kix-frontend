@@ -472,6 +472,8 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                 }
 
             }
+
+            await formValue.update();
         }
     }
 
