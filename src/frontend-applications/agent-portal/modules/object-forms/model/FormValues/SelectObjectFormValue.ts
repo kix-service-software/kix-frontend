@@ -348,8 +348,13 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         const selectedIds = selectedNodes.map((n: TreeNode) => n.id);
 
         const newValue = [];
-        if (Array.isArray(this.value)) {
-            for (const v of this.value) {
+
+        const value = this.value !== undefined && this.value !== null
+            ? Array.isArray(this.value) ? this.value : [this.value]
+            : null;
+
+        if (Array.isArray(value)) {
+            for (const v of value) {
                 if (typeof v !== 'undefined' && v !== null) {
                     if (TreeUtil.findNode(tree, v)) {
                         if (selectedIds.some((id) => id.toString() === v.toString())) {
@@ -424,8 +429,12 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             SortUtil.sortObjects(nodes, 'label', DataType.STRING);
         }
 
-        if (Array.isArray(this.value)) {
-            for (const v of this.value) {
+        const value = this.value !== undefined && this.value !== null
+            ? Array.isArray(this.value) ? this.value : [this.value]
+            : null;
+
+        if (Array.isArray(value)) {
+            for (const v of value) {
                 const node = TreeUtil.findNode(nodes, v);
                 if (node) {
                     node.selected = true;
@@ -433,7 +442,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             }
         }
 
-        this.treeHandler?.setTree(nodes, undefined, false, true);
+        this.treeHandler?.setTree(nodes, undefined, true, true);
     }
 
     public async search(searchValue: string): Promise<void> {
