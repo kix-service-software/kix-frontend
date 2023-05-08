@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -23,7 +23,7 @@ class Component {
 
     public onInput(input: ComponentState): void {
         this.state.routingConfiguration = input.routingConfiguration ? { ...input.routingConfiguration } : null;
-        this.state.objectId = input.objectId;
+        this.state.objectId = input.objectId || this.state.routingConfiguration?.replaceObjectId;
         this.state.object = input.object;
         this.setURL();
     }

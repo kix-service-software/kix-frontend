@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -15,10 +15,12 @@ import { FilterType } from '../../../../../../model/FilterType';
 import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
 import { SelectObjectFormValue } from '../../../../../object-forms/model/FormValues/SelectObjectFormValue';
 import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectFormValueMapper';
 import { SearchOperator } from '../../../../../search/model/SearchOperator';
+import { User } from '../../../../../user/model/User';
 import { UserProperty } from '../../../../../user/model/UserProperty';
 import { Ticket } from '../../../../model/Ticket';
 import { TicketProperty } from '../../../../model/TicketProperty';
@@ -62,6 +64,8 @@ export class UserObjectFormValue extends SelectObjectFormValue {
         }
 
         this.setLoadingOptions();
+
+        await this.loadInitialUser();
     }
 
     public async setLoadingOptions(): Promise<void> {
@@ -104,6 +108,25 @@ export class UserObjectFormValue extends SelectObjectFormValue {
         }
 
         this.loadingOptions.query = query;
+    }
+
+    public async reset(
+        ignoreProperties?: string[], ignoreFormValueProperties?: string[], ignoreFormValueReset?: string[]
+    ): Promise<void> {
+        await super.reset(ignoreProperties, ignoreFormValueProperties, ignoreFormValueReset);
+        await this.loadInitialUser();
+    }
+
+    protected async loadInitialUser(): Promise<void> {
+        if (this.enable) {
+            this.loadingOptions.limit = 10;
+            this.loadingOptions.searchLimit = 10;
+            const users = await KIXObjectService.loadObjects<User>(KIXObjectType.USER, null, this.loadingOptions)
+                .catch((): User[] => []);
+            if (users?.length) {
+                await this.prepareSelectableNodes(users);
+            }
+        }
     }
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -174,7 +174,7 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
     }
 
     private async prepareAttachments(files: Array<Attachment | File>): Promise<Attachment[]> {
-        const attachments = [];
+        let attachments = null;
         for (let f of files) {
             if (f instanceof File) {
                 const attachment = new Attachment();
@@ -189,6 +189,11 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
             delete f.Comment;
             delete f.KIXObjectType;
             delete f.ID;
+
+            if (!attachments) {
+                attachments = [];
+            }
+
             attachments.push(f);
         }
         return attachments;

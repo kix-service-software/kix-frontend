@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -191,7 +191,8 @@ export class CMDBContext extends Context {
         }
 
         const configItems = await KIXObjectService.loadObjects(
-            KIXObjectType.CONFIG_ITEM, null, loadingOptions, null, false, undefined, undefined, this.contextId
+            KIXObjectType.CONFIG_ITEM, null, loadingOptions, null, false, undefined, undefined,
+            this.contextId + KIXObjectType.CONFIG_ITEM
         ).catch((error) => []);
 
         this.setObjectList(KIXObjectType.CONFIG_ITEM, configItems);

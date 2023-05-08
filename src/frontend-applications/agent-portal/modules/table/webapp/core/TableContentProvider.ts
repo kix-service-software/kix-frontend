@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -156,7 +156,9 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         } else if (this.contextId && !this.objectIds) {
             const context = ContextService.getInstance().getActiveContext();
             objects = context ? await context.getObjectList(this.objectType, currentLimit) : [];
-            this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(context.contextId);
+            this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(
+                context.contextId + this.objectType
+            );
         } else if (!this.objectIds || (this.objectIds && this.objectIds.length > 0)) {
             const forceIds = (this.objectIds && this.objectIds.length > 0) ? true : false;
             const loadingOptions = await this.prepareLoadingOptions();

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -391,12 +391,22 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                 if (instructionProperty === InstructionProperty.READ_ONLY) {
                     if (formValue.readonly !== instruction.ReadOnly) {
                         formValue.readonly = instruction.ReadOnly;
+                        if (formValue.formValues && formValue.formValues.length > 0) {
+                            formValue.formValues.forEach((fv) => {
+                                fv.readonly = instruction.ReadOnly;
+                            });
+                        }
                     }
                 }
 
                 if (instructionProperty === InstructionProperty.WRITEABLE) {
                     if (formValue.readonly === instruction.Writeable) {
                         formValue.readonly = !instruction.Writeable;
+                        if (formValue.formValues && formValue.formValues.length > 0) {
+                            formValue.formValues.forEach((fv) => {
+                                fv.readonly = !instruction.Writeable;
+                            });
+                        }
                     }
                 }
 
@@ -472,6 +482,8 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                 }
 
             }
+
+            await formValue.update();
         }
     }
 

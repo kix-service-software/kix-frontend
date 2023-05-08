@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,6 +7,7 @@
  * --
  */
 
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';
 import { FormValueProperty } from '../../FormValueProperty';
@@ -22,6 +23,8 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
     public isEmpty: boolean = false;
 
     private initPromise: Promise<void>;
+
+    private formValuesVisible: boolean = false;
 
     public constructor(
         public property: string,
@@ -70,7 +73,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
 
                 this.initPromise = null;
 
-                this.visible = this.formValues.length === 0;
+                this.setVisibility(this.formValuesVisible);
 
                 this.setNewInitialState(FormValueProperty.VISIBLE, this.visible);
 
@@ -79,6 +82,11 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
         }
 
         return this.initPromise;
+    }
+
+    public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
+        await super.initFormValueByField(field);
+        this.formValuesVisible = this.visible;
     }
 
     public async initCountValues(): Promise<void> {
@@ -157,6 +165,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
             if (!fv.isSetInBackground) {
                 fv.visible = true;
             }
+
             fv.isSortable = false;
             fv.readonly = this.readonly;
             fv.required = this.required;
@@ -174,8 +183,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
             fv.setInitialState();
             this.setDFValue();
 
-            this.visible = this.formValues.length === 0;
-            this.setNewInitialState(FormValueProperty.VISIBLE, this.visible);
+            this.setVisibility(this.formValuesVisible);
         }
     }
 
@@ -242,7 +250,24 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
     }
 
     public async show(): Promise<void> {
-        return;
+        this.setVisibility(true);
+        this.formValuesVisible = true;
+    }
+
+    public async hide(): Promise<void> {
+        await super.hide();
+        this.formValuesVisible = false;
+    }
+
+    private setVisibility(show?: boolean): void {
+        if (show) {
+            this.visible = this.formValues.length === 0;
+            this.formValues.forEach((fv) => fv.visible = !this.visible);
+        } else {
+            this.visible = false;
+            this.formValues.forEach((fv) => fv.visible = false);
+        }
+        this.setNewInitialState(FormValueProperty.VISIBLE, this.visible);
     }
 
 }
