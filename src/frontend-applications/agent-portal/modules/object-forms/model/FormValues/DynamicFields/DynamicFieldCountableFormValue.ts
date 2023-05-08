@@ -145,7 +145,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
         const length = this.dfValues?.length || 0;
         const countMax = this.countMax;
         const countMin = this.countMin;
-        canAdd = ((countMax > countMin) && countMax > 0 && length < countMax) || countMax === 0;
+        canAdd = ((countMax >= countMin) && countMax > 0 && length < countMax) || countMax === 0;
         canAdd = canAdd && (index === this.formValues.length - 1 || this.instanceId === instanceId);
 
         return canAdd;

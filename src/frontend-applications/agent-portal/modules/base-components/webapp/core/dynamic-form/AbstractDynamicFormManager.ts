@@ -538,6 +538,12 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         if (dfName) {
             return await this.getInputTypeForDF(property);
         }
+        switch (property) {
+            case KIXObjectProperty.CREATE_BY:
+            case KIXObjectProperty.CHANGE_BY:
+                return InputFieldTypes.OBJECT_REFERENCE;
+            default:
+        }
 
         return InputFieldTypes.TEXT;
     }

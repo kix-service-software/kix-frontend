@@ -129,8 +129,6 @@ export class TicketSearchFormManager extends SearchFormManager {
 
     private isDropDown(property: string): boolean {
         return Ticket.SEARCH_PROPERTIES.some((p) => p.Property === property && p.InputType === InputFieldTypes.DROPDOWN)
-            || property === KIXObjectProperty.CREATE_BY
-            || property === KIXObjectProperty.CHANGE_BY
             || property === TicketProperty.STATE_TYPE
             || property === 'Queue.FollowUpID';
     }
