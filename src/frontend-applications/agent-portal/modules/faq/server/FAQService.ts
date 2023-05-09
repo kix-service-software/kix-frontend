@@ -302,6 +302,18 @@ export class FAQService extends KIXObjectAPIService {
             criteria = [...criteria, ...primarySearch];
         }
 
+        const categoryCriteria = criteria.find((c) => c.property === FAQArticleProperty.CATEGORY_ID);
+        if (categoryCriteria && categoryCriteria.operator === SearchOperator.EQUALS) {
+            categoryCriteria.operator = SearchOperator.IN;
+            categoryCriteria.value = [categoryCriteria.value as any];
+        }
+
+        const validCriteria = criteria.find((c) => c.property === KIXObjectProperty.VALID_ID);
+        if (validCriteria && validCriteria.operator === SearchOperator.EQUALS) {
+            validCriteria.operator = SearchOperator.IN;
+            validCriteria.value = [validCriteria.value as any];
+        }
+
         return criteria;
     }
 
