@@ -11,6 +11,8 @@ import { IConfiguration } from './IConfiguration';
 import { ConfigurationType } from './ConfigurationType';
 import { ConfiguredWidget } from './ConfiguredWidget';
 import { ConfiguredDialogWidget } from './ConfiguredDialogWidget';
+import { KIXObjectLoadingOptions } from '../KIXObjectLoadingOptions';
+import { KIXObjectType } from '../kix/KIXObjectType';
 
 export class ContextConfiguration implements IConfiguration {
 
@@ -32,6 +34,7 @@ export class ContextConfiguration implements IConfiguration {
                 public dialogs: ConfiguredDialogWidget[] = [],
                 public customizable: boolean = false,
                 public valid: boolean = true,
+                public loadingOptions: Array<[KIXObjectType | string, KIXObjectLoadingOptions]> = null
         ) { }
 
 }

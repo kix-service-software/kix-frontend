@@ -59,10 +59,6 @@ export class ConfigurationService {
         fs.writeFileSync(filePath, JSON.stringify(content));
     }
 
-    private getComponentConfigurationFilePath(fileName: string): string {
-        return path.join(this.configurationDirectory, fileName);
-    }
-
     private loadServerConfig(serverConfig: string): IServerConfiguration {
         this.clearRequireCache(serverConfig);
         const config: IServerConfiguration = require(serverConfig);

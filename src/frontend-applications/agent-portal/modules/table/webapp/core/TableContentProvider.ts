@@ -124,7 +124,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     public async loadMore(): Promise<void> {
         this.currentPageIndex++;
         if (this.contextId && !this.objectIds) {
-            const pageSize = this.loadingOptions?.limit || 20;
+            const pageSize = this.context?.getPageSize(this.objectType) || this.loadingOptions?.limit || 20;
             const currentLimit = this.currentPageIndex * pageSize;
 
             const context = ContextService.getInstance().getActiveContext();

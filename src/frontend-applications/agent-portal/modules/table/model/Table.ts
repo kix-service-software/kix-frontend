@@ -198,6 +198,8 @@ export class Table implements Table {
 
             await this.initDisplayRows();
 
+            this.setSortByContext();
+
             if (this.sortColumnId && this.sortOrder) {
                 await this.sort(this.sortColumnId, this.sortOrder, true);
             }
@@ -230,6 +232,29 @@ export class Table implements Table {
             EventService.getInstance().subscribe(TableEvent.COLUMN_RESIZED, this.subscriber);
         } else if (forceReload) {
             await this.reload();
+        }
+    }
+
+    private setSortByContext(): void {
+        if (this.contextId && !this.sortColumnId) {
+            const context = ContextService.getInstance().getActiveContext();
+            if (context.contextId === this.contextId) {
+                const sort = context.getSortOrder(this.getObjectType());
+                if (sort) {
+                    let property = sort.split('.')[1];
+                    if (property) {
+                        property = property.split(':')[0];
+                        this.sortOrder = SortOrder.UP;
+                        if (property.match(/^-.+/)) {
+                            this.sortOrder = SortOrder.DOWN;
+                            property = property.replace(/-(.+)/, '$1');
+                        }
+                        if (this.columns.some((c) => c.getColumnId() === property)) {
+                            this.sortColumnId = property;
+                        }
+                    }
+                }
+            }
         }
     }
 

@@ -135,7 +135,7 @@ export class OrganisationContext extends Context {
         }
     }
 
-    private async loadOrganisations(limit: number = this.currentOrganisationLimit): Promise<void> {
+    private async loadOrganisations(limit?: number): Promise<void> {
         if (this.filterValue) {
             EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.ORGANISATION);
 
@@ -145,6 +145,8 @@ export class OrganisationContext extends Context {
             loadingOptions.includes = [KIXObjectProperty.DYNAMIC_FIELDS];
 
             const collectionId = this.contextId + KIXObjectType.ORGANISATION;
+
+            this.prepareContextLoadingOptions(KIXObjectType.ORGANISATION, loadingOptions);
 
             const organisations = await KIXObjectService.loadObjects(
                 KIXObjectType.ORGANISATION, null, loadingOptions, null, false, undefined, undefined, collectionId
@@ -161,7 +163,7 @@ export class OrganisationContext extends Context {
 
     }
 
-    public async loadContacts(limit: number = this.currentContactLimit): Promise<void> {
+    public async loadContacts(limit?: number): Promise<void> {
         EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.CONTACT);
 
         const organisations = this.getFilteredObjectList(KIXObjectType.ORGANISATION);
@@ -184,12 +186,14 @@ export class OrganisationContext extends Context {
                     FilterDataType.NUMERIC, FilterType.AND, organisationIds
                 ));
             }
+            this.prepareContextLoadingOptions(KIXObjectType.CONTACT, loadingOptions);
             contacts = await KIXObjectService.loadObjects<Contact>(
                 KIXObjectType.CONTACT, null, loadingOptions, undefined, undefined, undefined, undefined, collectionId
             );
         } else if (!isOrganisationDepending && this.filterValue) {
             const filter = await ContactService.getInstance().prepareFullTextFilter(this.filterValue);
             loadingOptions.filter = filter;
+            this.prepareContextLoadingOptions(KIXObjectType.CONTACT, loadingOptions);
             contacts = await KIXObjectService.loadObjects<Contact>(
                 KIXObjectType.CONTACT, null, loadingOptions, undefined, undefined, undefined, undefined, collectionId
             );
@@ -202,16 +206,10 @@ export class OrganisationContext extends Context {
     public reloadObjectList(objectType: KIXObjectType, silent: boolean = false, limit: number = 20): Promise<void> {
         if (objectType === KIXObjectType.ORGANISATION) {
             this.currentOrganisationLimit = limit;
-            const isOrganisationDepending = this.getAdditionalInformation(
-                OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING
-            );
-            if (isOrganisationDepending) {
-                this.currentContactLimit = 20;
-            }
-            return this.loadOrganisations();
+            return this.loadOrganisations(this.currentOrganisationLimit);
         } else if (objectType === KIXObjectType.CONTACT) {
             this.currentContactLimit = limit;
-            return this.loadContacts();
+            return this.loadContacts(this.currentContactLimit);
         }
     }
 

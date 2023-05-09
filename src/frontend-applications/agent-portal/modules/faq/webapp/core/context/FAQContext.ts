@@ -97,14 +97,14 @@ export class FAQContext extends Context {
         }
     }
 
-    private async loadFAQArticles(limit: number = 20): Promise<void> {
+    private async loadFAQArticles(limit?: number): Promise<void> {
         const loadingOptions = new KIXObjectLoadingOptions();
         loadingOptions.limit = limit;
 
         loadingOptions.filter = [
             new FilterCriteria(
-                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                FilterType.AND, 1
+                KIXObjectProperty.VALID_ID, SearchOperator.IN, FilterDataType.NUMERIC,
+                FilterType.AND, [1]
             )
         ];
         loadingOptions.includes = [FAQArticleProperty.VOTES];
@@ -113,11 +113,13 @@ export class FAQContext extends Context {
         if (this.categoryId) {
             loadingOptions.filter.push(
                 new FilterCriteria(
-                    FAQArticleProperty.CATEGORY_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                    FilterType.AND, this.categoryId
+                    FAQArticleProperty.CATEGORY_ID, SearchOperator.IN, FilterDataType.NUMERIC,
+                    FilterType.AND, [this.categoryId]
                 )
             );
         }
+
+        this.prepareContextLoadingOptions(KIXObjectType.FAQ_ARTICLE, loadingOptions);
 
         const faqArticles = await KIXObjectService.loadObjects(
             KIXObjectType.FAQ_ARTICLE, null, loadingOptions, null, false, undefined, undefined,

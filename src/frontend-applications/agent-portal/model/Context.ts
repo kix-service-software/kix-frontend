@@ -52,6 +52,7 @@ export abstract class Context {
 
     protected objectLists: Map<KIXObjectType | string, KIXObject[]> = new Map();
     protected filteredObjectLists: Map<KIXObjectType | string, KIXObject[]> = new Map();
+    protected defaultPageSize: number = 20;
 
     private scrollInormation: [KIXObjectType | string, string | number] = null;
     protected displayText: string;
@@ -716,6 +717,69 @@ export abstract class Context {
         ) return false;
 
         return contextId === this.descriptor.contextId && objectId === contextObjectId;
+    }
+
+    protected prepareContextLoadingOptions(
+        type: KIXObjectType | string, loadingOptions: KIXObjectLoadingOptions
+    ): void {
+        loadingOptions.filter ||= [];
+        loadingOptions.includes ||= [];
+        loadingOptions.expands ||= [];
+        loadingOptions.query ||= [];
+
+        const contextLoadingOptionsIndex = Array.isArray(this.configuration?.loadingOptions) ?
+            this.configuration.loadingOptions.findIndex((lo) => Array.isArray(lo) && lo[0] === type) : -1;
+        const contextLoadingOptions = contextLoadingOptionsIndex !== -1 ?
+            this.configuration.loadingOptions[contextLoadingOptionsIndex][1] : null;
+
+        if (contextLoadingOptions) {
+            if (Array.isArray(contextLoadingOptions.filter)) {
+                loadingOptions.filter.push(...contextLoadingOptions.filter);
+            }
+            if (contextLoadingOptions.sortOrder) {
+                loadingOptions.sortOrder = this.getSortOrder(type);
+            }
+            if (Array.isArray(contextLoadingOptions.includes)) {
+                loadingOptions.includes.push(...contextLoadingOptions.includes);
+            }
+            if (Array.isArray(contextLoadingOptions.expands)) {
+                loadingOptions.expands.push(...contextLoadingOptions.expands);
+            }
+            if (Array.isArray(contextLoadingOptions.query)) {
+                loadingOptions.query = contextLoadingOptions.query;
+            }
+            if (contextLoadingOptions.searchLimit) {
+                loadingOptions.searchLimit = contextLoadingOptions.searchLimit;
+            }
+
+            // if no limit given - e.g. initial call, use configuration, else it will possible
+            // be set because of load more
+            if (typeof loadingOptions.limit === 'undefined' || loadingOptions.limit === null) {
+                loadingOptions.limit = this.getPageSize(type);
+            }
+        } else if (typeof loadingOptions.limit === 'undefined' || loadingOptions.limit === null) {
+            loadingOptions.limit = this.getPageSize(type);
+        }
+    }
+
+    public getPageSize(type: KIXObjectType | string): number {
+        const contextLoadingOptionsIndex = Array.isArray(this.configuration?.loadingOptions) ?
+            this.configuration.loadingOptions.findIndex((lo) => Array.isArray(lo) && lo[0] === type) : -1;
+        const contextLoadingOptions = contextLoadingOptionsIndex !== -1 ?
+            this.configuration.loadingOptions[contextLoadingOptionsIndex][1] : null;
+        return contextLoadingOptions?.limit || this.defaultPageSize;
+    }
+
+    public getSortOrder(type: KIXObjectType | string): string {
+        const contextLoadingOptionsIndex = Array.isArray(this.configuration?.loadingOptions) ?
+            this.configuration.loadingOptions.findIndex((lo) => Array.isArray(lo) && lo[0] === type) : -1;
+        const contextLoadingOptions = contextLoadingOptionsIndex !== -1 ?
+            this.configuration.loadingOptions[contextLoadingOptionsIndex][1] : null;
+        let sortOrder = contextLoadingOptions?.sortOrder;
+        if (!sortOrder.match(/^.+\..+/)) {
+            sortOrder = type + '.' + sortOrder;
+        }
+        return sortOrder;
     }
 
 }
