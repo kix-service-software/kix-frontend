@@ -9,9 +9,11 @@
 
 @import "../../../../static/less/index.less";
 
+@h-w-size: 7px;
+
 ::-webkit-scrollbar {
-    height: 3px;
-    width: 3px;
+    height: @h-w-size;
+    width: @h-w-size;
     background: transparent;
 }
 
@@ -26,4 +28,10 @@
 
 ::-webkit-scrollbar-corner {
     background: #000;
+}
+
+::-moz-scrollbar {
+    height: @h-w-size;
+    width: @h-w-size;
+    background: transparent;
 }
