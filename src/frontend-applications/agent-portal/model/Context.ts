@@ -776,7 +776,7 @@ export abstract class Context {
         const contextLoadingOptions = contextLoadingOptionsIndex !== -1 ?
             this.configuration.loadingOptions[contextLoadingOptionsIndex][1] : null;
         let sortOrder = contextLoadingOptions?.sortOrder;
-        if (!sortOrder.match(/^.+\..+/)) {
+        if (sortOrder && !sortOrder.match(/^.+\..+/)) {
             sortOrder = type + '.' + sortOrder;
         }
         return sortOrder;
