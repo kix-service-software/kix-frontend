@@ -7,27 +7,27 @@
  * --
  */
 
-import { ComponentState } from './ComponentState';
-import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
+import { Error } from '../../../../../../../server/model/Error';
 import { FormConfiguration } from '../../../../../model/configuration/FormConfiguration';
-import { FormGroupConfiguration } from '../../../../../model/configuration/FormGroupConfiguration';
-import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { FormContext } from '../../../../../model/configuration/FormContext';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { FormGroupConfiguration } from '../../../../../model/configuration/FormGroupConfiguration';
 import { FormPageConfiguration } from '../../../../../model/configuration/FormPageConfiguration';
-import { ValidationSeverity } from '../../../../../modules/base-components/webapp/core/ValidationSeverity';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
-import { ValidationResult } from '../../../../../modules/base-components/webapp/core/ValidationResult';
 import { ComponentContent } from '../../../../../modules/base-components/webapp/core/ComponentContent';
+import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
+import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { OverlayService } from '../../../../../modules/base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
-import { PersonalSetting } from '../../../model/PersonalSetting';
-import { Error } from '../../../../../../../server/model/Error';
+import { ValidationResult } from '../../../../../modules/base-components/webapp/core/ValidationResult';
+import { ValidationSeverity } from '../../../../../modules/base-components/webapp/core/ValidationSeverity';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { PersonalSetting } from '../../../model/PersonalSetting';
 import { AgentService } from '../../core/AgentService';
+import { ComponentState } from './ComponentState';
 
 
 class Component {

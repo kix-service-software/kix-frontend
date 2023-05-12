@@ -7,35 +7,35 @@
  * --
  */
 
-import { IContextListener } from '../modules/base-components/webapp/core/IContextListener';
-import { KIXObjectType } from './kix/KIXObjectType';
-import { KIXObject } from './kix/KIXObject';
-import { ContextDescriptor } from './ContextDescriptor';
-import { ContextConfiguration } from './configuration/ContextConfiguration';
+import { AbstractAction } from '../modules/base-components/webapp/core/AbstractAction';
 import { AdditionalContextInformation } from '../modules/base-components/webapp/core/AdditionalContextInformation';
-import { ConfiguredWidget } from './configuration/ConfiguredWidget';
-import { WidgetConfiguration } from './configuration/WidgetConfiguration';
-import { WidgetType } from './configuration/WidgetType';
-import { ContextMode } from './ContextMode';
+import { ApplicationEvent } from '../modules/base-components/webapp/core/ApplicationEvent';
+import { AuthenticationSocketClient } from '../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { ClientStorageService } from '../modules/base-components/webapp/core/ClientStorageService';
+import { ContextEvents } from '../modules/base-components/webapp/core/ContextEvents';
+import { ContextService } from '../modules/base-components/webapp/core/ContextService';
+import { EventService } from '../modules/base-components/webapp/core/EventService';
+import { IContextListener } from '../modules/base-components/webapp/core/IContextListener';
+import { IEventSubscriber } from '../modules/base-components/webapp/core/IEventSubscriber';
 import { KIXObjectService } from '../modules/base-components/webapp/core/KIXObjectService';
 import { ObjectIcon } from '../modules/icon/model/ObjectIcon';
-import { EventService } from '../modules/base-components/webapp/core/EventService';
-import { ApplicationEvent } from '../modules/base-components/webapp/core/ApplicationEvent';
-import { ClientStorageService } from '../modules/base-components/webapp/core/ClientStorageService';
+import { TranslationService } from '../modules/translation/webapp/core/TranslationService';
+import { AgentService } from '../modules/user/webapp/core/AgentService';
+import { ConfiguredWidget } from './configuration/ConfiguredWidget';
+import { ContextConfiguration } from './configuration/ContextConfiguration';
+import { WidgetConfiguration } from './configuration/WidgetConfiguration';
+import { WidgetType } from './configuration/WidgetType';
+import { ContextDescriptor } from './ContextDescriptor';
+import { ContextExtension } from './ContextExtension';
+import { ContextFormManager } from './ContextFormManager';
+import { ContextMode } from './ContextMode';
+import { ContextPreference } from './ContextPreference';
+import { ContextStorageManager } from './ContextStorageManager';
+import { IdService } from './IdService';
+import { KIXObject } from './kix/KIXObject';
+import { KIXObjectType } from './kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from './KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from './KIXObjectSpecificLoadingOptions';
-import { ContextService } from '../modules/base-components/webapp/core/ContextService';
-import { AbstractAction } from '../modules/base-components/webapp/core/AbstractAction';
-import { AuthenticationSocketClient } from '../modules/base-components/webapp/core/AuthenticationSocketClient';
-import { ContextFormManager } from './ContextFormManager';
-import { IdService } from './IdService';
-import { TranslationService } from '../modules/translation/webapp/core/TranslationService';
-import { ContextStorageManager } from './ContextStorageManager';
-import { ContextEvents } from '../modules/base-components/webapp/core/ContextEvents';
-import { ContextPreference } from './ContextPreference';
-import { AgentService } from '../modules/user/webapp/core/AgentService';
-import { IEventSubscriber } from '../modules/base-components/webapp/core/IEventSubscriber';
-import { ContextExtension } from './ContextExtension';
 
 export abstract class Context {
 
@@ -54,11 +54,11 @@ export abstract class Context {
     protected filteredObjectLists: Map<KIXObjectType | string, KIXObject[]> = new Map();
     protected defaultPageSize: number = 20;
 
-    private scrollInormation: [KIXObjectType | string, string | number] = null;
+    private scrollInformation: [KIXObjectType | string, string | number] = null;
     protected displayText: string;
     protected icon: ObjectIcon | string;
 
-    private eventSubsriber: IEventSubscriber;
+    private eventSubscriber: IEventSubscriber;
 
     public contextExtensions: ContextExtension[] = [];
 
@@ -101,7 +101,7 @@ export abstract class Context {
 
             this.contextId = descriptor.contextId;
 
-            this.eventSubsriber = {
+            this.eventSubscriber = {
                 eventSubscriberId: this.instanceId,
                 eventPublished: async (data: any, eventId: string): Promise<void> => {
                     const contextUpdateRequired = eventId === ContextEvents.CONTEXT_UPDATE_REQUIRED &&
@@ -130,14 +130,14 @@ export abstract class Context {
                 }
             };
 
-            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.eventSubsriber);
-            EventService.getInstance().subscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.eventSubsriber);
+            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.eventSubscriber);
+            EventService.getInstance().subscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.eventSubscriber);
         }
     }
 
     public async destroy(): Promise<void> {
-        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.eventSubsriber);
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.eventSubsriber);
+        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.eventSubscriber);
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.eventSubscriber);
 
         await this.formManager?.destroy();
 
@@ -636,9 +636,9 @@ export abstract class Context {
     }
 
     public provideScrollInformation(objectType: KIXObjectType | string, objectId: string | number): void {
-        this.scrollInormation = [objectType, objectId];
+        this.scrollInformation = [objectType, objectId];
 
-        this.listeners.forEach((l) => l.scrollInformationChanged(this.scrollInormation[0], this.scrollInormation[1]));
+        this.listeners.forEach((l) => l.scrollInformationChanged(this.scrollInformation[0], this.scrollInformation[1]));
     }
 
     public async reloadObjectList(

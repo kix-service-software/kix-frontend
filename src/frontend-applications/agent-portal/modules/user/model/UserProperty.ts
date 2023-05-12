@@ -44,6 +44,6 @@ export enum UserProperty {
 
     USER_ACCESS = 'USER_ACCESS',
 
-    EXEC_GENRATE_TOKEN = 'ExecGenerateToken'
+    EXEC_GENERATE_TOKEN = 'ExecGenerateToken'
 
 }
