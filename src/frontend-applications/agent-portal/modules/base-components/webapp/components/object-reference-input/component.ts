@@ -7,30 +7,30 @@
  * --
  */
 
-import { ComponentState } from './ComponentState';
-import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
-import { KIXObject } from '../../../../../model/kix/KIXObject';
-import { TreeNode, TreeService, TreeHandler } from '../../core/tree';
-import { ObjectReferenceOptions } from '../../../../../modules/base-components/webapp/core/ObjectReferenceOptions';
-import { SortUtil } from '../../../../../model/SortUtil';
-import { DataType } from '../../../../../model/DataType';
 import { AutoCompleteConfiguration } from '../../../../../model/configuration/AutoCompleteConfiguration';
-import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
-import { UIUtil } from '../../core/UIUtil';
-import { EventService } from '../../core/EventService';
-import { FormEvent } from '../../core/FormEvent';
-import { IEventSubscriber } from '../../core/IEventSubscriber';
-import { ContextService } from '../../core/ContextService';
-import { ObjectReferenceUtil } from './ObjectReferenceUtil';
+import { Context } from '../../../../../model/Context';
+import { DataType } from '../../../../../model/DataType';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../../model/KIXObjectSpecificLoadingOptions';
-import { FormValuesChangedEventData } from '../../core/FormValuesChangedEventData';
-import { Context } from '../../../../../model/Context';
-import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { SortUtil } from '../../../../../model/SortUtil';
+import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { ObjectReferenceOptions } from '../../../../../modules/base-components/webapp/core/ObjectReferenceOptions';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
+import { ContextService } from '../../core/ContextService';
+import { EventService } from '../../core/EventService';
+import { FormEvent } from '../../core/FormEvent';
+import { FormValuesChangedEventData } from '../../core/FormValuesChangedEventData';
+import { IEventSubscriber } from '../../core/IEventSubscriber';
+import { TreeHandler, TreeNode, TreeService } from '../../core/tree';
+import { UIUtil } from '../../core/UIUtil';
+import { ComponentState } from './ComponentState';
+import { ObjectReferenceUtil } from './ObjectReferenceUtil';
 
 class Component extends FormInputComponent<string | number | string[] | number[], ComponentState> {
 
@@ -96,7 +96,8 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     }
                     await this.load(false);
                     this.state.prepared = true;
-                } else if (
+                }
+                else if (
                     this.uniqueNodes && eventId === FormEvent.VALUES_CHANGED &&
                     data && (data as FormValuesChangedEventData).changedValues?.length
                 ) {
@@ -146,7 +147,8 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         if (this.autocomplete) {
             const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
             nodes = treeHandler?.getSelectedNodes() || [];
-        } else {
+        }
+        else {
             nodes = await this.loadNodes().catch(() => []);
         }
 
@@ -187,7 +189,8 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                 this.objectType, this.objects, this.showInvalidNodes,
                 this.isInvalidClickable, objectId ? [objectId] : null, translatable, this.useTextAsId
             );
-        } else {
+        }
+        else {
             const promises = [];
             for (const o of this.objects) {
                 promises.push(ObjectReferenceUtil.createTreeNode(
@@ -248,7 +251,8 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     if (fieldValue && fieldValue.value !== null) {
                         if (Array.isArray(fieldValue.value)) {
                             usedValues = [...usedValues, ...fieldValue.value];
-                        } else {
+                        }
+                        else {
                             usedValues.push(fieldValue.value);
                         }
                     }
@@ -268,7 +272,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
             const keepSelection = keepSelectionOption ? keepSelectionOption.value : false;
             const filterSelection = !keepSelection && !this.state.freeText;
-            treeHandler.setTree(nodes, null, true, filterSelection);
+            treeHandler.setTree(nodes, null, keepSelection, filterSelection);
         }
     }
 
@@ -278,7 +282,8 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
 
         const valueDefined = typeof formValue?.value !== 'undefined' && formValue?.value !== null;
-        if (treeHandler && formValue && valueDefined) {
+
+        if (treeHandler && valueDefined) {
             const objectIds: Array<string | number> = Array.isArray(formValue.value)
                 ? formValue.value
                 : formValue.value ? [formValue.value] : [];
@@ -287,7 +292,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
             // ignore placeholder and "useTextAsId" values (handle them like freetext)
             // and collect ids only if objectType is given (relevant if "additional node" is selected/current value)
-            const ids = objectIds.filter((id) => typeof id !== 'string' || (!id.match(/<KIX_.+>/) && !id.match(/\$\{.+\}/)));
+            const ids = objectIds.filter((id) =>
+                typeof id !== 'string' || (!id.match(/<KIX_.+>/) && !id.match(/\$\{.+\}/))
+            );
             const idsToLoad = !this.useTextAsId && this.objectType ? ids : [];
             if (idsToLoad.length) {
                 if (this.autocomplete) {
@@ -301,11 +308,11 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                             this.translatable
                         );
                         if (node) {
-                            node.selected = true;
                             selectedNodes.push(node);
                         }
                     }
-                } else {
+                }
+                else {
                     const objects = await KIXObjectService.loadObjects(
                         this.objectType, idsToLoad, null, null, true, null, true
                     );
@@ -319,7 +326,6 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                                 object, translatable, this.isInvalidClickable, this.useTextAsId, this.translatable
                             );
                             if (node) {
-                                node.selected = true;
                                 selectedNodes.push(node);
                             }
                         }
@@ -339,7 +345,8 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                 treeHandler.setSelection(selectedNodes, true, true, true);
                 treeHandler.expandSelection();
             }, 200);
-        } else if (treeHandler) {
+        }
+        else if (treeHandler) {
             treeHandler.selectNone();
         }
 
@@ -351,10 +358,12 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         if (currentNodes.length) {
             if (this.state.multiselect) {
                 super.provideValue(currentNodes.map((n) => n.id));
-            } else {
+            }
+            else {
                 super.provideValue(currentNodes[0].id);
             }
-        } else {
+        }
+        else {
             super.provideValue(null);
         }
     }
@@ -402,7 +411,8 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     ? autocompleteOption.value
                     : new AutoCompleteConfiguration();
             }
-        } else {
+        }
+        else {
             this.autocomplete = false;
             this.state.autoCompleteConfiguration = null;
         }
@@ -439,7 +449,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
         const dfName = this.state.field?.options?.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME)?.value;
         const property = this.state.field?.property === KIXObjectProperty.DYNAMIC_FIELDS
-            ? `${KIXObjectProperty.DYNAMIC_FIELDS}.${dfName}`
+            ? `${ KIXObjectProperty.DYNAMIC_FIELDS }.${ dfName }`
             : this.state.field?.property;
 
         const possibleValue = formInstance.getPossibleValue(property);
@@ -449,7 +459,8 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             this.state.possibleValuesOnly = true;
             const nodes = await this.loadNodes();
             this.fillTreeHandler(nodes);
-        } else {
+        }
+        else {
             this.state.possibleValuesOnly = false;
         }
     }
