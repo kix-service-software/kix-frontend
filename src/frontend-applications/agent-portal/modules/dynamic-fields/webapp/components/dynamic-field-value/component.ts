@@ -12,11 +12,10 @@ import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { ContextMode } from '../../../../../model/ContextMode';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { Label } from '../../../../base-components/webapp/core/Label';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
-import { ConfigItemDetailsContext } from '../../../../cmdb/webapp/core';
-import { TicketDetailsContext } from '../../../../ticket/webapp/core';
 import { DynamicFieldTypes } from '../../../model/DynamicFieldTypes';
 import { DynamicFieldValue } from '../../../model/DynamicFieldValue';
 import { ComponentState } from './ComponentState';
@@ -124,14 +123,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public labelClicked(label: Label): void {
-        switch (this.state.field.FieldType) {
-            case DynamicFieldTypes.CI_REFERENCE:
-                ContextService.getInstance().setActiveContext(ConfigItemDetailsContext.CONTEXT_ID, label?.id);
-                break;
-            case DynamicFieldTypes.TICKET_REFERENCE:
-                ContextService.getInstance().setActiveContext(TicketDetailsContext.CONTEXT_ID, label?.id);
-                break;
-            default:
+        if (label?.id && label?.object) {
+            const contextDescriptorList = ContextService.getInstance().getContextDescriptors(ContextMode.DETAILS);
+            for (const contextDescriptor of (contextDescriptorList)) {
+                if(contextDescriptor.isContextFor(label.object.KIXObjectType)) {
+                    ContextService.getInstance().setActiveContext(contextDescriptor.contextId, label.id);
+                    return;
+                }
+            }
         }
     }
 
