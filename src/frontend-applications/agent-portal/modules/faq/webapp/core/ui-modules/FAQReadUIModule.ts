@@ -28,8 +28,8 @@ import { ActionFactory } from '../../../../../modules/base-components/webapp/cor
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { FAQArticleVoteFormService } from '../FAQArticleVoteFormService';
-
-
+import { PlaceholderService } from '../../../../../modules/base-components/webapp/core/PlaceholderService';
+import { FAQArticlePlaceholderHandler } from '../FAQArticlePlaceholderHandler';
 
 export class UIModule implements IUIModule {
 
@@ -42,6 +42,8 @@ export class UIModule implements IUIModule {
     }
 
     public async register(): Promise<void> {
+        PlaceholderService.getInstance().registerPlaceholderHandler(new FAQArticlePlaceholderHandler());
+
         TableFactoryService.getInstance().registerFactory(new FAQArticleTableFactory());
         TableFactoryService.getInstance().registerFactory(new FAQArticleHistoryTableFactory());
 
