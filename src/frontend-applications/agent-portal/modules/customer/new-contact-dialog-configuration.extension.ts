@@ -91,7 +91,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             new FormFieldConfiguration(
                 'contact-new-form-field-organisation',
                 'Translatable#Organisations', ContactProperty.ORGANISATION_IDS, 'object-reference-input',
-                true, 'Translatable#Helptext_Customers_ContactCreate_Organisation',
+                false, 'Translatable#Helptext_Customers_ContactCreate_Organisation',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ORGANISATION),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
@@ -103,7 +103,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             new FormFieldConfiguration(
                 'contact-new-form-field-primary-organisation',
                 'Translatable#Primary Organisation', ContactProperty.PRIMARY_ORGANISATION_ID, 'object-reference-input',
-                true, 'Translatable#Helptext_Customers_ContactCreate_PrimaryOrganisation',
+                false, 'Translatable#Helptext_Customers_ContactCreate_PrimaryOrganisation',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ORGANISATION),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
