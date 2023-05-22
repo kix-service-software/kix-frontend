@@ -50,7 +50,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.translations = await TranslationService.createTranslationObject(
             [
                 'Translatable#Visible in customer portal', 'Translatable#Download all attachments',
-                'Translatable#Created at', 'Translatable#From', 'Translatable#edited'
+                'Translatable#Created at', 'Translatable#From', 'Translatable#edited',
+                'Translatable#Created by'
             ]
         );
     }
