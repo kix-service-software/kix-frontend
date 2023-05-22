@@ -229,7 +229,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(chartNewConfig);
 
         const tableConfig = new TableConfiguration(
-            'ticket-dashboard-table-config', 'Ticket Dashboard Table COnfiguration', ConfigurationType.Table,
+            'ticket-dashboard-table-config', 'Ticket Dashboard Table Configuration', ConfigurationType.Table,
             KIXObjectType.TICKET, null,
             null, null, [], true, true,
             new ToggleOptions('ticket-article-details', 'article', [], true),
