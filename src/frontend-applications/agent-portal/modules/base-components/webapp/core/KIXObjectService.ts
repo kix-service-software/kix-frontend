@@ -582,7 +582,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return nodes;
     }
 
-    public static async loadDynamicField(name: string, id?: number): Promise<DynamicField> {
+    public static async loadDynamicField(name: string, id?: number | string): Promise<DynamicField> {
         let dynamicField: DynamicField;
         if (name || id) {
             const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(

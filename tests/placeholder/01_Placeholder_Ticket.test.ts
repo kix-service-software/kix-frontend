@@ -314,13 +314,13 @@ class someTestFunctions {
         ticket.DynamicFields = [
             new DynamicFieldValue(
                 {
-                    ID: '1', Name: 'TicketTextDF', Label: 'Ticket Text DF',
+                    ID: 1, Name: 'TicketTextDF', Label: 'Ticket Text DF',
                     Value: ['Test Text', 'Test Text 2'], DisplayValue: 'Test Text, Test Text 2'
                 } as DynamicFieldValue
             ),
             new DynamicFieldValue(
                 {
-                    ID: '1', Name: 'TicketSelectionDF', Label: 'Ticket Selection DF',
+                    ID: 1, Name: 'TicketSelectionDF', Label: 'Ticket Selection DF',
                     Value: ['1', '3', '5'], DisplayValue: 'One, Three, Five'
                 } as DynamicFieldValue
             ),

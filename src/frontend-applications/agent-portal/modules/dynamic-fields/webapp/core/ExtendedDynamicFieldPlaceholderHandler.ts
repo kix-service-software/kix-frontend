@@ -22,6 +22,16 @@ export class ExtendedDynamicFieldPlaceholderHandler implements IPlaceholderHandl
         return null;
     }
 
+    public isHandlerForDFType(dfType: string): boolean {
+        return null;
+    }
+
+    public async replaceDFObjectPlaceholder(
+        attributePath: string, objectIds: number[], language?: string
+    ): Promise<string> {
+        return;
+    }
+
     public async replaceDFValue(object: KIXObject, optionString: string): Promise<string> {
         return null;
     }

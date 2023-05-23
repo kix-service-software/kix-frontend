@@ -184,6 +184,8 @@ class Component {
             let value = await TranslationService.translate(attr.DisplayValue);
             if (attr.Type === 'Date') {
                 value = await DateTimeUtil.getLocalDateString(value);
+            } else if (attr.Type === 'DateTime') {
+                value = await DateTimeUtil.getLocalDateTimeString(value);
             } else if (attr.Type === 'Attachment' && attr.Value) {
                 value = attr.Value.Filename;
 
