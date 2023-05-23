@@ -11,7 +11,7 @@ import { BindableObject } from '../../../model/BindableObject';
 
 export class DynamicFieldValue extends BindableObject {
 
-    public ID: string;
+    public ID: number | string;
     public Name: string;
     public Label: string;
     public Value: string[];

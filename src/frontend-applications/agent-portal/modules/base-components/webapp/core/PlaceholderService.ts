@@ -54,6 +54,22 @@ export class PlaceholderService {
         return placeholders;
     }
 
+    // attributePath has to be '0_SomeAttribute_0_SubAttribut' of
+    // something like <KIX_OBJECT_DynamicField_DFName_Object_0_SomeAttribute_0...>
+    public async replaceDFObjectPlaceholder(
+        attributePath: string, dfType: string, objectIds: any[], language?: string
+    ): Promise<string> {
+        let result: string = '';
+        if (objectIds?.length && attributePath.match(/^\d+_.+/)) {
+            const handler = dfType ? this.getHandlerByDFType(dfType) : null;
+            if (handler) {
+                result = await handler.replaceDFObjectPlaceholder(attributePath, objectIds, language);
+            }
+        }
+
+        return result;
+    }
+
     public async replacePlaceholders(text: string, object?: KIXObject, language?: string): Promise<string> {
         const placeholders = this.extractPlaceholders(text);
 
@@ -97,6 +113,13 @@ export class PlaceholderService {
     ): T {
         const handler = this.placeholderHandler.find(
             (ph) => ph.isHandlerForObjectType(objectType)
+        );
+        return handler as T;
+    }
+
+    public getHandlerByDFType<T extends IPlaceholderHandler = IPlaceholderHandler>(dfType: string): T {
+        const handler = this.placeholderHandler.find(
+            (ph) => ph.isHandlerForDFType(dfType)
         );
         return handler as T;
     }

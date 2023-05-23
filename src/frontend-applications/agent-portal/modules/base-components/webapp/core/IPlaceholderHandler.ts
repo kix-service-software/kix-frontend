@@ -18,6 +18,10 @@ export interface IPlaceholderHandler {
 
     isHandlerForObjectType(objectType: KIXObjectType | string): boolean;
 
+    isHandlerForDFType(dfFieldType: string): boolean;
+
+    replaceDFObjectPlaceholder(attributePath: string, objectIds: number[], language?: string): Promise<string>
+
     replace(placeholder: string, object?: KIXObject, language?: string): Promise<string>;
 
 }
