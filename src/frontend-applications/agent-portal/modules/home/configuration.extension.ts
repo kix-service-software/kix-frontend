@@ -100,7 +100,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 TicketProperty.STATE_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.OR, 1
             )
         ];
-        newTicketsLoadingOptions.sortOrder = 'Ticket.-Age:numeric';
         newTicketsLoadingOptions.limit = 10;
         newTicketsLoadingOptions.searchLimit = 100;
 

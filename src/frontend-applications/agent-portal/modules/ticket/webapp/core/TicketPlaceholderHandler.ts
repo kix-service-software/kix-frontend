@@ -331,6 +331,11 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                 case 'ID':
                     result = ticket[TicketProperty.TICKET_ID] ? ticket[TicketProperty.TICKET_ID].toString() : '';
                     break;
+                case TicketProperty.AGE:
+                    const createDate = new Date(ticket.Created);
+                    const age = (Date.now() - createDate.getTime()) / 1000;
+                    result = DateTimeUtil.calculateTimeInterval(age);
+                    break;
                 case TicketProperty.STATE_ID:
                 case TicketProperty.QUEUE_ID:
                 case TicketProperty.PRIORITY_ID:

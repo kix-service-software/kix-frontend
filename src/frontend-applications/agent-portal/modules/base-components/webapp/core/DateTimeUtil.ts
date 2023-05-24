@@ -103,7 +103,6 @@ export class DateTimeUtil {
             isNegative = true;
             seconds = seconds * -1;
         }
-        let ageResult = seconds + 's';
 
         const hoursInSeconds = 60 * 60;
         const daysInSeconds = 24 * hoursInSeconds;
@@ -112,11 +111,7 @@ export class DateTimeUtil {
         const hours = Math.floor((seconds - (days * daysInSeconds)) / hoursInSeconds);
         const minutes = Math.round((seconds - (days * daysInSeconds) - (hours * hoursInSeconds)) / 60);
 
-        if (days === 0) {
-            ageResult = hours + 'h ' + minutes + 'm';
-        } else {
-            ageResult = days + 'd ' + hours + 'h';
-        }
+        const ageResult = `${days}d ${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m`;
 
         return isNegative ? '- ' + ageResult : ageResult;
     }
