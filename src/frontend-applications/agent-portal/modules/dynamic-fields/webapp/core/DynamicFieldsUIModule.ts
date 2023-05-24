@@ -244,9 +244,9 @@ export class UIModule implements IUIModule {
                             }
                         }
                     }
-                },
-                required: ['CountMin', 'CountMax', 'CountDefault']
-            }
+                }
+            },
+            required: ['CountMin', 'CountMax', 'CountDefault']
         };
 
         DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.TEXT_AREA, schema);
