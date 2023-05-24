@@ -318,7 +318,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         [
                             new FilterCriteria(
                                 ConfigItemProperty.ASSIGNED_CONTACT, SearchOperator.EQUALS,
-                                FilterDataType.NUMERIC, FilterType.AND, '<KIX_TICKET_ContactID>'
+                                FilterDataType.NUMERIC, FilterType.OR, '<KIX_TICKET_ContactID>'
+                            ),
+                            new FilterCriteria(
+                                ConfigItemProperty.ASSIGNED_ORGANISATION, SearchOperator.EQUALS,
+                                FilterDataType.NUMERIC, FilterType.OR, '<KIX_TICKET_OrganisationID>'
                             )
                         ], null, 100
                     ), 10,
@@ -338,7 +342,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     ], null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 )
             ),
-            false, true, 'kix-icon-cmdb', false, false, true, [TicketProperty.CONTACT_ID]
+            false, true, 'kix-icon-cmdb', false, false, true, [TicketProperty.CONTACT_ID, TicketProperty.ORGANISATION_ID]
         );
         configurations.push(assignedAssets);
 

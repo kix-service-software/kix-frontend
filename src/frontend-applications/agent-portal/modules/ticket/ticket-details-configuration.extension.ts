@@ -951,7 +951,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         [
                             new FilterCriteria(
                                 ConfigItemProperty.ASSIGNED_CONTACT, SearchOperator.EQUALS,
-                                FilterDataType.NUMERIC, FilterType.AND, '<KIX_TICKET_ContactID>'
+                                FilterDataType.NUMERIC, FilterType.OR, '<KIX_TICKET_ContactID>'
+                            ),
+                            new FilterCriteria(
+                                ConfigItemProperty.ASSIGNED_ORGANISATION, SearchOperator.EQUALS,
+                                FilterDataType.NUMERIC, FilterType.OR, '<KIX_TICKET_OrganisationID>'
                             )
                         ], null, 100
                     ), 10,
