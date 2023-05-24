@@ -23,6 +23,7 @@ import { ObjectReferenceOptions } from '../../core/ObjectReferenceOptions';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { SearchDefinition } from '../../../../search/webapp/core';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { PlaceholderService } from '../../core/PlaceholderService';
 
 export class DynamicFormFieldValue {
 
@@ -322,7 +323,9 @@ export class DynamicFormFieldValue {
         this.value.operator = operator;
         this.isBetween = this.value.operator === SearchOperator.BETWEEN;
         this.isWithin = this.value.operator === SearchOperator.WITHIN;
-        this.isRelativeTime = relativeDateTimeOperators.includes(operator as SearchOperator);
+        this.isRelativeTime = relativeDateTimeOperators.includes(operator as SearchOperator)
+            || this.manager.isRelativDateTimeOperator(operator);
+
         if (this.manager.resetValue) {
             await this.createValueInput();
         }
@@ -455,10 +458,21 @@ export class DynamicFormFieldValue {
                     this.relativeTimeValue = this.value.value[0];
                     this.relativeTimeUnit = this.value.value[1];
                 } else if (typeof this.value.value === 'string') {
-                    const parts = this.value.value.split(/(\d+)/);
+                    let parts = this.value.value.split(/(\d+)/);
+                    const placeholders = PlaceholderService.getInstance().extractPlaceholders(this.value.value);
                     if (parts.length === 3) {
                         this.relativeTimeValue = parts[1];
                         this.relativeTimeUnit = parts[2];
+                    }
+                    else if (
+                        Array.isArray(placeholders)
+                        && placeholders.length
+                    ) {
+                        parts = this.value.value.split(/([YMdmhsw]{1})$/);
+                        if (parts.length === 3) {
+                            this.relativeTimeValue = parts[0];
+                            this.relativeTimeUnit = parts[1];
+                        }
                     }
                 }
                 const node = TreeUtil.findNode(this.relativeTimeUnitTreeHandler.getTree(), this.relativeTimeUnit);
@@ -693,8 +707,22 @@ export class DynamicFormFieldValue {
             }
         }
         if (this.isRelativeTime) {
+            const placeholders = PlaceholderService.getInstance().extractPlaceholders(this.relativeTimeValue);
             if (!isNaN(Number(this.relativeTimeValue)) && this.relativeTimeUnit) {
                 currentValue.value = [this.relativeTimeValue, this.relativeTimeUnit];
+                if (this.manager.isRelativDateTimeOperator(this.value.operator)) {
+                    currentValue.value = `${this.relativeTimeValue}${this.relativeTimeUnit}`;
+                }
+            }
+            else if (
+                typeof this.relativeTimeValue === 'string'
+                && Array.isArray(placeholders)
+                && placeholders.length
+            ) {
+                currentValue.value = [this.relativeTimeValue, this.relativeTimeUnit];
+                if (this.manager.isRelativDateTimeOperator(this.value.operator)) {
+                    currentValue.value = `${this.relativeTimeValue}${this.relativeTimeUnit}`;
+                }
             }
         }
         if (this.isWithin) {

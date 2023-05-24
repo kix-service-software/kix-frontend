@@ -275,4 +275,52 @@ export class DateTimeUtil {
         return dateFormat(date, format);
     }
 
+    public static calculateDate(value: number, unit: string): string {
+        const date = new Date();
+        switch (unit) {
+            case 'm':
+                date.setMinutes(date.getMinutes() + value);
+                break;
+            case 'h':
+                date.setHours(date.getHours() + value);
+                break;
+            case 'd':
+                const dayOffset = value * 60 * 60 * 24;
+                date.setSeconds(date.getSeconds() + dayOffset);
+                break;
+            case 'w':
+                const weekOffset = value * 60 * 60 * 24 * 7;
+                date.setSeconds(date.getSeconds() + weekOffset);
+                break;
+            case 'M':
+                date.setMonth(date.getMonth() + value);
+                break;
+            case 'Y':
+                date.setFullYear(date.getFullYear() + value);
+                break;
+            default:
+        }
+
+        return DateTimeUtil.getKIXDateTimeString(date);
+    }
+
+    public static getSeconds(value: number, unit: string): number {
+        switch (unit) {
+            case 'm':
+                return value * 60;
+            case 'h':
+                return value * 60 * 60;
+            case 'd':
+                return value * 60 * 60 * 24;
+            case 'w':
+                return value * 60 * 60 * 24 * 7;
+            case 'M':
+                return value * 60 * 60 * 24 * 30;
+            case 'Y':
+                return value * 60 * 60 * 24 * 365;
+            default:
+                return value;
+        }
+    }
+
 }

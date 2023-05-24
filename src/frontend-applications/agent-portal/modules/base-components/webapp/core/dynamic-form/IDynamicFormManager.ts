@@ -103,4 +103,6 @@ export interface IDynamicFormManager {
     prepareLoadingOptions(
         value: ObjectPropertyValue, loadingOptions: KIXObjectLoadingOptions
     ): Promise<void>;
+
+    isRelativDateTimeOperator(operator: string): boolean;
 }

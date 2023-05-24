@@ -678,4 +678,8 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         }
     }
 
+    public isRelativDateTimeOperator(operator: string): boolean {
+        return;
+    }
+
 }

@@ -50,7 +50,7 @@ export class FormFieldConfiguration implements IConfiguration {
         public type: ConfigurationType = ConfigurationType.FormField,
         public visible: boolean = true,
         public translateLabel: boolean = true,
-        public valid: boolean = true,
+        public valid: boolean = true
     ) {
         this.instanceId = existingFieldId ? existingFieldId : null;
     }

@@ -11,54 +11,28 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
    <div class="datetime-input-container">
 
       <if(state.inputType === "DATE" || state.inputType === "DATE_TIME")>
-         <if(!state.readonly)>
-            <input
-               key="date-" + state.inputId
-               value=state.dateValue
-               type="date"
-               min=state.minDate
-               max=state.maxDate
-               on-change("dateChanged")
-               on-blur("focusLost")
-               class="form-control"
-            >
-         </if>
-         <else-if(state.readonly)>
-            <input
-               key="date-" + state.inputId
-               value=state.dateValue
-               type="date"
-               min=state.minDate
-               max=state.maxDate
-               on-change("dateChanged")
-               on-blur("focusLost")
-               class="form-control"
-               disabled
-            >
-         </else-if>
+         <input
+            key="date-" + state.inputId
+            value=state.dateValue
+            type="date"
+            min=state.minDate
+            max=state.maxDate
+            on-change("dateChanged")
+            on-blur("focusLost")
+            class="form-control"
+            disabled=state.readonly
+         >
       </if>
       <if(state.inputType === "DATE_TIME" || state.inputType === "TIME")>
-         <if(!state.readonly)>
-            <input
-               key="time-" + state.inputId
-               value=state.timeValue
-               type="time"
-               on-change("timeChanged")
-               on-blur("focusLost")
-               class="form-control"
-            />
-         </if>
-         <else-if(state.readonly)>
-            <input
-               key="time-" + state.inputId
-               value=state.timeValue
-               type="time"
-               on-change("timeChanged")
-               on-blur("focusLost")
-               class="form-control"
-               disabled
-            />
-         </else-if>
+         <input
+            key="time-" + state.inputId
+            value=state.timeValue
+            type="time"
+            on-change("timeChanged")
+            on-blur("focusLost")
+            class="form-control"
+            disabled=state.readonly
+         >
       </if>
    </div>
 </if>

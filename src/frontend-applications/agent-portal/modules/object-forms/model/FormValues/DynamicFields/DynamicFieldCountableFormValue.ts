@@ -26,6 +26,8 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
 
     private formValuesVisible: boolean = false;
 
+    protected defaultValue: any;
+
     public constructor(
         public property: string,
         protected object: DynamicFieldValue,
@@ -71,9 +73,15 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
                 await this.initCountValues();
                 await super.initFormValue();
 
+                if (this.enabled && this.formValues?.length) {
+                    for (const fv of this.formValues) {
+                        fv.enabled = true;
+                    }
+                }
+
                 this.initPromise = null;
 
-                this.setVisibility(this.formValuesVisible);
+                await this.setVisibility(this.formValuesVisible);
 
                 this.setNewInitialState(FormValueProperty.VISIBLE, this.visible);
 
@@ -86,6 +94,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
         await super.initFormValueByField(field);
+        this.defaultValue = this.value;
         this.formValuesVisible = this.visible;
     }
 
@@ -99,11 +108,6 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
         if (this.value?.length) {
             for (const v of this.value) {
                 await this.addFormValue(this.instanceId, v, true);
-
-                const formValue = this.formValues[this.formValues.length - 1];
-                if (formValue) {
-                    formValue.value = v;
-                }
             }
         }
 
@@ -115,7 +119,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
     protected async addDefaultFormValues(): Promise<void> {
         const startIndex = this.formValues?.length || 0;
         for (let i = startIndex; i < this.countDefault; i++) {
-            await this.addFormValue(null, null);
+            await this.addFormValue(null, null, true);
         }
     }
 
@@ -154,7 +158,6 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
     public async addFormValue(instanceId: string, value: any, force?: boolean): Promise<void> {
         if (this.formValueConstructor && (this.canAddValue(instanceId) || force)) {
             const dfValue = new DynamicFieldValue();
-            dfValue.Value = value;
             dfValue.Name = this.dfName;
             this.dfValues.push(dfValue);
 
@@ -176,14 +179,16 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
             await fv.initFormValue();
             this.formValues = [...this.formValues, fv];
 
+            fv.setInitialState();
+            await fv.setFormValue(value || this.defaultValue, force);
+
+            this.setDFValue(true);
+
+            await this.setVisibility(this.formValuesVisible);
+
             fv.addPropertyBinding(FormValueProperty.VALUE, () => {
                 this.setDFValue();
             });
-
-            fv.setInitialState();
-            this.setDFValue();
-
-            this.setVisibility(this.formValuesVisible);
         }
     }
 
@@ -207,7 +212,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
         this.setNewInitialState(FormValueProperty.VISIBLE, this.visible);
     }
 
-    public setDFValue(): void {
+    public setDFValue(force?: boolean): void {
         const value = [];
         const dfValues = this.dfValues;
         if (Array.isArray(dfValues)) {
@@ -222,7 +227,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
             }
         }
 
-        this.setFormValue(value);
+        this.setFormValue(value, force);
     }
 
     protected async applyCountMax(): Promise<void> {
@@ -250,7 +255,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
     }
 
     public async show(): Promise<void> {
-        this.setVisibility(true);
+        await this.setVisibility(true);
         this.formValuesVisible = true;
     }
 
@@ -259,13 +264,21 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
         this.formValuesVisible = false;
     }
 
-    private setVisibility(show?: boolean): void {
+    private async setVisibility(show?: boolean): Promise<void> {
         if (show) {
             this.visible = this.formValues.length === 0;
-            this.formValues.forEach((fv) => fv.visible = !this.visible);
+            for (const fv of this.formValues) {
+                if (this.visible) {
+                    await fv.hide();
+                } else {
+                    await fv.show();
+                }
+            }
         } else {
             this.visible = false;
-            this.formValues.forEach((fv) => fv.visible = false);
+            for (const fv of this.formValues) {
+                await fv.hide();
+            }
         }
         this.setNewInitialState(FormValueProperty.VISIBLE, this.visible);
     }
