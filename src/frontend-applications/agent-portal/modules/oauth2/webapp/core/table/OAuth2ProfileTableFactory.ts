@@ -87,7 +87,7 @@ export class OAuth2ProfileTableFactory extends TableFactory {
                 break;
             case OAuth2ProfileProperty.HAS_ACCESS_TOKEN:
                 config = new DefaultColumnConfiguration(null, null, null,
-                    property, false, true, false, false, 50, true, true, true, DataType.NUMBER
+                    property, false, true, true, false, 150, true, true, true, DataType.NUMBER
                 );
                 break;
             case OAuth2ProfileProperty.RENEW_AUTH:
