@@ -15,6 +15,7 @@ import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicField
 import { ObjectFormValueMapper } from '../../ObjectFormValueMapper';
 import { DateTimeFormValue } from '../DateTimeFormValue';
 import { ObjectFormValue } from '../ObjectFormValue';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 
 export class DynamicFieldDateTimeFormValue extends DateTimeFormValue {
 
@@ -40,7 +41,10 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue {
 
     public async initFormValue(): Promise<void> {
         await super.initFormValue();
+        await this.setDateConfiguration();
+    }
 
+    private async getDynamicFieldConfig(): Promise<any> {
         const dynamicField = await KIXObjectService.loadDynamicField(this.dfName);
 
         if (dynamicField.FieldType === DynamicFieldTypes.DATE) {
@@ -49,14 +53,12 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue {
             this.inputType === InputFieldTypes.DATE_TIME;
         }
 
-        const config = dynamicField.Config;
-
-        this.setDateConfiguration(config);
-
-        this.value = this.object[this.property];
+        return dynamicField.Config;
     }
 
-    private setDateConfiguration(config: any): void {
+    private async setDateConfiguration(): Promise<void> {
+        const config = await this.getDynamicFieldConfig();
+
         switch (config?.DateRestriction) {
             case 'DisablePastDates':
                 this.setDatesLimit(config, true, false);
@@ -79,9 +81,7 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue {
         }
 
         if (!this.value && offset !== null && !this.isEmpty) {
-            const date = new Date();
-            date.setSeconds(date.getSeconds() + offset);
-            this.value = DateTimeUtil.getKIXDateTimeString(date);
+            this.value = this.getOffsetValue(offset);
         }
     }
 
@@ -124,4 +124,21 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue {
         return number;
     }
 
+    public async setFormValue(value: any, force?: boolean): Promise<void> {
+        const timestamp = Date.parse(value);
+        if (value && isNaN(timestamp)) {
+            const parts = value.split(/(\d+)/);
+            if (parts.length === 3) {
+                value = DateTimeUtil.calculateDate(Number(parts[1]), parts[2].toString());
+            }
+        }
+
+        await super.setFormValue(value, force);
+    }
+
+    protected getOffsetValue(offset: number): string {
+        const date = new Date();
+        date.setSeconds(date.getSeconds() + offset);
+        return DateTimeUtil.getKIXDateTimeString(date);
+    }
 }

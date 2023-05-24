@@ -172,4 +172,8 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
     ): Promise<void> {
         return;
     }
+
+    public isRelativDateTimeOperator(operator: string): boolean {
+        return;
+    }
 }

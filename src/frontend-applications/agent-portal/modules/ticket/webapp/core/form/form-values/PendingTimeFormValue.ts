@@ -7,6 +7,7 @@
  * --
  */
 
+import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { DateTimeUtil } from '../../../../../base-components/webapp/core/DateTimeUtil';
 import { DateTimeFormValue } from '../../../../../object-forms/model/FormValues/DateTimeFormValue';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
@@ -16,6 +17,8 @@ import { TicketProperty } from '../../../../model/TicketProperty';
 import { TicketService } from '../../TicketService';
 
 export class PendingTimeFormValue extends DateTimeFormValue {
+
+    private defaultValue: string;
 
     public constructor(
         property: string,
@@ -35,10 +38,12 @@ export class PendingTimeFormValue extends DateTimeFormValue {
             this.setNewInitialState('enabled', this.enabled);
             this.setNewInitialState('visible', this.visible);
 
-            this.minDate = DateTimeUtil.getKIXDateTimeString(new Date());
+            // this.defaultValue contains the origin value of the FormFieldConfiguration
+            // it's needed to calculate the right pending time
+            const pendingDate = await TicketService.getPendingDateDiff(this.defaultValue || this.value);
+            this.setFormValue(DateTimeUtil.getKIXDateTimeString(pendingDate));
 
-            const pendingDate = await TicketService.getPendingDateDiff();
-            this.setFormValue(isPending ? DateTimeUtil.getKIXDateTimeString(pendingDate) : null);
+            this.minDate = DateTimeUtil.getKIXDateTimeString(new Date());
         });
     }
 
@@ -48,6 +53,11 @@ export class PendingTimeFormValue extends DateTimeFormValue {
         this.visible = isPending;
 
         this.isSortable = false;
+    }
+
+    public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
+        this.defaultValue = field.defaultValue?.value;
+        return super.initFormValueByField(field);
     }
 
 }

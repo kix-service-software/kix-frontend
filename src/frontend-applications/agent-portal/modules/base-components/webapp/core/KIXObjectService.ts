@@ -773,5 +773,4 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         }
         return preload;
     }
-
 }
