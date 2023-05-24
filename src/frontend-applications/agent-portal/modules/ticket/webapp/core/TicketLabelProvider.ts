@@ -61,7 +61,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             TicketProperty.OWNER_ID,
             TicketProperty.RESPONSIBLE_ID,
             TicketProperty.WATCHERS,
-            TicketProperty.AGE,
             TicketProperty.UNSEEN,
             TicketProperty.ARCHIVE_FLAG,
             'Queue.FollowUpID'
@@ -354,6 +353,14 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 case TicketProperty.UNTIL_TIME:
                     if (ticket) {
                         displayValue = DateTimeUtil.calculateTimeInterval(ticket.getUntilTime() || 0);
+                        translatable = false;
+                    }
+                    break;
+                case TicketProperty.AGE:
+                    if (ticket) {
+                        const createDate = new Date(ticket.Created);
+                        const age = (Date.now() - createDate.getTime()) / 1000;
+                        displayValue = DateTimeUtil.calculateTimeInterval(age, undefined);
                         translatable = false;
                     }
                     break;

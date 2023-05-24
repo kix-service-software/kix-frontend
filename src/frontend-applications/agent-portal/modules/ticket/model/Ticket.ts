@@ -42,8 +42,6 @@ export class Ticket extends KIXObject {
 
     public TicketID: number;
 
-    public Age: number;
-
     public Created: string;
 
     public CreateTimeUnix: number;
@@ -183,7 +181,6 @@ export class Ticket extends KIXObject {
             this.TicketNumber = null;
             this.Title = null;
             this.TicketID = null;
-            this.Age = null;
             this.Created = null;
             this.CreateTimeUnix = null;
             this.CreateBy = null;
@@ -287,12 +284,6 @@ export class Ticket extends KIXObject {
     public static SEARCH_PROPERTIES = [
         {
             Property: TicketProperty.TICKET_ID,
-            Operations: Ticket.NUMBER_OPERATORS,
-            DataType: FilterDataType.NUMERIC,
-            InputType: InputFieldTypes.NUMBER
-        },
-        {
-            Property: TicketProperty.AGE,
             Operations: Ticket.NUMBER_OPERATORS,
             DataType: FilterDataType.NUMERIC,
             InputType: InputFieldTypes.NUMBER
@@ -612,10 +603,6 @@ export class Ticket extends KIXObject {
         {
             Property: TicketProperty.TICKET_NUMBER,
             DataType: FilterDataType.STRING,
-        },
-        {
-            Property: TicketProperty.AGE,
-            DataType: FilterDataType.NUMERIC,
         },
         {
             Property: TicketProperty.CREATE_TIME,
