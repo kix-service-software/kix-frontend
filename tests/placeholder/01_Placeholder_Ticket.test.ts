@@ -169,7 +169,11 @@ describe('Placeholder replacement for ticket', () => {
 
         it('Should replace ticket age placeholder', async () => {
             const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.AGE}>`, ticket);
-            const age = DateTimeUtil.calculateTimeInterval(Number(ticket.Age));
+
+            const createDate = new Date(ticket.Created);
+            const ticketAge = (Date.now() - createDate.getTime()) / 1000;
+
+            const age = DateTimeUtil.calculateTimeInterval(ticketAge);
             expect(text).equal(age);
         });
 
@@ -301,7 +305,6 @@ class someTestFunctions {
         ticket.OwnerID = 1;
         ticket.TypeID = 1;
         ticket.ResponsibleID = 1;
-        ticket.Age = 123456789;
         ticket.Created = '2019-05-30 08:45:30';
         ticket.CreateBy = 1;
         ticket.Changed = '2019-06-05 10:45:30';

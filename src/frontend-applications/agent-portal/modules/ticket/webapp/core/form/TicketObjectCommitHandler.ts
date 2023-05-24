@@ -220,7 +220,6 @@ export class TicketObjectCommitHandler extends ObjectCommitHandler<Ticket> {
             delete ticket.LockID;
         }
 
-        delete ticket.Age;
         delete ticket.ArchiveFlag;
         delete ticket.Changed;
         delete ticket.Comment;
