@@ -34,11 +34,16 @@ class ActionComponent {
     }
 
     public doAction(event: any): void {
+        if (!this.state.canRunAction) return;
+        this.state.canRunAction = false;
         if (event) {
             event.stopPropagation();
             event.preventDefault();
         }
         this.state.action.run(event);
+        setTimeout(() => {
+            this.state.canRunAction = true;
+        }, 500);
     }
 
     public linkClicked(event: any): void {
