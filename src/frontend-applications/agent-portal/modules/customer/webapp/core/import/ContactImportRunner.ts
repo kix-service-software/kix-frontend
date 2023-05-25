@@ -100,7 +100,7 @@ export class ContactImportRunner extends ImportRunner {
     }
 
     public async getRequiredProperties(): Promise<string[]> {
-        return [ContactProperty.EMAIL, ContactProperty.PRIMARY_ORGANISATION_ID];
+        return [ContactProperty.EMAIL];
     }
 
     public getAlternativeProperty(property: string): string {
