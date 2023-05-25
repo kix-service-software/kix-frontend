@@ -115,7 +115,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
     protected async addDefaultFormValues(): Promise<void> {
         const startIndex = this.formValues?.length || 0;
         for (let i = startIndex; i < this.countDefault; i++) {
-            await this.addFormValue(null, null);
+            await this.addFormValue(null, null, true);
         }
     }
 
