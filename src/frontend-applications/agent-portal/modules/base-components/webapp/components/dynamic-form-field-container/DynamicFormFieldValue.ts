@@ -756,7 +756,7 @@ export class DynamicFormFieldValue {
 
         loadingOptions.limit = limit;
 
-        await this.manager.prepareLoadingOptions(this.value, loadingOptions);
+        loadingOptions = await this.manager.prepareLoadingOptions(this.value, loadingOptions);
 
         if (this.manager.useOwnSearch) {
             tree = await this.manager.searchObjectTree(this.value.property, searchValue, loadingOptions);

@@ -344,7 +344,7 @@ export class TicketBulkManager extends BulkManager {
 
     public async prepareLoadingOptions(
         value: ObjectPropertyValue, loadingOptions: KIXObjectLoadingOptions
-    ): Promise<void> {
+    ): Promise<KIXObjectLoadingOptions> {
         if (value.property === TicketProperty.OWNER_ID || TicketProperty.RESPONSIBLE_ID) {
 
             const queueValue = this.getValues()?.find((v) => v.property === TicketProperty.QUEUE_ID);
@@ -368,6 +368,7 @@ export class TicketBulkManager extends BulkManager {
                 loadingOptions.query = [];
             }
         }
+        return loadingOptions;
     }
 
 }
