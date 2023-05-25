@@ -214,8 +214,8 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
     public async prepareLoadingOptions(
         value: ObjectPropertyValue, loadingOptions: KIXObjectLoadingOptions
-    ): Promise<void> {
-        return;
+    ): Promise<KIXObjectLoadingOptions> {
+        return loadingOptions;
     }
 
     public async hasDefinedValues(): Promise<boolean> {

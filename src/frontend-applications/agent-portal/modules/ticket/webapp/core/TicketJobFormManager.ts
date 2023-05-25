@@ -75,7 +75,7 @@ class TicketJobFilterFormManager extends TicketSearchFormManager {
         switch (property) {
             case TicketProperty.QUEUE_ID:
                 const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false);
-                nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy);
+                nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy, true, true);
                 break;
             default:
                 nodes = await super.getTreeNodes(property, objectIds);

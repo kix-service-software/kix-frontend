@@ -29,6 +29,8 @@ import { Ticket } from '../../model/Ticket';
 import { ArticleProperty } from '../../model/ArticleProperty';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { ConfigItemProperty } from '../../../cmdb/model/ConfigItemProperty';
 
 export class TicketSearchFormManager extends SearchFormManager {
 
@@ -184,7 +186,7 @@ export class TicketSearchFormManager extends SearchFormManager {
                 break;
             case TicketProperty.QUEUE_ID:
                 const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false, null, ['READ']);
-                nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy);
+                nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy, true, true);
                 break;
             default:
                 nodes = await super.getTreeNodes(property);
@@ -254,6 +256,16 @@ export class TicketSearchFormManager extends SearchFormManager {
         }
 
         await super.setValue(newValue, silent);
+    }
+
+    public async prepareLoadingOptions(
+        value: ObjectPropertyValue, loadingOptions: KIXObjectLoadingOptions
+    ): Promise<KIXObjectLoadingOptions> {
+        if (value.property === 'DynamicFields.AffectedServices') {
+            loadingOptions.filter = loadingOptions.filter?.filter(
+                (filter) => filter.property !== ConfigItemProperty.CUR_DEPL_STATE_ID);
+        }
+        return loadingOptions;
     }
 
 }

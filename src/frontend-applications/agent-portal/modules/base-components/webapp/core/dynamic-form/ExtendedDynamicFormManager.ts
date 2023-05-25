@@ -169,8 +169,8 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
 
     public async prepareLoadingOptions(
         value: ObjectPropertyValue, loadingOptions: KIXObjectLoadingOptions
-    ): Promise<void> {
-        return;
+    ): Promise<KIXObjectLoadingOptions> {
+        return loadingOptions;
     }
 
     public isRelativDateTimeOperator(operator: string): boolean {
