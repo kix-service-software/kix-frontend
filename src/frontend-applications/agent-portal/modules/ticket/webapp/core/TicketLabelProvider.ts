@@ -407,7 +407,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
     public async getObjectText(
         ticket: Ticket, id: boolean = true, title: boolean = true, translatable: boolean = true
     ): Promise<string> {
-        let displayValue: string = ticket?.Title;
+        let displayValue: string;
 
         const pattern = await SysConfigService.getInstance().getDisplayValuePattern(KIXObjectType.TICKET);
 
@@ -433,7 +433,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 ticketHookDivider = dividerConfig[0].Value ? dividerConfig[0].Value : '';
             }
 
-            if (id) displayValue += `${ticketHook}${ticketHookDivider}${ticket?.TicketNumber}`;
+            if (id) displayValue = `${ticketHook}${ticketHookDivider}${ticket?.TicketNumber}`;
             if (id && title && ticket?.Title) displayValue += '-';
             if (title && ticket?.Title) displayValue += `${ticket.Title}`;
         }
