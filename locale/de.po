@@ -315,8 +315,8 @@ msgstr "Anwenden"
 msgid "Approved"
 msgstr "Genehmigt"
 
-msgid "A product by c.a.p.e. IT GmbH"
-msgstr "Ein Produkt der c.a.p.e. IT GmbH"
+msgid "A product by KIX Service Software GmbH"
+msgstr ""
 
 msgid "Archived"
 msgstr "Archiviert"
@@ -513,6 +513,9 @@ msgstr "Passwort ändern"
 msgid "Changes cannot be saved. How do you want to proceed?"
 msgstr ""
 "Änderung kann nicht gespeichert werden. Wie möchten Sie weiter verfahren?"
+
+msgid "Change sort direction"
+msgstr ""
 
 msgid "Changes saved."
 msgstr "Änderungen wurden gespeichert."
@@ -1127,6 +1130,21 @@ msgstr "Webformular bearbeiten"
 msgid "Email"
 msgstr "E-Mail"
 
+msgid "Email1"
+msgstr ""
+
+msgid "Email2"
+msgstr ""
+
+msgid "Email3"
+msgstr ""
+
+msgid "Email4"
+msgstr ""
+
+msgid "Email5"
+msgstr ""
+
 msgid "Email Account"
 msgstr "E-Mail-Konto"
 
@@ -1276,6 +1294,9 @@ msgstr "FAQ Artikel"
 
 msgid "FAQ Article History"
 msgstr "FAQ Artikel Historie"
+
+msgid "FAQ Articles successfully removed."
+msgstr ""
 
 msgid "FAQ Attributes"
 msgstr "FAQ Attribute"
@@ -4146,6 +4167,12 @@ msgstr "Adresse(n) löschen"
 msgid "Remove dependency to organisation"
 msgstr "Abhängigkeit zur Organisation lösen"
 
+msgid "Remove FAQ Article(s)"
+msgstr ""
+
+msgid "Remove FAQ Articles"
+msgstr ""
+
 msgid "Remove FAQ Categories"
 msgstr "FAQ Kategorien entfernen"
 
@@ -5320,6 +5347,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "A product by c.a.p.e. IT GmbH"
+#~ msgstr "Ein Produkt der c.a.p.e. IT GmbH"
 
 #~ msgid "Display Limit"
 #~ msgstr "Anzeigelimit"
