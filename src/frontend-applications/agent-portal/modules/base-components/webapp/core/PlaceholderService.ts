@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -54,6 +54,22 @@ export class PlaceholderService {
         return placeholders;
     }
 
+    // attributePath has to be '0_SomeAttribute_0_SubAttribut' of
+    // something like <KIX_OBJECT_DynamicField_DFName_Object_0_SomeAttribute_0...>
+    public async replaceDFObjectPlaceholder(
+        attributePath: string, dfType: string, objectIds: any[], language?: string
+    ): Promise<string> {
+        let result: string = '';
+        if (objectIds?.length && attributePath.match(/^\d+_.+/)) {
+            const handler = dfType ? this.getHandlerByDFType(dfType) : null;
+            if (handler) {
+                result = await handler.replaceDFObjectPlaceholder(attributePath, objectIds, language);
+            }
+        }
+
+        return result;
+    }
+
     public async replacePlaceholders(text: string, object?: KIXObject, language?: string): Promise<string> {
         const placeholders = this.extractPlaceholders(text);
 
@@ -97,6 +113,13 @@ export class PlaceholderService {
     ): T {
         const handler = this.placeholderHandler.find(
             (ph) => ph.isHandlerForObjectType(objectType)
+        );
+        return handler as T;
+    }
+
+    public getHandlerByDFType<T extends IPlaceholderHandler = IPlaceholderHandler>(dfType: string): T {
+        const handler = this.placeholderHandler.find(
+            (ph) => ph.isHandlerForDFType(dfType)
         );
         return handler as T;
     }

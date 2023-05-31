@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -138,41 +138,46 @@ export class FAQService extends KIXObjectService {
     }
 
     public async prepareObjectTree(
-        faqCategories: FAQCategory[], showInvalid: boolean = false, invalidClickable: boolean = false,
-        filterIds?: number[]
+        objects: KIXObject[], showInvalid: boolean = false, invalidClickable: boolean = false,
+        filterIds?: number[], translatable?: boolean
     ): Promise<TreeNode[]> {
-        const nodes: TreeNode[] = [];
-        if (faqCategories && !!faqCategories.length) {
-            if (!showInvalid) {
-                faqCategories = faqCategories.filter((c) => c.ValidID === 1);
-            } else if (!invalidClickable) {
-                faqCategories = faqCategories.filter(
-                    (c) => c.ValidID === 1 || this.hasValidDescendants(c.SubCategories)
-                );
-            }
+        let nodes = [];
+        if (objects?.length) {
+            if (objects[0].KIXObjectType === KIXObjectType.FAQ_CATEGORY) {
+                if (!showInvalid) {
+                    objects = objects.filter((c) => c.ValidID === 1);
+                } else if (!invalidClickable) {
+                    objects = (objects as FAQCategory[]).filter(
+                        (c) => c.ValidID === 1 || this.hasValidDescendants(c.SubCategories)
+                    );
+                }
 
-            if (filterIds && filterIds.length) {
-                faqCategories = faqCategories.filter((c) => !filterIds.some((fid) => fid === c.ID));
-            }
+                if (filterIds && filterIds.length) {
+                    objects = objects.filter((tc) => !filterIds.some((fid) => fid === tc.ObjectId));
+                }
 
-            for (const category of faqCategories) {
-                const subTree = await this.prepareObjectTree(
-                    category.SubCategories, showInvalid, invalidClickable, filterIds
-                );
+                for (const category of (objects as FAQCategory[])) {
+                    const subTree = await this.prepareObjectTree(
+                        category.SubCategories, showInvalid, invalidClickable, filterIds
+                    );
 
-                const treeNode = new TreeNode(
-                    category.ID, category.Name,
-                    new ObjectIcon(null, KIXObjectType.FAQ_CATEGORY, category.ID),
-                    null,
-                    subTree,
-                    null, null, null, null, null, null, null,
-                    invalidClickable ? true : category.ValidID === 1,
-                    undefined, undefined, undefined, undefined,
-                    category.ValidID !== 1
-                );
-                nodes.push(treeNode);
+                    const treeNode = new TreeNode(
+                        category.ID, category.Name,
+                        new ObjectIcon(null, KIXObjectType.FAQ_CATEGORY, category.ID),
+                        null,
+                        subTree,
+                        null, null, null, null, null, null, null,
+                        invalidClickable ? true : category.ValidID === 1,
+                        undefined, undefined, undefined, undefined,
+                        category.ValidID !== 1
+                    );
+                    nodes.push(treeNode);
+                }
+            } else {
+                nodes = await super.prepareObjectTree(objects, showInvalid, invalidClickable, filterIds, translatable);
             }
         }
+
         return nodes;
     }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -27,6 +27,10 @@ import { LabelValueGroupValue } from '../../../../../model/LabelValueGroupValue'
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ImageViewerEvent } from '../../../../agent-portal/model/ImageViewerEvent';
 import { ImageViewerEventData } from '../../../../agent-portal/model/ImageViewerEventData';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
+import { OrganisationDetailsContext } from '../../../../customer/webapp/core/context/OrganisationDetailsContext';
+import { ContactDetailsContext } from '../../../../customer/webapp/core/context/ContactDetailsContext';
+import { ConfigItemDetailsContext } from '../../core';
 
 class Component {
 
@@ -175,10 +179,13 @@ class Component {
         for (const attr of data) {
             let attachment: ConfigItemAttachment;
             let multiline: boolean;
+            let routingConfiguration: RoutingConfiguration;
 
             let value = await TranslationService.translate(attr.DisplayValue);
             if (attr.Type === 'Date') {
                 value = await DateTimeUtil.getLocalDateString(value);
+            } else if (attr.Type === 'DateTime') {
+                value = await DateTimeUtil.getLocalDateTimeString(value);
             } else if (attr.Type === 'Attachment' && attr.Value) {
                 value = attr.Value.Filename;
 
@@ -188,16 +195,31 @@ class Component {
                 attachment = new ConfigItemAttachment(attr.Value);
             } else if (attr.Type === 'TextArea') {
                 multiline = true;
+            } else if (attr.Type === KIXObjectType.ORGANISATION && attr.Value) {
+                routingConfiguration = new RoutingConfiguration(
+                    OrganisationDetailsContext.CONTEXT_ID, KIXObjectType.ORGANISATION
+                );
+                routingConfiguration.replaceObjectId = attr.Value;
+            } else if (attr.Type === KIXObjectType.CONTACT && attr.Value) {
+                routingConfiguration = new RoutingConfiguration(
+                    ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT
+                );
+                routingConfiguration.replaceObjectId = attr.Value;
+            } else if (attr.Type === 'CIClassReference' && attr.Value) {
+                routingConfiguration = new RoutingConfiguration(
+                    ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM
+                );
+                routingConfiguration.replaceObjectId = attr.Value;
             }
 
             const subAttributes = (attr.Sub && attr.Sub.length ? await this.prepareLabelValueGroups(attr.Sub) : null);
 
             const label = await TranslationService.translate(attr.Label);
-            groups.push(
-                new LabelValueGroup(
-                    label, new LabelValueGroupValue(value, multiline, attachment), null, null, subAttributes
-                )
+            const labelValueGroup = new LabelValueGroupValue(value, multiline, attachment, routingConfiguration);
+            const group = new LabelValueGroup(
+                label, labelValueGroup, null, null, subAttributes
             );
+            groups.push(group);
         }
 
         if (images.length) {

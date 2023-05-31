@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -101,7 +101,7 @@ export class Table implements Table {
         ClientStorageService.setOption(this.getTableId(), tableStateString);
     }
 
-    private loadTableState(): void {
+    public loadTableState(): TableState {
         const tableStateString = ClientStorageService.getOption(this.getTableId());
         try {
             this.tableState = JSON.parse(tableStateString);
@@ -116,6 +116,7 @@ export class Table implements Table {
             }
 
             this.tableState?.columnsizes?.forEach((cs) => this.getColumn(cs[0])?.setSize(cs[1]));
+            return this.tableState;
         } catch (error) {
             console.error('Error loading table state: ' + this.getTableId());
             console.error(error);
@@ -197,6 +198,8 @@ export class Table implements Table {
 
             await this.initDisplayRows();
 
+            this.setSortByContext();
+
             if (this.sortColumnId && this.sortOrder) {
                 await this.sort(this.sortColumnId, this.sortOrder, true);
             }
@@ -229,6 +232,29 @@ export class Table implements Table {
             EventService.getInstance().subscribe(TableEvent.COLUMN_RESIZED, this.subscriber);
         } else if (forceReload) {
             await this.reload();
+        }
+    }
+
+    private setSortByContext(): void {
+        if (this.contextId && !this.sortColumnId) {
+            const context = ContextService.getInstance().getActiveContext();
+            if (context.contextId === this.contextId) {
+                const sort = context.getSortOrder(this.getObjectType());
+                if (sort) {
+                    let property = sort.split('.')[1];
+                    if (property) {
+                        property = property.split(':')[0];
+                        this.sortOrder = SortOrder.UP;
+                        if (property.match(/^-.+/)) {
+                            this.sortOrder = SortOrder.DOWN;
+                            property = property.replace(/-(.+)/, '$1');
+                        }
+                        if (this.columns.some((c) => c.getColumnId() === property)) {
+                            this.sortColumnId = property;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -342,6 +368,8 @@ export class Table implements Table {
         let row = existingRows.find((r) => r.getRowId() === rowId);
         if (!row) {
             row = new Row(this, tableObject);
+        } else if (tableObject) {
+            row.setRowObject(tableObject);
         }
 
         if (addRow) {
@@ -625,7 +653,6 @@ export class Table implements Table {
     public async sort(columnId: string, sortOrder: SortOrder, silent?: boolean): Promise<void> {
         this.sortColumnId = columnId;
         this.sortOrder = sortOrder;
-
         const promises = [];
         this.getRows(true).forEach((r) => promises.push(r.getCell(this.sortColumnId)?.initDisplayValue()));
         await Promise.all(promises);
@@ -656,6 +683,8 @@ export class Table implements Table {
                 );
             }
         }
+
+        this.saveTableState();
     }
 
     public async initDisplayRows(): Promise<void> {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -229,7 +229,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(chartNewConfig);
 
         const tableConfig = new TableConfiguration(
-            'ticket-dashboard-table-config', 'Ticket Dashboard Table COnfiguration', ConfigurationType.Table,
+            'ticket-dashboard-table-config', 'Ticket Dashboard Table Configuration', ConfigurationType.Table,
             KIXObjectType.TICKET, null,
             null, null, [], true, true,
             new ToggleOptions('ticket-article-details', 'article', [], true),

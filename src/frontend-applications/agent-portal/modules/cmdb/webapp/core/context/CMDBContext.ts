@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -26,6 +26,9 @@ import { ContextService } from '../../../../base-components/webapp/core/ContextS
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { ContextPreference } from '../../../../../model/ContextPreference';
+import { IdService } from '../../../../../model/IdService';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { TicketContext } from '../../../../ticket/webapp/core';
 
 export class CMDBContext extends Context {
 
@@ -34,12 +37,30 @@ export class CMDBContext extends Context {
     public classId: number;
     public filterValue: string;
 
+    private subscriber: IEventSubscriber;
+
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
         super.initContext();
 
         if (this.classId || this.filterValue) {
             this.loadConfigItems();
         }
+
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(TicketContext.CONTEXT_ID),
+            eventPublished: (data: Context, eventId: string): void => {
+                if (data.instanceId === this.instanceId) {
+                    this.loadConfigItems();
+                }
+            }
+        };
+
+        EventService.getInstance().subscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
+    }
+
+    public async destroy(): Promise<void> {
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_CHANGED, this.subscriber);
     }
 
     public getIcon(): string {
@@ -125,7 +146,7 @@ export class CMDBContext extends Context {
         }
     }
 
-    public async loadConfigItems(limit: number = 20): Promise<void> {
+    public async loadConfigItems(limit?: number): Promise<void> {
         EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.CONFIG_ITEM);
 
         const loadingOptions = new KIXObjectLoadingOptions([]);
@@ -169,8 +190,11 @@ export class CMDBContext extends Context {
             loadingOptions.sortOrder = 'ConfigItem.ChangeTime:datetime';
         }
 
+        this.prepareContextLoadingOptions(KIXObjectType.CONFIG_ITEM, loadingOptions);
+
         const configItems = await KIXObjectService.loadObjects(
-            KIXObjectType.CONFIG_ITEM, null, loadingOptions, null, false, undefined, undefined, this.contextId
+            KIXObjectType.CONFIG_ITEM, null, loadingOptions, null, false, undefined, undefined,
+            this.contextId + KIXObjectType.CONFIG_ITEM
         ).catch((error) => []);
 
         this.setObjectList(KIXObjectType.CONFIG_ITEM, configItems);

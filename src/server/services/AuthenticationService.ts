@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -183,14 +183,22 @@ export class AuthenticationService {
     }
 
     public async login(
-        user: string, password: string, userType: UserType, negotiateToken: string,
+        login: string, password: string, userType: UserType, negotiateToken: string,
         clientRequestId: string, remoteAddress: string, fakeLogin?: boolean
     ): Promise<string> {
-        const userLogin = new UserLogin(user, password, userType, negotiateToken);
+        const userLogin = new UserLogin(login, password, userType, negotiateToken);
         const response = await HttpService.getInstance().post<LoginResponse>(
             'auth', userLogin, null, clientRequestId, undefined, false
         );
-        const token = fakeLogin ? response.Token : this.createToken(user, response.Token, remoteAddress);
+        const token = fakeLogin ? response.Token : this.createToken(login, response.Token, remoteAddress);
+
+        const user = await HttpService.getInstance().getUserByToken(token);
+        if (!user?.Contact?.ID) {
+            await this.logout(token);
+            LoggingService.getInstance().error(`No contact available for user ${login}!`);
+            throw new SocketAuthenticationError('No contact available for user!');
+        }
+
         return token;
     }
 

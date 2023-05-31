@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
@@ -7,7 +7,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<widget title=state.translations["Translatable#Welcome to KIX 18"]>
+<widget title=`${state.translations["Translatable#Welcome to KIX 18"]} v28`>
     <@content>
         <div.slider-widget>
             <div.slider-menu>
@@ -111,6 +111,37 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <else>
                     <div.slider-button/>
                 </else>
+            </div>
+            <div#release-information.p-3.d-flex.flex-column.align-items-center.justify-content-evenly>
+                <div#release-information-title class="mb-3 h3">
+                    <translation-string pattern="Translatable#Latest releases"></translation-string>
+                </div>
+                <ul>
+                    <for|version| of=state.kixReleaseVersions>
+                        <li>
+                            <if(version.url && version.url.length > 0)>
+                                <a href=version.url target="_blank">
+                                    <p.h5>${version.label}</p>
+                                </a>
+                            </if>
+                            <else>
+                                <p.h5>${version.label}</p>
+                            </else>
+                        </li>
+                    </for>
+                    <!-- <li>
+                        <p.h5>v29 - tba (end of v29 regression phase)</p>
+                    </li>
+                    <li><a href="https://forum.kixdesk.com/index.php?topic=12020.0" target="_blank">
+                        <p.h5>v28 - Feature-Liste KIX18 v28</p>
+                    </a></li>
+                    <li><a href="https://forum.kixdesk.com/index.php?topic=11880.0" target="_blank">
+                        <p.h5>v27 - Feature-Liste KIX18 v27 - Release navidad</p>
+                    </a></li>
+                    <li><a href="https://forum.kixdesk.com/index.php?topic=11811.0" target="_blank">
+                        <p.h5>v26 - Feature List KIX18 v26</p>
+                    </a></li> -->
+                </ul>
             </div>
         </div>
     </@content>

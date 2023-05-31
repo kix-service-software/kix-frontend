@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -17,6 +17,10 @@ export interface IPlaceholderHandler {
     isHandlerFor(placeholderString: string): boolean;
 
     isHandlerForObjectType(objectType: KIXObjectType | string): boolean;
+
+    isHandlerForDFType(dfFieldType: string): boolean;
+
+    replaceDFObjectPlaceholder(attributePath: string, objectIds: number[], language?: string): Promise<string>
 
     replace(placeholder: string, object?: KIXObject, language?: string): Promise<string>;
 

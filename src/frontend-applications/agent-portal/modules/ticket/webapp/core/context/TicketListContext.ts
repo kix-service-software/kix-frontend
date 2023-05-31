@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -16,6 +16,11 @@ import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { TicketProperty } from '../../../model/TicketProperty';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../model/FilterType';
 
 export class TicketListContext extends Context {
 
@@ -28,22 +33,32 @@ export class TicketListContext extends Context {
         return this.icon || 'kix-icon-ticket';
     }
 
-    public async loadTickets(ticketIds: number[] = [], text: string = ''): Promise<void> {
+    public async loadTickets(ticketIds: number[] = [], text: string = '', limit?: number): Promise<void> {
 
         this.text = text;
         this.ticketIds = ticketIds;
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, 1000, ['Watchers']);
+        const loadingOptions = new KIXObjectLoadingOptions(null, null, limit, ['Watchers']);
+
+        loadingOptions.filter = [
+            new FilterCriteria(
+                TicketProperty.TICKET_ID, SearchOperator.IN, FilterDataType.NUMERIC, FilterType.AND, this.ticketIds
+            )
+        ];
+        this.prepareContextLoadingOptions(KIXObjectType.TICKET, loadingOptions);
 
         const tickets = await KIXObjectService.loadObjects<Ticket>(
-            KIXObjectType.TICKET, this.ticketIds, loadingOptions, null, false
+            KIXObjectType.TICKET, null, loadingOptions, null, false, undefined, undefined,
+            this.contextId + KIXObjectType.TICKET
         ).catch((error) => []);
 
         await this.getUrl();
         this.setObjectList(KIXObjectType.TICKET, tickets);
     }
 
-    public async reloadObjectList(objectType: KIXObjectType | string, silent: boolean = false): Promise<void> {
-        this.loadTickets(this.ticketIds, this.text);
+    public async reloadObjectList(
+        objectType: KIXObjectType | string, silent: boolean = false, limit: number
+    ): Promise<void> {
+        this.loadTickets(this.ticketIds, this.text, limit);
     }
 
     public async update(urlParams: URLSearchParams): Promise<void> {
