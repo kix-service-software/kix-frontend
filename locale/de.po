@@ -3158,6 +3158,9 @@ msgstr "Letzte Anmeldung"
 msgid "Last Name"
 msgstr "Nachname"
 
+msgid "Latest releases"
+msgstr ""
+
 msgid "Layer"
 msgstr "Layer"
 
