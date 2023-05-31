@@ -88,7 +88,12 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
             const name = nameOption.value;
             const dynamicField = await KIXObjectService.loadDynamicField(name);
             if (dynamicField && dynamicField.ValidID === 1) {
-                if (objectType && dynamicField.ObjectType !== objectType) {
+
+                const ignoreOption = field.options.find(
+                    (o) => o.option === DynamicFormFieldOption.IGNORE_OBJECT_TYPE
+                );
+
+                if (objectType && dynamicField.ObjectType !== objectType && !ignoreOption?.value) {
                     return;
                 }
 

@@ -11,6 +11,8 @@ export enum DynamicFormFieldOption {
 
     FIELD_NAME = 'FIELD_NAME',
 
-    RELATIVE_TIME = 'RELATIVE_TIME'
+    RELATIVE_TIME = 'RELATIVE_TIME',
+
+    IGNORE_OBJECT_TYPE = 'IGNORE_OBJECT_TYPE'
 
 }
