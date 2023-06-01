@@ -291,7 +291,7 @@ class Component {
                 settings.shortTable, false, !settings.cache
             );
 
-            const tableState = table.loadTableState();
+            const tableState = table?.loadTableState();
 
             if (settings.sort) {
                 const sortColumnId = tableState?.sortColumnId ?? settings.sort[0];

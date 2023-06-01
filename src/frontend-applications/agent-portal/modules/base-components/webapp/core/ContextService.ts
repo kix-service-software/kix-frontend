@@ -88,9 +88,10 @@ export class ContextService {
         }
     }
 
-    public getContextDescriptors(contextMode: ContextMode): ContextDescriptor[] {
+    public getContextDescriptors(contextMode: ContextMode, objectType?: KIXObjectType | string): ContextDescriptor[] {
         return this.contextDescriptorList
             .filter((cd) => cd.contextMode === contextMode)
+            .filter((cd) => !objectType ? true : cd.kixObjectTypes.some((ot) => ot === objectType))
             .sort((a, b) => a.priority - b.priority);
     }
 

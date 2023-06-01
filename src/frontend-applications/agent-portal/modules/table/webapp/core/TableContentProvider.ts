@@ -282,6 +282,22 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                         criterion.property, criterion.operator, criterion.type, criterion.filterType, value
                     );
                     loadingOptions.filter.push(preparedCriterion);
+                } else if (Array.isArray(criterion.value)) {
+                    const values = [];
+                    for (const value of criterion.value) {
+                        if (typeof value === 'string') {
+                            const replacedValue = await PlaceholderService.getInstance().replacePlaceholders(
+                                value, contextObject
+                            );
+                            values.push(replacedValue);
+                        } else {
+                            values.push(value);
+                        }
+                    }
+                    const preparedCriterion = new FilterCriteria(
+                        criterion.property, criterion.operator, criterion.type, criterion.filterType, values
+                    );
+                    loadingOptions.filter.push(preparedCriterion);
                 } else {
                     loadingOptions.filter.push(criterion);
                 }
