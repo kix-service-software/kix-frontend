@@ -711,7 +711,7 @@ export abstract class Context {
 
         objectId = objectId ? objectId.toString() : null;
         const contextObjectId = this.getObjectId() ? this.getObjectId().toString() : null;
-        if (contextId.includes('new') &&
+        if (contextId?.includes('new') &&
             this.descriptor.contextId === contextId &&
             !objectId && !contextObjectId
         ) return false;
