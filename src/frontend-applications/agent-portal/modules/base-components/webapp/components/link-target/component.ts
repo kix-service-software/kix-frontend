@@ -31,6 +31,7 @@ class Component {
     private async setURL(): Promise<void> {
         this.state.loading = true;
         if (this.state.routingConfiguration) {
+            this.setContextIdIfNecessary();
             this.state.url = await ContextService.getInstance().getURI(
                 this.state.routingConfiguration.contextId, this.state.objectId,
                 this.state.routingConfiguration.params
@@ -47,12 +48,28 @@ class Component {
         this.state.loading = false;
     }
 
+    private setContextIdIfNecessary(): void {
+        if (!this.state.routingConfiguration.contextId &&
+            this.state.routingConfiguration.contextMode &&
+            this.state.routingConfiguration.objectType
+        ) {
+            const descriptors = ContextService.getInstance().getContextDescriptors(
+                this.state.routingConfiguration.contextMode,
+                this.state.routingConfiguration.objectType
+            );
+            // use id of first found
+            if (descriptors?.length) {
+                this.state.routingConfiguration.contextId = descriptors[0].contextId;
+            }
+        }
+    }
+
     public async linkClicked(event: any): Promise<void> {
         if (event.preventDefault) {
             event.preventDefault();
         }
 
-        if (this.state.routingConfiguration) {
+        if (this.state.routingConfiguration?.contextId) {
             RoutingService.getInstance().routeTo(this.state.routingConfiguration, this.state.objectId);
         }
     }

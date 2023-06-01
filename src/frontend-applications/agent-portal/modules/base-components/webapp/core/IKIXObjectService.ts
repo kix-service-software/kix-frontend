@@ -68,7 +68,7 @@ export interface IKIXObjectService<T extends KIXObject = KIXObject> extends IKIX
         translatable?: boolean
     ): Promise<TreeNode[]>;
 
-    getObjectRoutingConfiguration(object?: KIXObject): RoutingConfiguration;
+    getObjectRoutingConfiguration(object?: KIXObject, property?: string): RoutingConfiguration;
 
     getObjectTypeForProperty(property: string): Promise<KIXObjectType | string>;
 

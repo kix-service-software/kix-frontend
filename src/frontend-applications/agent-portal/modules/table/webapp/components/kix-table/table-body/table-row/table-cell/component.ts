@@ -81,7 +81,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             } else if (object && object.KIXObjectType) {
                 const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(object.KIXObjectType);
                 if (service) {
-                    this.state.routingConfiguration = service.getObjectRoutingConfiguration(object);
+                    this.state.routingConfiguration = service.getObjectRoutingConfiguration(
+                        object, this.column.getColumnConfiguration().property
+                    );
                 }
             }
 

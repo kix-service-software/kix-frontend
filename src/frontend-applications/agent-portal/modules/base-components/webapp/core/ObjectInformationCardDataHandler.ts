@@ -112,7 +112,7 @@ export class ObjectInformationCardDataHandler {
 
         if (value.routingConfiguration) {
             infoValue.routingObjectId = await PlaceholderService.getInstance().replacePlaceholders(
-                value.routingObjectId
+                value.routingObjectId, object
             );
         }
 
