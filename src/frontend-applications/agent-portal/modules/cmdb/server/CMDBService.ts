@@ -47,6 +47,7 @@ import { ConfigItemClass } from '../model/ConfigItemClass';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
 import { HTTPResponse } from '../../../server/services/HTTPResponse';
+import { GeneralCatalogService } from '../../general-catalog/server/GeneralCatalogService';
 
 
 export class CMDBAPIService extends KIXObjectAPIService {
@@ -86,7 +87,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
                 FilterType.AND, 'postproductive')
         ], undefined, undefined, [GeneralCatalogItemProperty.PREFERENCES]);
 
-        const objectResponse = await this.loadObjects<GeneralCatalogItem>(
+        const objectResponse = await GeneralCatalogService.getInstance().loadObjects<GeneralCatalogItem>(
             token, null, KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions, null
         );
 
