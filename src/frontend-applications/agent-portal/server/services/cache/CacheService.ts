@@ -131,6 +131,8 @@ export class CacheService {
         if (ids?.length === 2) {
             await this.deleteKeys(`${KIXObjectType.CURRENT_USER}_${ids[0]}`);
         }
+
+        this.deleteKeys(event.Namespace);
     }
 
     public async deleteKeys(type: string, force: boolean = false): Promise<void> {
