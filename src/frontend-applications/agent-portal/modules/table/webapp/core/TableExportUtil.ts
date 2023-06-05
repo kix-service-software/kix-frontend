@@ -53,7 +53,7 @@ export class TableExportUtil {
             if (objectType) {
                 columnTitle = await LabelService.getInstance().getExportPropertyText(
                     columnTitle, objectType, useColumnDisplayString
-                );
+                ) || '';
             }
             columnTitles.push(`"${this.escapeText(columnTitle.trim())}"`);
         }
