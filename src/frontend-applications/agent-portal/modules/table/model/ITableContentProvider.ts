@@ -13,6 +13,7 @@ import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 export interface ITableContentProvider<T = any> {
 
     totalCount: number;
+    currentLimit: number;
 
     usePaging: boolean;
 

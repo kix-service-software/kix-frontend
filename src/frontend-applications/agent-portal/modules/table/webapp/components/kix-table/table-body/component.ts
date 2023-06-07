@@ -73,9 +73,9 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     private prepareLoadMore(): void {
         const usePaging = this.table.getContentProvider().usePaging;
-        const rowCount = this.table?.getRows(true)?.length;
+        const currentCount = this.table?.getContentProvider()?.currentLimit || this.table?.getRows(true)?.length;
         const totalCount = this.table?.getContentProvider()?.totalCount;
-        this.state.canLoadMore = usePaging && (rowCount < totalCount);
+        this.state.canLoadMore = usePaging && (currentCount < totalCount);
     }
 
 
