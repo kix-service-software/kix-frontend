@@ -34,6 +34,7 @@ import { CacheService } from '../../../server/services/cache';
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
+import { PersonalSettingsProperty } from '../../user/model/PersonalSettingsProperty';
 
 export class ContactAPIService extends KIXObjectAPIService {
 
@@ -193,10 +194,6 @@ export class ContactAPIService extends KIXObjectAPIService {
         parameter.push([KIXObjectProperty.VALID_ID, validValue]);
 
         if (userId) {
-            const index = parameter.findIndex((p) => p[0] === 'RoleIDs');
-            if (index > -1)
-                parameter.splice(index, 1);
-
             await UserService.getInstance().updateObject(
                 token, clientRequestId, KIXObjectType.USER, parameter, userId
             ).catch((error) => {
@@ -261,10 +258,22 @@ export class ContactAPIService extends KIXObjectAPIService {
 
     private getUserParameters(parameter: Array<[string, any]>): Array<[string, any]> {
         const userParameter = this.getParameterValue(parameter, 'User');
-        if (userParameter)
+        if (userParameter) {
             return Object.entries(userParameter);
-        else
-            return [];
+        } else {
+            return parameter.filter((p) =>
+                p[0] === UserProperty.USER_LOGIN ||
+                p[0] === UserProperty.USER_PASSWORD ||
+                p[0] === UserProperty.USER_COMMENT ||
+                p[0] === UserProperty.USER_ACCESS ||
+                p[0] === UserProperty.IS_AGENT ||
+                p[0] === UserProperty.IS_CUSTOMER ||
+                p[0] === UserProperty.ROLE_IDS ||
+                p[0] === PersonalSettingsProperty.MY_QUEUES ||
+                p[0] === PersonalSettingsProperty.NOTIFICATIONS ||
+                p[0] === PersonalSettingsProperty.USER_LANGUAGE
+            );
+        }
     }
 
     private prepareOrganisationIdsParameter(parameter: Array<[string, any]>): void {
