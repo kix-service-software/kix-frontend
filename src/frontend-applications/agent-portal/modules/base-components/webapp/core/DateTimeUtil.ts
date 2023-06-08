@@ -270,6 +270,17 @@ export class DateTimeUtil {
         return dateFormat(date, format);
     }
 
+    public static calculateRelativeDate(value: string): string {
+        const timestamp = Date.parse(value);
+        if (value && isNaN(timestamp)) {
+            const parts = value.split(/(\d+)/);
+            if (parts.length === 3) {
+                value = DateTimeUtil.calculateDate(Number(parts[1]), parts[2].toString());
+            }
+        }
+        return value;
+    }
+
     public static calculateDate(value: number, unit: string): string {
         const date = new Date();
         switch (unit) {
