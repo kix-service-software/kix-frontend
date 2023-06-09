@@ -90,7 +90,8 @@ export class ObjectInformationCardDataHandler {
             value.routingConfiguration,
             value.routingObjectId,
             '',
-            ''
+            '',
+            value.multiline
         );
 
         const placeholders = [];
