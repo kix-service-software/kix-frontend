@@ -54,6 +54,7 @@ export class KIXObjectSocketClient extends SocketClient {
     }
 
     private collectionsCounts: Map<string, number> = new Map();
+    private collectionsLimits: Map<string, number> = new Map();
 
     private constructor() {
         super('kixobjects');
@@ -61,6 +62,10 @@ export class KIXObjectSocketClient extends SocketClient {
 
     public getCollectionsCount(collectionId: string): number {
         return this.collectionsCounts.get(collectionId);
+    }
+
+    public getCollectionsLimit(collectionId: string): number {
+        return this.collectionsLimits.get(collectionId);
     }
 
     public async loadDisplayValue(
@@ -155,6 +160,9 @@ export class KIXObjectSocketClient extends SocketClient {
 
         if (collectionId) {
             this.collectionsCounts.set(collectionId, Number(response.totalCount));
+            if (loadingOptions?.limit) {
+                this.collectionsLimits.set(collectionId, Number(loadingOptions.limit));
+            }
         }
 
         return response.objects;

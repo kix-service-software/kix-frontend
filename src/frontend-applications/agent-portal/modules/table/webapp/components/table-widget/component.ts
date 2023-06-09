@@ -257,8 +257,11 @@ class Component {
             }
 
             let countString = `${count}`;
-            const visibleRows = this.state.table?.getRowCount();
-            if (visibleRows < count) {
+            // TODO: consider frontend filtering?
+            // if current loaded (page) < total, show actually loaded (api-filter/permission) of total
+            const currentLimit = this.state.table?.getContentProvider()?.currentLimit || count;
+            if (currentLimit < count) {
+                const visibleRows = this.state.table?.getRowCount();
                 countString = `${visibleRows}/${count}`;
             }
 
