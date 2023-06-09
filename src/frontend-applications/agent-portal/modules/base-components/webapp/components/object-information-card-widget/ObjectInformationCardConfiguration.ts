@@ -52,7 +52,8 @@ export class InformationConfiguration {
         public routingConfiguration?: RoutingConfiguration,
         public routingObjectId?: string,
         public preparedText?: string,
-        public preparedLinkSrc?: string
+        public preparedLinkSrc?: string,
+        public multiline?: boolean
     ) { }
 
 }
