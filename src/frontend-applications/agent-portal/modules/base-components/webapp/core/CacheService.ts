@@ -185,6 +185,7 @@ export class BrowserCacheService {
                 break;
             case KIXObjectType.USER:
                 cacheKeyPrefixes.push(KIXObjectType.ROLE);
+                cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 cacheKeyPrefixes.push(KIXObjectType.REPORT_DEFINITION);
                 break;
             case KIXObjectType.LINK:
@@ -202,6 +203,7 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push('ORGANISATION_TICKET_STATS');
                 break;
             case KIXObjectType.CONTACT:
+                cacheKeyPrefixes.push(KIXObjectType.USER);
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
                 cacheKeyPrefixes.push('CONTACT_TICKET_STATS');
                 break;
