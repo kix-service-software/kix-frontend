@@ -52,7 +52,9 @@ export class LabelService {
 
     public clearDisplayValueCache(objectType: KIXObjectType | string): void {
         this.displayIconCache.delete(objectType);
+        this.requestIconPromises.delete(objectType);
         this.displayValueCache.delete(objectType);
+        this.requestDisplayValuePromises.delete(objectType);
     }
 
     public registerLabelProvider<T>(labelProvider: ILabelProvider<T>): void {

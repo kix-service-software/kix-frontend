@@ -803,7 +803,7 @@ export class Table implements Table {
             }
 
             this.toggleFirstRow();
-            this.initDisplayRows();
+            await this.initDisplayRows();
             EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
             EventService.getInstance().publish(TableEvent.RELOADED, new TableEventData(this.getTableId()));
 
@@ -834,9 +834,9 @@ export class Table implements Table {
             this.getColumns().some((c) => c.isFiltered());
     }
 
-    public setRowObject(row: Row, rowObject: RowObject): void {
+    public async setRowObject(row: Row, rowObject: RowObject): Promise<void> {
         row.setRowObject(rowObject);
-        row.initializeDisplayValues();
+        await row.initializeDisplayValues();
         EventService.getInstance().publish(
             TableEvent.ROW_VALUE_CHANGED,
             new TableEventData(this.getTableId(), row.getRowId())
