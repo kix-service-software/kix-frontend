@@ -29,6 +29,7 @@ export class User extends KIXObject {
 
     public Contact: Contact;
 
+    public UsageContext: number;
     public IsAgent: number;
     public IsCustomer: number;
 

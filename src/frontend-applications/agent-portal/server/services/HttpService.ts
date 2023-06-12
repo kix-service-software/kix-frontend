@@ -25,6 +25,7 @@ import { AxiosAdapter, AxiosError, AxiosRequestConfig, AxiosResponse } from 'axi
 import { SocketAuthenticationError } from '../../../../server/model/SocketAuthenticationError';
 import { RequestCounter } from '../../../../server/services/RequestCounter';
 import { HTTPResponse } from './HTTPResponse';
+import { Session } from '../../../../server/model/Session';
 
 export class HttpService {
 
@@ -203,7 +204,8 @@ export class HttpService {
         };
 
         const user = await this.getUserByToken(token);
-        const cacheId = user.RoleIDs?.sort().join(';');
+        const session = await this.getUserSession(token);
+        const cacheId = user.RoleIDs?.sort().join(';') + `${session?.UserType}`;
 
         const cacheKey = cacheId + resource;
         const cacheType = collection === null || typeof collection === 'undefined' || collection
@@ -436,6 +438,64 @@ export class HttpService {
             return null;
         });
         return loadedUser;
+    }
+
+    public async getUserSession(token: string): Promise<Session> {
+        const backendToken = AuthenticationService.getInstance().getBackendToken(token);
+
+        const cacheType = `${KIXObjectType.USER_SESSION}_${token}`;
+
+        const session = await CacheService.getInstance().get(backendToken, cacheType);
+        if (session) {
+            return session;
+        }
+
+        const requestKey = `${KIXObjectType.USER_SESSION}-${token}`;
+        if (this.requestPromises.has(requestKey)) {
+            return this.requestPromises.get(requestKey);
+        }
+
+        const requestPromise = new Promise<User>(async (resolve, reject) => {
+            const options: AxiosRequestConfig = { method: RequestMethod.GET };
+
+            const uri = 'session';
+            options.url = this.buildRequestUrl(uri);
+            options.headers = {
+                'Authorization': 'Token ' + backendToken,
+                'KIX-Request-ID': ''
+            };
+
+            // start profiling
+            const profileTaskId = ProfilingService.getInstance().start(
+                'HttpService', options.method + '\t' + uri + '\t', { data: [options] }
+            );
+
+            const response = await this.axios(options)
+                .catch((error: AxiosError) => {
+                    LoggingService.getInstance().error(
+                        `Error during HTTP (${uri}) ${options.method} request.`, error
+                    );
+                    ProfilingService.getInstance().stop(profileTaskId, { data: ['Error'] });
+                    if (error.response?.status === 403) {
+                        throw new PermissionError(this.createError(error), uri, options.method);
+                    } else {
+                        throw this.createError(error);
+                    }
+                });
+
+            await CacheService.getInstance().set(backendToken, response.data['Session'], cacheType);
+            ProfilingService.getInstance().stop(profileTaskId, { data: [response.data] });
+            this.requestPromises.delete(requestKey);
+            resolve(response.data['Session']);
+        });
+
+        this.requestPromises.set(requestKey, requestPromise);
+
+        const loadedSession = await requestPromise.catch(() => {
+            this.requestPromises.delete(requestKey);
+            return null;
+        });
+        return loadedSession;
     }
 
     public getPendingRequestCount(): number {

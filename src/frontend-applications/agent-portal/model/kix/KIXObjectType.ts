@@ -177,6 +177,8 @@ export enum KIXObjectType {
 
     USER = 'User',
 
+    USER_SESSION = 'Session',
+
     USER_PREFERENCE = 'UserPreference',
 
     VALID_OBJECT = 'ValidObject',
