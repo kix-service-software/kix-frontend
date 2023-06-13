@@ -520,10 +520,11 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         if (searchCriteria.length) {
 
             // use correct property name
-            const fulltextCriterion = searchCriteria.find((c) => c.property === SearchProperty.FULLTEXT);
-            if (fulltextCriterion) {
-                fulltextCriterion.property = 'Fulltext';
-            }
+            searchCriteria.forEach((c) => {
+                if (c.property === SearchProperty.FULLTEXT) {
+                    c.property = 'Fulltext';
+                }
+            });
 
             const apiSearch = {};
             apiSearch[objectProperty] = this.prepareObjectFilter(searchCriteria);
