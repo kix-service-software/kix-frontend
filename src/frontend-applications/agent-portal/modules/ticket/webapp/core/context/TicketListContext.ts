@@ -16,40 +16,34 @@ import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { ContextEvents } from '../../../../base-components/webapp/core/ContextEvents';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { FilterCriteria } from '../../../../../model/FilterCriteria';
-import { TicketProperty } from '../../../model/TicketProperty';
-import { SearchOperator } from '../../../../search/model/SearchOperator';
-import { FilterDataType } from '../../../../../model/FilterDataType';
-import { FilterType } from '../../../../../model/FilterType';
+import { AgentService } from '../../../../user/webapp/core/AgentService';
 
 export class TicketListContext extends Context {
 
     public static CONTEXT_ID: string = 'ticket-list';
 
-    private text: string = '';
     private ticketIds: number[];
 
     public getIcon(): string | ObjectIcon {
         return this.icon || 'kix-icon-ticket';
     }
 
-    public async loadTickets(ticketIds: number[] = [], text: string = '', limit?: number): Promise<void> {
-
-        this.text = text;
-        this.ticketIds = ticketIds;
+    public async loadTickets(limit?: number): Promise<void> {
         const loadingOptions = new KIXObjectLoadingOptions(null, null, limit, ['Watchers']);
-
-        loadingOptions.filter = [
-            new FilterCriteria(
-                TicketProperty.TICKET_ID, SearchOperator.IN, FilterDataType.NUMERIC, FilterType.AND, this.ticketIds
-            )
-        ];
+        loadingOptions.limit = limit;
         this.prepareContextLoadingOptions(KIXObjectType.TICKET, loadingOptions);
 
-        const tickets = await KIXObjectService.loadObjects<Ticket>(
-            KIXObjectType.TICKET, null, loadingOptions, null, false, undefined, undefined,
-            this.contextId + KIXObjectType.TICKET
-        ).catch((error) => []);
+        const user = await AgentService.getInstance().getCurrentUser(true);
+        const ticketStatsProperty = this.getAdditionalInformation('TicketStatsProperty');
+
+        const ticketIds = user.Tickets[ticketStatsProperty];
+        let tickets: Ticket[] = [];
+        if (ticketIds?.length) {
+            tickets = await KIXObjectService.loadObjects<Ticket>(
+                KIXObjectType.TICKET, ticketIds, loadingOptions, null, false, undefined, undefined,
+                this.contextId + KIXObjectType.TICKET
+            ).catch(() => []);
+        }
 
         await this.getUrl();
         this.setObjectList(KIXObjectType.TICKET, tickets);
@@ -58,7 +52,7 @@ export class TicketListContext extends Context {
     public async reloadObjectList(
         objectType: KIXObjectType | string, silent: boolean = false, limit: number
     ): Promise<void> {
-        this.loadTickets(this.ticketIds, this.text, limit);
+        this.loadTickets(limit);
     }
 
     public async update(urlParams: URLSearchParams): Promise<void> {
@@ -67,8 +61,10 @@ export class TicketListContext extends Context {
 
     private async handleURLParams(urlParams: URLSearchParams): Promise<void> {
         if (urlParams) {
-            await this.getActionAndSetData(decodeURIComponent(urlParams.has('list') ? urlParams.get('list') : null));
+            this.setAdditionalInformation('TicketStatsProperty', urlParams.has('list'));
         }
+
+        this.loadTickets();
     }
 
     public async getUrl(): Promise<string> {
@@ -76,8 +72,9 @@ export class TicketListContext extends Context {
         if (Array.isArray(this.descriptor.urlPaths) && this.descriptor.urlPaths.length) {
             url = this.descriptor.urlPaths[0];
             const params = [];
-            if (this.text) {
-                params.push(`list=${encodeURIComponent(this.text)}`);
+            const ticketStatsProperty = this.getAdditionalInformation('TicketStatsProperty');
+            if (ticketStatsProperty) {
+                params.push(`list=${encodeURIComponent(ticketStatsProperty)}`);
             }
 
             if (params.length) {
@@ -88,29 +85,17 @@ export class TicketListContext extends Context {
     }
 
     public async setTicketList(title: string, history: boolean = true): Promise<void> {
-        if (!this.text || this.text !== title) {
-            this.text = title;
 
-            EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
+        EventService.getInstance().publish(ContextEvents.CONTEXT_PARAMETER_CHANGED, this);
 
-            if (history) {
-                ContextService.getInstance().setDocumentHistory(true, this, this, null);
-            }
-
-            const isStored = await ContextService.getInstance().isContextStored(this.instanceId);
-            if (isStored) {
-                ContextService.getInstance().updateStorage(this.instanceId);
-            }
+        if (history) {
+            ContextService.getInstance().setDocumentHistory(true, this, this, null);
         }
-    }
 
-    private async getActionAndSetData(key: string): Promise<void> {
-        const action = ContextService.getInstance().getToolbarAction(key);
-        if (!action) return;
-        this.setDisplayText(action.title);
-        await this.setTicketList(action.title);
-        this.setIcon(action.icon);
-        await this.loadTickets(action.actionData, action?.title);
+        const isStored = await ContextService.getInstance().isContextStored(this.instanceId);
+        if (isStored) {
+            ContextService.getInstance().updateStorage(this.instanceId);
+        }
     }
 
 }
