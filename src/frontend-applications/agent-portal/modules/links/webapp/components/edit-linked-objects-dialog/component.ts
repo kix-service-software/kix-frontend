@@ -282,8 +282,8 @@ class Component {
                 } as LinkObject));
             }
 
-            this.availableLinkObjects = [...this.availableLinkObjects, ...newLinkObjects];
-            this.newLinkObjects = [...this.newLinkObjects, ...newLinkObjects];
+            this.availableLinkObjects = this.filterUniqueLinks([...this.availableLinkObjects, ...newLinkObjects]);
+            this.newLinkObjects = this.filterUniqueLinks([...this.newLinkObjects, ...newLinkObjects]);
 
             const context = ContextService.getInstance().getActiveContext();
             context.setObjectList(KIXObjectType.LINK_OBJECT, [...this.availableLinkObjects]);
@@ -398,6 +398,18 @@ class Component {
         BrowserUtil.toggleLoadingShield('APP_SHIELD', true, 'Translatable#Links will be removed.');
         const failIds = await KIXObjectService.deleteObject(KIXObjectType.LINK_OBJECT, linkIdsToDelete);
         return !failIds || failIds.length === 0;
+    }
+
+
+    private filterUniqueLinks(array: Array<LinkObject>): Array<LinkObject> {
+        const filteredMappedArray = array.map((item) => item.ObjectId).filter((item, index, arr) => {
+            return arr.indexOf(item) === index;
+        });
+        const filteredLinks = [];
+        filteredMappedArray.forEach((objectId) => {
+            filteredLinks.push(array.find((item) => item.ObjectId === objectId));
+        });
+        return filteredLinks;
     }
 
 }
