@@ -17,13 +17,14 @@ import { TicketProperty } from '../../../../../ticket/model/TicketProperty';
 import { EventService } from '../../../../../base-components/webapp/core/EventService';
 import { KanbanEvent } from '../../../core/KanbanEvent';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
-import { Ticket } from '../../../../../ticket/model/Ticket';
 import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
 import { ObjectIconLoadingOptions } from '../../../../../../server/model/ObjectIconLoadingOptions';
 import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
 import { User } from '../../../../../user/model/User';
+import { Ticket } from '../../../../../ticket/model/Ticket';
+import { KIXObjectProperty } from '../../../../../../model/kix/KIXObjectProperty';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -84,10 +85,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async ticketChanged(data: any, eventId: string): Promise<void> {
         if (Number(data.ticket?.TicketID) === this.state.ticket.TicketID) {
-            this.state.ticket = data.ticket;
             this.state.update = true;
-            await this.prepareAvatar();
-            setTimeout(() => this.state.update = false, 20);
+            const loadingOptions = new KIXObjectLoadingOptions();
+            loadingOptions.includes = [KIXObjectProperty.DYNAMIC_FIELDS];
+            const tickets = await KIXObjectService.loadObjects<Ticket>(
+                KIXObjectType.TICKET, [this.state.ticket.TicketID], loadingOptions
+            ).catch((): Ticket[] => []);
+
+            if (tickets?.length) {
+                this.state.ticket = tickets[0];
+                await this.prepareAvatar();
+                setTimeout(() => this.state.update = false, 20);
+            }
         }
     }
 
