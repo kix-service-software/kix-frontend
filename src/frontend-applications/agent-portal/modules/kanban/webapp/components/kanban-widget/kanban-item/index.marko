@@ -9,6 +9,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <if(state.ticket && state.prepared)>
     <div class="kix-kanban-item">
+
         <div class="kanban-item-header">
             <div title=state.title class="kanban-item-title">
                 <link-target
@@ -39,27 +40,32 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </else>
             </div>
         </div>
-        <div class="extra-content">
-            <if(state.expanded && !state.update)>
-                <div class="kanban-item-details">
-                    <for|property| of=state.properties>
-                        <object-property-label
-                            object=state.ticket
-                            property=property
-                            labelProvider=state.labelProvider
-                        />
-                    </for>
-                </div>
-            </if>
-            <div on-click("expand") class="kanban-item-details-button">
-                Details
-                <if(state.expanded)>
-                    <span class="kix-icon-nook-up"/>
+        <if(state.update)>
+            <loading-spinner/>
+        </if>
+        <else>
+            <div class="extra-content">
+                <if(state.expanded && !state.update)>
+                    <div class="kanban-item-details">
+                        <for|property| of=state.properties>
+                            <object-property-label
+                                object=state.ticket
+                                property=property
+                                labelProvider=state.labelProvider
+                            />
+                        </for>
+                    </div>
                 </if>
-                <else>
-                    <span class="kix-icon-nook-down"/>
-                </else>
+                <div on-click("expand") class="kanban-item-details-button">
+                    Details
+                    <if(state.expanded)>
+                        <span class="kix-icon-nook-up"/>
+                    </if>
+                    <else>
+                        <span class="kix-icon-nook-down"/>
+                    </else>
+                </div>
             </div>
-        </div>
+        </else>
     </div>
 </if>

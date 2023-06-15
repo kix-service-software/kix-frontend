@@ -247,12 +247,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 ticket.OwnerID = user.UserID;
             }
 
+            await KIXObjectService.updateObject(KIXObjectType.TICKET, parameter, ticketId)
+                .catch(() => null);
+
             EventService.getInstance().publish(
                 KanbanEvent.TICKET_CHANGED, { ticket }
             );
-
-            await KIXObjectService.updateObject(KIXObjectType.TICKET, parameter, ticketId)
-                .catch(() => null);
         }
     }
 
