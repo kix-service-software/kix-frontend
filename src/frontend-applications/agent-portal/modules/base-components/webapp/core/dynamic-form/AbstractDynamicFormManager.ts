@@ -236,6 +236,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         }
 
         await this.checkProperties();
+        // TODO: do something with validate results (show them?)
         await this.validate();
         if (!silent) {
             this.notifyListeners();
