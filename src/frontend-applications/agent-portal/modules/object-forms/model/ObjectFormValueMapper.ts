@@ -285,7 +285,12 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         await this.resetFormValues(this.formValues, result.propertyInstructions);
 
         for (const instruction of result.propertyInstructions) {
-            await this.applyPropertyInstruction(instruction);
+            await this.applyPropertyInstruction(instruction)
+                .catch((e) => {
+                    console.error('Error appling instruction:');
+                    console.error(instruction);
+                    console.error(e);
+                });
         }
 
         if (debugRules) {
