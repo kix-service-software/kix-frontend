@@ -60,7 +60,13 @@ export class Server implements IServer {
             LoggingService.getInstance().error(reason.toString(), reason);
             console.error('Unhandled Rejection at: Promise', promise, 'reason:', reason);
             console.error(reason);
-            // throw reason;
+        });
+
+        process.on('uncaughtException', (reason, promise) => {
+            LoggingService.getInstance().error('An uncaughtException occured:', reason);
+            LoggingService.getInstance().error(reason.toString(), reason);
+            console.error('uncaught Exception at: Promise', promise, 'reason:', reason);
+            console.error(reason);
         });
 
         process.on('exit', () => {
