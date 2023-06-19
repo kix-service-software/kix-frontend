@@ -168,6 +168,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
             fv.isSetInBackground = this.isSetInBackground;
             if (!fv.isSetInBackground) {
                 fv.visible = true;
+                fv.setNewInitialState(FormValueProperty.VISIBLE, true);
             }
 
             fv.isSortable = false;
