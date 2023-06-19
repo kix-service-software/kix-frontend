@@ -37,7 +37,7 @@ export class AdminContext extends Context {
     }
 
     public async update(urlParams: URLSearchParams): Promise<void> {
-        TableFactoryService.getInstance().deleteContextTables(AdminContext.CONTEXT_ID);
+        TableFactoryService.getInstance().deleteContextTables(AdminContext.CONTEXT_ID, null, true);
         this.handleURLParams(urlParams);
     }
 
