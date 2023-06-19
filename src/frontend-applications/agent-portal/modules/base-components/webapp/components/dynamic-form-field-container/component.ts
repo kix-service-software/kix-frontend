@@ -68,6 +68,7 @@ class Component {
                 }
 
                 existingValue.required = cv.required;
+                existingValue.value.valid = cv.valid;
             } else {
                 const value = new DynamicFormFieldValue(this.manager, cv, cv.id);
                 await value.init();

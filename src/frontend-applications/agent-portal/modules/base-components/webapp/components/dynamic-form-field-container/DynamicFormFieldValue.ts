@@ -458,21 +458,10 @@ export class DynamicFormFieldValue {
                     this.relativeTimeValue = this.value.value[0];
                     this.relativeTimeUnit = this.value.value[1];
                 } else if (typeof this.value.value === 'string') {
-                    let parts = this.value.value.split(/(\d+)/);
-                    const placeholders = PlaceholderService.getInstance().extractPlaceholders(this.value.value);
+                    const parts = this.value.value.split(/([YMdmhsw])$/);
                     if (parts.length === 3) {
-                        this.relativeTimeValue = parts[1];
-                        this.relativeTimeUnit = parts[2];
-                    }
-                    else if (
-                        Array.isArray(placeholders)
-                        && placeholders.length
-                    ) {
-                        parts = this.value.value.split(/([YMdmhsw]{1})$/);
-                        if (parts.length === 3) {
-                            this.relativeTimeValue = parts[0];
-                            this.relativeTimeUnit = parts[1];
-                        }
+                        this.relativeTimeValue = parts[0];
+                        this.relativeTimeUnit = parts[1];
                     }
                 }
                 const node = TreeUtil.findNode(this.relativeTimeUnitTreeHandler.getTree(), this.relativeTimeUnit);
@@ -706,24 +695,8 @@ export class DynamicFormFieldValue {
                     ? [currentValue.value, Number(this.betweenEndNumberValue)] : null;
             }
         }
-        if (this.isRelativeTime) {
-            const placeholders = PlaceholderService.getInstance().extractPlaceholders(this.relativeTimeValue);
-            if (!isNaN(Number(this.relativeTimeValue)) && this.relativeTimeUnit) {
-                currentValue.value = [this.relativeTimeValue, this.relativeTimeUnit];
-                if (this.manager.isRelativDateTimeOperator(this.value.operator)) {
-                    currentValue.value = `${this.relativeTimeValue}${this.relativeTimeUnit}`;
-                }
-            }
-            else if (
-                typeof this.relativeTimeValue === 'string'
-                && Array.isArray(placeholders)
-                && placeholders.length
-            ) {
-                currentValue.value = [this.relativeTimeValue, this.relativeTimeUnit];
-                if (this.manager.isRelativDateTimeOperator(this.value.operator)) {
-                    currentValue.value = `${this.relativeTimeValue}${this.relativeTimeUnit}`;
-                }
-            }
+        if (this.isRelativeTime && this.relativeTimeValue) {
+            currentValue.value = [this.relativeTimeValue, this.relativeTimeUnit];
         }
         if (this.isWithin) {
             if (
