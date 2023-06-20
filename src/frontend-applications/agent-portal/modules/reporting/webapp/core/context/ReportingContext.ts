@@ -97,7 +97,7 @@ export class ReportingContext extends Context {
     }
 
     public async getObjectList<T = KIXObject>(objectType: string, limit?: number): Promise<T[]> {
-        if (objectType === KIXObjectType.REPORT) {
+        if (!this.hasObjectList(objectType) && objectType === KIXObjectType.REPORT) {
             await this.loadReports();
         }
 
