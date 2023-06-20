@@ -14,6 +14,7 @@ import { PortalNotificationService } from '../../../../portal-notification/webap
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { PortalNotificationEvent } from '../../../../portal-notification/model/PortalNotificationEvent';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFieldTypes';
 
 declare const window: Window;
 
@@ -136,6 +137,21 @@ class Component {
             }
         }
         return pattern;
+    }
+
+    public togglePasswordVisible(): void {
+        this.state.isPasswordVisible = !this.state.isPasswordVisible;
+    }
+
+    public getInputType(isPasswordVisible: boolean): string {
+        if (isPasswordVisible) return InputFieldTypes.TEXT;
+        else return InputFieldTypes.PASSWORD;
+    }
+
+    public passwordValueChanged(event: any): void {
+        if (event) {
+            this.state.passwordValue = event.target && event.target.value !== '' ? event.target.value : null;
+        }
     }
 }
 
