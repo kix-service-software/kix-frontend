@@ -98,12 +98,19 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             <span>${component.getString("Password")}:</span>
                             <!-- no-update to keep autofilled passwords -->
                             <input.input-style
-                                type="password"
+                                value=state.passwordValue
+                                type=component.getInputType(state.isPasswordVisible)
                                 name="password"
                                 tabindex="2"
                                 key="login-user-password"
-                                no-update
-                            >
+                                on-input("passwordValueChanged")
+                            />
+                            <div.d-flex.align-items-center.justify-content-center.px-2 role="button" on-click("togglePasswordVisible")>
+                                <i.far class={
+                                    'fa-eye': state.isPasswordVisible,
+                                    'fa-eye-slash': !state.isPasswordVisible
+                                }></i>
+                            </div>
                         </label>
                         <div.dialog-buttons>
                             <button.kix-button.special-button

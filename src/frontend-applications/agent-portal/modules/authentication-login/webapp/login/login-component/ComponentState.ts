@@ -20,7 +20,9 @@ export class ComponentState {
         public logout: boolean = false,
         public unsupportedBrowser: boolean = false,
         public userName: string = null,
-        public notifications: PortalNotification[] = []
+        public notifications: PortalNotification[] = [],
+        public isPasswordVisible: boolean = false,
+        public passwordValue: string = '',
     ) { }
 
 }
