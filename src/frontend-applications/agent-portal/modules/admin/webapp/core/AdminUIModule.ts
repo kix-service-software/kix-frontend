@@ -18,6 +18,7 @@ import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { SetupService } from '../../../setup-assistant/webapp/core/SetupService';
 import { SetupStep } from '../../../setup-assistant/webapp/core/SetupStep';
+import { AdministrationSocketClient } from './AdministrationSocketClient';
 
 export class UIModule implements IUIModule {
 
@@ -30,8 +31,7 @@ export class UIModule implements IUIModule {
     }
 
     public async register(): Promise<void> {
-        const contextDescriptor = new ContextDescriptor(
-            AdminContext.CONTEXT_ID, [
+        const contextObjectTypes = [
             KIXObjectType.CONFIG_ITEM_CLASS,
             KIXObjectType.GENERAL_CATALOG_ITEM,
             KIXObjectType.NOTIFICATION,
@@ -54,14 +54,17 @@ export class UIModule implements IUIModule {
             KIXObjectType.JOB,
             KIXObjectType.IMPORT_EXPORT_TEMPLATE,
             KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN
-        ],
-            ContextType.MAIN, ContextMode.DASHBOARD,
-            false, 'admin', ['admin'], AdminContext,
-            [
-                new UIComponentPermission('system/config/FQDN', [CRUD.UPDATE])
-            ]
+        ];
+
+        const contextDescriptor = new ContextDescriptor(
+            AdminContext.CONTEXT_ID, contextObjectTypes, ContextType.MAIN, ContextMode.DASHBOARD,
+            false, 'admin', ['admin'], AdminContext
         );
-        ContextService.getInstance().registerContext(contextDescriptor);
+
+        const adminModules = await AdministrationSocketClient.getInstance().loadAdminCategories().catch(() => []);
+        if (adminModules?.length) {
+            ContextService.getInstance().registerContext(contextDescriptor);
+        }
 
         SetupService.getInstance().registerSetupStep(
             new SetupStep('setup-system-settings', 'Translatable#System', 'setup-system-settings',
