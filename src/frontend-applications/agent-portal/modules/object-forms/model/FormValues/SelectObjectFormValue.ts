@@ -139,7 +139,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
         await super.setFormValue(value, force);
 
-        if (!this.readonly) {
+        if (!this.readonly || force) {
             await this.loadSelectedValues();
         }
     }
@@ -342,7 +342,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
     }
 
     protected async setSelectedNodes(nodes: TreeNode[] = []): Promise<void> {
-        const tree = this.treeHandler.getTree();
+        const tree = this.treeHandler?.getTree();
 
         const selectedNodes = this.treeHandler?.getSelection(this.treeHandler?.getTree()) || [];
         const selectedIds = selectedNodes.map((n: TreeNode) => n.id);
