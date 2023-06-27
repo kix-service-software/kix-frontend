@@ -41,4 +41,8 @@ export class RichTextFormValue extends ObjectFormValue<string> {
             this.autocompleteOption = autofillOption?.value;
         }
     }
+
+    protected async handlePlaceholders(value: any): Promise<any> {
+        return super.handlePlaceholders(value, true);
+    }
 }

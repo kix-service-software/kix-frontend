@@ -22,6 +22,6 @@ export interface IPlaceholderHandler {
 
     replaceDFObjectPlaceholder(attributePath: string, objectIds: number[], language?: string): Promise<string>
 
-    replace(placeholder: string, object?: KIXObject, language?: string): Promise<string>;
+    replace(placeholder: string, object?: KIXObject, language?: string, forRichtext?: boolean): Promise<string>;
 
 }

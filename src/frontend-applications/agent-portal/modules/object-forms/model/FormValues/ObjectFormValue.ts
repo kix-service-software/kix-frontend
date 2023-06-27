@@ -280,14 +280,14 @@ export class ObjectFormValue<T = any> {
         }
     }
 
-    protected async handlePlaceholders(value: any): Promise<any> {
+    protected async handlePlaceholders(value: any, forRichtext?: boolean): Promise<any> {
         if (value) {
 
             const placeholderObject = this.objectValueMapper?.sourceObject || this.objectValueMapper?.object;
 
             if (typeof value === 'string' && PlaceholderService.getInstance().extractPlaceholders(value)) {
                 const newValue = await PlaceholderService.getInstance().replacePlaceholders(
-                    value, placeholderObject
+                    value, placeholderObject, null, forRichtext
                 );
                 value = newValue as any || null;
             } else if (Array.isArray(value)) {

@@ -24,7 +24,9 @@ export class ContactPlaceholderHandler extends AbstractPlaceholderHandler {
 
     protected objectStrings: string[] = ['CONTACT'];
 
-    public async replace(placeholder: string, contact?: Contact, language?: string): Promise<string> {
+    public async replace(
+        placeholder: string, contact?: Contact, language?: string, forRichtext?: boolean
+    ): Promise<string> {
         let result = '';
         if (contact) {
             const attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
@@ -47,17 +49,23 @@ export class ContactPlaceholderHandler extends AbstractPlaceholderHandler {
                     case UserProperty.USER_LOGIN:
                     case ContactProperty.FIRSTNAME:
                     case ContactProperty.LASTNAME:
+                    case ContactProperty.COMMENT:
+                    case ContactProperty.TITLE:
+                    case ContactProperty.STREET:
+                    case ContactProperty.ZIP:
+                        result = await LabelService.getInstance().getDisplayText(contact, attribute, undefined, false);
+                        break;
                     case ContactProperty.EMAIL:
                     case ContactProperty.EMAIL1:
                     case ContactProperty.EMAIL2:
                     case ContactProperty.EMAIL3:
                     case ContactProperty.EMAIL4:
                     case ContactProperty.EMAIL5:
-                    case ContactProperty.COMMENT:
-                    case ContactProperty.TITLE:
-                    case ContactProperty.STREET:
-                    case ContactProperty.ZIP:
                         result = await LabelService.getInstance().getDisplayText(contact, attribute, undefined, false);
+                        if (forRichtext) {
+                            result = result.replace(/>/g, '&gt;');
+                            result = result.replace(/</g, '&lt;');
+                        }
                         break;
                     case KIXObjectProperty.CREATE_TIME:
                     case KIXObjectProperty.CHANGE_TIME:
