@@ -46,6 +46,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private tickets: Ticket[] = [];
 
+    private kanban: any;
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -100,7 +102,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async createKanbanBoard(): Promise<void> {
-        if (this.isCreatingBoard) {
+        if (this.isCreatingBoard || this.kanban) {
             return;
         }
 
@@ -158,7 +160,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         // tslint:disable-next-line: no-unused-expression
-        new jKanban({
+        this.kanban = new jKanban({
             element: '#kanban-board',
             gutter: '15px',
             widthBoard: '250px',
