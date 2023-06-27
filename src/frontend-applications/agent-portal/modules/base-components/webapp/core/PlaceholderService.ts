@@ -70,7 +70,9 @@ export class PlaceholderService {
         return result;
     }
 
-    public async replacePlaceholders(text: string, object?: KIXObject, language?: string): Promise<string> {
+    public async replacePlaceholders(
+        text: string, object?: KIXObject, language?: string, forRichtext?: boolean
+    ): Promise<string> {
         const placeholders = this.extractPlaceholders(text);
 
         const replacedPlaceholders: Map<string, string> = new Map();
@@ -82,7 +84,7 @@ export class PlaceholderService {
                 if (this.doNotTranslatePlaceholder(placeholder)) {
                     language = await TranslationService.getSystemDefaultLanguage();
                 }
-                let replaceString = handler ? await handler.replace(placeholder, object, language) : '';
+                let replaceString = handler ? await handler.replace(placeholder, object, language, forRichtext) : '';
                 replaceString = typeof replaceString === 'undefined' || replaceString === null ? '' : replaceString;
                 replacedPlaceholders.set(placeholder, replaceString);
             }
