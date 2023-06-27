@@ -15,7 +15,6 @@ import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicField
 import { ObjectFormValueMapper } from '../../ObjectFormValueMapper';
 import { DateTimeFormValue } from '../DateTimeFormValue';
 import { ObjectFormValue } from '../ObjectFormValue';
-import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 
 export class DynamicFieldDateTimeFormValue extends DateTimeFormValue {
 
@@ -87,13 +86,17 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue {
 
     private setDatesLimit(config: any, disablePast = false, disableFuture = false): void {
         if (disablePast) {
-            this.minDate = new Date().toISOString();
+            const date = new Date();
+            date.setHours(0);
+            date.setMinutes(0);
+            date.setSeconds(0);
+            this.minDate = DateTimeUtil.getKIXDateTimeString(date);
         } else if (this.parseYearsToInt(config?.YearsInPast)) {
             this.minDate = this.calculateDate(config?.YearsInPast);
         }
 
         if (disableFuture) {
-            this.maxDate = new Date().toISOString();
+            this.maxDate = DateTimeUtil.getKIXDateTimeString(new Date());
         } else if (this.parseYearsToInt(config?.YearsInFuture)) {
             this.maxDate = this.calculateDate(config?.YearsInFuture, true);
         }
