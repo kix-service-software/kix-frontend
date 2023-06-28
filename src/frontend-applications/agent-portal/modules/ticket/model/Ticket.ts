@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -41,8 +41,6 @@ export class Ticket extends KIXObject {
     public Title: string;
 
     public TicketID: number;
-
-    public Age: number;
 
     public Created: string;
 
@@ -183,7 +181,6 @@ export class Ticket extends KIXObject {
             this.TicketNumber = null;
             this.Title = null;
             this.TicketID = null;
-            this.Age = null;
             this.Created = null;
             this.CreateTimeUnix = null;
             this.CreateBy = null;
@@ -287,12 +284,6 @@ export class Ticket extends KIXObject {
     public static SEARCH_PROPERTIES = [
         {
             Property: TicketProperty.TICKET_ID,
-            Operations: Ticket.NUMBER_OPERATORS,
-            DataType: FilterDataType.NUMERIC,
-            InputType: InputFieldTypes.NUMBER
-        },
-        {
-            Property: TicketProperty.AGE,
             Operations: Ticket.NUMBER_OPERATORS,
             DataType: FilterDataType.NUMERIC,
             InputType: InputFieldTypes.NUMBER
@@ -612,10 +603,6 @@ export class Ticket extends KIXObject {
         {
             Property: TicketProperty.TICKET_NUMBER,
             DataType: FilterDataType.STRING,
-        },
-        {
-            Property: TicketProperty.AGE,
-            DataType: FilterDataType.NUMERIC,
         },
         {
             Property: TicketProperty.CREATE_TIME,

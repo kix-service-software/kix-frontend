@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -40,8 +40,8 @@ export class DynamicFieldChecklistFormValue extends ObjectFormValue<CheckListIte
         const config = dynamicField?.Config;
 
         const value = this.object[this.property];
-        if (Array.isArray(value) && value.length) {
-            this.value = value[0];
+        if (Array.isArray(value)) {
+            this.value = value.length ? value[0] : null;
         } else {
             this.value = value;
         }

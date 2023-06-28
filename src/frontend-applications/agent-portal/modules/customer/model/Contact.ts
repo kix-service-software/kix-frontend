@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -47,6 +47,11 @@ export class Contact extends KIXObject {
     public Country: string;
 
     public Email: string;
+    public Email1: string;
+    public Email2: string;
+    public Email3: string;
+    public Email4: string;
+    public Email5: string;
 
     public Fax: string;
 
@@ -70,26 +75,8 @@ export class Contact extends KIXObject {
         super(contact);
 
         if (contact) {
-            this.ID = contact.ID;
             this.ObjectId = this.ID;
-            this.AssignedUserID = contact.AssignedUserID;
-            this.AssignedConfigItems = contact.AssignedConfigItems ? contact.AssignedConfigItems : [];
-            this.Firstname = contact.Firstname;
-            this.Fullname = contact.Fullname;
-            this.Lastname = contact.Lastname;
-            this.City = contact.City;
-            this.Street = contact.Street;
-            this.Comment = contact.Comment;
-            this.Country = contact.Country;
-            this.Email = contact.Email;
-            this.Fax = contact.Fax;
-            this.Mobile = contact.Mobile;
-            this.Phone = contact.Phone;
-            this.PrimaryOrganisationID = contact.PrimaryOrganisationID;
-            this.OrganisationIDs = contact.OrganisationIDs;
-            this.Title = contact.Title;
-            this.Zip = contact.Zip;
-            this.TicketStats = contact.TicketStats;
+            this.AssignedConfigItems ||= [];
 
             this.User = contact.User ? new User(contact.User) : null;
             this.Tickets = contact.Tickets

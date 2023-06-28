@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -520,10 +520,11 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         if (searchCriteria.length) {
 
             // use correct property name
-            const fulltextCriterion = searchCriteria.find((c) => c.property === SearchProperty.FULLTEXT);
-            if (fulltextCriterion) {
-                fulltextCriterion.property = 'Fulltext';
-            }
+            searchCriteria.forEach((c) => {
+                if (c.property === SearchProperty.FULLTEXT) {
+                    c.property = 'Fulltext';
+                }
+            });
 
             const apiSearch = {};
             apiSearch[objectProperty] = this.prepareObjectFilter(searchCriteria);

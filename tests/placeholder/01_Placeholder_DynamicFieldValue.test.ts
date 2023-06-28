@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -73,55 +73,55 @@ describe('Placeholder replacement for dynamic field values', () => {
         it('Should replace text placeholder with value string', async () => {
             const text = await dFValuePlaceholderHandler.replace(`<KIX_ANY_DynamicField_${testDFValues[0].Name}>`, object);
             const fieldValue = object.DynamicFields.find((v) => v.Name === testDFValues[0].Name);
-            expect(text).equal(fieldValue.DisplayValue);
+            expect(text).equal(fieldValue?.DisplayValue);
         });
 
         it('Should replace text placeholder with value string (with use of "Value" option)', async () => {
             const text = await dFValuePlaceholderHandler.replace(`<KIX_ANY_DynamicField_${testDFValues[0].Name}_Value>`, object);
             const fieldValue = object.DynamicFields.find((v) => v.Name === testDFValues[0].Name);
-            expect(text).equal(fieldValue.DisplayValue);
+            expect(text).equal(fieldValue?.DisplayValue);
         });
 
         it('Should replace text placeholder with html value string (with use of "HTML" option)', async () => {
             const text = await dFValuePlaceholderHandler.replace(`<KIX_ANY_DynamicField_${testDFValues[0].Name}_HTML>`, object);
             const fieldValue = object.DynamicFields.find((v) => v.Name === testDFValues[0].Name);
-            expect(text).equal(fieldValue.DisplayValueHTML);
+            expect(text).equal(fieldValue?.DisplayValueHTML);
         });
 
         it('Should replace text placeholder with short value string (with use of "Short" option)', async () => {
             const text = await dFValuePlaceholderHandler.replace(`<KIX_ANY_DynamicField_${testDFValues[0].Name}_Short>`, object);
             const fieldValue = object.DynamicFields.find((v) => v.Name === testDFValues[0].Name);
-            expect(text).equal(fieldValue.DisplayValueShort);
+            expect(text).equal(fieldValue?.DisplayValueShort);
         });
 
         it('Should replace selection placeholder with value string', async () => {
             const text = await dFValuePlaceholderHandler.replace(`<KIX_ANY_DynamicField_${testDFValues[2].Name}>`, object);
             const fieldValue = object.DynamicFields.find((v) => v.Name === testDFValues[2].Name);
-            expect(text).equal(fieldValue.DisplayValue);
+            expect(text).equal(fieldValue?.DisplayValue);
         });
 
         it('Should replace selection placeholder with key string', async () => {
             const text = await dFValuePlaceholderHandler.replace(`<KIX_ANY_DynamicField_${testDFValues[2].Name}_Key>`, object);
             const fieldValue = object.DynamicFields.find((v) => v.Name === testDFValues[2].Name);
-            expect(text).equal((fieldValue.Value as string[]).join(sepatator));
+            expect(text).equal((fieldValue?.Value as string[]).join(sepatator));
         });
 
         it('Should replace CI reference placeholder with value string', async () => {
             const text = await dFValuePlaceholderHandler.replace(`<KIX_ANY_DynamicField_${testDFValues[3].Name}>`, object);
             const fieldValue = object.DynamicFields.find((v) => v.Name === testDFValues[3].Name);
-            expect(text).equal(fieldValue.DisplayValue);
+            expect(text).equal(fieldValue?.DisplayValue);
         });
 
         it('Should replace CI refernece placeholder with key string', async () => {
             const text = await dFValuePlaceholderHandler.replace(`<KIX_ANY_DynamicField_${testDFValues[3].Name}_Key>`, object);
             const fieldValue = object.DynamicFields.find((v) => v.Name === testDFValues[3].Name);
-            expect(text).equal((fieldValue.Value as string[]).join(sepatator));
+            expect(text).equal((fieldValue?.Value as string[]).join(sepatator));
         });
 
         it('Should not replace text placeholder with key string (text does not support "Key" option, use value string instead)', async () => {
             const text = await dFValuePlaceholderHandler.replace(`<KIX_ANY_DynamicField_${testDFValues[0].Name}_Key>`, object);
             const fieldValue = object.DynamicFields.find((v) => v.Name === testDFValues[0].Name);
-            expect(text).equal(fieldValue.DisplayValue);
+            expect(text).equal(fieldValue?.DisplayValue);
         });
 
         it('Should not replace text placeholder with value string (used wrong option)', async () => {
@@ -145,7 +145,7 @@ class someTestFunctions {
         return [
             new DynamicFieldValue(
                 {
-                    ID: '1', Name: 'TextDF', Label: 'Text DF',
+                    ID: 1, Name: 'TextDF', Label: 'Text DF',
                     Value: ['Test Text', 'Test Text 2'],
                     DisplayValue: 'Test Text, Test Text 2',
                     DisplayValueHTML: 'HTML',
@@ -154,25 +154,25 @@ class someTestFunctions {
             ),
             new DynamicFieldValue(
                 {
-                    ID: '1', Name: 'TextAreaDF', Label: 'Text Area DF',
+                    ID: 1, Name: 'TextAreaDF', Label: 'Text Area DF',
                     Value: ['Test\n Text Area'], DisplayValue: 'Test\n Text Area'
                 } as DynamicFieldValue
             ),
             new DynamicFieldValue(
                 {
-                    ID: '1', Name: 'SelectionDF', Label: 'Selection DF',
+                    ID: 1, Name: 'SelectionDF', Label: 'Selection DF',
                     Value: ['1', '3', '5'], DisplayValue: 'One, Three, Five'
                 } as DynamicFieldValue
             ),
             new DynamicFieldValue(
                 {
-                    ID: '1', Name: 'CIReference', Label: 'CI Reference DF',
+                    ID: 1, Name: 'CIReference', Label: 'CI Reference DF',
                     Value: ['1', '3', '5'], DisplayValue: 'CI1, CI2, CI3'
                 } as DynamicFieldValue
             ),
             new DynamicFieldValue(
                 {
-                    ID: '1', Name: 'DateTimeDF', Label: 'Date Time DF',
+                    ID: 1, Name: 'DateTimeDF', Label: 'Date Time DF',
                     Value: ['2020-01-13 08:17:30'], DisplayValue: 'ReplaceMe'
                 } as DynamicFieldValue
             ),

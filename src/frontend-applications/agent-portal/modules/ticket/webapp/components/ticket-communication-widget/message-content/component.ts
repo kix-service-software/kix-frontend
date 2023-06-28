@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -55,7 +55,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         // on update, some article was already loaded
         if (this.state.article && this.state.article.ArticleID !== this.article.ArticleID) {
-            await this.loadArticle(undefined, true);
+            await this.loadArticle(true);
         } else if (oldChangeTime !== currChangeTime) {
             this.state.article = this.article;
             this.prepareArticleData();
@@ -65,7 +65,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         // load article and prepare actions if not done yet
         if ((!this.state.selectedCompactView || this.state.expanded) && !this.state.article['ObjectActions']?.length) {
-            this.loadArticle(undefined, true);
+            this.loadArticle(true);
         }
     }
 
@@ -336,35 +336,31 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.filterAttachments();
     }
 
-    private async loadArticle(silent: boolean = false, force?: boolean): Promise<void> {
-        if (!this.state.selectedCompactView || this.state.compactViewExpanded) {
-            this.state.loading = !silent;
-
-            let articles = [];
-            if (!this.articleLoaded || force) {
-                const loadingOptions = new KIXObjectLoadingOptions(
-                    null, null, null,
-                    [
-                        ArticleProperty.PLAIN, ArticleProperty.ATTACHMENTS, 'ObjectActions'
-                    ]
-                );
-                articles = await KIXObjectService.loadObjects<Article>(
-                    KIXObjectType.ARTICLE, [this.article.ArticleID], loadingOptions,
-                    new ArticleLoadingOptions(this.article.TicketID)
-                );
-
-                if (articles?.length) {
-                    const countNumber = this.state.article['countNumber'];
-                    this.state.article = articles[0];
-                    this.state.article['countNumber'] = countNumber;
-                    this.articleLoaded = true;
-                }
-            }
+    private async loadArticle(force?: boolean): Promise<void> {
+        let articles = [];
+        if (!this.articleLoaded || force) {
+            const loadingOptions = new KIXObjectLoadingOptions(
+                null, null, null,
+                [
+                    ArticleProperty.PLAIN, ArticleProperty.ATTACHMENTS, 'ObjectActions'
+                ]
+            );
+            articles = await KIXObjectService.loadObjects<Article>(
+                KIXObjectType.ARTICLE, [this.article.ArticleID], loadingOptions,
+                new ArticleLoadingOptions(this.article.TicketID)
+            );
 
             if (articles?.length) {
+                const countNumber = this.state.article['countNumber'];
                 this.state.article = articles[0];
+                this.state.article['countNumber'] = countNumber;
                 this.articleLoaded = true;
             }
+        }
+
+        if (articles?.length) {
+            this.state.article = articles[0];
+            this.articleLoaded = true;
         }
 
         await this.prepareActions();
@@ -375,7 +371,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         await this.prepareArticleData();
 
-        this.state.loading = false;
         this.state.show = true;
     }
 }

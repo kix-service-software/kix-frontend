@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,35 +7,36 @@
  * --
  */
 
-import { IContextListener } from '../modules/base-components/webapp/core/IContextListener';
-import { KIXObjectType } from './kix/KIXObjectType';
-import { KIXObject } from './kix/KIXObject';
-import { ContextDescriptor } from './ContextDescriptor';
-import { ContextConfiguration } from './configuration/ContextConfiguration';
+import { AbstractAction } from '../modules/base-components/webapp/core/AbstractAction';
 import { AdditionalContextInformation } from '../modules/base-components/webapp/core/AdditionalContextInformation';
-import { ConfiguredWidget } from './configuration/ConfiguredWidget';
-import { WidgetConfiguration } from './configuration/WidgetConfiguration';
-import { WidgetType } from './configuration/WidgetType';
-import { ContextMode } from './ContextMode';
+import { ApplicationEvent } from '../modules/base-components/webapp/core/ApplicationEvent';
+import { AuthenticationSocketClient } from '../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { ClientStorageService } from '../modules/base-components/webapp/core/ClientStorageService';
+import { ContextEvents } from '../modules/base-components/webapp/core/ContextEvents';
+import { ContextService } from '../modules/base-components/webapp/core/ContextService';
+import { EventService } from '../modules/base-components/webapp/core/EventService';
+import { IContextListener } from '../modules/base-components/webapp/core/IContextListener';
+import { IEventSubscriber } from '../modules/base-components/webapp/core/IEventSubscriber';
 import { KIXObjectService } from '../modules/base-components/webapp/core/KIXObjectService';
 import { ObjectIcon } from '../modules/icon/model/ObjectIcon';
-import { EventService } from '../modules/base-components/webapp/core/EventService';
-import { ApplicationEvent } from '../modules/base-components/webapp/core/ApplicationEvent';
-import { ClientStorageService } from '../modules/base-components/webapp/core/ClientStorageService';
+import { TableFactoryService } from '../modules/table/webapp/core/factory/TableFactoryService';
+import { TranslationService } from '../modules/translation/webapp/core/TranslationService';
+import { AgentService } from '../modules/user/webapp/core/AgentService';
+import { ConfiguredWidget } from './configuration/ConfiguredWidget';
+import { ContextConfiguration } from './configuration/ContextConfiguration';
+import { WidgetConfiguration } from './configuration/WidgetConfiguration';
+import { WidgetType } from './configuration/WidgetType';
+import { ContextDescriptor } from './ContextDescriptor';
+import { ContextExtension } from './ContextExtension';
+import { ContextFormManager } from './ContextFormManager';
+import { ContextMode } from './ContextMode';
+import { ContextPreference } from './ContextPreference';
+import { ContextStorageManager } from './ContextStorageManager';
+import { IdService } from './IdService';
+import { KIXObject } from './kix/KIXObject';
+import { KIXObjectType } from './kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from './KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from './KIXObjectSpecificLoadingOptions';
-import { ContextService } from '../modules/base-components/webapp/core/ContextService';
-import { AbstractAction } from '../modules/base-components/webapp/core/AbstractAction';
-import { AuthenticationSocketClient } from '../modules/base-components/webapp/core/AuthenticationSocketClient';
-import { ContextFormManager } from './ContextFormManager';
-import { IdService } from './IdService';
-import { TranslationService } from '../modules/translation/webapp/core/TranslationService';
-import { ContextStorageManager } from './ContextStorageManager';
-import { ContextEvents } from '../modules/base-components/webapp/core/ContextEvents';
-import { ContextPreference } from './ContextPreference';
-import { AgentService } from '../modules/user/webapp/core/AgentService';
-import { IEventSubscriber } from '../modules/base-components/webapp/core/IEventSubscriber';
-import { ContextExtension } from './ContextExtension';
 
 export abstract class Context {
 
@@ -52,12 +53,13 @@ export abstract class Context {
 
     protected objectLists: Map<KIXObjectType | string, KIXObject[]> = new Map();
     protected filteredObjectLists: Map<KIXObjectType | string, KIXObject[]> = new Map();
+    protected defaultPageSize: number = 20;
 
-    private scrollInormation: [KIXObjectType | string, string | number] = null;
+    private scrollInformation: [KIXObjectType | string, string | number] = null;
     protected displayText: string;
     protected icon: ObjectIcon | string;
 
-    private eventSubsriber: IEventSubscriber;
+    private eventSubscriber: IEventSubscriber;
 
     public contextExtensions: ContextExtension[] = [];
 
@@ -100,7 +102,7 @@ export abstract class Context {
 
             this.contextId = descriptor.contextId;
 
-            this.eventSubsriber = {
+            this.eventSubscriber = {
                 eventSubscriberId: this.instanceId,
                 eventPublished: async (data: any, eventId: string): Promise<void> => {
                     const contextUpdateRequired = eventId === ContextEvents.CONTEXT_UPDATE_REQUIRED &&
@@ -109,6 +111,9 @@ export abstract class Context {
                     const objectUpdate = eventId === ApplicationEvent.OBJECT_UPDATED && data?.objectType;
 
                     if (this.descriptor.contextMode !== ContextMode.SEARCH) {
+
+                        TableFactoryService.getInstance().deleteContextTables(this.contextId, data?.objectType);
+
                         if (objectUpdate) {
                             if (this.objectLists.has(data.objectType)) {
                                 this.deleteObjectList(data.objectType);
@@ -129,14 +134,14 @@ export abstract class Context {
                 }
             };
 
-            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.eventSubsriber);
-            EventService.getInstance().subscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.eventSubsriber);
+            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.eventSubscriber);
+            EventService.getInstance().subscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.eventSubscriber);
         }
     }
 
     public async destroy(): Promise<void> {
-        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.eventSubsriber);
-        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.eventSubsriber);
+        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.eventSubscriber);
+        EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.eventSubscriber);
 
         await this.formManager?.destroy();
 
@@ -635,9 +640,9 @@ export abstract class Context {
     }
 
     public provideScrollInformation(objectType: KIXObjectType | string, objectId: string | number): void {
-        this.scrollInormation = [objectType, objectId];
+        this.scrollInformation = [objectType, objectId];
 
-        this.listeners.forEach((l) => l.scrollInformationChanged(this.scrollInormation[0], this.scrollInormation[1]));
+        this.listeners.forEach((l) => l.scrollInformationChanged(this.scrollInformation[0], this.scrollInformation[1]));
     }
 
     public async reloadObjectList(
@@ -710,12 +715,75 @@ export abstract class Context {
 
         objectId = objectId ? objectId.toString() : null;
         const contextObjectId = this.getObjectId() ? this.getObjectId().toString() : null;
-        if (contextId.includes('new') &&
+        if (contextId?.includes('new') &&
             this.descriptor.contextId === contextId &&
             !objectId && !contextObjectId
         ) return false;
 
         return contextId === this.descriptor.contextId && objectId === contextObjectId;
+    }
+
+    protected prepareContextLoadingOptions(
+        type: KIXObjectType | string, loadingOptions: KIXObjectLoadingOptions
+    ): void {
+        loadingOptions.filter ||= [];
+        loadingOptions.includes ||= [];
+        loadingOptions.expands ||= [];
+        loadingOptions.query ||= [];
+
+        const contextLoadingOptionsIndex = Array.isArray(this.configuration?.loadingOptions) ?
+            this.configuration.loadingOptions.findIndex((lo) => Array.isArray(lo) && lo[0] === type) : -1;
+        const contextLoadingOptions = contextLoadingOptionsIndex !== -1 ?
+            this.configuration.loadingOptions[contextLoadingOptionsIndex][1] : null;
+
+        if (contextLoadingOptions) {
+            if (Array.isArray(contextLoadingOptions.filter)) {
+                loadingOptions.filter.push(...contextLoadingOptions.filter);
+            }
+            if (contextLoadingOptions.sortOrder) {
+                loadingOptions.sortOrder = this.getSortOrder(type);
+            }
+            if (Array.isArray(contextLoadingOptions.includes)) {
+                loadingOptions.includes.push(...contextLoadingOptions.includes);
+            }
+            if (Array.isArray(contextLoadingOptions.expands)) {
+                loadingOptions.expands.push(...contextLoadingOptions.expands);
+            }
+            if (Array.isArray(contextLoadingOptions.query)) {
+                loadingOptions.query = contextLoadingOptions.query;
+            }
+            if (contextLoadingOptions.searchLimit) {
+                loadingOptions.searchLimit = contextLoadingOptions.searchLimit;
+            }
+
+            // if no limit given - e.g. initial call, use configuration, else it will possible
+            // be set because of load more
+            if (typeof loadingOptions.limit === 'undefined' || loadingOptions.limit === null) {
+                loadingOptions.limit = this.getPageSize(type);
+            }
+        } else if (typeof loadingOptions.limit === 'undefined' || loadingOptions.limit === null) {
+            loadingOptions.limit = this.getPageSize(type);
+        }
+    }
+
+    public getPageSize(type: KIXObjectType | string): number {
+        const contextLoadingOptionsIndex = Array.isArray(this.configuration?.loadingOptions) ?
+            this.configuration.loadingOptions.findIndex((lo) => Array.isArray(lo) && lo[0] === type) : -1;
+        const contextLoadingOptions = contextLoadingOptionsIndex !== -1 ?
+            this.configuration.loadingOptions[contextLoadingOptionsIndex][1] : null;
+        return contextLoadingOptions?.limit || this.defaultPageSize;
+    }
+
+    public getSortOrder(type: KIXObjectType | string): string {
+        const contextLoadingOptionsIndex = Array.isArray(this.configuration?.loadingOptions) ?
+            this.configuration.loadingOptions.findIndex((lo) => Array.isArray(lo) && lo[0] === type) : -1;
+        const contextLoadingOptions = contextLoadingOptionsIndex !== -1 ?
+            this.configuration.loadingOptions[contextLoadingOptionsIndex][1] : null;
+        let sortOrder = contextLoadingOptions?.sortOrder;
+        if (sortOrder && !sortOrder.match(/^.+\..+/)) {
+            sortOrder = type + '.' + sortOrder;
+        }
+        return sortOrder;
     }
 
 }

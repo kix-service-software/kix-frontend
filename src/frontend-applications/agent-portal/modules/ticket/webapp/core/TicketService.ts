@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -62,6 +62,7 @@ import { TicketHistory } from '../../model/TicketHistory';
 import { ArticleColorsConfiguration } from '../../model/ArticleColorsConfiguration';
 import { ArticleLoadingOptions } from '../../model/ArticleLoadingOptions';
 import { BrowserCacheService } from '../../../base-components/webapp/core/CacheService';
+import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -719,19 +720,41 @@ export class TicketService extends KIXObjectService<Ticket> {
         return contact;
     }
 
-    public static async getPendingDateDiff(date: Date = new Date()): Promise<Date> {
-        let offset = 86400;
+    public static async getPendingDateDiff(value?: any): Promise<Date> {
+        let offset: number;
+        let date: Date;
+
+        const timestamp = Date.parse(value);
 
         const offsetConfig = await KIXObjectService.loadObjects<SysConfigOption>(
             KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_FRONTEND_PENDING_DIFF_TIME], null, null, true
         ).catch((error): SysConfigOption[] => []);
 
-        if (offsetConfig?.length && offsetConfig[0].Value) {
-            offset = offsetConfig[0].Value;
+        if (value && isNaN(timestamp)) {
+            const parts = value.split(/(\d+)/);
+            if (parts.length === 3) {
+                date = new Date(DateTimeUtil.calculateDate(Number(parts[1]), parts[2].toString()));
+            }
+        }
+        else if (timestamp) {
+            date = new Date(timestamp);
+        }
+        else if (offsetConfig?.length && offsetConfig[0].Value) {
+            offset = Number(offsetConfig[0].Value);
+        }
+        else {
+            offset = 86400;
         }
 
-        date.setSeconds(date.getSeconds() + Number(offset));
+        if (offset) {
+            date = this.getOffsetValue(offset);
+        }
+        return date;
+    }
 
+    protected static getOffsetValue(offset: number): Date {
+        const date = new Date();
+        date.setSeconds(date.getSeconds() + offset);
         return date;
     }
 

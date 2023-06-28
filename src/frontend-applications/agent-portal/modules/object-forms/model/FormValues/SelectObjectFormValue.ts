@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -342,14 +342,19 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
     }
 
     protected async setSelectedNodes(nodes: TreeNode[] = []): Promise<void> {
-        const tree = this.treeHandler.getTree();
+        const tree = this.treeHandler?.getTree();
 
         const selectedNodes = this.treeHandler?.getSelection(this.treeHandler?.getTree()) || [];
         const selectedIds = selectedNodes.map((n: TreeNode) => n.id);
 
         const newValue = [];
-        if (Array.isArray(this.value)) {
-            for (const v of this.value) {
+
+        const value = this.value !== undefined && this.value !== null
+            ? Array.isArray(this.value) ? this.value : [this.value]
+            : null;
+
+        if (Array.isArray(value)) {
+            for (const v of value) {
                 if (typeof v !== 'undefined' && v !== null) {
                     if (TreeUtil.findNode(tree, v)) {
                         if (selectedIds.some((id) => id.toString() === v.toString())) {
@@ -424,8 +429,12 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             SortUtil.sortObjects(nodes, 'label', DataType.STRING);
         }
 
-        if (Array.isArray(this.value)) {
-            for (const v of this.value) {
+        const value = this.value !== undefined && this.value !== null
+            ? Array.isArray(this.value) ? this.value : [this.value]
+            : null;
+
+        if (Array.isArray(value)) {
+            for (const v of value) {
                 const node = TreeUtil.findNode(nodes, v);
                 if (node) {
                     node.selected = true;
@@ -433,7 +442,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             }
         }
 
-        this.treeHandler?.setTree(nodes, undefined, false, true);
+        this.treeHandler?.setTree(nodes, undefined, true, true);
     }
 
     public async search(searchValue: string): Promise<void> {
@@ -455,7 +464,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(this.objectType);
             const filter = service && this.searchValue
                 ? await service.prepareFullTextFilter(this.searchValue)
-                : null;
+                : [];
 
             let loadingOptions = new KIXObjectLoadingOptions();
 
@@ -471,9 +480,11 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
             loadingOptions = await ObjectReferenceUtil.prepareLoadingOptions(loadingOptions, this.searchValue);
 
-            objects = await service.loadObjects<KIXObject>(
-                this.objectType, null, loadingOptions, this.specificLoadingOptions, false
-            );
+            if (service) {
+                objects = await service.loadObjects<KIXObject>(
+                    this.objectType, null, loadingOptions, this.specificLoadingOptions, false
+                ).catch(() => []);
+            }
         }
 
         return objects;
@@ -501,8 +512,14 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             objectIds = objectIds.filter((id) => id !== null && typeof id !== 'undefined');
 
             if (Array.isArray(this.possibleValues)) {
+                const allowedValues = this.possibleValues;
+
+                if (this.additionalValues?.length) {
+                    allowedValues.push(...this.additionalValues);
+                }
+
                 objectIds = objectIds.filter(
-                    (id) => this.possibleValues.some((pv) => pv.toString() === id.toString())
+                    (id) => allowedValues.some((pv) => pv.toString() === id.toString())
                 );
             }
 
@@ -592,19 +609,8 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         this.treeHandler?.selectAll();
     }
 
-    public async setPossibleValues(values: T[]): Promise<void> {
-        await super.setPossibleValues(values);
+    public async update(): Promise<void> {
         await this.loadSelectableValues();
         await this.setSelectedNodes();
-    }
-
-    public async addPossibleValues(values: T[]): Promise<void> {
-        await super.addPossibleValues(values);
-        this.loadSelectableValues();
-    }
-
-    public async removePossibleValues(values: T[]): Promise<void> {
-        await super.removePossibleValues(values);
-        await this.loadSelectableValues();
     }
 }

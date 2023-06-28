@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -103,7 +103,6 @@ export class DateTimeUtil {
             isNegative = true;
             seconds = seconds * -1;
         }
-        let ageResult = seconds + 's';
 
         const hoursInSeconds = 60 * 60;
         const daysInSeconds = 24 * hoursInSeconds;
@@ -112,11 +111,7 @@ export class DateTimeUtil {
         const hours = Math.floor((seconds - (days * daysInSeconds)) / hoursInSeconds);
         const minutes = Math.round((seconds - (days * daysInSeconds) - (hours * hoursInSeconds)) / 60);
 
-        if (days === 0) {
-            ageResult = hours + 'h ' + minutes + 'm';
-        } else {
-            ageResult = days + 'd ' + hours + 'h';
-        }
+        const ageResult = `${days}d ${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m`;
 
         return isNegative ? '- ' + ageResult : ageResult;
     }
@@ -273,6 +268,65 @@ export class DateTimeUtil {
 
     public static format(date: Date, format: string): string {
         return dateFormat(date, format);
+    }
+
+    public static calculateRelativeDate(value: string): string {
+        const timestamp = Date.parse(value);
+        if (value && isNaN(timestamp)) {
+            const parts = value.split(/(\d+)/);
+            if (parts.length === 3) {
+                value = DateTimeUtil.calculateDate(Number(parts[1]), parts[2].toString());
+            }
+        }
+        return value;
+    }
+
+    public static calculateDate(value: number, unit: string): string {
+        const date = new Date();
+        switch (unit) {
+            case 'm':
+                date.setMinutes(date.getMinutes() + value);
+                break;
+            case 'h':
+                date.setHours(date.getHours() + value);
+                break;
+            case 'd':
+                const dayOffset = value * 60 * 60 * 24;
+                date.setSeconds(date.getSeconds() + dayOffset);
+                break;
+            case 'w':
+                const weekOffset = value * 60 * 60 * 24 * 7;
+                date.setSeconds(date.getSeconds() + weekOffset);
+                break;
+            case 'M':
+                date.setMonth(date.getMonth() + value);
+                break;
+            case 'Y':
+                date.setFullYear(date.getFullYear() + value);
+                break;
+            default:
+        }
+
+        return DateTimeUtil.getKIXDateTimeString(date);
+    }
+
+    public static getSeconds(value: number, unit: string): number {
+        switch (unit) {
+            case 'm':
+                return value * 60;
+            case 'h':
+                return value * 60 * 60;
+            case 'd':
+                return value * 60 * 60 * 24;
+            case 'w':
+                return value * 60 * 60 * 24 * 7;
+            case 'M':
+                return value * 60 * 60 * 24 * 30;
+            case 'Y':
+                return value * 60 * 60 * 24 * 365;
+            default:
+                return value;
+        }
     }
 
 }

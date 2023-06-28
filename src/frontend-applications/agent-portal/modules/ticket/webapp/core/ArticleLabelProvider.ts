@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -17,10 +17,8 @@ import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { Channel } from '../../model/Channel';
-import { SenderType } from '../../model/SenderType';
 import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
 import { KIXObject } from '../../../../model/kix/KIXObject';
-import { KIXModulesService } from '../../../base-components/webapp/core/KIXModulesService';
 
 
 export class ArticleLabelProvider extends LabelProvider<Article> {
@@ -296,18 +294,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                             const mailIcon = article && article.isUnsent()
                                 ? 'kix-icon-mail-warning'
                                 : new ObjectIcon(null, 'Channel', channelID);
-                            let directionIcon = 'kix-icon-arrow-receive';
-
-                            const senderTypes = await KIXObjectService.loadObjects<SenderType>(
-                                KIXObjectType.SENDER_TYPE, [article.SenderTypeID]
-                            ).catch((error) => []);
-
-                            const senderType = senderTypes && senderTypes.length ? senderTypes[0] : '';
-                            if (article && senderType.Name === 'agent') {
-                                directionIcon = 'kix-icon-arrow-outward';
-                            }
                             icons.push(mailIcon);
-                            icons.push(directionIcon);
                         } else {
                             icons.push(new ObjectIcon(null, 'Channel', channelID));
                         }

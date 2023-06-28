@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -50,7 +50,7 @@ export class FormFieldConfiguration implements IConfiguration {
         public type: ConfigurationType = ConfigurationType.FormField,
         public visible: boolean = true,
         public translateLabel: boolean = true,
-        public valid: boolean = true,
+        public valid: boolean = true
     ) {
         this.instanceId = existingFieldId ? existingFieldId : null;
     }

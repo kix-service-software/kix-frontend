@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -27,6 +27,8 @@ import { QueueProperty } from '../../model/QueueProperty';
 import { AgentService } from '../../../user/webapp/core/AgentService';
 import { Article } from '../../model/Article';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
+import { SysConfigService } from '../../../sysconfig/webapp/core/SysConfigService';
 
 export class TicketLabelProvider extends LabelProvider<Ticket> {
 
@@ -59,7 +61,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             TicketProperty.OWNER_ID,
             TicketProperty.RESPONSIBLE_ID,
             TicketProperty.WATCHERS,
-            TicketProperty.AGE,
             TicketProperty.UNSEEN,
             TicketProperty.ARCHIVE_FLAG,
             'Queue.FollowUpID'
@@ -355,6 +356,14 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                         translatable = false;
                     }
                     break;
+                case TicketProperty.AGE:
+                    if (ticket) {
+                        const createDate = new Date(ticket.Created);
+                        const age = (Date.now() - createDate.getTime()) / 1000;
+                        displayValue = DateTimeUtil.calculateTimeInterval(age, undefined);
+                        translatable = false;
+                    }
+                    break;
                 default:
                     displayValue = await super.getDisplayText(ticket, property, defaultValue, translatable);
             }
@@ -398,27 +407,37 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
     public async getObjectText(
         ticket: Ticket, id: boolean = true, title: boolean = true, translatable: boolean = true
     ): Promise<string> {
-        let ticketHook: string = '';
-        let ticketHookDivider: string = '';
+        let displayValue: string;
 
-        const hookConfig = await KIXObjectService.loadObjects<SysConfigOption>(
-            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_HOOK]
-        ).catch((error): SysConfigOption[] => []);
+        const pattern = await SysConfigService.getInstance().getDisplayValuePattern(KIXObjectType.TICKET);
 
-        const dividerConfig = await KIXObjectService.loadObjects<SysConfigOption>(
-            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_HOOK_DIVIDER]
-        ).catch((error): SysConfigOption[] => []);
+        if (pattern && ticket) {
+            displayValue = await PlaceholderService.getInstance().replacePlaceholders(pattern, ticket);
+        } else {
+            let ticketHook: string = '';
+            let ticketHookDivider: string = '';
 
-        if (hookConfig.length) {
-            ticketHook = hookConfig[0].Value ? hookConfig[0].Value : '';
+            const hookConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_HOOK]
+            ).catch((error): SysConfigOption[] => []);
+
+            const dividerConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_HOOK_DIVIDER]
+            ).catch((error): SysConfigOption[] => []);
+
+            if (hookConfig.length) {
+                ticketHook = hookConfig[0].Value ? hookConfig[0].Value : '';
+            }
+
+            if (dividerConfig.length) {
+                ticketHookDivider = dividerConfig[0].Value ? dividerConfig[0].Value : '';
+            }
+
+            if (id) displayValue = `${ticketHook}${ticketHookDivider}${ticket?.TicketNumber}`;
+            if (id && title && ticket?.Title) displayValue += '-';
+            if (title && ticket?.Title) displayValue += `${ticket.Title}`;
         }
-
-        if (dividerConfig.length) {
-            ticketHookDivider = dividerConfig[0].Value ? dividerConfig[0].Value : '';
-        }
-
-        const text = `${ticketHook}${ticketHookDivider}${ticket?.TicketNumber} - ${ticket?.Title}`;
-        return text;
+        return displayValue;
     }
 
     public getObjectAdditionalText(ticket: Ticket, translatable: boolean = true): string {

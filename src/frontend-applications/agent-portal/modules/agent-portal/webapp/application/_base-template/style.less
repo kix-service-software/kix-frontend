@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -72,7 +72,9 @@
     }
 
     >.content-wrapper {
-        margin-top: 2rem;
+        padding-top: 2rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
 
     .image-viewer-container {
@@ -162,7 +164,7 @@
 // not "mobile"
 @media only screen and (min-width: (@mobile-breakpoint + 1px)) {
     .app-wrapper {
-        grid-template-columns: [main-menu] (@main-menu-width) [sidebar-left] max-content [content] minmax(25rem, 1fr) [sidebar-right] max-content;
+        grid-template-columns: [main-menu] (@main-menu-width) [sidebar-left] max-content [content] minmax(25rem, 1fr) [sidebar-right] 3rem;
 
         >.header-wrapper,
         >.footer-wrapper {
@@ -179,7 +181,7 @@
 @media only screen and (min-width: (@sidebar-left-breakpoint + 1px)) {
     .app-wrapper {
         >.content-wrapper {
-            margin-left: 1rem;
+            padding-left: 1rem;
         }
 
         >.sidebar-left-wrapper {
@@ -191,8 +193,9 @@
 // sidebar right
 @media only screen and (min-width: (@sidebar-right-breakpoint + 1px)) {
     .app-wrapper {
+        grid-template-columns: [main-menu] (@main-menu-width) [sidebar-left] max-content [content] minmax(25rem, 1fr) [sidebar-right] max-content;
         >.content-wrapper {
-            margin-right: 1rem;
+            padding-right: 1rem;
         }
 
         >.sidebar-right-wrapper {

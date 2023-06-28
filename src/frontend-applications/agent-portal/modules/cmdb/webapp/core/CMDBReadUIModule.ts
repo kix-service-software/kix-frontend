@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -37,6 +37,7 @@ import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { ActionFactory } from '../../../base-components/webapp/core/ActionFactory';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
+import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
 import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
 import { GraphService } from '../../../graph/webapp/core/GraphService';
 import { SearchService } from '../../../search/webapp/core';
@@ -45,6 +46,7 @@ import { TableFactoryService } from '../../../table/webapp/core/factory/TableFac
 import ConfigItemPrintAction from './actions/ConfigItemPrintAction';
 import ConfigItemPrintSelectionAction from './actions/ConfigItemPrintSelectionAction';
 import { CMDBGraphInstance } from './CMDBGraphInstance';
+import { ConfigItemPlaceholderHandler } from './ConfigItemPlaceholderHandler';
 import { PostproductivCSSHandler } from './table/PostproductivCSSHandler';
 
 export class UIModule implements IUIModule {
@@ -80,6 +82,8 @@ export class UIModule implements IUIModule {
         );
 
         GraphService.registerGraphInstance('ConfigItemLinkGraph', CMDBGraphInstance);
+
+        PlaceholderService.getInstance().registerPlaceholderHandler(ConfigItemPlaceholderHandler.getInstance());
 
         await this.registerContexts();
         this.registerActions();

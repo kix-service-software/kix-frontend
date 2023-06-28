@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -47,6 +47,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     private id: string = IdService.generateDateBasedId('TableContentProvider');
 
     public totalCount: number;
+    public currentLimit: number;
 
     public constructor(
         protected objectType: KIXObjectType | string,
@@ -124,7 +125,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     public async loadMore(): Promise<void> {
         this.currentPageIndex++;
         if (this.contextId && !this.objectIds) {
-            const pageSize = this.loadingOptions?.limit || 20;
+            const pageSize = this.context?.getPageSize(this.objectType) || this.loadingOptions?.limit || 20;
             const currentLimit = this.currentPageIndex * pageSize;
 
             const context = ContextService.getInstance().getActiveContext();
@@ -137,7 +138,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         let objects = [];
 
         const pageSize = this.loadingOptions?.limit;
-        const currentLimit = this.usePaging && pageSize
+        this.currentLimit = this.usePaging && pageSize
             ? this.currentPageIndex * pageSize
             : null;
 
@@ -148,21 +149,26 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             const includes = hasDFColumn ? [KIXObjectProperty.DYNAMIC_FIELDS] : [];
             objects = await SearchService.getInstance().executeSearchCache(
                 this.table.getTableConfiguration().searchId, undefined, undefined, undefined, undefined,
-                includes, currentLimit, this.loadingOptions?.searchLimit
+                includes, this.currentLimit, this.loadingOptions?.searchLimit
             );
             this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(
                 this.table.getTableConfiguration().searchId
             );
         } else if (this.contextId && !this.objectIds) {
             const context = ContextService.getInstance().getActiveContext();
-            objects = context ? await context.getObjectList(this.objectType, currentLimit) : [];
-            this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(context.contextId);
+            objects = context ? await context.getObjectList(this.objectType, this.currentLimit) : [];
+            this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(
+                context.contextId + this.objectType
+            );
+            this.currentLimit = KIXObjectSocketClient.getInstance().getCollectionsLimit(
+                context.contextId + this.objectType
+            );
         } else if (!this.objectIds || (this.objectIds && this.objectIds.length > 0)) {
             const forceIds = (this.objectIds && this.objectIds.length > 0) ? true : false;
             const loadingOptions = await this.prepareLoadingOptions();
 
             if (this.usePaging) {
-                loadingOptions.limit = currentLimit;
+                loadingOptions.limit = this.currentLimit;
             }
 
             objects = await KIXObjectService.loadObjects<KIXObject>(
@@ -170,7 +176,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                 forceIds, this.useCache, undefined, this.id
             );
 
-            if (currentLimit) {
+            if (this.currentLimit) {
                 this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(this.id);
             }
         }
@@ -278,6 +284,22 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                     );
                     const preparedCriterion = new FilterCriteria(
                         criterion.property, criterion.operator, criterion.type, criterion.filterType, value
+                    );
+                    loadingOptions.filter.push(preparedCriterion);
+                } else if (Array.isArray(criterion.value)) {
+                    const values = [];
+                    for (const value of criterion.value) {
+                        if (typeof value === 'string') {
+                            const replacedValue = await PlaceholderService.getInstance().replacePlaceholders(
+                                value, contextObject
+                            );
+                            values.push(replacedValue);
+                        } else {
+                            values.push(value);
+                        }
+                    }
+                    const preparedCriterion = new FilterCriteria(
+                        criterion.property, criterion.operator, criterion.type, criterion.filterType, values
                     );
                     loadingOptions.filter.push(preparedCriterion);
                 } else {
