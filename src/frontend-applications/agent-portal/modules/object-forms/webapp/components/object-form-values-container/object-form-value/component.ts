@@ -42,6 +42,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     this.state.formValue?.inputComponentId
                 );
             }
+        } else {
+            const controlComponent = (this as any).getComponent(`control-${input.formValue?.instanceId}`);
+            if (controlComponent) {
+                controlComponent.prepareControls();
+            }
         }
     }
 
