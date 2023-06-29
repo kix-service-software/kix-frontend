@@ -327,6 +327,27 @@ export class FormInstance {
         return null;
     }
 
+    public async addNewFieldsAfterField(
+        newFormFields: FormFieldConfiguration[], afterField: FormFieldConfiguration
+    ): Promise<void> {
+        if (Array.isArray(newFormFields) && afterField) {
+            const fields: FormFieldConfiguration[] = this.getFields(afterField);
+            if (Array.isArray(fields)) {
+                let index = fields.findIndex((c) => c.instanceId === afterField.instanceId);
+
+                newFormFields.forEach((c) => {
+                    index++;
+                    fields.splice(index, 0, c);
+                });
+                this.setDefaultValueAndParent(newFormFields, afterField.parent);
+
+                EventService.getInstance().publish(
+                    FormEvent.FIELD_CHILDREN_ADDED, { formInstance: this, parent: afterField.parent }
+                );
+            }
+        }
+    }
+
     public async addFieldChildren(
         parent: FormFieldConfiguration, children: FormFieldConfiguration[], clearChildren: boolean = false,
         asFirst?: boolean
