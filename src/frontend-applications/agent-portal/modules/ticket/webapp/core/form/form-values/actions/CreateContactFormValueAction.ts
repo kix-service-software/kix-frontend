@@ -19,7 +19,6 @@ import { TicketProperty } from '../../../../../model/TicketProperty';
 export class CreateContactFormValueAction extends FormValueAction {
 
     public permissions = [
-        new UIComponentPermission('system/users', [CRUD.CREATE]),
         new UIComponentPermission('contacts', [CRUD.CREATE])
     ];
 
