@@ -201,8 +201,11 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         for (const property of properties) {
             const formValue = this.formValues.find((fv) => fv.property === property);
 
+            const context = ContextService.getInstance().getActiveContext();
+            const articleId = context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
+            const newArticle = this.objectValueMapper.formContext === FormContext.NEW && articleId;
             const isEdit = this.objectValueMapper.formContext === FormContext.EDIT;
-            const showFormValue = property !== ArticleProperty.TO || isEdit;
+            const showFormValue = property !== ArticleProperty.TO || (isEdit || newArticle);
 
             let showCc = false;
             let showBcc = false;
