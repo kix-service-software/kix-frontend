@@ -311,7 +311,9 @@ export abstract class Context {
             return list.value;
         }
 
-        // await this.reloadObjectList(objectType, undefined, limit);
+        if (!this.hasObjectList(objectType)) {
+            await this.reloadObjectList(objectType, undefined, limit);
+        }
 
         return this.objectLists.get(objectType) as any[];
     }
