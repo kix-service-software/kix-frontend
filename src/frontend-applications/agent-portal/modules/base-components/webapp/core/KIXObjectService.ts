@@ -369,8 +369,12 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         switch (property) {
             case KIXObjectProperty.CREATE_BY:
             case KIXObjectProperty.CHANGE_BY:
+                let userIds: number[] = null;
+                if (Array.isArray(filterIds)) {
+                    userIds = filterIds.filter((id) => !isNaN(Number(id))).map((id) => Number(id));
+                }
                 let users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, null,
+                    KIXObjectType.USER, userIds,
                     new KIXObjectLoadingOptions(
                         null, null, null, [UserProperty.CONTACT]
                     ), null, true

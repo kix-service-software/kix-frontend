@@ -43,8 +43,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         const organsiationTableWidget = new TableWidgetConfiguration(
             'customer-dashboard-table-widget', 'Organisation Table Widget', ConfigurationType.TableWidget,
             KIXObjectType.ORGANISATION, [OrganisationProperty.NAME, SortOrder.UP],
-            new ConfigurationDefinition('customer-dashboard-table', ConfigurationType.Table), null,
-            null, true, null, null, false
+            new ConfigurationDefinition('customer-dashboard-table', ConfigurationType.Table)
         );
         configurations.push(organsiationTableWidget);
 
@@ -66,8 +65,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         const contactTableWidget = new TableWidgetConfiguration(
             'customer-dashboard-contacts-table-widget', 'Contacts Table Widget', ConfigurationType.TableWidget,
             KIXObjectType.CONTACT, [ContactProperty.LASTNAME, SortOrder.UP],
-            new ConfigurationDefinition('customer-dashboard-contacts-table', ConfigurationType.Table), null,
-            null, true, null, null, null, false
+            new ConfigurationDefinition('customer-dashboard-contacts-table', ConfigurationType.Table)
         );
         configurations.push(contactTableWidget);
 

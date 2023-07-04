@@ -19,6 +19,7 @@ import { IContextListener } from '../modules/base-components/webapp/core/IContex
 import { IEventSubscriber } from '../modules/base-components/webapp/core/IEventSubscriber';
 import { KIXObjectService } from '../modules/base-components/webapp/core/KIXObjectService';
 import { ObjectIcon } from '../modules/icon/model/ObjectIcon';
+import { TableFactoryService } from '../modules/table/webapp/core/factory/TableFactoryService';
 import { TranslationService } from '../modules/translation/webapp/core/TranslationService';
 import { AgentService } from '../modules/user/webapp/core/AgentService';
 import { ConfiguredWidget } from './configuration/ConfiguredWidget';
@@ -110,6 +111,9 @@ export abstract class Context {
                     const objectUpdate = eventId === ApplicationEvent.OBJECT_UPDATED && data?.objectType;
 
                     if (this.descriptor.contextMode !== ContextMode.SEARCH) {
+
+                        TableFactoryService.getInstance().deleteContextTables(this.contextId, data?.objectType);
+
                         if (objectUpdate) {
                             if (this.objectLists.has(data.objectType)) {
                                 this.deleteObjectList(data.objectType);
@@ -307,7 +311,9 @@ export abstract class Context {
             return list.value;
         }
 
-        // await this.reloadObjectList(objectType, undefined, limit);
+        if (!this.hasObjectList(objectType)) {
+            await this.reloadObjectList(objectType, undefined, limit);
+        }
 
         return this.objectLists.get(objectType) as any[];
     }

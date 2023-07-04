@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2023-03-08 19:19+0000\n"
-"Last-Translator: fkrahl <Frank.Krahl@cape-it.de>\n"
+"PO-Revision-Date: 2023-06-05 14:20+0000\n"
+"Last-Translator: khuesig <Katja.Huesig@kixdesk.com>\n"
 "Language-Team: English <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/en/>\n"
 "Language: en\n"
@@ -232,7 +232,7 @@ msgid "All agents watching this ticket"
 msgstr ""
 
 msgid "All agents with read permissions for the ticket"
-msgstr ""
+msgstr "All agents with read-only permission for the ticket"
 
 msgid "All agents with update permission for the ticket"
 msgstr ""
@@ -292,7 +292,7 @@ msgstr ""
 msgid "Approved"
 msgstr ""
 
-msgid "A product by c.a.p.e. IT GmbH"
+msgid "A product by KIX Service Software GmbH"
 msgstr ""
 
 msgid "Archived"
@@ -485,9 +485,12 @@ msgid "Changed by"
 msgstr ""
 
 msgid "Change Password"
-msgstr ""
+msgstr "Change Password"
 
 msgid "Changes cannot be saved. How do you want to proceed?"
+msgstr ""
+
+msgid "Change sort direction"
 msgstr ""
 
 msgid "Changes saved."
@@ -1101,6 +1104,21 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
+msgid "Email1"
+msgstr ""
+
+msgid "Email2"
+msgstr ""
+
+msgid "Email3"
+msgstr ""
+
+msgid "Email4"
+msgstr ""
+
+msgid "Email5"
+msgstr ""
+
 msgid "Email Account"
 msgstr ""
 
@@ -1249,6 +1267,9 @@ msgid "FAQ Article"
 msgstr ""
 
 msgid "FAQ Article History"
+msgstr ""
+
+msgid "FAQ Articles successfully removed."
 msgstr ""
 
 msgid "FAQ Attributes"
@@ -2958,6 +2979,9 @@ msgstr ""
 msgid "Last Name"
 msgstr ""
 
+msgid "Latest releases"
+msgstr ""
+
 msgid "Layer"
 msgstr ""
 
@@ -3939,6 +3963,12 @@ msgstr "Remove Adress(es)"
 msgid "Remove dependency to organisation"
 msgstr ""
 
+msgid "Remove FAQ Article(s)"
+msgstr ""
+
+msgid "Remove FAQ Articles"
+msgstr ""
+
 msgid "Remove FAQ Categories"
 msgstr ""
 
@@ -4301,7 +4331,7 @@ msgstr ""
 msgid "setup_assistant_system_settings_text"
 msgstr ""
 "Please add basic system settings according to your system setup. For kix."
-"cloud users please check your notification email.  For on-premise-"
+"cloud users please check your notification email. For on-premise-"
 "installations: frontend refers to FQDN+port where the agent portal may be "
 "reached (e.g. \"your.docker.host:20001\"). Backend refers to FQDN+port where "
 "the KIX REST-API can be reached (e.g. \"your.docker.host:20000\"). Customer "

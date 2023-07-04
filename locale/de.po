@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2023-02-21 09:19+0000\n"
-"Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
+"PO-Revision-Date: 2023-06-27 12:20+0000\n"
+"Last-Translator: khuesig <Katja.Huesig@kixdesk.com>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
 "Language: de\n"
@@ -245,7 +245,7 @@ msgid "All agents watching this ticket"
 msgstr "Agenten die das Ticket beobachten"
 
 msgid "All agents with read permissions for the ticket"
-msgstr "Alle Agenten, die Leseberechtigungen auf das Ticket haben"
+msgstr "Alle Agenten, die Nur-Lese-Berechtigung auf das Ticket haben"
 
 msgid "All agents with update permission for the ticket"
 msgstr "Alle Agenten, die Update-Berechtigungen auf das Ticket haben"
@@ -315,8 +315,8 @@ msgstr "Anwenden"
 msgid "Approved"
 msgstr "Genehmigt"
 
-msgid "A product by c.a.p.e. IT GmbH"
-msgstr "Ein Produkt der c.a.p.e. IT GmbH"
+msgid "A product by KIX Service Software GmbH"
+msgstr ""
 
 msgid "Archived"
 msgstr "Archiviert"
@@ -513,6 +513,9 @@ msgstr "Passwort ändern"
 msgid "Changes cannot be saved. How do you want to proceed?"
 msgstr ""
 "Änderung kann nicht gespeichert werden. Wie möchten Sie weiter verfahren?"
+
+msgid "Change sort direction"
+msgstr ""
 
 msgid "Changes saved."
 msgstr "Änderungen wurden gespeichert."
@@ -1127,6 +1130,21 @@ msgstr "Webformular bearbeiten"
 msgid "Email"
 msgstr "E-Mail"
 
+msgid "Email1"
+msgstr ""
+
+msgid "Email2"
+msgstr ""
+
+msgid "Email3"
+msgstr ""
+
+msgid "Email4"
+msgstr ""
+
+msgid "Email5"
+msgstr ""
+
 msgid "Email Account"
 msgstr "E-Mail-Konto"
 
@@ -1277,6 +1295,9 @@ msgstr "FAQ Artikel"
 msgid "FAQ Article History"
 msgstr "FAQ Artikel Historie"
 
+msgid "FAQ Articles successfully removed."
+msgstr ""
+
 msgid "FAQ Attributes"
 msgstr "FAQ Attribute"
 
@@ -1381,7 +1402,7 @@ msgstr ""
 "Icon."
 
 msgid "finished"
-msgstr "beendet"
+msgstr "abgeschlossen"
 
 msgid "First Name"
 msgstr "Vorname"
@@ -2626,7 +2647,7 @@ msgstr "Ihr Anmeldepasswort für die Nutzung des Self-Service-Portals"
 msgid "Helptext_PersonalSettings_user_token_Hint"
 msgstr ""
 "Dieser persönliche Token ermöglicht den direkten Zugriff auf Berichtsdaten. "
-"Erstellen Sie einen neuen Toke, wenn Sie ihn versehentlich weitergegeben "
+"Erstellen Sie einen neuen Token, wenn Sie ihn versehentlich weitergegeben "
 "haben sollten."
 
 msgid "Helptext_Reporting_ReportCreate_Comment"
@@ -3158,6 +3179,9 @@ msgstr "Letzte Anmeldung"
 msgid "Last Name"
 msgstr "Nachname"
 
+msgid "Latest releases"
+msgstr ""
+
 msgid "Layer"
 msgstr "Layer"
 
@@ -3216,7 +3240,7 @@ msgid "Loading ..."
 msgstr "Lade ..."
 
 msgid "Load more"
-msgstr ""
+msgstr "weitere laden"
 
 msgid "Localisation"
 msgstr "Lokalisierung"
@@ -3282,7 +3306,7 @@ msgid "Menu"
 msgstr "Modulmenü"
 
 msgid "Merged into the Ticket"
-msgstr ""
+msgstr "zusammengefasst zu Ticket"
 
 msgid "Message"
 msgstr "Nachricht"
@@ -3813,7 +3837,7 @@ msgid "Owner"
 msgstr "Bearbeiter"
 
 msgid "Page Size"
-msgstr ""
+msgstr "Seitengröße"
 
 msgid "Paramater"
 msgstr "Parameter"
@@ -4081,7 +4105,7 @@ msgid "Readonly"
 msgstr "Nur Lesen"
 
 msgid "Read & Write"
-msgstr ""
+msgstr "Lesen & Schreiben"
 
 msgid "Recently Closed"
 msgstr "Kürzlich Geschlossen"
@@ -4142,6 +4166,12 @@ msgstr "Adresse(n) löschen"
 
 msgid "Remove dependency to organisation"
 msgstr "Abhängigkeit zur Organisation lösen"
+
+msgid "Remove FAQ Article(s)"
+msgstr ""
+
+msgid "Remove FAQ Articles"
+msgstr ""
 
 msgid "Remove FAQ Categories"
 msgstr "FAQ Kategorien entfernen"
@@ -4374,7 +4404,7 @@ msgid "Search error!"
 msgstr "Fehler bei Suche!"
 
 msgid "Search Limit"
-msgstr ""
+msgstr "Suchlimit"
 
 msgid "SEARCH_OPERATOR_WITHIN_LAST"
 msgstr "der letzten"
@@ -4747,7 +4777,7 @@ msgid "System Addresses"
 msgstr "Systemadressen"
 
 msgid "System: Console"
-msgstr ""
+msgstr "System: Konsole"
 
 msgid "System: Dynamic Fields"
 msgstr "System: Dynamische Felder"
@@ -4774,7 +4804,7 @@ msgid "Table Configuration"
 msgstr "Tabellenkonfiguration"
 
 msgid "Table Height (Row Count)"
-msgstr ""
+msgstr "Tabellenhöhe (Spaltenanzahl)"
 
 msgid "Tables"
 msgstr "Tabellen"
@@ -4880,6 +4910,8 @@ msgstr ""
 
 msgid "The requested ticket is not available due to restricted permissions."
 msgstr ""
+"Das angeforderte Ticket ist aufgrund von Berechtigungseinschränkungen nicht "
+"verfügbar."
 
 msgid ""
 "The value for the field is in the future! The date needs to be in the past!"
@@ -4922,7 +4954,7 @@ msgid "Ticket History"
 msgstr "Ticket Historie"
 
 msgid "Ticket Information"
-msgstr "Ticket-Informationen"
+msgstr "Ticketinformation"
 
 msgid "Ticket is being watched."
 msgstr "Ticket wird beobachtet."
@@ -5263,7 +5295,7 @@ msgid "Wrap Lines"
 msgstr "Zeilen umbrechen"
 
 msgid "Write"
-msgstr ""
+msgstr "Schreiben"
 
 msgid "Year(s)"
 msgstr "Jahr(e)"
@@ -5315,6 +5347,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "A product by c.a.p.e. IT GmbH"
+#~ msgstr "Ein Produkt der c.a.p.e. IT GmbH"
 
 #~ msgid "Display Limit"
 #~ msgstr "Anzeigelimit"

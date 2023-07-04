@@ -51,7 +51,8 @@ export class ContactImportRunner extends ImportRunner {
             existingUser = Array.isArray(result) && result.length > 0 ? result[0] : undefined;
 
             if (existingUser) {
-                if ((existingContact as Contact)?.AssignedUserID !== existingUser.UserID) {
+                if ((existingContact as Contact)?.AssignedUserID &&
+                    (existingContact as Contact)?.AssignedUserID !== existingUser.UserID) {
                     throw new Error(
                         null,
                         await TranslationService.translate('Translatable#User is already assigned'));
@@ -75,11 +76,13 @@ export class ContactImportRunner extends ImportRunner {
             }
         }
 
-        const user = new User();
-        user.IsAgent = Number(object[UserProperty.IS_AGENT]) || 0;
-        user.IsCustomer = Number(object[UserProperty.IS_CUSTOMER]) || 0;
-        user.UserLogin = object[UserProperty.USER_LOGIN] || '';
-        object[KIXObjectType.USER] = user;
+        if (object[UserProperty.USER_LOGIN]) {
+            const user = new User();
+            user.IsAgent = Number(object[UserProperty.IS_AGENT]) || 0;
+            user.IsCustomer = Number(object[UserProperty.IS_CUSTOMER]) || 0;
+            user.UserLogin = object[UserProperty.USER_LOGIN];
+            object[KIXObjectType.USER] = user;
+        }
 
         return new Contact(object as Contact);
     }

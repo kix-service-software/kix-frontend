@@ -76,6 +76,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
                 if (this.enabled && this.formValues?.length) {
                     for (const fv of this.formValues) {
                         fv.enabled = true;
+                        fv.setNewInitialState(FormValueProperty.VISIBLE, true);
                     }
                 }
 
@@ -167,6 +168,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
             fv.isSetInBackground = this.isSetInBackground;
             if (!fv.isSetInBackground) {
                 fv.visible = true;
+                fv.setNewInitialState(FormValueProperty.VISIBLE, true);
             }
 
             fv.isSortable = false;

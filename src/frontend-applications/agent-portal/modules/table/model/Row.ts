@@ -55,14 +55,16 @@ export class Row extends BindableObject {
         children?.forEach((c) => this.children.push(new Row(this.table, c)));
     }
 
-    public initializeDisplayValues(): void {
+    public async initializeDisplayValues(): Promise<any[]> {
+        const promises = [];
         this.cells.forEach((c) => {
-            c.initDisplayValue();
+            promises.push(c.initDisplayValue());
         });
 
         if (Array.isArray(this.children) && this.children.length) {
-            this.children.forEach((cr) => cr.initializeDisplayValues());
+            this.children.forEach((cr) => promises.push(cr.initializeDisplayValues()));
         }
+        return Promise.all(promises);
     }
 
     public getTable(): Table {

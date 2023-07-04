@@ -150,11 +150,16 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.widgetTitle = `${title} (${articleLengthText})`;
 
         if (this.state.articles?.length) {
-            setTimeout(() => {
-                EventService.getInstance().publish(
-                    'TOGGLE_ARTICLE', { articleId: this.state.articles[0].ArticleID, expanded: true }
-                );
-            }, 10);
+            const article = this.state.articles[0];
+            let component = (this as any).getComponent('article-' + article.ArticleID);
+            if (!component) {
+                setTimeout(() => {
+                    component = (this as any).getComponent('article-' + article.ArticleID);
+                    component?.toggleArticleCompactView();
+                }, 150);
+            } else {
+                component?.toggleArticleCompactView();
+            }
         }
     }
 

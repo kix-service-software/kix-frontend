@@ -27,10 +27,19 @@ export class PendingTimeFormValue extends DateTimeFormValue {
         public parent: ObjectFormValue,
     ) {
         super(property, ticket, objectValueMapper, parent);
-
         this.label = 'Translatable#Pending time';
+    }
 
-        ticket.addBinding(TicketProperty.STATE_ID, async (value: number) => {
+    public async initFormValue(): Promise<void> {
+        const isPending = await TicketService.isPendingState(this.object[TicketProperty.STATE_ID]);
+        this.enabled = isPending;
+        this.visible = isPending;
+
+        this.isSortable = false;
+
+        await super.initFormValue();
+
+        this.object.addBinding(TicketProperty.STATE_ID, async (value: number) => {
             const isPending = await TicketService.isPendingState(value);
             this.enabled = isPending;
             this.visible = isPending;
@@ -47,17 +56,14 @@ export class PendingTimeFormValue extends DateTimeFormValue {
         });
     }
 
-    public async initFormValue(): Promise<void> {
-        const isPending = await TicketService.isPendingState(this.object[TicketProperty.STATE_ID]);
-        this.enabled = isPending;
-        this.visible = isPending;
-
-        this.isSortable = false;
-    }
-
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
         this.defaultValue = field.defaultValue?.value;
         return super.initFormValueByField(field);
+    }
+
+    public async setFormValue(value: any, force?: boolean): Promise<void> {
+        value = DateTimeUtil.calculateRelativeDate(value);
+        await super.setFormValue(value, force);
     }
 
 }

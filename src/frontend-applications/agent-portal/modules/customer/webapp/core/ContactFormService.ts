@@ -372,10 +372,12 @@ export class ContactFormService extends KIXObjectFormService {
     ): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
         if (property === UserProperty.USER_ACCESS) {
-            const isAgent = Array.isArray(value) ? Number(value.some((v) => v === UserProperty.IS_AGENT)) : 0;
-            parameter.push([UserProperty.IS_AGENT, isAgent]);
-            const isCustomer = Array.isArray(value) ? Number(value.some((v) => v === UserProperty.IS_CUSTOMER)) : 0;
-            parameter.push([UserProperty.IS_CUSTOMER, isCustomer]);
+            if (value?.length) {
+                const isAgent = Array.isArray(value) ? Number(value.some((v) => v === UserProperty.IS_AGENT)) : 0;
+                parameter.push([UserProperty.IS_AGENT, isAgent]);
+                const isCustomer = Array.isArray(value) ? Number(value.some((v) => v === UserProperty.IS_CUSTOMER)) : 0;
+                parameter.push([UserProperty.IS_CUSTOMER, isCustomer]);
+            }
         } else if (!property.match(/_CONTAINER/)) {
             parameter.push([property, value]);
         }

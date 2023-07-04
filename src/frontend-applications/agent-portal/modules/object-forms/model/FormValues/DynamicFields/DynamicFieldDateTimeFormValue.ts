@@ -128,14 +128,7 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue {
     }
 
     public async setFormValue(value: any, force?: boolean): Promise<void> {
-        const timestamp = Date.parse(value);
-        if (value && isNaN(timestamp)) {
-            const parts = value.split(/(\d+)/);
-            if (parts.length === 3) {
-                value = DateTimeUtil.calculateDate(Number(parts[1]), parts[2].toString());
-            }
-        }
-
+        value = DateTimeUtil.calculateRelativeDate(value);
         await super.setFormValue(value, force);
     }
 

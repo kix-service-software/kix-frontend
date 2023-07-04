@@ -85,6 +85,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                                     )>
                                                         <a href=info.preparedLinkSrc target="_blank">${info.preparedText}</a>
                                                     </else-if>
+                                                    <else-if(info.multiline)>
+                                                        <pre>${info.preparedText}</pre>
+                                                    </else-if>
                                                     <else>${info.preparedText}</else>
                                                 </span>
                                             </div>

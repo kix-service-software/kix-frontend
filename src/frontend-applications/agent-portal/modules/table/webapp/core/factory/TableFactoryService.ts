@@ -45,11 +45,20 @@ export class TableFactoryService {
         EventService.getInstance().subscribe(ContextEvents.CONTEXT_REMOVED, this.subscriber);
     }
 
-    public deleteContextTables(contextId: string): void {
+    public deleteContextTables(contextId: string, objectType?: KIXObjectType | string, keepState?: boolean): void {
         if (this.contextTableInstances.has(contextId)) {
             this.contextTableInstances.get(contextId).forEach((table) => {
-                table.destroy();
-                table.deleteTableState();
+                if (!objectType) {
+                    table.destroy();
+                    if (!keepState) {
+                        table.deleteTableState();
+                    }
+                } else if (table.getObjectType() === objectType) {
+                    table.destroy();
+                    if (!keepState) {
+                        table.deleteTableState();
+                    }
+                }
             });
             this.contextTableInstances.delete(contextId);
         }

@@ -197,7 +197,7 @@ export class ClientRegistrationService extends KIXObjectAPIService {
                     ContextMetadata: c.type,
                     Type: 'String',
                     IsRequired: 0,
-                    ValidID: c.valid ? 1 : 2,
+                    ValidID: 1,
                 };
                 return definition;
             });

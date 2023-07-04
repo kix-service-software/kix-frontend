@@ -109,7 +109,8 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ORGANISATION),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
                     new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
-                    new FormFieldOption(ObjectReferenceOptions.OBJECT_IDS, [])
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT_IDS, []),
+                    new FormFieldOption(ObjectReferenceOptions.KEEP_SELECTION, true),
                 ]
             )
         );

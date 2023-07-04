@@ -243,7 +243,7 @@ export class ObjectFormValue<T = any> {
         if (field.empty) {
             this.setFormValue(null, true);
         } else if ((!this.value || isEdit) && field.defaultValue?.value && !field.empty) {
-            const value = await this.handlePlaceholders(this.value || field.defaultValue?.value);
+            const value = await this.handlePlaceholders(field.defaultValue?.value);
             this.setFormValue(value, true);
         }
 

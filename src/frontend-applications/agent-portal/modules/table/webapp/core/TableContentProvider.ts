@@ -47,6 +47,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     private id: string = IdService.generateDateBasedId('TableContentProvider');
 
     public totalCount: number;
+    public currentLimit: number;
 
     public constructor(
         protected objectType: KIXObjectType | string,
@@ -137,7 +138,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         let objects = [];
 
         const pageSize = this.loadingOptions?.limit;
-        const currentLimit = this.usePaging && pageSize
+        this.currentLimit = this.usePaging && pageSize
             ? this.currentPageIndex * pageSize
             : null;
 
@@ -148,15 +149,18 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             const includes = hasDFColumn ? [KIXObjectProperty.DYNAMIC_FIELDS] : [];
             objects = await SearchService.getInstance().executeSearchCache(
                 this.table.getTableConfiguration().searchId, undefined, undefined, undefined, undefined,
-                includes, currentLimit, this.loadingOptions?.searchLimit
+                includes, this.currentLimit, this.loadingOptions?.searchLimit
             );
             this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(
                 this.table.getTableConfiguration().searchId
             );
         } else if (this.contextId && !this.objectIds) {
             const context = ContextService.getInstance().getActiveContext();
-            objects = context ? await context.getObjectList(this.objectType, currentLimit) : [];
+            objects = context ? await context.getObjectList(this.objectType, this.currentLimit) : [];
             this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(
+                context.contextId + this.objectType
+            );
+            this.currentLimit = KIXObjectSocketClient.getInstance().getCollectionsLimit(
                 context.contextId + this.objectType
             );
         } else if (!this.objectIds || (this.objectIds && this.objectIds.length > 0)) {
@@ -164,7 +168,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             const loadingOptions = await this.prepareLoadingOptions();
 
             if (this.usePaging) {
-                loadingOptions.limit = currentLimit;
+                loadingOptions.limit = this.currentLimit;
             }
 
             objects = await KIXObjectService.loadObjects<KIXObject>(
@@ -172,7 +176,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                 forceIds, this.useCache, undefined, this.id
             );
 
-            if (currentLimit) {
+            if (this.currentLimit) {
                 this.totalCount = KIXObjectSocketClient.getInstance().getCollectionsCount(this.id);
             }
         }
