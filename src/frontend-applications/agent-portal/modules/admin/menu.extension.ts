@@ -26,9 +26,7 @@ class Extension extends KIXExtension implements IMainMenuExtension {
 
     public text: string = 'Translatable#Admin';
 
-    public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('system/config/FQDN', [CRUD.UPDATE])
-    ];
+    public permissions: UIComponentPermission[] = [];
 
     public orderRang: number = 1000;
 }
