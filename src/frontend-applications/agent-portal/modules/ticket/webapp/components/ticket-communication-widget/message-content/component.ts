@@ -140,7 +140,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         });
     }
 
-    private scrollToArticle(): void {
+    public scrollToArticle(): void {
         const element: any = (this as any).getEl();
         if (element) {
             BrowserUtil.scrollIntoViewIfNeeded(element);
