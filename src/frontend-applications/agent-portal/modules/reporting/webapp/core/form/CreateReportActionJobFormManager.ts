@@ -155,8 +155,14 @@ export class CreateReportActionJobFormManager extends ExtendedJobFormManager {
                 definition = reportDefinitions?.length ? reportDefinitions[0] : null;
             }
 
+            const optionName = outputFormatField.options.find((o) => o.option === 'OptionName');
             const field = await ReportFormCreator.createOutputFormatField(definition, outputFormat);
             outputFormatField.options = field.options;
+
+            if (optionName) {
+                outputFormatField.options.push(optionName);
+            }
+
             outputFormatField.defaultValue = field.defaultValue;
             outputFormatField.asStructure = false;
 
