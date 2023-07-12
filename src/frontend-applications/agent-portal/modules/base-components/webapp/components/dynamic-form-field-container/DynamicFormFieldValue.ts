@@ -23,7 +23,6 @@ import { ObjectReferenceOptions } from '../../core/ObjectReferenceOptions';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { SearchDefinition } from '../../../../search/webapp/core';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
-import { PlaceholderService } from '../../core/PlaceholderService';
 
 export class DynamicFormFieldValue {
 
@@ -380,7 +379,6 @@ export class DynamicFormFieldValue {
                 const tree = await this.doAutocompleteSearch(10, preloadOption[1].toString());
                 this.valueTreeHandler.setTree(tree);
             }
-            /*if (this.isTable) {}*/
         }
     }
 
@@ -728,6 +726,7 @@ export class DynamicFormFieldValue {
         }
 
         loadingOptions.limit = limit;
+        loadingOptions.searchLimit = limit;
 
         loadingOptions = await this.manager.prepareLoadingOptions(this.value, loadingOptions);
 

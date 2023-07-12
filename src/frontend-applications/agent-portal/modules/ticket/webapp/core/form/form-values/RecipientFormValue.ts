@@ -172,23 +172,28 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
 
     private async addEmailAddressNodes(emailAddresses: any[], nodes: TreeNode[]): Promise<TreeNode[]> {
         const searchMailAddresses = emailAddresses.map((v) => v.replace(/.+ <(.+)>/, '$1'));
-        const mailContacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, null,
-            new KIXObjectLoadingOptions(
-                [
-                    new FilterCriteria(
-                        'Email', SearchOperator.IN, FilterDataType.STRING,
-                        FilterType.OR, searchMailAddresses
-                    )
-                ]
-
-            ), null, true
+        const loadingOptions = new KIXObjectLoadingOptions(
+            [
+                new FilterCriteria(
+                    'Email', SearchOperator.IN, FilterDataType.STRING,
+                    FilterType.OR, searchMailAddresses
+                )
+            ]
         );
+        loadingOptions.limit = 1;
+        loadingOptions.searchLimit = 1;
+
+        const mailContacts = await KIXObjectService.loadObjects<Contact>(
+            KIXObjectType.CONTACT, null, loadingOptions, null, true
+        );
+
         const mailNodes = await this.getContactNodes(mailContacts);
 
         const unknownMailAddressNodes = emailAddresses.map((ma) => {
             const id = ma.replace(/.+ <(.+)>/, '$1');
             return new TreeNode(id, ma, 'kix-icon-man-bubble');
         });
+
         return [
             ...nodes,
             ...mailNodes.filter((mn) => !nodes.some((n) => n.id === mn.id)),
