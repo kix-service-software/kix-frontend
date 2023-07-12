@@ -59,10 +59,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('object-form'),
-            eventPublished: async (context: Context, eventId: string): Promise<void> => {
+            eventPublished: async (data: Context | any, eventId: string): Promise<void> => {
                 if (
                     eventId === FormEvent.OBJECT_FORM_HANDLER_CHANGED &&
-                    context.instanceId === this.context.instanceId
+                    data.instanceId === this.context.instanceId
                 ) {
                     this.state.prepared = false;
                     this.loadForm();
@@ -71,17 +71,24 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     this.state.prepared = false;
                     await this.setFormValues();
                     setTimeout(() => this.state.prepared = true, 5);
+                } else if (eventId === ObjectFormEvent.BLOCK_FORM) {
+                    BrowserUtil.toggleLoadingShield('OBJECT_FORM_SHIELD', data.blocked);
                 }
             }
         };
 
         EventService.getInstance().subscribe(FormEvent.OBJECT_FORM_HANDLER_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(ObjectFormEvent.FIELD_ORDER_CHANGED, this.subscriber);
+        EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
+
+        BrowserUtil.toggleLoadingShield('OBJECT_FORM_SHIELD', true);
+        setTimeout(() => BrowserUtil.toggleLoadingShield('OBJECT_FORM_SHIELD', false), 250);
     }
 
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(FormEvent.OBJECT_FORM_HANDLER_CHANGED, this.subscriber);
         EventService.getInstance().unsubscribe(ObjectFormEvent.FIELD_ORDER_CHANGED, this.subscriber);
+        EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
     }
 
     private async loadForm(): Promise<void> {
