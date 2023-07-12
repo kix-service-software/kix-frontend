@@ -472,6 +472,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             loadingOptions.filter.push(...filter);
 
             loadingOptions.limit = this.autoCompleteConfiguration?.limit;
+            loadingOptions.searchLimit = this.autoCompleteConfiguration?.limit;
 
             loadingOptions.includes = this.loadingOptions?.includes;
             loadingOptions.expands = this.loadingOptions?.expands;
