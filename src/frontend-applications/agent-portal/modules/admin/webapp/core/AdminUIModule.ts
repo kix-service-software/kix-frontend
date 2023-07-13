@@ -19,6 +19,8 @@ import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { SetupService } from '../../../setup-assistant/webapp/core/SetupService';
 import { SetupStep } from '../../../setup-assistant/webapp/core/SetupStep';
 import { AdministrationSocketClient } from './AdministrationSocketClient';
+import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
+import { SysConfigService } from '../../../sysconfig/webapp/core';
 
 export class UIModule implements IUIModule {
 
@@ -26,45 +28,38 @@ export class UIModule implements IUIModule {
 
     public name: string = 'AdminUIModule';
 
+    private contextObjectTypes = [
+        KIXObjectType.CONFIG_ITEM_CLASS,
+        KIXObjectType.GENERAL_CATALOG_ITEM,
+        KIXObjectType.NOTIFICATION,
+        KIXObjectType.SYSTEM_ADDRESS,
+        KIXObjectType.MAIL_ACCOUNT,
+        KIXObjectType.MAIL_FILTER,
+        KIXObjectType.WEBFORM,
+        KIXObjectType.TRANSLATION,
+        KIXObjectType.FAQ_CATEGORY,
+        KIXObjectType.SYS_CONFIG_OPTION,
+        KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
+        KIXObjectType.TICKET_PRIORITY,
+        KIXObjectType.TICKET_STATE,
+        KIXObjectType.QUEUE,
+        KIXObjectType.TEXT_MODULE,
+        KIXObjectType.TICKET_TYPE,
+        KIXObjectType.USER,
+        KIXObjectType.ROLE,
+        KIXObjectType.PERMISSION,
+        KIXObjectType.JOB,
+        KIXObjectType.IMPORT_EXPORT_TEMPLATE,
+        KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN
+    ];
+
     public unRegister(): Promise<void> {
         throw new Error('Method not implemented.');
     }
 
     public async register(): Promise<void> {
-        const contextObjectTypes = [
-            KIXObjectType.CONFIG_ITEM_CLASS,
-            KIXObjectType.GENERAL_CATALOG_ITEM,
-            KIXObjectType.NOTIFICATION,
-            KIXObjectType.SYSTEM_ADDRESS,
-            KIXObjectType.MAIL_ACCOUNT,
-            KIXObjectType.MAIL_FILTER,
-            KIXObjectType.WEBFORM,
-            KIXObjectType.TRANSLATION,
-            KIXObjectType.FAQ_CATEGORY,
-            KIXObjectType.SYS_CONFIG_OPTION,
-            KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
-            KIXObjectType.TICKET_PRIORITY,
-            KIXObjectType.TICKET_STATE,
-            KIXObjectType.QUEUE,
-            KIXObjectType.TEXT_MODULE,
-            KIXObjectType.TICKET_TYPE,
-            KIXObjectType.USER,
-            KIXObjectType.ROLE,
-            KIXObjectType.PERMISSION,
-            KIXObjectType.JOB,
-            KIXObjectType.IMPORT_EXPORT_TEMPLATE,
-            KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN
-        ];
 
-        const contextDescriptor = new ContextDescriptor(
-            AdminContext.CONTEXT_ID, contextObjectTypes, ContextType.MAIN, ContextMode.DASHBOARD,
-            false, 'admin', ['admin'], AdminContext
-        );
-
-        const adminModules = await AdministrationSocketClient.getInstance().loadAdminCategories().catch(() => []);
-        if (adminModules?.length) {
-            ContextService.getInstance().registerContext(contextDescriptor);
-        }
+        await this.registerAdminContext();
 
         SetupService.getInstance().registerSetupStep(
             new SetupStep('setup-system-settings', 'Translatable#System', 'setup-system-settings',
@@ -75,6 +70,40 @@ export class UIModule implements IUIModule {
                 'kix-icon-gears', 5
             )
         );
+    }
+
+    private async registerAdminContext(): Promise<void> {
+        const adminModuleAllowed = await this.checkAdminModuleAllowed();
+        if (adminModuleAllowed) {
+            const contextDescriptor = new ContextDescriptor(
+                AdminContext.CONTEXT_ID, this.contextObjectTypes, ContextType.MAIN, ContextMode.DASHBOARD,
+                false, 'admin', ['admin'], AdminContext
+            );
+
+            const adminModules = await AdministrationSocketClient.getInstance().loadAdminCategories().catch(() => []);
+            if (adminModules?.length) {
+                ContextService.getInstance().registerContext(contextDescriptor);
+            }
+        }
+    }
+
+    private async checkAdminModuleAllowed(): Promise<boolean> {
+        const currentUser = await AgentSocketClient.getInstance().getCurrentUser(false);
+        let allowed = currentUser.UserID === 1;
+        if (!allowed && Array.isArray(currentUser.RoleIDs)) {
+            const agentPortalConfig = await SysConfigService.getInstance().getAgentPortalConfiguration()
+                .catch(() => null);
+            if (agentPortalConfig?.adminRoleIds?.length) {
+                for (const roleId of currentUser.RoleIDs) {
+                    if (agentPortalConfig?.adminRoleIds.some((rid) => rid === roleId)) {
+                        allowed = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return allowed;
     }
 
 }
