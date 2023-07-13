@@ -39,7 +39,7 @@
         "type": "git",
         "url": "http://git.intra.cape-it.de/Softwareentwicklung/KIXng/frontend/app.git"
     },
-    "author": "c.a.p.e. IT GmbH",
+    "author": "KIX Service Software GmbH",
     "dependencies": {
         "@json-editor/json-editor": "^2.5.4",
         "@lasso/marko-taglib": "^2.0.3",
@@ -72,7 +72,7 @@
         "leaflet.markercluster": "^1.5.1",
         "logform": "2.4.2",
         "marked": "^4.0.19",
-        "marko": "^5.17.5",
+        "marko": "^5.28.0",
         "marko-loader": "^1.5.0",
         "md5": "^2.3.0",
         "redis": "^3.1.2",

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -19,18 +19,14 @@ class Component {
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
+        this.state.useReadonlyStyle = typeof input.useReadonlyStyle !== 'undefined' ? input.useReadonlyStyle : true;
     }
 
     public onInput(input: any): void {
         if (this.article?.ChangeTime !== input.article?.ChangeTime) {
             this.article = input.article;
-
             this.prepareContent();
         }
-    }
-
-    public onMount(): void {
-        this.prepareContent();
     }
 
     public async prepareContent(): Promise<void> {
@@ -41,7 +37,6 @@ class Component {
             if (this.article.ContentType.startsWith('text/plain') && !this.article.bodyAttachment) {
                 this.state.plainText = this.article.Body;
             }
-            this.state.show = true;
         }
     }
 }

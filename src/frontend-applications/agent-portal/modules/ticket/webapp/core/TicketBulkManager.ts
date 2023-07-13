@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -344,7 +344,7 @@ export class TicketBulkManager extends BulkManager {
 
     public async prepareLoadingOptions(
         value: ObjectPropertyValue, loadingOptions: KIXObjectLoadingOptions
-    ): Promise<void> {
+    ): Promise<KIXObjectLoadingOptions> {
         if (value.property === TicketProperty.OWNER_ID || TicketProperty.RESPONSIBLE_ID) {
 
             const queueValue = this.getValues()?.find((v) => v.property === TicketProperty.QUEUE_ID);
@@ -368,6 +368,7 @@ export class TicketBulkManager extends BulkManager {
                 loadingOptions.query = [];
             }
         }
+        return loadingOptions;
     }
 
 }

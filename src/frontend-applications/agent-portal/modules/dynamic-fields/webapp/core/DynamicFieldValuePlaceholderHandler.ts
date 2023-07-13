@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -118,6 +118,16 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
             result = await this.handleShortValue(object, dfValue);
         } else if (dfOptions && dfOptions.match(/^ObjectValue$/i)) {
             result = dfValue ? dfValue.Value : [];
+        } else if (dfOptions && dfOptions.match(/^Object_\d+_.+$/i) && dfValue?.Value?.length) {
+            const dynamicField = await KIXObjectService.loadDynamicField(dfValue.Name, dfValue.ID);
+            if (dynamicField) {
+                const attributePath = dfOptions.replace(/^Object_(\d+_.+)/, '$1');
+                result = await PlaceholderService.getInstance().replaceDFObjectPlaceholder(
+                    attributePath,
+                    dynamicField.FieldType,
+                    dfValue.Value
+                );
+            }
         } else if (dfValue && (dfOptions === '' || dfOptions.match(/^Value$/i))) {
             result = await this.handleValue(object, dfValue);
         }
@@ -132,7 +142,7 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
             }
         }
 
-        const dynamicField = await KIXObjectService.loadDynamicField(dfValue.Name);
+        const dynamicField = await KIXObjectService.loadDynamicField(dfValue.Name, dfValue.ID);
         let result: string = '';
         if (
             dynamicField &&

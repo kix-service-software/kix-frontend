@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -201,8 +201,11 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         for (const property of properties) {
             const formValue = this.formValues.find((fv) => fv.property === property);
 
+            const context = ContextService.getInstance().getActiveContext();
+            const articleId = context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
+            const newArticle = this.objectValueMapper.formContext === FormContext.NEW && articleId;
             const isEdit = this.objectValueMapper.formContext === FormContext.EDIT;
-            const showFormValue = property !== ArticleProperty.TO || isEdit;
+            const showFormValue = property !== ArticleProperty.TO || (isEdit || newArticle);
 
             let showCc = false;
             let showBcc = false;

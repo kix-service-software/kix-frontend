@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -372,10 +372,12 @@ export class ContactFormService extends KIXObjectFormService {
     ): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
         if (property === UserProperty.USER_ACCESS) {
-            const isAgent = Array.isArray(value) ? Number(value.some((v) => v === UserProperty.IS_AGENT)) : 0;
-            parameter.push([UserProperty.IS_AGENT, isAgent]);
-            const isCustomer = Array.isArray(value) ? Number(value.some((v) => v === UserProperty.IS_CUSTOMER)) : 0;
-            parameter.push([UserProperty.IS_CUSTOMER, isCustomer]);
+            if (value?.length) {
+                const isAgent = Array.isArray(value) ? Number(value.some((v) => v === UserProperty.IS_AGENT)) : 0;
+                parameter.push([UserProperty.IS_AGENT, isAgent]);
+                const isCustomer = Array.isArray(value) ? Number(value.some((v) => v === UserProperty.IS_CUSTOMER)) : 0;
+                parameter.push([UserProperty.IS_CUSTOMER, isCustomer]);
+            }
         } else if (!property.match(/_CONTAINER/)) {
             parameter.push([property, value]);
         }
@@ -438,6 +440,11 @@ export class ContactFormService extends KIXObjectFormService {
         const user = await this.loadAssignedUser(this.assignedUserId);
         switch (property) {
             case ContactProperty.EMAIL:
+            case ContactProperty.EMAIL1:
+            case ContactProperty.EMAIL2:
+            case ContactProperty.EMAIL3:
+            case ContactProperty.EMAIL4:
+            case ContactProperty.EMAIL5:
                 if (formContext === FormContext.NEW) {
                     value = null;
                 }

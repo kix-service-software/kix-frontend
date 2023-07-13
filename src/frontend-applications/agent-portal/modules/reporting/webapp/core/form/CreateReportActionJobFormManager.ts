@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -155,8 +155,14 @@ export class CreateReportActionJobFormManager extends ExtendedJobFormManager {
                 definition = reportDefinitions?.length ? reportDefinitions[0] : null;
             }
 
+            const optionName = outputFormatField.options.find((o) => o.option === 'OptionName');
             const field = await ReportFormCreator.createOutputFormatField(definition, outputFormat);
             outputFormatField.options = field.options;
+
+            if (optionName) {
+                outputFormatField.options.push(optionName);
+            }
+
             outputFormatField.defaultValue = field.defaultValue;
             outputFormatField.asStructure = false;
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -322,7 +322,9 @@ export class DynamicFormFieldValue {
         this.value.operator = operator;
         this.isBetween = this.value.operator === SearchOperator.BETWEEN;
         this.isWithin = this.value.operator === SearchOperator.WITHIN;
-        this.isRelativeTime = relativeDateTimeOperators.includes(operator as SearchOperator);
+        this.isRelativeTime = relativeDateTimeOperators.includes(operator as SearchOperator)
+            || this.manager.isRelativDateTimeOperator(operator);
+
         if (this.manager.resetValue) {
             await this.createValueInput();
         }
@@ -377,7 +379,6 @@ export class DynamicFormFieldValue {
                 const tree = await this.doAutocompleteSearch(10, preloadOption[1].toString());
                 this.valueTreeHandler.setTree(tree);
             }
-            /*if (this.isTable) {}*/
         }
     }
 
@@ -455,10 +456,10 @@ export class DynamicFormFieldValue {
                     this.relativeTimeValue = this.value.value[0];
                     this.relativeTimeUnit = this.value.value[1];
                 } else if (typeof this.value.value === 'string') {
-                    const parts = this.value.value.split(/(\d+)/);
+                    const parts = this.value.value.split(/([YMdmhsw])$/);
                     if (parts.length === 3) {
-                        this.relativeTimeValue = parts[1];
-                        this.relativeTimeUnit = parts[2];
+                        this.relativeTimeValue = parts[0];
+                        this.relativeTimeUnit = parts[1];
                     }
                 }
                 const node = TreeUtil.findNode(this.relativeTimeUnitTreeHandler.getTree(), this.relativeTimeUnit);
@@ -692,10 +693,8 @@ export class DynamicFormFieldValue {
                     ? [currentValue.value, Number(this.betweenEndNumberValue)] : null;
             }
         }
-        if (this.isRelativeTime) {
-            if (!isNaN(Number(this.relativeTimeValue)) && this.relativeTimeUnit) {
-                currentValue.value = [this.relativeTimeValue, this.relativeTimeUnit];
-            }
+        if (this.isRelativeTime && this.relativeTimeValue) {
+            currentValue.value = [this.relativeTimeValue, this.relativeTimeUnit];
         }
         if (this.isWithin) {
             if (
@@ -727,8 +726,9 @@ export class DynamicFormFieldValue {
         }
 
         loadingOptions.limit = limit;
+        loadingOptions.searchLimit = limit;
 
-        await this.manager.prepareLoadingOptions(this.value, loadingOptions);
+        loadingOptions = await this.manager.prepareLoadingOptions(this.value, loadingOptions);
 
         if (this.manager.useOwnSearch) {
             tree = await this.manager.searchObjectTree(this.value.property, searchValue, loadingOptions);

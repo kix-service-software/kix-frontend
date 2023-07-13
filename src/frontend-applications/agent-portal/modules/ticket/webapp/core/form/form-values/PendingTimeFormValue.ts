@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,6 +7,7 @@
  * --
  */
 
+import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { DateTimeUtil } from '../../../../../base-components/webapp/core/DateTimeUtil';
 import { DateTimeFormValue } from '../../../../../object-forms/model/FormValues/DateTimeFormValue';
 import { ObjectFormValue } from '../../../../../object-forms/model/FormValues/ObjectFormValue';
@@ -17,6 +18,8 @@ import { TicketService } from '../../TicketService';
 
 export class PendingTimeFormValue extends DateTimeFormValue {
 
+    private defaultValue: string;
+
     public constructor(
         property: string,
         ticket: Ticket,
@@ -24,22 +27,7 @@ export class PendingTimeFormValue extends DateTimeFormValue {
         public parent: ObjectFormValue,
     ) {
         super(property, ticket, objectValueMapper, parent);
-
         this.label = 'Translatable#Pending time';
-
-        ticket.addBinding(TicketProperty.STATE_ID, async (value: number) => {
-            const isPending = await TicketService.isPendingState(value);
-            this.enabled = isPending;
-            this.visible = isPending;
-
-            this.setNewInitialState('enabled', this.enabled);
-            this.setNewInitialState('visible', this.visible);
-
-            this.minDate = DateTimeUtil.getKIXDateTimeString(new Date());
-
-            const pendingDate = await TicketService.getPendingDateDiff();
-            this.setFormValue(isPending ? DateTimeUtil.getKIXDateTimeString(pendingDate) : null);
-        });
     }
 
     public async initFormValue(): Promise<void> {
@@ -48,6 +36,34 @@ export class PendingTimeFormValue extends DateTimeFormValue {
         this.visible = isPending;
 
         this.isSortable = false;
+
+        await super.initFormValue();
+
+        this.object.addBinding(TicketProperty.STATE_ID, async (value: number) => {
+            const isPending = await TicketService.isPendingState(value);
+            this.enabled = isPending;
+            this.visible = isPending;
+
+            this.setNewInitialState('enabled', this.enabled);
+            this.setNewInitialState('visible', this.visible);
+
+            // this.defaultValue contains the origin value of the FormFieldConfiguration
+            // it's needed to calculate the right pending time
+            const pendingDate = await TicketService.getPendingDateDiff(this.defaultValue || this.value);
+            this.setFormValue(DateTimeUtil.getKIXDateTimeString(pendingDate));
+
+            this.minDate = DateTimeUtil.getKIXDateTimeString(new Date());
+        });
+    }
+
+    public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
+        this.defaultValue = field.defaultValue?.value;
+        return super.initFormValueByField(field);
+    }
+
+    public async setFormValue(value: any, force?: boolean): Promise<void> {
+        value = DateTimeUtil.calculateRelativeDate(value);
+        await super.setFormValue(value, force);
     }
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -131,6 +131,8 @@ export class CacheService {
         if (ids?.length === 2) {
             await this.deleteKeys(`${KIXObjectType.CURRENT_USER}_${ids[0]}`);
         }
+
+        this.deleteKeys(event.Namespace);
     }
 
     public async deleteKeys(type: string, force: boolean = false): Promise<void> {

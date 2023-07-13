@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -37,12 +37,21 @@ export class TableValue {
     }
 
     public async initDisplayText(cell: Cell): Promise<void> {
-        const object = cell.getRow().getRowObject<KIXObject>().getObject();
-
-        if (!this.displayValue && object) {
-            this.displayValue = await LabelService.getInstance().getDisplayText(
-                object, this.property, object[this.property], cell.getColumnConfiguration()?.translatable
+        if (!this.displayValue) {
+            const rowObject = cell.getRow().getRowObject<KIXObject>();
+            const rowTableValue = rowObject.getValues().find(
+                (v) => v.property === cell.getProperty()
             );
+            if (rowTableValue?.displayValue) {
+                this.displayValue = rowTableValue.displayValue;
+            } else {
+                const object = rowObject.getObject();
+                if (!this.displayValue && object) {
+                    this.displayValue = await LabelService.getInstance().getDisplayText(
+                        object, this.property, object[this.property], cell.getColumnConfiguration()?.translatable
+                    );
+                }
+            }
         }
     }
 

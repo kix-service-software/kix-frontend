@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -37,7 +37,8 @@ export class TicketContext extends Context {
     public queueId: number;
     public filterValue: string;
 
-    private currentLimit: number = 20;
+    private currentLimit: number;
+
     private subscriber: IEventSubscriber;
 
     public async initContext(urlParams?: URLSearchParams): Promise<void> {
@@ -141,7 +142,7 @@ export class TicketContext extends Context {
         }
     }
 
-    private async loadTickets(silent: boolean = false, limit: number = 20): Promise<void> {
+    private async loadTickets(silent: boolean = false, limit?: number): Promise<void> {
         EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.TICKET);
 
         const loadingOptions = new KIXObjectLoadingOptions(
@@ -167,7 +168,7 @@ export class TicketContext extends Context {
         loadingOptions.limit = limit;
 
         if (!this.queueId) {
-            loadingOptions.sortOrder = '-Ticket.Age:numeric';
+            loadingOptions.sortOrder = 'Ticket.-Age:numeric';
 
             if (!this.filterValue) {
                 loadingOptions.filter.push(new FilterCriteria(
@@ -187,8 +188,11 @@ export class TicketContext extends Context {
         const additionalIncludes = this.getAdditionalInformation(AdditionalContextInformation.INCLUDES) || [];
         loadingOptions.includes.push(...additionalIncludes);
 
+        this.prepareContextLoadingOptions(KIXObjectType.TICKET, loadingOptions);
+
         const tickets = await KIXObjectService.loadObjects(
-            KIXObjectType.TICKET, null, loadingOptions, null, false, undefined, undefined, this.contextId
+            KIXObjectType.TICKET, null, loadingOptions, null, false, undefined, undefined,
+            this.contextId + KIXObjectType.TICKET
         ).catch((error) => []);
 
         this.setObjectList(KIXObjectType.TICKET, tickets, silent);

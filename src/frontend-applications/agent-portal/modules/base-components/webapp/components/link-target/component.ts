@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -23,7 +23,7 @@ class Component {
 
     public onInput(input: ComponentState): void {
         this.state.routingConfiguration = input.routingConfiguration ? { ...input.routingConfiguration } : null;
-        this.state.objectId = input.objectId;
+        this.state.objectId = input.objectId || this.state.routingConfiguration?.replaceObjectId;
         this.state.object = input.object;
         this.setURL();
     }
@@ -31,6 +31,7 @@ class Component {
     private async setURL(): Promise<void> {
         this.state.loading = true;
         if (this.state.routingConfiguration) {
+            this.setContextIdIfNecessary();
             this.state.url = await ContextService.getInstance().getURI(
                 this.state.routingConfiguration.contextId, this.state.objectId,
                 this.state.routingConfiguration.params
@@ -47,12 +48,28 @@ class Component {
         this.state.loading = false;
     }
 
+    private setContextIdIfNecessary(): void {
+        if (!this.state.routingConfiguration.contextId &&
+            this.state.routingConfiguration.contextMode &&
+            this.state.routingConfiguration.objectType
+        ) {
+            const descriptors = ContextService.getInstance().getContextDescriptors(
+                this.state.routingConfiguration.contextMode,
+                this.state.routingConfiguration.objectType
+            );
+            // use id of first found
+            if (descriptors?.length) {
+                this.state.routingConfiguration.contextId = descriptors[0].contextId;
+            }
+        }
+    }
+
     public async linkClicked(event: any): Promise<void> {
         if (event.preventDefault) {
             event.preventDefault();
         }
 
-        if (this.state.routingConfiguration) {
+        if (this.state.routingConfiguration?.contextId) {
             RoutingService.getInstance().routeTo(this.state.routingConfiguration, this.state.objectId);
         }
     }

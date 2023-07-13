@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -214,8 +214,8 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
     public async prepareLoadingOptions(
         value: ObjectPropertyValue, loadingOptions: KIXObjectLoadingOptions
-    ): Promise<void> {
-        return;
+    ): Promise<KIXObjectLoadingOptions> {
+        return loadingOptions;
     }
 
     public async hasDefinedValues(): Promise<boolean> {
@@ -236,6 +236,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         }
 
         await this.checkProperties();
+        // TODO: do something with validate results (show them?)
         await this.validate();
         if (!silent) {
             this.notifyListeners();
@@ -676,6 +677,10 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
             this.notifyListeners();
         }
+    }
+
+    public isRelativDateTimeOperator(operator: string): boolean {
+        return;
     }
 
 }

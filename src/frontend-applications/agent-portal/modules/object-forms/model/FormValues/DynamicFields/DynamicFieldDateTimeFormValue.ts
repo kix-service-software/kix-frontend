@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -40,7 +40,10 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue {
 
     public async initFormValue(): Promise<void> {
         await super.initFormValue();
+        await this.setDateConfiguration();
+    }
 
+    private async getDynamicFieldConfig(): Promise<any> {
         const dynamicField = await KIXObjectService.loadDynamicField(this.dfName);
 
         if (dynamicField.FieldType === DynamicFieldTypes.DATE) {
@@ -49,14 +52,12 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue {
             this.inputType === InputFieldTypes.DATE_TIME;
         }
 
-        const config = dynamicField.Config;
-
-        this.setDateConfiguration(config);
-
-        this.value = this.object[this.property];
+        return dynamicField.Config;
     }
 
-    private setDateConfiguration(config: any): void {
+    private async setDateConfiguration(): Promise<void> {
+        const config = await this.getDynamicFieldConfig();
+
         switch (config?.DateRestriction) {
             case 'DisablePastDates':
                 this.setDatesLimit(config, true, false);
@@ -79,9 +80,7 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue {
         }
 
         if (!this.value && offset !== null && !this.isEmpty) {
-            const date = new Date();
-            date.setSeconds(date.getSeconds() + offset);
-            this.value = DateTimeUtil.getKIXDateTimeString(date);
+            this.value = this.getOffsetValue(offset);
         }
     }
 
@@ -124,4 +123,14 @@ export class DynamicFieldDateTimeFormValue extends DateTimeFormValue {
         return number;
     }
 
+    public async setFormValue(value: any, force?: boolean): Promise<void> {
+        value = DateTimeUtil.calculateRelativeDate(value);
+        await super.setFormValue(value, force);
+    }
+
+    protected getOffsetValue(offset: number): string {
+        const date = new Date();
+        date.setSeconds(date.getSeconds() + offset);
+        return DateTimeUtil.getKIXDateTimeString(date);
+    }
 }

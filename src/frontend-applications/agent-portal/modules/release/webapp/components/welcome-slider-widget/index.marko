@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
@@ -7,92 +7,114 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<widget title=state.translations["Translatable#Welcome to KIX 18"]>
+<widget title=`${state.translations["Translatable#Welcome to KIX 18"]} v28`>
     <@content>
-        <div.slider-widget>
-            <div.slider-menu>
+        <div class="slider-widget">
+            <div class="slider-menu">
                 <for|sliderElement, index| of=state.sliderList>
                     <span
                         class={
-                            active: index === state.activeSliderIndex
+                            active: index === state.activeSliderIndex,
                         }
-                        title=state.translations[sliderElement.title]
-                        on-click("showSlider", index)/>
+                        title=(state.translations[sliderElement.title])
+                        on-click("showSlider", index)
+                    />
                 </for>
             </div>
-            <div.slider-image key="slider-image">
+            <div key="slider-image" class="slider-image">
                 <if(state.activeSlider && state.activeSlider.image)>
                     <if(state.activeSlider.imageIsBase64)>
                         <img
-                            alt=state.translations[state.activeSlider.title]
-                            src=state.activeSlider.image/>
+                            alt=(state.translations[state.activeSlider.title])
+                            src=(state.activeSlider.image)
+                        >
                     </if>
                     <else>
                         <img
-                            alt=state.translations[state.activeSlider.title]
+                            alt=(state.translations[state.activeSlider.title])
                             src=(
                                 "/static/img/release/" +
                                 state.activeSlider.image
-                            )/>
+                            )
+                        >
                     </else>
                 </if>
             </div>
-            <div.slider-block>
+            <div class="slider-block">
                 <if(state.activeSliderIndex !== 0)>
-                    <div.slider-button.useable
-                        title=state.translations["Translatable#previous"]
-                        on-click("previousSlider")>
-                        <span.kix-icon-nook-left/>
+                    <div
+                        title=(state.translations["Translatable#previous"])
+                        on-click("previousSlider")
+                        class="slider-button useable"
+                    >
+                        <span class="kix-icon-nook-left"/>
                     </div>
                 </if>
                 <else>
-                    <div.slider-button/>
+                    <div class="slider-button"/>
                 </else>
-                <div.slider-content key="slider-content">
+                <div key="slider-content" class="slider-content">
                     <if(state.activeSlider)>
-                        <h1.slider-content-title>
-                            <translation-string pattern=state.activeSlider.title/>
+                        <h1 class="slider-content-title">
+                            <translation-string pattern=(
+                                state.activeSlider.title
+                            )/>
                             <if(
                                 state.activeSliderIndex === 0 &&
                                 state.userString
-                            )>${" " + state.userString}</if>
+                            )>
+                                ${" " + state.userString}
+                            </if>
                         </h1>
-                        <div.slider-content-text>
-                            <translation-string pattern=state.activeSlider.text/>
+                        <div class="slider-content-text">
+                            <translation-string pattern=(
+                                state.activeSlider.text
+                            )/>
                         </div>
                     </if>
                     <if(
-                        state.activeSliderIndex ===
-                        state.sliderList.length - 1
+                        state.activeSliderIndex === state.sliderList.length - 1
                     )>
-                        <div.slider-content-buttons>
-                            <button.kix-button.submit-button
+                        <div class="slider-content-buttons">
+                            <button
                                 type="button"
-                                title=state.translations["Translatable#Let's go"]
-                                on-click("closeReleaseInfos")>
-                                <span.kix-icon-check/>
+                                title=(
+                                    state.translations["Translatable#Let's go"]
+                                )
+                                on-click("closeReleaseInfos")
+                                class="kix-button submit-button"
+                            >
+                                <span class="kix-icon-check"/>
                                 <translation-string pattern="Translatable#Let's go"/>
                             </button>
                         </div>
                     </if>
                     <else-if(state.activeSliderIndex === 0)>
-                        <div.slider-content-buttons.start-buttons>
-                            <button.kix-button
+                        <div class="slider-content-buttons start-buttons">
+                            <button
                                 type="button"
-                                title=state.translations[
-                                    "Translatable#No, thank you"
-                                ]
-                                on-click("closeReleaseInfos")>
-                                <span.kix-icon-close/>
+                                title=(
+                                    state.translations[
+                                        "Translatable#No, thank you"
+                                    ]
+                                )
+                                on-click("closeReleaseInfos")
+                                class="kix-button"
+                            >
+                                <span class="kix-icon-close"/>
                                 <translation-string pattern="Translatable#No, thank you"/>
                             </button>
-                            <button.kix-button
+                            <button
                                 type="button"
-                                title=state.translations[
-                                    "Translatable#Yes, please"
-                                ]
-                                on-click("showSlider", 1)>
-                                <span.kix-icon-check/>
+                                title=(
+                                    state.translations[
+                                        "Translatable#Yes, please"
+                                    ]
+                                )
+                                on-click("showSlider", 1)
+                                class="kix-button"
+                            >
+                                <span class="kix-icon-check"/>
                                 <translation-string pattern="Translatable#Yes, please"/>
                             </button>
                         </div>
@@ -102,15 +124,44 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     state.activeSliderIndex > 0 &&
                     state.activeSliderIndex < state.sliderList.length - 1
                 )>
-                    <div.slider-button.useable
-                        title=state.translations["Translatable#next"]
-                        on-click("nextSlider")>
-                        <span.kix-icon-nook-right/>
+                    <div
+                        title=(state.translations["Translatable#next"])
+                        on-click("nextSlider")
+                        class="slider-button useable"
+                    >
+                        <span class="kix-icon-nook-right"/>
                     </div>
                 </if>
                 <else>
-                    <div.slider-button/>
+                    <div class="slider-button"/>
                 </else>
+            </div>
+            <div
+                class="p-3 d-flex flex-column align-items-center justify-content-evenly"
+                id="release-information"
+            >
+                <div class="mb-3 h3" id="release-information-title">
+                    <translation-string pattern="Translatable#Latest releases"/>
+                </div>
+                <ul>
+                    <for|version| of=state.kixReleaseVersions>
+                        <li>
+                            <if(version.url && version.url.length > 0)>
+                                <a href=version.url target="_blank">
+                                    <p class="h5">
+                                        ${version.label}
+                                    </p>
+                                </a>
+                            </if>
+                            <else>
+                                <p class="h5">
+                                    ${version.label}
+                                </p>
+                            </else>
+                        </li>
+                    </for>
+
+                </ul>
             </div>
         </div>
     </@content>

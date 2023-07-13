@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2023 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,6 +7,7 @@
  * --
  */
 
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';
 import { FormValueProperty } from '../../FormValueProperty';
@@ -22,6 +23,10 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
     public isEmpty: boolean = false;
 
     private initPromise: Promise<void>;
+
+    private formValuesVisible: boolean = false;
+
+    protected defaultValue: any;
 
     public constructor(
         public property: string,
@@ -68,9 +73,16 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
                 await this.initCountValues();
                 await super.initFormValue();
 
+                if (this.enabled && this.formValues?.length) {
+                    for (const fv of this.formValues) {
+                        fv.enabled = true;
+                        fv.setNewInitialState(FormValueProperty.VISIBLE, true);
+                    }
+                }
+
                 this.initPromise = null;
 
-                this.visible = this.formValues.length === 0;
+                await this.setVisibility(this.formValuesVisible);
 
                 this.setNewInitialState(FormValueProperty.VISIBLE, this.visible);
 
@@ -79,6 +91,12 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
         }
 
         return this.initPromise;
+    }
+
+    public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
+        await super.initFormValueByField(field);
+        this.defaultValue = this.value;
+        this.formValuesVisible = this.visible;
     }
 
     public async initCountValues(): Promise<void> {
@@ -91,11 +109,6 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
         if (this.value?.length) {
             for (const v of this.value) {
                 await this.addFormValue(this.instanceId, v, true);
-
-                const formValue = this.formValues[this.formValues.length - 1];
-                if (formValue) {
-                    formValue.value = v;
-                }
             }
         }
 
@@ -107,7 +120,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
     protected async addDefaultFormValues(): Promise<void> {
         const startIndex = this.formValues?.length || 0;
         for (let i = startIndex; i < this.countDefault; i++) {
-            await this.addFormValue(null, null);
+            await this.addFormValue(null, null, true);
         }
     }
 
@@ -146,7 +159,6 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
     public async addFormValue(instanceId: string, value: any, force?: boolean): Promise<void> {
         if (this.formValueConstructor && (this.canAddValue(instanceId) || force)) {
             const dfValue = new DynamicFieldValue();
-            dfValue.Value = value;
             dfValue.Name = this.dfName;
             this.dfValues.push(dfValue);
 
@@ -156,7 +168,9 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
             fv.isSetInBackground = this.isSetInBackground;
             if (!fv.isSetInBackground) {
                 fv.visible = true;
+                fv.setNewInitialState(FormValueProperty.VISIBLE, true);
             }
+
             fv.isSortable = false;
             fv.readonly = this.readonly;
             fv.required = this.required;
@@ -167,15 +181,16 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
             await fv.initFormValue();
             this.formValues = [...this.formValues, fv];
 
+            fv.setInitialState();
+            await fv.setFormValue(value || this.defaultValue, force);
+
+            this.setDFValue(true);
+
+            await this.setVisibility(this.formValuesVisible);
+
             fv.addPropertyBinding(FormValueProperty.VALUE, () => {
                 this.setDFValue();
             });
-
-            fv.setInitialState();
-            this.setDFValue();
-
-            this.visible = this.formValues.length === 0;
-            this.setNewInitialState(FormValueProperty.VISIBLE, this.visible);
         }
     }
 
@@ -199,7 +214,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
         this.setNewInitialState(FormValueProperty.VISIBLE, this.visible);
     }
 
-    public setDFValue(): void {
+    public setDFValue(force?: boolean): void {
         const value = [];
         const dfValues = this.dfValues;
         if (Array.isArray(dfValues)) {
@@ -214,7 +229,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
             }
         }
 
-        this.setFormValue(value);
+        this.setFormValue(value, force);
     }
 
     protected async applyCountMax(): Promise<void> {
@@ -242,7 +257,32 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
     }
 
     public async show(): Promise<void> {
-        return;
+        await this.setVisibility(true);
+        this.formValuesVisible = true;
+    }
+
+    public async hide(): Promise<void> {
+        await super.hide();
+        this.formValuesVisible = false;
+    }
+
+    private async setVisibility(show?: boolean): Promise<void> {
+        if (show) {
+            this.visible = this.formValues.length === 0;
+            for (const fv of this.formValues) {
+                if (this.visible) {
+                    await fv.hide();
+                } else {
+                    await fv.show();
+                }
+            }
+        } else {
+            this.visible = false;
+            for (const fv of this.formValues) {
+                await fv.hide();
+            }
+        }
+        this.setNewInitialState(FormValueProperty.VISIBLE, this.visible);
     }
 
 }

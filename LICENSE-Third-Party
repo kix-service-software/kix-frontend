@@ -183,7 +183,7 @@
 ├─ @kix/frontend@19.0.0
 │  ├─ licenses: GPL-3.0*
 │  ├─ repository: https://github.com/cape-it/kix-frontend.git
-│  ├─ publisher: c.a.p.e. IT GmbH
+│  ├─ publisher: 2006-2023 KIX Service Software GmbH
 │  ├─ path: .
 │  └─ licenseFile: LICENSE
 ├─ @lasso/marko-taglib@2.0.3
