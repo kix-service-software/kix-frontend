@@ -112,10 +112,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             date.setHours(0, 0, 0, 0);
         } else if (isDateTime) {
             const dateTimeString = `${this.state.dateValue} ${this.state.timeValue}`;
-            const timestamp = Date.parse(dateTimeString);
-            if (!isNaN(timestamp)) {
-                date = new Date(dateTimeString);
-            }
+            date = new Date(dateTimeString);
         }
 
         if (isDate || (isDateTime && (this.timeValueChanged || hasValue))) {
