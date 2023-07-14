@@ -8,9 +8,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <if(state.field)>
-    <input
-        type="checkbox"
-        checked=state.checked
-        on-click("checkboxClicked")
-        disabled=state.field.readonly/>
+    <div class="form-check form-switch">
+        <input
+            type="checkbox"
+            checked=state.checked
+            on-click("checkboxClicked")
+            disabled=(state.field.readonly)
+            class="form-check-input checkbox-input"
+        >
+    </div>
 </if>
