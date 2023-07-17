@@ -22,11 +22,6 @@ import { FormFieldOption } from '../../model/configuration/FormFieldOption';
 import { FormFieldOptions } from '../../model/configuration/FormFieldOptions';
 import { FormFieldValue } from '../../model/configuration/FormFieldValue';
 import { ObjectReferenceOptions } from '../../modules/base-components/webapp/core/ObjectReferenceOptions';
-import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
-import { FilterCriteria } from '../../model/FilterCriteria';
-import { SearchOperator } from '../search/model/SearchOperator';
-import { FilterDataType } from '../../model/FilterDataType';
-import { FilterType } from '../../model/FilterType';
 import { TreeNode } from '../base-components/webapp/core/tree';
 import { DispatchingType } from './model/DispatchingType';
 import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
@@ -97,7 +92,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'mail-account-edit-form-field-accept-header',
-                'Translatable#Accept KIX Header', MailAccountProperty.TRUSTED, 'checkbox-input', true,
+                'Translatable#Accept KIX Header', MailAccountProperty.TRUSTED, 'checkbox-input', false,
                 'Translatable#Helptext_Admin_MailAccountCreate_AcceptKIXHeader', undefined,
                 new FormFieldValue(false)
             )
