@@ -48,11 +48,6 @@ export class UserObjectFormValue extends SelectObjectFormValue {
     public async initFormValue(): Promise<void> {
         await super.initFormValue();
         if (this.object && this.property) {
-            const userId = this.object[this.property];
-            if (userId) {
-                await this.setFormValue(userId, true);
-            }
-
             if (this.objectValueMapper?.object) {
                 this.objectBindingIds = [
                     this.objectValueMapper.object.addBinding(TicketProperty.QUEUE_ID, () => {
@@ -65,7 +60,7 @@ export class UserObjectFormValue extends SelectObjectFormValue {
 
         this.setLoadingOptions();
 
-        await this.loadInitialUser();
+        this.loadInitialUser();
     }
 
     public async setLoadingOptions(): Promise<void> {
@@ -118,7 +113,7 @@ export class UserObjectFormValue extends SelectObjectFormValue {
     }
 
     protected async loadInitialUser(): Promise<void> {
-        if (this.enable) {
+        if (this.enabled) {
             this.loadingOptions.limit = 10;
             this.loadingOptions.searchLimit = 10;
             const users = await KIXObjectService.loadObjects<User>(KIXObjectType.USER, null, this.loadingOptions)

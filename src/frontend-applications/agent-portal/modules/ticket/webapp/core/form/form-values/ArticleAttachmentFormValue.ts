@@ -53,14 +53,13 @@ export class ArticleAttachmentFormValue extends ObjectFormValue<string> {
 
         const context = ContextService.getInstance().getActiveContext();
         const useRefArticleAttachments = context?.getAdditionalInformation('USE_REFERENCED_ATTACHMENTS');
-        const refArticleId = context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
-        if (useRefArticleAttachments && refArticleId) {
-            const refTicketId = context?.getObjectId();
-            const refArticle = await this.loadReferencedArticle(Number(refTicketId), refArticleId);
-            if (refArticle) {
+        if (useRefArticleAttachments) {
+            const article = await this.getReferencedArticle();
+            if (article) {
                 const attachments = await this.getRefAttachments(
-                    refArticle.getAttachments(), refArticleId, Number(refTicketId)
+                    article.getAttachments(), article.ArticleID, article.TicketID
                 );
+
                 if (attachments?.length) {
                     const newValue = attachments;
                     if (Array.isArray(this.value) && this.value.length) {
@@ -70,6 +69,19 @@ export class ArticleAttachmentFormValue extends ObjectFormValue<string> {
                 }
             }
         }
+    }
+
+    private async getReferencedArticle(): Promise<Article> {
+        const context = ContextService.getInstance().getActiveContext();
+        let article = context.getAdditionalInformation('REFERENCED_ARTICLE');
+
+        const refArticleId = context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
+        if (!article && refArticleId) {
+            const refTicketId = context?.getObjectId();
+            article = await this.loadReferencedArticle(Number(refTicketId), refArticleId);
+        }
+
+        return article;
     }
 
     private async loadReferencedArticle(refTicketId: number, refArticleId: number): Promise<Article> {
