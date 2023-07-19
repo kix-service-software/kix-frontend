@@ -58,18 +58,24 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         await super.initFormValue();
 
         if (!this.value) {
-            const context = ContextService.getInstance().getActiveContext();
-            const refArticleId = context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
-            if (refArticleId) {
-                const refTicketId = context?.getObjectId();
-                const refArticle = await this.loadReferencedArticle(Number(refTicketId), refArticleId);
-                if (refArticle) {
-                    this.value = refArticle?.ChannelID;
-                }
-            }
+            const article = await this.getReferencedArticle();
+            this.value = article?.ChannelID;
         }
 
         await this.setChannelFields(this.value);
+    }
+
+    private async getReferencedArticle(): Promise<Article> {
+        const context = ContextService.getInstance().getActiveContext();
+        let article = context.getAdditionalInformation('REFERENCED_ARTICLE');
+
+        const refArticleId = context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
+        if (!article && refArticleId) {
+            const refTicketId = context?.getObjectId();
+            article = await this.loadReferencedArticle(Number(refTicketId), refArticleId);
+        }
+
+        return article;
     }
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {

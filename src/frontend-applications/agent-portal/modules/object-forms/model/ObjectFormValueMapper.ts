@@ -101,7 +101,8 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         this.fieldOrder = [...this.formFieldOrder];
 
         const startInitFormValues = Date.now();
-        await Promise.all(this.initFormValues());
+        // await Promise.all(this.initFormValues());
+        await this.initFormValues();
         const endInitFormValues = Date.now();
         console.debug(`Init Form Values: ${endInitFormValues - startInitFormValues}ms`);
 
@@ -136,14 +137,26 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         }
     }
 
-    protected initFormValues(formValues = this.formValues): Array<Promise<void>> {
+    protected async initFormValues(formValues = this.formValues): Promise<Array<Promise<void>>> {
         const promises = [];
         for (const fv of formValues) {
 
-            promises.push(fv.initFormValue());
+            // promises.push(fv.initFormValue());
 
-            if (fv.formValues?.length) {
-                promises.push(...this.initFormValues(fv.formValues));
+            // if (fv.formValues?.length) {
+            //     promises.push(...this.initFormValues(fv.formValues));
+            // }
+
+            if (fv.enabled) {
+                const start = Date.now();
+                await fv.initFormValue();
+                const end = Date.now();
+
+                console.debug(`Init Formvalue (${fv.property} - ${(fv as any).dfName}): ${end - start}ms`);
+
+                if (fv.formValues?.length) {
+                    await this.initFormValues(fv.formValues);
+                }
             }
         }
 
@@ -184,8 +197,10 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
     }
 
     protected async mapFormField(field: FormFieldConfiguration, object: T): Promise<void> {
+        const startMapFormField = Date.now();
         let formValue = this.findFormValue(field.property);
         if (!formValue) {
+            const startCreateFormValue = Date.now();
             if (field.property === KIXObjectProperty.DYNAMIC_FIELDS) {
                 const dfValue = this.findFormValue(KIXObjectProperty.DYNAMIC_FIELDS);
                 const nameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
@@ -198,14 +213,27 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
             } else {
                 formValue = await this.createFormValue(field.property, object);
             }
+
+            const endCreateFormValue = Date.now();
+            console.debug(`createFormValue (${formValue.property} - ${(formValue as any).dfName}): ${endCreateFormValue - startCreateFormValue}ms`);
         }
 
         for (const mapperExtension of this.extensions) {
             if (formValue) {
+                const startExtension = Date.now();
                 await mapperExtension.initFormValueByField(field, formValue);
+                const endExtension = Date.now();
+                console.debug(`mapperExtension (${mapperExtension?.constructor?.name}): ${endExtension - startExtension}ms`);
             }
         }
+
+        const startInit = Date.now();
         await formValue?.initFormValueByField(field);
+        const endInit = Date.now();
+        console.debug(`initFormValueByField (${formValue.property} - ${(formValue as any).dfName}): ${endInit - startInit}ms`);
+
+        const endMapFormField = Date.now();
+        console.debug(`mapFormField (${formValue.property}): ${endMapFormField - startMapFormField}ms`);
     }
 
     protected async createFormValue(property: string, object: T): Promise<ObjectFormValue> {
@@ -357,6 +385,7 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
 
     private async applyPropertyInstruction(instruction: PropertyInstruction): Promise<void> {
         const formValue = this.findFormValue(instruction.property);
+
         if (formValue) {
 
             const instructions = instruction.instructionOrder.sort((a, b) => {
