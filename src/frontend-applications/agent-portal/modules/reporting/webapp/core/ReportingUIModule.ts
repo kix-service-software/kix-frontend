@@ -41,7 +41,7 @@ import { ReportingJobFormManager } from './form/ReportingJobFormManager';
 
 export class UIModule implements IUIModule {
 
-    public priority: number = 900;
+    public priority: number = 50001;
 
     public name: string = 'ReportingUIModule';
 
