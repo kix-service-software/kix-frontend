@@ -18,6 +18,7 @@ import { ActionFactory } from '../../../../modules/base-components/webapp/core/A
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { TicketDetailsContext } from './context';
+import { TicketNotificationHandler } from './TicketNotificationHandler';
 
 export class UIModule implements IUIModule {
 
@@ -35,6 +36,8 @@ export class UIModule implements IUIModule {
 
         this.registerContexts();
         this.registerTicketActions();
+
+        TicketNotificationHandler.getInstance();
     }
 
     private async registerContexts(): Promise<void> {

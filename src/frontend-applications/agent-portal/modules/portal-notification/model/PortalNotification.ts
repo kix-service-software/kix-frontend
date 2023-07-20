@@ -24,7 +24,9 @@ export class PortalNotification {
         public teaserText: string = '',
         public fullText: string = '',
         public keywords: string = '',
-        public usageContext: string[] = []
+        public usageContext: string[] = [],
+        public callback?: (notification: PortalNotification) => void,
+        public data?: any
     ) {
         switch (type) {
             case PortalNotificationType.ADVICE:
