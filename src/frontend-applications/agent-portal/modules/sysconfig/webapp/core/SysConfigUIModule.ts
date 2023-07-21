@@ -37,7 +37,7 @@ export class UIModule implements IUIModule {
         throw new Error('Method not implemented.');
     }
 
-    public priority: number = 800;
+    public priority: number = 100;
 
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(SysConfigService.getInstance());

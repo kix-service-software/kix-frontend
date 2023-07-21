@@ -19,6 +19,7 @@ export class AgentPortalConfiguration implements IConfiguration {
         public constructor(
                 public preloadObjects: Array<KIXObjectType | string> = [],
                 public defaultPageSize: number = 20,
+                public adminRoleIds: number[] = [],
                 public id: string = AgentPortalConfiguration.CONFIGURATION_ID,
                 public name: string = 'Agent Portal Configuration',
                 public type: string = 'Agent Portal',
