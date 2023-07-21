@@ -25,10 +25,6 @@ import { FilterDataType } from '../../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../../model/FilterType';
 import { SystemAddress } from '../../../../../system-address/model/SystemAddress';
 import addrparser from 'address-rfc2822';
-import { ArticleProperty } from '../../../../model/ArticleProperty';
-import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
-import { Article } from '../../../../model/Article';
-import { ArticleLoadingOptions } from '../../../../model/ArticleLoadingOptions';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { FormContext } from '../../../../../../model/configuration/FormContext';
 

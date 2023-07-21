@@ -31,14 +31,10 @@ export class CustomerVisibleFormValue extends BooleanFormValue {
 
     public async initFormValue(): Promise<void> {
         await super.initFormValue();
-        const context = ContextService.getInstance().getActiveContext();
-        const refArticleId = context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
-        if (refArticleId) {
-            const refTicketId = context?.getObjectId();
-            const refArticle = await this.loadReferencedArticle(Number(refTicketId), refArticleId);
-            if (refArticle) {
-                this.value = refArticle?.CustomerVisible;
-            }
+
+        const article = await this.getReferencedArticle();
+        if (article) {
+            this.value = article?.CustomerVisible;
         }
 
         const ticket = this.objectValueMapper?.object ? this.objectValueMapper.object as Ticket : null;
@@ -68,6 +64,19 @@ export class CustomerVisibleFormValue extends BooleanFormValue {
         this.initialReadonly = this.readonly;
 
         return this.setVisibleIfNecessary();
+    }
+
+    private async getReferencedArticle(): Promise<Article> {
+        const context = ContextService.getInstance().getActiveContext();
+        let article: Article = context?.getAdditionalInformation('REFERENCED_ARTICLE');
+
+        const refArticleId = context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
+        if (!article && refArticleId) {
+            const refTicketId = context?.getObjectId();
+            article = await this.loadReferencedArticle(Number(refTicketId), refArticleId);
+        }
+
+        return article;
     }
 
     public setInitialState(): void {
