@@ -61,7 +61,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             eventSubscriberId: IdService.generateDateBasedId('object-form'),
             eventPublished: async (data: Context | any, eventId: string): Promise<void> => {
                 if (
-                    eventId === FormEvent.OBJECT_FORM_HANDLER_CHANGED &&
+                    (
+                        eventId === FormEvent.OBJECT_FORM_HANDLER_CHANGED ||
+                        eventId === ObjectFormEvent.FORM_VALUE_ADDED
+                    ) &&
                     data.instanceId === this.context.instanceId
                 ) {
                     this.state.prepared = false;
@@ -80,6 +83,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().subscribe(FormEvent.OBJECT_FORM_HANDLER_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(ObjectFormEvent.FIELD_ORDER_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
+        EventService.getInstance().subscribe(ObjectFormEvent.FORM_VALUE_ADDED, this.subscriber);
 
         BrowserUtil.toggleLoadingShield('OBJECT_FORM_SHIELD', true);
         setTimeout(() => BrowserUtil.toggleLoadingShield('OBJECT_FORM_SHIELD', false), 250);
@@ -88,7 +92,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(FormEvent.OBJECT_FORM_HANDLER_CHANGED, this.subscriber);
         EventService.getInstance().unsubscribe(ObjectFormEvent.FIELD_ORDER_CHANGED, this.subscriber);
-        EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
+        EventService.getInstance().unsubscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
+        EventService.getInstance().unsubscribe(ObjectFormEvent.FORM_VALUE_ADDED, this.subscriber);
     }
 
     private async loadForm(): Promise<void> {

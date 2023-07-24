@@ -16,6 +16,7 @@ import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { ClientStorageService } from '../../base-components/webapp/core/ClientStorageService';
 import { EventService } from '../../base-components/webapp/core/EventService';
+import { KIXObjectService } from '../../base-components/webapp/core/KIXObjectService';
 import { ValidationResult } from '../../base-components/webapp/core/ValidationResult';
 import { DynamicFormFieldOption } from '../../dynamic-fields/webapp/core';
 import { ObjectFormHandler } from '../webapp/core/ObjectFormHandler';
@@ -384,7 +385,17 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
     }
 
     private async applyPropertyInstruction(instruction: PropertyInstruction): Promise<void> {
-        const formValue = this.findFormValue(instruction.property);
+        let formValue = this.findFormValue(instruction.property);
+
+        if (!formValue) {
+            const dfName = KIXObjectService.getDynamicFieldName(instruction.property);
+            if (dfName) {
+                const dfFormValue = this.findFormValue(KIXObjectProperty.DYNAMIC_FIELDS);
+                if (dfFormValue) {
+                    formValue = await (dfFormValue as DynamicFieldObjectFormValue)?.createFormValue(dfName);
+                }
+            }
+        }
 
         if (formValue) {
 

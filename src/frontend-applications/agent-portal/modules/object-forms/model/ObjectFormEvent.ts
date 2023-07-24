@@ -17,6 +17,8 @@ export enum ObjectFormEvent {
 
     SCROLL_TO_FORM_VALUE = 'SCROLL_TO_FORM_VALUE',
 
-    BLOCK_FORM = 'BLOCK_FORM'
+    BLOCK_FORM = 'BLOCK_FORM',
+
+    FORM_VALUE_ADDED = 'FORM_VALUE_ADDED'
 
 }
