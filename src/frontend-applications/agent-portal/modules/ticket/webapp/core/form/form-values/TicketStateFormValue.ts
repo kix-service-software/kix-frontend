@@ -36,7 +36,7 @@ export class TicketStateFormValue extends SelectObjectFormValue {
         await super.initFormValue();
 
         if (this.formValues?.length) {
-            this.formValues[0].enabled = true;
+            await this.formValues[0].initFormValue();
         }
     }
 
