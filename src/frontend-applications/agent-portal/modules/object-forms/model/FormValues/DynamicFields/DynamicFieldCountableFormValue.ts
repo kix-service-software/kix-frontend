@@ -75,7 +75,7 @@ export class DynamicFieldCountableFormValue extends ObjectFormValue implements I
 
                 if (this.enabled && this.formValues?.length) {
                     for (const fv of this.formValues) {
-                        fv.enabled = true;
+                        await fv.enable();
                         fv.setNewInitialState(FormValueProperty.VISIBLE, true);
                     }
                 }
