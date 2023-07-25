@@ -81,6 +81,10 @@ export class FromObjectFormValue extends SelectObjectFormValue {
 
                 this.treeHandler?.setTree(nodes);
                 this.treeHandler?.setSelection(nodes?.length ? [nodes[0]] : [], true);
+
+                if (nodes.length) {
+                    this.setFormValue(nodes[0].id);
+                }
             }
         } else if (!queueId && this.treeHandler) {
             this.treeHandler?.setTree([]);
