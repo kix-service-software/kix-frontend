@@ -101,7 +101,6 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         this.fieldOrder = [...this.formFieldOrder];
 
         const startInitFormValues = Date.now();
-        // await Promise.all(this.initFormValues());
         await this.initFormValues();
         const endInitFormValues = Date.now();
         console.debug(`Init Form Values: ${endInitFormValues - startInitFormValues}ms`);
@@ -137,16 +136,8 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
         }
     }
 
-    protected async initFormValues(formValues = this.formValues): Promise<Array<Promise<void>>> {
-        const promises = [];
+    protected async initFormValues(formValues = this.formValues): Promise<Promise<void>> {
         for (const fv of formValues) {
-
-            // promises.push(fv.initFormValue());
-
-            // if (fv.formValues?.length) {
-            //     promises.push(...this.initFormValues(fv.formValues));
-            // }
-
             if (fv.enabled) {
                 const start = Date.now();
                 await fv.initFormValue();
@@ -159,8 +150,6 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
                 }
             }
         }
-
-        return promises;
     }
 
     protected setInitialFormValueState(formValues: ObjectFormValue[] = this.formValues): void {

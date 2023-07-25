@@ -16,7 +16,6 @@ import { ObjectFormValueMapper } from '../../../../../object-forms/model/ObjectF
 import { SystemAddress } from '../../../../../system-address/model/SystemAddress';
 import { AgentService } from '../../../../../user/webapp/core/AgentService';
 import { Queue } from '../../../../model/Queue';
-import { Ticket } from '../../../../model/Ticket';
 import { TicketProperty } from '../../../../model/TicketProperty';
 
 export class FromObjectFormValue extends SelectObjectFormValue {
@@ -40,7 +39,7 @@ export class FromObjectFormValue extends SelectObjectFormValue {
 
     public async loadSelectableValues(): Promise<void> {
         const queueValue = this.objectValueMapper.findFormValue(TicketProperty.QUEUE_ID);
-        this.initNodes(queueValue?.value);
+        await this.initNodes(queueValue?.value);
     }
 
     private async initNodes(queueId: number): Promise<void> {
