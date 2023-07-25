@@ -189,11 +189,11 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
 
             let submitPattern = 'Translatable#Save';
             if (channel?.Name === 'note') {
-                this.disableChannelFormValues(allFields.filter((p) => !noteFields.includes(p)));
-                this.enableChannelFormValues(channel.Name, noteFields);
+                await this.disableChannelFormValues(allFields.filter((p) => !noteFields.includes(p)));
+                await this.enableChannelFormValues(channel.Name, noteFields);
             } else if (channel?.Name === 'email') {
-                this.disableChannelFormValues(allFields.filter((p) => !mailFields.includes(p)));
-                this.enableChannelFormValues(channel.Name, mailFields);
+                await this.disableChannelFormValues(allFields.filter((p) => !mailFields.includes(p)));
+                await this.enableChannelFormValues(channel.Name, mailFields);
                 submitPattern = 'Translatable#Send';
             }
 
@@ -203,7 +203,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         }
     }
 
-    protected enableChannelFormValues(channelName: string, properties: ArticleProperty[]): void {
+    protected async enableChannelFormValues(channelName: string, properties: ArticleProperty[]): Promise<void> {
         for (const property of properties) {
             const formValue = this.formValues.find((fv) => fv.property === property);
 
@@ -233,7 +233,7 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             }
 
             if (formValue && showFormValue) {
-                formValue.enabled = this.enabled;
+                await formValue.enable();
 
                 if (showCc || showBcc) {
                     formValue.visible = true;
@@ -242,17 +242,18 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                 // make sure relevant properties are always required
                 if (formValue.property === ArticleProperty.FROM || formValue.property === ArticleProperty.TO) {
                     formValue.required = channelName === 'email' && this.visible;
+                    formValue.visible = true;
                 }
             }
         }
     }
 
-    protected disableChannelFormValues(properties: ArticleProperty[]): void {
+    protected async disableChannelFormValues(properties: ArticleProperty[]): Promise<void> {
         for (const property of properties) {
             const formValue = this.formValues.find((fv) => fv.property === property);
 
             if (formValue) {
-                formValue.enabled = false;
+                await formValue.disable();
             }
         }
     }
