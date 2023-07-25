@@ -213,36 +213,32 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             const isEdit = this.objectValueMapper.formContext === FormContext.EDIT;
             const showFormValue = property !== ArticleProperty.TO || (isEdit || newArticle);
 
-            let showCc = false;
-            let showBcc = false;
-
-            if (property === ArticleProperty.CC) {
-                const toValue = this.formValues.find((fv) => fv.property === ArticleProperty.TO);
-                if (
-                    (!toValue?.enabled && !isEdit)
-                    || (toValue?.enabled && formValue?.value && isEdit)
-                ) {
-                    showCc = true;
-                }
-            }
-            if (property === ArticleProperty.BCC) {
-                const toValue = this.formValues.find((fv) => fv.property === ArticleProperty.TO);
-                if (toValue?.enabled && formValue?.value && isEdit) {
-                    showBcc = true;
-                }
-            }
-
             if (formValue && showFormValue) {
-                await formValue.enable();
+                formValue.visible = true;
 
-                if (showCc || showBcc) {
-                    formValue.visible = true;
+                if (property === ArticleProperty.CC) {
+                    formValue.visible = false;
+                    const toValue = this.formValues.find((fv) => fv.property === ArticleProperty.TO);
+                    if (
+                        (!toValue?.enabled && !isEdit)
+                        || (toValue?.enabled && formValue?.value && isEdit)
+                    ) {
+                        formValue.visible = true;
+                    }
                 }
+                if (property === ArticleProperty.BCC) {
+                    formValue.visible = false;
+                    const toValue = this.formValues.find((fv) => fv.property === ArticleProperty.TO);
+                    if (toValue?.enabled && formValue?.value && isEdit) {
+                        formValue.visible = true;
+                    }
+                }
+
+                await formValue.enable();
 
                 // make sure relevant properties are always required
                 if (formValue.property === ArticleProperty.FROM || formValue.property === ArticleProperty.TO) {
                     formValue.required = channelName === 'email' && this.visible;
-                    formValue.visible = true;
                 }
             }
         }
