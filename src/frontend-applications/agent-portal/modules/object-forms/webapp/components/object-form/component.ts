@@ -106,8 +106,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
             const id = await this.formhandler.commit();
             if (id) {
-                await ContextService.getInstance().toggleActiveContext(
-                    this.context.descriptor.targetContextId, id, true
+
+                await ContextService.getInstance().removeContext(
+                    this.context?.instanceId, this.context?.descriptor?.targetContextId, id, true, true, true
                 );
 
                 await BrowserUtil.openSuccessOverlay('Translatable#Success');
