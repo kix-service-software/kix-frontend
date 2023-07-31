@@ -618,13 +618,21 @@ export class FormInstance {
     }
 
     public async validateForm(): Promise<ValidationResult[]> {
-        let result = [];
+        const result = [];
 
         if (this.form.validation) {
             for (const p of this.form.pages) {
                 for (const g of p.groups) {
                     const groupResult = await this.validateFields(g.formFields);
-                    result = [...result, ...groupResult];
+                    result.push(...groupResult);
+                }
+            }
+
+            const context = ContextService.getInstance().getActiveContext();
+            if (context) {
+                const dynamicFormResults = context.getAdditionalInformation('DynamicFormValidationResults');
+                if (dynamicFormResults?.length) {
+                    result.push(...dynamicFormResults);
                 }
             }
 
