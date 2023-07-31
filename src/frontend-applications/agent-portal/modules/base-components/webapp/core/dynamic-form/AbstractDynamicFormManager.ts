@@ -236,8 +236,20 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         }
 
         await this.checkProperties();
-        // TODO: do something with validate results (show them?)
-        await this.validate();
+
+        // reset context information
+        const context = ContextService.getInstance().getActiveContext();
+        if (context) {
+            context.setAdditionalInformation('DynamicFormValidationResults', null);
+        }
+
+        const results = await this.validate();
+
+        // set result in context to prevent submit
+        if (results?.length && context) {
+            context.setAdditionalInformation('DynamicFormValidationResults', results);
+        }
+
         if (!silent) {
             this.notifyListeners();
         }
@@ -250,8 +262,20 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         }
 
         await this.checkProperties();
-        // TODO: do something with validate results
-        await this.validate();
+
+        // reset context information
+        const context = ContextService.getInstance().getActiveContext();
+        if (context) {
+            context.setAdditionalInformation('DynamicFormValidationResults', null);
+        }
+
+        const results = await this.validate();
+
+        // set result in context to prevent submit
+        if (results?.length && context) {
+            context.setAdditionalInformation('DynamicFormValidationResults', results);
+        }
+
         this.notifyListeners();
     }
 
@@ -411,7 +435,14 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     }
 
     public async validate(): Promise<ValidationResult[]> {
+
+        // reset valid of values
+        this.values.forEach((v) => {
+            v.valid = true;
+            v.validErrorMessages = [];
+        });
         const fullResult = [];
+
         for (const extendedManager of this.extendedFormManager) {
             const result = await extendedManager.validate();
             if (result) {
@@ -419,93 +450,122 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             }
         }
         for (const value of this.values) {
-            if (value.operator === SearchOperator.BETWEEN && Array.isArray(value.value)) {
-                const fieldType = await this.getInputType(value.property);
-                if (fieldType && fieldType === InputFieldTypes.DATE || fieldType === InputFieldTypes.DATE_TIME) {
-                    const result = this.checkDate(value);
-                    if (result) {
-                        fullResult.push(...result);
-                    }
-                } else if (fieldType && fieldType === InputFieldTypes.NUMBER) {
-                    const result = this.checkNumber(value);
-                    if (result) {
-                        fullResult.push(...result);
-                    }
-                }
-            }
-            if (value.operator === SearchOperator.WITHIN && Array.isArray(value.value)) {
-                value.valid = true;
-                const missingMapping = [
-                    'Translatable#Type of first value is missing.',
-                    'Translatable#First number value is missing.',
-                    'Translatable#Unit of first value is missing.',
-                    'Translatable#Type of second value is missing.',
-                    'Translatable#Second number value is missing.',
-                    'Translatable#Unit of second value is missing.',
-                ];
-                for (let i = 0; i < 6; i++) {
-                    if (!value.value[i]) {
-                        fullResult.push(new ValidationResult(
-                            ValidationSeverity.ERROR, missingMapping[i]
-                        ));
-                    }
-                }
-                if (value.value[1] && !value.value[1].match(/^\d+$/)) {
-                    fullResult.push(new ValidationResult(
-                        ValidationSeverity.ERROR, 'Translatable#First number value is not an integer.'
-                    ));
-                }
-                if (value.value[4] && !value.value[4].match(/^\d+$/)) {
-                    fullResult.push(new ValidationResult(
-                        ValidationSeverity.ERROR, 'Translatable#Second number value is not an integer.'
-                    ));
-                }
+            if (value.property) {
+                fullResult.push(...await this.checkBetweenValue(value));
+                fullResult.push(...this.checkWithinValue(value));
+                fullResult.push(...this.checkRequiredValue(value));
+                value.valid = !value.validErrorMessages.length;
             }
         }
         return fullResult;
+    }
+
+    private checkRequiredValue(value: ObjectPropertyValue): ValidationResult[] {
+        const results: ValidationResult[] = [];
+        if (
+            value.required &&
+            (
+                typeof value.value === 'undefined' || value.value === null ||
+                Array.isArray(value.value) && !value.value.length
+            )
+        ) {
+            results.push(new ValidationResult(
+                ValidationSeverity.ERROR,
+                'Translatable#Required field has no value.'
+            ));
+            value.validErrorMessages.push('Translatable#Required field has no value.');
+        }
+        return results;
+    }
+
+    private checkWithinValue(value: ObjectPropertyValue): ValidationResult[] {
+        const results: ValidationResult[] = [];
+        if (value.operator === SearchOperator.WITHIN && Array.isArray(value.value)) {
+            const missingMapping = [
+                'Translatable#Type of first value is missing.',
+                'Translatable#First number value is missing.',
+                'Translatable#Unit of first value is missing.',
+                'Translatable#Type of second value is missing.',
+                'Translatable#Second number value is missing.',
+                'Translatable#Unit of second value is missing.',
+            ];
+            for (let i = 0; i < 6; i++) {
+                if (!value.value[i]) {
+                    results.push(new ValidationResult(
+                        ValidationSeverity.ERROR, missingMapping[i]
+                    ));
+                    value.validErrorMessages.push(missingMapping[i]);
+                }
+            }
+            if (value.value[1] && !value.value[1].match(/^\d+$/)) {
+                results.push(new ValidationResult(
+                    ValidationSeverity.ERROR, 'Translatable#First number value is not an integer.'
+                ));
+                value.validErrorMessages.push('Translatable#First number value is not an integer.');
+            }
+            if (value.value[4] && !value.value[4].match(/^\d+$/)) {
+                results.push(new ValidationResult(
+                    ValidationSeverity.ERROR, 'Translatable#Second number value is not an integer.'
+                ));
+                value.validErrorMessages.push('Translatable#Second number value is not an integer.');
+            }
+        }
+        return results;
+    }
+
+    private async checkBetweenValue(value: ObjectPropertyValue): Promise<ValidationResult[]> {
+        const results: ValidationResult[] = [];
+        if (value.operator === SearchOperator.BETWEEN && Array.isArray(value.value)) {
+            const fieldType = await this.getInputType(value.property);
+            if (fieldType && fieldType === InputFieldTypes.DATE || fieldType === InputFieldTypes.DATE_TIME) {
+                const result = this.checkDate(value);
+                if (result) {
+                    results.push(...result);
+                    value.validErrorMessages.push(...result.map((r) => r.message));
+                }
+            } else if (fieldType && fieldType === InputFieldTypes.NUMBER) {
+                const result = this.checkNumber(value);
+                if (result) {
+                    results.push(...result);
+                    value.validErrorMessages.push(...result.map((r) => r.message));
+                }
+            }
+        }
+        return results;
     }
 
     private checkDate(value: ObjectPropertyValue): ValidationResult[] {
         const start: Date = new Date(value.value[0]);
         const end: Date = new Date(value.value[1]);
         if (typeof start.getTime !== 'function') {
-            value.valid = false;
             return [new ValidationResult(
                 ValidationSeverity.ERROR, 'Translatable#Start date/time is not given'
             )];
         } else if (typeof end.getTime !== 'function') {
-            value.valid = false;
             return [new ValidationResult(
                 ValidationSeverity.ERROR, 'Translatable#End date/time is not given'
             )];
         } else if (start.getTime() > end.getTime()) {
-            value.valid = false;
             return [new ValidationResult(
                 ValidationSeverity.ERROR, 'Translatable#Start time has to be before end time'
             )];
-        } else {
-            value.valid = true;
         }
         return null;
     }
+
     private checkNumber(value: ObjectPropertyValue): ValidationResult[] {
         if (isNaN(Number(value.value[0])) || value.value[0] === null) {
-            value.valid = false;
             return [new ValidationResult(
                 ValidationSeverity.ERROR, 'Translatable#Start value is not given'
             )];
         } else if (isNaN(Number(value.value[1])) || value.value[1] === null) {
-            value.valid = false;
             return [new ValidationResult(
                 ValidationSeverity.ERROR, 'Translatable#End value is not given'
             )];
         } else if (Number(value.value[0]) > Number(value.value[1])) {
-            value.valid = false;
             return [new ValidationResult(
                 ValidationSeverity.ERROR, 'Translatable#Start value is greater than end value'
             )];
-        } else {
-            value.valid = true;
         }
         return null;
     }

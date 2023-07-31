@@ -62,15 +62,20 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
     }
 
     public async validate(): Promise<ValidationResult[]> {
+        const validationResult: ValidationResult[] = await super.validate();
         let dfValues = this.values.filter((v) => KIXObjectService.getDynamicFieldName(v.property));
         dfValues = dfValues.filter((v) => v.operator !== PropertyOperator.CLEAR);
-        let validationResult: ValidationResult[] = [];
         for (const v of dfValues) {
-            const result = await DynamicFieldFormUtil.getInstance().validateDFValue(
+            const results = await DynamicFieldFormUtil.getInstance().validateDFValue(
                 KIXObjectService.getDynamicFieldName(v.property), v.value
             );
-            v.valid = !result.some((r) => r.severity === ValidationSeverity.ERROR);
-            validationResult = [...validationResult, ...result];
+            v.valid = !results.some((r) => r.severity === ValidationSeverity.ERROR);
+            results.forEach((r) => {
+                if (r.severity === ValidationSeverity.ERROR) {
+                    v.validErrorMessages.push(r.message);
+                }
+            });
+            validationResult.push(...results);
         }
 
         return validationResult;
