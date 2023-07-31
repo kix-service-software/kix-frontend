@@ -109,12 +109,13 @@ export abstract class Context {
                         data?.instanceId === this.instanceId;
 
                     const objectUpdate = eventId === ApplicationEvent.OBJECT_UPDATED && data?.objectType;
+                    const objectDelete = eventId === ApplicationEvent.OBJECT_DELETED && data?.objectType;
 
                     if (this.descriptor.contextMode !== ContextMode.SEARCH) {
 
                         TableFactoryService.getInstance().deleteContextTables(this.contextId, data?.objectType);
 
-                        if (objectUpdate) {
+                        if (objectUpdate || objectDelete) {
                             if (this.objectLists.has(data.objectType)) {
                                 this.deleteObjectList(data.objectType);
                             }
@@ -135,12 +136,14 @@ export abstract class Context {
             };
 
             EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.eventSubscriber);
+            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_DELETED, this.eventSubscriber);
             EventService.getInstance().subscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.eventSubscriber);
         }
     }
 
     public async destroy(): Promise<void> {
         EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.eventSubscriber);
+        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_DELETED, this.eventSubscriber);
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.eventSubscriber);
 
         await this.formManager?.destroy();
