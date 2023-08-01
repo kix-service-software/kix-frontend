@@ -88,6 +88,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                   </div>
                </div>
             </if>
+
+            <if(state.validationErrors.length)>
+               <div class="col-sm-10 offset-sm-2">
+                  <for|validationError| of=state.validationErrors>
+                     <span class="text-danger">
+                        ${validationError.message}
+                     </span>
+                  </for>
+               </div>
+            </if>
          </if>
          <if(Array.isArray(state.formValues) && state.formValues.length)>
             <div class={
