@@ -180,8 +180,14 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
                     const values = await LabelService.getInstance().getDFDisplayValues(
                         object.KIXObjectType, dfValue
                     );
-                    result = values ? values[1] : Array.isArray(dfValue.Value) ?
-                        dfValue.Value.join(separator) : [dfValue.Value].join(separator);
+
+                    const fallbackValue = Array.isArray(dfValue.Value)
+                        ? dfValue.Value.join(separator)
+                        : [dfValue.Value].join(separator);
+
+                    result = values && values[1]
+                        ? values[1]
+                        : fallbackValue;
                 }
             }
         }
