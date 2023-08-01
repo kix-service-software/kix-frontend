@@ -52,6 +52,7 @@ import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsPr
 import { ArticlePlaceholderHandler } from './ArticlePlaceholderHandler';
 import { TableCSSHandlerRegistry } from '../../../table/webapp/core/css-handler/TableCSSHandlerRegistry';
 import { TableFactoryService } from '../../../table/webapp/core/factory/TableFactoryService';
+import { TicketLockLabelProvider } from './TicketLockLabelProvider';
 
 export class UIModule implements IUIModule {
 
@@ -93,6 +94,7 @@ export class UIModule implements IUIModule {
         LabelService.getInstance().registerLabelProvider(new TicketStateTypeLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ChannelLabelProvider());
         LabelService.getInstance().registerLabelProvider(new QueueLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new TicketLockLabelProvider());
 
         TableFactoryService.getInstance().registerFactory(new TicketTableFactory());
         TableFactoryService.getInstance().registerFactory(new ArticleTableFactory());
