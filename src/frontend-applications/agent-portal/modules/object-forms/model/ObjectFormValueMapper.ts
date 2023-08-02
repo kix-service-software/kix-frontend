@@ -205,25 +205,30 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
             }
 
             const endCreateFormValue = Date.now();
-            console.debug(`createFormValue (${formValue.property} - ${(formValue as any).dfName}): ${endCreateFormValue - startCreateFormValue}ms`);
+            if (formValue) {
+                console.debug(`createFormValue (${formValue.property} - ${(formValue as any).dfName}): ${endCreateFormValue - startCreateFormValue}ms`);
+            }
         }
 
-        for (const mapperExtension of this.extensions) {
-            if (formValue) {
+        if (formValue) {
+            for (const mapperExtension of this.extensions) {
+
                 const startExtension = Date.now();
                 await mapperExtension.initFormValueByField(field, formValue);
                 const endExtension = Date.now();
                 console.debug(`mapperExtension (${mapperExtension?.constructor?.name}): ${endExtension - startExtension}ms`);
             }
+
+            const startInit = Date.now();
+            await formValue?.initFormValueByField(field);
+            const endInit = Date.now();
+            console.debug(`initFormValueByField (${formValue.property} - ${(formValue as any).dfName}): ${endInit - startInit}ms`);
+
+            const endMapFormField = Date.now();
+            console.debug(`mapFormField (${formValue.property}): ${endMapFormField - startMapFormField}ms`);
+        } else {
+            console.debug(`No FormValue for ${field.property}`);
         }
-
-        const startInit = Date.now();
-        await formValue?.initFormValueByField(field);
-        const endInit = Date.now();
-        console.debug(`initFormValueByField (${formValue.property} - ${(formValue as any).dfName}): ${endInit - startInit}ms`);
-
-        const endMapFormField = Date.now();
-        console.debug(`mapFormField (${formValue.property}): ${endMapFormField - startMapFormField}ms`);
     }
 
     protected async createFormValue(property: string, object: T): Promise<ObjectFormValue> {
