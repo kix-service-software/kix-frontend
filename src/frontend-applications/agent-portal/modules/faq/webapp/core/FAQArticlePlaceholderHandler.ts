@@ -16,6 +16,12 @@ import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil'
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { AbstractPlaceholderHandler } from '../../../base-components/webapp/core/AbstractPlaceholderHandler';
 import { DynamicFieldValuePlaceholderHandler } from '../../../dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
+import { FAQCategory } from '../../model/FAQCategory';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FAQArticleHandler } from './FAQArticleHandler';
+import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
 
 export class FAQArticlePlaceholderHandler extends AbstractPlaceholderHandler {
 
@@ -48,6 +54,18 @@ export class FAQArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                     case FAQArticleProperty.CATEGORY_ID:
                         result = faqArticle[attribute] ? faqArticle[attribute].toString() : '';
                         break;
+                    case FAQArticleProperty.CATEGORY_FULLNAME:
+                    case FAQArticleProperty.CATEGORY:
+                        if (faqArticle.CategoryID) {
+                            const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
+                                KIXObjectType.FAQ_CATEGORY
+                            ).catch(() => [] as FAQCategory[]);
+                            const category = faqCategories.find((fc) => fc.ID === faqArticle.CategoryID);
+                            if (category) {
+                                result = attribute === FAQArticleProperty.CATEGORY ? category.Name : category.Fullname;
+                            }
+                        }
+                        break;
                     case FAQArticleProperty.TITLE:
                         result = await LabelService.getInstance().getDisplayText(
                             faqArticle, attribute, undefined, false
@@ -59,16 +77,28 @@ export class FAQArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                         break;
                     case FAQArticleProperty.APPROVED:
                     case FAQArticleProperty.CONTENT_TYPE:
-                    case FAQArticleProperty.CUSTOMER_VISIBLE:
+                    case FAQArticleProperty.LINK:
+                    case FAQArticleProperty.ATTACHMENTS:
+                        break;
+                    case FAQArticleProperty.FIELD_1_NO_INLINE:
+                    case FAQArticleProperty.FIELD_2_NO_INLINE:
+                    case FAQArticleProperty.FIELD_3_NO_INLINE:
+                    case FAQArticleProperty.FIELD_4_NO_INLINE:
+                    case FAQArticleProperty.FIELD_5_NO_INLINE:
+                    case FAQArticleProperty.FIELD_6_NO_INLINE:
+                        const property = attribute.replace(/(.+)NoInline/, '$1');
+                        const value = faqArticle[property];
+                        if (value) {
+                            return value.replace(/<img.+?src="cid:.+?>/, '');
+                        }
+                        break;
                     case FAQArticleProperty.FIELD_1:
                     case FAQArticleProperty.FIELD_2:
                     case FAQArticleProperty.FIELD_3:
                     case FAQArticleProperty.FIELD_4:
                     case FAQArticleProperty.FIELD_5:
                     case FAQArticleProperty.FIELD_6:
-                    case KIXObjectProperty.DYNAMIC_FIELDS:
-                    case FAQArticleProperty.LINK:
-                    case FAQArticleProperty.ATTACHMENTS:
+                        result = await this.getPreparedFieldValue(attribute, faqArticle);
                         break;
                     default:
                         attribute = this.relevantIdAttribut[attribute] || attribute;
@@ -91,5 +121,32 @@ export class FAQArticlePlaceholderHandler extends AbstractPlaceholderHandler {
             ...Object.keys(this.relevantIdAttribut),
         ];
         return knownProperties.some((p) => p === property);
+    }
+
+    private async getPreparedFieldValue(property: string, faqArticle: FAQArticle): Promise<string> {
+        let fieldValue = faqArticle[property];
+        if (fieldValue?.match(/<img.+?src="cid:.+?>/)) {
+            if (!faqArticle.Attachments?.length) {
+                const loadingOptions = new KIXObjectLoadingOptions();
+                loadingOptions.includes = [FAQArticleProperty.ATTACHMENTS];
+                const faqs = await KIXObjectService.loadObjects<FAQArticle>(
+                    KIXObjectType.FAQ_ARTICLE, [faqArticle.ID], loadingOptions
+                ).catch(() => []);
+                if (faqs?.length && faqs[0]) {
+                    faqArticle = faqs[0];
+                }
+            }
+            if (faqArticle.Attachments.length) {
+                const attachments = faqArticle.Attachments.filter((a) => a.Disposition !== 'inline');
+                if (attachments) {
+                    const inlineContent = await FAQArticleHandler.getFAQArticleInlineContent(faqArticle);
+                    fieldValue = BrowserUtil.replaceInlineContent(fieldValue, inlineContent);
+                }
+            }
+
+            // remove remaining img tags
+            fieldValue = fieldValue.replace(/<img.+?src="cid:.+?>/, '');
+        }
+        return fieldValue;
     }
 }

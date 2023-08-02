@@ -60,10 +60,15 @@ export class PlaceholderService {
         attributePath: string, dfType: string, objectIds: any[], language?: string
     ): Promise<string> {
         let result: string = '';
-        if (objectIds?.length && attributePath.match(/^\d+_.+/)) {
-            const handler = dfType ? this.getHandlerByDFType(dfType) : null;
-            if (handler) {
-                result = await handler.replaceDFObjectPlaceholder(attributePath, objectIds, language);
+        if (Array.isArray(objectIds) && objectIds?.length && attributePath?.match(/^\d+_.+/)) {
+            const objectIndex = attributePath.replace(/^(\d+)_.+/, '$1');
+            const path = attributePath.replace(/^\d+_(.+)/, '$1');
+            const objectId = objectIds[objectIndex];
+            if (objectId) {
+                const handler = dfType ? this.getHandlerByDFType(dfType) : null;
+                if (handler) {
+                    result = await handler.replaceDFObjectPlaceholder(path, objectId, language);
+                }
             }
         }
 

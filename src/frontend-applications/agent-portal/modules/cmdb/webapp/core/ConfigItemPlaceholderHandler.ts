@@ -54,18 +54,13 @@ export class ConfigItemPlaceholderHandler extends AbstractPlaceholderHandler {
     }
 
     public async replaceDFObjectPlaceholder(
-        attributePath: string, assetIds: number[], language?: string
+        attributePath: string, assetId: number, language?: string
     ): Promise<string> {
         let result: string = '';
-        if (Array.isArray(assetIds) && assetIds.length && attributePath) {
-            const objectIndex = attributePath.replace(/^(\d+)_.+/, '$1');
-            const path = attributePath.replace(/^\d+_(.+)/, '$1');
-            const assetId = assetIds[objectIndex];
-            if (assetId) {
-                const asset = await this.loadAssetWithCurrentVersion(assetId);
-                if (asset) {
-                    result = await this.replace(`<KIX_ASSET_${path}>`, asset, language);
-                }
+        if (assetId) {
+            const asset = await this.loadAssetWithCurrentVersion(assetId);
+            if (asset) {
+                result = await this.replace(`<KIX_ASSET_${attributePath}>`, asset, language);
             }
         }
         return result;

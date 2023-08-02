@@ -27,7 +27,7 @@ export class ExtendedDynamicFieldPlaceholderHandler implements IPlaceholderHandl
     }
 
     public async replaceDFObjectPlaceholder(
-        attributePath: string, objectIds: number[], language?: string
+        attributePath: string, objectId: number, language?: string
     ): Promise<string> {
         return;
     }
