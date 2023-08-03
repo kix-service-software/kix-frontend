@@ -74,15 +74,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                     this.state.prepared = false;
                     await this.setFormValues();
                     setTimeout(() => this.state.prepared = true, 5);
-                } else if (eventId === ObjectFormEvent.BLOCK_FORM) {
-                    BrowserUtil.toggleLoadingShield('OBJECT_FORM_SHIELD', data.blocked);
                 }
             }
         };
 
         EventService.getInstance().subscribe(FormEvent.OBJECT_FORM_HANDLER_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(ObjectFormEvent.FIELD_ORDER_CHANGED, this.subscriber);
-        EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
         EventService.getInstance().subscribe(ObjectFormEvent.FORM_VALUE_ADDED, this.subscriber);
 
         BrowserUtil.toggleLoadingShield('OBJECT_FORM_SHIELD', true);
@@ -92,7 +89,6 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(FormEvent.OBJECT_FORM_HANDLER_CHANGED, this.subscriber);
         EventService.getInstance().unsubscribe(ObjectFormEvent.FIELD_ORDER_CHANGED, this.subscriber);
-        EventService.getInstance().unsubscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
         EventService.getInstance().unsubscribe(ObjectFormEvent.FORM_VALUE_ADDED, this.subscriber);
     }
 

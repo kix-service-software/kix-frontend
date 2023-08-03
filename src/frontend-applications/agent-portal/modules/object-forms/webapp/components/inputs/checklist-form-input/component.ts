@@ -7,17 +7,23 @@
  * --
  */
 
+import { IdService } from '../../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { DynamicFieldFormUtil } from '../../../../../base-components/webapp/core/DynamicFieldFormUtil';
+import { EventService } from '../../../../../base-components/webapp/core/EventService';
+import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { FormValueProperty } from '../../../../model/FormValueProperty';
 import { DynamicFieldChecklistFormValue } from '../../../../model/FormValues/DynamicFields/DynamicFieldChecklistFormValue';
 import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
+import { ObjectFormEvent } from '../../../../model/ObjectFormEvent';
 import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
 
     private formValue: DynamicFieldChecklistFormValue;
     private bindingIds: string[];
+
+    private subscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -35,10 +41,23 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.value = this.formValue?.value;
         this.setProgressValues();
         this.state.prepared = true;
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(),
+            eventPublished: (data: any, eventId: string): void => {
+                if (data.blocked) {
+                    this.state.readonly = true;
+                } else {
+                    this.state.readonly = this.formValue.readonly;
+                }
+            }
+        };
+        EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
     }
 
     public onDestroy(): void {
         this.formValue?.removePropertyBinding(this.bindingIds);
+        EventService.getInstance().unsubscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
     }
 
     private async update(): Promise<void> {

@@ -7,12 +7,16 @@
  * --
  */
 
+import { IdService } from '../../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { TreeNode, TreeUtil } from '../../../../../base-components/webapp/core/tree';
+import { EventService } from '../../../../../base-components/webapp/core/EventService';
+import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
+import { TreeNode } from '../../../../../base-components/webapp/core/tree';
 import { TranslationService } from '../../../../../translation/webapp/core/TranslationService';
 import { FormValueProperty } from '../../../../model/FormValueProperty';
 import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
 import { SelectObjectFormValue } from '../../../../model/FormValues/SelectObjectFormValue';
+import { ObjectFormEvent } from '../../../../model/ObjectFormEvent';
 import { ComponentState } from './ComponentState';
 
 export class Component extends AbstractMarkoComponent<ComponentState> {
@@ -20,6 +24,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private bindingIds: string[];
     private formValue: SelectObjectFormValue<Array<string | number> | string | number>;
     private searchTimeout: any;
+
+    private subscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -38,10 +44,23 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 this.formValue.treeHandler.setKeyListenerElement(element);
             }
         }, 100);
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(),
+            eventPublished: (data: any, eventId: string): void => {
+                if (data.blocked) {
+                    this.state.readonly = true;
+                } else {
+                    this.state.readonly = this.formValue.readonly;
+                }
+            }
+        };
+        EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
     }
 
     public onDestroy(): void {
         this.formValue?.removePropertyBinding(this.bindingIds);
+        EventService.getInstance().unsubscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
     }
 
     public onUpdate(): void {
@@ -195,7 +214,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public selectInputClicked(event: any): void {
-        if (this.formValue?.multiselect) {
+        if (this.formValue?.multiselect || this.state.readonly) {
             this.stopPropagation(event);
         }
     }
@@ -220,13 +239,18 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    public inputClicked(): void {
-        setTimeout(() => {
-            const element = (this as any).getEl(this.state.searchValueKey);
-            if (element) {
-                element.focus();
-            }
-        }, 50);
+    public inputClicked(event: any): void {
+        if (this.state.readonly) {
+            this.stopPropagation(event);
+            event.preventDefault();
+        } else {
+            setTimeout(() => {
+                const element = (this as any).getEl(this.state.searchValueKey);
+                if (element) {
+                    element.focus();
+                }
+            }, 50);
+        }
     }
 
     private stopPropagation(event: any): void {
