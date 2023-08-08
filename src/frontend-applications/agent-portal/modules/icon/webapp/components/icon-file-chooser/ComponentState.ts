@@ -7,11 +7,14 @@
  * --
  */
 
-.icon-preview {
-    font-size: 5rem;
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-    .icon {
-        width: 5rem;
-        height: 5rem;
+export class ComponentState extends AbstractComponentState {
+
+    public constructor(
+        public dragging: boolean = false,
+    ) {
+        super();
     }
+
 }
