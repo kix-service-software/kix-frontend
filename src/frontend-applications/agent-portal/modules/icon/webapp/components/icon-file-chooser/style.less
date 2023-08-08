@@ -1,0 +1,37 @@
+/**
+ * Copyright (C) 2006-2023 KIX Service Software GmbH, https://www.kixdesk.com
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+.icon-upload {
+   width: 100%;
+   display: grid;
+   grid-template-columns: minmax(@button-min-width, min-content) auto;
+   grid-template-rows: @default-button-height max-content;
+   grid-column-gap: @margin-default;
+   align-items: center;
+
+   >.icon-upload-button {
+      .icon-upload-input {
+         display: none;
+      }
+   }
+
+   &.dragging {
+      border: 2px dotted @secondary-3;
+      border-radius: @border-radius;
+      padding: @margin-small;
+   }
+
+   >.icon-preview {
+      height: 100%;
+
+      img {
+         max-height: 100%;
+      }
+   }
+}
