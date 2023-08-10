@@ -60,7 +60,9 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.subscriber = {
             eventSubscriberId: IdService.generateDateBasedId('object-form'),
             eventPublished: async (data: Context | any, eventId: string): Promise<void> => {
-                if (
+                if (eventId === ObjectFormEvent.BLOCK_FORM) {
+                    this.state.blocked = data.blocked;
+                } else if (
                     (
                         eventId === FormEvent.OBJECT_FORM_HANDLER_CHANGED ||
                         eventId === ObjectFormEvent.FORM_VALUE_ADDED
@@ -81,6 +83,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().subscribe(FormEvent.OBJECT_FORM_HANDLER_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(ObjectFormEvent.FIELD_ORDER_CHANGED, this.subscriber);
         EventService.getInstance().subscribe(ObjectFormEvent.FORM_VALUE_ADDED, this.subscriber);
+        EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
 
         BrowserUtil.toggleLoadingShield('OBJECT_FORM_SHIELD', true);
         setTimeout(() => BrowserUtil.toggleLoadingShield('OBJECT_FORM_SHIELD', false), 250);
@@ -90,6 +93,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         EventService.getInstance().unsubscribe(FormEvent.OBJECT_FORM_HANDLER_CHANGED, this.subscriber);
         EventService.getInstance().unsubscribe(ObjectFormEvent.FIELD_ORDER_CHANGED, this.subscriber);
         EventService.getInstance().unsubscribe(ObjectFormEvent.FORM_VALUE_ADDED, this.subscriber);
+        EventService.getInstance().unsubscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
     }
 
     private async loadForm(): Promise<void> {
@@ -103,16 +107,18 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async submit(): Promise<void> {
         try {
-            this.state.prepared = false;
+            if (!this.state.blocked) {
+                this.state.prepared = false;
 
-            const id = await this.formhandler.commit();
-            if (id) {
+                const id = await this.formhandler.commit();
+                if (id) {
 
-                await ContextService.getInstance().removeContext(
-                    this.context?.instanceId, this.context?.descriptor?.targetContextId, id, true, true, true
-                );
+                    await ContextService.getInstance().removeContext(
+                        this.context?.instanceId, this.context?.descriptor?.targetContextId, id, true, true, true
+                    );
 
-                await BrowserUtil.openSuccessOverlay('Translatable#Success');
+                    await BrowserUtil.openSuccessOverlay('Translatable#Success');
+                }
             }
         } catch (e) {
             this.state.prepared = true;
