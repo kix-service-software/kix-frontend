@@ -94,22 +94,19 @@ class Component {
         this.state.userName = event?.target?.value;
     }
 
+    public passwordChanged(event: any): void {
+        this.state.password = event?.target?.value;
+    }
+
     private async login(event: any): Promise<void> {
         this.state.logout = false;
 
-        let password: string;
-
-        const passwordElement = (this as any).getEl('login-user-password');
-        if (passwordElement) {
-            password = passwordElement.value;
-        }
-
-        if (this.state.userName && this.state.userName !== '' && password && password !== '') {
+        if (this.state.userName && this.state.password) {
             this.state.loginProcess = true;
             this.state.error = false;
 
             const login = await AgentService.getInstance().login(
-                this.state.userName, password, this.redirectUrl
+                this.state.userName, this.state.password, this.redirectUrl
             );
 
             if (!login) {
@@ -139,19 +136,9 @@ class Component {
         return pattern;
     }
 
-    public togglePasswordVisible(): void {
-        this.state.isPasswordVisible = !this.state.isPasswordVisible;
-    }
-
-    public getInputType(isPasswordVisible: boolean): string {
-        if (isPasswordVisible) return InputFieldTypes.TEXT;
-        else return InputFieldTypes.PASSWORD;
-    }
-
-    public passwordValueChanged(event: any): void {
-        if (event) {
-            this.state.passwordValue = event.target && event.target.value !== '' ? event.target.value : null;
-        }
+    public togglePasswordVisibility(): void {
+        this.state.passwordFieldType = this.state.passwordFieldType === InputFieldTypes.PASSWORD.toLowerCase() ?
+            InputFieldTypes.TEXT.toLowerCase() : InputFieldTypes.PASSWORD.toLowerCase();
     }
 }
 
