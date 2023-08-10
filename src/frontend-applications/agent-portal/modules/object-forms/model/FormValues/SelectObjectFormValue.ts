@@ -356,11 +356,15 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         if (Array.isArray(value)) {
             for (const v of value) {
                 if (typeof v !== 'undefined' && v !== null) {
-                    if (TreeUtil.findNode(tree, v)) {
-                        if (selectedIds.some((id) => id.toString() === v.toString())) {
+                    if (!this.isAutoComplete) {
+                        if (TreeUtil.findNode(tree, v)) {
+                            if (selectedIds.some((id) => id.toString() === v.toString())) {
+                                newValue.push(v);
+                            }
+                        } else if (this.multiselect) {
                             newValue.push(v);
                         }
-                    } else if (this.multiselect) {
+                    } else {
                         newValue.push(v);
                     }
                 }
