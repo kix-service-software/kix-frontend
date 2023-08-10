@@ -169,7 +169,7 @@ export class UIModule implements IUIModule {
         ContextService.getInstance().registerContext(searchContext);
 
         const ticketListContext = new ContextDescriptor(
-            TicketListContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.MAIN, ContextMode.DASHBOARD,
+            TicketListContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.MAIN, ContextMode.DETAILS,
             false, 'ticket-list-module', ['ticket-list'], TicketListContext,
             [
                 new UIComponentPermission('tickets', [CRUD.READ])
