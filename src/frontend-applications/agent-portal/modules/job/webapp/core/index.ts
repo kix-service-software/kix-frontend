@@ -15,4 +15,3 @@ export { JobFormService } from './JobFormService';
 export { JobLabelProvider } from './JobLabelProvider';
 export { JobService } from './JobService';
 export { MacroActionLabelProvider } from './MacroActionLabelProvider';
-export { UIModule as JobUIModule } from './JobUIModule';

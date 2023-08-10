@@ -33,6 +33,8 @@ export enum SysConfigKey {
 
     CONFIG_LEVEL = 'ConfigLevel',
 
+    CONTACT_EVENTS = 'Events###Contact',
+
     TICKET_EVENTS = 'Events###Ticket',
 
     ARTICLE_EVENTS = 'Events###Article',
