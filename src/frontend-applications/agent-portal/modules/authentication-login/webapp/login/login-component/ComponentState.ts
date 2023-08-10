@@ -7,6 +7,7 @@
  * --
  */
 
+import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFieldTypes';
 import { PortalNotification } from '../../../../portal-notification/model/PortalNotification';
 
 export class ComponentState {
@@ -21,8 +22,8 @@ export class ComponentState {
         public unsupportedBrowser: boolean = false,
         public userName: string = null,
         public notifications: PortalNotification[] = [],
-        public isPasswordVisible: boolean = false,
-        public passwordValue: string = '',
+        public passwordFieldType: string = (InputFieldTypes.PASSWORD).toLowerCase(),
+        public password: string = '',
     ) { }
 
 }
