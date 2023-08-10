@@ -32,6 +32,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </div>
             <div class="bg-light">
                 <button
+                    disabled=state.blocked
                     type="button"
                     on-click("submit")
                     class="btn btn-outline-success py-0"
@@ -43,7 +44,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </button>
             </div>
         </div>
-
     </if>
     <else>
         <loading-spinner/>
