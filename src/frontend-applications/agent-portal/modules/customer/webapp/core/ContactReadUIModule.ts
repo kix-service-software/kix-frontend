@@ -32,6 +32,9 @@ import { ContactSearchContext } from './context/ContactSearchContext';
 import { ContactTableFactory } from './table';
 import { FormService } from '../../../base-components/webapp/core/FormService';
 import { ContactFormFieldValueHandler } from './ContactFormFieldValueHandler';
+import { ContactJobFormManager } from './ContactJobFormManager';
+import { JobFormService } from '../../../job/webapp/core';
+import { JobTypes } from '../../../job/model/JobTypes';
 
 export class UIModule implements IUIModule {
 
@@ -54,6 +57,8 @@ export class UIModule implements IUIModule {
         SearchService.getInstance().registerSearchDefinition(new ContactSearchDefinition());
 
         FormService.getInstance().addFormFieldValueHandler(new ContactFormFieldValueHandler());
+
+        JobFormService.getInstance().registerJobFormManager(JobTypes.CONTACT, new ContactJobFormManager());
 
         await this.registerContexts();
         this.registerActions();

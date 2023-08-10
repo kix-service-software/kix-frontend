@@ -7,7 +7,7 @@
  * --
  */
 
-import { JobService } from '.';
+import { JobService } from './JobService';
 import { DefaultSelectInputFormOption } from '../../../../model/configuration/DefaultSelectInputFormOption';
 import { FormContext } from '../../../../model/configuration/FormContext';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
