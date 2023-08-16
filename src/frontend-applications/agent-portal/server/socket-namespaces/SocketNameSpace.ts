@@ -8,7 +8,6 @@
  */
 
 import { ISocketNamespace } from './ISocketNamespace';
-import { AuthenticationService } from '../../../../server/services/AuthenticationService';
 import { SocketEvent } from '../../modules/base-components/webapp/core/SocketEvent';
 import { ISocketRequest } from '../../modules/base-components/webapp/core/ISocketRequest';
 import { ProfilingService } from '../../../../server/services/ProfilingService';

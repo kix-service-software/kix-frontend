@@ -15,6 +15,8 @@ import { NotificationEvent } from '../../model/NotificationEvent';
 import { BackendNotification } from '../../model/BackendNotification';
 import { SocketService } from '../services/SocketService';
 import { LoggingService } from '../../../../server/services/LoggingService';
+import { ServerManager } from '../../../../server/ServerManager';
+import { NotificationNamespace } from '../socket-namespaces/NotificationNamespace';
 
 export class NotificationRouter extends KIXRouter {
 
@@ -77,10 +79,13 @@ export class NotificationRouter extends KIXRouter {
         await CacheService.getInstance().updateCaches(this.notificationsQueue)
             .catch((error) => LoggingService.getInstance().error(error));
 
-        SocketService.getInstance().broadcast(NotificationEvent.UPDATE_EVENTS, this.notificationsQueue);
+        const servers = ServerManager.getInstance().getServers();
+        for (const server of servers) {
+            server?.getSocketService()?.broadcast(NotificationEvent.UPDATE_EVENTS, this.notificationsQueue);
+        }
+
         this.notificationListener.forEach((l) => l(this.notificationsQueue));
         this.notificationsQueue = [];
     }
-
 
 }

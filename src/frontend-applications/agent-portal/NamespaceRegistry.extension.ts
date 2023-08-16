@@ -19,7 +19,7 @@ export class Extension extends KIXExtension implements ISocketNamespaceRegistryE
 
     public getNamespaceClasses(): any[] {
         return [
-            NotificationNamespace.getInstance(),
+            new NotificationNamespace(),
             AuthenticationNamespace.getInstance(),
             ContextNamespace.getInstance(),
             KIXModuleNamespace.getInstance(),
