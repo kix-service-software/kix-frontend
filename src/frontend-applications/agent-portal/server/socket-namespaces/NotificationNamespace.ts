@@ -13,19 +13,6 @@ import { Socket } from 'socket.io';
 
 export class NotificationNamespace extends SocketNameSpace {
 
-    private static INSTANCE: NotificationNamespace;
-
-    public static getInstance(): NotificationNamespace {
-        if (!NotificationNamespace.INSTANCE) {
-            NotificationNamespace.INSTANCE = new NotificationNamespace();
-        }
-        return NotificationNamespace.INSTANCE;
-    }
-
-    private constructor() {
-        super();
-    }
-
     protected getNamespace(): string {
         return 'notifications';
     }

@@ -48,8 +48,8 @@ export class WebformService {
     public async loadWebforms(token: string, withPassword: boolean = false): Promise<Webform[]> {
         const configuration = await ModuleConfigurationService.getInstance().loadConfiguration<any>(
             token, 'kix-customer-portal-light-webforms'
-        );
-        const webforms: Webform[] = configuration ? configuration.webforms : [];
+        ).catch(() => null);
+        const webforms: Webform[] = configuration?.webforms || [];
         if (!withPassword) {
             webforms.forEach((wf) => delete wf.webformUserPassword);
         }

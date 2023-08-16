@@ -7,8 +7,22 @@
  * --
  */
 
+import { SocketService } from '../../frontend-applications/agent-portal/server/services/SocketService';
+
 export interface IServer {
 
-    initServer(): Promise<void>;
+    name: string;
+
+    initialize(): Promise<void>;
+
+    getHttpServer(): any;
+
+    getPort(): number;
+
+    getSocketIO(): any;
+
+    initializeSocketIO(): Promise<void>;
+
+    getSocketService(): SocketService;
 
 }
