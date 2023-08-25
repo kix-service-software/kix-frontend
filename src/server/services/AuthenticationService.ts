@@ -24,6 +24,7 @@ import { Socket } from 'socket.io';
 import { LoggingService } from './LoggingService';
 import { CacheService } from '../../frontend-applications/agent-portal/server/services/cache';
 import { HTTPResponse } from '../../frontend-applications/agent-portal/server/services/HTTPResponse';
+import { IncomingHttpHeaders } from 'node:http';
 
 export class AuthenticationService {
 
@@ -49,8 +50,8 @@ export class AuthenticationService {
         await CacheService.getInstance().set('CALLBACK_TOKEN', backendCallbackToken);
     }
 
-    private createToken(userLogin: string, backendToken: string, remoteAddress: string): string {
-        const token = jwt.sign({ userLogin, remoteAddress, backendToken, created: Date.now() }, this.tokenSecret);
+    private createToken(userLogin: string, backendToken: string): string {
+        const token = jwt.sign({ userLogin, backendToken, created: Date.now() }, this.tokenSecret);
         return token;
     }
 
@@ -68,15 +69,7 @@ export class AuthenticationService {
         return jwt.decode(token, secret);
     }
 
-    public async validateToken(token: string, remoteAddress: string, clientRequestId: string): Promise<boolean> {
-        const config = ConfigurationService.getInstance().getServerConfiguration();
-        if (config.CHECK_TOKEN_ORIGIN) {
-            const decodedToken = this.decodeToken(token);
-            if (decodedToken.remoteAddress !== remoteAddress) {
-                return false;
-            }
-        }
-
+    public async validateToken(token: string, clientRequestId: string): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
             HttpService.getInstance().get<SessionResponse>(
                 'session', {}, token, clientRequestId, null, false
@@ -112,11 +105,7 @@ export class AuthenticationService {
         let redirect = true;
 
         if (token) {
-            let remoteAddress = req.headers['x-forwarded-for'] || req.socket?.remoteAddress;
-            remoteAddress = Array.isArray(remoteAddress) ? remoteAddress[0] : remoteAddress;
-
-            const valid = await this.validateToken(token, remoteAddress, 'AuthenticationService')
-                .catch((error) => false);
+            const valid = await this.validateToken(token, 'AuthenticationService').catch((error) => false);
 
             if (valid) {
                 redirect = false;
@@ -162,9 +151,8 @@ export class AuthenticationService {
             const token = parsedCookie[`${tokenPrefix}token`];
 
             if (token) {
-                const valid = await this.validateToken(
-                    token, socket.handshake.address, 'AuthenticationService'
-                ).catch(() => next(new SocketAuthenticationError('Error validating token!')));
+                const valid = await this.validateToken(token, 'AuthenticationService')
+                    .catch(() => next(new SocketAuthenticationError('Error validating token!')));
 
                 if (valid) {
                     next();
@@ -184,13 +172,13 @@ export class AuthenticationService {
 
     public async login(
         login: string, password: string, userType: UserType, negotiateToken: string,
-        clientRequestId: string, remoteAddress: string, fakeLogin?: boolean
+        clientRequestId: string, headers: IncomingHttpHeaders, fakeLogin?: boolean
     ): Promise<string> {
         const userLogin = new UserLogin(login, password, userType, negotiateToken);
         const response = await HttpService.getInstance().post<LoginResponse>(
-            'auth', userLogin, null, clientRequestId, undefined, false
+            'auth', userLogin, null, clientRequestId, undefined, false, null, headers
         );
-        const token = fakeLogin ? response.Token : this.createToken(login, response.Token, remoteAddress);
+        const token = fakeLogin ? response.Token : this.createToken(login, response.Token);
 
         const user = await HttpService.getInstance().getUserByToken(token);
         if (!user?.Contact?.ID) {

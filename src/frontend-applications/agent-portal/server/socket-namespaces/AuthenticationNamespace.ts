@@ -63,7 +63,7 @@ export class AuthenticationNamespace extends SocketNameSpace {
         const response = await AuthenticationService.getInstance()
             .login(
                 data.userName, data.password, data.userType, data.negotiateToken,
-                data.clientRequestId, client.handshake.address
+                data.clientRequestId, client.handshake.headers
             ).then(async (token: string) => {
                 await TranslationAPIService.getInstance().loadObjects(token, 'login', KIXObjectType.TRANSLATION, null, null, null)
                     .catch(() => null);
@@ -122,7 +122,7 @@ export class AuthenticationNamespace extends SocketNameSpace {
             const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
             const valid = await AuthenticationService.getInstance().validateToken(
-                token, socket.handshake.address, data.clientRequestId
+                token, data.clientRequestId
             ).catch(
                 (error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error))
             );

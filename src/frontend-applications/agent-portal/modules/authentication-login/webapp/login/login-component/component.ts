@@ -101,7 +101,7 @@ class Component {
     private async login(event: any): Promise<void> {
         this.state.logout = false;
 
-        if (this.state.userName && this.state.password) {
+        if (this.state.userName) {
             this.state.loginProcess = true;
             this.state.error = false;
 
