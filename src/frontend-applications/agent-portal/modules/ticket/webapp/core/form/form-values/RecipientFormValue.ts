@@ -27,6 +27,7 @@ import { SystemAddress } from '../../../../../system-address/model/SystemAddress
 import addrparser from 'address-rfc2822';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { FormContext } from '../../../../../../model/configuration/FormContext';
+import { ArticleProperty } from '../../../../model/ArticleProperty';
 
 export class RecipientFormValue extends SelectObjectFormValue<any> {
 
@@ -245,6 +246,11 @@ export class RecipientFormValue extends SelectObjectFormValue<any> {
 
         if (field.empty) {
             this.setFormValue(null);
+        }
+
+        // enable TO if "active" in template for new context
+        if (!isEdit && this.property === ArticleProperty.TO) {
+            this.enabled = true;
         }
     }
 
