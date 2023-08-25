@@ -207,13 +207,9 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         for (const property of properties) {
             const formValue = this.formValues.find((fv) => fv.property === property);
 
-            const context = ContextService.getInstance().getActiveContext();
-            const articleId = context?.getAdditionalInformation(ArticleProperty.REFERENCED_ARTICLE_ID);
-            const newArticle = this.objectValueMapper.formContext === FormContext.NEW && articleId;
             const isEdit = this.objectValueMapper.formContext === FormContext.EDIT;
-            const showFormValue = property !== ArticleProperty.TO || (isEdit || newArticle);
 
-            if (formValue && showFormValue) {
+            if (formValue) {
                 formValue.visible = true;
 
                 if (property === ArticleProperty.CC) {
@@ -234,7 +230,10 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
                     }
                 }
 
-                await formValue.enable();
+                // TO is enabled for edit or if set by template (initFormValueByField in RecipientFormValue)
+                if (formValue.property !== ArticleProperty.TO || isEdit) {
+                    await formValue.enable();
+                }
 
                 // make sure relevant properties are always required
                 if (formValue.property === ArticleProperty.FROM || formValue.property === ArticleProperty.TO) {
