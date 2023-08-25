@@ -13,6 +13,7 @@ import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { AbstractDynamicFormManager } from '../../../base-components/webapp/core/dynamic-form';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
@@ -28,25 +29,26 @@ import { ContactSearchFormManager } from './ContactSearchFormManager';
 
 export class ContactJobFormManager extends AbstractJobFormManager {
 
-    public constructor() {
-        super();
+    public getFilterManager(): AbstractDynamicFormManager {
+        let filterManager;
         const searchDefinition = SearchService.getInstance().getSearchDefinition(KIXObjectType.CONTACT);
         if (searchDefinition) {
 
             // use own manager to extend operators
-            this.filterManager = new ContactJobFilterFormManager([SearchProperty.FULLTEXT], false);
+            filterManager = new ContactJobFilterFormManager([SearchProperty.FULLTEXT], false);
 
-            this.filterManager.init = (): void => {
+            filterManager.init = (): void => {
 
                 // get extended managers on init because they could be added after filterManager was created
                 if (searchDefinition) {
-                    this.filterManager['extendedFormManager'] = [];
+                    filterManager['extendedFormManager'] = [];
                     searchDefinition.formManager.getExtendedFormManager().forEach(
-                        (m) => this.filterManager.addExtendedFormManager(m)
+                        (m) => filterManager.addExtendedFormManager(m)
                     );
                 }
             };
         }
+        return filterManager;
     }
 
     public async prepareCreateValue(
