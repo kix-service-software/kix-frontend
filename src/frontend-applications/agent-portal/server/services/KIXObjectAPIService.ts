@@ -763,7 +763,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
         const service = await KIXObjectServiceRegistry.getServiceInstance(KIXObjectType.SYS_CONFIG_OPTION);
         if (service) {
-            const agentPortalConfig = await (service as any).getAgentPortalConfiguration(token);
+            const agentPortalConfig = await (service as any).getPortalConfiguration(token);
             preload = agentPortalConfig?.preloadObjects?.some((o) => o === objectType);
         }
         return preload;

@@ -91,7 +91,7 @@ export class UIModule implements IUIModule {
         const currentUser = await AgentSocketClient.getInstance().getCurrentUser(false);
         let allowed = currentUser.UserID === 1;
         if (!allowed && Array.isArray(currentUser.RoleIDs)) {
-            const agentPortalConfig = await SysConfigService.getInstance().getAgentPortalConfiguration()
+            const agentPortalConfig = await SysConfigService.getInstance().getPortalConfiguration()
                 .catch(() => null);
             if (agentPortalConfig?.adminRoleIds?.length) {
                 for (const roleId of currentUser.RoleIDs) {

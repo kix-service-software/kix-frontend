@@ -80,7 +80,7 @@ export class UserRoleFormService extends KIXObjectFormService {
         property: string, value: any, role: Role, formField: FormFieldConfiguration, formContext: FormContext
     ): Promise<any> {
         if (formContext === FormContext.EDIT && property === RoleProperty.ALLOW_ADMIN_MODULE) {
-            const agentPortalConfig = await SysConfigService.getInstance().getAgentPortalConfiguration();
+            const agentPortalConfig = await SysConfigService.getInstance().getPortalConfiguration();
             if (agentPortalConfig.adminRoleIds?.length) {
                 return agentPortalConfig.adminRoleIds?.some((rid) => rid === role?.ID);
             }

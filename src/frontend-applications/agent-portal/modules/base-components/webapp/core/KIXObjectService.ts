@@ -772,7 +772,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         let preload = false;
         const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.SYS_CONFIG_OPTION);
         if (service) {
-            const agentPortalConfig = await (service as any).getAgentPortalConfiguration();
+            const agentPortalConfig = await (service as any).getPortalConfiguration();
             preload = agentPortalConfig?.preloadObjects?.some((o) => o === objectType) || false;
         }
         return preload;
