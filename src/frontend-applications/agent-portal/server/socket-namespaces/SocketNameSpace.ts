@@ -85,6 +85,7 @@ export abstract class SocketNameSpace implements ISocketNamespace {
             ProfilingService.getInstance().logStart(profileTaskId);
 
             const response = await handler(data, client).catch((error) => {
+                LoggingService.getInstance().error(`Error SocketEvent (${event})`, error);
                 if (error instanceof SocketAuthenticationError) {
                     client.emit(SocketEvent.INVALID_TOKEN, new SocketErrorResponse(data.requestId, error));
                 } else if (error instanceof PermissionError) {
