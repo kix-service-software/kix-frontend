@@ -135,6 +135,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.CREATED_USER_ID:
             case TicketProperty.OWNER_ID:
             case TicketProperty.RESPONSIBLE_ID:
+            case TicketProperty.WATCHER_USER_ID:
                 if (value) {
                     displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.USER, value);
                 }

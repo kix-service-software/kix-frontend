@@ -386,7 +386,16 @@ export class JobAPIService extends KIXObjectAPIService {
     private prepareFilterParameter(jobParameter: Array<[string, any]>): void {
         const filterIndex = jobParameter.findIndex((p) => p[0] === JobProperty.FILTER);
         if (filterIndex !== -1 && Array.isArray(jobParameter[filterIndex][1])) {
-            const filter = this.prepareObjectFilter(jobParameter[filterIndex][1]);
+            const filter = [];
+            if (Array.isArray(jobParameter[filterIndex][1])) {
+                jobParameter[filterIndex][1].forEach((jobFilter) => {
+                    if (Array.isArray(jobFilter)) {
+                        const andFilters = this.prepareObjectFilter(jobFilter);
+                        filter.push(andFilters);
+                    }
+                });
+            }
+
             jobParameter[filterIndex][1] = filter;
         }
     }

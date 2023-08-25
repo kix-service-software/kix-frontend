@@ -41,6 +41,10 @@ export class AbstractJobFormManager {
     protected filterPageId: string = 'job-form-page-filters';
     protected actionPageId: string = 'job-form-page-actions';
 
+    public getFilterManager(): AbstractDynamicFormManager {
+        return;
+    }
+
     public addExtendedJobFormManager(manager: ExtendedJobFormManager): void {
         this.extendedJobFormManager.push(manager);
     }
@@ -185,15 +189,12 @@ export class AbstractJobFormManager {
     }
 
     protected async getFilterPage(formInstance: FormInstance): Promise<FormPageConfiguration> {
-        const filtersValue = await this.getValue(
-            JobProperty.FILTER, null, null, this.job, formInstance?.getFormContext()
-        );
-
         const filters = new FormFieldConfiguration(
             'job-form-field-filters',
             'Translatable#Filter', JobProperty.FILTER, 'job-input-filter', false,
             'Translatable#Helptext_Admin_JobCreateEdit_Filter', undefined,
-            filtersValue ? new FormFieldValue(filtersValue) : null
+            null, null, null, null,
+            1, 10, 0
         );
         const filterGroup = new FormGroupConfiguration(
             'job-new-form-group-filters', 'Translatable#Filter',
@@ -284,6 +285,12 @@ export class AbstractJobFormManager {
             case JobProperty.MACROS:
                 if (job && formContext === FormContext.EDIT) {
                     value = job.Type;
+                }
+                break;
+            case JobProperty.FILTER:
+                if (job && formContext === FormContext.EDIT) {
+                    // will be set in postPrepareForm
+                    value = null;
                 }
                 break;
             default:
