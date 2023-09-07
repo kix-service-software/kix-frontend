@@ -118,7 +118,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 objectType, objectIds ? [...objectIds] : null, loadingOptions, objectLoadingOptions, cache, forceIds,
                 silent, collectionId
             ).catch((error: Error) => {
-                if (!silent) {
+                if (!silent && error?.Code !== 'SILENT') {
                     // TODO: Publish event to show an error dialog
                     const content = new ComponentContent('list-with-title',
                         {
