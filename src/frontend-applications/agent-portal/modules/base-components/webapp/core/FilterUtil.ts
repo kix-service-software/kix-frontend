@@ -41,14 +41,20 @@ export class FilterUtil {
 
                 let objectValue = object[criterion.property];
 
-                if (!objectValue) {
+                const isDF = KIXObjectService.isDynamicFieldProperty(criterion.property);
+                if (isDF && objectValue === null || typeof objectValue === 'undefined') {
                     objectValue = await this.getDynamicFieldValue(object, criterion, objectValue);
                 }
 
-                if (!objectValue && typeof criterion.property === 'string') {
+                const isNotDefined = objectValue === null || typeof objectValue === 'undefined';
+                if (!isDF && isNotDefined && typeof criterion.property === 'string') {
                     objectValue = await PlaceholderService.getInstance().replacePlaceholders(
                         criterion.property, object
                     );
+
+                    if (objectValue === '') {
+                        objectValue = null;
+                    }
                 }
 
                 match = await FilterUtil.checkUIFilterCriterion(objectValue, criterion.operator, value);

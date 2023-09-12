@@ -8,5 +8,6 @@
         "lasso-less"
     ],
     "outputDir": "dist/frontend-applications/agent-portal/static",
-    "bundleReadTimeout": 200000
+    "bundleReadTimeout": 360000,
+    "cacheProfile": "development"
 }
