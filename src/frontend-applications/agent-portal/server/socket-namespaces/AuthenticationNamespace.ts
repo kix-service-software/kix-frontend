@@ -145,15 +145,20 @@ export class AuthenticationNamespace extends SocketNameSpace {
         return response;
     }
 
-    private async checkPermissions(data: PermissionCheckRequest, client: Socket): Promise<SocketResponse> {
-        const parsedCookie = client && client.handshake ? cookie.parse(client.handshake.headers.cookie) : null;
-        const token = parsedCookie ? parsedCookie.token : '';
+    private async checkPermissions(data: PermissionCheckRequest, socket: Socket): Promise<SocketResponse> {
+        const parsedCookie = socket ? cookie.parse(socket.handshake.headers.cookie) : null;
+
+        const tokenPrefix = socket?.handshake?.headers?.tokenprefix || '';
+        const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
         let event = AuthenticationEvent.PERMISSION_CHECK_SUCCESS;
 
-        const allowed = await PermissionService.getInstance().checkPermissions(
-            token, data.permissions, data.clientRequestId, data.object
-        ).catch(() => false);
+        let allowed = false;
+        if (token) {
+            allowed = await PermissionService.getInstance().checkPermissions(
+                token, data.permissions, data.clientRequestId, data.object
+            ).catch(() => false);
+        }
 
         if (!allowed) {
             event = AuthenticationEvent.PERMISSION_CHECK_FAILED;

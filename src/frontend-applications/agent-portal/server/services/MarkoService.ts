@@ -35,6 +35,7 @@ export class MarkoService {
 
     private ready: boolean = false;
     private appNames: string[] = [];
+    private currentApp: string;
 
     private constructor() {
         let configName = 'lasso.dev.config.json';
@@ -148,7 +149,6 @@ export class MarkoService {
         this.ready = false;
 
         this.appIsReady();
-        lasso.clearCaches();
 
         const config = ConfigurationService.getInstance().getServerConfiguration();
         const applicationString = config?.BUILD_MARKO_APPLICATIONS;
@@ -159,7 +159,6 @@ export class MarkoService {
 
         LoggingService.getInstance().info(`Build ${applications.length} marko applications`);
 
-        const buildPromises = [];
         this.appNames = applications.map((a) => a.name);
 
         for (const application of applications) {
@@ -176,10 +175,8 @@ export class MarkoService {
             const templatePath = path.join(__dirname, ...rootPath, folder, application.name, application.path);
 
             const template = require(templatePath).default;
-            buildPromises.push(this.buildApplication(template, application));
+            await this.buildApplication(template, application);
         }
-
-        await Promise.all(buildPromises);
 
         this.ready = true;
         ProfilingService.getInstance().stop(profileTaskId);
@@ -189,6 +186,7 @@ export class MarkoService {
         try {
             const profileTaskId = ProfilingService.getInstance().start('MarkoService', `Build App ${app.name}`);
 
+            this.currentApp = app.name;
             const startBuild = Date.now();
             await template.render({}).catch((error) => {
                 ProfilingService.getInstance().stop(profileTaskId, { data: [`[MARKO] ERROR - App Build for ${app.name}`] });
@@ -210,23 +208,27 @@ export class MarkoService {
     }
 
     public async appIsReady(): Promise<boolean> {
-        let tryCount = 20;
-        while (!this.ready && tryCount > 0) {
-            await this.waitForReadyState();
-            tryCount -= 1;
+        let tryCount = 1;
+        const lassoTimeout = Number(process.env.LASSO_TIMEOUT) || 360000;
+        const waitForTime = lassoTimeout / 20;
+        while (!this.ready && tryCount <= 20) {
+            await this.waitForReadyState(waitForTime, tryCount);
+            tryCount++;
         }
 
         return this.ready;
     }
 
-    private async waitForReadyState(): Promise<void> {
+    private async waitForReadyState(waitForTime: number, tryCount: number): Promise<void> {
         return new Promise<void>((resolve) => {
             setTimeout(() => {
                 if (!this.ready) {
-                    LoggingService.getInstance().info(`[MARKO] In Progress - App Build ${this.appNames.join(', ')}`);
+                    const count = tryCount.toString().padStart(2, '0');
+                    const duration = waitForTime * tryCount / 1000;
+                    LoggingService.getInstance().info(`[MARKO] (${count} - ${duration}s) In Progress - App Build ${this.currentApp} (pending: ${this.appNames.join(', ')})`);
                 }
                 resolve();
-            }, 6000);
+            }, waitForTime);
         });
     }
 

@@ -6,7 +6,7 @@
             "env": {
                 "NODE_ENV": "development",
                 "NODE_TLS_REJECT_UNAUTHORIZED": "0",
-                "LASSO_TIMEOUT": "200000",
+                "LASSO_TIMEOUT": "360000",
                 "SHOW_MODULE_COMPLAINS": "1",
                 "NODE_OPTIONS": "--inspect",
                 "ENABLE_PROFILING": "true"
