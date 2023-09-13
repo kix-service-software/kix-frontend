@@ -221,7 +221,7 @@ export class TicketBulkManager extends BulkManager {
                 );
                 break;
             case TicketProperty.QUEUE_ID:
-                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false, null, ['WRITE']);
+                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false, null, ['CREATE']);
                 nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy);
                 break;
             default:
