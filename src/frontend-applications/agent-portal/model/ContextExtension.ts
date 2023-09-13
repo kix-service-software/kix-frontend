@@ -11,6 +11,7 @@ import { Context } from './Context';
 import { AbstractAction } from '../modules/base-components/webapp/core/AbstractAction';
 import { KIXObject } from './kix/KIXObject';
 import { ContextPreference } from './ContextPreference';
+import { KIXObjectType } from './kix/KIXObjectType';
 
 export class ContextExtension {
 
@@ -38,6 +39,12 @@ export class ContextExtension {
 
     public async addExtendedUrlParams(url: string): Promise<string> {
         return url;
+    }
+
+    public async reloadObjectList(
+        objectType: KIXObjectType | string, context: Context, silent: boolean = false, limit?: number
+    ): Promise<void> {
+        return;
     }
 
     public async destroy(context: Context): Promise<void> {
