@@ -21,6 +21,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        this.state.title = await TranslationService.translate('Translatable#Search menu');
         const descriptors = ContextService.getInstance().getContextDescriptors(ContextMode.SEARCH);
         this.state.canShow = Array.isArray(descriptors) && descriptors.length > 0;
         for (const cd of descriptors) {

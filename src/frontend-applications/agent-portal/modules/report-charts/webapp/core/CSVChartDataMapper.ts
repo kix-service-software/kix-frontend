@@ -54,7 +54,8 @@ export class CSVChartDataMapper implements IReportChartDataMapper {
         for (let i = index + 1; i < csvData.length; i++) {
             const label = csvData[i][labelIndex];
             if (!labels.some((l) => l === label)) {
-                labels.push(label);
+                const displayValue = await TranslationService.translate(label);
+                labels.push(displayValue);
             }
 
             const labelValueIndex = labels.findIndex((l) => l === label);

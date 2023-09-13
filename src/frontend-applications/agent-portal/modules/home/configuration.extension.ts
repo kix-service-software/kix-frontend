@@ -28,7 +28,6 @@ import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../model/configuration/TableConfiguration';
 import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
-import { SortOrder } from '../../model/SortOrder';
 import { DefaultColumnConfiguration } from '../../model/configuration/DefaultColumnConfiguration';
 import { DataType } from '../../model/DataType';
 import { ToggleOptions } from '../table/model/ToggleOptions';
