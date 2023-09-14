@@ -54,6 +54,10 @@ export class SystemAddressTableFactory extends TableFactory {
                 DataType.STRING, true, null, null, false
             ),
             new DefaultColumnConfiguration(null, null, null,
+                SystemAddressProperty.QUEUE_ID, true, false, true, false, 150, true, true, false,
+                DataType.STRING, true, null, null, false
+            ),
+            new DefaultColumnConfiguration(null, null, null,
                 SystemAddressProperty.VALID_ID, true, false, true, false, 100, true, true, true
             ),
             new DefaultColumnConfiguration(null, null, null,

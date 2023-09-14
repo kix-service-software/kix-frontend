@@ -2,6 +2,7 @@
         "dependencies": [
                 "require ./components/admin-mail-accounts",
                 "require ./components/mail-account-info-widget",
+                "require ./components/mail-account-input-dispatching",
                 "require ./components/mail-account-input-types",
                 "require ./components/setup-mail-account",
                 "require ./components/setup-sending-email",
