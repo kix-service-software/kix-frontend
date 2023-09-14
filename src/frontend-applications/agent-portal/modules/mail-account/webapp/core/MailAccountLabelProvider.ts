@@ -56,6 +56,9 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
             case MailAccountProperty.OAUTH2_PROFILEID:
                 displayValue = 'Translatable#OAuth2 Profile';
                 break;
+            case MailAccountProperty.QUEUE_ID:
+                displayValue = 'Translatable#Queue';
+                break;
             default:
                 displayValue = await super.getPropertyText(property, short, translatable);
         }
@@ -84,13 +87,18 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
                 break;
             case MailAccountProperty.DISPATCHING_BY:
                 if (mailAccount.DispatchingBy === DispatchingType.BACKEND_KEY_DEFAULT) {
-                    displayValue = 'Translatable#Default';
-                } else if (mailAccount.QueueID) {
-                    const queues = await KIXObjectService.loadObjects(
-                        KIXObjectType.QUEUE, [mailAccount.QueueID], null, null, true
-                    ).catch((error) => []);
-                    displayValue = queues && !!queues.length ? queues[0].Name : value;
+                    displayValue = 'Translatable#Default Queue (SysConfig)';
+                } else if (mailAccount.DispatchingBy === DispatchingType.BACKEND_KEY_FROM) {
+                    displayValue = 'Translatable#recipient adresses (To, Cc, etc.)';
+                } else if (mailAccount.DispatchingBy === DispatchingType.BACKEND_KEY_QUEUE) {
+                    displayValue = 'Translatable#Queue';
                 }
+                break;
+            case MailAccountProperty.QUEUE_ID:
+                const queues = await KIXObjectService.loadObjects(
+                    KIXObjectType.QUEUE, [mailAccount.QueueID], null, null, true
+                ).catch((error) => []);
+                displayValue = queues && !!queues.length ? queues[0].Name : value;
                 break;
             default:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);

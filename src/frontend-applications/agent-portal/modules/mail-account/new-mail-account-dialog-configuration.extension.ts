@@ -19,11 +19,8 @@ import { ContextMode } from '../../model/ContextMode';
 import { FormFieldConfiguration } from '../../model/configuration/FormFieldConfiguration';
 import { MailAccountProperty } from './model/MailAccountProperty';
 import { FormFieldOption } from '../../model/configuration/FormFieldOption';
-import { FormFieldOptions } from '../../model/configuration/FormFieldOptions';
 import { FormFieldValue } from '../../model/configuration/FormFieldValue';
 import { ObjectReferenceOptions } from '../../modules/base-components/webapp/core/ObjectReferenceOptions';
-import { TreeNode } from '../base-components/webapp/core/tree';
-import { DispatchingType } from './model/DispatchingType';
 import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 import { FormGroupConfiguration } from '../../model/configuration/FormGroupConfiguration';
 import { FormPageConfiguration } from '../../model/configuration/FormPageConfiguration';
@@ -99,16 +96,8 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'mail-account-new-form-field-dispatching',
-                'Translatable#Dispatching', MailAccountProperty.DISPATCHING_BY, 'object-reference-input',
-                true, 'Translatable#Helptext_Admin_MailAccountCreate_Dispachting',
-                [
-                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
-                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
-                    new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true),
-                    new FormFieldOption(ObjectReferenceOptions.ADDITIONAL_NODES, [
-                        new TreeNode(DispatchingType.FRONTEND_KEY_DEFAULT, 'Translatable#Default'),
-                    ])
-                ]
+                'Translatable#Dispatching', MailAccountProperty.DISPATCHING_BY, 'mail-account-input-dispatching',
+                true, 'Translatable#Helptext_Admin_MailAccountCreate_Dispachting'
             )
         );
         configurations.push(

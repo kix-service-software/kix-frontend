@@ -42,6 +42,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 MailAccountProperty.IMAP_FOLDER,
                 MailAccountProperty.TRUSTED,
                 MailAccountProperty.DISPATCHING_BY,
+                MailAccountProperty.QUEUE_ID,
                 MailAccountProperty.COMMENT,
                 KIXObjectProperty.VALID_ID,
                 KIXObjectProperty.CREATE_BY,
