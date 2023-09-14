@@ -154,7 +154,7 @@ class Component {
         const cache = context?.getSearchCache();
 
         this.state.sortAttribute = cache?.sortAttribute;
-        this.state.sortDescanding = cache?.sortDescanding;
+        this.state.sortDescending = cache?.sortDescending;
 
         let sortAttributeNodes = [];
         if (this.state.manager) {
@@ -209,12 +209,12 @@ class Component {
         }
     }
 
-    public sortDescandingChanged(event: any): void {
-        this.state.sortDescanding = event.target.checked;
+    public sortDescendingChanged(event: any): void {
+        this.state.sortDescending = event.target.checked;
         const context = ContextService.getInstance().getContext<SearchContext>(this.contextInstanceId);
         const searchCache = context?.getSearchCache();
         if (searchCache) {
-            searchCache.sortDescanding = this.state.sortDescanding;
+            searchCache.sortDescending = this.state.sortDescending;
         }
     }
 

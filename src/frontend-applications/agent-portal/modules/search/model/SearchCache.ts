@@ -31,7 +31,7 @@ export class SearchCache<T extends KIXObject = KIXObject> {
         public name: string = '',
         public limit: number = 50,
         public sortAttribute: string = null,
-        public sortDescanding: boolean = false
+        public sortDescending: boolean = false
     ) {
         if (!id) {
             this.id = IdService.generateDateBasedId('SearchCache');
@@ -51,14 +51,14 @@ export class SearchCache<T extends KIXObject = KIXObject> {
         this.limit = this.originalLimit;
         this.name = '';
         this.sortAttribute = null;
-        this.sortDescanding = false;
+        this.sortDescending = false;
     }
 
     public static create(searchCache: SearchCache): SearchCache {
         return new SearchCache(
             searchCache.id, searchCache.contextId,
             searchCache.objectType, searchCache.criteria, [], searchCache.fulltextValue, searchCache.primaryValue,
-            searchCache.name, searchCache.limit, searchCache.sortAttribute, searchCache.sortDescanding
+            searchCache.name, searchCache.limit, searchCache.sortAttribute, searchCache.sortDescending
         );
     }
 

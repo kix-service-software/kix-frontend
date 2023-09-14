@@ -164,7 +164,7 @@ export class SearchService {
         preparedCriteria = this.prepareCriteria(preparedCriteria);
 
         const loadingOptions = await searchDefinition.getLoadingOptions(
-            preparedCriteria, searchCache.limit, searchCache.sortAttribute, searchCache.sortDescanding
+            preparedCriteria, searchCache.limit, searchCache.sortAttribute, searchCache.sortDescending
         );
 
         if (limit) {
