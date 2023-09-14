@@ -70,5 +70,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 on-dragenter("handleDragEnter")
                 on-dragleave("handleDragLeave")/>
         </if>
+        <if(field.countSeparatorString && field.countMax && field.countMax > 1 && state.fields[index+1] && state.fields[index+1].id === field.id)>
+            <p.field-separator><translation-string pattern=field.countSeparatorString/></p>
+        </if>
     </if>
 </for>

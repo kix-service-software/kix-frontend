@@ -196,6 +196,7 @@ export class AbstractJobFormManager {
             null, null, null, null,
             1, 10, 0
         );
+        filters.countSeparatorString = 'or';
         const filterGroup = new FormGroupConfiguration(
             'job-new-form-group-filters', 'Translatable#Filter',
             undefined, undefined, [filters]

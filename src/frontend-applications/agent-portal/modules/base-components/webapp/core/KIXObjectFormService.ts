@@ -217,7 +217,8 @@ export abstract class KIXObjectFormService {
             f.label, f.property, f.inputComponent, f.required, f.hint, f.options, f.defaultValue,
             [], null, (parent ? parent.instanceId : f.parentInstanceId), f.countDefault, f.countMax, f.countMin,
             f.maxLength, f.regEx, f.regExErrorMessage, f.empty, f.asStructure, f.readonly,
-            f.placeholder, undefined, f.showLabel, f.name, f.draggableFields, f.defaultHint
+            f.placeholder, undefined, f.showLabel, f.name, f.draggableFields, f.defaultHint, f.type, f.visible,
+            f.translateLabel, f.valid, f.countSeparatorString
         );
 
         newField.instanceId = IdService.generateDateBasedId(newField.property);
