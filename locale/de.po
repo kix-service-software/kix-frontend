@@ -264,6 +264,9 @@ msgstr "Alle Objekte"
 msgid "All open tabs will be closed. Continue?"
 msgstr "Alle geöffneten Tabs werden geschlossen. Fortfahren?"
 
+msgid "Allow access to admin module"
+msgstr ""
+
 msgid "All tickets"
 msgstr "Alle Tickets"
 
@@ -892,6 +895,9 @@ msgstr "DBMS"
 msgid "Default"
 msgstr "Standard"
 
+msgid "Default Queue (SysConfig)"
+msgstr ""
+
 msgid "Default Value"
 msgstr "Vorgabewert"
 
@@ -1160,6 +1166,12 @@ msgstr "Emailadressdetails"
 msgid "Email Addresses"
 msgstr "E-Mail-Adressen"
 
+msgid "Email could not be sent"
+msgstr ""
+
+msgid "Email Error"
+msgstr ""
+
 msgid "Email Filter"
 msgstr "E-Mail-Filter"
 
@@ -1372,6 +1384,9 @@ msgstr "<< Feld Optionen:"
 
 msgid "Field Type"
 msgstr "Feldtyp"
+
+msgid "File Upload"
+msgstr ""
 
 msgid "Filter"
 msgstr "Filter"
@@ -1666,6 +1681,9 @@ msgstr ""
 "Wählen Sie das Team, in welche über dieses Konto eingehende E-Mails "
 "verschoben werden. Welches Team als „Standard“ hinterlegt ist, wird in der "
 "SysConfig definiert."
+
+msgid "Helptext_Admin_MailAccountCreate_Dispatching_Queue"
+msgstr ""
 
 msgid "Helptext_Admin_MailAccountCreate_Host"
 msgstr ""
@@ -2056,6 +2074,9 @@ msgstr ""
 "„support@muster-kg.com“ Diese muss zu einem in KIX konfigurierten Konto "
 "passen, wenn Antworten an diese Adresse im KIX an Tickets ankommen sollen."
 
+msgid "Helptext_Admin_SystemAddressCreate_Queue"
+msgstr ""
+
 msgid "Helptext_Admin_SystemAddressCreate_Validity"
 msgstr ""
 "Die E-Mail-Adresse kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
@@ -2195,6 +2216,9 @@ msgstr ""
 "Durchsuchbar sind die Eigenschaften in der Spalte \"Pattern\". Wird nur ein "
 "Teil einer Bezeichnung gesucht, muss dieser in * gesetzt werden (Wildcard-"
 "Suche)."
+
+msgid "Helptext_Admin_Users_RoleCreate_AllowAdminModule"
+msgstr ""
 
 msgid "Helptext_Admin_Users_RoleCreate_Comment"
 msgstr ""
@@ -3197,6 +3221,9 @@ msgstr "Los geht's"
 msgid "Lets go"
 msgstr "Los geht's"
 
+msgid "Library"
+msgstr ""
+
 msgid "Limit:"
 msgstr "Limit (Suchergebnisse):"
 
@@ -4110,6 +4137,9 @@ msgstr "Lesen & Schreiben"
 msgid "Recently Closed"
 msgstr "Kürzlich Geschlossen"
 
+msgid "recipient adresses (To, Cc, etc.)"
+msgstr ""
+
 msgid "Recipients"
 msgstr "Empfänger"
 
@@ -4272,6 +4302,9 @@ msgstr "Benötigtes Feld '{0}' hat keinen Wert."
 msgid "Required field {0} is no JSON."
 msgstr "Benötigtes Feld '{0}' ist kein gültiges JSON-Format."
 
+msgid "Required field has no value."
+msgstr ""
+
 msgid "Reset"
 msgstr "Rücksetzen"
 
@@ -4405,6 +4438,9 @@ msgstr "Fehler bei Suche!"
 
 msgid "Search Limit"
 msgstr "Suchlimit"
+
+msgid "Search menu"
+msgstr ""
 
 msgid "SEARCH_OPERATOR_WITHIN_LAST"
 msgstr "der letzten"
