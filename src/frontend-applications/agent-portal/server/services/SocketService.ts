@@ -14,34 +14,15 @@ import { PluginService } from '../../../../server/services/PluginService';
 import { ISocketNamespaceRegistryExtension } from '../extensions/ISocketNamespaceRegistryExtension';
 import { LoggingService } from '../../../../server/services/LoggingService';
 import { Server } from 'socket.io';
+import { ServerManager } from '../../../../server/ServerManager';
 
 export class SocketService {
 
-    private static INSTANCE: SocketService;
-
     private namespaces = [];
 
-    public static getInstance(): SocketService {
-        if (!SocketService.INSTANCE) {
-            SocketService.INSTANCE = new SocketService();
-        }
-        return SocketService.INSTANCE;
-    }
+    public constructor(private socketIO: Server) { }
 
-    private constructor() { }
-
-    private socketIO: Server;
-
-    public async initialize(socketIO: any): Promise<void> {
-        this.socketIO = socketIO;
-        await this.registerNamespaces();
-    }
-
-    public stopServer(): void {
-        this.socketIO.close();
-    }
-
-    private async registerNamespaces(): Promise<void> {
+    public async initialize(): Promise<void> {
         const namespaces = await PluginService.getInstance().getExtensions<ISocketNamespaceRegistryExtension>(
             AgentPortalExtensions.SOCKET_NAMESPACE
         );
@@ -50,13 +31,20 @@ export class SocketService {
             for (const c of namespace.getNamespaceClasses()) {
                 LoggingService.getInstance().info(`Register socket namespace: ${c.constructor.name}`);
                 this.namespaces.push(c);
-                await c.registerNamespace(this.socketIO);
+                c.registerNamespace(this.socketIO);
             }
         }
     }
 
+    public stopServer(): void {
+        this.socketIO.close();
+    }
+
     public broadcast(event: NotificationEvent, data: any): void {
-        NotificationNamespace.getInstance().broadcast(event, data);
+        const notificationNamespace: NotificationNamespace = this.namespaces.find(
+            (n) => n instanceof NotificationNamespace
+        );
+        notificationNamespace?.broadcast(event, data);
     }
 
 }

@@ -8,6 +8,7 @@
  */
 
 import { AutocompleteFormFieldOption } from '../../../../../model/AutocompleteFormFieldOption';
+import { AgentPortalConfiguration } from '../../../../../model/configuration/AgentPortalConfiguration';
 import { IKIXObjectService } from '../../../../../modules/base-components/webapp/core/IKIXObjectService';
 import { PlaceholderService } from '../../../../../modules/base-components/webapp/core/PlaceholderService';
 import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
@@ -17,7 +18,6 @@ import { SysConfigService } from '../../../../sysconfig/webapp/core';
 import { TextModule } from '../../../../textmodule/model/TextModule';
 import { BrowserUtil } from '../../core/BrowserUtil';
 import { ComponentState } from './ComponentState';
-import { EditorConfiguration } from './EditorConfiguration';
 
 declare let CKEDITOR: any;
 
@@ -33,14 +33,10 @@ class EditorComponent {
     private maxReadyTries: number;
 
     private handleOnInputChange: boolean = false;
-    private config: any;
     private inline: boolean;
     private noImages: boolean;
 
     public onCreate(input: any): void {
-        this.config = EditorConfiguration.createConfiguration(
-            input.simple, input.readOnly, input.noImages, input.resize, input.resizeDir
-        );
         this.inline = input.inline;
         this.noImages = input.noImages;
         this.state = new ComponentState(input.readOnly);
@@ -126,21 +122,26 @@ class EditorComponent {
                 }
             });
 
+            const agentPortalConfig = await SysConfigService.getInstance()
+                .getPortalConfiguration<AgentPortalConfiguration>();
+
+            const editorConfig = agentPortalConfig?.ckEditorConfiguration;
+
             this.createTimeout = setTimeout(async () => {
                 if (!this.state.readOnly) {
                     const userLanguage = await TranslationService.getUserLanguage();
                     if (userLanguage) {
-                        this.config['language'] = userLanguage;
+                        editorConfig['language'] = userLanguage;
                     }
                 }
 
                 if (this.inline) {
                     this.editor = CKEDITOR.inline(this.state.id, {
-                        ...this.config
+                        ...editorConfig
                     });
                 } else {
                     this.editor = CKEDITOR.replace(this.state.id, {
-                        ...this.config
+                        ...editorConfig
                     });
                 }
 

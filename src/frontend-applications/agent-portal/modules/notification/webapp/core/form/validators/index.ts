@@ -8,4 +8,3 @@
  */
 
 export { NotificationEmailRecipientValidator } from './NotificationEmailRecipientValidator';
-export { NotificationFilterValidator } from './NotificationFilterValidator';

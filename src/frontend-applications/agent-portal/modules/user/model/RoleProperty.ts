@@ -31,4 +31,6 @@ export enum RoleProperty {
 
     PERMISSIONS = 'Permissions',
 
+    ALLOW_ADMIN_MODULE = 'ALLOW_ADMIN_MODULE'
+
 }

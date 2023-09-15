@@ -109,12 +109,13 @@ export abstract class Context {
                         data?.instanceId === this.instanceId;
 
                     const objectUpdate = eventId === ApplicationEvent.OBJECT_UPDATED && data?.objectType;
+                    const objectDelete = eventId === ApplicationEvent.OBJECT_DELETED && data?.objectType;
 
                     if (this.descriptor.contextMode !== ContextMode.SEARCH) {
 
                         TableFactoryService.getInstance().deleteContextTables(this.contextId, data?.objectType);
 
-                        if (objectUpdate) {
+                        if (objectUpdate || objectDelete) {
                             if (this.objectLists.has(data.objectType)) {
                                 this.deleteObjectList(data.objectType);
                             }
@@ -135,12 +136,14 @@ export abstract class Context {
             };
 
             EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.eventSubscriber);
+            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_DELETED, this.eventSubscriber);
             EventService.getInstance().subscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.eventSubscriber);
         }
     }
 
     public async destroy(): Promise<void> {
         EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.eventSubscriber);
+        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_DELETED, this.eventSubscriber);
         EventService.getInstance().unsubscribe(ContextEvents.CONTEXT_UPDATE_REQUIRED, this.eventSubscriber);
 
         await this.formManager?.destroy();
@@ -311,7 +314,9 @@ export abstract class Context {
             return list.value;
         }
 
-        // await this.reloadObjectList(objectType, undefined, limit);
+        if (!this.hasObjectList(objectType)) {
+            await this.reloadObjectList(objectType, undefined, limit);
+        }
 
         return this.objectLists.get(objectType) as any[];
     }
@@ -648,7 +653,11 @@ export abstract class Context {
     public async reloadObjectList(
         objectType: KIXObjectType | string, silent: boolean = false, limit?: number
     ): Promise<void> {
-        return;
+        const reloadPromises = [];
+        this.contextExtensions.forEach((ce) => {
+            reloadPromises.push(ce.reloadObjectList(objectType, this, silent, limit));
+        });
+        await Promise.allSettled(reloadPromises);
     }
 
     private loadingPromise: Promise<any>;

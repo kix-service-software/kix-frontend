@@ -27,6 +27,11 @@ export class PermissionService {
         token: string, permissions: UIComponentPermission[] = [], clientRequestId: string, object?: any
     ): Promise<boolean> {
         if (permissions && permissions.length) {
+
+            if (!token) {
+                return false;
+            }
+
             const andPermissionChecks: Array<Promise<boolean>> = [];
             const orPermissionChecks: Array<Promise<boolean>> = [];
             permissions.filter((p) => p.OR).forEach((p) => {

@@ -34,6 +34,7 @@ import { Context } from '../../../../../model/Context';
 import { FormValueProperty } from '../../../../object-forms/model/FormValueProperty';
 import { ObjectFormValue } from '../../../../object-forms/model/FormValues/ObjectFormValue';
 import { ObjectFormEvent } from '../../../../object-forms/model/ObjectFormEvent';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
 
 class Component {
 
@@ -148,23 +149,16 @@ class Component {
             this.contextListener = {
                 sidebarLeftToggled: (): void => { return; },
                 filteredObjectListChanged: (): void => { return; },
-                objectChanged: (): void => { return; },
+                objectChanged: async (
+                    objectId: number, object: KIXObject, objectType: KIXObjectType | string
+                ): Promise<void> => {
+                    if (objectType === this.objectType) {
+                        await this.reloadTable(settings);
+                    }
+                },
                 objectListChanged: async (objectType: KIXObjectType | string): Promise<void> => {
                     if (objectType === this.objectType) {
-                        const activeContext = ContextService.getInstance().getActiveContext();
-                        if (this.context.instanceId === activeContext.instanceId) {
-                            if (this.state.table.isFiltered()) {
-                                if (settings?.resetFilterOnReload) {
-                                    this.state.table?.resetFilter();
-                                    const filterComponent = (this as any).getComponent('table-widget-filter');
-                                    filterComponent?.reset();
-                                } else if (this.state.table) {
-                                    this.state.filterValue = this.state.table.getFilterValue();
-                                }
-                            }
-
-                            await this.prepare();
-                        }
+                        await this.reloadTable(settings);
                     }
                 },
                 sidebarRightToggled: (): void => { return; },
@@ -181,11 +175,28 @@ class Component {
         }
     }
 
+    private async reloadTable(settings: TableWidgetConfiguration): Promise<void> {
+        const activeContext = ContextService.getInstance().getActiveContext();
+        if (this.context.instanceId === activeContext.instanceId) {
+            if (this.state.table.isFiltered()) {
+                if (settings?.resetFilterOnReload) {
+                    this.state.table?.resetFilter();
+                    const filterComponent = (this as any).getComponent('table-widget-filter');
+                    filterComponent?.reset();
+                } else if (this.state.table) {
+                    this.state.filterValue = this.state.table.getFilterValue();
+                }
+            }
+
+            await this.prepare();
+        }
+    }
+
     private async prepareFormDependency(): Promise<void> {
         if (this.state.widgetConfiguration.formDependent) {
             this.formBindingIds = new Map();
             EventService.getInstance().subscribe(ObjectFormEvent.OBJECT_FORM_VALUE_MAPPER_INITIALIZED, this.subscriber);
-            // add bindins if mapper already initialized
+            // add bindings if mapper already initialized
             await this.addFormBindings();
         }
     }

@@ -30,26 +30,32 @@ export class CSVChartDataMapper implements IReportChartDataMapper {
             csvString, csvFormatConfig.textSeparator || '"', csvFormatConfig.valueSeparator || ','
         );
 
+        let index = 0;
+        if (csvData.length > 1 && csvData[index].length === 1 && csvData[1].length > 1) {
+            index = 1;
+        }
+
         const dataSetIndexes: Map<string, number> = new Map();
         for (const dsp of csvFormatConfig?.datasetProperties) {
-            dataSetIndexes.set(dsp, csvData[0].findIndex((d) => d === dsp));
+            dataSetIndexes.set(dsp, csvData[index].findIndex((d) => d === dsp));
         }
 
         const valueIndexes: Map<string, number> = new Map();
         for (const vp of csvFormatConfig?.valueProperties) {
-            valueIndexes.set(vp, csvData[0].findIndex((d) => d === vp));
+            valueIndexes.set(vp, csvData[index].findIndex((d) => d === vp));
         }
 
         const singleDataset = csvFormatConfig?.datasetProperties.length === 1 &&
             csvFormatConfig?.datasetProperties[0] === csvFormatConfig?.labelProperty;
 
-        const labelIndex = csvData[0].findIndex((d) => d === csvFormatConfig?.labelProperty);
+        const labelIndex = csvData[index].findIndex((d) => d === csvFormatConfig?.labelProperty);
 
         const labels = [];
-        for (let i = 1; i < csvData.length; i++) {
+        for (let i = index + 1; i < csvData.length; i++) {
             const label = csvData[i][labelIndex];
             if (!labels.some((l) => l === label)) {
-                labels.push(label);
+                const displayValue = await TranslationService.translate(label);
+                labels.push(displayValue);
             }
 
             const labelValueIndex = labels.findIndex((l) => l === label);

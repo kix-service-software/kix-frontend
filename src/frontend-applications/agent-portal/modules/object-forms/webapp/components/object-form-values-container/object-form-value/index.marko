@@ -9,66 +9,109 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <if(state.prepared)>
    <if(state.enabled)>
-      <div.mt-2.mb-2>
-         <if(state.visible)>         
-            <div.input-group>
+      <div class="mt-2 mb-2">
+         <if(state.visible)>
 
-               <div.col-11.col-sm-2.d-flex.p-0>
-                  <span.object-forms-component.flex-fill.input-group-text.min-w-0.p-0.ps-2.pe-2.rounded-0.rounded-start class={
-                     border: !state.valid,
-                     'bg-danger': !state.valid,
-                     'text-white': !state.valid,
-                     'border-danger': !state.valid,
-                     'rounded-left"': !state.valid,
-                     'border-end-0': state.hint,
-                     'border-end-1': !state.hint
-                  }
-                  title=state.label>
-                  <span.text-truncate>${state.label}</span>
-                     <if(state.required)>*</if>
+            <div class="input-group">
+
+               <div class="col-11 col-sm-2 d-flex p-0">
+                  <span
+                     class=[
+                        "object-forms-component flex-fill input-group-text min-w-0 p-0 ps-2 pe-2 rounded-0 rounded-start",
+                        {
+                           border: !state.valid,
+                           "bg-danger": !state.valid,
+                           "text-white": !state.valid,
+                           "border-danger": !state.valid,
+                           'rounded-left"': !state.valid,
+                           "border-end-0": state.hint,
+                           "border-end-1": !state.hint,
+                        },
+                     ]
+                     title=state.label
+                  >
+                     <span class="text-truncate">
+                        ${state.label}
+                     </span>
+                     <if(state.required)>
+                        *
+                     </if>
                   </span>
 
                   <if(state.hint)>
-                     <span.object-forms-component.input-group-text.hint-wrapper.rounded-0.border-start-0>
-                        <overlay-icon isHint=true content=state.hint title=state.label/>
+                     <span class="object-forms-component input-group-text hint-wrapper rounded-0 border-start-0">
+                        <overlay-icon
+                           isHint
+                           content=state.hint
+                           title=state.label
+                        />
                      </span>
                   </if>
                </div>
 
-               <div.col-11.col-sm-9.p-0 class={
-                  border: !state.valid,
-                  'border-danger': !state.valid,
-                  'text-danger': !state.valid,
-                  'rounded': !state.valid
-               }>
+               <div class=[
+                  "col-11 col-sm-9 p-0",
+                  {
+                     border: !state.valid,
+                     "border-danger": !state.valid,
+                     "text-danger": !state.valid,
+                     rounded: !state.valid,
+                  },
+               ]>
                   <if(state.inputTemplate)>
-                        <${state.inputTemplate} formValue=state.formValue/>
+                     <${state.inputTemplate} formValue=input.formValue/>
                   </if>
                   <else>
-                     <text-form-input formValue=state.formValue/>
+                     <text-form-input formValue=input.formValue/>
                   </else>
                </div>
-               <add-remove-form-value-control formValue=state.formValue/>
+               <add-remove-form-value-control
+                  formValue=input.formValue
+                  key=("control-" + input.formValue.instanceId)
+               />
             </div>
-            <if(!state.formValue.readonly && Array.isArray(state.formValue.actions) && state.formValue.actions.length > 0)>
-               <div.input-group>
-                  <div.col-11.col-sm-2.d-flex.p-0></div>
-                  <div.col-11.col-sm-9.p-0>
-                     <actions-container actions=state.formValue.actions isSelectInput=state.formValue.inputComponentId === "select-form-input"/>
+            <if(
+               !state.formValue.readonly &&
+               Array.isArray(state.formValue.actions) &&
+               state.formValue.actions.length > 0
+            )>
+               <div class="input-group">
+                  <div class="col-11 col-sm-2 d-flex p-0"/>
+                  <div class="col-11 col-sm-9 p-0">
+                     <actions-container
+                        actions=(state.formValue.actions)
+                        isSelectInput=(
+                           state.formValue.inputComponentId ===
+                           "select-form-input"
+                        )
+                     />
                   </div>
+               </div>
+            </if>
+
+            <if(state.validationErrors.length)>
+               <div class="col-sm-10 offset-sm-2">
+                  <for|validationError| of=state.validationErrors>
+                     <span class="text-danger">
+                        ${validationError.message}
+                     </span>
+                  </for>
                </div>
             </if>
          </if>
          <if(Array.isArray(state.formValues) && state.formValues.length)>
             <div class={
-               'ps-2': !state.formValue.IS_COUNTABLE && state.formValue.visible,
-               'ms-4': !state.formValue.IS_COUNTABLE && state.formValue.visible,
-               'border-start': !state.formValue.IS_COUNTABLE && state.formValue.visible
+               "ps-2": !state.formValue.IS_COUNTABLE && state.formValue.visible,
+               "ms-4": !state.formValue.IS_COUNTABLE && state.formValue.visible,
+               "border-start":
+                  !state.formValue.IS_COUNTABLE && state.formValue.visible,
             }>
-               <object-form-values-container formValues=state.formValues parent=state.formValue/>
+               <object-form-values-container
+                  formValues=state.formValues
+                  parent=input.formValue
+               />
             </div>
          </if>
-         
       </div>
-   </if>   
+   </if>
 </if>

@@ -31,6 +31,13 @@ import { FormContext } from '../../model/configuration/FormContext';
 import { ModuleConfigurationService } from '../../server/services/configuration/ModuleConfigurationService';
 
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { FilterCriteria } from '../../model/FilterCriteria';
+import { FilterDataType } from '../../model/FilterDataType';
+import { FilterType } from '../../model/FilterType';
+import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
+import { FormFieldOptions } from '../../model/configuration/FormFieldOptions';
+import { InputFieldTypes } from '../base-components/webapp/core/InputFieldTypes';
+import { SearchOperator } from '../search/model/SearchOperator';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -83,6 +90,27 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(
             new FormFieldConfiguration(
+                'system-address-new-form-field-queue',
+                'Translatable#Queue', SystemAddressProperty.QUEUE_ID, 'object-reference-input', false,
+                'Translatable#Helptext_Admin_SystemAddressCreate_Queue',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
+                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions([
+                            new FilterCriteria(
+                                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                FilterType.AND, 1
+                            )
+                        ])
+                    ),
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
+                    new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.OBJECT_REFERENCE)
+                ], null
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
                 'system-address-new-form-field-comment',
                 'Translatable#Comment', SystemAddressProperty.COMMENT, 'text-area-input', false,
                 'Translatable#Helptext_Admin_SystemAddressCreate_Comment', null, null, null,
@@ -105,6 +133,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 [
                     'system-address-new-form-field-email',
                     'system-address-new-form-field-name',
+                    'system-address-new-form-field-queue',
                     'system-address-new-form-field-comment',
                     'system-address-new-form-field-valid'
                 ]

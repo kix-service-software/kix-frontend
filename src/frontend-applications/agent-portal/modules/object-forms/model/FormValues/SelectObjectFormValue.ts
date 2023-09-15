@@ -139,7 +139,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
         await super.setFormValue(value, force);
 
-        if (!this.readonly) {
+        if (!this.readonly || force) {
             await this.loadSelectedValues();
         }
     }
@@ -356,11 +356,15 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         if (Array.isArray(value)) {
             for (const v of value) {
                 if (typeof v !== 'undefined' && v !== null) {
-                    if (TreeUtil.findNode(tree, v)) {
-                        if (selectedIds.some((id) => id.toString() === v.toString())) {
+                    if (!this.isAutoComplete) {
+                        if (TreeUtil.findNode(tree, v)) {
+                            if (selectedIds.some((id) => id.toString() === v.toString())) {
+                                newValue.push(v);
+                            }
+                        } else if (this.multiselect) {
                             newValue.push(v);
                         }
-                    } else if (this.multiselect) {
+                    } else {
                         newValue.push(v);
                     }
                 }
@@ -472,6 +476,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             loadingOptions.filter.push(...filter);
 
             loadingOptions.limit = this.autoCompleteConfiguration?.limit;
+            loadingOptions.searchLimit = this.autoCompleteConfiguration?.limit;
 
             loadingOptions.includes = this.loadingOptions?.includes;
             loadingOptions.expands = this.loadingOptions?.expands;

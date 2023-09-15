@@ -8,13 +8,17 @@
  */
 
 import { Context } from '../../../../../../model/Context';
+import { IdService } from '../../../../../../model/IdService';
 import { AbstractMarkoComponent } from '../../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../../base-components/webapp/core/ContextService';
 import { DateTimeUtil } from '../../../../../base-components/webapp/core/DateTimeUtil';
+import { EventService } from '../../../../../base-components/webapp/core/EventService';
+import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 import { InputFieldTypes } from '../../../../../base-components/webapp/core/InputFieldTypes';
 import { FormValueProperty } from '../../../../model/FormValueProperty';
 import { DateTimeFormValue } from '../../../../model/FormValues/DateTimeFormValue';
 import { ObjectFormValue } from '../../../../model/FormValues/ObjectFormValue';
+import { ObjectFormEvent } from '../../../../model/ObjectFormEvent';
 import { ObjectFormHandler } from '../../../core/ObjectFormHandler';
 import { ComponentState } from './ComponentState';
 
@@ -25,6 +29,8 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private context: Context;
     private formHandler: ObjectFormHandler;
     private timeValueChanged: boolean;
+
+    private subscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -68,6 +74,18 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.maxDate = DateTimeUtil.getKIXDateString(new Date(this.formValue.maxDate));
         }
 
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(),
+            eventPublished: (data: any, eventId: string): void => {
+                if (data.blocked) {
+                    this.state.readonly = true;
+                } else {
+                    this.state.readonly = this.formValue.readonly;
+                }
+            }
+        };
+        EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
+
         this.state.prepared = true;
     }
 
@@ -83,6 +101,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onDestroy(): void {
         this.formValue?.removePropertyBinding(this.bindingIds);
+        EventService.getInstance().unsubscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
     }
 
     public dateChanged(event: any): void {
@@ -112,10 +131,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             date.setHours(0, 0, 0, 0);
         } else if (isDateTime) {
             const dateTimeString = `${this.state.dateValue} ${this.state.timeValue}`;
-            const timestamp = Date.parse(dateTimeString);
-            if (!isNaN(timestamp)) {
-                date = new Date(dateTimeString);
-            }
+            date = new Date(dateTimeString);
         }
 
         if (isDate || (isDateTime && (this.timeValueChanged || hasValue))) {

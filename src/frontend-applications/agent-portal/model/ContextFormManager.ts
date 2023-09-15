@@ -77,7 +77,7 @@ export class ContextFormManager {
     ): Promise<void> {
         this.useObjectForms = useObjectForms;
 
-        if (this.formId !== formId) {
+        if (this.formId !== formId || createNewInstance) {
             this.formId = formId;
 
             if (this.useObjectForms) {

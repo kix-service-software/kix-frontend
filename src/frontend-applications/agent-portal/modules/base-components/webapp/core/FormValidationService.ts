@@ -68,7 +68,11 @@ export class FormValidationService {
             const validators = this.formFieldValidators.filter((ffv) => ffv.isValidatorFor(formField, formId));
             for (const v of validators) {
                 const validationResult = await v.validate(formField, formId, formInstance);
-                result.push(validationResult);
+                if (Array.isArray(validationResult)) {
+                    result.push(...validationResult);
+                } else {
+                    result.push(validationResult);
+                }
             }
         } else if (isDefaultValue) {
             result.push(new ValidationResult(ValidationSeverity.OK, ''));

@@ -11,7 +11,7 @@ import { IUIModule } from '../../../../model/IUIModule';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import {
     NotificationService, NotificationTableFactory, NotificationLabelProvider,
-    NotificationEmailRecipientValidator, NotificationFilterValidator, NotificationFormService,
+    NotificationEmailRecipientValidator, NotificationFormService,
     NotificationFilterTableFactory, NotificationCreateAction, NewNotificationDialogContext,
     NotificationEditAction, EditNotificationDialogContext, NotificationDetailsContext,
     NotificationTableDeleteAction
@@ -44,7 +44,6 @@ export class UIModule implements IUIModule {
         LabelService.getInstance().registerLabelProvider(new NotificationLabelProvider());
 
         FormValidationService.getInstance().registerValidator(new NotificationEmailRecipientValidator());
-        FormValidationService.getInstance().registerValidator(new NotificationFilterValidator());
 
         ServiceRegistry.registerServiceInstance(NotificationFormService.getInstance());
 

@@ -142,6 +142,7 @@ export class OrganisationContext extends Context {
             const filter = await OrganisationService.getInstance().prepareFullTextFilter(this.filterValue);
             const loadingOptions = new KIXObjectLoadingOptions(filter);
             loadingOptions.limit = limit;
+            loadingOptions.searchLimit = 250;
             loadingOptions.includes = [KIXObjectProperty.DYNAMIC_FIELDS];
 
             const collectionId = this.contextId + KIXObjectType.ORGANISATION;
@@ -175,6 +176,7 @@ export class OrganisationContext extends Context {
         const loadingOptions = new KIXObjectLoadingOptions([]);
         loadingOptions.includes = [ContactProperty.USER, KIXObjectProperty.DYNAMIC_FIELDS];
         loadingOptions.limit = limit;
+        loadingOptions.searchLimit = 250;
 
         const collectionId = this.contextId + KIXObjectType.CONTACT;
 
@@ -210,6 +212,8 @@ export class OrganisationContext extends Context {
         } else if (objectType === KIXObjectType.CONTACT) {
             this.currentContactLimit = limit;
             return this.loadContacts(this.currentContactLimit);
+        } else {
+            return super.reloadObjectList(objectType, silent, limit);
         }
     }
 

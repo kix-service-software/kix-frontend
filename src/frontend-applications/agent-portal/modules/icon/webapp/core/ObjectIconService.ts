@@ -13,6 +13,8 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { ObjectIconLoadingOptions } from '../../../../server/model/ObjectIconLoadingOptions';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXIcon } from '../../model/KIXIcon';
+import { FontawesomeIcon } from '../../model/FontawesomeIcon';
 
 export class ObjectIconService extends KIXObjectService<ObjectIcon> {
 
@@ -71,6 +73,32 @@ export class ObjectIconService extends KIXObjectService<ObjectIcon> {
 
     public getLinkObjectName(): string {
         return 'ObjectIcon';
+    }
+
+    public async getAvailableIcons(
+        kixFont: boolean = true, fontAwesome: boolean = true, kixIcons: boolean = true
+    ): Promise<Array<ObjectIcon | string>> {
+        const icons = [];
+
+        if (kixFont) {
+            for (const [key, value] of Object.entries(KIXIcon.icons)) {
+                icons.push(key);
+            }
+        }
+
+        if (fontAwesome) {
+            for (const [key, value] of Object.entries(FontawesomeIcon.icons)) {
+                icons.push(key);
+            }
+        }
+
+        if (kixIcons) {
+            const objectIcons = await this.loadObjects<ObjectIcon>(KIXObjectType.OBJECT_ICON, null)
+                .catch((): ObjectIcon[] => []);
+            icons.push(...objectIcons);
+        }
+
+        return icons;
     }
 
 }

@@ -11,7 +11,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <widget instanceId=state.instanceId title=state.title>
         <@content>
             <if(state.prepared)>
-                <kix-table table=state.table/>
+                <for|table,index| of=state.tables>
+                    <kix-table table=table/>
+                    <if(index+1 < state.tables.length)>
+                        <p.filter-separator><translation-string pattern="or"/></p>
+                    </if>
+                </for>
             </if>
         </@content>
     </widget>

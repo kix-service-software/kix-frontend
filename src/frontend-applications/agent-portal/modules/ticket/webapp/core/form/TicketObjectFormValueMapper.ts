@@ -74,6 +74,12 @@ export class TicketObjectFormValueMapper extends ObjectFormValueMapper<Ticket> {
                 selectFormValue.objectType = objectType;
                 this.formValues.push(selectFormValue);
                 break;
+            case TicketProperty.LOCK_ID:
+                const lockFormValue = new SelectObjectFormValue(property, ticket, this, null);
+                const lockObjectType = await TicketService.getInstance().getObjectTypeForProperty(property);
+                lockFormValue.objectType = lockObjectType;
+                this.formValues.push(lockFormValue);
+                break;
             default:
         }
     }

@@ -107,13 +107,10 @@ export class MailAccountService extends KIXObjectAPIService {
     private prepareParameter(parameter: Array<[string, any]>): Array<[string, any]> {
         const dispatchingIndex = parameter.findIndex((p) => p[0] === MailAccountProperty.DISPATCHING_BY);
         if (dispatchingIndex !== -1) {
-            if (parameter[dispatchingIndex][1] === DispatchingType.FRONTEND_KEY_DEFAULT) {
-                parameter[dispatchingIndex][1] = DispatchingType.BACKEND_KEY_DEFAULT;
-            } else {
+            if (parameter[dispatchingIndex][1] === DispatchingType.BACKEND_KEY_QUEUE) {
                 if (!parameter.some((p) => p[0] === MailAccountProperty.QUEUE_ID)) {
                     parameter.push([MailAccountProperty.QUEUE_ID, parameter[dispatchingIndex][1]]);
                 }
-                parameter[dispatchingIndex][1] = DispatchingType.BACKEND_KEY_QUEUE;
             }
         }
         if (!parameter.some((p) => p[0] === MailAccountProperty.TRUSTED)) {

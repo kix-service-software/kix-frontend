@@ -218,6 +218,8 @@ export class CMDBContext extends Context {
     ): Promise<void> {
         if (objectType === KIXObjectType.CONFIG_ITEM) {
             return this.loadConfigItems(limit);
+        } else {
+            return super.reloadObjectList(objectType, silent, limit);
         }
     }
 

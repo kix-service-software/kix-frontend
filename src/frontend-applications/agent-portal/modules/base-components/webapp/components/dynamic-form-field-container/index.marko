@@ -111,7 +111,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                     invalid: !dynamicValue.value.valid
                                 }
                                 value=dynamicValue.withinStartValue
-                                type="text"
+                                type="number"
+                                min=1
+                                step=1
                                 disabled=(
                                     dynamicValue.readonly &&
                                     !dynamicValue.changeable
@@ -139,7 +141,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                     invalid: !dynamicValue.value.valid
                                 }
                                 value=dynamicValue.withinEndValue
-                                type="text"
+                                type="number"
+                                min=1
+                                step=1
                                 disabled=(
                                     dynamicValue.readonly &&
                                     !dynamicValue.changeable
@@ -317,26 +321,33 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </if>
             </div>
             <if(
+                !dynamicValue.value.valid &&
+                Array.isArray(dynamicValue.value.validErrorMessages) &&
+                dynamicValue.value.validErrorMessages.length
+            )>
+                <div.errors.error class={"options-active": component.showAdditionalOptions(dynamicValue)}>
+                    <for|errorMessage| of=dynamicValue.value.validErrorMessages>
+                        <div><translation-string pattern=errorMessage/></div>
+                    </for>
+                </div>
+            </if>
+            <if(
                 state.hasAdditionalOptions &&
                 component.showValueInput(dynamicValue)
             )>
-                <div.addtional-options>
-                    <if(component.showAdditionalOptions(dynamicValue))>
-                        <div.additonal-editor-container no-update>
-                            <span.advanced-options on-click("toggleAdvancedOptions", dynamicValue)>
-                                <translation-string pattern="Translatable#<< Field Options:"/>
-                            </span>
-                            <div
-                                id=("jsoneditor" + dynamicValue.instanceId)
-                                style="width: 100%; height: 100%;"/>
-                        </div>
-                    </if>
-                    <else>
-                        <span.advanced-options on-click("toggleAdvancedOptions", dynamicValue)>
-                            <translation-string pattern="Translatable#>> Advanced Options"/>
-                        </span>
-                    </else>
-                </div>
+                <if(component.showAdditionalOptions(dynamicValue))>
+                    <span.advanced-options on-click("toggleAdvancedOptions", dynamicValue)>
+                        <translation-string pattern="Translatable#<< Field Options:"/>
+                    </span>
+                    <div.advanced-options-json-editor
+                        id=("jsoneditor" + dynamicValue.instanceId)
+                        style="width: 100%; height: 40rem;" no-update/>
+                </if>
+                <else>
+                    <span.advanced-options on-click("toggleAdvancedOptions", dynamicValue)>
+                        <translation-string pattern="Translatable#>> Advanced Options"/>
+                    </span>
+                </else>
             </if>
             <if(
                 !dynamicValue.required &&

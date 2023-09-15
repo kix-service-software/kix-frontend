@@ -137,6 +137,8 @@ export class SearchService {
             loadingOptions.expands.push(KIXObjectProperty.LINKS);
         }
 
+        loadingOptions.searchLimit = limit;
+
         const objects = await KIXObjectService.loadObjects(formObjectType, null, loadingOptions, null, false);
         return (objects as any);
     }
@@ -162,16 +164,15 @@ export class SearchService {
         preparedCriteria = this.prepareCriteria(preparedCriteria);
 
         const loadingOptions = await searchDefinition.getLoadingOptions(
-            preparedCriteria, searchCache.limit, searchCache.sortAttribute, searchCache.sortDescanding
+            preparedCriteria, searchCache.limit, searchCache.sortAttribute, searchCache.sortDescending
         );
 
         if (limit) {
             loadingOptions.limit = limit;
         }
 
-        if (searchLimit) {
-            loadingOptions.searchLimit = searchLimit;
-        }
+        loadingOptions.searchLimit = loadingOptions.limit;
+
 
         const hastDFInCriteria = preparedCriteria.some((criteria) => criteria.property.startsWith('DynamicFields.'));
         if (hastDFInCriteria) {

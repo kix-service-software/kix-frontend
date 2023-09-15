@@ -9,30 +9,17 @@
 
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
-import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { AttachmentUtil } from '../../../../../modules/base-components/webapp/core/AttachmentUtil';
-import { ComponentContent } from '../../../../../modules/base-components/webapp/core/ComponentContent';
-import { OverlayService } from '../../../../../modules/base-components/webapp/core/OverlayService';
-import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
-import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
 import { ObjectIcon } from '../../../model/ObjectIcon';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { Context } from '../../../../../model/Context';
+import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 
 class Component extends FormInputComponent<any, ComponentState> {
 
-    private dragCounter: number;
-    private mimeTypes: string[];
+    private context: Context;
 
     public onCreate(): void {
         this.state = new ComponentState();
-        this.mimeTypes = [
-            'image/bmp',
-            'image/gif',
-            'image/jpeg',
-            'image/png',
-            'image/svg+xml',
-            'image/x-icon'
-        ];
     }
 
     public onInput(input: any): void {
@@ -40,121 +27,46 @@ class Component extends FormInputComponent<any, ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-
-        this.state.translations = await TranslationService.createTranslationObject([
-            'Translatable#Select image file'
-        ]);
-
+        this.context = ContextService.getInstance().getActiveContext();
         await super.onMount();
-        const uploadElement = (this as any).getEl();
-        if (uploadElement) {
-            uploadElement.addEventListener('dragover', this.preventDefaultDragBehavior.bind(this), false);
-        } else {
-            document.addEventListener('dragover', this.preventDefaultDragBehavior.bind(this), false);
-        }
-        document.addEventListener('dragenter', this.dragEnter.bind(this), false);
-        document.addEventListener('dragleave', this.dragLeave.bind(this), false);
-
+        await this.setFieldConfiguration();
         await this.setCurrentValue();
     }
 
+    private async setFieldConfiguration(): Promise<void> {
+        const option = this.state.field?.options?.find((o) => o.option === 'ICON_LIBRARY');
+        if (option) {
+            this.state.fileUpload = !option?.value;
+            this.state.libraryEnabled = option?.value;
+        }
+    }
+
     public async setCurrentValue(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formInstance = await context?.getFormManager()?.getFormInstance();
-        const value = formInstance.getFormFieldValue<string | ObjectIcon>(this.state.field?.instanceId);
-        if (value) {
-            this.state.icon = value.value;
-        }
+        const value = await this.getFormValue();
+        this.state.icon = value?.value;
     }
 
-    public async onDestroy(): Promise<void> {
-        await super.onDestroy();
-        const uploadElement = (this as any).getEl();
-        if (uploadElement) {
-            uploadElement.removeEventListener('dragover', this.preventDefaultDragBehavior.bind(this), false);
-        } else {
-            document.removeEventListener('dragover', this.preventDefaultDragBehavior.bind(this), false);
-        }
-        document.removeEventListener('dragenter', this.dragEnter.bind(this), false);
-        document.removeEventListener('dragleave', this.dragLeave.bind(this), false);
+    private async getFormValue(): Promise<FormFieldValue> {
+        const formInstance = await this.context?.getFormManager()?.getFormInstance();
+        const value = formInstance?.getFormFieldValue<string | ObjectIcon>(this.state.field?.instanceId);
+        return value;
     }
 
-    private preventDefaultDragBehavior(event: any): void {
+    public switchMode(event: any): void {
         event.stopPropagation();
         event.preventDefault();
-        event.dataTransfer.dropEffect = 'copy';
+        this.state.fileUpload = !this.state.fileUpload;
     }
 
-    public triggerFileUpload(): void {
-        const uploadInput = (this as any).getEl('iconUploadInput');
-        if (uploadInput) {
-            uploadInput.click();
+    public iconChanged(icon: ObjectIcon | string): void {
+        if (typeof icon === 'string') {
+            const content = icon;
+            icon = new ObjectIcon();
+            icon.ContentType = 'text';
+            icon.Content = content;
         }
-    }
-
-    public setIcon(): void {
-        const uploadInput = (this as any).getEl('iconUploadInput');
-        if (uploadInput && uploadInput.files) {
-            this.checkAndSetIcon(Array.from(uploadInput.files));
-        }
-    }
-
-    private async checkAndSetIcon(files: File[]): Promise<void> {
-        const fileError = await AttachmentUtil.checkFile(files[0], this.mimeTypes);
-
-        if (fileError) {
-            const errorMessages = await AttachmentUtil.buildErrorMessages([[files[0], fileError]]);
-            const title = await TranslationService.translate('Translatable#Error while adding the image:');
-            const content = new ComponentContent('list-with-title', { title, list: errorMessages });
-
-            const error = await TranslationService.translate('Translatable#Error');
-
-            OverlayService.getInstance().openOverlay(
-                OverlayType.WARNING, null, content, error, null, true
-            );
-        } else {
-            this.state.icon = null;
-            const content = await BrowserUtil.readFile(files[0]);
-
-            setTimeout(() => {
-                this.state.icon = new ObjectIcon(null,
-                    null, null,
-                    files[0].type,
-                    content
-                );
-                this.state.title = files[0].name;
-                super.provideValue(this.state.icon);
-            }, 10);
-        }
-    }
-
-    private dragEnter(event: any): void {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dragCounter++;
-        this.state.dragging = true;
-    }
-
-    private dragLeave(event: any): void {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dragCounter--;
-        if (this.dragCounter === 0) {
-            this.state.dragging = false;
-        }
-    }
-
-    public drop(event: any): void {
-        event.stopPropagation();
-        event.preventDefault();
-
-        if (event.dataTransfer.files) {
-            const files: File[] = Array.from(event.dataTransfer.files);
-            this.checkAndSetIcon(files.filter((f) => f.type !== '' || (f.size % 4096 > 0)));
-        }
-
-        this.state.dragging = false;
-        this.dragCounter = 0;
+        this.state.icon = icon;
+        super.provideValue(icon);
     }
 }
 

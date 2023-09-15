@@ -24,6 +24,12 @@ import { ObjectReferenceOptions } from '../../../base-components/webapp/core/Obj
 import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
 import { InputFieldTypes } from '../../../base-components/webapp/core/InputFieldTypes';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
 
 export class MailAccountFormService extends KIXObjectFormService {
 
@@ -64,6 +70,12 @@ export class MailAccountFormService extends KIXObjectFormService {
                             if (type?.match(/^IMAP/)) {
                                 await this.setIMAPFolderField(f, formFieldValues, mailAccount);
                             }
+                        }
+                        else if (f.property === MailAccountProperty.DISPATCHING_BY) {
+                            const dispatch = formFieldValues.get(f.instanceId).value;
+                            if (dispatch?.match(/^Queue$/)) {
+                                await this.setQueueField(f, formFieldValues, mailAccount);
+                            }
                             break PAGES;
                         }
                     }
@@ -92,6 +104,40 @@ export class MailAccountFormService extends KIXObjectFormService {
         );
         passwordField.instanceId = IdService.generateDateBasedId(passwordField.property);
         return passwordField;
+    }
+
+    private async setQueueField(
+        typeField: FormFieldConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, mailAccount?: MailAccount
+    ): Promise<void> {
+        const value = mailAccount.DispatchingBy === DispatchingType.BACKEND_KEY_QUEUE
+            && mailAccount.QueueID !== null ? mailAccount.QueueID : undefined;
+        const queueField = await this.getQueueField();
+        typeField.children.push(queueField);
+        formFieldValues.set(queueField.instanceId, new FormFieldValue(value));
+    }
+
+    public async getQueueField(): Promise<FormFieldConfiguration> {
+        const queueField = new FormFieldConfiguration(
+            'dispatch-queue-field',
+            'Translatable#Queue', MailAccountProperty.QUEUE_ID, 'object-reference-input', true,
+            'Translatable#Helptext_Admin_MailAccountCreate_Dispatching_Queue',
+            [
+                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
+                new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
+                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                    new KIXObjectLoadingOptions([
+                        new FilterCriteria(
+                            KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                            FilterType.AND, 1
+                        )
+                    ])
+                ),
+                new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
+                new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.OBJECT_REFERENCE)
+            ]
+        );
+        queueField.instanceId = IdService.generateDateBasedId(queueField.property);
+        return queueField;
     }
 
     private async setIMAPFolderField(
@@ -146,24 +192,10 @@ export class MailAccountFormService extends KIXObjectFormService {
         return profileField;
     }
 
-    protected async getValue(property: string, value: any, mailAccount: MailAccount): Promise<any> {
-        switch (property) {
-            case MailAccountProperty.DISPATCHING_BY:
-                if (value === DispatchingType.BACKEND_KEY_DEFAULT) {
-                    value = DispatchingType.FRONTEND_KEY_DEFAULT;
-                } else {
-                    value = mailAccount ? mailAccount.QueueID : null;
-                }
-                break;
-            default:
-        }
-        return value;
-    }
-
     public async hasPermissions(field: FormFieldConfiguration): Promise<boolean> {
         let hasPermissions = true;
         switch (field.property) {
-            case MailAccountProperty.DISPATCHING_BY:
+            case MailAccountProperty.QUEUE_ID:
                 hasPermissions = await this.checkPermissions('system/ticket/queues');
                 break;
             default:

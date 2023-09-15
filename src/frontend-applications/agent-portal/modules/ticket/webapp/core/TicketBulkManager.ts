@@ -221,7 +221,7 @@ export class TicketBulkManager extends BulkManager {
                 );
                 break;
             case TicketProperty.QUEUE_ID:
-                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false, null, ['WRITE']);
+                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false, null, ['CREATE']);
                 nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy);
                 break;
             default:
@@ -311,34 +311,39 @@ export class TicketBulkManager extends BulkManager {
     public async validate(): Promise<ValidationResult[]> {
         const validationResult = await super.validate();
 
-        const result = [];
+        const results = [];
         const pendingValue = this.values.find((v) => v.property === TicketProperty.PENDING_TIME);
         if (pendingValue) {
             if (pendingValue.value) {
                 const pendingDate = new Date(pendingValue.value);
                 if (isNaN(pendingDate.getTime())) {
-                    result.push(
+                    results.push(
                         new ValidationResult(
                             ValidationSeverity.ERROR, 'Translatable#Pending Time has invalid date!'
                         )
                     );
                 } else if (pendingDate < new Date()) {
-                    result.push(
+                    results.push(
                         new ValidationResult(
                             ValidationSeverity.ERROR, 'Translatable#Pending Time has to be in future!'
                         )
                     );
                 }
             } else {
-                result.push(
+                results.push(
                     new ValidationResult(ValidationSeverity.ERROR, 'Translatable#Pending Time is required!')
                 );
             }
 
-            pendingValue.valid = !result.some((r) => r.severity === ValidationSeverity.ERROR);
+            pendingValue.valid = !results.some((r) => r.severity === ValidationSeverity.ERROR);
+            results.forEach((r) => {
+                if (r.severity === ValidationSeverity.ERROR) {
+                    pendingValue.validErrorMessages.push(r.message);
+                }
+            });
         }
 
-        validationResult.push(...result);
+        validationResult.push(...results);
         return validationResult;
     }
 

@@ -632,7 +632,8 @@ export class ContextService {
                         return null;
                     });
 
-                if (preference) {
+                const hasContext = this.storedContexts?.some((c) => c.instanceId === context.instanceId);
+                if (preference && !hasContext) {
                     this.storedContexts.push(preference);
                     stored = true;
                 }

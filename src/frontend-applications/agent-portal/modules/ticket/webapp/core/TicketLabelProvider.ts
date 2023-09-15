@@ -135,6 +135,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.CREATED_USER_ID:
             case TicketProperty.OWNER_ID:
             case TicketProperty.RESPONSIBLE_ID:
+            case TicketProperty.WATCHER_USER_ID:
                 if (value) {
                     displayValue = await KIXObjectService.loadDisplayValue(KIXObjectType.USER, value);
                 }
@@ -407,7 +408,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
     public async getObjectText(
         ticket: Ticket, id: boolean = true, title: boolean = true, translatable: boolean = true
     ): Promise<string> {
-        let displayValue: string;
+        let displayValue: string = '';
 
         const pattern = await SysConfigService.getInstance().getDisplayValuePattern(KIXObjectType.TICKET);
 
@@ -433,9 +434,15 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 ticketHookDivider = dividerConfig[0].Value ? dividerConfig[0].Value : '';
             }
 
-            if (id) displayValue = `${ticketHook}${ticketHookDivider}${ticket?.TicketNumber}`;
-            if (id && title && ticket?.Title) displayValue += '-';
-            if (title && ticket?.Title) displayValue += `${ticket.Title}`;
+            if (id) {
+                displayValue = `${ticketHook}${ticketHookDivider}${ticket?.TicketNumber}`;
+            }
+            if (id && title && ticket?.Title) {
+                displayValue += '-';
+            }
+            if (title && ticket?.Title) {
+                displayValue += `${ticket.Title}`;
+            }
         }
         return displayValue;
     }

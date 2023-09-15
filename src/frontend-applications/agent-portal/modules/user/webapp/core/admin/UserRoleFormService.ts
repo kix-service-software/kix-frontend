@@ -13,6 +13,10 @@ import { RoleProperty } from '../../../model/RoleProperty';
 import { KIXObjectSpecificCreateOptions } from '../../../../../model/KIXObjectSpecificCreateOptions';
 import { RoleUsageContextTypes } from '../../../model/RoleUsageContextTypes';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { FormContext } from '../../../../../model/configuration/FormContext';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { SysConfigService } from '../../../../sysconfig/webapp/core';
+import { Role } from '../../../model/Role';
 
 
 export class UserRoleFormService extends KIXObjectFormService {
@@ -70,6 +74,19 @@ export class UserRoleFormService extends KIXObjectFormService {
         }
 
         return parameter;
+    }
+
+    protected async getValue(
+        property: string, value: any, role: Role, formField: FormFieldConfiguration, formContext: FormContext
+    ): Promise<any> {
+        if (formContext === FormContext.EDIT && property === RoleProperty.ALLOW_ADMIN_MODULE) {
+            const agentPortalConfig = await SysConfigService.getInstance().getPortalConfiguration();
+            if (agentPortalConfig.adminRoleIds?.length) {
+                return agentPortalConfig.adminRoleIds?.some((rid) => rid === role?.ID);
+            }
+        }
+
+        return super.getValue(property, value, role, formField, formContext);
     }
 
 }

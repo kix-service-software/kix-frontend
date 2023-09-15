@@ -82,6 +82,7 @@ export class ObjectReferenceUtil {
             }
 
             loadingOptions.limit = autoCompleteConfiguration.limit;
+            loadingOptions.searchLimit = autoCompleteConfiguration.limit;
 
             const preparedOptions = await this.prepareLoadingOptions(loadingOptions, searchValue);
 
@@ -107,7 +108,9 @@ export class ObjectReferenceUtil {
             loadingOptions.limit,
             loadingOptions.includes,
             loadingOptions.expands,
-            []
+            [],
+            loadingOptions.cacheType,
+            loadingOptions.searchLimit
         );
 
         const context = ContextService.getInstance().getActiveContext();

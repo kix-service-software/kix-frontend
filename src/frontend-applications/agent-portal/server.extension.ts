@@ -17,7 +17,7 @@ class Extension extends KIXExtension implements IFrontendServerExtension {
     public name: string = 'Agent Portal Server';
 
     public getServer(): IServer {
-        return Server.getInstance();
+        return new Server();
     }
 
 }

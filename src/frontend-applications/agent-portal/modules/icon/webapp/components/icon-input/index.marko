@@ -6,23 +6,50 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<div.icon-upload
-    class={
-        dragging: state.dragging
-    }
-    on-drop("drop")>
-    <button.kix-button.form-button.icon-upload-button
-        type="button"
-        on-click("triggerFileUpload")
-        title=state.translations["Translatable#Select image file"]>
-        <span.kix-icon-upload/>
-        <translation-string pattern="Translatable#Select image file"/>
-        <input.icon-upload-input type="file" key="iconUploadInput" on-change("setIcon")/>
-    </button>
-    <span.icon-preview>
-        <if(state.icon)>
-            <icon icon=state.icon/>
+<div class="container-fluid">
+    <ul class="nav nav-tabs">
+        <if(state.libraryEnabled)>
+            <li class="nav-item" on-click("switchMode")>
+                <a
+                    class=[
+                        "nav-link",
+                        {
+                            active: !state.fileUpload,
+                        },
+                    ]
+                    aria-current="page"
+                    href="#"
+                >
+                    <translation-string pattern="Translatable#Library"/>
+                </a>
+            </li>
         </if>
-    </span>
+        <li class="nav-item" on-click("switchMode")>
+            <a
+                class=[
+                    "nav-link",
+                    {
+                        active: state.fileUpload,
+                    },
+                ]
+                href="#"
+            >
+                <translation-string pattern="Translatable#File Upload"/>
+            </a>
+        </li>
+    </ul>
+
+    <div class="row p-2 border border-top-0">
+        <div class="col-3 icon-preview d-flex align-items-center justify-content-center">
+            <icon icon=state.icon/>
+        </div>
+        <div class="col-9">
+            <if(state.fileUpload)>
+                <icon-file-chooser on-iconChanged("iconChanged")/>
+            </if>
+            <else>
+                <icon-library-chooser on-iconChanged("iconChanged")/>
+            </else>
+        </div>
+    </div>
 </div>

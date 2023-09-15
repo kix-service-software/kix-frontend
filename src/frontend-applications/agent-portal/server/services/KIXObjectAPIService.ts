@@ -483,7 +483,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         if (filterCriteria && filterCriteria.length) {
             const apiFilter = {};
             apiFilter[objectProperty] = this.prepareObjectFilter(filterCriteria);
-            query.filter = encodeURIComponent(JSON.stringify(apiFilter));
+            query.filter = JSON.stringify(apiFilter);
         }
 
         let searchCriteria = await this.prepareAPISearch(nonDynamicFieldCriteria, token);
@@ -528,7 +528,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
             const apiSearch = {};
             apiSearch[objectProperty] = this.prepareObjectFilter(searchCriteria);
-            query.search = encodeURIComponent(JSON.stringify(apiSearch));
+            query.search = JSON.stringify(apiSearch);
         }
 
         return true;
@@ -763,7 +763,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
         const service = await KIXObjectServiceRegistry.getServiceInstance(KIXObjectType.SYS_CONFIG_OPTION);
         if (service) {
-            const agentPortalConfig = await (service as any).getAgentPortalConfiguration(token);
+            const agentPortalConfig = await (service as any).getPortalConfiguration(token);
             preload = agentPortalConfig?.preloadObjects?.some((o) => o === objectType);
         }
         return preload;
