@@ -353,7 +353,11 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             ? Array.isArray(this.value) ? this.value : [this.value]
             : null;
 
-        if (Array.isArray(value)) {
+        if (!this.multiselect) {
+            if (nodes.length) {
+                newValue.push(nodes[0].id);
+            }
+        } else if (Array.isArray(value)) {
             for (const v of value) {
                 if (typeof v !== 'undefined' && v !== null) {
                     if (!this.isAutoComplete) {
@@ -361,19 +365,17 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                             if (selectedIds.some((id) => id.toString() === v.toString())) {
                                 newValue.push(v);
                             }
-                        } else if (this.multiselect) {
-                            newValue.push(v);
                         }
                     } else {
                         newValue.push(v);
                     }
                 }
             }
-        }
 
-        for (const node of nodes) {
-            if (!newValue.some((v) => v.toString() === node?.id?.toString())) {
-                newValue.push(node.id);
+            for (const node of nodes) {
+                if (!newValue.some((v) => v.toString() === node?.id?.toString())) {
+                    newValue.push(node.id);
+                }
             }
         }
 
