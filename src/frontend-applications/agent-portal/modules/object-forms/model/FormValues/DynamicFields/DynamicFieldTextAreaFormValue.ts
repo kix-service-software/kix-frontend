@@ -64,6 +64,6 @@ export class DynamicFieldTextAreaFormValue extends ObjectFormValue<string> {
 
     public async initFormValueByField(field: FormFieldConfiguration): Promise<void> {
         this.isEmpty = field?.empty || false;
-        super.initFormValueByField(field);
+        await super.initFormValueByField(field);
     }
 }
