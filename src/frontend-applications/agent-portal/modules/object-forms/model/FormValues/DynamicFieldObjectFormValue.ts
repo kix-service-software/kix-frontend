@@ -57,7 +57,7 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
         }
 
         if (formValue) {
-            formValue.initFormValueByField(field);
+            await formValue.initFormValueByField(field);
         } else {
             console.warn(`Could not find/create form value for dynamic field ${nameOption?.value}`);
             console.warn(field);
