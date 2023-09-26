@@ -46,12 +46,6 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
         this.inputComponentId = 'channel-form-input';
 
         this.createArticleFormValues(article);
-
-        article?.addBinding(ArticleProperty.CHANNEL_ID, async (value: number) => {
-            if (this.visible) {
-                await this.setChannelFields(value);
-            }
-        });
     }
 
     public async initFormValue(): Promise<void> {
@@ -62,7 +56,17 @@ export class ChannelFormValue extends SelectObjectFormValue<number> {
             this.value = article?.ChannelID;
         }
 
-        await this.setChannelFields(this.value);
+        if (this.value) {
+            await this.setChannelFields(this.value);
+        } else {
+            this.formValues.forEach((fv) => fv.enabled = false);
+        }
+
+        this.object?.addBinding(ArticleProperty.CHANNEL_ID, async (value: number) => {
+            if (this.visible) {
+                await this.setChannelFields(value);
+            }
+        });
     }
 
     private async getReferencedArticle(): Promise<Article> {
