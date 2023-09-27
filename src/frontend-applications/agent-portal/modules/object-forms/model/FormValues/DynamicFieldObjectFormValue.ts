@@ -42,6 +42,14 @@ export class DynamicFieldObjectFormValue extends ObjectFormValue<DynamicFieldVal
         this.enabled = true;
     }
 
+    public async createDFFormValues(): Promise<void> {
+        if (Array.isArray(this.object?.DynamicFields)) {
+            for (const dfValue of this.object.DynamicFields) {
+                await this.createFormValue(dfValue?.Name, dfValue);
+            }
+        }
+    }
+
     public async initFormValue(): Promise<void> {
         this.inputComponentId = null;
         this.visible = false;

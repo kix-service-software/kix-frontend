@@ -111,7 +111,7 @@ export class DynamicFieldSelectionFormValue extends SelectObjectFormValue<string
         const dynamicField = await KIXObjectService.loadDynamicField(this.dfName);
         this.minSelectCount = Number(dynamicField?.Config?.CountMin) || 0;
         this.maxSelectCount = Number(dynamicField?.Config?.CountMax) || 1;
-        super.initFormValueByField(field);
+        await super.initFormValueByField(field);
     }
 
     public async loadSelectableValues(): Promise<void> {
