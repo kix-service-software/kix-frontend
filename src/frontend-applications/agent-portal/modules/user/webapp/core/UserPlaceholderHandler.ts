@@ -28,7 +28,7 @@ export class UserPlaceholderHandler extends AbstractPlaceholderHandler {
 
     public handlerId: string = '100-UserPlaceholderHandler';
     protected objectStrings: string[] = [
-        'CURRENT'
+        'CURRENT', 'USER'
     ];
 
     public async replace(placeholder: string, user?: User, language?: string, forRichtext?: boolean): Promise<string> {
