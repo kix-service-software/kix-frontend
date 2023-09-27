@@ -130,7 +130,10 @@ export abstract class ObjectFormValueMapper<T extends KIXObject = KIXObject> {
     }
 
     protected async mapObjectValues(object: T): Promise<void> {
-        this.formValues.push(new DynamicFieldObjectFormValue(KIXObjectProperty.DYNAMIC_FIELDS, object, this, null));
+        const dfFormValue = new DynamicFieldObjectFormValue(KIXObjectProperty.DYNAMIC_FIELDS, object, this, null);
+        this.formValues.push(dfFormValue);
+        // create from values for existing dynamic field values
+        await dfFormValue.createDFFormValues();
 
         for (const mapperExtension of this.extensions) {
             await mapperExtension.mapObjectValues(object);
