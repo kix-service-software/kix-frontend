@@ -387,7 +387,8 @@ export class UserService extends KIXObjectAPIService {
             UserProperty.IS_AGENT,
             UserProperty.IS_CUSTOMER,
             UserProperty.PREFERENCES + '\..*?',
-            KIXObjectProperty.VALID_ID
+            KIXObjectProperty.VALID_ID,
+            UserProperty.USER_ID
         ];
 
         const searchCriteria = criteria.filter(

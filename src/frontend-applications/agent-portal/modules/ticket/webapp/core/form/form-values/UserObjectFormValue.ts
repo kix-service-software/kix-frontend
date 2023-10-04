@@ -52,7 +52,7 @@ export class UserObjectFormValue extends SelectObjectFormValue {
                 this.objectBindingIds = [
                     this.objectValueMapper.object.addBinding(TicketProperty.QUEUE_ID, () => {
                         this.setLoadingOptions();
-                        this.value = null;
+                        this.updateValue();
                     })
                 ];
             }
@@ -124,4 +124,28 @@ export class UserObjectFormValue extends SelectObjectFormValue {
         }
     }
 
+    protected async updateValue(): Promise<void> {
+        if (this.value) {
+            const userId: number = Array.isArray(this.value) && this.value.length
+                ? Number(this.value[0])
+                : Number(this.value);
+
+            const loadingOptions = JSON.parse(JSON.stringify(this.loadingOptions));
+            loadingOptions.limit = 1;
+            loadingOptions.filter = [
+                new FilterCriteria(
+                    UserProperty.USER_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                    FilterType.AND, userId
+                )
+            ];
+
+            const users = await KIXObjectService.loadObjects<User>(
+                KIXObjectType.USER, null, loadingOptions
+            ).catch(() => []);
+
+            if (!users.length) {
+                this.value = null;
+            }
+        }
+    }
 }
