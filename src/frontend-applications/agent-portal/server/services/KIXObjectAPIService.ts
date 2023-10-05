@@ -500,14 +500,24 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
         searchCriteria = [...searchCriteria, ...dynamicFieldCriteria];
 
-        // check for "invalid" (not satisfiable) AND criteria (IN criteria with empty values)
         if (searchCriteria.length) {
+            // check for "invalid" (not satisfiable) AND criteria (IN criteria with empty values)
             const hasEmptyINSearch = searchCriteria.some(
                 (c) => c.operator === SearchOperator.IN && c.filterType === FilterType.AND
                     && (c.value === null || (Array.isArray(c.value) && !c.value.length))
             );
 
             if (hasEmptyINSearch) {
+                LoggingService.getInstance().warning('Invalid api filter: Empty search value for IN search.');
+                return false;
+            }
+
+            // check for "invalid" NUMERIC search
+            const hasInvalidNumericSearch = searchCriteria.some(
+                (c) => c.type === FilterDataType.NUMERIC && (c.value === '' || isNaN(Number(c.value)))
+            );
+            if (hasInvalidNumericSearch) {
+                LoggingService.getInstance().warning('Invalid api filter: NUMERIC search has non numeric value.');
                 return false;
             }
         }
