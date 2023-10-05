@@ -744,10 +744,11 @@ export class TicketAPIService extends KIXObjectAPIService {
         let searchCriteria = criteria.filter((f) =>
             Ticket.SEARCH_PROPERTIES.some((sp) => sp.Property === f.property)
             && (
-                // TicketID and TypeID can NE as search
+                // TicketID,ContactID, TypeID can NE as search
                 f.operator !== SearchOperator.NOT_EQUALS ||
                 f.property === TicketProperty.TYPE_ID ||
-                f.property === TicketProperty.TICKET_ID
+                f.property === TicketProperty.TICKET_ID ||
+                f.property === TicketProperty.CONTACT_ID
             )
         );
 
