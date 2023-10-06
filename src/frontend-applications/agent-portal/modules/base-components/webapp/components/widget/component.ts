@@ -75,7 +75,7 @@ class WidgetComponent implements IEventSubscriber {
         }
 
         const storedMinimized = ClientStorageService.getOption(`${this.state.instanceId}-minimized`);
-        if (typeof storedMinimized !== 'undefined') {
+        if (typeof storedMinimized !== 'undefined' && storedMinimized !== null) {
             this.state.minimized = storedMinimized === 'true';
         }
 

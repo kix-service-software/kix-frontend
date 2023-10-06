@@ -44,9 +44,7 @@ import { RoutingConfiguration } from '../../../../model/configuration/RoutingCon
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
 import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
 import { ExtendedKIXObjectService } from './ExtendedKIXObjectService';
-import { TicketProperty } from '../../../ticket/model/TicketProperty';
 import { ContactProperty } from '../../../customer/model/ContactProperty';
-import { ArticleProperty } from '../../../ticket/model/ArticleProperty';
 import { KIXObjectFormService } from './KIXObjectFormService';
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
