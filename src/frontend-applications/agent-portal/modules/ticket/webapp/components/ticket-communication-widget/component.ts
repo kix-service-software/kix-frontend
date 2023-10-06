@@ -121,7 +121,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             const component = (this as any).getComponent('article-' + Number(data.articleId));
             if (component) {
                 component.scrollToArticle();
-                component.toggleArticleCompactView();
+                component.toggleArticleCompactView(true);
             }
         }
     }
