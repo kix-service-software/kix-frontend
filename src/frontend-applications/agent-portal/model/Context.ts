@@ -740,28 +740,32 @@ export abstract class Context {
         loadingOptions.expands ||= [];
         loadingOptions.query ||= [];
 
-        const contextLoadingOptionsIndex = Array.isArray(this.configuration?.loadingOptions) ?
-            this.configuration.loadingOptions.findIndex((lo) => Array.isArray(lo) && lo[0] === type) : -1;
-        const contextLoadingOptions = contextLoadingOptionsIndex !== -1 ?
-            this.configuration.loadingOptions[contextLoadingOptionsIndex][1] : null;
+        const contextLoadingOptions = this.getContextLoadingOptions(type);
 
         if (contextLoadingOptions) {
             if (Array.isArray(contextLoadingOptions.filter)) {
                 loadingOptions.filter.push(...contextLoadingOptions.filter);
             }
+
             if (contextLoadingOptions.sortOrder) {
                 loadingOptions.sortOrder = this.getSortOrder(type);
             }
+
             if (Array.isArray(contextLoadingOptions.includes)) {
                 loadingOptions.includes.push(...contextLoadingOptions.includes);
             }
+
             if (Array.isArray(contextLoadingOptions.expands)) {
                 loadingOptions.expands.push(...contextLoadingOptions.expands);
             }
+
             if (Array.isArray(contextLoadingOptions.query)) {
                 loadingOptions.query = contextLoadingOptions.query;
             }
-            if (contextLoadingOptions.searchLimit) {
+
+            const hasSearchLimit = contextLoadingOptions.searchLimit !== null
+                && typeof contextLoadingOptions.searchLimit !== 'undefined';
+            if (hasSearchLimit) {
                 loadingOptions.searchLimit = contextLoadingOptions.searchLimit;
             }
 
@@ -776,11 +780,23 @@ export abstract class Context {
     }
 
     public getPageSize(type: KIXObjectType | string): number {
-        const contextLoadingOptionsIndex = Array.isArray(this.configuration?.loadingOptions) ?
-            this.configuration.loadingOptions.findIndex((lo) => Array.isArray(lo) && lo[0] === type) : -1;
-        const contextLoadingOptions = contextLoadingOptionsIndex !== -1 ?
-            this.configuration.loadingOptions[contextLoadingOptionsIndex][1] : null;
-        return contextLoadingOptions?.limit || this.defaultPageSize;
+        const contextLoadingOptions = this.getContextLoadingOptions(type);
+
+        const hasLimit = contextLoadingOptions?.limit !== null
+            && typeof contextLoadingOptions?.limit !== 'undefined';
+
+        return hasLimit ? contextLoadingOptions.limit : this.defaultPageSize;
+    }
+
+    public getContextLoadingOptions(type: string): KIXObjectLoadingOptions {
+        let contextLoadingOptions: KIXObjectLoadingOptions;
+
+        if (Array.isArray(this.configuration?.loadingOptions)) {
+            const clo = this.configuration.loadingOptions.find((lo) => Array.isArray(lo) && lo[0] === type);
+            contextLoadingOptions = Array.isArray(clo) ? clo[1] : null;
+        }
+
+        return contextLoadingOptions;
     }
 
     public getSortOrder(type: KIXObjectType | string): string {
