@@ -62,7 +62,11 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     public async initialize(): Promise<void> {
         if (!this.initialized) {
             if (this.contextId) {
+
                 this.context = ContextService.getInstance().getActiveContext();
+
+                this.setContextLoadingLimit();
+
                 this.context?.registerListener(this.table.getTableId() + '-content-provider', {
                     sidebarLeftToggled: (): void => { return; },
                     filteredObjectListChanged: (): void => { return; },
@@ -85,6 +89,25 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                 EventService.getInstance().subscribe(ContextEvents.CONTEXT_PARAMETER_CHANGED, this.subscriber);
             }
             this.initialized = true;
+        }
+    }
+
+    private setContextLoadingLimit(): void {
+        // overwrite limit and search limit in context config if available
+        const contextLoadingOptions = this.context.getContextLoadingOptions(this.objectType);
+        if (contextLoadingOptions) {
+
+            const hasLimit = this.loadingOptions?.limit !== null
+                && typeof this.loadingOptions?.limit !== 'undefined';
+            if (hasLimit) {
+                contextLoadingOptions.limit = this.loadingOptions.limit;
+            }
+
+            const hasSearchLimit = this.loadingOptions?.searchLimit !== null
+                && typeof this.loadingOptions?.searchLimit !== 'undefined';
+            if (hasSearchLimit) {
+                contextLoadingOptions.searchLimit = this.loadingOptions?.searchLimit;
+            }
         }
     }
 
