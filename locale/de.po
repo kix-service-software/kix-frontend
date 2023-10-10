@@ -444,6 +444,9 @@ msgstr "Verfügbare Ausgabeformate"
 msgid "Avatar"
 msgstr "Avatar"
 
+msgid "A year after 2200 is not possible."
+msgstr ""
+
 msgid "Backend"
 msgstr "Backend"
 

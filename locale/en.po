@@ -421,6 +421,9 @@ msgstr ""
 msgid "Avatar"
 msgstr ""
 
+msgid "A year after 2200 is not possible."
+msgstr ""
+
 msgid "Backend"
 msgstr ""
 
