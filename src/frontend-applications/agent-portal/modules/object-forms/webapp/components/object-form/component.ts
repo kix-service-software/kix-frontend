@@ -108,17 +108,7 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public async submit(): Promise<void> {
         try {
             if (!this.state.blocked) {
-                this.state.prepared = false;
-
-                const id = await this.formhandler.commit();
-                if (id) {
-
-                    await ContextService.getInstance().removeContext(
-                        this.context?.instanceId, this.context?.descriptor?.targetContextId, id, true, true, true
-                    );
-
-                    await BrowserUtil.openSuccessOverlay('Translatable#Success');
-                }
+                await this.sendSubmit();
             }
         } catch (e) {
             this.state.prepared = true;
@@ -128,6 +118,29 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
                 EventService.getInstance().publish(ObjectFormEvent.SCROLL_TO_FORM_VALUE, invalidFormValue?.instanceId);
             }, 25);
         }
+    }
+
+    private async sendSubmit(): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            setTimeout(async () => {
+                this.state.prepared = false;
+
+                try {
+                    const id = await this.formhandler.commit();
+                    if (id) {
+
+                        await ContextService.getInstance().removeContext(
+                            this.context?.instanceId, this.context?.descriptor?.targetContextId, id, true, true, true
+                        );
+
+                        await BrowserUtil.openSuccessOverlay('Translatable#Success');
+                    }
+                    resolve();
+                } catch (e) {
+                    reject(e);
+                }
+            }, 1000);
+        });
     }
 
     private getFirstInvlaidFOrmValue(formValues: ObjectFormValue[]): ObjectFormValue {

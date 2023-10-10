@@ -333,15 +333,15 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         TreeService.getInstance().registerTreeHandler(this.instanceId, this.treeHandler);
 
         this.treeHandler?.registerSelectionListener(this.instanceId + '-selection', (nodes: TreeNode[]) => {
-            if (this.initialized) {
-                this.setSelectedNodes(nodes);
+            if (this.initialized && !this.multiselect) {
+                this.setSelectedNodes();
             }
         });
 
         await this.loadSelectableValues();
     }
 
-    protected async setSelectedNodes(nodes: TreeNode[] = []): Promise<void> {
+    public async setSelectedNodes(): Promise<void> {
         const tree = this.treeHandler?.getTree();
 
         const selectedNodes = this.treeHandler?.getSelection(this.treeHandler?.getTree()) || [];
@@ -354,28 +354,23 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             : null;
 
         if (!this.multiselect) {
-            if (nodes.length) {
-                newValue.push(nodes[0].id);
+            if (selectedNodes.length) {
+                newValue.push(selectedNodes[0].id);
             }
         } else if (Array.isArray(value)) {
             for (const v of value) {
-                if (typeof v !== 'undefined' && v !== null) {
-                    if (!this.isAutoComplete) {
-                        if (TreeUtil.findNode(tree, v)) {
-                            if (selectedIds.some((id) => id.toString() === v.toString())) {
-                                newValue.push(v);
-                            }
-                        }
-                    } else {
+                if (typeof v !== 'undefined' && v !== null && TreeUtil.findNode(tree, v)) {
+                    const isSelected = selectedIds.some((id) => id.toString() === v.toString());
+                    if (isSelected) {
                         newValue.push(v);
                     }
                 }
             }
+        }
 
-            for (const node of nodes) {
-                if (!newValue.some((v) => v.toString() === node?.id?.toString())) {
-                    newValue.push(node.id);
-                }
+        for (const node of selectedNodes) {
+            if (!newValue.some((v) => v.toString() === node?.id?.toString())) {
+                newValue.push(node.id);
             }
         }
 

@@ -7,12 +7,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 
-<div.article-body.input-style>
+<div class="article-body input-style">
     <if(state.prepared)>
         <editor
             resize
             value=state.currentValue
-            on-valueChanged("valueChanged")
+            on-focusLost("valueChanged")
             noImages=state.noImages
             key=state.editorId
             readOnly=state.readonly

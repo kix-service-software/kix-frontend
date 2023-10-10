@@ -28,9 +28,10 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     private formValue: DateTimeFormValue;
     private context: Context;
     private formHandler: ObjectFormHandler;
-    private timeValueChanged: boolean;
 
     private subscriber: IEventSubscriber;
+
+    private value: string;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -59,10 +60,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.timeValueChanged = false;
         this.context = ContextService.getInstance().getActiveContext();
         this.formHandler = await this.context.getFormManager().getObjectFormHandler();
         this.state.inputType = this.formValue?.inputType || InputFieldTypes.DATE;
+
+        this.value = this.formValue?.value;
+        if (this.formValue?.value) {
+            this.formHandler.objectFormValidator?.validate(this.formValue, true);
+        }
 
         this.updateValue();
 
@@ -90,11 +95,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private updateValue(): void {
-        if (this.formValue.value) {
-            this.state.dateValue = DateTimeUtil.getKIXDateString(new Date(this.formValue.value?.toString()));
+        if (this.value) {
+            this.state.dateValue = DateTimeUtil.getKIXDateString(new Date(this.value?.toString()));
 
             if (this.state.inputType === InputFieldTypes.DATE_TIME) {
-                this.state.timeValue = DateTimeUtil.getKIXTimeString(new Date(this.formValue.value?.toString()));
+                this.state.timeValue = DateTimeUtil.getKIXTimeString(new Date(this.value?.toString()));
             }
         }
     }
@@ -115,14 +120,12 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         if (event) {
             this.state.timeValue = event?.target?.value ? event.target.value : null;
             this.setValue();
-            this.timeValueChanged = true;
         }
     }
 
     private setValue(): void {
         let date: Date;
 
-        const hasValue = this.formValue.value !== null || this.formValue.value !== undefined;
         const isDate = this.formValue.inputType === InputFieldTypes.DATE;
         const isDateTime = this.formValue.inputType === InputFieldTypes.DATE_TIME;
 
@@ -130,23 +133,25 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
             date = new Date(this.state.dateValue);
             date.setHours(0, 0, 0, 0);
         } else if (isDateTime) {
+            if (!this.state.timeValue) {
+                this.state.timeValue = DateTimeUtil.getKIXTimeString(new Date());
+            }
             const dateTimeString = `${this.state.dateValue} ${this.state.timeValue}`;
             date = new Date(dateTimeString);
         }
 
-        if (isDate || (isDateTime && (this.timeValueChanged || hasValue))) {
-            const value = date ? DateTimeUtil.getKIXDateTimeString(date) : null;
-            this.formValue.setFormValue(value);
-
-            if (!value) {
-                this.formHandler.objectFormValidator?.validate(this.formValue, true);
-            }
-        }
+        this.value = date ? DateTimeUtil.getKIXDateTimeString(date) : null;
     }
 
     public async focusLost(event?: any): Promise<void> {
-        // TODO: dirty hack to trigger validation
-        this.setValue();
+        const hasValue = this.value !== null && this.value !== undefined;
+        if (hasValue) {
+            this.formValue.setFormValue(this.value);
+        }
+
+        if (!this.value) {
+            this.formHandler.objectFormValidator?.validate(this.formValue, true);
+        }
     }
 
 }
