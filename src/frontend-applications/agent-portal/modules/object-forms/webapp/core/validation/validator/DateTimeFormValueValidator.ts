@@ -39,15 +39,21 @@ export class DateTimeFormValueValidator extends ObjectFormValueValidator {
                             'Translatable#Entered date-time value is invalid.', formValue.label
                         );
                         result.push(validationError);
-                    }
-
-                    const invalidMinDate = formValue.minDate && dateValue < new Date(formValue.minDate);
-                    const invalidMaxDate = formValue.maxDate && dateValue > new Date(formValue.maxDate);
-                    if (invalidMinDate || invalidMaxDate) {
+                    } else if (dateValue.getFullYear() > 2201) {
                         const validationError = await ObjectFormValueValidator.createValidationError(
-                            'Translatable#The entered date is out of boundaries.', formValue.label
+                            'Translatable#A year after 2200 is not possible.', formValue.label
                         );
                         result.push(validationError);
+                    } else {
+
+                        const invalidMinDate = formValue.minDate && dateValue < new Date(formValue.minDate);
+                        const invalidMaxDate = formValue.maxDate && dateValue > new Date(formValue.maxDate);
+                        if (invalidMinDate || invalidMaxDate) {
+                            const validationError = await ObjectFormValueValidator.createValidationError(
+                                'Translatable#The entered date is out of boundaries.', formValue.label
+                            );
+                            result.push(validationError);
+                        }
                     }
                 }
             }
