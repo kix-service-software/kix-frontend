@@ -372,12 +372,15 @@ export class ContactFormService extends KIXObjectFormService {
     ): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
         if (property === UserProperty.USER_ACCESS) {
+            let isAgent = 0;
+            let isCustomer = 0;
             if (value?.length) {
-                const isAgent = Array.isArray(value) ? Number(value.some((v) => v === UserProperty.IS_AGENT)) : 0;
-                parameter.push([UserProperty.IS_AGENT, isAgent]);
-                const isCustomer = Array.isArray(value) ? Number(value.some((v) => v === UserProperty.IS_CUSTOMER)) : 0;
-                parameter.push([UserProperty.IS_CUSTOMER, isCustomer]);
+                isAgent = Array.isArray(value) ? Number(value.some((v) => v === UserProperty.IS_AGENT)) : 0;
+                isCustomer = Array.isArray(value) ? Number(value.some((v) => v === UserProperty.IS_CUSTOMER)) : 0;
             }
+            parameter.push([UserProperty.IS_AGENT, isAgent]);
+            parameter.push([UserProperty.IS_CUSTOMER, isCustomer]);
+
         } else if (!property.match(/_CONTAINER/)) {
             parameter.push([property, value]);
         }
@@ -395,24 +398,41 @@ export class ContactFormService extends KIXObjectFormService {
         if (service) {
             parameter = await service.postPrepareValues(parameter);
         } else {
-            parameter = this.prepareParameter(parameter);
-        }
-
-        if (this.assignedUserId && formContext === FormContext.EDIT) {
-            parameter.push([ContactProperty.ASSIGNED_USER_ID, this.assignedUserId]);
-        }
-        return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
-    }
-
-    private prepareParameter(parameter: Array<[string, any]>): Array<[string, any]> {
-        const queuesParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
-        if (queuesParameter) {
-            queuesParameter[1] = Array.isArray(queuesParameter[1]) ? queuesParameter[1].join(',') : '';
+            parameter = await this.prepareParameter(parameter);
         }
 
         const roleIdsParameter = parameter.find((p) => p[0] === UserProperty.ROLE_IDS);
         if (roleIdsParameter) {
             roleIdsParameter[1] = Array.isArray(roleIdsParameter[1]) ? roleIdsParameter[1] : [roleIdsParameter[1]];
+
+            const isAgent = parameter.find((p) => p[0] === UserProperty.IS_AGENT);
+            if (isAgent && isAgent[1]) {
+                const role = await this.loadRole('Agent User');
+                if (role && !roleIdsParameter[1].some((rid) => rid === role.ID)) {
+                    roleIdsParameter[1].push(role.ID);
+                }
+            }
+
+            const isCustomer = parameter.find((p) => p[0] === UserProperty.IS_CUSTOMER);
+            if (isCustomer && isCustomer[1]) {
+                const role = await this.loadRole('Customer');
+                if (role && !roleIdsParameter[1].some((rid) => rid === role.ID)) {
+                    roleIdsParameter[1].push(role.ID);
+                }
+            }
+        }
+
+        if (this.assignedUserId && formContext === FormContext.EDIT) {
+            parameter.push([ContactProperty.ASSIGNED_USER_ID, this.assignedUserId]);
+        }
+
+        return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
+    }
+
+    private async prepareParameter(parameter: Array<[string, any]>): Promise<Array<[string, any]>> {
+        const queuesParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
+        if (queuesParameter) {
+            queuesParameter[1] = Array.isArray(queuesParameter[1]) ? queuesParameter[1].join(',') : '';
         }
 
         const notificationParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.NOTIFICATIONS);
