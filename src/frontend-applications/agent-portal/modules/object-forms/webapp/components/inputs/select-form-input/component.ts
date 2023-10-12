@@ -101,17 +101,14 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.bindingIds.push(
             this.formValue?.addPropertyBinding('maxSelectCount', () => {
                 this.state.multiselect = this.formValue?.multiselect;
-            })
-        );
-
-        this.bindingIds.push(
+            }),
             this.formValue.addPropertyBinding(FormValueProperty.READ_ONLY, (formValue: ObjectFormValue) => {
                 this.setReadonly(Boolean(formValue.readonly));
-            })
-        );
-
-        this.bindingIds.push(
-            this.formValue.addPropertyBinding(FormValueProperty.VALUE, async (formValue: ObjectFormValue) => {
+            }),
+            this.formValue.addPropertyBinding(FormValueProperty.VALUE, async () => {
+                this.state.selectedNodes = await this.formValue.getSelectedTreeNodes();
+            }),
+            this.formValue.addPropertyBinding('selectedNodes', async () => {
                 this.state.selectedNodes = await this.formValue.getSelectedTreeNodes();
             })
         );
@@ -274,8 +271,11 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async apply(event: any): Promise<void> {
-        const element = document.getElementById(`id_${this.state.searchValueKey}`);
-        element?.click();
+        // TODO: apply but keep dropdown open else trigger "click"
+        // const element = document.getElementById(`id_${this.state.searchValueKey}`);
+        // element?.click();
+        await this.formValue?.setSelectedNodes();
+        this.state.selectedNodes = await this.formValue?.getSelectedTreeNodes();
     }
 
     public async prepareAutocompleteHint(): Promise<void> {

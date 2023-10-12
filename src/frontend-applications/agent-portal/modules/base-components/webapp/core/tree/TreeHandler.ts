@@ -96,22 +96,13 @@ export class TreeHandler {
                         event.preventDefault();
                         event.stopPropagation();
                     }
-                    this.selectNavigationNode(true);
+                    // TODO: changed (allow also de-select), because spacebar (below) currently not usable
+                    this.selectNavigationNode();
                     this.finishListener.forEach((l) => l());
                     break;
-                case ' ':
-                    this.selectNavigationNode();
-                    break;
-                case 'Tab':
-                    if (!event.ctrlKey) {
-                        this.selectNavigationNode();
-                        this.finishListener.forEach((l) => l());
-                        if (event.preventDefault && event.stopPropagation) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                    }
-                    break;
+                // case ' ': // TODO: currently deactivated (filter also gets space => new search triggered)
+                //     this.selectNavigationNode();
+                //     break;
                 case 'Escape':
                     this.finishListener.forEach((l) => l());
                     if (event.preventDefault && event.stopPropagation) {

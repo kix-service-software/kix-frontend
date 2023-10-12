@@ -358,12 +358,16 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
                 newValue.push(selectedNodes[0].id);
             }
         } else if (Array.isArray(value)) {
+            // keep current values
             for (const v of value) {
+                // if not in current loaded tree keep it else check if still selected
                 if (typeof v !== 'undefined' && v !== null && TreeUtil.findNode(tree, v)) {
                     const isSelected = selectedIds.some((id) => id.toString() === v.toString());
                     if (isSelected) {
                         newValue.push(v);
                     }
+                } else {
+                    newValue.push(v);
                 }
             }
         }
