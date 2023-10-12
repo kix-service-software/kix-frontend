@@ -13,7 +13,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
          type="text"
          rows=5
          value=state.value
-         on-keydown("valueChanged")
+         on-change("valueChanged")
       />
    </if>
    <else-if(state.readonly)>
@@ -21,7 +21,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
          type="text"
          rows=5
          value=state.value
-         on-keydown("valueChanged")
+         on-change("valueChanged")
          disabled=state.readonly
          readonly=state.readonly
       />

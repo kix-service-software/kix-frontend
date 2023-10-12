@@ -59,6 +59,13 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
         this.formValue?.removePropertyBinding(this.bindingIds);
     }
 
+    public keyDown(event: any): void {
+        if (event.keyCode === 13) {
+            this.state.value = event.target.value;
+            this.formValue.setFormValue(this.state.value);
+        }
+    }
+
     public valueChanged(event: any): void {
         if (this.changeTimeout) {
             window.clearTimeout(this.changeTimeout);

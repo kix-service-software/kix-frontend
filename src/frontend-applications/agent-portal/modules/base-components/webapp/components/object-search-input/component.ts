@@ -57,6 +57,10 @@ class Component extends FormInputComponent<any, ComponentState> {
         await super.onMount();
     }
 
+    public async onDestroy(): Promise<void> {
+        this.state.manager?.unregisterListener(this.state.field?.instanceId);
+    }
+
     public async setCurrentValue(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         const formInstance = await context?.getFormManager()?.getFormInstance();

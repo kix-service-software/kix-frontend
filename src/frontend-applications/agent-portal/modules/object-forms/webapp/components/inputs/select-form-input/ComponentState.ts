@@ -26,7 +26,8 @@ export class ComponentState extends AbstractComponentState {
         public searchPlaceholder: string = 'search ...',
         public hasFilter: boolean = false,
         public readonly: boolean = null,
-        public dropdownAttributes: any = {}
+        public dropdownAttributes: any = {},
+        public selectAll: boolean = true
     ) {
         super();
     }

@@ -156,7 +156,10 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             new FormFieldConfiguration(
                 'organisation-edit-form-field-icon',
                 'Translatable#Avatar', 'ICON', 'icon-input', false,
-                'Translatable#Helptext_Customers_OrganisationCreate_Avatar.'
+                'Translatable#Helptext_Customers_OrganisationCreate_Avatar.',
+                [
+                    new FormFieldOption('ICON_LIBRARY', false)
+                ]
             )
         );
         configurations.push(

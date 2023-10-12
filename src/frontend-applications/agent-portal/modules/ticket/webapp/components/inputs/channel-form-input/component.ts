@@ -13,11 +13,17 @@ import { AbstractMarkoComponent } from '../../../../../base-components/webapp/co
 import { FormValueProperty } from '../../../../../object-forms/model/FormValueProperty';
 import { ChannelFormValue } from '../../../core/form/form-values/ChannelFormValue';
 import { TreeNode } from '../../../../../base-components/webapp/core/tree';
+import { IdService } from '../../../../../../model/IdService';
+import { EventService } from '../../../../../base-components/webapp/core/EventService';
+import { ObjectFormEvent } from '../../../../../object-forms/model/ObjectFormEvent';
+import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private bindingIds: string[];
     private formValue: ChannelFormValue;
+
+    private subscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -78,10 +84,23 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             'Translatable#No Article'
         ]);
         this.state.loading = false;
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(),
+            eventPublished: (data: any, eventId: string): void => {
+                if (data.blocked) {
+                    this.state.readonly = true;
+                } else {
+                    this.state.readonly = this.formValue.readonly;
+                }
+            }
+        };
+        EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
     }
 
     public onDestroy(): void {
         this.formValue?.removePropertyBinding(this.bindingIds);
+        EventService.getInstance().subscribe(ObjectFormEvent.BLOCK_FORM, this.subscriber);
     }
 
     public selectChannel(node: TreeNode): void {

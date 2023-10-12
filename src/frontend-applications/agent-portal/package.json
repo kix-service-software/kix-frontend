@@ -2,7 +2,7 @@
     "name": "kix-agent-portal-server",
     "extensions": {
         "kix:application-server": {
-            "agent-portal-server": {
+            "kix:server": {
                 "module": "server.extension"
             }
         },

@@ -55,6 +55,7 @@ export class KIXObjectSocketClient extends SocketClient {
 
     private collectionsCounts: Map<string, number> = new Map();
     private collectionsLimits: Map<string, number> = new Map();
+    private collectionsController: Map<string, AbortController> = new Map();
 
     private constructor() {
         super('kixobjects');
@@ -144,7 +145,7 @@ export class KIXObjectSocketClient extends SocketClient {
             requestPromise = BrowserCacheService.getInstance().get(cacheKey, cacheType);
             if (!requestPromise) {
                 requestPromise = this.createLoadRequestPromise<T>(
-                    request, objectConstructors, timeout, silent
+                    request, objectConstructors, timeout, silent, collectionId
                 );
                 BrowserCacheService.getInstance().set(cacheKey, requestPromise, cacheType);
 
@@ -153,7 +154,9 @@ export class KIXObjectSocketClient extends SocketClient {
                 });
             }
         } else {
-            requestPromise = this.createLoadRequestPromise<T>(request, objectConstructors, timeout, silent);
+            requestPromise = this.createLoadRequestPromise<T>(
+                request, objectConstructors, timeout, silent, collectionId
+            );
         }
 
         const response = await requestPromise;
@@ -170,10 +173,22 @@ export class KIXObjectSocketClient extends SocketClient {
 
     private async createLoadRequestPromise<T extends KIXObject>(
         request: LoadObjectsRequest, objectConstructors: Array<new (object?: T) => T>, timeout?: number,
-        silent?: boolean
+        silent?: boolean, collectionId?: string
     ): Promise<LoadObjectsResponse<T>> {
+        let controller: AbortController;
+
+        if (collectionId) {
+            const oldController = this.collectionsController.get(collectionId);
+            if (oldController) {
+                oldController.abort();
+            }
+
+            controller = new AbortController();
+            this.collectionsController.set(collectionId, controller);
+        }
+
         const response = await this.sendRequest<LoadObjectsResponse<T>>(
-            request, KIXObjectEvent.LOAD_OBJECTS, KIXObjectEvent.LOAD_OBJECTS_FINISHED, timeout, silent
+            request, KIXObjectEvent.LOAD_OBJECTS, KIXObjectEvent.LOAD_OBJECTS_FINISHED, timeout, silent, controller
         ).catch((error): LoadObjectsResponse<T> => {
             if (error instanceof PermissionError) {
                 return new LoadObjectsResponse(request.clientRequestId, []);
@@ -284,7 +299,7 @@ export class KIXObjectSocketClient extends SocketClient {
 
     private async sendRequest<T extends ISocketResponse>(
         requestObject: ISocketObjectRequest, event: string, finishEvent: string, defaultTimeout?: number,
-        silent?: boolean
+        silent?: boolean, controller?: AbortController
     ): Promise<T> {
         this.checkSocketConnection();
 
@@ -292,6 +307,17 @@ export class KIXObjectSocketClient extends SocketClient {
 
         return new Promise<T>((resolve, reject) => {
             let timeout: any;
+
+            if (controller) {
+                if (controller.signal.aborted) {
+                    reject(new Error('SILENT', ''));
+                }
+                const abortEventListener: any = () => {
+                    controller.signal.removeEventListener('abort', abortEventListener);
+                    reject(new Error('SILENT', ''));
+                };
+                controller.signal.addEventListener('abort', abortEventListener);
+            }
 
             if (defaultTimeout > 0) {
                 timeout = window.setTimeout(() => {

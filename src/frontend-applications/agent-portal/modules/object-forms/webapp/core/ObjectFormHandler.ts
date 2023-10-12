@@ -81,7 +81,7 @@ export class ObjectFormHandler<T extends KIXObject = any> {
 
     public async commit(): Promise<string | number> {
 
-        this.objectFormValidator.enable();
+        await this.objectFormValidator.enable();
         const valid = await this.objectFormValidator.validateForm();
         if (!valid) {
             const validationResults = this.objectFormValueMapper.getValidationResults();
@@ -119,8 +119,8 @@ export class ObjectFormHandler<T extends KIXObject = any> {
         return id;
     }
 
-    public enableValidation(): void {
-        this.objectFormValidator.enable();
+    public async enableValidation(): Promise<void> {
+        await this.objectFormValidator.enable();
     }
 
     public disableValidation(): void {

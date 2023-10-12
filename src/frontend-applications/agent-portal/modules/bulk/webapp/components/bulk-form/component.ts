@@ -75,12 +75,14 @@ class Component {
         }
 
 
-        this.state.linkManager?.registerListener('bulk-dialog--link-listener', async () => {
+        this.state.linkManager?.registerListener('bulk-dialog-link-listener', async () => {
             this.setCanRun();
         });
     }
 
     public onDestroy(): void {
+        this.state.bulkManager?.unregisterListener('bulk-dialog-listener');
+        this.state.linkManager?.unregisterListener('bulk-dialog-link-listener');
         this.state.linkManager.reset();
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
     }

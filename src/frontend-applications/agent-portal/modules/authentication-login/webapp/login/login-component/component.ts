@@ -14,6 +14,7 @@ import { PortalNotificationService } from '../../../../portal-notification/webap
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { PortalNotificationEvent } from '../../../../portal-notification/model/PortalNotificationEvent';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFieldTypes';
 
 declare const window: Window;
 
@@ -93,22 +94,19 @@ class Component {
         this.state.userName = event?.target?.value;
     }
 
+    public passwordChanged(event: any): void {
+        this.state.password = event?.target?.value;
+    }
+
     private async login(event: any): Promise<void> {
         this.state.logout = false;
 
-        let password: string;
-
-        const passwordElement = (this as any).getEl('login-user-password');
-        if (passwordElement) {
-            password = passwordElement.value;
-        }
-
-        if (this.state.userName && this.state.userName !== '' && password && password !== '') {
+        if (this.state.userName) {
             this.state.loginProcess = true;
             this.state.error = false;
 
             const login = await AgentService.getInstance().login(
-                this.state.userName, password, this.redirectUrl
+                this.state.userName, this.state.password, this.redirectUrl
             );
 
             if (!login) {
@@ -136,6 +134,11 @@ class Component {
             }
         }
         return pattern;
+    }
+
+    public togglePasswordVisibility(): void {
+        this.state.passwordFieldType = this.state.passwordFieldType === InputFieldTypes.PASSWORD.toLowerCase() ?
+            InputFieldTypes.TEXT.toLowerCase() : InputFieldTypes.PASSWORD.toLowerCase();
     }
 }
 

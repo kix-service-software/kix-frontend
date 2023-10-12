@@ -37,7 +37,7 @@ export class AbstractPlaceholderHandler implements IPlaceholderHandler {
     }
 
     public async replaceDFObjectPlaceholder(
-        attributePath: string, objectIds: number[], language?: string
+        attributePath: string, objectId: number, language?: string
     ): Promise<string> {
         return;
     }

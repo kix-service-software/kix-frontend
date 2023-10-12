@@ -21,7 +21,7 @@ export enum SystemAddressProperty {
 
     VALID_ID = 'ValidID',
 
-    QUEUE_IDS = 'QueueIDs',
+    QUEUE_ID = 'QueueID',
 
     CHANGE_BY = 'ChangeBy',
 

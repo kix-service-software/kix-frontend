@@ -21,6 +21,8 @@ import { OrganisationPlaceholderHandler } from '../../../customer/webapp/core/Or
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { Organisation } from '../../../customer/model/Organisation';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { DynamicFieldValuePlaceholderHandler } from '../../../dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 
 export class UserPlaceholderHandler extends AbstractPlaceholderHandler {
 
@@ -29,7 +31,7 @@ export class UserPlaceholderHandler extends AbstractPlaceholderHandler {
         'CURRENT'
     ];
 
-    public async replace(placeholder: string, user?: User, language?: string): Promise<string> {
+    public async replace(placeholder: string, user?: User, language?: string, forRichtext?: boolean): Promise<string> {
         let result = '';
         const objectString = PlaceholderService.getInstance().getObjectString(placeholder);
         if (objectString === 'CURRENT') {
@@ -53,42 +55,80 @@ export class UserPlaceholderHandler extends AbstractPlaceholderHandler {
                     placeholder, organisations[0], language
                 );
             }
-        } else if (user) {
-            if (attribute && this.isKnownProperty(attribute)) {
-                switch (attribute) {
-                    case UserProperty.USER_ID:
-                    case KIXObjectProperty.VALID_ID:
-                        result = user[attribute].toString();
-                        break;
-                    // FIXME: use UserID else it will be ID of contact (change/remove it with placeholder refactoring)
-                    case 'ID':
-                        result = user.UserID.toString();
-                        break;
-                    case UserProperty.USER_LOGIN:
-                    case ContactProperty.FIRSTNAME:
-                    case ContactProperty.LASTNAME:
-                    case ContactProperty.EMAIL:
-                    case ContactProperty.COMMENT:
-                    case UserProperty.USER_COMMENT:
-                    case ContactProperty.TITLE:
-                        result = await LabelService.getInstance().getDisplayText(
-                            user, attribute, undefined, false
-                        );
-                        break;
-                    case KIXObjectProperty.CREATE_TIME:
-                    case KIXObjectProperty.CHANGE_TIME:
-                        result = await DateTimeUtil.getLocalDateTimeString(user[attribute], language);
-                        break;
-                    default:
-                        result = await LabelService.getInstance().getDisplayText(
-                            user, attribute, undefined, false
-                        );
-                        result = typeof result !== 'undefined' && result !== null
-                            ? await TranslationService.translate(result.toString(), undefined, language) : '';
-                }
+        }
+        else if (
+            PlaceholderService.getInstance().isDynamicFieldAttribute(attribute) &&
+            DynamicFieldValuePlaceholderHandler
+        ) {
+            if (user && !user.Contact) {
+                user = await this.loadUser(user.UserID);
+            }
+            if (user?.Contact) {
+                const optionsString: string = PlaceholderService.getInstance().getOptionsString(placeholder);
+                result = await DynamicFieldValuePlaceholderHandler.getInstance().replaceDFValue(
+                    user.Contact, optionsString
+                );
+            }
+        }
+        else if (user && attribute && this.isKnownProperty(attribute)) {
+            switch (attribute) {
+                case UserProperty.USER_ID:
+                case KIXObjectProperty.VALID_ID:
+                    result = user[attribute].toString();
+                    break;
+                // FIXME: use UserID else it will be ID of contact (change/remove it with placeholder refactoring)
+                case 'ID':
+                    result = user.UserID.toString();
+                    break;
+                case UserProperty.USER_LOGIN:
+                case ContactProperty.FIRSTNAME:
+                case ContactProperty.LASTNAME:
+                case ContactProperty.COMMENT:
+                case UserProperty.USER_COMMENT:
+                case ContactProperty.TITLE:
+                    result = await LabelService.getInstance().getDisplayText(user, attribute, undefined, false);
+                    break;
+                case ContactProperty.EMAIL:
+                case ContactProperty.EMAIL1:
+                case ContactProperty.EMAIL2:
+                case ContactProperty.EMAIL3:
+                case ContactProperty.EMAIL4:
+                case ContactProperty.EMAIL5:
+                    result = await LabelService.getInstance().getDisplayText(user, attribute, undefined, false);
+                    if (forRichtext) {
+                        result = result.replace(/>/g, '&gt;');
+                        result = result.replace(/</g, '&lt;');
+                    }
+                    break;
+                case KIXObjectProperty.CREATE_TIME:
+                case KIXObjectProperty.CHANGE_TIME:
+                    result = await DateTimeUtil.getLocalDateTimeString(user[attribute], language);
+                    break;
+                default:
+                    result = await LabelService.getInstance().getDisplayText(
+                        user, attribute, undefined, false
+                    );
+                    result = typeof result !== 'undefined' && result !== null
+                        ? await TranslationService.translate(result.toString(), undefined, language) : '';
             }
         }
         return result;
+    }
+
+    private async loadUser(userId: number): Promise<User> {
+        if (userId) {
+            const users = await KIXObjectService.loadObjects<User>(
+                KIXObjectType.USER, [userId],
+                new KIXObjectLoadingOptions(
+                    undefined, undefined, undefined,
+                    ['Contact']
+                )
+            ).catch(() => []);
+            if (users.length) {
+                return users[0];
+            }
+        }
+        return;
     }
 
     private isKnownProperty(property: string): boolean {

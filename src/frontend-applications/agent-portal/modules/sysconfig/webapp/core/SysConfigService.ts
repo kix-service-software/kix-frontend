@@ -68,7 +68,7 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
         return value;
     }
 
-    public async getAgentPortalConfiguration(): Promise<AgentPortalConfiguration> {
+    public async getPortalConfiguration<T = any>(): Promise<T> {
         let config: AgentPortalConfiguration;
 
         const value = await this.getSysConfigOptionValue(AgentPortalConfiguration.CONFIGURATION_ID)
@@ -81,7 +81,7 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
             }
         }
 
-        return config;
+        return config as any;
     }
 
     public async getDisplayValueConfiguration(): Promise<DisplayValueConfiguration> {

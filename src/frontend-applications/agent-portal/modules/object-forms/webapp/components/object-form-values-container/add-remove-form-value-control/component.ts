@@ -22,24 +22,27 @@ export class Component extends AbstractMarkoComponent<ComponentState> {
     public onInput(input: any): void {
         this.formValue = input.formValue;
         this.state.readonly = this.formValue?.readonly;
+        this.prepareControls();
     }
 
     public async onMount(): Promise<void> {
-        const formValue = this.getCountableFormValue();
-        this.state.canAdd = formValue?.canAddValue(this.formValue.instanceId);
-        this.state.canRemove = formValue?.canRemoveValue(this.formValue.instanceId);
+        this.prepareControls();
     }
 
     public async addValue(): Promise<void> {
         const formValue = this.getCountableFormValue();
         await formValue?.addFormValue(this.formValue.instanceId, null);
-        this.state.canAdd = formValue?.canAddValue(this.formValue.instanceId);
-        this.state.canRemove = formValue?.canRemoveValue(this.formValue.instanceId);
+        this.prepareControls();
     }
 
     public async removeValue(): Promise<void> {
         const formValue = this.getCountableFormValue();
         await formValue?.removeFormValue(this.formValue.instanceId);
+        this.prepareControls();
+    }
+
+    public prepareControls(): void {
+        const formValue = this.getCountableFormValue();
         this.state.canAdd = formValue?.canAddValue(this.formValue.instanceId);
         this.state.canRemove = formValue?.canRemoveValue(this.formValue.instanceId);
     }

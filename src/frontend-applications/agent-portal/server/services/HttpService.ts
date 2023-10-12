@@ -26,6 +26,7 @@ import { SocketAuthenticationError } from '../../../../server/model/SocketAuthen
 import { RequestCounter } from '../../../../server/services/RequestCounter';
 import { HTTPResponse } from './HTTPResponse';
 import { Session } from '../../../../server/model/Session';
+import { IncomingHttpHeaders } from 'http';
 
 export class HttpService {
 
@@ -147,7 +148,7 @@ export class HttpService {
 
     public async post<T>(
         resource: string, content: any, token: string, clientRequestId: string, cacheKeyPrefix: string = '',
-        logError: boolean = true, relevantOrganisationId?: number
+        logError: boolean = true, relevantOrganisationId?: number, headers?: IncomingHttpHeaders
     ): Promise<T> {
         const options: AxiosRequestConfig = {
             method: RequestMethod.POST,
@@ -155,7 +156,8 @@ export class HttpService {
             params: { RelevantOrganisationID: relevantOrganisationId }
         };
 
-        const response = await this.executeRequest(resource, token, clientRequestId, options, logError);
+
+        const response = await this.executeRequest(resource, token, clientRequestId, options, logError, headers);
         await CacheService.getInstance().deleteKeys(cacheKeyPrefix).catch(() => null);
         return response?.data;
     }
@@ -235,7 +237,7 @@ export class HttpService {
 
     private async executeRequest<T = AxiosResponse>(
         resource: string, token: string, clientRequestId: string, options: AxiosRequestConfig,
-        logError: boolean = true
+        logError: boolean = true, headers?: IncomingHttpHeaders
     ): Promise<T> {
         const backendToken = AuthenticationService.getInstance().getBackendToken(token);
 
@@ -246,10 +248,11 @@ export class HttpService {
         // extend options
         options.baseURL = this.apiURL;
         options.url = this.buildRequestUrl(resource);
-        options.headers = {
-            'Authorization': 'Token ' + backendToken,
-            'KIX-Request-ID': clientRequestId ? clientRequestId : ''
-        };
+
+        options.headers = headers || {};
+        options.headers['Authorization'] = 'Token ' + backendToken;
+        options.headers['KIX-Request-ID'] = clientRequestId ? clientRequestId : '';
+
         options.maxBodyLength = Infinity;
         options.maxContentLength = Infinity;
 

@@ -139,7 +139,7 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
 
         await super.setFormValue(value, force);
 
-        if (!this.readonly) {
+        if (!this.readonly || force) {
             await this.loadSelectedValues();
         }
     }
@@ -333,15 +333,15 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
         TreeService.getInstance().registerTreeHandler(this.instanceId, this.treeHandler);
 
         this.treeHandler?.registerSelectionListener(this.instanceId + '-selection', (nodes: TreeNode[]) => {
-            if (this.initialized) {
-                this.setSelectedNodes(nodes);
+            if (this.initialized && !this.multiselect) {
+                this.setSelectedNodes();
             }
         });
 
         await this.loadSelectableValues();
     }
 
-    protected async setSelectedNodes(nodes: TreeNode[] = []): Promise<void> {
+    public async setSelectedNodes(): Promise<void> {
         const tree = this.treeHandler?.getTree();
 
         const selectedNodes = this.treeHandler?.getSelection(this.treeHandler?.getTree()) || [];
@@ -353,21 +353,26 @@ export class SelectObjectFormValue<T = Array<string | number>> extends ObjectFor
             ? Array.isArray(this.value) ? this.value : [this.value]
             : null;
 
-        if (Array.isArray(value)) {
+        if (!this.multiselect) {
+            if (selectedNodes.length) {
+                newValue.push(selectedNodes[0].id);
+            }
+        } else if (Array.isArray(value)) {
+            // keep current values
             for (const v of value) {
-                if (typeof v !== 'undefined' && v !== null) {
-                    if (TreeUtil.findNode(tree, v)) {
-                        if (selectedIds.some((id) => id.toString() === v.toString())) {
-                            newValue.push(v);
-                        }
-                    } else if (this.multiselect) {
+                // if not in current loaded tree keep it else check if still selected
+                if (typeof v !== 'undefined' && v !== null && TreeUtil.findNode(tree, v)) {
+                    const isSelected = selectedIds.some((id) => id.toString() === v.toString());
+                    if (isSelected) {
                         newValue.push(v);
                     }
+                } else {
+                    newValue.push(v);
                 }
             }
         }
 
-        for (const node of nodes) {
+        for (const node of selectedNodes) {
             if (!newValue.some((v) => v.toString() === node?.id?.toString())) {
                 newValue.push(node.id);
             }

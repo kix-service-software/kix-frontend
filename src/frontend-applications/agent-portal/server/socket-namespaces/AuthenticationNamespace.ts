@@ -63,7 +63,7 @@ export class AuthenticationNamespace extends SocketNameSpace {
         const response = await AuthenticationService.getInstance()
             .login(
                 data.userName, data.password, data.userType, data.negotiateToken,
-                data.clientRequestId, client.handshake.address
+                data.clientRequestId, client.handshake.headers
             ).then(async (token: string) => {
                 await TranslationAPIService.getInstance().loadObjects(token, 'login', KIXObjectType.TRANSLATION, null, null, null)
                     .catch(() => null);
@@ -122,7 +122,7 @@ export class AuthenticationNamespace extends SocketNameSpace {
             const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
             const valid = await AuthenticationService.getInstance().validateToken(
-                token, socket.handshake.address, data.clientRequestId
+                token, data.clientRequestId
             ).catch(
                 (error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error))
             );
@@ -145,15 +145,20 @@ export class AuthenticationNamespace extends SocketNameSpace {
         return response;
     }
 
-    private async checkPermissions(data: PermissionCheckRequest, client: Socket): Promise<SocketResponse> {
-        const parsedCookie = client && client.handshake ? cookie.parse(client.handshake.headers.cookie) : null;
-        const token = parsedCookie ? parsedCookie.token : '';
+    private async checkPermissions(data: PermissionCheckRequest, socket: Socket): Promise<SocketResponse> {
+        const parsedCookie = socket ? cookie.parse(socket.handshake.headers.cookie) : null;
+
+        const tokenPrefix = socket?.handshake?.headers?.tokenprefix || '';
+        const token = parsedCookie ? parsedCookie[`${tokenPrefix}token`] : '';
 
         let event = AuthenticationEvent.PERMISSION_CHECK_SUCCESS;
 
-        const allowed = await PermissionService.getInstance().checkPermissions(
-            token, data.permissions, data.clientRequestId, data.object
-        ).catch(() => false);
+        let allowed = false;
+        if (token) {
+            allowed = await PermissionService.getInstance().checkPermissions(
+                token, data.permissions, data.clientRequestId, data.object
+            ).catch(() => false);
+        }
 
         if (!allowed) {
             event = AuthenticationEvent.PERMISSION_CHECK_FAILED;

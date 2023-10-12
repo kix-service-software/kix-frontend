@@ -44,7 +44,9 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
         this.extendedPlaceholderHandler.push(handler);
     }
 
-    public async replace(placeholder: string, article: Article, language?: string): Promise<string> {
+    public async replace(
+        placeholder: string, article: Article, language?: string, forRichtext?: boolean
+    ): Promise<string> {
         let result = '';
         if (article) {
             const attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
@@ -94,6 +96,10 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                         result = await LabelService.getInstance().getDisplayText(
                             article, attribute, undefined, undefined, false
                         );
+                        if (forRichtext) {
+                            result = result.replace(/>/g, '&gt;');
+                            result = result.replace(/</g, '&lt;');
+                        }
                         break;
                     case 'REPLYRECIPIENT':
                         let replyProperty = ArticleProperty.FROM;
@@ -114,6 +120,10 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                             result = await LabelService.getInstance().getDisplayText(
                                 article, ArticleProperty.TO, undefined, false
                             );
+                        }
+                        if (forRichtext) {
+                            result = result.replace(/>/g, '&gt;');
+                            result = result.replace(/</g, '&lt;');
                         }
                         break;
                     case KIXObjectProperty.CREATE_TIME:

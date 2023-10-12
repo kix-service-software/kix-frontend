@@ -15,7 +15,9 @@ export class ComponentState extends FormInputComponentState {
     public constructor(
         public currentValue: string = null,
         public placeholder: string = null,
-        public inputType: string = InputFieldTypes.TEXT
+        public inputType: string = InputFieldTypes.TEXT,
+        public isPasswordInit: boolean = false,
+        public isPasswordVisible: boolean = false,
     ) {
         super();
     }

@@ -27,6 +27,10 @@ import { SearchOperator } from '../../search/model/SearchOperator';
 import { FilterDataType } from '../../../model/FilterDataType';
 import { FilterType } from '../../../model/FilterType';
 import { ObjectResponse } from '../../../server/services/ObjectResponse';
+import { SysConfigService } from '../../sysconfig/server/SysConfigService';
+import { SysConfigOptionProperty } from '../../sysconfig/model/SysConfigOptionProperty';
+import { AgentPortalConfiguration } from '../../../model/configuration/AgentPortalConfiguration';
+import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
 
 
 export class RoleService extends KIXObjectAPIService {
@@ -83,7 +87,9 @@ export class RoleService extends KIXObjectAPIService {
         token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<number> {
-        const createParameter = parameter.filter((p) => p[0] !== RoleProperty.PERMISSIONS);
+        const createParameter = parameter.filter(
+            (p) => p[0] !== RoleProperty.PERMISSIONS && p[0] !== RoleProperty.ALLOW_ADMIN_MODULE
+        );
 
         const id = await super.executeUpdateOrCreateRequest(
             token, clientRequestId, createParameter, this.RESOURCE_URI, this.objectType, 'RoleID', true
@@ -91,6 +97,9 @@ export class RoleService extends KIXObjectAPIService {
 
         const permissions = this.getParameterValue(parameter, RoleProperty.PERMISSIONS);
         await this.createPermissions(token, clientRequestId, Number(id), [], permissions);
+
+        const allowAdminModule = this.getParameterValue(parameter, RoleProperty.ALLOW_ADMIN_MODULE);
+        await this.applyAllowAdminModule(id, !allowAdminModule);
 
         return id;
     }
@@ -102,6 +111,7 @@ export class RoleService extends KIXObjectAPIService {
         const updateParameter = parameter.filter(
             (p) => p[0] !== RoleProperty.USER_IDS
                 && p[0] !== RoleProperty.PERMISSIONS
+                && p[0] !== RoleProperty.ALLOW_ADMIN_MODULE
         );
 
         const uri = this.buildUri(this.RESOURCE_URI, objectId);
@@ -128,7 +138,34 @@ export class RoleService extends KIXObjectAPIService {
             ]);
         }
 
+        const allowAdminModule = this.getParameterValue(parameter, RoleProperty.ALLOW_ADMIN_MODULE);
+        await this.applyAllowAdminModule(id, !allowAdminModule);
+
         return id;
+    }
+
+    private async applyAllowAdminModule(roleId: number, remove?: boolean): Promise<void> {
+        const config = ConfigurationService.getInstance().getServerConfiguration();
+        const token = config.BACKEND_API_TOKEN;
+        const agentPortalConfig = await SysConfigService.getInstance().getPortalConfiguration(token);
+        if (!Array.isArray(agentPortalConfig?.adminRoleIds)) {
+            agentPortalConfig.adminRoleIds = [];
+        }
+
+        if (!remove && !agentPortalConfig.adminRoleIds.some((rid) => rid === roleId)) {
+            agentPortalConfig.adminRoleIds.push(roleId);
+        } else if (remove) {
+            const index = agentPortalConfig.adminRoleIds?.findIndex((rid) => rid === roleId);
+            if (index !== -1) {
+                agentPortalConfig.adminRoleIds.splice(index, 1);
+            }
+        }
+
+        await SysConfigService.getInstance().updateObject(
+            token, 'RoleService', KIXObjectType.SYS_CONFIG_OPTION,
+            [[SysConfigOptionProperty.VALUE, JSON.stringify(agentPortalConfig)]],
+            AgentPortalConfiguration.CONFIGURATION_ID
+        );
     }
 
     private async setUserIds(

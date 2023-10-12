@@ -602,7 +602,7 @@ export class TicketAPIService extends KIXObjectAPIService {
 
             // switch To and From with external sendertype by channel note on new ticket (= incomming call)
             // - so ticket "is" from customer
-            if (!ticket.TicketID && article.ChannelID === 1) {
+            if (!ticket.TicketID && Number(article.ChannelID) === 1) {
                 const oldFrom = article.From;
                 article.From = article.To;
                 article.To = oldFrom;

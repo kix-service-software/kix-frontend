@@ -52,7 +52,8 @@ export class TicketListContext extends Context {
     public async reloadObjectList(
         objectType: KIXObjectType | string, silent: boolean = false, limit: number
     ): Promise<void> {
-        this.loadTickets(limit);
+        await this.loadTickets(limit);
+        return super.reloadObjectList(objectType, silent, limit);
     }
 
     public async update(urlParams: URLSearchParams): Promise<void> {

@@ -133,6 +133,8 @@ export class FAQContext extends Context {
     ): Promise<void> {
         if (objectType === KIXObjectType.FAQ_ARTICLE) {
             return this.loadFAQArticles(limit);
+        } else {
+            return super.reloadObjectList(objectType, silent, limit);
         }
     }
 
